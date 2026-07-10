@@ -1,0 +1,586 @@
+# Application Registry Specification
+
+## ONNELLAB Content Engine
+
+---
+
+# 1. Purpose
+
+This document defines the official application registry used by the ONNELLAB Content Engine.
+
+The registry is the single source of truth for:
+
+* Official application names
+* Product status
+* Supported platforms
+* Content eligibility
+* Official landing pages
+* Store links
+* Product categories
+* Canonical product descriptions
+
+Every application referenced by the Content Engine must exist in this registry.
+
+---
+
+# 2. Canonical File
+
+The canonical registry file is:
+
+```text
+data/apps_registry.csv
+```
+
+The file must use:
+
+```text
+UTF-8
+```
+
+The registry is version-controlled.
+
+Manual review is required before adding or changing an application record.
+
+---
+
+# 3. Core Principle
+
+The Content Engine must never infer product information.
+
+It must only use verified information stored in the application registry or official product documents.
+
+If required information is missing, content generation must stop or omit the unsupported claim.
+
+---
+
+# 4. Required Columns
+
+The v1 column structure is fixed as follows.
+
+```csv
+app_id,app_name,slug,status,product_group,primary_category,platforms,pricing_model,content_eligible,official_site_path,app_store_url,play_store_url,docs_path,one_line_description,primary_language,notes
+```
+
+Column order must remain fixed during v1.
+
+---
+
+# 5. Field Definitions
+
+## 5-1. app_id
+
+Permanent internal application identifier.
+
+Format:
+
+```text
+APP-0001
+APP-0002
+APP-0003
+```
+
+Rules:
+
+* Must be unique.
+* Must never be reused.
+* Must not change when the product name changes.
+* Must not depend on the application slug.
+
+---
+
+## 5-2. app_name
+
+Official public product name.
+
+Examples:
+
+```text
+TagWeaver
+VaultXT
+ClipNest
+```
+
+Rules:
+
+* Capitalization must match official branding.
+* Alternate spellings are prohibited.
+* Internal working names must not be used.
+* Every `related_apps` value in `topics.csv` must match this field exactly.
+
+---
+
+## 5-3. slug
+
+Permanent product URL slug.
+
+Examples:
+
+```text
+tagweaver
+vaultxt
+clipnest
+```
+
+Rules:
+
+* Lowercase only.
+* Hyphenated only when necessary.
+* Must remain stable after publication.
+* Must match the official landing-page path.
+
+---
+
+## 5-4. status
+
+Current product lifecycle status.
+
+Allowed values:
+
+```text
+concept
+planning
+development
+beta
+released
+paused
+retired
+```
+
+Meaning:
+
+* `concept`: idea only; no active development
+* `planning`: specification work is active
+* `development`: implementation is active
+* `beta`: externally or internally testable
+* `released`: publicly available
+* `paused`: work is temporarily suspended
+* `retired`: no longer distributed or supported
+
+---
+
+## 5-5. product_group
+
+Top-level ONNELLAB website group.
+
+Allowed v1 values:
+
+```text
+apps
+games
+fonts
+research
+internal
+```
+
+Examples:
+
+* Mobile utility application → `apps`
+* Commercial game → `games`
+* ONNEL Sans → `fonts`
+* ONNEL Sans Research → `research`
+* Content Engine → `internal`
+
+Internal projects must not be recommended to end users.
+
+---
+
+## 5-6. primary_category
+
+Primary Content Engine category.
+
+Allowed values:
+
+```text
+reading
+music
+productivity
+media
+craft
+games
+research
+internal
+```
+
+Each product must belong to exactly one primary category.
+
+Cross-category use cases may be represented in article metadata, not in this field.
+
+---
+
+## 5-7. platforms
+
+Supported or planned public platforms.
+
+Format:
+
+```text
+ios|android
+```
+
+Allowed values include:
+
+```text
+ios
+android
+windows
+macos
+web
+linux
+steam
+```
+
+Use a vertical bar as the separator.
+
+Only confirmed platforms may be recorded.
+
+Do not infer future platform support.
+
+---
+
+## 5-8. pricing_model
+
+Current public pricing structure.
+
+Allowed values:
+
+```text
+free
+paid
+freemium
+one_time_purchase
+subscription
+not_applicable
+undecided
+```
+
+If pricing is not fixed, use:
+
+```text
+undecided
+```
+
+Do not generate specific pricing claims from this field alone.
+
+---
+
+## 5-9. content_eligible
+
+Whether the Content Engine may recommend the product publicly.
+
+Allowed values:
+
+```text
+true
+false
+```
+
+Recommended rules:
+
+* Released product with valid landing page → `true`
+* Beta product approved for public promotion → `true`
+* Concept, planning, or internal project → normally `false`
+* Retired product → `false`
+
+The publishing pipeline must not recommend an application where:
+
+```text
+content_eligible = false
+```
+
+It may discuss a public research project without presenting it as an available product.
+
+---
+
+## 5-10. official_site_path
+
+Official ONNELLAB landing-page path.
+
+Example:
+
+```text
+/apps/tagweaver/
+```
+
+Rules:
+
+* Use a site-relative path.
+* Leave blank if no public page exists.
+* The publishing pipeline may build the full URL from the configured site domain.
+
+---
+
+## 5-11. app_store_url
+
+Official Apple App Store URL.
+
+Leave blank when:
+
+* unavailable
+* not released on iOS
+* not yet verified
+
+Never invent or derive an App Store URL.
+
+---
+
+## 5-12. play_store_url
+
+Official Google Play URL.
+
+Leave blank when:
+
+* unavailable
+* not released on Android
+* not yet verified
+
+Never invent or derive a Play Store URL.
+
+---
+
+## 5-13. docs_path
+
+Repository path to the official product source documents.
+
+Example:
+
+```text
+sources/tagweaver/
+```
+
+or:
+
+```text
+external/tagweaver/docs/
+```
+
+The exact repository integration method may be decided later.
+
+This field must point only to verified product documentation.
+
+---
+
+## 5-14. one_line_description
+
+Canonical neutral description used by the Content Engine.
+
+Rules:
+
+* One sentence only.
+* No exaggerated claims.
+* No unsupported superlatives.
+* Describe the product’s actual role.
+* Do not include pricing.
+
+Example:
+
+```text
+A local MP3 metadata editor designed for focused tag management.
+```
+
+---
+
+## 5-15. primary_language
+
+Primary language of official product documentation.
+
+Allowed values:
+
+```text
+en
+ko
+```
+
+This does not limit the languages supported by the application.
+
+It only identifies the canonical documentation language.
+
+---
+
+## 5-16. notes
+
+Internal operational notes.
+
+Examples:
+
+```text
+iOS saves edited files as copies due to platform restrictions.
+```
+
+```text
+Do not describe as a full file manager.
+```
+
+```text
+Public promotion begins after the landing page is complete.
+```
+
+This field must never be published directly.
+
+---
+
+# 6. Validation Rules
+
+The registry is invalid if:
+
+* `app_id` is duplicated.
+* `app_name` is duplicated.
+* `slug` is duplicated.
+* `status` is unsupported.
+* `product_group` is unsupported.
+* `primary_category` is unsupported.
+* `content_eligible` is not `true` or `false`.
+* A released, content-eligible product has no official site path.
+* A store URL is malformed.
+* A topic references an app name not found in the registry.
+
+Validation failure must stop content generation and publishing.
+
+---
+
+# 7. Recommendation Rules
+
+A product may be recommended in a public article only when all conditions are satisfied:
+
+```text
+status = released or beta
+```
+
+```text
+content_eligible = true
+```
+
+```text
+official_site_path is not empty
+```
+
+The product must also genuinely solve the article’s user problem.
+
+Registry eligibility does not override editorial relevance.
+
+---
+
+# 8. Unreleased Product Rules
+
+Products with these statuses:
+
+```text
+concept
+planning
+development
+```
+
+must not be presented as currently available.
+
+They may be referenced only in explicitly approved content such as:
+
+* public development notes
+* research articles
+* release previews
+* ONNELLAB roadmap posts
+
+The article must clearly state the product’s current status.
+
+---
+
+# 9. Retired Product Rules
+
+Products with:
+
+```text
+status = retired
+```
+
+must not be newly recommended.
+
+Existing articles should be reviewed and either:
+
+* updated with alternatives
+* marked as historical
+* redirected
+* archived when necessary
+
+Do not silently leave obsolete recommendations active.
+
+---
+
+# 10. Initial Registry File
+
+Create:
+
+```text
+data/apps_registry.csv
+```
+
+with the following header and initial released applications.
+
+```csv
+app_id,app_name,slug,status,product_group,primary_category,platforms,pricing_model,content_eligible,official_site_path,app_store_url,play_store_url,docs_path,one_line_description,primary_language,notes
+APP-0001,Quivra,quivra,released,apps,media,ios|android,one_time_purchase,true,/apps/quivra/,,,sources/quivra/,"A local media conversion utility for focused file-format tasks.",ko,"Verify platform availability and store URLs before publishing."
+APP-0002,TagWeaver,tagweaver,released,apps,music,ios|android,one_time_purchase,true,/apps/tagweaver/,,,sources/tagweaver/,"A local MP3 metadata editor designed for focused tag management.",ko,"Explain iOS copy-save behavior accurately when relevant."
+APP-0003,VaultXT,vaultxt,released,apps,reading,ios|android,one_time_purchase,true,/apps/vaultxt/,,,sources/vaultxt/,"A text editor and viewer designed for working with large plain-text files.",ko,"Do not make unsupported performance claims without verified tests."
+APP-0004,Segra,segra,released,apps,media,ios|android,one_time_purchase,true,/apps/segra/,,,sources/segra/,"A focused audio utility for trimming and organizing audio segments.",ko,"Do not describe as a full audio-production application."
+APP-0005,ClipNest,clipnest,released,apps,productivity,ios,one_time_purchase,true,/apps/clipnest/,,,sources/clipnest/,"A local iOS clipboard utility for saving and reusing copied text.",ko,"Do not claim continuous background clipboard monitoring."
+APP-0006,Aligna,aligna,released,apps,productivity,ios|android,freemium,true,/apps/aligna/,,,sources/aligna/,"A rule-based file-renaming utility with preview-before-apply workflows.",ko,"Describe iOS output as saving a newly named copy when applicable."
+```
+
+Store URLs remain blank until verified and entered manually.
+
+Do not infer them from application names.
+
+---
+
+# 11. Future Product Registration
+
+When registering a new product:
+
+1. Assign the next permanent `app_id`.
+2. Confirm the official product name.
+3. Confirm its lifecycle status.
+4. Confirm its public platforms.
+5. Confirm its primary content category.
+6. Add the official landing-page path.
+7. Add verified store URLs.
+8. Write a neutral one-line description.
+9. Decide whether public recommendation is allowed.
+10. Run registry validation.
+
+A product must not enter `topics.csv` before this process is complete.
+
+---
+
+# 12. Scope Ceiling
+
+The v1 registry must not include:
+
+* live store-price synchronization
+* automatic store scraping
+* automatic status inference
+* review-score collection
+* download statistics
+* revenue data
+* autonomous public eligibility decisions
+
+The registry must remain small, explicit, inspectable, and human-controlled.
+
+---
+
+# 13. Success Criteria
+
+The application registry succeeds when:
+
+* every product reference uses an official name
+* unreleased products are not accidentally promoted
+* invalid store links are prevented
+* articles use accurate product descriptions
+* content eligibility is centrally controlled
+* the registry remains readable without specialized tools
+
+---
+
+# Final Principle
+
+Verify the product.
+
+Verify its status.
+
+Recommend only what truly exists.
