@@ -30,11 +30,15 @@ Foundation
 
 Topic Management
 
+✅
+
 ---
 
 ## Phase 3
 
 Markdown Generator
+
+✅
 
 ---
 
@@ -42,11 +46,15 @@ Markdown Generator
 
 Image Specification
 
+✅
+
 ---
 
 ## Phase 5
 
 Internal Linking
+
+✅
 
 ---
 
@@ -54,11 +62,15 @@ Internal Linking
 
 Publishing
 
+✅
+
 ---
 
 ## Phase 7
 
 Automation
+
+✅
 
 ---
 
