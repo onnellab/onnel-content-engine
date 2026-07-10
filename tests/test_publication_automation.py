@@ -160,8 +160,8 @@ class PublicationAutomationTest(unittest.TestCase):
             return list(csv.DictReader(file))
 
     def test_evaluates_article_above_publication_threshold(self) -> None:
-        write_topics(self.topics_path, [topic_row("review")])
-        write_topics(self.legacy_path, [topic_row("review")])
+        write_topics(self.topics_path, [topic_row("review"), topic_row("review", "TOPIC-0002", "ko")])
+        write_topics(self.legacy_path, [topic_row("review"), topic_row("review", "TOPIC-0002", "ko")])
 
         path = evaluate_article(
             "TOPIC-0001",
@@ -174,6 +174,9 @@ class PublicationAutomationTest(unittest.TestCase):
         review = json.loads(path.read_text(encoding="utf-8"))
         self.assertGreater(review["score"], 9.0)
         self.assertTrue(review["passed"])
+        check_names = {check["name"] for check in review["checks"]}
+        self.assertIn("image_quality", check_names)
+        self.assertIn("translation_quality", check_names)
 
     def test_schedules_only_reviewed_articles_above_threshold_every_three_days(self) -> None:
         published = topic_row("published", "TOPIC-0002")

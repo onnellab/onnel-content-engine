@@ -64,6 +64,13 @@
       "note": "At least one referenced blog image asset exists."
     },
     {
+      "name": "image_quality",
+      "passed": true,
+      "points": 1.0,
+      "max_points": 1.0,
+      "note": "Referenced image assets use language-specific paths, accessible SVG structure, word wrapping, and non-overlapping arrows."
+    },
+    {
       "name": "internal_links",
       "passed": true,
       "points": 1.0,
@@ -76,6 +83,13 @@
       "points": 1.0,
       "max_points": 1.0,
       "note": "Article length supports a complete but focused answer."
+    },
+    {
+      "name": "translation_quality",
+      "passed": true,
+      "points": 1.0,
+      "max_points": 1.0,
+      "note": "Translation counterpart, section alignment, slug alignment, and localized terminology are valid."
     }
   ]
 }

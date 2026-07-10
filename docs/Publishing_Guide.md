@@ -264,11 +264,13 @@ Before publishing, confirm:
 * English and Korean article counterparts both exist.
 * Images exist.
 * Text-containing images exist separately for English and Korean.
+* Image quality checks pass.
 * Metadata is complete.
 * Internal links work.
 * External links are valid.
 * Category is correct.
 * Related applications are accurate.
+* Translation quality checks pass.
 * The article review score is greater than `9.0 / 10`.
 
 Publishing should fail if validation fails.

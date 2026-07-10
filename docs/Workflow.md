@@ -265,7 +265,9 @@ Review checklist:
 * Product references
 * Internal links
 * Image quality
+* Image layout and language-specific image text
 * English and Korean counterparts
+* Translation quality
 * Article review score greater than `9.0 / 10`
 
 Publishing should never bypass review.

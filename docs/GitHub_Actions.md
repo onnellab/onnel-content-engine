@@ -164,6 +164,15 @@ An article may be scheduled or published only when its review score is greater t
 
 A score of exactly `9.0` is not enough.
 
+The review score includes:
+
+* article structure
+* metadata readiness
+* internal links
+* image existence
+* image quality
+* translation quality
+
 ---
 
 # 9. Schedule Ready Articles
