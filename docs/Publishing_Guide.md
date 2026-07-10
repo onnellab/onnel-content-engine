@@ -110,6 +110,15 @@ Do not use a temporary `/tmp` clone for homepage publishing work when this local
 
 Other ONNELLAB sites are connected from this main homepage.
 
+Each public post must be published in both supported languages:
+
+* English
+* Korean
+
+Publishing only one language is incomplete.
+
+The English and Korean versions should share the same slug when they represent the same article.
+
 ---
 
 # 6. Secondary Destinations
@@ -134,11 +143,17 @@ The publishing schedule should remain consistent.
 
 Preferred schedule:
 
-* Two to three articles per week
+* One article every three days
 
 Consistency is more important than volume.
 
 Avoid long inactive periods followed by large bursts of content.
+
+Generation work may happen ahead of publication.
+
+Article generation, image asset generation, and internal link recommendation may be prepared in advance.
+
+Publication itself must still follow the three-day schedule.
 
 ---
 
@@ -246,14 +261,19 @@ Images should always support understanding.
 Before publishing, confirm:
 
 * Markdown is valid.
+* English and Korean article counterparts both exist.
 * Images exist.
+* Text-containing images exist separately for English and Korean.
 * Metadata is complete.
 * Internal links work.
 * External links are valid.
 * Category is correct.
 * Related applications are accurate.
+* The article review score is greater than `9.0 / 10`.
 
 Publishing should fail if validation fails.
+
+Publishing should also fail when the review score is `9.0 / 10` or lower.
 
 ---
 

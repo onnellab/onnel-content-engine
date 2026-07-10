@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/reading/read-large-txt-files-without-lag.md",
+  "topic": {
+    "id": "TOPIC-0005",
+    "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+    "slug": "read-large-txt-files-without-lag",
+    "category": "reading",
+    "language": "ko",
+    "primary_keyword": "대용량 TXT 파일 리더",
+    "related_apps": [
+      "VaultXT"
+    ]
+  },
+  "article_sections_detected": [
+    "대용량 TXT 파일을 지연 없이 읽는 방법",
+    "질문",
+    "짧은 답변",
+    "대용량 TXT 파일이 느려지는 이유",
+    "자주 생기는 상황",
+    "먼저 확인할 항목",
+    "권장 워크플로",
+    "전체 파일 로딩과 필요한 부분 렌더링 비교",
+    "파일을 나누는 것이 도움이 되는 경우",
+    "온넬랩 앱",
+    "관련 주제",
+    "참고 자료",
+    "결론",
+    "자주 묻는 질문"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "대용량 TXT 파일 리더를 선택하기 전에 어떤 흐름을 따라야 하나요?",
+      "source_sections": [
+        "짧은 답변",
+        "권장 워크플로"
+      ],
+      "structure": [
+        "문제",
+        "과정",
+        "결과"
+      ],
+      "notes": "차분하고 최소한의 워크플로 다이어그램을 사용합니다. 시각 요소는 장식이 아니라 과정을 설명해야 합니다."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "대용량 TXT 파일 리더를 평가할 때 어떤 개념이나 접근법이 중요한가요?",
+      "source_sections": [
+        "대용량 TXT 파일이 느려지는 이유",
+        "먼저 확인할 항목"
+      ],
+      "compare": [
+        "대용량 텍스트 파일",
+        "TXT 뷰어",
+        "대용량 파일 성능"
+      ],
+      "notes": "비교는 균형 있게 유지하고 ONNELLAB 제품을 보편적으로 우월한 선택처럼 제시하지 않습니다."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "관련 ONNELLAB 앱이 언급되므로 실제 기능을 보여줄 때만 스크린샷이 유용합니다.",
+    "applications": [
+      "VaultXT"
+    ],
+    "rules": [
+      "실제 기능을 설명할 때만 스크린샷을 사용합니다.",
+      "불필요한 UI는 잘라냅니다.",
+      "관련 컨트롤이나 작업 영역만 강조합니다.",
+      "충분한 해상도를 유지합니다.",
+      "장식 목적으로 스크린샷을 사용하지 않습니다."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "대용량 TXT 파일 읽기 워크플로",
+      "steps": [
+        "문제",
+        "설명",
+        "선택지",
+        "권장 워크플로",
+        "선택적 앱"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "대용량 TXT 파일 리더 비교",
+      "items": [
+        "대용량 텍스트 파일",
+        "TXT 뷰어",
+        "대용량 파일 성능"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ]
+}

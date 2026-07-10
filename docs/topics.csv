@@ -180,6 +180,8 @@ Rules:
 * No dates unless the date is essential.
 * No application name unless the article is specifically about that product.
 * Must remain stable after publication.
+* Must be unique within the same language.
+* English and Korean counterparts for the same article should share the same slug.
 
 ---
 

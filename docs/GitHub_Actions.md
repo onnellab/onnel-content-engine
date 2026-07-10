@@ -39,6 +39,26 @@ Generate image specifications
 
 ↓
 
+Generate image assets
+
+↓
+
+Generate internal link metadata
+
+↓
+
+Evaluate articles
+
+↓
+
+Schedule ready articles
+
+↓
+
+Publish due articles
+
+↓
+
 Build
 
 ↓
@@ -92,11 +112,89 @@ scripts/generate_all_image_specs.py
 
 This stage creates `image_spec.json` files only.
 
-It does not generate image assets.
+It does not publish.
 
 ---
 
-# 6. Build
+# 6. Generate Image Assets
+
+The image asset stage runs:
+
+```text
+scripts/generate_all_image_assets.py
+```
+
+This stage creates deterministic article image assets from approved image specifications.
+
+It does not use external image generation.
+
+---
+
+# 7. Generate Internal Links
+
+The internal link stage runs:
+
+```text
+scripts/generate_all_internal_links.py
+```
+
+This stage generates recommendation metadata for:
+
+* related articles
+* related applications
+* related guides
+
+It must not modify article text.
+
+---
+
+# 8. Evaluate Articles
+
+The evaluation stage runs:
+
+```text
+scripts/evaluate_all_articles.py
+```
+
+An article may be scheduled or published only when its review score is greater than:
+
+```text
+9.0 / 10
+```
+
+A score of exactly `9.0` is not enough.
+
+---
+
+# 9. Schedule Ready Articles
+
+The scheduling stage runs:
+
+```text
+scripts/schedule_ready_articles.py --threshold 9.0 --interval-days 3 --publication-time 09:00
+```
+
+Approved review articles are scheduled one at a time at a fixed three-day interval.
+
+The publication time is `09:00` Korea Standard Time.
+
+---
+
+# 10. Publish Due Articles
+
+The due publication stage runs:
+
+```text
+scripts/publish_due_articles.py --threshold 9.0 --site-url https://onnelakin.github.io/ --limit 1
+```
+
+Only due scheduled articles whose review score remains greater than `9.0 / 10` are promoted to `published`.
+
+Scheduled articles are not included in the website build before this stage promotes them.
+
+---
+
+# 11. Build
 
 The build stage runs:
 
@@ -130,7 +228,7 @@ generated/html/
 
 ---
 
-# 7. Deploy
+# 12. Deploy
 
 The deploy stage runs only when dry-run mode is disabled.
 
@@ -170,7 +268,31 @@ The homepage repository then runs its own Astro build before the Markdown conten
 
 ---
 
-# 8. Dry-Run Mode
+# 13. Scheduled Automation
+
+The workflow runs automatically every day at:
+
+```text
+00:00 UTC
+```
+
+This is:
+
+```text
+09:00 KST
+```
+
+Daily execution does not mean daily publishing.
+
+The scheduling and due-publication scripts enforce the three-day publication interval.
+
+Push events run dry-run mode.
+
+Scheduled events run real publication mode.
+
+---
+
+# 14. Dry-Run Mode
 
 Dry-run mode is used for testing the workflow safely.
 
@@ -179,6 +301,11 @@ In dry-run mode:
 * validation runs
 * Markdown generation runs in a temporary copy
 * image specification generation runs in a temporary copy
+* image asset generation runs in a temporary copy
+* internal link generation runs in a temporary copy
+* article evaluation runs in a temporary copy
+* scheduling runs in a temporary copy
+* due-publication runs in a temporary copy
 * build runs in a temporary copy
 * homepage Markdown export is previewed without copying files
 * deployment is skipped
@@ -190,7 +317,7 @@ Push events also run dry-run mode by default.
 
 ---
 
-# 9. Unsupported Targets
+# 15. Unsupported Targets
 
 Blogger is not supported.
 

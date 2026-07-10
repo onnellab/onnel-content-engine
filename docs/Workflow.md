@@ -175,6 +175,7 @@ Every article should:
 * be easy to scan
 * be easy to understand
 * remain useful over time
+* be prepared in both English and Korean before public publication
 
 Product recommendations must appear only after the educational content.
 
@@ -237,6 +238,8 @@ Images should maintain consistent:
 
 Every infographic should be recognizable as ONNELLAB content.
 
+If an image contains readable text, English and Korean versions must be produced separately before publication.
+
 ---
 
 ### Output
@@ -262,8 +265,12 @@ Review checklist:
 * Product references
 * Internal links
 * Image quality
+* English and Korean counterparts
+* Article review score greater than `9.0 / 10`
 
 Publishing should never bypass review.
+
+An article that scores `9.0 / 10` or lower remains in review.
 
 ---
 
@@ -330,10 +337,13 @@ Automation is encouraged for:
 * Draft generation
 * Image generation
 * Metadata creation
+* Internal link recommendation
 * Publishing
 * Archiving
 
-Human review may remain optional depending on confidence level.
+Automation may prepare article drafts, image assets, and internal link recommendations ahead of the publication date.
+
+Publication automation must still enforce the review threshold and the three-day publication interval.
 
 ---
 

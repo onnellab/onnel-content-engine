@@ -14,16 +14,18 @@ on:
   push:
     branches:
       - main
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   publishing:
     name: Validate, generate, build, and deploy
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
 
     env:
-      DRY_RUN: ${{ github.event_name == 'push' && 'true' || inputs.dry_run }}
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || github.event_name == 'push' && 'true' || 'false' }}
       SITE_URL: https://onnelakin.github.io/
       HOMEPAGE_REPO_PATH: .homepage
 
@@ -59,9 +61,9 @@ jobs:
       - name: Validate
         run: |
           set -euo pipefail
-          scripts/validate_topics.py
-          scripts/validate_apps_registry.py
-          scripts/validate_foundation.py
+          python3 scripts/validate_topics.py
+          python3 scripts/validate_apps_registry.py
+          python3 scripts/validate_foundation.py
 
       - name: Prepare Dry Run Workspace
         if: env.DRY_RUN == 'true'
@@ -75,13 +77,13 @@ jobs:
         if: env.DRY_RUN != 'true'
         run: |
           set -euo pipefail
-          scripts/generate_all_markdown.py
+          python3 scripts/generate_all_markdown.py
 
       - name: Generate Markdown Dry Run
         if: env.DRY_RUN == 'true'
         run: |
           set -euo pipefail
-          scripts/generate_all_markdown.py \
+          python3 scripts/generate_all_markdown.py \
             --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
             --apps /tmp/onnel-content-engine-dry-run/data/apps_registry.csv \
             --output-root /tmp/onnel-content-engine-dry-run/generated/markdown \
@@ -91,38 +93,136 @@ jobs:
         if: env.DRY_RUN != 'true'
         run: |
           set -euo pipefail
-          scripts/generate_all_image_specs.py
+          python3 scripts/generate_all_image_specs.py
 
       - name: Generate Image Specifications Dry Run
         if: env.DRY_RUN == 'true'
         run: |
           set -euo pipefail
-          scripts/generate_all_image_specs.py \
+          python3 scripts/generate_all_image_specs.py \
             --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
             --apps /tmp/onnel-content-engine-dry-run/data/apps_registry.csv \
             --output-root /tmp/onnel-content-engine-dry-run/generated/images \
             --legacy-topics /tmp/onnel-content-engine-dry-run/topics/topics.csv
 
+      - name: Generate Image Assets
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_all_image_assets.py
+
+      - name: Generate Image Assets Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_all_image_assets.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --images-root /tmp/onnel-content-engine-dry-run/generated/images \
+            --assets-root /tmp/onnel-content-engine-dry-run/generated/assets/blog \
+            --legacy-topics /tmp/onnel-content-engine-dry-run/topics/topics.csv
+
+      - name: Generate Internal Links
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_all_internal_links.py
+
+      - name: Generate Internal Links Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_all_internal_links.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --apps /tmp/onnel-content-engine-dry-run/data/apps_registry.csv \
+            --output-root /tmp/onnel-content-engine-dry-run/generated/metadata
+
+      - name: Evaluate Articles
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/evaluate_all_articles.py
+
+      - name: Evaluate Articles Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/evaluate_all_articles.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --metadata-root /tmp/onnel-content-engine-dry-run/generated/metadata \
+            --assets-root /tmp/onnel-content-engine-dry-run/generated/assets/blog \
+            --review-root /tmp/onnel-content-engine-dry-run/generated/reviews
+
+      - name: Schedule Ready Articles
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/schedule_ready_articles.py --threshold 9.0 --interval-days 3 --publication-time 09:00
+
+      - name: Schedule Ready Articles Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/schedule_ready_articles.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --review-root /tmp/onnel-content-engine-dry-run/generated/reviews \
+            --legacy-topics /tmp/onnel-content-engine-dry-run/topics/topics.csv \
+            --threshold 9.0 \
+            --interval-days 3 \
+            --publication-time 09:00
+
+      - name: Publish Due Articles
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/publish_due_articles.py --threshold 9.0 --site-url "$SITE_URL" --limit 1
+
+      - name: Publish Due Articles Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/publish_due_articles.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --review-root /tmp/onnel-content-engine-dry-run/generated/reviews \
+            --legacy-topics /tmp/onnel-content-engine-dry-run/topics/topics.csv \
+            --threshold 9.0 \
+            --site-url "$SITE_URL" \
+            --limit 1
+
       - name: Build
         if: env.DRY_RUN != 'true'
         run: |
           set -euo pipefail
-          scripts/build_site.py --site-url "$SITE_URL"
+          python3 scripts/build_site.py --site-url "$SITE_URL"
 
       - name: Build Dry Run
         if: env.DRY_RUN == 'true'
         run: |
           set -euo pipefail
-          scripts/build_site.py \
+          python3 scripts/build_site.py \
             --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
             --site-dir /tmp/onnel-content-engine-dry-run/generated/html \
             --site-url "$SITE_URL"
+
+      - name: Commit Content Engine Outputs
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p generated/assets generated/metadata generated/reviews generated/html
+          git add data/topics.csv topics/topics.csv generated/markdown generated/images generated/assets generated/metadata generated/reviews generated/html
+          if git diff --cached --quiet; then
+            echo "No content engine changes to commit"
+          else
+            git commit -m "Run scheduled publishing automation"
+            git push origin HEAD:main
+          fi
 
       - name: Deploy Dry Run
         if: env.DRY_RUN == 'true'
         run: |
           set -euo pipefail
-          scripts/deploy_github_pages.py \
+          python3 scripts/deploy_github_pages.py \
             --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
             --homepage-repo "$HOMEPAGE_REPO_PATH" \
             --dry-run
@@ -139,6 +239,6 @@ jobs:
           fi
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          scripts/deploy_github_pages.py \
+          python3 scripts/deploy_github_pages.py \
             --homepage-repo "$HOMEPAGE_REPO_PATH" \
             --branch main

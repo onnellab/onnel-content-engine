@@ -106,7 +106,7 @@ def validate_topics() -> None:
     apps = app_names()
     rows = read_csv(TOPICS_PATH, TOPIC_HEADER)
     seen_ids: set[str] = set()
-    seen_slugs: set[str] = set()
+    seen_slugs: set[tuple[str, str]] = set()
     seen_intents: set[tuple[str, str, str, str]] = set()
 
     for row in rows:
@@ -141,8 +141,9 @@ def validate_topics() -> None:
             raise ValueError(f"{topic_id} primary_question must not begin with an ONNELLAB product name")
         if not SLUG_RE.match(row["slug"]):
             raise ValueError(f"{topic_id} has invalid slug: {row['slug']}")
-        if row["slug"] in seen_slugs:
-            raise ValueError(f"{topic_id} duplicates slug: {row['slug']}")
+        language_slug = (row["primary_language"], row["slug"])
+        if language_slug in seen_slugs:
+            raise ValueError(f"{topic_id} duplicates slug within language: {row['slug']}")
         if row["status"] == "published" and not row["published_url"]:
             raise ValueError(f"{topic_id} is published with no published_url")
         if row["status"] == "scheduled" and not row["scheduled_at"]:
@@ -166,7 +167,7 @@ def validate_topics() -> None:
             raise ValueError(f"{topic_id} duplicates an existing topic intent")
 
         seen_ids.add(topic_id)
-        seen_slugs.add(row["slug"])
+        seen_slugs.add(language_slug)
         seen_intents.add(intent_key)
 
 

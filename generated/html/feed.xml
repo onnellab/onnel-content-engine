@@ -11,5 +11,12 @@
     <description>Learn why very large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnecessary lag.</description>
     <pubDate>Fri, 10 Jul 2026 15:00:00 GMT</pubDate>
   </item>
+  <item>
+    <title>대용량 TXT 파일을 지연 없이 읽는 방법</title>
+    <link>https://onnelakin.github.io/blog/ko/read-large-txt-files-without-lag/</link>
+    <guid>https://onnelakin.github.io/blog/ko/read-large-txt-files-without-lag/</guid>
+    <description>대용량 TXT 파일이 느리게 열리는 이유, 먼저 확인할 항목, 불필요한 지연을 줄이는 plain-text 읽기 흐름을 정리합니다.</description>
+    <pubDate>Fri, 10 Jul 2026 15:00:00 GMT</pubDate>
+  </item>
 </channel>
 </rss>

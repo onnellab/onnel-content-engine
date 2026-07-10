@@ -33,7 +33,8 @@ DEFAULT_PAGES_BRANCH = "main"
 DEFAULT_HOMEPAGE_REPOSITORY_PATH = Path(
     os.environ.get("ONNELLAB_HOMEPAGE_REPOSITORY", "/mnt/c/dev/onnelakin.github.io")
 )
-PUBLISHABLE_STATUSES = {"scheduled", "published"}
+PUBLISHABLE_STATUSES = {"published"}
+REQUIRED_PUBLICATION_LANGUAGES = {"en", "ko"}
 
 FRONT_MATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
@@ -238,8 +239,23 @@ def article_url_path(topic: dict[str, str]) -> str:
     return f"blog/{topic['primary_language']}/{topic['slug']}/"
 
 
+def validate_publishable_language_pairs(rows: list[dict[str, str]]) -> None:
+    groups: dict[tuple[str, str], set[str]] = {}
+    for topic in rows:
+        if topic["status"] not in PUBLISHABLE_STATUSES:
+            continue
+        groups.setdefault((topic["category"], topic["slug"]), set()).add(topic["primary_language"])
+    for (category, slug), languages in groups.items():
+        missing = REQUIRED_PUBLICATION_LANGUAGES - languages
+        if missing:
+            raise PublishingError(
+                f"published article {category}/{slug} is missing language counterpart(s): {', '.join(sorted(missing))}"
+            )
+
+
 def load_publishable_articles(topics_path: Path, site_dir: Path, site_url: str) -> list[Article]:
     rows = read_csv(topics_path, TOPIC_HEADER)
+    validate_publishable_language_pairs(rows)
     articles: list[Article] = []
     for topic in rows:
         if topic["status"] not in PUBLISHABLE_STATUSES:

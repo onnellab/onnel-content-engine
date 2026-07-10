@@ -71,7 +71,7 @@ Encoding is the rule an app uses to turn bytes into readable characters. UTF-8 i
 
 > The safest workflow is to treat a huge TXT file as a reference document first and an editable document second.
 
-![Large TXT file reading workflow diagram](/blog-assets/read-large-txt-files-without-lag/workflow-diagram.svg "Workflow diagram: file check, encoding check, reading mode, search, bookmarks, optional app")
+![Large TXT file reading workflow diagram](/blog-assets/en/read-large-txt-files-without-lag/workflow-diagram.svg "Workflow diagram: file check, encoding check, reading mode, search, bookmarks, optional app")
 
 ## Loading the Whole File vs Rendering What You Need
 

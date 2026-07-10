@@ -217,15 +217,16 @@ def validate_row(row: dict[str, str], app_names: set[str]) -> None:
 
 def validate_rows(rows: list[dict[str, str]], app_names: set[str]) -> None:
     seen_ids: set[str] = set()
-    seen_slugs: set[str] = set()
+    seen_slugs: set[tuple[str, str]] = set()
     for row in rows:
         validate_row(row, app_names)
         if row["id"] in seen_ids:
             raise TopicError(f"duplicated topic id: {row['id']}")
-        if row["slug"] in seen_slugs:
-            raise TopicError(f"duplicated topic slug: {row['slug']}")
+        language_slug = (row["primary_language"], row["slug"])
+        if language_slug in seen_slugs:
+            raise TopicError(f"duplicated topic slug within language: {row['slug']}")
         seen_ids.add(row["id"])
-        seen_slugs.add(row["slug"])
+        seen_slugs.add(language_slug)
 
 
 class TopicStore:

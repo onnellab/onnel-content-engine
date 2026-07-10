@@ -305,7 +305,31 @@ Color should never be the only way information is communicated.
 
 ---
 
-# 15. AI Image Generation
+# 15. Language Variants
+
+Images that contain readable text must be generated separately for each published language.
+
+Supported public article languages are:
+
+* English
+* Korean
+
+Do not reuse an English text infographic in a Korean article.
+
+Do not reuse a Korean text infographic in an English article.
+
+Language-specific blog assets should use language-specific paths:
+
+```text
+/blog-assets/en/{slug}/...
+/blog-assets/ko/{slug}/...
+```
+
+Screenshots without embedded explanatory text may be reused only when the UI itself is the subject and the reuse does not reduce comprehension.
+
+---
+
+# 16. AI Image Generation
 
 When images are generated using AI:
 
@@ -321,7 +345,7 @@ Not impress.
 
 ---
 
-# 16. Quality Checklist
+# 17. Quality Checklist
 
 Before publishing, confirm that the image:
 
@@ -331,12 +355,13 @@ Before publishing, confirm that the image:
 * remains readable on mobile
 * avoids unnecessary decoration
 * supports the accompanying article
+* matches the article language when the image contains text
 
 If any item fails, revise the image.
 
 ---
 
-# 17. Success Criteria
+# 18. Success Criteria
 
 A successful image allows readers to understand the core concept almost immediately.
 

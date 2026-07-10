@@ -9,18 +9,18 @@
     "knowledge_graph": "docs/Knowledge_Graph.md"
   },
   "topic": {
-    "id": "TOPIC-0001",
-    "title": "How to Read Large TXT Files Without Lag",
+    "id": "TOPIC-0005",
+    "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
     "slug": "read-large-txt-files-without-lag",
     "category": "reading",
-    "language": "en",
+    "language": "ko",
     "status": "published",
     "topic_clusters": [
-      "huge text file",
-      "TXT viewer",
-      "large file performance",
-      "virtual rendering",
-      "large TXT file reader",
+      "대용량 텍스트 파일",
+      "TXT 뷰어",
+      "대용량 파일 성능",
+      "가상 렌더링",
+      "대용량 TXT 파일 리더",
       "reading"
     ],
     "related_app_names": [
@@ -30,13 +30,13 @@
   "recommendations": {
     "related_articles": [
       {
-        "topic_id": "TOPIC-0005",
-        "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+        "topic_id": "TOPIC-0001",
+        "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
         "category": "reading",
-        "language": "ko",
+        "language": "en",
         "status": "published",
-        "url": "https://onnelakin.github.io/blog/ko/read-large-txt-files-without-lag/",
+        "url": "https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/",
         "relationship": "deeper",
         "shared_clusters": [
           "reading"
@@ -66,9 +66,9 @@
       },
       {
         "type": "topic_cluster",
-        "title": "huge text file cluster",
+        "title": "대용량 텍스트 파일 cluster",
         "category": "reading",
-        "cluster": "huge text file",
+        "cluster": "대용량 텍스트 파일",
         "reason": "Connects the article to its nearest conceptual cluster."
       }
     ]

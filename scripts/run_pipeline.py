@@ -11,8 +11,13 @@ import tempfile
 from pathlib import Path
 
 from generate_all_image_specs import generate_all_image_specs
+from generate_all_image_assets import generate_all_image_assets
+from generate_all_internal_links import generate_all_internal_links
 from generate_all_markdown import generate_all_markdown
+from evaluate_all_articles import evaluate_all_articles
 from publishing import DEFAULT_HOMEPAGE_REPOSITORY_PATH, DEFAULT_SITE_URL, build_site, deploy_github_pages
+from publish_due_articles import publish_due_articles
+from schedule_ready_articles import schedule_ready_articles
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,15 +61,28 @@ def run_pipeline(
             legacy_topics_path = temp_root / "topics" / "topics.csv"
             markdown_root = temp_root / "generated" / "markdown"
             images_root = temp_root / "generated" / "images"
+            assets_root = temp_root / "generated" / "assets" / "blog"
+            metadata_root = temp_root / "generated" / "metadata"
+            review_root = temp_root / "generated" / "reviews"
             html_root = temp_root / "generated" / "html"
             generate_all_markdown(topics_path, apps_path, markdown_root, legacy_topics_path)
             generate_all_image_specs(topics_path, apps_path, images_root, legacy_topics_path)
+            generate_all_image_assets(topics_path, images_root, assets_root, legacy_topics_path)
+            generate_all_internal_links(topics_path, apps_path, metadata_root)
+            evaluate_all_articles(topics_path, metadata_root, assets_root, review_root)
+            schedule_ready_articles(topics_path, review_root, legacy_topics_path)
+            publish_due_articles(topics_path, review_root, legacy_topics_path, site_url=site_url)
             build_site(topics_path, html_root, site_url)
             deploy_github_pages(topics_path=topics_path, homepage_repo=homepage_repo, dry_run=True)
         return
 
     generate_all_markdown()
     generate_all_image_specs()
+    generate_all_image_assets()
+    generate_all_internal_links()
+    evaluate_all_articles()
+    schedule_ready_articles()
+    publish_due_articles(site_url=site_url)
     build_site(site_url=site_url)
     if deploy:
         deploy_github_pages(homepage_repo=homepage_repo)
