@@ -191,6 +191,7 @@ Instruction Markdown files include:
 
 * CODEX.md
 * README.md
+* docs/Phase_Lock.md
 * docs/Workflow.md
 * docs/Content_Guide.md
 * docs/SEO_Guide.md

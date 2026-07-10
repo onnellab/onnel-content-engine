@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_PATHS = [
     "CODEX.md",
     "README.md",
+    "docs/Phase_Lock.md",
     "docs/Workflow.md",
     "docs/Content_Guide.md",
     "docs/SEO_Guide.md",
