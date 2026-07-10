@@ -3,6 +3,7 @@ title: "How to Read Large TXT Files Without Lag"
 slug: "read-large-txt-files-without-lag"
 category: "reading"
 language: "en"
+description: "Learn why very large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnecessary lag."
 status: "draft"
 topic_id: "TOPIC-0001"
 search_intent: "solve"
@@ -33,6 +34,12 @@ Many general-purpose editors are designed for short notes or normal documents. W
 
 The most important distinction is between reading and editing. Reading a large plain-text file should be lighter than editing it. If the app prepares the entire file for editing before you even start reading, the experience can become slow.
 
+## Common Situations
+
+Large TXT files usually appear in practical workflows rather than as polished documents. You might be opening an exported chat history, a long web novel saved as plain text, a server log, a subtitle or transcript file, or a backup export from another tool.
+
+These files have different structures, but the reading problem is similar. You need to find the right section quickly without making the app reprocess more text than necessary.
+
 ## What To Check First
 
 - Confirm that the file is actually plain text and not a renamed binary or document file.
@@ -40,6 +47,8 @@ The most important distinction is between reading and editing. Reading a large p
 - Avoid opening the file in a rich text editor when you only need to read it.
 - Keep a backup before using tools that modify or resave the file.
 - If the file is extremely large, prefer search, bookmarks, and section-based navigation over repeated full-document scrolling.
+
+Encoding is the rule an app uses to turn bytes into readable characters. UTF-8 is common, but older files may use another encoding. If letters appear as broken symbols, the file may not be damaged; the app may simply be reading it with the wrong encoding.
 
 ## Recommended Workflow
 
@@ -51,6 +60,8 @@ The most important distinction is between reading and editing. Reading a large p
 6. Edit only when necessary, because editing usually requires more memory and processing than reading.
 
 > The safest workflow is to treat a huge TXT file as a reference document first and an editable document second.
+
+![Workflow diagram placeholder](/app-assets/vaultxt/assets/screenshots/en/1.png "Planned workflow diagram: file check, encoding check, reading mode, search, bookmarks, optional app")
 
 ## Loading the Whole File vs Rendering What You Need
 
