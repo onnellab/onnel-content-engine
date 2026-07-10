@@ -77,7 +77,7 @@ def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str
                 ("3. 흐름", "가벼운 경로 선택"),
                 ("4. 결과", "마찰을 줄여 읽기"),
             ],
-            "온넬랩 블로그 · 생성된 워크플로 자산",
+            "ONNELLAB Blog · 생성된 워크플로 자산",
             "워크플로 다이어그램",
         )
     return (

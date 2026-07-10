@@ -327,6 +327,16 @@ Language-specific blog assets should use language-specific paths:
 
 Screenshots without embedded explanatory text may be reused only when the UI itself is the subject and the reuse does not reduce comprehension.
 
+Brand labels must remain in their official form.
+
+Use:
+
+```text
+ONNELLAB Blog
+```
+
+Do not translate this label as `온넬랩 블로그` inside image assets.
+
 ---
 
 # 16. AI Image Generation

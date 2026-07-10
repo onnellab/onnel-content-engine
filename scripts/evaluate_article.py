@@ -216,6 +216,8 @@ def image_quality_passes(topic: dict[str, str], assets: list[str], assets_root: 
             found = [term for term in forbidden_svg_terms if term in svg]
             if found:
                 return False, f"Korean SVG contains untranslated text: {', '.join(found)}."
+            if "온넬랩 블로그" in svg or "ONNELLAB Blog" not in svg:
+                return False, "Korean SVG must keep the brand label as ONNELLAB Blog."
     return True, "Referenced image assets use language-specific paths, accessible SVG structure, word wrapping, and non-overlapping arrows."
 
 
