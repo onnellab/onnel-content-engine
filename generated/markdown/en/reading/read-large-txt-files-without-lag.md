@@ -1,5 +1,6 @@
 ---
 title: "How to Read Large TXT Files Without Lag"
+card_title: "Read Large TXT Files Without Lag"
 slug: "read-large-txt-files-without-lag"
 category: "reading"
 language: "en"
@@ -40,6 +41,14 @@ Large TXT files usually appear in practical workflows rather than as polished do
 
 These files have different structures, but the reading problem is similar. You need to find the right section quickly without making the app reprocess more text than necessary.
 
+## What Makes a TXT File Feel Slow
+
+File size matters, but it is not the only factor. A 50 MB TXT file with short, regular lines may feel easier to handle than a smaller file with extremely long lines, unusual characters, or a structure that forces the app to calculate a large layout before showing anything.
+
+The number of lines, the length of each line, the file encoding, available device memory, and the app's search behavior can all affect the experience. If the file is slow only when searching, the bottleneck may be different from a file that is slow immediately after opening.
+
+Before changing tools, identify the task. Reading, searching, bookmarking, converting, and editing require different amounts of memory and processing. A workflow that is good for quick inspection may not be the best workflow for heavy editing.
+
 ## What To Check First
 
 - Confirm that the file is actually plain text and not a renamed binary or document file.
@@ -61,7 +70,7 @@ Encoding is the rule an app uses to turn bytes into readable characters. UTF-8 i
 
 > The safest workflow is to treat a huge TXT file as a reference document first and an editable document second.
 
-![Workflow diagram placeholder](/app-assets/vaultxt/assets/screenshots/en/1.png "Planned workflow diagram: file check, encoding check, reading mode, search, bookmarks, optional app")
+![Workflow diagram placeholder](/blog-assets/read-large-txt-files-without-lag/workflow-diagram.png "Planned workflow diagram: file check, encoding check, reading mode, search, bookmarks, optional app")
 
 ## Loading the Whole File vs Rendering What You Need
 
@@ -91,6 +100,14 @@ VaultXT should be considered after the basic workflow is clear: confirm the file
 - TXT encoding and unreadable characters
 - Plain-text reading workflows
 - Search and bookmarks in long documents
+
+## References
+
+- [The Unicode Standard](https://www.unicode.org/versions/latest/) for the official Unicode specification and related character encoding references.
+
+## Conclusion
+
+Start by treating the TXT file as something to read and inspect, not something to fully edit. Confirm that the file is plain text, check encoding when characters look wrong, use search and bookmarks before repeated scrolling, and choose a reader designed for large plain-text files when the problem happens often.
 
 ## FAQ
 

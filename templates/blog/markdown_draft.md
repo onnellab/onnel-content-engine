@@ -1,8 +1,10 @@
 ---
 title: "{{title}}"
+card_title: "{{card_title}}"
 slug: "{{slug}}"
 category: "{{category}}"
 language: "{{primary_language}}"
+description: "{{meta_description}}"
 status: "draft"
 topic_id: "{{topic_id}}"
 search_intent: "{{search_intent}}"
@@ -12,6 +14,7 @@ related_apps: "{{related_apps}}"
 canonical_url: ""
 published_at: ""
 updated_at: ""
+image_specs: "{{image_specs}}"
 ---
 
 # {{title}}
@@ -28,6 +31,10 @@ updated_at: ""
 
 {{problem_explanation}}
 
+## What Makes This Problem Feel Worse
+
+{{diagnostic_factors}}
+
 ## What To Check First
 
 {{checklist}}
@@ -36,6 +43,8 @@ updated_at: ""
 
 {{workflow_steps}}
 
+![Workflow diagram placeholder](/blog-assets/{{slug}}/workflow-diagram.png "Planned workflow diagram for the recommended process")
+
 ## ONNELLAB Application
 
 {{product_section}}
@@ -43,6 +52,14 @@ updated_at: ""
 ## Related Topics
 
 {{related_topics}}
+
+## References
+
+{{references_section}}
+
+## Conclusion
+
+{{conclusion}}
 
 ## FAQ
 

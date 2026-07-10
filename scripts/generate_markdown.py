@@ -60,6 +60,13 @@ def sentence_from_question(question: str) -> str:
     return cleaned[0].lower() + cleaned[1:]
 
 
+def card_title(title: str) -> str:
+    cleaned = title.strip()
+    if cleaned.lower().startswith("how to "):
+        cleaned = cleaned[7:].strip()
+    return cleaned or title.strip()
+
+
 def split_pipe(value: str) -> list[str]:
     return [item.strip() for item in value.split("|") if item.strip()]
 
@@ -121,6 +128,12 @@ def draft_context(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> dic
         "Recommend the most appropriate workflow for the reader's situation.",
         "Introduce an ONNELLAB application only if it directly solves the problem.",
     ]
+    diagnostic_items = [
+        "The size of the input can matter, but size alone rarely explains every slowdown.",
+        "Long continuous sections may be harder to process than shorter structured sections.",
+        "Encoding, file format, device memory, and search behavior can all affect the experience.",
+        "The reader should identify whether the task is reading, searching, converting, or editing before choosing a tool.",
+    ]
     faq = [
         f"**Is this article mainly about {keyword}?**\n\nYes. The draft should stay focused on one primary question and avoid unrelated keywords.",
         "**Should the article start with an ONNELLAB product?**\n\nNo. The article should explain the reader's problem before mentioning any application.",
@@ -129,14 +142,22 @@ def draft_context(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> dic
 
     return {
         "title": topic["working_title"],
+        "card_title": card_title(topic["working_title"]),
         "slug": topic["slug"],
         "category": topic["category"],
         "primary_language": topic["primary_language"],
+        "meta_description": (
+            f"Learn how to evaluate {keyword}, understand the practical trade-offs, and choose a workflow that solves "
+            "the problem without unnecessary complexity."
+        ),
         "topic_id": topic["id"],
         "search_intent": topic["search_intent"],
         "primary_keyword": keyword,
         "secondary_keywords": topic["secondary_keywords"],
         "related_apps": topic["related_apps"],
+        "image_specs": (
+            f"Workflow diagram for {keyword}|Comparison diagram for practical options|Screenshot requirements for related applications"
+        ),
         "primary_question": topic["primary_question"],
         "short_answer": (
             f"The practical answer is to understand {subject}, then choose a workflow that solves the problem "
@@ -147,10 +168,19 @@ def draft_context(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> dic
             f"The article should define {keyword}, explain related concepts such as {', '.join(concepts)}, and describe "
             "the trade-offs in calm, objective language."
         ),
+        "diagnostic_factors": "\n\n".join(diagnostic_items),
         "checklist": render_list(checklist_items),
         "workflow_steps": render_steps(workflow_items),
         "product_section": product_section(topic, apps),
         "related_topics": related_topics(topic),
+        "references_section": (
+            "Add official specifications, platform documentation, or recognized standards during review when they improve trust. "
+            "Do not add low-quality external links."
+        ),
+        "conclusion": (
+            f"Start with the reader's real task, explain {keyword} clearly, and recommend the simplest workflow that solves the problem. "
+            "Mention an ONNELLAB application only after the educational answer is complete."
+        ),
         "faq_section": "\n\n".join(faq),
     }
 
@@ -165,14 +195,17 @@ def render_template(template: str, context: dict[str, str]) -> str:
             raise MarkdownGenerationError(f"unknown template placeholder: {key}")
         if key in {
             "title",
+            "card_title",
             "slug",
             "category",
             "primary_language",
+            "meta_description",
             "topic_id",
             "search_intent",
             "primary_keyword",
             "secondary_keywords",
             "related_apps",
+            "image_specs",
         }:
             return yaml_escape(context[key])
         return markdown_escape(context[key])

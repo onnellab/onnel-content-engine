@@ -21,12 +21,15 @@
     "Short Answer",
     "Why This Problem Happens",
     "Common Situations",
+    "What Makes a TXT File Feel Slow",
     "What To Check First",
     "Recommended Workflow",
     "Loading the Whole File vs Rendering What You Need",
     "When Splitting the File Helps",
     "ONNELLAB Application",
     "Related Topics",
+    "References",
+    "Conclusion",
     "FAQ",
     "Can a large TXT file damage my device?",
     "Should I convert a large TXT file to PDF or EPUB?",
@@ -85,6 +88,7 @@
       "question_answered": "Which concepts or approaches matter when evaluating large TXT file reader?",
       "source_sections": [
         "Why This Problem Happens",
+        "What Makes a TXT File Feel Slow",
         "What To Check First"
       ],
       "compare": [
