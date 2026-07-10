@@ -82,6 +82,20 @@ Every article should be published there first.
 
 Other platforms receive adapted versions.
 
+The main GitHub Pages homepage repository is:
+
+```text
+https://github.com/onnelakin/onnelakin.github.io.git
+```
+
+The canonical website root is:
+
+```text
+https://onnelakin.github.io/
+```
+
+Other ONNELLAB sites are connected from this main homepage.
+
 ---
 
 # 6. Secondary Destinations

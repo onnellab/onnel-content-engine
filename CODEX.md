@@ -179,6 +179,14 @@ Codex must commit and push after each completed task.
 
 After every 10 completed tasks, Codex must reread the instruction Markdown files before making further implementation decisions.
 
+The main GitHub Pages homepage repository is:
+
+```text
+https://github.com/onnelakin/onnelakin.github.io.git
+```
+
+ONNELLAB publishing targets should treat `https://onnelakin.github.io/` as the canonical website root unless a project document explicitly says otherwise.
+
 Instruction Markdown files include:
 
 * CODEX.md
