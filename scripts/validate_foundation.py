@@ -40,6 +40,7 @@ REQUIRED_PATHS = [
     "generated/markdown",
     "generated/html",
     "generated/images",
+    "generated/metadata",
     "generated/social",
     "scripts",
     ".github/workflows",
