@@ -14,6 +14,7 @@ from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEAD
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_IMAGES_ROOT = ROOT / "generated" / "images"
 DEFAULT_ASSETS_ROOT = ROOT / "generated" / "assets" / "blog"
+SVG_FONT_STACK = "Pretendard, SUIT, Noto Sans KR, Apple SD Gothic Neo, Inter, system-ui, sans-serif"
 
 
 class ImageAssetError(ValueError):
@@ -110,9 +111,9 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
         detail_lines = wrap_words(detail, 16, max_lines=2)
         cards.append(
             f'<g transform="translate({x} 220)">'
-            f'<rect width="{card_width}" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>'
-            f'<text x="24" y="48" fill="#2f302c" font-family="Inter, system-ui, sans-serif" font-size="21" font-weight="700">{html_escape(heading)}</text>'
-            f'<text fill="#625f58" font-family="Inter, system-ui, sans-serif" font-size="17">{svg_tspans(detail_lines, 24, 88, 24)}</text>'
+            f'<rect width="{card_width}" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/>'
+            f'<text x="24" y="48" fill="#30302c" font-family="{SVG_FONT_STACK}" font-size="20" font-weight="650">{html_escape(heading)}</text>'
+            f'<text fill="#5f5b54" font-family="{SVG_FONT_STACK}" font-size="16">{svg_tspans(detail_lines, 24, 88, 23)}</text>'
             "</g>"
         )
         x += card_width + card_gap
@@ -124,14 +125,14 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
   <title id="title">{html_escape(" ".join(title_lines))}</title>
   <desc id="desc">ONNELLAB {description_label} for {keyword}.</desc>
   <rect width="1200" height="675" fill="#fbf7ef"/>
-  <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="2"/>
-  <text fill="#2f302c" font-family="Inter, system-ui, sans-serif" font-size="40" font-weight="720">{svg_tspans(title_lines, 92, 112, 46)}</text>
-  <text x="92" y="184" fill="#6c675e" font-family="Inter, system-ui, sans-serif" font-size="20">{html_escape(subtitle)} · {keyword}</text>
+  <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
+  <text fill="#30302c" font-family="{SVG_FONT_STACK}" font-size="38" font-weight="680">{svg_tspans(title_lines, 92, 112, 44)}</text>
+  <text x="92" y="184" fill="#69645c" font-family="{SVG_FONT_STACK}" font-size="19">{html_escape(subtitle)} · {keyword}</text>
   {''.join(cards)}
   {arrows}
-  <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="2"/>
-  <text x="124" y="506" fill="#2f302c" font-family="Inter, system-ui, sans-serif" font-size="21" font-weight="700">{html_escape(bottom_message)}</text>
-  <text x="92" y="588" fill="#8a857b" font-family="Inter, system-ui, sans-serif" font-size="15">{html_escape(footer)}</text>
+  <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.6"/>
+  <text x="124" y="506" fill="#30302c" font-family="{SVG_FONT_STACK}" font-size="20" font-weight="650">{html_escape(bottom_message)}</text>
+  <text x="92" y="588" fill="#817c73" font-family="{SVG_FONT_STACK}" font-size="14">{html_escape(footer)}</text>
 </svg>
 '''
 
