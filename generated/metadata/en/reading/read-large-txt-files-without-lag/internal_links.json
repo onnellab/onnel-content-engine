@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0001",
+    "title": "How to Read Large TXT Files Without Lag",
+    "slug": "read-large-txt-files-without-lag",
+    "category": "reading",
+    "language": "en",
+    "status": "image_planning",
+    "topic_clusters": [
+      "huge text file",
+      "TXT viewer",
+      "large file performance",
+      "virtual rendering",
+      "large TXT file reader",
+      "reading"
+    ],
+    "related_app_names": [
+      "VaultXT"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [],
+    "related_apps": [
+      {
+        "app_id": "APP-0003",
+        "app_name": "VaultXT",
+        "slug": "vaultxt",
+        "category": "reading",
+        "url": "/apps/vaultxt/",
+        "description": "A text editor and viewer designed for working with large plain-text files.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Reading guide",
+        "category": "reading",
+        "cluster": "reading",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "huge text file cluster",
+        "category": "reading",
+        "cluster": "huge text file",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}
