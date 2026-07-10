@@ -232,3 +232,5 @@ Teach first.
 Recommend second.
 
 Sell last.
+
+Implementation follows documentation. Documentation does not follow implementation.
