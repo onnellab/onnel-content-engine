@@ -109,6 +109,40 @@ def related_topics(topic: dict[str, str]) -> str:
     return render_list([f"Further reading placeholder: {item}" for item in related[:4]])
 
 
+def localized_labels(language: str) -> dict[str, str]:
+    if language == "ko":
+        return {
+            "question_heading": "질문",
+            "short_answer_heading": "요약 답변",
+            "problem_heading": "이 문제가 생기는 이유",
+            "diagnostic_heading": "문제가 더 심하게 느껴지는 경우",
+            "checklist_heading": "먼저 확인할 항목",
+            "workflow_heading": "권장 워크플로",
+            "app_heading": "온넬랩 앱",
+            "related_heading": "관련 주제",
+            "references_heading": "참고 자료",
+            "conclusion_heading": "결론",
+            "faq_heading": "자주 묻는 질문",
+            "workflow_image_alt": "워크플로 다이어그램",
+            "workflow_image_title": "권장 과정을 설명하는 워크플로 다이어그램",
+        }
+    return {
+        "question_heading": "Question",
+        "short_answer_heading": "Short Answer",
+        "problem_heading": "Why This Problem Happens",
+        "diagnostic_heading": "What Makes This Problem Feel Worse",
+        "checklist_heading": "What To Check First",
+        "workflow_heading": "Recommended Workflow",
+        "app_heading": "ONNELLAB Application",
+        "related_heading": "Related Topics",
+        "references_heading": "References",
+        "conclusion_heading": "Conclusion",
+        "faq_heading": "FAQ",
+        "workflow_image_alt": "Workflow diagram placeholder",
+        "workflow_image_title": "Planned workflow diagram for the recommended process",
+    }
+
+
 def draft_context(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> dict[str, str]:
     subject = sentence_from_question(topic["primary_question"])
     keyword = topic["primary_keyword"]
@@ -140,7 +174,7 @@ def draft_context(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> dic
         "**Can this draft include images?**\n\nNo. Image planning and image production are separate workflow stages.",
     ]
 
-    return {
+    context = {
         "title": topic["working_title"],
         "card_title": card_title(topic["working_title"]),
         "slug": topic["slug"],
@@ -183,6 +217,8 @@ def draft_context(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> dic
         ),
         "faq_section": "\n\n".join(faq),
     }
+    context.update(localized_labels(topic["primary_language"]))
+    return context
 
 
 PLACEHOLDER_RE = re.compile(r"{{([a-zA-Z0-9_]+)}}")

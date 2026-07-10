@@ -83,7 +83,7 @@ def related_article_count(path: Path) -> int:
 
 SECTION_ALIASES = {
     "question": {"question", "질문"},
-    "short_answer": {"short answer", "짧은 답변"},
+    "short_answer": {"short answer", "짧은 답변", "요약 답변", "핵심 답변", "요약"},
     "recommended_workflow": {"recommended workflow", "권장 워크플로"},
     "onnellab_application": {"onnellab application", "온넬랩 앱"},
     "references": {"references", "참고 자료"},

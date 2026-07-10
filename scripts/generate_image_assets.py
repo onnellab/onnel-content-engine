@@ -41,6 +41,35 @@ def svg_text(value: str, max_chars: int = 34) -> str:
     return html_escape(value[: max_chars - 1] + "…") if len(value) > max_chars else html_escape(value)
 
 
+def wrap_words(value: str, max_chars: int, max_lines: int = 2) -> list[str]:
+    words = " ".join(value.split()).split(" ")
+    if not words:
+        return [""]
+    lines: list[str] = []
+    current = words[0]
+    for word in words[1:]:
+        candidate = f"{current} {word}"
+        if len(candidate) <= max_chars:
+            current = candidate
+            continue
+        lines.append(current)
+        current = word
+        if len(lines) == max_lines - 1:
+            break
+    remaining_index = sum(len(line.split(" ")) for line in lines) + len(current.split(" "))
+    if remaining_index < len(words):
+        current = f"{current} ..."
+    lines.append(current)
+    return lines[:max_lines]
+
+
+def svg_tspans(lines: list[str], x: int, y: int, line_height: int) -> str:
+    return "".join(
+        f'<tspan x="{x}" y="{y + index * line_height}">{html_escape(line)}</tspan>'
+        for index, line in enumerate(lines)
+    )
+
+
 def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str, str]:
     if language == "ko":
         return (
@@ -70,31 +99,34 @@ def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str
 
 
 def workflow_svg(title: str, keyword: str, language: str) -> str:
-    title = svg_text(title, 48)
+    title_lines = wrap_words(title, 34, max_lines=2)
     keyword = svg_text(keyword, 36)
     subtitle, bottom_message, steps, footer, description_label = localized_steps(language)
     cards = []
-    x = 92
+    card_width = 190
+    card_gap = 84
+    x = 72
     for heading, detail in steps:
+        detail_lines = wrap_words(detail, 16, max_lines=2)
         cards.append(
             f'<g transform="translate({x} 220)">'
-            '<rect width="220" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>'
+            f'<rect width="{card_width}" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>'
             f'<text x="24" y="48" fill="#2f302c" font-family="Inter, system-ui, sans-serif" font-size="21" font-weight="700">{html_escape(heading)}</text>'
-            f'<text x="24" y="88" fill="#625f58" font-family="Inter, system-ui, sans-serif" font-size="17">{html_escape(detail)}</text>'
+            f'<text fill="#625f58" font-family="Inter, system-ui, sans-serif" font-size="17">{svg_tspans(detail_lines, 24, 88, 24)}</text>'
             "</g>"
         )
-        x += 250
+        x += card_width + card_gap
     arrows = "".join(
-        f'<path d="M{300 + i * 250} 295h34m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
+        f'<path d="M{72 + card_width + i * (card_width + card_gap) + 18} 295H{72 + (i + 1) * (card_width + card_gap) - 18}m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
         for i in range(3)
     )
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
-  <title id="title">{title}</title>
+  <title id="title">{html_escape(" ".join(title_lines))}</title>
   <desc id="desc">ONNELLAB {description_label} for {keyword}.</desc>
   <rect width="1200" height="675" fill="#fbf7ef"/>
   <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="2"/>
-  <text x="92" y="120" fill="#2f302c" font-family="Inter, system-ui, sans-serif" font-size="40" font-weight="720">{title}</text>
-  <text x="92" y="164" fill="#6c675e" font-family="Inter, system-ui, sans-serif" font-size="20">{html_escape(subtitle)} · {keyword}</text>
+  <text fill="#2f302c" font-family="Inter, system-ui, sans-serif" font-size="40" font-weight="720">{svg_tspans(title_lines, 92, 112, 46)}</text>
+  <text x="92" y="184" fill="#6c675e" font-family="Inter, system-ui, sans-serif" font-size="20">{html_escape(subtitle)} · {keyword}</text>
   {''.join(cards)}
   {arrows}
   <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="2"/>

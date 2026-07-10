@@ -19,48 +19,48 @@ image_specs: "{{image_specs}}"
 
 # {{title}}
 
-## Question
+## {{question_heading}}
 
 {{primary_question}}
 
-## Short Answer
+## {{short_answer_heading}}
 
 {{short_answer}}
 
-## Why This Problem Happens
+## {{problem_heading}}
 
 {{problem_explanation}}
 
-## What Makes This Problem Feel Worse
+## {{diagnostic_heading}}
 
 {{diagnostic_factors}}
 
-## What To Check First
+## {{checklist_heading}}
 
 {{checklist}}
 
-## Recommended Workflow
+## {{workflow_heading}}
 
 {{workflow_steps}}
 
-![Workflow diagram placeholder](/blog-assets/{{slug}}/workflow-diagram.svg "Planned workflow diagram for the recommended process")
+![{{workflow_image_alt}}](/blog-assets/{{primary_language}}/{{slug}}/workflow-diagram.svg "{{workflow_image_title}}")
 
-## ONNELLAB Application
+## {{app_heading}}
 
 {{product_section}}
 
-## Related Topics
+## {{related_heading}}
 
 {{related_topics}}
 
-## References
+## {{references_heading}}
 
 {{references_section}}
 
-## Conclusion
+## {{conclusion_heading}}
 
 {{conclusion}}
 
-## FAQ
+## {{faq_heading}}
 
 {{faq_section}}

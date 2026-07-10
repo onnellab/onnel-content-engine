@@ -107,7 +107,7 @@ class MarkdownGenerationTest(unittest.TestCase):
         self.assertIn("## Short Answer", content)
         self.assertIn("## What Makes This Problem Feel Worse", content)
         self.assertIn("## Recommended Workflow", content)
-        self.assertIn("![Workflow diagram placeholder](/blog-assets/read-large-txt-files/workflow-diagram.svg", content)
+        self.assertIn("![Workflow diagram placeholder](/blog-assets/en/read-large-txt-files/workflow-diagram.svg", content)
         self.assertIn("## ONNELLAB Application", content)
         self.assertIn("## References", content)
         self.assertIn("## Conclusion", content)
