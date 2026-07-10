@@ -43,7 +43,25 @@ REQUIRED_PATHS = [
     "generated/social",
     "scripts",
     ".github/workflows",
+    "archive",
     "data/apps_registry.csv",
+    "data/topics.csv",
+    "scripts/validate_apps_registry.py",
+    "scripts/validate_topics.py",
+    "generated/markdown/en/reading",
+    "generated/markdown/en/music",
+    "generated/markdown/en/productivity",
+    "generated/markdown/en/media",
+    "generated/markdown/en/craft",
+    "generated/markdown/en/games",
+    "generated/markdown/en/research",
+    "generated/markdown/ko/reading",
+    "generated/markdown/ko/music",
+    "generated/markdown/ko/productivity",
+    "generated/markdown/ko/media",
+    "generated/markdown/ko/craft",
+    "generated/markdown/ko/games",
+    "generated/markdown/ko/research",
 ]
 
 TOPIC_HEADER = [
@@ -274,8 +292,12 @@ def validate_topic_file(path: Path, apps: dict[str, dict[str, str]]) -> list[dic
 
 
 def validate_topics(apps: dict[str, dict[str, str]]) -> None:
-    canonical_rows = validate_topic_file(ROOT / "topics/topics.csv", apps)
-    canonical_ids = {row["id"] for row in canonical_rows}
+    data_rows = validate_topic_file(ROOT / "data/topics.csv", apps)
+    legacy_rows = validate_topic_file(ROOT / "topics/topics.csv", apps)
+    canonical_ids = {row["id"] for row in data_rows}
+
+    if data_rows != legacy_rows:
+        raise ValueError("data/topics.csv and topics/topics.csv must remain identical during v1 foundation setup")
 
     for category in sorted(TOPIC_CATEGORIES):
         path = ROOT / "topics" / f"{category}.csv"
