@@ -43,7 +43,7 @@ image_specs: "{{image_specs}}"
 
 {{workflow_steps}}
 
-![Workflow diagram placeholder](/blog-assets/{{slug}}/workflow-diagram.png "Planned workflow diagram for the recommended process")
+![Workflow diagram placeholder](/blog-assets/{{slug}}/workflow-diagram.svg "Planned workflow diagram for the recommended process")
 
 ## ONNELLAB Application
 

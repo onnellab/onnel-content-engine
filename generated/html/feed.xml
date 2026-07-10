@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>ONNELLAB Content Engine</title>
+  <link>https://onnelakin.github.io/</link>
+  <description>Canonical ONNELLAB educational articles.</description>
+  <item>
+    <title>How to Read Large TXT Files Without Lag</title>
+    <link>https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/</link>
+    <guid>https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/</guid>
+    <description>Learn why very large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnecessary lag.</description>
+    <pubDate>Fri, 10 Jul 2026 15:00:00 GMT</pubDate>
+  </item>
+</channel>
+</rss>

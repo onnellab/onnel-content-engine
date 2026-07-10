@@ -52,6 +52,7 @@ title: "How to Read Very Large TXT Files"
 slug: "read-large-txt-files"
 category: "reading"
 language: "en"
+description: "A practical guide to reading very large TXT files without unnecessary lag."
 topic_id: "TOPIC-0001"
 ---
 
@@ -70,6 +71,14 @@ Use a reader workflow that separates file size, encoding, and search behavior be
 1. Identify the file size.
 2. Check the encoding.
 3. Choose a stable reader.
+
+> Treat the file as a reference document before editing it.
+
+![Workflow diagram](/blog-assets/read-large-txt-files/workflow-diagram.svg "Workflow diagram")
+
+| Approach | Best for |
+| --- | --- |
+| Render visible text | Very large TXT files |
 """
 
 
@@ -84,6 +93,9 @@ class PublishingTest(unittest.TestCase):
         self.markdown_path.parent.mkdir(parents=True)
         write_topics(self.topics_path, [topic_row()])
         self.markdown_path.write_text(MARKDOWN, encoding="utf-8")
+        self.asset_path = self.root / "generated" / "assets" / "blog" / "read-large-txt-files" / "workflow-diagram.svg"
+        self.asset_path.parent.mkdir(parents=True)
+        self.asset_path.write_text("<svg xmlns=\"http://www.w3.org/2000/svg\"></svg>\n", encoding="utf-8")
 
     def tearDown(self) -> None:
         self.tmp.cleanup()
@@ -101,7 +113,12 @@ class PublishingTest(unittest.TestCase):
         self.assertTrue((self.site_dir / "index.html").exists())
         self.assertTrue((self.site_dir / "feed.xml").exists())
         self.assertTrue((self.site_dir / "sitemap.xml").exists())
-        self.assertIn("<h1>How to Read Very Large TXT Files</h1>", article_html.read_text(encoding="utf-8"))
+        html = article_html.read_text(encoding="utf-8")
+        self.assertIn("<h1>How to Read Very Large TXT Files</h1>", html)
+        self.assertIn('content="A practical guide to reading very large TXT files without unnecessary lag."', html)
+        self.assertIn("<blockquote>Treat the file as a reference document before editing it.</blockquote>", html)
+        self.assertIn("<table>", html)
+        self.assertIn('<img src="/blog-assets/read-large-txt-files/workflow-diagram.svg"', html)
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", (self.site_dir / "feed.xml").read_text(encoding="utf-8"))
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", (self.site_dir / "sitemap.xml").read_text(encoding="utf-8"))
 
@@ -140,9 +157,11 @@ class PublishingTest(unittest.TestCase):
         exports = export_markdown_to_homepage(self.topics_path, homepage)
 
         destination = homepage / "src" / "content" / "blog" / "en" / "read-large-txt-files.md"
+        asset_destination = homepage / "public" / "blog-assets" / "read-large-txt-files" / "workflow-diagram.svg"
         self.assertEqual(len(exports), 1)
         self.assertEqual(exports[0].action, "create")
         self.assertEqual(destination.read_text(encoding="utf-8"), MARKDOWN)
+        self.assertEqual(asset_destination.read_text(encoding="utf-8"), self.asset_path.read_text(encoding="utf-8"))
         self.assertEqual(existing_site_file.read_text(encoding="utf-8"), "<main>keep</main>\n")
 
     def test_export_markdown_to_homepage_dry_run_does_not_copy(self) -> None:
@@ -155,9 +174,11 @@ class PublishingTest(unittest.TestCase):
         exports = export_markdown_to_homepage(self.topics_path, homepage, dry_run=True)
 
         destination = homepage / "src" / "content" / "blog" / "en" / "read-large-txt-files.md"
+        asset_destination = homepage / "public" / "blog-assets" / "read-large-txt-files" / "workflow-diagram.svg"
         self.assertEqual(len(exports), 1)
         self.assertEqual(exports[0].action, "create")
         self.assertFalse(destination.exists())
+        self.assertFalse(asset_destination.exists())
 
 
 if __name__ == "__main__":

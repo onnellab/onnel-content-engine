@@ -38,6 +38,8 @@ PUBLISHABLE_STATUSES = {"scheduled", "published"}
 FRONT_MATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
+BLOG_ASSET_RE = re.compile(r"\]\((/blog-assets/[^)\s\"]+)")
+IMAGE_RE = re.compile(r"^!\[([^\]]*)\]\(([^)\s]+)(?:\s+\"([^\"]+)\")?\)$")
 
 
 class PublishingError(ValueError):
@@ -89,12 +91,19 @@ def markdown_to_html(markdown: str) -> str:
     paragraph: list[str] = []
     list_items: list[str] = []
     ordered_items: list[str] = []
+    blockquote: list[str] = []
 
     def flush_paragraph() -> None:
         nonlocal paragraph
         if paragraph:
             blocks.append(f"<p>{inline_markdown(' '.join(paragraph))}</p>")
             paragraph = []
+
+    def flush_blockquote() -> None:
+        nonlocal blockquote
+        if blockquote:
+            blocks.append(f"<blockquote>{inline_markdown(' '.join(blockquote))}</blockquote>")
+            blockquote = []
 
     def flush_lists() -> None:
         nonlocal list_items, ordered_items
@@ -105,37 +114,87 @@ def markdown_to_html(markdown: str) -> str:
             blocks.append("<ol>" + "".join(f"<li>{inline_markdown(item)}</li>" for item in ordered_items) + "</ol>")
             ordered_items = []
 
-    for line in lines:
+    def flush_all() -> None:
+        flush_paragraph()
+        flush_lists()
+        flush_blockquote()
+
+    index = 0
+    while index < len(lines):
+        line = lines[index]
         stripped = line.strip()
         if not stripped:
-            flush_paragraph()
-            flush_lists()
+            flush_all()
+            index += 1
             continue
         heading = re.match(r"^(#{1,6})\s+(.+)$", stripped)
         unordered = re.match(r"^-\s+(.+)$", stripped)
         ordered = re.match(r"^\d+\.\s+(.+)$", stripped)
+        quote = re.match(r"^>\s?(.+)$", stripped)
+        image = IMAGE_RE.match(stripped)
         if heading:
-            flush_paragraph()
-            flush_lists()
+            flush_all()
             level = min(len(heading.group(1)), 6)
             blocks.append(f"<h{level}>{inline_markdown(heading.group(2))}</h{level}>")
+        elif image:
+            flush_all()
+            alt = html.escape(image.group(1), quote=True)
+            src = html.escape(image.group(2), quote=True)
+            title = image.group(3)
+            title_attr = f' title="{html.escape(title, quote=True)}"' if title else ""
+            blocks.append(f'<figure><img src="{src}" alt="{alt}"{title_attr}></figure>')
+        elif is_table_start(lines, index):
+            flush_all()
+            table_html, index = read_table_html(lines, index)
+            blocks.append(table_html)
         elif unordered:
             flush_paragraph()
+            flush_blockquote()
             if ordered_items:
                 flush_lists()
             list_items.append(unordered.group(1))
         elif ordered:
             flush_paragraph()
+            flush_blockquote()
             if list_items:
                 flush_lists()
             ordered_items.append(ordered.group(1))
+        elif quote:
+            flush_paragraph()
+            flush_lists()
+            blockquote.append(quote.group(1))
         else:
             flush_lists()
+            flush_blockquote()
             paragraph.append(stripped)
+        index += 1
 
-    flush_paragraph()
-    flush_lists()
+    flush_all()
     return "\n".join(blocks)
+
+
+def is_table_start(lines: list[str], index: int) -> bool:
+    header = lines[index].strip() if index < len(lines) else ""
+    separator = lines[index + 1].strip() if index + 1 < len(lines) else ""
+    return "|" in header and bool(re.fullmatch(r"\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?", separator))
+
+
+def table_cells(line: str) -> list[str]:
+    return [cell.strip() for cell in line.strip().strip("|").split("|")]
+
+
+def read_table_html(lines: list[str], index: int) -> tuple[str, int]:
+    headers = table_cells(lines[index])
+    rows: list[list[str]] = []
+    cursor = index + 2
+    while cursor < len(lines) and "|" in lines[cursor].strip() and lines[cursor].strip():
+        rows.append(table_cells(lines[cursor]))
+        cursor += 1
+    head = "<thead><tr>" + "".join(f"<th>{inline_markdown(header)}</th>" for header in headers) + "</tr></thead>"
+    body = "<tbody>" + "".join(
+        "<tr>" + "".join(f"<td>{inline_markdown(cell)}</td>" for cell in row) + "</tr>" for row in rows
+    ) + "</tbody>"
+    return f"<table>{head}{body}</table>", cursor - 1
 
 
 def first_paragraph_text(markdown: str) -> str:
@@ -193,7 +252,7 @@ def load_publishable_articles(topics_path: Path, site_dir: Path, site_url: str) 
         markdown = markdown_path.read_text(encoding="utf-8")
         metadata, _ = parse_front_matter(markdown)
         title = metadata.get("title") or topic["working_title"]
-        description = first_paragraph_text(markdown) or topic["primary_question"]
+        description = metadata.get("description") or first_paragraph_text(markdown) or topic["primary_question"]
         url_path = article_url_path(topic)
         html_path = site_dir / url_path / "index.html"
         body_html = markdown_to_html(markdown)
@@ -319,21 +378,66 @@ def homepage_destination_for(topic: dict[str, str], homepage_repo: Path) -> Path
     return homepage_repo / "src" / "content" / "blog" / language / f"{topic['slug']}.md"
 
 
+def blog_asset_source_for(asset_path: str, project_root: Path = ROOT) -> Path:
+    relative = asset_path.lstrip("/")
+    if not relative.startswith("blog-assets/"):
+        raise PublishingError(f"unsupported blog asset path: {asset_path}")
+    return project_root / "generated" / "assets" / "blog" / relative.removeprefix("blog-assets/")
+
+
+def blog_asset_destination_for(asset_path: str, homepage_repo: Path) -> Path:
+    relative = asset_path.lstrip("/")
+    if not relative.startswith("blog-assets/"):
+        raise PublishingError(f"unsupported blog asset path: {asset_path}")
+    return homepage_repo / "public" / relative
+
+
+def referenced_blog_assets(markdown: str) -> list[str]:
+    seen: set[str] = set()
+    assets: list[str] = []
+    for match in BLOG_ASSET_RE.finditer(markdown):
+        asset_path = match.group(1)
+        if asset_path in seen:
+            continue
+        seen.add(asset_path)
+        assets.append(asset_path)
+    return assets
+
+
+def export_blog_assets_to_homepage(markdown: str, homepage_repo: Path, dry_run: bool, project_root: Path = ROOT) -> None:
+    for asset_path in referenced_blog_assets(markdown):
+        source = blog_asset_source_for(asset_path, project_root)
+        if not source.exists():
+            try:
+                display_path = source.relative_to(project_root)
+            except ValueError:
+                display_path = source
+            raise PublishingError(f"referenced blog asset does not exist: {display_path}")
+        if dry_run:
+            continue
+        destination = blog_asset_destination_for(asset_path, homepage_repo)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+
+
 def export_markdown_to_homepage(
     topics_path: Path = DEFAULT_TOPICS_PATH,
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPOSITORY_PATH,
     dry_run: bool = False,
 ) -> list[HomepageExport]:
     validate_homepage_repository(homepage_repo)
+    project_root = topics_path.parent.parent
     articles = load_publishable_articles(topics_path, ROOT / ".homepage-export-check", DEFAULT_SITE_URL)
     exports: list[HomepageExport] = []
 
     for article in articles:
+        markdown = article.markdown_path.read_text(encoding="utf-8")
         destination = homepage_destination_for(article.topic, homepage_repo)
         action = "create"
         if destination.exists():
-            action = "unchanged" if destination.read_text(encoding="utf-8") == article.markdown_path.read_text(encoding="utf-8") else "overwrite"
+            action = "unchanged" if destination.read_text(encoding="utf-8") == markdown else "overwrite"
         exports.append(HomepageExport(article.topic["id"], article.markdown_path, destination, action))
+        export_blog_assets_to_homepage(markdown, homepage_repo, dry_run, project_root)
         if dry_run or action == "unchanged":
             continue
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -365,7 +469,7 @@ def deploy_github_pages(
     run_homepage_command(["git", "pull", "--rebase", "origin", branch], homepage_repo)
     exports = export_markdown_to_homepage(topics_path, homepage_repo, dry_run=False)
     run_homepage_command(["npm", "run", "build"], homepage_repo)
-    run_homepage_command(["git", "add", "src/content/blog"], homepage_repo)
+    run_homepage_command(["git", "add", "src/content/blog", "public/blog-assets"], homepage_repo)
     diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=homepage_repo)
     if diff.returncode == 0:
         return exports
