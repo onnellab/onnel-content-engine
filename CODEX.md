@@ -169,6 +169,34 @@ Each stage should remain independent.
 
 ---
 
+# Repository Operating Rules
+
+Codex must run `git pull` before starting repository work.
+
+When remote and local history conflict, Codex must rebase and keep the better implementation according to the project documents.
+
+Codex must commit and push after each completed task.
+
+After every 10 completed tasks, Codex must reread the instruction Markdown files before making further implementation decisions.
+
+Instruction Markdown files include:
+
+* CODEX.md
+* README.md
+* docs/Workflow.md
+* docs/Content_Guide.md
+* docs/SEO_Guide.md
+* docs/AEO_Guide.md
+* docs/GEO_Guide.md
+* docs/Image_Guide.md
+* docs/Publishing_Guide.md
+* docs/Topic_Guide.md
+* docs/Knowledge_Graph.md
+* docs/topics.csv
+* docs/apps_registry.csv
+
+---
+
 # Repository Outputs
 
 Possible outputs include:
