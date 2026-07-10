@@ -82,15 +82,14 @@
       "required": true,
       "question_answered": "대용량 TXT 파일 리더를 평가할 때 어떤 개념이나 접근법이 중요한가요?",
       "source_sections": [
-        "대용량 TXT 파일이 느려지는 이유",
-        "먼저 확인할 항목"
+        "전체 파일 로딩과 필요한 부분 렌더링 비교"
       ],
       "compare": [
-        "대용량 텍스트 파일",
-        "TXT 뷰어",
-        "대용량 파일 성능"
+        "전체를 한 번에 불러오기",
+        "보이는 부분부터 렌더링",
+        "다른 형식으로 변환"
       ],
-      "notes": "비교는 균형 있게 유지하고 ONNELLAB 제품을 보편적으로 우월한 선택처럼 제시하지 않습니다."
+      "notes": "본문의 비교표를 시각적으로 요약합니다. 각 방식의 실제 동작과 적합한 경우를 분리해 보여주고, ONNELLAB 제품을 보편적으로 우월한 선택처럼 제시하지 않습니다."
     }
   ],
   "screenshot_requirements": {
@@ -126,11 +125,11 @@
       "id": "comparison-options",
       "title": "대용량 TXT 파일 리더 비교",
       "items": [
-        "대용량 텍스트 파일",
-        "TXT 뷰어",
-        "대용량 파일 성능"
+        "전체를 한 번에 불러오기",
+        "보이는 부분부터 렌더링",
+        "다른 형식으로 변환"
       ],
-      "layout": "side-by-side comparison table"
+      "layout": "three-column comparison table with clear cell dividers"
     }
   ],
   "prohibited": [

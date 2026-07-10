@@ -87,16 +87,14 @@
       "required": true,
       "question_answered": "Which concepts or approaches matter when evaluating large TXT file reader?",
       "source_sections": [
-        "Why This Problem Happens",
-        "What Makes a TXT File Feel Slow",
-        "What To Check First"
+        "Loading the Whole File vs Rendering What You Need"
       ],
       "compare": [
-        "huge text file",
-        "TXT viewer",
-        "large file performance"
+        "Load everything at once",
+        "Render visible text first",
+        "Convert to another format"
       ],
-      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+      "notes": "Summarize the article comparison table visually. Separate what happens from the best-fit use case, and avoid presenting any ONNELLAB product as universally superior."
     }
   ],
   "screenshot_requirements": {
@@ -132,11 +130,11 @@
       "id": "comparison-options",
       "title": "large TXT file reader Comparison",
       "items": [
-        "huge text file",
-        "TXT viewer",
-        "large file performance"
+        "Load everything at once",
+        "Render visible text first",
+        "Convert to another format"
       ],
-      "layout": "side-by-side comparison table"
+      "layout": "three-column comparison table with clear cell dividers"
     }
   ],
   "prohibited": [
