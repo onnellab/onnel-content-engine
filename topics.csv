@@ -1,0 +1,707 @@
+# Topic Database Specification
+
+## ONNELLAB Content Engine
+
+---
+
+# 1. Purpose
+
+This document defines the permanent data structure for the topic database used by the ONNELLAB Content Engine.
+
+The topic database is the central queue for planning, generating, reviewing, publishing, and maintaining content.
+
+Every article must originate from a topic record.
+
+No article should be generated outside the topic database.
+
+---
+
+# 2. Source Format
+
+The initial source format is:
+
+```text
+CSV
+```
+
+Default file:
+
+```text
+topics/topics.csv
+```
+
+The CSV file is the canonical topic queue for v1.
+
+Future migration to JSON, SQLite, or another database is allowed only when the CSV structure becomes insufficient.
+
+---
+
+# 3. Core Principle
+
+The topic database manages content intent.
+
+It does not store the full article.
+
+Each row represents one potential or published article.
+
+The article body, image assets, and generated outputs remain in separate files.
+
+---
+
+# 4. Required Fields
+
+The following columns are required.
+
+```csv
+id,status,category,primary_question,working_title,slug,primary_language,priority,search_intent,related_apps,primary_keyword,secondary_keywords,evergreen,source_type,canonical_path,published_url,scheduled_at,published_at,updated_at,review_required,notes
+```
+
+Column order should remain fixed in v1.
+
+---
+
+# 5. Field Definitions
+
+## 5-1. id
+
+Unique topic identifier.
+
+Format:
+
+```text
+TOPIC-0001
+TOPIC-0002
+TOPIC-0003
+```
+
+Rules:
+
+* Must never be reused.
+* Must remain stable after publication.
+* Must not depend on the article title.
+* Must be unique across all categories and languages.
+
+---
+
+## 5-2. status
+
+Current lifecycle state.
+
+Allowed values:
+
+```text
+idea
+approved
+research
+outline
+draft
+image_planning
+review
+scheduled
+published
+update_required
+archived
+failed
+```
+
+Only these values are allowed.
+
+---
+
+## 5-3. category
+
+Primary content domain.
+
+Allowed values:
+
+```text
+reading
+music
+productivity
+media
+craft
+games
+research
+```
+
+Each topic must belong to exactly one primary category.
+
+Cross-domain relationships are handled through tags and internal links, not multiple category values.
+
+---
+
+## 5-4. primary_question
+
+The real user question the article must answer.
+
+Example:
+
+```text
+How can I read a very large TXT file without lag?
+```
+
+Rules:
+
+* Must be written as a complete question.
+* Must describe user intent clearly.
+* Must not begin with an ONNELLAB product name.
+* Must remain understandable without additional context.
+
+---
+
+## 5-5. working_title
+
+Provisional article title.
+
+Example:
+
+```text
+How to Read Large TXT Files Without Lag
+```
+
+The final article title may differ slightly, but the search intent must remain unchanged.
+
+---
+
+## 5-6. slug
+
+Permanent URL slug.
+
+Example:
+
+```text
+read-large-txt-files-without-lag
+```
+
+Rules:
+
+* Lowercase only.
+* Hyphen-separated.
+* No dates unless the date is essential.
+* No application name unless the article is specifically about that product.
+* Must remain stable after publication.
+
+---
+
+## 5-7. primary_language
+
+Primary writing language.
+
+Allowed values:
+
+```text
+en
+ko
+```
+
+Future languages may be added later.
+
+Each translated article must use a separate topic row with its own ID.
+
+---
+
+## 5-8. priority
+
+Generation and publication priority.
+
+Allowed values:
+
+```text
+critical
+high
+normal
+low
+```
+
+Suggested interpretation:
+
+* critical: urgent product, policy, or user issue
+* high: strong user demand or launch relevance
+* normal: standard evergreen topic
+* low: optional or experimental topic
+
+---
+
+## 5-9. search_intent
+
+Primary user intent.
+
+Allowed values:
+
+```text
+learn
+solve
+compare
+workflow
+discover
+troubleshoot
+```
+
+Each topic must use exactly one primary search intent.
+
+---
+
+## 5-10. related_apps
+
+ONNELLAB applications naturally related to the topic.
+
+Format:
+
+```text
+Textoria|VaultXT
+```
+
+Use a vertical bar as the separator.
+
+Rules:
+
+* May be empty.
+* Must contain official product names only.
+* Do not include unrelated apps for promotional purposes.
+* Ordering should follow relevance.
+
+---
+
+## 5-11. primary_keyword
+
+Main search phrase.
+
+Example:
+
+```text
+large TXT file reader
+```
+
+Rules:
+
+* One phrase only.
+* Must match the primary question.
+* Must not be repeated unnaturally in the article.
+
+---
+
+## 5-12. secondary_keywords
+
+Related semantic phrases.
+
+Format:
+
+```text
+huge text file|TXT viewer|large file performance|virtual rendering
+```
+
+Use a vertical bar as the separator.
+
+These terms guide semantic coverage, not keyword repetition.
+
+---
+
+## 5-13. evergreen
+
+Whether the topic is intended to remain useful long term.
+
+Allowed values:
+
+```text
+true
+false
+```
+
+Most ONNELLAB educational content should use:
+
+```text
+true
+```
+
+---
+
+## 5-14. source_type
+
+Origin of the topic.
+
+Allowed values:
+
+```text
+user_question
+faq
+product_documentation
+support_issue
+feature_request
+search_research
+community_discussion
+editorial
+release_note
+```
+
+This field helps evaluate topic quality and provenance.
+
+---
+
+## 5-15. canonical_path
+
+Repository path to the canonical Markdown article.
+
+Example:
+
+```text
+generated/markdown/en/reading/read-large-txt-files-without-lag.md
+```
+
+Leave empty before the article file is generated.
+
+---
+
+## 5-16. published_url
+
+Final public URL.
+
+Example:
+
+```text
+https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/
+```
+
+Leave empty until publication succeeds.
+
+---
+
+## 5-17. scheduled_at
+
+Scheduled publication datetime.
+
+Format:
+
+```text
+YYYY-MM-DDTHH:MM:SS+09:00
+```
+
+Example:
+
+```text
+2026-07-14T09:00:00+09:00
+```
+
+Leave empty when unscheduled.
+
+---
+
+## 5-18. published_at
+
+Actual publication datetime.
+
+Use the same ISO 8601 format as `scheduled_at`.
+
+This field is written only after successful deployment.
+
+---
+
+## 5-19. updated_at
+
+Last meaningful update datetime.
+
+This field changes when:
+
+* article content is updated
+* major screenshots are replaced
+* technical information changes
+* internal links are significantly revised
+
+Minor typo corrections do not require a new update date unless publication metadata exposes it.
+
+---
+
+## 5-20. review_required
+
+Whether human review is mandatory before publication.
+
+Allowed values:
+
+```text
+true
+false
+```
+
+Default:
+
+```text
+true
+```
+
+Automatic publication with `false` should only be allowed after the workflow has demonstrated stable quality.
+
+---
+
+## 5-21. notes
+
+Internal operational notes.
+
+Examples:
+
+```text
+Needs Textoria performance screenshot
+```
+
+```text
+Link to official Unicode documentation
+```
+
+```text
+Do not compare with named competitors
+```
+
+Notes must not be published.
+
+---
+
+# 6. Optional Future Fields
+
+The following fields may be added later, but are not part of the v1 schema.
+
+```text
+content_type
+translation_of
+topic_cluster
+difficulty
+estimated_word_count
+image_count
+reviewer
+failure_reason
+performance_score
+last_checked_at
+```
+
+Do not add them prematurely.
+
+---
+
+# 7. Example Records
+
+```csv
+id,status,category,primary_question,working_title,slug,primary_language,priority,search_intent,related_apps,primary_keyword,secondary_keywords,evergreen,source_type,canonical_path,published_url,scheduled_at,published_at,updated_at,review_required,notes
+TOPIC-0001,approved,reading,"How can I read a very large TXT file without lag?","How to Read Large TXT Files Without Lag","read-large-txt-files-without-lag",en,high,solve,"Textoria|VaultXT","large TXT file reader","huge text file|TXT viewer|large file performance|virtual rendering",true,product_documentation,,,,,,true,"Use a performance workflow diagram"
+TOPIC-0002,idea,music,"How should I organize MP3 metadata for a large music library?","How to Organize MP3 Metadata Correctly","organize-mp3-metadata",en,normal,workflow,"TagWeaver|Melivra","organize MP3 metadata","MP3 tags|music library metadata|artist album tags|ID3",true,faq,,,,,,true,"Explain metadata before mentioning products"
+TOPIC-0003,idea,productivity,"What is the safest way to rename many files at once?","How to Rename Multiple Files Safely","rename-multiple-files-safely",en,normal,solve,"Aligna","batch file renaming","bulk rename|filename rules|rename preview|file naming",true,user_question,,,,,,true,"Emphasize preview before apply"
+```
+
+---
+
+# 8. Status Transition Rules
+
+Allowed transitions:
+
+```text
+idea
+→ approved
+→ research
+→ outline
+→ draft
+→ image_planning
+→ review
+→ scheduled
+→ published
+```
+
+Additional transitions:
+
+```text
+published
+→ update_required
+→ review
+→ published
+```
+
+Failure transition:
+
+```text
+any active state
+→ failed
+```
+
+Archive transition:
+
+```text
+idea
+→ archived
+```
+
+```text
+published
+→ archived
+```
+
+Published content should rarely be archived.
+
+---
+
+# 9. Automation Rules
+
+The automation system may only select rows where:
+
+```text
+status = approved
+```
+
+After selection:
+
+```text
+approved
+→ research
+```
+
+The row must be locked during processing to prevent duplicate generation.
+
+After each successful stage, update the status.
+
+If a stage fails:
+
+```text
+status = failed
+```
+
+The failure reason should be recorded in a log file.
+
+Do not silently skip failed topics.
+
+---
+
+# 10. Scheduling Rules
+
+The scheduler should prioritize topics in this order:
+
+```text
+critical
+high
+normal
+low
+```
+
+Within the same priority:
+
+1. Oldest approved topic first
+2. Category rotation
+3. Avoid publishing the same related app repeatedly
+
+The scheduler should prevent one product from dominating the blog.
+
+---
+
+# 11. Language Rules
+
+English and Korean versions are separate records.
+
+Example:
+
+```text
+TOPIC-0001
+English original
+```
+
+```text
+TOPIC-0042
+Korean adaptation
+```
+
+They may share the same conceptual topic but must have:
+
+* separate IDs
+* separate slugs
+* separate URLs
+* separate publication metadata
+
+A future `translation_of` field may connect them.
+
+---
+
+# 12. Duplicate Prevention
+
+Before approving a new topic, compare:
+
+* primary question
+* working title
+* slug
+* primary keyword
+* topic meaning
+
+If the same intent already exists:
+
+* update the existing topic
+* narrow the new topic
+* create a deeper follow-up
+* reject the duplicate
+
+Do not generate near-identical articles.
+
+---
+
+# 13. File Encoding and Formatting
+
+The CSV file must use:
+
+```text
+UTF-8
+```
+
+Requirements:
+
+* Header row required.
+* Commas inside fields must be quoted.
+* Line breaks inside fields are prohibited.
+* Empty values remain blank.
+* Column names must not be changed without updating the parser and this specification.
+
+---
+
+# 14. Validation Rules
+
+The topic database is invalid if:
+
+* ID is duplicated.
+* Required fields are empty.
+* Status is unsupported.
+* Category is unsupported.
+* Slug is duplicated within the same language.
+* Published status has no published URL.
+* Scheduled status has no scheduled datetime.
+* Related app names do not match the official app registry.
+
+The publishing pipeline must stop when validation fails.
+
+---
+
+# 15. Scope Ceiling
+
+The v1 topic database must not include:
+
+* automatic trend scraping
+* autonomous topic approval
+* search-volume purchasing integrations
+* competitor scraping
+* automatic removal of published topics
+* complex ranking prediction
+
+The database should remain simple, inspectable, and version-controlled.
+
+---
+
+# 16. Success Criteria
+
+The topic database succeeds when:
+
+* every article is traceable to one topic record
+* duplicate generation is prevented
+* publication status is visible
+* multiple applications receive balanced coverage
+* automation can safely select and update topics
+* the CSV remains understandable to a human
+
+---
+
+# Final Principle
+
+One row.
+
+One question.
+
+One article.
+
+One traceable lifecycle.
