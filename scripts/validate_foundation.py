@@ -22,6 +22,7 @@ REQUIRED_PATHS = [
     "docs/GEO_Guide.md",
     "docs/Image_Guide.md",
     "docs/Publishing_Guide.md",
+    "docs/GitHub_Actions.md",
     "docs/Topic_Guide.md",
     "docs/Knowledge_Graph.md",
     "docs/topics.csv",

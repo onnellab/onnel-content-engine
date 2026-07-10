@@ -1,0 +1,114 @@
+name: ONNELLAB Publishing Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run validation, generation, and build without deployment"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+  push:
+    branches:
+      - main
+
+jobs:
+  publishing:
+    name: Validate, generate, build, and deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      DRY_RUN: ${{ github.event_name == 'push' && 'true' || inputs.dry_run }}
+      SITE_URL: https://onnelakin.github.io/
+
+    steps:
+      - name: Checkout content engine
+        uses: actions/checkout@v4
+
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate
+        run: |
+          set -euo pipefail
+          scripts/validate_topics.py
+          scripts/validate_apps_registry.py
+          scripts/validate_foundation.py
+
+      - name: Prepare Dry Run Workspace
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/onnel-content-engine-dry-run
+          mkdir -p /tmp/onnel-content-engine-dry-run
+          cp -R data topics templates generated /tmp/onnel-content-engine-dry-run/
+
+      - name: Generate Markdown
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          scripts/generate_all_markdown.py
+
+      - name: Generate Markdown Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          scripts/generate_all_markdown.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --apps /tmp/onnel-content-engine-dry-run/data/apps_registry.csv \
+            --output-root /tmp/onnel-content-engine-dry-run/generated/markdown \
+            --legacy-topics /tmp/onnel-content-engine-dry-run/topics/topics.csv
+
+      - name: Generate Image Specifications
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          scripts/generate_all_image_specs.py
+
+      - name: Generate Image Specifications Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          scripts/generate_all_image_specs.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --apps /tmp/onnel-content-engine-dry-run/data/apps_registry.csv \
+            --output-root /tmp/onnel-content-engine-dry-run/generated/images \
+            --legacy-topics /tmp/onnel-content-engine-dry-run/topics/topics.csv
+
+      - name: Build
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          scripts/build_site.py --site-url "$SITE_URL"
+
+      - name: Build Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          scripts/build_site.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --site-dir /tmp/onnel-content-engine-dry-run/generated/html \
+            --site-url "$SITE_URL"
+
+      - name: Deploy
+        if: env.DRY_RUN != 'true'
+        env:
+          PAGES_TOKEN: ${{ secrets.ONNELAKIN_GITHUB_PAGES_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${PAGES_TOKEN:-}" ]; then
+            echo "ONNELAKIN_GITHUB_PAGES_TOKEN is required for deployment" >&2
+            exit 1
+          fi
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          scripts/deploy_github_pages.py \
+            --repository "https://x-access-token:${PAGES_TOKEN}@github.com/onnelakin/onnelakin.github.io.git" \
+            --branch main
