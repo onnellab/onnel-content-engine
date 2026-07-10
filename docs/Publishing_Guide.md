@@ -94,6 +94,20 @@ The canonical website root is:
 https://onnelakin.github.io/
 ```
 
+The local clone for homepage publishing work is:
+
+```text
+C:\dev\onnelakin.github.io
+```
+
+In WSL, use:
+
+```text
+/mnt/c/dev/onnelakin.github.io
+```
+
+Do not use a temporary `/tmp` clone for homepage publishing work when this local clone is available.
+
 Other ONNELLAB sites are connected from this main homepage.
 
 ---

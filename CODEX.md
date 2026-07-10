@@ -185,6 +185,20 @@ The main GitHub Pages homepage repository is:
 https://github.com/onnelakin/onnelakin.github.io.git
 ```
 
+The local clone for the main GitHub Pages homepage repository is:
+
+```text
+C:\dev\onnelakin.github.io
+```
+
+In WSL, use:
+
+```text
+/mnt/c/dev/onnelakin.github.io
+```
+
+Do not use a temporary `/tmp` clone for homepage work when this local clone is available.
+
 ONNELLAB publishing targets should treat `https://onnelakin.github.io/` as the canonical website root unless a project document explicitly says otherwise.
 
 Instruction Markdown files include:
