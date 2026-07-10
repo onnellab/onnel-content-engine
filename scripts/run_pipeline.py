@@ -12,7 +12,7 @@ from pathlib import Path
 
 from generate_all_image_specs import generate_all_image_specs
 from generate_all_markdown import generate_all_markdown
-from publishing import DEFAULT_SITE_URL, build_site, deploy_github_pages
+from publishing import DEFAULT_HOMEPAGE_REPOSITORY_PATH, DEFAULT_SITE_URL, build_site, deploy_github_pages
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,7 +40,12 @@ def copy_for_dry_run(destination: Path) -> None:
             shutil.copytree(source, target)
 
 
-def run_pipeline(dry_run: bool = False, deploy: bool = False, site_url: str = DEFAULT_SITE_URL) -> None:
+def run_pipeline(
+    dry_run: bool = False,
+    deploy: bool = False,
+    site_url: str = DEFAULT_SITE_URL,
+    homepage_repo: Path = DEFAULT_HOMEPAGE_REPOSITORY_PATH,
+) -> None:
     validate()
     if dry_run:
         with tempfile.TemporaryDirectory(prefix="onnel-content-engine-dry-run-") as temp_dir:
@@ -55,13 +60,14 @@ def run_pipeline(dry_run: bool = False, deploy: bool = False, site_url: str = DE
             generate_all_markdown(topics_path, apps_path, markdown_root, legacy_topics_path)
             generate_all_image_specs(topics_path, apps_path, images_root, legacy_topics_path)
             build_site(topics_path, html_root, site_url)
+            deploy_github_pages(topics_path=topics_path, homepage_repo=homepage_repo, dry_run=True)
         return
 
     generate_all_markdown()
     generate_all_image_specs()
     build_site(site_url=site_url)
     if deploy:
-        deploy_github_pages()
+        deploy_github_pages(homepage_repo=homepage_repo)
 
 
 def main() -> int:
@@ -69,9 +75,15 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true", help="Run in a temporary copy without changing repository outputs")
     parser.add_argument("--deploy", action="store_true", help="Deploy after build. Ignored during dry-run.")
     parser.add_argument("--site-url", default=DEFAULT_SITE_URL)
+    parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPOSITORY_PATH)
     args = parser.parse_args()
     try:
-        run_pipeline(dry_run=args.dry_run, deploy=args.deploy and not args.dry_run, site_url=args.site_url)
+        run_pipeline(
+            dry_run=args.dry_run,
+            deploy=args.deploy and not args.dry_run,
+            site_url=args.site_url,
+            homepage_repo=args.homepage_repo,
+        )
     except (OSError, PipelineError, subprocess.CalledProcessError, ValueError) as error:
         print(f"pipeline failed: {error}", file=sys.stderr)
         return 1

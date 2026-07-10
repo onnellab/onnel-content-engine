@@ -25,15 +25,36 @@ jobs:
     env:
       DRY_RUN: ${{ github.event_name == 'push' && 'true' || inputs.dry_run }}
       SITE_URL: https://onnelakin.github.io/
+      HOMEPAGE_REPO_PATH: .homepage
 
     steps:
       - name: Checkout content engine
         uses: actions/checkout@v4
 
+      - name: Checkout homepage
+        uses: actions/checkout@v4
+        with:
+          repository: onnelakin/onnelakin.github.io
+          path: ${{ env.HOMEPAGE_REPO_PATH }}
+          token: ${{ secrets.ONNELAKIN_GITHUB_PAGES_TOKEN || github.token }}
+
+      - name: Configure Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: ${{ env.HOMEPAGE_REPO_PATH }}/package-lock.json
+
       - name: Configure Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+
+      - name: Install homepage dependencies
+        working-directory: ${{ env.HOMEPAGE_REPO_PATH }}
+        run: |
+          set -euo pipefail
+          npm ci
 
       - name: Validate
         run: |
@@ -97,6 +118,15 @@ jobs:
             --site-dir /tmp/onnel-content-engine-dry-run/generated/html \
             --site-url "$SITE_URL"
 
+      - name: Deploy Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          scripts/deploy_github_pages.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --homepage-repo "$HOMEPAGE_REPO_PATH" \
+            --dry-run
+
       - name: Deploy
         if: env.DRY_RUN != 'true'
         env:
@@ -110,5 +140,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           scripts/deploy_github_pages.py \
-            --repository "https://x-access-token:${PAGES_TOKEN}@github.com/onnelakin/onnelakin.github.io.git" \
+            --homepage-repo "$HOMEPAGE_REPO_PATH" \
             --branch main

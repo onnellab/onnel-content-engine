@@ -299,6 +299,18 @@ Possible automated tasks include:
 
 Human approval may remain optional.
 
+GitHub Pages deployment must preserve the Astro homepage repository.
+
+The content engine must not delete or replace the homepage repository root with generated HTML output.
+
+Approved Markdown is exported into:
+
+```text
+src/content/blog/{en,ko}/{slug}.md
+```
+
+The homepage repository owns HTML, RSS, sitemap, and GitHub Pages output generation through its Astro build.
+
 ---
 
 # 18. Success Criteria

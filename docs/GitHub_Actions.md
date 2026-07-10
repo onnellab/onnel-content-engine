@@ -158,6 +158,16 @@ The workflow requires this secret:
 ONNELAKIN_GITHUB_PAGES_TOKEN
 ```
 
+Deployment does not replace the homepage repository with `generated/html/`.
+
+Instead, it exports approved generated Markdown into the Astro homepage repository:
+
+```text
+src/content/blog/{en,ko}/{slug}.md
+```
+
+The homepage repository then runs its own Astro build before the Markdown content is committed and pushed.
+
 ---
 
 # 8. Dry-Run Mode
@@ -170,6 +180,7 @@ In dry-run mode:
 * Markdown generation runs in a temporary copy
 * image specification generation runs in a temporary copy
 * build runs in a temporary copy
+* homepage Markdown export is previewed without copying files
 * deployment is skipped
 * repository files are not modified
 
@@ -195,4 +206,4 @@ Validate first.
 
 Generate only after validation.
 
-Deploy only complete website output.
+Deploy only validated Markdown into the canonical homepage repository.

@@ -9,7 +9,15 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from publishing import DEFAULT_PAGES_BRANCH, DEFAULT_PAGES_REPOSITORY, DEFAULT_SITE_URL, PublishingError, build_site
+from publishing import (
+    DEFAULT_HOMEPAGE_REPOSITORY_PATH,
+    DEFAULT_PAGES_BRANCH,
+    DEFAULT_PAGES_REPOSITORY,
+    DEFAULT_SITE_URL,
+    PublishingError,
+    build_site,
+    export_markdown_to_homepage,
+)
 from topic_management import write_topics
 
 
@@ -117,6 +125,39 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(DEFAULT_SITE_URL, "https://onnelakin.github.io/")
         self.assertEqual(DEFAULT_PAGES_REPOSITORY, "https://github.com/onnelakin/onnelakin.github.io.git")
         self.assertEqual(DEFAULT_PAGES_BRANCH, "main")
+        self.assertEqual(str(DEFAULT_HOMEPAGE_REPOSITORY_PATH), "/mnt/c/dev/onnelakin.github.io")
+
+    def test_export_markdown_to_homepage_writes_only_blog_content(self) -> None:
+        homepage = self.root / "homepage"
+        (homepage / ".git").mkdir(parents=True)
+        (homepage / "src" / "content" / "blog" / "en").mkdir(parents=True)
+        (homepage / "src" / "content" / "blog" / "ko").mkdir(parents=True)
+        (homepage / "astro.config.mjs").write_text("export default {};\n", encoding="utf-8")
+        (homepage / "src" / "components").mkdir(parents=True)
+        existing_site_file = homepage / "src" / "components" / "HomePage.astro"
+        existing_site_file.write_text("<main>keep</main>\n", encoding="utf-8")
+
+        exports = export_markdown_to_homepage(self.topics_path, homepage)
+
+        destination = homepage / "src" / "content" / "blog" / "en" / "read-large-txt-files.md"
+        self.assertEqual(len(exports), 1)
+        self.assertEqual(exports[0].action, "create")
+        self.assertEqual(destination.read_text(encoding="utf-8"), MARKDOWN)
+        self.assertEqual(existing_site_file.read_text(encoding="utf-8"), "<main>keep</main>\n")
+
+    def test_export_markdown_to_homepage_dry_run_does_not_copy(self) -> None:
+        homepage = self.root / "homepage"
+        (homepage / ".git").mkdir(parents=True)
+        (homepage / "src" / "content" / "blog" / "en").mkdir(parents=True)
+        (homepage / "src" / "content" / "blog" / "ko").mkdir(parents=True)
+        (homepage / "astro.config.mjs").write_text("export default {};\n", encoding="utf-8")
+
+        exports = export_markdown_to_homepage(self.topics_path, homepage, dry_run=True)
+
+        destination = homepage / "src" / "content" / "blog" / "en" / "read-large-txt-files.md"
+        self.assertEqual(len(exports), 1)
+        self.assertEqual(exports[0].action, "create")
+        self.assertFalse(destination.exists())
 
 
 if __name__ == "__main__":

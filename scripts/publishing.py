@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import os
 import re
 import shutil
 import subprocess
@@ -29,6 +30,9 @@ DEFAULT_SITE_DIR = ROOT / "generated" / "html"
 DEFAULT_SITE_URL = "https://onnelakin.github.io/"
 DEFAULT_PAGES_REPOSITORY = "https://github.com/onnelakin/onnelakin.github.io.git"
 DEFAULT_PAGES_BRANCH = "main"
+DEFAULT_HOMEPAGE_REPOSITORY_PATH = Path(
+    os.environ.get("ONNELLAB_HOMEPAGE_REPOSITORY", "/mnt/c/dev/onnelakin.github.io")
+)
 PUBLISHABLE_STATUSES = {"scheduled", "published"}
 
 FRONT_MATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
@@ -49,6 +53,14 @@ class Article:
     title: str
     body_html: str
     description: str
+
+
+@dataclass(frozen=True)
+class HomepageExport:
+    topic_id: str
+    source: Path
+    destination: Path
+    action: str
 
 
 def parse_front_matter(markdown: str) -> tuple[dict[str, str], str]:
@@ -288,39 +300,79 @@ def build_site(topics_path: Path = DEFAULT_TOPICS_PATH, site_dir: Path = DEFAULT
     return articles
 
 
+def validate_homepage_repository(homepage_repo: Path) -> None:
+    if not homepage_repo.exists():
+        raise PublishingError(f"homepage repository does not exist: {homepage_repo}")
+    if not (homepage_repo / ".git").exists():
+        raise PublishingError(f"homepage repository is not a git checkout: {homepage_repo}")
+    if not (homepage_repo / "astro.config.mjs").exists():
+        raise PublishingError(f"homepage repository is not the Astro homepage checkout: {homepage_repo}")
+    content_dir = homepage_repo / "src" / "content" / "blog"
+    if not content_dir.exists():
+        raise PublishingError(f"homepage blog content directory does not exist: {content_dir}")
+
+
+def homepage_destination_for(topic: dict[str, str], homepage_repo: Path) -> Path:
+    language = topic["primary_language"]
+    if language not in {"en", "ko"}:
+        raise PublishingError(f"{topic['id']} has unsupported homepage language: {language}")
+    return homepage_repo / "src" / "content" / "blog" / language / f"{topic['slug']}.md"
+
+
+def export_markdown_to_homepage(
+    topics_path: Path = DEFAULT_TOPICS_PATH,
+    homepage_repo: Path = DEFAULT_HOMEPAGE_REPOSITORY_PATH,
+    dry_run: bool = False,
+) -> list[HomepageExport]:
+    validate_homepage_repository(homepage_repo)
+    articles = load_publishable_articles(topics_path, ROOT / ".homepage-export-check", DEFAULT_SITE_URL)
+    exports: list[HomepageExport] = []
+
+    for article in articles:
+        destination = homepage_destination_for(article.topic, homepage_repo)
+        action = "create"
+        if destination.exists():
+            action = "unchanged" if destination.read_text(encoding="utf-8") == article.markdown_path.read_text(encoding="utf-8") else "overwrite"
+        exports.append(HomepageExport(article.topic["id"], article.markdown_path, destination, action))
+        if dry_run or action == "unchanged":
+            continue
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(article.markdown_path, destination)
+
+    return exports
+
+
+def run_homepage_command(command: list[str], homepage_repo: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, cwd=homepage_repo, check=True, text=True)
+
+
 def deploy_github_pages(
     site_dir: Path = DEFAULT_SITE_DIR,
     repository: str = DEFAULT_PAGES_REPOSITORY,
     branch: str = DEFAULT_PAGES_BRANCH,
     deploy_dir: Path = ROOT / ".deploy-github-pages",
-) -> None:
-    if not site_dir.exists():
-        raise PublishingError(f"site directory does not exist: {site_dir}")
-    if deploy_dir.exists():
-        shutil.rmtree(deploy_dir)
-    subprocess.run(["git", "clone", "--branch", branch, "--single-branch", repository, str(deploy_dir)], cwd=ROOT, check=True)
+    topics_path: Path = DEFAULT_TOPICS_PATH,
+    homepage_repo: Path = DEFAULT_HOMEPAGE_REPOSITORY_PATH,
+    dry_run: bool = False,
+) -> list[HomepageExport]:
+    _ = site_dir
+    _ = repository
+    _ = deploy_dir
+    validate_homepage_repository(homepage_repo)
+    if dry_run:
+        return export_markdown_to_homepage(topics_path, homepage_repo, dry_run=True)
 
-    for child in deploy_dir.iterdir():
-        if child.name == ".git":
-            continue
-        if child.is_dir():
-            shutil.rmtree(child)
-        else:
-            child.unlink()
-    for child in site_dir.iterdir():
-        destination = deploy_dir / child.name
-        if child.is_dir():
-            shutil.copytree(child, destination)
-        else:
-            shutil.copy2(child, destination)
-    subprocess.run(["git", "add", "."], cwd=deploy_dir, check=True)
-    diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=deploy_dir)
+    run_homepage_command(["git", "pull", "--rebase", "origin", branch], homepage_repo)
+    exports = export_markdown_to_homepage(topics_path, homepage_repo, dry_run=False)
+    run_homepage_command(["npm", "run", "build"], homepage_repo)
+    run_homepage_command(["git", "add", "src/content/blog"], homepage_repo)
+    diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=homepage_repo)
     if diff.returncode == 0:
-        shutil.rmtree(deploy_dir)
-        return
-    subprocess.run(["git", "commit", "-m", "Deploy GitHub Pages site"], cwd=deploy_dir, check=True)
-    subprocess.run(["git", "push", "origin", f"HEAD:{branch}"], cwd=deploy_dir, check=True)
-    shutil.rmtree(deploy_dir)
+        return exports
+    run_homepage_command(["git", "commit", "-m", "Publish ONNELLAB blog content"], homepage_repo)
+    run_homepage_command(["git", "pull", "--rebase", "origin", branch], homepage_repo)
+    run_homepage_command(["git", "push", "origin", branch], homepage_repo)
+    return exports
 
 
 def main() -> int:
@@ -331,11 +383,22 @@ def main() -> int:
     parser.add_argument("--deploy", action="store_true", help="Deploy the built site to the GitHub Pages homepage repository")
     parser.add_argument("--repository", default=DEFAULT_PAGES_REPOSITORY)
     parser.add_argument("--branch", default=DEFAULT_PAGES_BRANCH)
+    parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPOSITORY_PATH)
+    parser.add_argument("--dry-run", action="store_true", help="Preview homepage Markdown export without copying or deploying")
     args = parser.parse_args()
     try:
         articles = build_site(args.topics, args.site_dir, args.site_url)
-        if args.deploy:
-            deploy_github_pages(args.site_dir, repository=args.repository, branch=args.branch)
+        if args.deploy or args.dry_run:
+            exports = deploy_github_pages(
+                args.site_dir,
+                repository=args.repository,
+                branch=args.branch,
+                topics_path=args.topics,
+                homepage_repo=args.homepage_repo,
+                dry_run=args.dry_run,
+            )
+            for item in exports:
+                print(f"{item.action}: {item.source} -> {item.destination}")
     except (PublishingError, TopicError, OSError, subprocess.CalledProcessError) as error:
         print(f"publishing failed: {error}", file=sys.stderr)
         return 1
