@@ -17,6 +17,7 @@ DEFAULT_METADATA_ROOT = ROOT / "generated" / "metadata"
 DEFAULT_ASSETS_ROOT = ROOT / "generated" / "assets" / "blog"
 DEFAULT_REVIEW_ROOT = ROOT / "generated" / "reviews"
 DEFAULT_THRESHOLD = 9.0
+FORBIDDEN_LOCAL_BRAND = "\uc628\ub128\ub7a9"
 
 
 class ArticleEvaluationError(ValueError):
@@ -85,7 +86,7 @@ SECTION_ALIASES = {
     "question": {"question", "질문"},
     "short_answer": {"short answer", "짧은 답변", "요약 답변", "핵심 답변", "요약"},
     "recommended_workflow": {"recommended workflow", "권장 워크플로"},
-    "onnellab_application": {"onnellab application", "온넬랩 앱"},
+    "onnellab_application": {"onnellab application", "onnellab 앱"},
     "references": {"references", "참고 자료"},
     "conclusion": {"conclusion", "결론"},
     "faq": {"faq", "자주 묻는 질문"},
@@ -113,7 +114,7 @@ def find_product_section(body: str) -> int:
     lowered = body.lower()
     positions = [
         lowered.find("## onnellab application"),
-        lowered.find("## 온넬랩 앱"),
+        lowered.find("## onnellab 앱"),
     ]
     valid = [position for position in positions if position >= 0]
     return min(valid, default=-1)
@@ -159,6 +160,8 @@ def translation_quality_passes(
     if missing_sections:
         return False, f"Translated article is missing counterpart section(s): {', '.join(sorted(missing_sections))}."
     if topic["primary_language"] == "ko":
+        if FORBIDDEN_LOCAL_BRAND in body:
+            return False, "Korean articles must keep the brand spelling as ONNELLAB."
         forbidden_terms = ["plain-text", "rich text"]
         lowered_body = body.lower()
         found_forbidden = [term for term in forbidden_terms if term in lowered_body]
@@ -216,7 +219,7 @@ def image_quality_passes(topic: dict[str, str], assets: list[str], assets_root: 
             found = [term for term in forbidden_svg_terms if term in svg]
             if found:
                 return False, f"Korean SVG contains untranslated text: {', '.join(found)}."
-            if "온넬랩 블로그" in svg or "ONNELLAB Blog" not in svg:
+            if FORBIDDEN_LOCAL_BRAND in svg or "ONNELLAB Blog" not in svg:
                 return False, "Korean SVG must keep the brand label as ONNELLAB Blog."
     return True, "Referenced image assets use language-specific paths, accessible SVG structure, word wrapping, and non-overlapping arrows."
 

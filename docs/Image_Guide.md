@@ -335,7 +335,7 @@ Use:
 ONNELLAB Blog
 ```
 
-Do not translate this label as `온넬랩 블로그` inside image assets.
+Do not translate or localize the `ONNELLAB` brand name inside image assets.
 
 ---
 

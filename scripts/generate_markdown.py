@@ -118,7 +118,7 @@ def localized_labels(language: str) -> dict[str, str]:
             "diagnostic_heading": "문제가 더 심하게 느껴지는 경우",
             "checklist_heading": "먼저 확인할 항목",
             "workflow_heading": "권장 워크플로",
-            "app_heading": "온넬랩 앱",
+            "app_heading": "ONNELLAB 앱",
             "related_heading": "관련 주제",
             "references_heading": "참고 자료",
             "conclusion_heading": "결론",
