@@ -207,7 +207,7 @@ def image_quality_passes(topic: dict[str, str], assets: list[str], assets_root: 
         missing = [fragment for fragment in required_fragments if fragment not in svg]
         if missing:
             return False, f"SVG is missing quality structure fragment(s): {', '.join(missing)}."
-        if "…" in svg:
+        if "…" in svg or "..." in svg:
             return False, "SVG text must wrap on spaces instead of truncating with an ellipsis."
         if not svg_arrows_avoid_cards(svg):
             return False, "SVG arrows must remain in the gaps between workflow cards."

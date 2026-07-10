@@ -42,7 +42,7 @@ def svg_text(value: str, max_chars: int = 34) -> str:
     return html_escape(value[: max_chars - 1] + "…") if len(value) > max_chars else html_escape(value)
 
 
-def wrap_words(value: str, max_chars: int, max_lines: int = 2) -> list[str]:
+def wrap_words(value: str, max_chars: int) -> list[str]:
     words = " ".join(value.split()).split(" ")
     if not words:
         return [""]
@@ -55,13 +55,8 @@ def wrap_words(value: str, max_chars: int, max_lines: int = 2) -> list[str]:
             continue
         lines.append(current)
         current = word
-        if len(lines) == max_lines - 1:
-            break
-    remaining_index = sum(len(line.split(" ")) for line in lines) + len(current.split(" "))
-    if remaining_index < len(words):
-        current = f"{current} ..."
     lines.append(current)
-    return lines[:max_lines]
+    return lines
 
 
 def svg_tspans(lines: list[str], x: int, y: int, line_height: int) -> str:
@@ -100,7 +95,7 @@ def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str
 
 
 def workflow_svg(title: str, keyword: str, language: str) -> str:
-    title_lines = wrap_words(title, 34, max_lines=2)
+    title_lines = wrap_words(title, 38)
     keyword = svg_text(keyword, 36)
     subtitle, bottom_message, steps, footer, description_label = localized_steps(language)
     cards = []
@@ -108,12 +103,12 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
     card_gap = 84
     x = 72
     for heading, detail in steps:
-        detail_lines = wrap_words(detail, 16, max_lines=2)
+        detail_lines = wrap_words(detail, 14)
         cards.append(
             f'<g transform="translate({x} 220)">'
             f'<rect width="{card_width}" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/>'
             f'<text x="24" y="48" fill="#30302c" font-family="{SVG_FONT_STACK}" font-size="20" font-weight="650">{html_escape(heading)}</text>'
-            f'<text fill="#5f5b54" font-family="{SVG_FONT_STACK}" font-size="16">{svg_tspans(detail_lines, 24, 88, 23)}</text>'
+            f'<text fill="#5f5b54" font-family="{SVG_FONT_STACK}" font-size="15">{svg_tspans(detail_lines, 24, 84, 21)}</text>'
             "</g>"
         )
         x += card_width + card_gap
