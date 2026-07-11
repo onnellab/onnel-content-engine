@@ -110,6 +110,20 @@ def has_clear_definitions(body: str) -> bool:
     )
 
 
+def has_short_answer(metadata: dict[str, str], found_sections: set[str], body: str) -> bool:
+    if metadata.get("short_answer") or metadata.get("shortAnswer"):
+        return True
+    if not (SECTION_ALIASES["short_answer"] & found_sections):
+        return False
+    return bool(
+        re.search(
+            r"^##\s+(?:Short Answer|짧은 답변|요약 답변|핵심 답변|요약)\s*\n\n\S",
+            body,
+            flags=re.MULTILINE,
+        )
+    )
+
+
 def find_product_section(body: str) -> int:
     lowered = body.lower()
     positions = [
@@ -236,6 +250,7 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
     add("metadata_complete", all(metadata.get(key) for key in required_metadata), 1.2, "Pre-publication frontmatter contains the fields needed for review and scheduling.")
 
     add("required_sections", has_required_sections(found_sections), 1.4, "Article includes the required problem-first and publication sections.")
+    add("short_answer_ready", has_short_answer(metadata, found_sections, body), 0.6, "Article exposes a direct short answer for readers, answer engines, and llms.txt summaries.")
 
     add("structured_answer", bool(re.search(r"^\d+\.\s+", body, flags=re.MULTILINE)) and "|" in body, 1.0, "Article includes steps and a comparison table.")
     add("clear_definitions", has_clear_definitions(body), 0.8, "Article defines important technical terms.")

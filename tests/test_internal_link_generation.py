@@ -167,6 +167,8 @@ class InternalLinkGenerationTest(unittest.TestCase):
         self.assertFalse(metadata["article_text_modified"])
         self.assertEqual(metadata["recommendations"]["related_apps"][0]["app_name"], "VaultXT")
         self.assertEqual(metadata["recommendations"]["related_articles"][0]["topic_id"], "TOPIC-0002")
+        self.assertEqual(metadata["recommendations"]["related_articles"][0]["destination"], "published_article")
+        self.assertEqual(metadata["selection_policy"]["related_article_priority"][0], "published_article")
         self.assertTrue(metadata["recommendations"]["related_guides"])
 
     def test_rejects_unknown_application_name(self) -> None:

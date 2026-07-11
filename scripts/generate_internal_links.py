@@ -94,6 +94,16 @@ def article_url(topic: dict[str, str]) -> str:
     return f"generated/markdown/{topic['primary_language']}/{topic['category']}/{topic['slug']}.md"
 
 
+def recommendation_destination(topic: dict[str, str]) -> str:
+    if topic["published_url"]:
+        return "published_article"
+    if topic["status"] == "published":
+        return "published_article"
+    if topic["status"] == "scheduled":
+        return "scheduled_article"
+    return "draft_article"
+
+
 def relationship(target: dict[str, str], candidate: dict[str, str], shared_clusters: set[str]) -> str:
     if candidate["search_intent"] == "learn" and target["search_intent"] in {"solve", "workflow", "troubleshoot"}:
         return "prerequisite"
@@ -153,6 +163,7 @@ def related_articles(target: dict[str, str], rows: list[dict[str, str]]) -> list
                 "language": candidate["primary_language"],
                 "status": candidate["status"],
                 "url": article_url(candidate),
+                "destination": recommendation_destination(candidate),
                 "relationship": relationship(target, candidate, shared_clusters),
                 "shared_clusters": sorted(shared_clusters),
                 "score": score,
@@ -260,6 +271,15 @@ def build_metadata(target: dict[str, str], rows: list[dict[str, str]], apps: dic
             "related_articles": related_articles(target, rows),
             "related_apps": related_apps(target, apps),
             "related_guides": related_guides(target, rows),
+        },
+        "selection_policy": {
+            "related_article_priority": [
+                "published_article",
+                "scheduled_article",
+                "draft_article",
+            ],
+            "markdown_text_modified": False,
+            "publication_note": "Published article destinations should be preferred when rendering public article recommendations.",
         },
         "rules": [
             "Recommendations represent conceptual relationships, not SEO-only links.",

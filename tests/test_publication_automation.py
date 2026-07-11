@@ -175,6 +175,7 @@ class PublicationAutomationTest(unittest.TestCase):
         self.assertGreater(review["score"], 9.0)
         self.assertTrue(review["passed"])
         check_names = {check["name"] for check in review["checks"]}
+        self.assertIn("short_answer_ready", check_names)
         self.assertIn("image_quality", check_names)
         self.assertIn("translation_quality", check_names)
 
