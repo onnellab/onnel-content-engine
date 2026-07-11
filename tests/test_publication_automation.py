@@ -50,6 +50,7 @@ def topic_row(status: str, topic_id: str = "TOPIC-0001", language: str = "en") -
 
 MARKDOWN = """---
 title: "How to Read Very Large TXT Files"
+card_title: "How to Read Very Large TXT Files"
 slug: "read-large-txt-files"
 category: "reading"
 language: "en"
@@ -145,8 +146,16 @@ class PublicationAutomationTest(unittest.TestCase):
             MARKDOWN.replace('language: "en"', 'language: "ko"').replace('/blog-assets/en/', '/blog-assets/ko/'),
             encoding="utf-8",
         )
-        self.asset_path.write_text("<svg xmlns=\"http://www.w3.org/2000/svg\"></svg>\n", encoding="utf-8")
-        self.ko_asset_path.write_text("<svg xmlns=\"http://www.w3.org/2000/svg\"></svg>\n", encoding="utf-8")
+        svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+<title>ONNELLAB Blog workflow diagram</title>
+<desc>ONNELLAB workflow diagram for reading large TXT files.</desc>
+<g transform="translate(100 210)"><rect width="200" height="170"/><text><tspan>Check file</tspan></text></g>
+<path d="M330 295H470"/>
+<g transform="translate(500 210)"><rect width="200" height="170"/><text><tspan>Read safely</tspan></text></g>
+</svg>
+"""
+        self.asset_path.write_text(svg, encoding="utf-8")
+        self.ko_asset_path.write_text(svg.replace("Check file", "파일 확인").replace("Read safely", "안전하게 읽기"), encoding="utf-8")
         self.metadata_path.write_text(
             json.dumps({"recommendations": {"related_articles": [{"topic_id": "TOPIC-0002"}]}}),
             encoding="utf-8",
@@ -176,6 +185,9 @@ class PublicationAutomationTest(unittest.TestCase):
         self.assertTrue(review["passed"])
         check_names = {check["name"] for check in review["checks"]}
         self.assertIn("short_answer_ready", check_names)
+        self.assertIn("card_title_consistent", check_names)
+        self.assertIn("brand_spelling", check_names)
+        self.assertIn("social_card_source", check_names)
         self.assertIn("image_quality", check_names)
         self.assertIn("translation_quality", check_names)
 

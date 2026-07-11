@@ -75,6 +75,23 @@ def blog_asset_paths(body: str) -> list[str]:
     return re.findall(r"\]\((/blog-assets/[^)\s\"]+)", body)
 
 
+def has_workflow_social_source(assets: list[str]) -> bool:
+    return any(asset.endswith("/workflow-diagram.svg") for asset in assets)
+
+
+def card_title_matches_title(metadata: dict[str, str]) -> bool:
+    title = metadata.get("title", "").strip()
+    card_title = metadata.get("card_title", metadata.get("cardTitle", "")).strip()
+    return bool(title and card_title and title == card_title)
+
+
+def brand_spelling_passes(metadata: dict[str, str], body: str) -> tuple[bool, str]:
+    combined = "\n".join([*(str(value) for value in metadata.values()), body])
+    if FORBIDDEN_LOCAL_BRAND in combined:
+        return False, "Article text must keep the brand spelling as ONNELLAB."
+    return True, "Article text keeps the ONNELLAB brand spelling consistent."
+
+
 def related_article_count(path: Path) -> int:
     if not path.exists():
         return 0
@@ -248,6 +265,14 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
 
     required_metadata = ["title", "slug", "description", "status", "topic_id", "search_intent", "primary_keyword", "tags"]
     add("metadata_complete", all(metadata.get(key) for key in required_metadata), 1.2, "Pre-publication frontmatter contains the fields needed for review and scheduling.")
+    add(
+        "card_title_consistent",
+        card_title_matches_title(metadata),
+        0.4,
+        "Blog list card title matches the article title so index and article pages stay consistent.",
+    )
+    brand_ok, brand_note = brand_spelling_passes(metadata, body)
+    add("brand_spelling", brand_ok, 0.4, brand_note)
 
     add("required_sections", has_required_sections(found_sections), 1.4, "Article includes the required problem-first and publication sections.")
     add("short_answer_ready", has_short_answer(metadata, found_sections, body), 0.6, "Article exposes a direct short answer for readers, answer engines, and llms.txt summaries.")
@@ -273,6 +298,12 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
         asset_path = assets_root / asset.removeprefix("/blog-assets/")
         asset_ok = asset_ok and asset_path.exists()
     add("publish_ready_image", asset_ok, 1.0, "At least one referenced blog image asset exists.")
+    add(
+        "social_card_source",
+        has_workflow_social_source(assets),
+        0.4,
+        "A language-specific workflow diagram is available for social card generation.",
+    )
     image_ok, image_note = image_quality_passes(topic, assets, assets_root)
     add("image_quality", image_ok, 1.0, image_note)
 

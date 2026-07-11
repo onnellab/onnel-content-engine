@@ -15,6 +15,20 @@
       "note": "Pre-publication frontmatter contains the fields needed for review and scheduling."
     },
     {
+      "name": "card_title_consistent",
+      "passed": true,
+      "points": 0.4,
+      "max_points": 0.4,
+      "note": "Blog list card title matches the article title so index and article pages stay consistent."
+    },
+    {
+      "name": "brand_spelling",
+      "passed": true,
+      "points": 0.4,
+      "max_points": 0.4,
+      "note": "Article text keeps the ONNELLAB brand spelling consistent."
+    },
+    {
       "name": "required_sections",
       "passed": true,
       "points": 1.4,
@@ -69,6 +83,13 @@
       "points": 1.0,
       "max_points": 1.0,
       "note": "At least one referenced blog image asset exists."
+    },
+    {
+      "name": "social_card_source",
+      "passed": true,
+      "points": 0.4,
+      "max_points": 0.4,
+      "note": "A language-specific workflow diagram is available for social card generation."
     },
     {
       "name": "image_quality",

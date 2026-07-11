@@ -168,9 +168,12 @@ The review score includes:
 
 * article structure
 * metadata readiness
+* article title and blog card title consistency
+* ONNELLAB brand spelling consistency
 * internal links
 * image existence
 * image quality
+* workflow diagram availability for social card generation
 * translation quality
 
 ---

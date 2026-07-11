@@ -262,9 +262,12 @@ Before publishing, confirm:
 
 * Markdown is valid.
 * English and Korean article counterparts both exist.
+* Article title and blog card title are consistent.
+* ONNELLAB brand spelling is preserved in every language.
 * Images exist.
 * Text-containing images exist separately for English and Korean.
 * Image quality checks pass.
+* A workflow diagram source exists for social card generation when the article uses generated blog imagery.
 * Metadata is complete.
 * Internal links work.
 * External links are valid.
