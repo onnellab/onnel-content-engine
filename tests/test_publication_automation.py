@@ -250,6 +250,88 @@ class PublicationAutomationTest(unittest.TestCase):
         ko_content = self.ko_markdown_path.read_text(encoding="utf-8")
         self.assertIn('status: "published"', ko_content)
 
+    def test_publish_injects_public_same_language_related_articles_into_frontmatter(self) -> None:
+        en = topic_row("scheduled", "TOPIC-0001", "en")
+        ko = topic_row("scheduled", "TOPIC-0002", "ko")
+        en["scheduled_at"] = "2026-07-14T09:00:00+09:00"
+        ko["scheduled_at"] = "2026-07-14T09:00:00+09:00"
+        write_topics(self.topics_path, [en, ko])
+        write_topics(self.legacy_path, [en, ko])
+        for language in ["en", "ko"]:
+            review_path = self.review_root / language / "reading" / "read-large-txt-files" / "review.json"
+            review_path.parent.mkdir(parents=True)
+            review_path.write_text(json.dumps({"score": 9.4}), encoding="utf-8")
+        ko_metadata_path = self.root / "generated" / "metadata" / "ko" / "reading" / "read-large-txt-files" / "internal_links.json"
+        ko_metadata_path.parent.mkdir(parents=True)
+        self.metadata_path.write_text(
+            json.dumps(
+                {
+                    "recommendations": {
+                        "related_articles": [
+                            {
+                                "title": "Already Published TXT Guide",
+                                "language": "en",
+                                "status": "published",
+                                "url": "https://example.com/blog/en/already-published-txt-guide/",
+                            },
+                            {
+                                "title": "Draft TXT Follow-up",
+                                "language": "en",
+                                "status": "review",
+                                "url": "generated/markdown/en/reading/draft-txt-follow-up.md",
+                            },
+                            {
+                                "title": "Korean TXT Guide",
+                                "language": "ko",
+                                "status": "published",
+                                "url": "https://example.com/blog/ko/korean-txt-guide/",
+                            },
+                        ]
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
+        ko_metadata_path.write_text(
+            json.dumps(
+                {
+                    "recommendations": {
+                        "related_articles": [
+                            {
+                                "title": "이미 공개된 TXT 가이드",
+                                "language": "ko",
+                                "status": "published",
+                                "url": "https://example.com/blog/ko/already-published-txt-guide/",
+                            }
+                        ]
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
+
+        publish_due_articles(
+            self.topics_path,
+            self.review_root,
+            self.legacy_path,
+            site_url="https://example.com/",
+            now=datetime(2026, 7, 14, 9, tzinfo=KST),
+            metadata_root=self.root / "generated" / "metadata",
+        )
+
+        content = self.markdown_path.read_text(encoding="utf-8")
+        self.assertIn(
+            'related_articles: "Already Published TXT Guide => https://example.com/blog/en/already-published-txt-guide/"',
+            content,
+        )
+        self.assertNotIn("Draft TXT Follow-up", content)
+        self.assertNotIn("Korean TXT Guide", content)
+        ko_content = self.ko_markdown_path.read_text(encoding="utf-8")
+        self.assertIn(
+            'related_articles: "이미 공개된 TXT 가이드 => https://example.com/blog/ko/already-published-txt-guide/"',
+            ko_content,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

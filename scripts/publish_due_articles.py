@@ -9,6 +9,7 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 
 from evaluate_article import DEFAULT_REVIEW_ROOT, DEFAULT_THRESHOLD
 from schedule_ready_articles import grouped_by_publication, require_language_pair, review_score
@@ -17,6 +18,7 @@ from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEAD
 
 KST = timezone(timedelta(hours=9))
 DEFAULT_SITE_URL = "https://onnelakin.github.io/"
+DEFAULT_METADATA_ROOT = Path(__file__).resolve().parents[1] / "generated" / "metadata"
 
 
 class DuePublicationError(ValueError):
@@ -55,7 +57,37 @@ def replace_frontmatter_value(content: str, key: str, value: str) -> str:
     return content[:end] + f'\n{key}: "{value}"' + content[end:]
 
 
-def update_markdown_publication_metadata(path: Path, topic: dict[str, str], site_url: str, published_at: str) -> None:
+def metadata_path(topic: dict[str, str], metadata_root: Path) -> Path:
+    return metadata_root / topic["primary_language"] / topic["category"] / topic["slug"] / "internal_links.json"
+
+
+def public_related_article_value(topic: dict[str, str], metadata_root: Path) -> str:
+    path = metadata_path(topic, metadata_root)
+    if not path.exists():
+        return ""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    items: list[str] = []
+    for item in data.get("recommendations", {}).get("related_articles", []):
+        url = str(item.get("url", "")).strip()
+        title = str(item.get("title", "")).strip()
+        language = str(item.get("language", "")).strip()
+        status = str(item.get("status", "")).strip()
+        parsed = urlparse(url)
+        if not title or language != topic["primary_language"] or status != "published":
+            continue
+        if not (url.startswith("/") or parsed.scheme in {"http", "https"}):
+            continue
+        items.append(f"{title} => {url}")
+    return "|".join(items)
+
+
+def update_markdown_publication_metadata(
+    path: Path,
+    topic: dict[str, str],
+    site_url: str,
+    published_at: str,
+    metadata_root: Path = DEFAULT_METADATA_ROOT,
+) -> None:
     content = path.read_text(encoding="utf-8")
     values = {
         "status": "published",
@@ -63,6 +95,9 @@ def update_markdown_publication_metadata(path: Path, topic: dict[str, str], site
         "published_at": published_at,
         "updated_at": published_at,
     }
+    related_articles = public_related_article_value(topic, metadata_root)
+    if related_articles:
+        values["related_articles"] = related_articles
     for key, value in values.items():
         content = replace_frontmatter_value(content, key, value)
     path.write_text(content, encoding="utf-8")
@@ -76,6 +111,7 @@ def publish_due_articles(
     site_url: str = DEFAULT_SITE_URL,
     now: datetime | None = None,
     limit: int = 1,
+    metadata_root: Path = DEFAULT_METADATA_ROOT,
 ) -> list[dict[str, str]]:
     rows = read_csv(topics_path, TOPIC_HEADER)
     now = now or datetime.now(KST)
@@ -108,7 +144,7 @@ def publish_due_articles(
         for topic in pair.values():
             published_at = topic["scheduled_at"]
             path = markdown_path(topic, topics_path)
-            update_markdown_publication_metadata(path, topic, site_url, published_at)
+            update_markdown_publication_metadata(path, topic, site_url, published_at, metadata_root)
             row = store.edit(
                 topic["id"],
                 {
