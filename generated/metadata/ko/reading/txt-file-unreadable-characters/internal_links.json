@@ -30,22 +30,6 @@
   "recommendations": {
     "related_articles": [
       {
-        "topic_id": "TOPIC-0002",
-        "title": "Why TXT Files Show Unreadable Characters",
-        "slug": "txt-file-unreadable-characters",
-        "category": "reading",
-        "language": "en",
-        "status": "review",
-        "url": "generated/markdown/en/reading/txt-file-unreadable-characters.md",
-        "destination": "draft_article",
-        "relationship": "troubleshooting",
-        "shared_clusters": [
-          "reading",
-          "utf-8"
-        ],
-        "score": 15
-      },
-      {
         "topic_id": "TOPIC-0005",
         "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
         "slug": "read-large-txt-files-without-lag",
@@ -59,21 +43,6 @@
           "reading"
         ],
         "score": 14
-      },
-      {
-        "topic_id": "TOPIC-0001",
-        "title": "How to Read Large TXT Files Without Lag",
-        "slug": "read-large-txt-files-without-lag",
-        "category": "reading",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/",
-        "destination": "published_article",
-        "relationship": "deeper",
-        "shared_clusters": [
-          "reading"
-        ],
-        "score": 13
       }
     ],
     "related_apps": [

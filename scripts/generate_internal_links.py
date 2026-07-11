@@ -149,6 +149,8 @@ def related_articles(target: dict[str, str], rows: list[dict[str, str]]) -> list
     for candidate in rows:
         if candidate["id"] == target["id"]:
             continue
+        if candidate["primary_language"] != target["primary_language"]:
+            continue
         if candidate["status"] in {"idea", "approved", "research", "outline", "archived", "failed"}:
             continue
         score, shared_clusters = score_article(target, candidate)

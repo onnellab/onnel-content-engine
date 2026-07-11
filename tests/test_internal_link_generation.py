@@ -65,6 +65,7 @@ def topic_row(
     related_apps: str,
     status: str = "draft",
     intent: str = "solve",
+    language: str = "en",
 ) -> dict[str, str]:
     return {
         "id": topic_id,
@@ -73,7 +74,7 @@ def topic_row(
         "primary_question": f"How should I understand {keyword}?",
         "working_title": title,
         "slug": slug,
-        "primary_language": "en",
+        "primary_language": language,
         "priority": "normal",
         "search_intent": intent,
         "related_apps": related_apps,
@@ -81,7 +82,7 @@ def topic_row(
         "secondary_keywords": secondary,
         "evergreen": "true",
         "source_type": "user_question",
-        "canonical_path": f"generated/markdown/en/{category}/{slug}.md",
+        "canonical_path": f"generated/markdown/{language}/{category}/{slug}.md",
         "published_url": "",
         "scheduled_at": "",
         "published_at": "",
@@ -149,6 +150,18 @@ class InternalLinkGenerationTest(unittest.TestCase):
                     status="draft",
                     intent="learn",
                 ),
+                topic_row(
+                    "TOPIC-0004",
+                    "reading",
+                    "대용량 TXT 파일 읽기",
+                    "read-large-txt-files",
+                    "large TXT files",
+                    "TXT reader|file performance|encoding|virtual rendering",
+                    "VaultXT",
+                    status="published",
+                    intent="learn",
+                    language="ko",
+                ),
             ]
         )
 
@@ -168,6 +181,10 @@ class InternalLinkGenerationTest(unittest.TestCase):
         self.assertEqual(metadata["recommendations"]["related_apps"][0]["app_name"], "VaultXT")
         self.assertEqual(metadata["recommendations"]["related_articles"][0]["topic_id"], "TOPIC-0002")
         self.assertEqual(metadata["recommendations"]["related_articles"][0]["destination"], "published_article")
+        self.assertNotIn(
+            "TOPIC-0004",
+            {item["topic_id"] for item in metadata["recommendations"]["related_articles"]},
+        )
         self.assertEqual(metadata["selection_policy"]["related_article_priority"][0], "published_article")
         self.assertTrue(metadata["recommendations"]["related_guides"])
 

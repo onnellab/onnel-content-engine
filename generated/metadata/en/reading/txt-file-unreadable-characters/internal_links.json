@@ -43,37 +43,6 @@
           "reading"
         ],
         "score": 15
-      },
-      {
-        "topic_id": "TOPIC-0006",
-        "title": "TXT 파일 글자가 깨져 보이는 이유",
-        "slug": "txt-file-unreadable-characters",
-        "category": "reading",
-        "language": "ko",
-        "status": "review",
-        "url": "generated/markdown/ko/reading/txt-file-unreadable-characters.md",
-        "destination": "draft_article",
-        "relationship": "troubleshooting",
-        "shared_clusters": [
-          "reading",
-          "utf-8"
-        ],
-        "score": 15
-      },
-      {
-        "topic_id": "TOPIC-0005",
-        "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
-        "slug": "read-large-txt-files-without-lag",
-        "category": "reading",
-        "language": "ko",
-        "status": "published",
-        "url": "https://onnelakin.github.io/blog/ko/read-large-txt-files-without-lag/",
-        "destination": "published_article",
-        "relationship": "deeper",
-        "shared_clusters": [
-          "reading"
-        ],
-        "score": 13
       }
     ],
     "related_apps": [
