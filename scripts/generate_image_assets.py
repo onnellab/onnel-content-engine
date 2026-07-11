@@ -77,7 +77,7 @@ def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str
                 ("3. 흐름", "가벼운 경로 선택"),
                 ("4. 결과", "마찰을 줄여 읽기"),
             ],
-            "ONNELLAB Blog · 생성된 워크플로 자산",
+            "ONNELLAB Blog · 권장 읽기 워크플로",
             "워크플로 다이어그램",
         )
     return (
@@ -96,6 +96,7 @@ def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str
 
 def workflow_svg(title: str, keyword: str, language: str) -> str:
     title_lines = wrap_words(title, 38)
+    raw_keyword = keyword
     keyword = svg_text(keyword, 36)
     subtitle, bottom_message, steps, footer, description_label = localized_steps(language)
     cards = []
@@ -118,7 +119,7 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
     )
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
   <title id="title">{html_escape(" ".join(title_lines))}</title>
-  <desc id="desc">ONNELLAB {description_label} for {keyword}.</desc>
+  <desc id="desc">{html_escape(f'{raw_keyword}을 위한 ONNELLAB {description_label}입니다.' if language == 'ko' else f'ONNELLAB {description_label} for {raw_keyword}.')}</desc>
   <rect width="1200" height="675" fill="#fbf7ef"/>
   <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
   <text fill="#30302c" font-family="{SVG_FONT_STACK}" font-size="38" font-weight="680">{svg_tspans(title_lines, 92, 112, 44)}</text>

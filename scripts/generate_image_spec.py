@@ -83,16 +83,25 @@ def build_spec(markdown_path: Path, markdown: str, topic: dict[str, str]) -> dic
     headings = extract_headings(markdown)
     related_apps = split_pipe(topic["related_apps"])
     secondary_keywords = split_pipe(topic["secondary_keywords"])
+    is_ko = topic["primary_language"] == "ko"
 
     required_infographics: list[dict[str, object]] = [
         {
             "id": "workflow-primary",
             "type": "workflow",
             "required": True,
-            "question_answered": f"What is the recommended workflow for {topic['primary_keyword']}?",
-            "source_sections": ["Short Answer", "Recommended Workflow"],
-            "structure": ["Problem", "Process", "Result"],
-            "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article.",
+            "question_answered": (
+                f"{topic['primary_keyword']}에 권장되는 워크플로는 무엇인가요?"
+                if is_ko
+                else f"What is the recommended workflow for {topic['primary_keyword']}?"
+            ),
+            "source_sections": ["요약 답변", "권장 워크플로"] if is_ko else ["Short Answer", "Recommended Workflow"],
+            "structure": ["문제", "과정", "결과"] if is_ko else ["Problem", "Process", "Result"],
+            "notes": (
+                "차분하고 간결한 워크플로 다이어그램을 사용합니다. 이미지는 장식이 아니라 과정을 설명해야 합니다."
+                if is_ko
+                else "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+            ),
         }
     ]
 
@@ -102,10 +111,22 @@ def build_spec(markdown_path: Path, markdown: str, topic: dict[str, str]) -> dic
                 "id": "comparison-options",
                 "type": "comparison",
                 "required": True,
-                "question_answered": f"Which concepts or approaches matter when evaluating {topic['primary_keyword']}?",
-                "source_sections": ["Why This Problem Happens", "What To Check First"],
+                "question_answered": (
+                    f"{topic['primary_keyword']} 주제를 판단할 때 어떤 개념이나 접근법이 중요한가요?"
+                    if is_ko
+                    else f"Which concepts or approaches matter when evaluating {topic['primary_keyword']}?"
+                ),
+                "source_sections": (
+                    ["이 문제가 생기는 이유", "먼저 확인할 항목"]
+                    if is_ko
+                    else ["Why This Problem Happens", "What To Check First"]
+                ),
                 "compare": secondary_keywords[:3],
-                "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior.",
+                "notes": (
+                    "비교는 균형 있게 작성하고, ONNELLAB 제품을 모든 상황의 우월한 해답처럼 제시하지 않습니다."
+                    if is_ko
+                    else "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+                ),
             }
         )
 
@@ -113,35 +134,66 @@ def build_spec(markdown_path: Path, markdown: str, topic: dict[str, str]) -> dic
     screenshot_requirements = {
         "required": screenshot_required,
         "reason": (
-            "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature."
-            if screenshot_required
-            else "No related application is referenced; decorative screenshots are not required."
+            (
+                "관련 ONNELLAB 애플리케이션이 언급되므로, 실제 기능을 보여줄 때에만 스크린샷을 사용할 수 있습니다."
+                if screenshot_required
+                else "관련 애플리케이션이 없으므로 장식용 스크린샷은 필요하지 않습니다."
+            )
+            if is_ko
+            else (
+                "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature."
+                if screenshot_required
+                else "No related application is referenced; decorative screenshots are not required."
+            )
         ),
         "applications": related_apps,
-        "rules": [
-            "Use screenshots only to demonstrate a real feature.",
-            "Crop unnecessary UI.",
-            "Highlight only the relevant control or workflow area.",
-            "Maintain high resolution.",
-            "Do not use screenshots as decoration.",
-        ],
+        "rules": (
+            [
+                "실제 기능을 설명할 때에만 스크린샷을 사용합니다.",
+                "불필요한 UI는 잘라냅니다.",
+                "관련 컨트롤이나 워크플로 영역만 강조합니다.",
+                "높은 해상도를 유지합니다.",
+                "스크린샷을 장식으로 사용하지 않습니다.",
+            ]
+            if is_ko
+            else [
+                "Use screenshots only to demonstrate a real feature.",
+                "Crop unnecessary UI.",
+                "Highlight only the relevant control or workflow area.",
+                "Maintain high resolution.",
+                "Do not use screenshots as decoration.",
+            ]
+        ),
     }
 
+    workflow_title = (
+        f"{topic['working_title']} 워크플로"
+        if is_ko
+        else f"{topic['working_title']} Workflow"
+    )
     workflow_diagrams = [
         {
             "id": "workflow-primary",
-            "title": f"{topic['working_title']} Workflow",
-            "steps": ["Problem", "Explanation", "Options", "Recommended workflow", "Optional application"],
-            "layout": "vertical or left-to-right sequence",
+            "title": workflow_title,
+            "steps": (
+                ["문제", "설명", "선택지", "권장 워크플로", "선택 애플리케이션"]
+                if is_ko
+                else ["Problem", "Explanation", "Options", "Recommended workflow", "Optional application"]
+            ),
+            "layout": "세로 또는 좌우 순서형" if is_ko else "vertical or left-to-right sequence",
         }
     ]
 
     comparison_diagrams = [
         {
             "id": "comparison-options",
-            "title": f"{topic['primary_keyword']} Comparison",
+            "title": (
+                f"{topic['primary_keyword']} 비교"
+                if is_ko
+                else f"{topic['primary_keyword']} Comparison"
+            ),
             "items": secondary_keywords[:3] or [topic["primary_keyword"]],
-            "layout": "side-by-side comparison table",
+            "layout": "나란히 비교하는 표" if is_ko else "side-by-side comparison table",
         }
     ]
 
@@ -181,12 +233,21 @@ def build_spec(markdown_path: Path, markdown: str, topic: dict[str, str]) -> dic
         "screenshot_requirements": screenshot_requirements,
         "workflow_diagrams": workflow_diagrams,
         "comparison_diagrams": comparison_diagrams,
-        "prohibited": [
-            "Do not generate image files in this step.",
-            "Do not create screenshots in this step.",
-            "Do not publish assets in this step.",
-            "Do not use decorative visuals without explanatory purpose.",
-        ],
+        "prohibited": (
+            [
+                "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+                "이 단계에서는 스크린샷을 만들지 않습니다.",
+                "이 단계에서는 에셋을 게시하지 않습니다.",
+                "설명 목적이 없는 장식용 이미지는 사용하지 않습니다.",
+            ]
+            if is_ko
+            else [
+                "Do not generate image files in this step.",
+                "Do not create screenshots in this step.",
+                "Do not publish assets in this step.",
+                "Do not use decorative visuals without explanatory purpose.",
+            ]
+        ),
     }
 
 
