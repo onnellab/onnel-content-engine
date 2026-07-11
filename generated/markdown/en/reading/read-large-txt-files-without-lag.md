@@ -1,6 +1,6 @@
 ---
 title: "How to Read Large TXT Files Without Lag"
-card_title: "Read Large TXT Files Without Lag"
+card_title: "How to Read Large TXT Files Without Lag"
 slug: "read-large-txt-files-without-lag"
 category: "reading"
 language: "en"

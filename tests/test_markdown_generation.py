@@ -99,7 +99,7 @@ class MarkdownGenerationTest(unittest.TestCase):
         rows = self.read_topics()
         self.assertEqual(rows[0]["status"], "draft")
         self.assertEqual(rows[0]["canonical_path"], "generated/markdown/en/reading/read-large-txt-files.md")
-        self.assertIn('card_title: "Read Very Large TXT Files"', content)
+        self.assertIn('card_title: "How to Read Very Large TXT Files"', content)
         self.assertIn('description: "Learn how to evaluate large TXT files', content)
         self.assertIn('image_specs: "Workflow diagram for large TXT files', content)
         self.assertIn("# How to Read Very Large TXT Files", content)

@@ -1,6 +1,6 @@
 ---
 title: "Why TXT Files Show Unreadable Characters"
-card_title: "TXT Files Show Unreadable Characters"
+card_title: "Why TXT Files Show Unreadable Characters"
 slug: "txt-file-unreadable-characters"
 category: "reading"
 language: "en"

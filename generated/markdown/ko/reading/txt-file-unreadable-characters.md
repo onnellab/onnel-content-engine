@@ -1,6 +1,6 @@
 ---
 title: "TXT 파일 글자가 깨져 보이는 이유"
-card_title: "TXT 파일 글자 깨짐"
+card_title: "TXT 파일 글자가 깨져 보이는 이유"
 slug: "txt-file-unreadable-characters"
 category: "reading"
 language: "ko"

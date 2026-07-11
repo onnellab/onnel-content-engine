@@ -60,13 +60,6 @@ def sentence_from_question(question: str) -> str:
     return cleaned[0].lower() + cleaned[1:]
 
 
-def card_title(title: str) -> str:
-    cleaned = title.strip()
-    if cleaned.lower().startswith("how to "):
-        cleaned = cleaned[7:].strip()
-    return cleaned or title.strip()
-
-
 def split_pipe(value: str) -> list[str]:
     return [item.strip() for item in value.split("|") if item.strip()]
 
@@ -176,7 +169,7 @@ def draft_context(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> dic
 
     context = {
         "title": topic["working_title"],
-        "card_title": card_title(topic["working_title"]),
+        "card_title": topic["working_title"],
         "slug": topic["slug"],
         "category": topic["category"],
         "primary_language": topic["primary_language"],

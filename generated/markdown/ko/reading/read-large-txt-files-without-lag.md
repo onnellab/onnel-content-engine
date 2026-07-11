@@ -1,6 +1,6 @@
 ---
 title: "대용량 TXT 파일을 지연 없이 읽는 방법"
-card_title: "대용량 TXT 파일 읽기"
+card_title: "대용량 TXT 파일을 지연 없이 읽는 방법"
 slug: "read-large-txt-files-without-lag"
 category: "reading"
 language: "ko"
