@@ -35,9 +35,9 @@
         "slug": "txt-file-unreadable-characters",
         "category": "reading",
         "language": "en",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/en/reading/txt-file-unreadable-characters.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "troubleshooting",
         "shared_clusters": [
           "reading"
