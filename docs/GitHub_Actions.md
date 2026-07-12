@@ -119,6 +119,18 @@ data/store_versions.csv
 
 App Store rows can be marked `new`, `unchanged`, or `updated`. Google Play rows are recorded as `manual_check` with the package ID because this workflow does not use Play Store scraping as a release source of truth.
 
+Android version source rows can be supplied in:
+
+```text
+data/android_store_versions.csv
+```
+
+and are validated by:
+
+```text
+scripts/validate_android_store_versions.py
+```
+
 Updated store snapshots are then converted into planned release candidates:
 
 ```text

@@ -134,7 +134,19 @@ The snapshot path is:
 data/store_versions.csv
 ```
 
-The script records App Store version metadata from the public lookup endpoint. Google Play package URLs are recorded as `manual_check` because this automation does not depend on an unstable public Play Store scraping path.
+The script records App Store version metadata from the public lookup endpoint. Android versions can be supplied from:
+
+```text
+data/android_store_versions.csv
+```
+
+Validate Android source data with:
+
+```text
+scripts/validate_android_store_versions.py
+```
+
+Google Play package URLs are recorded as `manual_check` only when no Android source row exists, because this automation does not depend on an unstable public Play Store scraping path.
 
 Use the snapshot as a signal. Create a GitHub Release row only when the new public release artifact is available and the change notes can be tied to that artifact.
 

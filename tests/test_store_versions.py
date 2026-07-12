@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from check_store_versions import (  # noqa: E402
+    ANDROID_HEADER,
     STORE_HEADER,
     app_store_id,
     check_store_versions,
@@ -125,6 +126,44 @@ class StoreVersionsTest(unittest.TestCase):
                 )
 
             self.assertEqual(rows[0]["status"], "updated")
+
+    def test_android_source_marks_snapshot_new(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            apps = Path(temp) / "apps.csv"
+            output = Path(temp) / "store_versions.csv"
+            android = Path(temp) / "android_store_versions.csv"
+            write_apps(apps)
+            with android.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=ANDROID_HEADER, lineterminator="\n")
+                writer.writeheader()
+                writer.writerow(
+                    {
+                        "app_id": "APP-0001",
+                        "app_slug": "quivra",
+                        "package": "com.onnellab.quivra2",
+                        "version": "1.2.3",
+                        "last_updated": "2026-07-12",
+                        "release_notes": "Android release.",
+                        "source": "manual_entry",
+                        "notes": "Manual Play Console entry.",
+                    }
+                )
+
+            with patch(
+                "check_store_versions.json_get",
+                return_value={"results": [{"version": "1.2.3", "currentVersionReleaseDate": "", "releaseNotes": ""}]},
+            ):
+                rows = check_store_versions(
+                    apps,
+                    output,
+                    android,
+                    dry_run=True,
+                    now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
+                )
+
+            self.assertEqual(rows[1]["status"], "new")
+            self.assertEqual(rows[1]["version"], "1.2.3")
+            self.assertEqual(rows[1]["release_notes"], "Android release.")
 
 
 if __name__ == "__main__":

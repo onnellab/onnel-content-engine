@@ -20,6 +20,7 @@ from validate_apps_registry import APP_HEADER, APPS_PATH
 
 ROOT = Path(__file__).resolve().parents[1]
 STORE_VERSIONS_PATH = ROOT / "data" / "store_versions.csv"
+ANDROID_VERSIONS_PATH = ROOT / "data" / "android_store_versions.csv"
 KST = ZoneInfo("Asia/Seoul")
 
 STORE_HEADER = [
@@ -35,6 +36,17 @@ STORE_HEADER = [
     "release_notes",
     "checked_at",
     "status",
+    "notes",
+]
+
+ANDROID_HEADER = [
+    "app_id",
+    "app_slug",
+    "package",
+    "version",
+    "last_updated",
+    "release_notes",
+    "source",
     "notes",
 ]
 
@@ -114,6 +126,28 @@ def google_play_placeholder(store_url: str) -> dict[str, str]:
     }
 
 
+def android_version_index(path: Path = ANDROID_VERSIONS_PATH) -> dict[str, dict[str, str]]:
+    if not path.exists():
+        return {}
+    return {row["app_id"]: row for row in read_csv(path, ANDROID_HEADER) if row["version"]}
+
+
+def google_play_from_source(store_url: str, app_id: str, android_versions: dict[str, dict[str, str]]) -> dict[str, str]:
+    package = play_package(store_url)
+    row = android_versions.get(app_id)
+    if not row:
+        return google_play_placeholder(store_url)
+    if row["package"] != package:
+        raise StoreVersionError(f"Android version package does not match Play Store URL for {app_id}")
+    return {
+        "store_app_id": "",
+        "store_package": package,
+        "version": row["version"],
+        "last_updated": row["last_updated"],
+        "release_notes": row["release_notes"],
+    }
+
+
 def snapshot_key(row: dict[str, str]) -> tuple[str, str]:
     return row["app_id"], row["platform"]
 
@@ -124,26 +158,35 @@ def read_existing(path: Path) -> dict[tuple[str, str], dict[str, str]]:
     return {snapshot_key(row): row for row in read_csv(path, STORE_HEADER)}
 
 
-def store_rows_from_apps(apps_path: Path, existing: dict[tuple[str, str], dict[str, str]], now: str) -> list[dict[str, str]]:
+def store_rows_from_apps(
+    apps_path: Path,
+    existing: dict[tuple[str, str], dict[str, str]],
+    now: str,
+    android_versions: dict[str, dict[str, str]] | None = None,
+) -> list[dict[str, str]]:
+    android_versions = android_versions or {}
     rows: list[dict[str, str]] = []
     for app in read_csv(apps_path, APP_HEADER):
-        candidates = [
-            ("ios", app["app_store_url"], app_store_lookup),
-            ("android", app["play_store_url"], google_play_placeholder),
-        ]
-        for platform, store_url, fetcher in candidates:
+        candidates = [("ios", app["app_store_url"]), ("android", app["play_store_url"])]
+        for platform, store_url in candidates:
             if not store_url:
                 continue
             previous = existing.get((app["app_id"], platform), {})
             try:
-                current = fetcher(store_url)
+                if platform == "android":
+                    current = google_play_from_source(store_url, app["app_id"], android_versions)
+                else:
+                    current = app_store_lookup(store_url)
                 previous_version = previous.get("version", "")
                 status = "new" if not previous else "unchanged"
                 if current["version"] and previous_version and current["version"] != previous_version:
                     status = "updated"
                 if platform == "android":
-                    status = "manual_check"
-                    notes = "Google Play has no stable public version lookup in this automation."
+                    if current["version"]:
+                        notes = android_versions.get(app["app_id"], {}).get("notes", "")
+                    else:
+                        status = "manual_check"
+                        notes = "Google Play has no stable public version lookup in this automation."
                 else:
                     notes = ""
                 rows.append(
@@ -184,12 +227,14 @@ def store_rows_from_apps(apps_path: Path, existing: dict[tuple[str, str], dict[s
 def check_store_versions(
     apps_path: Path = APPS_PATH,
     output_path: Path = STORE_VERSIONS_PATH,
+    android_versions_path: Path = ANDROID_VERSIONS_PATH,
     dry_run: bool = False,
     now: datetime | None = None,
 ) -> list[dict[str, str]]:
     timestamp = (now or datetime.now(KST)).replace(microsecond=0).isoformat()
     existing = read_existing(output_path)
-    rows = store_rows_from_apps(apps_path, existing, timestamp)
+    android_versions = android_version_index(android_versions_path)
+    rows = store_rows_from_apps(apps_path, existing, timestamp, android_versions)
     if not dry_run:
         write_csv(output_path, rows)
     return rows
@@ -199,10 +244,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Check App Store versions and record store snapshots")
     parser.add_argument("--apps", type=Path, default=APPS_PATH)
     parser.add_argument("--output", type=Path, default=STORE_VERSIONS_PATH)
+    parser.add_argument("--android-versions", type=Path, default=ANDROID_VERSIONS_PATH)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     try:
-        rows = check_store_versions(args.apps, args.output, args.dry_run)
+        rows = check_store_versions(args.apps, args.output, args.android_versions, args.dry_run)
     except (StoreVersionError, OSError, json.JSONDecodeError) as error:
         print(f"store version check failed: {error}", file=sys.stderr)
         return 1
