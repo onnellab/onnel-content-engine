@@ -46,6 +46,7 @@ def reset_failed_social_post(
         raise SocialResetError(f"social post is not failed: {topic_id} {platform} {language} {template_id}")
     post["status"] = "approved"
     post["error"] = ""
+    post["error_type"] = ""
     write_manifest(manifest_path, manifest)
     return post
 
