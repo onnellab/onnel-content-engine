@@ -18,6 +18,7 @@ REQUIRED_PATHS = [
     "docs/Phase_Lock.md",
     "docs/Workflow.md",
     "docs/Content_Guide.md",
+    "docs/External_Account_Update_Checklist.md",
     "docs/SEO_Guide.md",
     "docs/AEO_Guide.md",
     "docs/GEO_Guide.md",
