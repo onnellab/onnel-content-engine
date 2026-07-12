@@ -25,6 +25,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Check App Store Versions", workflow)
         self.assertIn("Prepare App Release Candidates", workflow)
         self.assertIn("collect_release_artifacts.py", workflow)
+        self.assertIn("sync_codemagic_artifact_urls.py", workflow)
         self.assertIn("download_codemagic_artifacts.py", workflow)
         self.assertIn("fill_ready_app_releases.py", workflow)
         self.assertIn("generate_app_release_report.py", workflow)

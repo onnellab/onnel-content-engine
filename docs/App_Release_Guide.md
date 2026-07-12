@@ -229,6 +229,27 @@ scripts/collect_release_artifacts.py
 
 iOS release artifacts are produced by Codemagic for the current workflow, so iOS planned rows remain in `planned` until an `.ipa` is provided or copied into the configured artifact path.
 
+Codemagic build IDs can be recorded in:
+
+```text
+data/codemagic_builds.csv
+```
+
+Example Codemagic build row:
+
+```csv
+release_id,codemagic_app_id,workflow_id,build_id,artifact_name,notes
+REL-0002,5c9c064185dd2310123b8e96,release,66a000000000000000000001,VaultXT.ipa,Use only after the build is the intended release artifact.
+```
+
+Sync artifact URLs from recorded build IDs with:
+
+```text
+CODEMAGIC_API_TOKEN=... scripts/sync_codemagic_artifact_urls.py
+```
+
+The script reads the Codemagic build response, finds release artifact URLs, and writes `data/codemagic_artifacts.csv`. If the build exposes multiple app artifacts, set `artifact_name` so the release artifact is selected deterministically.
+
 Codemagic artifact URLs can be recorded in:
 
 ```text

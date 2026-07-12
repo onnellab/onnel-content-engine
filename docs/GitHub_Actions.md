@@ -187,6 +187,12 @@ scripts/collect_release_artifacts.py
 
 iOS artifacts are expected from Codemagic in the current release flow, so local collection normally skips iOS rows.
 
+Codemagic build IDs from `data/codemagic_builds.csv` are converted into artifact URL rows with:
+
+```text
+scripts/sync_codemagic_artifact_urls.py
+```
+
 Codemagic artifact URLs from `data/codemagic_artifacts.csv` are downloaded with:
 
 ```text
