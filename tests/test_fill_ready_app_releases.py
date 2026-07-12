@@ -24,7 +24,7 @@ def release_row() -> dict[str, str]:
             "app_id": "APP-0003",
             "app_slug": "vaultxt",
             "app_name": "VaultXT",
-            "repository": "onnelakin/vaultxt",
+            "repository": "onnellab/vaultxt",
             "tag": "v1.2.3",
             "version": "1.2.3",
             "platform": "ios",
@@ -56,7 +56,7 @@ def write_config(path: Path, pattern: str) -> None:
             {
                 "app_id": "APP-0003",
                 "app_slug": "vaultxt",
-                "repository": "onnelakin/vaultxt",
+                "repository": "onnellab/vaultxt",
                 "artifact_pattern": pattern,
                 "notes": "",
             }

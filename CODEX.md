@@ -182,24 +182,24 @@ After every 10 completed tasks, Codex must reread the instruction Markdown files
 The main GitHub Pages homepage repository is:
 
 ```text
-https://github.com/onnelakin/onnelakin.github.io.git
+https://github.com/onnellab/onnellab.github.io.git
 ```
 
 The local clone for the main GitHub Pages homepage repository is:
 
 ```text
-C:\dev\onnelakin.github.io
+C:\dev\onnellab.github.io
 ```
 
 In WSL, use:
 
 ```text
-/mnt/c/dev/onnelakin.github.io
+/mnt/c/dev/onnellab.github.io
 ```
 
 Do not use a temporary `/tmp` clone for homepage work when this local clone is available.
 
-ONNELLAB publishing targets should treat `https://onnelakin.github.io/` as the canonical website root unless a project document explicitly says otherwise.
+ONNELLAB publishing targets should treat `https://onnellab.github.io/` as the canonical website root unless a project document explicitly says otherwise.
 
 Instruction Markdown files include:
 

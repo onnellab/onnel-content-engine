@@ -171,7 +171,7 @@ def prepare_app_release_rows(
     releases_path: Path = RELEASES_PATH,
     config_path: Path = CONFIG_PATH,
     local_repositories_path: Path = LOCAL_REPOSITORIES_PATH,
-    owner: str = "onnelakin",
+    owner: str = "onnellab",
     dry_run: bool = False,
     now: datetime | None = None,
 ) -> list[dict[str, str]]:
@@ -228,7 +228,7 @@ def main() -> int:
     parser.add_argument("--releases", type=Path, default=RELEASES_PATH)
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     parser.add_argument("--local-repositories", type=Path, default=LOCAL_REPOSITORIES_PATH)
-    parser.add_argument("--owner", default="onnelakin")
+    parser.add_argument("--owner", default="onnellab")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     try:

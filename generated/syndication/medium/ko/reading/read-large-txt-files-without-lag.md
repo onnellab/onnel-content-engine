@@ -1,9 +1,9 @@
 ---
 title: "대용량 TXT 파일을 지연 없이 읽는 방법"
-canonical_url: "https://onnelakin.github.io/blog/ko/read-large-txt-files-without-lag/"
+canonical_url: "https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/"
 ---
 
-> Originally published at https://onnelakin.github.io/blog/ko/read-large-txt-files-without-lag/
+> Originally published at https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/
 
 # 대용량 TXT 파일을 지연 없이 읽는 방법
 

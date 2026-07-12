@@ -12,7 +12,7 @@ Use the existing site typography and spacing for the full `ONNELLAB` wordmark. D
 
 ## Favicon
 
-Use the shared ONNELLAB `OL` monogram favicon for the main site and pages under `https://onnelakin.github.io/`.
+Use the shared ONNELLAB `OL` monogram favicon for the main site and pages under `https://onnellab.github.io/`.
 
 Favicon assets:
 

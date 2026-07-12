@@ -7,4 +7,4 @@
 - 워드프로세서보다 일반 텍스트 리더나 편집기를 사용합니다.
 
 전체 글 읽기:
-https://onnelakin.github.io/blog/ko/read-large-txt-files-without-lag/
+https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/

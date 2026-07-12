@@ -35,7 +35,7 @@ def github_token(dry_run: bool = False) -> str:
 
 
 def repository_arg(value: str | None) -> str:
-    repository = value or os.environ.get("GITHUB_REPOSITORY") or "onnelakin/onnel-content-engine"
+    repository = value or os.environ.get("GITHUB_REPOSITORY") or "onnellab/onnel-content-engine"
     if "/" not in repository:
         raise AppReleaseIssueError("repository must use owner/name format")
     return repository

@@ -28,4 +28,4 @@ scripts/sync_android_versions_from_repos.py
 | onnellab-text | `/mnt/c/dev/onnellab-text` | Windows-mounted checkout. |
 | melivra | `/mnt/c/dev/projects/melivra` | Windows-mounted project checkout. |
 | onnel-content-engine | `/mnt/c/dev/onnel-content-engine` | Content automation repository. |
-| onnelakin.github.io | `/mnt/c/dev/onnelakin.github.io` | Main ONNELLAB homepage repository. |
+| onnellab.github.io | `/mnt/c/dev/onnellab.github.io` | Main ONNELLAB homepage repository. |

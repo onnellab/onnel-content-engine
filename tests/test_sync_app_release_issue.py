@@ -41,9 +41,9 @@ class SyncAppReleaseIssueTest(unittest.TestCase):
             report = Path(temp) / "app_releases.md"
             report.write_text(REPORT_WITH_ATTENTION, encoding="utf-8")
 
-            message = sync_app_release_issue(report, "onnelakin/onnel-content-engine", dry_run=True)
+            message = sync_app_release_issue(report, "onnellab/onnel-content-engine", dry_run=True)
 
-            self.assertIn("would sync onnelakin/onnel-content-engine", message)
+            self.assertIn("would sync onnellab/onnel-content-engine", message)
 
     def test_updates_existing_issue_when_attention_exists(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -59,9 +59,9 @@ class SyncAppReleaseIssueTest(unittest.TestCase):
 
             with patch.dict("os.environ", {"GITHUB_TOKEN": "token"}):
                 with patch("sync_app_release_issue.github_request", fake_request):
-                    message = sync_app_release_issue(report, "onnelakin/onnel-content-engine")
+                    message = sync_app_release_issue(report, "onnellab/onnel-content-engine")
 
-            self.assertEqual(message, "updated onnelakin/onnel-content-engine issue #7")
+            self.assertEqual(message, "updated onnellab/onnel-content-engine issue #7")
             self.assertEqual(calls[-1][1], "PATCH")
             self.assertEqual(calls[-1][2]["state"], "open")
 
@@ -79,9 +79,9 @@ class SyncAppReleaseIssueTest(unittest.TestCase):
 
             with patch.dict("os.environ", {"GITHUB_TOKEN": "token"}):
                 with patch("sync_app_release_issue.github_request", fake_request):
-                    message = sync_app_release_issue(report, "onnelakin/onnel-content-engine")
+                    message = sync_app_release_issue(report, "onnellab/onnel-content-engine")
 
-            self.assertEqual(message, "closed onnelakin/onnel-content-engine issue #7")
+            self.assertEqual(message, "closed onnellab/onnel-content-engine issue #7")
             self.assertEqual(calls[-1][2], {"state": "closed"})
 
 

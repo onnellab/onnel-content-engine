@@ -80,7 +80,7 @@ class AppReleaseReportTest(unittest.TestCase):
                     "app_id": "APP-0003",
                     "app_slug": "vaultxt",
                     "app_name": "VaultXT",
-                    "repository": "onnelakin/vaultxt",
+                    "repository": "onnellab/vaultxt",
                     "tag": "v1.2.3",
                     "version": "1.2.3",
                     "platform": "ios",
@@ -102,7 +102,7 @@ class AppReleaseReportTest(unittest.TestCase):
                     {
                         "app_id": "APP-0003",
                         "app_slug": "vaultxt",
-                        "repository": "onnelakin/vaultxt",
+                        "repository": "onnellab/vaultxt",
                         "artifact_pattern": "generated/releases/vaultxt/{version}/{platform}/*-release.*",
                         "notes": "",
                     }
@@ -160,7 +160,7 @@ class AppReleaseReportTest(unittest.TestCase):
                     "app_id": "APP-0003",
                     "app_slug": "vaultxt",
                     "app_name": "VaultXT",
-                    "repository": "onnelakin/vaultxt",
+                    "repository": "onnellab/vaultxt",
                     "tag": "v1.2.3",
                     "version": "1.2.3",
                     "platform": "ios",
@@ -184,7 +184,7 @@ class AppReleaseReportTest(unittest.TestCase):
                     {
                         "app_id": "APP-0003",
                         "app_slug": "vaultxt",
-                        "repository": "onnelakin/vaultxt",
+                        "repository": "onnellab/vaultxt",
                         "artifact_pattern": "generated/releases/vaultxt/{version}/{platform}/*-release.*",
                         "notes": "",
                     }

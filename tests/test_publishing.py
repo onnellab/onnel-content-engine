@@ -192,10 +192,10 @@ class PublishingTest(unittest.TestCase):
             build_site(self.topics_path, self.site_dir, "https://example.com/")
 
     def test_default_github_pages_target_is_main_homepage(self) -> None:
-        self.assertEqual(DEFAULT_SITE_URL, "https://onnelakin.github.io/")
-        self.assertEqual(DEFAULT_PAGES_REPOSITORY, "https://github.com/onnelakin/onnelakin.github.io.git")
+        self.assertEqual(DEFAULT_SITE_URL, "https://onnellab.github.io/")
+        self.assertEqual(DEFAULT_PAGES_REPOSITORY, "https://github.com/onnellab/onnellab.github.io.git")
         self.assertEqual(DEFAULT_PAGES_BRANCH, "main")
-        self.assertEqual(str(DEFAULT_HOMEPAGE_REPOSITORY_PATH), "/mnt/c/dev/onnelakin.github.io")
+        self.assertEqual(str(DEFAULT_HOMEPAGE_REPOSITORY_PATH), "/mnt/c/dev/onnellab.github.io")
 
     def test_export_markdown_to_homepage_writes_only_blog_content(self) -> None:
         homepage = self.root / "homepage"

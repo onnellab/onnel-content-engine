@@ -46,7 +46,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("--threshold 9.0", workflow)
         self.assertIn("--interval-days 3", workflow)
         self.assertIn("--publication-time 09:00", workflow)
-        self.assertIn("ONNELAKIN_GITHUB_PAGES_TOKEN", workflow)
+        self.assertIn("ONNELLAB_GITHUB_PAGES_TOKEN", workflow)
         self.assertNotIn("Blogger", workflow)
 
     def test_dry_run_pipeline_does_not_modify_repository_topics(self) -> None:

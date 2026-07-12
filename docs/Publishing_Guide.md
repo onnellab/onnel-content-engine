@@ -85,25 +85,25 @@ Other platforms receive adapted versions.
 The main GitHub Pages homepage repository is:
 
 ```text
-https://github.com/onnelakin/onnelakin.github.io.git
+https://github.com/onnellab/onnellab.github.io.git
 ```
 
 The canonical website root is:
 
 ```text
-https://onnelakin.github.io/
+https://onnellab.github.io/
 ```
 
 The local clone for homepage publishing work is:
 
 ```text
-C:\dev\onnelakin.github.io
+C:\dev\onnellab.github.io
 ```
 
 In WSL, use:
 
 ```text
-/mnt/c/dev/onnelakin.github.io
+/mnt/c/dev/onnellab.github.io
 ```
 
 Do not use a temporary `/tmp` clone for homepage publishing work when this local clone is available.

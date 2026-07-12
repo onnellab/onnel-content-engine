@@ -17,7 +17,7 @@ from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEAD
 
 
 KST = timezone(timedelta(hours=9))
-DEFAULT_SITE_URL = "https://onnelakin.github.io/"
+DEFAULT_SITE_URL = "https://onnellab.github.io/"
 DEFAULT_METADATA_ROOT = Path(__file__).resolve().parents[1] / "generated" / "metadata"
 
 

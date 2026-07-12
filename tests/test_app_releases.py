@@ -47,7 +47,7 @@ class AppReleaseTest(unittest.TestCase):
                         "app_id": "APP-0003",
                         "app_slug": "vaultxt",
                         "app_name": "VaultXT",
-                        "repository": "onnelakin/vaultxt",
+                        "repository": "onnellab/vaultxt",
                         "tag": "v1.2.0",
                         "version": "1.2.0",
                         "platform": "android",
@@ -79,7 +79,7 @@ class AppReleaseTest(unittest.TestCase):
                         "app_id": "APP-0003",
                         "app_slug": "vaultxt",
                         "app_name": "VaultXT",
-                        "repository": "onnelakin/vaultxt",
+                        "repository": "onnellab/vaultxt",
                         "tag": "v1.2.0",
                         "version": "1.2.0",
                         "platform": "android",
@@ -106,7 +106,7 @@ class AppReleaseTest(unittest.TestCase):
                         "app_id": "APP-0003",
                         "app_slug": "vaultxt",
                         "app_name": "VaultXT",
-                        "repository": "onnelakin/vaultxt",
+                        "repository": "onnellab/vaultxt",
                         "tag": "v1.2.0",
                         "version": "1.2.0",
                         "platform": "android",
@@ -128,7 +128,7 @@ class AppReleaseTest(unittest.TestCase):
 
             messages = create_github_releases(path, dry_run=True)
 
-            self.assertEqual(messages, [f"would create onnelakin/vaultxt v1.2.0 with {artifact_path}"])
+            self.assertEqual(messages, [f"would create onnellab/vaultxt v1.2.0 with {artifact_path}"])
 
     def test_create_github_releases_posts_draft_and_updates_status(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -141,7 +141,7 @@ class AppReleaseTest(unittest.TestCase):
                         "app_id": "APP-0003",
                         "app_slug": "vaultxt",
                         "app_name": "VaultXT",
-                        "repository": "onnelakin/vaultxt",
+                        "repository": "onnellab/vaultxt",
                         "tag": "v1.2.0",
                         "version": "1.2.0",
                         "platform": "android",
@@ -168,15 +168,15 @@ class AppReleaseTest(unittest.TestCase):
                     raise GitHubReleaseError("HTTP 404 from releases/tags")
                 if method == "POST" and path_or_url.endswith("/releases"):
                     self.assertTrue(payload["draft"])
-                    return {"upload_url": "https://uploads.github.com/repos/onnelakin/vaultxt/releases/1/assets{?name,label}"}
+                    return {"upload_url": "https://uploads.github.com/repos/onnellab/vaultxt/releases/1/assets{?name,label}"}
                 return {"state": "uploaded"}
 
             with patch.dict("os.environ", {"GITHUB_TOKEN": "token"}):
                 with patch("create_github_releases.github_request", fake_request):
                     messages = create_github_releases(path)
 
-            self.assertEqual(messages, [f"created onnelakin/vaultxt v1.2.0 with {artifact_path}"])
-            self.assertIn("/repos/onnelakin/vaultxt/releases", [call[0] for call in calls])
+            self.assertEqual(messages, [f"created onnellab/vaultxt v1.2.0 with {artifact_path}"])
+            self.assertIn("/repos/onnellab/vaultxt/releases", [call[0] for call in calls])
             self.assertIn(",released,", path.read_text(encoding="utf-8"))
 
 

@@ -13,7 +13,7 @@ from validate_apps_registry import APP_HEADER, APPS_PATH
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_HOMEPAGE_APPS_DIR = ROOT.parent / "onnelakin.github.io" / "src" / "content" / "apps"
+DEFAULT_HOMEPAGE_APPS_DIR = ROOT.parent / "onnellab.github.io" / "src" / "content" / "apps"
 FRONTMATTER_RE = re.compile(r"^---\n(?P<body>.*?)\n---", re.DOTALL)
 
 

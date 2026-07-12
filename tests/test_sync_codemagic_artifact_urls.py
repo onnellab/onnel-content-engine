@@ -40,7 +40,7 @@ def planned_release() -> dict[str, str]:
             "app_id": "APP-0003",
             "app_slug": "vaultxt",
             "app_name": "VaultXT",
-            "repository": "onnelakin/vaultxt",
+            "repository": "onnellab/vaultxt",
             "tag": "v1.2.3",
             "version": "1.2.3",
             "platform": "ios",

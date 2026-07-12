@@ -28,14 +28,14 @@ from topic_management import DEFAULT_TOPICS_PATH, TOPIC_HEADER, TopicError, read
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SITE_DIR = ROOT / "generated" / "html"
-DEFAULT_SITE_URL = "https://onnelakin.github.io/"
+DEFAULT_SITE_URL = "https://onnellab.github.io/"
 DEFAULT_SOCIAL_TEMPLATE_DIR = ROOT / "templates" / "social"
 DEFAULT_SOCIAL_OUTPUT_DIR = ROOT / "generated" / "social"
 LOCAL_RSVG_CONVERT = ROOT / ".tools" / "librsvg2-bin" / "usr" / "bin" / "rsvg-convert"
-DEFAULT_PAGES_REPOSITORY = "https://github.com/onnelakin/onnelakin.github.io.git"
+DEFAULT_PAGES_REPOSITORY = "https://github.com/onnellab/onnellab.github.io.git"
 DEFAULT_PAGES_BRANCH = "main"
 DEFAULT_HOMEPAGE_REPOSITORY_PATH = Path(
-    os.environ.get("ONNELLAB_HOMEPAGE_REPOSITORY", "/mnt/c/dev/onnelakin.github.io")
+    os.environ.get("ONNELLAB_HOMEPAGE_REPOSITORY", "/mnt/c/dev/onnellab.github.io")
 )
 FAVICON_VERSION = "20260712-transparent"
 FAVICON_ASSET_NAMES = ("favicon.svg", "favicon-32x32.png", "apple-touch-icon.png", "site.webmanifest")

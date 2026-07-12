@@ -1,12 +1,12 @@
 ---
 title: "How to Read Large TXT Files Without Lag"
-canonical_url: "https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/"
+canonical_url: "https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/"
 tags: "large-txt-file-reader,txt-viewer,plain-text,reading-workflow"
-cover_image: "https://onnelakin.github.io/blog-assets/en/read-large-txt-files-without-lag/social-card.png"
+cover_image: "https://onnellab.github.io/blog-assets/en/read-large-txt-files-without-lag/social-card.png"
 publication_id: ""
 ---
 
-> Originally published at https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/
+> Originally published at https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/
 
 # How to Read Large TXT Files Without Lag
 

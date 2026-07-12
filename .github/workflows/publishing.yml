@@ -26,7 +26,7 @@ jobs:
 
     env:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || github.event_name == 'push' && 'true' || 'false' }}
-      SITE_URL: https://onnelakin.github.io/
+      SITE_URL: https://onnellab.github.io/
       HOMEPAGE_REPO_PATH: .homepage
 
     steps:
@@ -36,9 +36,9 @@ jobs:
       - name: Checkout homepage
         uses: actions/checkout@v4
         with:
-          repository: onnelakin/onnelakin.github.io
+          repository: onnellab/onnellab.github.io
           path: ${{ env.HOMEPAGE_REPO_PATH }}
-          token: ${{ secrets.ONNELAKIN_GITHUB_PAGES_TOKEN || github.token }}
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
 
       - name: Configure Node
         uses: actions/setup-node@v4
@@ -347,11 +347,11 @@ jobs:
       - name: Deploy
         if: env.DRY_RUN != 'true'
         env:
-          PAGES_TOKEN: ${{ secrets.ONNELAKIN_GITHUB_PAGES_TOKEN }}
+          PAGES_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN }}
         run: |
           set -euo pipefail
           if [ -z "${PAGES_TOKEN:-}" ]; then
-            echo "ONNELAKIN_GITHUB_PAGES_TOKEN is required for deployment" >&2
+            echo "ONNELLAB_GITHUB_PAGES_TOKEN is required for deployment" >&2
             exit 1
           fi
           git config --global user.name "github-actions[bot]"

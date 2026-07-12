@@ -7,4 +7,4 @@ Use a reader that does not try to load and render the entire TXT file at once. L
 - Use a plain-text reader or editor instead of a word processor.
 
 Read the full article:
-https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/
+https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/

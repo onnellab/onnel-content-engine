@@ -2,4 +2,4 @@ How can I read a very large TXT file without lag?
 
 Learn why very large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnec...
 
-https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/
+https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/

@@ -6,4 +6,4 @@
 - 글자가 깨지면 인코딩을 확인합니다.
 
 전체 글 읽기:
-https://onnelakin.github.io/blog/ko/read-large-txt-files-without-lag/
+https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/

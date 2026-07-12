@@ -348,7 +348,7 @@ The publication time is `09:00` Korea Standard Time.
 The due publication stage runs:
 
 ```text
-scripts/publish_due_articles.py --threshold 9.0 --site-url https://onnelakin.github.io/ --limit 1
+scripts/publish_due_articles.py --threshold 9.0 --site-url https://onnellab.github.io/ --limit 1
 ```
 
 Only due scheduled articles whose review score remains greater than `9.0 / 10` are promoted to `published`.
@@ -362,7 +362,7 @@ Scheduled articles are not included in the website build before this stage promo
 The build stage runs:
 
 ```text
-scripts/build_site.py --site-url https://onnelakin.github.io/
+scripts/build_site.py --site-url https://onnellab.github.io/
 ```
 
 The build stage converts Markdown into the canonical website output:
@@ -396,8 +396,8 @@ generated/html/
 The distribution draft stage runs after the canonical site build:
 
 ```text
-scripts/generate_social_posts.py --site-url https://onnelakin.github.io/
-scripts/generate_syndication_drafts.py --site-url https://onnelakin.github.io/
+scripts/generate_social_posts.py --site-url https://onnellab.github.io/
+scripts/generate_syndication_drafts.py --site-url https://onnellab.github.io/
 scripts/approve_due_distribution.py --approved-by github-actions
 ```
 
@@ -427,7 +427,7 @@ The deploy stage runs only when dry-run mode is disabled.
 The first deployment target is the main GitHub Pages homepage repository:
 
 ```text
-https://github.com/onnelakin/onnelakin.github.io.git
+https://github.com/onnellab/onnellab.github.io.git
 ```
 
 The deployment branch is:
@@ -439,13 +439,13 @@ main
 The canonical website root is:
 
 ```text
-https://onnelakin.github.io/
+https://onnellab.github.io/
 ```
 
 The workflow requires this secret:
 
 ```text
-ONNELAKIN_GITHUB_PAGES_TOKEN
+ONNELLAB_GITHUB_PAGES_TOKEN
 ```
 
 Deployment does not replace the homepage repository with `generated/html/`.
