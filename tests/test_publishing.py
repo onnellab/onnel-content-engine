@@ -254,7 +254,7 @@ class PublishingTest(unittest.TestCase):
 
         posts = generate_social_posts(self.topics_path, social_dir, "https://example.com/")
 
-        self.assertEqual(len(posts), 6)
+        self.assertEqual(len(posts), 3)
         x_path = social_dir / "x" / "en" / "reading" / "read-large-txt-files.txt"
         linkedin_path = social_dir / "linkedin" / "en" / "reading" / "read-large-txt-files.txt"
         bluesky_path = social_dir / "bluesky" / "en" / "reading" / "read-large-txt-files.txt"
@@ -283,12 +283,13 @@ class PublishingTest(unittest.TestCase):
         self.assertIn('"template_id": "bluesky"', manifest)
         self.assertIn('"template_id": "bluesky_question"', manifest)
         self.assertIn('"card_asset_path":', manifest)
+        self.assertNotIn('"language": "ko"', manifest)
         self.assertIn('"approved_by": ""', manifest)
         self.assertIn('"post_id": ""', manifest)
         self.assertIn('"error_type": ""', manifest)
         self.assertIn('"retry_count": 0', manifest)
         self.assertIn('"impressions": 0', manifest)
-        self.assertEqual(validate_social_posts(social_dir / "manifest.json", self.root), 12)
+        self.assertEqual(validate_social_posts(social_dir / "manifest.json", self.root), 6)
 
         approved = approve_social_post(
             "TOPIC-0001",
@@ -626,7 +627,7 @@ class PublishingTest(unittest.TestCase):
 
         drafts = generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
 
-        self.assertEqual(len(drafts), 6)
+        self.assertEqual(len(drafts), 3)
         devto_path = output_dir / "devto" / "en" / "reading" / "read-large-txt-files.md"
         hashnode_path = output_dir / "hashnode" / "en" / "reading" / "read-large-txt-files.md"
         medium_path = output_dir / "medium" / "en" / "reading" / "read-large-txt-files.md"
@@ -648,12 +649,13 @@ class PublishingTest(unittest.TestCase):
         self.assertIn('"platform": "devto"', manifest)
         self.assertIn('"platform": "hashnode"', manifest)
         self.assertIn('"platform": "medium"', manifest)
+        self.assertNotIn('"language": "ko"', manifest)
         self.assertIn('"last_attempt_at": ""', manifest)
         self.assertIn('"error_type": ""', manifest)
         self.assertIn('"retry_count": 0', manifest)
         evaluation = evaluate_syndication_drafts(output_dir / "manifest.json", self.root)
         self.assertGreaterEqual(evaluation["average_score"], 9.0)
-        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 6)
+        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 3)
 
         approved = approve_syndication_draft(
             "TOPIC-0001",

@@ -415,6 +415,8 @@ Current syndication draft targets:
 * Hashnode
 * Medium
 
+External distribution drafts are English-only. Korean articles remain on the ONNELLAB blog unless a specific post is manually selected for an external channel.
+
 Syndication drafts must include a canonical link back to the ONNELLAB article.
 
 Dev.to drafts should remain unpublished by default and use normalized tags.

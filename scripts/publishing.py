@@ -41,6 +41,7 @@ FAVICON_VERSION = "20260712-ol-transparent-v2"
 FAVICON_ASSET_NAMES = ("favicon.svg", "favicon-32x32.png", "apple-touch-icon.png", "site.webmanifest")
 PUBLISHABLE_STATUSES = {"published"}
 REQUIRED_PUBLICATION_LANGUAGES = {"en", "ko"}
+EXTERNAL_DISTRIBUTION_LANGUAGES = {"en"}
 
 FRONT_MATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
@@ -932,6 +933,8 @@ def generate_social_posts(
     manifest_items: list[dict[str, str | int]] = []
     templates = social_templates(platforms)
     for article in articles:
+        if article.topic["primary_language"] not in EXTERNAL_DISTRIBUTION_LANGUAGES:
+            continue
         card_path = write_social_card(article, project_root)
         for template in templates:
             text = render_social_template_post(article, template, site_url)

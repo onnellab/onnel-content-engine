@@ -12,6 +12,7 @@ from pathlib import Path
 from urllib.parse import urljoin
 
 from publishing import DEFAULT_SITE_URL, PublishingError, article_public_url, load_publishable_articles, normalize_site_url, parse_front_matter
+from publishing import EXTERNAL_DISTRIBUTION_LANGUAGES
 from topic_management import DEFAULT_TOPICS_PATH, TopicError
 
 
@@ -126,6 +127,8 @@ def generate_syndication_drafts(
     articles = load_publishable_articles(topics_path, project_root / ".syndication-export-check", site_url)
     manifest: list[dict[str, object]] = []
     for article in articles:
+        if article.topic["primary_language"] not in EXTERNAL_DISTRIBUTION_LANGUAGES:
+            continue
         markdown = article.markdown_path.read_text(encoding="utf-8")
         metadata, body = parse_front_matter(markdown)
         canonical_url = article_public_url(article, site_url)

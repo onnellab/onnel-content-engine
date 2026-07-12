@@ -17,6 +17,8 @@ DEFAULT_TOPICS = ROOT / "data" / "topics.csv"
 DEFAULT_SOCIAL_MANIFEST = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.json"
 DEFAULT_OUTPUT = ROOT / "generated" / "manual-publish" / "index.html"
+DEFAULT_APP_RELEASES = ROOT / "data" / "app_releases.csv"
+DEFAULT_APP_RELEASE_PUBLICATIONS = ROOT / "data" / "app_release_publications.csv"
 KST = ZoneInfo("Asia/Seoul")
 
 
@@ -36,6 +38,13 @@ AUTOMATED_PLATFORMS = {"bluesky", "devto"}
 
 def read_json(path: Path) -> dict[str, object]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_csv_rows(path: Path) -> list[dict[str, str]]:
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        return [{key: (value or "").strip() for key, value in row.items()} for row in csv.DictReader(handle)]
 
 
 def read_topics(path: Path) -> dict[str, dict[str, str]]:
@@ -80,6 +89,34 @@ def item_key(topic_id: object, platform: str, language: object, template_id: obj
 
 def publishing_mode(platform: str) -> str:
     return "automatic" if platform in AUTOMATED_PLATFORMS else "manual"
+
+
+def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS) -> list[dict[str, str]]:
+    approvals = {
+        row.get("release_id", ""): row
+        for row in read_csv_rows(publications_path)
+        if row.get("release_id")
+    }
+    items: list[dict[str, str]] = []
+    for row in read_csv_rows(releases_path):
+        release_id = row.get("release_id", "")
+        approval = approvals.get(release_id, {})
+        public_release = approval.get("public_release", "").lower() == "true"
+        items.append(
+            {
+                "release_id": release_id,
+                "app_name": row.get("app_name", ""),
+                "repository": row.get("repository", ""),
+                "tag": row.get("tag", ""),
+                "version": row.get("version", ""),
+                "platform": row.get("platform", ""),
+                "status": row.get("status", ""),
+                "release_date": row.get("release_date", ""),
+                "public_release": "true" if public_release else "false",
+                "approved_at": approval.get("approved_at", ""),
+            }
+        )
+    return items
 
 
 def asset_href(path_value: str) -> str:
@@ -199,8 +236,9 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
     return items
 
 
-def html_document(items: list[dict[str, object]]) -> str:
+def html_document(items: list[dict[str, object]], releases: list[dict[str, str]] | None = None) -> str:
     data = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
+    release_data = json.dumps(releases or [], ensure_ascii=False).replace("</", "<\\/")
     total = len(items)
     manual = sum(
         1
@@ -269,6 +307,14 @@ def html_document(items: list[dict[str, object]]) -> str:
     .platform-card strong {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; margin-bottom: 8px; }}
     .platform-card strong .tag {{ flex: 0 0 auto; font-size: 11px; font-weight: 700; }}
     .platform-card > span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
+    .release-section {{ margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }}
+    .release-head {{ display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 10px; }}
+    .release-head h2 {{ margin: 0; font-size: 18px; }}
+    .release-head span {{ color: var(--muted); font-size: 12px; }}
+    .release-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }}
+    .release-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
+    .release-card strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
+    .release-card span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
     input, select {{ width: 100%; min-height: 40px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 8px 10px; font: inherit; border-radius: 6px; }}
     input:focus, select:focus, textarea:focus {{ outline: 2px solid rgba(46,111,187,.2); border-color: var(--blue); }}
     .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; align-items: start; }}
@@ -371,10 +417,19 @@ def html_document(items: list[dict[str, object]]) -> str:
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
     <div id="platform-summary" class="platforms"></div>
+    <section class="release-section" aria-label="GitHub Release status">
+      <div class="release-head">
+        <h2 id="release-title">GitHub Release 상태</h2>
+        <span id="release-summary"></span>
+      </div>
+      <div id="release-grid" class="release-grid"></div>
+    </section>
   </main>
   <script id="manual-data" type="application/json">{data}</script>
+  <script id="release-data" type="application/json">{release_data}</script>
   <script>
     const items = JSON.parse(document.getElementById('manual-data').textContent);
+    const releases = JSON.parse(document.getElementById('release-data').textContent);
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
     const stateBranch = 'main';
@@ -421,6 +476,10 @@ def html_document(items: list[dict[str, object]]) -> str:
         failedWord: '실패',
         lastPosted: '최근 게시',
         lastUpdate: '최근 갱신',
+        releaseTitle: 'GitHub Release 상태',
+        releaseSummary: '상태',
+        publicApproved: '공개 승인',
+        publicPending: '공개 미승인',
         copyMarkdown: '마크다운 복사',
         copyPost: '게시글 복사',
         copyAndOpen: '복사 후 열기',
@@ -489,6 +548,10 @@ def html_document(items: list[dict[str, object]]) -> str:
         failedWord: 'failed',
         lastPosted: 'last posted',
         lastUpdate: 'last update',
+        releaseTitle: 'GitHub Release status',
+        releaseSummary: 'status',
+        publicApproved: 'public approved',
+        publicPending: 'public pending',
         copyMarkdown: 'Copy markdown',
         copyPost: 'Copy post',
         copyAndOpen: 'Copy and open',
@@ -543,6 +606,8 @@ def html_document(items: list[dict[str, object]]) -> str:
     const variantToggle = document.getElementById('toggle-variants');
     const viewButtons = document.querySelectorAll('[data-view]');
     const platformSummary = document.getElementById('platform-summary');
+    const releaseGrid = document.getElementById('release-grid');
+    const releaseSummary = document.getElementById('release-summary');
     let remoteState = {{ done: {{}}, updated_at: '', version: 1 }};
     let remoteSha = '';
     let showVariants = false;
@@ -563,6 +628,7 @@ def html_document(items: list[dict[str, object]]) -> str:
       document.getElementById('overview-posted-label').textContent = t('overviewPosted');
       document.getElementById('overview-sync-label').textContent = t('overviewSync');
       document.getElementById('advanced-summary').textContent = t('advancedSummary');
+      document.getElementById('release-title').textContent = t('releaseTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
@@ -582,6 +648,7 @@ def html_document(items: list[dict[str, object]]) -> str:
       langToggle.textContent = currentLang === 'ko' ? 'English' : '한국어';
       setSync(syncState.dataset.state || (githubToken() ? 'synced' : 'viewOnly'));
       syncViewButtons();
+      renderReleaseSummary();
     }}
 
     function syncViewButtons() {{
@@ -872,6 +939,27 @@ def html_document(items: list[dict[str, object]]) -> str:
       }});
     }}
 
+    function renderReleaseSummary() {{
+      releaseGrid.textContent = '';
+      const counts = releases.reduce((acc, item) => {{
+        acc[item.status] = (acc[item.status] || 0) + 1;
+        return acc;
+      }}, {{}});
+      releaseSummary.textContent = Object.entries(counts).map(([status, count]) => `${{status}} ${{count}}`).join(' / ') || t('none');
+      releases.forEach((item) => {{
+        const card = document.createElement('div');
+        card.className = 'release-card';
+        const title = document.createElement('strong');
+        title.textContent = `${{item.app_name}} ${{item.tag}}`;
+        const status = document.createElement('span');
+        status.textContent = `${{t('releaseSummary')}}: ${{item.status}} / ${{item.public_release === 'true' ? t('publicApproved') : t('publicPending')}}`;
+        const repo = document.createElement('span');
+        repo.textContent = `${{item.repository}} / ${{item.platform}} / ${{item.release_date || t('none')}}`;
+        card.append(title, status, repo);
+        releaseGrid.appendChild(card);
+      }});
+    }}
+
     function statusClass(status) {{
       return 'status-' + String(status || 'draft').replace(/[^a-z0-9]+/g, '-');
     }}
@@ -917,6 +1005,7 @@ def html_document(items: list[dict[str, object]]) -> str:
       empty.hidden = visible.length !== 0;
       visible.forEach((item) => grid.appendChild(card(item)));
       renderPlatformSummary();
+      renderReleaseSummary();
       updateVariantToggle();
       syncViewButtons();
       updateAppBadge();
@@ -1099,11 +1188,14 @@ def build_manual_publish_site(
     syndication_manifest: Path = DEFAULT_SYNDICATION_MANIFEST,
     output: Path = DEFAULT_OUTPUT,
     topics_path: Path = DEFAULT_TOPICS,
+    app_releases_path: Path = DEFAULT_APP_RELEASES,
+    app_release_publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS,
 ) -> Path:
     topics = read_topics(topics_path)
     items = social_items(social_manifest, topics) + syndication_items(syndication_manifest, topics)
+    releases = app_release_items(app_releases_path, app_release_publications_path)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(html_document(items), encoding="utf-8")
+    output.write_text(html_document(items, releases), encoding="utf-8")
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")
     return output
@@ -1114,9 +1206,18 @@ def main() -> int:
     parser.add_argument("--social-manifest", type=Path, default=DEFAULT_SOCIAL_MANIFEST)
     parser.add_argument("--syndication-manifest", type=Path, default=DEFAULT_SYNDICATION_MANIFEST)
     parser.add_argument("--topics", type=Path, default=DEFAULT_TOPICS)
+    parser.add_argument("--app-releases", type=Path, default=DEFAULT_APP_RELEASES)
+    parser.add_argument("--app-release-publications", type=Path, default=DEFAULT_APP_RELEASE_PUBLICATIONS)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
-    output = build_manual_publish_site(args.social_manifest, args.syndication_manifest, args.output, args.topics)
+    output = build_manual_publish_site(
+        args.social_manifest,
+        args.syndication_manifest,
+        args.output,
+        args.topics,
+        args.app_releases,
+        args.app_release_publications,
+    )
     print(f"generated {output}")
     return 0
 
