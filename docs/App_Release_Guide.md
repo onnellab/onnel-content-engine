@@ -214,6 +214,15 @@ The report is written to:
 generated/reports/app_releases.md
 ```
 
+The report compares store snapshot versions with local `pubspec.yaml` versions from `data/local_repositories.csv`. Comparison values:
+
+```text
+same
+local_ahead
+store_ahead
+unknown
+```
+
 Sync the report to the fixed GitHub Issue with:
 
 ```text

@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from check_store_versions import STORE_HEADER  # noqa: E402
 from generate_app_release_report import generate_app_release_report  # noqa: E402
 from prepare_app_release_rows import CONFIG_HEADER  # noqa: E402
+from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER  # noqa: E402
 from validate_app_releases import RELEASE_HEADER  # noqa: E402
 
 
@@ -31,7 +32,11 @@ class AppReleaseReportTest(unittest.TestCase):
             store = root / "store_versions.csv"
             releases = root / "app_releases.csv"
             config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
             output = root / "app_releases.md"
+            app_repo = root / "vaultxt"
+            app_repo.mkdir()
+            (app_repo / "pubspec.yaml").write_text("name: vaultxt\nversion: 1.2.4+10\n", encoding="utf-8")
             write_csv(
                 store,
                 STORE_HEADER,
@@ -103,19 +108,36 @@ class AppReleaseReportTest(unittest.TestCase):
                     }
                 ],
             )
+            write_csv(
+                local_repos,
+                LOCAL_REPOSITORIES_HEADER,
+                [
+                    {
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "repository_name": "vaultxt",
+                        "path": app_repo.as_posix(),
+                        "pubspec_path": "pubspec.yaml",
+                        "source_priority": "primary",
+                        "notes": "",
+                    }
+                ],
+            )
 
             text = generate_app_release_report(
                 store,
                 releases,
                 config,
+                local_repos,
                 output,
                 now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
             )
 
             self.assertIn("# App Release Status", text)
-            self.assertIn("Create or verify release candidate", text)
             self.assertIn("Check Google Play update manually", text)
             self.assertIn("Add release artifact and checksum", text)
+            self.assertIn("local_ahead", text)
+            self.assertIn("Prepare store release", text)
             self.assertEqual(output.read_text(encoding="utf-8"), text)
 
 

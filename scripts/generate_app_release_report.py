@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 import sys
 from collections import Counter
 from datetime import datetime
@@ -13,12 +14,14 @@ from zoneinfo import ZoneInfo
 
 from check_store_versions import STORE_HEADER, STORE_VERSIONS_PATH
 from prepare_app_release_rows import CONFIG_HEADER, CONFIG_PATH
+from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER, LOCAL_REPOSITORIES_PATH, pubspec_version
 from validate_app_releases import RELEASE_HEADER, RELEASES_PATH
 
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT_PATH = ROOT / "generated" / "reports" / "app_releases.md"
 KST = ZoneInfo("Asia/Seoul")
+VERSION_PART_RE = re.compile(r"\d+|[A-Za-z]+")
 
 
 class AppReleaseReportError(ValueError):
@@ -53,6 +56,14 @@ def store_action(row: dict[str, str]) -> str:
     return "Review status"
 
 
+def next_action(row: dict[str, str], comparison: str) -> str:
+    if comparison == "local_ahead":
+        return "Prepare store release"
+    if comparison == "store_ahead":
+        return "Sync local metadata"
+    return store_action(row)
+
+
 def release_action(row: dict[str, str]) -> str:
     status = row["status"]
     if status == "planned":
@@ -70,6 +81,39 @@ def release_action(row: dict[str, str]) -> str:
 
 def config_index(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
     return {row["app_id"]: row for row in rows}
+
+
+def local_version_index(rows: list[dict[str, str]]) -> dict[str, str]:
+    versions: dict[str, str] = {}
+    for row in rows:
+        pubspec_path = Path(row["path"]) / row["pubspec_path"]
+        if not pubspec_path.exists():
+            continue
+        version, _raw = pubspec_version(pubspec_path)
+        versions[row["app_id"]] = version
+    return versions
+
+
+def version_key(version: str) -> list[tuple[int, int | str]]:
+    key: list[tuple[int, int | str]] = []
+    for part in VERSION_PART_RE.findall(version):
+        if part.isdigit():
+            key.append((0, int(part)))
+        else:
+            key.append((1, part.lower()))
+    return key
+
+
+def compare_versions(store_version: str, local_version: str) -> str:
+    if not store_version or not local_version:
+        return "unknown"
+    store_key = version_key(store_version)
+    local_key = version_key(local_version)
+    if store_key == local_key:
+        return "same"
+    if local_key > store_key:
+        return "local_ahead"
+    return "store_ahead"
 
 
 def release_index(rows: list[dict[str, str]]) -> dict[tuple[str, str], list[dict[str, str]]]:
@@ -90,9 +134,11 @@ def report_markdown(
     store_rows: list[dict[str, str]],
     release_rows: list[dict[str, str]],
     config_rows: list[dict[str, str]],
+    local_repo_rows: list[dict[str, str]],
     generated_at: datetime,
 ) -> str:
     config = config_index(config_rows)
+    local_versions = local_version_index(local_repo_rows)
     releases = release_index(release_rows)
     store_counts = Counter(row["status"] for row in store_rows)
     release_counts = Counter(row["status"] for row in release_rows)
@@ -119,18 +165,27 @@ def report_markdown(
         latest_release = releases.get((row["app_id"], row["platform"]), [])
         release_status = latest_release[-1]["status"] if latest_release else "-"
         cfg = config.get(row["app_id"], {})
+        local_version = local_versions.get(row["app_id"], "")
+        comparison = compare_versions(row["version"], local_version)
         store_table.append(
             [
                 row["app_name"],
                 row["platform"],
                 row["version"] or row["store_package"] or row["store_app_id"],
+                local_version,
+                comparison,
                 row["status"],
                 release_status,
                 cfg.get("repository", ""),
-                store_action(row),
+                next_action(row, comparison),
             ]
         )
-    lines.extend(table(["App", "Platform", "Version/Package", "Store", "Release", "Repository", "Next action"], store_table))
+    lines.extend(
+        table(
+            ["App", "Platform", "Store version/package", "Local version", "Comparison", "Store", "Release", "Repository", "Next action"],
+            store_table,
+        )
+    )
 
     lines.extend(["", "## Release Candidates", ""])
     if release_rows:
@@ -150,11 +205,12 @@ def report_markdown(
     else:
         lines.append("No app release candidate rows exist yet.")
 
-    attention = [
-        [row["app_name"], row["platform"], row["status"], store_action(row), row["notes"]]
-        for row in store_rows
-        if row["status"] in {"updated", "manual_check", "failed"}
-    ]
+    attention: list[list[str]] = []
+    for row in store_rows:
+        local_version = local_versions.get(row["app_id"], "")
+        comparison = compare_versions(row["version"], local_version)
+        if row["status"] in {"updated", "manual_check", "failed"} or comparison in {"local_ahead", "store_ahead"}:
+            attention.append([row["app_name"], row["platform"], row["status"], next_action(row, comparison), row["notes"]])
     attention += [
         [row["app_name"], row["platform"], row["status"], release_action(row), row["notes"]]
         for row in release_rows
@@ -173,13 +229,15 @@ def generate_app_release_report(
     store_versions_path: Path = STORE_VERSIONS_PATH,
     releases_path: Path = RELEASES_PATH,
     config_path: Path = CONFIG_PATH,
+    local_repositories_path: Path = LOCAL_REPOSITORIES_PATH,
     output_path: Path = REPORT_PATH,
     now: datetime | None = None,
 ) -> str:
     store_rows = read_csv(store_versions_path, STORE_HEADER)
     release_rows = read_csv(releases_path, RELEASE_HEADER)
     config_rows = read_csv(config_path, CONFIG_HEADER)
-    text = report_markdown(store_rows, release_rows, config_rows, now or datetime.now(KST))
+    local_repo_rows = read_csv(local_repositories_path, LOCAL_REPOSITORIES_HEADER)
+    text = report_markdown(store_rows, release_rows, config_rows, local_repo_rows, now or datetime.now(KST))
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(text, encoding="utf-8")
     return text
@@ -190,10 +248,11 @@ def main() -> int:
     parser.add_argument("--store-versions", type=Path, default=STORE_VERSIONS_PATH)
     parser.add_argument("--releases", type=Path, default=RELEASES_PATH)
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
+    parser.add_argument("--local-repositories", type=Path, default=LOCAL_REPOSITORIES_PATH)
     parser.add_argument("--output", type=Path, default=REPORT_PATH)
     args = parser.parse_args()
     try:
-        generate_app_release_report(args.store_versions, args.releases, args.config, args.output)
+        generate_app_release_report(args.store_versions, args.releases, args.config, args.local_repositories, args.output)
     except (AppReleaseReportError, OSError) as error:
         print(f"generate app release report failed: {error}", file=sys.stderr)
         return 1

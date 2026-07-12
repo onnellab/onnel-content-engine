@@ -191,6 +191,8 @@ using:
 scripts/generate_app_release_report.py
 ```
 
+The report includes local-versus-store version comparison using `data/local_repositories.csv`. Rows with `local_ahead` are added to the attention queue as release preparation items.
+
 The attention issue stage then creates, updates, reopens, or closes one fixed GitHub Issue:
 
 ```text
