@@ -1,8 +1,3 @@
----
-title: "{{title}}"
-canonical_url: "{{canonical_url}}"
----
+{{body}}
 
 > Originally published at {{canonical_url}}
-
-{{body}}

@@ -244,31 +244,27 @@ def html_document(items: list[dict[str, object]]) -> str:
     .mark {{ width: 32px; height: 32px; display: block; object-fit: contain; }}
     .header-right {{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }}
     .summary {{ display: flex; gap: 8px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }}
-    .pill {{ border: 1px solid var(--line); padding: 6px 9px; background: rgba(255,255,255,.75); border-radius: 999px; }}
+    .pill {{ min-height: 31px; border: 1px solid var(--line); padding: 6px 9px; background: rgba(255,255,255,.75); color: var(--muted); border-radius: 999px; }}
+    .pill.is-active {{ border-color: var(--blue); background: var(--blue-soft); color: var(--blue); font-weight: 800; }}
     .lang {{ min-height: 31px; border-color: var(--line); background: var(--ink); color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 12px; white-space: nowrap; }}
     main {{ max-width: 1180px; margin: 0 auto; padding: 22px 20px 56px; }}
     .overview {{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }}
-    .metric-card {{ border: 1px solid var(--line); background: var(--panel); padding: 14px; border-radius: 8px; box-shadow: var(--shadow); min-height: 88px; display: flex; flex-direction: column; justify-content: space-between; }}
+    .metric-card {{ border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 14px; border-radius: 8px; box-shadow: var(--shadow); min-height: 88px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; }}
     .metric-card:nth-child(1) {{ background: linear-gradient(135deg, var(--peach-soft), #fff); }}
     .metric-card:nth-child(2) {{ background: linear-gradient(135deg, var(--sky-soft), #fff); }}
     .metric-card:nth-child(3) {{ background: linear-gradient(135deg, var(--ok-soft), #fff); }}
     .metric-card:nth-child(4) {{ background: linear-gradient(135deg, var(--lilac-soft), #fff); }}
     .metric-card span {{ color: var(--muted); font-size: 12px; }}
     .metric-card strong {{ font-size: 28px; line-height: 1; letter-spacing: 0; }}
+    .metric-card.is-active {{ border-color: var(--blue); outline: 2px solid rgba(46,111,187,.16); }}
     .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }}
-    .task-switcher {{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }}
-    .task-button {{ min-height: 78px; border-radius: 8px; text-align: left; padding: 12px; background: #fff; color: var(--ink); border: 2px solid var(--line); box-shadow: 0 8px 20px rgba(47, 38, 28, .05); }}
-    .task-button strong {{ display: block; font-size: 17px; margin-bottom: 5px; }}
-    .task-button span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.35; }}
-    .task-button.is-active {{ border-color: var(--blue); background: var(--blue-soft); }}
-    .task-button.is-active strong {{ color: var(--blue); }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
     .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) auto auto auto; gap: 8px; margin-top: 12px; }}
     details.advanced {{ margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }}
     details.advanced summary {{ cursor: pointer; color: var(--ink); font-weight: 800; min-height: 38px; display: flex; align-items: center; }}
     .controls {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(116px, 150px)); gap: 10px; margin-top: 8px; }}
     .secondary-controls {{ display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }}
-    .platforms {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-bottom: 16px; }}
+    .platforms {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 18px 0 0; }}
     .platform-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
     .platform-card strong {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; margin-bottom: 8px; }}
     .platform-card strong .tag {{ flex: 0 0 auto; font-size: 11px; font-weight: 700; }}
@@ -314,7 +310,6 @@ def html_document(items: list[dict[str, object]]) -> str:
     @media (max-width: 760px) {{
       .bar {{ align-items: flex-start; flex-direction: column; }}
       .header-right {{ width: 100%; justify-content: space-between; }}
-      .task-switcher {{ grid-template-columns: 1fr; }}
       .quick-row {{ grid-template-columns: 1fr; }}
       .auth, .controls {{ grid-template-columns: 1fr 1fr; }}
       .auth input, .controls input {{ grid-column: 1 / -1; }}
@@ -325,7 +320,6 @@ def html_document(items: list[dict[str, object]]) -> str:
       .grid {{ grid-template-columns: 1fr; }}
       .auth, .controls {{ grid-template-columns: 1fr; }}
       .auth input, .controls input {{ grid-column: auto; }}
-      .task-button {{ min-height: 64px; }}
     }}
   </style>
 </head>
@@ -335,10 +329,10 @@ def html_document(items: list[dict[str, object]]) -> str:
       <a class="brand" href="/" aria-label="ONNELLAB home"><img class="mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32"><div id="app-title">ONNELLAB 수동 게시</div></a>
       <div class="header-right">
       <div class="summary">
-        <span class="pill"><span id="label-total">전체</span> {total}</span>
-        <span class="pill"><span class="due-count">0</span> <span id="label-due">예정</span></span>
-        <span class="pill"><span id="label-manual">수동</span> {manual}</span>
-        <span class="pill"><span id="label-posted">게시됨</span> {posted}</span>
+        <button class="pill" type="button" data-view="all"><span id="label-total">전체</span> {total}</button>
+        <button class="pill" type="button" data-view="due"><span class="due-count">0</span> <span id="label-due">예정</span></button>
+        <button class="pill" type="button" data-view="manual"><span id="label-manual">수동</span> {manual}</button>
+        <button class="pill" type="button" data-view="done"><span id="label-posted">게시됨</span> {posted}</button>
         <span class="pill" id="sync-state">불러오는 중</span>
       </div>
       <button id="lang-toggle" type="button" class="lang">English</button>
@@ -347,20 +341,15 @@ def html_document(items: list[dict[str, object]]) -> str:
   </header>
   <main>
     <section class="overview" aria-label="Publish overview">
-      <div class="metric-card"><span id="overview-due-label">오늘 할 일</span><strong class="due-count">0</strong></div>
-      <div class="metric-card"><span id="overview-manual-label">수동 대기</span><strong>{manual}</strong></div>
-      <div class="metric-card"><span id="overview-posted-label">게시 완료</span><strong>{posted}</strong></div>
-      <div class="metric-card"><span id="overview-sync-label">동기화</span><strong id="sync-state-large">...</strong></div>
+      <button class="metric-card" type="button" data-view="due"><span id="overview-due-label">오늘 할 일</span><strong class="due-count">0</strong></button>
+      <button class="metric-card" type="button" data-view="manual"><span id="overview-manual-label">수동 대기</span><strong>{manual}</strong></button>
+      <button class="metric-card" type="button" data-view="done"><span id="overview-posted-label">게시 완료</span><strong>{posted}</strong></button>
+      <button class="metric-card" type="button" id="refresh-state-large"><span id="overview-sync-label">동기화</span><strong id="sync-state-large">...</strong></button>
     </section>
     <section class="tool-panel" aria-label="Publish controls">
-    <div class="task-switcher" role="group" aria-label="Publish mode">
-      <button class="task-button is-active" type="button" data-mode="manual"><strong id="task-manual-title">수동 게시</strong><span id="task-manual-help">내가 버튼을 눌러 올려야 하는 글만 봅니다.</span></button>
-      <button class="task-button" type="button" data-mode="automatic"><strong id="task-auto-title">자동화 확인</strong><span id="task-auto-help">이미 자동 발행되는 매체의 최근 상태를 봅니다.</span></button>
-      <button class="task-button" type="button" data-mode=""><strong id="task-all-title">전체 보기</strong><span id="task-all-help">수동, 자동화, 완료 항목을 함께 점검합니다.</span></button>
-    </div>
     <div class="quick-row">
       <select id="platform"><option value="">모든 매체</option></select>
-      <select id="visibility"><option value="active">진행 항목만</option><option value="all">완료 포함</option><option value="due">게시 예정만</option></select>
+      <select id="visibility"><option value="due">게시 예정만</option><option value="active">진행 항목만</option><option value="all">완료 포함</option></select>
       <button id="toggle-variants" type="button" class="secondary">대안 보기</button>
     </div>
     <details class="advanced">
@@ -379,9 +368,9 @@ def html_document(items: list[dict[str, object]]) -> str:
       </div>
     </details>
     </section>
-    <div id="platform-summary" class="platforms"></div>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
+    <div id="platform-summary" class="platforms"></div>
   </main>
   <script id="manual-data" type="application/json">{data}</script>
   <script>
@@ -406,12 +395,6 @@ def html_document(items: list[dict[str, object]]) -> str:
         syncError: '동기화 오류',
         saveError: '저장 오류',
         tokenPlaceholder: '완료 상태 동기화용 GitHub 토큰',
-        taskManualTitle: '수동 게시',
-        taskManualHelp: '내가 버튼을 눌러 올려야 하는 글만 봅니다.',
-        taskAutoTitle: '자동화 확인',
-        taskAutoHelp: '이미 자동 발행되는 매체의 최근 상태를 봅니다.',
-        taskAllTitle: '전체 보기',
-        taskAllHelp: '수동, 자동화, 완료 항목을 함께 점검합니다.',
         advancedSummary: '상세 필터와 동기화',
         connectSync: '동기화 연결',
         refresh: '새로고침',
@@ -480,12 +463,6 @@ def html_document(items: list[dict[str, object]]) -> str:
         syncError: 'sync error',
         saveError: 'save error',
         tokenPlaceholder: 'GitHub token for synced done state',
-        taskManualTitle: 'Manual publish',
-        taskManualHelp: 'Only posts that need your final publish tap.',
-        taskAutoTitle: 'Automation check',
-        taskAutoHelp: 'Review platforms that are already automated.',
-        taskAllTitle: 'All items',
-        taskAllHelp: 'Check manual, automated, and completed items together.',
         advancedSummary: 'Advanced filters and sync',
         connectSync: 'Connect sync',
         refresh: 'Refresh',
@@ -564,11 +541,12 @@ def html_document(items: list[dict[str, object]]) -> str:
     const badgeButton = document.getElementById('enable-badge');
     const langToggle = document.getElementById('lang-toggle');
     const variantToggle = document.getElementById('toggle-variants');
-    const taskButtons = document.querySelectorAll('.task-button');
+    const viewButtons = document.querySelectorAll('[data-view]');
     const platformSummary = document.getElementById('platform-summary');
     let remoteState = {{ done: {{}}, updated_at: '', version: 1 }};
     let remoteSha = '';
     let showVariants = false;
+    let currentView = 'due';
 
     tokenInput.value = sessionStorage.getItem(tokenKey) || '';
 
@@ -584,12 +562,6 @@ def html_document(items: list[dict[str, object]]) -> str:
       document.getElementById('overview-manual-label').textContent = t('overviewManual');
       document.getElementById('overview-posted-label').textContent = t('overviewPosted');
       document.getElementById('overview-sync-label').textContent = t('overviewSync');
-      document.getElementById('task-manual-title').textContent = t('taskManualTitle');
-      document.getElementById('task-manual-help').textContent = t('taskManualHelp');
-      document.getElementById('task-auto-title').textContent = t('taskAutoTitle');
-      document.getElementById('task-auto-help').textContent = t('taskAutoHelp');
-      document.getElementById('task-all-title').textContent = t('taskAllTitle');
-      document.getElementById('task-all-help').textContent = t('taskAllHelp');
       document.getElementById('advanced-summary').textContent = t('advancedSummary');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
@@ -603,19 +575,41 @@ def html_document(items: list[dict[str, object]]) -> str:
       filters.mode.options[0].textContent = t('manualOnly');
       filters.mode.options[1].textContent = t('automaticOnly');
       filters.mode.options[2].textContent = t('allModes');
-      filters.visibility.options[0].textContent = t('activeOnly');
-      filters.visibility.options[1].textContent = t('showDone');
-      filters.visibility.options[2].textContent = t('dueOnly');
+      filters.visibility.options[0].textContent = t('dueOnly');
+      filters.visibility.options[1].textContent = t('activeOnly');
+      filters.visibility.options[2].textContent = t('showDone');
       empty.textContent = t('empty');
       langToggle.textContent = currentLang === 'ko' ? 'English' : '한국어';
       setSync(syncState.dataset.state || (githubToken() ? 'synced' : 'viewOnly'));
-      syncModeButtons();
+      syncViewButtons();
     }}
 
-    function syncModeButtons() {{
-      taskButtons.forEach((button) => {{
-        button.classList.toggle('is-active', button.dataset.mode === filters.mode.value);
+    function syncViewButtons() {{
+      viewButtons.forEach((button) => {{
+        button.classList.toggle('is-active', button.dataset.view === currentView);
       }});
+    }}
+
+    function applyView(view) {{
+      currentView = view;
+      if (view === 'due') {{
+        filters.mode.value = 'manual';
+        filters.visibility.value = 'due';
+        filters.status.value = '';
+      }} else if (view === 'manual') {{
+        filters.mode.value = 'manual';
+        filters.visibility.value = 'active';
+        filters.status.value = '';
+      }} else if (view === 'done') {{
+        filters.mode.value = '';
+        filters.visibility.value = 'all';
+        filters.status.value = '';
+      }} else {{
+        filters.mode.value = '';
+        filters.visibility.value = 'all';
+        filters.status.value = '';
+      }}
+      render();
     }}
 
     function optionize(select, values) {{
@@ -886,6 +880,15 @@ def html_document(items: list[dict[str, object]]) -> str:
       return 'platform-' + String(platform || '').replace(/[^a-z0-9]+/g, '-');
     }}
 
+    function displayTitle(item) {{
+      const text = String(item.text || '');
+      const frontmatterTitle = text.match(/^---[\\s\\S]*?^title:\\s*["']?(.+?)["']?\\s*$[\\s\\S]*?^---/m);
+      if (frontmatterTitle) return frontmatterTitle[1].trim();
+      const heading = text.match(/^#\\s+(.+)$/m);
+      if (heading) return heading[1].trim();
+      return text.split('\\n').find((line) => line.trim()) || item.slug;
+    }}
+
     function render() {{
       const query = filters.search.value.trim().toLowerCase();
       const platform = filters.platform.value;
@@ -898,12 +901,15 @@ def html_document(items: list[dict[str, object]]) -> str:
         const done = isDone(item);
         const due = isDue(item);
         if (item.is_variant && !showVariants) return false;
+        if (currentView === 'due' && !due) return false;
+        if (currentView === 'manual' && (item.publishing_mode !== 'manual' || done)) return false;
+        if (currentView === 'done' && !done) return false;
         return (!query || haystack.includes(query))
           && (!platform || item.platform_label === platform)
           && (!language || item.language === language)
           && (!status || item.status === status)
           && (!mode || item.publishing_mode === mode)
-          && (visibility === 'all' || (visibility === 'due' ? due : !done));
+          && (currentView !== 'custom' || visibility === 'all' || (visibility === 'due' ? due : !done));
       }});
       const dueTotal = String(items.filter(isDue).length);
       dueCountEls.forEach((element) => element.textContent = dueTotal);
@@ -912,7 +918,7 @@ def html_document(items: list[dict[str, object]]) -> str:
       visible.forEach((item) => grid.appendChild(card(item)));
       renderPlatformSummary();
       updateVariantToggle();
-      syncModeButtons();
+      syncViewButtons();
       updateAppBadge();
     }}
 
@@ -939,7 +945,7 @@ def html_document(items: list[dict[str, object]]) -> str:
       cardHead.append(platformBadge, kindTag);
       const meta = document.createElement('div');
       meta.className = 'meta';
-      [item.language, item.status, item.template_id].forEach((value, index) => {{
+      [item.language, item.status].forEach((value, index) => {{
         const span = document.createElement('span');
         span.className = 'tag' + (index === 1 ? ' ' + statusClass(value) : '');
         span.textContent = value;
@@ -958,11 +964,7 @@ def html_document(items: list[dict[str, object]]) -> str:
         meta.appendChild(done);
       }}
       const title = document.createElement('h2');
-      const firstLine = String(item.text || '').split('\\n').find((line) => line.trim()) || item.slug;
-      title.textContent = firstLine + (item.is_variant ? ' / ' + t('variantTag') : '');
-      const subtitle = document.createElement('div');
-      subtitle.className = 'subtitle';
-      subtitle.textContent = item.platform_label + ' / ' + item.language + ' / ' + item.topic_id;
+      title.textContent = displayTitle(item) + (item.is_variant ? ' / ' + t('variantTag') : '');
       const textarea = document.createElement('textarea');
       textarea.value = item.text;
       textarea.spellcheck = false;
@@ -997,7 +999,7 @@ def html_document(items: list[dict[str, object]]) -> str:
       const note = document.createElement('div');
       note.className = 'note';
       note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '');
-      body.append(cardHead, meta, title, subtitle, textarea, actions, note);
+      body.append(cardHead, meta, title, textarea, actions, note);
       if (item.error) {{
         const error = document.createElement('div');
         error.className = 'error';
@@ -1013,6 +1015,7 @@ def html_document(items: list[dict[str, object]]) -> str:
       await loadRemoteState();
     }};
     document.getElementById('refresh-state').onclick = loadRemoteState;
+    document.getElementById('refresh-state-large').onclick = loadRemoteState;
     badgeButton.onclick = async () => {{
       if ('Notification' in window && Notification.permission === 'default') {{
         await Notification.requestPermission();
@@ -1030,14 +1033,12 @@ def html_document(items: list[dict[str, object]]) -> str:
       showVariants = !showVariants;
       render();
     }};
-    taskButtons.forEach((button) => {{
-      button.onclick = () => {{
-        filters.mode.value = button.dataset.mode;
-        render();
-      }};
-    }});
+    viewButtons.forEach((button) => button.onclick = () => applyView(button.dataset.view));
+    Object.values(filters).forEach((input) => input.addEventListener('input', () => {{
+      currentView = 'custom';
+      render();
+    }}));
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.warn);
-    Object.values(filters).forEach((input) => input.addEventListener('input', render));
     loadRemoteState();
   </script>
 </body>

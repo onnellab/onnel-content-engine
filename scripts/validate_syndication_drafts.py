@@ -63,7 +63,7 @@ def validate_draft(draft: dict[str, object], project_root: Path = ROOT) -> None:
         raise SyndicationValidationError(f"{topic_id} draft does not exist: {draft_path}")
     content = draft_path.read_text(encoding="utf-8")
     metadata = frontmatter(content)
-    if metadata.get("canonical_url") != canonical_url:
+    if platform != "medium" and metadata.get("canonical_url") != canonical_url:
         raise SyndicationValidationError(f"{topic_id} canonical frontmatter mismatch: {draft_path}")
     if f"Originally published at {canonical_url}" not in content:
         raise SyndicationValidationError(f"{topic_id} missing canonical notice: {draft_path}")

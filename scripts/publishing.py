@@ -327,6 +327,23 @@ def svg_tspans(lines: list[str], x: int, y: int, line_height: int) -> str:
     )
 
 
+def social_card_font_defs(language: str) -> tuple[str, str]:
+    if language != "ko":
+        return "", "Inter, system-ui, sans-serif"
+    font_path = Path("/mnt/c/Windows/Fonts/NotoSansKR-VF.ttf")
+    if font_path.exists():
+        font_uri = font_path.as_uri()
+        defs = (
+            "<defs><style>"
+            "@font-face { font-family: 'ONNELLAB Korean'; "
+            f"src: url('{font_uri}') format('truetype'); "
+            "font-weight: 100 900; font-style: normal; }"
+            "</style></defs>"
+        )
+        return defs, "ONNELLAB Korean, Noto Sans KR, Malgun Gothic, system-ui, sans-serif"
+    return "", "Noto Sans KR, Malgun Gothic, system-ui, sans-serif"
+
+
 def social_card_svg(article: Article) -> str:
     language = article.topic["primary_language"]
     label = "ONNELLAB Article" if language == "en" else "ONNELLAB 아티클"
@@ -343,18 +360,20 @@ def social_card_svg(article: Article) -> str:
         "research": ("#e9f3f1", "#b9d8d2", "#244f4a"),
     }
     badge_fill, badge_stroke, badge_text = category_colors.get(article.topic["category"], category_colors["reading"])
+    font_defs, font_stack = social_card_font_defs(language)
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">{html.escape(article.title)}</title>
   <desc id="desc">{html.escape(article.description)}</desc>
+  {font_defs}
   <rect width="1200" height="630" fill="#f8f4ec"/>
   <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
   <rect x="92" y="92" width="210" height="44" rx="22" fill="{badge_fill}" stroke="{badge_stroke}" stroke-width="1.4"/>
-  <text x="118" y="121" fill="{badge_text}" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="18" font-weight="700">{html.escape(category)}</text>
-  <text x="92" y="218" fill="#282723" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="54" font-weight="760">{svg_tspans(title_lines, 92, 218, 64)}</text>
-  <text fill="#5f5b54" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="24">{svg_tspans(description_lines, 92, 442, 34)}</text>
+  <text x="118" y="121" fill="{badge_text}" font-family="{font_stack}" font-size="18" font-weight="700">{html.escape(category)}</text>
+  <text x="92" y="218" fill="#282723" font-family="{font_stack}" font-size="54" font-weight="760">{svg_tspans(title_lines, 92, 218, 64)}</text>
+  <text fill="#5f5b54" font-family="{font_stack}" font-size="24">{svg_tspans(description_lines, 92, 442, 34)}</text>
   <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
-  <text x="92" y="552" fill="#817c73" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="19">{html.escape(label)}</text>
-  <text x="1030" y="552" fill="#30302c" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="19" font-weight="700">ONNELLAB</text>
+  <text x="92" y="552" fill="#817c73" font-family="{font_stack}" font-size="19">{html.escape(label)}</text>
+  <text x="1030" y="552" fill="#30302c" font-family="{font_stack}" font-size="19" font-weight="700">ONNELLAB</text>
 </svg>
 '''
 
