@@ -420,7 +420,7 @@ def html_document(
     .pill.is-active {{ border-color: var(--blue); background: var(--blue-soft); color: var(--blue); font-weight: 800; }}
     .lang {{ min-height: 31px; border-color: var(--line); background: var(--ink); color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 12px; white-space: nowrap; }}
     main {{ max-width: 1180px; margin: 0 auto; padding: 22px 20px 56px; }}
-    .overview {{ display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }}
+    .overview {{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }}
     .metric-card {{ border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 14px; border-radius: 8px; box-shadow: var(--shadow); min-height: 88px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; }}
     .metric-card:nth-child(1) {{ background: linear-gradient(135deg, var(--peach-soft), #fff); }}
     .metric-card:nth-child(2) {{ background: linear-gradient(135deg, var(--sky-soft), #fff); }}
@@ -437,6 +437,18 @@ def html_document(
     @keyframes spin {{ to {{ transform: rotate(360deg); }} }}
     .metric-card.is-active {{ border-color: var(--blue); outline: 2px solid rgba(46,111,187,.16); }}
     .metric-card:disabled {{ cursor: default; opacity: .72; transform: none; }}
+    .atm-action {{ display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 320px); gap: 14px; align-items: center; border: 2px solid var(--ink); background: #fff; border-radius: 8px; padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow); }}
+    .atm-action h1 {{ margin: 0 0 6px; font-size: 24px; line-height: 1.2; }}
+    .atm-action p {{ margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }}
+    .atm-note {{ margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.45; }}
+    .atm-action button {{ min-height: 66px; font-size: 20px; font-weight: 900; background: var(--blue); border-color: var(--blue); }}
+    .atm-action button:disabled {{ opacity: .72; cursor: default; }}
+    .atm-side {{ display: grid; gap: 8px; }}
+    .atm-status-row {{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }}
+    .atm-status-row button {{ min-height: 46px; background: #fff; color: var(--ink); border-color: var(--line); padding: 8px; font-size: 12px; font-weight: 800; text-align: left; }}
+    .atm-status-row button strong {{ display: block; margin-top: 3px; font-size: 15px; line-height: 1.1; }}
+    .atm-status-row button strong > span:not(.state-subtext) {{ color: inherit; font-size: 15px; line-height: 1.1; }}
+    .atm-status-row button .state-subtext {{ display: block; margin-top: 2px; font-size: 11px; color: var(--muted); }}
     .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
     .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, auto); gap: 8px; margin-top: 12px; }}
@@ -452,6 +464,7 @@ def html_document(
     .tag.mode-automatic {{ color: var(--ok); background: var(--ok-soft); border-color: #b7d9c5; font-weight: 800; }}
     .platform-card > span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
     .status-section {{ margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }}
+    .status-section summary {{ cursor: pointer; font-weight: 900; font-size: 16px; min-height: 44px; display: flex; align-items: center; }}
     .release-head {{ display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 10px; }}
     .release-head h2 {{ margin: 0; font-size: 18px; }}
     .release-head h3 {{ margin: 0; font-size: 16px; }}
@@ -525,6 +538,9 @@ def html_document(
     @media (max-width: 760px) {{
       .bar {{ align-items: flex-start; flex-direction: column; }}
       .header-right {{ width: 100%; justify-content: space-between; }}
+      .atm-action {{ grid-template-columns: 1fr; padding: 14px; }}
+      .atm-action h1 {{ font-size: 20px; }}
+      .atm-action button {{ min-height: 60px; font-size: 18px; }}
       .quick-row {{ grid-template-columns: 1fr; }}
       .auth, .controls {{ grid-template-columns: 1fr 1fr; }}
       .auth input, .controls input {{ grid-column: 1 / -1; }}
@@ -550,14 +566,25 @@ def html_document(
     </div>
   </header>
   <main>
+    <section class="atm-action" aria-label="Primary verification action">
+      <div>
+        <h1 id="atm-title">게시 여부 확인</h1>
+        <p id="atm-copy">X와 LinkedIn의 공개 게시물을 확인하고, 일치하는 수동 게시 항목만 완료로 표시합니다.</p>
+        <div id="token-note" class="atm-note">GitHub 토큰 연결 후 동기화와 공개 확인을 실행할 수 있습니다.</div>
+      </div>
+      <div class="atm-side">
+        <button id="verify-publications-primary" type="button">게시 확인 및 완료 반영</button>
+        <div class="atm-status-row" aria-label="Sync and verification status">
+          <button type="button" id="refresh-state-large"><span id="overview-sync-label">동기화</span><strong id="sync-state-large">...</strong></button>
+          <button type="button" id="verify-publications-large"><span id="overview-verify-label">공개 확인</span><strong id="verify-state-large">...</strong></button>
+        </div>
+      </div>
+    </section>
     <section class="overview" aria-label="Publish overview">
       <button class="metric-card" type="button" data-view="due"><span id="overview-due-label">오늘 할 일</span><strong class="due-count">0</strong></button>
       <button class="metric-card" type="button" data-view="manual"><span id="overview-manual-label">수동 대기</span><strong id="manual-count">{manual}</strong></button>
       <button class="metric-card" type="button" data-view="done"><span id="overview-posted-label">게시 완료</span><strong id="posted-count">{posted}</strong></button>
-      <button class="metric-card" type="button" id="refresh-state-large"><span id="overview-sync-label">동기화</span><strong id="sync-state-large">...</strong></button>
-      <button class="metric-card" type="button" id="verify-publications-large"><span id="overview-verify-label">공개 확인</span><strong id="verify-state-large">...</strong></button>
     </section>
-    <div id="token-note" class="token-note">GitHub 토큰 연결 후 공개 프로필 확인을 실행할 수 있습니다.</div>
     <section class="tool-panel" aria-label="Publish controls">
     <div class="quick-row">
       <select id="platform"><option value="">모든 매체</option></select>
@@ -590,20 +617,20 @@ def html_document(
       </div>
       <div id="blog-grid" class="status-grid"></div>
     </section>
-    <section class="status-section" aria-label="Website asset status">
+    <details class="status-section" aria-label="Website asset status">
+      <summary id="site-status-title">사이트 갱신 상태</summary>
       <div class="release-head">
-        <h2 id="site-status-title">사이트 갱신 상태</h2>
         <span id="site-status-summary"></span>
       </div>
       <div id="site-status-grid" class="app-status-grid"></div>
-    </section>
-    <section class="status-section" aria-label="App operation status">
+    </details>
+    <details class="status-section" aria-label="App operation status">
+      <summary id="app-status-title">앱 운영 상태</summary>
       <div class="release-head">
-        <h2 id="app-status-title">앱 운영 상태</h2>
         <span id="app-status-summary"></span>
       </div>
       <div id="app-status-grid" class="app-status-grid"></div>
-    </section>
+    </details>
   </main>
   <script id="manual-data" type="application/json">{data}</script>
   <script id="release-data" type="application/json">{release_data}</script>
@@ -648,6 +675,9 @@ def html_document(
         verificationRefreshIn: '자동 재확인',
         secondsShort: '초',
         tokenNeededNote: 'ONNELLAB_GITHUB_PAGES_TOKEN 입력 후 동기화와 공개 확인을 실행할 수 있습니다.',
+        atmTitle: '게시 여부 확인',
+        atmCopy: 'X와 LinkedIn의 공개 게시물을 확인하고, 일치하는 수동 게시 항목만 완료로 표시합니다.',
+        atmRun: '게시 확인 및 완료 반영',
         overviewVerify: '공개 확인',
         enableBadge: '뱃지 켜기',
         badgeReady: '뱃지 준비됨',
@@ -763,6 +793,9 @@ def html_document(
         verificationRefreshIn: 'auto refresh',
         secondsShort: 's',
         tokenNeededNote: 'Enter ONNELLAB_GITHUB_PAGES_TOKEN to run sync and public profile checks.',
+        atmTitle: 'Check published posts',
+        atmCopy: 'Check public X and LinkedIn posts, then mark only matching manual items as done.',
+        atmRun: 'Check and mark done',
         overviewVerify: 'Public check',
         enableBadge: 'Enable badge',
         badgeReady: 'Badge ready',
@@ -878,6 +911,7 @@ def html_document(
     const badgeButton = document.getElementById('enable-badge');
     const refreshButton = document.getElementById('refresh-state');
     const verifyButtonLarge = document.getElementById('verify-publications-large');
+    const verifyButtonPrimary = document.getElementById('verify-publications-primary');
     const verifyStateLarge = document.getElementById('verify-state-large');
     const syncButtonLarge = document.getElementById('refresh-state-large');
     const langToggle = document.getElementById('lang-toggle');
@@ -903,6 +937,9 @@ def html_document(
       document.documentElement.lang = currentLang;
       document.title = t('appTitle');
       document.getElementById('app-title').textContent = t('appTitle');
+      document.getElementById('atm-title').textContent = t('atmTitle');
+      document.getElementById('atm-copy').textContent = t('atmCopy');
+      verifyButtonPrimary.textContent = t('atmRun');
       document.getElementById('overview-due-label').textContent = t('overviewDue');
       document.getElementById('overview-manual-label').textContent = t('overviewManual');
       document.getElementById('overview-posted-label').textContent = t('overviewPosted');
@@ -992,6 +1029,8 @@ def html_document(
       syncButtonLarge.setAttribute('aria-disabled', 'false');
       verifyButtonLarge.disabled = false;
       verifyButtonLarge.setAttribute('aria-disabled', 'false');
+      verifyButtonPrimary.disabled = false;
+      verifyButtonPrimary.setAttribute('aria-disabled', 'false');
       document.getElementById('token-note').hidden = Boolean(githubToken());
       if (!githubToken()) setVerifyState('verificationTokenRequired');
     }}
@@ -1006,6 +1045,8 @@ def html_document(
       verifyButtonLarge.classList.toggle('is-working', isWorking);
       verifyButtonLarge.disabled = false;
       verifyButtonLarge.setAttribute('aria-disabled', 'false');
+      verifyButtonPrimary.disabled = false;
+      verifyButtonPrimary.setAttribute('aria-disabled', 'false');
     }}
 
     function setStateContent(element, label, isWorking = false, subtext = '') {{
@@ -1096,6 +1137,7 @@ def html_document(
       }}
       setVerifyState('verifyingPublications');
       verifyButtonLarge.disabled = true;
+      verifyButtonPrimary.disabled = true;
       try {{
         await githubRequest(`/repos/${{stateRepo}}/actions/workflows/verify-manual-publications.yml/dispatches`, {{
           method: 'POST',
@@ -1110,6 +1152,7 @@ def html_document(
         console.error(error);
       }} finally {{
         verifyButtonLarge.disabled = false;
+        verifyButtonPrimary.disabled = false;
       }}
     }}
 
@@ -1696,6 +1739,7 @@ def html_document(
       loadRemoteState();
     }};
     verifyButtonLarge.onclick = triggerPublicationVerification;
+    verifyButtonPrimary.onclick = triggerPublicationVerification;
     syncButtonLarge.onclick = () => {{
       if (!githubToken()) {{
         setSync('viewOnly');
