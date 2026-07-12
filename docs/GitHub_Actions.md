@@ -520,7 +520,7 @@ LINKEDIN_PROFILE_URL
 
 Bluesky and Dev.to checks use public APIs. Medium and Hashnode use RSS when configured. X/Twitter and LinkedIn use Playwright to inspect public profile pages without login; those checks are lower confidence because public pages can change, hide content, or rate-limit anonymous visitors.
 
-X/Twitter defaults to `https://x.com/onnellab` when no X profile secret is set. LinkedIn requires `LINKEDIN_PUBLIC_PROFILE_URL` or `LINKEDIN_PROFILE_URL`.
+X/Twitter defaults to `https://x.com/onnellab` when no X profile secret is set. LinkedIn defaults to `https://www.linkedin.com/in/onnel-lab-b5b9b0421/` when no LinkedIn profile secret is set, and the verifier checks that profile's recent activity page.
 
 ---
 

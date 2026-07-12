@@ -26,6 +26,8 @@ DEFAULT_STATE = ROOT / "data" / "manual_publish_state.json"
 PUBLIC_API_BSKY = "https://public.api.bsky.app"
 ONNELLAB_USER_AGENT = "ONNELLAB content engine"
 DEFAULT_X_USERNAME = "onnellab"
+DEFAULT_X_PUBLIC_PROFILE_URL = "https://x.com/onnellab"
+DEFAULT_LINKEDIN_PUBLIC_PROFILE_URL = "https://www.linkedin.com/in/onnel-lab-b5b9b0421/"
 
 
 class PublicationVerificationError(ValueError):
@@ -198,10 +200,26 @@ def public_profile_url(platform: str) -> str:
             or os.environ.get("TWITTER_USERNAME", "").strip().lstrip("@")
             or DEFAULT_X_USERNAME
         )
-        return f"https://x.com/{username}" if username else ""
+        return f"https://x.com/{username}" if username else DEFAULT_X_PUBLIC_PROFILE_URL
     if platform == "linkedin":
-        return os.environ.get("LINKEDIN_PUBLIC_PROFILE_URL", "").strip() or os.environ.get("LINKEDIN_PROFILE_URL", "").strip()
+        return (
+            os.environ.get("LINKEDIN_PUBLIC_PROFILE_URL", "").strip()
+            or os.environ.get("LINKEDIN_PROFILE_URL", "").strip()
+            or DEFAULT_LINKEDIN_PUBLIC_PROFILE_URL
+        )
     return ""
+
+
+def public_activity_url(platform: str, profile_url: str) -> str:
+    if platform != "linkedin":
+        return profile_url
+    parsed = urllib.parse.urlparse(profile_url)
+    path = parsed.path.rstrip("/")
+    if "/recent-activity" in path:
+        return profile_url
+    if path:
+        return urllib.parse.urlunparse(parsed._replace(path=f"{path}/recent-activity/all/"))
+    return profile_url
 
 
 def playwright_page_text(url: str) -> str:
@@ -211,8 +229,17 @@ const { chromium } = require('playwright');
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await page.goto(process.argv[2], { waitUntil: 'domcontentloaded', timeout: 45000 });
-  await page.waitForTimeout(2500);
-  console.log(await page.evaluate(() => document.body ? document.body.innerText : ''));
+  await page.waitForTimeout(5000);
+  await page.evaluate(() => window.scrollTo(0, Math.min(document.body.scrollHeight, 1800)));
+  await page.waitForTimeout(1200);
+  console.log(await page.evaluate(() => {
+    const bodyText = document.body ? document.body.innerText : '';
+    const links = Array.from(document.querySelectorAll('a[href]'))
+      .map((link) => link.href)
+      .filter(Boolean)
+      .join('\\n');
+    return bodyText + '\\n' + links;
+  }));
   await browser.close();
 })().catch((error) => {
   console.error(String(error && error.stack || error));
@@ -235,14 +262,18 @@ def verify_public_page(item: dict[str, Any], visual_text: VisualText) -> Verific
     if not url:
         print(f"skip {platform} public page verification: profile URL is not configured", file=sys.stderr)
         return None
-    text = visual_text(url)
+    verification_url = public_activity_url(platform, url)
+    text = visual_text(verification_url)
     canonical_url = str(item.get("canonical_url", ""))
-    slug = str(item.get("slug", ""))
     title = first_line_from_draft(item)
-    if (canonical_url and canonical_url in text) or (slug and slug in text) or (title and title in text):
+    canonical_host = urllib.parse.urlparse(canonical_url).netloc
+    has_title = bool(title and title in text)
+    has_canonical_url = bool(canonical_url and canonical_url in text)
+    has_canonical_card = bool(canonical_host and canonical_host in text and has_title)
+    if has_title and (has_canonical_url or has_canonical_card):
         return result_for(item, url, f"{platform}_public_page_visual", "low")
     print(
-        f"checked {platform} public page but found no matching canonical URL, slug, or title: {url}",
+        f"checked {platform} public page but found no matching title plus canonical URL or domain: {verification_url}",
         file=sys.stderr,
     )
     return None

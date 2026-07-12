@@ -51,9 +51,9 @@ jobs:
           MEDIUM_USERNAME: ${{ secrets.MEDIUM_USERNAME }}
           HASHNODE_RSS_URL: ${{ secrets.HASHNODE_RSS_URL }}
           HASHNODE_BLOG_URL: ${{ secrets.HASHNODE_BLOG_URL }}
-          X_PUBLIC_PROFILE_URL: ${{ secrets.X_PUBLIC_PROFILE_URL }}
+          X_PUBLIC_PROFILE_URL: ${{ secrets.X_PUBLIC_PROFILE_URL || 'https://x.com/onnellab' }}
           X_USERNAME: ${{ secrets.X_USERNAME }}
-          LINKEDIN_PUBLIC_PROFILE_URL: ${{ secrets.LINKEDIN_PUBLIC_PROFILE_URL }}
+          LINKEDIN_PUBLIC_PROFILE_URL: ${{ secrets.LINKEDIN_PUBLIC_PROFILE_URL || 'https://www.linkedin.com/in/onnel-lab-b5b9b0421/' }}
           LINKEDIN_PROFILE_URL: ${{ secrets.LINKEDIN_PROFILE_URL }}
         run: |
           set -euo pipefail

@@ -13,7 +13,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from verify_manual_publications import public_profile_url, verify_manual_publications  # noqa: E402
+from verify_manual_publications import public_activity_url, public_profile_url, verify_manual_publications  # noqa: E402
 
 
 class VerifyManualPublicationsTest(unittest.TestCase):
@@ -28,6 +28,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             syndication = root / "generated" / "syndication" / "manifest.json"
             state = root / "data" / "manual_publish_state.json"
             canonical_url = "https://onnellab.github.io/blog/en/example/"
+            draft_path = root / "missing.txt"
             self.write_json(
                 social,
                 {
@@ -40,7 +41,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                             "status": "draft",
                             "canonical_url": canonical_url,
                             "slug": "example",
-                            "draft_path": "missing.txt",
+                            "draft_path": str(draft_path),
                             "is_variant": False,
                         },
                         {
@@ -51,7 +52,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                             "status": "draft",
                             "canonical_url": canonical_url,
                             "slug": "example",
-                            "draft_path": "missing.txt",
+                            "draft_path": str(draft_path),
                             "is_variant": False,
                         },
                         {
@@ -62,7 +63,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                             "status": "draft",
                             "canonical_url": canonical_url,
                             "slug": "example",
-                            "draft_path": "missing.txt",
+                            "draft_path": str(draft_path),
                             "is_variant": False,
                         },
                     ]
@@ -94,6 +95,8 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                 },
             )
             self.write_json(state, {"version": 1, "updated_at": "", "done": {}})
+            draft_text = "How to Read Large TXT Files Without Lag\n\nExample text\n"
+            draft_path.write_text(draft_text, encoding="utf-8")
 
             def fetch_json(url: str, _headers: dict[str, str] | None = None) -> object:
                 if "app.bsky.feed.getAuthorFeed" in url:
@@ -116,7 +119,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                 return f"<rss><item><link>{canonical_url}</link></item></rss>"
 
             def visual_text(url: str) -> str:
-                return f"Public profile shows {canonical_url} from {url}"
+                return f"Public profile shows How to Read Large TXT Files Without Lag {canonical_url} from {url}"
 
             with unittest.mock.patch.dict(
                 "os.environ",
@@ -125,7 +128,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                     "DEVTO_USERNAME": "onnellab",
                     "MEDIUM_RSS_URL": "https://medium.com/feed/@onnellab",
                     "X_PUBLIC_PROFILE_URL": "https://x.com/onnellab",
-                    "LINKEDIN_PUBLIC_PROFILE_URL": "https://www.linkedin.com/in/onnellab/",
+                    "LINKEDIN_PUBLIC_PROFILE_URL": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
                 },
             ):
                 verified = verify_manual_publications(
@@ -187,6 +190,16 @@ class VerifyManualPublicationsTest(unittest.TestCase):
     def test_x_public_profile_defaults_to_onnellab(self) -> None:
         with unittest.mock.patch.dict("os.environ", {}, clear=True):
             self.assertEqual(public_profile_url("x"), "https://x.com/onnellab")
+
+    def test_linkedin_public_profile_defaults_to_onnellab_profile(self) -> None:
+        with unittest.mock.patch.dict("os.environ", {}, clear=True):
+            self.assertEqual(public_profile_url("linkedin"), "https://www.linkedin.com/in/onnel-lab-b5b9b0421/")
+
+    def test_linkedin_activity_url_uses_recent_activity_page(self) -> None:
+        self.assertEqual(
+            public_activity_url("linkedin", "https://www.linkedin.com/in/onnel-lab-b5b9b0421/"),
+            "https://www.linkedin.com/in/onnel-lab-b5b9b0421/recent-activity/all/",
+        )
 
 
 if __name__ == "__main__":
