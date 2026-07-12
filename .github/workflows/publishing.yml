@@ -376,12 +376,25 @@ jobs:
           X_CLIENT_ID: ${{ secrets.X_CLIENT_ID }}
           X_CLIENT_SECRET: ${{ secrets.X_CLIENT_SECRET }}
           X_REFRESH_TOKEN: ${{ secrets.X_REFRESH_TOKEN }}
+          X_REFRESH_TOKEN_FILE: .tokens/x-refresh-token
           BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
           BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
         run: |
           set -euo pipefail
           python3 scripts/post_core_distribution.py
+
+      - name: Persist Rotated X Refresh Token
+        if: env.DRY_RUN != 'true' && always()
+        env:
+          GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -s .tokens/x-refresh-token ]; then
+            gh secret set X_REFRESH_TOKEN --repo "$GITHUB_REPOSITORY" < .tokens/x-refresh-token
+          else
+            echo "No rotated X refresh token file found"
+          fi
 
       - name: Commit Distribution Posting Status
         if: env.DRY_RUN != 'true' && always()
