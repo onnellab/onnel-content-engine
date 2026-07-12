@@ -24,10 +24,14 @@ RELEASE_HEADER = [
     "version",
     "platform",
     "build_type",
+    "release_type",
     "artifact_path",
     "checksum_sha256",
     "previous_tag",
     "status",
+    "release_url",
+    "github_release_id",
+    "released_at",
     "release_date",
     "release_title",
     "summary",
@@ -39,6 +43,7 @@ RELEASE_HEADER = [
 
 STATUS_VALUES = {"planned", "ready", "released", "failed", "archived"}
 BUILD_TYPES = {"release"}
+RELEASE_TYPES = {"binary", "notes_only"}
 PLATFORMS = {"ios", "android", "windows", "macos", "linux", "web"}
 BLOCKED_ARTIFACT_MARKERS = ("debug", "dev", "internal", "test")
 REPOSITORY_RE = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
@@ -79,6 +84,9 @@ def validate_release(row: dict[str, str], apps: dict[str, dict[str, str]], seen:
         raise AppReleaseValidationError(f"{release_id} has invalid platform: {row['platform']}")
     if row["build_type"] not in BUILD_TYPES:
         raise AppReleaseValidationError(f"{release_id} build_type must be release")
+    release_type = row["release_type"] or "binary"
+    if release_type not in RELEASE_TYPES:
+        raise AppReleaseValidationError(f"{release_id} has invalid release_type: {row['release_type']}")
     if not REPOSITORY_RE.fullmatch(row["repository"]):
         raise AppReleaseValidationError(f"{release_id} repository must use owner/name format")
     if not TAG_RE.fullmatch(row["tag"]):
@@ -89,16 +97,21 @@ def validate_release(row: dict[str, str], apps: dict[str, dict[str, str]], seen:
     seen.add(key)
     if row["status"] in {"ready", "released"}:
         artifact = row["artifact_path"].strip()
-        if not artifact:
+        if release_type != "notes_only" and not artifact:
             raise AppReleaseValidationError(f"{release_id} artifact_path is required when status is {row['status']}")
-        artifact_lower = Path(artifact).name.lower()
-        if any(marker in artifact_lower for marker in BLOCKED_ARTIFACT_MARKERS):
-            raise AppReleaseValidationError(f"{release_id} artifact_path looks like a non-release build")
-        artifact_path = ROOT / artifact
-        if not artifact_path.exists():
-            raise AppReleaseValidationError(f"{release_id} artifact does not exist: {artifact}")
-        if not SHA256_RE.fullmatch(row["checksum_sha256"]):
-            raise AppReleaseValidationError(f"{release_id} checksum_sha256 must be 64 lowercase hex characters")
+        if artifact:
+            artifact_lower = Path(artifact).name.lower()
+            if any(marker in artifact_lower for marker in BLOCKED_ARTIFACT_MARKERS):
+                raise AppReleaseValidationError(f"{release_id} artifact_path looks like a non-release build")
+            artifact_path = ROOT / artifact
+            if not artifact_path.exists():
+                raise AppReleaseValidationError(f"{release_id} artifact does not exist: {artifact}")
+            if not SHA256_RE.fullmatch(row["checksum_sha256"]):
+                raise AppReleaseValidationError(f"{release_id} checksum_sha256 must be 64 lowercase hex characters")
+        elif row["checksum_sha256"]:
+            raise AppReleaseValidationError(f"{release_id} checksum_sha256 requires artifact_path")
+        if row["status"] == "released" and not row["release_url"]:
+            raise AppReleaseValidationError(f"{release_id} release_url is required when status is released")
         for field in ["release_title", "summary", "changes", "compatibility"]:
             if not row[field]:
                 raise AppReleaseValidationError(f"{release_id} {field} is required when status is {row['status']}")

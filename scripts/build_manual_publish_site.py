@@ -117,7 +117,10 @@ def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_p
                 "tag": row.get("tag", ""),
                 "version": row.get("version", ""),
                 "platform": row.get("platform", ""),
+                "release_type": row.get("release_type", ""),
                 "status": row.get("status", ""),
+                "release_url": row.get("release_url", ""),
+                "released_at": row.get("released_at", ""),
                 "release_date": row.get("release_date", ""),
                 "public_release": "true" if public_release else "false",
                 "approved_at": approval.get("approved_at", ""),
@@ -1619,6 +1622,14 @@ def html_document(
               const repo = document.createElement('span');
               repo.textContent = item.repository;
               row.append(label, status, planned, repo);
+              if (item.release_url) {{
+                const link = document.createElement('a');
+                link.href = item.release_url;
+                link.target = '_blank';
+                link.rel = 'noopener';
+                link.textContent = 'Release Notes';
+                row.appendChild(link);
+              }}
               card.appendChild(row);
             }});
         }} else {{

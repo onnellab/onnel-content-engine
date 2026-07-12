@@ -78,14 +78,13 @@ def github_request(
         raise GitHubReleaseError(f"HTTP {error.code} from {url}: {detail}") from error
 
 
-def release_exists(repository: str, tag: str, token: str) -> bool:
+def existing_release(repository: str, tag: str, token: str) -> dict[str, object] | None:
     path = f"/repos/{repository}/releases/tags/{urllib.parse.quote(tag, safe='')}"
     try:
-        github_request(path, token)
-        return True
+        return github_request(path, token)
     except GitHubReleaseError as error:
         if "HTTP 404" in str(error):
-            return False
+            return None
         raise
 
 
@@ -106,8 +105,11 @@ def release_body(row: dict[str, str]) -> str:
         "- Release build verified",
         "- Debug build excluded",
         f"- Version tag: {row['tag']}",
-        f"- SHA-256: `{row['checksum_sha256']}`",
     ]
+    if row["checksum_sha256"]:
+        parts.append(f"- SHA-256: `{row['checksum_sha256']}`")
+    else:
+        parts.append("- Release notes page verified")
     if row["summary"]:
         parts.insert(2, row["summary"])
         parts.insert(3, "")
@@ -145,20 +147,40 @@ def verify_checksum(path: Path, expected: str) -> None:
         raise GitHubReleaseError(f"checksum mismatch for {path}: expected {expected}, got {actual}")
 
 
+def sync_release_metadata(row: dict[str, str], release: dict[str, object]) -> None:
+    release_url = release.get("html_url")
+    release_id = release.get("id")
+    published_at = release.get("published_at") or release.get("created_at")
+    if isinstance(release_url, str):
+        row["release_url"] = release_url
+    if release_id is not None:
+        row["github_release_id"] = str(release_id)
+    if isinstance(published_at, str):
+        row["released_at"] = published_at
+
+
 def process_release(row: dict[str, str], token: str, draft: bool, dry_run: bool) -> str:
-    artifact_path = ROOT / row["artifact_path"]
-    verify_checksum(artifact_path, row["checksum_sha256"])
+    artifact_path = ROOT / row["artifact_path"] if row["artifact_path"] else None
+    if artifact_path:
+        verify_checksum(artifact_path, row["checksum_sha256"])
     if dry_run:
-        return f"would create {row['repository']} {row['tag']} with {row['artifact_path']}"
-    if release_exists(row["repository"], row["tag"], token):
-        raise GitHubReleaseError(f"release already exists: {row['repository']} {row['tag']}")
+        suffix = f" with {row['artifact_path']}" if row["artifact_path"] else " as release notes"
+        return f"would create {row['repository']} {row['tag']}{suffix}"
+    release = existing_release(row["repository"], row["tag"], token)
+    if release:
+        sync_release_metadata(row, release)
+        row["status"] = "released"
+        return f"synced existing {row['repository']} {row['tag']} {row['release_url']}"
     release = create_release(row, token, draft)
-    upload_url = release.get("upload_url")
-    if not isinstance(upload_url, str) or not upload_url:
-        raise GitHubReleaseError("GitHub release response did not include upload_url")
-    upload_asset(upload_url, artifact_path, token)
+    if artifact_path:
+        upload_url = release.get("upload_url")
+        if not isinstance(upload_url, str) or not upload_url:
+            raise GitHubReleaseError("GitHub release response did not include upload_url")
+        upload_asset(upload_url, artifact_path, token)
+    sync_release_metadata(row, release)
     row["status"] = "released"
-    return f"created {row['repository']} {row['tag']} with {row['artifact_path']}"
+    suffix = f" with {row['artifact_path']}" if row["artifact_path"] else " as release notes"
+    return f"created {row['repository']} {row['tag']}{suffix}"
 
 
 def create_github_releases(path: Path = RELEASES_PATH, dry_run: bool = False, draft: bool = True) -> list[str]:

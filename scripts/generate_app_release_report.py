@@ -238,12 +238,13 @@ def report_markdown(
                 row["tag"],
                 row["status"],
                 publication_gate(row, approvals),
+                row["release_url"],
                 row["artifact_path"],
                 release_action(row),
             ]
             for row in release_rows
         ]
-        lines.extend(table(["ID", "App", "Platform", "Tag", "Status", "Publication gate", "Artifact", "Next action"], release_table))
+        lines.extend(table(["ID", "App", "Platform", "Tag", "Status", "Publication gate", "Release URL", "Artifact", "Next action"], release_table))
     else:
         lines.append("No app release candidate rows exist yet.")
 
