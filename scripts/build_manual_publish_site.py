@@ -477,7 +477,7 @@ def html_document(
         <select id="mode"><option value="manual">수동만</option><option value="automatic">자동화만</option><option value="">전체</option></select>
       </div>
       <div class="auth">
-        <input id="token" type="password" autocomplete="off" placeholder="완료 상태 동기화용 GitHub 토큰">
+        <input id="token" type="password" autocomplete="off" placeholder="ONNELLAB_GITHUB_PAGES_TOKEN">
         <button id="save-token" type="button">동기화 연결</button>
         <button id="refresh-state" type="button" class="secondary">새로고침</button>
         <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
@@ -530,7 +530,7 @@ def html_document(
         viewOnly: '보기 전용',
         syncError: '동기화 오류',
         saveError: '저장 오류',
-        tokenPlaceholder: '완료 상태 동기화용 GitHub 토큰',
+        tokenPlaceholder: 'ONNELLAB_GITHUB_PAGES_TOKEN',
         advancedSummary: '상세 필터와 동기화',
         connectSync: '동기화 연결',
         refresh: '새로고침',
@@ -540,7 +540,7 @@ def html_document(
         verificationReady: '실행',
         verificationTokenRequired: '토큰 필요',
         verificationFailed: '실패',
-        tokenNeededNote: 'GitHub 토큰 연결 후 공개 프로필 확인을 실행할 수 있습니다.',
+        tokenNeededNote: 'ONNELLAB_GITHUB_PAGES_TOKEN 입력 후 동기화와 공개 확인을 실행할 수 있습니다.',
         overviewVerify: '공개 확인',
         enableBadge: '뱃지 켜기',
         badgeReady: '뱃지 준비됨',
@@ -636,7 +636,7 @@ def html_document(
         viewOnly: 'view only',
         syncError: 'sync error',
         saveError: 'save error',
-        tokenPlaceholder: 'GitHub token for synced done state',
+        tokenPlaceholder: 'ONNELLAB_GITHUB_PAGES_TOKEN',
         advancedSummary: 'Advanced filters and sync',
         connectSync: 'Connect sync',
         refresh: 'Refresh',
@@ -646,7 +646,7 @@ def html_document(
         verificationReady: 'Run',
         verificationTokenRequired: 'Token needed',
         verificationFailed: 'Failed',
-        tokenNeededNote: 'Connect a GitHub token to run public profile checks.',
+        tokenNeededNote: 'Enter ONNELLAB_GITHUB_PAGES_TOKEN to run sync and public profile checks.',
         overviewVerify: 'Public check',
         enableBadge: 'Enable badge',
         badgeReady: 'Badge ready',
@@ -1015,6 +1015,11 @@ def html_document(
       const original = button.textContent;
       button.textContent = label;
       setTimeout(() => {{ button.textContent = original; }}, 1200);
+    }}
+
+    function keepButtonLabel(button, label) {{
+      button.textContent = label;
+      button.dataset.stateLabel = label;
     }}
 
     function isDone(item) {{
@@ -1494,7 +1499,7 @@ def html_document(
         await Notification.requestPermission();
       }}
       await updateAppBadge();
-      flash(badgeButton, t('badgeReady'));
+      keepButtonLabel(badgeButton, t('badgeReady'));
     }};
     langToggle.onclick = () => {{
       currentLang = currentLang === 'ko' ? 'en' : 'ko';
