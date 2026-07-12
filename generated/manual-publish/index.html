@@ -98,15 +98,23 @@
     .tag.status-done { color: var(--ok); border-color: #b7d9c5; background: #f2fbf5; }
     h2 { font-size: 17px; line-height: 1.35; margin: 0 0 6px; }
     .subtitle { color: var(--muted); font-size: 12px; margin: 0 0 10px; overflow-wrap: anywhere; }
+    .card-summary { display: grid; gap: 8px; margin-bottom: 10px; }
+    .card-summary .note { margin-top: 0; }
+    .card-detail { display: none; margin-top: 10px; }
+    article.is-expanded .card-detail { display: block; }
+    .card-detail > button, .card-detail > a.button { width: 100%; display: block; margin-top: 8px; }
     textarea { width: 100%; min-height: 170px; resize: vertical; border: 1px solid var(--line); padding: 11px; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--ink); background: #fff; border-radius: 6px; }
     .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
     .actions .primary { grid-column: 1 / -1; }
+    .actions .primary { min-height: 48px; font-size: 16px; font-weight: 900; background: var(--blue); border-color: var(--blue); }
     button, a.button { min-height: 38px; border: 1px solid var(--ink); background: var(--ink); color: #fff; padding: 8px 10px; font: inherit; text-decoration: none; text-align: center; cursor: pointer; border-radius: 6px; }
     button:hover, a.button:hover { transform: translateY(-1px); }
     button.secondary, a.secondary { background: #fff; color: var(--ink); border-color: var(--line); }
     .note { margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
     .error { margin-top: 10px; color: var(--bad); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; background: var(--bad-soft); border: 1px solid #efb5b0; border-radius: 6px; padding: 8px; }
-    .empty { border: 1px dashed var(--line); padding: 28px; color: var(--muted); background: var(--panel); text-align: center; border-radius: 8px; }
+    .empty { border: 1px dashed var(--line); padding: 24px; color: var(--muted); background: var(--panel); text-align: left; border-radius: 8px; }
+    .empty strong { display: block; color: var(--ink); font-size: 18px; margin-bottom: 8px; }
+    .empty span { display: block; line-height: 1.55; }
     @media (max-width: 900px) {
       .overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
@@ -232,6 +240,9 @@
         showDone: '완료 포함',
         dueOnly: '게시 예정만',
         empty: '현재 필터와 일치하는 초안이 없습니다.',
+        emptyTitle: '지금 게시할 수동 항목이 없습니다',
+        emptyNext: '다음 수동 게시 예정',
+        emptyLatest: '최근 게시',
         noRecord: '기록 없음',
         none: '없음',
         today: '오늘',
@@ -242,13 +253,14 @@
         failedWord: '실패',
         lastPosted: '최근 게시',
         lastUpdate: '최근 갱신',
-        releaseTitle: 'GitHub Release 상태',
+        releaseTitle: 'GitHub에 올릴 릴리즈 후보',
         releaseSummary: '상태',
         releaseCandidate: '릴리즈 후보',
         plannedDate: '예정일',
-        storeTitle: '스토어 출시 상태',
+        storeTitle: 'App Store / Play Store 현재 공개 버전',
         storeSummary: '현재 표시',
         currentVersion: '현재 버전',
+        releasedDate: '공개일',
         checkedAt: '최근 확인',
         blogTitle: '블로그 상태',
         blogSummary: '상태',
@@ -263,6 +275,8 @@
         undoDone: '완료 취소',
         copyImage: '이미지 복사',
         openImage: '이미지 열기',
+        showDetails: '본문 보기',
+        hideDetails: '본문 숨기기',
         overviewDue: '오늘 할 일',
         overviewManual: '수동 대기',
         overviewPosted: '게시 완료',
@@ -314,6 +328,9 @@
         showDone: 'Show done',
         dueOnly: 'Due only',
         empty: 'No drafts match the current filters.',
+        emptyTitle: 'No manual items are due now',
+        emptyNext: 'next manual publish',
+        emptyLatest: 'latest posted',
         noRecord: 'no record',
         none: 'none',
         today: 'today',
@@ -324,13 +341,14 @@
         failedWord: 'failed',
         lastPosted: 'last posted',
         lastUpdate: 'last update',
-        releaseTitle: 'GitHub Release status',
+        releaseTitle: 'GitHub Release candidates',
         releaseSummary: 'status',
         releaseCandidate: 'release candidate',
         plannedDate: 'planned date',
-        storeTitle: 'Store release status',
+        storeTitle: 'Current App Store / Play Store versions',
         storeSummary: 'currently shown',
         currentVersion: 'current version',
+        releasedDate: 'released',
         checkedAt: 'last checked',
         blogTitle: 'Blog status',
         blogSummary: 'status',
@@ -345,6 +363,8 @@
         undoDone: 'Undo done',
         copyImage: 'Copy image',
         openImage: 'Open image',
+        showDetails: 'Show draft',
+        hideDetails: 'Hide draft',
         overviewDue: 'Due today',
         overviewManual: 'Waiting',
         overviewPosted: 'Posted',
@@ -691,6 +711,31 @@
       return values.map(parseDate).filter(Boolean).sort((a, b) => b - a)[0] || null;
     }
 
+    function nextManualDueDate() {
+      return items
+        .filter((item) => item.publishing_mode === 'manual' && !isDone(item) && !item.is_variant && item.due_at)
+        .map((item) => dueDate(item))
+        .filter(Boolean)
+        .sort((a, b) => a - b)[0] || null;
+    }
+
+    function latestPostedDate() {
+      return latestDate(items.filter((item) => item.status === 'posted').map((item) => item.posted_at));
+    }
+
+    function renderEmptyState() {
+      empty.textContent = '';
+      const title = document.createElement('strong');
+      title.textContent = currentView === 'due' ? t('emptyTitle') : t('empty');
+      const next = document.createElement('span');
+      const nextDue = nextManualDueDate();
+      next.textContent = t('emptyNext') + ': ' + (nextDue ? formatDate(nextDue.toISOString()) : t('none'));
+      const latest = document.createElement('span');
+      const latestPosted = latestPostedDate();
+      latest.textContent = t('emptyLatest') + ': ' + (latestPosted ? `${formatDate(latestPosted.toISOString())} (${daysAgo(latestPosted.toISOString())})` : t('none'));
+      empty.append(title, next, latest);
+    }
+
     function updateVariantToggle() {
       const count = items.filter((item) => item.is_variant).length;
       if (currentLang === 'ko') {
@@ -803,7 +848,7 @@
         const version = document.createElement('span');
         version.textContent = `${t('currentVersion')}: ${item.version || t('none')} / ${item.status || t('none')}`;
         const released = document.createElement('span');
-        released.textContent = `${t('plannedDate')}: ${item.release_date || t('none')}`;
+        released.textContent = `${t('releasedDate')}: ${item.release_date || t('none')}`;
         const checked = document.createElement('span');
         checked.textContent = `${t('checkedAt')}: ${formatDate(item.checked_at)}`;
         card.append(title, version, released, checked);
@@ -854,6 +899,7 @@
       dueCountEls.forEach((element) => element.textContent = dueTotal);
       grid.textContent = '';
       empty.hidden = visible.length !== 0;
+      if (!visible.length) renderEmptyState();
       visible.forEach((item) => grid.appendChild(card(item)));
       renderPlatformSummary();
       renderReleaseSummary();
@@ -907,15 +953,29 @@
       }
       const title = document.createElement('h2');
       title.textContent = displayTitle(item) + (item.is_variant ? ' / ' + t('variantTag') : '');
+      const summary = document.createElement('div');
+      summary.className = 'card-summary';
+      const summaryNote = document.createElement('div');
+      summaryNote.className = 'note';
+      summaryNote.textContent = (item.due_at ? t('dueAt') + ' ' + formatDue(item) + ' / ' : '') + t('length') + ' ' + item.length;
       const textarea = document.createElement('textarea');
       textarea.value = item.text;
       textarea.spellcheck = false;
+      const detail = document.createElement('div');
+      detail.className = 'card-detail';
       const actions = document.createElement('div');
       actions.className = 'actions';
       const open = document.createElement('button');
       open.className = 'primary';
       open.textContent = t('copyAndOpen');
       open.onclick = () => copyThenOpen({ ...item, text: textarea.value }, open);
+      const detailToggle = document.createElement('button');
+      detailToggle.className = 'secondary';
+      detailToggle.textContent = t('showDetails');
+      detailToggle.onclick = () => {
+        article.classList.toggle('is-expanded');
+        detailToggle.textContent = article.classList.contains('is-expanded') ? t('hideDetails') : t('showDetails');
+      };
       const copy = document.createElement('button');
       copy.className = 'secondary';
       copy.textContent = item.kind === 'syndication' ? t('copyMarkdown') : t('copyPost');
@@ -924,7 +984,7 @@
       doneButton.className = 'secondary';
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
       doneButton.onclick = () => isDone(item) ? undoDone(item, doneButton) : markDone(item, doneButton);
-      actions.append(open, copy, doneButton);
+      actions.append(open, detailToggle, doneButton);
       if (item.card_asset_href) {
         const copyImg = document.createElement('button');
         copyImg.className = 'secondary';
@@ -936,18 +996,20 @@
         openImg.href = item.card_asset_href;
         openImg.target = '_blank';
         openImg.rel = 'noopener noreferrer';
-        actions.append(copyImg, openImg);
+        detail.append(copyImg, openImg);
       }
       const note = document.createElement('div');
       note.className = 'note';
       note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '');
-      body.append(cardHead, meta, title, textarea, actions, note);
+      detail.append(textarea, copy, note);
+      summary.append(summaryNote);
       if (item.error) {
         const error = document.createElement('div');
         error.className = 'error';
         error.textContent = item.error;
-        body.appendChild(error);
+        detail.appendChild(error);
       }
+      body.append(cardHead, meta, title, summary, actions, detail);
       article.appendChild(body);
       return article;
     }

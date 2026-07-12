@@ -347,7 +347,7 @@ def social_card_font_defs(language: str) -> tuple[str, str]:
 
 def social_card_svg(article: Article) -> str:
     language = article.topic["primary_language"]
-    label = "ONNELLAB Article" if language == "en" else "ONNELLAB 아티클"
+    label = f"{article.topic['category'].upper()} · {language.upper()}"
     title_lines = wrap_text(article.title, 34 if language == "en" else 24, 3)
     description_lines = wrap_text(article.description, 72 if language == "en" else 36, 2)
     category = article.topic["category"].upper()
@@ -374,7 +374,7 @@ def social_card_svg(article: Article) -> str:
   <text fill="#5f5b54" font-family="{font_stack}" font-size="24">{svg_tspans(description_lines, 92, 442, 34)}</text>
   <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
   <text x="92" y="552" fill="#817c73" font-family="{font_stack}" font-size="19">{html.escape(label)}</text>
-  <text x="1030" y="552" fill="#30302c" font-family="{font_stack}" font-size="19" font-weight="700">ONNELLAB</text>
+  <text x="1048" y="552" fill="#30302c" font-family="{font_stack}" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
 </svg>
 '''
 
