@@ -117,7 +117,7 @@
     article.is-done { opacity: .78; }
     .thumb { width: 100%; aspect-ratio: 1.91 / 1; object-fit: cover; display: block; border-bottom: 1px solid var(--line); background: #eee; }
     .body { padding: 14px; }
-    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
     .platform-badge { display: inline-flex; align-items: center; min-height: 30px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--ink); color: #fff; font-size: 13px; font-weight: 800; }
     .platform-badge.platform-x { background: #1da1f2; border-color: #1da1f2; }
     .platform-badge.platform-linkedin { background: #0a66c2; border-color: #0a66c2; }
@@ -125,8 +125,7 @@
     .platform-badge.platform-devto { background: #171717; }
     .platform-badge.platform-hashnode { background: #2962ff; border-color: #2962ff; }
     .platform-badge.platform-medium { background: #1f1f1f; }
-    .card-head .tag { margin-left: auto; }
-    .meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .meta { color: var(--muted); font-size: 12px; line-height: 1.35; margin-bottom: 10px; overflow-wrap: anywhere; }
     .tag { font-size: 12px; border: 1px solid var(--line); padding: 4px 7px; color: var(--muted); background: #fff; border-radius: 999px; }
     .tag.status-posted { color: var(--ok); border-color: #b7d9c5; background: var(--ok-soft); }
     .tag.status-failed { color: var(--bad); border-color: #efb5b0; background: var(--bad-soft); }
@@ -1271,36 +1270,24 @@
       const platformBadge = document.createElement('div');
       platformBadge.className = 'platform-badge ' + platformClass(item.platform);
       platformBadge.textContent = item.platform_label;
-      const kindTag = document.createElement('span');
-      kindTag.className = 'tag ' + (item.publishing_mode === 'manual' ? 'mode-manual' : 'mode-automatic');
-      kindTag.textContent = item.publishing_mode === 'manual' ? t('manualMode') : t('automaticMode');
-      cardHead.append(platformBadge, kindTag);
+      cardHead.append(platformBadge);
       const meta = document.createElement('div');
       meta.className = 'meta';
-      [
-        [item.language, ''],
-        [isDone(item) ? t('doneTag') : item.status, isDone(item) ? 'status-done' : statusClass(item.status)],
-      ].forEach(([value, className]) => {
-        const span = document.createElement('span');
-        span.className = 'tag' + (className ? ' ' + className : '');
-        span.textContent = value;
-        meta.appendChild(span);
-      });
+      const statusParts = [
+        item.publishing_mode === 'manual' ? t('manualMode') : t('automaticMode'),
+        item.language,
+        isDone(item) ? t('doneTag') : item.status,
+      ];
       if (isDue(item)) {
-        const due = document.createElement('span');
-        due.className = 'tag status-due';
-        due.textContent = t('dueTag');
-        meta.appendChild(due);
+        statusParts.push(t('dueTag'));
       }
       if (isDone(item)) {
         const [label, className] = verificationLabel(item);
         if (label) {
-          const verification = document.createElement('span');
-          verification.className = 'tag ' + className;
-          verification.textContent = label;
-          meta.appendChild(verification);
+          statusParts.push(label);
         }
       }
+      meta.textContent = statusParts.filter(Boolean).join(' / ');
       const title = document.createElement('h2');
       title.textContent = displayTitle(item) + (item.is_variant ? ' / ' + t('variantTag') : '');
       const summary = document.createElement('div');
