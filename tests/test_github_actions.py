@@ -81,6 +81,14 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Post Core Distribution", text)
         self.assertIn("Dry-Run Mode", text)
 
+    def test_manual_publication_verification_refreshes_store_snapshots(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "verify-manual-publications.yml").read_text(encoding="utf-8")
+
+        self.assertIn("Check store homepage versions", workflow)
+        self.assertIn("scripts/check_store_versions.py", workflow)
+        self.assertIn("data/manual_publish_state.json data/store_versions.csv", workflow)
+        self.assertIn("Build manual publish dashboard", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

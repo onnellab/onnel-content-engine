@@ -136,6 +136,7 @@ def store_status_items(store_versions_path: Path = DEFAULT_STORE_VERSIONS) -> li
             "store_url": row.get("store_url", ""),
             "version": row.get("version", ""),
             "published_at": row.get("last_updated", ""),
+            "release_notes": row.get("release_notes", ""),
             "checked_at": row.get("checked_at", ""),
             "status": row.get("status", ""),
             "notes": row.get("notes", ""),
@@ -725,6 +726,7 @@ def html_document(
         storeSummary: '현재 표시',
         currentVersion: '현재 버전',
         releasedDate: '현재 버전 게시일',
+        releaseNotes: '출시 정보',
         checkedAt: '최근 확인',
         noStore: '스토어 없음',
         noRelease: '릴리즈 후보 없음',
@@ -846,6 +848,7 @@ def html_document(
         storeSummary: 'currently shown',
         currentVersion: 'current version',
         releasedDate: 'current version published',
+        releaseNotes: 'release info',
         checkedAt: 'last checked',
         noStore: 'no store',
         noRelease: 'no release candidate',
@@ -1588,6 +1591,11 @@ def html_document(
             const checked = document.createElement('span');
             checked.textContent = `${{t('checkedAt')}}: ${{formatDate(item.checked_at)}}`;
             row.append(label, version, published, checked);
+            if (item.release_notes) {{
+              const notes = document.createElement('span');
+              notes.textContent = `${{t('releaseNotes')}}: ${{item.release_notes}}`;
+              row.appendChild(notes);
+            }}
             card.appendChild(row);
           }});
         if (!group.stores.length) {{
