@@ -17,6 +17,7 @@ class GitHubActionsTest(unittest.TestCase):
 
         self.assertIn("dry_run", workflow)
         self.assertIn("Validate", workflow)
+        self.assertIn("validate_app_release_config.py", workflow)
         self.assertIn("Generate Markdown", workflow)
         self.assertIn("Create GitHub App Releases", workflow)
         self.assertIn("Check App Store Versions", workflow)

@@ -63,6 +63,7 @@ jobs:
           set -euo pipefail
           python3 scripts/validate_topics.py
           python3 scripts/validate_apps_registry.py
+          python3 scripts/validate_app_release_config.py
           python3 scripts/validate_app_releases.py
           python3 scripts/validate_foundation.py
 

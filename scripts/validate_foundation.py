@@ -55,6 +55,7 @@ REQUIRED_PATHS = [
     "data/topics.csv",
     "scripts/validate_apps_registry.py",
     "scripts/validate_app_releases.py",
+    "scripts/validate_app_release_config.py",
     "scripts/check_store_versions.py",
     "scripts/fill_ready_app_releases.py",
     "scripts/prepare_app_release_rows.py",

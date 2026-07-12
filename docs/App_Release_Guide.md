@@ -152,6 +152,12 @@ Release artifacts are configured in:
 data/app_release_config.csv
 ```
 
+Validate it with:
+
+```text
+scripts/validate_app_release_config.py
+```
+
 Default artifact location:
 
 ```text

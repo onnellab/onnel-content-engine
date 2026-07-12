@@ -133,6 +133,12 @@ The release artifact fill stage then checks:
 data/app_release_config.csv
 ```
 
+The config is validated during the initial validation stage:
+
+```text
+scripts/validate_app_release_config.py
+```
+
 and runs:
 
 ```text
