@@ -1,0 +1,726 @@
+{
+  "type": "social_template_evaluation",
+  "average_score": 10.0,
+  "posts": [
+    {
+      "topic_id": "TOPIC-0001",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "draft",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "x_weighted_length",
+          "passed": true,
+          "points": 1.8,
+          "max_points": 1.8
+        },
+        {
+          "name": "x_compact",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0001",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x_question",
+      "status": "variant",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "x_weighted_length",
+          "passed": true,
+          "points": 1.8,
+          "max_points": 1.8
+        },
+        {
+          "name": "x_compact",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0001",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "draft",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "bluesky_length",
+          "passed": true,
+          "points": 1.8,
+          "max_points": 1.8
+        },
+        {
+          "name": "bluesky_compact",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0001",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky_question",
+      "status": "variant",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "bluesky_length",
+          "passed": true,
+          "points": 1.8,
+          "max_points": 1.8
+        },
+        {
+          "name": "bluesky_compact",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0001",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "draft",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "linkedin_cta",
+          "passed": true,
+          "points": 1.2,
+          "max_points": 1.2
+        },
+        {
+          "name": "linkedin_bullets",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "linkedin_readable_length",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0001",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin_short",
+      "status": "variant",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "linkedin_cta",
+          "passed": true,
+          "points": 1.2,
+          "max_points": 1.2
+        },
+        {
+          "name": "linkedin_bullets",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "linkedin_readable_length",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0005",
+      "platform": "x",
+      "language": "ko",
+      "template_id": "x",
+      "status": "draft",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "x_weighted_length",
+          "passed": true,
+          "points": 1.8,
+          "max_points": 1.8
+        },
+        {
+          "name": "x_compact",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0005",
+      "platform": "x",
+      "language": "ko",
+      "template_id": "x_question",
+      "status": "variant",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "x_weighted_length",
+          "passed": true,
+          "points": 1.8,
+          "max_points": 1.8
+        },
+        {
+          "name": "x_compact",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0005",
+      "platform": "bluesky",
+      "language": "ko",
+      "template_id": "bluesky",
+      "status": "draft",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "bluesky_length",
+          "passed": true,
+          "points": 1.8,
+          "max_points": 1.8
+        },
+        {
+          "name": "bluesky_compact",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0005",
+      "platform": "bluesky",
+      "language": "ko",
+      "template_id": "bluesky_question",
+      "status": "variant",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "bluesky_length",
+          "passed": true,
+          "points": 1.8,
+          "max_points": 1.8
+        },
+        {
+          "name": "bluesky_compact",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0005",
+      "platform": "linkedin",
+      "language": "ko",
+      "template_id": "linkedin",
+      "status": "draft",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "linkedin_cta",
+          "passed": true,
+          "points": 1.2,
+          "max_points": 1.2
+        },
+        {
+          "name": "linkedin_bullets",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "linkedin_readable_length",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0005",
+      "platform": "linkedin",
+      "language": "ko",
+      "template_id": "linkedin_short",
+      "status": "variant",
+      "score": 10.0,
+      "checks": [
+        {
+          "name": "canonical_url",
+          "passed": true,
+          "points": 1.5,
+          "max_points": 1.5
+        },
+        {
+          "name": "no_placeholders",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "png_card",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "template_tracked",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "approval_fields",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "metrics_fields",
+          "passed": true,
+          "points": 0.7,
+          "max_points": 0.7
+        },
+        {
+          "name": "linkedin_cta",
+          "passed": true,
+          "points": 1.2,
+          "max_points": 1.2
+        },
+        {
+          "name": "linkedin_bullets",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        },
+        {
+          "name": "linkedin_readable_length",
+          "passed": true,
+          "points": 1.0,
+          "max_points": 1.0
+        }
+      ]
+    }
+  ]
+}

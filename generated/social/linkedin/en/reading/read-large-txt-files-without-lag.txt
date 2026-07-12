@@ -1,0 +1,10 @@
+How to Read Large TXT Files Without Lag
+
+Use a reader that does not try to load and render the entire TXT file at once. Large TXT files become slow when an app treats the whole document as one visible text area.
+
+- Start by opening a copy of the file, not the only original.
+- Confirm the encoding if the text appears broken or unreadable.
+- Use a plain-text reader or editor instead of a word processor.
+
+Read the full article:
+https://onnelakin.github.io/blog/en/read-large-txt-files-without-lag/

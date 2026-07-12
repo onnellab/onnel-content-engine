@@ -14,8 +14,9 @@ from generate_all_image_specs import generate_all_image_specs
 from generate_all_image_assets import generate_all_image_assets
 from generate_all_internal_links import generate_all_internal_links
 from generate_all_markdown import generate_all_markdown
+from generate_syndication_drafts import generate_syndication_drafts
 from evaluate_all_articles import evaluate_all_articles
-from publishing import DEFAULT_HOMEPAGE_REPOSITORY_PATH, DEFAULT_SITE_URL, build_site, deploy_github_pages
+from publishing import DEFAULT_HOMEPAGE_REPOSITORY_PATH, DEFAULT_SITE_URL, build_site, deploy_github_pages, generate_social_posts
 from publish_due_articles import publish_due_articles
 from schedule_ready_articles import schedule_ready_articles
 
@@ -65,6 +66,8 @@ def run_pipeline(
             metadata_root = temp_root / "generated" / "metadata"
             review_root = temp_root / "generated" / "reviews"
             html_root = temp_root / "generated" / "html"
+            social_root = temp_root / "generated" / "social"
+            syndication_root = temp_root / "generated" / "syndication"
             generate_all_markdown(topics_path, apps_path, markdown_root, legacy_topics_path)
             generate_all_image_specs(topics_path, apps_path, images_root, legacy_topics_path)
             generate_all_image_assets(topics_path, images_root, assets_root, legacy_topics_path)
@@ -73,6 +76,8 @@ def run_pipeline(
             schedule_ready_articles(topics_path, review_root, legacy_topics_path)
             publish_due_articles(topics_path, review_root, legacy_topics_path, site_url=site_url)
             build_site(topics_path, html_root, site_url)
+            generate_social_posts(topics_path, social_root, site_url)
+            generate_syndication_drafts(topics_path, syndication_root, site_url)
             deploy_github_pages(topics_path=topics_path, homepage_repo=homepage_repo, dry_run=True)
         return
 
@@ -84,6 +89,8 @@ def run_pipeline(
     schedule_ready_articles()
     publish_due_articles(site_url=site_url)
     build_site(site_url=site_url)
+    generate_social_posts(site_url=site_url)
+    generate_syndication_drafts(site_url=site_url)
     if deploy:
         deploy_github_pages(homepage_repo=homepage_repo)
 

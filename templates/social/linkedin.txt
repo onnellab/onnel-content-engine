@@ -1,0 +1,8 @@
+{{title}}
+
+{{insight}}
+
+{{key_points}}
+
+{{cta}}
+{{url}}

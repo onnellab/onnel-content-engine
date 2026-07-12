@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">How to Read Large TXT Files Without Lag</title>
+  <desc id="desc">Learn why very large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnecessary lag.</desc>
+  <rect width="1200" height="630" fill="#f8f4ec"/>
+  <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
+  <rect x="92" y="92" width="210" height="44" rx="22" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.4"/>
+  <text x="118" y="121" fill="#24465c" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="18" font-weight="700">READING</text>
+  <text x="92" y="218" fill="#282723" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">How to Read Large TXT Files</tspan><tspan x="92" y="282">Without Lag</tspan></text>
+  <text fill="#5f5b54" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="24"><tspan x="92" y="442">Learn why very large TXT files can feel slow, what to check first, and</tspan><tspan x="92" y="476">how to choose a plain-text reading workflow that avoids unnecessary lag.</tspan></text>
+  <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
+  <text x="92" y="552" fill="#817c73" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="19">ONNELLAB Article</text>
+  <text x="1030" y="552" fill="#30302c" font-family="Pretendard, SUIT, Noto Sans KR, Inter, system-ui, sans-serif" font-size="19" font-weight="700">ONNELLAB</text>
+</svg>

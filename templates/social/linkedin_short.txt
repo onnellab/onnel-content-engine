@@ -1,0 +1,8 @@
+{{title}}
+
+{{description}}
+
+{{short_points}}
+
+{{cta}}
+{{url}}

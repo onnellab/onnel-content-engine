@@ -110,6 +110,12 @@ Do not use a temporary `/tmp` clone for homepage publishing work when this local
 
 Other ONNELLAB sites are connected from this main homepage.
 
+Brand assets and favicon rules are defined in:
+
+```text
+docs/Brand_Guide.md
+```
+
 Each public post must be published in both supported languages:
 
 * English
@@ -134,6 +140,300 @@ Possible future destinations include:
 These are distribution channels.
 
 They are not canonical sources.
+
+The publishing pipeline may generate platform-specific distribution drafts after the canonical website build.
+
+Current social draft targets:
+
+* X
+* LinkedIn
+* Bluesky
+
+Generated social drafts are stored under:
+
+```text
+generated/social/{platform}/{language}/{category}/{slug}.txt
+```
+
+Generated social approval metadata is stored at:
+
+```text
+generated/social/manifest.json
+```
+
+Each manifest item should keep operational posting fields:
+
+* `status`
+* `template_id`
+* `template_path`
+* `is_variant`
+* `approved_by`
+* `approved_at`
+* `post_id`
+* `posted_url`
+* `posted_at`
+* `last_attempt_at`
+* `error`
+* `retry_count`
+* `impressions`
+* `clicks`
+* `engagements`
+* `last_metrics_at`
+
+Generated social card assets are stored with blog assets:
+
+```text
+generated/assets/blog/{language}/{slug}/social-card.svg
+generated/assets/blog/{language}/{slug}/social-card.png
+```
+
+These drafts may be reviewed, copied manually, or passed to a later API adapter.
+
+Do not edit them as source content.
+
+If a platform API is connected later, the API layer must publish from these generated drafts, not directly from hand-written social copy.
+
+Website pages should include Open Graph and X card metadata so shared article links can render platform-native previews when supported.
+
+The Open Graph and X image URL should point to the generated PNG social card asset, not the in-article workflow diagram.
+
+Template quality is evaluated in:
+
+```text
+docs/Social_Template_Evaluation.md
+```
+
+Before API posting, validate social drafts with:
+
+```text
+scripts/validate_social_posts.py
+```
+
+Evaluate template quality with:
+
+```text
+scripts/evaluate_social_templates.py --output generated/social/evaluation.json
+```
+
+Review posting state with:
+
+```text
+scripts/social_post_report.py
+```
+
+Post approved drafts through the mock adapter with:
+
+```text
+scripts/post_social_drafts.py --adapter mock
+```
+
+Before using any non-mock adapter, check credentials with:
+
+```text
+scripts/check_publishing_credentials.py
+```
+
+Run live authentication preflight without posting:
+
+```text
+scripts/check_publishing_credentials.py --live
+```
+
+Print one consolidated dry-run report for approved social and syndication items:
+
+```text
+scripts/publishing_dry_run_report.py
+```
+
+Add `--live-credentials` to include live authentication checks in the consolidated report.
+
+Publishing adapter requirements are defined in:
+
+```text
+docs/Publishing_Credentials.md
+scripts/publishing_adapters.py
+```
+
+Preview approved drafts without changing the manifest with:
+
+```text
+scripts/post_social_drafts.py --dry-run
+```
+
+Approve individual drafts with:
+
+```text
+scripts/approve_social_post.py TOPIC-0001 x en --approved-by editor
+```
+
+Variant drafts are generated under:
+
+```text
+generated/social/variants/{template_id}/{language}/{category}/{slug}.txt
+```
+
+Variant drafts must not be approved unless the approval command is run with `--allow-variant`.
+
+Only `approved` manifest items may be posted.
+
+Items with `status: posted` must not be posted again by default.
+
+Real X, Bluesky, and LinkedIn adapters must update the same manifest fields used by the mock adapter:
+
+* `status`
+* `post_id`
+* `posted_url`
+* `posted_at`
+* `last_attempt_at`
+* `error`
+* `retry_count`
+
+Bluesky uses the same social manifest and posting flow as X and LinkedIn.
+
+The X adapter posts generated draft text to `https://api.x.com/2/tweets`:
+
+* requires `X_BEARER_TOKEN`
+* sends `Authorization: Bearer <token>`
+* keeps the canonical URL in the post text
+* relies on the canonical page Open Graph and Twitter card metadata for website card rendering
+
+Inspect the X payload without posting:
+
+```text
+scripts/post_social_drafts.py --adapter x --platform x --dry-run --verbose
+```
+
+The Bluesky adapter posts text with clickable link facets and website card embeds:
+
+* creates a session with `com.atproto.server.createSession`
+* uploads the generated 1200x630 social card PNG with `com.atproto.repo.uploadBlob`
+* posts an `app.bsky.feed.post` record with `com.atproto.repo.createRecord`
+* adds `app.bsky.richtext.facet#link` facets for URLs in the draft
+* attaches an `app.bsky.embed.external` website card using the canonical URL, draft title, draft description, and uploaded thumbnail blob
+
+Before the first real Bluesky post, run:
+
+```text
+scripts/check_bluesky_connection.py
+```
+
+To inspect the exact approved Bluesky payload without posting, run:
+
+```text
+scripts/post_social_drafts.py --adapter bluesky --platform bluesky --dry-run --verbose
+```
+
+Failed social posts may be retried only after an explicit reset:
+
+```text
+scripts/reset_failed_social_post.py TOPIC-0001 bluesky en bluesky
+```
+
+Long-form syndication platforms must stay separate from social drafts.
+
+Generated syndication drafts are stored under:
+
+```text
+generated/syndication/{platform}/{language}/{category}/{slug}.md
+```
+
+Generated syndication metadata is stored at:
+
+```text
+generated/syndication/manifest.json
+```
+
+Evaluate syndication drafts with:
+
+```text
+scripts/evaluate_syndication_drafts.py --output generated/syndication/evaluation.json
+```
+
+Dev.to real draft posting is supported:
+
+* requires `DEVTO_API_KEY`
+* sends `POST https://dev.to/api/articles`
+* uses the `api-key` request header
+* sends `published: false` from the generated Dev.to frontmatter
+* preserves the canonical URL from the manifest
+
+Inspect the Dev.to payload without posting:
+
+```text
+scripts/post_syndication_drafts.py --adapter devto --platform devto --dry-run --verbose
+```
+
+Hashnode real draft posting is supported:
+
+* requires `HASHNODE_TOKEN` and `HASHNODE_PUBLICATION_ID`
+* sends GraphQL POST requests to `https://gql.hashnode.com`
+* uses the `Authorization` request header with the Hashnode personal access token
+* creates an unpublished draft with `createDraft`
+* sends the canonical URL as `originalArticleURL`
+* sends the generated social card URL as `coverImageOptions.coverImageURL`
+* disables newsletter activation by default
+
+Inspect the Hashnode payload without posting:
+
+```text
+scripts/post_syndication_drafts.py --adapter hashnode --platform hashnode --dry-run --verbose
+```
+
+Validate syndication drafts with:
+
+```text
+scripts/validate_syndication_drafts.py
+```
+
+Review syndication posting state with:
+
+```text
+scripts/syndication_report.py
+```
+
+Approve individual syndication drafts with:
+
+```text
+scripts/approve_syndication_draft.py TOPIC-0001 devto en --approved-by editor
+```
+
+Post approved Dev.to or Hashnode drafts through the mock adapter with:
+
+```text
+scripts/post_syndication_drafts.py --adapter mock
+```
+
+Current syndication draft targets:
+
+* Dev.to
+* Hashnode
+* Medium
+
+Syndication drafts must include a canonical link back to the ONNELLAB article.
+
+Dev.to drafts should remain unpublished by default and use normalized tags.
+
+Hashnode drafts should include a `cover_image` field pointing to the generated social card PNG and a blank `publication_id` placeholder until a publication is configured.
+
+Medium is export-only by default because its public API documentation is archived and no longer recommended for new integrations.
+
+Medium drafts must remain `status: draft` unless explicitly tracked as a manual action.
+
+---
+
+# 6-1. Product Release Destinations
+
+GitHub Release is not a general educational distribution channel.
+
+It may be used only when all of the following are true:
+
+* `source_type` is `release_note`
+* a related ONNELLAB application exists
+* a version or tag is known
+* the Markdown contains a changelog or release summary section
+* the release is tied to a real repository artifact or tag
+
+Education-first articles must not be converted into GitHub Releases.
 
 ---
 
