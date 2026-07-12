@@ -182,6 +182,12 @@ The report is written to:
 generated/reports/app_releases.md
 ```
 
+Sync the report to the fixed GitHub Issue with:
+
+```text
+scripts/sync_app_release_issue.py
+```
+
 ## Repository
 
 `repository` must use `owner/name` format.

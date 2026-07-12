@@ -85,7 +85,6 @@ jobs:
           set -euo pipefail
           python3 scripts/prepare_app_release_rows.py
           python3 scripts/fill_ready_app_releases.py
-          python3 scripts/generate_app_release_report.py
           python3 scripts/validate_app_releases.py
 
       - name: Prepare App Release Candidates Dry Run
@@ -94,7 +93,6 @@ jobs:
           set -euo pipefail
           python3 scripts/prepare_app_release_rows.py --dry-run
           python3 scripts/fill_ready_app_releases.py --dry-run
-          python3 scripts/generate_app_release_report.py --output /tmp/onnel-content-engine-app-releases.md
 
       - name: Create GitHub App Releases
         if: env.DRY_RUN != 'true'
@@ -110,6 +108,32 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/create_github_releases.py --dry-run
+
+      - name: Generate App Release Report
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_app_release_report.py
+
+      - name: Generate App Release Report Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_app_release_report.py --output /tmp/onnel-content-engine-app-releases.md
+
+      - name: Sync App Release Attention Issue
+        if: env.DRY_RUN != 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 scripts/sync_app_release_issue.py
+
+      - name: Sync App Release Attention Issue Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/sync_app_release_issue.py --report /tmp/onnel-content-engine-app-releases.md --dry-run
 
       - name: Prepare Dry Run Workspace
         if: env.DRY_RUN == 'true'

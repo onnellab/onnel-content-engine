@@ -61,6 +61,7 @@ REQUIRED_PATHS = [
     "scripts/fill_ready_app_releases.py",
     "scripts/generate_app_release_report.py",
     "scripts/prepare_app_release_rows.py",
+    "scripts/sync_app_release_issue.py",
     "scripts/validate_topics.py",
     "generated/markdown/en/reading",
     "generated/markdown/en/music",

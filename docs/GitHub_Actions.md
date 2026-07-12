@@ -159,6 +159,12 @@ using:
 scripts/generate_app_release_report.py
 ```
 
+The attention issue stage then creates, updates, reopens, or closes one fixed GitHub Issue:
+
+```text
+scripts/sync_app_release_issue.py
+```
+
 For cross-repository releases, configure this secret:
 
 ```text
