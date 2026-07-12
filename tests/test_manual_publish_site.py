@@ -73,9 +73,12 @@ class ManualPublishSiteTest(unittest.TestCase):
 
             html = output.read_text(encoding="utf-8")
             self.assertIn("ONNELLAB Manual Publish", html)
+            self.assertIn("ONNELLAB 수동 게시", html)
+            self.assertIn("동기화 연결", html)
+            self.assertIn('id="lang-toggle"', html)
             self.assertIn("https://twitter.com/intent/tweet", html)
             self.assertIn("https://dev.to/new", html)
-            self.assertIn("../assets/blog/en/example/social-card.png", html)
+            self.assertIn("/blog-assets/en/example/social-card.png", html)
             self.assertIn("statePath = 'data/manual_publish_state.json'", html)
             self.assertIn("setAppBadge", html)
             self.assertIn("Enable badge", html)

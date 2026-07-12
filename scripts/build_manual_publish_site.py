@@ -80,6 +80,8 @@ def item_key(topic_id: object, platform: str, language: object, template_id: obj
 def asset_href(path_value: str) -> str:
     if not path_value:
         return ""
+    if path_value.startswith("generated/assets/blog/"):
+        return "/blog-assets/" + path_value.removeprefix("generated/assets/blog/")
     if path_value.startswith("generated/"):
         return "../" + path_value.removeprefix("generated/")
     return "../" + path_value
@@ -216,10 +218,12 @@ def html_document(items: list[dict[str, object]]) -> str:
     body {{ margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--surface); }}
     header {{ position: sticky; top: 0; z-index: 5; border-bottom: 1px solid var(--line); background: rgba(255, 250, 245, .96); backdrop-filter: blur(12px); }}
     .bar {{ max-width: 1180px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }}
-    .brand {{ display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0; }}
+    .brand {{ display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0; color: inherit; text-decoration: none; }}
     .mark {{ width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid var(--ink); background: #f5d3c7; font-size: 13px; font-weight: 900; }}
+    .header-right {{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }}
     .summary {{ display: flex; gap: 8px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }}
     .pill {{ border: 1px solid var(--line); padding: 5px 8px; background: var(--panel); }}
+    .lang {{ min-height: 29px; border-color: var(--line); background: var(--panel); color: var(--ink); padding: 5px 8px; border-radius: 999px; font-size: 12px; }}
     main {{ max-width: 1180px; margin: 0 auto; padding: 22px 20px 48px; }}
     .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) auto auto auto; gap: 8px; margin-bottom: 12px; }}
     .controls {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(4, minmax(120px, 160px)); gap: 10px; margin-bottom: 18px; }}
@@ -257,33 +261,36 @@ def html_document(items: list[dict[str, object]]) -> str:
 <body>
   <header>
     <div class="bar">
-      <div class="brand"><div class="mark">OL</div><div>ONNELLAB Manual Publish</div></div>
+      <a class="brand" href="/" aria-label="ONNELLAB home"><div class="mark">OL</div><div id="app-title">ONNELLAB 수동 게시</div></a>
+      <div class="header-right">
       <div class="summary">
-        <span class="pill">total {total}</span>
-        <span class="pill"><span id="due-count">0</span> due</span>
-        <span class="pill">manual {manual}</span>
-        <span class="pill">posted {posted}</span>
-        <span class="pill" id="sync-state">offline</span>
+        <span class="pill"><span id="label-total">전체</span> {total}</span>
+        <span class="pill"><span id="due-count">0</span> <span id="label-due">예정</span></span>
+        <span class="pill"><span id="label-manual">수동</span> {manual}</span>
+        <span class="pill"><span id="label-posted">게시됨</span> {posted}</span>
+        <span class="pill" id="sync-state">불러오는 중</span>
+      </div>
+      <button id="lang-toggle" type="button" class="lang">EN</button>
       </div>
     </div>
   </header>
   <main>
     <div class="auth">
-      <input id="token" type="password" autocomplete="off" placeholder="GitHub token for synced done state">
-      <button id="save-token" type="button">Connect sync</button>
-      <button id="refresh-state" type="button" class="secondary">Refresh</button>
-      <button id="enable-badge" type="button" class="secondary">Enable badge</button>
+      <input id="token" type="password" autocomplete="off" placeholder="완료 상태 동기화용 GitHub 토큰">
+      <button id="save-token" type="button">동기화 연결</button>
+      <button id="refresh-state" type="button" class="secondary">새로고침</button>
+      <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
     </div>
     <div class="controls">
-      <input id="search" type="search" placeholder="Search topic, platform, language, status">
-      <select id="platform"><option value="">All platforms</option></select>
-      <select id="language"><option value="">All languages</option></select>
-      <select id="status"><option value="">All statuses</option></select>
-      <select id="visibility"><option value="active">Active only</option><option value="all">Show done</option><option value="due">Due only</option></select>
+      <input id="search" type="search" placeholder="토픽, 매체, 언어, 상태 검색">
+      <select id="platform"><option value="">모든 매체</option></select>
+      <select id="language"><option value="">모든 언어</option></select>
+      <select id="status"><option value="">모든 상태</option></select>
+      <select id="visibility"><option value="active">진행 항목만</option><option value="all">완료 포함</option><option value="due">게시 예정만</option></select>
     </div>
     <div id="platform-summary" class="platforms"></div>
     <div id="grid" class="grid"></div>
-    <div id="empty" class="empty" hidden>No drafts match the current filters.</div>
+    <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
   </main>
   <script id="manual-data" type="application/json">{data}</script>
   <script>
@@ -292,6 +299,119 @@ def html_document(items: list[dict[str, object]]) -> str:
     const statePath = 'data/manual_publish_state.json';
     const stateBranch = 'main';
     const tokenKey = 'onnellab-manual-publish-token';
+    const langKey = 'onnellab-manual-publish-lang';
+    const params = new URLSearchParams(window.location.search);
+    const messages = {{
+      ko: {{
+        appTitle: 'ONNELLAB 수동 게시',
+        total: '전체',
+        due: '예정',
+        manual: '수동',
+        posted: '게시됨',
+        loading: '불러오는 중',
+        syncing: '동기화 중',
+        synced: '동기화됨',
+        viewOnly: '보기 전용',
+        syncError: '동기화 오류',
+        saveError: '저장 오류',
+        tokenPlaceholder: '완료 상태 동기화용 GitHub 토큰',
+        connectSync: '동기화 연결',
+        refresh: '새로고침',
+        enableBadge: '뱃지 켜기',
+        badgeReady: '뱃지 준비됨',
+        searchPlaceholder: '토픽, 매체, 언어, 상태 검색',
+        allPlatforms: '모든 매체',
+        allLanguages: '모든 언어',
+        allStatuses: '모든 상태',
+        activeOnly: '진행 항목만',
+        showDone: '완료 포함',
+        dueOnly: '게시 예정만',
+        empty: '현재 필터와 일치하는 초안이 없습니다.',
+        noRecord: '기록 없음',
+        none: '없음',
+        today: '오늘',
+        dayAgo: '일 전',
+        daysAgo: '일 전',
+        postedWord: '게시',
+        waitingWord: '대기',
+        failedWord: '실패',
+        lastPosted: '최근 게시',
+        lastUpdate: '최근 갱신',
+        copyMarkdown: '마크다운 복사',
+        copyPost: '게시글 복사',
+        copyAndOpen: '복사 후 열기',
+        markDone: '완료 표시',
+        undoDone: '완료 취소',
+        copyImage: '이미지 복사',
+        openImage: '이미지 열기',
+        copied: '복사됨',
+        imageCopied: '이미지 복사됨',
+        opened: '열림',
+        saving: '저장 중',
+        saveFailed: '저장 실패',
+        openImageFallback: '이미지 열기',
+        length: '길이',
+        dueAt: '게시 예정',
+        dateLocale: 'ko-KR',
+      }},
+      en: {{
+        appTitle: 'ONNELLAB Manual Publish',
+        total: 'total',
+        due: 'due',
+        manual: 'manual',
+        posted: 'posted',
+        loading: 'loading',
+        syncing: 'syncing',
+        synced: 'synced',
+        viewOnly: 'view only',
+        syncError: 'sync error',
+        saveError: 'save error',
+        tokenPlaceholder: 'GitHub token for synced done state',
+        connectSync: 'Connect sync',
+        refresh: 'Refresh',
+        enableBadge: 'Enable badge',
+        badgeReady: 'Badge ready',
+        searchPlaceholder: 'Search topic, platform, language, status',
+        allPlatforms: 'All platforms',
+        allLanguages: 'All languages',
+        allStatuses: 'All statuses',
+        activeOnly: 'Active only',
+        showDone: 'Show done',
+        dueOnly: 'Due only',
+        empty: 'No drafts match the current filters.',
+        noRecord: 'no record',
+        none: 'none',
+        today: 'today',
+        dayAgo: 'day ago',
+        daysAgo: 'days ago',
+        postedWord: 'posted',
+        waitingWord: 'waiting',
+        failedWord: 'failed',
+        lastPosted: 'last posted',
+        lastUpdate: 'last update',
+        copyMarkdown: 'Copy markdown',
+        copyPost: 'Copy post',
+        copyAndOpen: 'Copy and open',
+        markDone: 'Mark done',
+        undoDone: 'Undo done',
+        copyImage: 'Copy image',
+        openImage: 'Open image',
+        copied: 'Copied',
+        imageCopied: 'Image copied',
+        opened: 'Opened',
+        saving: 'Saving',
+        saveFailed: 'Save failed',
+        openImageFallback: 'Open image',
+        length: 'length',
+        dueAt: 'due',
+        dateLocale: 'en-US',
+      }},
+    }};
+    let currentLang = ['ko', 'en'].includes(params.get('lang') || '') ? params.get('lang') : localStorage.getItem(langKey) || 'ko';
+    if (!['ko', 'en'].includes(currentLang)) currentLang = 'ko';
+    function t(key) {{
+      return messages[currentLang][key] || messages.ko[key] || key;
+    }}
     const grid = document.getElementById('grid');
     const empty = document.getElementById('empty');
     const dueCount = document.getElementById('due-count');
@@ -305,11 +425,36 @@ def html_document(items: list[dict[str, object]]) -> str:
     }};
     const tokenInput = document.getElementById('token');
     const badgeButton = document.getElementById('enable-badge');
+    const langToggle = document.getElementById('lang-toggle');
     const platformSummary = document.getElementById('platform-summary');
     let remoteState = {{ done: {{}}, updated_at: '', version: 1 }};
     let remoteSha = '';
 
     tokenInput.value = sessionStorage.getItem(tokenKey) || '';
+
+    function applyTranslations() {{
+      document.documentElement.lang = currentLang;
+      document.title = t('appTitle');
+      document.getElementById('app-title').textContent = t('appTitle');
+      document.getElementById('label-total').textContent = t('total');
+      document.getElementById('label-due').textContent = t('due');
+      document.getElementById('label-manual').textContent = t('manual');
+      document.getElementById('label-posted').textContent = t('posted');
+      tokenInput.placeholder = t('tokenPlaceholder');
+      document.getElementById('save-token').textContent = t('connectSync');
+      document.getElementById('refresh-state').textContent = t('refresh');
+      badgeButton.textContent = t('enableBadge');
+      filters.search.placeholder = t('searchPlaceholder');
+      filters.platform.options[0].textContent = t('allPlatforms');
+      filters.language.options[0].textContent = t('allLanguages');
+      filters.status.options[0].textContent = t('allStatuses');
+      filters.visibility.options[0].textContent = t('activeOnly');
+      filters.visibility.options[1].textContent = t('showDone');
+      filters.visibility.options[2].textContent = t('dueOnly');
+      empty.textContent = t('empty');
+      langToggle.textContent = currentLang === 'ko' ? 'EN' : 'KO';
+      setSync(syncState.dataset.state || (githubToken() ? 'synced' : 'viewOnly'));
+    }}
 
     function optionize(select, values) {{
       values.forEach((value) => {{
@@ -322,13 +467,15 @@ def html_document(items: list[dict[str, object]]) -> str:
     optionize(filters.platform, [...new Set(items.map((item) => item.platform_label))].sort());
     optionize(filters.language, [...new Set(items.map((item) => item.language))].sort());
     optionize(filters.status, [...new Set(items.map((item) => item.status))].sort());
+    applyTranslations();
 
     function githubToken() {{
       return sessionStorage.getItem(tokenKey) || tokenInput.value.trim();
     }}
 
     function setSync(label) {{
-      syncState.textContent = label;
+      syncState.dataset.state = label;
+      syncState.textContent = messages[currentLang][label] || label;
     }}
 
     function decodeBase64Unicode(value) {{
@@ -346,13 +493,13 @@ def html_document(items: list[dict[str, object]]) -> str:
 
     async function githubRequest(path, options = {{}}) {{
       const token = githubToken();
-      if (!token) throw new Error('GitHub token is required for sync');
+      const authHeaders = token ? {{ 'Authorization': 'Bearer ' + token }} : {{}};
       const response = await fetch('https://api.github.com' + path, {{
         ...options,
         headers: {{
           'Accept': 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
-          'Authorization': 'Bearer ' + token,
+          ...authHeaders,
           ...(options.headers || {{}}),
         }},
       }});
@@ -369,9 +516,9 @@ def html_document(items: list[dict[str, object]]) -> str:
         remoteSha = data.sha;
         remoteState = JSON.parse(decodeBase64Unicode(data.content));
         remoteState.done ||= {{}};
-        setSync('synced');
+        setSync(githubToken() ? 'synced' : 'viewOnly');
       }} catch (error) {{
-        setSync('sync error');
+        setSync('syncError');
         console.error(error);
       }}
       render();
@@ -389,6 +536,7 @@ def html_document(items: list[dict[str, object]]) -> str:
     }}
 
     async function saveRemoteState(message) {{
+      if (!githubToken()) throw new Error('GitHub token is required to save synced state');
       remoteState.updated_at = new Date().toISOString();
       const content = encodeBase64Unicode(JSON.stringify(remoteState, null, 2) + '\\n');
       const payload = {{ message, content, branch: stateBranch }};
@@ -402,26 +550,38 @@ def html_document(items: list[dict[str, object]]) -> str:
       setSync('synced');
     }}
 
+    async function saveWithMerge(message, localDone) {{
+      try {{
+        await saveRemoteState(message);
+      }} catch (error) {{
+        if (!String(error.message || '').includes('sha')) throw error;
+        await loadRemoteState();
+        remoteState.done ||= {{}};
+        Object.assign(remoteState.done, localDone);
+        await saveRemoteState(message + ' after sync refresh');
+      }}
+    }}
+
     async function copyText(text, button) {{
       await navigator.clipboard.writeText(text);
-      flash(button, 'Copied');
+      flash(button, t('copied'));
     }}
 
     async function copyImage(src, button) {{
       if (!src || !window.ClipboardItem) {{
-        flash(button, 'Open image');
+        flash(button, t('openImageFallback'));
         return;
       }}
       const response = await fetch(src);
       const blob = await response.blob();
       await navigator.clipboard.write([new ClipboardItem({{ [blob.type]: blob }})]);
-      flash(button, 'Image copied');
+      flash(button, t('imageCopied'));
     }}
 
     async function copyThenOpen(item, button) {{
       await navigator.clipboard.writeText(item.text);
       window.open(item.open_url, '_blank', 'noopener,noreferrer');
-      flash(button, 'Opened');
+      flash(button, t('opened'));
     }}
 
     function flash(button, label) {{
@@ -436,22 +596,37 @@ def html_document(items: list[dict[str, object]]) -> str:
 
     async function markDone(item, button) {{
       remoteState.done ||= {{}};
-      remoteState.done[item.manual_key] = {{
+      const localDone = {{
+        [item.manual_key]: {{
         topic_id: item.topic_id,
         platform: item.platform,
         language: item.language,
         template_id: item.template_id,
         marked_at: new Date().toISOString(),
+        }}
       }};
-      flash(button, 'Saving');
-      await saveRemoteState('Mark manual publish item done');
+      Object.assign(remoteState.done, localDone);
+      try {{
+        flash(button, t('saving'));
+        await saveWithMerge('Mark manual publish item done', localDone);
+      }} catch (error) {{
+        flash(button, t('saveFailed'));
+        setSync('saveError');
+        console.error(error);
+      }}
       render();
     }}
 
     async function undoDone(item, button) {{
       if (remoteState.done) delete remoteState.done[item.manual_key];
-      flash(button, 'Saving');
-      await saveRemoteState('Undo manual publish item done');
+      try {{
+        flash(button, t('saving'));
+        await saveRemoteState('Undo manual publish item done');
+      }} catch (error) {{
+        flash(button, t('saveFailed'));
+        setSync('saveError');
+        console.error(error);
+      }}
       render();
     }}
 
@@ -471,7 +646,7 @@ def html_document(items: list[dict[str, object]]) -> str:
     function formatDue(item) {{
       const date = dueDate(item);
       if (!date) return '';
-      return new Intl.DateTimeFormat('ko-KR', {{ dateStyle: 'medium', timeStyle: 'short' }}).format(date);
+      return new Intl.DateTimeFormat(t('dateLocale'), {{ dateStyle: 'medium', timeStyle: 'short' }}).format(date);
     }}
 
     function parseDate(value) {{
@@ -482,15 +657,17 @@ def html_document(items: list[dict[str, object]]) -> str:
 
     function formatDate(value) {{
       const date = parseDate(value);
-      if (!date) return 'none';
-      return new Intl.DateTimeFormat('ko-KR', {{ dateStyle: 'medium', timeStyle: 'short' }}).format(date);
+      if (!date) return t('none');
+      return new Intl.DateTimeFormat(t('dateLocale'), {{ dateStyle: 'medium', timeStyle: 'short' }}).format(date);
     }}
 
     function daysAgo(value) {{
       const date = parseDate(value);
-      if (!date) return 'no record';
+      if (!date) return t('noRecord');
       const days = Math.max(0, Math.floor((Date.now() - date.getTime()) / 86400000));
-      return days === 0 ? 'today' : `${{days}} day${{days === 1 ? '' : 's'}} ago`;
+      if (days === 0) return t('today');
+      if (currentLang === 'ko') return `${{days}}${{t('dayAgo')}}`;
+      return `${{days}} ${{days === 1 ? t('dayAgo') : t('daysAgo')}}`;
     }}
 
     function latestDate(values) {{
@@ -512,11 +689,11 @@ def html_document(items: list[dict[str, object]]) -> str:
         const title = document.createElement('strong');
         title.textContent = label;
         const status = document.createElement('span');
-        status.textContent = `${{posted.length}} posted / ${{drafts.length}} waiting / ${{failed.length}} failed`;
+        status.textContent = `${{posted.length}} ${{t('postedWord')}} / ${{drafts.length}} ${{t('waitingWord')}} / ${{failed.length}} ${{t('failedWord')}}`;
         const postedLine = document.createElement('span');
-        postedLine.textContent = 'last posted: ' + (latestPosted ? `${{formatDate(latestPosted.toISOString())}} (${{daysAgo(latestPosted.toISOString())}})` : 'none');
+        postedLine.textContent = t('lastPosted') + ': ' + (latestPosted ? `${{formatDate(latestPosted.toISOString())}} (${{daysAgo(latestPosted.toISOString())}})` : t('none'));
         const attemptLine = document.createElement('span');
-        attemptLine.textContent = 'last update: ' + (latestAttempt ? `${{formatDate(latestAttempt.toISOString())}} (${{daysAgo(latestAttempt.toISOString())}})` : 'none');
+        attemptLine.textContent = t('lastUpdate') + ': ' + (latestAttempt ? `${{formatDate(latestAttempt.toISOString())}} (${{daysAgo(latestAttempt.toISOString())}})` : t('none'));
         card.append(title, status, postedLine, attemptLine);
         platformSummary.appendChild(card);
       }});
@@ -589,24 +766,24 @@ def html_document(items: list[dict[str, object]]) -> str:
       const actions = document.createElement('div');
       actions.className = 'actions';
       const copy = document.createElement('button');
-      copy.textContent = item.kind === 'syndication' ? 'Copy markdown' : 'Copy post';
+      copy.textContent = item.kind === 'syndication' ? t('copyMarkdown') : t('copyPost');
       copy.onclick = () => copyText(textarea.value, copy);
       const open = document.createElement('button');
-      open.textContent = 'Copy and open';
+      open.textContent = t('copyAndOpen');
       open.onclick = () => copyThenOpen({{ ...item, text: textarea.value }}, open);
       const doneButton = document.createElement('button');
       doneButton.className = 'secondary';
-      doneButton.textContent = isDone(item) ? 'Undo done' : 'Mark done';
+      doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
       doneButton.onclick = () => isDone(item) ? undoDone(item, doneButton) : markDone(item, doneButton);
       actions.append(copy, open, doneButton);
       if (item.card_asset_href) {{
         const copyImg = document.createElement('button');
         copyImg.className = 'secondary';
-        copyImg.textContent = 'Copy image';
+        copyImg.textContent = t('copyImage');
         copyImg.onclick = () => copyImage(item.card_asset_href, copyImg);
         const openImg = document.createElement('a');
         openImg.className = 'button secondary';
-        openImg.textContent = 'Open image';
+        openImg.textContent = t('openImage');
         openImg.href = item.card_asset_href;
         openImg.target = '_blank';
         openImg.rel = 'noopener noreferrer';
@@ -614,7 +791,7 @@ def html_document(items: list[dict[str, object]]) -> str:
       }}
       const note = document.createElement('div');
       note.className = 'note';
-      note.textContent = item.draft_path + ' / length ' + item.length + (item.due_at ? ' / due ' + formatDue(item) : '');
+      note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '');
       body.append(meta, title, textarea, actions, note);
       if (item.error) {{
         const error = document.createElement('div');
@@ -636,11 +813,17 @@ def html_document(items: list[dict[str, object]]) -> str:
         await Notification.requestPermission();
       }}
       await updateAppBadge();
-      flash(badgeButton, 'Badge ready');
+      flash(badgeButton, t('badgeReady'));
+    }};
+    langToggle.onclick = () => {{
+      currentLang = currentLang === 'ko' ? 'en' : 'ko';
+      localStorage.setItem(langKey, currentLang);
+      applyTranslations();
+      render();
     }};
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.warn);
     Object.values(filters).forEach((input) => input.addEventListener('input', render));
-    if (tokenInput.value) loadRemoteState(); else render();
+    loadRemoteState();
   </script>
 </body>
 </html>
