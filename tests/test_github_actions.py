@@ -19,7 +19,8 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Validate", workflow)
         self.assertIn("validate_app_release_config.py", workflow)
         self.assertIn("validate_android_store_versions.py", workflow)
-        self.assertIn("sync_android_versions_from_repos.py --dry-run", workflow)
+        validate_block = workflow.split("- name: Validate", 1)[1].split("- name: Check App Store Versions", 1)[0]
+        self.assertNotIn("sync_android_versions_from_repos.py --dry-run", validate_block)
         self.assertIn("Generate Markdown", workflow)
         self.assertIn("Create GitHub App Releases", workflow)
         self.assertIn("Check App Store Versions", workflow)
