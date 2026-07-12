@@ -765,7 +765,7 @@ def html_document(
     let showVariants = false;
     let currentView = 'due';
 
-    tokenInput.value = sessionStorage.getItem(tokenKey) || '';
+    tokenInput.value = localStorage.getItem(tokenKey) || '';
 
     function applyTranslations() {{
       document.documentElement.lang = currentLang;
@@ -846,7 +846,7 @@ def html_document(
     applyTranslations();
 
     function githubToken() {{
-      return sessionStorage.getItem(tokenKey) || tokenInput.value.trim();
+      return localStorage.getItem(tokenKey) || tokenInput.value.trim();
     }}
 
     function setSync(label) {{
@@ -1454,7 +1454,7 @@ def html_document(
     }}
 
     document.getElementById('save-token').onclick = async () => {{
-      sessionStorage.setItem(tokenKey, tokenInput.value.trim());
+      localStorage.setItem(tokenKey, tokenInput.value.trim());
       await loadRemoteState();
     }};
     document.getElementById('refresh-state').onclick = loadRemoteState;
