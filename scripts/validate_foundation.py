@@ -55,6 +55,7 @@ REQUIRED_PATHS = [
     "scripts/validate_apps_registry.py",
     "scripts/validate_app_releases.py",
     "scripts/check_store_versions.py",
+    "scripts/prepare_app_release_rows.py",
     "scripts/validate_topics.py",
     "generated/markdown/en/reading",
     "generated/markdown/en/music",

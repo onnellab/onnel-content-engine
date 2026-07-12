@@ -138,6 +138,14 @@ The script records App Store version metadata from the public lookup endpoint. G
 
 Use the snapshot as a signal. Create a GitHub Release row only when the new public release artifact is available and the change notes can be tied to that artifact.
 
+Release candidate rows can be prepared from updated store snapshots:
+
+```text
+scripts/prepare_app_release_rows.py
+```
+
+The generated rows use `status=planned`. They do not upload anything until `artifact_path`, `checksum_sha256`, and any final release notes are filled and the row is changed to `status=ready`.
+
 ## Repository
 
 `repository` must use `owner/name` format.

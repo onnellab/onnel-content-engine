@@ -66,6 +66,31 @@ jobs:
           python3 scripts/validate_app_releases.py
           python3 scripts/validate_foundation.py
 
+      - name: Check App Store Versions
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/check_store_versions.py
+
+      - name: Check App Store Versions Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/check_store_versions.py --dry-run
+
+      - name: Prepare App Release Candidates
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_app_release_rows.py
+          python3 scripts/validate_app_releases.py
+
+      - name: Prepare App Release Candidates Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_app_release_rows.py --dry-run
+
       - name: Create GitHub App Releases
         if: env.DRY_RUN != 'true'
         env:
@@ -80,18 +105,6 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/create_github_releases.py --dry-run
-
-      - name: Check App Store Versions
-        if: env.DRY_RUN != 'true'
-        run: |
-          set -euo pipefail
-          python3 scripts/check_store_versions.py
-
-      - name: Check App Store Versions Dry Run
-        if: env.DRY_RUN == 'true'
-        run: |
-          set -euo pipefail
-          python3 scripts/check_store_versions.py --dry-run
 
       - name: Prepare Dry Run Workspace
         if: env.DRY_RUN == 'true'

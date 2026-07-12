@@ -83,7 +83,8 @@ class AppReleaseTest(unittest.TestCase):
                         "platform": "android",
                         "build_type": "release",
                         "artifact_path": "build/app-debug.apk",
-                        "status": "planned",
+                        "checksum_sha256": "0" * 64,
+                        "status": "ready",
                     }
                 ),
                 encoding="utf-8",

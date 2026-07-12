@@ -119,6 +119,14 @@ data/store_versions.csv
 
 App Store rows can be marked `new`, `unchanged`, or `updated`. Google Play rows are recorded as `manual_check` with the package ID because this workflow does not use Play Store scraping as a release source of truth.
 
+Updated store snapshots are then converted into planned release candidates:
+
+```text
+scripts/prepare_app_release_rows.py
+```
+
+Candidate rows are committed as `planned` rows in `data/app_releases.csv`. They do not create GitHub Releases until a real release artifact and checksum are added and the row is marked `ready`.
+
 For cross-repository releases, configure this secret:
 
 ```text

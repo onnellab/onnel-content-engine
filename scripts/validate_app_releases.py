@@ -42,7 +42,7 @@ BUILD_TYPES = {"release"}
 PLATFORMS = {"ios", "android", "windows", "macos", "linux", "web"}
 BLOCKED_ARTIFACT_MARKERS = ("debug", "dev", "internal", "test")
 REPOSITORY_RE = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
-TAG_RE = re.compile(r"^v?\d+\.\d+\.\d+([-.+][0-9A-Za-z.-]+)?$")
+TAG_RE = re.compile(r"^v?\d+\.\d+(?:\.\d+)?([-.+][0-9A-Za-z.-]+)?$")
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
@@ -87,13 +87,13 @@ def validate_release(row: dict[str, str], apps: dict[str, dict[str, str]], seen:
     if key in seen:
         raise AppReleaseValidationError(f"{release_id} duplicates repository/tag: {row['repository']} {row['tag']}")
     seen.add(key)
-    artifact = row["artifact_path"].strip()
-    if not artifact:
-        raise AppReleaseValidationError(f"{release_id} artifact_path is required")
-    artifact_lower = Path(artifact).name.lower()
-    if any(marker in artifact_lower for marker in BLOCKED_ARTIFACT_MARKERS):
-        raise AppReleaseValidationError(f"{release_id} artifact_path looks like a non-release build")
     if row["status"] in {"ready", "released"}:
+        artifact = row["artifact_path"].strip()
+        if not artifact:
+            raise AppReleaseValidationError(f"{release_id} artifact_path is required when status is {row['status']}")
+        artifact_lower = Path(artifact).name.lower()
+        if any(marker in artifact_lower for marker in BLOCKED_ARTIFACT_MARKERS):
+            raise AppReleaseValidationError(f"{release_id} artifact_path looks like a non-release build")
         artifact_path = ROOT / artifact
         if not artifact_path.exists():
             raise AppReleaseValidationError(f"{release_id} artifact does not exist: {artifact}")
