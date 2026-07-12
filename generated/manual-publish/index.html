@@ -53,7 +53,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .metric-card.is-active { border-color: var(--blue); outline: 2px solid rgba(46,111,187,.16); }
     .metric-card:disabled { cursor: default; opacity: .72; transform: none; }
-    .atm-action { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 320px); gap: 14px; align-items: center; border: 2px solid var(--ink); background: #fff; border-radius: 8px; padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow); }
+    .atm-action { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 320px); gap: 14px; align-items: center; border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 16px; margin-bottom: 14px; box-shadow: var(--shadow); }
     .atm-action h1 { margin: 0 0 6px; font-size: 24px; line-height: 1.2; }
     .atm-action p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
     .atm-note { margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.45; }
@@ -69,11 +69,12 @@
     .quick-row { display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }
     .auth { display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, auto); gap: 8px; margin-top: 12px; }
     details.advanced { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
-    details.advanced summary { cursor: pointer; color: var(--ink); font-weight: 800; min-height: 38px; display: flex; align-items: center; }
+    details.advanced summary { cursor: pointer; color: var(--ink); font-weight: 800; min-height: 38px; display: inline-flex; align-items: center; gap: 8px; width: fit-content; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 7px 12px; }
     .controls { display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(116px, 150px)); gap: 10px; margin-top: 8px; }
     .secondary-controls { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
     .platform-status { margin-top: 18px; }
-    .platform-status summary { cursor: pointer; font-weight: 900; font-size: 16px; min-height: 44px; display: flex; align-items: center; }
+    .platform-status summary { cursor: pointer; font-weight: 900; font-size: 16px; min-height: 40px; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; width: fit-content; max-width: 100%; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 8px 12px; }
+    .platform-status-summary { color: var(--muted); font-size: 12px; font-weight: 700; }
     .platforms { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 8px 0 0; }
     .platform-card { border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }
     .platform-card strong { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; margin-bottom: 8px; }
@@ -82,7 +83,10 @@
     .tag.mode-automatic { color: var(--ok); background: var(--ok-soft); border-color: #b7d9c5; font-weight: 800; }
     .platform-card > span { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
     .status-section { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }
-    .status-section summary { cursor: pointer; font-weight: 900; font-size: 16px; min-height: 44px; display: flex; align-items: center; }
+    .status-section summary { cursor: pointer; font-weight: 900; font-size: 16px; min-height: 40px; display: inline-flex; align-items: center; gap: 8px; width: fit-content; max-width: 100%; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 8px 12px; }
+    details.advanced summary:hover,
+    .platform-status summary:hover,
+    .status-section summary:hover { border-color: var(--blue); background: var(--blue-soft); }
     .release-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
     .release-head h2 { margin: 0; font-size: 18px; }
     .release-head h3 { margin: 0; font-size: 16px; }
@@ -165,7 +169,11 @@
     }
     @media (max-width: 520px) {
       main { padding: 16px 12px 40px; }
-      .overview { grid-template-columns: 1fr; gap: 8px; }
+      .overview { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
+      .metric-card { min-height: 58px; padding: 9px; }
+      .metric-card span { font-size: 11px; line-height: 1.15; }
+      .metric-card strong { font-size: 22px; }
+      .metric-card strong > span:not(.state-subtext) { font-size: 22px; }
       .grid { grid-template-columns: 1fr; }
       .auth { grid-template-columns: 1fr 1fr; }
       .auth input { grid-column: 1 / -1; }
@@ -228,7 +236,7 @@
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
     <details class="platform-status" aria-label="Platform status">
-      <summary id="platform-status-title">매체별 상태</summary>
+      <summary><span id="platform-status-title">매체별 상태</span><span id="platform-status-summary" class="platform-status-summary"></span></summary>
       <div id="platform-summary" class="platforms"></div>
     </details>
     <details class="status-section" aria-label="Website asset status">
@@ -538,6 +546,7 @@
     const variantToggle = document.getElementById('toggle-variants');
     const viewButtons = document.querySelectorAll('[data-view]');
     const platformSummary = document.getElementById('platform-summary');
+    const platformStatusSummary = document.getElementById('platform-status-summary');
     const appStatusGrid = document.getElementById('app-status-grid');
     const appStatusSummary = document.getElementById('app-status-summary');
     const siteStatusGrid = document.getElementById('site-status-grid');
@@ -1010,6 +1019,7 @@
         acc[item.status] = (acc[item.status] || 0) + 1;
         return acc;
       }, {});
+      const platformSummaryParts = [`${t('blogPlatformName')} ${blogItems.length}`];
       const latestPublished = latestDate(blogItems.map((item) => item.published_at));
       const nextScheduled = blogItems
         .filter((item) => item.status === 'scheduled' && item.scheduled_at)
@@ -1037,9 +1047,10 @@
       const platforms = [...new Set(items.map((item) => item.platform_label))].sort();
       platforms.forEach((label) => {
         const rows = items.filter((item) => item.platform_label === label && !item.is_variant);
-        const posted = rows.filter((item) => item.status === 'posted');
-        const failed = rows.filter((item) => item.status === 'failed');
-        const drafts = rows.filter((item) => ['draft', 'approved'].includes(item.status));
+        platformSummaryParts.push(`${label} ${rows.length}`);
+        const posted = rows.filter((item) => isDone(item));
+        const failed = rows.filter((item) => !isDone(item) && item.status === 'failed');
+        const drafts = rows.filter((item) => !isDone(item) && ['draft', 'approved'].includes(item.status));
         const latestPosted = latestDate(posted.map((item) => item.posted_at));
         const latestAttempt = latestDate(rows.map((item) => item.last_attempt_at || item.approved_at || item.posted_at));
         const nextDue = rows
@@ -1067,6 +1078,7 @@
         card.append(title, status, postedLine, nextLine, attemptLine);
         platformSummary.appendChild(card);
       });
+      platformStatusSummary.textContent = platformSummaryParts.length ? platformSummaryParts.join(' / ') : '';
     }
 
     function renderSiteStatusSummary() {
