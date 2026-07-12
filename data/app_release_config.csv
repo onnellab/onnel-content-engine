@@ -1,7 +1,7 @@
 app_id,app_slug,repository,artifact_pattern,notes
 APP-0001,quivra,onnellab/quivra,generated/releases/quivra/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
 APP-0002,tagweaver,onnellab/tagweaver,generated/releases/tagweaver/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
-APP-0003,vaultxt,onnellab/vaultxt,generated/releases/vaultxt/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
+APP-0003,vaultxt,onnellab/onnellab-text,generated/releases/vaultxt/{version}/{platform}/*-release.*,VaultXT lives in the shared onnellab-text repository.
 APP-0004,segra,onnellab/segra,generated/releases/segra/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
 APP-0005,clipnest,onnellab/clipnest,generated/releases/clipnest/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
 APP-0006,aligna,onnellab/aligna,generated/releases/aligna/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.

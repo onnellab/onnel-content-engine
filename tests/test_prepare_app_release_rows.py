@@ -80,7 +80,7 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
             self.assertEqual(len(additions), 1)
             row = additions[0]
             self.assertEqual(row["release_id"], "REL-0001")
-            self.assertEqual(row["repository"], "onnellab/vaultxt")
+            self.assertEqual(row["repository"], "onnellab/onnellab-text")
             self.assertEqual(row["tag"], "v1.2.3")
             self.assertEqual(row["status"], "planned")
             self.assertEqual(row["artifact_path"], "")
@@ -138,7 +138,7 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
                     "app_id": "APP-0003",
                     "app_slug": "vaultxt",
                     "app_name": "VaultXT",
-                    "repository": "onnellab/vaultxt",
+                    "repository": "onnellab/onnellab-text",
                     "tag": "v1.2.3",
                     "version": "1.2.3",
                     "platform": "ios",
@@ -170,7 +170,7 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
                     "app_id": "APP-0003",
                     "app_slug": "vaultxt",
                     "app_name": "VaultXT",
-                    "repository": "onnellab/vaultxt",
+                    "repository": "onnellab/onnellab-text",
                     "tag": "v1.2.3",
                     "version": "1.2.3",
                     "platform": "android",
