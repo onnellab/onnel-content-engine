@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fill planned app release rows from local release artifacts."""
+"""Fill planned app release rows from release artifacts and publication approvals."""
 
 from __future__ import annotations
 
@@ -15,6 +15,8 @@ from validate_app_releases import RELEASE_HEADER, RELEASES_PATH, ROOT, validate_
 
 
 BLOCKED_ARTIFACT_MARKERS = ("debug", "dev", "internal", "test")
+PUBLICATIONS_PATH = ROOT / "data" / "app_release_publications.csv"
+PUBLICATION_HEADER = ["release_id", "public_release", "approved_at", "notes"]
 
 
 class FillReadyReleaseError(ValueError):
@@ -30,6 +32,24 @@ def write_releases(path: Path, rows: list[dict[str, str]]) -> None:
 
 def release_config(path: Path) -> dict[str, dict[str, str]]:
     return {row["app_id"]: row for row in read_csv(path, CONFIG_HEADER)}
+
+
+def publication_approvals(path: Path) -> dict[str, dict[str, str]]:
+    if not path.exists():
+        return {}
+    return {row["release_id"]: row for row in read_csv(path, PUBLICATION_HEADER)}
+
+
+def is_public_approved(release_id: str, approvals: dict[str, dict[str, str]]) -> bool:
+    row = approvals.get(release_id)
+    return bool(row and row["public_release"].lower() == "true")
+
+
+def append_note(row: dict[str, str], note: str) -> None:
+    notes = row["notes"].strip()
+    if note in notes:
+        return
+    row["notes"] = f"{notes} {note}".strip()
 
 
 def format_artifact_pattern(pattern: str, row: dict[str, str]) -> str:
@@ -68,15 +88,26 @@ def relative(path: Path) -> str:
 def fill_ready_app_releases(
     releases_path: Path = RELEASES_PATH,
     config_path: Path = CONFIG_PATH,
+    publications_path: Path = PUBLICATIONS_PATH,
     dry_run: bool = False,
 ) -> list[dict[str, str]]:
     rows = read_csv(releases_path, RELEASE_HEADER)
     config = release_config(config_path)
-    promoted: list[dict[str, str]] = []
+    approvals = publication_approvals(publications_path)
+    updated: list[dict[str, str]] = []
 
     for row in rows:
-        if row["status"] != "planned" or row["artifact_path"] or row["checksum_sha256"]:
+        if row["status"] != "planned":
             continue
+        approved = is_public_approved(row["release_id"], approvals)
+        if row["artifact_path"] and row["checksum_sha256"]:
+            if approved:
+                row["status"] = "ready"
+                append_note(row, "Public release approved.")
+                updated.append(dict(row))
+            continue
+        if row["artifact_path"] or row["checksum_sha256"]:
+            raise FillReadyReleaseError(f"{row['release_id']} artifact_path and checksum_sha256 must be filled together")
         cfg = config.get(row["app_id"])
         if not cfg:
             continue
@@ -90,30 +121,35 @@ def fill_ready_app_releases(
         safe_artifact(artifact, row["release_id"])
         row["artifact_path"] = relative(artifact)
         row["checksum_sha256"] = checksum(artifact)
-        row["status"] = "ready"
-        row["notes"] = (row["notes"] + " Artifact and checksum filled automatically.").strip()
-        promoted.append(dict(row))
+        append_note(row, "Artifact and checksum filled automatically.")
+        if approved:
+            row["status"] = "ready"
+            append_note(row, "Public release approved.")
+        else:
+            append_note(row, "Kept planned until public release is approved.")
+        updated.append(dict(row))
 
-    if promoted and not dry_run:
+    if updated and not dry_run:
         write_releases(releases_path, rows)
         validate_app_releases(releases_path)
-    return promoted
+    return updated
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Promote planned app release rows when release artifacts are present")
+    parser = argparse.ArgumentParser(description="Fill app release artifacts and promote only public-approved rows")
     parser.add_argument("--releases", type=Path, default=RELEASES_PATH)
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
+    parser.add_argument("--publications", type=Path, default=PUBLICATIONS_PATH)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     try:
-        promoted = fill_ready_app_releases(args.releases, args.config, args.dry_run)
+        updated = fill_ready_app_releases(args.releases, args.config, args.publications, args.dry_run)
     except (FillReadyReleaseError, OSError) as error:
         print(f"fill ready app releases failed: {error}", file=sys.stderr)
         return 1
-    action = "would promote" if args.dry_run else "promoted"
-    print(f"{action} {len(promoted)} app release row(s)")
-    for row in promoted:
+    action = "would update" if args.dry_run else "updated"
+    print(f"{action} {len(updated)} app release row(s)")
+    for row in updated:
         print(f"{row['release_id']} {row['app_slug']} {row['platform']} {row['tag']} {row['artifact_path']}")
     return 0
 

@@ -177,7 +177,7 @@ and runs:
 scripts/fill_ready_app_releases.py
 ```
 
-It promotes a planned row to `ready` only when exactly one matching `*-release.*` artifact exists.
+It fills artifact metadata only when exactly one matching `*-release.*` artifact exists. It promotes a planned row to `ready` only when the release ID is also approved in `data/app_release_publications.csv` with `public_release=true`, so private TestFlight or Play Console test builds do not become posts or GitHub Releases just because a file exists.
 
 Before that, local artifacts are copied into `generated/releases/` when available:
 
@@ -186,6 +186,14 @@ scripts/collect_release_artifacts.py
 ```
 
 iOS artifacts are expected from Codemagic in the current release flow, so local collection normally skips iOS rows.
+
+Codemagic artifact URLs from `data/codemagic_artifacts.csv` are downloaded with:
+
+```text
+scripts/download_codemagic_artifacts.py
+```
+
+The script uses `CODEMAGIC_API_TOKEN` when not running in dry-run mode.
 
 The release report stage then writes:
 

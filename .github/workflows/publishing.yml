@@ -83,10 +83,13 @@ jobs:
 
       - name: Prepare App Release Candidates
         if: env.DRY_RUN != 'true'
+        env:
+          CODEMAGIC_API_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
         run: |
           set -euo pipefail
           python3 scripts/prepare_app_release_rows.py
           python3 scripts/collect_release_artifacts.py
+          python3 scripts/download_codemagic_artifacts.py
           python3 scripts/fill_ready_app_releases.py
           python3 scripts/validate_app_releases.py
 
@@ -96,6 +99,7 @@ jobs:
           set -euo pipefail
           python3 scripts/prepare_app_release_rows.py --dry-run
           python3 scripts/collect_release_artifacts.py --dry-run
+          python3 scripts/download_codemagic_artifacts.py --dry-run
           python3 scripts/fill_ready_app_releases.py --dry-run
 
       - name: Create GitHub App Releases

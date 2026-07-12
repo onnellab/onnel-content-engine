@@ -67,6 +67,8 @@ def next_action(row: dict[str, str], comparison: str) -> str:
 def release_action(row: dict[str, str]) -> str:
     status = row["status"]
     if status == "planned":
+        if row.get("artifact_path") and row.get("checksum_sha256"):
+            return "Approve public release or keep as private test"
         return "Add release artifact and checksum"
     if status == "ready":
         return "GitHub Release can be created"

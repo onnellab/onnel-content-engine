@@ -92,6 +92,8 @@ archived
 
 Only `ready` rows are eligible for GitHub Release automation.
 
+Do not use artifact existence as a publishing decision. A release file may be a private TestFlight, Play Console internal test, or another non-public build. The automation can collect and checksum those files, but it must not mark a row `ready` until the public release is explicitly approved.
+
 Run a safe preview with:
 
 ```text
@@ -176,7 +178,7 @@ Release candidate rows can be prepared from updated store snapshots:
 scripts/prepare_app_release_rows.py
 ```
 
-The generated rows use `status=planned`. They do not upload anything until `artifact_path`, `checksum_sha256`, and any final release notes are filled and the row is changed to `status=ready`.
+The generated rows use `status=planned`. They do not upload anything until `artifact_path`, `checksum_sha256`, final release notes, and public release approval are present.
 
 Release artifacts are configured in:
 
@@ -196,7 +198,15 @@ Default artifact location:
 generated/releases/{app_slug}/{version}/{platform}/*-release.*
 ```
 
-When exactly one matching release artifact exists, this command fills `artifact_path`, calculates `checksum_sha256`, and promotes the row to `status=ready`:
+Publication approvals are recorded in:
+
+```text
+data/app_release_publications.csv
+```
+
+Use `public_release=true` only after the build is meant to be public, not just available as a private test artifact.
+
+When exactly one matching release artifact exists, this command fills `artifact_path` and calculates `checksum_sha256`. It promotes the row to `status=ready` only when `data/app_release_publications.csv` approves that release ID:
 
 ```text
 scripts/fill_ready_app_releases.py
@@ -209,6 +219,18 @@ scripts/collect_release_artifacts.py
 ```
 
 iOS release artifacts are produced by Codemagic for the current workflow, so iOS planned rows remain in `planned` until an `.ipa` is provided or copied into the configured artifact path.
+
+Codemagic artifact URLs can be recorded in:
+
+```text
+data/codemagic_artifacts.csv
+```
+
+Download recorded Codemagic artifacts with:
+
+```text
+CODEMAGIC_API_TOKEN=... scripts/download_codemagic_artifacts.py
+```
 
 Generate the release status report with:
 
