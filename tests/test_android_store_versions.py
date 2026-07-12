@@ -36,7 +36,7 @@ def valid_row() -> dict[str, str]:
 
 class AndroidStoreVersionsTest(unittest.TestCase):
     def test_current_android_store_versions_file_is_valid(self) -> None:
-        self.assertEqual(validate_android_store_versions(ANDROID_VERSIONS_PATH), 0)
+        self.assertEqual(validate_android_store_versions(ANDROID_VERSIONS_PATH), 5)
 
     def test_valid_android_row_passes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

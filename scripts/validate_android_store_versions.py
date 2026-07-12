@@ -13,7 +13,7 @@ from validate_apps_registry import APP_HEADER, APPS_PATH
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION_RE = re.compile(r"^\d+\.\d+(?:\.\d+)?([-.+][0-9A-Za-z.-]+)?$")
-SOURCES = {"play_console_export", "manual_entry"}
+SOURCES = {"play_console_export", "manual_entry", "local_build_metadata"}
 
 
 class AndroidStoreVersionError(ValueError):

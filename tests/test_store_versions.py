@@ -97,6 +97,7 @@ class StoreVersionsTest(unittest.TestCase):
                 rows = check_store_versions(
                     apps,
                     output,
+                    Path(temp) / "missing_android_store_versions.csv",
                     now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
                 )
 
@@ -121,6 +122,7 @@ class StoreVersionsTest(unittest.TestCase):
                 rows = check_store_versions(
                     apps,
                     output,
+                    Path(temp) / "missing_android_store_versions.csv",
                     dry_run=True,
                     now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
                 )

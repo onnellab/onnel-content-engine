@@ -131,6 +131,14 @@ and are validated by:
 scripts/validate_android_store_versions.py
 ```
 
+Play Console style CSV exports can be converted locally with:
+
+```text
+scripts/import_android_store_versions.py path/to/play-console-export.csv
+```
+
+Rows using `local_build_metadata` come from app repository build files and should be checked against Play Console when exact store rollout state matters.
+
 Updated store snapshots are then converted into planned release candidates:
 
 ```text

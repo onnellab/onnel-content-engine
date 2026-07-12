@@ -146,6 +146,14 @@ Validate Android source data with:
 scripts/validate_android_store_versions.py
 ```
 
+Supported Android source values are `play_console_export`, `manual_entry`, and `local_build_metadata`.
+
+Import a Play Console style CSV export with:
+
+```text
+scripts/import_android_store_versions.py path/to/play-console-export.csv
+```
+
 Google Play package URLs are recorded as `manual_check` only when no Android source row exists, because this automation does not depend on an unstable public Play Store scraping path.
 
 Use the snapshot as a signal. Create a GitHub Release row only when the new public release artifact is available and the change notes can be tied to that artifact.
