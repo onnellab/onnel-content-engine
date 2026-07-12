@@ -567,6 +567,8 @@ def html_document(
         undoDone: '완료 취소',
         copyImage: '이미지 복사',
         openImage: '이미지 열기',
+        linkCardOnly: '링크 카드 사용',
+        noImageAttach: '이미지 첨부 없이 링크 카드로 게시',
         showDetails: '본문 보기',
         hideDetails: '본문 숨기기',
         overviewDue: '오늘 할 일',
@@ -655,6 +657,8 @@ def html_document(
         undoDone: 'Undo done',
         copyImage: 'Copy image',
         openImage: 'Open image',
+        linkCardOnly: 'Link card only',
+        noImageAttach: 'Post with the link card; do not attach the image',
         showDetails: 'Show draft',
         hideDetails: 'Hide draft',
         overviewDue: 'Due today',
@@ -1015,6 +1019,10 @@ def html_document(
       return latestDate(items.filter((item) => item.status === 'posted').map((item) => item.posted_at));
     }}
 
+    function usesLinkPreviewCard(item) {{
+      return ['x', 'linkedin'].includes(item.platform);
+    }}
+
     function renderEmptyState() {{
       empty.textContent = '';
       const title = document.createElement('strong');
@@ -1249,7 +1257,7 @@ def html_document(
       summary.className = 'card-summary';
       const summaryNote = document.createElement('div');
       summaryNote.className = 'note';
-      summaryNote.textContent = (item.due_at ? t('dueAt') + ' ' + formatDue(item) + ' / ' : '') + t('length') + ' ' + item.length;
+      summaryNote.textContent = (item.due_at ? t('dueAt') + ' ' + formatDue(item) + ' / ' : '') + t('length') + ' ' + item.length + (usesLinkPreviewCard(item) ? ' / ' + t('linkCardOnly') : '');
       const textarea = document.createElement('textarea');
       textarea.value = item.text;
       textarea.spellcheck = false;
@@ -1277,7 +1285,7 @@ def html_document(
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
       doneButton.onclick = () => isDone(item) ? undoDone(item, doneButton) : markDone(item, doneButton);
       actions.append(open, detailToggle, doneButton);
-      if (item.card_asset_href) {{
+      if (item.card_asset_href && !usesLinkPreviewCard(item)) {{
         const copyImg = document.createElement('button');
         copyImg.className = 'secondary';
         copyImg.textContent = t('copyImage');
@@ -1292,7 +1300,7 @@ def html_document(
       }}
       const note = document.createElement('div');
       note.className = 'note';
-      note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '');
+      note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '') + (usesLinkPreviewCard(item) ? ' / ' + t('noImageAttach') : '');
       detail.append(textarea, copy, note);
       summary.append(summaryNote);
       if (item.error) {{
