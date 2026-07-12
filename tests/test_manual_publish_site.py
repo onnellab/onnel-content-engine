@@ -69,13 +69,18 @@ class ManualPublishSiteTest(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            build_manual_publish_site(social_manifest, syndication_manifest, output)
+            build_manual_publish_site(social_manifest, syndication_manifest, output, ROOT / "data" / "topics.csv")
 
             html = output.read_text(encoding="utf-8")
             self.assertIn("ONNELLAB Manual Publish", html)
             self.assertIn("https://twitter.com/intent/tweet", html)
             self.assertIn("https://dev.to/new", html)
             self.assertIn("../assets/blog/en/example/social-card.png", html)
+            self.assertIn("statePath = 'data/manual_publish_state.json'", html)
+            self.assertIn("setAppBadge", html)
+            self.assertIn("Enable badge", html)
+            self.assertTrue((output.parent / "manifest.webmanifest").exists())
+            self.assertTrue((output.parent / "sw.js").exists())
 
 
 if __name__ == "__main__":
