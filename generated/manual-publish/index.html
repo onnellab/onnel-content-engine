@@ -65,7 +65,7 @@
     .atm-status-row button strong { display: block; margin-top: 3px; font-size: 15px; line-height: 1.1; }
     .atm-status-row button strong > span:not(.state-subtext) { color: inherit; font-size: 15px; line-height: 1.1; }
     .atm-status-row button .state-subtext { display: block; margin-top: 2px; font-size: 11px; color: var(--muted); }
-    .tool-panel { border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }
+    .tool-panel { border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 10px; margin-bottom: 14px; box-shadow: var(--shadow); }
     .quick-row { display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }
     .auth { display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, auto); gap: 8px; margin-top: 12px; }
     details.advanced { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
@@ -163,7 +163,8 @@
       .atm-action { grid-template-columns: 1fr; padding: 14px; }
       .atm-action h1 { font-size: 20px; }
       .atm-action button { min-height: 60px; font-size: 18px; }
-      .quick-row { grid-template-columns: 1fr; }
+      .quick-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 8px; }
+      .quick-row button { padding-left: 8px; padding-right: 8px; font-size: 13px; white-space: nowrap; }
       .auth, .controls { grid-template-columns: 1fr 1fr; }
       .auth input, .controls input { grid-column: 1 / -1; }
     }
@@ -179,6 +180,8 @@
       .auth input { grid-column: 1 / -1; }
       .controls { grid-template-columns: 1fr; }
       .controls input { grid-column: auto; }
+      .quick-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+      .quick-row button { min-height: 40px; }
     }
   </style>
 </head>
@@ -298,7 +301,7 @@
         secondsShort: '초',
         tokenNeededNote: 'ONNELLAB_GITHUB_PAGES_TOKEN 입력 후 동기화와 공개 확인을 실행할 수 있습니다.',
         atmTitle: '게시 여부 확인',
-        atmCopy: 'X와 LinkedIn의 공개 게시물을 확인하고, 일치하는 수동 게시 항목만 완료로 표시합니다.',
+        atmCopy: '공개 게시물을 확인해 일치 항목만 완료 표시합니다.',
         atmRun: '게시 확인 및 완료 반영',
         overviewVerify: '공개 확인',
         enableBadge: '뱃지 켜기',
@@ -419,7 +422,7 @@
         secondsShort: 's',
         tokenNeededNote: 'Enter ONNELLAB_GITHUB_PAGES_TOKEN to run sync and public profile checks.',
         atmTitle: 'Check published posts',
-        atmCopy: 'Check public X and LinkedIn posts, then mark only matching manual items as done.',
+        atmCopy: 'Check public posts and mark matching items done.',
         atmRun: 'Check and mark done',
         overviewVerify: 'Public check',
         enableBadge: 'Enable badge',
@@ -1007,9 +1010,9 @@
     function updateVariantToggle() {
       const count = items.filter((item) => item.is_variant).length;
       if (currentLang === 'ko') {
-        variantToggle.textContent = showVariants ? `${t('hideVariants')} (${count}${t('variantsCount')})` : `${t('showVariants')} (${count}${t('variantsCount')})`;
+        variantToggle.textContent = showVariants ? `대안 숨김 ${count}` : `대안 ${count}`;
       } else {
-        variantToggle.textContent = showVariants ? `${t('hideVariants')} (${count} ${t('variantsCount')})` : `${t('showVariants')} (${count} ${t('variantsCount')})`;
+        variantToggle.textContent = showVariants ? `Hide ${count}` : `Alt ${count}`;
       }
     }
 
