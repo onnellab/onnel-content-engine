@@ -19,6 +19,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Validate", workflow)
         self.assertIn("Generate Markdown", workflow)
         self.assertIn("Create GitHub App Releases", workflow)
+        self.assertIn("Check App Store Versions", workflow)
         self.assertIn("Generate Image Specifications", workflow)
         self.assertIn("Generate Image Assets", workflow)
         self.assertIn("Generate Internal Links", workflow)

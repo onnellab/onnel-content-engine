@@ -105,6 +105,20 @@ The workflow creates draft GitHub Releases by default and uploads only release a
 
 Debug, dev, internal, and test artifacts are blocked before upload.
 
+The store version snapshot stage runs after the release upload preview/creation:
+
+```text
+scripts/check_store_versions.py
+```
+
+It writes:
+
+```text
+data/store_versions.csv
+```
+
+App Store rows can be marked `new`, `unchanged`, or `updated`. Google Play rows are recorded as `manual_check` with the package ID because this workflow does not use Play Store scraping as a release source of truth.
+
 For cross-repository releases, configure this secret:
 
 ```text
