@@ -277,6 +277,73 @@ class AppReleaseTest(unittest.TestCase):
             self.assertEqual([call for call in calls if "uploads.github.com" in call[0]], [])
             self.assertIn("https://github.com/onnellab/vaultxt/releases/tag/v1.2.0", path.read_text(encoding="utf-8"))
 
+    def test_private_test_release_is_not_created_as_github_release(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "app_releases.csv"
+            _artifact, artifact_path, checksum = self.release_artifact("vaultxt-private-candidate-release.apk")
+            path.write_text(
+                release_csv(
+                    {
+                        "release_id": "REL-0007",
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "app_name": "VaultXT",
+                        "repository": "onnellab/vaultxt",
+                        "tag": "v1.2.0",
+                        "version": "1.2.0",
+                        "platform": "android",
+                        "build_type": "release",
+                        "release_channel": "private_test",
+                        "artifact_path": artifact_path,
+                        "checksum_sha256": checksum,
+                        "status": "ready",
+                        "release_date": "2026-07-12",
+                        "release_title": "VaultXT v1.2.0",
+                        "summary": "Private test build for VaultXT.",
+                        "changes": "Internal QA build.",
+                        "compatibility": "Android private test build.",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            messages = create_github_releases(path, dry_run=True)
+
+            self.assertEqual(messages, [])
+
+    def test_public_ready_release_rejects_local_metadata_placeholder_changes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "app_releases.csv"
+            _artifact, artifact_path, checksum = self.release_artifact("vaultxt-placeholder-release.apk")
+            path.write_text(
+                release_csv(
+                    {
+                        "release_id": "REL-0008",
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "app_name": "VaultXT",
+                        "repository": "onnellab/vaultxt",
+                        "tag": "v1.2.0",
+                        "version": "1.2.0",
+                        "platform": "android",
+                        "build_type": "release",
+                        "release_channel": "public",
+                        "artifact_path": artifact_path,
+                        "checksum_sha256": checksum,
+                        "status": "ready",
+                        "release_date": "2026-07-12",
+                        "release_title": "VaultXT v1.2.0",
+                        "summary": "Public release for VaultXT.",
+                        "changes": "Local Flutter build metadata version.",
+                        "compatibility": "Android public release.",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with self.assertRaises(AppReleaseValidationError):
+                validate_app_releases(path)
+
 
 if __name__ == "__main__":
     unittest.main()

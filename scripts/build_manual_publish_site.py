@@ -118,6 +118,7 @@ def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_p
                 "version": row.get("version", ""),
                 "platform": row.get("platform", ""),
                 "release_type": row.get("release_type", ""),
+                "release_channel": row.get("release_channel", ""),
                 "status": row.get("status", ""),
                 "release_url": row.get("release_url", ""),
                 "released_at": row.get("released_at", ""),
@@ -1616,7 +1617,7 @@ def html_document(
               const label = document.createElement('b');
               label.textContent = `${{t('githubRelease')}} / ${{item.platform}}`;
               const status = document.createElement('span');
-              status.textContent = `${{item.tag}} / ${{item.status}} / ${{item.public_release === 'true' ? t('publicApproved') : t('publicPending')}}`;
+              status.textContent = `${{item.tag}} / ${{item.status}} / ${{item.release_channel || 'public'}} / ${{item.public_release === 'true' ? t('publicApproved') : t('publicPending')}}`;
               const planned = document.createElement('span');
               planned.textContent = `${{t('plannedDate')}}: ${{item.release_date || t('none')}}`;
               const repo = document.createElement('span');

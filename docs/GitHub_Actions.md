@@ -177,7 +177,7 @@ and runs:
 scripts/fill_ready_app_releases.py
 ```
 
-It fills artifact metadata only when exactly one matching `*-release.*` artifact exists. It promotes a planned row to `ready` only when the release ID is also approved in `data/app_release_publications.csv` with `public_release=true`, so private TestFlight or Play Console test builds do not become posts or GitHub Releases just because a file exists.
+It fills artifact metadata only when exactly one matching `*-release.*` artifact exists. It promotes a planned row to `ready` only when the release ID is also approved in `data/app_release_publications.csv` with `public_release=true` and the row is `release_channel=public`, so private TestFlight or Play Console test builds do not become posts or GitHub Releases just because a file exists. Public GitHub Release notes must describe the user-visible changes between the current public release and the previous public release, not private-test-only or local build metadata differences.
 
 Before that, local artifacts are copied into `generated/releases/` when available:
 

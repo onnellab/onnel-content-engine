@@ -74,6 +74,10 @@ def next_action(row: dict[str, str], comparison: str) -> str:
 
 def release_action(row: dict[str, str]) -> str:
     status = row["status"]
+    if (row.get("release_channel") or "public") != "public":
+        return "Private test; do not publish GitHub Release"
+    if "Local Flutter build metadata version" in row.get("changes", ""):
+        return "Replace placeholder with public patch notes"
     if status == "planned":
         if row.get("artifact_path") and row.get("checksum_sha256"):
             return "Approve public release or keep as private test"
@@ -138,6 +142,8 @@ def publication_index(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
 
 
 def publication_gate(row: dict[str, str], approvals: dict[str, dict[str, str]]) -> str:
+    if (row.get("release_channel") or "public") != "public":
+        return "Private test; public Release disabled"
     status = row["status"]
     approved = approvals.get(row["release_id"], {}).get("public_release", "").lower() == "true"
     has_artifact = bool(row["artifact_path"] and row["checksum_sha256"])
@@ -235,6 +241,7 @@ def report_markdown(
                 row["release_id"],
                 row["app_name"],
                 row["platform"],
+                row.get("release_channel") or "public",
                 row["tag"],
                 row["status"],
                 publication_gate(row, approvals),
@@ -244,7 +251,7 @@ def report_markdown(
             ]
             for row in release_rows
         ]
-        lines.extend(table(["ID", "App", "Platform", "Tag", "Status", "Publication gate", "Release URL", "Artifact", "Next action"], release_table))
+        lines.extend(table(["ID", "App", "Platform", "Channel", "Tag", "Status", "Publication gate", "Release URL", "Artifact", "Next action"], release_table))
     else:
         lines.append("No app release candidate rows exist yet.")
 

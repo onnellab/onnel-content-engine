@@ -93,7 +93,11 @@ def release_body(row: dict[str, str]) -> str:
         f"# {row['release_title']}",
         "",
         "## What changed",
-        row["changes"],
+        (
+            f"Changes since {row['previous_tag']}:\n\n{row['changes']}"
+            if row["previous_tag"]
+            else row["changes"]
+        ),
         "",
         "## Compatibility",
         row["compatibility"],
@@ -102,6 +106,7 @@ def release_body(row: dict[str, str]) -> str:
         row["upgrade_notes"] or "No special upgrade steps.",
         "",
         "## Checks",
+        f"- Release channel: {row.get('release_channel') or 'public'}",
         "- Release build verified",
         "- Debug build excluded",
         f"- Version tag: {row['tag']}",
@@ -186,7 +191,7 @@ def process_release(row: dict[str, str], token: str, draft: bool, dry_run: bool)
 def create_github_releases(path: Path = RELEASES_PATH, dry_run: bool = False, draft: bool = True) -> list[str]:
     validate_app_releases(path)
     rows = read_manifest(path)
-    ready = [row for row in rows if row["status"] == "ready"]
+    ready = [row for row in rows if row["status"] == "ready" and (row.get("release_channel") or "public") == "public"]
     if not ready:
         return []
     token = "dry-run-token" if dry_run else github_token()

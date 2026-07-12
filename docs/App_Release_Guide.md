@@ -67,10 +67,15 @@ tag
 version
 platform
 build_type
+release_type
+release_channel
 artifact_path
 checksum_sha256
 previous_tag
 status
+release_url
+github_release_id
+released_at
 release_date
 release_title
 summary
@@ -91,6 +96,10 @@ archived
 ```
 
 Only `ready` rows are eligible for GitHub Release automation.
+
+Use `release_channel=public` only for versions that are publicly released or intended for public release notes. Use `release_channel=private_test` for TestFlight, Play Console internal testing, local QA, or any other non-public build.
+
+The `changes` field for a public GitHub Release must describe the user-visible difference between this public release version and the previous public release version. Do not use local build metadata, private test notes, or unpublished build-only differences as public patch notes. Use `previous_tag` to record the previous public release tag when it is known.
 
 Do not use artifact existence as a publishing decision. A release file may be a private TestFlight, Play Console internal test, or another non-public build. The automation can collect and checksum those files, but it must not mark a row `ready` until the public release is explicitly approved.
 
@@ -213,7 +222,7 @@ release_id,public_release,approved_at,notes
 REL-0002,true,2026-07-12T09:00:00+09:00,Approved after App Store release became public.
 ```
 
-Leave the release ID absent, or use `public_release=false`, while the artifact is only for TestFlight, Play Console internal testing, local QA, or any other private test channel.
+Leave the release ID absent, use `public_release=false`, or set the release row to `release_channel=private_test` while the artifact is only for TestFlight, Play Console internal testing, local QA, or any other private test channel.
 
 When exactly one matching release artifact exists, this command fills `artifact_path` and calculates `checksum_sha256`. It promotes the row to `status=ready` only when `data/app_release_publications.csv` approves that release ID:
 

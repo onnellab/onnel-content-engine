@@ -25,6 +25,7 @@ RELEASE_HEADER = [
     "platform",
     "build_type",
     "release_type",
+    "release_channel",
     "artifact_path",
     "checksum_sha256",
     "previous_tag",
@@ -44,6 +45,7 @@ RELEASE_HEADER = [
 STATUS_VALUES = {"planned", "ready", "released", "failed", "archived"}
 BUILD_TYPES = {"release"}
 RELEASE_TYPES = {"binary", "notes_only"}
+RELEASE_CHANNELS = {"public", "private_test"}
 PLATFORMS = {"ios", "android", "windows", "macos", "linux", "web"}
 BLOCKED_ARTIFACT_MARKERS = ("debug", "dev", "internal", "test")
 REPOSITORY_RE = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
@@ -87,6 +89,9 @@ def validate_release(row: dict[str, str], apps: dict[str, dict[str, str]], seen:
     release_type = row["release_type"] or "binary"
     if release_type not in RELEASE_TYPES:
         raise AppReleaseValidationError(f"{release_id} has invalid release_type: {row['release_type']}")
+    release_channel = row["release_channel"] or "public"
+    if release_channel not in RELEASE_CHANNELS:
+        raise AppReleaseValidationError(f"{release_id} has invalid release_channel: {row['release_channel']}")
     if not REPOSITORY_RE.fullmatch(row["repository"]):
         raise AppReleaseValidationError(f"{release_id} repository must use owner/name format")
     if not TAG_RE.fullmatch(row["tag"]):
@@ -115,6 +120,8 @@ def validate_release(row: dict[str, str], apps: dict[str, dict[str, str]], seen:
         for field in ["release_title", "summary", "changes", "compatibility"]:
             if not row[field]:
                 raise AppReleaseValidationError(f"{release_id} {field} is required when status is {row['status']}")
+        if release_channel == "public" and "Local Flutter build metadata version" in row["changes"]:
+            raise AppReleaseValidationError(f"{release_id} public release changes must describe user-visible differences")
 
 
 def validate_app_releases(path: Path = RELEASES_PATH) -> int:

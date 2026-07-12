@@ -99,6 +99,10 @@ def fill_ready_app_releases(
     for row in rows:
         if row["status"] != "planned":
             continue
+        if (row.get("release_channel") or "public") != "public":
+            append_note(row, "Private test channel; not promoted to public GitHub Release.")
+            updated.append(dict(row))
+            continue
         approved = is_public_approved(row["release_id"], approvals)
         if row["artifact_path"] and row["checksum_sha256"]:
             if approved:

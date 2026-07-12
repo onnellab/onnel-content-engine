@@ -141,6 +141,7 @@ def refresh_existing_local_ahead_release(
     if row.get("version") != snapshot.get("version"):
         return False
     row["platform"] = snapshot["platform"]
+    row["release_channel"] = "public"
     row["release_date"] = release_date(snapshot, now)
     row["summary"] = f"{snapshot['app_name']} {snapshot['version']} public store update detected."
     row["changes"] = snapshot["release_notes"] or f"{snapshot['app_name']} {snapshot['version']} store update detected."
@@ -163,15 +164,19 @@ def planned_row(
 ) -> dict[str, str]:
     tag = tag_for(snapshot["version"])
     if reason == "local_ahead":
+        previous_tag = tag_for(store_version) if store_version else ""
         notes = (
             "Generated from local build metadata because local version is ahead of store snapshot. "
             f"Store version: {store_version or 'unknown'}. "
             "Add release artifact, checksum, and set status=ready after verifying the release build."
         )
         summary = f"{snapshot['app_name']} {snapshot['version']} local build metadata is ahead of the store snapshot."
+        release_channel = "private_test"
     else:
+        previous_tag = ""
         notes = "Generated from store version snapshot. Add release artifact, checksum, and set status=ready after verifying the release build."
         summary = f"{snapshot['app_name']} {snapshot['version']} public store update detected."
+        release_channel = "public"
     release_notes = snapshot["release_notes"] or f"{snapshot['app_name']} {snapshot['version']} store update detected."
     return {
         "release_id": release_id,
@@ -184,9 +189,10 @@ def planned_row(
         "platform": snapshot["platform"],
         "build_type": "release",
         "release_type": "binary",
+        "release_channel": release_channel,
         "artifact_path": "",
         "checksum_sha256": "",
-        "previous_tag": "",
+        "previous_tag": previous_tag,
         "status": "planned",
         "release_url": "",
         "github_release_id": "",
