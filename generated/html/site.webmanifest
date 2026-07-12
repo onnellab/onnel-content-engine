@@ -3,17 +3,17 @@
   "short_name": "ONNELLAB",
   "icons": [
     {
-      "src": "/favicon.svg?v=20260712-transparent",
+      "src": "/favicon.svg?v=20260712-ol-transparent-v2",
       "sizes": "64x64",
       "type": "image/svg+xml"
     },
     {
-      "src": "/favicon-32x32.png?v=20260712-transparent",
+      "src": "/favicon-32x32.png?v=20260712-ol-transparent-v2",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "/apple-touch-icon.png?v=20260712-transparent",
+      "src": "/apple-touch-icon.png?v=20260712-ol-transparent-v2",
       "sizes": "180x180",
       "type": "image/png"
     }

@@ -37,7 +37,7 @@ DEFAULT_PAGES_BRANCH = "main"
 DEFAULT_HOMEPAGE_REPOSITORY_PATH = Path(
     os.environ.get("ONNELLAB_HOMEPAGE_REPOSITORY", "/mnt/c/dev/onnellab.github.io")
 )
-FAVICON_VERSION = "20260712-transparent"
+FAVICON_VERSION = "20260712-ol-transparent-v2"
 FAVICON_ASSET_NAMES = ("favicon.svg", "favicon-32x32.png", "apple-touch-icon.png", "site.webmanifest")
 PUBLISHABLE_STATUSES = {"published"}
 REQUIRED_PUBLICATION_LANGUAGES = {"en", "ko"}

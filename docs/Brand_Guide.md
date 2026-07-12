@@ -28,16 +28,16 @@ The favicon background should remain transparent. The icon itself should carry t
 Current cache version:
 
 ```text
-20260712-transparent
+20260712-ol-transparent-v2
 ```
 
 Use versioned favicon URLs in page heads:
 
 ```text
-/favicon.svg?v=20260712-transparent
-/favicon-32x32.png?v=20260712-transparent
-/apple-touch-icon.png?v=20260712-transparent
-/site.webmanifest?v=20260712-transparent
+/favicon.svg?v=20260712-ol-transparent-v2
+/favicon-32x32.png?v=20260712-ol-transparent-v2
+/apple-touch-icon.png?v=20260712-ol-transparent-v2
+/site.webmanifest?v=20260712-ol-transparent-v2
 ```
 
 ## Colors

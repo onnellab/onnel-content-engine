@@ -150,9 +150,9 @@ class PublishingTest(unittest.TestCase):
         html = article_html.read_text(encoding="utf-8")
         self.assertIn("<h1>How to Read Very Large TXT Files</h1>", html)
         self.assertIn('content="A practical guide to reading very large TXT files without unnecessary lag."', html)
-        self.assertIn('<link rel="icon" href="/favicon.svg?v=20260712-transparent" type="image/svg+xml">', html)
-        self.assertIn('<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260712-transparent">', html)
-        self.assertIn('<link rel="manifest" href="/site.webmanifest?v=20260712-transparent">', html)
+        self.assertIn('<link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">', html)
+        self.assertIn('<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260712-ol-transparent-v2">', html)
+        self.assertIn('<link rel="manifest" href="/site.webmanifest?v=20260712-ol-transparent-v2">', html)
         self.assertIn("<blockquote>Treat the file as a reference document before editing it.</blockquote>", html)
         self.assertIn("<table>", html)
         self.assertIn('<img src="/blog-assets/en/read-large-txt-files/workflow-diagram.svg"', html)
@@ -167,7 +167,7 @@ class PublishingTest(unittest.TestCase):
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", (self.site_dir / "feed.xml").read_text(encoding="utf-8"))
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", (self.site_dir / "sitemap.xml").read_text(encoding="utf-8"))
         self.assertIn('"short_name": "ONNELLAB"', (self.site_dir / "site.webmanifest").read_text(encoding="utf-8"))
-        self.assertIn('/favicon.svg?v=20260712-transparent', (self.site_dir / "site.webmanifest").read_text(encoding="utf-8"))
+        self.assertIn('/favicon.svg?v=20260712-ol-transparent-v2', (self.site_dir / "site.webmanifest").read_text(encoding="utf-8"))
 
     def test_build_rejects_publishable_topic_without_markdown(self) -> None:
         self.markdown_path.unlink()
@@ -228,7 +228,7 @@ class PublishingTest(unittest.TestCase):
         self.assertTrue(social_card_svg_destination.exists())
         self.assertTrue(favicon_destination.exists())
         self.assertTrue(favicon_png_destination.exists())
-        self.assertIn('/favicon.svg?v=20260712-transparent', manifest_destination.read_text(encoding="utf-8"))
+        self.assertIn('/favicon.svg?v=20260712-ol-transparent-v2', manifest_destination.read_text(encoding="utf-8"))
         self.assertEqual(existing_site_file.read_text(encoding="utf-8"), "<main>keep</main>\n")
 
     def test_export_markdown_to_homepage_dry_run_does_not_copy(self) -> None:
