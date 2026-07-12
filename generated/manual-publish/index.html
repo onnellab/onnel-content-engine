@@ -74,7 +74,9 @@
     .secondary-controls { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
     .platform-status { margin-top: 18px; }
     .platform-status summary { cursor: pointer; font-weight: 900; font-size: 16px; min-height: 40px; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; width: fit-content; max-width: 100%; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 8px 12px; }
-    .platform-status-summary { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .platform-status-summary { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+    .platform-count-badge { display: inline-flex; align-items: center; gap: 4px; min-height: 24px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; background: #fffdf9; color: var(--muted); font-size: 12px; font-weight: 800; }
+    .platform-count-badge b { color: var(--ink); font-size: 13px; line-height: 1; }
     .platforms { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 8px 0 0; }
     .platform-card { border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }
     .platform-card strong { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; margin-bottom: 8px; }
@@ -1019,7 +1021,7 @@
         acc[item.status] = (acc[item.status] || 0) + 1;
         return acc;
       }, {});
-      const platformSummaryParts = [`${t('blogPlatformName')} ${blogItems.length}`];
+      const platformSummaryBadges = [[t('blogPlatformName'), blogItems.length]];
       const latestPublished = latestDate(blogItems.map((item) => item.published_at));
       const nextScheduled = blogItems
         .filter((item) => item.status === 'scheduled' && item.scheduled_at)
@@ -1047,7 +1049,7 @@
       const platforms = [...new Set(items.map((item) => item.platform_label))].sort();
       platforms.forEach((label) => {
         const rows = items.filter((item) => item.platform_label === label && !item.is_variant);
-        platformSummaryParts.push(`${label} ${rows.length}`);
+        platformSummaryBadges.push([label, rows.length]);
         const posted = rows.filter((item) => isDone(item));
         const failed = rows.filter((item) => !isDone(item) && item.status === 'failed');
         const drafts = rows.filter((item) => !isDone(item) && ['draft', 'approved'].includes(item.status));
@@ -1078,7 +1080,17 @@
         card.append(title, status, postedLine, nextLine, attemptLine);
         platformSummary.appendChild(card);
       });
-      platformStatusSummary.textContent = platformSummaryParts.length ? platformSummaryParts.join(' / ') : '';
+      platformStatusSummary.textContent = '';
+      platformSummaryBadges.forEach(([label, count]) => {
+        const badge = document.createElement('span');
+        badge.className = 'platform-count-badge';
+        const name = document.createElement('span');
+        name.textContent = label;
+        const value = document.createElement('b');
+        value.textContent = String(count);
+        badge.append(name, value);
+        platformStatusSummary.appendChild(badge);
+      });
     }
 
     function renderSiteStatusSummary() {
@@ -1296,7 +1308,7 @@
       summary.className = 'card-summary';
       const summaryNote = document.createElement('div');
       summaryNote.className = 'note';
-      summaryNote.textContent = (item.due_at ? t('dueAt') + ' ' + formatDue(item) + ' / ' : '') + t('length') + ' ' + item.length + (usesLinkPreviewCard(item) ? ' / ' + t('linkCardOnly') : '');
+      summaryNote.textContent = item.due_at ? t('dueAt') + ' ' + formatDue(item) : t('noRecord');
       const textarea = document.createElement('textarea');
       textarea.value = item.text;
       textarea.spellcheck = false;
