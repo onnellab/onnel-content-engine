@@ -108,7 +108,7 @@ class ManualPublishSiteTest(unittest.TestCase):
             self.assertIn("GitHub Release", html)
             self.assertIn("store-data", html)
             self.assertIn('"platform": "android"', html)
-            self.assertIn("본문 보기", html)
+            self.assertIn("상세 보기", html)
             self.assertIn("card-detail", html)
             self.assertIn("링크 카드 사용", html)
             self.assertIn("이미지 첨부 없이 링크 카드로 게시", html)
