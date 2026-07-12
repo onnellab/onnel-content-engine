@@ -431,6 +431,8 @@ Medium drafts must remain `status: draft` unless explicitly tracked as a manual 
 
 GitHub Release is not a general educational distribution channel.
 
+See `docs/App_Release_Guide.md` for the release manifest contract.
+
 It may be used only when all of the following are true:
 
 * `source_type` is `release_note`

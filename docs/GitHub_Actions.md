@@ -79,6 +79,7 @@ The validation stage runs:
 ```text
 scripts/validate_topics.py
 scripts/validate_apps_registry.py
+scripts/validate_app_releases.py
 scripts/validate_foundation.py
 ```
 

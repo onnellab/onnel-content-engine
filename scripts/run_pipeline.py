@@ -36,6 +36,7 @@ def run_command(command: list[str], cwd: Path = ROOT) -> None:
 def validate() -> None:
     run_command(["scripts/validate_topics.py"])
     run_command(["scripts/validate_apps_registry.py"])
+    run_command(["scripts/validate_app_releases.py"])
     run_command(["scripts/validate_foundation.py"])
 
 
