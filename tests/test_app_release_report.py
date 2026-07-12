@@ -136,8 +136,87 @@ class AppReleaseReportTest(unittest.TestCase):
             self.assertIn("# App Release Status", text)
             self.assertIn("Check Google Play update manually", text)
             self.assertIn("Add release artifact and checksum", text)
+            self.assertIn("Publication gate", text)
+            self.assertIn("Waiting for artifact and public approval", text)
             self.assertIn("local_ahead", text)
             self.assertEqual(output.read_text(encoding="utf-8"), text)
+
+    def test_report_marks_artifact_without_public_approval_as_private_or_pending(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
+            output = root / "app_releases.md"
+            app_repo = root / "vaultxt"
+            app_repo.mkdir()
+            (app_repo / "pubspec.yaml").write_text("name: vaultxt\nversion: 1.2.3+10\n", encoding="utf-8")
+            write_csv(store, STORE_HEADER, [])
+            planned = {field: "" for field in RELEASE_HEADER}
+            planned.update(
+                {
+                    "release_id": "REL-0001",
+                    "app_id": "APP-0003",
+                    "app_slug": "vaultxt",
+                    "app_name": "VaultXT",
+                    "repository": "onnelakin/vaultxt",
+                    "tag": "v1.2.3",
+                    "version": "1.2.3",
+                    "platform": "ios",
+                    "build_type": "release",
+                    "artifact_path": "generated/releases/vaultxt/1.2.3/ios/vaultxt-ios-1.2.3-release.ipa",
+                    "checksum_sha256": "0" * 64,
+                    "status": "planned",
+                    "release_date": "2026-07-12",
+                    "release_title": "VaultXT v1.2.3",
+                    "summary": "VaultXT 1.2.3 update.",
+                    "changes": "Improved scrolling.",
+                    "compatibility": "ios public release.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                }
+            )
+            write_csv(releases, RELEASE_HEADER, [planned])
+            write_csv(
+                config,
+                CONFIG_HEADER,
+                [
+                    {
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "repository": "onnelakin/vaultxt",
+                        "artifact_pattern": "generated/releases/vaultxt/{version}/{platform}/*-release.*",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(
+                local_repos,
+                LOCAL_REPOSITORIES_HEADER,
+                [
+                    {
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "repository_name": "vaultxt",
+                        "path": app_repo.as_posix(),
+                        "pubspec_path": "pubspec.yaml",
+                        "source_priority": "primary",
+                        "notes": "",
+                    }
+                ],
+            )
+
+            text = generate_app_release_report(
+                store,
+                releases,
+                config,
+                local_repos,
+                output,
+                now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
+            )
+
+            self.assertIn("Private test or approval pending", text)
+            self.assertIn("Approve public release or keep as private test", text)
 
 
 if __name__ == "__main__":

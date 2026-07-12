@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-07-12T15:59:47+09:00
+Generated: 2026-07-12T16:20:55+09:00
 
 ## Summary
 
@@ -27,11 +27,11 @@ Generated: 2026-07-12T15:59:47+09:00
 
 ## Release Candidates
 
-| ID | App | Platform | Tag | Status | Artifact | Next action |
-| --- | --- | --- | --- | --- | --- | --- |
-| REL-0001 | TagWeaver | ios | v2.1.3 | planned | - | Add release artifact and checksum |
-| REL-0002 | VaultXT | ios | v1.0.6 | planned | - | Add release artifact and checksum |
-| REL-0003 | Segra | ios | v1.0.2 | planned | - | Add release artifact and checksum |
+| ID | App | Platform | Tag | Status | Publication gate | Artifact | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| REL-0001 | TagWeaver | ios | v2.1.3 | planned | Waiting for artifact and public approval | - | Add release artifact and checksum |
+| REL-0002 | VaultXT | ios | v1.0.6 | planned | Waiting for artifact and public approval | - | Add release artifact and checksum |
+| REL-0003 | Segra | ios | v1.0.2 | planned | Waiting for artifact and public approval | - | Add release artifact and checksum |
 
 ## Attention Queue
 

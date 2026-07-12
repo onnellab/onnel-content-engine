@@ -20,6 +20,8 @@ from validate_app_releases import RELEASE_HEADER, RELEASES_PATH
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT_PATH = ROOT / "generated" / "reports" / "app_releases.md"
+PUBLICATIONS_PATH = ROOT / "data" / "app_release_publications.csv"
+PUBLICATION_HEADER = ["release_id", "public_release", "approved_at", "notes"]
 KST = ZoneInfo("Asia/Seoul")
 VERSION_PART_RE = re.compile(r"\d+|[A-Za-z]+")
 
@@ -34,6 +36,12 @@ def read_csv(path: Path, expected_header: list[str]) -> list[dict[str, str]]:
         if reader.fieldnames != expected_header:
             raise AppReleaseReportError(f"{path} header mismatch")
         return [{key: (value or "").strip() for key, value in row.items()} for row in reader]
+
+
+def read_optional_csv(path: Path, expected_header: list[str]) -> list[dict[str, str]]:
+    if not path.exists():
+        return []
+    return read_csv(path, expected_header)
 
 
 def markdown(value: str) -> str:
@@ -125,6 +133,33 @@ def release_index(rows: list[dict[str, str]]) -> dict[tuple[str, str], list[dict
     return index
 
 
+def publication_index(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
+    return {row["release_id"]: row for row in rows}
+
+
+def publication_gate(row: dict[str, str], approvals: dict[str, dict[str, str]]) -> str:
+    status = row["status"]
+    approved = approvals.get(row["release_id"], {}).get("public_release", "").lower() == "true"
+    has_artifact = bool(row["artifact_path"] and row["checksum_sha256"])
+    if status == "released":
+        return "Released"
+    if status == "ready":
+        return "Approved public release"
+    if status == "planned" and approved and has_artifact:
+        return "Approved, ready fill pending"
+    if status == "planned" and approved:
+        return "Public approved, waiting for artifact"
+    if status == "planned" and has_artifact:
+        return "Private test or approval pending"
+    if status == "planned":
+        return "Waiting for artifact and public approval"
+    if status == "failed":
+        return "Fix release error"
+    if status == "archived":
+        return "Archived"
+    return "Review"
+
+
 def table(headers: list[str], rows: list[list[str]]) -> list[str]:
     lines = ["| " + " | ".join(headers) + " |", "| " + " | ".join(["---"] * len(headers)) + " |"]
     for row in rows:
@@ -137,11 +172,13 @@ def report_markdown(
     release_rows: list[dict[str, str]],
     config_rows: list[dict[str, str]],
     local_repo_rows: list[dict[str, str]],
+    publication_rows: list[dict[str, str]],
     generated_at: datetime,
 ) -> str:
     config = config_index(config_rows)
     local_versions = local_version_index(local_repo_rows)
     releases = release_index(release_rows)
+    approvals = publication_index(publication_rows)
     store_counts = Counter(row["status"] for row in store_rows)
     release_counts = Counter(row["status"] for row in release_rows)
 
@@ -200,12 +237,13 @@ def report_markdown(
                 row["platform"],
                 row["tag"],
                 row["status"],
+                publication_gate(row, approvals),
                 row["artifact_path"],
                 release_action(row),
             ]
             for row in release_rows
         ]
-        lines.extend(table(["ID", "App", "Platform", "Tag", "Status", "Artifact", "Next action"], release_table))
+        lines.extend(table(["ID", "App", "Platform", "Tag", "Status", "Publication gate", "Artifact", "Next action"], release_table))
     else:
         lines.append("No app release candidate rows exist yet.")
 
@@ -237,13 +275,15 @@ def generate_app_release_report(
     config_path: Path = CONFIG_PATH,
     local_repositories_path: Path = LOCAL_REPOSITORIES_PATH,
     output_path: Path = REPORT_PATH,
+    publications_path: Path = PUBLICATIONS_PATH,
     now: datetime | None = None,
 ) -> str:
     store_rows = read_csv(store_versions_path, STORE_HEADER)
     release_rows = read_csv(releases_path, RELEASE_HEADER)
     config_rows = read_csv(config_path, CONFIG_HEADER)
     local_repo_rows = read_csv(local_repositories_path, LOCAL_REPOSITORIES_HEADER)
-    text = report_markdown(store_rows, release_rows, config_rows, local_repo_rows, now or datetime.now(KST))
+    publication_rows = read_optional_csv(publications_path, PUBLICATION_HEADER)
+    text = report_markdown(store_rows, release_rows, config_rows, local_repo_rows, publication_rows, now or datetime.now(KST))
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(text, encoding="utf-8")
     return text
@@ -256,9 +296,10 @@ def main() -> int:
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     parser.add_argument("--local-repositories", type=Path, default=LOCAL_REPOSITORIES_PATH)
     parser.add_argument("--output", type=Path, default=REPORT_PATH)
+    parser.add_argument("--publications", type=Path, default=PUBLICATIONS_PATH)
     args = parser.parse_args()
     try:
-        generate_app_release_report(args.store_versions, args.releases, args.config, args.local_repositories, args.output)
+        generate_app_release_report(args.store_versions, args.releases, args.config, args.local_repositories, args.output, args.publications)
     except (AppReleaseReportError, OSError) as error:
         print(f"generate app release report failed: {error}", file=sys.stderr)
         return 1

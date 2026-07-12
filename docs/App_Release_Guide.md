@@ -206,6 +206,15 @@ data/app_release_publications.csv
 
 Use `public_release=true` only after the build is meant to be public, not just available as a private test artifact.
 
+Example approval row:
+
+```csv
+release_id,public_release,approved_at,notes
+REL-0002,true,2026-07-12T09:00:00+09:00,Approved after App Store release became public.
+```
+
+Leave the release ID absent, or use `public_release=false`, while the artifact is only for TestFlight, Play Console internal testing, local QA, or any other private test channel.
+
 When exactly one matching release artifact exists, this command fills `artifact_path` and calculates `checksum_sha256`. It promotes the row to `status=ready` only when `data/app_release_publications.csv` approves that release ID:
 
 ```text
@@ -226,11 +235,28 @@ Codemagic artifact URLs can be recorded in:
 data/codemagic_artifacts.csv
 ```
 
+Example Codemagic artifact row:
+
+```csv
+release_id,app_id,app_slug,version,platform,artifact_url,artifact_name,notes
+REL-0002,APP-0003,vaultxt,1.0.6,ios,/artifacts/.../VaultXT.ipa,VaultXT.ipa,Copied from the Codemagic build artifact link.
+```
+
+Use either the full `https://api.codemagic.io/artifacts/...` URL or the `/artifacts/...` path. Do not record debug, dev, internal, or test artifact names.
+
 Download recorded Codemagic artifacts with:
 
 ```text
 CODEMAGIC_API_TOKEN=... scripts/download_codemagic_artifacts.py
 ```
+
+The GitHub Actions secret name is:
+
+```text
+CODEMAGIC_API_TOKEN
+```
+
+The token is only required when `data/codemagic_artifacts.csv` contains a matching artifact URL that must be downloaded.
 
 Generate the release status report with:
 

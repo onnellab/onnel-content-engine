@@ -195,6 +195,14 @@ scripts/download_codemagic_artifacts.py
 
 The script uses `CODEMAGIC_API_TOKEN` when not running in dry-run mode.
 
+Configure this repository secret before adding real Codemagic artifact URLs:
+
+```text
+CODEMAGIC_API_TOKEN
+```
+
+If `data/codemagic_artifacts.csv` is empty, the step completes without the token. Once artifact URLs are added, the token is required for authenticated Codemagic downloads.
+
 The release report stage then writes:
 
 ```text
