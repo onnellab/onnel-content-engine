@@ -1,6 +1,6 @@
 {
-  "name": "ONNELLAB Manual Publish",
-  "short_name": "ONNEL Publish",
+  "name": "ONNELLAB Publish Status Dashboard",
+  "short_name": "ONNEL Dashboard",
   "start_url": "/manual-publish/",
   "scope": "/manual-publish/",
   "display": "standalone",

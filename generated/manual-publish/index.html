@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ONNELLAB Manual Publish</title>
+  <title>ONNELLAB 게시 상태 대시보드</title>
   <meta name="theme-color" content="#fffaf5">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="googlebot" content="noindex,nofollow,noarchive">
   <meta name="naverbot" content="noindex,nofollow,noarchive">
   <meta name="yeti" content="noindex,nofollow,noarchive">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="ONNEL Publish">
+  <meta name="apple-mobile-web-app-title" content="ONNEL Dashboard">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
   <link rel="icon" href="/favicon-32x32.png?v=20260712-ol-transparent-v2" sizes="32x32" type="image/png">
@@ -72,7 +72,9 @@
     details.advanced summary { cursor: pointer; color: var(--ink); font-weight: 800; min-height: 38px; display: flex; align-items: center; }
     .controls { display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(116px, 150px)); gap: 10px; margin-top: 8px; }
     .secondary-controls { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
-    .platforms { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 18px 0 0; }
+    .platform-status { margin-top: 18px; }
+    .platform-status summary { cursor: pointer; font-weight: 900; font-size: 16px; min-height: 44px; display: flex; align-items: center; }
+    .platforms { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 8px 0 0; }
     .platform-card { border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }
     .platform-card strong { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; margin-bottom: 8px; }
     .platform-card strong .tag { flex: 0 0 auto; font-size: 11px; font-weight: 700; }
@@ -182,6 +184,11 @@
     </div>
   </header>
   <main>
+    <section class="overview" aria-label="Publish overview">
+      <button class="metric-card" type="button" data-view="due"><span id="overview-due-label">오늘 할 일</span><strong class="due-count">0</strong></button>
+      <button class="metric-card" type="button" data-view="manual"><span id="overview-manual-label">수동 대기</span><strong id="manual-count">4</strong></button>
+      <button class="metric-card" type="button" data-view="done"><span id="overview-posted-label">게시 완료</span><strong id="posted-count">1</strong></button>
+    </section>
     <section class="atm-action" aria-label="Primary verification action">
       <div>
         <h1 id="atm-title">게시 여부 확인</h1>
@@ -195,11 +202,6 @@
           <button type="button" id="verify-publications-large"><span id="overview-verify-label">공개 확인</span><strong id="verify-state-large">...</strong></button>
         </div>
       </div>
-    </section>
-    <section class="overview" aria-label="Publish overview">
-      <button class="metric-card" type="button" data-view="due"><span id="overview-due-label">오늘 할 일</span><strong class="due-count">0</strong></button>
-      <button class="metric-card" type="button" data-view="manual"><span id="overview-manual-label">수동 대기</span><strong id="manual-count">4</strong></button>
-      <button class="metric-card" type="button" data-view="done"><span id="overview-posted-label">게시 완료</span><strong id="posted-count">1</strong></button>
     </section>
     <section class="tool-panel" aria-label="Publish controls">
     <div class="quick-row">
@@ -225,14 +227,10 @@
     </section>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
-    <div id="platform-summary" class="platforms"></div>
-    <section class="status-section" aria-label="Blog status">
-      <div class="release-head">
-        <h2 id="blog-title">블로그 상태</h2>
-        <span id="blog-summary"></span>
-      </div>
-      <div id="blog-grid" class="status-grid"></div>
-    </section>
+    <details class="platform-status" aria-label="Platform status">
+      <summary id="platform-status-title">매체별 상태</summary>
+      <div id="platform-summary" class="platforms"></div>
+    </details>
     <details class="status-section" aria-label="Website asset status">
       <summary id="site-status-title">사이트 갱신 상태</summary>
       <div class="release-head">
@@ -267,7 +265,7 @@
     const params = new URLSearchParams(window.location.search);
     const messages = {
       ko: {
-        appTitle: 'ONNELLAB 수동 게시',
+        appTitle: 'ONNELLAB 게시 상태 대시보드',
         total: '전체',
         due: '예정',
         manual: '수동',
@@ -337,6 +335,9 @@
         noRelease: '릴리즈 후보 없음',
         blogTitle: '블로그 상태',
         blogSummary: '상태',
+        blogPlatformName: 'Blog',
+        blogMode: '콘텐츠',
+        platformStatusTitle: '매체별 상태',
         siteStatusTitle: '사이트 갱신 상태',
         siteStatusSummary: '메인홈과 앱 상세 페이지',
         mainHome: '메인홈',
@@ -385,7 +386,7 @@
         dateLocale: 'ko-KR',
       },
       en: {
-        appTitle: 'ONNELLAB Manual Publish',
+        appTitle: 'ONNELLAB Publish Status Dashboard',
         total: 'total',
         due: 'due',
         manual: 'manual',
@@ -455,6 +456,9 @@
         noRelease: 'no release candidate',
         blogTitle: 'Blog status',
         blogSummary: 'status',
+        blogPlatformName: 'Blog',
+        blogMode: 'Content',
+        platformStatusTitle: 'Platform status',
         siteStatusTitle: 'Website update status',
         siteStatusSummary: 'home and app landing pages',
         mainHome: 'Main home',
@@ -536,8 +540,6 @@
     const platformSummary = document.getElementById('platform-summary');
     const appStatusGrid = document.getElementById('app-status-grid');
     const appStatusSummary = document.getElementById('app-status-summary');
-    const blogGrid = document.getElementById('blog-grid');
-    const blogSummary = document.getElementById('blog-summary');
     const siteStatusGrid = document.getElementById('site-status-grid');
     const siteStatusSummary = document.getElementById('site-status-summary');
     let remoteState = { done: {}, updated_at: '', version: 1 };
@@ -563,7 +565,7 @@
       document.getElementById('overview-verify-label').textContent = t('overviewVerify');
       document.getElementById('advanced-summary').textContent = t('advancedSummary');
       document.getElementById('app-status-title').textContent = t('appStatusTitle');
-      document.getElementById('blog-title').textContent = t('blogTitle');
+      document.getElementById('platform-status-title').textContent = t('platformStatusTitle');
       document.getElementById('site-status-title').textContent = t('siteStatusTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
@@ -587,7 +589,6 @@
       setVerifyState(verifyStateLarge.dataset.state || (githubToken() ? 'verificationReady' : 'verificationTokenRequired'), verifyCountdownRemaining);
       syncViewButtons();
       renderAppStatusSummary();
-      renderBlogSummary();
       renderSiteStatusSummary();
     }
 
@@ -1004,8 +1005,36 @@
     }
 
     function renderPlatformSummary() {
-      const platforms = [...new Set(items.map((item) => item.platform_label))].sort();
       platformSummary.textContent = '';
+      const blogCounts = blogItems.reduce((acc, item) => {
+        acc[item.status] = (acc[item.status] || 0) + 1;
+        return acc;
+      }, {});
+      const latestPublished = latestDate(blogItems.map((item) => item.published_at));
+      const nextScheduled = blogItems
+        .filter((item) => item.status === 'scheduled' && item.scheduled_at)
+        .map((item) => parseDate(item.scheduled_at))
+        .filter(Boolean)
+        .sort((a, b) => a - b)[0] || null;
+      const blogCard = document.createElement('div');
+      blogCard.className = 'platform-card';
+      const blogTitle = document.createElement('strong');
+      const blogTitleText = document.createElement('span');
+      blogTitleText.textContent = t('blogPlatformName');
+      const blogTag = document.createElement('span');
+      blogTag.className = 'tag mode-automatic';
+      blogTag.textContent = t('blogMode');
+      blogTitle.append(blogTitleText, blogTag);
+      const blogStatus = document.createElement('span');
+      blogStatus.textContent = Object.entries(blogCounts).map(([status, count]) => `${status} ${count}`).join(' / ') || t('none');
+      const blogLatest = document.createElement('span');
+      blogLatest.textContent = t('latestPublished') + ': ' + (latestPublished ? `${formatDate(latestPublished.toISOString())} (${daysAgo(latestPublished.toISOString())})` : t('none'));
+      const blogNext = document.createElement('span');
+      blogNext.textContent = t('nextScheduled') + ': ' + (nextScheduled ? formatDate(nextScheduled.toISOString()) : t('none'));
+      blogCard.append(blogTitle, blogStatus, blogLatest, blogNext);
+      platformSummary.appendChild(blogCard);
+
+      const platforms = [...new Set(items.map((item) => item.platform_label))].sort();
       platforms.forEach((label) => {
         const rows = items.filter((item) => item.platform_label === label && !item.is_variant);
         const posted = rows.filter((item) => item.status === 'posted');
@@ -1037,34 +1066,6 @@
         attemptLine.textContent = t('lastUpdate') + ': ' + (latestAttempt ? `${formatDate(latestAttempt.toISOString())} (${daysAgo(latestAttempt.toISOString())})` : t('none'));
         card.append(title, status, postedLine, nextLine, attemptLine);
         platformSummary.appendChild(card);
-      });
-    }
-
-    function renderBlogSummary() {
-      blogGrid.textContent = '';
-      const counts = blogItems.reduce((acc, item) => {
-        acc[item.status] = (acc[item.status] || 0) + 1;
-        return acc;
-      }, {});
-      blogSummary.textContent = Object.entries(counts).map(([status, count]) => `${status} ${count}`).join(' / ') || t('none');
-      const latestPublished = latestDate(blogItems.map((item) => item.published_at));
-      const nextScheduled = blogItems
-        .filter((item) => item.status === 'scheduled' && item.scheduled_at)
-        .map((item) => parseDate(item.scheduled_at))
-        .filter(Boolean)
-        .sort((a, b) => a - b)[0] || null;
-      [
-        [t('latestPublished'), latestPublished ? formatDate(latestPublished.toISOString()) : t('none')],
-        [t('nextScheduled'), nextScheduled ? formatDate(nextScheduled.toISOString()) : t('none')],
-      ].forEach(([label, value]) => {
-        const card = document.createElement('div');
-        card.className = 'status-card';
-        const title = document.createElement('strong');
-        title.textContent = label;
-        const line = document.createElement('span');
-        line.textContent = value;
-        card.append(title, line);
-        blogGrid.appendChild(card);
       });
     }
 
@@ -1224,7 +1225,6 @@
       visible.forEach((item) => grid.appendChild(card(item)));
       renderPlatformSummary();
       renderAppStatusSummary();
-      renderBlogSummary();
       renderSiteStatusSummary();
       updateVariantToggle();
       syncViewButtons();
@@ -1254,9 +1254,12 @@
       cardHead.append(platformBadge, kindTag);
       const meta = document.createElement('div');
       meta.className = 'meta';
-      [item.language, item.status].forEach((value, index) => {
+      [
+        [item.language, ''],
+        [isDone(item) ? t('doneTag') : item.status, isDone(item) ? 'status-done' : statusClass(item.status)],
+      ].forEach(([value, className]) => {
         const span = document.createElement('span');
-        span.className = 'tag' + (index === 1 ? ' ' + statusClass(value) : '');
+        span.className = 'tag' + (className ? ' ' + className : '');
         span.textContent = value;
         meta.appendChild(span);
       });
@@ -1267,10 +1270,6 @@
         meta.appendChild(due);
       }
       if (isDone(item)) {
-        const done = document.createElement('span');
-        done.className = 'tag status-done';
-        done.textContent = t('doneTag');
-        meta.appendChild(done);
         const [label, className] = verificationLabel(item);
         if (label) {
           const verification = document.createElement('span');
