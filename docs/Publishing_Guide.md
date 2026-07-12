@@ -292,10 +292,15 @@ Bluesky uses the same social manifest and posting flow as X and LinkedIn.
 
 The X adapter posts generated draft text to `https://api.x.com/2/tweets`:
 
-* requires `X_BEARER_TOKEN`
-* sends `Authorization: Bearer <token>`
+* requires `X_CLIENT_ID`, `X_CLIENT_SECRET`, and `X_REFRESH_TOKEN`
+* refreshes an OAuth 2.0 access token through `POST https://api.x.com/2/oauth2/token`
+* sends `Authorization: Bearer <refreshed_access_token>`
 * keeps the canonical URL in the post text
 * relies on the canonical page Open Graph and Twitter card metadata for website card rendering
+
+The X app must request `tweet.write`, `tweet.read`, `users.read`, and `offline.access`. `offline.access` is required so the content engine can refresh short-lived access tokens during scheduled automation.
+
+For local scheduled runs, set `X_REFRESH_TOKEN_FILE=.tokens/x-refresh-token` so a rotated refresh token can be persisted outside git. In GitHub Actions, update the `X_REFRESH_TOKEN` repository secret if a run reports that X returned a rotated refresh token.
 
 Inspect the X payload without posting:
 

@@ -26,10 +26,22 @@ The adapter posts text, clickable URL facets, and external website card embeds.
 Required for the real X adapter:
 
 ```text
-X_BEARER_TOKEN
+X_CLIENT_ID
+X_CLIENT_SECRET
+X_REFRESH_TOKEN
 ```
 
-The adapter posts generated text with the canonical URL. X website cards are expected to render from the canonical page's Open Graph and Twitter card metadata.
+The adapter refreshes an OAuth 2.0 access token before posting generated text with the canonical URL. X website cards are expected to render from the canonical page's Open Graph and Twitter card metadata.
+
+`X_ACCESS_TOKEN` may be kept locally for debugging, but long-running automation should rely on `X_REFRESH_TOKEN`.
+
+Optional for local schedulers:
+
+```text
+X_REFRESH_TOKEN_FILE
+```
+
+When X returns a rotated refresh token, the adapter writes it to this file. Keep the file outside git or under `.tokens/`.
 
 ### LinkedIn
 

@@ -307,7 +307,7 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(posted[0]["status"], "posted")
         self.assertTrue(str(posted[0]["post_id"]).startswith("mock-TOPIC-0001-x-en-x"))
         self.assertIn("mock-social/x/en/TOPIC-0001/x", str(posted[0]["posted_url"]))
-        self.assertIn("X_BEARER_TOKEN", missing_credentials("x", {}))
+        self.assertIn("X_REFRESH_TOKEN", missing_credentials("x", {}))
         self.assertIn("BLUESKY_HANDLE", missing_credentials("bluesky", {}))
         self.assertIn("bluesky: not ready", credential_report("bluesky"))
         with self.assertRaises(AdapterError):
@@ -333,7 +333,9 @@ class PublishingTest(unittest.TestCase):
 
         env = {
             "DEVTO_API_KEY": "devto-key",
-            "X_BEARER_TOKEN": "x-token",
+            "X_CLIENT_ID": "client-id",
+            "X_CLIENT_SECRET": "client-secret",
+            "X_REFRESH_TOKEN": "refresh-token",
             "HASHNODE_TOKEN": "hashnode-token",
             "HASHNODE_PUBLICATION_ID": "pub123",
             "BLUESKY_HANDLE": "onnel.test",
@@ -341,15 +343,16 @@ class PublishingTest(unittest.TestCase):
         }
         with patch.dict("os.environ", env):
             with patch("check_publishing_credentials.json_request", fake_json_request):
-                self.assertEqual(credential_status("devto", live=True)["identity"], "dev-user")
-                self.assertEqual(credential_status("x", live=True)["identity"], "x-user")
-                hashnode_status = credential_status("hashnode", live=True)
-                self.assertFalse(hashnode_status["implemented"])
-                self.assertFalse(hashnode_status["live_checked"])
-                self.assertEqual(credential_status("bluesky", live=True)["identity"], "did:plc:test")
+                with patch("check_publishing_credentials.form_request", return_value={"access_token": "x-access-token"}):
+                    self.assertEqual(credential_status("devto", live=True)["identity"], "dev-user")
+                    self.assertEqual(credential_status("x", live=True)["identity"], "x-user")
+                    hashnode_status = credential_status("hashnode", live=True)
+                    self.assertFalse(hashnode_status["implemented"])
+                    self.assertFalse(hashnode_status["live_checked"])
+                    self.assertEqual(credential_status("bluesky", live=True)["identity"], "did:plc:test")
 
         self.assertIn(("https://dev.to/api/users/me", "GET", None, {"api-key": "devto-key"}), calls)
-        self.assertIn(("https://api.x.com/2/users/me", "GET", None, {"Authorization": "Bearer x-token"}), calls)
+        self.assertIn(("https://api.x.com/2/users/me", "GET", None, {"Authorization": "Bearer x-access-token"}), calls)
         self.assertNotIn(("https://gql.hashnode.com", "POST", {"query": "query Viewer { me { id username } }"}, {"Authorization": "hashnode-token"}), calls)
 
     def test_x_adapter_creates_post_payload(self) -> None:
@@ -357,21 +360,33 @@ class PublishingTest(unittest.TestCase):
         generate_social_posts(self.topics_path, social_dir, "https://example.com/")
         approve_social_post("TOPIC-0001", "x", "en", "editor", social_dir / "manifest.json")
         calls: list[tuple[str, dict[str, object], dict[str, str] | None]] = []
+        refresh_calls: list[tuple[str, dict[str, str], dict[str, str] | None]] = []
 
         def fake_json_post(url: str, payload: dict[str, object], headers: dict[str, str] | None = None) -> dict[str, object]:
             calls.append((url, payload, headers))
             return {"data": {"id": "1234567890", "text": str(payload["text"])}}
 
-        with patch.dict("os.environ", {"X_BEARER_TOKEN": "x-token"}):
+        def fake_form_post(url: str, payload: dict[str, str], headers: dict[str, str] | None = None) -> dict[str, object]:
+            refresh_calls.append((url, payload, headers))
+            return {"access_token": "x-access-token", "refresh_token": "refresh-token"}
+
+        env = {"X_CLIENT_ID": "client-id", "X_CLIENT_SECRET": "client-secret", "X_REFRESH_TOKEN": "refresh-token"}
+        with patch.dict("os.environ", env):
             with patch("post_social_drafts.json_post", fake_json_post):
-                posted = post_social_drafts(social_dir / "manifest.json", platform="x", adapter="x")
+                with patch("post_social_drafts.form_post", fake_form_post):
+                    posted = post_social_drafts(social_dir / "manifest.json", platform="x", adapter="x")
 
         self.assertEqual(len(posted), 1)
         self.assertEqual(posted[0]["status"], "posted")
         self.assertEqual(posted[0]["post_id"], "1234567890")
         self.assertEqual(posted[0]["posted_url"], "https://x.com/i/web/status/1234567890")
+        self.assertEqual(refresh_calls[0][0], "https://api.x.com/2/oauth2/token")
+        self.assertEqual(refresh_calls[0][1]["grant_type"], "refresh_token")
+        self.assertEqual(refresh_calls[0][1]["refresh_token"], "refresh-token")
+        self.assertEqual(refresh_calls[0][1]["client_id"], "client-id")
+        self.assertTrue(str(refresh_calls[0][2]["Authorization"]).startswith("Basic "))
         self.assertEqual(calls[0][0], "https://api.x.com/2/tweets")
-        self.assertEqual(calls[0][2]["Authorization"], "Bearer x-token")
+        self.assertEqual(calls[0][2]["Authorization"], "Bearer x-access-token")
         self.assertIn("How to Read Very Large TXT Files", calls[0][1]["text"])
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", calls[0][1]["text"])
 
@@ -384,10 +399,12 @@ class PublishingTest(unittest.TestCase):
         def fake_json_post(url: str, payload: dict[str, object], headers: dict[str, str] | None = None) -> dict[str, object]:
             raise SocialPostingError("HTTP 429 from https://api.x.com/2/tweets: rate limit")
 
-        with patch.dict("os.environ", {"X_BEARER_TOKEN": "x-token"}):
+        env = {"X_CLIENT_ID": "client-id", "X_CLIENT_SECRET": "client-secret", "X_REFRESH_TOKEN": "refresh-token"}
+        with patch.dict("os.environ", env):
             with patch("post_social_drafts.json_post", fake_json_post):
-                with self.assertRaises(SocialPostingError):
-                    post_social_drafts(manifest_path, platform="x", adapter="x")
+                with patch("post_social_drafts.form_post", return_value={"access_token": "x-access-token"}):
+                    with self.assertRaises(SocialPostingError):
+                        post_social_drafts(manifest_path, platform="x", adapter="x")
 
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         failed = next(post for post in manifest["posts"] if post["platform"] == "x" and post["language"] == "en" and not post["is_variant"])
@@ -625,7 +642,7 @@ class PublishingTest(unittest.TestCase):
         self.assertIn("Publishing dry-run report", report)
         self.assertIn("approved social posts: 1", report)
         self.assertIn("approved syndication drafts: 1", report)
-        self.assertIn("x: not ready, missing=X_BEARER_TOKEN", report)
+        self.assertIn("x: not ready, missing=X_CLIENT_ID,X_CLIENT_SECRET,X_REFRESH_TOKEN", report)
         self.assertIn("devto: not ready, missing=DEVTO_API_KEY", report)
         self.assertIn("TOPIC-0001 x en x: text_length=", report)
         self.assertIn("TOPIC-0001 devto en: published=False tags=large-txt-files", report)

@@ -32,9 +32,9 @@ ADAPTERS: dict[str, AdapterSpec] = {
     "x": AdapterSpec(
         "x",
         "social",
-        ("X_BEARER_TOKEN",),
+        ("X_CLIENT_ID", "X_CLIENT_SECRET", "X_REFRESH_TOKEN"),
         True,
-        "X API v2 text post creation.",
+        "X API v2 text post creation with OAuth 2.0 refresh-token access.",
     ),
     "devto": AdapterSpec(
         "devto",

@@ -4,11 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
+from pathlib import Path
 
 from publishing_adapters import ADAPTERS, AdapterError, adapter_spec, missing_credentials
 
@@ -38,8 +41,70 @@ def json_request(
         raise CredentialPreflightError(f"HTTP {error.code} from {url}: {detail}") from error
 
 
+def form_request(url: str, payload: dict[str, str], headers: dict[str, str] | None = None) -> dict[str, object]:
+    data = urllib.parse.urlencode(payload).encode("utf-8")
+    request_headers = {"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"}
+    if headers:
+        request_headers.update(headers)
+    request = urllib.request.Request(url, data=data, headers=request_headers, method="POST")
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as error:
+        detail = error.read().decode("utf-8", errors="replace")
+        raise CredentialPreflightError(f"HTTP {error.code} from {url}: {detail}") from error
+
+
 def bluesky_service_url() -> str:
     return os.environ.get("BLUESKY_SERVICE", "https://bsky.social").rstrip("/")
+
+
+def x_basic_auth_header() -> str:
+    credentials = f"{os.environ['X_CLIENT_ID']}:{os.environ['X_CLIENT_SECRET']}".encode("utf-8")
+    return f"Basic {base64.b64encode(credentials).decode('ascii')}"
+
+
+def x_refresh_token() -> str:
+    token_file = os.environ.get("X_REFRESH_TOKEN_FILE", "").strip()
+    if token_file:
+        path = Path(token_file)
+        if path.exists():
+            token = path.read_text(encoding="utf-8").strip()
+            if token:
+                return token
+    return os.environ["X_REFRESH_TOKEN"]
+
+
+def persist_x_refresh_token(refresh_token: str, previous_refresh_token: str) -> None:
+    if refresh_token == previous_refresh_token:
+        return
+    token_file = os.environ.get("X_REFRESH_TOKEN_FILE", "").strip()
+    if token_file:
+        path = Path(token_file)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"{refresh_token}\n", encoding="utf-8")
+        return
+    print("X OAuth returned a rotated refresh token. Update X_REFRESH_TOKEN in your secret store.", file=sys.stderr)
+
+
+def refresh_x_access_token() -> str:
+    current_refresh_token = x_refresh_token()
+    response = form_request(
+        "https://api.x.com/2/oauth2/token",
+        {
+            "grant_type": "refresh_token",
+            "refresh_token": current_refresh_token,
+            "client_id": os.environ["X_CLIENT_ID"],
+        },
+        {"Authorization": x_basic_auth_header()},
+    )
+    access_token = response.get("access_token")
+    if not isinstance(access_token, str) or not access_token:
+        raise CredentialPreflightError("X OAuth refresh response did not include access_token")
+    refresh_token = response.get("refresh_token")
+    if isinstance(refresh_token, str) and refresh_token:
+        persist_x_refresh_token(refresh_token, current_refresh_token)
+    return access_token
 
 
 def live_preflight(adapter: str) -> dict[str, object]:
@@ -73,9 +138,10 @@ def live_preflight(adapter: str) -> dict[str, object]:
         me = data["me"]
         return {"authenticated": True, "identity": me.get("username") or me.get("id", "")}
     if adapter == "x":
+        access_token = refresh_x_access_token()
         response = json_request(
             "https://api.x.com/2/users/me",
-            headers={"Authorization": f"Bearer {os.environ['X_BEARER_TOKEN']}"},
+            headers={"Authorization": f"Bearer {access_token}"},
         )
         data = response.get("data")
         if not isinstance(data, dict):
