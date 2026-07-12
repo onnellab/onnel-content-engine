@@ -147,6 +147,18 @@ scripts/fill_ready_app_releases.py
 
 It promotes a planned row to `ready` only when exactly one matching `*-release.*` artifact exists.
 
+The release report stage then writes:
+
+```text
+generated/reports/app_releases.md
+```
+
+using:
+
+```text
+scripts/generate_app_release_report.py
+```
+
 For cross-repository releases, configure this secret:
 
 ```text

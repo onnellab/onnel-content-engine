@@ -170,6 +170,18 @@ When exactly one matching release artifact exists, this command fills `artifact_
 scripts/fill_ready_app_releases.py
 ```
 
+Generate the release status report with:
+
+```text
+scripts/generate_app_release_report.py
+```
+
+The report is written to:
+
+```text
+generated/reports/app_releases.md
+```
+
 ## Repository
 
 `repository` must use `owner/name` format.

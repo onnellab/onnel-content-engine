@@ -1,0 +1,205 @@
+#!/usr/bin/env python3
+"""Generate a Markdown report for app store and GitHub Release automation state."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import sys
+from collections import Counter
+from datetime import datetime
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+from check_store_versions import STORE_HEADER, STORE_VERSIONS_PATH
+from prepare_app_release_rows import CONFIG_HEADER, CONFIG_PATH
+from validate_app_releases import RELEASE_HEADER, RELEASES_PATH
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_PATH = ROOT / "generated" / "reports" / "app_releases.md"
+KST = ZoneInfo("Asia/Seoul")
+
+
+class AppReleaseReportError(ValueError):
+    """Raised when the app release report cannot be generated."""
+
+
+def read_csv(path: Path, expected_header: list[str]) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        if reader.fieldnames != expected_header:
+            raise AppReleaseReportError(f"{path} header mismatch")
+        return [{key: (value or "").strip() for key, value in row.items()} for row in reader]
+
+
+def markdown(value: str) -> str:
+    cleaned = " ".join(value.split())
+    return cleaned.replace("|", "\\|") or "-"
+
+
+def store_action(row: dict[str, str]) -> str:
+    status = row["status"]
+    if status == "updated":
+        return "Create or verify release candidate"
+    if status == "manual_check":
+        return "Check Google Play update manually"
+    if status == "failed":
+        return "Fix store lookup error"
+    if status == "new":
+        return "Baseline snapshot recorded"
+    if status == "unchanged":
+        return "No action"
+    return "Review status"
+
+
+def release_action(row: dict[str, str]) -> str:
+    status = row["status"]
+    if status == "planned":
+        return "Add release artifact and checksum"
+    if status == "ready":
+        return "GitHub Release can be created"
+    if status == "released":
+        return "No action"
+    if status == "failed":
+        return "Fix release error"
+    if status == "archived":
+        return "No action"
+    return "Review status"
+
+
+def config_index(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
+    return {row["app_id"]: row for row in rows}
+
+
+def release_index(rows: list[dict[str, str]]) -> dict[tuple[str, str], list[dict[str, str]]]:
+    index: dict[tuple[str, str], list[dict[str, str]]] = {}
+    for row in rows:
+        index.setdefault((row["app_id"], row["platform"]), []).append(row)
+    return index
+
+
+def table(headers: list[str], rows: list[list[str]]) -> list[str]:
+    lines = ["| " + " | ".join(headers) + " |", "| " + " | ".join(["---"] * len(headers)) + " |"]
+    for row in rows:
+        lines.append("| " + " | ".join(markdown(cell) for cell in row) + " |")
+    return lines
+
+
+def report_markdown(
+    store_rows: list[dict[str, str]],
+    release_rows: list[dict[str, str]],
+    config_rows: list[dict[str, str]],
+    generated_at: datetime,
+) -> str:
+    config = config_index(config_rows)
+    releases = release_index(release_rows)
+    store_counts = Counter(row["status"] for row in store_rows)
+    release_counts = Counter(row["status"] for row in release_rows)
+
+    lines = [
+        "# App Release Status",
+        "",
+        f"Generated: {generated_at.replace(microsecond=0).isoformat()}",
+        "",
+        "## Summary",
+        "",
+        *table(
+            ["Area", "Status", "Count"],
+            [["Store", status, str(count)] for status, count in sorted(store_counts.items())]
+            + [["GitHub Release", status, str(count)] for status, count in sorted(release_counts.items())],
+        ),
+        "",
+        "## Store Snapshots",
+        "",
+    ]
+
+    store_table: list[list[str]] = []
+    for row in sorted(store_rows, key=lambda item: (item["app_slug"], item["platform"])):
+        latest_release = releases.get((row["app_id"], row["platform"]), [])
+        release_status = latest_release[-1]["status"] if latest_release else "-"
+        cfg = config.get(row["app_id"], {})
+        store_table.append(
+            [
+                row["app_name"],
+                row["platform"],
+                row["version"] or row["store_package"] or row["store_app_id"],
+                row["status"],
+                release_status,
+                cfg.get("repository", ""),
+                store_action(row),
+            ]
+        )
+    lines.extend(table(["App", "Platform", "Version/Package", "Store", "Release", "Repository", "Next action"], store_table))
+
+    lines.extend(["", "## Release Candidates", ""])
+    if release_rows:
+        release_table = [
+            [
+                row["release_id"],
+                row["app_name"],
+                row["platform"],
+                row["tag"],
+                row["status"],
+                row["artifact_path"],
+                release_action(row),
+            ]
+            for row in release_rows
+        ]
+        lines.extend(table(["ID", "App", "Platform", "Tag", "Status", "Artifact", "Next action"], release_table))
+    else:
+        lines.append("No app release candidate rows exist yet.")
+
+    attention = [
+        [row["app_name"], row["platform"], row["status"], store_action(row), row["notes"]]
+        for row in store_rows
+        if row["status"] in {"updated", "manual_check", "failed"}
+    ]
+    attention += [
+        [row["app_name"], row["platform"], row["status"], release_action(row), row["notes"]]
+        for row in release_rows
+        if row["status"] in {"planned", "ready", "failed"}
+    ]
+    lines.extend(["", "## Attention Queue", ""])
+    if attention:
+        lines.extend(table(["App", "Platform", "Status", "Next action", "Notes"], attention))
+    else:
+        lines.append("No release automation items need attention.")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def generate_app_release_report(
+    store_versions_path: Path = STORE_VERSIONS_PATH,
+    releases_path: Path = RELEASES_PATH,
+    config_path: Path = CONFIG_PATH,
+    output_path: Path = REPORT_PATH,
+    now: datetime | None = None,
+) -> str:
+    store_rows = read_csv(store_versions_path, STORE_HEADER)
+    release_rows = read_csv(releases_path, RELEASE_HEADER)
+    config_rows = read_csv(config_path, CONFIG_HEADER)
+    text = report_markdown(store_rows, release_rows, config_rows, now or datetime.now(KST))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(text, encoding="utf-8")
+    return text
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate app release automation status report")
+    parser.add_argument("--store-versions", type=Path, default=STORE_VERSIONS_PATH)
+    parser.add_argument("--releases", type=Path, default=RELEASES_PATH)
+    parser.add_argument("--config", type=Path, default=CONFIG_PATH)
+    parser.add_argument("--output", type=Path, default=REPORT_PATH)
+    args = parser.parse_args()
+    try:
+        generate_app_release_report(args.store_versions, args.releases, args.config, args.output)
+    except (AppReleaseReportError, OSError) as error:
+        print(f"generate app release report failed: {error}", file=sys.stderr)
+        return 1
+    print(f"generated {args.output}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
