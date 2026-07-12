@@ -3,6 +3,7 @@ from __future__ import annotations
 import tempfile
 import unittest
 import json
+from datetime import datetime
 from pathlib import Path
 from unittest.mock import patch
 
@@ -22,6 +23,7 @@ from publishing import (
     generate_social_posts,
     x_weighted_length,
 )
+from approve_due_distribution import approve_due_distribution
 from approve_social_post import approve_social_post
 from generate_syndication_drafts import generate_syndication_drafts
 from evaluate_syndication_drafts import evaluate_syndication_drafts
@@ -312,6 +314,91 @@ class PublishingTest(unittest.TestCase):
         self.assertIn("bluesky: not ready", credential_report("bluesky"))
         with self.assertRaises(AdapterError):
             require_adapter_ready("bluesky", "social", {})
+
+    def test_distribution_generation_preserves_manifest_state(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        syndication_dir = self.root / "generated" / "syndication"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        generate_syndication_drafts(self.topics_path, syndication_dir, "https://example.com/")
+        approve_social_post("TOPIC-0001", "x", "en", "editor", social_dir / "manifest.json")
+        approve_syndication_draft("TOPIC-0001", "devto", "en", "editor", syndication_dir / "manifest.json")
+
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        generate_syndication_drafts(self.topics_path, syndication_dir, "https://example.com/")
+
+        social_manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
+        x_post = next(
+            post
+            for post in social_manifest["posts"]
+            if post["platform"] == "x" and post["language"] == "en" and not post["is_variant"]
+        )
+        self.assertEqual(x_post["status"], "approved")
+        self.assertEqual(x_post["approved_by"], "editor")
+        syndication_manifest = json.loads((syndication_dir / "manifest.json").read_text(encoding="utf-8"))
+        devto_draft = next(
+            draft for draft in syndication_manifest["drafts"] if draft["platform"] == "devto" and draft["language"] == "en"
+        )
+        self.assertEqual(devto_draft["status"], "approved")
+        self.assertEqual(devto_draft["approved_by"], "editor")
+
+    def test_approve_due_distribution_uses_staggered_core_cadence(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        syndication_dir = self.root / "generated" / "syndication"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        generate_syndication_drafts(self.topics_path, syndication_dir, "https://example.com/")
+
+        approve_due_distribution(
+            self.topics_path,
+            social_dir / "manifest.json",
+            syndication_dir / "manifest.json",
+            now=datetime.fromisoformat("2026-07-14T09:00:00+09:00"),
+            approved_by="automation",
+        )
+        social_manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
+        x_post = next(
+            post
+            for post in social_manifest["posts"]
+            if post["platform"] == "x" and post["language"] == "en" and not post["is_variant"]
+        )
+        bluesky_post = next(
+            post
+            for post in social_manifest["posts"]
+            if post["platform"] == "bluesky" and post["language"] == "en" and not post["is_variant"]
+        )
+        self.assertEqual(x_post["status"], "approved")
+        self.assertEqual(bluesky_post["status"], "draft")
+
+        approve_due_distribution(
+            self.topics_path,
+            social_dir / "manifest.json",
+            syndication_dir / "manifest.json",
+            now=datetime.fromisoformat("2026-07-15T09:00:00+09:00"),
+            approved_by="automation",
+        )
+        social_manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
+        bluesky_post = next(
+            post
+            for post in social_manifest["posts"]
+            if post["platform"] == "bluesky" and post["language"] == "en" and not post["is_variant"]
+        )
+        self.assertEqual(bluesky_post["status"], "approved")
+
+        approve_due_distribution(
+            self.topics_path,
+            social_dir / "manifest.json",
+            syndication_dir / "manifest.json",
+            now=datetime.fromisoformat("2026-07-16T09:00:00+09:00"),
+            approved_by="automation",
+        )
+        syndication_manifest = json.loads((syndication_dir / "manifest.json").read_text(encoding="utf-8"))
+        devto_draft = next(
+            draft for draft in syndication_manifest["drafts"] if draft["platform"] == "devto" and draft["language"] == "en"
+        )
+        hashnode_draft = next(
+            draft for draft in syndication_manifest["drafts"] if draft["platform"] == "hashnode" and draft["language"] == "en"
+        )
+        self.assertEqual(devto_draft["status"], "approved")
+        self.assertEqual(hashnode_draft["status"], "draft")
 
     def test_live_credential_preflight_uses_safe_auth_endpoints(self) -> None:
         calls: list[tuple[str, str, dict[str, object] | None, dict[str, str] | None]] = []

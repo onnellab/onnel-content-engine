@@ -203,6 +203,43 @@ jobs:
             --site-dir /tmp/onnel-content-engine-dry-run/generated/html \
             --site-url "$SITE_URL"
 
+      - name: Generate Distribution Drafts
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_social_posts.py --site-url "$SITE_URL"
+          python3 scripts/generate_syndication_drafts.py --site-url "$SITE_URL"
+
+      - name: Generate Distribution Drafts Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_social_posts.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --output-dir /tmp/onnel-content-engine-dry-run/generated/social \
+            --site-url "$SITE_URL"
+          python3 scripts/generate_syndication_drafts.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --output-dir /tmp/onnel-content-engine-dry-run/generated/syndication \
+            --site-url "$SITE_URL"
+
+      - name: Approve Due Core Distribution
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/approve_due_distribution.py --approved-by github-actions
+
+      - name: Approve Due Core Distribution Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/approve_due_distribution.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --social-manifest /tmp/onnel-content-engine-dry-run/generated/social/manifest.json \
+            --syndication-manifest /tmp/onnel-content-engine-dry-run/generated/syndication/manifest.json \
+            --approved-by github-actions \
+            --dry-run
+
       - name: Commit Content Engine Outputs
         if: env.DRY_RUN != 'true'
         run: |
@@ -210,7 +247,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           mkdir -p generated/assets generated/metadata generated/reviews generated/html
-          git add data/topics.csv topics/topics.csv generated/markdown generated/images generated/assets generated/metadata generated/reviews generated/html
+          git add data/topics.csv topics/topics.csv generated/markdown generated/images generated/assets generated/metadata generated/reviews generated/html generated/social generated/syndication
           if git diff --cached --quiet; then
             echo "No content engine changes to commit"
           else
@@ -242,3 +279,40 @@ jobs:
           python3 scripts/deploy_github_pages.py \
             --homepage-repo "$HOMEPAGE_REPO_PATH" \
             --branch main
+
+      - name: Post Due Core Distribution
+        id: post_core_distribution
+        if: env.DRY_RUN != 'true'
+        continue-on-error: true
+        env:
+          X_CLIENT_ID: ${{ secrets.X_CLIENT_ID }}
+          X_CLIENT_SECRET: ${{ secrets.X_CLIENT_SECRET }}
+          X_REFRESH_TOKEN: ${{ secrets.X_REFRESH_TOKEN }}
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+        run: |
+          set -euo pipefail
+          python3 scripts/post_core_distribution.py
+
+      - name: Commit Distribution Posting Status
+        if: env.DRY_RUN != 'true' && always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated/social/manifest.json generated/syndication/manifest.json
+          if git diff --cached --quiet; then
+            echo "No distribution posting status changes to commit"
+          else
+            git commit -m "Update distribution posting status"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Fail On Core Distribution Posting Error
+        if: env.DRY_RUN != 'true' && steps.post_core_distribution.outcome == 'failure'
+        run: |
+          set -euo pipefail
+          echo "Core distribution posting failed; manifest status was committed when possible" >&2
+          exit 1

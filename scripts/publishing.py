@@ -837,6 +837,65 @@ def manifest_item(
     }
 
 
+SOCIAL_STATE_FIELDS = (
+    "status",
+    "approved_by",
+    "approved_at",
+    "post_id",
+    "posted_url",
+    "posted_at",
+    "last_attempt_at",
+    "error",
+    "error_type",
+    "retry_count",
+    "impressions",
+    "clicks",
+    "engagements",
+    "last_metrics_at",
+)
+
+
+def previous_social_state(output_dir: Path) -> dict[tuple[str, str, str, str], dict[str, object]]:
+    path = output_dir / "manifest.json"
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    posts = data.get("posts")
+    if not isinstance(posts, list):
+        return {}
+    state: dict[tuple[str, str, str, str], dict[str, object]] = {}
+    for post in posts:
+        if not isinstance(post, dict):
+            continue
+        key = (
+            str(post.get("topic_id", "")),
+            str(post.get("platform", "")),
+            str(post.get("language", "")),
+            str(post.get("template_id", "")),
+        )
+        if all(key):
+            state[key] = post
+    return state
+
+
+def apply_previous_social_state(item: dict[str, object], state: dict[tuple[str, str, str, str], dict[str, object]]) -> None:
+    key = (
+        str(item.get("topic_id", "")),
+        str(item.get("platform", "")),
+        str(item.get("language", "")),
+        str(item.get("template_id", "")),
+    )
+    previous = state.get(key)
+    if not previous:
+        return
+    for field in SOCIAL_STATE_FIELDS:
+        if field in previous:
+            item[field] = previous[field]
+
+
 def generate_social_posts(
     topics_path: Path = DEFAULT_TOPICS_PATH,
     output_dir: Path = DEFAULT_SOCIAL_OUTPUT_DIR,
@@ -844,6 +903,7 @@ def generate_social_posts(
     platforms: tuple[str, ...] = ("x", "linkedin", "bluesky"),
 ) -> list[SocialPost]:
     site_url = normalize_site_url(site_url)
+    state = previous_social_state(output_dir)
     if output_dir.exists():
         shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True)
@@ -870,9 +930,9 @@ def generate_social_posts(
             destination.write_text(text + "\n", encoding="utf-8")
             if not template.is_variant:
                 posts.append(SocialPost(article.topic["id"], template.platform, destination, text))
-            manifest_items.append(
-                manifest_item(article, template, destination, card_path, site_url, project_root, weighted_length)
-            )
+            item = manifest_item(article, template, destination, card_path, site_url, project_root, weighted_length)
+            apply_previous_social_state(item, state)
+            manifest_items.append(item)
     (output_dir / "manifest.json").write_text(json.dumps({"posts": manifest_items}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return posts
 

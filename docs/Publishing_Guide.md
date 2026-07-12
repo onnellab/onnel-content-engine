@@ -451,6 +451,15 @@ Preferred schedule:
 
 * One article every three days
 
+Core distribution schedule:
+
+* ONNELLAB canonical article: every three days at `09:00` KST
+* X: same day as the canonical article
+* Bluesky: one day after the canonical article
+* Dev.to: two days after the canonical article
+
+This creates a three-day distribution window per article and avoids posting the same article to every automated channel at once.
+
 Consistency is more important than volume.
 
 Avoid long inactive periods followed by large bursts of content.
@@ -460,6 +469,16 @@ Generation work may happen ahead of publication.
 Article generation, image asset generation, and internal link recommendation may be prepared in advance.
 
 Publication itself must still follow the three-day schedule.
+
+Distribution drafts are approved automatically only for English primary drafts on the core automated channels. Variants, LinkedIn, Hashnode, and Medium remain manual/export-only unless explicitly approved.
+
+The core automated posting command is:
+
+```text
+scripts/post_core_distribution.py
+```
+
+It attempts X, Bluesky, and Dev.to independently so one platform failure does not prevent the remaining due platforms from being attempted.
 
 ---
 

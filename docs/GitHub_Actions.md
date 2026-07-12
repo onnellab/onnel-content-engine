@@ -240,7 +240,36 @@ generated/html/
 
 ---
 
-# 12. Deploy
+# 12. Generate And Approve Distribution
+
+The distribution draft stage runs after the canonical site build:
+
+```text
+scripts/generate_social_posts.py --site-url https://onnelakin.github.io/
+scripts/generate_syndication_drafts.py --site-url https://onnelakin.github.io/
+scripts/approve_due_distribution.py --approved-by github-actions
+```
+
+Core automated cadence:
+
+```text
+Day 0: canonical ONNELLAB article + X
+Day 1: Bluesky
+Day 2: Dev.to
+Day 3: next canonical ONNELLAB article + X
+```
+
+Only English primary drafts are automatically approved.
+
+LinkedIn remains manual.
+
+Hashnode remains export-only unless its paid API is enabled later.
+
+Medium remains disabled.
+
+---
+
+# 13. Deploy
 
 The deploy stage runs only when dry-run mode is disabled.
 
@@ -280,7 +309,37 @@ The homepage repository then runs its own Astro build before the Markdown conten
 
 ---
 
-# 13. Scheduled Automation
+# 14. Post Core Distribution
+
+After deployment succeeds, the workflow posts approved due distribution drafts:
+
+```text
+scripts/post_core_distribution.py
+```
+
+Required GitHub Actions secrets:
+
+```text
+X_CLIENT_ID
+X_CLIENT_SECRET
+X_REFRESH_TOKEN
+BLUESKY_HANDLE
+BLUESKY_APP_PASSWORD
+DEVTO_API_KEY
+```
+
+Posting status is committed back to:
+
+```text
+generated/social/manifest.json
+generated/syndication/manifest.json
+```
+
+The core distribution posting script attempts X, Bluesky, and Dev.to independently. If one platform fails, the remaining platforms are still attempted and the failed manifest item records its error state before the workflow fails.
+
+---
+
+# 15. Scheduled Automation
 
 The workflow runs automatically every day at:
 
@@ -304,7 +363,7 @@ Scheduled events run real publication mode.
 
 ---
 
-# 14. Dry-Run Mode
+# 16. Dry-Run Mode
 
 Dry-run mode is used for testing the workflow safely.
 
@@ -319,8 +378,11 @@ In dry-run mode:
 * scheduling runs in a temporary copy
 * due-publication runs in a temporary copy
 * build runs in a temporary copy
+* distribution draft generation runs in a temporary copy
+* due distribution approval runs in a temporary copy
 * homepage Markdown export is previewed without copying files
 * deployment is skipped
+* external distribution posting is skipped
 * repository files are not modified
 
 Manual workflow dispatch defaults to dry-run mode.

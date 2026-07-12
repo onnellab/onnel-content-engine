@@ -58,6 +58,59 @@ def social_card_url(site_url: str, topic: dict[str, str]) -> str:
     return urljoin(normalize_site_url(site_url), f"blog-assets/{topic['primary_language']}/{topic['slug']}/social-card.png")
 
 
+SYNDICATION_STATE_FIELDS = (
+    "status",
+    "approved_by",
+    "approved_at",
+    "post_id",
+    "posted_url",
+    "posted_at",
+    "last_attempt_at",
+    "error",
+    "error_type",
+    "retry_count",
+)
+
+
+def previous_syndication_state(output_dir: Path) -> dict[tuple[str, str, str], dict[str, object]]:
+    path = output_dir / "manifest.json"
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    drafts = data.get("drafts")
+    if not isinstance(drafts, list):
+        return {}
+    state: dict[tuple[str, str, str], dict[str, object]] = {}
+    for draft in drafts:
+        if not isinstance(draft, dict):
+            continue
+        key = (
+            str(draft.get("topic_id", "")),
+            str(draft.get("platform", "")),
+            str(draft.get("language", "")),
+        )
+        if all(key):
+            state[key] = draft
+    return state
+
+
+def apply_previous_syndication_state(item: dict[str, object], state: dict[tuple[str, str, str], dict[str, object]]) -> None:
+    key = (
+        str(item.get("topic_id", "")),
+        str(item.get("platform", "")),
+        str(item.get("language", "")),
+    )
+    previous = state.get(key)
+    if not previous:
+        return
+    for field in SYNDICATION_STATE_FIELDS:
+        if field in previous:
+            item[field] = previous[field]
+
+
 def generate_syndication_drafts(
     topics_path: Path = DEFAULT_TOPICS_PATH,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
@@ -65,6 +118,7 @@ def generate_syndication_drafts(
     platforms: tuple[str, ...] = PLATFORMS,
 ) -> list[dict[str, object]]:
     site_url = normalize_site_url(site_url)
+    state = previous_syndication_state(output_dir)
     if output_dir.exists():
         shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True)
@@ -91,27 +145,27 @@ def generate_syndication_drafts(
             destination = output_dir / platform / article.topic["primary_language"] / article.topic["category"] / f"{article.topic['slug']}.md"
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_text(render_template(template_path.read_text(encoding="utf-8"), context), encoding="utf-8")
-            manifest.append(
-                {
-                    "topic_id": article.topic["id"],
-                    "platform": platform,
-                    "language": article.topic["primary_language"],
-                    "category": article.topic["category"],
-                    "slug": article.topic["slug"],
-                    "draft_path": str(destination.relative_to(project_root)),
-                    "canonical_url": canonical_url,
-                    "status": "draft",
-                    "approved_by": "",
-                    "approved_at": "",
-                    "post_id": "",
-                    "posted_url": "",
-                    "posted_at": "",
-                    "last_attempt_at": "",
-                    "error": "",
-                    "error_type": "",
-                    "retry_count": 0,
-                }
-            )
+            item = {
+                "topic_id": article.topic["id"],
+                "platform": platform,
+                "language": article.topic["primary_language"],
+                "category": article.topic["category"],
+                "slug": article.topic["slug"],
+                "draft_path": str(destination.relative_to(project_root)),
+                "canonical_url": canonical_url,
+                "status": "draft",
+                "approved_by": "",
+                "approved_at": "",
+                "post_id": "",
+                "posted_url": "",
+                "posted_at": "",
+                "last_attempt_at": "",
+                "error": "",
+                "error_type": "",
+                "retry_count": 0,
+            }
+            apply_previous_syndication_state(item, state)
+            manifest.append(item)
     (output_dir / "manifest.json").write_text(json.dumps({"drafts": manifest}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return manifest
 

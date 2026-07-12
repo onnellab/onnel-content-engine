@@ -10,6 +10,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+from approve_due_distribution import approve_due_distribution
 from generate_all_image_specs import generate_all_image_specs
 from generate_all_image_assets import generate_all_image_assets
 from generate_all_internal_links import generate_all_internal_links
@@ -78,6 +79,7 @@ def run_pipeline(
             build_site(topics_path, html_root, site_url)
             generate_social_posts(topics_path, social_root, site_url)
             generate_syndication_drafts(topics_path, syndication_root, site_url)
+            approve_due_distribution(topics_path, social_root / "manifest.json", syndication_root / "manifest.json", dry_run=True)
             deploy_github_pages(topics_path=topics_path, homepage_repo=homepage_repo, dry_run=True)
         return
 
@@ -91,6 +93,7 @@ def run_pipeline(
     build_site(site_url=site_url)
     generate_social_posts(site_url=site_url)
     generate_syndication_drafts(site_url=site_url)
+    approve_due_distribution()
     if deploy:
         deploy_github_pages(homepage_repo=homepage_repo)
 

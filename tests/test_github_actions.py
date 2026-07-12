@@ -25,7 +25,11 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Schedule Ready Articles", workflow)
         self.assertIn("Publish Due Articles", workflow)
         self.assertIn("Build", workflow)
+        self.assertIn("Generate Distribution Drafts", workflow)
+        self.assertIn("Approve Due Core Distribution", workflow)
         self.assertIn("Deploy", workflow)
+        self.assertIn("Post Due Core Distribution", workflow)
+        self.assertIn("Fail On Core Distribution Posting Error", workflow)
         self.assertIn('cron: "0 0 * * *"', workflow)
         self.assertIn("--threshold 9.0", workflow)
         self.assertIn("--interval-days 3", workflow)
@@ -58,7 +62,9 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("three-day", text)
         self.assertIn("9.0 / 10", text)
         self.assertIn("Build", text)
+        self.assertIn("Generate And Approve Distribution", text)
         self.assertIn("Deploy", text)
+        self.assertIn("Post Core Distribution", text)
         self.assertIn("Dry-Run Mode", text)
 
 
