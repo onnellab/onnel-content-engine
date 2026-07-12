@@ -13,7 +13,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from verify_manual_publications import verify_manual_publications  # noqa: E402
+from verify_manual_publications import public_profile_url, verify_manual_publications  # noqa: E402
 
 
 class VerifyManualPublicationsTest(unittest.TestCase):
@@ -183,6 +183,10 @@ class VerifyManualPublicationsTest(unittest.TestCase):
 
             self.assertEqual(len(verified), 1)
             self.assertEqual(json.loads(state.read_text(encoding="utf-8"))["done"], {})
+
+    def test_x_public_profile_defaults_to_onnellab(self) -> None:
+        with unittest.mock.patch.dict("os.environ", {}, clear=True):
+            self.assertEqual(public_profile_url("x"), "https://x.com/onnellab")
 
 
 if __name__ == "__main__":

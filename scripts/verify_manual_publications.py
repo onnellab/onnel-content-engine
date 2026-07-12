@@ -25,6 +25,7 @@ DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.js
 DEFAULT_STATE = ROOT / "data" / "manual_publish_state.json"
 PUBLIC_API_BSKY = "https://public.api.bsky.app"
 ONNELLAB_USER_AGENT = "ONNELLAB content engine"
+DEFAULT_X_USERNAME = "onnellab"
 
 
 class PublicationVerificationError(ValueError):
@@ -192,7 +193,11 @@ def public_profile_url(platform: str) -> str:
         explicit = os.environ.get("X_PUBLIC_PROFILE_URL", "").strip() or os.environ.get("TWITTER_PUBLIC_PROFILE_URL", "").strip()
         if explicit:
             return explicit
-        username = os.environ.get("X_USERNAME", "").strip().lstrip("@") or os.environ.get("TWITTER_USERNAME", "").strip().lstrip("@")
+        username = (
+            os.environ.get("X_USERNAME", "").strip().lstrip("@")
+            or os.environ.get("TWITTER_USERNAME", "").strip().lstrip("@")
+            or DEFAULT_X_USERNAME
+        )
         return f"https://x.com/{username}" if username else ""
     if platform == "linkedin":
         return os.environ.get("LINKEDIN_PUBLIC_PROFILE_URL", "").strip() or os.environ.get("LINKEDIN_PROFILE_URL", "").strip()
@@ -214,7 +219,7 @@ const { chromium } = require('playwright');
   process.exit(2);
 });
 """.strip()
-    with tempfile.NamedTemporaryFile("w", suffix=".js", encoding="utf-8", delete=False) as handle:
+    with tempfile.NamedTemporaryFile("w", suffix=".js", encoding="utf-8", dir=ROOT, delete=False) as handle:
         handle.write(script)
         path = Path(handle.name)
     try:

@@ -504,7 +504,7 @@ Verified completion is committed back to:
 data/manual_publish_state.json
 ```
 
-Optional GitHub Actions secrets for public verification:
+GitHub Actions secrets for public verification:
 
 ```text
 DEVTO_USERNAME
@@ -519,6 +519,8 @@ LINKEDIN_PROFILE_URL
 ```
 
 Bluesky and Dev.to checks use public APIs. Medium and Hashnode use RSS when configured. X/Twitter and LinkedIn use Playwright to inspect public profile pages without login; those checks are lower confidence because public pages can change, hide content, or rate-limit anonymous visitors.
+
+X/Twitter defaults to `https://x.com/onnellab` when no X profile secret is set. LinkedIn requires `LINKEDIN_PUBLIC_PROFILE_URL` or `LINKEDIN_PROFILE_URL`.
 
 ---
 

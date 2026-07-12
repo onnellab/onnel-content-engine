@@ -241,7 +241,7 @@ Supported medium/low-confidence checks:
 scripts/verify_manual_publications.py --visual-public-pages
 ```
 
-Optional public-page environment variables:
+Public-page environment variables:
 
 ```text
 X_PUBLIC_PROFILE_URL
@@ -249,6 +249,8 @@ X_USERNAME
 LINKEDIN_PUBLIC_PROFILE_URL
 LINKEDIN_PROFILE_URL
 ```
+
+Twitter defaults to `https://x.com/onnellab` when no X profile variable is set. LinkedIn requires `LINKEDIN_PUBLIC_PROFILE_URL` or `LINKEDIN_PROFILE_URL`, because LinkedIn profile URLs cannot be reliably inferred from the account name.
 
 Twitter and LinkedIn public-page verification is intentionally marked low confidence because those pages can change, hide posts, rate-limit anonymous users, or render different content by region. Use it as a convenience check, not as the source of record.
 

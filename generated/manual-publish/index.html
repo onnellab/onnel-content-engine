@@ -45,6 +45,11 @@
     .metric-card:nth-child(5) { background: linear-gradient(135deg, var(--blue-soft), #fff); }
     .metric-card span { color: var(--muted); font-size: 12px; }
     .metric-card strong { font-size: 28px; line-height: 1; letter-spacing: 0; }
+    .metric-card strong.state-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .metric-card .spinner { width: 18px; height: 18px; border: 2px solid rgba(46,111,187,.22); border-top-color: var(--blue); border-radius: 999px; animation: spin .8s linear infinite; flex: 0 0 auto; }
+    .metric-card .state-subtext { font-size: 12px; font-weight: 800; color: var(--muted); line-height: 1.2; }
+    .metric-card.is-working { border-color: var(--blue); outline: 2px solid rgba(46,111,187,.14); }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .metric-card.is-active { border-color: var(--blue); outline: 2px solid rgba(46,111,187,.16); }
     .metric-card:disabled { cursor: default; opacity: .72; transform: none; }
     .tool-panel { border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }
@@ -246,6 +251,8 @@
         verificationReady: '실행',
         verificationTokenRequired: '토큰 필요',
         verificationFailed: '실패',
+        verificationRefreshIn: '자동 재확인',
+        secondsShort: '초',
         tokenNeededNote: 'ONNELLAB_GITHUB_PAGES_TOKEN 입력 후 동기화와 공개 확인을 실행할 수 있습니다.',
         overviewVerify: '공개 확인',
         enableBadge: '뱃지 켜기',
@@ -352,6 +359,8 @@
         verificationReady: 'Run',
         verificationTokenRequired: 'Token needed',
         verificationFailed: 'Failed',
+        verificationRefreshIn: 'auto refresh',
+        secondsShort: 's',
         tokenNeededNote: 'Enter ONNELLAB_GITHUB_PAGES_TOKEN to run sync and public profile checks.',
         overviewVerify: 'Public check',
         enableBadge: 'Enable badge',
@@ -473,6 +482,8 @@
     let remoteSha = '';
     let showVariants = false;
     let currentView = 'due';
+    let verifyCountdownTimer = null;
+    let verifyCountdownRemaining = 0;
 
     tokenInput.value = localStorage.getItem(tokenKey) || '';
 
@@ -507,7 +518,7 @@
       empty.textContent = t('empty');
       langToggle.textContent = currentLang === 'ko' ? 'English' : '한국어';
       setSync(syncStateLarge.dataset.state || (githubToken() ? 'synced' : 'viewOnly'));
-      setVerifyState(verifyStateLarge.dataset.state || (githubToken() ? 'verificationReady' : 'verificationTokenRequired'));
+      setVerifyState(verifyStateLarge.dataset.state || (githubToken() ? 'verificationReady' : 'verificationTokenRequired'), verifyCountdownRemaining);
       syncViewButtons();
       renderAppStatusSummary();
       renderBlogSummary();
@@ -561,7 +572,8 @@
     function setSync(label) {
       syncStateLarge.dataset.state = label;
       const value = messages[currentLang][label] || label;
-      syncStateLarge.textContent = value;
+      setStateContent(syncStateLarge, value, label === 'syncing');
+      syncButtonLarge.classList.toggle('is-working', label === 'syncing');
       syncButtonLarge.disabled = false;
       syncButtonLarge.setAttribute('aria-disabled', 'false');
       verifyButtonLarge.disabled = false;
@@ -570,11 +582,57 @@
       if (!githubToken()) setVerifyState('verificationTokenRequired');
     }
 
-    function setVerifyState(label) {
+    function setVerifyState(label, countdown = 0) {
       verifyStateLarge.dataset.state = label;
-      verifyStateLarge.textContent = messages[currentLang][label] || label;
+      const isWorking = ['verifyingPublications', 'verificationStarted'].includes(label);
+      const subtext = label === 'verificationStarted' && countdown > 0
+        ? `${t('verificationRefreshIn')} ${countdown}${t('secondsShort')}`
+        : '';
+      setStateContent(verifyStateLarge, messages[currentLang][label] || label, isWorking, subtext);
+      verifyButtonLarge.classList.toggle('is-working', isWorking);
       verifyButtonLarge.disabled = false;
       verifyButtonLarge.setAttribute('aria-disabled', 'false');
+    }
+
+    function setStateContent(element, label, isWorking = false, subtext = '') {
+      element.textContent = '';
+      element.classList.toggle('state-line', isWorking || Boolean(subtext));
+      if (isWorking) {
+        const spinner = document.createElement('span');
+        spinner.className = 'spinner';
+        spinner.setAttribute('aria-hidden', 'true');
+        element.appendChild(spinner);
+      }
+      const labelText = document.createElement('span');
+      labelText.textContent = label;
+      element.appendChild(labelText);
+      if (subtext) {
+        const small = document.createElement('span');
+        small.className = 'state-subtext';
+        small.textContent = subtext;
+        element.appendChild(small);
+      }
+    }
+
+    function clearVerifyCountdown() {
+      if (verifyCountdownTimer) clearInterval(verifyCountdownTimer);
+      verifyCountdownTimer = null;
+      verifyCountdownRemaining = 0;
+    }
+
+    function startVerifyCountdown(seconds) {
+      clearVerifyCountdown();
+      verifyCountdownRemaining = seconds;
+      setVerifyState('verificationStarted', verifyCountdownRemaining);
+      verifyCountdownTimer = setInterval(() => {
+        verifyCountdownRemaining -= 1;
+        if (verifyCountdownRemaining <= 0) {
+          clearVerifyCountdown();
+          loadRemoteState();
+          return;
+        }
+        setVerifyState('verificationStarted', verifyCountdownRemaining);
+      }, 1000);
     }
 
     function revealTokenInput() {
@@ -630,9 +688,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ref: stateBranch, inputs: { visual_public_pages: 'true' } }),
         });
-        setVerifyState('verificationStarted');
-        setTimeout(loadRemoteState, 90000);
+        startVerifyCountdown(90);
       } catch (error) {
+        clearVerifyCountdown();
         setVerifyState('verificationFailed');
         setSync('syncError');
         console.error(error);
@@ -642,6 +700,7 @@
     }
 
     async function loadRemoteState() {
+      clearVerifyCountdown();
       setSync('syncing');
       try {
         const data = await githubRequest(`/repos/${stateRepo}/contents/${statePath}?ref=${stateBranch}`);
