@@ -359,6 +359,8 @@ Dev.to real draft posting is supported:
 * requires `DEVTO_API_KEY`
 * sends `POST https://dev.to/api/articles`
 * uses the `api-key` request header
+* sends `Accept: application/vnd.forem.api-v1+json`
+* sends `User-Agent: ONNELLAB content engine`
 * sends `published: false` from the generated Dev.to frontmatter
 * preserves the canonical URL from the manifest
 

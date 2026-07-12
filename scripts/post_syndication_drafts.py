@@ -19,6 +19,10 @@ from publishing_adapters import AdapterError, require_adapter_ready
 from validate_syndication_drafts import SyndicationValidationError, project_root_for_manifest, validate_syndication_drafts
 
 
+FOREM_API_ACCEPT = "application/vnd.forem.api-v1+json"
+ONNELLAB_USER_AGENT = "ONNELLAB content engine"
+
+
 class SyndicationPostingError(ValueError):
     """Raised when approved syndication drafts cannot be posted."""
 
@@ -115,7 +119,7 @@ def post_devto_draft(draft: dict[str, object], project_root: Path) -> tuple[str,
     response = json_post(
         "https://dev.to/api/articles",
         devto_payload(draft, project_root),
-        {"api-key": api_key},
+        {"api-key": api_key, "Accept": FOREM_API_ACCEPT, "User-Agent": ONNELLAB_USER_AGENT},
     )
     post_id = response.get("id")
     url = response.get("url")

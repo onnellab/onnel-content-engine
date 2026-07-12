@@ -16,6 +16,10 @@ from pathlib import Path
 from publishing_adapters import ADAPTERS, AdapterError, adapter_spec, missing_credentials
 
 
+FOREM_API_ACCEPT = "application/vnd.forem.api-v1+json"
+ONNELLAB_USER_AGENT = "ONNELLAB content engine"
+
+
 class CredentialPreflightError(ValueError):
     """Raised when a live credential preflight fails."""
 
@@ -119,7 +123,14 @@ def live_preflight(adapter: str) -> dict[str, object]:
             raise CredentialPreflightError("Bluesky session response did not include accessJwt")
         return {"authenticated": True, "identity": response.get("did", "")}
     if adapter == "devto":
-        response = json_request("https://dev.to/api/users/me", headers={"api-key": os.environ["DEVTO_API_KEY"]})
+        response = json_request(
+            "https://dev.to/api/users/me",
+            headers={
+                "api-key": os.environ["DEVTO_API_KEY"],
+                "Accept": FOREM_API_ACCEPT,
+                "User-Agent": ONNELLAB_USER_AGENT,
+            },
+        )
         username = response.get("username") or response.get("name") or response.get("id", "")
         return {"authenticated": True, "identity": username}
     if adapter == "hashnode":

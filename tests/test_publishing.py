@@ -438,7 +438,19 @@ class PublishingTest(unittest.TestCase):
                     self.assertFalse(hashnode_status["live_checked"])
                     self.assertEqual(credential_status("bluesky", live=True)["identity"], "did:plc:test")
 
-        self.assertIn(("https://dev.to/api/users/me", "GET", None, {"api-key": "devto-key"}), calls)
+        self.assertIn(
+            (
+                "https://dev.to/api/users/me",
+                "GET",
+                None,
+                {
+                    "api-key": "devto-key",
+                    "Accept": "application/vnd.forem.api-v1+json",
+                    "User-Agent": "ONNELLAB content engine",
+                },
+            ),
+            calls,
+        )
         self.assertIn(("https://api.x.com/2/users/me", "GET", None, {"Authorization": "Bearer x-access-token"}), calls)
         self.assertNotIn(("https://gql.hashnode.com", "POST", {"query": "query Viewer { me { id username } }"}, {"Authorization": "hashnode-token"}), calls)
 
@@ -684,6 +696,8 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(posted[0]["posted_url"], "https://dev.to/onnel/read-large-txt-files")
         self.assertEqual(calls[0][0], "https://dev.to/api/articles")
         self.assertEqual(calls[0][2]["api-key"], "devto-key")
+        self.assertEqual(calls[0][2]["Accept"], "application/vnd.forem.api-v1+json")
+        self.assertEqual(calls[0][2]["User-Agent"], "ONNELLAB content engine")
         article = calls[0][1]["article"]
         self.assertEqual(article["title"], "How to Read Very Large TXT Files")
         self.assertFalse(article["published"])
