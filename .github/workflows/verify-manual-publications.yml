@@ -18,11 +18,20 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      HOMEPAGE_REPO_PATH: .homepage
 
     steps:
       - name: Checkout content engine
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+
+      - name: Checkout homepage
+        uses: actions/checkout@v4
+        with:
+          repository: onnellab/onnellab.github.io
+          path: ${{ env.HOMEPAGE_REPO_PATH }}
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
 
       - name: Configure Python
@@ -75,4 +84,27 @@ jobs:
             git commit -m "Update verified manual publication state"
             git pull --rebase origin main
             git push origin HEAD:main
+          fi
+
+      - name: Build manual publish dashboard
+        run: |
+          set -euo pipefail
+          python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+
+      - name: Deploy manual publish dashboard
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOMEPAGE_REPO_PATH/public/manual-publish"
+          cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
+          cp generated/manual-publish/manifest.webmanifest "$HOMEPAGE_REPO_PATH/public/manual-publish/manifest.webmanifest"
+          cp generated/manual-publish/sw.js "$HOMEPAGE_REPO_PATH/public/manual-publish/sw.js"
+          git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
+          git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/index.html public/manual-publish/manifest.webmanifest public/manual-publish/sw.js
+          if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
+            echo "No manual publish dashboard changes to deploy"
+          else
+            git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh manual publish dashboard"
+            git -C "$HOMEPAGE_REPO_PATH" pull --rebase origin main
+            git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
           fi

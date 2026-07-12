@@ -647,11 +647,11 @@ def html_document(
   <script id="store-data" type="application/json">{store_data}</script>
   <script id="site-data" type="application/json">{site_data}</script>
   <script>
-    const items = JSON.parse(document.getElementById('manual-data').textContent);
-    const releases = JSON.parse(document.getElementById('release-data').textContent);
-    const blogItems = JSON.parse(document.getElementById('blog-data').textContent);
-    const storeItems = JSON.parse(document.getElementById('store-data').textContent);
-    const siteItems = JSON.parse(document.getElementById('site-data').textContent);
+    let items = JSON.parse(document.getElementById('manual-data').textContent);
+    let releases = JSON.parse(document.getElementById('release-data').textContent);
+    let blogItems = JSON.parse(document.getElementById('blog-data').textContent);
+    let storeItems = JSON.parse(document.getElementById('store-data').textContent);
+    let siteItems = JSON.parse(document.getElementById('site-data').textContent);
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
     const stateBranch = 'main';
@@ -1024,10 +1024,24 @@ def html_document(
         select.appendChild(option);
       }});
     }}
-    optionize(filters.platform, [...new Set(items.map((item) => item.platform_label))].sort());
-    optionize(filters.language, [...new Set(items.map((item) => item.language))].sort());
-    optionize(filters.status, [...new Set(items.map((item) => item.status))].sort());
-    applyTranslations();
+    function syncFilterOptions() {{
+      const current = {{
+        platform: filters.platform.value,
+        language: filters.language.value,
+        status: filters.status.value,
+      }};
+      [filters.platform, filters.language, filters.status].forEach((select) => {{
+        while (select.options.length > 1) select.remove(1);
+      }});
+      optionize(filters.platform, [...new Set(items.map((item) => item.platform_label))].sort());
+      optionize(filters.language, [...new Set(items.map((item) => item.language))].sort());
+      optionize(filters.status, [...new Set(items.map((item) => item.status))].sort());
+      Object.entries(current).forEach(([key, value]) => {{
+        if ([...filters[key].options].some((option) => option.value === value)) filters[key].value = value;
+      }});
+      applyTranslations();
+    }}
+    syncFilterOptions();
 
     function githubToken() {{
       return localStorage.getItem(tokenKey) || tokenInput.value.trim();
@@ -1096,7 +1110,7 @@ def html_document(
         verifyCountdownRemaining -= 1;
         if (verifyCountdownRemaining <= 0) {{
           clearVerifyCountdown();
-          loadRemoteState();
+          loadRemoteState({{ refreshDashboardData: true }});
           return;
         }}
         setVerifyState('verificationStarted', verifyCountdownRemaining);
@@ -1169,7 +1183,26 @@ def html_document(
       }}
     }}
 
-    async function loadRemoteState() {{
+    function readEmbeddedJson(doc, id) {{
+      const element = doc.getElementById(id);
+      return element ? JSON.parse(element.textContent || '[]') : [];
+    }}
+
+    async function refreshDashboardDataFromPublishedPage() {{
+      const url = new URL(window.location.href);
+      url.searchParams.set('refresh', String(Date.now()));
+      const response = await fetch(url.toString(), {{ cache: 'no-store' }});
+      if (!response.ok) throw new Error('Failed to refresh dashboard data');
+      const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+      items = readEmbeddedJson(doc, 'manual-data');
+      releases = readEmbeddedJson(doc, 'release-data');
+      blogItems = readEmbeddedJson(doc, 'blog-data');
+      storeItems = readEmbeddedJson(doc, 'store-data');
+      siteItems = readEmbeddedJson(doc, 'site-data');
+      syncFilterOptions();
+    }}
+
+    async function loadRemoteState(options = {{}}) {{
       clearVerifyCountdown();
       setSync('syncing');
       try {{
@@ -1177,6 +1210,13 @@ def html_document(
         remoteSha = data.sha;
         remoteState = JSON.parse(decodeBase64Unicode(data.content));
         remoteState.done ||= {{}};
+        if (options.refreshDashboardData) {{
+          try {{
+            await refreshDashboardDataFromPublishedPage();
+          }} catch (refreshError) {{
+            console.warn(refreshError);
+          }}
+        }}
         setSync(githubToken() ? 'synced' : 'viewOnly');
         setVerifyState(githubToken() ? 'verificationReady' : 'verificationTokenRequired');
       }} catch (error) {{
