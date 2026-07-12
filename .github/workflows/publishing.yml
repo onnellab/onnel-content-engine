@@ -22,7 +22,7 @@ jobs:
     name: Validate, generate, build, and deploy
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
 
     env:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || github.event_name == 'push' && 'true' || 'false' }}
@@ -32,6 +32,8 @@ jobs:
     steps:
       - name: Checkout content engine
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
 
       - name: Checkout homepage
         uses: actions/checkout@v4
