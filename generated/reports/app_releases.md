@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-07-12T17:28:36+09:00
+Generated: 2026-07-12T20:30:00+09:00
 
 ## Summary
 
@@ -13,17 +13,17 @@ Generated: 2026-07-12T17:28:36+09:00
 
 | App | Platform | Store version/package | Local version | Comparison | Store | Release | Repository | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Aligna | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
-| Aligna | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
+| Aligna | android | 1.0.6 | - | unknown | unchanged | - | onnellab/aligna | No action |
+| Aligna | ios | 1.0.6 | - | unknown | unchanged | - | onnellab/aligna | No action |
 | ClipNest | ios | 1.0.1 | - | unknown | unchanged | - | onnellab/clipnest | No action |
-| Quivra | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
-| Quivra | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
-| Segra | android | 1.0.2 | 1.0.2 | same | unchanged | - | onnellab/segra | No action |
-| Segra | ios | 1.0.1 | 1.0.2 | local_ahead | unchanged | planned | onnellab/segra | Add release artifact and checksum |
-| TagWeaver | android | 2.1.3 | 2.1.3 | same | unchanged | - | onnellab/tagweaver | No action |
-| TagWeaver | ios | 2.1 | 2.1.3 | local_ahead | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
-| VaultXT | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/onnellab-text | No action |
-| VaultXT | ios | 1.0.3 | 1.0.6 | local_ahead | unchanged | planned | onnellab/onnellab-text | Add release artifact and checksum |
+| Quivra | android | 1.0.6 | - | unknown | unchanged | - | onnellab/quivra | No action |
+| Quivra | ios | 1.0.6 | - | unknown | unchanged | - | onnellab/quivra | No action |
+| Segra | android | 1.0.2 | - | unknown | unchanged | - | onnellab/segra | No action |
+| Segra | ios | 1.0.1 | - | unknown | unchanged | planned | onnellab/segra | Add release artifact and checksum |
+| TagWeaver | android | 2.1.3 | - | unknown | unchanged | - | onnellab/tagweaver | No action |
+| TagWeaver | ios | 2.1 | - | unknown | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
+| VaultXT | android | 1.0.6 | - | unknown | unchanged | - | onnellab/onnellab-text | No action |
+| VaultXT | ios | 1.0.3 | - | unknown | unchanged | planned | onnellab/onnellab-text | Add release artifact and checksum |
 
 ## Release Candidates
 

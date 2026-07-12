@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
   <title id="title">대용량 TXT 파일 읽기 워크플로</title>
-  <desc id="desc">ONNELLAB 워크플로 다이어그램 for 대용량 TXT 파일 리더.</desc>
+  <desc id="desc">대용량 TXT 파일 리더을 위한 ONNELLAB 워크플로 다이어그램입니다.</desc>
   <rect width="1200" height="675" fill="#fbf7ef"/>
   <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
   <text fill="#30302c" font-family="Pretendard, SUIT, Noto Sans KR, Apple SD Gothic Neo, Inter, system-ui, sans-serif" font-size="38" font-weight="680"><tspan x="92" y="112">대용량 TXT 파일 읽기 워크플로</tspan></text>
@@ -9,5 +9,5 @@
   <path d="M280 295H328m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M554 295H602m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M828 295H876m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.6"/>
   <text x="124" y="506" fill="#30302c" font-family="Pretendard, SUIT, Noto Sans KR, Apple SD Gothic Neo, Inter, system-ui, sans-serif" font-size="20" font-weight="650">도구를 추천하기 전에 과정을 먼저 설명합니다.</text>
-  <text x="92" y="588" fill="#817c73" font-family="Pretendard, SUIT, Noto Sans KR, Apple SD Gothic Neo, Inter, system-ui, sans-serif" font-size="14">ONNELLAB Blog · 생성된 워크플로 자산</text>
+  <text x="92" y="588" fill="#817c73" font-family="Pretendard, SUIT, Noto Sans KR, Apple SD Gothic Neo, Inter, system-ui, sans-serif" font-size="14">ONNELLAB Blog · 권장 읽기 워크플로</text>
 </svg>
