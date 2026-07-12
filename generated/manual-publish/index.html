@@ -48,7 +48,7 @@
     .metric-card:disabled { cursor: default; opacity: .72; transform: none; }
     .tool-panel { border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }
     .quick-row { display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }
-    .auth { display: grid; grid-template-columns: minmax(220px, 1fr) auto auto auto; gap: 8px; margin-top: 12px; }
+    .auth { display: grid; grid-template-columns: minmax(220px, 1fr) repeat(4, auto); gap: 8px; margin-top: 12px; }
     details.advanced { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
     details.advanced summary { cursor: pointer; color: var(--ink); font-weight: 800; min-height: 38px; display: flex; align-items: center; }
     .controls { display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(116px, 150px)); gap: 10px; margin-top: 8px; }
@@ -168,6 +168,7 @@
         <input id="token" type="password" autocomplete="off" placeholder="완료 상태 동기화용 GitHub 토큰">
         <button id="save-token" type="button">동기화 연결</button>
         <button id="refresh-state" type="button" class="secondary">새로고침</button>
+        <button id="verify-publications" type="button" class="secondary">공개 프로필 확인</button>
         <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
       </div>
     </details>
@@ -227,6 +228,9 @@
         advancedSummary: '상세 필터와 동기화',
         connectSync: '동기화 연결',
         refresh: '새로고침',
+        verifyPublications: '공개 프로필 확인',
+        verifyingPublications: '확인 실행 중',
+        verificationStarted: '확인 시작됨',
         enableBadge: '뱃지 켜기',
         badgeReady: '뱃지 준비됨',
         searchPlaceholder: '토픽, 매체, 언어, 상태 검색',
@@ -317,6 +321,9 @@
         advancedSummary: 'Advanced filters and sync',
         connectSync: 'Connect sync',
         refresh: 'Refresh',
+        verifyPublications: 'Check public profiles',
+        verifyingPublications: 'Starting check',
+        verificationStarted: 'Check started',
         enableBadge: 'Enable badge',
         badgeReady: 'Badge ready',
         searchPlaceholder: 'Search topic, platform, language, status',
@@ -411,6 +418,7 @@
     };
     const tokenInput = document.getElementById('token');
     const badgeButton = document.getElementById('enable-badge');
+    const verifyButton = document.getElementById('verify-publications');
     const syncButtonLarge = document.getElementById('refresh-state-large');
     const langToggle = document.getElementById('lang-toggle');
     const variantToggle = document.getElementById('toggle-variants');
@@ -444,6 +452,7 @@
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
+      verifyButton.textContent = t('verifyPublications');
       badgeButton.textContent = t('enableBadge');
       updateVariantToggle();
       filters.search.placeholder = t('searchPlaceholder');
@@ -515,7 +524,9 @@
       const value = messages[currentLang][label] || label;
       syncStateLarge.textContent = value;
       syncButtonLarge.disabled = !githubToken();
+      verifyButton.disabled = !githubToken();
       syncButtonLarge.setAttribute('aria-disabled', String(!githubToken()));
+      verifyButton.setAttribute('aria-disabled', String(!githubToken()));
     }
 
     function decodeBase64Unicode(value) {
@@ -547,6 +558,28 @@
       const data = text ? JSON.parse(text) : {};
       if (!response.ok) throw new Error(data.message || 'GitHub request failed');
       return data;
+    }
+
+    async function triggerPublicationVerification() {
+      if (!githubToken()) return;
+      const original = verifyButton.textContent;
+      verifyButton.textContent = t('verifyingPublications');
+      verifyButton.disabled = true;
+      try {
+        await githubRequest(`/repos/${stateRepo}/actions/workflows/verify-manual-publications.yml/dispatches`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ref: stateBranch, inputs: { visual_public_pages: 'true' } }),
+        });
+        flash(verifyButton, t('verificationStarted'));
+        setTimeout(loadRemoteState, 90000);
+      } catch (error) {
+        verifyButton.textContent = original;
+        setSync('syncError');
+        console.error(error);
+      } finally {
+        verifyButton.disabled = !githubToken();
+      }
     }
 
     async function loadRemoteState() {
@@ -1027,6 +1060,7 @@
       await loadRemoteState();
     };
     document.getElementById('refresh-state').onclick = loadRemoteState;
+    verifyButton.onclick = triggerPublicationVerification;
     syncButtonLarge.onclick = () => {
       if (!githubToken()) return;
       loadRemoteState();
