@@ -209,6 +209,49 @@ Before API posting, validate social drafts with:
 scripts/validate_social_posts.py
 ```
 
+### Verify manual publication completion
+
+After manually posting to external platforms, scan public platform surfaces and update the hosted dashboard state with:
+
+```text
+scripts/verify_manual_publications.py
+```
+
+The verifier updates:
+
+```text
+data/manual_publish_state.json
+```
+
+Verified items appear as done in the manual publishing dashboard after sync.
+
+Supported high-confidence checks:
+
+* Bluesky author feed through the public AT Protocol endpoint
+* Dev.to public articles API
+* GitHub Release status through the release automation data
+
+Supported medium/low-confidence checks:
+
+* Medium RSS with `MEDIUM_RSS_URL` or `MEDIUM_USERNAME`
+* Hashnode RSS with `HASHNODE_RSS_URL` or `HASHNODE_BLOG_URL`
+* Twitter and LinkedIn public profile pages with Playwright:
+
+```text
+scripts/verify_manual_publications.py --visual-public-pages
+```
+
+Optional public-page environment variables:
+
+```text
+X_PUBLIC_PROFILE_URL
+X_USERNAME
+LINKEDIN_PUBLIC_PROFILE_URL
+LINKEDIN_PROFILE_URL
+```
+
+Twitter and LinkedIn public-page verification is intentionally marked low confidence because those pages can change, hide posts, rate-limit anonymous users, or render different content by region. Use it as a convenience check, not as the source of record.
+
 Evaluate template quality with:
 
 ```text

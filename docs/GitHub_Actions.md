@@ -490,7 +490,39 @@ The core distribution posting script attempts X, Bluesky, and Dev.to independent
 
 ---
 
-# 15. Scheduled Automation
+# 15. Verify Manual Publication Completion
+
+After posting, the workflow checks whether manually published items are visible on supported public surfaces:
+
+```text
+scripts/verify_manual_publications.py --visual-public-pages
+```
+
+Verified completion is committed back to:
+
+```text
+data/manual_publish_state.json
+```
+
+Optional GitHub Actions secrets for public verification:
+
+```text
+DEVTO_USERNAME
+MEDIUM_RSS_URL
+MEDIUM_USERNAME
+HASHNODE_RSS_URL
+HASHNODE_BLOG_URL
+X_PUBLIC_PROFILE_URL
+X_USERNAME
+LINKEDIN_PUBLIC_PROFILE_URL
+LINKEDIN_PROFILE_URL
+```
+
+Bluesky and Dev.to checks use public APIs. Medium and Hashnode use RSS when configured. X/Twitter and LinkedIn use Playwright to inspect public profile pages without login; those checks are lower confidence because public pages can change, hide content, or rate-limit anonymous visitors.
+
+---
+
+# 16. Scheduled Automation
 
 The workflow runs automatically every day at:
 

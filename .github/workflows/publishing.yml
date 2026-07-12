@@ -396,13 +396,30 @@ jobs:
             echo "No rotated X refresh token file found"
           fi
 
+      - name: Verify Manual Publication Completion
+        if: env.DRY_RUN != 'true'
+        env:
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          DEVTO_USERNAME: ${{ secrets.DEVTO_USERNAME }}
+          MEDIUM_RSS_URL: ${{ secrets.MEDIUM_RSS_URL }}
+          MEDIUM_USERNAME: ${{ secrets.MEDIUM_USERNAME }}
+          HASHNODE_RSS_URL: ${{ secrets.HASHNODE_RSS_URL }}
+          HASHNODE_BLOG_URL: ${{ secrets.HASHNODE_BLOG_URL }}
+          X_PUBLIC_PROFILE_URL: ${{ secrets.X_PUBLIC_PROFILE_URL }}
+          X_USERNAME: ${{ secrets.X_USERNAME }}
+          LINKEDIN_PUBLIC_PROFILE_URL: ${{ secrets.LINKEDIN_PUBLIC_PROFILE_URL }}
+          LINKEDIN_PROFILE_URL: ${{ secrets.LINKEDIN_PROFILE_URL }}
+        run: |
+          set -euo pipefail
+          python3 scripts/verify_manual_publications.py --visual-public-pages
+
       - name: Commit Distribution Posting Status
         if: env.DRY_RUN != 'true' && always()
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add generated/social/manifest.json generated/syndication/manifest.json
+          git add generated/social/manifest.json generated/syndication/manifest.json data/manual_publish_state.json
           if git diff --cached --quiet; then
             echo "No distribution posting status changes to commit"
           else
