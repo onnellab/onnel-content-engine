@@ -2,6 +2,18 @@
 
 This file records local repository paths that the content engine may need for release metadata or cross-repository automation.
 
+Machine-readable app repository mappings live in:
+
+```text
+data/local_repositories.csv
+```
+
+Android version metadata can be synced from those mappings with:
+
+```text
+scripts/sync_android_versions_from_repos.py
+```
+
 ## Primary WSL Checkouts
 
 | Repository | WSL path | Notes |

@@ -1,0 +1,6 @@
+app_id,app_slug,repository_name,path,pubspec_path,source_priority,notes
+APP-0001,quivra,quivra,/mnt/c/dev/projects/quivra,pubspec.yaml,primary,Flutter app checkout.
+APP-0002,tagweaver,tagweaver,/mnt/c/dev/projects/tagweaver2,pubspec.yaml,primary,Flutter app checkout uses tagweaver2 directory.
+APP-0003,vaultxt,onnellab-text,/home/lue/dev/onnellab-text/vaultxt,pubspec.yaml,primary,Primary WSL checkout under onnellab-text.
+APP-0004,segra,segra,/mnt/c/dev/projects/segra,pubspec.yaml,primary,Flutter app checkout.
+APP-0006,aligna,aligna,/mnt/c/dev/projects/aligna,pubspec.yaml,primary,Flutter app checkout.

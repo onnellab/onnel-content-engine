@@ -139,6 +139,18 @@ scripts/import_android_store_versions.py path/to/play-console-export.csv
 
 Rows using `local_build_metadata` come from app repository build files and should be checked against Play Console when exact store rollout state matters.
 
+Local app repository mappings are stored in:
+
+```text
+data/local_repositories.csv
+```
+
+The validation stage dry-runs local metadata sync:
+
+```text
+scripts/sync_android_versions_from_repos.py --dry-run
+```
+
 Updated store snapshots are then converted into planned release candidates:
 
 ```text

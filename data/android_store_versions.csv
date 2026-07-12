@@ -1,6 +1,6 @@
 app_id,app_slug,package,version,last_updated,release_notes,source,notes
-APP-0001,quivra,com.onnellab.quivra2,1.0.6,2026-07-12,Local Flutter build metadata version.,local_build_metadata,Imported from /mnt/c/dev/projects/quivra/pubspec.yaml version 1.0.6+77; confirm against Play Console if needed.
-APP-0002,tagweaver,com.onnellab.tagweaver2,2.1.3,2026-07-12,Local Flutter build metadata version.,local_build_metadata,Imported from /mnt/c/dev/projects/tagweaver2/pubspec.yaml version 2.1.3+81; confirm against Play Console if needed.
-APP-0003,vaultxt,com.onnellab.vaultxt,1.0.6,2026-07-12,Local Flutter build metadata version.,local_build_metadata,Imported from /mnt/c/dev/onnellab-text/vaultxt/pubspec.yaml version 1.0.6+49; confirm against Play Console if needed.
-APP-0004,segra,com.onnellab.segra,1.0.2,2026-07-12,Local Flutter build metadata version.,local_build_metadata,Imported from /mnt/c/dev/projects/segra/pubspec.yaml version 1.0.2+67; confirm against Play Console if needed.
 APP-0006,aligna,com.onnellab.aligna,1.0.6,2026-07-12,Local Flutter build metadata version.,local_build_metadata,Imported from /mnt/c/dev/projects/aligna/pubspec.yaml version 1.0.6+22; confirm against Play Console if needed.
+APP-0001,quivra,com.onnellab.quivra2,1.0.6,2026-07-12,Local Flutter build metadata version.,local_build_metadata,Imported from /mnt/c/dev/projects/quivra/pubspec.yaml version 1.0.6+77; confirm against Play Console if needed.
+APP-0004,segra,com.onnellab.segra,1.0.2,2026-07-12,Local Flutter build metadata version.,local_build_metadata,Imported from /mnt/c/dev/projects/segra/pubspec.yaml version 1.0.2+67; confirm against Play Console if needed.
+APP-0002,tagweaver,com.onnellab.tagweaver2,2.1.3,2026-07-12,Local Flutter build metadata version.,local_build_metadata,Imported from /mnt/c/dev/projects/tagweaver2/pubspec.yaml version 2.1.3+81; confirm against Play Console if needed.
+APP-0003,vaultxt,com.onnellab.vaultxt,1.0.6,2026-07-12,Local Flutter build metadata version.,local_build_metadata,Imported from /home/lue/dev/onnellab-text/vaultxt/pubspec.yaml version 1.0.6+52; confirm against Play Console if needed.

@@ -148,6 +148,18 @@ scripts/validate_android_store_versions.py
 
 Supported Android source values are `play_console_export`, `manual_entry`, and `local_build_metadata`.
 
+Sync `local_build_metadata` rows from configured app repositories with:
+
+```text
+scripts/sync_android_versions_from_repos.py
+```
+
+Repository mappings are configured in:
+
+```text
+data/local_repositories.csv
+```
+
 Import a Play Console style CSV export with:
 
 ```text
