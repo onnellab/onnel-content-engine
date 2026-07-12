@@ -46,6 +46,7 @@
     .metric-card span { color: var(--muted); font-size: 12px; }
     .metric-card strong { font-size: 28px; line-height: 1; letter-spacing: 0; }
     .metric-card strong.state-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .metric-card strong > span:not(.state-subtext) { color: inherit; font-size: 28px; line-height: 1; }
     .metric-card .spinner { width: 18px; height: 18px; border: 2px solid rgba(46,111,187,.22); border-top-color: var(--blue); border-radius: 999px; animation: spin .8s linear infinite; flex: 0 0 auto; }
     .metric-card .state-subtext { font-size: 12px; font-weight: 800; color: var(--muted); line-height: 1.2; }
     .metric-card.is-working { border-color: var(--blue); outline: 2px solid rgba(46,111,187,.14); }
@@ -167,8 +168,8 @@
   <main>
     <section class="overview" aria-label="Publish overview">
       <button class="metric-card" type="button" data-view="due"><span id="overview-due-label">오늘 할 일</span><strong class="due-count">0</strong></button>
-      <button class="metric-card" type="button" data-view="manual"><span id="overview-manual-label">수동 대기</span><strong>4</strong></button>
-      <button class="metric-card" type="button" data-view="done"><span id="overview-posted-label">게시 완료</span><strong>1</strong></button>
+      <button class="metric-card" type="button" data-view="manual"><span id="overview-manual-label">수동 대기</span><strong id="manual-count">4</strong></button>
+      <button class="metric-card" type="button" data-view="done"><span id="overview-posted-label">게시 완료</span><strong id="posted-count">1</strong></button>
       <button class="metric-card" type="button" id="refresh-state-large"><span id="overview-sync-label">동기화</span><strong id="sync-state-large">...</strong></button>
       <button class="metric-card" type="button" id="verify-publications-large"><span id="overview-verify-label">공개 확인</span><strong id="verify-state-large">...</strong></button>
     </section>
@@ -477,6 +478,8 @@
     const grid = document.getElementById('grid');
     const empty = document.getElementById('empty');
     const dueCountEls = document.querySelectorAll('.due-count');
+    const manualCountEl = document.getElementById('manual-count');
+    const postedCountEl = document.getElementById('posted-count');
     const syncStateLarge = document.getElementById('sync-state-large');
     const filters = {
       search: document.getElementById('search'),
@@ -1167,7 +1170,11 @@
           && (currentView !== 'custom' || visibility === 'all' || (visibility === 'due' ? due : !done));
       });
       const dueTotal = String(items.filter(isDue).length);
+      const manualTotal = String(items.filter((item) => item.publishing_mode === 'manual' && !item.is_variant && !isDone(item)).length);
+      const postedTotal = String(items.filter((item) => !item.is_variant && isDone(item)).length);
       dueCountEls.forEach((element) => element.textContent = dueTotal);
+      manualCountEl.textContent = manualTotal;
+      postedCountEl.textContent = postedTotal;
       grid.textContent = '';
       empty.hidden = visible.length !== 0;
       if (!visible.length) renderEmptyState();
