@@ -106,6 +106,8 @@ def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_p
         items.append(
             {
                 "release_id": release_id,
+                "app_id": row.get("app_id", ""),
+                "app_slug": row.get("app_slug", ""),
                 "app_name": row.get("app_name", ""),
                 "repository": row.get("repository", ""),
                 "tag": row.get("tag", ""),
@@ -129,7 +131,7 @@ def store_status_items(store_versions_path: Path = DEFAULT_STORE_VERSIONS) -> li
             "platform": row.get("platform", ""),
             "store_url": row.get("store_url", ""),
             "version": row.get("version", ""),
-            "release_date": row.get("release_date", ""),
+            "published_at": row.get("last_updated", ""),
             "checked_at": row.get("checked_at", ""),
             "status": row.get("status", ""),
             "notes": row.get("notes", ""),
@@ -328,19 +330,20 @@ def html_document(
     .pill.is-active {{ border-color: var(--blue); background: var(--blue-soft); color: var(--blue); font-weight: 800; }}
     .lang {{ min-height: 31px; border-color: var(--line); background: var(--ink); color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 12px; white-space: nowrap; }}
     main {{ max-width: 1180px; margin: 0 auto; padding: 22px 20px 56px; }}
-    .overview {{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }}
+    .overview {{ display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }}
     .metric-card {{ border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 14px; border-radius: 8px; box-shadow: var(--shadow); min-height: 88px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; }}
     .metric-card:nth-child(1) {{ background: linear-gradient(135deg, var(--peach-soft), #fff); }}
     .metric-card:nth-child(2) {{ background: linear-gradient(135deg, var(--sky-soft), #fff); }}
     .metric-card:nth-child(3) {{ background: linear-gradient(135deg, var(--ok-soft), #fff); }}
     .metric-card:nth-child(4) {{ background: linear-gradient(135deg, var(--lilac-soft), #fff); }}
+    .metric-card:nth-child(5) {{ background: linear-gradient(135deg, var(--blue-soft), #fff); }}
     .metric-card span {{ color: var(--muted); font-size: 12px; }}
     .metric-card strong {{ font-size: 28px; line-height: 1; letter-spacing: 0; }}
     .metric-card.is-active {{ border-color: var(--blue); outline: 2px solid rgba(46,111,187,.16); }}
     .metric-card:disabled {{ cursor: default; opacity: .72; transform: none; }}
     .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
-    .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(4, auto); gap: 8px; margin-top: 12px; }}
+    .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, auto); gap: 8px; margin-top: 12px; }}
     details.advanced {{ margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }}
     details.advanced summary {{ cursor: pointer; color: var(--ink); font-weight: 800; min-height: 38px; display: flex; align-items: center; }}
     .controls {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(116px, 150px)); gap: 10px; margin-top: 8px; }}
@@ -358,12 +361,20 @@ def html_document(
     .release-head h3 {{ margin: 0; font-size: 16px; }}
     .release-head.subhead {{ margin-top: 16px; }}
     .release-head span {{ color: var(--muted); font-size: 12px; }}
-    .status-grid, .release-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }}
-    .status-card, .release-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
+    .status-grid, .release-grid, .app-status-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }}
+    .status-card, .release-card, .app-status-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
     .status-card strong,
-    .release-card strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
+    .release-card strong,
+    .app-status-card strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
     .status-card span,
-    .release-card span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
+    .release-card span,
+    .app-status-card span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
+    .app-status-card {{ display: grid; gap: 10px; }}
+    .app-status-card strong {{ margin-bottom: 0; }}
+    .app-status-row {{ border: 1px solid var(--line); border-radius: 8px; padding: 9px; background: #fffdf9; }}
+    .app-status-row b {{ display: block; font-size: 13px; margin-bottom: 5px; }}
+    .app-status-row.is-release {{ background: var(--lilac-soft); }}
+    .app-status-row.is-store {{ background: var(--sky-soft); }}
     input, select {{ width: 100%; min-height: 40px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 8px 10px; font: inherit; border-radius: 6px; }}
     input:focus, select:focus, textarea:focus {{ outline: 2px solid rgba(46,111,187,.2); border-color: var(--blue); }}
     .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; align-items: start; }}
@@ -388,6 +399,9 @@ def html_document(
     .tag.status-approved {{ color: var(--blue); border-color: #acc9e7; background: var(--blue-soft); }}
     .tag.status-due {{ color: #fff; border-color: var(--bad); background: var(--bad); }}
     .tag.status-done {{ color: var(--ok); border-color: #b7d9c5; background: #f2fbf5; }}
+    .tag.verification-automatic {{ color: var(--blue); border-color: #acc9e7; background: var(--blue-soft); }}
+    .tag.verification-public {{ color: #6d4d00; border-color: #ead08a; background: #fff8df; }}
+    .tag.verification-manual {{ color: var(--muted); border-color: var(--line); background: #fff; }}
     h2 {{ font-size: 17px; line-height: 1.35; margin: 0 0 6px; }}
     .subtitle {{ color: var(--muted); font-size: 12px; margin: 0 0 10px; overflow-wrap: anywhere; }}
     .card-summary {{ display: grid; gap: 8px; margin-bottom: 10px; }}
@@ -403,6 +417,7 @@ def html_document(
     button:hover, a.button:hover {{ transform: translateY(-1px); }}
     button.secondary, a.secondary {{ background: #fff; color: var(--ink); border-color: var(--line); }}
     .note {{ margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }}
+    .token-note {{ margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 1.45; }}
     .error {{ margin-top: 10px; color: var(--bad); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; background: var(--bad-soft); border: 1px solid #efb5b0; border-radius: 6px; padding: 8px; }}
     .empty {{ border: 1px dashed var(--line); padding: 24px; color: var(--muted); background: var(--panel); text-align: left; border-radius: 8px; }}
     .empty strong {{ display: block; color: var(--ink); font-size: 18px; margin-bottom: 8px; }}
@@ -421,8 +436,10 @@ def html_document(
       main {{ padding: 16px 12px 40px; }}
       .overview {{ grid-template-columns: 1fr; gap: 8px; }}
       .grid {{ grid-template-columns: 1fr; }}
-      .auth, .controls {{ grid-template-columns: 1fr; }}
-      .auth input, .controls input {{ grid-column: auto; }}
+      .auth {{ grid-template-columns: 1fr 1fr; }}
+      .auth input {{ grid-column: 1 / -1; }}
+      .controls {{ grid-template-columns: 1fr; }}
+      .controls input {{ grid-column: auto; }}
     }}
   </style>
 </head>
@@ -441,7 +458,9 @@ def html_document(
       <button class="metric-card" type="button" data-view="manual"><span id="overview-manual-label">수동 대기</span><strong>{manual}</strong></button>
       <button class="metric-card" type="button" data-view="done"><span id="overview-posted-label">게시 완료</span><strong>{posted}</strong></button>
       <button class="metric-card" type="button" id="refresh-state-large"><span id="overview-sync-label">동기화</span><strong id="sync-state-large">...</strong></button>
+      <button class="metric-card" type="button" id="verify-publications-large"><span id="overview-verify-label">공개 확인</span><strong id="verify-state-large">...</strong></button>
     </section>
+    <div id="token-note" class="token-note">GitHub 토큰 연결 후 공개 프로필 확인을 실행할 수 있습니다.</div>
     <section class="tool-panel" aria-label="Publish controls">
     <div class="quick-row">
       <select id="platform"><option value="">모든 매체</option></select>
@@ -460,7 +479,6 @@ def html_document(
         <input id="token" type="password" autocomplete="off" placeholder="완료 상태 동기화용 GitHub 토큰">
         <button id="save-token" type="button">동기화 연결</button>
         <button id="refresh-state" type="button" class="secondary">새로고침</button>
-        <button id="verify-publications" type="button" class="secondary">공개 프로필 확인</button>
         <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
       </div>
     </details>
@@ -475,17 +493,12 @@ def html_document(
       </div>
       <div id="blog-grid" class="status-grid"></div>
     </section>
-    <section class="status-section" aria-label="GitHub Release status">
+    <section class="status-section" aria-label="App operation status">
       <div class="release-head">
-        <h2 id="release-title">GitHub Release 상태</h2>
-        <span id="release-summary"></span>
+        <h2 id="app-status-title">앱 운영 상태</h2>
+        <span id="app-status-summary"></span>
       </div>
-      <div id="release-grid" class="release-grid"></div>
-      <div class="release-head subhead">
-        <h3 id="store-title">스토어 출시 상태</h3>
-        <span id="store-summary"></span>
-      </div>
-      <div id="store-grid" class="status-grid"></div>
+      <div id="app-status-grid" class="app-status-grid"></div>
     </section>
   </main>
   <script id="manual-data" type="application/json">{data}</script>
@@ -523,6 +536,11 @@ def html_document(
         verifyPublications: '공개 프로필 확인',
         verifyingPublications: '확인 실행 중',
         verificationStarted: '확인 시작됨',
+        verificationReady: '실행',
+        verificationTokenRequired: '토큰 필요',
+        verificationFailed: '실패',
+        tokenNeededNote: 'GitHub 토큰 연결 후 공개 프로필 확인을 실행할 수 있습니다.',
+        overviewVerify: '공개 확인',
         enableBadge: '뱃지 켜기',
         badgeReady: '뱃지 준비됨',
         searchPlaceholder: '토픽, 매체, 언어, 상태 검색',
@@ -549,15 +567,20 @@ def html_document(
         failedWord: '실패',
         lastPosted: '최근 게시',
         lastUpdate: '최근 갱신',
+        appStatusTitle: '앱 운영 상태',
+        appStatusSummary: '앱별 묶음',
         releaseTitle: 'GitHub에 올릴 릴리즈 후보',
         releaseSummary: '상태',
         releaseCandidate: '릴리즈 후보',
         plannedDate: '예정일',
+        githubRelease: 'GitHub Release',
         storeTitle: 'App Store / Play Store 현재 공개 버전',
         storeSummary: '현재 표시',
         currentVersion: '현재 버전',
-        releasedDate: '공개일',
+        releasedDate: '현재 버전 게시일',
         checkedAt: '최근 확인',
+        noStore: '스토어 없음',
+        noRelease: '릴리즈 후보 없음',
         blogTitle: '블로그 상태',
         blogSummary: '상태',
         latestPublished: '최근 게시',
@@ -581,6 +604,9 @@ def html_document(
         overviewSync: '동기화',
         dueTag: '예정',
         doneTag: '완료',
+        automaticVerified: '자동 확인',
+        publicVerified: '공개 페이지 확인',
+        manualVerified: '직접 완료',
         variantTag: '대안',
         manualMode: '수동 게시 필요',
         automaticMode: '자동화 대상',
@@ -616,6 +642,11 @@ def html_document(
         verifyPublications: 'Check public profiles',
         verifyingPublications: 'Starting check',
         verificationStarted: 'Check started',
+        verificationReady: 'Run',
+        verificationTokenRequired: 'Token needed',
+        verificationFailed: 'Failed',
+        tokenNeededNote: 'Connect a GitHub token to run public profile checks.',
+        overviewVerify: 'Public check',
         enableBadge: 'Enable badge',
         badgeReady: 'Badge ready',
         searchPlaceholder: 'Search topic, platform, language, status',
@@ -642,15 +673,20 @@ def html_document(
         failedWord: 'failed',
         lastPosted: 'last posted',
         lastUpdate: 'last update',
+        appStatusTitle: 'App operation status',
+        appStatusSummary: 'grouped by app',
         releaseTitle: 'GitHub Release candidates',
         releaseSummary: 'status',
         releaseCandidate: 'release candidate',
         plannedDate: 'planned date',
+        githubRelease: 'GitHub Release',
         storeTitle: 'Current App Store / Play Store versions',
         storeSummary: 'currently shown',
         currentVersion: 'current version',
-        releasedDate: 'released',
+        releasedDate: 'current version published',
         checkedAt: 'last checked',
+        noStore: 'no store',
+        noRelease: 'no release candidate',
         blogTitle: 'Blog status',
         blogSummary: 'status',
         latestPublished: 'latest published',
@@ -674,6 +710,9 @@ def html_document(
         overviewSync: 'Sync',
         dueTag: 'due',
         doneTag: 'done',
+        automaticVerified: 'Auto verified',
+        publicVerified: 'Public page',
+        manualVerified: 'Manual done',
         variantTag: 'variant',
         manualMode: 'Manual publish',
         automaticMode: 'Automated',
@@ -710,16 +749,15 @@ def html_document(
     }};
     const tokenInput = document.getElementById('token');
     const badgeButton = document.getElementById('enable-badge');
-    const verifyButton = document.getElementById('verify-publications');
+    const verifyButtonLarge = document.getElementById('verify-publications-large');
+    const verifyStateLarge = document.getElementById('verify-state-large');
     const syncButtonLarge = document.getElementById('refresh-state-large');
     const langToggle = document.getElementById('lang-toggle');
     const variantToggle = document.getElementById('toggle-variants');
     const viewButtons = document.querySelectorAll('[data-view]');
     const platformSummary = document.getElementById('platform-summary');
-    const releaseGrid = document.getElementById('release-grid');
-    const releaseSummary = document.getElementById('release-summary');
-    const storeGrid = document.getElementById('store-grid');
-    const storeSummary = document.getElementById('store-summary');
+    const appStatusGrid = document.getElementById('app-status-grid');
+    const appStatusSummary = document.getElementById('app-status-summary');
     const blogGrid = document.getElementById('blog-grid');
     const blogSummary = document.getElementById('blog-summary');
     let remoteState = {{ done: {{}}, updated_at: '', version: 1 }};
@@ -737,14 +775,14 @@ def html_document(
       document.getElementById('overview-manual-label').textContent = t('overviewManual');
       document.getElementById('overview-posted-label').textContent = t('overviewPosted');
       document.getElementById('overview-sync-label').textContent = t('overviewSync');
+      document.getElementById('overview-verify-label').textContent = t('overviewVerify');
       document.getElementById('advanced-summary').textContent = t('advancedSummary');
-      document.getElementById('release-title').textContent = t('releaseTitle');
-      document.getElementById('store-title').textContent = t('storeTitle');
+      document.getElementById('app-status-title').textContent = t('appStatusTitle');
       document.getElementById('blog-title').textContent = t('blogTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
-      verifyButton.textContent = t('verifyPublications');
+      document.getElementById('token-note').textContent = t('tokenNeededNote');
       badgeButton.textContent = t('enableBadge');
       updateVariantToggle();
       filters.search.placeholder = t('searchPlaceholder');
@@ -760,9 +798,9 @@ def html_document(
       empty.textContent = t('empty');
       langToggle.textContent = currentLang === 'ko' ? 'English' : '한국어';
       setSync(syncStateLarge.dataset.state || (githubToken() ? 'synced' : 'viewOnly'));
+      setVerifyState(verifyStateLarge.dataset.state || (githubToken() ? 'verificationReady' : 'verificationTokenRequired'));
       syncViewButtons();
-      renderReleaseSummary();
-      renderStoreSummary();
+      renderAppStatusSummary();
       renderBlogSummary();
     }}
 
@@ -816,9 +854,18 @@ def html_document(
       const value = messages[currentLang][label] || label;
       syncStateLarge.textContent = value;
       syncButtonLarge.disabled = !githubToken();
-      verifyButton.disabled = !githubToken();
       syncButtonLarge.setAttribute('aria-disabled', String(!githubToken()));
-      verifyButton.setAttribute('aria-disabled', String(!githubToken()));
+      verifyButtonLarge.disabled = !githubToken();
+      verifyButtonLarge.setAttribute('aria-disabled', String(!githubToken()));
+      document.getElementById('token-note').hidden = Boolean(githubToken());
+      if (!githubToken()) setVerifyState('verificationTokenRequired');
+    }}
+
+    function setVerifyState(label) {{
+      verifyStateLarge.dataset.state = label;
+      verifyStateLarge.textContent = messages[currentLang][label] || label;
+      verifyButtonLarge.disabled = !githubToken();
+      verifyButtonLarge.setAttribute('aria-disabled', String(!githubToken()));
     }}
 
     function decodeBase64Unicode(value) {{
@@ -854,23 +901,22 @@ def html_document(
 
     async function triggerPublicationVerification() {{
       if (!githubToken()) return;
-      const original = verifyButton.textContent;
-      verifyButton.textContent = t('verifyingPublications');
-      verifyButton.disabled = true;
+      setVerifyState('verifyingPublications');
+      verifyButtonLarge.disabled = true;
       try {{
         await githubRequest(`/repos/${{stateRepo}}/actions/workflows/verify-manual-publications.yml/dispatches`, {{
           method: 'POST',
           headers: {{ 'Content-Type': 'application/json' }},
           body: JSON.stringify({{ ref: stateBranch, inputs: {{ visual_public_pages: 'true' }} }}),
         }});
-        flash(verifyButton, t('verificationStarted'));
+        setVerifyState('verificationStarted');
         setTimeout(loadRemoteState, 90000);
       }} catch (error) {{
-        verifyButton.textContent = original;
+        setVerifyState('verificationFailed');
         setSync('syncError');
         console.error(error);
       }} finally {{
-        verifyButton.disabled = !githubToken();
+        verifyButtonLarge.disabled = !githubToken();
       }}
     }}
 
@@ -882,6 +928,7 @@ def html_document(
         remoteState = JSON.parse(decodeBase64Unicode(data.content));
         remoteState.done ||= {{}};
         setSync(githubToken() ? 'synced' : 'viewOnly');
+        setVerifyState(githubToken() ? 'verificationReady' : 'verificationTokenRequired');
       }} catch (error) {{
         setSync('syncError');
         console.error(error);
@@ -959,6 +1006,20 @@ def html_document(
       return item.status === 'posted' || Boolean(remoteState.done?.[item.manual_key]);
     }}
 
+    function doneRecord(item) {{
+      return remoteState.done?.[item.manual_key] || null;
+    }}
+
+    function verificationLabel(item) {{
+      if (item.status === 'posted') return [t('automaticVerified'), 'verification-automatic'];
+      const record = doneRecord(item);
+      const method = String(record?.verification_method || '');
+      if (method.includes('public_page_visual')) return [t('publicVerified'), 'verification-public'];
+      if (method) return [t('automaticVerified'), 'verification-automatic'];
+      if (record) return [t('manualVerified'), 'verification-manual'];
+      return ['', ''];
+    }}
+
     async function markDone(item, button) {{
       remoteState.done ||= {{}};
       const localDone = {{
@@ -1025,6 +1086,12 @@ def html_document(
       const date = parseDate(value);
       if (!date) return t('none');
       return new Intl.DateTimeFormat(t('dateLocale'), {{ dateStyle: 'medium', timeStyle: 'short' }}).format(date);
+    }}
+
+    function formatPublishedDate(value) {{
+      if (!value) return t('none');
+      if (/^\\d{{4}}-\\d{{2}}-\\d{{2}}$/.test(value)) return value;
+      return formatDate(value);
     }}
 
     function daysAgo(value) {{
@@ -1143,49 +1210,82 @@ def html_document(
       }});
     }}
 
-    function renderReleaseSummary() {{
-      releaseGrid.textContent = '';
-      const counts = releases.reduce((acc, item) => {{
-        acc[item.status] = (acc[item.status] || 0) + 1;
-        return acc;
-      }}, {{}});
-      releaseSummary.textContent = Object.entries(counts).map(([status, count]) => `${{status}} ${{count}}`).join(' / ') || t('none');
-      releases.forEach((item) => {{
-        const card = document.createElement('div');
-        card.className = 'release-card';
-        const title = document.createElement('strong');
-        title.textContent = `${{item.app_name}} ${{item.tag}}`;
-        const status = document.createElement('span');
-        status.textContent = `${{t('releaseCandidate')}}: ${{item.status}} / ${{item.public_release === 'true' ? t('publicApproved') : t('publicPending')}}`;
-        const planned = document.createElement('span');
-        planned.textContent = `${{t('plannedDate')}}: ${{item.release_date || t('none')}}`;
-        const repo = document.createElement('span');
-        repo.textContent = `${{item.repository}} / ${{item.platform}}`;
-        card.append(title, status, planned, repo);
-        releaseGrid.appendChild(card);
-      }});
+    function appStatusGroups() {{
+      const groups = new Map();
+      function ensure(item) {{
+        const key = item.app_id || item.app_slug || item.app_name;
+        if (!groups.has(key)) groups.set(key, {{ app_name: item.app_name, stores: [], releases: [] }});
+        return groups.get(key);
+      }}
+      storeItems.forEach((item) => ensure(item).stores.push(item));
+      releases.forEach((item) => ensure(item).releases.push(item));
+      return [...groups.values()].sort((a, b) => a.app_name.localeCompare(b.app_name));
     }}
 
-    function renderStoreSummary() {{
-      storeGrid.textContent = '';
-      const counts = storeItems.reduce((acc, item) => {{
-        acc[item.platform] = (acc[item.platform] || 0) + 1;
-        return acc;
-      }}, {{}});
-      storeSummary.textContent = Object.entries(counts).map(([platform, count]) => `${{platform}} ${{count}}`).join(' / ') || t('none');
-      storeItems.forEach((item) => {{
+    function storeLabel(platform) {{
+      if (platform === 'ios') return 'App Store';
+      if (platform === 'android') return 'Play Store';
+      return platform || t('noStore');
+    }}
+
+    function renderAppStatusSummary() {{
+      appStatusGrid.textContent = '';
+      const groups = appStatusGroups();
+      const storeCount = storeItems.length;
+      const releaseCount = releases.length;
+      appStatusSummary.textContent = `${{groups.length}} apps / ${{storeCount}} stores / ${{releaseCount}} releases`;
+      groups.forEach((group) => {{
         const card = document.createElement('div');
-        card.className = 'status-card';
+        card.className = 'app-status-card';
         const title = document.createElement('strong');
-        title.textContent = `${{item.app_name}} / ${{item.platform}}`;
-        const version = document.createElement('span');
-        version.textContent = `${{t('currentVersion')}}: ${{item.version || t('none')}} / ${{item.status || t('none')}}`;
-        const released = document.createElement('span');
-        released.textContent = `${{t('releasedDate')}}: ${{item.release_date || t('none')}}`;
-        const checked = document.createElement('span');
-        checked.textContent = `${{t('checkedAt')}}: ${{formatDate(item.checked_at)}}`;
-        card.append(title, version, released, checked);
-        storeGrid.appendChild(card);
+        title.textContent = group.app_name || t('none');
+        card.appendChild(title);
+        group.stores
+          .sort((a, b) => a.platform.localeCompare(b.platform))
+          .forEach((item) => {{
+            const row = document.createElement('div');
+            row.className = 'app-status-row is-store';
+            const label = document.createElement('b');
+            label.textContent = storeLabel(item.platform);
+            const version = document.createElement('span');
+            version.textContent = `${{t('currentVersion')}}: ${{item.version || t('none')}} / ${{item.status || t('none')}}`;
+            const published = document.createElement('span');
+            published.textContent = `${{t('releasedDate')}}: ${{formatPublishedDate(item.published_at)}}`;
+            const checked = document.createElement('span');
+            checked.textContent = `${{t('checkedAt')}}: ${{formatDate(item.checked_at)}}`;
+            row.append(label, version, published, checked);
+            card.appendChild(row);
+          }});
+        if (!group.stores.length) {{
+          const row = document.createElement('div');
+          row.className = 'app-status-row is-store';
+          row.textContent = t('noStore');
+          card.appendChild(row);
+        }}
+        if (group.releases.length) {{
+          group.releases
+            .sort((a, b) => a.platform.localeCompare(b.platform))
+            .forEach((item) => {{
+              const row = document.createElement('div');
+              row.className = 'app-status-row is-release';
+              const label = document.createElement('b');
+              label.textContent = `${{t('githubRelease')}} / ${{item.platform}}`;
+              const status = document.createElement('span');
+              status.textContent = `${{item.tag}} / ${{item.status}} / ${{item.public_release === 'true' ? t('publicApproved') : t('publicPending')}}`;
+              const planned = document.createElement('span');
+              planned.textContent = `${{t('plannedDate')}}: ${{item.release_date || t('none')}}`;
+              const repo = document.createElement('span');
+              repo.textContent = item.repository;
+              row.append(label, status, planned, repo);
+              card.appendChild(row);
+            }});
+        }} else {{
+          const row = document.createElement('div');
+          row.className = 'app-status-row is-release';
+          row.textContent = t('noRelease');
+          card.appendChild(row);
+        }}
+        appStatusGrid.appendChild(card);
       }});
     }}
 
@@ -1235,8 +1335,7 @@ def html_document(
       if (!visible.length) renderEmptyState();
       visible.forEach((item) => grid.appendChild(card(item)));
       renderPlatformSummary();
-      renderReleaseSummary();
-      renderStoreSummary();
+      renderAppStatusSummary();
       renderBlogSummary();
       updateVariantToggle();
       syncViewButtons();
@@ -1283,6 +1382,13 @@ def html_document(
         done.className = 'tag status-done';
         done.textContent = t('doneTag');
         meta.appendChild(done);
+        const [label, className] = verificationLabel(item);
+        if (label) {{
+          const verification = document.createElement('span');
+          verification.className = 'tag ' + className;
+          verification.textContent = label;
+          meta.appendChild(verification);
+        }}
       }}
       const title = document.createElement('h2');
       title.textContent = displayTitle(item) + (item.is_variant ? ' / ' + t('variantTag') : '');
@@ -1352,7 +1458,7 @@ def html_document(
       await loadRemoteState();
     }};
     document.getElementById('refresh-state').onclick = loadRemoteState;
-    verifyButton.onclick = triggerPublicationVerification;
+    verifyButtonLarge.onclick = triggerPublicationVerification;
     syncButtonLarge.onclick = () => {{
       if (!githubToken()) return;
       loadRemoteState();
