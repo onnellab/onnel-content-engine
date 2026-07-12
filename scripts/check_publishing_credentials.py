@@ -100,7 +100,7 @@ def credential_status(adapter: str, live: bool = False) -> dict[str, object]:
         "identity": "",
         "error": "",
     }
-    if live and ready and adapter in {"bluesky", "devto", "hashnode", "x"}:
+    if live and ready and adapter in {"bluesky", "devto", "x"}:
         result["live_checked"] = True
         try:
             preflight = live_preflight(adapter)
@@ -118,7 +118,9 @@ def credential_report(adapter: str | None = None, live: bool = False) -> str:
     for name in names:
         status_item = credential_status(name, live)
         status = "ready" if status_item["ready"] else "not ready"
-        if not status_item["implemented"] and not status_item["missing"]:
+        if not status_item["implemented"] and not status_item["required"]:
+            status = "adapter not implemented"
+        elif not status_item["implemented"] and not status_item["missing"]:
             status = "credentials present, adapter not implemented"
         lines.append(f"{name}: {status}")
         if status_item["required"]:

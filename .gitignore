@@ -1,3 +1,6 @@
 .tools/
 __pycache__/
 *.pyc
+docs/environment variables.txt
+.env
+.env.*

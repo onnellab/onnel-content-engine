@@ -31,7 +31,7 @@ from publishing_adapters import AdapterError, missing_credentials, require_adapt
 from post_social_drafts import SocialPostingError, bluesky_link_facets, post_bluesky_text, post_social_drafts
 from check_bluesky_connection import check_bluesky_connection
 from reset_failed_social_post import SocialResetError, reset_failed_social_post
-from post_syndication_drafts import post_syndication_drafts
+from post_syndication_drafts import SyndicationPostingError, hashnode_payload, post_syndication_drafts
 from publishing_dry_run_report import publishing_dry_run_report
 from social_post_report import social_post_report
 from syndication_report import syndication_report
@@ -343,12 +343,14 @@ class PublishingTest(unittest.TestCase):
             with patch("check_publishing_credentials.json_request", fake_json_request):
                 self.assertEqual(credential_status("devto", live=True)["identity"], "dev-user")
                 self.assertEqual(credential_status("x", live=True)["identity"], "x-user")
-                self.assertEqual(credential_status("hashnode", live=True)["identity"], "hash-user")
+                hashnode_status = credential_status("hashnode", live=True)
+                self.assertFalse(hashnode_status["implemented"])
+                self.assertFalse(hashnode_status["live_checked"])
                 self.assertEqual(credential_status("bluesky", live=True)["identity"], "did:plc:test")
 
         self.assertIn(("https://dev.to/api/users/me", "GET", None, {"api-key": "devto-key"}), calls)
         self.assertIn(("https://api.x.com/2/users/me", "GET", None, {"Authorization": "Bearer x-token"}), calls)
-        self.assertIn(("https://gql.hashnode.com", "POST", {"query": "query Viewer { me { id username } }"}, {"Authorization": "hashnode-token"}), calls)
+        self.assertNotIn(("https://gql.hashnode.com", "POST", {"query": "query Viewer { me { id username } }"}, {"Authorization": "hashnode-token"}), calls)
 
     def test_x_adapter_creates_post_payload(self) -> None:
         social_dir = self.root / "generated" / "social"
@@ -585,34 +587,25 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(article["tags"], "large-txt-files")
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", article["body_markdown"])
 
-    def test_hashnode_adapter_posts_graphql_draft_payload(self) -> None:
+    def test_hashnode_adapter_is_export_only_without_paid_api(self) -> None:
         output_dir = self.root / "generated" / "syndication"
         generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
         approve_syndication_draft("TOPIC-0001", "hashnode", "en", "editor", output_dir / "manifest.json")
-        calls: list[tuple[str, dict[str, object], dict[str, str] | None]] = []
 
-        def fake_json_post(url: str, payload: dict[str, object], headers: dict[str, str] | None = None) -> dict[str, object]:
-            calls.append((url, payload, headers))
-            return {"data": {"createDraft": {"draft": {"id": "draft123"}}}}
+        dry_run = post_syndication_drafts(output_dir / "manifest.json", platform="hashnode", adapter="hashnode", dry_run=True)
 
-        with patch.dict("os.environ", {"HASHNODE_TOKEN": "hashnode-token", "HASHNODE_PUBLICATION_ID": "pub123"}):
-            with patch("post_syndication_drafts.json_post", fake_json_post):
-                posted = post_syndication_drafts(output_dir / "manifest.json", platform="hashnode", adapter="hashnode")
-
-        self.assertEqual(len(posted), 1)
-        self.assertEqual(posted[0]["status"], "posted")
-        self.assertEqual(posted[0]["post_id"], "draft123")
-        self.assertEqual(posted[0]["posted_url"], "https://hashnode.com/draft/draft123")
-        self.assertEqual(calls[0][0], "https://gql.hashnode.com")
-        self.assertEqual(calls[0][2]["Authorization"], "hashnode-token")
-        self.assertIn("mutation CreateDraft", calls[0][1]["query"])
-        variables = calls[0][1]["variables"]
+        self.assertEqual(len(dry_run), 1)
+        payload = hashnode_payload(dry_run[0], self.root)
+        self.assertIn("mutation CreateDraft", payload["query"])
+        variables = payload["variables"]
         input_payload = variables["input"]
         self.assertEqual(input_payload["title"], "How to Read Very Large TXT Files")
-        self.assertEqual(input_payload["publicationId"], "pub123")
+        self.assertEqual(input_payload["publicationId"], "")
         self.assertEqual(input_payload["slug"], "read-large-txt-files")
         self.assertEqual(input_payload["originalArticleURL"], "https://example.com/blog/en/read-large-txt-files/")
         self.assertEqual(input_payload["tags"], [{"slug": "large-txt-files", "name": "large-txt-files"}])
+        with self.assertRaises(SyndicationPostingError):
+            post_syndication_drafts(output_dir / "manifest.json", platform="hashnode", adapter="hashnode")
         self.assertEqual(
             input_payload["coverImageOptions"]["coverImageURL"],
             "https://example.com/blog-assets/en/read-large-txt-files/social-card.png",

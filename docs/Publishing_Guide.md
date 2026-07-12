@@ -363,15 +363,14 @@ Inspect the Dev.to payload without posting:
 scripts/post_syndication_drafts.py --adapter devto --platform devto --dry-run --verbose
 ```
 
-Hashnode real draft posting is supported:
+Hashnode is export-only by default because GraphQL API access now requires a paid publication plan.
 
-* requires `HASHNODE_TOKEN` and `HASHNODE_PUBLICATION_ID`
-* sends GraphQL POST requests to `https://gql.hashnode.com`
-* uses the `Authorization` request header with the Hashnode personal access token
-* creates an unpublished draft with `createDraft`
-* sends the canonical URL as `originalArticleURL`
-* sends the generated social card URL as `coverImageOptions.coverImageURL`
-* disables newsletter activation by default
+Generated Hashnode drafts still include:
+
+* canonical URL as `originalArticleURL`
+* generated social card URL as `coverImageOptions.coverImageURL`
+* normalized tags
+* a `publication_id` placeholder for future paid API use
 
 Inspect the Hashnode payload without posting:
 
@@ -397,7 +396,7 @@ Approve individual syndication drafts with:
 scripts/approve_syndication_draft.py TOPIC-0001 devto en --approved-by editor
 ```
 
-Post approved Dev.to or Hashnode drafts through the mock adapter with:
+Post approved Dev.to, Hashnode, or Medium drafts through the mock adapter with:
 
 ```text
 scripts/post_syndication_drafts.py --adapter mock
@@ -414,6 +413,8 @@ Syndication drafts must include a canonical link back to the ONNELLAB article.
 Dev.to drafts should remain unpublished by default and use normalized tags.
 
 Hashnode drafts should include a `cover_image` field pointing to the generated social card PNG and a blank `publication_id` placeholder until a publication is configured.
+
+Hashnode Markdown should be copied into the Hashnode editor manually unless the publication is upgraded to a paid plan with GraphQL API access.
 
 Medium is export-only by default because its public API documentation is archived and no longer recommended for new integrations.
 

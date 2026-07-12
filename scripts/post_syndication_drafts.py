@@ -153,9 +153,7 @@ def hashnode_payload(draft: dict[str, object], project_root: Path) -> dict[str, 
     title = metadata.get("title")
     if not title:
         raise SyndicationPostingError(f"Hashnode draft has no title: {draft_path}")
-    publication_id = os.environ.get("HASHNODE_PUBLICATION_ID") or metadata.get("publication_id")
-    if not publication_id:
-        raise SyndicationPostingError("Hashnode publication ID is missing")
+    publication_id = os.environ.get("HASHNODE_PUBLICATION_ID") or metadata.get("publication_id", "")
     input_payload: dict[str, object] = {
         "title": title,
         "publicationId": publication_id,
