@@ -163,10 +163,12 @@ def report_markdown(
     store_table: list[list[str]] = []
     for row in sorted(store_rows, key=lambda item: (item["app_slug"], item["platform"])):
         latest_release = releases.get((row["app_id"], row["platform"]), [])
-        release_status = latest_release[-1]["status"] if latest_release else "-"
+        latest_release_row = latest_release[-1] if latest_release else {}
+        release_status = latest_release_row["status"] if latest_release_row else "-"
         cfg = config.get(row["app_id"], {})
         local_version = local_versions.get(row["app_id"], "")
         comparison = compare_versions(row["version"], local_version)
+        action = release_action(latest_release_row) if latest_release_row and release_status in {"planned", "ready", "failed"} else next_action(row, comparison)
         store_table.append(
             [
                 row["app_name"],
@@ -177,7 +179,7 @@ def report_markdown(
                 row["status"],
                 release_status,
                 cfg.get("repository", ""),
-                next_action(row, comparison),
+                action,
             ]
         )
     lines.extend(
@@ -209,7 +211,9 @@ def report_markdown(
     for row in store_rows:
         local_version = local_versions.get(row["app_id"], "")
         comparison = compare_versions(row["version"], local_version)
-        if row["status"] in {"updated", "manual_check", "failed"} or comparison in {"local_ahead", "store_ahead"}:
+        latest_release = releases.get((row["app_id"], row["platform"]), [])
+        active_release = latest_release and latest_release[-1]["status"] in {"planned", "ready", "failed"}
+        if not active_release and (row["status"] in {"updated", "manual_check", "failed"} or comparison in {"local_ahead", "store_ahead"}):
             attention.append([row["app_name"], row["platform"], row["status"], next_action(row, comparison), row["notes"]])
     attention += [
         [row["app_name"], row["platform"], row["status"], release_action(row), row["notes"]]

@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from check_store_versions import STORE_HEADER  # noqa: E402
 from prepare_app_release_rows import prepare_app_release_rows  # noqa: E402
+from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER  # noqa: E402
 from validate_app_releases import RELEASE_HEADER, validate_app_releases  # noqa: E402
 
 
@@ -45,6 +46,23 @@ def write_releases(path: Path, rows: list[dict[str, str]] | None = None) -> None
         writer.writerows(rows or [])
 
 
+def write_local_repositories(path: Path, app_path: Path) -> None:
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=LOCAL_REPOSITORIES_HEADER, lineterminator="\n")
+        writer.writeheader()
+        writer.writerow(
+            {
+                "app_id": "APP-0003",
+                "app_slug": "vaultxt",
+                "repository_name": "vaultxt",
+                "path": app_path.as_posix(),
+                "pubspec_path": "pubspec.yaml",
+                "source_priority": "primary",
+                "notes": "",
+            }
+        )
+
+
 class PrepareAppReleaseRowsTest(unittest.TestCase):
     def test_updated_store_snapshot_creates_planned_release_row(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -66,6 +84,34 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
             self.assertEqual(row["tag"], "v1.2.3")
             self.assertEqual(row["status"], "planned")
             self.assertEqual(row["artifact_path"], "")
+            self.assertEqual(validate_app_releases(releases), 1)
+
+    def test_local_ahead_snapshot_creates_planned_release_row(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store_versions = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            local_repositories = root / "local_repositories.csv"
+            app = root / "vaultxt"
+            app.mkdir()
+            (app / "pubspec.yaml").write_text("name: vaultxt\nversion: 1.2.4+10\n", encoding="utf-8")
+            write_store_versions(store_versions, status="unchanged", version="1.2.3")
+            write_releases(releases)
+            write_local_repositories(local_repositories, app)
+
+            additions = prepare_app_release_rows(
+                store_versions,
+                releases,
+                local_repositories_path=local_repositories,
+                now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
+            )
+
+            self.assertEqual(len(additions), 1)
+            row = additions[0]
+            self.assertEqual(row["tag"], "v1.2.4")
+            self.assertEqual(row["version"], "1.2.4")
+            self.assertIn("local build metadata", row["notes"])
+            self.assertIn("Store version: 1.2.3", row["notes"])
             self.assertEqual(validate_app_releases(releases), 1)
 
     def test_unchanged_snapshot_does_not_create_row(self) -> None:

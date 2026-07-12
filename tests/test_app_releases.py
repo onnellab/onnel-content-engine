@@ -31,8 +31,10 @@ class AppReleaseTest(unittest.TestCase):
         self.addCleanup(lambda: artifact.unlink(missing_ok=True))
         return artifact, f"generated/{name}", checksum
 
-    def test_empty_release_manifest_is_valid(self) -> None:
-        self.assertEqual(validate_app_releases(ROOT / "data" / "app_releases.csv"), 0)
+    def test_current_release_manifest_is_valid(self) -> None:
+        path = ROOT / "data" / "app_releases.csv"
+        row_count = len(path.read_text(encoding="utf-8").splitlines()) - 1
+        self.assertEqual(validate_app_releases(path), row_count)
 
     def test_ready_release_requires_release_artifact_and_checksum(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

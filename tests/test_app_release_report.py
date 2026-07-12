@@ -137,7 +137,6 @@ class AppReleaseReportTest(unittest.TestCase):
             self.assertIn("Check Google Play update manually", text)
             self.assertIn("Add release artifact and checksum", text)
             self.assertIn("local_ahead", text)
-            self.assertIn("Prepare store release", text)
             self.assertEqual(output.read_text(encoding="utf-8"), text)
 
 

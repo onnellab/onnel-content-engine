@@ -12,6 +12,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from check_store_versions import STORE_HEADER, STORE_VERSIONS_PATH
+from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER, LOCAL_REPOSITORIES_PATH, pubspec_version
 from validate_app_releases import RELEASE_HEADER, RELEASES_PATH
 
 
@@ -19,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "data" / "app_release_config.csv"
 KST = ZoneInfo("Asia/Seoul")
 VERSION_RE = re.compile(r"^\d+\.\d+(?:\.\d+)?([-.+][0-9A-Za-z.-]+)?$")
+VERSION_PART_RE = re.compile(r"\d+|[A-Za-z]+")
 CONFIG_HEADER = ["app_id", "app_slug", "repository", "artifact_pattern", "notes"]
 
 
@@ -67,6 +69,39 @@ def release_config(path: Path = CONFIG_PATH) -> dict[str, dict[str, str]]:
     return {row["app_id"]: row for row in read_csv(path, CONFIG_HEADER)}
 
 
+def local_version_index(rows: list[dict[str, str]]) -> dict[str, str]:
+    versions: dict[str, str] = {}
+    for row in rows:
+        pubspec_path = Path(row["path"]) / row["pubspec_path"]
+        if not pubspec_path.exists():
+            continue
+        version, _raw = pubspec_version(pubspec_path)
+        versions[row["app_id"]] = version
+    return versions
+
+
+def version_key(version: str) -> list[tuple[int, int | str]]:
+    key: list[tuple[int, int | str]] = []
+    for part in VERSION_PART_RE.findall(version):
+        if part.isdigit():
+            key.append((0, int(part)))
+        else:
+            key.append((1, part.lower()))
+    return key
+
+
+def compare_versions(store_version: str, local_version: str) -> str:
+    if not store_version or not local_version:
+        return "unknown"
+    store_key = version_key(store_version)
+    local_key = version_key(local_version)
+    if store_key == local_key:
+        return "same"
+    if local_key > store_key:
+        return "local_ahead"
+    return "store_ahead"
+
+
 def repository_for(snapshot: dict[str, str], config: dict[str, dict[str, str]], owner: str) -> str:
     row = config.get(snapshot["app_id"], {})
     return row.get("repository") or f"{owner}/{snapshot['app_slug']}"
@@ -92,9 +127,20 @@ def planned_row(
     config: dict[str, dict[str, str]],
     owner: str,
     now: datetime,
+    reason: str = "store_updated",
+    store_version: str = "",
 ) -> dict[str, str]:
     tag = tag_for(snapshot["version"])
-    notes = "Generated from store version snapshot. Add release artifact, checksum, and set status=ready after verifying the release build."
+    if reason == "local_ahead":
+        notes = (
+            "Generated from local build metadata because local version is ahead of store snapshot. "
+            f"Store version: {store_version or 'unknown'}. "
+            "Add release artifact, checksum, and set status=ready after verifying the release build."
+        )
+        summary = f"{snapshot['app_name']} {snapshot['version']} local build metadata is ahead of the store snapshot."
+    else:
+        notes = "Generated from store version snapshot. Add release artifact, checksum, and set status=ready after verifying the release build."
+        summary = f"{snapshot['app_name']} {snapshot['version']} public store update detected."
     release_notes = snapshot["release_notes"] or f"{snapshot['app_name']} {snapshot['version']} store update detected."
     return {
         "release_id": release_id,
@@ -112,7 +158,7 @@ def planned_row(
         "status": "planned",
         "release_date": release_date(snapshot, now),
         "release_title": f"{snapshot['app_name']} {tag}",
-        "summary": f"{snapshot['app_name']} {snapshot['version']} public store update detected.",
+        "summary": summary,
         "changes": release_notes,
         "compatibility": f"{snapshot['platform']} public release.",
         "upgrade_notes": "No special upgrade steps documented yet.",
@@ -124,6 +170,7 @@ def prepare_app_release_rows(
     store_versions_path: Path = STORE_VERSIONS_PATH,
     releases_path: Path = RELEASES_PATH,
     config_path: Path = CONFIG_PATH,
+    local_repositories_path: Path = LOCAL_REPOSITORIES_PATH,
     owner: str = "onnelakin",
     dry_run: bool = False,
     now: datetime | None = None,
@@ -132,6 +179,7 @@ def prepare_app_release_rows(
     snapshots = read_csv(store_versions_path, STORE_HEADER)
     releases = read_csv(releases_path, RELEASE_HEADER)
     config = release_config(config_path)
+    local_versions = local_version_index(read_csv(local_repositories_path, LOCAL_REPOSITORIES_HEADER))
     seen = existing_keys(releases)
     seen_tags = existing_release_tags(releases)
     additions: list[dict[str, str]] = []
@@ -139,18 +187,30 @@ def prepare_app_release_rows(
     next_number = int(next_id.removeprefix("REL-"))
 
     for snapshot in snapshots:
-        if snapshot["status"] != "updated":
+        reason = ""
+        candidate = dict(snapshot)
+        local_version = local_versions.get(snapshot["app_id"], "")
+        comparison = compare_versions(snapshot["version"], local_version)
+        if snapshot["status"] == "updated":
+            reason = "store_updated"
+        elif comparison == "local_ahead":
+            reason = "local_ahead"
+            candidate["version"] = local_version
+            candidate["release_notes"] = (
+                f"Local build metadata version {local_version} is ahead of store snapshot {snapshot['version'] or 'unknown'}."
+            )
+        if not reason:
             continue
-        if not snapshot["version"]:
+        if not candidate["version"]:
             continue
-        key = (snapshot["app_id"], snapshot["platform"], snapshot["version"])
+        key = (candidate["app_id"], candidate["platform"], candidate["version"])
         if key in seen:
             continue
-        tag = tag_for(snapshot["version"])
-        repository = repository_for(snapshot, config, owner)
+        tag = tag_for(candidate["version"])
+        repository = repository_for(candidate, config, owner)
         if (repository, tag) in seen_tags:
             continue
-        row = planned_row(snapshot, f"REL-{next_number:04d}", config, owner, timestamp)
+        row = planned_row(candidate, f"REL-{next_number:04d}", config, owner, timestamp, reason, snapshot["version"])
         additions.append(row)
         releases.append(row)
         seen.add(key)
@@ -167,11 +227,12 @@ def main() -> int:
     parser.add_argument("--store-versions", type=Path, default=STORE_VERSIONS_PATH)
     parser.add_argument("--releases", type=Path, default=RELEASES_PATH)
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
+    parser.add_argument("--local-repositories", type=Path, default=LOCAL_REPOSITORIES_PATH)
     parser.add_argument("--owner", default="onnelakin")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     try:
-        additions = prepare_app_release_rows(args.store_versions, args.releases, args.config, args.owner, args.dry_run)
+        additions = prepare_app_release_rows(args.store_versions, args.releases, args.config, args.local_repositories, args.owner, args.dry_run)
     except (PrepareAppReleaseError, OSError) as error:
         print(f"prepare app release rows failed: {error}", file=sys.stderr)
         return 1
