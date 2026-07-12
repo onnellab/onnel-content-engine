@@ -377,6 +377,7 @@ def html_document(
     .app-status-row.is-store {{ background: var(--sky-soft); }}
     input, select {{ width: 100%; min-height: 40px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 8px 10px; font: inherit; border-radius: 6px; }}
     input:focus, select:focus, textarea:focus {{ outline: 2px solid rgba(46,111,187,.2); border-color: var(--blue); }}
+    input.needs-token {{ border-color: var(--blue); box-shadow: 0 0 0 3px rgba(46,111,187,.18); }}
     .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; align-items: start; }}
     article {{ border: 1px solid var(--line); background: var(--panel); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); }}
     article.is-due {{ border-color: #efb5b0; }}
@@ -748,7 +749,9 @@ def html_document(
       visibility: document.getElementById('visibility'),
     }};
     const tokenInput = document.getElementById('token');
+    const advancedPanel = document.querySelector('details.advanced');
     const badgeButton = document.getElementById('enable-badge');
+    const refreshButton = document.getElementById('refresh-state');
     const verifyButtonLarge = document.getElementById('verify-publications-large');
     const verifyStateLarge = document.getElementById('verify-state-large');
     const syncButtonLarge = document.getElementById('refresh-state-large');
@@ -853,10 +856,10 @@ def html_document(
       syncStateLarge.dataset.state = label;
       const value = messages[currentLang][label] || label;
       syncStateLarge.textContent = value;
-      syncButtonLarge.disabled = !githubToken();
-      syncButtonLarge.setAttribute('aria-disabled', String(!githubToken()));
-      verifyButtonLarge.disabled = !githubToken();
-      verifyButtonLarge.setAttribute('aria-disabled', String(!githubToken()));
+      syncButtonLarge.disabled = false;
+      syncButtonLarge.setAttribute('aria-disabled', 'false');
+      verifyButtonLarge.disabled = false;
+      verifyButtonLarge.setAttribute('aria-disabled', 'false');
       document.getElementById('token-note').hidden = Boolean(githubToken());
       if (!githubToken()) setVerifyState('verificationTokenRequired');
     }}
@@ -864,8 +867,16 @@ def html_document(
     function setVerifyState(label) {{
       verifyStateLarge.dataset.state = label;
       verifyStateLarge.textContent = messages[currentLang][label] || label;
-      verifyButtonLarge.disabled = !githubToken();
-      verifyButtonLarge.setAttribute('aria-disabled', String(!githubToken()));
+      verifyButtonLarge.disabled = false;
+      verifyButtonLarge.setAttribute('aria-disabled', 'false');
+    }}
+
+    function revealTokenInput() {{
+      advancedPanel.open = true;
+      tokenInput.classList.add('needs-token');
+      tokenInput.scrollIntoView({{ block: 'center', behavior: 'smooth' }});
+      tokenInput.focus({{ preventScroll: true }});
+      setTimeout(() => tokenInput.classList.remove('needs-token'), 1600);
     }}
 
     function decodeBase64Unicode(value) {{
@@ -900,7 +911,11 @@ def html_document(
     }}
 
     async function triggerPublicationVerification() {{
-      if (!githubToken()) return;
+      if (!githubToken()) {{
+        setVerifyState('verificationTokenRequired');
+        revealTokenInput();
+        return;
+      }}
       setVerifyState('verifyingPublications');
       verifyButtonLarge.disabled = true;
       try {{
@@ -916,7 +931,7 @@ def html_document(
         setSync('syncError');
         console.error(error);
       }} finally {{
-        verifyButtonLarge.disabled = !githubToken();
+        verifyButtonLarge.disabled = false;
       }}
     }}
 
@@ -1457,10 +1472,21 @@ def html_document(
       localStorage.setItem(tokenKey, tokenInput.value.trim());
       await loadRemoteState();
     }};
-    document.getElementById('refresh-state').onclick = loadRemoteState;
+    refreshButton.onclick = () => {{
+      if (!githubToken()) {{
+        setSync('viewOnly');
+        revealTokenInput();
+        return;
+      }}
+      loadRemoteState();
+    }};
     verifyButtonLarge.onclick = triggerPublicationVerification;
     syncButtonLarge.onclick = () => {{
-      if (!githubToken()) return;
+      if (!githubToken()) {{
+        setSync('viewOnly');
+        revealTokenInput();
+        return;
+      }}
       loadRemoteState();
     }};
     badgeButton.onclick = async () => {{
