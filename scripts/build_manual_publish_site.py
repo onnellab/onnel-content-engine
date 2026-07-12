@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
+import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
 from urllib.parse import quote
@@ -20,6 +22,8 @@ DEFAULT_OUTPUT = ROOT / "generated" / "manual-publish" / "index.html"
 DEFAULT_APP_RELEASES = ROOT / "data" / "app_releases.csv"
 DEFAULT_APP_RELEASE_PUBLICATIONS = ROOT / "data" / "app_release_publications.csv"
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
+DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
+DEFAULT_HOMEPAGE_REPO = Path(os.environ.get("ONNELLAB_HOMEPAGE_REPO", "/mnt/c/dev/onnellab.github.io"))
 KST = ZoneInfo("Asia/Seoul")
 
 
@@ -156,6 +160,90 @@ def blog_status_items(topics_path: Path = DEFAULT_TOPICS) -> list[dict[str, str]
     ]
 
 
+def app_name_index(apps_registry_path: Path = DEFAULT_APPS_REGISTRY) -> dict[str, str]:
+    return {row.get("slug", ""): row.get("app_name", "") for row in read_csv_rows(apps_registry_path)}
+
+
+def latest_file_mtime(paths: list[Path]) -> str:
+    existing = [path for path in paths if path.exists()]
+    if not existing:
+        return ""
+    latest = max(path.stat().st_mtime for path in existing)
+    return datetime.fromtimestamp(latest, tz=KST).isoformat()
+
+
+def latest_git_time(repo: Path, paths: list[Path]) -> str:
+    existing = [path for path in paths if path.exists()]
+    if not existing:
+        return ""
+    try:
+        relative = [path.relative_to(repo).as_posix() for path in existing]
+        completed = subprocess.run(
+            ["git", "-C", str(repo), "log", "-1", "--format=%cI", "--", *relative],
+            check=False,
+            text=True,
+            capture_output=True,
+            timeout=10,
+        )
+    except (OSError, subprocess.SubprocessError, ValueError):
+        return latest_file_mtime(existing)
+    value = completed.stdout.strip()
+    return value or latest_file_mtime(existing)
+
+
+def homepage_status_items(homepage_repo: Path = DEFAULT_HOMEPAGE_REPO) -> list[dict[str, object]]:
+    if not homepage_repo.exists():
+        return []
+    src = homepage_repo / "src"
+    content_apps = src / "content" / "apps"
+    names = app_name_index()
+    items: list[dict[str, object]] = [
+        {
+            "kind": "home",
+            "slug": "home",
+            "name": "ONNELLAB Home",
+            "landing_updated_at": latest_git_time(
+                homepage_repo,
+                [
+                    src / "components" / "HomePage.astro",
+                    src / "pages" / "index.astro",
+                    src / "pages" / "ko" / "index.astro",
+                ],
+            ),
+            "screenshots_updated_at": "",
+            "assets_updated_at": latest_git_time(
+                homepage_repo,
+                [
+                    homepage_repo / "public" / "favicon.svg",
+                    homepage_repo / "public" / "favicon-32x32.png",
+                    homepage_repo / "public" / "apple-touch-icon.png",
+                ],
+            ),
+            "screenshot_count": 0,
+        }
+    ]
+    if not content_apps.exists():
+        return items
+    for app_dir in sorted(path for path in content_apps.iterdir() if path.is_dir()):
+        slug = app_dir.name
+        landing_paths = [app_dir / "app.md", app_dir / "description-ko.md", app_dir / "description-en.md"]
+        screenshot_paths = sorted((app_dir / "assets" / "screenshots").glob("**/*.png"))
+        asset_paths = sorted((app_dir / "assets").glob("**/*"))
+        asset_files = [path for path in asset_paths if path.is_file() and "screenshots" not in path.parts]
+        items.append(
+            {
+                "kind": "app",
+                "slug": slug,
+                "name": names.get(slug) or slug,
+                "landing_updated_at": latest_git_time(homepage_repo, landing_paths),
+                "screenshots_updated_at": latest_git_time(homepage_repo, screenshot_paths),
+                "assets_updated_at": latest_git_time(homepage_repo, asset_files),
+                "screenshot_count": len(screenshot_paths),
+            }
+        )
+    return items
+
+
 def asset_href(path_value: str) -> str:
     if not path_value:
         return ""
@@ -278,11 +366,13 @@ def html_document(
     releases: list[dict[str, str]] | None = None,
     blog_items: list[dict[str, str]] | None = None,
     store_items: list[dict[str, str]] | None = None,
+    site_items: list[dict[str, object]] | None = None,
 ) -> str:
     data = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
     release_data = json.dumps(releases or [], ensure_ascii=False).replace("</", "<\\/")
     blog_data = json.dumps(blog_items or [], ensure_ascii=False).replace("</", "<\\/")
     store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
+    site_data = json.dumps(site_items or [], ensure_ascii=False).replace("</", "<\\/")
     total = len(items)
     manual = sum(
         1
@@ -499,6 +589,13 @@ def html_document(
       </div>
       <div id="blog-grid" class="status-grid"></div>
     </section>
+    <section class="status-section" aria-label="Website asset status">
+      <div class="release-head">
+        <h2 id="site-status-title">사이트 갱신 상태</h2>
+        <span id="site-status-summary"></span>
+      </div>
+      <div id="site-status-grid" class="app-status-grid"></div>
+    </section>
     <section class="status-section" aria-label="App operation status">
       <div class="release-head">
         <h2 id="app-status-title">앱 운영 상태</h2>
@@ -511,11 +608,13 @@ def html_document(
   <script id="release-data" type="application/json">{release_data}</script>
   <script id="blog-data" type="application/json">{blog_data}</script>
   <script id="store-data" type="application/json">{store_data}</script>
+  <script id="site-data" type="application/json">{site_data}</script>
   <script>
     const items = JSON.parse(document.getElementById('manual-data').textContent);
     const releases = JSON.parse(document.getElementById('release-data').textContent);
     const blogItems = JSON.parse(document.getElementById('blog-data').textContent);
     const storeItems = JSON.parse(document.getElementById('store-data').textContent);
+    const siteItems = JSON.parse(document.getElementById('site-data').textContent);
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
     const stateBranch = 'main';
@@ -591,6 +690,13 @@ def html_document(
         noRelease: '릴리즈 후보 없음',
         blogTitle: '블로그 상태',
         blogSummary: '상태',
+        siteStatusTitle: '사이트 갱신 상태',
+        siteStatusSummary: '메인홈과 앱 상세 페이지',
+        mainHome: '메인홈',
+        landingUpdated: '랜딩페이지 갱신',
+        screenshotsUpdated: '스크린샷 갱신',
+        assetsUpdated: '아이콘/자산 갱신',
+        screenshotCount: '스크린샷',
         latestPublished: '최근 게시',
         nextScheduled: '다음 게시 예정',
         publicApproved: '공개 승인',
@@ -699,6 +805,13 @@ def html_document(
         noRelease: 'no release candidate',
         blogTitle: 'Blog status',
         blogSummary: 'status',
+        siteStatusTitle: 'Website update status',
+        siteStatusSummary: 'home and app landing pages',
+        mainHome: 'Main home',
+        landingUpdated: 'landing updated',
+        screenshotsUpdated: 'screenshots updated',
+        assetsUpdated: 'icon/assets updated',
+        screenshotCount: 'screenshots',
         latestPublished: 'latest published',
         nextScheduled: 'next scheduled',
         publicApproved: 'public approved',
@@ -772,6 +885,8 @@ def html_document(
     const appStatusSummary = document.getElementById('app-status-summary');
     const blogGrid = document.getElementById('blog-grid');
     const blogSummary = document.getElementById('blog-summary');
+    const siteStatusGrid = document.getElementById('site-status-grid');
+    const siteStatusSummary = document.getElementById('site-status-summary');
     let remoteState = {{ done: {{}}, updated_at: '', version: 1 }};
     let remoteSha = '';
     let showVariants = false;
@@ -793,6 +908,7 @@ def html_document(
       document.getElementById('advanced-summary').textContent = t('advancedSummary');
       document.getElementById('app-status-title').textContent = t('appStatusTitle');
       document.getElementById('blog-title').textContent = t('blogTitle');
+      document.getElementById('site-status-title').textContent = t('siteStatusTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
@@ -816,6 +932,7 @@ def html_document(
       syncViewButtons();
       renderAppStatusSummary();
       renderBlogSummary();
+      renderSiteStatusSummary();
     }}
 
     function syncViewButtons() {{
@@ -1289,6 +1406,32 @@ def html_document(
       }});
     }}
 
+    function renderSiteStatusSummary() {{
+      siteStatusGrid.textContent = '';
+      const appCount = siteItems.filter((item) => item.kind === 'app').length;
+      siteStatusSummary.textContent = `${{siteItems.length}} ${{t('siteStatusSummary')}} / ${{appCount}} apps`;
+      siteItems.forEach((item) => {{
+        const card = document.createElement('div');
+        card.className = 'app-status-card';
+        const title = document.createElement('strong');
+        title.textContent = item.kind === 'home' ? t('mainHome') : item.name;
+        const landing = document.createElement('div');
+        landing.className = 'app-status-row is-store';
+        landing.innerHTML = `<b>${{t('landingUpdated')}}</b><span>${{formatDate(item.landing_updated_at)}}</span>`;
+        const assets = document.createElement('div');
+        assets.className = 'app-status-row is-release';
+        assets.innerHTML = `<b>${{t('assetsUpdated')}}</b><span>${{formatDate(item.assets_updated_at)}}</span>`;
+        card.append(title, landing, assets);
+        if (item.kind === 'app') {{
+          const screenshots = document.createElement('div');
+          screenshots.className = 'app-status-row is-store';
+          screenshots.innerHTML = `<b>${{t('screenshotsUpdated')}}</b><span>${{formatDate(item.screenshots_updated_at)}} / ${{item.screenshot_count}} ${{t('screenshotCount')}}</span>`;
+          card.appendChild(screenshots);
+        }}
+        siteStatusGrid.appendChild(card);
+      }});
+    }}
+
     function appStatusGroups() {{
       const groups = new Map();
       function ensure(item) {{
@@ -1416,6 +1559,7 @@ def html_document(
       renderPlatformSummary();
       renderAppStatusSummary();
       renderBlogSummary();
+      renderSiteStatusSummary();
       updateVariantToggle();
       syncViewButtons();
       updateAppBadge();
@@ -1639,14 +1783,16 @@ def build_manual_publish_site(
     app_releases_path: Path = DEFAULT_APP_RELEASES,
     app_release_publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS,
     store_versions_path: Path = DEFAULT_STORE_VERSIONS,
+    homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
 ) -> Path:
     topics = read_topics(topics_path)
     items = social_items(social_manifest, topics) + syndication_items(syndication_manifest, topics)
     releases = app_release_items(app_releases_path, app_release_publications_path)
     blog_items = blog_status_items(topics_path)
     store_items = store_status_items(store_versions_path)
+    site_items = homepage_status_items(homepage_repo)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(html_document(items, releases, blog_items, store_items), encoding="utf-8")
+    output.write_text(html_document(items, releases, blog_items, store_items, site_items), encoding="utf-8")
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")
     return output
@@ -1660,6 +1806,7 @@ def main() -> int:
     parser.add_argument("--app-releases", type=Path, default=DEFAULT_APP_RELEASES)
     parser.add_argument("--app-release-publications", type=Path, default=DEFAULT_APP_RELEASE_PUBLICATIONS)
     parser.add_argument("--store-versions", type=Path, default=DEFAULT_STORE_VERSIONS)
+    parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPO)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
     output = build_manual_publish_site(
@@ -1670,6 +1817,7 @@ def main() -> int:
         args.app_releases,
         args.app_release_publications,
         args.store_versions,
+        args.homepage_repo,
     )
     print(f"generated {output}")
     return 0

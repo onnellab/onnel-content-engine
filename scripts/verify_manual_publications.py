@@ -233,6 +233,7 @@ def verify_public_page(item: dict[str, Any], visual_text: VisualText) -> Verific
     platform = str(item.get("platform", ""))
     url = public_profile_url(platform)
     if not url:
+        print(f"skip {platform} public page verification: profile URL is not configured", file=sys.stderr)
         return None
     text = visual_text(url)
     canonical_url = str(item.get("canonical_url", ""))
@@ -240,6 +241,10 @@ def verify_public_page(item: dict[str, Any], visual_text: VisualText) -> Verific
     title = first_line_from_draft(item)
     if (canonical_url and canonical_url in text) or (slug and slug in text) or (title and title in text):
         return result_for(item, url, f"{platform}_public_page_visual", "low")
+    print(
+        f"checked {platform} public page but found no matching canonical URL, slug, or title: {url}",
+        file=sys.stderr,
+    )
     return None
 
 
@@ -284,7 +289,8 @@ def verify_item(
             return verify_rss(item, fetch_text)
         if platform in {"x", "linkedin"} and visual_public_pages:
             return verify_public_page(item, visual_text)
-    except (urllib.error.URLError, TimeoutError, subprocess.SubprocessError, OSError, json.JSONDecodeError):
+    except (urllib.error.URLError, TimeoutError, subprocess.SubprocessError, OSError, json.JSONDecodeError) as error:
+        print(f"skip {platform} verification after error: {error}", file=sys.stderr)
         return None
     return None
 
