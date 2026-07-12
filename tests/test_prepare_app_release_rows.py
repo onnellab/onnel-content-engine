@@ -17,17 +17,23 @@ from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER  # noqa: 
 from validate_app_releases import RELEASE_HEADER, validate_app_releases  # noqa: E402
 
 
-def write_store_versions(path: Path, status: str = "updated", version: str = "1.2.3") -> None:
+def write_store_versions(
+    path: Path,
+    status: str = "updated",
+    version: str = "1.2.3",
+    platform: str = "ios",
+    last_updated: str = "2026-07-12T01:30:00Z",
+) -> None:
     row = {
         "app_id": "APP-0003",
         "app_slug": "vaultxt",
         "app_name": "VaultXT",
-        "platform": "ios",
+        "platform": platform,
         "store_url": "https://apps.apple.com/app/id6760122045",
         "store_app_id": "6760122045",
-        "store_package": "",
+        "store_package": "com.onnellab.vaultxt" if platform == "android" else "",
         "version": version,
-        "last_updated": "2026-07-12T01:30:00Z",
+        "last_updated": last_updated,
         "release_notes": "Improved large-file scrolling.",
         "checked_at": "2026-07-12T09:00:00+09:00",
         "status": status,
@@ -189,6 +195,81 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
 
             self.assertEqual(additions, [])
             self.assertEqual(validate_app_releases(releases), 1)
+
+    def test_existing_local_ahead_release_is_refreshed_when_store_catches_up(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            store_versions = Path(temp) / "store_versions.csv"
+            releases = Path(temp) / "app_releases.csv"
+            write_store_versions(
+                store_versions,
+                status="unchanged",
+                version="1.2.3",
+                platform="android",
+                last_updated="2026. 7. 13.",
+            )
+            existing = {field: "" for field in RELEASE_HEADER}
+            existing.update(
+                {
+                    "release_id": "REL-0001",
+                    "app_id": "APP-0003",
+                    "app_slug": "vaultxt",
+                    "app_name": "VaultXT",
+                    "repository": "onnellab/onnellab-text",
+                    "tag": "v1.2.3",
+                    "version": "1.2.3",
+                    "platform": "ios",
+                    "build_type": "release",
+                    "status": "planned",
+                    "release_date": "2026-07-10",
+                    "release_title": "VaultXT v1.2.3",
+                    "summary": "VaultXT 1.2.3 local build metadata is ahead of the store snapshot.",
+                    "changes": "Local build metadata version 1.2.3 is ahead of store snapshot 1.2.2.",
+                    "compatibility": "ios public release.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                    "notes": "Generated from local build metadata because local version is ahead of the store snapshot.",
+                }
+            )
+            write_releases(releases, [existing])
+
+            additions = prepare_app_release_rows(
+                store_versions,
+                releases,
+                now=datetime.fromisoformat("2026-07-13T09:00:00+09:00"),
+            )
+
+            self.assertEqual(additions, [])
+            with releases.open("r", encoding="utf-8", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+            self.assertEqual(rows[0]["platform"], "android")
+            self.assertEqual(rows[0]["release_date"], "2026-07-13")
+            self.assertIn("public store update detected", rows[0]["summary"])
+            self.assertEqual(rows[0]["changes"], "Improved large-file scrolling.")
+            self.assertIn("same version was confirmed", rows[0]["notes"])
+            self.assertEqual(validate_app_releases(releases), 1)
+
+    def test_local_ahead_takes_precedence_over_updated_older_store_snapshot(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store_versions = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            local_repositories = root / "local_repositories.csv"
+            app = root / "vaultxt"
+            app.mkdir()
+            (app / "pubspec.yaml").write_text("name: vaultxt\nversion: 1.2.4+10\n", encoding="utf-8")
+            write_store_versions(store_versions, status="updated", version="1.2.3")
+            write_releases(releases)
+            write_local_repositories(local_repositories, app)
+
+            additions = prepare_app_release_rows(
+                store_versions,
+                releases,
+                local_repositories_path=local_repositories,
+                now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
+            )
+
+            self.assertEqual(len(additions), 1)
+            self.assertEqual(additions[0]["tag"], "v1.2.4")
+            self.assertIn("local build metadata", additions[0]["notes"])
 
 
 if __name__ == "__main__":

@@ -62,6 +62,10 @@ def release_date(snapshot: dict[str, str], now: datetime) -> str:
             return datetime.fromisoformat(last_updated.replace("Z", "+00:00")).date().isoformat()
         except ValueError:
             pass
+        match = re.fullmatch(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.?", last_updated)
+        if match:
+            year, month, day = (int(part) for part in match.groups())
+            return datetime(year, month, day).date().isoformat()
     return now.date().isoformat()
 
 
@@ -119,6 +123,33 @@ def existing_keys(rows: list[dict[str, str]]) -> set[tuple[str, str, str]]:
 
 def existing_release_tags(rows: list[dict[str, str]]) -> set[tuple[str, str]]:
     return {(row["repository"], row["tag"]) for row in rows}
+
+
+def release_index_by_tag(rows: list[dict[str, str]]) -> dict[tuple[str, str], dict[str, str]]:
+    return {(row["repository"], row["tag"]): row for row in rows}
+
+
+def refresh_existing_local_ahead_release(
+    row: dict[str, str],
+    snapshot: dict[str, str],
+    now: datetime,
+) -> bool:
+    if row.get("status") not in {"planned", "ready"}:
+        return False
+    if "local build metadata is ahead of the store snapshot" not in row.get("summary", ""):
+        return False
+    if row.get("version") != snapshot.get("version"):
+        return False
+    row["platform"] = snapshot["platform"]
+    row["release_date"] = release_date(snapshot, now)
+    row["summary"] = f"{snapshot['app_name']} {snapshot['version']} public store update detected."
+    row["changes"] = snapshot["release_notes"] or f"{snapshot['app_name']} {snapshot['version']} store update detected."
+    row["compatibility"] = f"{snapshot['platform']} public release."
+    row["notes"] = (
+        "Updated from local-ahead metadata after the same version was confirmed on the public store. "
+        "Add release artifact, checksum, and set status=ready after verifying the release build."
+    )
+    return True
 
 
 def planned_row(
@@ -182,7 +213,9 @@ def prepare_app_release_rows(
     local_versions = local_version_index(read_csv(local_repositories_path, LOCAL_REPOSITORIES_HEADER))
     seen = existing_keys(releases)
     seen_tags = existing_release_tags(releases)
+    release_by_tag = release_index_by_tag(releases)
     additions: list[dict[str, str]] = []
+    refreshed = False
     next_id = next_release_id(releases)
     next_number = int(next_id.removeprefix("REL-"))
 
@@ -191,14 +224,20 @@ def prepare_app_release_rows(
         candidate = dict(snapshot)
         local_version = local_versions.get(snapshot["app_id"], "")
         comparison = compare_versions(snapshot["version"], local_version)
-        if snapshot["status"] == "updated":
-            reason = "store_updated"
-        elif comparison == "local_ahead":
+        if comparison == "local_ahead":
             reason = "local_ahead"
             candidate["version"] = local_version
             candidate["release_notes"] = (
                 f"Local build metadata version {local_version} is ahead of store snapshot {snapshot['version'] or 'unknown'}."
             )
+        elif snapshot["status"] == "updated":
+            reason = "store_updated"
+        elif snapshot["version"]:
+            tag = tag_for(snapshot["version"])
+            repository = repository_for(snapshot, config, owner)
+            existing = release_by_tag.get((repository, tag))
+            if existing and refresh_existing_local_ahead_release(existing, snapshot, timestamp):
+                refreshed = True
         if not reason:
             continue
         if not candidate["version"]:
@@ -215,9 +254,10 @@ def prepare_app_release_rows(
         releases.append(row)
         seen.add(key)
         seen_tags.add((repository, tag))
+        release_by_tag[(repository, tag)] = row
         next_number += 1
 
-    if additions and not dry_run:
+    if (additions or refreshed) and not dry_run:
         write_releases(releases_path, releases)
     return additions
 
