@@ -19,11 +19,12 @@ DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.js
 DEFAULT_OUTPUT = ROOT / "generated" / "manual-publish" / "index.html"
 DEFAULT_APP_RELEASES = ROOT / "data" / "app_releases.csv"
 DEFAULT_APP_RELEASE_PUBLICATIONS = ROOT / "data" / "app_release_publications.csv"
+DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 KST = ZoneInfo("Asia/Seoul")
 
 
 PLATFORM_LABELS = {
-    "x": "X",
+    "x": "Twitter",
     "linkedin": "LinkedIn",
     "bluesky": "Bluesky",
     "devto": "Dev.to",
@@ -117,6 +118,40 @@ def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_p
             }
         )
     return items
+
+
+def store_status_items(store_versions_path: Path = DEFAULT_STORE_VERSIONS) -> list[dict[str, str]]:
+    return [
+        {
+            "app_id": row.get("app_id", ""),
+            "app_slug": row.get("app_slug", ""),
+            "app_name": row.get("app_name", ""),
+            "platform": row.get("platform", ""),
+            "store_url": row.get("store_url", ""),
+            "version": row.get("version", ""),
+            "release_date": row.get("release_date", ""),
+            "checked_at": row.get("checked_at", ""),
+            "status": row.get("status", ""),
+            "notes": row.get("notes", ""),
+        }
+        for row in read_csv_rows(store_versions_path)
+    ]
+
+
+def blog_status_items(topics_path: Path = DEFAULT_TOPICS) -> list[dict[str, str]]:
+    return [
+        {
+            "topic_id": row.get("id", ""),
+            "title": row.get("working_title", ""),
+            "language": row.get("primary_language", ""),
+            "status": row.get("status", ""),
+            "published_url": row.get("published_url", ""),
+            "scheduled_at": row.get("scheduled_at", ""),
+            "published_at": row.get("published_at", ""),
+            "updated_at": row.get("updated_at", ""),
+        }
+        for row in read_csv_rows(topics_path)
+    ]
 
 
 def asset_href(path_value: str) -> str:
@@ -236,9 +271,16 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
     return items
 
 
-def html_document(items: list[dict[str, object]], releases: list[dict[str, str]] | None = None) -> str:
+def html_document(
+    items: list[dict[str, object]],
+    releases: list[dict[str, str]] | None = None,
+    blog_items: list[dict[str, str]] | None = None,
+    store_items: list[dict[str, str]] | None = None,
+) -> str:
     data = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
     release_data = json.dumps(releases or [], ensure_ascii=False).replace("</", "<\\/")
+    blog_data = json.dumps(blog_items or [], ensure_ascii=False).replace("</", "<\\/")
+    store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
     total = len(items)
     manual = sum(
         1
@@ -295,6 +337,7 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
     .metric-card span {{ color: var(--muted); font-size: 12px; }}
     .metric-card strong {{ font-size: 28px; line-height: 1; letter-spacing: 0; }}
     .metric-card.is-active {{ border-color: var(--blue); outline: 2px solid rgba(46,111,187,.16); }}
+    .metric-card:disabled {{ cursor: default; opacity: .72; transform: none; }}
     .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
     .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) auto auto auto; gap: 8px; margin-top: 12px; }}
@@ -306,14 +349,20 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
     .platform-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
     .platform-card strong {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; margin-bottom: 8px; }}
     .platform-card strong .tag {{ flex: 0 0 auto; font-size: 11px; font-weight: 700; }}
+    .tag.mode-manual {{ color: #fff; background: var(--bad); border-color: var(--bad); font-weight: 900; }}
+    .tag.mode-automatic {{ color: var(--ok); background: var(--ok-soft); border-color: #b7d9c5; font-weight: 800; }}
     .platform-card > span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
-    .release-section {{ margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }}
+    .status-section {{ margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }}
     .release-head {{ display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 10px; }}
     .release-head h2 {{ margin: 0; font-size: 18px; }}
+    .release-head h3 {{ margin: 0; font-size: 16px; }}
+    .release-head.subhead {{ margin-top: 16px; }}
     .release-head span {{ color: var(--muted); font-size: 12px; }}
-    .release-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }}
-    .release-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
+    .status-grid, .release-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }}
+    .status-card, .release-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
+    .status-card strong,
     .release-card strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
+    .status-card span,
     .release-card span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
     input, select {{ width: 100%; min-height: 40px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 8px 10px; font: inherit; border-radius: 6px; }}
     input:focus, select:focus, textarea:focus {{ outline: 2px solid rgba(46,111,187,.2); border-color: var(--blue); }}
@@ -325,7 +374,7 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
     .body {{ padding: 14px; }}
     .card-head {{ display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }}
     .platform-badge {{ display: inline-flex; align-items: center; min-height: 30px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--ink); color: #fff; font-size: 13px; font-weight: 800; }}
-    .platform-badge.platform-x {{ background: #111; }}
+    .platform-badge.platform-x {{ background: #1da1f2; border-color: #1da1f2; }}
     .platform-badge.platform-linkedin {{ background: #0a66c2; border-color: #0a66c2; }}
     .platform-badge.platform-bluesky {{ background: #1685fe; border-color: #1685fe; }}
     .platform-badge.platform-devto {{ background: #171717; }}
@@ -374,14 +423,7 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
     <div class="bar">
       <a class="brand" href="/" aria-label="ONNELLAB home"><img class="mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32"><div id="app-title">ONNELLAB 수동 게시</div></a>
       <div class="header-right">
-      <div class="summary">
-        <button class="pill" type="button" data-view="all"><span id="label-total">전체</span> {total}</button>
-        <button class="pill" type="button" data-view="due"><span class="due-count">0</span> <span id="label-due">예정</span></button>
-        <button class="pill" type="button" data-view="manual"><span id="label-manual">수동</span> {manual}</button>
-        <button class="pill" type="button" data-view="done"><span id="label-posted">게시됨</span> {posted}</button>
-        <span class="pill" id="sync-state">불러오는 중</span>
-      </div>
-      <button id="lang-toggle" type="button" class="lang">English</button>
+        <button id="lang-toggle" type="button" class="lang">English</button>
       </div>
     </div>
   </header>
@@ -417,19 +459,35 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
     <div id="platform-summary" class="platforms"></div>
-    <section class="release-section" aria-label="GitHub Release status">
+    <section class="status-section" aria-label="Blog status">
+      <div class="release-head">
+        <h2 id="blog-title">블로그 상태</h2>
+        <span id="blog-summary"></span>
+      </div>
+      <div id="blog-grid" class="status-grid"></div>
+    </section>
+    <section class="status-section" aria-label="GitHub Release status">
       <div class="release-head">
         <h2 id="release-title">GitHub Release 상태</h2>
         <span id="release-summary"></span>
       </div>
       <div id="release-grid" class="release-grid"></div>
+      <div class="release-head subhead">
+        <h3 id="store-title">스토어 출시 상태</h3>
+        <span id="store-summary"></span>
+      </div>
+      <div id="store-grid" class="status-grid"></div>
     </section>
   </main>
   <script id="manual-data" type="application/json">{data}</script>
   <script id="release-data" type="application/json">{release_data}</script>
+  <script id="blog-data" type="application/json">{blog_data}</script>
+  <script id="store-data" type="application/json">{store_data}</script>
   <script>
     const items = JSON.parse(document.getElementById('manual-data').textContent);
     const releases = JSON.parse(document.getElementById('release-data').textContent);
+    const blogItems = JSON.parse(document.getElementById('blog-data').textContent);
+    const storeItems = JSON.parse(document.getElementById('store-data').textContent);
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
     const stateBranch = 'main';
@@ -478,6 +536,16 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
         lastUpdate: '최근 갱신',
         releaseTitle: 'GitHub Release 상태',
         releaseSummary: '상태',
+        releaseCandidate: '릴리즈 후보',
+        plannedDate: '예정일',
+        storeTitle: '스토어 출시 상태',
+        storeSummary: '현재 표시',
+        currentVersion: '현재 버전',
+        checkedAt: '최근 확인',
+        blogTitle: '블로그 상태',
+        blogSummary: '상태',
+        latestPublished: '최근 게시',
+        nextScheduled: '다음 게시 예정',
         publicApproved: '공개 승인',
         publicPending: '공개 미승인',
         copyMarkdown: '마크다운 복사',
@@ -550,6 +618,16 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
         lastUpdate: 'last update',
         releaseTitle: 'GitHub Release status',
         releaseSummary: 'status',
+        releaseCandidate: 'release candidate',
+        plannedDate: 'planned date',
+        storeTitle: 'Store release status',
+        storeSummary: 'currently shown',
+        currentVersion: 'current version',
+        checkedAt: 'last checked',
+        blogTitle: 'Blog status',
+        blogSummary: 'status',
+        latestPublished: 'latest published',
+        nextScheduled: 'next scheduled',
         publicApproved: 'public approved',
         publicPending: 'public pending',
         copyMarkdown: 'Copy markdown',
@@ -590,7 +668,6 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
     const grid = document.getElementById('grid');
     const empty = document.getElementById('empty');
     const dueCountEls = document.querySelectorAll('.due-count');
-    const syncState = document.getElementById('sync-state');
     const syncStateLarge = document.getElementById('sync-state-large');
     const filters = {{
       search: document.getElementById('search'),
@@ -602,12 +679,17 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
     }};
     const tokenInput = document.getElementById('token');
     const badgeButton = document.getElementById('enable-badge');
+    const syncButtonLarge = document.getElementById('refresh-state-large');
     const langToggle = document.getElementById('lang-toggle');
     const variantToggle = document.getElementById('toggle-variants');
     const viewButtons = document.querySelectorAll('[data-view]');
     const platformSummary = document.getElementById('platform-summary');
     const releaseGrid = document.getElementById('release-grid');
     const releaseSummary = document.getElementById('release-summary');
+    const storeGrid = document.getElementById('store-grid');
+    const storeSummary = document.getElementById('store-summary');
+    const blogGrid = document.getElementById('blog-grid');
+    const blogSummary = document.getElementById('blog-summary');
     let remoteState = {{ done: {{}}, updated_at: '', version: 1 }};
     let remoteSha = '';
     let showVariants = false;
@@ -619,16 +701,14 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
       document.documentElement.lang = currentLang;
       document.title = t('appTitle');
       document.getElementById('app-title').textContent = t('appTitle');
-      document.getElementById('label-total').textContent = t('total');
-      document.getElementById('label-due').textContent = t('due');
-      document.getElementById('label-manual').textContent = t('manual');
-      document.getElementById('label-posted').textContent = t('posted');
       document.getElementById('overview-due-label').textContent = t('overviewDue');
       document.getElementById('overview-manual-label').textContent = t('overviewManual');
       document.getElementById('overview-posted-label').textContent = t('overviewPosted');
       document.getElementById('overview-sync-label').textContent = t('overviewSync');
       document.getElementById('advanced-summary').textContent = t('advancedSummary');
       document.getElementById('release-title').textContent = t('releaseTitle');
+      document.getElementById('store-title').textContent = t('storeTitle');
+      document.getElementById('blog-title').textContent = t('blogTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
@@ -646,9 +726,11 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
       filters.visibility.options[2].textContent = t('showDone');
       empty.textContent = t('empty');
       langToggle.textContent = currentLang === 'ko' ? 'English' : '한국어';
-      setSync(syncState.dataset.state || (githubToken() ? 'synced' : 'viewOnly'));
+      setSync(syncStateLarge.dataset.state || (githubToken() ? 'synced' : 'viewOnly'));
       syncViewButtons();
       renderReleaseSummary();
+      renderStoreSummary();
+      renderBlogSummary();
     }}
 
     function syncViewButtons() {{
@@ -697,10 +779,11 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
     }}
 
     function setSync(label) {{
-      syncState.dataset.state = label;
+      syncStateLarge.dataset.state = label;
       const value = messages[currentLang][label] || label;
-      syncState.textContent = value;
       syncStateLarge.textContent = value;
+      syncButtonLarge.disabled = !githubToken();
+      syncButtonLarge.setAttribute('aria-disabled', String(!githubToken()));
     }}
 
     function decodeBase64Unicode(value) {{
@@ -919,23 +1002,58 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
         const drafts = rows.filter((item) => ['draft', 'approved'].includes(item.status));
         const latestPosted = latestDate(posted.map((item) => item.posted_at));
         const latestAttempt = latestDate(rows.map((item) => item.last_attempt_at || item.approved_at || item.posted_at));
+        const nextDue = rows
+          .filter((item) => !isDone(item) && !item.is_variant && item.due_at)
+          .map((item) => dueDate(item))
+          .filter(Boolean)
+          .sort((a, b) => a - b)[0] || null;
         const card = document.createElement('div');
         card.className = 'platform-card';
         const title = document.createElement('strong');
         const titleText = document.createElement('span');
         titleText.textContent = label;
         const modeTag = document.createElement('span');
-        modeTag.className = 'tag';
+        modeTag.className = 'tag ' + (rows[0]?.publishing_mode === 'automatic' ? 'mode-automatic' : 'mode-manual');
         modeTag.textContent = rows[0]?.publishing_mode === 'automatic' ? t('automaticMode') : t('manualMode');
         title.append(titleText, modeTag);
         const status = document.createElement('span');
         status.textContent = `${{posted.length}} ${{t('postedWord')}} / ${{drafts.length}} ${{t('waitingWord')}} / ${{failed.length}} ${{t('failedWord')}}`;
         const postedLine = document.createElement('span');
         postedLine.textContent = t('lastPosted') + ': ' + (latestPosted ? `${{formatDate(latestPosted.toISOString())}} (${{daysAgo(latestPosted.toISOString())}})` : t('none'));
+        const nextLine = document.createElement('span');
+        nextLine.textContent = t('nextScheduled') + ': ' + (nextDue ? formatDate(nextDue.toISOString()) : t('none'));
         const attemptLine = document.createElement('span');
         attemptLine.textContent = t('lastUpdate') + ': ' + (latestAttempt ? `${{formatDate(latestAttempt.toISOString())}} (${{daysAgo(latestAttempt.toISOString())}})` : t('none'));
-        card.append(title, status, postedLine, attemptLine);
+        card.append(title, status, postedLine, nextLine, attemptLine);
         platformSummary.appendChild(card);
+      }});
+    }}
+
+    function renderBlogSummary() {{
+      blogGrid.textContent = '';
+      const counts = blogItems.reduce((acc, item) => {{
+        acc[item.status] = (acc[item.status] || 0) + 1;
+        return acc;
+      }}, {{}});
+      blogSummary.textContent = Object.entries(counts).map(([status, count]) => `${{status}} ${{count}}`).join(' / ') || t('none');
+      const latestPublished = latestDate(blogItems.map((item) => item.published_at));
+      const nextScheduled = blogItems
+        .filter((item) => item.status === 'scheduled' && item.scheduled_at)
+        .map((item) => parseDate(item.scheduled_at))
+        .filter(Boolean)
+        .sort((a, b) => a - b)[0] || null;
+      [
+        [t('latestPublished'), latestPublished ? formatDate(latestPublished.toISOString()) : t('none')],
+        [t('nextScheduled'), nextScheduled ? formatDate(nextScheduled.toISOString()) : t('none')],
+      ].forEach(([label, value]) => {{
+        const card = document.createElement('div');
+        card.className = 'status-card';
+        const title = document.createElement('strong');
+        title.textContent = label;
+        const line = document.createElement('span');
+        line.textContent = value;
+        card.append(title, line);
+        blogGrid.appendChild(card);
       }});
     }}
 
@@ -952,11 +1070,36 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
         const title = document.createElement('strong');
         title.textContent = `${{item.app_name}} ${{item.tag}}`;
         const status = document.createElement('span');
-        status.textContent = `${{t('releaseSummary')}}: ${{item.status}} / ${{item.public_release === 'true' ? t('publicApproved') : t('publicPending')}}`;
+        status.textContent = `${{t('releaseCandidate')}}: ${{item.status}} / ${{item.public_release === 'true' ? t('publicApproved') : t('publicPending')}}`;
+        const planned = document.createElement('span');
+        planned.textContent = `${{t('plannedDate')}}: ${{item.release_date || t('none')}}`;
         const repo = document.createElement('span');
-        repo.textContent = `${{item.repository}} / ${{item.platform}} / ${{item.release_date || t('none')}}`;
-        card.append(title, status, repo);
+        repo.textContent = `${{item.repository}} / ${{item.platform}}`;
+        card.append(title, status, planned, repo);
         releaseGrid.appendChild(card);
+      }});
+    }}
+
+    function renderStoreSummary() {{
+      storeGrid.textContent = '';
+      const counts = storeItems.reduce((acc, item) => {{
+        acc[item.platform] = (acc[item.platform] || 0) + 1;
+        return acc;
+      }}, {{}});
+      storeSummary.textContent = Object.entries(counts).map(([platform, count]) => `${{platform}} ${{count}}`).join(' / ') || t('none');
+      storeItems.forEach((item) => {{
+        const card = document.createElement('div');
+        card.className = 'status-card';
+        const title = document.createElement('strong');
+        title.textContent = `${{item.app_name}} / ${{item.platform}}`;
+        const version = document.createElement('span');
+        version.textContent = `${{t('currentVersion')}}: ${{item.version || t('none')}} / ${{item.status || t('none')}}`;
+        const released = document.createElement('span');
+        released.textContent = `${{t('plannedDate')}}: ${{item.release_date || t('none')}}`;
+        const checked = document.createElement('span');
+        checked.textContent = `${{t('checkedAt')}}: ${{formatDate(item.checked_at)}}`;
+        card.append(title, version, released, checked);
+        storeGrid.appendChild(card);
       }});
     }}
 
@@ -1006,6 +1149,8 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
       visible.forEach((item) => grid.appendChild(card(item)));
       renderPlatformSummary();
       renderReleaseSummary();
+      renderStoreSummary();
+      renderBlogSummary();
       updateVariantToggle();
       syncViewButtons();
       updateAppBadge();
@@ -1029,7 +1174,7 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
       platformBadge.className = 'platform-badge ' + platformClass(item.platform);
       platformBadge.textContent = item.platform_label;
       const kindTag = document.createElement('span');
-      kindTag.className = 'tag';
+      kindTag.className = 'tag ' + (item.publishing_mode === 'manual' ? 'mode-manual' : 'mode-automatic');
       kindTag.textContent = item.publishing_mode === 'manual' ? t('manualMode') : t('automaticMode');
       cardHead.append(platformBadge, kindTag);
       const meta = document.createElement('div');
@@ -1104,7 +1249,10 @@ def html_document(items: list[dict[str, object]], releases: list[dict[str, str]]
       await loadRemoteState();
     }};
     document.getElementById('refresh-state').onclick = loadRemoteState;
-    document.getElementById('refresh-state-large').onclick = loadRemoteState;
+    syncButtonLarge.onclick = () => {{
+      if (!githubToken()) return;
+      loadRemoteState();
+    }};
     badgeButton.onclick = async () => {{
       if ('Notification' in window && Notification.permission === 'default') {{
         await Notification.requestPermission();
@@ -1190,12 +1338,15 @@ def build_manual_publish_site(
     topics_path: Path = DEFAULT_TOPICS,
     app_releases_path: Path = DEFAULT_APP_RELEASES,
     app_release_publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS,
+    store_versions_path: Path = DEFAULT_STORE_VERSIONS,
 ) -> Path:
     topics = read_topics(topics_path)
     items = social_items(social_manifest, topics) + syndication_items(syndication_manifest, topics)
     releases = app_release_items(app_releases_path, app_release_publications_path)
+    blog_items = blog_status_items(topics_path)
+    store_items = store_status_items(store_versions_path)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(html_document(items, releases), encoding="utf-8")
+    output.write_text(html_document(items, releases, blog_items, store_items), encoding="utf-8")
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")
     return output
@@ -1208,6 +1359,7 @@ def main() -> int:
     parser.add_argument("--topics", type=Path, default=DEFAULT_TOPICS)
     parser.add_argument("--app-releases", type=Path, default=DEFAULT_APP_RELEASES)
     parser.add_argument("--app-release-publications", type=Path, default=DEFAULT_APP_RELEASE_PUBLICATIONS)
+    parser.add_argument("--store-versions", type=Path, default=DEFAULT_STORE_VERSIONS)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
     output = build_manual_publish_site(
@@ -1217,6 +1369,7 @@ def main() -> int:
         args.topics,
         args.app_releases,
         args.app_release_publications,
+        args.store_versions,
     )
     print(f"generated {output}")
     return 0
