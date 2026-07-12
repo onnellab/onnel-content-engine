@@ -23,17 +23,21 @@ def release_csv(row: dict[str, str] | None = None) -> str:
 
 
 class AppReleaseTest(unittest.TestCase):
+    def release_artifact(self, name: str) -> tuple[Path, str, str]:
+        artifact = ROOT / "generated" / name
+        artifact.parent.mkdir(parents=True, exist_ok=True)
+        artifact.write_bytes(b"release artifact")
+        checksum = hashlib.sha256(artifact.read_bytes()).hexdigest()
+        self.addCleanup(lambda: artifact.unlink(missing_ok=True))
+        return artifact, f"generated/{name}", checksum
+
     def test_empty_release_manifest_is_valid(self) -> None:
         self.assertEqual(validate_app_releases(ROOT / "data" / "app_releases.csv"), 0)
 
     def test_ready_release_requires_release_artifact_and_checksum(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "app_releases.csv"
-            artifact = ROOT / "generated" / "release-artifact.apk"
-            artifact.parent.mkdir(parents=True, exist_ok=True)
-            artifact.write_bytes(b"release artifact")
-            checksum = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            self.addCleanup(lambda: artifact.unlink(missing_ok=True))
+            _artifact, artifact_path, checksum = self.release_artifact("vaultxt-release-validation.apk")
             path.write_text(
                 release_csv(
                     {
@@ -46,7 +50,7 @@ class AppReleaseTest(unittest.TestCase):
                         "version": "1.2.0",
                         "platform": "android",
                         "build_type": "release",
-                        "artifact_path": "generated/release-artifact.apk",
+                        "artifact_path": artifact_path,
                         "checksum_sha256": checksum,
                         "previous_tag": "v1.1.0",
                         "status": "ready",
@@ -91,11 +95,7 @@ class AppReleaseTest(unittest.TestCase):
     def test_create_github_releases_dry_run_does_not_require_token(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "app_releases.csv"
-            artifact = ROOT / "generated" / "release-artifact.apk"
-            artifact.parent.mkdir(parents=True, exist_ok=True)
-            artifact.write_bytes(b"release artifact")
-            checksum = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            self.addCleanup(lambda: artifact.unlink(missing_ok=True))
+            _artifact, artifact_path, checksum = self.release_artifact("vaultxt-release-dry-run.apk")
             path.write_text(
                 release_csv(
                     {
@@ -108,7 +108,7 @@ class AppReleaseTest(unittest.TestCase):
                         "version": "1.2.0",
                         "platform": "android",
                         "build_type": "release",
-                        "artifact_path": "generated/release-artifact.apk",
+                        "artifact_path": artifact_path,
                         "checksum_sha256": checksum,
                         "previous_tag": "v1.1.0",
                         "status": "ready",
@@ -125,16 +125,12 @@ class AppReleaseTest(unittest.TestCase):
 
             messages = create_github_releases(path, dry_run=True)
 
-            self.assertEqual(messages, ["would create onnelakin/vaultxt v1.2.0 with generated/release-artifact.apk"])
+            self.assertEqual(messages, [f"would create onnelakin/vaultxt v1.2.0 with {artifact_path}"])
 
     def test_create_github_releases_posts_draft_and_updates_status(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "app_releases.csv"
-            artifact = ROOT / "generated" / "release-artifact.apk"
-            artifact.parent.mkdir(parents=True, exist_ok=True)
-            artifact.write_bytes(b"release artifact")
-            checksum = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            self.addCleanup(lambda: artifact.unlink(missing_ok=True))
+            _artifact, artifact_path, checksum = self.release_artifact("vaultxt-release-create.apk")
             path.write_text(
                 release_csv(
                     {
@@ -147,7 +143,7 @@ class AppReleaseTest(unittest.TestCase):
                         "version": "1.2.0",
                         "platform": "android",
                         "build_type": "release",
-                        "artifact_path": "generated/release-artifact.apk",
+                        "artifact_path": artifact_path,
                         "checksum_sha256": checksum,
                         "previous_tag": "v1.1.0",
                         "status": "ready",
@@ -176,7 +172,7 @@ class AppReleaseTest(unittest.TestCase):
                 with patch("create_github_releases.github_request", fake_request):
                     messages = create_github_releases(path)
 
-            self.assertEqual(messages, ["created onnelakin/vaultxt v1.2.0 with generated/release-artifact.apk"])
+            self.assertEqual(messages, [f"created onnelakin/vaultxt v1.2.0 with {artifact_path}"])
             self.assertIn("/repos/onnelakin/vaultxt/releases", [call[0] for call in calls])
             self.assertIn(",released,", path.read_text(encoding="utf-8"))
 
