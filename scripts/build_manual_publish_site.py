@@ -31,6 +31,7 @@ PLATFORM_LABELS = {
 
 SOCIAL_DUE_DELAYS_DAYS = {"x": 0, "linkedin": 1, "bluesky": 1}
 SYNDICATION_DUE_DELAYS_DAYS = {"devto": 2, "hashnode": 3, "medium": 4}
+AUTOMATED_PLATFORMS = {"bluesky", "devto"}
 
 
 def read_json(path: Path) -> dict[str, object]:
@@ -75,6 +76,10 @@ def due_at_for(topic: dict[str, str] | None, platform: str, kind: str) -> str:
 
 def item_key(topic_id: object, platform: str, language: object, template_id: object) -> str:
     return "::".join([str(topic_id), platform, str(language), str(template_id)])
+
+
+def publishing_mode(platform: str) -> str:
+    return "automatic" if platform in AUTOMATED_PLATFORMS else "manual"
 
 
 def asset_href(path_value: str) -> str:
@@ -122,6 +127,7 @@ def social_items(manifest_path: Path, topics: dict[str, dict[str, str]]) -> list
                 "kind": "social",
                 "topic_id": topic_id,
                 "platform": platform,
+                "publishing_mode": publishing_mode(platform),
                 "platform_label": PLATFORM_LABELS.get(platform, platform),
                 "language": language,
                 "slug": post.get("slug", ""),
@@ -166,6 +172,7 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
                 "kind": "syndication",
                 "topic_id": topic_id,
                 "platform": platform,
+                "publishing_mode": publishing_mode(platform),
                 "platform_label": PLATFORM_LABELS.get(platform, platform),
                 "language": language,
                 "slug": draft.get("slug", ""),
@@ -195,7 +202,13 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
 def html_document(items: list[dict[str, object]]) -> str:
     data = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
     total = len(items)
-    manual = sum(1 for item in items if item["status"] in {"draft", "failed", "variant", "approved"})
+    manual = sum(
+        1
+        for item in items
+        if item["publishing_mode"] == "manual"
+        and not item["is_variant"]
+        and item["status"] in {"draft", "failed", "approved"}
+    )
     posted = sum(1 for item in items if item["status"] == "posted")
     return f"""<!doctype html>
 <html lang="ko">
@@ -204,11 +217,17 @@ def html_document(items: list[dict[str, object]]) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ONNELLAB Manual Publish</title>
   <meta name="theme-color" content="#fffaf5">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="googlebot" content="noindex,nofollow,noarchive">
+  <meta name="naverbot" content="noindex,nofollow,noarchive">
+  <meta name="yeti" content="noindex,nofollow,noarchive">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="ONNEL Publish">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20260712-ol-transparent-v2" sizes="32x32" type="image/png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260712-ol-transparent-v2">
   <style>
     :root {{
       --ink: #191714; --muted: #746f69; --line: #ddd4ca; --surface: #fffaf5; --panel: #ffffff;
@@ -222,11 +241,11 @@ def html_document(items: list[dict[str, object]]) -> str:
     header {{ position: sticky; top: 0; z-index: 5; border-bottom: 1px solid rgba(221, 212, 202, .85); background: rgba(255, 250, 245, .94); backdrop-filter: blur(14px); }}
     .bar {{ max-width: 1180px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }}
     .brand {{ display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0; color: inherit; text-decoration: none; }}
-    .mark {{ width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--ink); background: linear-gradient(135deg, var(--peach), var(--lilac) 55%, var(--sky)); font-size: 13px; font-weight: 900; border-radius: 8px; }}
+    .mark {{ width: 32px; height: 32px; display: block; object-fit: contain; }}
     .header-right {{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }}
     .summary {{ display: flex; gap: 8px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }}
     .pill {{ border: 1px solid var(--line); padding: 6px 9px; background: rgba(255,255,255,.75); border-radius: 999px; }}
-    .lang {{ min-height: 31px; border-color: var(--line); background: var(--ink); color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 12px; }}
+    .lang {{ min-height: 31px; border-color: var(--line); background: var(--ink); color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 12px; white-space: nowrap; }}
     main {{ max-width: 1180px; margin: 0 auto; padding: 22px 20px 56px; }}
     .overview {{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }}
     .metric-card {{ border: 1px solid var(--line); background: var(--panel); padding: 14px; border-radius: 8px; box-shadow: var(--shadow); min-height: 88px; display: flex; flex-direction: column; justify-content: space-between; }}
@@ -236,13 +255,24 @@ def html_document(items: list[dict[str, object]]) -> str:
     .metric-card:nth-child(4) {{ background: linear-gradient(135deg, var(--lilac-soft), #fff); }}
     .metric-card span {{ color: var(--muted); font-size: 12px; }}
     .metric-card strong {{ font-size: 28px; line-height: 1; letter-spacing: 0; }}
-    .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.78); border-radius: 8px; padding: 12px; margin-bottom: 14px; box-shadow: var(--shadow); }}
-    .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) auto auto auto; gap: 8px; margin-bottom: 10px; }}
-    .controls {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(4, minmax(120px, 160px)); gap: 10px; }}
+    .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }}
+    .task-switcher {{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }}
+    .task-button {{ min-height: 78px; border-radius: 8px; text-align: left; padding: 12px; background: #fff; color: var(--ink); border: 2px solid var(--line); box-shadow: 0 8px 20px rgba(47, 38, 28, .05); }}
+    .task-button strong {{ display: block; font-size: 17px; margin-bottom: 5px; }}
+    .task-button span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.35; }}
+    .task-button.is-active {{ border-color: var(--blue); background: var(--blue-soft); }}
+    .task-button.is-active strong {{ color: var(--blue); }}
+    .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
+    .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) auto auto auto; gap: 8px; margin-top: 12px; }}
+    details.advanced {{ margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }}
+    details.advanced summary {{ cursor: pointer; color: var(--ink); font-weight: 800; min-height: 38px; display: flex; align-items: center; }}
+    .controls {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(116px, 150px)); gap: 10px; margin-top: 8px; }}
+    .secondary-controls {{ display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }}
     .platforms {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-bottom: 16px; }}
     .platform-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
-    .platform-card strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
-    .platform-card span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
+    .platform-card strong {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; margin-bottom: 8px; }}
+    .platform-card strong .tag {{ flex: 0 0 auto; font-size: 11px; font-weight: 700; }}
+    .platform-card > span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
     input, select {{ width: 100%; min-height: 40px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 8px 10px; font: inherit; border-radius: 6px; }}
     input:focus, select:focus, textarea:focus {{ outline: 2px solid rgba(46,111,187,.2); border-color: var(--blue); }}
     .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; align-items: start; }}
@@ -251,6 +281,15 @@ def html_document(items: list[dict[str, object]]) -> str:
     article.is-done {{ opacity: .78; }}
     .thumb {{ width: 100%; aspect-ratio: 1.91 / 1; object-fit: cover; display: block; border-bottom: 1px solid var(--line); background: #eee; }}
     .body {{ padding: 14px; }}
+    .card-head {{ display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }}
+    .platform-badge {{ display: inline-flex; align-items: center; min-height: 30px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--ink); color: #fff; font-size: 13px; font-weight: 800; }}
+    .platform-badge.platform-x {{ background: #111; }}
+    .platform-badge.platform-linkedin {{ background: #0a66c2; border-color: #0a66c2; }}
+    .platform-badge.platform-bluesky {{ background: #1685fe; border-color: #1685fe; }}
+    .platform-badge.platform-devto {{ background: #171717; }}
+    .platform-badge.platform-hashnode {{ background: #2962ff; border-color: #2962ff; }}
+    .platform-badge.platform-medium {{ background: #1f1f1f; }}
+    .card-head .tag {{ margin-left: auto; }}
     .meta {{ display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }}
     .tag {{ font-size: 12px; border: 1px solid var(--line); padding: 4px 7px; color: var(--muted); background: #fff; border-radius: 999px; }}
     .tag.status-posted {{ color: var(--ok); border-color: #b7d9c5; background: var(--ok-soft); }}
@@ -275,6 +314,8 @@ def html_document(items: list[dict[str, object]]) -> str:
     @media (max-width: 760px) {{
       .bar {{ align-items: flex-start; flex-direction: column; }}
       .header-right {{ width: 100%; justify-content: space-between; }}
+      .task-switcher {{ grid-template-columns: 1fr; }}
+      .quick-row {{ grid-template-columns: 1fr; }}
       .auth, .controls {{ grid-template-columns: 1fr 1fr; }}
       .auth input, .controls input {{ grid-column: 1 / -1; }}
     }}
@@ -284,13 +325,14 @@ def html_document(items: list[dict[str, object]]) -> str:
       .grid {{ grid-template-columns: 1fr; }}
       .auth, .controls {{ grid-template-columns: 1fr; }}
       .auth input, .controls input {{ grid-column: auto; }}
+      .task-button {{ min-height: 64px; }}
     }}
   </style>
 </head>
 <body>
   <header>
     <div class="bar">
-      <a class="brand" href="/" aria-label="ONNELLAB home"><div class="mark">OL</div><div id="app-title">ONNELLAB 수동 게시</div></a>
+      <a class="brand" href="/" aria-label="ONNELLAB home"><img class="mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32"><div id="app-title">ONNELLAB 수동 게시</div></a>
       <div class="header-right">
       <div class="summary">
         <span class="pill"><span id="label-total">전체</span> {total}</span>
@@ -299,7 +341,7 @@ def html_document(items: list[dict[str, object]]) -> str:
         <span class="pill"><span id="label-posted">게시됨</span> {posted}</span>
         <span class="pill" id="sync-state">불러오는 중</span>
       </div>
-      <button id="lang-toggle" type="button" class="lang">EN</button>
+      <button id="lang-toggle" type="button" class="lang">English</button>
       </div>
     </div>
   </header>
@@ -310,20 +352,32 @@ def html_document(items: list[dict[str, object]]) -> str:
       <div class="metric-card"><span id="overview-posted-label">게시 완료</span><strong>{posted}</strong></div>
       <div class="metric-card"><span id="overview-sync-label">동기화</span><strong id="sync-state-large">...</strong></div>
     </section>
-    <section class="tool-panel">
-    <div class="auth">
-      <input id="token" type="password" autocomplete="off" placeholder="완료 상태 동기화용 GitHub 토큰">
-      <button id="save-token" type="button">동기화 연결</button>
-      <button id="refresh-state" type="button" class="secondary">새로고침</button>
-      <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
+    <section class="tool-panel" aria-label="Publish controls">
+    <div class="task-switcher" role="group" aria-label="Publish mode">
+      <button class="task-button is-active" type="button" data-mode="manual"><strong id="task-manual-title">수동 게시</strong><span id="task-manual-help">내가 버튼을 눌러 올려야 하는 글만 봅니다.</span></button>
+      <button class="task-button" type="button" data-mode="automatic"><strong id="task-auto-title">자동화 확인</strong><span id="task-auto-help">이미 자동 발행되는 매체의 최근 상태를 봅니다.</span></button>
+      <button class="task-button" type="button" data-mode=""><strong id="task-all-title">전체 보기</strong><span id="task-all-help">수동, 자동화, 완료 항목을 함께 점검합니다.</span></button>
     </div>
-    <div class="controls">
-      <input id="search" type="search" placeholder="토픽, 매체, 언어, 상태 검색">
+    <div class="quick-row">
       <select id="platform"><option value="">모든 매체</option></select>
-      <select id="language"><option value="">모든 언어</option></select>
-      <select id="status"><option value="">모든 상태</option></select>
       <select id="visibility"><option value="active">진행 항목만</option><option value="all">완료 포함</option><option value="due">게시 예정만</option></select>
+      <button id="toggle-variants" type="button" class="secondary">대안 보기</button>
     </div>
+    <details class="advanced">
+      <summary id="advanced-summary">상세 필터와 동기화</summary>
+      <div class="controls">
+        <input id="search" type="search" placeholder="토픽, 매체, 언어, 상태 검색">
+        <select id="language"><option value="">모든 언어</option></select>
+        <select id="status"><option value="">모든 상태</option></select>
+        <select id="mode"><option value="manual">수동만</option><option value="automatic">자동화만</option><option value="">전체</option></select>
+      </div>
+      <div class="auth">
+        <input id="token" type="password" autocomplete="off" placeholder="완료 상태 동기화용 GitHub 토큰">
+        <button id="save-token" type="button">동기화 연결</button>
+        <button id="refresh-state" type="button" class="secondary">새로고침</button>
+        <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
+      </div>
+    </details>
     </section>
     <div id="platform-summary" class="platforms"></div>
     <div id="grid" class="grid"></div>
@@ -352,6 +406,13 @@ def html_document(items: list[dict[str, object]]) -> str:
         syncError: '동기화 오류',
         saveError: '저장 오류',
         tokenPlaceholder: '완료 상태 동기화용 GitHub 토큰',
+        taskManualTitle: '수동 게시',
+        taskManualHelp: '내가 버튼을 눌러 올려야 하는 글만 봅니다.',
+        taskAutoTitle: '자동화 확인',
+        taskAutoHelp: '이미 자동 발행되는 매체의 최근 상태를 봅니다.',
+        taskAllTitle: '전체 보기',
+        taskAllHelp: '수동, 자동화, 완료 항목을 함께 점검합니다.',
+        advancedSummary: '상세 필터와 동기화',
         connectSync: '동기화 연결',
         refresh: '새로고침',
         enableBadge: '뱃지 켜기',
@@ -360,6 +421,9 @@ def html_document(items: list[dict[str, object]]) -> str:
         allPlatforms: '모든 매체',
         allLanguages: '모든 언어',
         allStatuses: '모든 상태',
+        manualOnly: '수동만',
+        automaticOnly: '자동화만',
+        allModes: '전체',
         activeOnly: '진행 항목만',
         showDone: '완료 포함',
         dueOnly: '게시 예정만',
@@ -388,6 +452,11 @@ def html_document(items: list[dict[str, object]]) -> str:
         dueTag: '예정',
         doneTag: '완료',
         variantTag: '대안',
+        manualMode: '수동 게시 필요',
+        automaticMode: '자동화 대상',
+        showVariants: '대안 보기',
+        hideVariants: '대안 숨기기',
+        variantsCount: '개 대안',
         copied: '복사됨',
         imageCopied: '이미지 복사됨',
         opened: '열림',
@@ -411,6 +480,13 @@ def html_document(items: list[dict[str, object]]) -> str:
         syncError: 'sync error',
         saveError: 'save error',
         tokenPlaceholder: 'GitHub token for synced done state',
+        taskManualTitle: 'Manual publish',
+        taskManualHelp: 'Only posts that need your final publish tap.',
+        taskAutoTitle: 'Automation check',
+        taskAutoHelp: 'Review platforms that are already automated.',
+        taskAllTitle: 'All items',
+        taskAllHelp: 'Check manual, automated, and completed items together.',
+        advancedSummary: 'Advanced filters and sync',
         connectSync: 'Connect sync',
         refresh: 'Refresh',
         enableBadge: 'Enable badge',
@@ -419,6 +495,9 @@ def html_document(items: list[dict[str, object]]) -> str:
         allPlatforms: 'All platforms',
         allLanguages: 'All languages',
         allStatuses: 'All statuses',
+        manualOnly: 'Manual only',
+        automaticOnly: 'Automated only',
+        allModes: 'All',
         activeOnly: 'Active only',
         showDone: 'Show done',
         dueOnly: 'Due only',
@@ -447,6 +526,11 @@ def html_document(items: list[dict[str, object]]) -> str:
         dueTag: 'due',
         doneTag: 'done',
         variantTag: 'variant',
+        manualMode: 'Manual publish',
+        automaticMode: 'Automated',
+        showVariants: 'Show alternatives',
+        hideVariants: 'Hide alternatives',
+        variantsCount: 'alternatives',
         copied: 'Copied',
         imageCopied: 'Image copied',
         opened: 'Opened',
@@ -473,14 +557,18 @@ def html_document(items: list[dict[str, object]]) -> str:
       platform: document.getElementById('platform'),
       language: document.getElementById('language'),
       status: document.getElementById('status'),
+      mode: document.getElementById('mode'),
       visibility: document.getElementById('visibility'),
     }};
     const tokenInput = document.getElementById('token');
     const badgeButton = document.getElementById('enable-badge');
     const langToggle = document.getElementById('lang-toggle');
+    const variantToggle = document.getElementById('toggle-variants');
+    const taskButtons = document.querySelectorAll('.task-button');
     const platformSummary = document.getElementById('platform-summary');
     let remoteState = {{ done: {{}}, updated_at: '', version: 1 }};
     let remoteSha = '';
+    let showVariants = false;
 
     tokenInput.value = sessionStorage.getItem(tokenKey) || '';
 
@@ -496,20 +584,38 @@ def html_document(items: list[dict[str, object]]) -> str:
       document.getElementById('overview-manual-label').textContent = t('overviewManual');
       document.getElementById('overview-posted-label').textContent = t('overviewPosted');
       document.getElementById('overview-sync-label').textContent = t('overviewSync');
+      document.getElementById('task-manual-title').textContent = t('taskManualTitle');
+      document.getElementById('task-manual-help').textContent = t('taskManualHelp');
+      document.getElementById('task-auto-title').textContent = t('taskAutoTitle');
+      document.getElementById('task-auto-help').textContent = t('taskAutoHelp');
+      document.getElementById('task-all-title').textContent = t('taskAllTitle');
+      document.getElementById('task-all-help').textContent = t('taskAllHelp');
+      document.getElementById('advanced-summary').textContent = t('advancedSummary');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
       badgeButton.textContent = t('enableBadge');
+      updateVariantToggle();
       filters.search.placeholder = t('searchPlaceholder');
       filters.platform.options[0].textContent = t('allPlatforms');
       filters.language.options[0].textContent = t('allLanguages');
       filters.status.options[0].textContent = t('allStatuses');
+      filters.mode.options[0].textContent = t('manualOnly');
+      filters.mode.options[1].textContent = t('automaticOnly');
+      filters.mode.options[2].textContent = t('allModes');
       filters.visibility.options[0].textContent = t('activeOnly');
       filters.visibility.options[1].textContent = t('showDone');
       filters.visibility.options[2].textContent = t('dueOnly');
       empty.textContent = t('empty');
-      langToggle.textContent = currentLang === 'ko' ? 'EN' : 'KO';
+      langToggle.textContent = currentLang === 'ko' ? 'English' : '한국어';
       setSync(syncState.dataset.state || (githubToken() ? 'synced' : 'viewOnly'));
+      syncModeButtons();
+    }}
+
+    function syncModeButtons() {{
+      taskButtons.forEach((button) => {{
+        button.classList.toggle('is-active', button.dataset.mode === filters.mode.value);
+      }});
     }}
 
     function optionize(select, values) {{
@@ -696,6 +802,7 @@ def html_document(items: list[dict[str, object]]) -> str:
 
     function isDue(item) {{
       if (isDone(item) || item.is_variant) return false;
+      if (item.publishing_mode !== 'manual') return false;
       if (!['draft', 'failed', 'approved'].includes(item.status)) return false;
       const date = dueDate(item);
       return date ? Date.now() >= date.getTime() : false;
@@ -732,6 +839,15 @@ def html_document(items: list[dict[str, object]]) -> str:
       return values.map(parseDate).filter(Boolean).sort((a, b) => b - a)[0] || null;
     }}
 
+    function updateVariantToggle() {{
+      const count = items.filter((item) => item.is_variant).length;
+      if (currentLang === 'ko') {{
+        variantToggle.textContent = showVariants ? `${{t('hideVariants')}} (${{count}}${{t('variantsCount')}})` : `${{t('showVariants')}} (${{count}}${{t('variantsCount')}})`;
+      }} else {{
+        variantToggle.textContent = showVariants ? `${{t('hideVariants')}} (${{count}} ${{t('variantsCount')}})` : `${{t('showVariants')}} (${{count}} ${{t('variantsCount')}})`;
+      }}
+    }}
+
     function renderPlatformSummary() {{
       const platforms = [...new Set(items.map((item) => item.platform_label))].sort();
       platformSummary.textContent = '';
@@ -745,7 +861,12 @@ def html_document(items: list[dict[str, object]]) -> str:
         const card = document.createElement('div');
         card.className = 'platform-card';
         const title = document.createElement('strong');
-        title.textContent = label;
+        const titleText = document.createElement('span');
+        titleText.textContent = label;
+        const modeTag = document.createElement('span');
+        modeTag.className = 'tag';
+        modeTag.textContent = rows[0]?.publishing_mode === 'automatic' ? t('automaticMode') : t('manualMode');
+        title.append(titleText, modeTag);
         const status = document.createElement('span');
         status.textContent = `${{posted.length}} ${{t('postedWord')}} / ${{drafts.length}} ${{t('waitingWord')}} / ${{failed.length}} ${{t('failedWord')}}`;
         const postedLine = document.createElement('span');
@@ -761,20 +882,27 @@ def html_document(items: list[dict[str, object]]) -> str:
       return 'status-' + String(status || 'draft').replace(/[^a-z0-9]+/g, '-');
     }}
 
+    function platformClass(platform) {{
+      return 'platform-' + String(platform || '').replace(/[^a-z0-9]+/g, '-');
+    }}
+
     function render() {{
       const query = filters.search.value.trim().toLowerCase();
       const platform = filters.platform.value;
       const language = filters.language.value;
       const status = filters.status.value;
+      const mode = filters.mode.value;
       const visibility = filters.visibility.value;
       const visible = items.filter((item) => {{
         const haystack = [item.topic_id, item.platform_label, item.language, item.status, item.template_id, item.text].join(' ').toLowerCase();
         const done = isDone(item);
         const due = isDue(item);
+        if (item.is_variant && !showVariants) return false;
         return (!query || haystack.includes(query))
           && (!platform || item.platform_label === platform)
           && (!language || item.language === language)
           && (!status || item.status === status)
+          && (!mode || item.publishing_mode === mode)
           && (visibility === 'all' || (visibility === 'due' ? due : !done));
       }});
       const dueTotal = String(items.filter(isDue).length);
@@ -783,6 +911,8 @@ def html_document(items: list[dict[str, object]]) -> str:
       empty.hidden = visible.length !== 0;
       visible.forEach((item) => grid.appendChild(card(item)));
       renderPlatformSummary();
+      updateVariantToggle();
+      syncModeButtons();
       updateAppBadge();
     }}
 
@@ -798,11 +928,20 @@ def html_document(items: list[dict[str, object]]) -> str:
       }}
       const body = document.createElement('div');
       body.className = 'body';
+      const cardHead = document.createElement('div');
+      cardHead.className = 'card-head';
+      const platformBadge = document.createElement('div');
+      platformBadge.className = 'platform-badge ' + platformClass(item.platform);
+      platformBadge.textContent = item.platform_label;
+      const kindTag = document.createElement('span');
+      kindTag.className = 'tag';
+      kindTag.textContent = item.publishing_mode === 'manual' ? t('manualMode') : t('automaticMode');
+      cardHead.append(platformBadge, kindTag);
       const meta = document.createElement('div');
       meta.className = 'meta';
-      [item.platform_label, item.language, item.status, item.template_id, item.kind].forEach((value, index) => {{
+      [item.language, item.status, item.template_id].forEach((value, index) => {{
         const span = document.createElement('span');
-        span.className = 'tag' + (index === 2 ? ' ' + statusClass(value) : '');
+        span.className = 'tag' + (index === 1 ? ' ' + statusClass(value) : '');
         span.textContent = value;
         meta.appendChild(span);
       }});
@@ -858,7 +997,7 @@ def html_document(items: list[dict[str, object]]) -> str:
       const note = document.createElement('div');
       note.className = 'note';
       note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '');
-      body.append(meta, title, subtitle, textarea, actions, note);
+      body.append(cardHead, meta, title, subtitle, textarea, actions, note);
       if (item.error) {{
         const error = document.createElement('div');
         error.className = 'error';
@@ -887,6 +1026,16 @@ def html_document(items: list[dict[str, object]]) -> str:
       applyTranslations();
       render();
     }};
+    variantToggle.onclick = () => {{
+      showVariants = !showVariants;
+      render();
+    }};
+    taskButtons.forEach((button) => {{
+      button.onclick = () => {{
+        filters.mode.value = button.dataset.mode;
+        render();
+      }};
+    }});
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.warn);
     Object.values(filters).forEach((input) => input.addEventListener('input', render));
     loadRemoteState();
@@ -907,9 +1056,16 @@ def pwa_manifest_document() -> str:
             "background_color": "#fffaf5",
             "theme_color": "#fffaf5",
             "icons": [
-                {"src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png"},
-                {"src": "/favicon-32x32.png", "sizes": "32x32", "type": "image/png"},
-                {"src": "/favicon-16x16.png", "sizes": "16x16", "type": "image/png"},
+                {
+                    "src": "/apple-touch-icon.png?v=20260712-ol-transparent-v2",
+                    "sizes": "180x180",
+                    "type": "image/png",
+                },
+                {
+                    "src": "/favicon-32x32.png?v=20260712-ol-transparent-v2",
+                    "sizes": "32x32",
+                    "type": "image/png",
+                },
             ],
         },
         ensure_ascii=False,
