@@ -108,7 +108,7 @@ Debug, dev, internal, and test artifacts are blocked before upload.
 For cross-repository releases, configure this secret:
 
 ```text
-GITHUB_RELEASE_TOKEN
+ONNELLAB_RELEASE_TOKEN
 ```
 
 ---

@@ -113,12 +113,12 @@ scripts/create_github_releases.py --publish
 Required token:
 
 ```text
-GITHUB_RELEASE_TOKEN
+ONNELLAB_RELEASE_TOKEN
 ```
 
-If `GITHUB_RELEASE_TOKEN` is not set, the script falls back to `GITHUB_TOKEN`.
+If `ONNELLAB_RELEASE_TOKEN` is not set, the script falls back to `GITHUB_TOKEN`.
 
-For releases in a different repository, `GITHUB_RELEASE_TOKEN` must have release/content write permission for that repository.
+For releases in a different repository, `ONNELLAB_RELEASE_TOKEN` must have release/content write permission for that repository.
 
 ## Repository
 

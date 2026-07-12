@@ -43,9 +43,9 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
 
 
 def github_token() -> str:
-    token = os.environ.get("GITHUB_RELEASE_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    token = os.environ.get("ONNELLAB_RELEASE_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if not token:
-        raise GitHubReleaseError("GITHUB_RELEASE_TOKEN or GITHUB_TOKEN is required")
+        raise GitHubReleaseError("ONNELLAB_RELEASE_TOKEN or GITHUB_TOKEN is required")
     return token
 
 

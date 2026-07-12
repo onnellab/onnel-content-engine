@@ -70,7 +70,7 @@ jobs:
         if: env.DRY_RUN != 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_RELEASE_TOKEN: ${{ secrets.GITHUB_RELEASE_TOKEN }}
+          ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN }}
         run: |
           set -euo pipefail
           python3 scripts/create_github_releases.py
