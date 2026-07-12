@@ -145,7 +145,6 @@
     .card-detail > button, .card-detail > a.button { width: 100%; display: block; margin-top: 8px; }
     textarea { width: 100%; min-height: 170px; resize: vertical; border: 1px solid var(--line); padding: 11px; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--ink); background: #fff; border-radius: 6px; }
     .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
-    .actions .primary { grid-column: 1 / -1; }
     .actions .primary { min-height: 48px; font-size: 16px; font-weight: 900; background: var(--blue); border-color: var(--blue); }
     button, a.button { min-height: 38px; border: 1px solid var(--ink); background: var(--ink); color: #fff; padding: 8px 10px; font: inherit; text-decoration: none; text-align: center; cursor: pointer; border-radius: 6px; }
     button:hover, a.button:hover { transform: translateY(-1px); }
@@ -1335,7 +1334,7 @@
       doneButton.className = 'secondary';
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
       doneButton.onclick = () => isDone(item) ? undoDone(item, doneButton) : markDone(item, doneButton);
-      actions.append(open, detailToggle, doneButton);
+      actions.append(open, detailToggle);
       if (item.card_asset_href && !usesLinkPreviewCard(item)) {
         const copyImg = document.createElement('button');
         copyImg.className = 'secondary';
@@ -1352,7 +1351,7 @@
       const note = document.createElement('div');
       note.className = 'note';
       note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '') + (usesLinkPreviewCard(item) ? ' / ' + t('noImageAttach') : '');
-      detail.append(textarea, copy, note);
+      detail.append(doneButton, textarea, copy, note);
       summary.append(summaryNote);
       if (item.error) {
         const error = document.createElement('div');
