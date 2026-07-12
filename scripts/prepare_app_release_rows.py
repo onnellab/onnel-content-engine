@@ -16,8 +16,10 @@ from validate_app_releases import RELEASE_HEADER, RELEASES_PATH
 
 
 ROOT = Path(__file__).resolve().parents[1]
+CONFIG_PATH = ROOT / "data" / "app_release_config.csv"
 KST = ZoneInfo("Asia/Seoul")
 VERSION_RE = re.compile(r"^\d+\.\d+(?:\.\d+)?([-.+][0-9A-Za-z.-]+)?$")
+CONFIG_HEADER = ["app_id", "app_slug", "repository", "artifact_pattern", "notes"]
 
 
 class PrepareAppReleaseError(ValueError):
@@ -61,8 +63,13 @@ def release_date(snapshot: dict[str, str], now: datetime) -> str:
     return now.date().isoformat()
 
 
-def repository_for(snapshot: dict[str, str], owner: str) -> str:
-    return f"{owner}/{snapshot['app_slug']}"
+def release_config(path: Path = CONFIG_PATH) -> dict[str, dict[str, str]]:
+    return {row["app_id"]: row for row in read_csv(path, CONFIG_HEADER)}
+
+
+def repository_for(snapshot: dict[str, str], config: dict[str, dict[str, str]], owner: str) -> str:
+    row = config.get(snapshot["app_id"], {})
+    return row.get("repository") or f"{owner}/{snapshot['app_slug']}"
 
 
 def tag_for(version: str) -> str:
@@ -79,7 +86,13 @@ def existing_release_tags(rows: list[dict[str, str]]) -> set[tuple[str, str]]:
     return {(row["repository"], row["tag"]) for row in rows}
 
 
-def planned_row(snapshot: dict[str, str], release_id: str, owner: str, now: datetime) -> dict[str, str]:
+def planned_row(
+    snapshot: dict[str, str],
+    release_id: str,
+    config: dict[str, dict[str, str]],
+    owner: str,
+    now: datetime,
+) -> dict[str, str]:
     tag = tag_for(snapshot["version"])
     notes = "Generated from store version snapshot. Add release artifact, checksum, and set status=ready after verifying the release build."
     release_notes = snapshot["release_notes"] or f"{snapshot['app_name']} {snapshot['version']} store update detected."
@@ -88,7 +101,7 @@ def planned_row(snapshot: dict[str, str], release_id: str, owner: str, now: date
         "app_id": snapshot["app_id"],
         "app_slug": snapshot["app_slug"],
         "app_name": snapshot["app_name"],
-        "repository": repository_for(snapshot, owner),
+        "repository": repository_for(snapshot, config, owner),
         "tag": tag,
         "version": snapshot["version"],
         "platform": snapshot["platform"],
@@ -110,6 +123,7 @@ def planned_row(snapshot: dict[str, str], release_id: str, owner: str, now: date
 def prepare_app_release_rows(
     store_versions_path: Path = STORE_VERSIONS_PATH,
     releases_path: Path = RELEASES_PATH,
+    config_path: Path = CONFIG_PATH,
     owner: str = "onnelakin",
     dry_run: bool = False,
     now: datetime | None = None,
@@ -117,6 +131,7 @@ def prepare_app_release_rows(
     timestamp = now or datetime.now(KST)
     snapshots = read_csv(store_versions_path, STORE_HEADER)
     releases = read_csv(releases_path, RELEASE_HEADER)
+    config = release_config(config_path)
     seen = existing_keys(releases)
     seen_tags = existing_release_tags(releases)
     additions: list[dict[str, str]] = []
@@ -132,10 +147,10 @@ def prepare_app_release_rows(
         if key in seen:
             continue
         tag = tag_for(snapshot["version"])
-        repository = repository_for(snapshot, owner)
+        repository = repository_for(snapshot, config, owner)
         if (repository, tag) in seen_tags:
             continue
-        row = planned_row(snapshot, f"REL-{next_number:04d}", owner, timestamp)
+        row = planned_row(snapshot, f"REL-{next_number:04d}", config, owner, timestamp)
         additions.append(row)
         releases.append(row)
         seen.add(key)
@@ -151,11 +166,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Prepare planned GitHub Release rows from store updates")
     parser.add_argument("--store-versions", type=Path, default=STORE_VERSIONS_PATH)
     parser.add_argument("--releases", type=Path, default=RELEASES_PATH)
+    parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     parser.add_argument("--owner", default="onnelakin")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     try:
-        additions = prepare_app_release_rows(args.store_versions, args.releases, args.owner, args.dry_run)
+        additions = prepare_app_release_rows(args.store_versions, args.releases, args.config, args.owner, args.dry_run)
     except (PrepareAppReleaseError, OSError) as error:
         print(f"prepare app release rows failed: {error}", file=sys.stderr)
         return 1

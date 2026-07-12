@@ -146,6 +146,24 @@ scripts/prepare_app_release_rows.py
 
 The generated rows use `status=planned`. They do not upload anything until `artifact_path`, `checksum_sha256`, and any final release notes are filled and the row is changed to `status=ready`.
 
+Release artifacts are configured in:
+
+```text
+data/app_release_config.csv
+```
+
+Default artifact location:
+
+```text
+generated/releases/{app_slug}/{version}/{platform}/*-release.*
+```
+
+When exactly one matching release artifact exists, this command fills `artifact_path`, calculates `checksum_sha256`, and promotes the row to `status=ready`:
+
+```text
+scripts/fill_ready_app_releases.py
+```
+
 ## Repository
 
 `repository` must use `owner/name` format.

@@ -127,6 +127,20 @@ scripts/prepare_app_release_rows.py
 
 Candidate rows are committed as `planned` rows in `data/app_releases.csv`. They do not create GitHub Releases until a real release artifact and checksum are added and the row is marked `ready`.
 
+The release artifact fill stage then checks:
+
+```text
+data/app_release_config.csv
+```
+
+and runs:
+
+```text
+scripts/fill_ready_app_releases.py
+```
+
+It promotes a planned row to `ready` only when exactly one matching `*-release.*` artifact exists.
+
 For cross-repository releases, configure this secret:
 
 ```text

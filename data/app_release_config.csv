@@ -1,0 +1,7 @@
+app_id,app_slug,repository,artifact_pattern,notes
+APP-0001,quivra,onnelakin/quivra,generated/releases/quivra/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
+APP-0002,tagweaver,onnelakin/tagweaver,generated/releases/tagweaver/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
+APP-0003,vaultxt,onnelakin/vaultxt,generated/releases/vaultxt/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
+APP-0004,segra,onnelakin/segra,generated/releases/segra/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
+APP-0005,clipnest,onnelakin/clipnest,generated/releases/clipnest/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
+APP-0006,aligna,onnelakin/aligna,generated/releases/aligna/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
