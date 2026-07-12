@@ -15,8 +15,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from check_store_versions import (  # noqa: E402
     ANDROID_HEADER,
     STORE_HEADER,
+    StoreVersionError,
     app_store_id,
     check_store_versions,
+    google_play_homepage_lookup,
     play_package,
 )
 from validate_apps_registry import APP_HEADER  # noqa: E402
@@ -93,7 +95,7 @@ class StoreVersionsTest(unittest.TestCase):
                         }
                     ]
                 },
-            ):
+            ), patch("check_store_versions.html_get", side_effect=StoreVersionError("blocked")):
                 rows = check_store_versions(
                     apps,
                     output,
@@ -118,7 +120,7 @@ class StoreVersionsTest(unittest.TestCase):
             with patch(
                 "check_store_versions.json_get",
                 return_value={"results": [{"version": "1.2.3", "currentVersionReleaseDate": "", "releaseNotes": ""}]},
-            ):
+            ), patch("check_store_versions.html_get", side_effect=StoreVersionError("blocked")):
                 rows = check_store_versions(
                     apps,
                     output,
@@ -154,6 +156,9 @@ class StoreVersionsTest(unittest.TestCase):
             with patch(
                 "check_store_versions.json_get",
                 return_value={"results": [{"version": "1.2.3", "currentVersionReleaseDate": "", "releaseNotes": ""}]},
+            ), patch(
+                "check_store_versions.html_get",
+                return_value='"141":[[["1.2.3"]]],"146":[["2026. 7. 12."]] com.onnellab.quivra2',
             ):
                 rows = check_store_versions(
                     apps,
@@ -166,6 +171,16 @@ class StoreVersionsTest(unittest.TestCase):
             self.assertEqual(rows[1]["status"], "new")
             self.assertEqual(rows[1]["version"], "1.2.3")
             self.assertEqual(rows[1]["release_notes"], "Android release.")
+            self.assertIn("Google Play public page", rows[1]["notes"])
+
+    def test_google_play_homepage_lookup_reads_public_page_version(self) -> None:
+        html = '"141":[[["2.0.1"]]],"146":[["2026. 7. 13."]] com.onnellab.quivra2'
+        with patch("check_store_versions.html_get", return_value=html):
+            row = google_play_homepage_lookup("https://play.google.com/store/apps/details?id=com.onnellab.quivra2")
+
+        self.assertEqual(row["store_package"], "com.onnellab.quivra2")
+        self.assertEqual(row["version"], "2.0.1")
+        self.assertEqual(row["last_updated"], "2026. 7. 13.")
 
 
 if __name__ == "__main__":

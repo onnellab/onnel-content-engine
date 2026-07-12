@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import html as html_lib
 import json
 import re
 import sys
@@ -52,6 +53,11 @@ ANDROID_HEADER = [
 
 APP_STORE_ID_RE = re.compile(r"/id(\d+)")
 PLAY_PACKAGE_RE = re.compile(r"[?&]id=([A-Za-z0-9_.]+)")
+PLAY_VERSION_RE = re.compile(r'"141":\[\[\["([^"]+)"\]\]')
+PLAY_UPDATED_RE = re.compile(r'"146":\[\["([^"]+)"')
+PLAY_VISIBLE_UPDATED_RE = re.compile(
+    r'<div class="[^"]*">(?:업데이트 날짜|Updated on)</div>\s*<div class="[^"]*">([^<]+)</div>'
+)
 
 
 class StoreVersionError(ValueError):
@@ -97,6 +103,22 @@ def json_get(url: str) -> dict[str, object]:
         raise StoreVersionError(f"HTTP {error.code} from {url}: {detail}") from error
 
 
+def html_get(url: str) -> str:
+    request = urllib.request.Request(
+        url,
+        headers={
+            "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+            "User-Agent": "ONNELLAB content engine",
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return response.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as error:
+        detail = error.read().decode("utf-8", errors="replace")
+        raise StoreVersionError(f"HTTP {error.code} from {url}: {detail}") from error
+
+
 def app_store_lookup(store_url: str, country: str = "kr") -> dict[str, str]:
     identifier = app_store_id(store_url)
     query = urllib.parse.urlencode({"id": identifier, "country": country})
@@ -126,6 +148,37 @@ def google_play_placeholder(store_url: str) -> dict[str, str]:
     }
 
 
+def google_play_public_url(store_url: str) -> str:
+    parsed = urllib.parse.urlparse(store_url)
+    query = urllib.parse.parse_qs(parsed.query, keep_blank_values=True)
+    query["hl"] = ["ko"]
+    query["gl"] = ["KR"]
+    return urllib.parse.urlunparse(parsed._replace(query=urllib.parse.urlencode(query, doseq=True)))
+
+
+def first_match(pattern: re.Pattern[str], text: str) -> str:
+    match = pattern.search(text)
+    return html_lib.unescape(match.group(1)).strip() if match else ""
+
+
+def google_play_homepage_lookup(store_url: str) -> dict[str, str]:
+    package = play_package(store_url)
+    html = html_get(google_play_public_url(store_url))
+    if package not in html:
+        raise StoreVersionError(f"Google Play public page did not include package id: {package}")
+    version = first_match(PLAY_VERSION_RE, html)
+    last_updated = first_match(PLAY_UPDATED_RE, html) or first_match(PLAY_VISIBLE_UPDATED_RE, html)
+    if not version and not last_updated:
+        raise StoreVersionError(f"Google Play public page did not expose version or update date: {package}")
+    return {
+        "store_app_id": "",
+        "store_package": package,
+        "version": version,
+        "last_updated": last_updated,
+        "release_notes": "",
+    }
+
+
 def android_version_index(path: Path = ANDROID_VERSIONS_PATH) -> dict[str, dict[str, str]]:
     if not path.exists():
         return {}
@@ -146,6 +199,27 @@ def google_play_from_source(store_url: str, app_id: str, android_versions: dict[
         "last_updated": row["last_updated"],
         "release_notes": row["release_notes"],
     }
+
+
+def google_play_lookup(store_url: str, app_id: str, android_versions: dict[str, dict[str, str]]) -> tuple[dict[str, str], str]:
+    source = android_versions.get(app_id)
+    try:
+        current = google_play_homepage_lookup(store_url)
+        if source:
+            if source["package"] != current["store_package"]:
+                raise StoreVersionError(f"Android version package does not match Play Store URL for {app_id}")
+            current["version"] = current["version"] or source["version"]
+            current["last_updated"] = current["last_updated"] or source["last_updated"]
+            current["release_notes"] = current["release_notes"] or source["release_notes"]
+            note = "Version/update date read from Google Play public page; release notes from Android snapshot."
+        else:
+            note = "Version/update date read from Google Play public page."
+        return current, note
+    except StoreVersionError as error:
+        current = google_play_from_source(store_url, app_id, android_versions)
+        if current["version"]:
+            return current, f"Google Play public page lookup failed; used Android snapshot. {error}"
+        return current, "Google Play has no stable public version lookup in this automation."
 
 
 def snapshot_key(row: dict[str, str]) -> tuple[str, str]:
@@ -174,19 +248,23 @@ def store_rows_from_apps(
             previous = existing.get((app["app_id"], platform), {})
             try:
                 if platform == "android":
-                    current = google_play_from_source(store_url, app["app_id"], android_versions)
+                    current, notes = google_play_lookup(store_url, app["app_id"], android_versions)
                 else:
                     current = app_store_lookup(store_url)
+                    notes = ""
                 previous_version = previous.get("version", "")
                 status = "new" if not previous else "unchanged"
                 if current["version"] and previous_version and current["version"] != previous_version:
                     status = "updated"
                 if platform == "android":
                     if current["version"]:
-                        notes = android_versions.get(app["app_id"], {}).get("notes", "")
+                        notes = " ".join(
+                            part
+                            for part in [notes, android_versions.get(app["app_id"], {}).get("notes", "")]
+                            if part
+                        )
                     else:
                         status = "manual_check"
-                        notes = "Google Play has no stable public version lookup in this automation."
                 else:
                     notes = ""
                 rows.append(
