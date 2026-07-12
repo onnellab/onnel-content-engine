@@ -87,7 +87,33 @@ No generation, build, or deployment step may run after a validation failure.
 
 ---
 
-# 4. Generate Markdown
+# 4. Create GitHub App Releases
+
+The app release stage runs before content generation:
+
+```text
+scripts/create_github_releases.py
+```
+
+It processes only `ready` rows from:
+
+```text
+data/app_releases.csv
+```
+
+The workflow creates draft GitHub Releases by default and uploads only release artifacts that pass `scripts/validate_app_releases.py`.
+
+Debug, dev, internal, and test artifacts are blocked before upload.
+
+For cross-repository releases, configure this secret:
+
+```text
+GITHUB_RELEASE_TOKEN
+```
+
+---
+
+# 5. Generate Markdown
 
 The Markdown stage runs:
 

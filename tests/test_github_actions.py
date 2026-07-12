@@ -18,6 +18,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("dry_run", workflow)
         self.assertIn("Validate", workflow)
         self.assertIn("Generate Markdown", workflow)
+        self.assertIn("Create GitHub App Releases", workflow)
         self.assertIn("Generate Image Specifications", workflow)
         self.assertIn("Generate Image Assets", workflow)
         self.assertIn("Generate Internal Links", workflow)
@@ -53,6 +54,7 @@ class GitHubActionsTest(unittest.TestCase):
 
         self.assertIn("Validate", text)
         self.assertIn("Generate Markdown", text)
+        self.assertIn("Create GitHub App Releases", text)
         self.assertIn("Generate image specifications", text)
         self.assertIn("Generate image assets", text)
         self.assertIn("Generate internal link metadata", text)

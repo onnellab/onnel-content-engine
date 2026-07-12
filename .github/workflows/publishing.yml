@@ -66,6 +66,21 @@ jobs:
           python3 scripts/validate_app_releases.py
           python3 scripts/validate_foundation.py
 
+      - name: Create GitHub App Releases
+        if: env.DRY_RUN != 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_RELEASE_TOKEN: ${{ secrets.GITHUB_RELEASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          python3 scripts/create_github_releases.py
+
+      - name: Create GitHub App Releases Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/create_github_releases.py --dry-run
+
       - name: Prepare Dry Run Workspace
         if: env.DRY_RUN == 'true'
         run: |
@@ -248,7 +263,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           mkdir -p generated/assets generated/metadata generated/reviews generated/html
-          git add data/topics.csv topics/topics.csv generated/markdown generated/images generated/assets generated/metadata generated/reviews generated/html generated/social generated/syndication
+          git add data/topics.csv data/app_releases.csv topics/topics.csv generated/markdown generated/images generated/assets generated/metadata generated/reviews generated/html generated/social generated/syndication
           if git diff --cached --quiet; then
             echo "No content engine changes to commit"
           else

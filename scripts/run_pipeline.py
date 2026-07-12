@@ -11,6 +11,7 @@ import tempfile
 from pathlib import Path
 
 from approve_due_distribution import approve_due_distribution
+from create_github_releases import create_github_releases
 from generate_all_image_specs import generate_all_image_specs
 from generate_all_image_assets import generate_all_image_assets
 from generate_all_internal_links import generate_all_internal_links
@@ -59,6 +60,7 @@ def run_pipeline(
         with tempfile.TemporaryDirectory(prefix="onnel-content-engine-dry-run-") as temp_dir:
             temp_root = Path(temp_dir)
             copy_for_dry_run(temp_root)
+            releases_path = temp_root / "data" / "app_releases.csv"
             topics_path = temp_root / "data" / "topics.csv"
             apps_path = temp_root / "data" / "apps_registry.csv"
             legacy_topics_path = temp_root / "topics" / "topics.csv"
@@ -70,6 +72,7 @@ def run_pipeline(
             html_root = temp_root / "generated" / "html"
             social_root = temp_root / "generated" / "social"
             syndication_root = temp_root / "generated" / "syndication"
+            create_github_releases(releases_path, dry_run=True)
             generate_all_markdown(topics_path, apps_path, markdown_root, legacy_topics_path)
             generate_all_image_specs(topics_path, apps_path, images_root, legacy_topics_path)
             generate_all_image_assets(topics_path, images_root, assets_root, legacy_topics_path)
@@ -84,6 +87,7 @@ def run_pipeline(
             deploy_github_pages(topics_path=topics_path, homepage_repo=homepage_repo, dry_run=True)
         return
 
+    create_github_releases()
     generate_all_markdown()
     generate_all_image_specs()
     generate_all_image_assets()
