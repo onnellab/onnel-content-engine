@@ -62,6 +62,7 @@ REQUIRED_PATHS = [
     "scripts/validate_app_release_config.py",
     "scripts/validate_android_store_versions.py",
     "scripts/check_store_versions.py",
+    "scripts/collect_release_artifacts.py",
     "scripts/fill_ready_app_releases.py",
     "scripts/generate_app_release_report.py",
     "scripts/import_android_store_versions.py",

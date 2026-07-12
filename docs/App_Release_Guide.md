@@ -202,6 +202,14 @@ When exactly one matching release artifact exists, this command fills `artifact_
 scripts/fill_ready_app_releases.py
 ```
 
+Local release artifacts can be collected into `generated/releases/` with:
+
+```text
+scripts/collect_release_artifacts.py
+```
+
+iOS release artifacts are produced by Codemagic for the current workflow, so iOS planned rows remain in `planned` until an `.ipa` is provided or copied into the configured artifact path.
+
 Generate the release status report with:
 
 ```text

@@ -179,6 +179,14 @@ scripts/fill_ready_app_releases.py
 
 It promotes a planned row to `ready` only when exactly one matching `*-release.*` artifact exists.
 
+Before that, local artifacts are copied into `generated/releases/` when available:
+
+```text
+scripts/collect_release_artifacts.py
+```
+
+iOS artifacts are expected from Codemagic in the current release flow, so local collection normally skips iOS rows.
+
 The release report stage then writes:
 
 ```text

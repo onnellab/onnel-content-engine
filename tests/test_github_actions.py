@@ -24,6 +24,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Create GitHub App Releases", workflow)
         self.assertIn("Check App Store Versions", workflow)
         self.assertIn("Prepare App Release Candidates", workflow)
+        self.assertIn("collect_release_artifacts.py", workflow)
         self.assertIn("fill_ready_app_releases.py", workflow)
         self.assertIn("generate_app_release_report.py", workflow)
         self.assertIn("sync_app_release_issue.py", workflow)
