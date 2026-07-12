@@ -140,6 +140,7 @@ jobs:
 
       - name: Sync App Release Attention Issue
         if: env.DRY_RUN != 'true'
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
         run: |
