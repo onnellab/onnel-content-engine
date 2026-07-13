@@ -86,7 +86,13 @@ class GitHubActionsTest(unittest.TestCase):
 
         self.assertIn("Check store homepage versions", workflow)
         self.assertIn("scripts/check_store_versions.py", workflow)
-        self.assertIn("data/manual_publish_state.json data/store_versions.csv", workflow)
+        self.assertIn("Prepare app release candidates", workflow)
+        self.assertIn("scripts/prepare_app_release_rows.py", workflow)
+        self.assertIn("Fill ready app release rows", workflow)
+        self.assertIn("scripts/fill_ready_app_releases.py", workflow)
+        self.assertIn("data/manual_publish_state.json", workflow)
+        self.assertIn("data/store_versions.csv", workflow)
+        self.assertIn("data/app_releases.csv", workflow)
         self.assertIn("Build manual publish dashboard", workflow)
 
 

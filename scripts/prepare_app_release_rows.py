@@ -129,6 +129,23 @@ def release_index_by_tag(rows: list[dict[str, str]]) -> dict[tuple[str, str], di
     return {(row["repository"], row["tag"]): row for row in rows}
 
 
+def latest_public_release_tag(rows: list[dict[str, str]], snapshot: dict[str, str]) -> str:
+    candidates = [
+        row
+        for row in rows
+        if row.get("app_id") == snapshot["app_id"]
+        and row.get("platform") == snapshot["platform"]
+        and (row.get("release_channel") or "public") == "public"
+        and row.get("status") in {"released", "ready"}
+        and row.get("tag")
+        and row.get("version")
+    ]
+    if not candidates:
+        return ""
+    candidates.sort(key=lambda row: version_key(row["version"]), reverse=True)
+    return candidates[0]["tag"]
+
+
 def refresh_existing_local_ahead_release(
     row: dict[str, str],
     snapshot: dict[str, str],
@@ -161,6 +178,7 @@ def planned_row(
     now: datetime,
     reason: str = "store_updated",
     store_version: str = "",
+    previous_public_tag: str = "",
 ) -> dict[str, str]:
     tag = tag_for(snapshot["version"])
     if reason == "local_ahead":
@@ -168,15 +186,17 @@ def planned_row(
         notes = (
             "Generated from local build metadata because local version is ahead of store snapshot. "
             f"Store version: {store_version or 'unknown'}. "
-            "Add release artifact, checksum, and set status=ready after verifying the release build."
+            "Add release artifact and checksum only for private testing. Keep private until the version is publicly released."
         )
         summary = f"{snapshot['app_name']} {snapshot['version']} local build metadata is ahead of the store snapshot."
         release_channel = "private_test"
+        compatibility = f"{snapshot['platform']} private test build."
     else:
-        previous_tag = ""
-        notes = "Generated from store version snapshot. Add release artifact, checksum, and set status=ready after verifying the release build."
+        previous_tag = previous_public_tag
+        notes = "Generated from public store version snapshot. Patch notes must describe changes since the previous public release."
         summary = f"{snapshot['app_name']} {snapshot['version']} public store update detected."
         release_channel = "public"
+        compatibility = f"{snapshot['platform']} public release."
     release_notes = snapshot["release_notes"] or f"{snapshot['app_name']} {snapshot['version']} store update detected."
     return {
         "release_id": release_id,
@@ -201,7 +221,7 @@ def planned_row(
         "release_title": f"{snapshot['app_name']} {tag}",
         "summary": summary,
         "changes": release_notes,
-        "compatibility": f"{snapshot['platform']} public release.",
+        "compatibility": compatibility,
         "upgrade_notes": "No special upgrade steps documented yet.",
         "notes": notes,
     }
@@ -259,7 +279,16 @@ def prepare_app_release_rows(
         repository = repository_for(candidate, config, owner)
         if (repository, tag) in seen_tags:
             continue
-        row = planned_row(candidate, f"REL-{next_number:04d}", config, owner, timestamp, reason, snapshot["version"])
+        row = planned_row(
+            candidate,
+            f"REL-{next_number:04d}",
+            config,
+            owner,
+            timestamp,
+            reason,
+            snapshot["version"],
+            latest_public_release_tag(releases, candidate) if reason == "store_updated" else "",
+        )
         additions.append(row)
         releases.append(row)
         seen.add(key)

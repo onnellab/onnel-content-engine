@@ -118,6 +118,8 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
             self.assertEqual(row["version"], "1.2.4")
             self.assertIn("local build metadata", row["notes"])
             self.assertIn("Store version: 1.2.3", row["notes"])
+            self.assertEqual(row["release_channel"], "private_test")
+            self.assertEqual(row["compatibility"], "ios private test build.")
             self.assertEqual(validate_app_releases(releases), 1)
 
     def test_unchanged_snapshot_does_not_create_row(self) -> None:
@@ -270,6 +272,59 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
             self.assertEqual(len(additions), 1)
             self.assertEqual(additions[0]["tag"], "v1.2.4")
             self.assertIn("local build metadata", additions[0]["notes"])
+
+    def test_updated_store_snapshot_uses_previous_public_release_tag(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            store_versions = Path(temp) / "store_versions.csv"
+            releases = Path(temp) / "app_releases.csv"
+            write_store_versions(store_versions, version="1.2.4")
+            previous = {field: "" for field in RELEASE_HEADER}
+            previous.update(
+                {
+                    "release_id": "REL-0001",
+                    "app_id": "APP-0003",
+                    "app_slug": "vaultxt",
+                    "app_name": "VaultXT",
+                    "repository": "onnellab/onnellab-text",
+                    "tag": "v1.2.3",
+                    "version": "1.2.3",
+                    "platform": "ios",
+                    "build_type": "release",
+                    "release_type": "notes_only",
+                    "release_channel": "public",
+                    "status": "released",
+                    "release_url": "https://github.com/onnellab/onnellab-text/releases/tag/v1.2.3",
+                    "release_date": "2026-07-10",
+                    "release_title": "VaultXT v1.2.3",
+                    "summary": "VaultXT 1.2.3 public store update detected.",
+                    "changes": "Previous public notes.",
+                    "compatibility": "ios public release.",
+                }
+            )
+            private = dict(previous)
+            private.update(
+                {
+                    "release_id": "REL-0002",
+                    "tag": "v1.2.5",
+                    "version": "1.2.5",
+                    "release_channel": "private_test",
+                    "status": "ready",
+                }
+            )
+            write_releases(releases, [previous, private])
+
+            additions = prepare_app_release_rows(
+                store_versions,
+                releases,
+                now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
+            )
+
+            self.assertEqual(len(additions), 1)
+            self.assertEqual(additions[0]["tag"], "v1.2.4")
+            self.assertEqual(additions[0]["previous_tag"], "v1.2.3")
+            self.assertEqual(additions[0]["release_channel"], "public")
+            self.assertIn("previous public release", additions[0]["notes"])
+            self.assertEqual(validate_app_releases(releases), 3)
 
 
 if __name__ == "__main__":

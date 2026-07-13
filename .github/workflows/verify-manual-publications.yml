@@ -77,6 +77,16 @@ jobs:
           set -euo pipefail
           python3 scripts/check_store_versions.py
 
+      - name: Prepare app release candidates
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_app_release_rows.py
+
+      - name: Fill ready app release rows
+        run: |
+          set -euo pipefail
+          python3 scripts/fill_ready_app_releases.py
+
       - name: Sync GitHub release status
         env:
           GITHUB_TOKEN: ${{ github.token }}

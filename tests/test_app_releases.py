@@ -131,6 +131,36 @@ class AppReleaseTest(unittest.TestCase):
 
             self.assertEqual(messages, [f"would create onnellab/vaultxt v1.2.0 with {artifact_path}"])
 
+    def test_private_test_ready_release_is_not_created(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "app_releases.csv"
+            path.write_text(
+                release_csv(
+                    {
+                        "release_id": "REL-0006",
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "app_name": "VaultXT",
+                        "repository": "onnellab/vaultxt",
+                        "tag": "v1.2.1",
+                        "version": "1.2.1",
+                        "platform": "ios",
+                        "build_type": "release",
+                        "release_type": "notes_only",
+                        "release_channel": "private_test",
+                        "status": "ready",
+                        "release_date": "2026-07-12",
+                        "release_title": "VaultXT v1.2.1",
+                        "summary": "VaultXT private test build.",
+                        "changes": "Internal TestFlight changes.",
+                        "compatibility": "ios private test build.",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(create_github_releases(path, dry_run=True), [])
+
     def test_create_github_releases_posts_draft_and_updates_status(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "app_releases.csv"
