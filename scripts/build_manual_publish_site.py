@@ -446,7 +446,7 @@ def html_document(
   <link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
   <link rel="icon" href="/favicon-32x32.png?v=20260712-ol-transparent-v2" sizes="32x32" type="image/png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260712-ol-transparent-v2">
+  <link rel="apple-touch-icon" href="./icon-180.png?v=20260713-dashboard-bg">
   <style>
     :root {{
       --ink: #191714; --muted: #746f69; --line: #ddd4ca; --surface: #fffaf5; --panel: #ffffff;
@@ -2011,14 +2011,21 @@ def pwa_manifest_document() -> str:
             "theme_color": "#fffaf5",
             "icons": [
                 {
-                    "src": "/apple-touch-icon.png?v=20260712-ol-transparent-v2",
+                    "src": "./icon-180.png?v=20260713-dashboard-bg",
                     "sizes": "180x180",
                     "type": "image/png",
                 },
                 {
-                    "src": "/favicon-32x32.png?v=20260712-ol-transparent-v2",
-                    "sizes": "32x32",
+                    "src": "./icon-192.png?v=20260713-dashboard-bg",
+                    "sizes": "192x192",
                     "type": "image/png",
+                    "purpose": "any maskable",
+                },
+                {
+                    "src": "./icon-512.png?v=20260713-dashboard-bg",
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any maskable",
                 },
             ],
         },
@@ -2029,7 +2036,7 @@ def pwa_manifest_document() -> str:
 
 def service_worker_document() -> str:
     return """const CACHE = 'onnellab-manual-publish-v1';
-const ASSETS = ['./', './index.html', './manifest.webmanifest'];
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
