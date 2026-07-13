@@ -768,6 +768,23 @@ def social_hook(article: Article, platform: str = "") -> str:
             ),
         )
         return hooks[stable_index(article.topic["id"], len(hooks))]
+    if "txt" in haystack and ("unreadable" in haystack or "encoding" in haystack or "utf-8" in haystack or "broken characters" in haystack):
+        hooks_by_platform = {
+            "x": (
+                "Unreadable TXT characters usually point to an encoding mismatch.",
+                "A TXT file can be valid and still look broken in the wrong encoding.",
+            ),
+            "bluesky": (
+                "When plain text looks broken, the file is not always damaged.",
+                "A text file can look unreadable simply because the app guessed the encoding wrong.",
+            ),
+            "linkedin": (
+                "Broken-looking TXT files are often an encoding problem, not a content problem.",
+                "Teams can lose time on TXT files when unreadable characters are treated as file damage too early.",
+            ),
+        }
+        hooks = hooks_by_platform.get(platform, hooks_by_platform["x"])
+        return hooks[stable_index(article.topic["id"], len(hooks))]
     if question.lower().startswith("how can i "):
         return question[0].upper() + question[1:].rstrip("?") + " is a workflow problem, not just a tool choice."
     if question:
@@ -790,6 +807,13 @@ def social_summary(article: Article, description: str, platform: str = "") -> st
             "linkedin": "A good workflow separates quick reading from full editing before the tool choice is made.",
         }
         return summaries.get(platform, "The slow part is often how the app loads, renders, and searches the text.")
+    if "txt" in haystack and ("unreadable" in haystack or "encoding" in haystack or "utf-8" in haystack or "broken characters" in haystack):
+        summaries = {
+            "x": "Start by checking encoding before converting or rewriting the file.",
+            "bluesky": "The first useful check is whether the app is reading the bytes as UTF-8 or something else.",
+            "linkedin": "The practical workflow is to preserve the original file, open a copy, and test the encoding before changing tools.",
+        }
+        return summaries.get(platform, description)
     return description
 
 
@@ -797,10 +821,31 @@ def linkedin_lead(article: Article, insight: str, description: str) -> str:
     haystack = f"{article.title} {article.topic['primary_question']} {description}".lower()
     if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
         return "The useful test is simple: decide whether the file needs quick reading, search, light edits, or full editing before choosing the tool."
+    if "txt" in haystack and ("unreadable" in haystack or "encoding" in haystack or "utf-8" in haystack or "broken characters" in haystack):
+        return "The useful test is to keep the original file unchanged, open a copy, and check the encoding before assuming the content is damaged."
     return insight
 
 
 def syndication_note(article: Article, platform: str) -> str:
+    haystack = f"{article.title} {article.topic['primary_question']} {article.description}".lower()
+    if "txt" in haystack and ("unreadable" in haystack or "encoding" in haystack or "utf-8" in haystack or "broken characters" in haystack):
+        notes = {
+            "medium": (
+                "ONNELLAB note: This version keeps the troubleshooting steps first and treats app choice as context.",
+                "ONNELLAB note: This edit focuses on the practical encoding checks before recommending tools.",
+            ),
+            "hashnode": (
+                "ONNELLAB note: This version keeps the byte-to-text encoding issue visible for technical readers.",
+                "ONNELLAB note: These are implementation-minded notes about text encoding and plain-text workflows.",
+            ),
+            "devto": (
+                "ONNELLAB note: This version focuses on encoding mismatches, UTF-8 checks, and safe TXT file handling.",
+                "ONNELLAB note: This is a field note for developers and power users who handle plain-text encoding issues.",
+            ),
+        }
+        choices = notes.get(platform)
+        if choices:
+            return choices[stable_index(f"{article.topic['id']}:{platform}", len(choices))]
     notes = {
         "medium": (
             "ONNELLAB note: This version keeps the practical checklist and leaves the product details secondary.",
@@ -836,6 +881,22 @@ def syndication_intro(article: Article, platform: str) -> str:
             "devto": (
                 "Large TXT files become interesting when the UI treats the whole document as one editable surface. "
                 "Rendering strategy, memory pressure, and search indexing often matter more than the file extension."
+            ),
+        }
+        return intros.get(platform, "")
+    if "txt" in haystack and ("unreadable" in haystack or "encoding" in haystack or "utf-8" in haystack or "broken characters" in haystack):
+        intros = {
+            "medium": (
+                "The first useful move is not to convert the file. "
+                "It is to check whether the app is interpreting the same bytes with the right encoding."
+            ),
+            "hashnode": (
+                "A TXT file does not carry a guaranteed visual layout. "
+                "The important step is turning bytes into characters with the intended encoding."
+            ),
+            "devto": (
+                "Unreadable text is often a decoding problem: the bytes are still there, "
+                "but the app may be mapping them through the wrong character set."
             ),
         }
         return intros.get(platform, "")
