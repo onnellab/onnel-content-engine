@@ -140,6 +140,8 @@ class AppReleaseReportTest(unittest.TestCase):
             self.assertIn("Check Google Play update manually", text)
             self.assertIn("Add release artifact and checksum", text)
             self.assertIn("Publication gate", text)
+            self.assertIn("Store notes", text)
+            self.assertIn("Improved scrolling.", text)
             self.assertIn("Waiting for artifact and public approval", text)
             self.assertIn("local_ahead", text)
             self.assertEqual(output.read_text(encoding="utf-8"), text)
@@ -350,6 +352,84 @@ class AppReleaseReportTest(unittest.TestCase):
             )
 
             self.assertIn("| TagWeaver | android | 2.1.3 | 2.1.3 | same | unchanged | - | onnellab/tagweaver | No action |", text)
+
+    def test_unchanged_store_with_local_ahead_is_review_not_store_release(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
+            publications = root / "app_release_publications.csv"
+            output = root / "app_releases.md"
+            app_repo = root / "segra"
+            app_repo.mkdir()
+            (app_repo / "pubspec.yaml").write_text("name: segra\nversion: 1.0.2+10\n", encoding="utf-8")
+            write_csv(
+                store,
+                STORE_HEADER,
+                [
+                    {
+                        "app_id": "APP-0004",
+                        "app_slug": "segra",
+                        "app_name": "Segra",
+                        "platform": "ios",
+                        "store_url": "https://apps.apple.com/app/id6779433972",
+                        "store_app_id": "6779433972",
+                        "store_package": "",
+                        "version": "1.0.1",
+                        "last_updated": "2026-07-10T18:44:50Z",
+                        "release_notes": "Bug fixes.",
+                        "checked_at": "2026-07-13T09:00:00+09:00",
+                        "status": "unchanged",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(releases, RELEASE_HEADER, [])
+            write_csv(
+                config,
+                CONFIG_HEADER,
+                [
+                    {
+                        "app_id": "APP-0004",
+                        "app_slug": "segra",
+                        "repository": "onnellab/segra",
+                        "artifact_pattern": "generated/releases/segra/{version}/{platform}/*-release.*",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(
+                local_repos,
+                LOCAL_REPOSITORIES_HEADER,
+                [
+                    {
+                        "app_id": "APP-0004",
+                        "app_slug": "segra",
+                        "repository_name": "segra",
+                        "path": app_repo.as_posix(),
+                        "pubspec_path": "pubspec.yaml",
+                        "source_priority": "primary",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
+
+            text = generate_app_release_report(
+                store,
+                releases,
+                config,
+                local_repos,
+                output,
+                publications,
+                now=datetime.fromisoformat("2026-07-13T09:00:00+09:00"),
+            )
+
+            self.assertIn("local_ahead", text)
+            self.assertIn("Review unpublished local build", text)
+            self.assertNotIn("Prepare store release", text)
 
 
 if __name__ == "__main__":

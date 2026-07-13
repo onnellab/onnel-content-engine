@@ -1226,6 +1226,18 @@ def html_document(
       return data.workflow_runs?.[0] || null;
     }}
 
+    async function refreshVerificationRunLink() {{
+      if (!githubToken()) {{
+        clearVerificationRunLink();
+        return;
+      }}
+      try {{
+        setVerificationRunLink(await latestVerificationRun());
+      }} catch (error) {{
+        console.warn(error);
+      }}
+    }}
+
     async function pollVerificationRun(maxAttempts = 36) {{
       clearVerifyCountdown();
       let run = null;
@@ -1352,6 +1364,7 @@ def html_document(
         }}
         setSync(githubToken() ? 'synced' : 'viewOnly');
         setVerifyState(githubToken() ? 'verificationReady' : 'verificationTokenRequired');
+        await refreshVerificationRunLink();
       }} catch (error) {{
         setSync('syncError');
         console.error(error);

@@ -66,7 +66,9 @@ def store_action(row: dict[str, str]) -> str:
 
 def next_action(row: dict[str, str], comparison: str) -> str:
     if comparison == "local_ahead":
-        return "Prepare store release"
+        if row["status"] in {"updated", "new"}:
+            return "Prepare store release"
+        return "Review unpublished local build"
     if comparison == "store_ahead":
         return "Sync local metadata"
     return store_action(row)
@@ -151,6 +153,14 @@ def publication_index(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
     return {row["release_id"]: row for row in rows}
 
 
+def store_notes_index(rows: list[dict[str, str]]) -> dict[tuple[str, str], str]:
+    return {
+        (row["app_id"], row["platform"]): row["release_notes"]
+        for row in rows
+        if row.get("release_notes")
+    }
+
+
 def publication_gate(row: dict[str, str], approvals: dict[str, dict[str, str]]) -> str:
     if (row.get("release_channel") or "public") != "public":
         return "Private test; public Release disabled"
@@ -203,6 +213,7 @@ def report_markdown(
         local_versions.setdefault(app_id, version)
     releases = release_index(release_rows)
     approvals = publication_index(publication_rows)
+    store_notes = store_notes_index(store_rows)
     store_counts = Counter(row["status"] for row in store_rows)
     release_counts = Counter(row["status"] for row in release_rows)
 
@@ -265,11 +276,17 @@ def report_markdown(
                 publication_gate(row, approvals),
                 row["release_url"],
                 row["artifact_path"],
+                store_notes.get((row["app_id"], row["platform"]), ""),
                 release_action(row),
             ]
             for row in release_rows
         ]
-        lines.extend(table(["ID", "App", "Platform", "Channel", "Tag", "Status", "Publication gate", "Release URL", "Artifact", "Next action"], release_table))
+        lines.extend(
+            table(
+                ["ID", "App", "Platform", "Channel", "Tag", "Status", "Publication gate", "Release URL", "Artifact", "Store notes", "Next action"],
+                release_table,
+            )
+        )
     else:
         lines.append("No app release candidate rows exist yet.")
 

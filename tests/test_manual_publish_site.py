@@ -162,6 +162,7 @@ class ManualPublishSiteTest(unittest.TestCase):
             self.assertIn('id="verification-run-link"', html)
             self.assertIn("verificationRunLink", html)
             self.assertIn("setVerificationRunLink(run)", html)
+            self.assertIn("refreshVerificationRunLink", html)
             self.assertIn("readEmbeddedJson(doc, 'site-data')", html)
             self.assertIn("release-sync-data", html)
             self.assertIn("releaseSyncSummaryText", html)
