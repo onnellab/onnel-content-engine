@@ -1,6 +1,12 @@
 name: Update Dev.to Article
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/update-devto-article.yml
+      - scripts/update_devto_article.py
   workflow_dispatch:
     inputs:
       topic_id:
@@ -26,10 +32,12 @@ jobs:
       - name: Update existing Dev.to article
         env:
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          TOPIC_ID: ${{ github.event.inputs.topic_id || 'TOPIC-0001' }}
+          LANGUAGE: ${{ github.event.inputs.language || 'en' }}
         run: |
           python3 scripts/update_devto_article.py \
-            --topic-id "${{ inputs.topic_id }}" \
-            --language "${{ inputs.language }}"
+            --topic-id "$TOPIC_ID" \
+            --language "$LANGUAGE"
       - name: Rebuild manual publish dashboard
         run: python3 scripts/build_manual_publish_site.py
       - name: Commit updated publication state
