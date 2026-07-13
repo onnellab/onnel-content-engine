@@ -33,6 +33,7 @@ class AppReleaseReportTest(unittest.TestCase):
             releases = root / "app_releases.csv"
             config = root / "app_release_config.csv"
             local_repos = root / "local_repositories.csv"
+            publications = root / "app_release_publications.csv"
             output = root / "app_releases.md"
             app_repo = root / "vaultxt"
             app_repo.mkdir()
@@ -95,6 +96,7 @@ class AppReleaseReportTest(unittest.TestCase):
                 }
             )
             write_csv(releases, RELEASE_HEADER, [planned])
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
             write_csv(
                 config,
                 CONFIG_HEADER,
@@ -130,6 +132,7 @@ class AppReleaseReportTest(unittest.TestCase):
                 config,
                 local_repos,
                 output,
+                publications,
                 now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
             )
 
@@ -148,6 +151,7 @@ class AppReleaseReportTest(unittest.TestCase):
             releases = root / "app_releases.csv"
             config = root / "app_release_config.csv"
             local_repos = root / "local_repositories.csv"
+            publications = root / "app_release_publications.csv"
             output = root / "app_releases.md"
             app_repo = root / "vaultxt"
             app_repo.mkdir()
@@ -177,6 +181,7 @@ class AppReleaseReportTest(unittest.TestCase):
                 }
             )
             write_csv(releases, RELEASE_HEADER, [planned])
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
             write_csv(
                 config,
                 CONFIG_HEADER,
@@ -212,11 +217,62 @@ class AppReleaseReportTest(unittest.TestCase):
                 config,
                 local_repos,
                 output,
+                publications,
                 now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
             )
 
             self.assertIn("Private test or approval pending", text)
             self.assertIn("Approve public release or keep as private test", text)
+
+    def test_report_marks_notes_only_release_as_waiting_for_notes_approval(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
+            publications = root / "app_release_publications.csv"
+            output = root / "app_releases.md"
+            write_csv(store, STORE_HEADER, [])
+            planned = {field: "" for field in RELEASE_HEADER}
+            planned.update(
+                {
+                    "release_id": "REL-0009",
+                    "app_id": "APP-0003",
+                    "app_slug": "vaultxt",
+                    "app_name": "VaultXT",
+                    "repository": "onnellab/vaultxt",
+                    "tag": "v1.2.3",
+                    "version": "1.2.3",
+                    "platform": "android",
+                    "build_type": "release",
+                    "release_type": "notes_only",
+                    "status": "planned",
+                    "release_date": "2026-07-12",
+                    "release_title": "VaultXT v1.2.3",
+                    "summary": "VaultXT 1.2.3 update.",
+                    "changes": "Improved scrolling.",
+                    "compatibility": "android public release.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                }
+            )
+            write_csv(releases, RELEASE_HEADER, [planned])
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
+            write_csv(config, CONFIG_HEADER, [])
+            write_csv(local_repos, LOCAL_REPOSITORIES_HEADER, [])
+
+            text = generate_app_release_report(
+                store,
+                releases,
+                config,
+                local_repos,
+                output,
+                publications,
+                now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
+            )
+
+            self.assertIn("Waiting for public notes approval", text)
+            self.assertIn("Approve public notes-only release", text)
 
 
 if __name__ == "__main__":

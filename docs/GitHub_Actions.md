@@ -157,7 +157,7 @@ Updated store snapshots are then converted into planned release candidates:
 scripts/prepare_app_release_rows.py
 ```
 
-Candidate rows are committed as `planned` rows in `data/app_releases.csv`. They do not create GitHub Releases until a real release artifact and checksum are added and the row is marked `ready`.
+Candidate rows are committed as `planned` rows in `data/app_releases.csv`. Binary rows do not create GitHub Releases until a real release artifact and checksum are added and the row is marked `ready`. Store-distributed releases can use `release_type=notes_only` so GitHub provides the permanent release-notes URL without uploading an app binary.
 
 The release artifact fill stage then checks:
 
@@ -177,7 +177,7 @@ and runs:
 scripts/fill_ready_app_releases.py
 ```
 
-It fills artifact metadata only when exactly one matching `*-release.*` artifact exists. It promotes a planned row to `ready` only when the release ID is also approved in `data/app_release_publications.csv` with `public_release=true` and the row is `release_channel=public`, so private TestFlight or Play Console test builds do not become posts or GitHub Releases just because a file exists. Public GitHub Release notes must describe the user-visible changes between the current public release and the previous public release, not private-test-only or local build metadata differences.
+It fills artifact metadata only when exactly one matching `*-release.*` artifact exists. For `release_type=notes_only`, it skips artifact lookup and can promote the row after public approval. It promotes a planned row to `ready` only when the release ID is also approved in `data/app_release_publications.csv` with `public_release=true` and the row is `release_channel=public`, so private TestFlight or Play Console test builds do not become posts or GitHub Releases just because a file exists. Public GitHub Release notes must describe the user-visible changes between the current public release and the previous public release, not private-test-only or local build metadata differences.
 
 Before that, local artifacts are copied into `generated/releases/` when available:
 

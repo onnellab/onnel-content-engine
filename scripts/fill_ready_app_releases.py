@@ -104,6 +104,12 @@ def fill_ready_app_releases(
             updated.append(dict(row))
             continue
         approved = is_public_approved(row["release_id"], approvals)
+        if row.get("release_type") == "notes_only":
+            if approved:
+                row["status"] = "ready"
+                append_note(row, "Public release approved for notes-only GitHub Release.")
+                updated.append(dict(row))
+            continue
         if row["artifact_path"] and row["checksum_sha256"]:
             if approved:
                 row["status"] = "ready"

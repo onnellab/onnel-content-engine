@@ -121,6 +121,25 @@ class FillReadyAppReleasesTest(unittest.TestCase):
             self.assertEqual(updated[0]["status"], "ready")
             self.assertEqual(validate_app_releases(releases), 1)
 
+    def test_promotes_approved_notes_only_release_without_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            releases = Path(temp) / "app_releases.csv"
+            config = Path(temp) / "app_release_config.csv"
+            publications = Path(temp) / "app_release_publications.csv"
+            row = release_row()
+            row["release_type"] = "notes_only"
+            write_csv(releases, RELEASE_HEADER, [row])
+            write_config(config, "generated/releases/vaultxt/{version}/{platform}/*-release.*")
+            write_publications(publications, "true")
+
+            updated = fill_ready_app_releases(releases, config, publications)
+
+            self.assertEqual(len(updated), 1)
+            self.assertEqual(updated[0]["status"], "ready")
+            self.assertEqual(updated[0]["artifact_path"], "")
+            self.assertEqual(updated[0]["checksum_sha256"], "")
+            self.assertEqual(validate_app_releases(releases), 1)
+
     def test_skips_when_no_artifact_exists(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             releases = Path(temp) / "app_releases.csv"

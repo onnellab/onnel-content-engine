@@ -2,7 +2,7 @@
 
 This document defines how ONNELLAB app releases become GitHub Releases.
 
-GitHub Releases are only for real app release artifacts. They are not a general content distribution channel.
+GitHub Releases are only for real app releases. Use a binary release when a public artifact should be attached, and use a notes-only release when the public app is distributed through an app store and GitHub is the permanent patch-notes URL.
 
 ## Rule
 
@@ -13,7 +13,7 @@ Allowed:
 * `build_type = release`
 * a real version and tag
 * a real artifact file path
-* a checksum for the artifact
+* a checksum for the artifact, unless `release_type=notes_only`
 * a previous tag when this is not the first public release
 
 Blocked:
@@ -97,6 +97,8 @@ archived
 
 Only `ready` rows are eligible for GitHub Release automation.
 
+Use `release_type=binary` when a public artifact should be uploaded to GitHub. Use `release_type=notes_only` when the store already distributes the public build and GitHub should only hold the release notes page. Notes-only rows must still be public-approved before they become `ready`.
+
 Use `release_channel=public` only for versions that are publicly released or intended for public release notes. Use `release_channel=private_test` for TestFlight, Play Console internal testing, local QA, or any other non-public build.
 
 The `changes` field for a public GitHub Release must describe the user-visible difference between this public release version and the previous public release version. Do not use local build metadata, private test notes, or unpublished build-only differences as public patch notes. Use `previous_tag` to record the previous public release tag when it is known.
@@ -179,7 +181,7 @@ scripts/import_android_store_versions.py path/to/play-console-export.csv
 
 Google Play package URLs are recorded as `manual_check` only when no Android source row exists, because this automation does not depend on an unstable public Play Store scraping path.
 
-Use the snapshot as a signal. Create a GitHub Release row only when the new public release artifact is available and the change notes can be tied to that artifact.
+Use the snapshot as a signal. Create a GitHub Release row only when the new public release is confirmed and the change notes can be tied to that public version. If GitHub should host only the permanent patch-notes page, set `release_type=notes_only`.
 
 Release candidate rows can be prepared from updated store snapshots:
 
@@ -187,7 +189,7 @@ Release candidate rows can be prepared from updated store snapshots:
 scripts/prepare_app_release_rows.py
 ```
 
-The generated rows use `status=planned`. They do not upload anything until `artifact_path`, `checksum_sha256`, final release notes, and public release approval are present.
+The generated rows use `status=planned`. Binary rows do not upload anything until `artifact_path`, `checksum_sha256`, final release notes, and public release approval are present. Notes-only rows can become `ready` after final release notes and public release approval are present.
 
 Release artifacts are configured in:
 
@@ -224,7 +226,7 @@ REL-0002,true,2026-07-12T09:00:00+09:00,Approved after App Store release became 
 
 Leave the release ID absent, use `public_release=false`, or set the release row to `release_channel=private_test` while the artifact is only for TestFlight, Play Console internal testing, local QA, or any other private test channel.
 
-When exactly one matching release artifact exists, this command fills `artifact_path` and calculates `checksum_sha256`. It promotes the row to `status=ready` only when `data/app_release_publications.csv` approves that release ID:
+When exactly one matching release artifact exists, this command fills `artifact_path` and calculates `checksum_sha256`. For `release_type=notes_only`, it does not require an artifact. It promotes the row to `status=ready` only when `data/app_release_publications.csv` approves that release ID:
 
 ```text
 scripts/fill_ready_app_releases.py

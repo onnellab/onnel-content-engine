@@ -79,6 +79,8 @@ def release_action(row: dict[str, str]) -> str:
     if "Local Flutter build metadata version" in row.get("changes", ""):
         return "Replace placeholder with public patch notes"
     if status == "planned":
+        if row.get("release_type") == "notes_only":
+            return "Approve public notes-only release"
         if row.get("artifact_path") and row.get("checksum_sha256"):
             return "Approve public release or keep as private test"
         return "Add release artifact and checksum"
@@ -147,10 +149,15 @@ def publication_gate(row: dict[str, str], approvals: dict[str, dict[str, str]]) 
     status = row["status"]
     approved = approvals.get(row["release_id"], {}).get("public_release", "").lower() == "true"
     has_artifact = bool(row["artifact_path"] and row["checksum_sha256"])
+    notes_only = row.get("release_type") == "notes_only"
     if status == "released":
         return "Released"
     if status == "ready":
         return "Approved public release"
+    if status == "planned" and approved and notes_only:
+        return "Approved, notes-only ready fill pending"
+    if status == "planned" and notes_only:
+        return "Waiting for public notes approval"
     if status == "planned" and approved and has_artifact:
         return "Approved, ready fill pending"
     if status == "planned" and approved:
