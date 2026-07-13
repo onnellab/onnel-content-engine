@@ -24,6 +24,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertNotIn("sync_android_versions_from_repos.py --dry-run", validate_block)
         self.assertIn("Generate Markdown", workflow)
         self.assertIn("Create GitHub App Releases", workflow)
+        self.assertIn("scripts/create_github_releases.py --publish", workflow)
         self.assertIn("Check App Store Versions", workflow)
         self.assertIn("Prepare App Release Candidates", workflow)
         self.assertIn("collect_release_artifacts.py", workflow)

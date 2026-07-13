@@ -119,7 +119,7 @@ jobs:
           ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN }}
         run: |
           set -euo pipefail
-          python3 scripts/create_github_releases.py
+          python3 scripts/create_github_releases.py --publish
 
       - name: Create GitHub App Releases Dry Run
         if: env.DRY_RUN == 'true'
