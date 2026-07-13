@@ -484,7 +484,8 @@ def html_document(
       --shadow: 0 14px 35px rgba(47, 38, 28, .08);
     }}
     * {{ box-sizing: border-box; }}
-    body {{ margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--surface); }}
+    body {{ margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--surface); word-break: keep-all; overflow-wrap: normal; line-break: strict; }}
+    code, pre, kbd, samp, input, textarea {{ word-break: normal; overflow-wrap: anywhere; line-break: auto; }}
     header {{ position: sticky; top: 0; z-index: 5; border-bottom: 1px solid rgba(221, 212, 202, .85); background: rgba(255, 250, 245, .94); backdrop-filter: blur(14px); }}
     .bar {{ max-width: 1180px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }}
     .brand {{ display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0; color: inherit; text-decoration: none; }}
@@ -548,7 +549,8 @@ def html_document(
     .platforms {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 8px 0 0; }}
     .platform-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
     .platform-card strong {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; margin-bottom: 8px; }}
-    .platform-card strong a {{ color: inherit; text-decoration: none; }}
+    .platform-card strong a {{ display: inline-flex; align-items: center; min-height: 34px; padding: 4px 8px; margin: -4px -8px; border-radius: 6px; color: inherit; text-decoration: none; }}
+    .platform-card strong a:hover {{ background: var(--blue-soft); color: var(--blue); }}
     .platform-card strong .tag {{ flex: 0 0 auto; font-size: 11px; font-weight: 700; }}
     .tag.mode-manual {{ color: #fff; background: var(--bad); border-color: var(--bad); font-weight: 900; }}
     .tag.mode-automatic {{ color: var(--ok); background: var(--ok-soft); border-color: #b7d9c5; font-weight: 800; }}
@@ -568,7 +570,8 @@ def html_document(
     .status-card strong,
     .release-card strong,
     .app-status-card strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
-    .app-status-card strong a {{ color: inherit; text-decoration: none; }}
+    .app-status-card strong a {{ display: inline-flex; align-items: center; min-height: 34px; padding: 4px 8px; margin: -4px -8px; border-radius: 6px; color: inherit; text-decoration: none; }}
+    .app-status-card strong a:hover {{ background: var(--blue-soft); color: var(--blue); }}
     .status-card span,
     .release-card span,
     .app-status-card span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
