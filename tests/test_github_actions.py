@@ -94,10 +94,17 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("scripts/fill_ready_app_releases.py", workflow)
         self.assertIn("Validate app pricing", workflow)
         self.assertIn("scripts/validate_app_pricing.py", workflow)
-        self.assertIn("data/manual_publish_state.json", workflow)
-        self.assertIn("data/store_versions.csv", workflow)
+
+    def test_ready_app_release_workflow_is_release_only(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "publish-ready-app-releases.yml").read_text(encoding="utf-8")
+
+        self.assertIn("scripts/create_github_releases.py --publish", workflow)
+        self.assertIn("scripts/sync_github_release_status.py --allow-missing-token", workflow)
+        self.assertIn("scripts/build_manual_publish_site.py", workflow)
+        self.assertNotIn("post_core_distribution.py", workflow)
+        self.assertNotIn("verify_manual_publications.py --visual-public-pages", workflow)
         self.assertIn("data/app_releases.csv", workflow)
-        self.assertIn("Build manual publish dashboard", workflow)
+        self.assertIn("generated/manual-publish/index.html", workflow)
 
 
 if __name__ == "__main__":
