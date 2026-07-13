@@ -108,11 +108,11 @@ class MarkdownGenerationTest(unittest.TestCase):
         self.assertIn("## What Makes This Problem Feel Worse", content)
         self.assertIn("## Recommended Workflow", content)
         self.assertIn("![Workflow diagram placeholder](/blog-assets/en/read-large-txt-files/workflow-diagram.svg", content)
-        self.assertIn("## ONNELLAB Application", content)
+        self.assertIn("## Where ONNELLAB Fits", content)
         self.assertIn("## References", content)
         self.assertIn("## Conclusion", content)
         self.assertIn("[VaultXT](/apps/vaultxt/)", content)
-        self.assertLess(content.index("## Recommended Workflow"), content.index("## ONNELLAB Application"))
+        self.assertLess(content.index("## Recommended Workflow"), content.index("## Where ONNELLAB Fits"))
         self.assertNotIn("image generation", content.lower())
 
     def test_rejects_unapproved_topic(self) -> None:

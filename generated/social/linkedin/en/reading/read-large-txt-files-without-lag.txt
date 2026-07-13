@@ -1,6 +1,6 @@
 Teams often lose time on large TXT files because the first tool treats them like small notes.
 
-We usually see this when a normal editor tries to treat a large plain-text file like a small note.
+The useful test is simple: decide whether the file needs quick reading, search, light edits, or full editing before choosing the tool.
 
 Before changing tools:
 - Start by opening a copy of the file, not the only original.

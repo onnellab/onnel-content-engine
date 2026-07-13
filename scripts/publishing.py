@@ -781,17 +781,22 @@ def stable_index(value: str, size: int) -> int:
     return sum(ord(char) for char in value) % size
 
 
-def social_summary(article: Article, description: str) -> str:
+def social_summary(article: Article, description: str, platform: str = "") -> str:
     haystack = f"{article.title} {article.topic['primary_question']} {description}".lower()
     if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
-        return "The slow part is often how the app loads, renders, and searches the text."
+        summaries = {
+            "x": "The fix starts with how the app opens, renders, and searches the text.",
+            "bluesky": "Opening the file is only step one; the reading path matters just as much.",
+            "linkedin": "A good workflow separates quick reading from full editing before the tool choice is made.",
+        }
+        return summaries.get(platform, "The slow part is often how the app loads, renders, and searches the text.")
     return description
 
 
 def linkedin_lead(article: Article, insight: str, description: str) -> str:
     haystack = f"{article.title} {article.topic['primary_question']} {description}".lower()
     if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
-        return "We usually see this when a normal editor tries to treat a large plain-text file like a small note."
+        return "The useful test is simple: decide whether the file needs quick reading, search, light edits, or full editing before choosing the tool."
     return insight
 
 
@@ -825,6 +830,28 @@ def syndication_intro(article: Article, platform: str) -> str:
     return ""
 
 
+def syndication_body(article: Article, body: str, platform: str) -> str:
+    haystack = f"{article.title} {article.topic['primary_question']} {article.description}".lower()
+    if not ("txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack)):
+        return body
+    if platform == "medium":
+        return body.replace(
+            "Large TXT files usually appear in practical workflows rather than as polished documents. You might be opening an exported chat history, a long web novel saved as plain text, a server log, a subtitle or transcript file, or a backup export from another tool.",
+            "Large TXT files usually appear in practical workflows rather than polished documents. The file may be an exported chat history, a long web novel saved as plain text, a server log, a transcript, or a backup export that someone simply needs to inspect without turning it into another project.",
+        )
+    if platform == "hashnode":
+        return body.replace(
+            "Virtual rendering is a technique where an app renders only the visible portion of a large document instead of drawing every line immediately. It can reduce memory pressure and make scrolling feel more responsive. The exact implementation depends on the app, so avoid assuming that every TXT reader handles large files the same way.",
+            "Virtual rendering is a common way to keep large text views responsive: the app prioritizes visible lines and avoids drawing the entire document at once. The exact implementation varies, but the important trade-off is the same: reduce memory pressure without making search and navigation feel disconnected.",
+        )
+    if platform == "devto":
+        return body.replace(
+            "Many general-purpose editors are designed for short notes or normal documents. When they open a huge text file, they may try to load the full file into memory, calculate layout for every line, and keep the whole editable document ready at all times. That can make scrolling, searching, and editing feel delayed.",
+            "Many general-purpose editors are optimized for short notes or normal documents. With a huge text file, they may load the full buffer, calculate layout for every line, and keep the document ready for editing before the reader has done anything. That is where scrolling, search, and memory use start to feel connected.",
+        )
+    return body
+
+
 def social_template_context(article: Article, site_url: str, platform: str = "") -> dict[str, str]:
     markdown = article.markdown_path.read_text(encoding="utf-8")
     title = plain_text(article.title)
@@ -844,7 +871,7 @@ def social_template_context(article: Article, site_url: str, platform: str = "")
     x_summary_limit = max(0, 280 - fixed_length)
     cta = "전체 글 읽기:" if article.topic["primary_language"] == "ko" else "Read the full article:"
     insight = first_sentences(short_answer, 2)
-    summary = social_summary(article, description)
+    summary = social_summary(article, description, platform)
     lead = linkedin_lead(article, insight, description)
     return {
         "title": title,

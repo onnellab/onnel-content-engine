@@ -22,7 +22,7 @@ The most important distinction is between reading and editing. Reading a large p
 
 ## Common Situations
 
-Large TXT files usually appear in practical workflows rather than as polished documents. You might be opening an exported chat history, a long web novel saved as plain text, a server log, a subtitle or transcript file, or a backup export from another tool.
+Large TXT files usually appear in practical workflows rather than polished documents. The file may be an exported chat history, a long web novel saved as plain text, a server log, a transcript, or a backup export that someone simply needs to inspect without turning it into another project.
 
 These files have different structures, but the reading problem is similar. You need to find the right section quickly without making the app reprocess more text than necessary.
 
@@ -73,7 +73,7 @@ Splitting a large TXT file can help when the document is too large for the tools
 
 If the file has a meaningful structure, such as chapters, logs by date, or exported sections, splitting can make the document easier to manage. If the file is just one continuous export, splitting may create more files to track without solving the underlying reading workflow.
 
-## ONNELLAB Application
+## Where VaultXT Fits
 
 This is the kind of workflow [VaultXT](/apps/vaultxt/) is built around: open the plain-text file first, then search, bookmark, or edit only when the task actually needs it.
 
@@ -98,15 +98,15 @@ Start by treating the TXT file as something to read and inspect, not something t
 
 ### Can a large TXT file damage my device?
 
-No. The file itself does not damage hardware. The usual problem is much simpler: the app may use too much memory, slow down, or stop responding.
+The file itself does not damage hardware. What usually happens is more mundane: the app may use too much memory, slow down, or stop responding.
 
 ### Should I convert a large TXT file to PDF or EPUB?
 
-Convert it only when the goal is publishing, sharing, or structured long-form reading. For quick inspection or search, conversion often adds work without solving the bottleneck.
+Conversion helps when the goal is publishing, sharing, or structured long-form reading. For quick inspection or search, it often adds work without solving the bottleneck.
 
 ### Is a text editor always better than a text reader?
 
-No. Use an editor when you need to change the file. Use a reader when the job is fast navigation, search, and viewing.
+Not always. Use an editor when you need to change the file. Use a reader when the job is fast navigation, search, and viewing.
 
 ### When should I use VaultXT?
 

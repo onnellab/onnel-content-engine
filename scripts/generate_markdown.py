@@ -126,7 +126,7 @@ def localized_labels(language: str) -> dict[str, str]:
         "diagnostic_heading": "What Makes This Problem Feel Worse",
         "checklist_heading": "What To Check First",
         "workflow_heading": "Recommended Workflow",
-        "app_heading": "ONNELLAB Application",
+        "app_heading": "Where ONNELLAB Fits",
         "related_heading": "Related Topics",
         "references_heading": "References",
         "conclusion_heading": "Conclusion",

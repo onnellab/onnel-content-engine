@@ -1,5 +1,5 @@
 Sometimes the best fix for a slow text file is changing how you open it.
 
-The slow part is often how the app loads, renders, and searches the text.
+Opening the file is only step one; the reading path matters just as much.
 
 https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/
