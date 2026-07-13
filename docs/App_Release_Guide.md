@@ -133,6 +133,20 @@ If `ONNELLAB_RELEASE_TOKEN` is not set, the script falls back to `GITHUB_TOKEN`.
 
 For releases in a different repository, `ONNELLAB_RELEASE_TOKEN` must have release/content write permission for that repository.
 
+For local runs, keep real values in the ignored file `docs/environment variables.md`.
+The file uses shell-style export lines, but it is not committed. To load it without
+printing secret values, run:
+
+```text
+scripts/run_with_local_env.py -- scripts/create_github_releases.py --publish
+```
+
+To verify which variable names would be loaded without running the release command:
+
+```text
+scripts/run_with_local_env.py --dry-run
+```
+
 ## Store Version Snapshots
 
 Store pages can be checked before preparing release rows:
