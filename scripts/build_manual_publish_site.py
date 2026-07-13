@@ -1889,7 +1889,7 @@ def html_document(
       const groups = new Map();
       function ensure(item) {{
         const key = item.app_id || item.app_slug || item.app_name;
-        if (!groups.has(key)) groups.set(key, {{ app_name: item.app_name, stores: [], releases: [] }});
+        if (!groups.has(key)) groups.set(key, {{ app_name: item.app_name, app_slug: item.app_slug || item.app_id || '', stores: [], releases: [] }});
         return groups.get(key);
       }}
       storeItems.forEach((item) => ensure(item).stores.push(item));
@@ -1917,7 +1917,7 @@ def html_document(
         const card = document.createElement('div');
         card.className = 'app-status-card';
         const title = document.createElement('strong');
-        title.textContent = group.app_name || t('none');
+        title.appendChild(profileLink(group.app_name || t('none'), group.app_slug ? `/apps/${{group.app_slug}}/` : '/apps/'));
         card.appendChild(title);
         group.stores
           .sort((a, b) => a.platform.localeCompare(b.platform))
