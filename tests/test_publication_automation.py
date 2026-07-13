@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from evaluate_article import evaluate_article
+from build_manual_publish_site import compose_url
 from publish_due_articles import publish_due_articles
 from schedule_ready_articles import schedule_ready_articles
 from topic_management import TOPIC_HEADER, write_topics
@@ -331,6 +332,10 @@ class PublicationAutomationTest(unittest.TestCase):
             'related_articles: "이미 공개된 TXT 가이드 => https://example.com/blog/ko/already-published-txt-guide/"',
             ko_content,
         )
+
+    def test_manual_syndication_open_urls_use_current_editor_routes(self) -> None:
+        self.assertEqual(compose_url("hashnode", "", "https://example.com/article"), "https://hashnode.com/new")
+        self.assertEqual(compose_url("medium", "", "https://example.com/article"), "https://medium.com/new-story")
 
 
 if __name__ == "__main__":
