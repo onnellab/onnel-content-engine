@@ -1,0 +1,45 @@
+name: Update Dev.to Article
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic_id:
+        description: Topic id to update
+        required: true
+        default: TOPIC-0001
+      language:
+        description: Draft language
+        required: true
+        default: en
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Update existing Dev.to article
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+        run: |
+          python3 scripts/update_devto_article.py \
+            --topic-id "${{ inputs.topic_id }}" \
+            --language "${{ inputs.language }}"
+      - name: Rebuild manual publish dashboard
+        run: python3 scripts/build_manual_publish_site.py
+      - name: Commit updated publication state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated/syndication/manifest.json generated/manual-publish/index.html
+          if git diff --cached --quiet; then
+            echo "No generated state changes"
+          else
+            git commit -m "Update Dev.to published article state"
+            git push
+          fi
