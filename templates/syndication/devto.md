@@ -7,6 +7,8 @@ tags: "{{tags}}"
 
 > {{syndication_note}}
 
+{{syndication_intro}}
+
 {{body}}
 
 ---

@@ -1,4 +1,4 @@
-A huge TXT file should not freeze just because you opened it.
+A slow TXT file is often a workflow problem before it is a file problem.
 
 The slow part is often how the app loads, renders, and searches the text.
 

@@ -274,11 +274,11 @@ class PublishingTest(unittest.TestCase):
         self.assertLessEqual(len(x_text), 280)
         self.assertLessEqual(x_weighted_length(x_text), 280)
         self.assertLessEqual(len(bluesky_text), 300)
-        self.assertIn("A huge TXT file should not freeze just because you opened it.", x_text)
+        self.assertIn("A slow TXT file is often a workflow problem before it is a file problem.", x_text)
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", x_text)
-        self.assertIn("A huge TXT file should not freeze just because you opened it.", bluesky_text)
+        self.assertIn("Sometimes the best fix for a slow text file is changing how you open it.", bluesky_text)
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", bluesky_text)
-        self.assertIn("A huge TXT file should not freeze just because you opened it.", linkedin_text)
+        self.assertIn("Teams often lose time on large TXT files because the first tool treats them like small notes.", linkedin_text)
         self.assertIn("Identify the file size.", linkedin_text)
         self.assertIn("Check the encoding.", linkedin_text)
         self.assertNotIn("{{", linkedin_text)
@@ -498,7 +498,7 @@ class PublishingTest(unittest.TestCase):
         self.assertTrue(str(refresh_calls[0][2]["Authorization"]).startswith("Basic "))
         self.assertEqual(calls[0][0], "https://api.x.com/2/tweets")
         self.assertEqual(calls[0][2]["Authorization"], "Bearer x-access-token")
-        self.assertIn("A huge TXT file should not freeze just because you opened it.", calls[0][1]["text"])
+        self.assertIn("A slow TXT file is often a workflow problem before it is a file problem.", calls[0][1]["text"])
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", calls[0][1]["text"])
 
     def test_social_posting_failure_records_error_type(self) -> None:
@@ -568,7 +568,7 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(calls[1][1]["collection"], "app.bsky.feed.post")
         record = calls[1][1]["record"]
         self.assertEqual(record["$type"], "app.bsky.feed.post")
-        self.assertIn("A huge TXT file should not freeze just because you opened it.", record["text"])
+        self.assertIn("Sometimes the best fix for a slow text file is changing how you open it.", record["text"])
         self.assertEqual(record["langs"], ["en"])
         self.assertIn("facets", record)
         facets = record["facets"]

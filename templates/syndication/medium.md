@@ -1,5 +1,7 @@
 > {{syndication_note}}
 
+{{syndication_intro}}
+
 {{body}}
 
 ---

@@ -1,4 +1,4 @@
-A huge TXT file should not freeze just because you opened it.
+Teams often lose time on large TXT files because the first tool treats them like small notes.
 
 We usually see this when a normal editor tries to treat a large plain-text file like a small note.
 

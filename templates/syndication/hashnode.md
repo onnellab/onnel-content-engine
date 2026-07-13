@@ -8,6 +8,8 @@ publication_id: ""
 
 > {{syndication_note}}
 
+{{syndication_intro}}
+
 {{body}}
 
 ---

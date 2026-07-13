@@ -91,9 +91,9 @@ If the file has a meaningful structure, such as chapters, logs by date, or expor
 
 ## ONNELLAB Application
 
-If you frequently read or inspect large plain-text files, [VaultXT](/apps/vaultxt/) may be relevant. VaultXT is a text editor and viewer designed for working with large plain-text files.
+This is the kind of workflow [VaultXT](/apps/vaultxt/) is built around: open the plain-text file first, then search, bookmark, or edit only when the task actually needs it.
 
-VaultXT should be considered after the basic workflow is clear: confirm the file type, understand whether you need reading or editing, and avoid unnecessary conversion. The app is most relevant when the problem is repeatedly opening and navigating large TXT files rather than formatting rich documents.
+It is not meant to make every document workflow more complex. It is most relevant when the recurring problem is opening and navigating large TXT files, not formatting rich documents.
 
 ## Related Topics
 
@@ -114,16 +114,16 @@ Start by treating the TXT file as something to read and inspect, not something t
 
 ### Can a large TXT file damage my device?
 
-No. A large TXT file does not damage hardware. The usual risk is that an app may become slow, use too much memory, or stop responding if it is not designed for large files.
+No. The file itself does not damage hardware. The usual problem is much simpler: the app may use too much memory, slow down, or stop responding.
 
 ### Should I convert a large TXT file to PDF or EPUB?
 
-Only if the goal is publishing, sharing, or structured reading. If you simply need to inspect or search the file, conversion may add unnecessary steps.
+Convert it only when the goal is publishing, sharing, or structured long-form reading. For quick inspection or search, conversion often adds work without solving the bottleneck.
 
 ### Is a text editor always better than a text reader?
 
-No. A text editor is useful when you need to modify the file. A reader can be better when you only need fast navigation, search, and viewing.
+No. Use an editor when you need to change the file. Use a reader when the job is fast navigation, search, and viewing.
 
 ### When should I use VaultXT?
 
-Use VaultXT when your main task is opening, reading, searching, or lightly editing large plain-text files. It should not be treated as a replacement for every document editor or publishing tool.
+Use VaultXT when the main task is opening, reading, searching, or lightly editing large plain-text files. It is not a replacement for every document editor or publishing tool.

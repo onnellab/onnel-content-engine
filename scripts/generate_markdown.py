@@ -81,14 +81,14 @@ def product_section(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> s
         )
 
     lines = [
-        "After the problem and workflow are understood, the following ONNELLAB application may be relevant:"
+        "If the article mentions an ONNELLAB application, make it a workflow fit instead of the starting point:"
     ]
     for app_name in app_names:
         app = apps[app_name]
         if app["status"] not in {"released", "beta"} or app["content_eligible"] != "true" or not app["official_site_path"]:
             raise MarkdownGenerationError(f"{app_name} is not eligible for public recommendation")
         lines.append(f"- [{app_name}]({app['official_site_path']}): {app['one_line_description']}")
-    lines.append("Mention the application only where it directly supports the reader's workflow.")
+    lines.append("Explain the specific task the application supports, and keep the educational answer useful without it.")
     return "\n".join(lines)
 
 
@@ -206,7 +206,7 @@ def draft_context(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> dic
         ),
         "conclusion": (
             f"Start with the reader's real task, explain {keyword} clearly, and recommend the simplest workflow that solves the problem. "
-            "Mention an ONNELLAB application only after the educational answer is complete."
+        "Mention an ONNELLAB application only when it fits the workflow already described."
         ),
         "faq_section": "\n\n".join(faq),
     }

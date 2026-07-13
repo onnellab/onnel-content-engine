@@ -692,7 +692,7 @@ def render_x_post(article: Article, site_url: str) -> str:
 
 
 def render_x_template(article: Article, site_url: str, template_id: str) -> str:
-    context = social_template_context(article, site_url)
+    context = social_template_context(article, site_url, "x")
     template = load_social_template(template_id)
     rendered = render_social_template(template, context)
     while x_weighted_length(rendered) > 280 and context["x_summary"]:
@@ -708,7 +708,7 @@ def render_x_template(article: Article, site_url: str, template_id: str) -> str:
 
 
 def render_bluesky_template(article: Article, site_url: str, template_id: str) -> str:
-    context = social_template_context(article, site_url)
+    context = social_template_context(article, site_url, "bluesky")
     template = load_social_template(template_id)
     rendered = render_social_template(template, context)
     while len(rendered) > 260 and context["bsky_summary"]:
@@ -724,12 +724,12 @@ def render_bluesky_template(article: Article, site_url: str, template_id: str) -
 
 
 def render_linkedin_post(article: Article, site_url: str) -> str:
-    context = social_template_context(article, site_url)
+    context = social_template_context(article, site_url, "linkedin")
     return truncate_text(render_social_template(load_social_template("linkedin"), context), 3000)
 
 
 def render_linkedin_template(article: Article, site_url: str, template_id: str) -> str:
-    context = social_template_context(article, site_url)
+    context = social_template_context(article, site_url, "linkedin")
     return truncate_text(render_social_template(load_social_template(template_id), context), 900 if template_id == "linkedin_short" else 3000)
 
 
@@ -740,15 +740,32 @@ def load_social_template(platform: str, template_dir: Path = DEFAULT_SOCIAL_TEMP
     return path.read_text(encoding="utf-8")
 
 
-def social_hook(article: Article) -> str:
+def social_hook(article: Article, platform: str = "") -> str:
     title = plain_text(article.title)
     question = plain_text(article.topic["primary_question"])
     haystack = f"{title} {question} {article.description}".lower()
     if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
-        hooks = (
-            "A huge TXT file should not freeze just because you opened it.",
-            "When a TXT file feels slow, the file is not always the real problem.",
-            "Large plain-text files need a reading workflow before they need a new format.",
+        hooks_by_platform = {
+            "x": (
+                "A huge TXT file should not freeze just because you opened it.",
+                "A slow TXT file is often a workflow problem before it is a file problem.",
+            ),
+            "bluesky": (
+                "Large TXT files are a good reminder that plain text can still be hard to read.",
+                "Sometimes the best fix for a slow text file is changing how you open it.",
+            ),
+            "linkedin": (
+                "Large plain-text files need a reading workflow before they need a new format.",
+                "Teams often lose time on large TXT files because the first tool treats them like small notes.",
+            ),
+        }
+        hooks = hooks_by_platform.get(
+            platform,
+            (
+                "A huge TXT file should not freeze just because you opened it.",
+                "When a TXT file feels slow, the file is not always the real problem.",
+                "Large plain-text files need a reading workflow before they need a new format.",
+            ),
         )
         return hooks[stable_index(article.topic["id"], len(hooks))]
     if question.lower().startswith("how can i "):
@@ -787,7 +804,28 @@ def syndication_note(article: Article, platform: str) -> str:
     return notes.get(platform, "ONNELLAB note: This is a practical checklist from our product and reading-workflow notes.")
 
 
-def social_template_context(article: Article, site_url: str) -> dict[str, str]:
+def syndication_intro(article: Article, platform: str) -> str:
+    haystack = f"{article.title} {article.topic['primary_question']} {article.description}".lower()
+    if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
+        intros = {
+            "medium": (
+                "The useful question is not only which app can open a large TXT file. "
+                "It is what the reader needs to do after the file opens: inspect, search, bookmark, split, or edit."
+            ),
+            "hashnode": (
+                "For large plain-text files, the practical bottleneck is usually the path from bytes to visible lines: "
+                "decoding, layout, search, and memory use all show up in the reading experience."
+            ),
+            "devto": (
+                "Large TXT files become interesting when the UI treats the whole document as one editable surface. "
+                "Rendering strategy, memory pressure, and search indexing often matter more than the file extension."
+            ),
+        }
+        return intros.get(platform, "")
+    return ""
+
+
+def social_template_context(article: Article, site_url: str, platform: str = "") -> dict[str, str]:
     markdown = article.markdown_path.read_text(encoding="utf-8")
     title = plain_text(article.title)
     description = plain_text(article.description)
@@ -810,7 +848,7 @@ def social_template_context(article: Article, site_url: str) -> dict[str, str]:
     lead = linkedin_lead(article, insight, description)
     return {
         "title": title,
-        "hook": truncate_text(social_hook(article), 160),
+        "hook": truncate_text(social_hook(article, platform), 160),
         "question": truncate_text(plain_text(article.topic["primary_question"]), 120),
         "description": description,
         "insight": truncate_text(insight, 420),
