@@ -2169,7 +2169,8 @@ def html_document(
 
     function publishedItemUrl(item) {{
       if (!isDone(item)) return '';
-      const url = String(item.posted_url || item.canonical_url || '').trim();
+      const record = doneRecord(item);
+      const url = String(item.posted_url || record?.posted_url || platformProfileUrl(item.platform || item.platform_label) || item.canonical_url || '').trim();
       return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/') ? url : '';
     }}
 
