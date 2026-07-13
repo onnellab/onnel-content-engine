@@ -543,11 +543,12 @@ def html_document(
     .platform-status {{ margin-top: 18px; }}
     .platform-status summary {{ cursor: pointer; font-weight: 900; font-size: 16px; min-height: 40px; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; width: fit-content; max-width: 100%; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 8px 12px; }}
     .platform-status-summary {{ display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }}
-    .platform-count-badge {{ display: inline-flex; align-items: center; gap: 4px; min-height: 24px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; background: #fffdf9; color: var(--muted); font-size: 12px; font-weight: 800; }}
+    .platform-count-badge {{ display: inline-flex; align-items: center; gap: 4px; min-height: 24px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; background: #fffdf9; color: var(--muted); font-size: 12px; font-weight: 800; text-decoration: none; }}
     .platform-count-badge b {{ color: var(--ink); font-size: 13px; line-height: 1; }}
     .platforms {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 8px 0 0; }}
     .platform-card {{ border: 1px solid var(--line); background: var(--panel); padding: 12px; border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); }}
     .platform-card strong {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; margin-bottom: 8px; }}
+    .platform-card strong a {{ color: inherit; text-decoration: none; }}
     .platform-card strong .tag {{ flex: 0 0 auto; font-size: 11px; font-weight: 700; }}
     .tag.mode-manual {{ color: #fff; background: var(--bad); border-color: var(--bad); font-weight: 900; }}
     .tag.mode-automatic {{ color: var(--ok); background: var(--ok-soft); border-color: #b7d9c5; font-weight: 800; }}
@@ -567,6 +568,7 @@ def html_document(
     .status-card strong,
     .release-card strong,
     .app-status-card strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
+    .app-status-card strong a {{ color: inherit; text-decoration: none; }}
     .status-card span,
     .release-card span,
     .app-status-card span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
@@ -586,7 +588,7 @@ def html_document(
     .thumb {{ width: 100%; aspect-ratio: 1.91 / 1; object-fit: cover; display: block; border-bottom: 1px solid var(--line); background: #eee; }}
     .body {{ padding: 14px; }}
     .card-head {{ display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }}
-    .platform-badge {{ display: inline-flex; align-items: center; min-height: 30px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--ink); color: #fff; font-size: 13px; font-weight: 800; }}
+    .platform-badge {{ display: inline-flex; align-items: center; min-height: 30px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--ink); color: #fff; font-size: 13px; font-weight: 800; text-decoration: none; }}
     .platform-badge.platform-x {{ background: #1da1f2; border-color: #1da1f2; }}
     .platform-badge.platform-linkedin {{ background: #0a66c2; border-color: #0a66c2; }}
     .platform-badge.platform-bluesky {{ background: #1685fe; border-color: #1685fe; }}
@@ -1687,13 +1689,46 @@ def html_document(
       }}
     }}
 
+    function platformProfileUrl(platformOrLabel) {{
+      const key = String(platformOrLabel || '').toLowerCase();
+      const urls = {{
+        blog: '/blog/',
+        x: 'https://x.com/onnellab',
+        twitter: 'https://x.com/onnellab',
+        linkedin: 'https://www.linkedin.com/in/onnel-lab-b5b9b0421/',
+        bluesky: 'https://bsky.app/profile/onnellab.bsky.social',
+        'dev.to': 'https://dev.to/onnellab',
+        devto: 'https://dev.to/onnellab',
+        hashnode: 'https://hashnode.com/@onnellab',
+        medium: 'https://medium.com/@onnellab.app',
+      }};
+      return urls[key] || '';
+    }}
+
+    function profileLink(label, url, className = '') {{
+      const link = document.createElement('a');
+      link.href = url || '#';
+      link.textContent = label;
+      if (className) link.className = className;
+      if (url && !url.startsWith('/')) {{
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+      }}
+      return link;
+    }}
+
+    function siteItemUrl(item) {{
+      if (item.kind === 'home') return '/';
+      return item.slug ? `/apps/${{item.slug}}/` : '/apps/';
+    }}
+
     function renderPlatformSummary() {{
       platformSummary.textContent = '';
       const blogCounts = blogItems.reduce((acc, item) => {{
         acc[item.status] = (acc[item.status] || 0) + 1;
         return acc;
       }}, {{}});
-      const platformSummaryBadges = [[t('blogPlatformName'), blogItems.length]];
+      const platformSummaryBadges = [[t('blogPlatformName'), blogItems.length, platformProfileUrl('blog')]];
       const latestPublished = latestDate(blogItems.map((item) => item.published_at));
       const nextScheduled = blogItems
         .filter((item) => item.status === 'scheduled' && item.scheduled_at)
@@ -1703,8 +1738,7 @@ def html_document(
       const blogCard = document.createElement('div');
       blogCard.className = 'platform-card';
       const blogTitle = document.createElement('strong');
-      const blogTitleText = document.createElement('span');
-      blogTitleText.textContent = t('blogPlatformName');
+      const blogTitleText = profileLink(t('blogPlatformName'), platformProfileUrl('blog'));
       const blogTag = document.createElement('span');
       blogTag.className = 'tag mode-automatic';
       blogTag.textContent = t('blogMode');
@@ -1721,7 +1755,7 @@ def html_document(
       const platforms = [...new Set(items.map((item) => item.platform_label))].sort();
       platforms.forEach((label) => {{
         const rows = items.filter((item) => item.platform_label === label && !item.is_variant);
-        platformSummaryBadges.push([label, rows.length]);
+        platformSummaryBadges.push([label, rows.length, platformProfileUrl(rows[0]?.platform || label)]);
         const posted = rows.filter((item) => isDone(item));
         const failed = rows.filter((item) => !isDone(item) && item.status === 'failed');
         const drafts = rows.filter((item) => !isDone(item) && ['draft', 'approved'].includes(item.status));
@@ -1735,8 +1769,7 @@ def html_document(
         const card = document.createElement('div');
         card.className = 'platform-card';
         const title = document.createElement('strong');
-        const titleText = document.createElement('span');
-        titleText.textContent = label;
+        const titleText = profileLink(label, platformProfileUrl(rows[0]?.platform || label));
         const modeTag = document.createElement('span');
         modeTag.className = 'tag ' + (rows[0]?.publishing_mode === 'automatic' ? 'mode-automatic' : 'mode-manual');
         modeTag.textContent = rows[0]?.publishing_mode === 'automatic' ? t('automaticMode') : t('manualMode');
@@ -1753,9 +1786,16 @@ def html_document(
         platformSummary.appendChild(card);
       }});
       platformStatusSummary.textContent = '';
-      platformSummaryBadges.forEach(([label, count]) => {{
-        const badge = document.createElement('span');
+      platformSummaryBadges.forEach(([label, count, url]) => {{
+        const badge = document.createElement(url ? 'a' : 'span');
         badge.className = 'platform-count-badge';
+        if (url) {{
+          badge.href = url;
+          if (!url.startsWith('/')) {{
+            badge.target = '_blank';
+            badge.rel = 'noopener noreferrer';
+          }}
+        }}
         const name = document.createElement('span');
         name.textContent = label;
         const value = document.createElement('b');
@@ -1773,7 +1813,7 @@ def html_document(
         const card = document.createElement('div');
         card.className = 'app-status-card';
         const title = document.createElement('strong');
-        title.textContent = item.kind === 'home' ? t('mainHome') : item.name;
+        title.appendChild(profileLink(item.kind === 'home' ? t('mainHome') : item.name, siteItemUrl(item)));
         const landing = document.createElement('div');
         landing.className = 'app-status-row is-store';
         landing.innerHTML = `<b>${{siteLandingLabel(item)}}</b><span>${{formatDate(item.landing_updated_at)}}</span>`;
@@ -2023,9 +2063,17 @@ def html_document(
       body.className = 'body';
       const cardHead = document.createElement('div');
       cardHead.className = 'card-head';
-      const platformBadge = document.createElement('div');
+      const platformProfile = platformProfileUrl(item.platform || item.platform_label);
+      const platformBadge = document.createElement(platformProfile ? 'a' : 'div');
       platformBadge.className = 'platform-badge ' + platformClass(item.platform);
       platformBadge.textContent = item.platform_label;
+      if (platformProfile) {{
+        platformBadge.href = platformProfile;
+        if (!platformProfile.startsWith('/')) {{
+          platformBadge.target = '_blank';
+          platformBadge.rel = 'noopener noreferrer';
+        }}
+      }}
       cardHead.append(platformBadge);
       const meta = document.createElement('div');
       meta.className = 'meta';
