@@ -745,7 +745,12 @@ def social_hook(article: Article) -> str:
     question = plain_text(article.topic["primary_question"])
     haystack = f"{title} {question} {article.description}".lower()
     if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
-        return "A huge TXT file should not freeze just because you opened it."
+        hooks = (
+            "A huge TXT file should not freeze just because you opened it.",
+            "When a TXT file feels slow, the file is not always the real problem.",
+            "Large plain-text files need a reading workflow before they need a new format.",
+        )
+        return hooks[stable_index(article.topic["id"], len(hooks))]
     if question.lower().startswith("how can i "):
         return question[0].upper() + question[1:].rstrip("?") + " is a workflow problem, not just a tool choice."
     if question:
@@ -753,11 +758,33 @@ def social_hook(article: Article) -> str:
     return title
 
 
+def stable_index(value: str, size: int) -> int:
+    if size <= 0:
+        return 0
+    return sum(ord(char) for char in value) % size
+
+
 def social_summary(article: Article, description: str) -> str:
     haystack = f"{article.title} {article.topic['primary_question']} {description}".lower()
     if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
         return "The slow part is often how the app loads, renders, and searches the text."
     return description
+
+
+def linkedin_lead(article: Article, insight: str, description: str) -> str:
+    haystack = f"{article.title} {article.topic['primary_question']} {description}".lower()
+    if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
+        return "We usually see this when a normal editor tries to treat a large plain-text file like a small note."
+    return insight
+
+
+def syndication_note(article: Article, platform: str) -> str:
+    notes = {
+        "medium": "ONNELLAB note: This version keeps the practical checklist and leaves the product details secondary.",
+        "hashnode": "ONNELLAB note: These are implementation-minded notes from our plain-text workflow research.",
+        "devto": "ONNELLAB note: This is a field note for developers and power users who work with large text files.",
+    }
+    return notes.get(platform, "ONNELLAB note: This is a practical checklist from our product and reading-workflow notes.")
 
 
 def social_template_context(article: Article, site_url: str) -> dict[str, str]:
@@ -780,12 +807,14 @@ def social_template_context(article: Article, site_url: str) -> dict[str, str]:
     cta = "전체 글 읽기:" if article.topic["primary_language"] == "ko" else "Read the full article:"
     insight = first_sentences(short_answer, 2)
     summary = social_summary(article, description)
+    lead = linkedin_lead(article, insight, description)
     return {
         "title": title,
         "hook": truncate_text(social_hook(article), 160),
         "question": truncate_text(plain_text(article.topic["primary_question"]), 120),
         "description": description,
         "insight": truncate_text(insight, 420),
+        "lead": truncate_text(lead, 360),
         "key_points": key_points_text,
         "short_points": short_points_text,
         "cta": cta,

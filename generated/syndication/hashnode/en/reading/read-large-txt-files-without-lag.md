@@ -6,7 +6,7 @@ cover_image: "https://onnellab.github.io/blog-assets/en/read-large-txt-files-wit
 publication_id: ""
 ---
 
-> ONNELLAB note: This is a practical checklist from our product and reading-workflow notes.
+> ONNELLAB note: These are implementation-minded notes from our plain-text workflow research.
 
 # How to Read Large TXT Files Without Lag
 

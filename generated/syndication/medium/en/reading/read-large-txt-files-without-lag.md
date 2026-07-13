@@ -1,4 +1,4 @@
-> ONNELLAB note: This is a practical checklist from our product and reading-workflow notes.
+> ONNELLAB note: This version keeps the practical checklist and leaves the product details secondary.
 
 # How to Read Large TXT Files Without Lag
 

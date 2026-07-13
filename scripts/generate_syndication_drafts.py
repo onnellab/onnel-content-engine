@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 from urllib.parse import urljoin
 
-from publishing import DEFAULT_SITE_URL, PublishingError, article_public_url, load_publishable_articles, normalize_site_url, parse_front_matter
+from publishing import DEFAULT_SITE_URL, PublishingError, article_public_url, load_publishable_articles, normalize_site_url, parse_front_matter, syndication_note
 from publishing import EXTERNAL_DISTRIBUTION_LANGUAGES
 from topic_management import DEFAULT_TOPICS_PATH, TopicError
 
@@ -138,6 +138,7 @@ def generate_syndication_drafts(
             "tags": tag_list(metadata, article.topic),
             "cover_image": social_card_url(site_url, article.topic),
             "body": body.strip(),
+            "syndication_note": "",
         }
         for platform in platforms:
             if platform not in PLATFORMS:
@@ -147,6 +148,7 @@ def generate_syndication_drafts(
                 raise SyndicationError(f"syndication template does not exist: {template_path}")
             destination = output_dir / platform / article.topic["primary_language"] / article.topic["category"] / f"{article.topic['slug']}.md"
             destination.parent.mkdir(parents=True, exist_ok=True)
+            context["syndication_note"] = syndication_note(article, platform)
             destination.write_text(render_template(template_path.read_text(encoding="utf-8"), context), encoding="utf-8")
             item = {
                 "topic_id": article.topic["id"],

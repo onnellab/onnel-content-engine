@@ -6,7 +6,7 @@ cover_image: "{{cover_image}}"
 publication_id: ""
 ---
 
-> ONNELLAB note: This is a practical checklist from our product and reading-workflow notes.
+> {{syndication_note}}
 
 {{body}}
 

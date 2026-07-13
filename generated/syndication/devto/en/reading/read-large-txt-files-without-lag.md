@@ -5,7 +5,7 @@ canonical_url: "https://onnellab.github.io/blog/en/read-large-txt-files-without-
 tags: "large-txt-file-reader,txt-viewer,plain-text,reading-workflow"
 ---
 
-> ONNELLAB note: This is a practical checklist from our product and reading-workflow notes.
+> ONNELLAB note: This is a field note for developers and power users who work with large text files.
 
 # How to Read Large TXT Files Without Lag
 

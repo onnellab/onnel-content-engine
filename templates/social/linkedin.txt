@@ -1,6 +1,6 @@
 {{hook}}
 
-{{insight}}
+{{lead}}
 
 Before changing tools:
 {{key_points}}
