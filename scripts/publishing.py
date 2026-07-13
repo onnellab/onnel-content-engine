@@ -802,11 +802,23 @@ def linkedin_lead(article: Article, insight: str, description: str) -> str:
 
 def syndication_note(article: Article, platform: str) -> str:
     notes = {
-        "medium": "ONNELLAB note: This version keeps the practical checklist and leaves the product details secondary.",
-        "hashnode": "ONNELLAB note: These are implementation-minded notes from our plain-text workflow research.",
-        "devto": "ONNELLAB note: This is a field note for developers and power users who work with large text files.",
+        "medium": (
+            "ONNELLAB note: This version keeps the practical checklist and leaves the product details secondary.",
+            "ONNELLAB note: This edit keeps the reader workflow first and treats the product mention as context.",
+        ),
+        "hashnode": (
+            "ONNELLAB note: These are implementation-minded notes from our plain-text workflow research.",
+            "ONNELLAB note: This version keeps the implementation trade-offs visible for technical readers.",
+        ),
+        "devto": (
+            "ONNELLAB note: This is a field note for developers and power users who work with large text files.",
+            "ONNELLAB note: This version focuses on the rendering and workflow details behind large text files.",
+        ),
     }
-    return notes.get(platform, "ONNELLAB note: This is a practical checklist from our product and reading-workflow notes.")
+    choices = notes.get(platform)
+    if choices:
+        return choices[stable_index(f"{article.topic['id']}:{platform}", len(choices))]
+    return "ONNELLAB note: This is a practical checklist from our product and reading-workflow notes."
 
 
 def syndication_intro(article: Article, platform: str) -> str:

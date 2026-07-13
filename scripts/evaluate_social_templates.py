@@ -14,6 +14,14 @@ from validate_social_posts import DEFAULT_MANIFEST_PATH, ROOT, SocialValidationE
 
 
 PLACEHOLDER_RE = re.compile(r"\{\{[a-zA-Z0-9_]+\}\}")
+REPETITION_PATTERNS = (
+    "workflow problem",
+    "plain-text file",
+    "large txt file",
+    "slow text file",
+    "tool choice",
+    "opens, renders, and searches",
+)
 
 
 def score_post(post: dict[str, object], project_root: Path = ROOT) -> dict[str, object]:
@@ -64,7 +72,22 @@ def evaluate_social_templates(manifest_path: Path = DEFAULT_MANIFEST_PATH, proje
     posts = [post for post in manifest["posts"] if isinstance(post, dict)]
     evaluations = [score_post(post, project_root) for post in posts]
     average = round(sum(float(item["score"]) for item in evaluations) / len(evaluations), 2) if evaluations else 0.0
-    return {"type": "social_template_evaluation", "average_score": average, "posts": evaluations}
+    texts = []
+    for post in posts:
+        draft_path = project_root / str(post["draft_path"])
+        if draft_path.exists():
+            texts.append(draft_path.read_text(encoding="utf-8").lower())
+    repeated = []
+    for pattern in REPETITION_PATTERNS:
+        count = sum(text.count(pattern) for text in texts)
+        if count > 2:
+            repeated.append({"phrase": pattern, "count": count, "severity": "warning"})
+    return {
+        "type": "social_template_evaluation",
+        "average_score": average,
+        "repetition_warnings": repeated,
+        "posts": evaluations,
+    }
 
 
 def main() -> int:

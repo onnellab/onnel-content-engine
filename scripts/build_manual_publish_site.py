@@ -13,6 +13,9 @@ from pathlib import Path
 from urllib.parse import quote
 from zoneinfo import ZoneInfo
 
+from evaluate_social_templates import evaluate_social_templates
+from evaluate_syndication_drafts import evaluate_syndication_drafts
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TOPICS = ROOT / "data" / "topics.csv"
@@ -426,6 +429,7 @@ def html_document(
     site_items: list[dict[str, object]] | None = None,
     release_sync_status: dict[str, object] | None = None,
     verification_report: dict[str, object] | None = None,
+    quality_report: dict[str, object] | None = None,
 ) -> str:
     manual_state = manual_state or {"done": {}, "updated_at": "", "version": 1}
     done_state = manual_state.get("done", {})
@@ -442,6 +446,7 @@ def html_document(
     site_data = json.dumps(site_items or [], ensure_ascii=False).replace("</", "<\\/")
     release_sync_data = json.dumps(release_sync_status or {}, ensure_ascii=False).replace("</", "<\\/")
     verification_report_data = json.dumps(verification_report or {}, ensure_ascii=False).replace("</", "<\\/")
+    quality_report_data = json.dumps(quality_report or {}, ensure_ascii=False).replace("</", "<\\/")
     total = len(items)
     manual = sum(
         1
@@ -723,6 +728,13 @@ def html_document(
       </div>
       <div id="site-status-grid" class="app-status-grid"></div>
     </details>
+    <details class="status-section" aria-label="Publishing quality status">
+      <summary id="quality-status-title">발행 품질 점검</summary>
+      <div class="release-head">
+        <span id="quality-status-summary"></span>
+      </div>
+      <div id="quality-status-grid" class="app-status-grid"></div>
+    </details>
     <details class="status-section" aria-label="App operation status">
       <summary id="app-status-title">앱 운영 상태</summary>
       <div class="release-head">
@@ -739,6 +751,7 @@ def html_document(
   <script id="site-data" type="application/json">{site_data}</script>
   <script id="release-sync-data" type="application/json">{release_sync_data}</script>
   <script id="verification-report-data" type="application/json">{verification_report_data}</script>
+  <script id="quality-report-data" type="application/json">{quality_report_data}</script>
   <script>
     let items = JSON.parse(document.getElementById('manual-data').textContent);
     let releases = JSON.parse(document.getElementById('release-data').textContent);
@@ -747,6 +760,7 @@ def html_document(
     let siteItems = JSON.parse(document.getElementById('site-data').textContent);
     let releaseSyncStatus = JSON.parse(document.getElementById('release-sync-data').textContent);
     let verificationReport = JSON.parse(document.getElementById('verification-report-data').textContent);
+    let qualityReport = JSON.parse(document.getElementById('quality-report-data').textContent);
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
     const stateBranch = 'main';
@@ -846,6 +860,13 @@ def html_document(
         blogMode: '콘텐츠',
         platformStatusTitle: '매체별 상태',
         siteStatusTitle: '사이트 갱신 상태',
+        qualityStatusTitle: '발행 품질 점검',
+        qualityStatusSummary: '템플릿 점수와 반복어 경고',
+        socialQuality: '소셜 템플릿',
+        syndicationQuality: '신디케이션',
+        repetitionWarnings: '반복어 경고',
+        noWarnings: '경고 없음',
+        qualityError: '점검 오류',
         siteStatusSummary: '메인홈과 앱 상세 페이지',
         mainHome: '메인홈',
         landingUpdated: '랜딩페이지 갱신',
@@ -984,6 +1005,13 @@ def html_document(
         blogMode: 'Content',
         platformStatusTitle: 'Platform status',
         siteStatusTitle: 'Website update status',
+        qualityStatusTitle: 'Publishing quality check',
+        qualityStatusSummary: 'template scores and repeated phrase warnings',
+        socialQuality: 'Social templates',
+        syndicationQuality: 'Syndication',
+        repetitionWarnings: 'repetition warnings',
+        noWarnings: 'no warnings',
+        qualityError: 'quality check error',
         siteStatusSummary: 'home and app landing pages',
         mainHome: 'Main home',
         landingUpdated: 'landing updated',
@@ -1068,6 +1096,8 @@ def html_document(
     const appStatusSummary = document.getElementById('app-status-summary');
     const siteStatusGrid = document.getElementById('site-status-grid');
     const siteStatusSummary = document.getElementById('site-status-summary');
+    const qualityStatusGrid = document.getElementById('quality-status-grid');
+    const qualityStatusSummary = document.getElementById('quality-status-summary');
     const verificationSummaryGrid = document.getElementById('verification-summary-grid');
     const verificationSummaryNote = document.getElementById('verification-summary-note');
     let remoteState = JSON.parse(document.getElementById('manual-state-data').textContent);
@@ -1097,6 +1127,7 @@ def html_document(
       document.getElementById('app-status-title').textContent = t('appStatusTitle');
       document.getElementById('platform-status-title').textContent = t('platformStatusTitle');
       document.getElementById('site-status-title').textContent = t('siteStatusTitle');
+      document.getElementById('quality-status-title').textContent = t('qualityStatusTitle');
       document.getElementById('verification-summary-title').textContent = t('verificationSummaryTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
@@ -1122,6 +1153,7 @@ def html_document(
       syncViewButtons();
       renderAppStatusSummary();
       renderSiteStatusSummary();
+      renderQualityStatusSummary();
       renderVerificationSummary();
     }}
 
@@ -1750,6 +1782,35 @@ def html_document(
       }});
     }}
 
+    function renderQualityStatusSummary() {{
+      qualityStatusGrid.textContent = '';
+      const social = qualityReport?.social || {{}};
+      const syndication = qualityReport?.syndication || {{}};
+      const warnings = Array.isArray(social.repetition_warnings) ? social.repetition_warnings : [];
+      qualityStatusSummary.textContent = `${{t('qualityStatusSummary')}} / ${{warnings.length}} ${{t('repetitionWarnings')}}`;
+      const rows = [
+        [t('socialQuality'), social.average_score, `${{(social.posts || []).length}} items`],
+        [t('syndicationQuality'), syndication.average_score, `${{(syndication.drafts || []).length}} items`],
+        [t('repetitionWarnings'), warnings.length, warnings.length ? warnings.map((warning) => `${{warning.phrase}} (${{warning.count}})`).join(' / ') : t('noWarnings')],
+      ];
+      if (qualityReport?.error) rows.push([t('qualityError'), '!', qualityReport.error]);
+      rows.forEach(([labelText, score, detail]) => {{
+        const card = document.createElement('div');
+        card.className = 'app-status-card';
+        const title = document.createElement('strong');
+        title.textContent = labelText;
+        const row = document.createElement('div');
+        row.className = 'app-status-row is-release';
+        const scoreLine = document.createElement('b');
+        scoreLine.textContent = score === undefined || score === null ? t('none') : String(score);
+        const detailLine = document.createElement('span');
+        detailLine.textContent = detail || '';
+        row.append(scoreLine, detailLine);
+        card.append(title, row);
+        qualityStatusGrid.appendChild(card);
+      }});
+    }}
+
     function renderVerificationSummary() {{
       verificationSummaryGrid.textContent = '';
       const counts = verificationReport?.counts || {{}};
@@ -2140,6 +2201,22 @@ self.addEventListener('fetch', (event) => {
 """
 
 
+def quality_report_item(social_manifest: Path, syndication_manifest: Path) -> dict[str, object]:
+    report: dict[str, object] = {}
+    errors: list[str] = []
+    try:
+        report["social"] = evaluate_social_templates(social_manifest)
+    except Exception as error:  # Keep dashboard generation available even if quality checks fail.
+        errors.append(f"social: {error}")
+    try:
+        report["syndication"] = evaluate_syndication_drafts(syndication_manifest)
+    except Exception as error:  # Keep dashboard generation available even if quality checks fail.
+        errors.append(f"syndication: {error}")
+    if errors:
+        report["error"] = " / ".join(errors)
+    return report
+
+
 def build_manual_publish_site(
     social_manifest: Path = DEFAULT_SOCIAL_MANIFEST,
     syndication_manifest: Path = DEFAULT_SYNDICATION_MANIFEST,
@@ -2162,9 +2239,10 @@ def build_manual_publish_site(
     site_items = homepage_status_items(homepage_repo)
     release_sync_status = release_sync_status_item(app_release_sync_status_path)
     verification_report = verification_report_item(verification_report_path)
+    quality_report = quality_report_item(social_manifest, syndication_manifest)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
-        html_document(items, manual_state, releases, blog_items, store_items, site_items, release_sync_status, verification_report),
+        html_document(items, manual_state, releases, blog_items, store_items, site_items, release_sync_status, verification_report, quality_report),
         encoding="utf-8",
     )
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")

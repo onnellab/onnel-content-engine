@@ -5,7 +5,7 @@ canonical_url: "https://onnellab.github.io/blog/en/read-large-txt-files-without-
 tags: "large-txt-file-reader,txt-viewer,plain-text,reading-workflow"
 ---
 
-> ONNELLAB note: This is a field note for developers and power users who work with large text files.
+> ONNELLAB note: This version focuses on the rendering and workflow details behind large text files.
 
 Large TXT files become interesting when the UI treats the whole document as one editable surface. Rendering strategy, memory pressure, and search indexing often matter more than the file extension.
 

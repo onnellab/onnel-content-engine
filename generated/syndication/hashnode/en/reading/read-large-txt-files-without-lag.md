@@ -6,7 +6,7 @@ cover_image: "https://onnellab.github.io/blog-assets/en/read-large-txt-files-wit
 publication_id: ""
 ---
 
-> ONNELLAB note: These are implementation-minded notes from our plain-text workflow research.
+> ONNELLAB note: This version keeps the implementation trade-offs visible for technical readers.
 
 For large plain-text files, the practical bottleneck is usually the path from bytes to visible lines: decoding, layout, search, and memory use all show up in the reading experience.
 
