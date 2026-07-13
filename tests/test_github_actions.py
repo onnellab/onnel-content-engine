@@ -19,6 +19,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Validate", workflow)
         self.assertIn("validate_app_release_config.py", workflow)
         self.assertIn("validate_android_store_versions.py", workflow)
+        self.assertIn("validate_app_pricing.py", workflow)
         validate_block = workflow.split("- name: Validate", 1)[1].split("- name: Check App Store Versions", 1)[0]
         self.assertNotIn("sync_android_versions_from_repos.py --dry-run", validate_block)
         self.assertIn("Generate Markdown", workflow)
@@ -90,6 +91,8 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("scripts/prepare_app_release_rows.py", workflow)
         self.assertIn("Fill ready app release rows", workflow)
         self.assertIn("scripts/fill_ready_app_releases.py", workflow)
+        self.assertIn("Validate app pricing", workflow)
+        self.assertIn("scripts/validate_app_pricing.py", workflow)
         self.assertIn("data/manual_publish_state.json", workflow)
         self.assertIn("data/store_versions.csv", workflow)
         self.assertIn("data/app_releases.csv", workflow)

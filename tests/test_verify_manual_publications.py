@@ -13,7 +13,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from verify_manual_publications import public_activity_url, public_profile_url, rss_url_for, verify_manual_publications  # noqa: E402
+from verify_manual_publications import public_activity_url, public_post_url_from_visual_text, public_profile_url, rss_url_for, verify_manual_publications  # noqa: E402
 
 
 class VerifyManualPublicationsTest(unittest.TestCase):
@@ -120,7 +120,9 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                 return f"<rss><item><link>{canonical_url}</link></item></rss>"
 
             def visual_text(url: str) -> str:
-                return f"Public profile shows How to Read Large TXT Files Without Lag {canonical_url} from {url}"
+                if "linkedin" in url:
+                    return f"Public profile shows How to Read Large TXT Files Without Lag {canonical_url} https://www.linkedin.com/feed/update/urn:li:activity:123456789/"
+                return f"Public profile shows How to Read Large TXT Files Without Lag {canonical_url} https://x.com/onnellab/status/123456789"
 
             with unittest.mock.patch.dict(
                 "os.environ",
@@ -148,6 +150,8 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             data = json.loads(state.read_text(encoding="utf-8"))
             self.assertIn("TOPIC-0001::bluesky::en::bluesky", data["done"])
             self.assertEqual(data["done"]["TOPIC-0001::devto::en::markdown"]["posted_url"], "https://dev.to/onnellab/example")
+            self.assertEqual(data["done"]["TOPIC-0001::x::en::x"]["posted_url"], "https://x.com/onnellab/status/123456789")
+            self.assertEqual(data["done"]["TOPIC-0001::linkedin::en::linkedin"]["posted_url"], "https://www.linkedin.com/feed/update/urn:li:activity:123456789")
             self.assertEqual(data["done"]["TOPIC-0001::x::en::x"]["verification_method"], "x_public_page_visual")
             self.assertEqual(data["done"]["TOPIC-0001::linkedin::en::linkedin"]["verification_confidence"], "low")
             report_data = json.loads(report.read_text(encoding="utf-8"))
@@ -252,6 +256,12 @@ class VerifyManualPublicationsTest(unittest.TestCase):
         self.assertEqual(
             public_activity_url("linkedin", "https://www.linkedin.com/in/onnel-lab-b5b9b0421/"),
             "https://www.linkedin.com/in/onnel-lab-b5b9b0421/recent-activity/all/",
+        )
+
+    def test_public_post_url_from_visual_text_falls_back_to_profile_when_permalink_is_missing(self) -> None:
+        self.assertEqual(
+            public_post_url_from_visual_text("x", "profile text without permalink", "https://x.com/onnellab"),
+            "https://x.com/onnellab",
         )
 
 

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -225,6 +226,18 @@ def public_activity_url(platform: str, profile_url: str) -> str:
     return profile_url
 
 
+def public_post_url_from_visual_text(platform: str, text: str, fallback_url: str) -> str:
+    patterns = {
+        "x": r"https?://(?:x|twitter)\.com/[^/\s\"')]+/status/\d+",
+        "linkedin": r"https?://(?:www\.)?linkedin\.com/(?:feed/update/urn:li:[^/\s\"')]+|posts/[^/\s\"')]+)",
+    }
+    pattern = patterns.get(platform)
+    if not pattern:
+        return fallback_url
+    match = re.search(pattern, text)
+    return match.group(0) if match else fallback_url
+
+
 def playwright_page_text(url: str) -> str:
     script = """
 const { chromium } = require('playwright');
@@ -274,7 +287,8 @@ def verify_public_page(item: dict[str, Any], visual_text: VisualText) -> Verific
     has_canonical_url = bool(canonical_url and canonical_url in text)
     has_canonical_card = bool(canonical_host and canonical_host in text and has_title)
     if has_title and (has_canonical_url or has_canonical_card):
-        return result_for(item, url, f"{platform}_public_page_visual", "low")
+        posted_url = public_post_url_from_visual_text(platform, text, verification_url)
+        return result_for(item, posted_url, f"{platform}_public_page_visual", "low")
     print(
         f"checked {platform} public page but found no matching title plus canonical URL or domain: {verification_url}",
         file=sys.stderr,

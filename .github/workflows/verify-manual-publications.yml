@@ -100,6 +100,11 @@ jobs:
           set -euo pipefail
           python3 scripts/generate_app_release_report.py
 
+      - name: Validate app pricing
+        run: |
+          set -euo pipefail
+          python3 scripts/validate_app_pricing.py
+
       - name: Commit verified state and dashboard snapshots
         run: |
           set -euo pipefail
