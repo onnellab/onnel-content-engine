@@ -11,7 +11,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from check_store_versions import STORE_HEADER  # noqa: E402
+from check_store_versions import ANDROID_HEADER, STORE_HEADER  # noqa: E402
 from generate_app_release_report import generate_app_release_report  # noqa: E402
 from prepare_app_release_rows import CONFIG_HEADER  # noqa: E402
 from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER  # noqa: E402
@@ -273,6 +273,83 @@ class AppReleaseReportTest(unittest.TestCase):
 
             self.assertIn("Waiting for public notes approval", text)
             self.assertIn("Approve public notes-only release", text)
+
+    def test_report_uses_android_local_metadata_when_local_repo_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
+            android_versions = root / "android_store_versions.csv"
+            publications = root / "app_release_publications.csv"
+            output = root / "app_releases.md"
+            write_csv(
+                store,
+                STORE_HEADER,
+                [
+                    {
+                        "app_id": "APP-0002",
+                        "app_slug": "tagweaver",
+                        "app_name": "TagWeaver",
+                        "platform": "android",
+                        "store_url": "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2",
+                        "store_app_id": "",
+                        "store_package": "com.onnellab.tagweaver2",
+                        "version": "2.1.3",
+                        "last_updated": "2026-07-12",
+                        "release_notes": "Local Flutter build metadata version.",
+                        "checked_at": "2026-07-13T09:00:00+09:00",
+                        "status": "unchanged",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(releases, RELEASE_HEADER, [])
+            write_csv(
+                config,
+                CONFIG_HEADER,
+                [
+                    {
+                        "app_id": "APP-0002",
+                        "app_slug": "tagweaver",
+                        "repository": "onnellab/tagweaver",
+                        "artifact_pattern": "generated/releases/tagweaver/{version}/{platform}/*-release.*",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(local_repos, LOCAL_REPOSITORIES_HEADER, [])
+            write_csv(
+                android_versions,
+                ANDROID_HEADER,
+                [
+                    {
+                        "app_id": "APP-0002",
+                        "app_slug": "tagweaver",
+                        "package": "com.onnellab.tagweaver2",
+                        "version": "2.1.3",
+                        "last_updated": "2026-07-12",
+                        "release_notes": "Local Flutter build metadata version.",
+                        "source": "local_build_metadata",
+                        "notes": "Imported from CI snapshot.",
+                    }
+                ],
+            )
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
+
+            text = generate_app_release_report(
+                store,
+                releases,
+                config,
+                local_repos,
+                output,
+                publications,
+                now=datetime.fromisoformat("2026-07-13T09:00:00+09:00"),
+                android_versions_path=android_versions,
+            )
+
+            self.assertIn("| TagWeaver | android | 2.1.3 | 2.1.3 | same | unchanged | - | onnellab/tagweaver | No action |", text)
 
 
 if __name__ == "__main__":

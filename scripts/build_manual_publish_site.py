@@ -496,6 +496,9 @@ def html_document(
     .atm-status-row button strong {{ display: block; margin-top: 3px; font-size: 15px; line-height: 1.1; }}
     .atm-status-row button strong > span:not(.state-subtext) {{ color: inherit; font-size: 15px; line-height: 1.1; }}
     .atm-status-row button .state-subtext {{ display: block; margin-top: 2px; font-size: 11px; color: var(--muted); }}
+    .run-link {{ min-height: 34px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--blue); font-size: 12px; font-weight: 900; text-decoration: none; padding: 7px 10px; }}
+    .run-link:hover {{ border-color: var(--blue); background: var(--blue-soft); }}
+    .run-link[hidden] {{ display: none; }}
     .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 10px; margin-bottom: 14px; box-shadow: var(--shadow); }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
     .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, auto); gap: 8px; margin-top: 12px; }}
@@ -643,6 +646,7 @@ def html_document(
           <button type="button" id="refresh-state-large"><span id="overview-sync-label">동기화</span><strong id="sync-state-large">...</strong></button>
           <button type="button" id="verify-publications-large"><span id="overview-verify-label">공개 확인</span><strong id="verify-state-large">...</strong></button>
         </div>
+        <a id="verification-run-link" class="run-link" href="#" target="_blank" rel="noopener" hidden>실행 기록</a>
       </div>
     </section>
     <section class="tool-panel" aria-label="Publish controls">
@@ -731,6 +735,7 @@ def html_document(
         verificationQueued: '대기 중',
         verificationRunning: '실행 중',
         verificationCompleted: '완료',
+        verificationRunLink: 'GitHub Actions 실행 기록',
         verificationReady: '실행',
         verificationTokenRequired: '토큰 필요',
         verificationFailed: '실패',
@@ -861,6 +866,7 @@ def html_document(
         verificationQueued: 'Queued',
         verificationRunning: 'Running',
         verificationCompleted: 'Completed',
+        verificationRunLink: 'GitHub Actions run',
         verificationReady: 'Run',
         verificationTokenRequired: 'Token needed',
         verificationFailed: 'Failed',
@@ -996,6 +1002,7 @@ def html_document(
     const verifyButtonLarge = document.getElementById('verify-publications-large');
     const verifyButtonPrimary = document.getElementById('verify-publications-primary');
     const verifyStateLarge = document.getElementById('verify-state-large');
+    const verificationRunLink = document.getElementById('verification-run-link');
     const syncButtonLarge = document.getElementById('refresh-state-large');
     const langToggle = document.getElementById('lang-toggle');
     const variantToggle = document.getElementById('toggle-variants');
@@ -1013,6 +1020,7 @@ def html_document(
     let currentView = 'due';
     let verifyCountdownTimer = null;
     let verifyCountdownRemaining = 0;
+    let latestVerificationRunUrl = '';
 
     tokenInput.value = localStorage.getItem(tokenKey) || '';
 
@@ -1052,6 +1060,7 @@ def html_document(
       langToggle.textContent = currentLang === 'ko' ? 'English' : '한국어';
       setSync(syncStateLarge.dataset.state || (githubToken() ? 'synced' : 'viewOnly'));
       setVerifyState(verifyStateLarge.dataset.state || (githubToken() ? 'verificationReady' : 'verificationTokenRequired'), verifyCountdownRemaining);
+      renderVerificationRunLink();
       syncViewButtons();
       renderAppStatusSummary();
       renderSiteStatusSummary();
@@ -1145,6 +1154,22 @@ def html_document(
       verifyButtonPrimary.setAttribute('aria-disabled', 'false');
     }}
 
+    function setVerificationRunLink(run) {{
+      latestVerificationRunUrl = run?.html_url || latestVerificationRunUrl;
+      renderVerificationRunLink();
+    }}
+
+    function clearVerificationRunLink() {{
+      latestVerificationRunUrl = '';
+      renderVerificationRunLink();
+    }}
+
+    function renderVerificationRunLink() {{
+      verificationRunLink.hidden = !latestVerificationRunUrl;
+      verificationRunLink.href = latestVerificationRunUrl || '#';
+      verificationRunLink.textContent = t('verificationRunLink');
+    }}
+
     function setStateContent(element, label, isWorking = false, subtext = '') {{
       element.textContent = '';
       element.classList.toggle('state-line', isWorking || Boolean(subtext));
@@ -1207,6 +1232,7 @@ def html_document(
       for (let attempt = 0; attempt < maxAttempts; attempt += 1) {{
         try {{
           run = await latestVerificationRun();
+          setVerificationRunLink(run);
           setVerifyState(workflowRunLabel(run));
           if (run?.status === 'completed') {{
             await loadRemoteState({{ refreshDashboardData: true }});
@@ -1267,6 +1293,7 @@ def html_document(
         return;
       }}
       setVerifyState('verifyingPublications');
+      clearVerificationRunLink();
       verifyButtonLarge.disabled = true;
       verifyButtonPrimary.disabled = true;
       try {{

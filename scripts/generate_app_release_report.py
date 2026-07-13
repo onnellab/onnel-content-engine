@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from check_store_versions import STORE_HEADER, STORE_VERSIONS_PATH
+from check_store_versions import ANDROID_HEADER, ANDROID_VERSIONS_PATH, STORE_HEADER, STORE_VERSIONS_PATH
 from prepare_app_release_rows import CONFIG_HEADER, CONFIG_PATH
 from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER, LOCAL_REPOSITORIES_PATH, pubspec_version
 from validate_app_releases import RELEASE_HEADER, RELEASES_PATH
@@ -110,6 +110,14 @@ def local_version_index(rows: list[dict[str, str]]) -> dict[str, str]:
     return versions
 
 
+def local_metadata_version_index(rows: list[dict[str, str]]) -> dict[str, str]:
+    return {
+        row["app_id"]: row["version"]
+        for row in rows
+        if row.get("source") == "local_build_metadata" and row.get("app_id") and row.get("version")
+    }
+
+
 def version_key(version: str) -> list[tuple[int, int | str]]:
     key: list[tuple[int, int | str]] = []
     for part in VERSION_PART_RE.findall(version):
@@ -185,11 +193,14 @@ def report_markdown(
     release_rows: list[dict[str, str]],
     config_rows: list[dict[str, str]],
     local_repo_rows: list[dict[str, str]],
+    local_metadata_rows: list[dict[str, str]],
     publication_rows: list[dict[str, str]],
     generated_at: datetime,
 ) -> str:
     config = config_index(config_rows)
     local_versions = local_version_index(local_repo_rows)
+    for app_id, version in local_metadata_version_index(local_metadata_rows).items():
+        local_versions.setdefault(app_id, version)
     releases = release_index(release_rows)
     approvals = publication_index(publication_rows)
     store_counts = Counter(row["status"] for row in store_rows)
@@ -292,13 +303,15 @@ def generate_app_release_report(
     output_path: Path = REPORT_PATH,
     publications_path: Path = PUBLICATIONS_PATH,
     now: datetime | None = None,
+    android_versions_path: Path = ANDROID_VERSIONS_PATH,
 ) -> str:
     store_rows = read_csv(store_versions_path, STORE_HEADER)
     release_rows = read_csv(releases_path, RELEASE_HEADER)
     config_rows = read_csv(config_path, CONFIG_HEADER)
     local_repo_rows = read_csv(local_repositories_path, LOCAL_REPOSITORIES_HEADER)
+    local_metadata_rows = read_optional_csv(android_versions_path, ANDROID_HEADER)
     publication_rows = read_optional_csv(publications_path, PUBLICATION_HEADER)
-    text = report_markdown(store_rows, release_rows, config_rows, local_repo_rows, publication_rows, now or datetime.now(KST))
+    text = report_markdown(store_rows, release_rows, config_rows, local_repo_rows, local_metadata_rows, publication_rows, now or datetime.now(KST))
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(text, encoding="utf-8")
     return text
@@ -310,11 +323,20 @@ def main() -> int:
     parser.add_argument("--releases", type=Path, default=RELEASES_PATH)
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     parser.add_argument("--local-repositories", type=Path, default=LOCAL_REPOSITORIES_PATH)
+    parser.add_argument("--android-versions", type=Path, default=ANDROID_VERSIONS_PATH)
     parser.add_argument("--output", type=Path, default=REPORT_PATH)
     parser.add_argument("--publications", type=Path, default=PUBLICATIONS_PATH)
     args = parser.parse_args()
     try:
-        generate_app_release_report(args.store_versions, args.releases, args.config, args.local_repositories, args.output, args.publications)
+        generate_app_release_report(
+            args.store_versions,
+            args.releases,
+            args.config,
+            args.local_repositories,
+            args.output,
+            args.publications,
+            android_versions_path=args.android_versions,
+        )
     except (AppReleaseReportError, OSError) as error:
         print(f"generate app release report failed: {error}", file=sys.stderr)
         return 1
