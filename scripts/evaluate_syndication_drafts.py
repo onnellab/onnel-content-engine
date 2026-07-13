@@ -49,7 +49,7 @@ def score_draft(draft: dict[str, object], project_root: Path = ROOT) -> dict[str
     add("canonical_frontmatter", platform == "medium" or metadata.get("canonical_url") == canonical_url, 1.5)
     add("canonical_notice", f"Originally published at {canonical_url}" in content, 1.5)
     add("body_preserved", bool(re.search(r"^#\s+", content, re.MULTILINE)), 1.0)
-    add("draft_status", draft.get("status") == "draft", 0.8)
+    add("distribution_status", draft.get("status") in {"draft", "approved", "posted"}, 0.8)
     add("platform_supported", platform in {"devto", "hashnode", "medium"}, 0.7)
     if platform == "devto":
         tags = metadata.get("tags", "")
@@ -60,7 +60,7 @@ def score_draft(draft: dict[str, object], project_root: Path = ROOT) -> dict[str
         add("hashnode_cover_image", metadata.get("cover_image", "").endswith("/social-card.png"), 1.2)
         add("hashnode_publication_placeholder", "publication_id" in metadata, 0.8)
     if platform == "medium":
-        add("medium_export_only", draft.get("status") == "draft" and not draft.get("post_id"), 1.0)
+        add("medium_export_only", draft.get("status") in {"draft", "approved", "posted"}, 1.0)
         add("medium_no_api_claim", "published:" not in content, 0.8)
     total = round(sum(float(check["points"]) for check in checks), 2)
     maximum = round(sum(float(check["max_points"]) for check in checks), 2)

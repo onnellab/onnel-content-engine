@@ -17,6 +17,8 @@ from generate_all_image_assets import generate_all_image_assets
 from generate_all_internal_links import generate_all_internal_links
 from generate_all_markdown import generate_all_markdown
 from generate_syndication_drafts import generate_syndication_drafts
+from evaluate_social_templates import evaluate_social_templates
+from evaluate_syndication_drafts import evaluate_syndication_drafts
 from evaluate_all_articles import evaluate_all_articles
 from publishing import DEFAULT_HOMEPAGE_REPOSITORY_PATH, DEFAULT_SITE_URL, build_site, deploy_github_pages, generate_social_posts
 from publish_due_articles import publish_due_articles
@@ -39,6 +41,21 @@ def validate() -> None:
     run_command(["scripts/validate_apps_registry.py"])
     run_command(["scripts/validate_app_releases.py"])
     run_command(["scripts/validate_foundation.py"])
+
+
+def quality_gate(social_manifest: Path, syndication_manifest: Path, minimum_score: float = 9.5) -> None:
+    social = evaluate_social_templates(social_manifest)
+    syndication = evaluate_syndication_drafts(syndication_manifest)
+    social_score = float(social["average_score"])
+    syndication_score = float(syndication["average_score"])
+    warnings = social.get("repetition_warnings") or []
+    if social_score < minimum_score:
+        raise PipelineError(f"social template score {social_score}/10 is below {minimum_score}/10")
+    if syndication_score < minimum_score:
+        raise PipelineError(f"syndication score {syndication_score}/10 is below {minimum_score}/10")
+    if warnings:
+        phrases = ", ".join(f"{item['phrase']} ({item['count']})" for item in warnings if isinstance(item, dict))
+        raise PipelineError(f"social repetition warnings: {phrases}")
 
 
 def copy_for_dry_run(destination: Path) -> None:
@@ -83,6 +100,7 @@ def run_pipeline(
             build_site(topics_path, html_root, site_url)
             generate_social_posts(topics_path, social_root, site_url)
             generate_syndication_drafts(topics_path, syndication_root, site_url)
+            quality_gate(social_root / "manifest.json", syndication_root / "manifest.json")
             approve_due_distribution(topics_path, social_root / "manifest.json", syndication_root / "manifest.json", dry_run=True)
             deploy_github_pages(topics_path=topics_path, homepage_repo=homepage_repo, dry_run=True)
         return
@@ -98,6 +116,7 @@ def run_pipeline(
     build_site(site_url=site_url)
     generate_social_posts(site_url=site_url)
     generate_syndication_drafts(site_url=site_url)
+    quality_gate(ROOT / "generated" / "social" / "manifest.json", ROOT / "generated" / "syndication" / "manifest.json")
     approve_due_distribution()
     if deploy:
         deploy_github_pages(homepage_repo=homepage_repo)
