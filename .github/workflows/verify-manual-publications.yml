@@ -95,7 +95,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/manual_publish_state.json data/store_versions.csv data/app_releases.csv data/app_release_sync_status.json generated/reports/app_releases.md
+          git add data/manual_publish_state.json data/manual_publication_verification_report.json data/store_versions.csv data/app_releases.csv data/app_release_sync_status.json generated/reports/app_releases.md
           if git diff --cached --quiet; then
             echo "No manual publication or dashboard snapshot changes to commit"
           else

@@ -27,6 +27,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             social = root / "generated" / "social" / "manifest.json"
             syndication = root / "generated" / "syndication" / "manifest.json"
             state = root / "data" / "manual_publish_state.json"
+            report = root / "data" / "manual_publication_verification_report.json"
             canonical_url = "https://onnellab.github.io/blog/en/example/"
             draft_path = root / "missing.txt"
             self.write_json(
@@ -135,6 +136,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                     social,
                     syndication,
                     state,
+                    report,
                     visual_public_pages=True,
                     now=datetime(2026, 7, 13, 9, 0, tzinfo=ZoneInfo("Asia/Seoul")),
                     fetch_json=fetch_json,
@@ -148,6 +150,10 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             self.assertEqual(data["done"]["TOPIC-0001::devto::en::markdown"]["posted_url"], "https://dev.to/onnellab/example")
             self.assertEqual(data["done"]["TOPIC-0001::x::en::x"]["verification_method"], "x_public_page_visual")
             self.assertEqual(data["done"]["TOPIC-0001::linkedin::en::linkedin"]["verification_confidence"], "low")
+            report_data = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(report_data["counts"]["checked"], 5)
+            self.assertEqual(report_data["counts"]["verified"], 5)
+            self.assertEqual(report_data["counts"]["pending"], 0)
 
     def test_dry_run_does_not_write_state(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -155,6 +161,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             social = root / "social.json"
             syndication = root / "syndication.json"
             state = root / "state.json"
+            report = root / "report.json"
             self.write_json(
                 social,
                 {
@@ -178,6 +185,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                 social,
                 syndication,
                 state,
+                report,
                 dry_run=True,
                 fetch_json=lambda _url, _headers=None: {
                     "feed": [{"post": {"uri": "at://did/app.bsky.feed.post/a", "record": {"text": "https://example.com/a"}}}]
@@ -186,6 +194,46 @@ class VerifyManualPublicationsTest(unittest.TestCase):
 
             self.assertEqual(len(verified), 1)
             self.assertEqual(json.loads(state.read_text(encoding="utf-8"))["done"], {})
+            self.assertFalse(report.exists())
+
+    def test_report_records_pending_reason(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            social = root / "social.json"
+            syndication = root / "syndication.json"
+            state = root / "state.json"
+            report = root / "report.json"
+            self.write_json(social, {"posts": []})
+            self.write_json(
+                syndication,
+                {
+                    "drafts": [
+                        {
+                            "topic_id": "TOPIC-0001",
+                            "platform": "hashnode",
+                            "language": "en",
+                            "status": "draft",
+                            "canonical_url": "https://example.com/a",
+                            "slug": "a",
+                            "draft_path": "missing.md",
+                        }
+                    ]
+                },
+            )
+            self.write_json(state, {"version": 1, "updated_at": "", "done": {}})
+
+            verified = verify_manual_publications(
+                social,
+                syndication,
+                state,
+                report,
+                now=datetime(2026, 7, 13, 9, 0, tzinfo=ZoneInfo("Asia/Seoul")),
+            )
+
+            self.assertEqual(verified, [])
+            report_data = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(report_data["counts"]["pending"], 1)
+            self.assertEqual(report_data["items"][0]["reason"], "RSS URL not configured")
 
     def test_x_public_profile_defaults_to_onnellab(self) -> None:
         with unittest.mock.patch.dict("os.environ", {}, clear=True):

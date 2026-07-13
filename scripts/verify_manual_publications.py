@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOCIAL_MANIFEST = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.json"
 DEFAULT_STATE = ROOT / "data" / "manual_publish_state.json"
+DEFAULT_REPORT = ROOT / "data" / "manual_publication_verification_report.json"
 PUBLIC_API_BSKY = "https://public.api.bsky.app"
 ONNELLAB_USER_AGENT = "ONNELLAB content engine"
 DEFAULT_X_USERNAME = "onnellab"
@@ -357,6 +358,7 @@ def verify_manual_publications(
     social_manifest: Path = DEFAULT_SOCIAL_MANIFEST,
     syndication_manifest: Path = DEFAULT_SYNDICATION_MANIFEST,
     state_path: Path = DEFAULT_STATE,
+    report_path: Path = DEFAULT_REPORT,
     visual_public_pages: bool = False,
     dry_run: bool = False,
     now: datetime | None = None,
@@ -367,16 +369,86 @@ def verify_manual_publications(
     state = load_json(state_path) or {"version": 1, "updated_at": "", "done": {}}
     items = load_items(social_manifest, syndication_manifest)
     verifications: list[Verification] = []
+    already_done_items: list[dict[str, Any]] = []
+    pending_items: list[dict[str, Any]] = []
     for item in items:
         if already_done(item, state):
+            already_done_items.append(item)
             continue
         verification = verify_item(item, fetch_json, fetch_text, visual_text, visual_public_pages)
         if verification:
             verifications.append(verification)
+        else:
+            pending_items.append(item)
+    timestamp = (now or datetime.now(ZoneInfo("Asia/Seoul"))).replace(microsecond=0).isoformat()
     if verifications and not dry_run:
-        update_state(state, verifications, now or datetime.now(ZoneInfo("Asia/Seoul")))
+        update_state(state, verifications, datetime.fromisoformat(timestamp))
         write_json(state_path, state)
+    if not dry_run:
+        write_json(report_path, verification_report(items, already_done_items, verifications, pending_items, state, visual_public_pages, timestamp))
     return verifications
+
+
+def pending_reason(item: dict[str, Any], visual_public_pages: bool) -> str:
+    platform = str(item.get("platform", ""))
+    if platform in {"medium", "hashnode"} and not rss_url_for(platform):
+        return "RSS URL not configured"
+    if platform in {"x", "linkedin"} and not visual_public_pages:
+        return "Public profile visual check disabled"
+    if item.get("error"):
+        return str(item.get("error"))
+    return "No matching public post found"
+
+
+def report_item(
+    item: dict[str, Any],
+    status: str,
+    reason: str = "",
+    verification: Verification | None = None,
+    done_record: dict[str, Any] | None = None,
+) -> dict[str, str]:
+    done_record = done_record or {}
+    return {
+        "manual_key": str(item.get("manual_key", verification.manual_key if verification else "")),
+        "topic_id": str(item.get("topic_id", verification.topic_id if verification else "")),
+        "platform": str(item.get("platform", verification.platform if verification else "")),
+        "language": str(item.get("language", verification.language if verification else "")),
+        "template_id": str(item.get("template_id", verification.template_id if verification else "")),
+        "status": status,
+        "reason": reason,
+        "posted_url": verification.posted_url if verification else str(done_record.get("posted_url") or item.get("posted_url", "")),
+        "verification_method": verification.method if verification else str(done_record.get("verification_method", "")),
+        "verification_confidence": verification.confidence if verification else str(done_record.get("verification_confidence", "")),
+    }
+
+
+def verification_report(
+    items: list[dict[str, Any]],
+    already_done_items: list[dict[str, Any]],
+    verifications: list[Verification],
+    pending_items: list[dict[str, Any]],
+    state: dict[str, Any],
+    visual_public_pages: bool,
+    checked_at: str,
+) -> dict[str, Any]:
+    verified_by_key = {verification.manual_key: verification for verification in verifications}
+    rows: list[dict[str, str]] = []
+    done_state = state.get("done", {}) if isinstance(state.get("done"), dict) else {}
+    rows.extend(report_item(item, "already_done", done_record=done_state.get(str(item.get("manual_key", "")), {})) for item in already_done_items)
+    rows.extend(report_item({"manual_key": key}, "verified", verification=verification) for key, verification in verified_by_key.items())
+    rows.extend(report_item(item, "pending", pending_reason(item, visual_public_pages)) for item in pending_items)
+    return {
+        "version": 1,
+        "checked_at": checked_at,
+        "visual_public_pages": visual_public_pages,
+        "counts": {
+            "checked": len(items),
+            "already_done": len(already_done_items),
+            "verified": len(verifications),
+            "pending": len(pending_items),
+        },
+        "items": rows,
+    }
 
 
 def main() -> int:
@@ -384,6 +456,7 @@ def main() -> int:
     parser.add_argument("--social-manifest", type=Path, default=DEFAULT_SOCIAL_MANIFEST)
     parser.add_argument("--syndication-manifest", type=Path, default=DEFAULT_SYNDICATION_MANIFEST)
     parser.add_argument("--state", type=Path, default=DEFAULT_STATE)
+    parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument("--visual-public-pages", action="store_true", help="Use Playwright to inspect public Twitter/LinkedIn pages")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -392,6 +465,7 @@ def main() -> int:
             args.social_manifest,
             args.syndication_manifest,
             args.state,
+            args.report,
             visual_public_pages=args.visual_public_pages,
             dry_run=args.dry_run,
         )

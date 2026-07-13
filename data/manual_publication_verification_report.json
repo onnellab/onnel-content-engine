@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "checked_at": "2026-07-13T12:44:11+09:00",
+  "visual_public_pages": false,
+  "counts": {
+    "checked": 6,
+    "already_done": 4,
+    "verified": 0,
+    "pending": 2
+  },
+  "items": [
+    {
+      "manual_key": "TOPIC-0001::x::en::x",
+      "topic_id": "TOPIC-0001",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab",
+      "verification_method": "existing_chrome_profile",
+      "verification_confidence": "high"
+    },
+    {
+      "manual_key": "TOPIC-0001::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0001",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mqh4blutb32s",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0001::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0001",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/recent-activity/all/",
+      "verification_method": "existing_chrome_profile",
+      "verification_confidence": "high"
+    },
+    {
+      "manual_key": "TOPIC-0001::devto::en::markdown",
+      "topic_id": "TOPIC-0001",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-read-large-txt-files-without-lag-5dad-temp-slug-4247352",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0001::hashnode::en::markdown",
+      "topic_id": "TOPIC-0001",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "RSS URL not configured",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0001::medium::en::markdown",
+      "topic_id": "TOPIC-0001",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "RSS URL not configured",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    }
+  ]
+}

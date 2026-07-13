@@ -67,8 +67,8 @@ def store_action(row: dict[str, str]) -> str:
 def next_action(row: dict[str, str], comparison: str) -> str:
     if comparison == "local_ahead":
         if row["status"] in {"updated", "new"}:
-            return "Prepare store release"
-        return "Review unpublished local build"
+            return "Release ready; prepare store rollout"
+        return "Store not updated; confirm public rollout"
     if comparison == "store_ahead":
         return "Sync local metadata"
     return store_action(row)
@@ -77,14 +77,14 @@ def next_action(row: dict[str, str], comparison: str) -> str:
 def release_action(row: dict[str, str]) -> str:
     status = row["status"]
     if (row.get("release_channel") or "public") != "public":
-        return "Private test; do not publish GitHub Release"
+        return "Private test only; do not publish public GitHub Release"
     if "Local Flutter build metadata version" in row.get("changes", ""):
         return "Replace placeholder with public patch notes"
     if status == "planned":
         if row.get("release_type") == "notes_only":
-            return "Approve public notes-only release"
+            return "Release ready; approve public notes-only release"
         if row.get("artifact_path") and row.get("checksum_sha256"):
-            return "Approve public release or keep as private test"
+            return "Release ready; approve public release or keep private"
         return "Add release artifact and checksum"
     if status == "ready":
         return "GitHub Release can be created"

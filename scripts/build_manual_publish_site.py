@@ -19,6 +19,7 @@ DEFAULT_TOPICS = ROOT / "data" / "topics.csv"
 DEFAULT_SOCIAL_MANIFEST = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.json"
 DEFAULT_MANUAL_STATE = ROOT / "data" / "manual_publish_state.json"
+DEFAULT_VERIFICATION_REPORT = ROOT / "data" / "manual_publication_verification_report.json"
 DEFAULT_OUTPUT = ROOT / "generated" / "manual-publish" / "index.html"
 DEFAULT_APP_RELEASES = ROOT / "data" / "app_releases.csv"
 DEFAULT_APP_RELEASE_PUBLICATIONS = ROOT / "data" / "app_release_publications.csv"
@@ -48,6 +49,12 @@ def read_json(path: Path) -> dict[str, object]:
 
 
 def release_sync_status_item(path: Path = DEFAULT_APP_RELEASE_SYNC_STATUS) -> dict[str, object]:
+    if not path.exists():
+        return {}
+    return read_json(path)
+
+
+def verification_report_item(path: Path = DEFAULT_VERIFICATION_REPORT) -> dict[str, object]:
     if not path.exists():
         return {}
     return read_json(path)
@@ -199,6 +206,20 @@ def app_name_index(apps_registry_path: Path = DEFAULT_APPS_REGISTRY) -> dict[str
     return {row.get("slug", ""): row.get("app_name", "") for row in read_csv_rows(apps_registry_path)}
 
 
+def frontmatter_title(path: Path) -> str:
+    if not path.exists():
+        return ""
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("title:"):
+            return stripped.removeprefix("title:").strip().strip("\"'")
+    return ""
+
+
+def app_display_name(slug: str, names: dict[str, str], app_dir: Path) -> str:
+    return names.get(slug) or frontmatter_title(app_dir / "app.md") or slug
+
+
 def latest_file_mtime(paths: list[Path]) -> str:
     existing = [path for path in paths if path.exists()]
     if not existing:
@@ -269,7 +290,7 @@ def homepage_status_items(homepage_repo: Path = DEFAULT_HOMEPAGE_REPO) -> list[d
             {
                 "kind": "app",
                 "slug": slug,
-                "name": names.get(slug) or slug,
+                "name": app_display_name(slug, names, app_dir),
                 "landing_updated_at": latest_git_time(homepage_repo, landing_paths),
                 "screenshots_updated_at": latest_git_time(homepage_repo, screenshot_paths),
                 "assets_updated_at": latest_git_time(homepage_repo, asset_files),
@@ -404,6 +425,7 @@ def html_document(
     store_items: list[dict[str, str]] | None = None,
     site_items: list[dict[str, object]] | None = None,
     release_sync_status: dict[str, object] | None = None,
+    verification_report: dict[str, object] | None = None,
 ) -> str:
     manual_state = manual_state or {"done": {}, "updated_at": "", "version": 1}
     done_state = manual_state.get("done", {})
@@ -419,6 +441,7 @@ def html_document(
     store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
     site_data = json.dumps(site_items or [], ensure_ascii=False).replace("</", "<\\/")
     release_sync_data = json.dumps(release_sync_status or {}, ensure_ascii=False).replace("</", "<\\/")
+    verification_report_data = json.dumps(verification_report or {}, ensure_ascii=False).replace("</", "<\\/")
     total = len(items)
     manual = sum(
         1
@@ -499,6 +522,12 @@ def html_document(
     .run-link {{ min-height: 34px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--blue); font-size: 12px; font-weight: 900; text-decoration: none; padding: 7px 10px; }}
     .run-link:hover {{ border-color: var(--blue); background: var(--blue-soft); }}
     .run-link[hidden] {{ display: none; }}
+    .verification-summary {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 12px; margin-bottom: 14px; box-shadow: var(--shadow); }}
+    .verification-summary strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
+    .verification-summary-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }}
+    .verification-summary-grid span {{ display: block; border: 1px solid var(--line); border-radius: 8px; background: #fffdf9; color: var(--muted); font-size: 12px; line-height: 1.4; padding: 8px; overflow-wrap: anywhere; }}
+    .verification-summary-grid b {{ display: block; color: var(--ink); font-size: 17px; line-height: 1.1; margin-top: 3px; }}
+    .verification-summary .note {{ margin-top: 8px; }}
     .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 10px; margin-bottom: 14px; box-shadow: var(--shadow); }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
     .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, auto); gap: 8px; margin-top: 12px; }}
@@ -609,6 +638,11 @@ def html_document(
       .metric-card span {{ font-size: 11px; line-height: 1.15; }}
       .metric-card strong {{ font-size: 22px; }}
       .metric-card strong > span:not(.state-subtext) {{ font-size: 22px; }}
+      .platform-status summary {{ width: 100%; align-items: flex-start; flex-direction: column; gap: 8px; border-radius: 8px; }}
+      .platform-status-summary {{ width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }}
+      .platform-count-badge {{ min-height: 34px; justify-content: space-between; padding: 6px 8px; font-size: 11px; }}
+      .platform-count-badge b {{ font-size: 14px; }}
+      .platforms {{ grid-template-columns: 1fr; }}
       .grid {{ grid-template-columns: 1fr; }}
       .auth {{ grid-template-columns: 1fr 1fr; }}
       .auth input {{ grid-column: 1 / -1; }}
@@ -648,6 +682,11 @@ def html_document(
         </div>
         <a id="verification-run-link" class="run-link" href="#" target="_blank" rel="noopener" hidden>실행 기록</a>
       </div>
+    </section>
+    <section class="verification-summary" aria-label="Verification result summary">
+      <strong id="verification-summary-title">공개 확인 결과</strong>
+      <div id="verification-summary-grid" class="verification-summary-grid"></div>
+      <div id="verification-summary-note" class="note"></div>
     </section>
     <section class="tool-panel" aria-label="Publish controls">
     <div class="quick-row">
@@ -699,6 +738,7 @@ def html_document(
   <script id="store-data" type="application/json">{store_data}</script>
   <script id="site-data" type="application/json">{site_data}</script>
   <script id="release-sync-data" type="application/json">{release_sync_data}</script>
+  <script id="verification-report-data" type="application/json">{verification_report_data}</script>
   <script>
     let items = JSON.parse(document.getElementById('manual-data').textContent);
     let releases = JSON.parse(document.getElementById('release-data').textContent);
@@ -706,6 +746,7 @@ def html_document(
     let storeItems = JSON.parse(document.getElementById('store-data').textContent);
     let siteItems = JSON.parse(document.getElementById('site-data').textContent);
     let releaseSyncStatus = JSON.parse(document.getElementById('release-sync-data').textContent);
+    let verificationReport = JSON.parse(document.getElementById('verification-report-data').textContent);
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
     const stateBranch = 'main';
@@ -736,6 +777,13 @@ def html_document(
         verificationRunning: '실행 중',
         verificationCompleted: '완료',
         verificationRunLink: 'GitHub Actions 실행 기록',
+        verificationSummaryTitle: '공개 확인 결과',
+        verificationChecked: '확인 항목',
+        verificationAlreadyDone: '기존 완료',
+        verificationNewDone: '신규 완료',
+        verificationPending: '미확인',
+        verificationSummaryNote: '최근 확인',
+        verificationNoReport: '확인 기록 없음',
         verificationReady: '실행',
         verificationTokenRequired: '토큰 필요',
         verificationFailed: '실패',
@@ -867,6 +915,13 @@ def html_document(
         verificationRunning: 'Running',
         verificationCompleted: 'Completed',
         verificationRunLink: 'GitHub Actions run',
+        verificationSummaryTitle: 'Public check result',
+        verificationChecked: 'checked',
+        verificationAlreadyDone: 'already done',
+        verificationNewDone: 'newly done',
+        verificationPending: 'unconfirmed',
+        verificationSummaryNote: 'last checked',
+        verificationNoReport: 'no check record',
         verificationReady: 'Run',
         verificationTokenRequired: 'Token needed',
         verificationFailed: 'Failed',
@@ -1013,6 +1068,8 @@ def html_document(
     const appStatusSummary = document.getElementById('app-status-summary');
     const siteStatusGrid = document.getElementById('site-status-grid');
     const siteStatusSummary = document.getElementById('site-status-summary');
+    const verificationSummaryGrid = document.getElementById('verification-summary-grid');
+    const verificationSummaryNote = document.getElementById('verification-summary-note');
     let remoteState = JSON.parse(document.getElementById('manual-state-data').textContent);
     remoteState.done ||= {{}};
     let remoteSha = '';
@@ -1040,6 +1097,7 @@ def html_document(
       document.getElementById('app-status-title').textContent = t('appStatusTitle');
       document.getElementById('platform-status-title').textContent = t('platformStatusTitle');
       document.getElementById('site-status-title').textContent = t('siteStatusTitle');
+      document.getElementById('verification-summary-title').textContent = t('verificationSummaryTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
@@ -1064,6 +1122,7 @@ def html_document(
       syncViewButtons();
       renderAppStatusSummary();
       renderSiteStatusSummary();
+      renderVerificationSummary();
     }}
 
     function syncViewButtons() {{
@@ -1344,6 +1403,7 @@ def html_document(
       storeItems = readEmbeddedJson(doc, 'store-data');
       siteItems = readEmbeddedJson(doc, 'site-data');
       releaseSyncStatus = readEmbeddedJson(doc, 'release-sync-data');
+      verificationReport = readEmbeddedJson(doc, 'verification-report-data');
       syncFilterOptions();
     }}
 
@@ -1690,6 +1750,31 @@ def html_document(
       }});
     }}
 
+    function renderVerificationSummary() {{
+      verificationSummaryGrid.textContent = '';
+      const counts = verificationReport?.counts || {{}};
+      const cells = [
+        [t('verificationChecked'), counts.checked ?? 0],
+        [t('verificationAlreadyDone'), counts.already_done ?? 0],
+        [t('verificationNewDone'), counts.verified ?? 0],
+        [t('verificationPending'), counts.pending ?? 0],
+      ];
+      cells.forEach(([label, value]) => {{
+        const cell = document.createElement('span');
+        cell.textContent = label;
+        const number = document.createElement('b');
+        number.textContent = String(value);
+        cell.appendChild(number);
+        verificationSummaryGrid.appendChild(cell);
+      }});
+      const checkedAt = verificationReport?.checked_at ? formatDate(verificationReport.checked_at) : t('verificationNoReport');
+      const pendingItems = Array.isArray(verificationReport?.items) ? verificationReport.items.filter((item) => item.status === 'pending') : [];
+      const reasonSummary = pendingItems.length
+        ? ' / ' + pendingItems.map((item) => `${{item.platform}}: ${{item.reason}}`).join(' / ')
+        : '';
+      verificationSummaryNote.textContent = `${{t('verificationSummaryNote')}}: ${{checkedAt}}${{reasonSummary}}`;
+    }}
+
     function appStatusGroups() {{
       const groups = new Map();
       function ensure(item) {{
@@ -1844,6 +1929,7 @@ def html_document(
       renderPlatformSummary();
       renderAppStatusSummary();
       renderSiteStatusSummary();
+      renderVerificationSummary();
       updateVariantToggle();
       syncViewButtons();
       updateAppBadge();
@@ -2063,6 +2149,7 @@ def build_manual_publish_site(
     app_releases_path: Path = DEFAULT_APP_RELEASES,
     app_release_publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS,
     app_release_sync_status_path: Path = DEFAULT_APP_RELEASE_SYNC_STATUS,
+    verification_report_path: Path = DEFAULT_VERIFICATION_REPORT,
     store_versions_path: Path = DEFAULT_STORE_VERSIONS,
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
 ) -> Path:
@@ -2074,9 +2161,10 @@ def build_manual_publish_site(
     store_items = store_status_items(store_versions_path)
     site_items = homepage_status_items(homepage_repo)
     release_sync_status = release_sync_status_item(app_release_sync_status_path)
+    verification_report = verification_report_item(verification_report_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
-        html_document(items, manual_state, releases, blog_items, store_items, site_items, release_sync_status),
+        html_document(items, manual_state, releases, blog_items, store_items, site_items, release_sync_status, verification_report),
         encoding="utf-8",
     )
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
@@ -2093,6 +2181,7 @@ def main() -> int:
     parser.add_argument("--app-releases", type=Path, default=DEFAULT_APP_RELEASES)
     parser.add_argument("--app-release-publications", type=Path, default=DEFAULT_APP_RELEASE_PUBLICATIONS)
     parser.add_argument("--app-release-sync-status", type=Path, default=DEFAULT_APP_RELEASE_SYNC_STATUS)
+    parser.add_argument("--verification-report", type=Path, default=DEFAULT_VERIFICATION_REPORT)
     parser.add_argument("--store-versions", type=Path, default=DEFAULT_STORE_VERSIONS)
     parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPO)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -2106,6 +2195,7 @@ def main() -> int:
         args.app_releases,
         args.app_release_publications,
         args.app_release_sync_status,
+        args.verification_report,
         args.store_versions,
         args.homepage_repo,
     )

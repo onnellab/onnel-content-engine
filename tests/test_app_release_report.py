@@ -224,7 +224,7 @@ class AppReleaseReportTest(unittest.TestCase):
             )
 
             self.assertIn("Private test or approval pending", text)
-            self.assertIn("Approve public release or keep as private test", text)
+            self.assertIn("Release ready; approve public release or keep private", text)
 
     def test_report_marks_notes_only_release_as_waiting_for_notes_approval(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -274,7 +274,7 @@ class AppReleaseReportTest(unittest.TestCase):
             )
 
             self.assertIn("Waiting for public notes approval", text)
-            self.assertIn("Approve public notes-only release", text)
+            self.assertIn("Release ready; approve public notes-only release", text)
 
     def test_report_uses_android_local_metadata_when_local_repo_is_missing(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -428,8 +428,8 @@ class AppReleaseReportTest(unittest.TestCase):
             )
 
             self.assertIn("local_ahead", text)
-            self.assertIn("Review unpublished local build", text)
-            self.assertNotIn("Prepare store release", text)
+            self.assertIn("Store not updated; confirm public rollout", text)
+            self.assertNotIn("Release ready; prepare store rollout", text)
 
 
 if __name__ == "__main__":
