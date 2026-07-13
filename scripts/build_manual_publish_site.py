@@ -2013,7 +2013,7 @@ def html_document(
 
     function pricingProductLabel(item) {{
       if (item.product_type === 'paid_download') return t('paidDownload');
-      if (item.product_type === 'ai_credit') return item.app_name === 'Melivra' ? `Melivra ${{t('aiCredit')}}` : t('aiCredit');
+      if (item.product_type === 'ai_credit') return item.product_name || t('aiCredit');
       return item.product_name || t('paidProduct');
     }}
 
@@ -2251,17 +2251,9 @@ def html_document(
       body.className = 'body';
       const cardHead = document.createElement('div');
       cardHead.className = 'card-head';
-      const platformProfile = platformProfileUrl(item.platform || item.platform_label);
-      const platformBadge = document.createElement(platformProfile ? 'a' : 'div');
+      const platformBadge = document.createElement('div');
       platformBadge.className = 'platform-badge ' + platformClass(item.platform);
       platformBadge.textContent = item.platform_label;
-      if (platformProfile) {{
-        platformBadge.href = platformProfile;
-        if (!platformProfile.startsWith('/')) {{
-          platformBadge.target = '_blank';
-          platformBadge.rel = 'noopener noreferrer';
-        }}
-      }}
       cardHead.append(platformBadge);
       const meta = document.createElement('div');
       meta.className = 'meta';
