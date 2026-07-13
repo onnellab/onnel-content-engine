@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from validate_app_releases import AppReleaseValidationError, RELEASE_HEADER, validate_app_releases
 from create_github_releases import GitHubReleaseError, create_github_releases
+from sync_github_release_status import sync_github_release_status
 
 
 def release_csv(row: dict[str, str] | None = None) -> str:
@@ -230,6 +231,61 @@ class AppReleaseTest(unittest.TestCase):
             self.assertEqual(messages, ["synced existing onnellab/vaultxt v1.2.0 https://github.com/onnellab/vaultxt/releases/tag/v1.2.0"])
             self.assertIn(",released,", text)
             self.assertIn(",456,", text)
+
+    def test_sync_github_release_status_updates_public_existing_release(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "app_releases.csv"
+            path.write_text(
+                release_csv(
+                    {
+                        "release_id": "REL-0005",
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "app_name": "VaultXT",
+                        "repository": "onnellab/vaultxt",
+                        "tag": "v1.2.0",
+                        "version": "1.2.0",
+                        "platform": "android",
+                        "build_type": "release",
+                        "release_type": "notes_only",
+                        "release_channel": "public",
+                        "status": "ready",
+                        "release_date": "2026-07-12",
+                        "release_title": "VaultXT v1.2.0",
+                        "summary": "Release notes for VaultXT.",
+                        "changes": "Improved large file handling.",
+                        "compatibility": "Android public release.",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            def fake_request(path_or_url: str, token: str, method: str = "GET", payload=None, data=None, content_type: str = "application/json"):
+                self.assertEqual(method, "GET")
+                return {
+                    "id": 789,
+                    "html_url": "https://github.com/onnellab/vaultxt/releases/tag/v1.2.0",
+                    "published_at": "2026-07-12T00:00:00Z",
+                }
+
+            with patch.dict("os.environ", {"GITHUB_TOKEN": "token"}):
+                with patch("sync_github_release_status.github_request", fake_request):
+                    messages = sync_github_release_status(path)
+
+            text = path.read_text(encoding="utf-8")
+            self.assertEqual(messages, ["synced onnellab/vaultxt v1.2.0 https://github.com/onnellab/vaultxt/releases/tag/v1.2.0"])
+            self.assertIn(",released,", text)
+            self.assertIn(",789,", text)
+
+    def test_sync_github_release_status_can_skip_missing_token(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "app_releases.csv"
+            path.write_text(release_csv(), encoding="utf-8")
+
+            with patch.dict("os.environ", {}, clear=True):
+                messages = sync_github_release_status(path, allow_missing_token=True)
+
+            self.assertEqual(messages, ["skipped GitHub release status sync: token not configured"])
 
     def test_create_github_releases_supports_notes_only_release(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
