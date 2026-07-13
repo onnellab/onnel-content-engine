@@ -96,6 +96,17 @@ def publishing_mode(platform: str) -> str:
     return "automatic" if platform in AUTOMATED_PLATFORMS else "manual"
 
 
+def public_release_notes_url(row: dict[str, str]) -> str:
+    if row.get("release_type") != "notes_only":
+        return ""
+    app_slug = row.get("app_slug", "").strip()
+    tag = row.get("tag", "").strip()
+    if not app_slug or not tag:
+        return ""
+    version_slug = tag.removeprefix("v")
+    return f"https://onnellab.github.io/release-notes/{app_slug}/{version_slug}/"
+
+
 def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS) -> list[dict[str, str]]:
     approvals = {
         row.get("release_id", ""): row
@@ -120,7 +131,7 @@ def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_p
                 "release_type": row.get("release_type", ""),
                 "release_channel": row.get("release_channel", ""),
                 "status": row.get("status", ""),
-                "release_url": row.get("release_url", ""),
+                "release_url": public_release_notes_url(row) or row.get("release_url", ""),
                 "released_at": row.get("released_at", ""),
                 "release_date": row.get("release_date", ""),
                 "public_release": "true" if public_release else "false",
