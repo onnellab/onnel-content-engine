@@ -84,6 +84,14 @@ def completed_release_action(comparison: str, platform_label_divergence_is_relea
     return "No action"
 
 
+def cross_platform_release_action(row: dict[str, str]) -> str:
+    if (row.get("release_channel") or "public") != "public":
+        return "Covered by private test release row"
+    if row.get("status") == "released":
+        return "Platform rollout not public"
+    return release_action(row)
+
+
 def release_action(row: dict[str, str]) -> str:
     status = row["status"]
     if (row.get("release_channel") or "public") != "public":
@@ -186,6 +194,35 @@ def has_released_matching_local_version(
     return False
 
 
+def matching_cross_platform_release(
+    app_id: str,
+    current_platform: str,
+    local_version: str,
+    rows: list[dict[str, str]],
+) -> dict[str, str]:
+    if not local_version:
+        return {}
+    candidates = [
+        row
+        for row in rows
+        if row.get("app_id") == app_id
+        and row.get("platform") != current_platform
+        and row.get("version") == local_version
+        and row.get("status") in {"planned", "ready", "released"}
+    ]
+    if not candidates:
+        return {}
+    candidates.sort(
+        key=lambda row: (
+            (row.get("release_channel") or "public") == "public",
+            row.get("status") == "released",
+            row.get("release_id", ""),
+        ),
+        reverse=True,
+    )
+    return candidates[0]
+
+
 def publication_index(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
     return {row["release_id"]: row for row in rows}
 
@@ -286,6 +323,10 @@ def report_markdown(
                 row["app_id"], row["platform"], local_version, store_rows, releases
             )
             action = completed_release_action(comparison, platform_label_divergence_is_released)
+        elif comparison == "local_ahead" and (
+            cross_release := matching_cross_platform_release(row["app_id"], row["platform"], local_version, release_rows)
+        ):
+            action = cross_platform_release_action(cross_release)
         else:
             action = next_action(row, comparison)
         store_table.append(
@@ -347,6 +388,12 @@ def report_markdown(
                 row["app_id"], row["platform"], local_version, store_rows, releases
             )
             action = completed_release_action(comparison, platform_label_divergence_is_released)
+            if action != "No action":
+                attention.append([row["app_name"], row["platform"], row["status"], action, row["notes"]])
+        elif comparison == "local_ahead" and (
+            cross_release := matching_cross_platform_release(row["app_id"], row["platform"], local_version, release_rows)
+        ):
+            action = cross_platform_release_action(cross_release)
             if action != "No action":
                 attention.append([row["app_name"], row["platform"], row["status"], action, row["notes"]])
         elif not active_release and not completed_release and (

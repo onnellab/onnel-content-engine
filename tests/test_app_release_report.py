@@ -430,6 +430,207 @@ class AppReleaseReportTest(unittest.TestCase):
             self.assertIn("local_ahead", text)
             self.assertIn("Store not updated; confirm public rollout", text)
 
+    def test_cross_platform_public_release_marks_platform_rollout_not_public(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
+            publications = root / "app_release_publications.csv"
+            output = root / "app_releases.md"
+            app_repo = root / "segra"
+            app_repo.mkdir()
+            (app_repo / "pubspec.yaml").write_text("name: segra\nversion: 1.0.2+67\n", encoding="utf-8")
+            write_csv(
+                store,
+                STORE_HEADER,
+                [
+                    {
+                        "app_id": "APP-0004",
+                        "app_slug": "segra",
+                        "app_name": "Segra",
+                        "platform": "ios",
+                        "store_url": "https://apps.apple.com/app/id6779433972",
+                        "store_app_id": "6779433972",
+                        "store_package": "",
+                        "version": "1.0.1",
+                        "last_updated": "2026-07-10T18:44:50Z",
+                        "release_notes": "Bug fixes.",
+                        "checked_at": "2026-07-14T00:00:00+09:00",
+                        "status": "unchanged",
+                        "notes": "",
+                    }
+                ],
+            )
+            released = {field: "" for field in RELEASE_HEADER}
+            released.update(
+                {
+                    "release_id": "REL-0003",
+                    "app_id": "APP-0004",
+                    "app_slug": "segra",
+                    "app_name": "Segra",
+                    "repository": "onnellab/segra",
+                    "tag": "v1.0.2",
+                    "version": "1.0.2",
+                    "platform": "android",
+                    "build_type": "release",
+                    "release_type": "notes_only",
+                    "release_channel": "public",
+                    "status": "released",
+                    "release_url": "https://github.com/onnellab/segra/releases/tag/v1.0.2",
+                    "release_date": "2026-07-10",
+                    "release_title": "Segra v1.0.2",
+                    "summary": "Segra 1.0.2 public Android store update detected.",
+                    "changes": "Improved layout.",
+                    "compatibility": "android public release.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                }
+            )
+            write_csv(releases, RELEASE_HEADER, [released])
+            write_csv(
+                config,
+                CONFIG_HEADER,
+                [
+                    {
+                        "app_id": "APP-0004",
+                        "app_slug": "segra",
+                        "repository": "onnellab/segra",
+                        "artifact_pattern": "generated/releases/segra/{version}/{platform}/*-release.*",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(
+                local_repos,
+                LOCAL_REPOSITORIES_HEADER,
+                [
+                    {
+                        "app_id": "APP-0004",
+                        "app_slug": "segra",
+                        "repository_name": "segra",
+                        "path": app_repo.as_posix(),
+                        "pubspec_path": "pubspec.yaml",
+                        "source_priority": "primary",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
+
+            text = generate_app_release_report(
+                store,
+                releases,
+                config,
+                local_repos,
+                output,
+                publications,
+                now=datetime.fromisoformat("2026-07-14T00:00:00+09:00"),
+            )
+
+            self.assertIn("Platform rollout not public", text)
+            self.assertNotIn("Store not updated; confirm public rollout", text)
+
+    def test_cross_platform_private_release_marks_covered_by_private_test(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
+            publications = root / "app_release_publications.csv"
+            output = root / "app_releases.md"
+            app_repo = root / "vaultxt"
+            app_repo.mkdir()
+            (app_repo / "pubspec.yaml").write_text("name: vaultxt\nversion: 1.0.6+52\n", encoding="utf-8")
+            write_csv(
+                store,
+                STORE_HEADER,
+                [
+                    {
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "app_name": "VaultXT",
+                        "platform": "android",
+                        "store_url": "https://play.google.com/store/apps/details?id=com.onnellab.vaultxt",
+                        "store_app_id": "",
+                        "store_package": "com.onnellab.vaultxt",
+                        "version": "1.0.3",
+                        "last_updated": "2026-04-30",
+                        "release_notes": "Bug fixes.",
+                        "checked_at": "2026-07-14T00:00:00+09:00",
+                        "status": "unchanged",
+                        "notes": "",
+                    }
+                ],
+            )
+            private = {field: "" for field in RELEASE_HEADER}
+            private.update(
+                {
+                    "release_id": "REL-0002",
+                    "app_id": "APP-0003",
+                    "app_slug": "vaultxt",
+                    "app_name": "VaultXT",
+                    "repository": "onnellab/onnellab-text",
+                    "tag": "v1.0.6",
+                    "version": "1.0.6",
+                    "platform": "ios",
+                    "build_type": "release",
+                    "release_type": "binary",
+                    "release_channel": "private_test",
+                    "status": "planned",
+                    "release_date": "2026-04-30",
+                    "release_title": "VaultXT v1.0.6",
+                    "summary": "VaultXT 1.0.6 local build metadata is ahead of the store snapshot.",
+                    "changes": "Local build metadata version 1.0.6 is ahead of store snapshot 1.0.3.",
+                    "compatibility": "ios private test build.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                }
+            )
+            write_csv(releases, RELEASE_HEADER, [private])
+            write_csv(
+                config,
+                CONFIG_HEADER,
+                [
+                    {
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "repository": "onnellab/onnellab-text",
+                        "artifact_pattern": "generated/releases/vaultxt/{version}/{platform}/*-release.*",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(
+                local_repos,
+                LOCAL_REPOSITORIES_HEADER,
+                [
+                    {
+                        "app_id": "APP-0003",
+                        "app_slug": "vaultxt",
+                        "repository_name": "onnellab-text",
+                        "path": app_repo.as_posix(),
+                        "pubspec_path": "pubspec.yaml",
+                        "source_priority": "primary",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
+
+            text = generate_app_release_report(
+                store,
+                releases,
+                config,
+                local_repos,
+                output,
+                publications,
+                now=datetime.fromisoformat("2026-07-14T00:00:00+09:00"),
+            )
+
+            self.assertIn("Covered by private test release row", text)
+            self.assertNotIn("Store not updated; confirm public rollout", text)
+
     def test_completed_store_release_does_not_remain_candidate_action(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
