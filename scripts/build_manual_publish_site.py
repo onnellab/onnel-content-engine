@@ -29,6 +29,7 @@ DEFAULT_APP_RELEASE_PUBLICATIONS = ROOT / "data" / "app_release_publications.csv
 DEFAULT_APP_RELEASE_SYNC_STATUS = ROOT / "data" / "app_release_sync_status.json"
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
+DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
 DEFAULT_HOMEPAGE_REPO = Path(os.environ.get("ONNELLAB_HOMEPAGE_REPO", "/mnt/c/dev/onnellab.github.io"))
 KST = ZoneInfo("Asia/Seoul")
 
@@ -251,8 +252,13 @@ def format_price_value(value: str, currency: str) -> str:
 def product_pricing_items(
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
     apps_registry_path: Path = DEFAULT_APPS_REGISTRY,
+    app_pricing_path: Path = DEFAULT_APP_PRICING,
 ) -> list[dict[str, str]]:
     registry = {row.get("slug", ""): row for row in read_csv_rows(apps_registry_path)}
+    explicit_rows = read_csv_rows(app_pricing_path)
+    explicit_by_slug: dict[str, list[dict[str, str]]] = {}
+    for row in explicit_rows:
+        explicit_by_slug.setdefault(row.get("app_slug", ""), []).append(row)
     content_apps = homepage_repo / "src" / "content" / "apps"
     slugs = sorted(set(registry) | ({path.name for path in content_apps.iterdir() if path.is_dir()} if content_apps.exists() else set()))
     items: list[dict[str, str]] = []
@@ -274,6 +280,18 @@ def product_pricing_items(
             "play_store_url": meta.get("googleplay") or row.get("play_store_url", ""),
             "checked_at": latest_git_time(homepage_repo, [content_apps / slug / "app.md"]) if homepage_repo.exists() else "",
         }
+        explicit_products = explicit_by_slug.get(slug, [])
+        for explicit in explicit_products:
+            items.append(
+                {
+                    **base,
+                    "product_name": explicit.get("product_name", ""),
+                    "product_type": explicit.get("product_type", ""),
+                    "price": format_price_value(explicit.get("price", ""), explicit.get("currency", "")),
+                    "price_note": explicit.get("price_note", "Manual price registry"),
+                }
+            )
+        explicit_types = {item.get("product_type", "") for item in explicit_products}
         if price and price != "Free":
             items.append(
                 {
@@ -284,7 +302,7 @@ def product_pricing_items(
                     "price_note": "Public landing page metadata",
                 }
             )
-        if "optional pro" in pricing.lower() or "pro purchase" in pricing.lower():
+        if "pro" not in explicit_types and ("optional pro" in pricing.lower() or "pro purchase" in pricing.lower()):
             items.append(
                 {
                     **base,
@@ -294,7 +312,7 @@ def product_pricing_items(
                     "price_note": "Store in-app purchase price not recorded locally",
                 }
             )
-        if slug == "melivra":
+        if slug == "melivra" and "ai_credit" not in explicit_types:
             items.append(
                 {
                     **base,

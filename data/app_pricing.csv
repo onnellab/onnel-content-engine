@@ -1,0 +1,10 @@
+app_slug,product_name,product_type,price,currency,price_note
+aligna,Aligna Pro,pro,3300,KRW,Manual price registry
+clipnest,ClipNest Pro,pro,4400,KRW,Manual price registry
+melivra,Melivra AI Credits 100,ai_credit,0.99,USD,Manual price registry
+melivra,Melivra AI Credits 1000,ai_credit,8.99,USD,Manual price registry
+melivra,Melivra AI Credits 5000,ai_credit,34.99,USD,Manual price registry
+melivra,Melivra Pro,pro,7700,KRW,Manual price registry
+segra,Segra Pro,pro,7700,KRW,Manual price registry
+tagweaver,TagWeaver Pro,pro,5500,KRW,Manual price registry
+vaultxt,VaultXT Pro,pro,9900,KRW,Manual price registry
