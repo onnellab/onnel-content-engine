@@ -1761,6 +1761,14 @@ def html_document(
       return values.map(parseDate).filter(Boolean).sort((a, b) => b - a)[0] || null;
     }}
 
+    function nextBlogScheduledDate() {{
+      return blogItems
+        .filter((item) => item.status === 'scheduled' && item.scheduled_at)
+        .map((item) => parseDate(item.scheduled_at))
+        .filter(Boolean)
+        .sort((a, b) => a - b)[0] || null;
+    }}
+
     function nextManualDueDate() {{
       return items
         .filter((item) => item.publishing_mode === 'manual' && !isDone(item) && !item.is_variant && item.due_at)
@@ -1840,11 +1848,7 @@ def html_document(
       }}, {{}});
       const platformSummaryBadges = [[t('blogPlatformName'), blogItems.length, platformProfileUrl('blog')]];
       const latestPublished = latestDate(blogItems.map((item) => item.published_at));
-      const nextScheduled = blogItems
-        .filter((item) => item.status === 'scheduled' && item.scheduled_at)
-        .map((item) => parseDate(item.scheduled_at))
-        .filter(Boolean)
-        .sort((a, b) => a - b)[0] || null;
+      const nextScheduled = nextBlogScheduledDate();
       const blogCard = document.createElement('div');
       blogCard.className = 'platform-card';
       const blogTitle = document.createElement('strong');
@@ -1875,7 +1879,7 @@ def html_document(
           .filter((item) => !isDone(item) && !item.is_variant && item.due_at)
           .map((item) => dueDate(item))
           .filter(Boolean)
-          .sort((a, b) => a - b)[0] || null;
+          .sort((a, b) => a - b)[0] || nextScheduled;
         const card = document.createElement('div');
         card.className = 'platform-card';
         const title = document.createElement('strong');

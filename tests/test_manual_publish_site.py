@@ -143,6 +143,8 @@ class ManualPublishSiteTest(unittest.TestCase):
             self.assertIn("blogPlatformName", html)
             self.assertIn("blog-data", html)
             self.assertIn("다음 게시 예정", html)
+            self.assertIn("function nextBlogScheduledDate()", html)
+            self.assertIn("|| nextScheduled", html)
             self.assertIn("사이트 갱신 상태", html)
             self.assertIn('id="site-status-grid"', html)
             self.assertIn("site-data", html)
