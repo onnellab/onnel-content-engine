@@ -13,7 +13,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from verify_manual_publications import public_activity_url, public_profile_url, verify_manual_publications  # noqa: E402
+from verify_manual_publications import public_activity_url, public_profile_url, rss_url_for, verify_manual_publications  # noqa: E402
 
 
 class VerifyManualPublicationsTest(unittest.TestCase):
@@ -233,7 +233,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             self.assertEqual(verified, [])
             report_data = json.loads(report.read_text(encoding="utf-8"))
             self.assertEqual(report_data["counts"]["pending"], 1)
-            self.assertEqual(report_data["items"][0]["reason"], "RSS URL not configured")
+            self.assertEqual(report_data["items"][0]["reason"], "No matching public post found")
 
     def test_x_public_profile_defaults_to_onnellab(self) -> None:
         with unittest.mock.patch.dict("os.environ", {}, clear=True):
@@ -242,6 +242,11 @@ class VerifyManualPublicationsTest(unittest.TestCase):
     def test_linkedin_public_profile_defaults_to_onnellab_profile(self) -> None:
         with unittest.mock.patch.dict("os.environ", {}, clear=True):
             self.assertEqual(public_profile_url("linkedin"), "https://www.linkedin.com/in/onnel-lab-b5b9b0421/")
+
+    def test_medium_and_hashnode_rss_urls_default_to_onnellab_public_feeds(self) -> None:
+        with unittest.mock.patch.dict("os.environ", {}, clear=True):
+            self.assertEqual(rss_url_for("medium"), "https://medium.com/feed/@onnellab.app")
+            self.assertEqual(rss_url_for("hashnode"), "https://onnellab.hashnode.dev/rss.xml")
 
     def test_linkedin_activity_url_uses_recent_activity_page(self) -> None:
         self.assertEqual(

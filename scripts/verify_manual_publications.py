@@ -29,6 +29,8 @@ ONNELLAB_USER_AGENT = "ONNELLAB content engine"
 DEFAULT_X_USERNAME = "onnellab"
 DEFAULT_X_PUBLIC_PROFILE_URL = "https://x.com/onnellab"
 DEFAULT_LINKEDIN_PUBLIC_PROFILE_URL = "https://www.linkedin.com/in/onnel-lab-b5b9b0421/"
+DEFAULT_MEDIUM_USERNAME = "onnellab.app"
+DEFAULT_HASHNODE_BLOG_URL = "https://onnellab.hashnode.dev"
 
 
 class PublicationVerificationError(ValueError):
@@ -167,13 +169,13 @@ def rss_url_for(platform: str) -> str:
         explicit = os.environ.get("MEDIUM_RSS_URL", "").strip()
         if explicit:
             return explicit
-        username = os.environ.get("MEDIUM_USERNAME", "").strip().lstrip("@")
+        username = os.environ.get("MEDIUM_USERNAME", "").strip().lstrip("@") or DEFAULT_MEDIUM_USERNAME
         return f"https://medium.com/feed/@{username}" if username else ""
     if platform == "hashnode":
         explicit = os.environ.get("HASHNODE_RSS_URL", "").strip()
         if explicit:
             return explicit
-        blog_url = os.environ.get("HASHNODE_BLOG_URL", "").strip().rstrip("/")
+        blog_url = os.environ.get("HASHNODE_BLOG_URL", "").strip().rstrip("/") or DEFAULT_HASHNODE_BLOG_URL
         return f"{blog_url}/rss.xml" if blog_url else ""
     return ""
 

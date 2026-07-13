@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checked_at": "2026-07-13T12:59:51+09:00",
+  "checked_at": "2026-07-13T13:10:36+09:00",
   "visual_public_pages": false,
   "counts": {
     "checked": 6,
@@ -64,7 +64,7 @@
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
-      "reason": "RSS URL not configured",
+      "reason": "No matching public post found",
       "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
@@ -76,7 +76,7 @@
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
-      "reason": "RSS URL not configured",
+      "reason": "No matching public post found",
       "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
