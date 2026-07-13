@@ -1,13 +1,14 @@
 # App Release Status
 
-Generated: 2026-07-13T12:59:51+09:00
+Generated: 2026-07-13T23:37:33+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
-| Store | unchanged | 11 |
-| GitHub Release | planned | 1 |
+| Store | unchanged | 9 |
+| Store | updated | 2 |
+| GitHub Release | planned | 3 |
 | GitHub Release | released | 2 |
 
 ## Store Snapshots
@@ -16,13 +17,13 @@ Generated: 2026-07-13T12:59:51+09:00
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Aligna | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
 | Aligna | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
-| ClipNest | ios | 1.0.1 | - | unknown | unchanged | - | onnellab/clipnest | No action |
+| ClipNest | ios | 1.0.2 | - | unknown | updated | planned | onnellab/clipnest | Add release artifact and checksum |
 | Quivra | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
 | Quivra | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
 | Segra | android | 1.0.2 | 1.0.2 | same | unchanged | released | onnellab/segra | No action |
 | Segra | ios | 1.0.1 | 1.0.2 | local_ahead | unchanged | - | onnellab/segra | Store not updated; confirm public rollout |
 | TagWeaver | android | 2.1.3 | 2.1.3 | same | unchanged | released | onnellab/tagweaver | No action |
-| TagWeaver | ios | 2.1 | 2.1.3 | local_ahead | unchanged | - | onnellab/tagweaver | Store not updated; confirm public rollout |
+| TagWeaver | ios | 2.2 | 2.1.3 | store_ahead | updated | planned | onnellab/tagweaver | Add release artifact and checksum |
 | VaultXT | android | 1.0.3 | 1.0.6 | local_ahead | unchanged | - | onnellab/onnellab-text | Store not updated; confirm public rollout |
 | VaultXT | ios | 1.0.3 | 1.0.6 | local_ahead | unchanged | planned | onnellab/onnellab-text | Private test only; do not publish public GitHub Release |
 
@@ -33,12 +34,15 @@ Generated: 2026-07-13T12:59:51+09:00
 | REL-0001 | TagWeaver | android | public | v2.1.3 | released | Released | https://github.com/onnellab/tagweaver/releases/tag/v2.1.3 | - | Local Flutter build metadata version. | No action |
 | REL-0002 | VaultXT | ios | private_test | v1.0.6 | planned | Private test; public Release disabled | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Private test only; do not publish public GitHub Release |
 | REL-0003 | Segra | android | public | v1.0.2 | released | Released | https://github.com/onnellab/segra/releases/tag/v1.0.2 | - | Local Flutter build metadata version. | No action |
+| REL-0004 | TagWeaver | ios | public | v2.2 | planned | Waiting for artifact and public approval | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Add release artifact and checksum |
+| REL-0005 | ClipNest | ios | public | v1.0.2 | planned | Waiting for artifact and public approval | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Add release artifact and checksum |
 
 ## Attention Queue
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| TagWeaver | ios | unchanged | Store not updated; confirm public rollout | - |
 | VaultXT | android | unchanged | Store not updated; confirm public rollout | Version/update date read from Google Play public page; release notes from Android snapshot. Imported from /home/lue/dev/onnellab-text/vaultxt/pubspec.yaml version 1.0.6+52; confirm against Play Console if needed. |
 | Segra | ios | unchanged | Store not updated; confirm public rollout | - |
 | VaultXT | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.3. Add release artifact, checksum, and keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |
+| TagWeaver | ios | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
+| ClipNest | ios | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |

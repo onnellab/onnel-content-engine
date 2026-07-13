@@ -51,8 +51,6 @@ def sync_github_release_status(
     except GitHubReleaseError:
         if allow_missing_token:
             messages = ["skipped GitHub release status sync: token not configured"]
-            if not dry_run:
-                write_status(status_output, "skipped", messages, False)
             return messages
         raise
 

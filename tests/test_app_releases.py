@@ -313,12 +313,13 @@ class AppReleaseTest(unittest.TestCase):
             path = Path(temp) / "app_releases.csv"
             path.write_text(release_csv(), encoding="utf-8")
             status_output = Path(temp) / "sync_status.json"
+            status_output.write_text('{"outcome": "synced"}\n', encoding="utf-8")
 
             with patch.dict("os.environ", {}, clear=True):
                 messages = sync_github_release_status(path, allow_missing_token=True, status_output=status_output)
 
             self.assertEqual(messages, ["skipped GitHub release status sync: token not configured"])
-            self.assertIn('"outcome": "skipped"', status_output.read_text(encoding="utf-8"))
+            self.assertEqual(status_output.read_text(encoding="utf-8"), '{"outcome": "synced"}\n')
 
     def test_create_github_releases_supports_notes_only_release(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
