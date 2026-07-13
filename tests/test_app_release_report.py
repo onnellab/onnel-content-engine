@@ -616,7 +616,7 @@ class AppReleaseReportTest(unittest.TestCase):
             self.assertIn("Store release complete; confirm next public rollout", text)
             self.assertNotIn("Create or verify release candidate", text)
 
-    def test_completed_release_with_other_platform_matching_local_version_flags_policy(self) -> None:
+    def test_completed_release_with_other_platform_matching_local_version_is_no_action(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             store = root / "store_versions.csv"
@@ -664,8 +664,8 @@ class AppReleaseReportTest(unittest.TestCase):
                     },
                 ],
             )
-            released = {field: "" for field in RELEASE_HEADER}
-            released.update(
+            ios_release = {field: "" for field in RELEASE_HEADER}
+            ios_release.update(
                 {
                     "release_id": "REL-0004",
                     "app_id": "APP-0002",
@@ -688,7 +688,31 @@ class AppReleaseReportTest(unittest.TestCase):
                     "upgrade_notes": "No special upgrade steps documented yet.",
                 }
             )
-            write_csv(releases, RELEASE_HEADER, [released])
+            android_release = {field: "" for field in RELEASE_HEADER}
+            android_release.update(
+                {
+                    "release_id": "REL-0001",
+                    "app_id": "APP-0002",
+                    "app_slug": "tagweaver",
+                    "app_name": "TagWeaver",
+                    "repository": "onnellab/tagweaver",
+                    "tag": "v2.1.3",
+                    "version": "2.1.3",
+                    "platform": "android",
+                    "build_type": "release",
+                    "release_type": "notes_only",
+                    "release_channel": "public",
+                    "status": "released",
+                    "release_url": "https://github.com/onnellab/tagweaver/releases/tag/v2.1.3",
+                    "release_date": "2026-07-12",
+                    "release_title": "TagWeaver v2.1.3",
+                    "summary": "TagWeaver 2.1.3 public Android store update detected.",
+                    "changes": "Stability improvements.",
+                    "compatibility": "android public release.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                }
+            )
+            write_csv(releases, RELEASE_HEADER, [ios_release, android_release])
             write_csv(
                 config,
                 CONFIG_HEADER,
@@ -729,7 +753,8 @@ class AppReleaseReportTest(unittest.TestCase):
                 now=datetime.fromisoformat("2026-07-14T00:00:00+09:00"),
             )
 
-            self.assertIn("Platform versions diverged; confirm version policy", text)
+            self.assertIn("| TagWeaver | ios | 2.2 | 2.1.3 | store_ahead | updated | released | onnellab/tagweaver | No action |", text)
+            self.assertNotIn("Platform versions diverged; confirm version policy", text)
             self.assertNotIn("Sync local metadata", text)
 
 

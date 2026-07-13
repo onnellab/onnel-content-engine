@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-07-14T00:21:00+09:00
+Generated: 2026-07-14T00:24:11+09:00
 
 ## Summary
 
@@ -23,7 +23,7 @@ Generated: 2026-07-14T00:21:00+09:00
 | Segra | android | 1.0.2 | 1.0.2 | same | unchanged | released | onnellab/segra | No action |
 | Segra | ios | 1.0.1 | 1.0.2 | local_ahead | unchanged | - | onnellab/segra | Store not updated; confirm public rollout |
 | TagWeaver | android | 2.1.3 | 2.1.3 | same | unchanged | released | onnellab/tagweaver | No action |
-| TagWeaver | ios | 2.2 | 2.1.3 | store_ahead | updated | released | onnellab/tagweaver | Platform versions diverged; confirm version policy |
+| TagWeaver | ios | 2.2 | 2.1.3 | store_ahead | updated | released | onnellab/tagweaver | No action |
 | VaultXT | android | 1.0.3 | 1.0.6 | local_ahead | unchanged | - | onnellab/onnellab-text | Store not updated; confirm public rollout |
 | VaultXT | ios | 1.0.3 | 1.0.6 | local_ahead | unchanged | planned | onnellab/onnellab-text | Private test only; do not publish public GitHub Release |
 
@@ -41,7 +41,6 @@ Generated: 2026-07-14T00:21:00+09:00
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| TagWeaver | ios | updated | Platform versions diverged; confirm version policy | - |
 | VaultXT | android | unchanged | Store not updated; confirm public rollout | Version/update date read from Google Play public page; release notes from Android snapshot. Imported from /home/lue/dev/onnellab-text/vaultxt/pubspec.yaml version 1.0.6+52; confirm against Play Console if needed. |
 | Segra | ios | unchanged | Store not updated; confirm public rollout | - |
 | ClipNest | ios | updated | Store release complete; confirm next public rollout | - |

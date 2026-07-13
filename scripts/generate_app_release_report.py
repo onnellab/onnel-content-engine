@@ -74,10 +74,10 @@ def next_action(row: dict[str, str], comparison: str) -> str:
     return store_action(row)
 
 
-def completed_release_action(comparison: str, local_version_platforms: set[str] | None = None) -> str:
+def completed_release_action(comparison: str, platform_label_divergence_is_released: bool = False) -> str:
     if comparison == "store_ahead":
-        if local_version_platforms:
-            return "Platform versions diverged; confirm version policy"
+        if platform_label_divergence_is_released:
+            return "No action"
         return "Sync local metadata"
     if comparison == "local_ahead":
         return "Store release complete; confirm next public rollout"
@@ -168,6 +168,24 @@ def release_matches_store(release_row: dict[str, str], store_row: dict[str, str]
     )
 
 
+def has_released_matching_local_version(
+    app_id: str,
+    current_platform: str,
+    local_version: str,
+    store_rows: list[dict[str, str]],
+    releases: dict[tuple[str, str], list[dict[str, str]]],
+) -> bool:
+    if not local_version:
+        return False
+    for row in store_rows:
+        if row["app_id"] != app_id or row["platform"] == current_platform or row["version"] != local_version:
+            continue
+        latest_release = releases.get((row["app_id"], row["platform"]), [])
+        if latest_release and release_matches_store(latest_release[-1], row):
+            return True
+    return False
+
+
 def publication_index(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
     return {row["release_id"]: row for row in rows}
 
@@ -230,11 +248,6 @@ def report_markdown(
     local_versions = local_version_index(local_repo_rows)
     for app_id, version in local_metadata_version_index(local_metadata_rows).items():
         local_versions.setdefault(app_id, version)
-    local_version_platforms: dict[str, set[str]] = {}
-    for row in store_rows:
-        local_version = local_versions.get(row["app_id"], "")
-        if local_version and local_version == row["version"]:
-            local_version_platforms.setdefault(row["app_id"], set()).add(row["platform"])
     releases = release_index(release_rows)
     approvals = publication_index(publication_rows)
     store_notes = store_notes_index(store_rows)
@@ -269,8 +282,10 @@ def report_markdown(
         if latest_release_row and release_status in {"planned", "ready", "failed"}:
             action = release_action(latest_release_row)
         elif release_matches_store(latest_release_row, row):
-            other_platforms = local_version_platforms.get(row["app_id"], set()) - {row["platform"]}
-            action = completed_release_action(comparison, other_platforms)
+            platform_label_divergence_is_released = has_released_matching_local_version(
+                row["app_id"], row["platform"], local_version, store_rows, releases
+            )
+            action = completed_release_action(comparison, platform_label_divergence_is_released)
         else:
             action = next_action(row, comparison)
         store_table.append(
@@ -328,8 +343,12 @@ def report_markdown(
         active_release = latest_release and latest_release[-1]["status"] in {"planned", "ready", "failed"}
         completed_release = bool(latest_release) and release_matches_store(latest_release[-1], row)
         if completed_release and comparison in {"local_ahead", "store_ahead"}:
-            other_platforms = local_version_platforms.get(row["app_id"], set()) - {row["platform"]}
-            attention.append([row["app_name"], row["platform"], row["status"], completed_release_action(comparison, other_platforms), row["notes"]])
+            platform_label_divergence_is_released = has_released_matching_local_version(
+                row["app_id"], row["platform"], local_version, store_rows, releases
+            )
+            action = completed_release_action(comparison, platform_label_divergence_is_released)
+            if action != "No action":
+                attention.append([row["app_name"], row["platform"], row["status"], action, row["notes"]])
         elif not active_release and not completed_release and (
             row["status"] in {"updated", "manual_check", "failed"} or comparison in {"local_ahead", "store_ahead"}
         ):
