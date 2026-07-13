@@ -616,6 +616,122 @@ class AppReleaseReportTest(unittest.TestCase):
             self.assertIn("Store release complete; confirm next public rollout", text)
             self.assertNotIn("Create or verify release candidate", text)
 
+    def test_completed_release_with_other_platform_matching_local_version_flags_policy(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
+            publications = root / "app_release_publications.csv"
+            output = root / "app_releases.md"
+            app_repo = root / "tagweaver"
+            app_repo.mkdir()
+            (app_repo / "pubspec.yaml").write_text("name: tagweaver\nversion: 2.1.3+81\n", encoding="utf-8")
+            write_csv(
+                store,
+                STORE_HEADER,
+                [
+                    {
+                        "app_id": "APP-0002",
+                        "app_slug": "tagweaver",
+                        "app_name": "TagWeaver",
+                        "platform": "ios",
+                        "store_url": "https://apps.apple.com/app/id6759609875",
+                        "store_app_id": "6759609875",
+                        "store_package": "",
+                        "version": "2.2",
+                        "last_updated": "2026-07-12T18:06:15Z",
+                        "release_notes": "Bug fixes.",
+                        "checked_at": "2026-07-14T00:00:00+09:00",
+                        "status": "updated",
+                        "notes": "",
+                    },
+                    {
+                        "app_id": "APP-0002",
+                        "app_slug": "tagweaver",
+                        "app_name": "TagWeaver",
+                        "platform": "android",
+                        "store_url": "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2",
+                        "store_app_id": "",
+                        "store_package": "com.onnellab.tagweaver2",
+                        "version": "2.1.3",
+                        "last_updated": "2026-07-12",
+                        "release_notes": "Bug fixes.",
+                        "checked_at": "2026-07-14T00:00:00+09:00",
+                        "status": "unchanged",
+                        "notes": "",
+                    },
+                ],
+            )
+            released = {field: "" for field in RELEASE_HEADER}
+            released.update(
+                {
+                    "release_id": "REL-0004",
+                    "app_id": "APP-0002",
+                    "app_slug": "tagweaver",
+                    "app_name": "TagWeaver",
+                    "repository": "onnellab/tagweaver",
+                    "tag": "v2.2",
+                    "version": "2.2",
+                    "platform": "ios",
+                    "build_type": "release",
+                    "release_type": "notes_only",
+                    "release_channel": "public",
+                    "status": "released",
+                    "release_url": "https://github.com/onnellab/tagweaver/releases/tag/v2.2",
+                    "release_date": "2026-07-12",
+                    "release_title": "TagWeaver v2.2",
+                    "summary": "TagWeaver 2.2 public iOS store update detected.",
+                    "changes": "Stability improvements.",
+                    "compatibility": "ios public release.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                }
+            )
+            write_csv(releases, RELEASE_HEADER, [released])
+            write_csv(
+                config,
+                CONFIG_HEADER,
+                [
+                    {
+                        "app_id": "APP-0002",
+                        "app_slug": "tagweaver",
+                        "repository": "onnellab/tagweaver",
+                        "artifact_pattern": "generated/releases/tagweaver/{version}/{platform}/*-release.*",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(
+                local_repos,
+                LOCAL_REPOSITORIES_HEADER,
+                [
+                    {
+                        "app_id": "APP-0002",
+                        "app_slug": "tagweaver",
+                        "repository_name": "tagweaver",
+                        "path": app_repo.as_posix(),
+                        "pubspec_path": "pubspec.yaml",
+                        "source_priority": "primary",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
+
+            text = generate_app_release_report(
+                store,
+                releases,
+                config,
+                local_repos,
+                output,
+                publications,
+                now=datetime.fromisoformat("2026-07-14T00:00:00+09:00"),
+            )
+
+            self.assertIn("Platform versions diverged; confirm version policy", text)
+            self.assertNotIn("Sync local metadata", text)
+
 
 if __name__ == "__main__":
     unittest.main()
