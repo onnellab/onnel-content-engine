@@ -223,6 +223,90 @@ def app_display_name(slug: str, names: dict[str, str], app_dir: Path) -> str:
     return names.get(slug) or frontmatter_title(app_dir / "app.md") or slug
 
 
+def read_app_meta(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    values: dict[str, str] = {}
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if ":" not in line or line.startswith(" ") or line.startswith("\t"):
+            continue
+        key, value = line.split(":", 1)
+        values[key.strip()] = value.strip().strip("\"'")
+    return values
+
+
+def format_price_value(value: str, currency: str) -> str:
+    if not value:
+        return ""
+    try:
+        number = float(value)
+    except ValueError:
+        return value
+    if number == 0:
+        return "Free"
+    amount = f"{int(number):,}" if number.is_integer() else f"{number:,.2f}"
+    return f"{amount} {currency}".strip()
+
+
+def product_pricing_items(
+    homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
+    apps_registry_path: Path = DEFAULT_APPS_REGISTRY,
+) -> list[dict[str, str]]:
+    registry = {row.get("slug", ""): row for row in read_csv_rows(apps_registry_path)}
+    content_apps = homepage_repo / "src" / "content" / "apps"
+    slugs = sorted(set(registry) | ({path.name for path in content_apps.iterdir() if path.is_dir()} if content_apps.exists() else set()))
+    items: list[dict[str, str]] = []
+    for slug in slugs:
+        row = registry.get(slug, {})
+        meta = read_app_meta(content_apps / slug / "app.md")
+        app_name = row.get("app_name") or meta.get("title") or slug
+        pricing = meta.get("pricing") or row.get("pricing_model", "")
+        price = format_price_value(meta.get("price", ""), meta.get("priceCurrency", ""))
+        official_site_path = row.get("official_site_path") or f"/apps/{slug}/"
+        base = {
+            "app_id": row.get("app_id", ""),
+            "app_slug": slug,
+            "app_name": app_name,
+            "pricing_model": row.get("pricing_model", ""),
+            "pricing": pricing,
+            "official_site_path": official_site_path,
+            "app_store_url": meta.get("appstore") or row.get("app_store_url", ""),
+            "play_store_url": meta.get("googleplay") or row.get("play_store_url", ""),
+            "checked_at": latest_git_time(homepage_repo, [content_apps / slug / "app.md"]) if homepage_repo.exists() else "",
+        }
+        if price and price != "Free":
+            items.append(
+                {
+                    **base,
+                    "product_name": "Paid download",
+                    "product_type": "paid_download",
+                    "price": price,
+                    "price_note": "Public landing page metadata",
+                }
+            )
+        if "optional pro" in pricing.lower() or "pro purchase" in pricing.lower():
+            items.append(
+                {
+                    **base,
+                    "product_name": f"{app_name} Pro",
+                    "product_type": "pro",
+                    "price": "",
+                    "price_note": "Store in-app purchase price not recorded locally",
+                }
+            )
+        if slug == "melivra":
+            items.append(
+                {
+                    **base,
+                    "product_name": "Melivra AI Token",
+                    "product_type": "ai_credit",
+                    "price": "",
+                    "price_note": "AI credit price not recorded locally",
+                }
+            )
+    return sorted(items, key=lambda item: (item["app_name"].lower(), item["product_type"]))
+
+
 def latest_file_mtime(paths: list[Path]) -> str:
     existing = [path for path in paths if path.exists()]
     if not existing:
@@ -427,6 +511,7 @@ def html_document(
     blog_items: list[dict[str, str]] | None = None,
     store_items: list[dict[str, str]] | None = None,
     site_items: list[dict[str, object]] | None = None,
+    pricing_items: list[dict[str, str]] | None = None,
     release_sync_status: dict[str, object] | None = None,
     verification_report: dict[str, object] | None = None,
     quality_report: dict[str, object] | None = None,
@@ -444,6 +529,7 @@ def html_document(
     blog_data = json.dumps(blog_items or [], ensure_ascii=False).replace("</", "<\\/")
     store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
     site_data = json.dumps(site_items or [], ensure_ascii=False).replace("</", "<\\/")
+    pricing_data = json.dumps(pricing_items or [], ensure_ascii=False).replace("</", "<\\/")
     release_sync_data = json.dumps(release_sync_status or {}, ensure_ascii=False).replace("</", "<\\/")
     verification_report_data = json.dumps(verification_report or {}, ensure_ascii=False).replace("</", "<\\/")
     quality_report_data = json.dumps(quality_report or {}, ensure_ascii=False).replace("</", "<\\/")
@@ -747,6 +833,13 @@ def html_document(
       </div>
       <div id="app-status-grid" class="app-status-grid"></div>
     </details>
+    <details class="status-section" aria-label="Paid product pricing status">
+      <summary id="pricing-status-title">유료 제품 가격</summary>
+      <div class="release-head">
+        <span id="pricing-status-summary"></span>
+      </div>
+      <div id="pricing-status-grid" class="app-status-grid"></div>
+    </details>
   </main>
   <script id="manual-data" type="application/json">{data}</script>
   <script id="manual-state-data" type="application/json">{manual_state_data}</script>
@@ -754,6 +847,7 @@ def html_document(
   <script id="blog-data" type="application/json">{blog_data}</script>
   <script id="store-data" type="application/json">{store_data}</script>
   <script id="site-data" type="application/json">{site_data}</script>
+  <script id="pricing-data" type="application/json">{pricing_data}</script>
   <script id="release-sync-data" type="application/json">{release_sync_data}</script>
   <script id="verification-report-data" type="application/json">{verification_report_data}</script>
   <script id="quality-report-data" type="application/json">{quality_report_data}</script>
@@ -763,6 +857,7 @@ def html_document(
     let blogItems = JSON.parse(document.getElementById('blog-data').textContent);
     let storeItems = JSON.parse(document.getElementById('store-data').textContent);
     let siteItems = JSON.parse(document.getElementById('site-data').textContent);
+    let pricingItems = JSON.parse(document.getElementById('pricing-data').textContent);
     let releaseSyncStatus = JSON.parse(document.getElementById('release-sync-data').textContent);
     let verificationReport = JSON.parse(document.getElementById('verification-report-data').textContent);
     let qualityReport = JSON.parse(document.getElementById('quality-report-data').textContent);
@@ -865,6 +960,20 @@ def html_document(
         blogMode: '콘텐츠',
         platformStatusTitle: '매체별 상태',
         siteStatusTitle: '사이트 갱신 상태',
+        pricingStatusTitle: '유료 제품 가격',
+        pricingStatusSummary: '유료 다운로드, Pro, AI 크레딧',
+        paidProduct: '유료 제품',
+        paidDownload: '유료 다운로드',
+        aiCredit: 'AI 크레딧',
+        pricingModel: '가격 모델',
+        priceLabel: '가격',
+        priceCheckNeeded: '스토어 확인 필요',
+        localPriceMetadata: '공개 랜딩 페이지 가격 메타데이터',
+        iapPriceNotRecorded: '스토어 인앱 구매 가격이 로컬에 기록되어 있지 않음',
+        aiCreditPriceNotRecorded: 'AI 크레딧 가격이 로컬에 기록되어 있지 않음',
+        appsWord: '앱',
+        appStore: 'App Store',
+        playStore: 'Play Store',
         qualityStatusTitle: '발행 품질 점검',
         qualityStatusSummary: '템플릿 점수와 반복어 경고',
         socialQuality: '소셜 템플릿',
@@ -1012,6 +1121,20 @@ def html_document(
         blogMode: 'Content',
         platformStatusTitle: 'Platform status',
         siteStatusTitle: 'Website update status',
+        pricingStatusTitle: 'Paid product pricing',
+        pricingStatusSummary: 'paid downloads, Pro, and AI credits',
+        paidProduct: 'paid product',
+        paidDownload: 'Paid download',
+        aiCredit: 'AI credit',
+        pricingModel: 'pricing model',
+        priceLabel: 'price',
+        priceCheckNeeded: 'Check store',
+        localPriceMetadata: 'Public landing page metadata',
+        iapPriceNotRecorded: 'Store in-app purchase price not recorded locally',
+        aiCreditPriceNotRecorded: 'AI credit price not recorded locally',
+        appsWord: 'apps',
+        appStore: 'App Store',
+        playStore: 'Play Store',
         qualityStatusTitle: 'Publishing quality check',
         qualityStatusSummary: 'template scores and repeated phrase warnings',
         socialQuality: 'Social templates',
@@ -1105,6 +1228,8 @@ def html_document(
     const appStatusSummary = document.getElementById('app-status-summary');
     const siteStatusGrid = document.getElementById('site-status-grid');
     const siteStatusSummary = document.getElementById('site-status-summary');
+    const pricingStatusGrid = document.getElementById('pricing-status-grid');
+    const pricingStatusSummary = document.getElementById('pricing-status-summary');
     const qualityStatusGrid = document.getElementById('quality-status-grid');
     const qualityStatusSummary = document.getElementById('quality-status-summary');
     const verificationSummaryGrid = document.getElementById('verification-summary-grid');
@@ -1136,6 +1261,7 @@ def html_document(
       document.getElementById('app-status-title').textContent = t('appStatusTitle');
       document.getElementById('platform-status-title').textContent = t('platformStatusTitle');
       document.getElementById('site-status-title').textContent = t('siteStatusTitle');
+      document.getElementById('pricing-status-title').textContent = t('pricingStatusTitle');
       document.getElementById('quality-status-title').textContent = t('qualityStatusTitle');
       document.getElementById('verification-summary-title').textContent = t('verificationSummaryTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
@@ -1162,6 +1288,7 @@ def html_document(
       syncViewButtons();
       renderAppStatusSummary();
       renderSiteStatusSummary();
+      renderPricingStatusSummary();
       renderQualityStatusSummary();
       renderVerificationSummary();
     }}
@@ -1443,6 +1570,7 @@ def html_document(
       blogItems = readEmbeddedJson(doc, 'blog-data');
       storeItems = readEmbeddedJson(doc, 'store-data');
       siteItems = readEmbeddedJson(doc, 'site-data');
+      pricingItems = readEmbeddedJson(doc, 'pricing-data');
       releaseSyncStatus = readEmbeddedJson(doc, 'release-sync-data');
       verificationReport = readEmbeddedJson(doc, 'verification-report-data');
       syncFilterOptions();
@@ -1790,15 +1918,8 @@ def html_document(
       }});
       platformStatusSummary.textContent = '';
       platformSummaryBadges.forEach(([label, count, url]) => {{
-        const badge = document.createElement(url ? 'a' : 'span');
+        const badge = document.createElement('span');
         badge.className = 'platform-count-badge';
-        if (url) {{
-          badge.href = url;
-          if (!url.startsWith('/')) {{
-            badge.target = '_blank';
-            badge.rel = 'noopener noreferrer';
-          }}
-        }}
         const name = document.createElement('span');
         name.textContent = label;
         const value = document.createElement('b');
@@ -1832,6 +1953,87 @@ def html_document(
         }}
         siteStatusGrid.appendChild(card);
       }});
+    }}
+
+    function renderPricingStatusSummary() {{
+      pricingStatusGrid.textContent = '';
+      const appCount = new Set(pricingItems.map((item) => item.app_slug || item.app_name)).size;
+      const explicitPrices = pricingItems.filter((item) => item.price).length;
+      const needsStoreCheck = pricingItems.length - explicitPrices;
+      pricingStatusSummary.textContent = `${{pricingItems.length}} ${{t('paidProduct')}} / ${{appCount}} ${{t('appsWord')}} / ${{needsStoreCheck}} ${{t('priceCheckNeeded')}}`;
+      const groups = new Map();
+      pricingItems.forEach((item) => {{
+        const key = item.app_slug || item.app_name;
+        if (!groups.has(key)) groups.set(key, {{ app_name: item.app_name, app_slug: item.app_slug, items: [] }});
+        groups.get(key).items.push(item);
+      }});
+      [...groups.values()].sort((a, b) => a.app_name.localeCompare(b.app_name)).forEach((group) => {{
+        const card = document.createElement('div');
+        card.className = 'app-status-card';
+        const title = document.createElement('strong');
+        title.appendChild(profileLink(group.app_name || t('none'), group.app_slug ? `/apps/${{group.app_slug}}/` : '/apps/'));
+        card.appendChild(title);
+        group.items.forEach((item) => {{
+          const row = document.createElement('div');
+          row.className = item.product_type === 'paid_download' ? 'app-status-row is-store' : 'app-status-row is-release';
+          const label = document.createElement('b');
+          label.textContent = pricingProductLabel(item);
+          const price = document.createElement('span');
+          price.textContent = `${{t('priceLabel')}}: ${{item.price || t('priceCheckNeeded')}}`;
+          const model = document.createElement('span');
+          model.textContent = `${{t('pricingModel')}}: ${{pricingModelLabel(item.pricing || item.pricing_model)}}`;
+          const checked = document.createElement('span');
+          checked.textContent = `${{t('checkedAt')}}: ${{formatDate(item.checked_at)}}`;
+          row.append(label, price, model, checked);
+          if (item.price_note) {{
+            const note = document.createElement('span');
+            note.textContent = pricingNoteLabel(item.price_note);
+            row.appendChild(note);
+          }}
+          const links = document.createElement('span');
+          const linkParts = [];
+          if (item.app_store_url) linkParts.push([t('appStore'), item.app_store_url]);
+          if (item.play_store_url) linkParts.push([t('playStore'), item.play_store_url]);
+          linkParts.forEach(([labelText, href], index) => {{
+            if (index > 0) links.append(' / ');
+            const link = document.createElement('a');
+            link.href = href;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = labelText;
+            links.appendChild(link);
+          }});
+          if (linkParts.length) row.appendChild(links);
+          card.appendChild(row);
+        }});
+        pricingStatusGrid.appendChild(card);
+      }});
+    }}
+
+    function pricingProductLabel(item) {{
+      if (item.product_type === 'paid_download') return t('paidDownload');
+      if (item.product_type === 'ai_credit') return item.app_name === 'Melivra' ? `Melivra ${{t('aiCredit')}}` : t('aiCredit');
+      return item.product_name || t('paidProduct');
+    }}
+
+    function pricingNoteLabel(note) {{
+      if (note === 'Public landing page metadata') return t('localPriceMetadata');
+      if (note === 'Store in-app purchase price not recorded locally') return t('iapPriceNotRecorded');
+      if (note === 'AI credit price not recorded locally') return t('aiCreditPriceNotRecorded');
+      return note;
+    }}
+
+    function pricingModelLabel(model) {{
+      if (!model) return t('none');
+      const normalized = String(model).toLowerCase();
+      if (currentLang === 'ko') {{
+        if (normalized === 'free download with optional pro purchase') return '무료 다운로드 + 선택 Pro 구매';
+        if (normalized === 'paid download') return '유료 다운로드';
+        if (normalized === 'freemium') return '프리미엄';
+        if (normalized === 'one_time_purchase') return '일회성 구매';
+      }}
+      if (normalized === 'one_time_purchase') return 'one-time purchase';
+      return model;
     }}
 
     function renderQualityStatusSummary() {{
@@ -2046,6 +2248,7 @@ def html_document(
       renderPlatformSummary();
       renderAppStatusSummary();
       renderSiteStatusSummary();
+      renderPricingStatusSummary();
       renderVerificationSummary();
       updateVariantToggle();
       syncViewButtons();
@@ -2301,12 +2504,24 @@ def build_manual_publish_site(
     blog_items = blog_status_items(topics_path)
     store_items = store_status_items(store_versions_path)
     site_items = homepage_status_items(homepage_repo)
+    pricing_items = product_pricing_items(homepage_repo)
     release_sync_status = release_sync_status_item(app_release_sync_status_path)
     verification_report = verification_report_item(verification_report_path)
     quality_report = quality_report_item(social_manifest, syndication_manifest)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
-        html_document(items, manual_state, releases, blog_items, store_items, site_items, release_sync_status, verification_report, quality_report),
+        html_document(
+            items,
+            manual_state,
+            releases,
+            blog_items,
+            store_items,
+            site_items,
+            pricing_items,
+            release_sync_status,
+            verification_report,
+            quality_report,
+        ),
         encoding="utf-8",
     )
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
