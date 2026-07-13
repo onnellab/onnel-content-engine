@@ -323,7 +323,7 @@ def compose_url(platform: str, text: str, canonical_url: str) -> str:
     if platform == "devto":
         return "https://dev.to/new"
     if platform == "hashnode":
-        return "https://hashnode.com/new"
+        return "https://hashnode.com/@onnellab"
     if platform == "medium":
         return "https://medium.com/new-story"
     return canonical_url
