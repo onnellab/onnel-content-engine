@@ -37,7 +37,7 @@ def read_manifest(path: Path) -> list[dict[str, str]]:
 
 def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=RELEASE_HEADER)
+        writer = csv.DictWriter(handle, fieldnames=RELEASE_HEADER, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
