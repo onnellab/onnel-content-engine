@@ -123,6 +123,14 @@ To create public releases instead of drafts:
 scripts/create_github_releases.py --publish
 ```
 
+The release-only GitHub Actions workflow is:
+
+```text
+.github/workflows/publish-ready-app-releases.yml
+```
+
+It creates only approved app release notes, syncs release state, and refreshes the manual dashboard. It must not post to X, LinkedIn, Bluesky, Dev.to, Medium, or Hashnode.
+
 Required token:
 
 ```text
@@ -146,6 +154,20 @@ To verify which variable names would be loaded without running the release comma
 ```text
 scripts/run_with_local_env.py --dry-run
 ```
+
+## Public Sharing Links
+
+Use the homepage release notes URL as the public sharing URL for app updates:
+
+```text
+https://onnellab.github.io/release-notes/{app_slug}/{version}/
+```
+
+Use GitHub Release URLs as release automation records and repository references. If the app repository is private or otherwise not readable without authentication, the GitHub Release URL may not be suitable for X, LinkedIn, blog, store support pages, or customer-facing documentation. In that case, share the homepage release notes URL instead.
+
+The manual dashboard should show the homepage release notes URL as the user-facing release link. The GitHub URL can still remain in release sync data for audit and automation checks.
+
+When writing social or blog copy, describe only the public store-visible changes between the current public version and the previous public version. Exclude private TestFlight, Play Console internal test, local QA, and local build metadata changes.
 
 ## Store Version Snapshots
 

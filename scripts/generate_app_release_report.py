@@ -74,6 +74,14 @@ def next_action(row: dict[str, str], comparison: str) -> str:
     return store_action(row)
 
 
+def completed_release_action(comparison: str) -> str:
+    if comparison == "store_ahead":
+        return "Sync local metadata"
+    if comparison == "local_ahead":
+        return "Store release complete; confirm next public rollout"
+    return "No action"
+
+
 def release_action(row: dict[str, str]) -> str:
     status = row["status"]
     if (row.get("release_channel") or "public") != "public":
@@ -147,6 +155,15 @@ def release_index(rows: list[dict[str, str]]) -> dict[tuple[str, str], list[dict
     for row in rows:
         index.setdefault((row["app_id"], row["platform"]), []).append(row)
     return index
+
+
+def release_matches_store(release_row: dict[str, str], store_row: dict[str, str]) -> bool:
+    return (
+        bool(release_row)
+        and release_row.get("status") == "released"
+        and (release_row.get("release_channel") or "public") == "public"
+        and release_row.get("version") == store_row.get("version")
+    )
 
 
 def publication_index(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
@@ -242,7 +259,12 @@ def report_markdown(
         cfg = config.get(row["app_id"], {})
         local_version = local_versions.get(row["app_id"], "")
         comparison = compare_versions(row["version"], local_version)
-        action = release_action(latest_release_row) if latest_release_row and release_status in {"planned", "ready", "failed"} else next_action(row, comparison)
+        if latest_release_row and release_status in {"planned", "ready", "failed"}:
+            action = release_action(latest_release_row)
+        elif release_matches_store(latest_release_row, row):
+            action = completed_release_action(comparison)
+        else:
+            action = next_action(row, comparison)
         store_table.append(
             [
                 row["app_name"],
@@ -296,7 +318,12 @@ def report_markdown(
         comparison = compare_versions(row["version"], local_version)
         latest_release = releases.get((row["app_id"], row["platform"]), [])
         active_release = latest_release and latest_release[-1]["status"] in {"planned", "ready", "failed"}
-        if not active_release and (row["status"] in {"updated", "manual_check", "failed"} or comparison in {"local_ahead", "store_ahead"}):
+        completed_release = bool(latest_release) and release_matches_store(latest_release[-1], row)
+        if completed_release and comparison in {"local_ahead", "store_ahead"}:
+            attention.append([row["app_name"], row["platform"], row["status"], completed_release_action(comparison), row["notes"]])
+        elif not active_release and not completed_release and (
+            row["status"] in {"updated", "manual_check", "failed"} or comparison in {"local_ahead", "store_ahead"}
+        ):
             attention.append([row["app_name"], row["platform"], row["status"], next_action(row, comparison), row["notes"]])
     attention += [
         [row["app_name"], row["platform"], row["status"], release_action(row), row["notes"]]

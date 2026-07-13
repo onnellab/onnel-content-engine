@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-07-14T00:08:20+09:00
+Generated: 2026-07-14T00:18:45+09:00
 
 ## Summary
 
@@ -17,7 +17,7 @@ Generated: 2026-07-14T00:08:20+09:00
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Aligna | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
 | Aligna | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
-| ClipNest | ios | 1.0.2 | - | unknown | updated | released | onnellab/clipnest | Create or verify release candidate |
+| ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | updated | released | onnellab/clipnest | Store release complete; confirm next public rollout |
 | Quivra | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
 | Quivra | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
 | Segra | android | 1.0.2 | 1.0.2 | same | unchanged | released | onnellab/segra | No action |
@@ -44,5 +44,5 @@ Generated: 2026-07-14T00:08:20+09:00
 | TagWeaver | ios | updated | Sync local metadata | - |
 | VaultXT | android | unchanged | Store not updated; confirm public rollout | Version/update date read from Google Play public page; release notes from Android snapshot. Imported from /home/lue/dev/onnellab-text/vaultxt/pubspec.yaml version 1.0.6+52; confirm against Play Console if needed. |
 | Segra | ios | unchanged | Store not updated; confirm public rollout | - |
-| ClipNest | ios | updated | Create or verify release candidate | - |
+| ClipNest | ios | updated | Store release complete; confirm next public rollout | - |
 | VaultXT | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.3. Add release artifact, checksum, and keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |

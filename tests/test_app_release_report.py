@@ -429,7 +429,192 @@ class AppReleaseReportTest(unittest.TestCase):
 
             self.assertIn("local_ahead", text)
             self.assertIn("Store not updated; confirm public rollout", text)
+
+    def test_completed_store_release_does_not_remain_candidate_action(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
+            publications = root / "app_release_publications.csv"
+            output = root / "app_releases.md"
+            write_csv(
+                store,
+                STORE_HEADER,
+                [
+                    {
+                        "app_id": "APP-0005",
+                        "app_slug": "clipnest",
+                        "app_name": "ClipNest",
+                        "platform": "ios",
+                        "store_url": "https://apps.apple.com/app/id6779928552",
+                        "store_app_id": "6779928552",
+                        "store_package": "",
+                        "version": "1.0.2",
+                        "last_updated": "2026-07-13T03:53:22Z",
+                        "release_notes": "Bug fixes.",
+                        "checked_at": "2026-07-14T00:00:00+09:00",
+                        "status": "updated",
+                        "notes": "",
+                    }
+                ],
+            )
+            released = {field: "" for field in RELEASE_HEADER}
+            released.update(
+                {
+                    "release_id": "REL-0005",
+                    "app_id": "APP-0005",
+                    "app_slug": "clipnest",
+                    "app_name": "ClipNest",
+                    "repository": "onnellab/clipnest",
+                    "tag": "v1.0.2",
+                    "version": "1.0.2",
+                    "platform": "ios",
+                    "build_type": "release",
+                    "release_type": "notes_only",
+                    "release_channel": "public",
+                    "status": "released",
+                    "release_url": "https://github.com/onnellab/clipnest/releases/tag/v1.0.2",
+                    "release_date": "2026-07-13",
+                    "release_title": "ClipNest v1.0.2",
+                    "summary": "ClipNest 1.0.2 public iOS store update detected.",
+                    "changes": "Improved keyboard editing handoff.",
+                    "compatibility": "ios public release.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                }
+            )
+            write_csv(releases, RELEASE_HEADER, [released])
+            write_csv(
+                config,
+                CONFIG_HEADER,
+                [
+                    {
+                        "app_id": "APP-0005",
+                        "app_slug": "clipnest",
+                        "repository": "onnellab/clipnest",
+                        "artifact_pattern": "generated/releases/clipnest/{version}/{platform}/*-release.*",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(local_repos, LOCAL_REPOSITORIES_HEADER, [])
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
+
+            text = generate_app_release_report(
+                store,
+                releases,
+                config,
+                local_repos,
+                output,
+                publications,
+                now=datetime.fromisoformat("2026-07-14T00:00:00+09:00"),
+            )
+
+            self.assertIn("| ClipNest | ios | 1.0.2 | - | unknown | updated | released | onnellab/clipnest | No action |", text)
+            self.assertNotIn("Create or verify release candidate", text)
             self.assertNotIn("Release ready; prepare store rollout", text)
+
+    def test_completed_store_release_with_local_ahead_keeps_rollout_review(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            config = root / "app_release_config.csv"
+            local_repos = root / "local_repositories.csv"
+            publications = root / "app_release_publications.csv"
+            output = root / "app_releases.md"
+            app_repo = root / "clipnest"
+            app_repo.mkdir()
+            (app_repo / "pubspec.yaml").write_text("name: clipnest\nversion: 1.0.4+12\n", encoding="utf-8")
+            write_csv(
+                store,
+                STORE_HEADER,
+                [
+                    {
+                        "app_id": "APP-0005",
+                        "app_slug": "clipnest",
+                        "app_name": "ClipNest",
+                        "platform": "ios",
+                        "store_url": "https://apps.apple.com/app/id6779928552",
+                        "store_app_id": "6779928552",
+                        "store_package": "",
+                        "version": "1.0.2",
+                        "last_updated": "2026-07-13T03:53:22Z",
+                        "release_notes": "Bug fixes.",
+                        "checked_at": "2026-07-14T00:00:00+09:00",
+                        "status": "updated",
+                        "notes": "",
+                    }
+                ],
+            )
+            released = {field: "" for field in RELEASE_HEADER}
+            released.update(
+                {
+                    "release_id": "REL-0005",
+                    "app_id": "APP-0005",
+                    "app_slug": "clipnest",
+                    "app_name": "ClipNest",
+                    "repository": "onnellab/clipnest",
+                    "tag": "v1.0.2",
+                    "version": "1.0.2",
+                    "platform": "ios",
+                    "build_type": "release",
+                    "release_type": "notes_only",
+                    "release_channel": "public",
+                    "status": "released",
+                    "release_url": "https://github.com/onnellab/clipnest/releases/tag/v1.0.2",
+                    "release_date": "2026-07-13",
+                    "release_title": "ClipNest v1.0.2",
+                    "summary": "ClipNest 1.0.2 public iOS store update detected.",
+                    "changes": "Improved keyboard editing handoff.",
+                    "compatibility": "ios public release.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                }
+            )
+            write_csv(releases, RELEASE_HEADER, [released])
+            write_csv(
+                config,
+                CONFIG_HEADER,
+                [
+                    {
+                        "app_id": "APP-0005",
+                        "app_slug": "clipnest",
+                        "repository": "onnellab/clipnest",
+                        "artifact_pattern": "generated/releases/clipnest/{version}/{platform}/*-release.*",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(
+                local_repos,
+                LOCAL_REPOSITORIES_HEADER,
+                [
+                    {
+                        "app_id": "APP-0005",
+                        "app_slug": "clipnest",
+                        "repository_name": "clipnest",
+                        "path": app_repo.as_posix(),
+                        "pubspec_path": "pubspec.yaml",
+                        "source_priority": "primary",
+                        "notes": "",
+                    }
+                ],
+            )
+            write_csv(publications, ["release_id", "public_release", "approved_at", "notes"], [])
+
+            text = generate_app_release_report(
+                store,
+                releases,
+                config,
+                local_repos,
+                output,
+                publications,
+                now=datetime.fromisoformat("2026-07-14T00:00:00+09:00"),
+            )
+
+            self.assertIn("Store release complete; confirm next public rollout", text)
+            self.assertNotIn("Create or verify release candidate", text)
 
 
 if __name__ == "__main__":
