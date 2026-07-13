@@ -59,6 +59,25 @@ def social_card_url(site_url: str, topic: dict[str, str]) -> str:
     return urljoin(normalize_site_url(site_url), f"blog-assets/{topic['primary_language']}/{topic['slug']}/social-card.png")
 
 
+def absolutize_markdown_links(markdown: str, site_url: str) -> str:
+    base = normalize_site_url(site_url)
+
+    def replace_image(match: re.Match[str]) -> str:
+        alt, url, title = match.groups()
+        if url.startswith(("http://", "https://", "mailto:", "#")):
+            return match.group(0)
+        return f"![{alt}]({urljoin(base, url.lstrip('/'))}{title or ''})"
+
+    def replace_link(match: re.Match[str]) -> str:
+        label, url = match.groups()
+        if url.startswith(("http://", "https://", "mailto:", "#")):
+            return match.group(0)
+        return f"[{label}]({urljoin(base, url.lstrip('/'))})"
+
+    markdown = re.sub(r"!\[([^\]]*)\]\((\S+?)(\s+\"[^\"]*\")?\)", replace_image, markdown)
+    return re.sub(r"(?<!!)\[([^\]]+)\]\(([^)\s]+)\)", replace_link, markdown)
+
+
 SYNDICATION_STATE_FIELDS = (
     "status",
     "approved_by",
@@ -151,7 +170,7 @@ def generate_syndication_drafts(
             destination.parent.mkdir(parents=True, exist_ok=True)
             context["syndication_note"] = syndication_note(article, platform)
             context["syndication_intro"] = syndication_intro(article, platform)
-            context["body"] = syndication_body(article, body.strip(), platform)
+            context["body"] = absolutize_markdown_links(syndication_body(article, body.strip(), platform), site_url)
             destination.write_text(render_template(template_path.read_text(encoding="utf-8"), context), encoding="utf-8")
             item = {
                 "topic_id": article.topic["id"],

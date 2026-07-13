@@ -53,7 +53,7 @@ def score_draft(draft: dict[str, object], project_root: Path = ROOT) -> dict[str
     add("platform_supported", platform in {"devto", "hashnode", "medium"}, 0.7)
     if platform == "devto":
         tags = metadata.get("tags", "")
-        add("devto_unpublished", metadata.get("published") == "false", 1.0)
+        add("devto_public", metadata.get("published") == "true", 1.0)
         add("devto_tags", bool(tags) and len(tags.split(",")) <= 4 and " " not in tags, 1.0)
     if platform == "hashnode":
         add("hashnode_tags", bool(metadata.get("tags")), 0.8)

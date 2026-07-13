@@ -1,6 +1,6 @@
 ---
 title: "{{title}}"
-published: false
+published: true
 canonical_url: "{{canonical_url}}"
 tags: "{{tags}}"
 ---

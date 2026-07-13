@@ -69,8 +69,8 @@ def validate_draft(draft: dict[str, object], project_root: Path = ROOT) -> None:
         raise SyndicationValidationError(f"{topic_id} missing canonical notice: {draft_path}")
     if not re.search(r"^#\s+", content, re.MULTILINE):
         raise SyndicationValidationError(f"{topic_id} draft body has no title heading: {draft_path}")
-    if platform == "devto" and metadata.get("published") != "false":
-        raise SyndicationValidationError(f"{topic_id} Dev.to draft must be unpublished by default")
+    if platform == "devto" and metadata.get("published") != "true":
+        raise SyndicationValidationError(f"{topic_id} Dev.to draft must be public by default")
     if platform in {"devto", "hashnode"} and not metadata.get("tags"):
         raise SyndicationValidationError(f"{topic_id} {platform} draft has no tags")
     if platform == "hashnode":

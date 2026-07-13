@@ -644,8 +644,10 @@ class PublishingTest(unittest.TestCase):
         self.assertTrue(hashnode_path.exists())
         self.assertTrue(medium_path.exists())
         content = devto_path.read_text(encoding="utf-8")
+        self.assertIn("published: true", content)
         self.assertIn('canonical_url: "https://example.com/blog/en/read-large-txt-files/"', content)
         self.assertIn('tags: "large-txt-files"', content)
+        self.assertIn("![Workflow diagram](https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", content)
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", content)
         self.assertIn("# How to Read Very Large TXT Files", content)
         self.assertIn('cover_image: "https://example.com/blog-assets/en/read-large-txt-files/social-card.png"', hashnode_path.read_text(encoding="utf-8"))
@@ -694,7 +696,7 @@ class PublishingTest(unittest.TestCase):
                 output_dir / "manifest.json",
             )
 
-    def test_devto_adapter_posts_unpublished_draft_payload(self) -> None:
+    def test_devto_adapter_posts_public_article_payload(self) -> None:
         output_dir = self.root / "generated" / "syndication"
         generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
         approve_syndication_draft("TOPIC-0001", "devto", "en", "editor", output_dir / "manifest.json")
@@ -718,10 +720,11 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(calls[0][2]["User-Agent"], "ONNELLAB content engine")
         article = calls[0][1]["article"]
         self.assertEqual(article["title"], "How to Read Very Large TXT Files")
-        self.assertFalse(article["published"])
+        self.assertTrue(article["published"])
         self.assertEqual(article["canonical_url"], "https://example.com/blog/en/read-large-txt-files/")
         self.assertEqual(article["tags"], "large-txt-files")
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", article["body_markdown"])
+        self.assertIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", article["body_markdown"])
 
     def test_hashnode_adapter_is_export_only_without_paid_api(self) -> None:
         output_dir = self.root / "generated" / "syndication"
@@ -764,7 +767,7 @@ class PublishingTest(unittest.TestCase):
         self.assertIn("x: not ready, missing=X_CLIENT_ID,X_CLIENT_SECRET,X_REFRESH_TOKEN", report)
         self.assertIn("devto: not ready, missing=DEVTO_API_KEY", report)
         self.assertIn("TOPIC-0001 x en x: text_length=", report)
-        self.assertIn("TOPIC-0001 devto en: published=False tags=large-txt-files", report)
+        self.assertIn("TOPIC-0001 devto en: published=True tags=large-txt-files", report)
 
 
 if __name__ == "__main__":

@@ -41,7 +41,7 @@ ADAPTERS: dict[str, AdapterSpec] = {
         "syndication",
         ("DEVTO_API_KEY",),
         True,
-        "Unpublished Dev.to draft posting.",
+        "Public Dev.to article posting.",
     ),
     "hashnode": AdapterSpec(
         "hashnode",

@@ -993,6 +993,7 @@ def html_document(
         nextScheduled: '다음 게시 예정',
         publicApproved: '공개 승인',
         publicPending: '공개 미승인',
+        completedAt: '게시 완료',
         copyMarkdown: '마크다운 복사',
         copyPost: '게시글 복사',
         copyAndOpen: '복사 후 열기',
@@ -1154,6 +1155,7 @@ def html_document(
         nextScheduled: 'next scheduled',
         publicApproved: 'public approved',
         publicPending: 'public pending',
+        completedAt: 'posted',
         copyMarkdown: 'Copy markdown',
         copyPost: 'Copy post',
         copyAndOpen: 'Copy and open',
@@ -2304,7 +2306,9 @@ def html_document(
       summary.className = 'card-summary';
       const summaryNote = document.createElement('div');
       summaryNote.className = 'note';
-      summaryNote.textContent = item.due_at ? t('dueAt') + ' ' + formatDue(item) : t('noRecord');
+      summaryNote.textContent = isDone(item)
+        ? t('completedAt') + ' ' + formatDate(postedOrVerifiedAt(item))
+        : item.due_at ? t('dueAt') + ' ' + formatDue(item) : t('noRecord');
       const textarea = document.createElement('textarea');
       textarea.value = item.text;
       textarea.spellcheck = false;
