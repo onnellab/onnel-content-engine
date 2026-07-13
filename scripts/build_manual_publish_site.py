@@ -869,7 +869,9 @@ def html_document(
         qualityError: '점검 오류',
         siteStatusSummary: '메인 홈페이지와 앱 상세 페이지',
         mainHome: '메인 홈페이지',
-        landingUpdated: '랜딩페이지 갱신',
+        landingUpdated: '페이지 갱신',
+        homePageUpdated: '메인 홈페이지 갱신',
+        appPageUpdated: '앱 소개 페이지 갱신',
         screenshotsUpdated: '스크린샷 갱신',
         assetsUpdated: '아이콘/자산 갱신',
         screenshotCount: '스크린샷',
@@ -1014,7 +1016,9 @@ def html_document(
         qualityError: 'quality check error',
         siteStatusSummary: 'home and app landing pages',
         mainHome: 'Main home',
-        landingUpdated: 'landing updated',
+        landingUpdated: 'page updated',
+        homePageUpdated: 'home page updated',
+        appPageUpdated: 'app page updated',
         screenshotsUpdated: 'screenshots updated',
         assetsUpdated: 'icon/assets updated',
         screenshotCount: 'screenshots',
@@ -1772,7 +1776,7 @@ def html_document(
         title.textContent = item.kind === 'home' ? t('mainHome') : item.name;
         const landing = document.createElement('div');
         landing.className = 'app-status-row is-store';
-        landing.innerHTML = `<b>${{t('landingUpdated')}}</b><span>${{formatDate(item.landing_updated_at)}}</span>`;
+        landing.innerHTML = `<b>${{siteLandingLabel(item)}}</b><span>${{formatDate(item.landing_updated_at)}}</span>`;
         const assets = document.createElement('div');
         assets.className = 'app-status-row is-release';
         assets.innerHTML = `<b>${{t('assetsUpdated')}}</b><span>${{formatDate(item.assets_updated_at)}}</span>`;
@@ -1857,6 +1861,10 @@ def html_document(
       if (platform === 'ios') return 'App Store';
       if (platform === 'android') return 'Play Store';
       return platform || t('noStore');
+    }}
+
+    function siteLandingLabel(item) {{
+      return item.kind === 'home' ? t('homePageUpdated') : t('appPageUpdated');
     }}
 
     function renderAppStatusSummary() {{
