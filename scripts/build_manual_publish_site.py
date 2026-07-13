@@ -867,8 +867,8 @@ def html_document(
         repetitionWarnings: '반복어 경고',
         noWarnings: '경고 없음',
         qualityError: '점검 오류',
-        siteStatusSummary: '메인홈과 앱 상세 페이지',
-        mainHome: '메인홈',
+        siteStatusSummary: '메인 홈페이지와 앱 상세 페이지',
+        mainHome: '메인 홈페이지',
         landingUpdated: '랜딩페이지 갱신',
         screenshotsUpdated: '스크린샷 갱신',
         assetsUpdated: '아이콘/자산 갱신',
@@ -1543,6 +1543,11 @@ def html_document(
       return remoteState.done?.[item.manual_key] || null;
     }}
 
+    function postedOrVerifiedAt(item) {{
+      const record = doneRecord(item);
+      return item.posted_at || record?.verified_at || record?.marked_at || '';
+    }}
+
     function verificationLabel(item) {{
       if (item.status === 'posted') return [t('automaticVerified'), 'verification-automatic'];
       const record = doneRecord(item);
@@ -1649,7 +1654,7 @@ def html_document(
     }}
 
     function latestPostedDate() {{
-      return latestDate(items.filter((item) => item.status === 'posted').map((item) => item.posted_at));
+      return latestDate(items.filter((item) => isDone(item)).map(postedOrVerifiedAt));
     }}
 
     function usesLinkPreviewCard(item) {{
@@ -1716,8 +1721,8 @@ def html_document(
         const posted = rows.filter((item) => isDone(item));
         const failed = rows.filter((item) => !isDone(item) && item.status === 'failed');
         const drafts = rows.filter((item) => !isDone(item) && ['draft', 'approved'].includes(item.status));
-        const latestPosted = latestDate(posted.map((item) => item.posted_at));
-        const latestAttempt = latestDate(rows.map((item) => item.last_attempt_at || item.approved_at || item.posted_at));
+        const latestPosted = latestDate(posted.map(postedOrVerifiedAt));
+        const latestAttempt = latestDate(rows.map((item) => item.last_attempt_at || item.approved_at || postedOrVerifiedAt(item)));
         const nextDue = rows
           .filter((item) => !isDone(item) && !item.is_variant && item.due_at)
           .map((item) => dueDate(item))
