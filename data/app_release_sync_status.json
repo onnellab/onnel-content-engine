@@ -1,8 +1,9 @@
 {
-  "checked_at": "2026-07-13T02:26:00.322462Z",
-  "outcome": "skipped",
-  "token_configured": false,
+  "checked_at": "2026-07-13T02:37:09.997639Z",
+  "outcome": "synced",
+  "token_configured": true,
   "messages": [
-    "skipped GitHub release status sync: token not configured"
+    "synced onnellab/tagweaver v2.1.3 https://github.com/onnellab/tagweaver/releases/tag/v2.1.3",
+    "synced onnellab/segra v1.0.2 https://github.com/onnellab/segra/releases/tag/v1.0.2"
   ]
 }
