@@ -740,6 +740,26 @@ def load_social_template(platform: str, template_dir: Path = DEFAULT_SOCIAL_TEMP
     return path.read_text(encoding="utf-8")
 
 
+def social_hook(article: Article) -> str:
+    title = plain_text(article.title)
+    question = plain_text(article.topic["primary_question"])
+    haystack = f"{title} {question} {article.description}".lower()
+    if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
+        return "A huge TXT file should not freeze just because you opened it."
+    if question.lower().startswith("how can i "):
+        return question[0].upper() + question[1:].rstrip("?") + " is a workflow problem, not just a tool choice."
+    if question:
+        return question.rstrip("?") + "."
+    return title
+
+
+def social_summary(article: Article, description: str) -> str:
+    haystack = f"{article.title} {article.topic['primary_question']} {description}".lower()
+    if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
+        return "The slow part is often how the app loads, renders, and searches the text."
+    return description
+
+
 def social_template_context(article: Article, site_url: str) -> dict[str, str]:
     markdown = article.markdown_path.read_text(encoding="utf-8")
     title = plain_text(article.title)
@@ -759,8 +779,10 @@ def social_template_context(article: Article, site_url: str) -> dict[str, str]:
     x_summary_limit = max(0, 280 - fixed_length)
     cta = "전체 글 읽기:" if article.topic["primary_language"] == "ko" else "Read the full article:"
     insight = first_sentences(short_answer, 2)
+    summary = social_summary(article, description)
     return {
         "title": title,
+        "hook": truncate_text(social_hook(article), 160),
         "question": truncate_text(plain_text(article.topic["primary_question"]), 120),
         "description": description,
         "insight": truncate_text(insight, 420),
@@ -768,8 +790,8 @@ def social_template_context(article: Article, site_url: str) -> dict[str, str]:
         "short_points": short_points_text,
         "cta": cta,
         "url": url,
-        "x_summary": truncate_text(description, x_summary_limit),
-        "bsky_summary": truncate_text(description, 160),
+        "x_summary": truncate_text(summary, x_summary_limit),
+        "bsky_summary": truncate_text(summary, 160),
     }
 
 

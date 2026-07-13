@@ -46,7 +46,7 @@ def score_draft(draft: dict[str, object], project_root: Path = ROOT) -> dict[str
     def add(name: str, passed: bool, points: float) -> None:
         checks.append({"name": name, "passed": passed, "points": points if passed else 0.0, "max_points": points})
 
-    add("canonical_frontmatter", metadata.get("canonical_url") == canonical_url, 1.5)
+    add("canonical_frontmatter", platform == "medium" or metadata.get("canonical_url") == canonical_url, 1.5)
     add("canonical_notice", f"Originally published at {canonical_url}" in content, 1.5)
     add("body_preserved", bool(re.search(r"^#\s+", content, re.MULTILINE)), 1.0)
     add("draft_status", draft.get("status") == "draft", 0.8)

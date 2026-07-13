@@ -1,6 +1,6 @@
-{{title}}
+{{hook}}
 
-{{description}}
+{{insight}}
 
 {{short_points}}
 

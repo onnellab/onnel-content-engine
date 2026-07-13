@@ -1,7 +1,8 @@
-{{title}}
+{{hook}}
 
 {{insight}}
 
+Before changing tools:
 {{key_points}}
 
 {{cta}}

@@ -5,7 +5,7 @@ canonical_url: "https://onnellab.github.io/blog/en/read-large-txt-files-without-
 tags: "large-txt-file-reader,txt-viewer,plain-text,reading-workflow"
 ---
 
-> Originally published at https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/
+> ONNELLAB note: This is a practical checklist from our product and reading-workflow notes.
 
 # How to Read Large TXT Files Without Lag
 
@@ -116,3 +116,7 @@ No. A text editor is useful when you need to modify the file. A reader can be be
 ### When should I use VaultXT?
 
 Use VaultXT when your main task is opening, reading, searching, or lightly editing large plain-text files. It should not be treated as a replacement for every document editor or publishing tool.
+
+---
+
+Originally published at https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/

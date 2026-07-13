@@ -1,5 +1,5 @@
-How can I read a very large TXT file without lag?
+A huge TXT file should not freeze just because you opened it.
 
-Learn why very large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnec...
+The slow part is often how the app loads, renders, and searches the text.
 
 https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/

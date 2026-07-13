@@ -274,9 +274,11 @@ class PublishingTest(unittest.TestCase):
         self.assertLessEqual(len(x_text), 280)
         self.assertLessEqual(x_weighted_length(x_text), 280)
         self.assertLessEqual(len(bluesky_text), 300)
-        self.assertIn("How to Read Very Large TXT Files", x_text)
+        self.assertIn("A huge TXT file should not freeze just because you opened it.", x_text)
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", x_text)
+        self.assertIn("A huge TXT file should not freeze just because you opened it.", bluesky_text)
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", bluesky_text)
+        self.assertIn("A huge TXT file should not freeze just because you opened it.", linkedin_text)
         self.assertIn("Identify the file size.", linkedin_text)
         self.assertIn("Check the encoding.", linkedin_text)
         self.assertNotIn("{{", linkedin_text)
@@ -496,7 +498,7 @@ class PublishingTest(unittest.TestCase):
         self.assertTrue(str(refresh_calls[0][2]["Authorization"]).startswith("Basic "))
         self.assertEqual(calls[0][0], "https://api.x.com/2/tweets")
         self.assertEqual(calls[0][2]["Authorization"], "Bearer x-access-token")
-        self.assertIn("How to Read Very Large TXT Files", calls[0][1]["text"])
+        self.assertIn("A huge TXT file should not freeze just because you opened it.", calls[0][1]["text"])
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", calls[0][1]["text"])
 
     def test_social_posting_failure_records_error_type(self) -> None:
@@ -566,7 +568,7 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(calls[1][1]["collection"], "app.bsky.feed.post")
         record = calls[1][1]["record"]
         self.assertEqual(record["$type"], "app.bsky.feed.post")
-        self.assertIn("How to Read Very Large TXT Files", record["text"])
+        self.assertIn("A huge TXT file should not freeze just because you opened it.", record["text"])
         self.assertEqual(record["langs"], ["en"])
         self.assertIn("facets", record)
         facets = record["facets"]
@@ -648,8 +650,8 @@ class PublishingTest(unittest.TestCase):
         self.assertIn("# How to Read Very Large TXT Files", content)
         self.assertIn('cover_image: "https://example.com/blog-assets/en/read-large-txt-files/social-card.png"', hashnode_path.read_text(encoding="utf-8"))
         medium_content = medium_path.read_text(encoding="utf-8")
-        self.assertTrue(medium_content.startswith("# How to Read Very Large TXT Files"))
-        self.assertIn("> Originally published at https://example.com/blog/en/read-large-txt-files/", medium_content)
+        self.assertTrue(medium_content.startswith("> ONNELLAB note:"))
+        self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", medium_content)
         self.assertNotIn("canonical_url:", medium_content)
         self.assertFalse(medium_content.startswith("---"))
         manifest = (output_dir / "manifest.json").read_text(encoding="utf-8")

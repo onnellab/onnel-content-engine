@@ -1,4 +1,4 @@
-{{title}}
+{{hook}}
 
 {{bsky_summary}}
 
