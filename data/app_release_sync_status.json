@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-07-13T01:07:53.809620Z",
+  "outcome": "skipped",
+  "token_configured": false,
+  "messages": [
+    "skipped GitHub release status sync: token not configured"
+  ]
+}

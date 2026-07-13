@@ -21,6 +21,7 @@ DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.js
 DEFAULT_OUTPUT = ROOT / "generated" / "manual-publish" / "index.html"
 DEFAULT_APP_RELEASES = ROOT / "data" / "app_releases.csv"
 DEFAULT_APP_RELEASE_PUBLICATIONS = ROOT / "data" / "app_release_publications.csv"
+DEFAULT_APP_RELEASE_SYNC_STATUS = ROOT / "data" / "app_release_sync_status.json"
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
 DEFAULT_HOMEPAGE_REPO = Path(os.environ.get("ONNELLAB_HOMEPAGE_REPO", "/mnt/c/dev/onnellab.github.io"))
@@ -43,6 +44,12 @@ AUTOMATED_PLATFORMS = {"bluesky", "devto"}
 
 def read_json(path: Path) -> dict[str, object]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def release_sync_status_item(path: Path = DEFAULT_APP_RELEASE_SYNC_STATUS) -> dict[str, object]:
+    if not path.exists():
+        return {}
+    return read_json(path)
 
 
 def read_csv_rows(path: Path) -> list[dict[str, str]]:
@@ -383,12 +390,14 @@ def html_document(
     blog_items: list[dict[str, str]] | None = None,
     store_items: list[dict[str, str]] | None = None,
     site_items: list[dict[str, object]] | None = None,
+    release_sync_status: dict[str, object] | None = None,
 ) -> str:
     data = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
     release_data = json.dumps(releases or [], ensure_ascii=False).replace("</", "<\\/")
     blog_data = json.dumps(blog_items or [], ensure_ascii=False).replace("</", "<\\/")
     store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
     site_data = json.dumps(site_items or [], ensure_ascii=False).replace("</", "<\\/")
+    release_sync_data = json.dumps(release_sync_status or {}, ensure_ascii=False).replace("</", "<\\/")
     total = len(items)
     manual = sum(
         1
@@ -662,12 +671,14 @@ def html_document(
   <script id="blog-data" type="application/json">{blog_data}</script>
   <script id="store-data" type="application/json">{store_data}</script>
   <script id="site-data" type="application/json">{site_data}</script>
+  <script id="release-sync-data" type="application/json">{release_sync_data}</script>
   <script>
     let items = JSON.parse(document.getElementById('manual-data').textContent);
     let releases = JSON.parse(document.getElementById('release-data').textContent);
     let blogItems = JSON.parse(document.getElementById('blog-data').textContent);
     let storeItems = JSON.parse(document.getElementById('store-data').textContent);
     let siteItems = JSON.parse(document.getElementById('site-data').textContent);
+    let releaseSyncStatus = JSON.parse(document.getElementById('release-sync-data').textContent);
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
     const stateBranch = 'main';
@@ -694,6 +705,9 @@ def html_document(
         verifyPublications: '공개 프로필 확인',
         verifyingPublications: '확인 실행 중',
         verificationStarted: '확인 시작됨',
+        verificationQueued: '대기 중',
+        verificationRunning: '실행 중',
+        verificationCompleted: '완료',
         verificationReady: '실행',
         verificationTokenRequired: '토큰 필요',
         verificationFailed: '실패',
@@ -742,6 +756,11 @@ def html_document(
         currentVersion: '현재 버전',
         releasedDate: '현재 버전 게시일',
         releaseNotes: '출시 정보',
+        releaseSyncStatus: 'GitHub Release 확인',
+        releaseSyncSkipped: '토큰 없음으로 스킵',
+        releaseSyncSynced: '확인 완료',
+        releaseSyncNotFound: '릴리즈 없음',
+        releaseSyncUnknown: '확인 기록 없음',
         checkedAt: '최근 확인',
         noStore: '스토어 없음',
         noRelease: '릴리즈 후보 없음',
@@ -816,6 +835,9 @@ def html_document(
         verifyPublications: 'Check public profiles',
         verifyingPublications: 'Starting check',
         verificationStarted: 'Check started',
+        verificationQueued: 'Queued',
+        verificationRunning: 'Running',
+        verificationCompleted: 'Completed',
         verificationReady: 'Run',
         verificationTokenRequired: 'Token needed',
         verificationFailed: 'Failed',
@@ -864,6 +886,11 @@ def html_document(
         currentVersion: 'current version',
         releasedDate: 'current version published',
         releaseNotes: 'release info',
+        releaseSyncStatus: 'GitHub Release check',
+        releaseSyncSkipped: 'skipped: no token',
+        releaseSyncSynced: 'checked',
+        releaseSyncNotFound: 'release not found',
+        releaseSyncUnknown: 'no check record',
         checkedAt: 'last checked',
         noStore: 'no store',
         noRelease: 'no release candidate',
@@ -1082,7 +1109,7 @@ def html_document(
 
     function setVerifyState(label, countdown = 0) {{
       verifyStateLarge.dataset.state = label;
-      const isWorking = ['verifyingPublications', 'verificationStarted'].includes(label);
+      const isWorking = ['verifyingPublications', 'verificationStarted', 'verificationQueued', 'verificationRunning'].includes(label);
       const subtext = label === 'verificationStarted' && countdown > 0
         ? `${{t('verificationRefreshIn')}} ${{countdown}}${{t('secondsShort')}}`
         : '';
@@ -1133,6 +1160,41 @@ def html_document(
         }}
         setVerifyState('verificationStarted', verifyCountdownRemaining);
       }}, 1000);
+    }}
+
+    function workflowRunLabel(run) {{
+      if (!run) return 'verificationStarted';
+      if (run.status === 'queued' || run.status === 'requested' || run.status === 'waiting' || run.status === 'pending') return 'verificationQueued';
+      if (run.status === 'in_progress') return 'verificationRunning';
+      if (run.status === 'completed' && run.conclusion === 'success') return 'verificationCompleted';
+      if (run.status === 'completed') return 'verificationFailed';
+      return 'verificationStarted';
+    }}
+
+    async function latestVerificationRun() {{
+      const query = new URLSearchParams({{ branch: stateBranch, event: 'workflow_dispatch', per_page: '1' }});
+      const data = await githubRequest(`/repos/${{stateRepo}}/actions/workflows/verify-manual-publications.yml/runs?${{query.toString()}}`);
+      return data.workflow_runs?.[0] || null;
+    }}
+
+    async function pollVerificationRun(maxAttempts = 36) {{
+      clearVerifyCountdown();
+      let run = null;
+      for (let attempt = 0; attempt < maxAttempts; attempt += 1) {{
+        try {{
+          run = await latestVerificationRun();
+          setVerifyState(workflowRunLabel(run));
+          if (run?.status === 'completed') {{
+            await loadRemoteState({{ refreshDashboardData: true }});
+            setVerifyState(run.conclusion === 'success' ? 'verificationCompleted' : 'verificationFailed');
+            return;
+          }}
+        }} catch (error) {{
+          console.warn(error);
+        }}
+        await new Promise((resolve) => setTimeout(resolve, attempt < 4 ? 5000 : 10000));
+      }}
+      startVerifyCountdown(30);
     }}
 
     function revealTokenInput() {{
@@ -1189,7 +1251,8 @@ def html_document(
           headers: {{ 'Content-Type': 'application/json' }},
           body: JSON.stringify({{ ref: stateBranch, inputs: {{ visual_public_pages: 'true' }} }}),
         }});
-        startVerifyCountdown(90);
+        setVerifyState('verificationQueued');
+        await pollVerificationRun();
       }} catch (error) {{
         clearVerifyCountdown();
         setVerifyState('verificationFailed');
@@ -1217,6 +1280,7 @@ def html_document(
       blogItems = readEmbeddedJson(doc, 'blog-data');
       storeItems = readEmbeddedJson(doc, 'store-data');
       siteItems = readEmbeddedJson(doc, 'site-data');
+      releaseSyncStatus = readEmbeddedJson(doc, 'release-sync-data');
       syncFilterOptions();
     }}
 
@@ -1585,7 +1649,7 @@ def html_document(
       const groups = appStatusGroups();
       const storeCount = storeItems.length;
       const releaseCount = releases.length;
-      appStatusSummary.textContent = `${{groups.length}} apps / ${{storeCount}} stores / ${{releaseCount}} releases`;
+      appStatusSummary.textContent = `${{groups.length}} apps / ${{storeCount}} stores / ${{releaseCount}} releases / ${{releaseSyncSummaryText()}}`;
       groups.forEach((group) => {{
         const card = document.createElement('div');
         card.className = 'app-status-card';
@@ -1652,6 +1716,16 @@ def html_document(
         }}
         appStatusGrid.appendChild(card);
       }});
+    }}
+
+    function releaseSyncSummaryText() {{
+      if (!releaseSyncStatus || !releaseSyncStatus.outcome) return `${{t('releaseSyncStatus')}}: ${{t('releaseSyncUnknown')}}`;
+      const label = releaseSyncStatus.outcome === 'skipped'
+        ? t('releaseSyncSkipped')
+        : releaseSyncStatus.outcome === 'not_found'
+          ? t('releaseSyncNotFound')
+          : t('releaseSyncSynced');
+      return `${{t('releaseSyncStatus')}}: ${{label}} / ${{formatDate(releaseSyncStatus.checked_at)}}`;
     }}
 
     function statusClass(status) {{
@@ -1916,6 +1990,7 @@ def build_manual_publish_site(
     topics_path: Path = DEFAULT_TOPICS,
     app_releases_path: Path = DEFAULT_APP_RELEASES,
     app_release_publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS,
+    app_release_sync_status_path: Path = DEFAULT_APP_RELEASE_SYNC_STATUS,
     store_versions_path: Path = DEFAULT_STORE_VERSIONS,
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
 ) -> Path:
@@ -1925,8 +2000,9 @@ def build_manual_publish_site(
     blog_items = blog_status_items(topics_path)
     store_items = store_status_items(store_versions_path)
     site_items = homepage_status_items(homepage_repo)
+    release_sync_status = release_sync_status_item(app_release_sync_status_path)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(html_document(items, releases, blog_items, store_items, site_items), encoding="utf-8")
+    output.write_text(html_document(items, releases, blog_items, store_items, site_items, release_sync_status), encoding="utf-8")
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")
     return output
@@ -1939,6 +2015,7 @@ def main() -> int:
     parser.add_argument("--topics", type=Path, default=DEFAULT_TOPICS)
     parser.add_argument("--app-releases", type=Path, default=DEFAULT_APP_RELEASES)
     parser.add_argument("--app-release-publications", type=Path, default=DEFAULT_APP_RELEASE_PUBLICATIONS)
+    parser.add_argument("--app-release-sync-status", type=Path, default=DEFAULT_APP_RELEASE_SYNC_STATUS)
     parser.add_argument("--store-versions", type=Path, default=DEFAULT_STORE_VERSIONS)
     parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPO)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -1950,6 +2027,7 @@ def main() -> int:
         args.topics,
         args.app_releases,
         args.app_release_publications,
+        args.app_release_sync_status,
         args.store_versions,
         args.homepage_repo,
     )

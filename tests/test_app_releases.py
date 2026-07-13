@@ -270,22 +270,25 @@ class AppReleaseTest(unittest.TestCase):
 
             with patch.dict("os.environ", {"GITHUB_TOKEN": "token"}):
                 with patch("sync_github_release_status.github_request", fake_request):
-                    messages = sync_github_release_status(path)
+                    messages = sync_github_release_status(path, status_output=Path(temp) / "sync_status.json")
 
             text = path.read_text(encoding="utf-8")
             self.assertEqual(messages, ["synced onnellab/vaultxt v1.2.0 https://github.com/onnellab/vaultxt/releases/tag/v1.2.0"])
             self.assertIn(",released,", text)
             self.assertIn(",789,", text)
+            self.assertIn('"outcome": "synced"', (Path(temp) / "sync_status.json").read_text(encoding="utf-8"))
 
     def test_sync_github_release_status_can_skip_missing_token(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "app_releases.csv"
             path.write_text(release_csv(), encoding="utf-8")
+            status_output = Path(temp) / "sync_status.json"
 
             with patch.dict("os.environ", {}, clear=True):
-                messages = sync_github_release_status(path, allow_missing_token=True)
+                messages = sync_github_release_status(path, allow_missing_token=True, status_output=status_output)
 
             self.assertEqual(messages, ["skipped GitHub release status sync: token not configured"])
+            self.assertIn('"outcome": "skipped"', status_output.read_text(encoding="utf-8"))
 
     def test_create_github_releases_supports_notes_only_release(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
