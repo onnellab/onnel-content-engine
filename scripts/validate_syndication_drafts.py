@@ -71,6 +71,8 @@ def validate_draft(draft: dict[str, object], project_root: Path = ROOT) -> None:
         raise SyndicationValidationError(f"{topic_id} draft body has no title heading: {draft_path}")
     if platform == "devto" and metadata.get("published") != "true":
         raise SyndicationValidationError(f"{topic_id} Dev.to draft must be public by default")
+    if platform == "devto" and re.search(r"https?://[^\s)]+/workflow-diagram\.svg|/blog-assets/[^\s)]+/workflow-diagram\.svg", content):
+        raise SyndicationValidationError(f"{topic_id} Dev.to draft must use PNG body images, not SVG")
     if platform in {"devto", "hashnode"} and not metadata.get("tags"):
         raise SyndicationValidationError(f"{topic_id} {platform} draft has no tags")
     if platform == "hashnode":

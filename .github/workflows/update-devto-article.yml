@@ -6,7 +6,10 @@ on:
       - main
     paths:
       - .github/workflows/update-devto-article.yml
+      - generated/syndication/devto/**
+      - scripts/generate_syndication_drafts.py
       - scripts/update_devto_article.py
+      - scripts/validate_syndication_drafts.py
   workflow_dispatch:
     inputs:
       topic_id:

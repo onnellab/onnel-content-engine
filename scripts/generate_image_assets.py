@@ -5,9 +5,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
+from publishing import rsvg_convert_command
 from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEADER, TopicError, TopicStore, read_csv
 
 
@@ -134,7 +136,7 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
 
 
 def spec_parts(spec_path: Path, images_root: Path) -> tuple[str, str, str]:
-    relative = spec_path.relative_to(images_root)
+    relative = spec_path.resolve().relative_to(images_root.resolve())
     if len(relative.parts) != 4 or relative.name != "image_spec.json":
         raise ImageAssetError(f"unsupported image spec path: {spec_path}")
     return relative.parts[0], relative.parts[1], relative.parts[2]
@@ -188,6 +190,8 @@ def generate_image_asset(
     output_path = assets_root / language / slug / "workflow-diagram.svg"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(workflow_svg(title, keyword, language), encoding="utf-8")
+    png_path = output_path.with_suffix(".png")
+    subprocess.run(rsvg_convert_command() + ["-w", "1200", "-h", "675", str(output_path), "-o", str(png_path)], check=True)
     markdown_path = topics_path.parent.parent / topic["canonical_path"]
     ensure_markdown_references_asset(markdown_path, language, slug, title)
     if advance_to_review and topic["status"] == "image_planning":

@@ -614,17 +614,9 @@ def html_document(
     .run-link {{ min-height: 34px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--blue); font-size: 12px; font-weight: 900; text-decoration: none; padding: 7px 10px; }}
     .run-link:hover {{ border-color: var(--blue); background: var(--blue-soft); }}
     .run-link[hidden] {{ display: none; }}
-    .verification-summary {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 12px; margin-bottom: 14px; box-shadow: var(--shadow); }}
-    .verification-summary strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
-    .verification-summary-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }}
-    .verification-summary-grid span {{ display: block; border: 1px solid var(--line); border-radius: 8px; background: #fffdf9; color: var(--muted); font-size: 12px; line-height: 1.4; padding: 8px; overflow-wrap: anywhere; }}
-    .verification-summary-grid b {{ display: block; color: var(--ink); font-size: 17px; line-height: 1.1; margin-top: 3px; }}
-    .verification-summary .note {{ margin-top: 8px; }}
     .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 10px; margin-bottom: 14px; box-shadow: var(--shadow); }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
     .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, auto); gap: 8px; margin-top: 12px; }}
-    details.advanced {{ margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }}
-    details.advanced summary {{ cursor: pointer; color: var(--ink); font-weight: 800; min-height: 38px; display: inline-flex; align-items: center; gap: 8px; width: fit-content; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 7px 12px; }}
     .controls {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(116px, 150px)); gap: 10px; margin-top: 8px; }}
     .secondary-controls {{ display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }}
     .platform-status {{ margin-top: 18px; }}
@@ -643,7 +635,6 @@ def html_document(
     .platform-card > span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
     .status-section {{ margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }}
     .status-section summary {{ cursor: pointer; font-weight: 900; font-size: 16px; min-height: 40px; display: inline-flex; align-items: center; gap: 8px; width: fit-content; max-width: 100%; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 8px 12px; }}
-    details.advanced summary:hover,
     .platform-status summary:hover,
     .status-section summary:hover {{ border-color: var(--blue); background: var(--blue-soft); }}
     .release-head {{ display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 10px; }}
@@ -695,6 +686,8 @@ def html_document(
     .tag.verification-public {{ color: #6d4d00; border-color: #ead08a; background: #fff8df; }}
     .tag.verification-manual {{ color: var(--muted); border-color: var(--line); background: #fff; }}
     h2 {{ font-size: 17px; line-height: 1.35; margin: 0 0 6px; }}
+    h2 a {{ color: inherit; text-decoration: none; border-radius: 6px; margin: -3px -5px; padding: 3px 5px; }}
+    h2 a:hover, h2 a:focus-visible {{ color: var(--blue); background: var(--blue-soft); }}
     .subtitle {{ color: var(--muted); font-size: 12px; margin: 0 0 10px; overflow-wrap: anywhere; }}
     .card-summary {{ display: grid; gap: 8px; margin-bottom: 10px; }}
     .card-summary .note {{ margin-top: 0; }}
@@ -779,32 +772,24 @@ def html_document(
         <a id="verification-run-link" class="run-link" href="#" target="_blank" rel="noopener" hidden>실행 기록</a>
       </div>
     </section>
-    <section class="verification-summary" aria-label="Verification result summary">
-      <strong id="verification-summary-title">공개 확인 결과</strong>
-      <div id="verification-summary-grid" class="verification-summary-grid"></div>
-      <div id="verification-summary-note" class="note"></div>
-    </section>
     <section class="tool-panel" aria-label="Publish controls">
     <div class="quick-row">
       <select id="platform"><option value="">모든 매체</option></select>
       <select id="visibility"><option value="due">게시 예정만</option><option value="active">진행 항목만</option><option value="all">완료 포함</option></select>
       <button id="toggle-variants" type="button" class="secondary">대안 보기</button>
     </div>
-    <details class="advanced">
-      <summary id="advanced-summary">상세 필터와 동기화</summary>
-      <div class="controls">
+      <div class="controls" hidden>
         <input id="search" type="search" placeholder="토픽, 매체, 언어, 상태 검색">
         <select id="language"><option value="">모든 언어</option></select>
         <select id="status"><option value="">모든 상태</option></select>
         <select id="mode"><option value="manual">수동만</option><option value="automatic">자동화만</option><option value="">전체</option></select>
       </div>
-      <div class="auth">
+      <div class="auth" id="sync-auth" hidden>
         <input id="token" type="password" autocomplete="off" placeholder="ONNELLAB_GITHUB_PAGES_TOKEN">
         <button id="save-token" type="button">동기화 연결</button>
         <button id="refresh-state" type="button" class="secondary">새로고침</button>
         <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
       </div>
-    </details>
     </section>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
@@ -891,12 +876,10 @@ def html_document(
         verificationRunning: '실행 중',
         verificationCompleted: '완료',
         verificationRunLink: 'GitHub Actions 실행 기록',
-        verificationSummaryTitle: '공개 확인 결과',
         verificationChecked: '확인 항목',
         verificationAlreadyDone: '기존 완료',
         verificationNewDone: '신규 완료',
         verificationPending: '미확인',
-        verificationSummaryNote: '최근 확인',
         verificationNoReport: '확인 기록 없음',
         verificationReady: '실행',
         verificationTokenRequired: '토큰 필요',
@@ -1053,12 +1036,10 @@ def html_document(
         verificationRunning: 'Running',
         verificationCompleted: 'Completed',
         verificationRunLink: 'GitHub Actions run',
-        verificationSummaryTitle: 'Public check result',
         verificationChecked: 'checked',
         verificationAlreadyDone: 'already done',
         verificationNewDone: 'newly done',
         verificationPending: 'unconfirmed',
-        verificationSummaryNote: 'last checked',
         verificationNoReport: 'no check record',
         verificationReady: 'Run',
         verificationTokenRequired: 'Token needed',
@@ -1213,7 +1194,7 @@ def html_document(
       visibility: document.getElementById('visibility'),
     }};
     const tokenInput = document.getElementById('token');
-    const advancedPanel = document.querySelector('details.advanced');
+    const syncAuthPanel = document.getElementById('sync-auth');
     const badgeButton = document.getElementById('enable-badge');
     const refreshButton = document.getElementById('refresh-state');
     const verifyButtonLarge = document.getElementById('verify-publications-large');
@@ -1234,8 +1215,6 @@ def html_document(
     const pricingStatusSummary = document.getElementById('pricing-status-summary');
     const qualityStatusGrid = document.getElementById('quality-status-grid');
     const qualityStatusSummary = document.getElementById('quality-status-summary');
-    const verificationSummaryGrid = document.getElementById('verification-summary-grid');
-    const verificationSummaryNote = document.getElementById('verification-summary-note');
     let remoteState = JSON.parse(document.getElementById('manual-state-data').textContent);
     remoteState.done ||= {{}};
     let remoteSha = '';
@@ -1259,13 +1238,11 @@ def html_document(
       document.getElementById('overview-posted-label').textContent = t('overviewPosted');
       document.getElementById('overview-sync-label').textContent = t('overviewSync');
       document.getElementById('overview-verify-label').textContent = t('overviewVerify');
-      document.getElementById('advanced-summary').textContent = t('advancedSummary');
       document.getElementById('app-status-title').textContent = t('appStatusTitle');
       document.getElementById('platform-status-title').textContent = t('platformStatusTitle');
       document.getElementById('site-status-title').textContent = t('siteStatusTitle');
       document.getElementById('pricing-status-title').textContent = t('pricingStatusTitle');
       document.getElementById('quality-status-title').textContent = t('qualityStatusTitle');
-      document.getElementById('verification-summary-title').textContent = t('verificationSummaryTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
@@ -1292,7 +1269,6 @@ def html_document(
       renderSiteStatusSummary();
       renderPricingStatusSummary();
       renderQualityStatusSummary();
-      renderVerificationSummary();
     }}
 
     function syncViewButtons() {{
@@ -1366,6 +1342,7 @@ def html_document(
       verifyButtonPrimary.disabled = false;
       verifyButtonPrimary.setAttribute('aria-disabled', 'false');
       document.getElementById('token-note').hidden = Boolean(githubToken());
+      if (githubToken()) syncAuthPanel.hidden = true;
       if (!githubToken()) setVerifyState('verificationTokenRequired');
     }}
 
@@ -1489,7 +1466,7 @@ def html_document(
     }}
 
     function revealTokenInput() {{
-      advancedPanel.open = true;
+      syncAuthPanel.hidden = false;
       tokenInput.classList.add('needs-token');
       tokenInput.scrollIntoView({{ block: 'center', behavior: 'smooth' }});
       tokenInput.focus({{ preventScroll: true }});
@@ -2067,31 +2044,6 @@ def html_document(
       }});
     }}
 
-    function renderVerificationSummary() {{
-      verificationSummaryGrid.textContent = '';
-      const counts = verificationReport?.counts || {{}};
-      const cells = [
-        [t('verificationChecked'), counts.checked ?? 0],
-        [t('verificationAlreadyDone'), counts.already_done ?? 0],
-        [t('verificationNewDone'), counts.verified ?? 0],
-        [t('verificationPending'), counts.pending ?? 0],
-      ];
-      cells.forEach(([label, value]) => {{
-        const cell = document.createElement('span');
-        cell.textContent = label;
-        const number = document.createElement('b');
-        number.textContent = String(value);
-        cell.appendChild(number);
-        verificationSummaryGrid.appendChild(cell);
-      }});
-      const checkedAt = verificationReport?.checked_at ? formatDate(verificationReport.checked_at) : t('verificationNoReport');
-      const pendingItems = Array.isArray(verificationReport?.items) ? verificationReport.items.filter((item) => item.status === 'pending') : [];
-      const reasonSummary = pendingItems.length
-        ? ' / ' + pendingItems.map((item) => `${{item.platform}}: ${{item.reason}}`).join(' / ')
-        : '';
-      verificationSummaryNote.textContent = `${{t('verificationSummaryNote')}}: ${{checkedAt}}${{reasonSummary}}`;
-    }}
-
     function appStatusGroups() {{
       const groups = new Map();
       function ensure(item) {{
@@ -2215,6 +2167,12 @@ def html_document(
       return text.split('\\n').find((line) => line.trim()) || item.slug;
     }}
 
+    function publishedItemUrl(item) {{
+      if (!isDone(item)) return '';
+      const url = String(item.posted_url || item.canonical_url || '').trim();
+      return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/') ? url : '';
+    }}
+
     function render() {{
       const query = filters.search.value.trim().toLowerCase();
       const platform = filters.platform.value;
@@ -2251,7 +2209,6 @@ def html_document(
       renderAppStatusSummary();
       renderSiteStatusSummary();
       renderPricingStatusSummary();
-      renderVerificationSummary();
       updateVariantToggle();
       syncViewButtons();
       updateAppBadge();
@@ -2301,7 +2258,20 @@ def html_document(
       }}
       meta.textContent = statusParts.filter(Boolean).join(' / ');
       const title = document.createElement('h2');
-      title.textContent = displayTitle(item) + (item.is_variant ? ' / ' + t('variantTag') : '');
+      const titleText = displayTitle(item) + (item.is_variant ? ' / ' + t('variantTag') : '');
+      const publishedUrl = publishedItemUrl(item);
+      if (publishedUrl) {{
+        const titleLink = document.createElement('a');
+        titleLink.href = publishedUrl;
+        titleLink.textContent = titleText;
+        if (!publishedUrl.startsWith('/')) {{
+          titleLink.target = '_blank';
+          titleLink.rel = 'noopener noreferrer';
+        }}
+        title.appendChild(titleLink);
+      }} else {{
+        title.textContent = titleText;
+      }}
       const summary = document.createElement('div');
       summary.className = 'card-summary';
       const summaryNote = document.createElement('div');

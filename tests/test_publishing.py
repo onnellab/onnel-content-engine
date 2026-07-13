@@ -647,7 +647,8 @@ class PublishingTest(unittest.TestCase):
         self.assertIn("published: true", content)
         self.assertIn('canonical_url: "https://example.com/blog/en/read-large-txt-files/"', content)
         self.assertIn('tags: "large-txt-files"', content)
-        self.assertIn("![Workflow diagram](https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", content)
+        self.assertIn("![Workflow diagram](https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.png", content)
+        self.assertNotIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", content)
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", content)
         self.assertIn("# How to Read Very Large TXT Files", content)
         self.assertIn('cover_image: "https://example.com/blog-assets/en/read-large-txt-files/social-card.png"', hashnode_path.read_text(encoding="utf-8"))
@@ -724,7 +725,8 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(article["canonical_url"], "https://example.com/blog/en/read-large-txt-files/")
         self.assertEqual(article["tags"], "large-txt-files")
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", article["body_markdown"])
-        self.assertIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", article["body_markdown"])
+        self.assertIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.png", article["body_markdown"])
+        self.assertNotIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", article["body_markdown"])
 
     def test_hashnode_adapter_is_export_only_without_paid_api(self) -> None:
         output_dir = self.root / "generated" / "syndication"

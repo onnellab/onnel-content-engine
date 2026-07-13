@@ -59,11 +59,18 @@ def social_card_url(site_url: str, topic: dict[str, str]) -> str:
     return urljoin(normalize_site_url(site_url), f"blog-assets/{topic['primary_language']}/{topic['slug']}/social-card.png")
 
 
-def absolutize_markdown_links(markdown: str, site_url: str) -> str:
+def platform_markdown_url(url: str, platform: str) -> str:
+    if platform == "devto" and url.startswith("/blog-assets/") and url.endswith("/workflow-diagram.svg"):
+        return url.removesuffix(".svg") + ".png"
+    return url
+
+
+def absolutize_markdown_links(markdown: str, site_url: str, platform: str = "") -> str:
     base = normalize_site_url(site_url)
 
     def replace_image(match: re.Match[str]) -> str:
         alt, url, title = match.groups()
+        url = platform_markdown_url(url, platform)
         if url.startswith(("http://", "https://", "mailto:", "#")):
             return match.group(0)
         return f"![{alt}]({urljoin(base, url.lstrip('/'))}{title or ''})"
@@ -170,7 +177,7 @@ def generate_syndication_drafts(
             destination.parent.mkdir(parents=True, exist_ok=True)
             context["syndication_note"] = syndication_note(article, platform)
             context["syndication_intro"] = syndication_intro(article, platform)
-            context["body"] = absolutize_markdown_links(syndication_body(article, body.strip(), platform), site_url)
+            context["body"] = absolutize_markdown_links(syndication_body(article, body.strip(), platform), site_url, platform)
             destination.write_text(render_template(template_path.read_text(encoding="utf-8"), context), encoding="utf-8")
             item = {
                 "topic_id": article.topic["id"],
