@@ -23,6 +23,7 @@ class ManualPublishSiteTest(unittest.TestCase):
             syndication_draft.write_text("# Article\n\nBody", encoding="utf-8")
             social_manifest = root / "social.json"
             syndication_manifest = root / "syndication.json"
+            manual_state = root / "manual_publish_state.json"
             output = root / "manual" / "index.html"
             social_manifest.write_text(
                 json.dumps(
@@ -68,8 +69,26 @@ class ManualPublishSiteTest(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
+            manual_state.write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "updated_at": "2026-07-13T10:00:00+09:00",
+                        "done": {
+                            "TOPIC-0001::x::en::x": {
+                                "topic_id": "TOPIC-0001",
+                                "platform": "x",
+                                "language": "en",
+                                "template_id": "x",
+                                "verification_method": "existing_chrome_profile",
+                            }
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
 
-            build_manual_publish_site(social_manifest, syndication_manifest, output, ROOT / "data" / "topics.csv")
+            build_manual_publish_site(social_manifest, syndication_manifest, output, ROOT / "data" / "topics.csv", manual_state)
 
             html = output.read_text(encoding="utf-8")
             self.assertIn("ONNELLAB 게시 상태 대시보드", html)
@@ -84,6 +103,9 @@ class ManualPublishSiteTest(unittest.TestCase):
             self.assertIn("https://dev.to/new", html)
             self.assertIn("/blog-assets/en/example/social-card.png", html)
             self.assertIn("statePath = 'data/manual_publish_state.json'", html)
+            self.assertIn("manual-state-data", html)
+            self.assertIn("existing_chrome_profile", html)
+            self.assertIn("remoteState = JSON.parse(document.getElementById('manual-state-data').textContent)", html)
             self.assertIn("setAppBadge", html)
             self.assertIn("Enable badge", html)
             self.assertIn('name="robots" content="noindex,nofollow,noarchive"', html)

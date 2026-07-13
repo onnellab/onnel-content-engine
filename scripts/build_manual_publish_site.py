@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TOPICS = ROOT / "data" / "topics.csv"
 DEFAULT_SOCIAL_MANIFEST = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.json"
+DEFAULT_MANUAL_STATE = ROOT / "data" / "manual_publish_state.json"
 DEFAULT_OUTPUT = ROOT / "generated" / "manual-publish" / "index.html"
 DEFAULT_APP_RELEASES = ROOT / "data" / "app_releases.csv"
 DEFAULT_APP_RELEASE_PUBLICATIONS = ROOT / "data" / "app_release_publications.csv"
@@ -50,6 +51,17 @@ def release_sync_status_item(path: Path = DEFAULT_APP_RELEASE_SYNC_STATUS) -> di
     if not path.exists():
         return {}
     return read_json(path)
+
+
+def manual_state_item(path: Path = DEFAULT_MANUAL_STATE) -> dict[str, object]:
+    if not path.exists():
+        return {"done": {}, "updated_at": "", "version": 1}
+    state = read_json(path)
+    if not isinstance(state.get("done"), dict):
+        state["done"] = {}
+    state.setdefault("updated_at", "")
+    state.setdefault("version", 1)
+    return state
 
 
 def read_csv_rows(path: Path) -> list[dict[str, str]]:
@@ -386,13 +398,22 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
 
 def html_document(
     items: list[dict[str, object]],
+    manual_state: dict[str, object] | None = None,
     releases: list[dict[str, str]] | None = None,
     blog_items: list[dict[str, str]] | None = None,
     store_items: list[dict[str, str]] | None = None,
     site_items: list[dict[str, object]] | None = None,
     release_sync_status: dict[str, object] | None = None,
 ) -> str:
+    manual_state = manual_state or {"done": {}, "updated_at": "", "version": 1}
+    done_state = manual_state.get("done", {})
+    done_keys = set(done_state) if isinstance(done_state, dict) else set()
+
+    def item_is_done(item: dict[str, object]) -> bool:
+        return item["status"] == "posted" or str(item.get("manual_key", "")) in done_keys
+
     data = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
+    manual_state_data = json.dumps(manual_state, ensure_ascii=False).replace("</", "<\\/")
     release_data = json.dumps(releases or [], ensure_ascii=False).replace("</", "<\\/")
     blog_data = json.dumps(blog_items or [], ensure_ascii=False).replace("</", "<\\/")
     store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
@@ -404,9 +425,10 @@ def html_document(
         for item in items
         if item["publishing_mode"] == "manual"
         and not item["is_variant"]
+        and not item_is_done(item)
         and item["status"] in {"draft", "failed", "approved"}
     )
-    posted = sum(1 for item in items if item["status"] == "posted")
+    posted = sum(1 for item in items if not item["is_variant"] and item_is_done(item))
     return f"""<!doctype html>
 <html lang="ko">
 <head>
@@ -667,6 +689,7 @@ def html_document(
     </details>
   </main>
   <script id="manual-data" type="application/json">{data}</script>
+  <script id="manual-state-data" type="application/json">{manual_state_data}</script>
   <script id="release-data" type="application/json">{release_data}</script>
   <script id="blog-data" type="application/json">{blog_data}</script>
   <script id="store-data" type="application/json">{store_data}</script>
@@ -983,7 +1006,8 @@ def html_document(
     const appStatusSummary = document.getElementById('app-status-summary');
     const siteStatusGrid = document.getElementById('site-status-grid');
     const siteStatusSummary = document.getElementById('site-status-summary');
-    let remoteState = {{ done: {{}}, updated_at: '', version: 1 }};
+    let remoteState = JSON.parse(document.getElementById('manual-state-data').textContent);
+    remoteState.done ||= {{}};
     let remoteSha = '';
     let showVariants = false;
     let currentView = 'due';
@@ -1988,6 +2012,7 @@ def build_manual_publish_site(
     syndication_manifest: Path = DEFAULT_SYNDICATION_MANIFEST,
     output: Path = DEFAULT_OUTPUT,
     topics_path: Path = DEFAULT_TOPICS,
+    manual_state_path: Path = DEFAULT_MANUAL_STATE,
     app_releases_path: Path = DEFAULT_APP_RELEASES,
     app_release_publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS,
     app_release_sync_status_path: Path = DEFAULT_APP_RELEASE_SYNC_STATUS,
@@ -1996,13 +2021,17 @@ def build_manual_publish_site(
 ) -> Path:
     topics = read_topics(topics_path)
     items = social_items(social_manifest, topics) + syndication_items(syndication_manifest, topics)
+    manual_state = manual_state_item(manual_state_path)
     releases = app_release_items(app_releases_path, app_release_publications_path)
     blog_items = blog_status_items(topics_path)
     store_items = store_status_items(store_versions_path)
     site_items = homepage_status_items(homepage_repo)
     release_sync_status = release_sync_status_item(app_release_sync_status_path)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(html_document(items, releases, blog_items, store_items, site_items, release_sync_status), encoding="utf-8")
+    output.write_text(
+        html_document(items, manual_state, releases, blog_items, store_items, site_items, release_sync_status),
+        encoding="utf-8",
+    )
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")
     return output
@@ -2013,6 +2042,7 @@ def main() -> int:
     parser.add_argument("--social-manifest", type=Path, default=DEFAULT_SOCIAL_MANIFEST)
     parser.add_argument("--syndication-manifest", type=Path, default=DEFAULT_SYNDICATION_MANIFEST)
     parser.add_argument("--topics", type=Path, default=DEFAULT_TOPICS)
+    parser.add_argument("--manual-state", type=Path, default=DEFAULT_MANUAL_STATE)
     parser.add_argument("--app-releases", type=Path, default=DEFAULT_APP_RELEASES)
     parser.add_argument("--app-release-publications", type=Path, default=DEFAULT_APP_RELEASE_PUBLICATIONS)
     parser.add_argument("--app-release-sync-status", type=Path, default=DEFAULT_APP_RELEASE_SYNC_STATUS)
@@ -2025,6 +2055,7 @@ def main() -> int:
         args.syndication_manifest,
         args.output,
         args.topics,
+        args.manual_state,
         args.app_releases,
         args.app_release_publications,
         args.app_release_sync_status,
