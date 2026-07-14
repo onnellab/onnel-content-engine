@@ -1,0 +1,9 @@
+How can I convert local media files without sending them to a server is a handling issue, not just a processing choice.
+
+Use a local media converter when the file should stay on your device and the task is a focused format change, size adjustment, or compatibility fix. Before converting, identify the source format, target device, output format, quality needs, and whether the file contains private audio, video, or image content.
+
+- Make a copy of the original file or confirm that the converter writes a separate output file.
+- Identify the target use: playback, upload, archive, editing, or sharing.
+
+Read the full article:
+https://onnellab.github.io/blog/en/convert-local-media-files-privately/

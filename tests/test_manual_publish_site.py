@@ -10,7 +10,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from build_manual_publish_site import build_manual_publish_site  # noqa: E402
+from build_manual_publish_site import build_manual_publish_site, current_verification_report, latest_git_time  # noqa: E402
 
 
 class ManualPublishSiteTest(unittest.TestCase):
@@ -21,6 +21,22 @@ class ManualPublishSiteTest(unittest.TestCase):
             social_draft.write_text("Post text\nhttps://onnellab.github.io/blog/en/example/", encoding="utf-8")
             syndication_draft = root / "devto.md"
             syndication_draft.write_text("# Article\n\nBody", encoding="utf-8")
+            hashnode_draft = root / "hashnode.md"
+            hashnode_draft.write_text(
+                """---
+title: "Hashnode Title"
+canonical_url: "https://onnellab.github.io/blog/en/example/"
+tags: "alpha,beta"
+cover_image: "https://onnellab.github.io/card.png"
+publication_id: ""
+---
+
+# Hashnode Title
+
+Body
+""",
+                encoding="utf-8",
+            )
             social_manifest = root / "social.json"
             syndication_manifest = root / "syndication.json"
             manual_state = root / "manual_publish_state.json"
@@ -63,6 +79,16 @@ class ManualPublishSiteTest(unittest.TestCase):
                                 "status": "draft",
                                 "draft_path": syndication_draft.as_posix(),
                                 "canonical_url": "https://onnellab.github.io/blog/en/example/",
+                            },
+                            {
+                                "topic_id": "TOPIC-0001",
+                                "platform": "hashnode",
+                                "language": "en",
+                                "category": "reading",
+                                "slug": "example",
+                                "status": "draft",
+                                "draft_path": hashnode_draft.as_posix(),
+                                "canonical_url": "https://onnellab.github.io/blog/en/example/",
                             }
                         ]
                     }
@@ -98,9 +124,51 @@ class ManualPublishSiteTest(unittest.TestCase):
             self.assertIn("공개 확인", html)
             self.assertIn("ONNELLAB_GITHUB_PAGES_TOKEN 입력 후 동기화와 공개 확인을 실행할 수 있습니다.", html)
             self.assertIn("ONNELLAB_GITHUB_PAGES_TOKEN", html)
+            self.assertIn("자동 포스팅 연결", html)
+            self.assertIn("Bluesky 앱 패스워드", html)
+            self.assertIn("Dev.to API key", html)
+            self.assertIn('id="bluesky-app-password"', html)
+            self.assertIn('id="devto-api-key"', html)
+            self.assertIn("onnellab-publishing-credentials", html)
+            self.assertIn("credentialEnvBlock", html)
+            self.assertIn("export BLUESKY_APP_PASSWORD", html)
+            self.assertIn("export DEVTO_API_KEY", html)
+            self.assertIn("python3 scripts/run_with_local_env.py -- python3 scripts/post_core_distribution.py", html)
+            self.assertIn("python3 scripts/run_with_local_env.py -- python3 scripts/sync_publishing_secrets.py", html)
+            self.assertIn("저장은 이 브라우저에만 유지됩니다.", html)
+            self.assertIn("지금 자동 포스팅 실행", html)
+            self.assertIn("runPostingNow", html)
+            self.assertIn("actions/workflows/publishing.yml/dispatches", html)
+            self.assertIn("dry_run: 'false'", html)
+            self.assertIn("doneReportRecord", html)
+            self.assertIn("verificationReportRecord", html)
+            self.assertIn("current_verification_report", Path(ROOT / "scripts" / "build_manual_publish_site.py").read_text(encoding="utf-8"))
+            self.assertIn("pendingReportReason", html)
+            self.assertIn("reportPath = 'data/manual_publication_verification_report.json'", html)
+            self.assertIn("contents/${reportPath}", html)
+            self.assertIn("loadRemoteState({ refreshDashboardData: true })", html)
+            self.assertIn("verificationPendingReason", html)
+            self.assertIn("actions.append(open, doneButton, detailToggle)", html)
+            self.assertIn("반복어 수정 명령 복사", html)
+            self.assertIn("copyRepetitionFixCommand", html)
+            self.assertIn("python3 scripts/reduce_social_repetition.py && python3 scripts/build_manual_publish_site.py", html)
+            self.assertIn(".app-status-card { display: flex; flex-direction: column; gap: 10px; }", html)
+            self.assertIn(".app-status-row:only-of-type { flex: 1 1 auto; }", html)
             self.assertIn('id="lang-toggle"', html)
             self.assertIn("https://twitter.com/intent/tweet", html)
             self.assertIn("https://dev.to/new", html)
+            self.assertIn('"platform": "hashnode"', html)
+            self.assertIn('"publish_title": "Hashnode Title"', html)
+            self.assertIn('"publish_body": "# Hashnode Title\\n\\nBody"', html)
+            self.assertIn('"publish_tags": "alpha,beta"', html)
+            self.assertIn('"publish_canonical_url": "https://onnellab.github.io/blog/en/example/"', html)
+            self.assertIn('"publish_cover_image": "https://onnellab.github.io/card.png"', html)
+            self.assertIn('"seo_description": "Learn why very large TXT files can feel slow', html)
+            self.assertIn("appendHashnodePublishFields", html)
+            self.assertIn("hashnodeQuickCopyRows", html)
+            self.assertIn("copyBodyAndOpen", html)
+            self.assertIn("본문 복사 후 열기", html)
+            self.assertIn("copyAndOpenText", html)
             self.assertIn("/blog-assets/en/example/social-card.png", html)
             self.assertIn("statePath = 'data/manual_publish_state.json'", html)
             self.assertIn("manual-state-data", html)
@@ -144,7 +212,10 @@ class ManualPublishSiteTest(unittest.TestCase):
             self.assertIn("blog-data", html)
             self.assertIn("다음 게시 예정", html)
             self.assertIn("function nextBlogScheduledDate()", html)
+            self.assertIn("function nextAutomatedBlogSlot()", html)
+            self.assertIn("86400000 * 3", html)
             self.assertIn("|| nextScheduled", html)
+            self.assertNotIn('"status": "archived"', html)
             self.assertIn("사이트 갱신 상태", html)
             self.assertIn('id="site-status-grid"', html)
             self.assertIn("site-data", html)
@@ -213,6 +284,33 @@ class ManualPublishSiteTest(unittest.TestCase):
             self.assertNotIn("favicon-16x16.png", manifest)
             self.assertTrue((output.parent / "manifest.webmanifest").exists())
             self.assertTrue((output.parent / "sw.js").exists())
+            self.assertIn("onnellab-manual-publish-v5", (output.parent / "sw.js").read_text(encoding="utf-8"))
+
+    def test_filters_stale_verification_report_items(self) -> None:
+        report = current_verification_report(
+            {
+                "version": 1,
+                "checked_at": "2026-07-14T14:00:00+09:00",
+                "items": [
+                    {"manual_key": "TOPIC-0007::x::en::x", "status": "verified"},
+                    {"manual_key": "TOPIC-0002::x::en::x", "status": "pending"},
+                ],
+            },
+            [{"manual_key": "TOPIC-0007::x::en::x"}],
+        )
+
+        self.assertEqual(report["counts"], {"checked": 1, "already_done": 0, "verified": 1, "pending": 0})
+        self.assertEqual(report["items"], [{"manual_key": "TOPIC-0007::x::en::x", "status": "verified"}])
+
+    def test_latest_git_time_falls_back_to_file_mtime(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            repo = Path(temp)
+            page = repo / "page.md"
+            page.write_text("updated", encoding="utf-8")
+
+            value = latest_git_time(repo, [page])
+
+        self.assertRegex(value, r"^\d{4}-\d{2}-\d{2}T")
 
 
 if __name__ == "__main__":

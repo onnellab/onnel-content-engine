@@ -420,7 +420,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add generated/social/manifest.json generated/syndication/manifest.json data/manual_publish_state.json
+          git add generated/social/manifest.json generated/syndication/manifest.json data/manual_publish_state.json data/manual_publication_verification_report.json
           if git diff --cached --quiet; then
             echo "No distribution posting status changes to commit"
           else

@@ -30,19 +30,17 @@
   "recommendations": {
     "related_articles": [
       {
-        "topic_id": "TOPIC-0002",
-        "title": "Why TXT Files Show Unreadable Characters",
-        "slug": "txt-file-unreadable-characters",
-        "category": "reading",
+        "topic_id": "TOPIC-0007",
+        "title": "How to Convert Local Media Files Privately",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
         "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/reading/txt-file-unreadable-characters.md",
-        "destination": "scheduled_article",
-        "relationship": "troubleshooting",
-        "shared_clusters": [
-          "reading"
-        ],
-        "score": 14
+        "status": "review",
+        "url": "generated/markdown/en/media/convert-local-media-files-privately.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
       }
     ],
     "related_apps": [

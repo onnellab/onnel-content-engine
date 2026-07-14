@@ -96,7 +96,85 @@ def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str
     )
 
 
+def encoding_workflow_svg(title: str, keyword: str, language: str) -> str:
+    title_lines = wrap_words(title, 36 if language == "en" else 22)
+    keyword_text = svg_text(keyword, 34)
+    if language == "ko":
+        header = "인코딩 진단"
+        subtitle = "깨진 글자는 파일 손상보다 디코딩 불일치인 경우가 많습니다."
+        panels = [
+            ("원본 보존", "복사본으로 열기"),
+            ("바이트 확인", "TXT 여부 확인"),
+            ("인코딩 선택", "UTF-8 / EUC-KR / Shift JIS"),
+            ("미리보기", "깨짐이 사라지는지 확인"),
+            ("저장 판단", "검증 후 새 복사본 저장"),
+        ]
+        footer = "ONNELLAB Blog · 텍스트 인코딩 점검 자산"
+        desc = f"{keyword} 문제를 위한 인코딩 진단 다이어그램입니다."
+        sample_bad = "ÃªÂ¸Â ? □"
+        sample_good = "읽을 수 있는 텍스트"
+    else:
+        header = "Encoding diagnosis"
+        subtitle = "Unreadable text is often a decoding mismatch, not file damage."
+        panels = [
+            ("Keep original", "Open a copy"),
+            ("Check bytes", "Confirm plain text"),
+            ("Choose encoding", "UTF-8 / EUC-KR / Shift JIS"),
+            ("Preview result", "Look for readable text"),
+            ("Save carefully", "Write a new copy only after checks"),
+        ]
+        footer = "ONNELLAB Blog · Text encoding diagnostic asset"
+        desc = f"Encoding diagnosis diagram for {keyword}."
+        sample_bad = "ÃªÂ¸Â ? □"
+        sample_good = "Readable text"
+    panel_svg = []
+    for index, (heading, detail) in enumerate(panels):
+        x = 72 + index * 214
+        detail_lines = wrap_words(detail, 18 if language == "en" else 12)
+        panel_svg.append(
+            f'<g transform="translate({x} 368)">'
+            f'<rect width="178" height="124" rx="10" fill="#fffdf8" stroke="#d7c7a8" stroke-width="1.5"/>'
+            f'<text x="18" y="38" fill="#2f2d29" font-family="{SVG_FONT_STACK}" font-size="17" font-weight="760">{html_escape(heading)}</text>'
+            f'<text fill="#615b50" font-family="{SVG_FONT_STACK}" font-size="13">{svg_tspans(detail_lines, 18, 70, 19)}</text>'
+            "</g>"
+        )
+    arrows = "".join(
+        f'<path d="M{72 + 178 + index * 214 + 12} 430H{72 + (index + 1) * 214 - 12}m-9-9 10 9-10 9" fill="none" stroke="#9a7a42" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'
+        for index in range(4)
+    )
+    byte_cells = "".join(
+        f'<rect x="{88 + index * 48}" y="230" width="34" height="34" rx="6" fill="#2f2d29" opacity="{0.9 - index * 0.04:.2f}"/>'
+        for index in range(12)
+    )
+    byte_labels = "".join(
+        f'<text x="{96 + index * 48}" y="253" fill="#fffdf8" font-family="ui-monospace, monospace" font-size="12">{label}</text>'
+        for index, label in enumerate(["EF", "BB", "BF", "EA", "B8", "80", "20", "ED", "85", "8D", "EC", "A4"])
+    )
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">{html_escape(" ".join(title_lines))}</title>
+  <desc id="desc">{html_escape(desc)}</desc>
+  <rect width="1200" height="675" fill="#f7f1e7"/>
+  <rect x="46" y="42" width="1108" height="591" rx="20" fill="#fffaf1" stroke="#d9c9ab" stroke-width="1.8"/>
+  <text x="78" y="105" fill="#2f2d29" font-family="{SVG_FONT_STACK}" font-size="20" font-weight="800">{html_escape(header)} · {keyword_text}</text>
+  <text fill="#2f2d29" font-family="{SVG_FONT_STACK}" font-size="40" font-weight="760">{svg_tspans(title_lines, 78, 168, 47)}</text>
+  <text x="78" y="296" fill="#6b5f4d" font-family="{SVG_FONT_STACK}" font-size="18">{html_escape(subtitle)}</text>
+  <g aria-label="byte sequence">{byte_cells}{byte_labels}</g>
+  <rect x="724" y="214" width="372" height="112" rx="12" fill="#fff" stroke="#d7c7a8" stroke-width="1.5"/>
+  <text x="752" y="254" fill="#a33a2b" font-family="ui-monospace, monospace" font-size="25" font-weight="700">{html_escape(sample_bad)}</text>
+  <path d="M748 280H1072" stroke="#ead8bb" stroke-width="1.5"/>
+  <text x="752" y="307" fill="#2f6b4f" font-family="{SVG_FONT_STACK}" font-size="22" font-weight="720">{html_escape(sample_good)}</text>
+  {''.join(panel_svg)}
+  {arrows}
+  <text x="78" y="586" fill="#81725e" font-family="{SVG_FONT_STACK}" font-size="14">{html_escape(footer)}</text>
+</svg>
+'''
+
+
 def workflow_svg(title: str, keyword: str, language: str) -> str:
+    keyword_lower = keyword.lower()
+    title_lower = title.lower()
+    if any(term in keyword_lower or term in title_lower for term in ["encoding", "unreadable", "utf-8", "깨짐", "인코딩"]):
+        return encoding_workflow_svg(title, keyword, language)
     title_lines = wrap_words(title, 38)
     raw_keyword = keyword
     keyword = svg_text(keyword, 36)

@@ -7,6 +7,7 @@ import argparse
 import csv
 import json
 import os
+import re
 import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -94,6 +95,33 @@ def read_text(path_value: str) -> str:
     if not path.exists():
         return ""
     return path.read_text(encoding="utf-8").strip()
+
+
+def frontmatter_value(markdown: str, key: str) -> str:
+    match = re.search(rf"^---\s*$([\s\S]*?)^---\s*$", markdown, re.MULTILINE)
+    if not match:
+        return ""
+    value_match = re.search(rf"^{re.escape(key)}:\s*[\"']?(.+?)[\"']?\s*$", match.group(1), re.MULTILINE)
+    return value_match.group(1).strip() if value_match else ""
+
+
+def markdown_body(markdown: str) -> str:
+    return re.sub(r"^---\s*$[\s\S]*?^---\s*", "", markdown, count=1, flags=re.MULTILINE).strip()
+
+
+def hashnode_publish_fields(topic: dict[str, str] | None, draft_text: str) -> dict[str, str]:
+    source_text = ""
+    if topic and topic.get("canonical_path"):
+        source_text = read_text(topic["canonical_path"])
+    return {
+        "publish_title": frontmatter_value(draft_text, "title"),
+        "publish_body": markdown_body(draft_text),
+        "publish_tags": frontmatter_value(draft_text, "tags"),
+        "publish_canonical_url": frontmatter_value(draft_text, "canonical_url"),
+        "publish_cover_image": frontmatter_value(draft_text, "cover_image"),
+        "seo_title": frontmatter_value(source_text, "title") or frontmatter_value(draft_text, "title"),
+        "seo_description": frontmatter_value(source_text, "description"),
+    }
 
 
 def parse_topic_datetime(value: str) -> datetime | None:
@@ -203,6 +231,7 @@ def blog_status_items(topics_path: Path = DEFAULT_TOPICS) -> list[dict[str, str]
             "updated_at": row.get("updated_at", ""),
         }
         for row in read_csv_rows(topics_path)
+        if row.get("status", "") != "archived"
     ]
 
 
@@ -337,6 +366,7 @@ def latest_git_time(repo: Path, paths: list[Path]) -> str:
     existing = [path for path in paths if path.exists()]
     if not existing:
         return ""
+    file_value = latest_file_mtime(existing)
     try:
         relative = [path.relative_to(repo).as_posix() for path in existing]
         completed = subprocess.run(
@@ -347,9 +377,34 @@ def latest_git_time(repo: Path, paths: list[Path]) -> str:
             timeout=10,
         )
     except (OSError, subprocess.SubprocessError, ValueError):
-        return latest_file_mtime(existing)
+        return file_value
     value = completed.stdout.strip()
-    return value or latest_file_mtime(existing)
+    if not value:
+        return file_value
+    git_time = parse_topic_datetime(value)
+    file_time = parse_topic_datetime(file_value)
+    if git_time and file_time:
+        return max(git_time, file_time).isoformat()
+    return value or file_value
+
+
+def current_verification_report(report: dict[str, object], items: list[dict[str, object]]) -> dict[str, object]:
+    rows = report.get("items", [])
+    if not isinstance(rows, list):
+        return report
+    current_keys = {str(item.get("manual_key", "")) for item in items}
+    filtered_rows = [
+        row
+        for row in rows
+        if isinstance(row, dict) and str(row.get("manual_key", "")) in current_keys
+    ]
+    counts = {
+        "checked": len(filtered_rows),
+        "already_done": sum(1 for row in filtered_rows if row.get("status") == "already_done"),
+        "verified": sum(1 for row in filtered_rows if row.get("status") == "verified"),
+        "pending": sum(1 for row in filtered_rows if row.get("status") == "pending"),
+    }
+    return {**report, "counts": counts, "items": filtered_rows}
 
 
 def homepage_status_items(homepage_repo: Path = DEFAULT_HOMEPAGE_REPO) -> list[dict[str, object]]:
@@ -464,6 +519,13 @@ def social_items(manifest_path: Path, topics: dict[str, dict[str, str]]) -> list
                 "card_asset_href": asset_href(card_asset_path),
                 "text": text,
                 "length": post.get("weighted_length") or len(text),
+                "publish_title": "",
+                "publish_body": "",
+                "publish_tags": "",
+                "publish_canonical_url": "",
+                "publish_cover_image": "",
+                "seo_title": "",
+                "seo_description": "",
                 "approved_at": post.get("approved_at", ""),
                 "posted_url": post.get("posted_url", ""),
                 "posted_at": post.get("posted_at", ""),
@@ -490,6 +552,19 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
         draft_path = str(draft.get("draft_path", ""))
         text = read_text(draft_path)
         canonical_url = str(draft.get("canonical_url", ""))
+        fields = (
+            hashnode_publish_fields(topics.get(str(topic_id)), text)
+            if platform == "hashnode"
+            else {
+                "publish_title": "",
+                "publish_body": "",
+                "publish_tags": "",
+                "publish_canonical_url": "",
+                "publish_cover_image": "",
+                "seo_title": "",
+                "seo_description": "",
+            }
+        )
         items.append(
             {
                 "kind": "syndication",
@@ -509,6 +584,13 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
                 "card_asset_href": "",
                 "text": text,
                 "length": len(text),
+                "publish_title": fields["publish_title"],
+                "publish_body": fields["publish_body"],
+                "publish_tags": fields["publish_tags"],
+                "publish_canonical_url": fields["publish_canonical_url"],
+                "publish_cover_image": fields["publish_cover_image"],
+                "seo_title": fields["seo_title"],
+                "seo_description": fields["seo_description"],
                 "approved_at": draft.get("approved_at", ""),
                 "posted_url": draft.get("posted_url", ""),
                 "posted_at": draft.get("posted_at", ""),
@@ -535,6 +617,7 @@ def html_document(
     quality_report: dict[str, object] | None = None,
 ) -> str:
     manual_state = manual_state or {"done": {}, "updated_at": "", "version": 1}
+    verification_report = current_verification_report(verification_report or {}, items)
     done_state = manual_state.get("done", {})
     done_keys = set(done_state) if isinstance(done_state, dict) else set()
 
@@ -633,6 +716,14 @@ def html_document(
     .run-link:hover {{ border-color: var(--blue); background: var(--blue-soft); }}
     .run-link[hidden] {{ display: none; }}
     .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 10px; margin-bottom: 14px; box-shadow: var(--shadow); }}
+    .credential-panel {{ display: grid; gap: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }}
+    .credential-head {{ display: flex; align-items: start; justify-content: space-between; gap: 12px; }}
+    .credential-head h2 {{ margin: 0; font-size: 17px; }}
+    .credential-head p {{ margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }}
+    .credential-grid {{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }}
+    .credential-grid label {{ display: grid; gap: 5px; color: var(--muted); font-size: 12px; font-weight: 800; }}
+    .credential-actions {{ display: flex; gap: 8px; flex-wrap: wrap; }}
+    .credential-output {{ min-height: 78px; }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
     .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, auto); gap: 8px; margin-top: 12px; }}
     .controls {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(116px, 150px)); gap: 10px; margin-top: 8px; }}
@@ -670,9 +761,10 @@ def html_document(
     .status-card span,
     .release-card span,
     .app-status-card span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
-    .app-status-card {{ display: grid; gap: 10px; }}
+    .app-status-card {{ display: flex; flex-direction: column; gap: 10px; }}
     .app-status-card strong {{ margin-bottom: 0; }}
-    .app-status-row {{ border: 1px solid var(--line); border-radius: 8px; padding: 9px; background: #fffdf9; }}
+    .app-status-row {{ flex: 0 0 auto; border: 1px solid var(--line); border-radius: 8px; padding: 9px; background: #fffdf9; }}
+    .app-status-row:only-of-type {{ flex: 1 1 auto; }}
     .app-status-row b {{ display: block; font-size: 13px; margin-bottom: 5px; }}
     .app-status-row.is-release {{ background: var(--lilac-soft); }}
     .app-status-row.is-store {{ background: var(--sky-soft); }}
@@ -712,6 +804,10 @@ def html_document(
     .card-detail {{ display: none; margin-top: 10px; }}
     article.is-expanded .card-detail {{ display: block; }}
     .card-detail > button, .card-detail > a.button {{ width: 100%; display: block; margin-top: 8px; }}
+    .copy-field {{ display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: end; margin-bottom: 8px; }}
+    .copy-field label {{ display: grid; gap: 5px; min-width: 0; color: var(--muted); font-size: 12px; font-weight: 800; }}
+    .copy-field textarea {{ min-height: 54px; resize: vertical; }}
+    .copy-field button {{ min-height: 54px; min-width: 82px; }}
     textarea {{ width: 100%; min-height: 170px; resize: vertical; border: 1px solid var(--line); padding: 11px; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--ink); background: #fff; border-radius: 6px; }}
     .actions {{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }}
     .actions .primary {{ min-height: 48px; font-size: 16px; font-weight: 900; background: var(--blue); border-color: var(--blue); }}
@@ -737,6 +833,7 @@ def html_document(
       .quick-row button {{ padding-left: 8px; padding-right: 8px; font-size: 13px; white-space: nowrap; }}
       .auth, .controls {{ grid-template-columns: 1fr 1fr; }}
       .auth input, .controls input {{ grid-column: 1 / -1; }}
+      .credential-grid {{ grid-template-columns: 1fr; }}
     }}
     @media (max-width: 520px) {{
       main {{ padding: 16px 12px 40px; }}
@@ -809,6 +906,30 @@ def html_document(
         <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
       </div>
     </section>
+    <section class="credential-panel" aria-label="Automated posting credentials">
+      <div class="credential-head">
+        <div>
+          <h2 id="credentials-title">자동 포스팅 연결</h2>
+          <p id="credentials-copy">Bluesky 앱 패스워드와 Dev.to API key를 입력하면 로컬 env 파일에 넣을 값과 실행 명령을 만들 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="credential-grid">
+        <label><span id="bluesky-handle-label">Bluesky handle</span><input id="bluesky-handle" type="text" autocomplete="username" value="onnellab.bsky.social"></label>
+        <label><span id="bluesky-password-label">Bluesky 앱 패스워드</span><input id="bluesky-app-password" type="password" autocomplete="off"></label>
+        <label><span id="devto-key-label">Dev.to API key</span><input id="devto-api-key" type="password" autocomplete="off"></label>
+      </div>
+      <div class="credential-actions">
+        <button id="save-credentials" type="button">입력값 저장</button>
+        <button id="copy-env-block" type="button" class="secondary">env 블록 복사</button>
+        <button id="copy-secret-sync-command" type="button" class="secondary">GitHub secrets 동기화 명령 복사</button>
+        <button id="copy-post-command" type="button" class="secondary">자동 포스팅 명령 복사</button>
+        <button id="run-posting-now" type="button" class="secondary">지금 자동 포스팅 실행</button>
+        <button id="clear-credentials" type="button" class="secondary">입력값 삭제</button>
+      </div>
+      <textarea id="credential-output" class="credential-output" readonly spellcheck="false"></textarea>
+      <div id="posting-run-note" class="note">입력값 저장만으로는 자동 게시가 즉시 실행되지 않습니다. GitHub secrets 동기화 후 이 버튼으로 publishing workflow를 dry_run=false로 실행하세요.</div>
+      <div id="credential-note" class="note">복사한 env 블록을 docs/environment variables.md에 붙여넣으면 기존 자동 포스팅 스크립트가 해당 값을 읽습니다.</div>
+    </section>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
     <details class="platform-status" aria-label="Platform status">
@@ -866,9 +987,11 @@ def html_document(
     let qualityReport = JSON.parse(document.getElementById('quality-report-data').textContent);
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
+    const reportPath = 'data/manual_publication_verification_report.json';
     const stateBranch = 'main';
     const tokenKey = 'onnellab-manual-publish-token';
     const langKey = 'onnellab-manual-publish-lang';
+    const credentialStorageKey = 'onnellab-publishing-credentials';
     const params = new URLSearchParams(window.location.search);
     const messages = {{
       ko: {{
@@ -905,6 +1028,23 @@ def html_document(
         verificationRefreshIn: '자동 재확인',
         secondsShort: '초',
         tokenNeededNote: 'ONNELLAB_GITHUB_PAGES_TOKEN 입력 후 동기화와 공개 확인을 실행할 수 있습니다.',
+        credentialsTitle: '자동 포스팅 연결',
+        credentialsCopy: '저장은 이 브라우저에만 유지됩니다. 실제 자동 포스팅은 env 블록을 로컬 파일에 반영하거나 GitHub Actions secrets로 동기화해야 연결됩니다.',
+        blueskyHandle: 'Bluesky handle',
+        blueskyAppPassword: 'Bluesky 앱 패스워드',
+        devtoApiKey: 'Dev.to API key',
+        saveCredentials: '입력값 저장',
+        clearCredentials: '입력값 삭제',
+        copyEnvBlock: 'env 블록 복사',
+        copyPostCommand: '자동 포스팅 명령 복사',
+        copySecretSyncCommand: 'GitHub secrets 동기화 명령 복사',
+        runPostingNow: '지금 자동 포스팅 실행',
+        postingRunStarted: '자동 포스팅 실행 시작됨',
+        postingRunHelp: '입력값 저장만으로는 자동 게시가 즉시 실행되지 않습니다. GitHub secrets 동기화 후 이 버튼으로 publishing workflow를 dry_run=false로 실행하세요.',
+        credentialNote: '브라우저 저장은 자동 포스팅 실행 환경에 직접 전달되지 않습니다. env 블록을 docs/environment variables.md에 붙여넣은 뒤 secrets 동기화 명령을 실행하면 GitHub Actions 자동 포스팅에도 반영됩니다.',
+        credentialsSaved: '저장됨',
+        credentialsCleared: '삭제됨',
+        missingCredentials: '필수값 누락',
         atmTitle: '게시 여부 확인',
         atmCopy: '공개 게시물을 확인해 일치 항목만 완료 표시합니다.',
         atmRun: '게시 확인 및 완료 반영',
@@ -980,6 +1120,9 @@ def html_document(
         socialQuality: '소셜 템플릿',
         syndicationQuality: '신디케이션',
         repetitionWarnings: '반복어 경고',
+        copyRepetitionFixCommand: '반복어 수정 명령 복사',
+        copyRepetitionWarnings: '경고 목록 복사',
+        repetitionFixCommand: 'python3 scripts/reduce_social_repetition.py && python3 scripts/build_manual_publish_site.py',
         noWarnings: '경고 없음',
         qualityError: '점검 오류',
         siteStatusSummary: '메인 홈페이지와 앱 상세 페이지',
@@ -997,6 +1140,15 @@ def html_document(
         completedAt: '게시 완료',
         copyMarkdown: '마크다운 복사',
         copyPost: '게시글 복사',
+        copy: '복사',
+        publishTitle: '제목',
+        publishBody: '본문',
+        publishTags: '태그',
+        canonicalUrl: 'Canonical URL',
+        coverImage: '커버 이미지',
+        seoTitle: 'SEO title',
+        seoDescription: 'SEO description',
+        copyBodyAndOpen: '본문 복사 후 열기',
         copyAndOpen: '복사 후 열기',
         markDone: '완료 표시',
         undoDone: '완료 취소',
@@ -1015,6 +1167,7 @@ def html_document(
         automaticVerified: '자동 확인',
         publicVerified: '공개 페이지 확인',
         manualVerified: '직접 완료',
+        verificationPendingReason: '확인 결과',
         variantTag: '대안',
         manualMode: '수동 게시 필요',
         automaticMode: '자동화 대상',
@@ -1065,6 +1218,23 @@ def html_document(
         verificationRefreshIn: 'auto refresh',
         secondsShort: 's',
         tokenNeededNote: 'Enter ONNELLAB_GITHUB_PAGES_TOKEN to run sync and public profile checks.',
+        credentialsTitle: 'Automated posting connection',
+        credentialsCopy: 'Saved inputs stay in this browser only. Automated posting is connected after you apply the env block locally or sync it to GitHub Actions secrets.',
+        blueskyHandle: 'Bluesky handle',
+        blueskyAppPassword: 'Bluesky app password',
+        devtoApiKey: 'Dev.to API key',
+        saveCredentials: 'Save inputs',
+        clearCredentials: 'Clear inputs',
+        copyEnvBlock: 'Copy env block',
+        copyPostCommand: 'Copy posting command',
+        copySecretSyncCommand: 'Copy GitHub secrets sync command',
+        runPostingNow: 'Run automated posting now',
+        postingRunStarted: 'Automated posting started',
+        postingRunHelp: 'Saving inputs alone does not run posting immediately. Sync GitHub secrets, then use this button to run the publishing workflow with dry_run=false.',
+        credentialNote: 'Browser storage is not passed to the posting runtime. Paste the env block into docs/environment variables.md, then run the secrets sync command to connect GitHub Actions automated posting.',
+        credentialsSaved: 'Saved',
+        credentialsCleared: 'Cleared',
+        missingCredentials: 'Missing required values',
         atmTitle: 'Check published posts',
         atmCopy: 'Check public posts and mark matching items done.',
         atmRun: 'Check and mark done',
@@ -1140,6 +1310,9 @@ def html_document(
         socialQuality: 'Social templates',
         syndicationQuality: 'Syndication',
         repetitionWarnings: 'repetition warnings',
+        copyRepetitionFixCommand: 'Copy fix command',
+        copyRepetitionWarnings: 'Copy warnings',
+        repetitionFixCommand: 'python3 scripts/reduce_social_repetition.py && python3 scripts/build_manual_publish_site.py',
         noWarnings: 'no warnings',
         qualityError: 'quality check error',
         siteStatusSummary: 'home and app landing pages',
@@ -1157,6 +1330,15 @@ def html_document(
         completedAt: 'posted',
         copyMarkdown: 'Copy markdown',
         copyPost: 'Copy post',
+        copy: 'Copy',
+        publishTitle: 'Title',
+        publishBody: 'Body',
+        publishTags: 'Tags',
+        canonicalUrl: 'Canonical URL',
+        coverImage: 'Cover image',
+        seoTitle: 'SEO title',
+        seoDescription: 'SEO description',
+        copyBodyAndOpen: 'Copy body and open',
         copyAndOpen: 'Copy and open',
         markDone: 'Mark done',
         undoDone: 'Undo done',
@@ -1175,6 +1357,7 @@ def html_document(
         automaticVerified: 'Auto verified',
         publicVerified: 'Public page',
         manualVerified: 'Manual done',
+        verificationPendingReason: 'check result',
         variantTag: 'variant',
         manualMode: 'Manual publish',
         automaticMode: 'Automated',
@@ -1212,6 +1395,12 @@ def html_document(
       visibility: document.getElementById('visibility'),
     }};
     const tokenInput = document.getElementById('token');
+    const credentialInputs = {{
+      blueskyHandle: document.getElementById('bluesky-handle'),
+      blueskyAppPassword: document.getElementById('bluesky-app-password'),
+      devtoApiKey: document.getElementById('devto-api-key'),
+    }};
+    const credentialOutput = document.getElementById('credential-output');
     const syncAuthPanel = document.getElementById('sync-auth');
     const badgeButton = document.getElementById('enable-badge');
     const refreshButton = document.getElementById('refresh-state');
@@ -1265,6 +1454,19 @@ def html_document(
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
       document.getElementById('token-note').textContent = t('tokenNeededNote');
+      document.getElementById('credentials-title').textContent = t('credentialsTitle');
+      document.getElementById('credentials-copy').textContent = t('credentialsCopy');
+      document.getElementById('bluesky-handle-label').textContent = t('blueskyHandle');
+      document.getElementById('bluesky-password-label').textContent = t('blueskyAppPassword');
+      document.getElementById('devto-key-label').textContent = t('devtoApiKey');
+      document.getElementById('save-credentials').textContent = t('saveCredentials');
+      document.getElementById('copy-env-block').textContent = t('copyEnvBlock');
+      document.getElementById('copy-secret-sync-command').textContent = t('copySecretSyncCommand');
+      document.getElementById('copy-post-command').textContent = t('copyPostCommand');
+      document.getElementById('run-posting-now').textContent = t('runPostingNow');
+      document.getElementById('clear-credentials').textContent = t('clearCredentials');
+      document.getElementById('posting-run-note').textContent = t('postingRunHelp');
+      document.getElementById('credential-note').textContent = t('credentialNote');
       badgeButton.textContent = t('enableBadge');
       updateVariantToggle();
       filters.search.placeholder = t('searchPlaceholder');
@@ -1346,6 +1548,117 @@ def html_document(
 
     function githubToken() {{
       return localStorage.getItem(tokenKey) || tokenInput.value.trim();
+    }}
+
+    function shellQuote(value) {{
+      return "'" + String(value || '').replace(/'/g, "'\\\\''") + "'";
+    }}
+
+    function credentialValues() {{
+      return {{
+        blueskyHandle: credentialInputs.blueskyHandle.value.trim(),
+        blueskyAppPassword: credentialInputs.blueskyAppPassword.value.trim(),
+        devtoApiKey: credentialInputs.devtoApiKey.value.trim(),
+      }};
+    }}
+
+    function loadCredentials() {{
+      try {{
+        const saved = JSON.parse(localStorage.getItem(credentialStorageKey) || '{{}}');
+        credentialInputs.blueskyHandle.value = saved.blueskyHandle || credentialInputs.blueskyHandle.value || 'onnellab.bsky.social';
+        credentialInputs.blueskyAppPassword.value = saved.blueskyAppPassword || '';
+        credentialInputs.devtoApiKey.value = saved.devtoApiKey || '';
+      }} catch (error) {{
+        console.warn(error);
+      }}
+      updateCredentialOutput();
+    }}
+
+    function saveCredentials(button) {{
+      localStorage.setItem(credentialStorageKey, JSON.stringify(credentialValues()));
+      updateCredentialOutput();
+      flash(button, t('credentialsSaved'));
+    }}
+
+    function clearCredentials(button) {{
+      localStorage.removeItem(credentialStorageKey);
+      credentialInputs.blueskyHandle.value = 'onnellab.bsky.social';
+      credentialInputs.blueskyAppPassword.value = '';
+      credentialInputs.devtoApiKey.value = '';
+      updateCredentialOutput();
+      flash(button, t('credentialsCleared'));
+    }}
+
+    function missingCredentialNames(values) {{
+      return [
+        values.blueskyHandle ? '' : 'BLUESKY_HANDLE',
+        values.blueskyAppPassword ? '' : 'BLUESKY_APP_PASSWORD',
+        values.devtoApiKey ? '' : 'DEVTO_API_KEY',
+      ].filter(Boolean);
+    }}
+
+    function credentialEnvBlock() {{
+      const values = credentialValues();
+      return [
+        '# ONNELLAB automated posting credentials',
+        `export BLUESKY_HANDLE=${{shellQuote(values.blueskyHandle)}}`,
+        `export BLUESKY_APP_PASSWORD=${{shellQuote(values.blueskyAppPassword)}}`,
+        `export DEVTO_API_KEY=${{shellQuote(values.devtoApiKey)}}`,
+      ].join('\\n') + '\\n';
+    }}
+
+    function postingCommand() {{
+      return 'python3 scripts/run_with_local_env.py -- python3 scripts/post_core_distribution.py';
+    }}
+
+    function secretSyncCommand() {{
+      return 'python3 scripts/run_with_local_env.py -- python3 scripts/sync_publishing_secrets.py';
+    }}
+
+    function updateCredentialOutput() {{
+      const missing = missingCredentialNames(credentialValues());
+      credentialOutput.value = missing.length
+        ? `${{t('missingCredentials')}}: ${{missing.join(', ')}}\\n\\n${{credentialEnvBlock()}}`
+        : credentialEnvBlock() + '\\n' + secretSyncCommand() + '\\n' + postingCommand();
+    }}
+
+    async function copyCredentialEnv(button) {{
+      updateCredentialOutput();
+      await copyText(credentialEnvBlock(), button);
+    }}
+
+    async function copyPostingCommand(button) {{
+      updateCredentialOutput();
+      await copyText(postingCommand(), button);
+    }}
+
+    async function copySecretSyncCommand(button) {{
+      updateCredentialOutput();
+      await copyText(secretSyncCommand(), button);
+    }}
+
+    async function runPostingNow(button) {{
+      if (!githubToken()) {{
+        setSync('viewOnly');
+        revealTokenInput();
+        return;
+      }}
+      button.disabled = true;
+      try {{
+        await githubRequest(`/repos/${{stateRepo}}/actions/workflows/publishing.yml/dispatches`, {{
+          method: 'POST',
+          headers: {{ 'Content-Type': 'application/json' }},
+          body: JSON.stringify({{ ref: stateBranch, inputs: {{ dry_run: 'false' }} }}),
+        }});
+        flash(button, t('postingRunStarted'));
+        await refreshVerificationRunLink();
+      }} catch (error) {{
+        flash(button, t('verificationFailed'));
+        setSync('syncError');
+        console.error(error);
+      }} finally {{
+        button.disabled = false;
+      }}
     }}
 
     function setSync(label) {{
@@ -1588,6 +1901,12 @@ def html_document(
             console.warn(refreshError);
           }}
         }}
+        try {{
+          const reportData = await githubRequest(`/repos/${{stateRepo}}/contents/${{reportPath}}?ref=${{stateBranch}}`);
+          verificationReport = JSON.parse(decodeBase64Unicode(reportData.content));
+        }} catch (reportError) {{
+          console.warn(reportError);
+        }}
         setSync(githubToken() ? 'synced' : 'viewOnly');
         setVerifyState(githubToken() ? 'verificationReady' : 'verificationTokenRequired');
         await refreshVerificationRunLink();
@@ -1670,11 +1989,33 @@ def html_document(
     }}
 
     function isDone(item) {{
-      return item.status === 'posted' || Boolean(remoteState.done?.[item.manual_key]);
+      return item.status === 'posted' || Boolean(remoteState.done?.[item.manual_key]) || Boolean(doneReportRecord(item));
     }}
 
     function doneRecord(item) {{
-      return remoteState.done?.[item.manual_key] || null;
+      return remoteState.done?.[item.manual_key] || doneReportRecord(item) || null;
+    }}
+
+    function verificationReportRecord(item) {{
+      const rows = Array.isArray(verificationReport?.items) ? verificationReport.items : [];
+      return rows.find((row) => row.manual_key === item.manual_key) || null;
+    }}
+
+    function doneReportRecord(item) {{
+      const row = verificationReportRecord(item);
+      if (!row || !['verified', 'already_done'].includes(row.status)) return null;
+      return {{
+        verified_at: verificationReport?.checked_at || '',
+        marked_at: verificationReport?.checked_at || '',
+        posted_url: row.posted_url || '',
+        verification_method: row.verification_method || 'publication_report',
+        verification_confidence: row.verification_confidence || '',
+      }};
+    }}
+
+    function pendingReportReason(item) {{
+      const row = verificationReportRecord(item);
+      return row?.status === 'pending' ? row.reason || '' : '';
     }}
 
     function postedOrVerifiedAt(item) {{
@@ -1779,12 +2120,20 @@ def html_document(
       return values.map(parseDate).filter(Boolean).sort((a, b) => b - a)[0] || null;
     }}
 
+    function nextAutomatedBlogSlot() {{
+      const anchor = latestDate(blogItems.map((item) => item.published_at || item.scheduled_at));
+      if (!anchor) return null;
+      const next = new Date(anchor.getTime() + (86400000 * 3));
+      next.setHours(9, 0, 0, 0);
+      return next;
+    }}
+
     function nextBlogScheduledDate() {{
       return blogItems
         .filter((item) => item.status === 'scheduled' && item.scheduled_at)
         .map((item) => parseDate(item.scheduled_at))
         .filter(Boolean)
-        .sort((a, b) => a - b)[0] || null;
+        .sort((a, b) => a - b)[0] || nextAutomatedBlogSlot();
     }}
 
     function nextManualDueDate() {{
@@ -1801,6 +2150,61 @@ def html_document(
 
     function usesLinkPreviewCard(item) {{
       return ['x', 'linkedin'].includes(item.platform);
+    }}
+
+    function copyField(labelText, value) {{
+      const row = document.createElement('div');
+      row.className = 'copy-field';
+      const label = document.createElement('label');
+      label.textContent = labelText;
+      const field = document.createElement('textarea');
+      field.value = value || '';
+      field.spellcheck = false;
+      label.appendChild(field);
+      const button = document.createElement('button');
+      button.className = 'secondary';
+      button.textContent = t('copy');
+      button.onclick = () => copyText(field.value, button);
+      row.append(label, button);
+      return row;
+    }}
+
+    function appendHashnodePublishFields(detail, item) {{
+      if (item.platform !== 'hashnode') return;
+      hashnodeCopyRows(item).forEach(([labelText, value]) => detail.appendChild(copyField(labelText, value)));
+    }}
+
+    function hashnodeCopyRows(item) {{
+      return [
+        [t('publishTitle'), item.publish_title || displayTitle(item)],
+        [t('seoTitle'), item.seo_title || item.publish_title || displayTitle(item)],
+        [t('seoDescription'), item.seo_description || ''],
+        [t('publishTags'), item.publish_tags || ''],
+        [t('canonicalUrl'), item.publish_canonical_url || item.canonical_url || ''],
+        [t('coverImage'), item.publish_cover_image || ''],
+      ].filter(([, value]) => value);
+    }}
+
+    function hashnodeQuickCopyRows(item) {{
+      return hashnodeCopyRows(item).filter(([labelText]) => labelText !== t('coverImage'));
+    }}
+
+    function copyValueButton(labelText, value) {{
+      const button = document.createElement('button');
+      button.className = 'secondary';
+      button.textContent = `${{labelText}} ${{t('copy')}}`;
+      button.onclick = () => copyText(value, button);
+      return button;
+    }}
+
+    function publishBodyText(item) {{
+      if (item.platform === 'hashnode' && item.publish_body) return item.publish_body;
+      return item.text;
+    }}
+
+    function copyAndOpenText(item, textarea) {{
+      if (item.platform === 'hashnode') return publishBodyText({{ ...item, publish_body: textarea.value }});
+      return textarea.value;
     }}
 
     function renderEmptyState() {{
@@ -2062,6 +2466,21 @@ def html_document(
         detailLine.textContent = detail || '';
         row.append(scoreLine, detailLine);
         card.append(title, row);
+        if (labelText === t('repetitionWarnings') && warnings.length) {{
+          const actions = document.createElement('div');
+          actions.className = 'credential-actions';
+          const commandButton = document.createElement('button');
+          commandButton.type = 'button';
+          commandButton.textContent = t('copyRepetitionFixCommand');
+          commandButton.onclick = () => copyText(t('repetitionFixCommand'), commandButton);
+          const warningsButton = document.createElement('button');
+          warningsButton.type = 'button';
+          warningsButton.className = 'secondary';
+          warningsButton.textContent = t('copyRepetitionWarnings');
+          warningsButton.onclick = () => copyText(warnings.map((warning) => `${{warning.phrase}} (${{warning.count}})`).join('\\n'), warningsButton);
+          actions.append(commandButton, warningsButton);
+          card.appendChild(actions);
+        }}
         qualityStatusGrid.appendChild(card);
       }});
     }}
@@ -2295,7 +2714,7 @@ def html_document(
         ? t('completedAt') + ' ' + formatDate(postedOrVerifiedAt(item))
         : item.due_at ? t('dueAt') + ' ' + formatDue(item) : t('noRecord');
       const textarea = document.createElement('textarea');
-      textarea.value = item.text;
+      textarea.value = publishBodyText(item);
       textarea.spellcheck = false;
       const detail = document.createElement('div');
       detail.className = 'card-detail';
@@ -2303,8 +2722,8 @@ def html_document(
       actions.className = 'actions';
       const open = document.createElement('button');
       open.className = 'primary';
-      open.textContent = t('copyAndOpen');
-      open.onclick = () => copyThenOpen({{ ...item, text: textarea.value }}, open);
+      open.textContent = item.platform === 'hashnode' ? t('copyBodyAndOpen') : t('copyAndOpen');
+      open.onclick = () => copyThenOpen({{ ...item, text: copyAndOpenText(item, textarea) }}, open);
       const detailToggle = document.createElement('button');
       detailToggle.className = 'secondary';
       detailToggle.textContent = t('showDetails');
@@ -2314,13 +2733,16 @@ def html_document(
       }};
       const copy = document.createElement('button');
       copy.className = 'secondary';
-      copy.textContent = item.kind === 'syndication' ? t('copyMarkdown') : t('copyPost');
+      copy.textContent = item.platform === 'hashnode' ? t('publishBody') + ' ' + t('copy') : item.kind === 'syndication' ? t('copyMarkdown') : t('copyPost');
       copy.onclick = () => copyText(textarea.value, copy);
       const doneButton = document.createElement('button');
       doneButton.className = 'secondary';
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
       doneButton.onclick = () => isDone(item) ? undoDone(item, doneButton) : markDone(item, doneButton);
-      actions.append(open, detailToggle);
+      actions.append(open, doneButton, detailToggle);
+      if (item.platform === 'hashnode') {{
+        hashnodeQuickCopyRows(item).forEach(([labelText, value]) => actions.appendChild(copyValueButton(labelText, value)));
+      }}
       if (item.card_asset_href && !usesLinkPreviewCard(item)) {{
         const copyImg = document.createElement('button');
         copyImg.className = 'secondary';
@@ -2334,10 +2756,18 @@ def html_document(
         openImg.rel = 'noopener noreferrer';
         detail.append(copyImg, openImg);
       }}
+      appendHashnodePublishFields(detail, item);
       const note = document.createElement('div');
       note.className = 'note';
       note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '') + (usesLinkPreviewCard(item) ? ' / ' + t('noImageAttach') : '');
-      detail.append(doneButton, textarea, copy, note);
+      const pendingReason = pendingReportReason(item);
+      if (pendingReason) {{
+        const pending = document.createElement('div');
+        pending.className = 'note';
+        pending.textContent = `${{t('verificationPendingReason')}}: ${{pendingReason}}`;
+        detail.appendChild(pending);
+      }}
+      detail.append(textarea, copy, note);
       summary.append(summaryNote);
       if (item.error) {{
         const error = document.createElement('div');
@@ -2352,15 +2782,22 @@ def html_document(
 
     document.getElementById('save-token').onclick = async () => {{
       localStorage.setItem(tokenKey, tokenInput.value.trim());
-      await loadRemoteState();
+      await loadRemoteState({{ refreshDashboardData: true }});
     }};
+    document.getElementById('save-credentials').onclick = (event) => saveCredentials(event.currentTarget);
+    document.getElementById('clear-credentials').onclick = (event) => clearCredentials(event.currentTarget);
+    document.getElementById('copy-env-block').onclick = (event) => copyCredentialEnv(event.currentTarget);
+    document.getElementById('copy-secret-sync-command').onclick = (event) => copySecretSyncCommand(event.currentTarget);
+    document.getElementById('copy-post-command').onclick = (event) => copyPostingCommand(event.currentTarget);
+    document.getElementById('run-posting-now').onclick = (event) => runPostingNow(event.currentTarget);
+    Object.values(credentialInputs).forEach((input) => input.addEventListener('input', updateCredentialOutput));
     refreshButton.onclick = () => {{
       if (!githubToken()) {{
         setSync('viewOnly');
         revealTokenInput();
         return;
       }}
-      loadRemoteState();
+      loadRemoteState({{ refreshDashboardData: true }});
     }};
     verifyButtonLarge.onclick = triggerPublicationVerification;
     verifyButtonPrimary.onclick = triggerPublicationVerification;
@@ -2370,7 +2807,7 @@ def html_document(
         revealTokenInput();
         return;
       }}
-      loadRemoteState();
+      loadRemoteState({{ refreshDashboardData: true }});
     }};
     badgeButton.onclick = async () => {{
       if ('Notification' in window && Notification.permission === 'default') {{
@@ -2395,6 +2832,7 @@ def html_document(
       render();
     }}));
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.warn);
+    loadCredentials();
     loadRemoteState();
   </script>
 </body>
@@ -2438,7 +2876,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v1';
+    return """const CACHE = 'onnellab-manual-publish-v5';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -2447,7 +2885,11 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))
+      .then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (event) => {

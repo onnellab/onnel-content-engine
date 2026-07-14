@@ -200,6 +200,34 @@ def markdown_to_html(markdown: str) -> str:
     return "\n".join(blocks)
 
 
+def related_article_entries(value: str) -> list[tuple[str, str]]:
+    entries: list[tuple[str, str]] = []
+    for item in value.split("|"):
+        if "=>" not in item:
+            continue
+        title, url = (part.strip() for part in item.split("=>", 1))
+        if title and url and (url.startswith("/") or url.startswith(("http://", "https://"))):
+            entries.append((title, url))
+    return entries
+
+
+def related_articles_html(metadata: dict[str, str]) -> str:
+    entries = related_article_entries(metadata.get("related_articles", ""))
+    if not entries:
+        return ""
+    is_ko = metadata.get("language") == "ko"
+    heading = "관련 글" if is_ko else "Related Articles"
+    action = "글 열기" if is_ko else "Read article"
+    cards = "\n".join(
+        '<article class="related-article-card">'
+        f'<h3>{html.escape(title)}</h3>'
+        f'<a class="related-article-link" href="{html.escape(url, quote=True)}">{html.escape(action)}</a>'
+        "</article>"
+        for title, url in entries
+    )
+    return f'\n<section class="related-articles" aria-label="{html.escape(heading, quote=True)}">\n<h2>{html.escape(heading)}</h2>\n{cards}\n</section>'
+
+
 def is_table_start(lines: list[str], index: int) -> bool:
     header = lines[index].strip() if index < len(lines) else ""
     separator = lines[index + 1].strip() if index + 1 < len(lines) else ""
@@ -567,7 +595,7 @@ def load_publishable_articles(topics_path: Path, site_dir: Path, site_url: str) 
         description = metadata.get("description") or first_paragraph_text(markdown) or topic["primary_question"]
         url_path = article_url_path(topic)
         html_path = site_dir / url_path / "index.html"
-        body_html = markdown_to_html(markdown)
+        body_html = markdown_to_html(markdown) + related_articles_html(metadata)
         social_image_path = social_card_asset_path(topic)
         social_image_url = absolute_url(site_url, social_image_path)
         articles.append(

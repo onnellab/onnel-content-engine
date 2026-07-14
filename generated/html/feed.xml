@@ -19,17 +19,17 @@
     <pubDate>Fri, 10 Jul 2026 15:00:00 GMT</pubDate>
   </item>
   <item>
-    <title>Why TXT Files Show Unreadable Characters</title>
-    <link>https://onnellab.github.io/blog/en/txt-file-unreadable-characters/</link>
-    <guid>https://onnellab.github.io/blog/en/txt-file-unreadable-characters/</guid>
-    <description>Learn why TXT files can show unreadable characters, how text encoding affects plain text, and what to check before changing tools.</description>
+    <title>How to Convert Local Media Files Privately</title>
+    <link>https://onnellab.github.io/blog/en/convert-local-media-files-privately/</link>
+    <guid>https://onnellab.github.io/blog/en/convert-local-media-files-privately/</guid>
+    <description>Learn how to convert local media files privately, what to check before changing formats, and when a focused local media converter is the right workflow.</description>
     <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
-    <title>TXT 파일 글자가 깨져 보이는 이유</title>
-    <link>https://onnellab.github.io/blog/ko/txt-file-unreadable-characters/</link>
-    <guid>https://onnellab.github.io/blog/ko/txt-file-unreadable-characters/</guid>
-    <description>TXT 파일의 글자가 깨져 보이는 이유, 텍스트 인코딩이 일반 텍스트에 미치는 영향, 도구를 바꾸기 전에 확인할 항목을 정리합니다.</description>
+    <title>로컬 미디어 파일을 비공개로 변환하는 방법</title>
+    <link>https://onnellab.github.io/blog/ko/convert-local-media-files-privately/</link>
+    <guid>https://onnellab.github.io/blog/ko/convert-local-media-files-privately/</guid>
+    <description>로컬 미디어 파일을 서버로 보내지 않고 변환할 때 확인할 항목, 출력 형식 선택 기준, 로컬 미디어 변환기가 맞는 상황을 설명합니다.</description>
     <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>

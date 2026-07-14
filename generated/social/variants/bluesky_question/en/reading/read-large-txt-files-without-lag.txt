@@ -1,4 +1,4 @@
-Sometimes the best fix for a slow text file is changing how you open it.
+Sometimes the best fix for a laggy text document is changing how you open it.
 
 Opening the file is only step one; the reading path matters just as much.
 

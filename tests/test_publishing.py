@@ -75,6 +75,7 @@ category: "reading"
 language: "en"
 description: "A practical guide to reading very large TXT files without unnecessary lag."
 topic_id: "TOPIC-0001"
+related_articles: "Encoding Basics => https://example.com/blog/en/encoding-basics/"
 ---
 
 # How to Read Very Large TXT Files
@@ -155,6 +156,9 @@ class PublishingTest(unittest.TestCase):
         self.assertIn('<link rel="manifest" href="/site.webmanifest?v=20260712-ol-transparent-v2">', html)
         self.assertIn("<blockquote>Treat the file as a reference document before editing it.</blockquote>", html)
         self.assertIn("<table>", html)
+        self.assertIn('<section class="related-articles"', html)
+        self.assertIn("<h3>Encoding Basics</h3>", html)
+        self.assertIn('<a class="related-article-link" href="https://example.com/blog/en/encoding-basics/">Read article</a>', html)
         self.assertIn('<img src="/blog-assets/en/read-large-txt-files/workflow-diagram.svg"', html)
         self.assertIn('<meta property="og:title" content="How to Read Very Large TXT Files">', html)
         self.assertIn('<meta name="twitter:card" content="summary_large_image">', html)

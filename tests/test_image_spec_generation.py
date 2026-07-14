@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from generate_image_spec import ImageSpecError, generate_image_spec
+from generate_image_assets import workflow_svg
 from generate_markdown import generate_markdown
 from topic_management import APP_HEADER, TopicStore, write_topics
 
@@ -136,7 +137,17 @@ class ImageSpecGenerationTest(unittest.TestCase):
                 apps_path=self.apps_path,
                 output_root=self.image_root,
                 legacy_topics_path=self.mirror_path,
-            )
+                )
+
+
+    def test_encoding_workflow_asset_uses_distinct_layout(self) -> None:
+        svg = workflow_svg("Workflow diagram for checking text encoding", "TXT unreadable characters", "en")
+
+        self.assertIn("Encoding diagnosis", svg)
+        self.assertIn("UTF-8 / EUC-KR /", svg)
+        self.assertIn("Shift JIS", svg)
+        self.assertIn("Readable text", svg)
+        self.assertNotIn("A practical workflow", svg)
 
 
 if __name__ == "__main__":

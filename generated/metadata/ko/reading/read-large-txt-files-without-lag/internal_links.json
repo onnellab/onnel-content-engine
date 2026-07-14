@@ -30,19 +30,17 @@
   "recommendations": {
     "related_articles": [
       {
-        "topic_id": "TOPIC-0006",
-        "title": "TXT 파일 글자가 깨져 보이는 이유",
-        "slug": "txt-file-unreadable-characters",
-        "category": "reading",
+        "topic_id": "TOPIC-0011",
+        "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/reading/txt-file-unreadable-characters.md",
-        "destination": "scheduled_article",
-        "relationship": "troubleshooting",
-        "shared_clusters": [
-          "reading"
-        ],
-        "score": 13
+        "status": "review",
+        "url": "generated/markdown/ko/media/convert-local-media-files-privately.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [
