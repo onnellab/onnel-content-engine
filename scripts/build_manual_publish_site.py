@@ -716,6 +716,8 @@ def html_document(
     .run-link:hover {{ border-color: var(--blue); background: var(--blue-soft); }}
     .run-link[hidden] {{ display: none; }}
     .tool-panel {{ border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 10px; margin-bottom: 14px; box-shadow: var(--shadow); }}
+    .panel-summary {{ cursor: pointer; font-weight: 900; font-size: 15px; min-height: 36px; display: inline-flex; align-items: center; gap: 8px; width: fit-content; max-width: 100%; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 7px 11px; margin-bottom: 10px; }}
+    .panel-summary:hover {{ border-color: var(--blue); background: var(--blue-soft); }}
     .credential-panel {{ display: grid; gap: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.86); border-radius: 8px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow); }}
     .credential-head {{ display: flex; align-items: start; justify-content: space-between; gap: 12px; }}
     .credential-head h2 {{ margin: 0; font-size: 17px; }}
@@ -887,13 +889,14 @@ def html_document(
         <a id="verification-run-link" class="run-link" href="#" target="_blank" rel="noopener" hidden>실행 기록</a>
       </div>
     </section>
-    <section class="tool-panel" aria-label="Publish controls">
-    <div class="quick-row">
-      <select id="platform"><option value="">모든 매체</option></select>
-      <select id="visibility"><option value="due">게시 예정만</option><option value="active">진행 항목만</option><option value="all">완료 포함</option></select>
-      <button id="toggle-variants" type="button" class="secondary">대안 보기</button>
-    </div>
-      <div class="controls" hidden>
+    <details class="tool-panel" aria-label="Publish controls" open>
+      <summary id="filter-panel-title" class="panel-summary">검색 및 필터</summary>
+      <div class="quick-row">
+        <select id="platform"><option value="">모든 매체</option></select>
+        <select id="visibility"><option value="due">게시 예정만</option><option value="active">진행 항목만</option><option value="all">완료 포함</option></select>
+        <button id="toggle-variants" type="button" class="secondary">대안 보기</button>
+      </div>
+      <div class="controls">
         <input id="search" type="search" placeholder="토픽, 매체, 언어, 상태 검색">
         <select id="language"><option value="">모든 언어</option></select>
         <select id="status"><option value="">모든 상태</option></select>
@@ -905,8 +908,9 @@ def html_document(
         <button id="refresh-state" type="button" class="secondary">새로고침</button>
         <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
       </div>
-    </section>
-    <section class="credential-panel" aria-label="Automated posting credentials">
+    </details>
+    <details class="credential-panel" aria-label="Automated posting credentials" open>
+      <summary id="credential-panel-title" class="panel-summary">자동 포스팅 연결</summary>
       <div class="credential-head">
         <div>
           <h2 id="credentials-title">자동 포스팅 연결</h2>
@@ -929,7 +933,7 @@ def html_document(
       <textarea id="credential-output" class="credential-output" readonly spellcheck="false"></textarea>
       <div id="posting-run-note" class="note">입력값 저장만으로는 자동 게시가 즉시 실행되지 않습니다. GitHub secrets 동기화 후 이 버튼으로 publishing workflow를 dry_run=false로 실행하세요.</div>
       <div id="credential-note" class="note">복사한 env 블록을 docs/environment variables.md에 붙여넣으면 기존 자동 포스팅 스크립트가 해당 값을 읽습니다.</div>
-    </section>
+    </details>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
     <details class="platform-status" aria-label="Platform status">
@@ -1008,6 +1012,7 @@ def html_document(
         saveError: '저장 오류',
         tokenPlaceholder: 'ONNELLAB_GITHUB_PAGES_TOKEN',
         advancedSummary: '상세 필터와 동기화',
+        filterPanelTitle: '검색 및 필터',
         connectSync: '동기화 연결',
         refresh: '새로고침',
         verifyPublications: '공개 프로필 확인',
@@ -1029,6 +1034,7 @@ def html_document(
         secondsShort: '초',
         tokenNeededNote: 'ONNELLAB_GITHUB_PAGES_TOKEN 입력 후 동기화와 공개 확인을 실행할 수 있습니다.',
         credentialsTitle: '자동 포스팅 연결',
+        credentialPanelTitle: '자동 포스팅 연결',
         credentialsCopy: '저장은 이 브라우저에만 유지됩니다. 실제 자동 포스팅은 env 블록을 로컬 파일에 반영하거나 GitHub Actions secrets로 동기화해야 연결됩니다.',
         blueskyHandle: 'Bluesky handle',
         blueskyAppPassword: 'Bluesky 앱 패스워드',
@@ -1198,6 +1204,7 @@ def html_document(
         saveError: 'save error',
         tokenPlaceholder: 'ONNELLAB_GITHUB_PAGES_TOKEN',
         advancedSummary: 'Advanced filters and sync',
+        filterPanelTitle: 'Search and filters',
         connectSync: 'Connect sync',
         refresh: 'Refresh',
         verifyPublications: 'Check public profiles',
@@ -1219,6 +1226,7 @@ def html_document(
         secondsShort: 's',
         tokenNeededNote: 'Enter ONNELLAB_GITHUB_PAGES_TOKEN to run sync and public profile checks.',
         credentialsTitle: 'Automated posting connection',
+        credentialPanelTitle: 'Automated posting connection',
         credentialsCopy: 'Saved inputs stay in this browser only. Automated posting is connected after you apply the env block locally or sync it to GitHub Actions secrets.',
         blueskyHandle: 'Bluesky handle',
         blueskyAppPassword: 'Bluesky app password',
@@ -1450,11 +1458,13 @@ def html_document(
       document.getElementById('site-status-title').textContent = t('siteStatusTitle');
       document.getElementById('pricing-status-title').textContent = t('pricingStatusTitle');
       document.getElementById('quality-status-title').textContent = t('qualityStatusTitle');
+      document.getElementById('filter-panel-title').textContent = t('filterPanelTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
       document.getElementById('save-token').textContent = t('connectSync');
       document.getElementById('refresh-state').textContent = t('refresh');
       document.getElementById('token-note').textContent = t('tokenNeededNote');
       document.getElementById('credentials-title').textContent = t('credentialsTitle');
+      document.getElementById('credential-panel-title').textContent = t('credentialPanelTitle');
       document.getElementById('credentials-copy').textContent = t('credentialsCopy');
       document.getElementById('bluesky-handle-label').textContent = t('blueskyHandle');
       document.getElementById('bluesky-password-label').textContent = t('blueskyAppPassword');
