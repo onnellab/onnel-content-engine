@@ -171,9 +171,9 @@ Each stage should remain independent.
 
 # Repository Operating Rules
 
-Codex must run `git pull` before starting repository work.
+At the start of every repository session, Codex must run `git pull` before making changes.
 
-When remote and local history conflict, Codex must rebase and keep the better implementation according to the project documents.
+When remote and local history conflict, Codex must compare the local and remote code, rebase, and keep the better implementation according to the project documents.
 
 Codex must commit and push after each completed task.
 
