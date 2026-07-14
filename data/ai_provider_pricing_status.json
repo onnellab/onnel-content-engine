@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-07-14T22:42:50+09:00",
+  "checked_at": "2026-07-14T23:16:58+09:00",
   "outcome": "warning",
   "messages": [
     "deepl:deepl-api-pro price requires manual confirmation; using manual verification from 2026-07-14"
@@ -29,8 +29,7 @@
       "manual_verification_note": "DeepL public pricing can be JavaScript or region rendered; local assumption is manually verified when automatic page text cannot confirm it.",
       "status": "manual_ok",
       "message": "automatic price check could not confirm the page, but local assumption is manually verified",
-      "confirmation_method": "manual",
-      "browser_error": "browser check failed: Playwright is not installed in this environment"
+      "confirmation_method": "manual"
     }
   ]
 }
