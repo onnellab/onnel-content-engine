@@ -1597,7 +1597,8 @@
       if (!title) return text;
       const trimmed = String(text || '').trimStart();
       const titleHeading = new RegExp('^#\\s+' + escapeRegExp(title) + '\\s*(?:\\n{1,2}|$)', 'im');
-      if (trimmed.startsWith('---') || trimmed.match(titleHeading)) return text;
+      const leadingTitleHeading = new RegExp('^#\\s+' + escapeRegExp(title) + '\\s*(?:\\n{1,2}|$)', 'i');
+      if (trimmed.startsWith('---') || trimmed.match(leadingTitleHeading)) return text;
       const body = String(text || '').replace(titleHeading, '').replace(/^\n+/, '');
       return `# ${title}\n\n${body}`;
     }
