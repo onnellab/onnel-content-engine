@@ -628,10 +628,12 @@ def social_items(manifest_path: Path, topics: dict[str, dict[str, str]]) -> list
         text = read_text(draft_path)
         canonical_url = str(post.get("canonical_url", ""))
         card_asset_path = str(post.get("card_asset_path", ""))
+        topic = topics.get(str(topic_id), {})
         items.append(
             {
                 "kind": "social",
                 "topic_id": topic_id,
+                "title": topic.get("working_title", ""),
                 "platform": platform,
                 "publishing_mode": publishing_mode(platform),
                 "platform_label": PLATFORM_LABELS.get(platform, platform),
@@ -680,8 +682,9 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
         draft_path = str(draft.get("draft_path", ""))
         text = read_text(draft_path)
         canonical_url = str(draft.get("canonical_url", ""))
+        topic = topics.get(str(topic_id), {})
         fields = (
-            hashnode_publish_fields(topics.get(str(topic_id)), text)
+            hashnode_publish_fields(topic, text)
             if platform == "hashnode"
             else {
                 "publish_title": "",
@@ -697,6 +700,7 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
             {
                 "kind": "syndication",
                 "topic_id": topic_id,
+                "title": topic.get("working_title", ""),
                 "platform": platform,
                 "publishing_mode": publishing_mode(platform),
                 "platform_label": PLATFORM_LABELS.get(platform, platform),
@@ -2367,9 +2371,20 @@ def html_document(
       return item.text;
     }}
 
+    function titlePrefixedMarkdown(item, text) {{
+      if (item.kind !== 'syndication' || item.platform === 'hashnode') return text;
+      const title = displayTitle(item);
+      if (!title) return text;
+      const trimmed = String(text || '').trimStart();
+      const titleHeading = new RegExp('^#\\\\s+' + escapeRegExp(title) + '\\\\s*(?:\\\\n{{1,2}}|$)', 'im');
+      if (trimmed.startsWith('---') || trimmed.match(titleHeading)) return text;
+      const body = String(text || '').replace(titleHeading, '').replace(/^\\n+/, '');
+      return `# ${{title}}\\n\\n${{body}}`;
+    }}
+
     function copyAndOpenText(item, textarea) {{
       if (item.platform === 'hashnode') return publishBodyText({{ ...item, publish_body: textarea.value }});
-      return textarea.value;
+      return titlePrefixedMarkdown(item, textarea.value);
     }}
 
     function renderEmptyState() {{
@@ -2805,12 +2820,17 @@ def html_document(
     }}
 
     function displayTitle(item) {{
+      if (item.title) return String(item.title).trim();
       const text = String(item.text || '');
       const frontmatterTitle = text.match(/^---[\\s\\S]*?^title:\\s*["']?(.+?)["']?\\s*$[\\s\\S]*?^---/m);
       if (frontmatterTitle) return frontmatterTitle[1].trim();
       const heading = text.match(/^#\\s+(.+)$/m);
       if (heading) return heading[1].trim();
       return text.split('\\n').find((line) => line.trim()) || item.slug;
+    }}
+
+    function escapeRegExp(value) {{
+      return String(value).replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&');
     }}
 
     function publishedItemUrl(item) {{
