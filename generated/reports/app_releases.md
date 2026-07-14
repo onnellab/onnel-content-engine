@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-07-14T00:41:48+09:00
+Generated: 2026-07-14T11:29:37+09:00
 
 ## Summary
 
@@ -16,7 +16,7 @@ Generated: 2026-07-14T00:41:48+09:00
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Aligna | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
 | Aligna | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
-| ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
+| ClipNest | ios | 1.0.2 | - | unknown | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
 | Quivra | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
 | Quivra | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
 | Segra | android | 1.0.2 | 1.0.2 | same | unchanged | released | onnellab/segra | No action |
@@ -44,4 +44,4 @@ Generated: 2026-07-14T00:41:48+09:00
 | VaultXT | android | unchanged | Covered by private test release row | Version/update date read from Google Play public page; release notes from Android snapshot. Imported from /home/lue/dev/onnellab-text/vaultxt/pubspec.yaml version 1.0.6+52; confirm against Play Console if needed. |
 | Segra | ios | unchanged | Platform rollout not public | - |
 | VaultXT | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.3. Add release artifact, checksum, and keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |
-| ClipNest | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.2. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
+| ClipNest | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.2. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |

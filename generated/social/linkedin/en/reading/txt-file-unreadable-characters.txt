@@ -1,0 +1,11 @@
+Broken-looking TXT files are often an encoding problem, not a content problem.
+
+The useful test is to keep the original file unchanged, open a copy, and check the encoding before assuming the content is damaged.
+
+Before changing tools:
+- Keep the original TXT file unchanged.
+- Open a copy in a reader or editor that lets you choose encoding.
+- Start with UTF-8 and check whether the text becomes readable.
+
+Read the full article:
+https://onnellab.github.io/blog/en/txt-file-unreadable-characters/

@@ -1,0 +1,5 @@
+Unreadable TXT characters usually point to an encoding mismatch.
+
+Start by checking encoding before converting or rewriting the file.
+
+https://onnellab.github.io/blog/en/txt-file-unreadable-characters/

@@ -1,0 +1,5 @@
+When plain text looks broken, the file is not always damaged.
+
+The first useful check is whether the app is reading the bytes as UTF-8 or something else.
+
+https://onnellab.github.io/blog/en/txt-file-unreadable-characters/

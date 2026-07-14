@@ -1,23 +1,14 @@
 ---
 title: "Why TXT Files Show Unreadable Characters"
-card_title: "Why TXT Files Show Unreadable Characters"
-slug: "txt-file-unreadable-characters"
-category: "reading"
-language: "en"
-description: "Learn why TXT files can show unreadable characters, how text encoding affects plain text, and what to check before changing tools."
-status: "published"
-topic_id: "TOPIC-0002"
-search_intent: "troubleshoot"
-primary_keyword: "TXT unreadable characters"
-secondary_keywords: "text encoding|UTF-8|broken characters|plain text"
-related_apps: "VaultXT"
 canonical_url: "https://onnellab.github.io/blog/en/txt-file-unreadable-characters/"
-published_at: "2026-07-14T09:00:00+09:00"
-updated_at: "2026-07-14T09:00:00+09:00"
-tags: "TXT unreadable characters|text encoding|UTF-8|plain text|VaultXT"
-image_specs: "Workflow diagram for checking text encoding|Comparison diagram for UTF-8 vs wrong encoding symptoms|VaultXT screenshot requirement for opening plain text files"
-related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/"
+tags: "txt-unreadable-characters,text-encoding,utf-8,plain-text"
+cover_image: "https://onnellab.github.io/blog-assets/en/txt-file-unreadable-characters/social-card.png"
+publication_id: ""
 ---
+
+> ONNELLAB note: This version keeps the byte-to-text encoding issue visible for technical readers.
+
+A TXT file does not carry a guaranteed visual layout. The important step is turning bytes into characters with the intended encoding.
 
 # Why TXT Files Show Unreadable Characters
 
@@ -62,7 +53,7 @@ Large TXT files add another layer of difficulty. If a large file opens slowly an
 
 > The safest workflow is to solve the encoding problem before making format changes.
 
-![Workflow diagram](/blog-assets/en/txt-file-unreadable-characters/workflow-diagram.svg "Workflow diagram: copy file, check encoding, preview text, save only after verification")
+![Workflow diagram](https://onnellab.github.io/blog-assets/en/txt-file-unreadable-characters/workflow-diagram.svg "Workflow diagram: copy file, check encoding, preview text, save only after verification")
 
 ## UTF-8 vs Wrong Encoding Symptoms
 
@@ -77,7 +68,7 @@ Virtual rendering is a technique where an app renders only the visible portion o
 
 ## ONNELLAB Application
 
-If you often inspect large plain-text files, [VaultXT](/apps/vaultxt/) may be relevant after the encoding issue is understood. VaultXT is designed for reading and lightly editing large plain-text files, so it fits workflows where the same files must be opened, searched, and reviewed repeatedly.
+If you often inspect large plain-text files, [VaultXT](https://onnellab.github.io/apps/vaultxt/) may be relevant after the encoding issue is understood. VaultXT is designed for reading and lightly editing large plain-text files, so it fits workflows where the same files must be opened, searched, and reviewed repeatedly.
 
 VaultXT should not be treated as a magic repair tool for damaged files. It is most useful when the file is plain text and the reader needs a calmer way to open, inspect, search, and navigate it.
 
@@ -113,3 +104,7 @@ No. UTF-8 is common, but older files and regional exports may use another encodi
 ### When should I use VaultXT?
 
 Use VaultXT when the file is plain text and your recurring task is opening, reading, searching, or lightly editing large TXT files.
+
+---
+
+Originally published at https://onnellab.github.io/blog/en/txt-file-unreadable-characters/

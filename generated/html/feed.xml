@@ -18,5 +18,19 @@
     <description>대용량 TXT 파일이 느리게 열리는 이유, 먼저 확인할 항목, 불필요한 지연을 줄이는 일반 텍스트 파일 읽기 흐름을 정리합니다.</description>
     <pubDate>Fri, 10 Jul 2026 15:00:00 GMT</pubDate>
   </item>
+  <item>
+    <title>Why TXT Files Show Unreadable Characters</title>
+    <link>https://onnellab.github.io/blog/en/txt-file-unreadable-characters/</link>
+    <guid>https://onnellab.github.io/blog/en/txt-file-unreadable-characters/</guid>
+    <description>Learn why TXT files can show unreadable characters, how text encoding affects plain text, and what to check before changing tools.</description>
+    <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>TXT 파일 글자가 깨져 보이는 이유</title>
+    <link>https://onnellab.github.io/blog/ko/txt-file-unreadable-characters/</link>
+    <guid>https://onnellab.github.io/blog/ko/txt-file-unreadable-characters/</guid>
+    <description>TXT 파일의 글자가 깨져 보이는 이유, 텍스트 인코딩이 일반 텍스트에 미치는 영향, 도구를 바꾸기 전에 확인할 항목을 정리합니다.</description>
+    <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+  </item>
 </channel>
 </rss>
