@@ -40,13 +40,11 @@ jobs:
           python-version: "3.x"
 
       - name: Configure Node
-        if: inputs.visual_public_pages == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
       - name: Install Playwright
-        if: inputs.visual_public_pages == 'true'
         run: |
           set -euo pipefail
           npm install playwright
@@ -105,12 +103,17 @@ jobs:
           set -euo pipefail
           python3 scripts/validate_app_pricing.py
 
+      - name: Sync AI provider pricing assumptions
+        run: |
+          set -euo pipefail
+          python3 scripts/sync_ai_provider_pricing.py
+
       - name: Commit verified state and dashboard snapshots
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/manual_publish_state.json data/manual_publication_verification_report.json data/store_versions.csv data/app_releases.csv data/app_release_sync_status.json generated/reports/app_releases.md
+          git add data/manual_publish_state.json data/manual_publication_verification_report.json data/store_versions.csv data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing_status.json generated/reports/app_releases.md
           if git diff --cached --quiet; then
             echo "No manual publication or dashboard snapshot changes to commit"
           else

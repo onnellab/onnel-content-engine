@@ -1,0 +1,3 @@
+provider,service,unit,price_usd,source_url,source_browser_url,source_pattern,manual_verified_at,manual_verification_note,price_note
+openai,gpt-4o-transcribe,audio_minute,0.006,https://developers.openai.com/api/docs/pricing,,"gpt-4o-transcribe.*0\.006\s*/\s*minute",,,OpenAI transcription pricing
+deepl,deepl-api-pro,1m_characters,25.00,https://www.deepl.com/en/pro#developer,https://www.deepl.com/en/pro#developer,"(25(\.00)?\s*(USD|\$)|(\$|USD)\s*25(\.00)?).{0,120}(1,000,000|million).{0,120}characters",2026-07-14,"DeepL public pricing can be JavaScript or region rendered; local assumption is manually verified when automatic page text cannot confirm it.",DeepL API Pro character pricing

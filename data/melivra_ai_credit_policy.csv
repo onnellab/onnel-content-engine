@@ -1,0 +1,2 @@
+app_slug,script_credits_per_minute,minimum_translation_credits_per_minute,gross_krw_per_100_credits,store_fee_rate,krw_per_usd_estimate,translation_usd_per_million_characters,translation_characters_per_minute,provider_cost_safety_multiplier
+melivra,6,5,1100,0.30,1450,25.00,900,1.8

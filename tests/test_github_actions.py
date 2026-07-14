@@ -94,17 +94,36 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("scripts/fill_ready_app_releases.py", workflow)
         self.assertIn("Validate app pricing", workflow)
         self.assertIn("scripts/validate_app_pricing.py", workflow)
+        self.assertIn("Sync AI provider pricing assumptions", workflow)
+        self.assertIn("scripts/sync_ai_provider_pricing.py", workflow)
 
     def test_ready_app_release_workflow_is_release_only(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "publish-ready-app-releases.yml").read_text(encoding="utf-8")
 
         self.assertIn("scripts/create_github_releases.py --publish", workflow)
         self.assertIn("scripts/sync_github_release_status.py --allow-missing-token", workflow)
+        self.assertIn("scripts/sync_ai_provider_pricing.py", workflow)
         self.assertIn("scripts/build_manual_publish_site.py", workflow)
         self.assertNotIn("post_core_distribution.py", workflow)
         self.assertNotIn("verify_manual_publications.py --visual-public-pages", workflow)
         self.assertIn("data/app_releases.csv", workflow)
+        self.assertIn("data/ai_provider_pricing.csv", workflow)
+        self.assertIn("data/melivra_ai_credit_policy.csv", workflow)
         self.assertIn("generated/manual-publish/index.html", workflow)
+        self.assertIn("generated/manual-publish/sw.js", workflow)
+        self.assertIn("public/manual-publish/sw.js", workflow)
+
+    def test_devto_update_workflow_deploys_rebuilt_dashboard(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "update-devto-article.yml").read_text(encoding="utf-8")
+
+        self.assertIn("repository: onnellab/onnellab.github.io", workflow)
+        self.assertIn("scripts/sync_ai_provider_pricing.py", workflow)
+        self.assertIn("scripts/build_manual_publish_site.py --homepage-repo", workflow)
+        self.assertIn("data/ai_provider_pricing.csv", workflow)
+        self.assertIn("data/melivra_ai_credit_policy.csv", workflow)
+        self.assertIn("generated/manual-publish/sw.js", workflow)
+        self.assertIn("public/manual-publish/sw.js", workflow)
+        self.assertIn("Refresh manual publish dashboard", workflow)
 
 
 if __name__ == "__main__":

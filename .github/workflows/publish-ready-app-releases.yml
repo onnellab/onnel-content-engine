@@ -9,6 +9,11 @@ on:
       - ".github/workflows/publish-ready-app-releases.yml"
       - "data/app_releases.csv"
       - "data/app_release_publications.csv"
+      - "data/app_pricing.csv"
+      - "data/ai_provider_pricing.csv"
+      - "data/melivra_ai_credit_policy.csv"
+      - "scripts/build_manual_publish_site.py"
+      - "scripts/sync_ai_provider_pricing.py"
 
 jobs:
   publish-ready-app-releases:
@@ -37,6 +42,17 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Configure Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Playwright
+        run: |
+          set -euo pipefail
+          npm install playwright
+          npx playwright install chromium --with-deps
+
       - name: Create public GitHub Releases
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -56,6 +72,7 @@ jobs:
       - name: Generate dashboard snapshots
         run: |
           set -euo pipefail
+          python3 scripts/sync_ai_provider_pricing.py
           python3 scripts/generate_app_release_report.py
           python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
 
@@ -64,7 +81,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/app_releases.csv data/app_release_sync_status.json generated/reports/app_releases.md generated/manual-publish/index.html
+          git add data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing_status.json generated/reports/app_releases.md generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js generated/manual-publish/icon-180.png generated/manual-publish/icon-192.png generated/manual-publish/icon-512.png
           if git diff --cached --quiet; then
             echo "No content engine release state changes"
           else
@@ -76,10 +93,16 @@ jobs:
       - name: Deploy manual publish dashboard
         run: |
           set -euo pipefail
+          mkdir -p "$HOMEPAGE_REPO_PATH/public/manual-publish"
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
+          cp generated/manual-publish/manifest.webmanifest "$HOMEPAGE_REPO_PATH/public/manual-publish/manifest.webmanifest"
+          cp generated/manual-publish/sw.js "$HOMEPAGE_REPO_PATH/public/manual-publish/sw.js"
+          cp generated/manual-publish/icon-180.png "$HOMEPAGE_REPO_PATH/public/manual-publish/icon-180.png"
+          cp generated/manual-publish/icon-192.png "$HOMEPAGE_REPO_PATH/public/manual-publish/icon-192.png"
+          cp generated/manual-publish/icon-512.png "$HOMEPAGE_REPO_PATH/public/manual-publish/icon-512.png"
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/index.html
+          git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/index.html public/manual-publish/manifest.webmanifest public/manual-publish/sw.js public/manual-publish/icon-180.png public/manual-publish/icon-192.png public/manual-publish/icon-512.png
           if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
             echo "No manual publish dashboard changes"
           else

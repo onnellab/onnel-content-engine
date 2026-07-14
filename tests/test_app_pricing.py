@@ -14,7 +14,7 @@ from validate_app_pricing import AppPricingValidationError, validate_app_pricing
 
 class AppPricingValidationTest(unittest.TestCase):
     def test_validates_current_registry(self) -> None:
-        self.assertEqual(validate_app_pricing(ROOT / "data" / "app_pricing.csv"), 9)
+        self.assertEqual(validate_app_pricing(ROOT / "data" / "app_pricing.csv"), 10)
 
     def test_rejects_duplicate_product_rows(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

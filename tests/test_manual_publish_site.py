@@ -241,6 +241,13 @@ Body
             self.assertIn("3,300 KRW", html)
             self.assertIn("Melivra AI Credits 5000", html)
             self.assertIn("34.99 USD", html)
+            self.assertIn("AI 원가 대비 흑자", html)
+            self.assertIn("Profit vs AI cost", html)
+            self.assertIn("ai_provider_cost_usd", html)
+            self.assertIn("OpenAI $0.006/min + DeepL $25.00/1M chars", html)
+            self.assertIn("ai-provider-pricing-status-data", html)
+            self.assertIn("AI 요금 변경 확인 필요", html)
+            self.assertIn("AI 요금 자동 확인 실패, 수동 확인 완료", html)
             self.assertIn("VaultXT Pro", html)
             self.assertIn("9,900 KRW", html)
             self.assertIn("if (item.product_type === 'ai_credit') return item.product_name", html)
@@ -296,7 +303,7 @@ Body
             self.assertNotIn("favicon-16x16.png", manifest)
             self.assertTrue((output.parent / "manifest.webmanifest").exists())
             self.assertTrue((output.parent / "sw.js").exists())
-            self.assertIn("onnellab-manual-publish-v5", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("onnellab-manual-publish-v6", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_filters_stale_verification_report_items(self) -> None:
         report = current_verification_report(

@@ -1,0 +1,36 @@
+{
+  "checked_at": "2026-07-14T22:42:50+09:00",
+  "outcome": "warning",
+  "messages": [
+    "deepl:deepl-api-pro price requires manual confirmation; using manual verification from 2026-07-14"
+  ],
+  "providers": [
+    {
+      "provider": "openai",
+      "service": "gpt-4o-transcribe",
+      "unit": "audio_minute",
+      "expected_price_usd": "0.006",
+      "source_url": "https://developers.openai.com/api/docs/pricing",
+      "source_browser_url": "",
+      "manual_verified_at": "",
+      "manual_verification_note": "",
+      "status": "ok",
+      "message": "expected price pattern found in static source",
+      "confirmation_method": "static"
+    },
+    {
+      "provider": "deepl",
+      "service": "deepl-api-pro",
+      "unit": "1m_characters",
+      "expected_price_usd": "25.00",
+      "source_url": "https://www.deepl.com/en/pro#developer",
+      "source_browser_url": "https://www.deepl.com/en/pro#developer",
+      "manual_verified_at": "2026-07-14",
+      "manual_verification_note": "DeepL public pricing can be JavaScript or region rendered; local assumption is manually verified when automatic page text cannot confirm it.",
+      "status": "manual_ok",
+      "message": "automatic price check could not confirm the page, but local assumption is manually verified",
+      "confirmation_method": "manual",
+      "browser_error": "browser check failed: Playwright is not installed in this environment"
+    }
+  ]
+}

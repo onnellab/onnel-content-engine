@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import os
 import re
 import subprocess
@@ -31,6 +32,9 @@ DEFAULT_APP_RELEASE_SYNC_STATUS = ROOT / "data" / "app_release_sync_status.json"
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
 DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
+DEFAULT_AI_PROVIDER_PRICING = ROOT / "data" / "ai_provider_pricing.csv"
+DEFAULT_AI_PROVIDER_PRICING_STATUS = ROOT / "data" / "ai_provider_pricing_status.json"
+DEFAULT_MELIVRA_AI_CREDIT_POLICY = ROOT / "data" / "melivra_ai_credit_policy.csv"
 DEFAULT_HOMEPAGE_REPO = Path(os.environ.get("ONNELLAB_HOMEPAGE_REPO", "/mnt/c/dev/onnellab.github.io"))
 KST = ZoneInfo("Asia/Seoul")
 
@@ -54,6 +58,12 @@ def read_json(path: Path) -> dict[str, object]:
 
 
 def release_sync_status_item(path: Path = DEFAULT_APP_RELEASE_SYNC_STATUS) -> dict[str, object]:
+    if not path.exists():
+        return {}
+    return read_json(path)
+
+
+def ai_provider_pricing_status_item(path: Path = DEFAULT_AI_PROVIDER_PRICING_STATUS) -> dict[str, object]:
     if not path.exists():
         return {}
     return read_json(path)
@@ -278,13 +288,100 @@ def format_price_value(value: str, currency: str) -> str:
     return f"{amount} {currency}".strip()
 
 
+def parse_float(value: str, fallback: float = 0.0) -> float:
+    try:
+        return float(str(value).replace(",", "").strip())
+    except ValueError:
+        return fallback
+
+
+def parse_int_from_product_name(value: str) -> int:
+    matches = re.findall(r"\d+", value)
+    return int(matches[-1]) if matches else 0
+
+
+def read_melivra_ai_credit_policy(path: Path = DEFAULT_MELIVRA_AI_CREDIT_POLICY) -> dict[str, float]:
+    rows = read_csv_rows(path)
+    row = next((item for item in rows if item.get("app_slug") == "melivra"), rows[0] if rows else {})
+    return {
+        "script_credits_per_minute": parse_float(row.get("script_credits_per_minute", "6"), 6.0),
+        "minimum_translation_credits_per_minute": parse_float(row.get("minimum_translation_credits_per_minute", "5"), 5.0),
+        "gross_krw_per_100_credits": parse_float(row.get("gross_krw_per_100_credits", "1100"), 1100.0),
+        "store_fee_rate": parse_float(row.get("store_fee_rate", "0.30"), 0.30),
+        "krw_per_usd_estimate": parse_float(row.get("krw_per_usd_estimate", "1450"), 1450.0),
+        "translation_usd_per_million_characters": parse_float(
+            row.get("translation_usd_per_million_characters", "25.00"),
+            25.0,
+        ),
+        "translation_characters_per_minute": parse_float(row.get("translation_characters_per_minute", "900"), 900.0),
+        "provider_cost_safety_multiplier": parse_float(row.get("provider_cost_safety_multiplier", "1.8"), 1.8),
+    }
+
+
+def provider_price_by_unit(path: Path = DEFAULT_AI_PROVIDER_PRICING) -> dict[tuple[str, str], float]:
+    prices: dict[tuple[str, str], float] = {}
+    for row in read_csv_rows(path):
+        price = parse_float(row.get("price_usd", ""))
+        if price > 0:
+            prices[(row.get("provider", ""), row.get("unit", ""))] = price
+    return prices
+
+
+def melivra_ai_credit_economics(
+    credit_count: int,
+    price_amount: float,
+    currency: str,
+    provider_prices: dict[tuple[str, str], float],
+    policy: dict[str, float],
+) -> dict[str, str]:
+    if credit_count <= 0 or price_amount <= 0:
+        return {}
+    krw_per_usd = policy["krw_per_usd_estimate"]
+    gross_usd = price_amount if currency == "USD" else price_amount / krw_per_usd
+    net_usd = gross_usd * (1 - policy["store_fee_rate"])
+    whisper_per_minute = provider_prices.get(("openai", "audio_minute"), 0.006)
+    deepl_per_million = provider_prices.get(("deepl", "1m_characters"), policy["translation_usd_per_million_characters"])
+    translation_cost_per_minute = policy["translation_characters_per_minute"] * deepl_per_million / 1_000_000
+    script_credits = policy["script_credits_per_minute"]
+    guarded_translation_credits = math.ceil(
+        (
+            translation_cost_per_minute
+            * krw_per_usd
+            * policy["provider_cost_safety_multiplier"]
+            / ((policy["gross_krw_per_100_credits"] * (1 - policy["store_fee_rate"]) / 100))
+        )
+    )
+    translation_credits = max(policy["minimum_translation_credits_per_minute"], guarded_translation_credits)
+    provider_cost_per_credit = (whisper_per_minute + translation_cost_per_minute) / (script_credits + translation_credits)
+    provider_cost_usd = provider_cost_per_credit * credit_count
+    profit_usd = net_usd - provider_cost_usd
+    margin_percent = (profit_usd / net_usd * 100) if net_usd else 0
+    status = "profit" if profit_usd > 0 else "loss" if profit_usd < 0 else "even"
+    return {
+        "ai_credit_count": str(credit_count),
+        "ai_net_revenue_usd": f"{net_usd:.2f}",
+        "ai_provider_cost_usd": f"{provider_cost_usd:.2f}",
+        "ai_profit_usd": f"{profit_usd:.2f}",
+        "ai_margin_percent": f"{margin_percent:.1f}",
+        "ai_margin_status": status,
+        "ai_cost_basis": (
+            f"OpenAI ${whisper_per_minute:.3f}/min + DeepL ${deepl_per_million:.2f}/1M chars, "
+            f"{int(script_credits + translation_credits)} credits/min script+translation"
+        ),
+    }
+
+
 def product_pricing_items(
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
     apps_registry_path: Path = DEFAULT_APPS_REGISTRY,
     app_pricing_path: Path = DEFAULT_APP_PRICING,
+    ai_provider_pricing_path: Path = DEFAULT_AI_PROVIDER_PRICING,
+    melivra_ai_credit_policy_path: Path = DEFAULT_MELIVRA_AI_CREDIT_POLICY,
 ) -> list[dict[str, str]]:
     registry = {row.get("slug", ""): row for row in read_csv_rows(apps_registry_path)}
     explicit_rows = read_csv_rows(app_pricing_path)
+    provider_prices = provider_price_by_unit(ai_provider_pricing_path)
+    melivra_policy = read_melivra_ai_credit_policy(melivra_ai_credit_policy_path)
     explicit_by_slug: dict[str, list[dict[str, str]]] = {}
     for row in explicit_rows:
         explicit_by_slug.setdefault(row.get("app_slug", ""), []).append(row)
@@ -311,15 +408,29 @@ def product_pricing_items(
         }
         explicit_products = explicit_by_slug.get(slug, [])
         for explicit in explicit_products:
-            items.append(
-                {
-                    **base,
-                    "product_name": explicit.get("product_name", ""),
-                    "product_type": explicit.get("product_type", ""),
-                    "price": format_price_value(explicit.get("price", ""), explicit.get("currency", "")),
-                    "price_note": explicit.get("price_note", "Manual price registry"),
-                }
-            )
+            product_type = explicit.get("product_type", "")
+            price_amount = parse_float(explicit.get("price", ""))
+            currency = explicit.get("currency", "")
+            item = {
+                **base,
+                "product_name": explicit.get("product_name", ""),
+                "product_type": product_type,
+                "price": format_price_value(explicit.get("price", ""), currency),
+                "price_amount": explicit.get("price", ""),
+                "currency": currency,
+                "price_note": explicit.get("price_note", "Manual price registry"),
+            }
+            if slug == "melivra" and product_type == "ai_credit":
+                item.update(
+                    melivra_ai_credit_economics(
+                        parse_int_from_product_name(explicit.get("product_name", "")),
+                        price_amount,
+                        currency,
+                        provider_prices,
+                        melivra_policy,
+                    )
+                )
+            items.append(item)
         explicit_types = {item.get("product_type", "") for item in explicit_products}
         if "paid_download" not in explicit_types and price and price != "Free":
             items.append(
@@ -629,6 +740,7 @@ def html_document(
     store_items: list[dict[str, str]] | None = None,
     site_items: list[dict[str, object]] | None = None,
     pricing_items: list[dict[str, str]] | None = None,
+    ai_provider_pricing_status: dict[str, object] | None = None,
     release_sync_status: dict[str, object] | None = None,
     verification_report: dict[str, object] | None = None,
     quality_report: dict[str, object] | None = None,
@@ -648,6 +760,7 @@ def html_document(
     store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
     site_data = json.dumps(site_items or [], ensure_ascii=False).replace("</", "<\\/")
     pricing_data = json.dumps(pricing_items or [], ensure_ascii=False).replace("</", "<\\/")
+    ai_provider_pricing_status_data = json.dumps(ai_provider_pricing_status or {}, ensure_ascii=False).replace("</", "<\\/")
     release_sync_data = json.dumps(release_sync_status or {}, ensure_ascii=False).replace("</", "<\\/")
     verification_report_data = json.dumps(verification_report or {}, ensure_ascii=False).replace("</", "<\\/")
     quality_report_data = json.dumps(quality_report or {}, ensure_ascii=False).replace("</", "<\\/")
@@ -787,6 +900,10 @@ def html_document(
     .app-status-row b {{ display: block; font-size: 13px; margin-bottom: 5px; }}
     .app-status-row.is-release {{ background: var(--lilac-soft); }}
     .app-status-row.is-store {{ background: var(--sky-soft); }}
+    .app-status-row.is-ai-profit {{ background: var(--ok-soft); border-color: #b7d9c5; }}
+    .app-status-row.is-ai-loss {{ background: var(--bad-soft); border-color: #efb5b0; }}
+    .ai-margin-badge {{ display: inline-flex; width: fit-content; max-width: 100%; margin: 2px 0 5px; padding: 4px 7px; border: 1px solid #b7d9c5; border-radius: 999px; color: var(--ok); background: #fff; font-size: 12px; font-weight: 900; }}
+    .app-status-row.is-ai-loss .ai-margin-badge {{ color: var(--bad); border-color: #efb5b0; }}
     input, select {{ width: 100%; min-height: 40px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 8px 10px; font: inherit; border-radius: 6px; }}
     input:focus, select:focus, textarea:focus {{ outline: 2px solid rgba(46,111,187,.2); border-color: var(--blue); }}
     input.needs-token {{ border-color: var(--blue); box-shadow: 0 0 0 3px rgba(46,111,187,.18); }}
@@ -993,6 +1110,7 @@ def html_document(
   <script id="store-data" type="application/json">{store_data}</script>
   <script id="site-data" type="application/json">{site_data}</script>
   <script id="pricing-data" type="application/json">{pricing_data}</script>
+  <script id="ai-provider-pricing-status-data" type="application/json">{ai_provider_pricing_status_data}</script>
   <script id="release-sync-data" type="application/json">{release_sync_data}</script>
   <script id="verification-report-data" type="application/json">{verification_report_data}</script>
   <script id="quality-report-data" type="application/json">{quality_report_data}</script>
@@ -1003,6 +1121,7 @@ def html_document(
     let storeItems = JSON.parse(document.getElementById('store-data').textContent);
     let siteItems = JSON.parse(document.getElementById('site-data').textContent);
     let pricingItems = JSON.parse(document.getElementById('pricing-data').textContent);
+    let aiProviderPricingStatus = JSON.parse(document.getElementById('ai-provider-pricing-status-data').textContent);
     let releaseSyncStatus = JSON.parse(document.getElementById('release-sync-data').textContent);
     let verificationReport = JSON.parse(document.getElementById('verification-report-data').textContent);
     let qualityReport = JSON.parse(document.getElementById('quality-report-data').textContent);
@@ -1129,6 +1248,15 @@ def html_document(
         paidProduct: '유료 제품',
         paidDownload: '유료 다운로드',
         aiCredit: 'AI 크레딧',
+        aiCreditMarginProfit: 'AI 원가 대비 흑자',
+        aiCreditMarginLoss: 'AI 원가 대비 적자',
+        aiCreditEconomics: 'AI 원가 비교',
+        aiProviderCost: '예상 공급자 원가',
+        aiNetRevenue: '수수료 차감 후 매출',
+        aiPricingCheckChanged: 'AI 요금 변경 확인 필요',
+        aiPricingCheckWarning: 'AI 요금 확인 경고',
+        aiPricingManualOk: 'AI 요금 자동 확인 실패, 수동 확인 완료',
+        aiPricingCheckedAt: 'AI 요금 확인',
         pricingModel: '가격 모델',
         priceLabel: '가격',
         priceCheckNeeded: '스토어 확인 필요',
@@ -1321,6 +1449,15 @@ def html_document(
         paidProduct: 'paid product',
         paidDownload: 'Paid download',
         aiCredit: 'AI credit',
+        aiCreditMarginProfit: 'Profit vs AI cost',
+        aiCreditMarginLoss: 'Loss vs AI cost',
+        aiCreditEconomics: 'AI cost comparison',
+        aiProviderCost: 'estimated provider cost',
+        aiNetRevenue: 'net revenue after store fee',
+        aiPricingCheckChanged: 'AI pricing review needed',
+        aiPricingCheckWarning: 'AI pricing check warning',
+        aiPricingManualOk: 'AI pricing manually verified after automatic check failed',
+        aiPricingCheckedAt: 'AI pricing checked',
         pricingModel: 'pricing model',
         priceLabel: 'price',
         priceCheckNeeded: 'Check store',
@@ -1908,6 +2045,7 @@ def html_document(
       storeItems = readEmbeddedJson(doc, 'store-data');
       siteItems = readEmbeddedJson(doc, 'site-data');
       pricingItems = readEmbeddedJson(doc, 'pricing-data');
+      aiProviderPricingStatus = readEmbeddedJson(doc, 'ai-provider-pricing-status-data');
       releaseSyncStatus = readEmbeddedJson(doc, 'release-sync-data');
       verificationReport = readEmbeddedJson(doc, 'verification-report-data');
       syncFilterOptions();
@@ -2392,7 +2530,8 @@ def html_document(
       const appCount = new Set(pricingItems.map((item) => item.app_slug || item.app_name)).size;
       const explicitPrices = pricingItems.filter((item) => item.price).length;
       const needsStoreCheck = pricingItems.length - explicitPrices;
-      pricingStatusSummary.textContent = `${{pricingItems.length}} ${{t('paidProduct')}} / ${{appCount}} ${{t('appsWord')}} / ${{needsStoreCheck}} ${{t('priceCheckNeeded')}}`;
+      const aiPricingNote = aiProviderPricingSummaryText();
+      pricingStatusSummary.textContent = `${{pricingItems.length}} ${{t('paidProduct')}} / ${{appCount}} ${{t('appsWord')}} / ${{needsStoreCheck}} ${{t('priceCheckNeeded')}}${{aiPricingNote ? ' / ' + aiPricingNote : ''}}`;
       const groups = new Map();
       pricingItems.forEach((item) => {{
         const key = item.app_slug || item.app_name;
@@ -2407,9 +2546,15 @@ def html_document(
         card.appendChild(title);
         group.items.forEach((item) => {{
           const row = document.createElement('div');
-          row.className = item.product_type === 'paid_download' ? 'app-status-row is-store' : 'app-status-row is-release';
+          row.className = pricingRowClass(item);
           const label = document.createElement('b');
           label.textContent = pricingProductLabel(item);
+          if (item.ai_margin_status) {{
+            const margin = document.createElement('span');
+            margin.className = 'ai-margin-badge';
+            margin.textContent = aiCreditMarginText(item);
+            row.appendChild(margin);
+          }}
           const price = document.createElement('span');
           price.textContent = `${{t('priceLabel')}}: ${{item.price || t('priceCheckNeeded')}}`;
           const model = document.createElement('span');
@@ -2421,6 +2566,16 @@ def html_document(
             const note = document.createElement('span');
             note.textContent = pricingNoteLabel(item.price_note);
             row.appendChild(note);
+          }}
+          if (item.ai_provider_cost_usd) {{
+            const economics = document.createElement('span');
+            economics.textContent = `${{t('aiCreditEconomics')}}: ${{t('aiNetRevenue')}} $${{item.ai_net_revenue_usd}} / ${{t('aiProviderCost')}} $${{item.ai_provider_cost_usd}}`;
+            row.appendChild(economics);
+          }}
+          if (item.ai_cost_basis) {{
+            const basis = document.createElement('span');
+            basis.textContent = item.ai_cost_basis;
+            row.appendChild(basis);
           }}
           const links = document.createElement('span');
           const linkParts = [];
@@ -2440,6 +2595,29 @@ def html_document(
         }});
         pricingStatusGrid.appendChild(card);
       }});
+    }}
+
+    function pricingRowClass(item) {{
+      if (item.ai_margin_status === 'loss') return 'app-status-row is-ai-loss';
+      if (item.ai_margin_status === 'profit') return 'app-status-row is-ai-profit';
+      return item.product_type === 'paid_download' ? 'app-status-row is-store' : 'app-status-row is-release';
+    }}
+
+    function aiCreditMarginText(item) {{
+      const label = item.ai_margin_status === 'loss' ? t('aiCreditMarginLoss') : t('aiCreditMarginProfit');
+      return `${{label}}: $${{item.ai_profit_usd}} (${{item.ai_margin_percent}}%)`;
+    }}
+
+    function aiProviderPricingSummaryText() {{
+      const outcome = aiProviderPricingStatus && aiProviderPricingStatus.outcome;
+      const providers = Array.isArray(aiProviderPricingStatus && aiProviderPricingStatus.providers) ? aiProviderPricingStatus.providers : [];
+      if (providers.some((provider) => provider.status === 'manual_ok')) return t('aiPricingManualOk');
+      if (outcome === 'changed') return t('aiPricingCheckChanged');
+      if (outcome === 'warning') return t('aiPricingCheckWarning');
+      if (aiProviderPricingStatus && aiProviderPricingStatus.checked_at) {{
+        return `${{t('aiPricingCheckedAt')}}: ${{formatDate(aiProviderPricingStatus.checked_at)}}`;
+      }}
+      return '';
     }}
 
     function pricingProductLabel(item) {{
@@ -2903,7 +3081,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v5';
+    return """const CACHE = 'onnellab-manual-publish-v6';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -2963,6 +3141,7 @@ def build_manual_publish_site(
     store_items = store_status_items(store_versions_path)
     site_items = homepage_status_items(homepage_repo)
     pricing_items = product_pricing_items(homepage_repo)
+    ai_provider_pricing_status = ai_provider_pricing_status_item()
     release_sync_status = release_sync_status_item(app_release_sync_status_path)
     verification_report = verification_report_item(verification_report_path)
     quality_report = quality_report_item(social_manifest, syndication_manifest)
@@ -2976,6 +3155,7 @@ def build_manual_publish_site(
             store_items,
             site_items,
             pricing_items,
+            ai_provider_pricing_status,
             release_sync_status,
             verification_report,
             quality_report,
