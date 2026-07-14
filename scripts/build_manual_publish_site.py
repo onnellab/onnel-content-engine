@@ -3102,7 +3102,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v6';
+    return """const CACHE = 'onnellab-manual-publish-v7';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
