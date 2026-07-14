@@ -321,7 +321,7 @@ def product_pricing_items(
                 }
             )
         explicit_types = {item.get("product_type", "") for item in explicit_products}
-        if price and price != "Free":
+        if "paid_download" not in explicit_types and price and price != "Free":
             items.append(
                 {
                     **base,
@@ -409,7 +409,24 @@ def current_verification_report(report: dict[str, object], items: list[dict[str,
 
 def homepage_status_items(homepage_repo: Path = DEFAULT_HOMEPAGE_REPO) -> list[dict[str, object]]:
     if not homepage_repo.exists():
-        return []
+        generated_html = ROOT / "generated" / "html"
+        return [
+            {
+                "kind": "home",
+                "slug": "home",
+                "name": "ONNELLAB Home",
+                "landing_updated_at": latest_file_mtime(
+                    [
+                        generated_html / "index.html",
+                        generated_html / "blog" / "index.html",
+                        generated_html / "sitemap.xml",
+                    ]
+                ),
+                "screenshots_updated_at": "",
+                "assets_updated_at": latest_file_mtime(list((ROOT / "generated" / "assets").glob("**/*"))),
+                "screenshot_count": 0,
+            }
+        ]
     src = homepage_repo / "src"
     content_apps = src / "content" / "apps"
     names = app_name_index()
@@ -889,7 +906,7 @@ def html_document(
         <a id="verification-run-link" class="run-link" href="#" target="_blank" rel="noopener" hidden>실행 기록</a>
       </div>
     </section>
-    <details class="tool-panel" aria-label="Publish controls" open>
+    <details class="tool-panel" aria-label="Publish controls">
       <summary id="filter-panel-title" class="panel-summary">검색 및 필터</summary>
       <div class="quick-row">
         <select id="platform"><option value="">모든 매체</option></select>
@@ -909,7 +926,7 @@ def html_document(
         <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
       </div>
     </details>
-    <details class="credential-panel" aria-label="Automated posting credentials" open>
+    <details class="credential-panel" aria-label="Automated posting credentials">
       <summary id="credential-panel-title" class="panel-summary">자동 포스팅 연결</summary>
       <div class="credential-head">
         <div>

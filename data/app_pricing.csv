@@ -1,4 +1,5 @@
 app_slug,product_name,product_type,price,currency,price_note
+quivra,Paid download,paid_download,3300,KRW,Manual price registry
 aligna,Aligna Pro,pro,3300,KRW,Manual price registry
 clipnest,ClipNest Pro,pro,4400,KRW,Manual price registry
 melivra,Melivra AI Credits 100,ai_credit,0.99,USD,Manual price registry
