@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-14T13:43:06+09:00",
+  "checked_at": "2026-07-14T14:07:19+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 12,
     "already_done": 4,
-    "verified": 0,
-    "pending": 8
+    "verified": 1,
+    "pending": 7
   },
   "items": [
     {
@@ -58,6 +58,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0001::hashnode::en::markdown",
+      "topic_id": "TOPIC-0001",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "verified",
+      "reason": "",
+      "posted_url": "https://onnellab.hashnode.dev/rss.xml",
+      "verification_method": "hashnode_rss",
+      "verification_confidence": "medium"
+    },
+    {
       "manual_key": "TOPIC-0002::x::en::x",
       "topic_id": "TOPIC-0002",
       "platform": "x",
@@ -87,18 +99,6 @@
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0001::hashnode::en::markdown",
-      "topic_id": "TOPIC-0001",
-      "platform": "hashnode",
-      "language": "en",
-      "template_id": "markdown",
       "status": "pending",
       "reason": "No matching public post found",
       "posted_url": "",
