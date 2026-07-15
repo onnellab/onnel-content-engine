@@ -119,6 +119,32 @@ def markdown_body(markdown: str) -> str:
     return re.sub(r"^---\s*$[\s\S]*?^---\s*", "", markdown, count=1, flags=re.MULTILINE).strip()
 
 
+def trim_text_to_limit(value: str, limit: int) -> str:
+    text = " ".join(value.split())
+    if len(text) <= limit:
+        return text
+    trimmed = text[:limit].rstrip()
+    if " " in trimmed:
+        trimmed = trimmed.rsplit(" ", 1)[0].rstrip()
+    return trimmed.rstrip(".,;:") or text[:limit].rstrip()
+
+
+def medium_story_preview_subtitle(description: str) -> str:
+    text = " ".join(description.split())
+    if len(text) <= 140:
+        return text
+    rewrites = (
+        ("very large TXT files", "large TXT files"),
+        ("that avoids unnecessary lag", "that avoids lag"),
+        ("when a focused local media converter is the right workflow", "when to use a focused local media converter"),
+    )
+    for old, new in rewrites:
+        text = text.replace(old, new)
+        if len(text) <= 140:
+            return text
+    return trim_text_to_limit(text, 140)
+
+
 def hashnode_publish_fields(topic: dict[str, str] | None, draft_text: str) -> dict[str, str]:
     source_text = ""
     if topic and topic.get("canonical_path"):
@@ -134,11 +160,15 @@ def hashnode_publish_fields(topic: dict[str, str] | None, draft_text: str) -> di
     }
 
 
-def syndication_publish_fields(topic: dict[str, str] | None, draft_text: str, canonical_url: str) -> dict[str, str]:
+def syndication_publish_fields(
+    topic: dict[str, str] | None, draft_text: str, canonical_url: str, platform: str
+) -> dict[str, str]:
     source_text = ""
     if topic and topic.get("canonical_path"):
         source_text = read_text(topic["canonical_path"])
     title = frontmatter_value(source_text, "title") or frontmatter_value(draft_text, "title")
+    description = frontmatter_value(source_text, "description")
+    story_preview_subtitle = medium_story_preview_subtitle(description) if platform == "medium" else description
     language = topic.get("primary_language", "") if topic else ""
     slug = topic.get("slug", "") if topic else ""
     site_root = canonical_url.split("/blog/", 1)[0].rstrip("/") if "/blog/" in canonical_url else "https://onnellab.github.io"
@@ -151,7 +181,7 @@ def syndication_publish_fields(topic: dict[str, str] | None, draft_text: str, ca
         "publish_canonical_url": canonical_url,
         "publish_cover_image": cover_image,
         "seo_title": title,
-        "seo_description": frontmatter_value(source_text, "description"),
+        "seo_description": story_preview_subtitle,
     }
 
 
@@ -707,7 +737,7 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
         fields = (
             hashnode_publish_fields(topic, text)
             if platform == "hashnode"
-            else syndication_publish_fields(topic, text, canonical_url)
+            else syndication_publish_fields(topic, text, canonical_url, platform)
         )
         items.append(
             {

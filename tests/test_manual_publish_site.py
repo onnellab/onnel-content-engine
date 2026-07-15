@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import html as html_lib
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -129,6 +131,15 @@ Body
             build_manual_publish_site(social_manifest, syndication_manifest, output, ROOT / "data" / "topics.csv", manual_state)
 
             html = output.read_text(encoding="utf-8")
+            data_match = re.search(r'<script id="manual-data" type="application/json">(.*?)</script>', html, re.S)
+            self.assertIsNotNone(data_match)
+            manual_items = json.loads(html_lib.unescape(data_match.group(1)))
+            medium_item = next(item for item in manual_items if item["platform"] == "medium")
+            self.assertLessEqual(len(medium_item["seo_description"]), 140)
+            self.assertEqual(
+                medium_item["seo_description"],
+                "Learn why large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnecessary lag.",
+            )
             self.assertIn("ONNELLAB 게시 상태 대시보드", html)
             self.assertIn("ONNELLAB Publish Status Dashboard", html)
             self.assertIn("동기화 연결", html)
