@@ -2368,7 +2368,7 @@ def html_document(
 
     function publishBodyText(item) {{
       if (item.platform === 'hashnode' && item.publish_body) return item.publish_body;
-      return item.text;
+      return titlePrefixedMarkdown(item, item.text);
     }}
 
     function titlePrefixedMarkdown(item, text) {{

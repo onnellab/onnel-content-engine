@@ -173,6 +173,7 @@ Body
             self.assertIn("본문 복사 후 열기", html)
             self.assertIn("copyAndOpenText", html)
             self.assertIn("titlePrefixedMarkdown", html)
+            self.assertIn("return titlePrefixedMarkdown(item, item.text)", html)
             self.assertIn("const leadingTitleHeading = new RegExp", html)
             self.assertIn("trimmed.match(leadingTitleHeading)", html)
             self.assertIn("const body = String(text || '').replace(titleHeading, '').replace(/^\\n+/, '')", html)
