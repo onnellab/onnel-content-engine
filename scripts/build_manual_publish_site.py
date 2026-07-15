@@ -2255,7 +2255,7 @@ def html_document(
     }}
 
     async function copyMediumThenOpen(item, textarea, button) {{
-      const plainText = copyAndOpenText(item, textarea);
+      const plainText = mediumBodyText(item, textarea.value);
       await copyHtml(markdownToMediumHtml(plainText), plainText, button);
       window.open(item.open_url, '_blank', 'noopener,noreferrer');
       flash(button, t('opened'));
@@ -2497,7 +2497,7 @@ def html_document(
 
     function syndicationQuickCopyRows(item) {{
       if (item.platform === 'medium') {{
-        return syndicationCopyRows(item).filter(([labelText]) => ![t('publishTitle'), t('storyPreviewSubtitle')].includes(labelText));
+        return syndicationCopyRows(item);
       }}
       return syndicationCopyRows(item).filter(([labelText]) => labelText !== t('coverImage'));
     }}
@@ -2515,6 +2515,17 @@ def html_document(
       return titlePrefixedMarkdown(item, item.text);
     }}
 
+    function removeLeadingMarkdownTitle(item, text) {{
+      const title = displayTitle(item);
+      if (!title) return text;
+      const titleHeading = new RegExp('^\\\\s*#\\\\s+' + escapeRegExp(title) + '\\\\s*(?:\\\\n{{1,2}}|$)', 'i');
+      return String(text || '').replace(titleHeading, '').replace(/^\\n+/, '');
+    }}
+
+    function mediumBodyText(item, text) {{
+      return removeLeadingMarkdownTitle(item, text);
+    }}
+
     function titlePrefixedMarkdown(item, text) {{
       if (item.kind !== 'syndication' || item.platform === 'hashnode') return text;
       const title = displayTitle(item);
@@ -2529,6 +2540,7 @@ def html_document(
 
     function copyAndOpenText(item, textarea) {{
       if (item.platform === 'hashnode') return publishBodyText({{ ...item, publish_body: textarea.value }});
+      if (item.platform === 'medium') return mediumBodyText(item, textarea.value);
       return titlePrefixedMarkdown(item, textarea.value);
     }}
 
