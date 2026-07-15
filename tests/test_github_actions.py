@@ -96,6 +96,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("scripts/validate_app_pricing.py", workflow)
         self.assertIn("Sync AI provider pricing assumptions", workflow)
         self.assertIn("scripts/sync_ai_provider_pricing.py", workflow)
+        self.assertIn("git pull --rebase --autostash origin main", workflow)
 
     def test_ready_app_release_workflow_is_release_only(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "publish-ready-app-releases.yml").read_text(encoding="utf-8")

@@ -304,6 +304,8 @@ Body
             self.assertIn("verificationRunLink", html)
             self.assertIn("setVerificationRunLink(run)", html)
             self.assertIn("refreshVerificationRunLink", html)
+            self.assertIn("verificationReportCoversRun", html)
+            self.assertIn("completedVerificationLabel(run)", html)
             self.assertIn("verification-report-data", html)
             self.assertNotIn("verification-summary", html)
             self.assertNotIn("renderVerificationSummary", html)
@@ -339,7 +341,7 @@ Body
             self.assertNotIn("favicon-16x16.png", manifest)
             self.assertTrue((output.parent / "manifest.webmanifest").exists())
             self.assertTrue((output.parent / "sw.js").exists())
-            self.assertIn("onnellab-manual-publish-v7", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("onnellab-manual-publish-v8", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_filters_stale_verification_report_items(self) -> None:
         report = current_verification_report(

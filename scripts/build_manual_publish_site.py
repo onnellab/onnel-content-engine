@@ -1970,6 +1970,17 @@ def html_document(
       return 'verificationStarted';
     }}
 
+    function verificationReportCoversRun(run) {{
+      const reportDate = parseDate(verificationReport?.checked_at);
+      const runDate = parseDate(run?.created_at);
+      return Boolean(reportDate && runDate && reportDate.getTime() >= runDate.getTime());
+    }}
+
+    function completedVerificationLabel(run) {{
+      if (run?.conclusion === 'success' || verificationReportCoversRun(run)) return 'verificationCompleted';
+      return 'verificationFailed';
+    }}
+
     async function latestVerificationRun() {{
       const query = new URLSearchParams({{ branch: stateBranch, event: 'workflow_dispatch', per_page: '1' }});
       const data = await githubRequest(`/repos/${{stateRepo}}/actions/workflows/verify-manual-publications.yml/runs?${{query.toString()}}`);
@@ -1998,7 +2009,7 @@ def html_document(
           setVerifyState(workflowRunLabel(run));
           if (run?.status === 'completed') {{
             await loadRemoteState({{ refreshDashboardData: true }});
-            setVerifyState(run.conclusion === 'success' ? 'verificationCompleted' : 'verificationFailed');
+            setVerifyState(completedVerificationLabel(run));
             return;
           }}
         }} catch (error) {{
@@ -3150,7 +3161,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v7';
+    return """const CACHE = 'onnellab-manual-publish-v8';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
