@@ -145,6 +145,33 @@ def medium_story_preview_subtitle(description: str) -> str:
     return trim_text_to_limit(text, 140)
 
 
+def medium_topic_label(value: str, limit: int = 25) -> str:
+    text = " ".join(value.replace("-", " ").split())
+    if len(text) <= limit:
+        return text
+    trimmed = text[:limit].rstrip()
+    if len(text) > limit and not text[limit : limit + 1].isspace() and " " in trimmed:
+        trimmed = trimmed.rsplit(" ", 1)[0].rstrip()
+    return trimmed.rstrip(".,;:")
+
+
+def medium_topic_labels(values: list[str], limit: int = 25, max_topics: int = 5) -> list[str]:
+    labels: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        label = medium_topic_label(value, limit)
+        if not label:
+            continue
+        key = label.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        labels.append(label)
+        if len(labels) >= max_topics:
+            break
+    return labels
+
+
 def hashnode_publish_fields(topic: dict[str, str] | None, draft_text: str) -> dict[str, str]:
     source_text = ""
     if topic and topic.get("canonical_path"):
@@ -174,10 +201,11 @@ def syndication_publish_fields(
     site_root = canonical_url.split("/blog/", 1)[0].rstrip("/") if "/blog/" in canonical_url else "https://onnellab.github.io"
     cover_image = f"{site_root}/blog-assets/{language}/{slug}/social-card.png" if language and slug else ""
     topics = [tag.strip() for tag in frontmatter_value(source_text, "tags").split("|") if tag.strip()]
+    publish_tags = medium_topic_labels(topics) if platform == "medium" else topics[:5]
     return {
         "publish_title": title,
         "publish_body": "",
-        "publish_tags": ", ".join(topics[:5]),
+        "publish_tags": ", ".join(publish_tags),
         "publish_canonical_url": canonical_url,
         "publish_cover_image": cover_image,
         "seo_title": title,
@@ -1342,8 +1370,10 @@ def html_document(
         publishTitle: '제목',
         publishBody: '본문',
         publishTags: '태그',
+        topics: '토픽',
         canonicalUrl: 'Canonical URL',
         coverImage: '커버 이미지',
+        featuredImage: '대표 이미지 URL',
         storyPreviewSubtitle: 'Story preview 부제',
         seoTitle: 'SEO title',
         seoDescription: 'SEO description',
@@ -1544,8 +1574,10 @@ def html_document(
         publishTitle: 'Title',
         publishBody: 'Body',
         publishTags: 'Tags',
+        topics: 'Topics',
         canonicalUrl: 'Canonical URL',
         coverImage: 'Cover image',
+        featuredImage: 'Featured image URL',
         storyPreviewSubtitle: 'Story preview subtitle',
         seoTitle: 'SEO title',
         seoDescription: 'SEO description',
@@ -2403,10 +2435,19 @@ def html_document(
     }}
 
     function syndicationCopyRows(item) {{
+      if (item.platform === 'medium') {{
+        return [
+          [t('publishTitle'), item.publish_title || displayTitle(item)],
+          [t('storyPreviewSubtitle'), item.seo_description || ''],
+          [t('topics'), item.publish_tags || ''],
+          [t('canonicalUrl'), item.publish_canonical_url || item.canonical_url || ''],
+          [t('featuredImage'), item.publish_cover_image || ''],
+        ].filter(([, value]) => value);
+      }}
       return [
         [t('publishTitle'), item.publish_title || displayTitle(item)],
         [t('seoTitle'), item.seo_title || item.publish_title || displayTitle(item)],
-        [item.platform === 'medium' ? t('storyPreviewSubtitle') : t('seoDescription'), item.seo_description || ''],
+        [t('seoDescription'), item.seo_description || ''],
         [t('publishTags'), item.publish_tags || ''],
         [t('canonicalUrl'), item.publish_canonical_url || item.canonical_url || ''],
         [t('coverImage'), item.publish_cover_image || ''],
@@ -2414,6 +2455,9 @@ def html_document(
     }}
 
     function syndicationQuickCopyRows(item) {{
+      if (item.platform === 'medium') {{
+        return syndicationCopyRows(item).filter(([labelText]) => ![t('publishTitle'), t('storyPreviewSubtitle')].includes(labelText));
+      }}
       return syndicationCopyRows(item).filter(([labelText]) => labelText !== t('coverImage'));
     }}
 

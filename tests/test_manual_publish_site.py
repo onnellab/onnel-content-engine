@@ -12,7 +12,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from build_manual_publish_site import build_manual_publish_site, current_verification_report, latest_git_time  # noqa: E402
+from build_manual_publish_site import build_manual_publish_site, current_verification_report, latest_git_time, medium_topic_labels  # noqa: E402
 
 
 class ManualPublishSiteTest(unittest.TestCase):
@@ -136,6 +136,7 @@ Body
             manual_items = json.loads(html_lib.unescape(data_match.group(1)))
             medium_item = next(item for item in manual_items if item["platform"] == "medium")
             self.assertLessEqual(len(medium_item["seo_description"]), 140)
+            self.assertTrue(all(len(topic.strip()) <= 25 for topic in medium_item["publish_tags"].split(",")))
             self.assertEqual(
                 medium_item["seo_description"],
                 "Learn why large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnecessary lag.",
@@ -193,6 +194,11 @@ Body
             self.assertIn('"publish_tags": "large TXT file reader, TXT viewer, plain text, reading workflow, VaultXT"', html)
             self.assertIn('"publish_cover_image": "https://onnellab.github.io/blog-assets/en/read-large-txt-files-without-lag/social-card.png"', html)
             self.assertIn('"seo_description": "Learn why very large TXT files can feel slow', html)
+            self.assertIn("대표 이미지 URL", html)
+            self.assertIn("Featured image URL", html)
+            self.assertIn("if (item.platform === 'medium')", html)
+            self.assertIn("[t('topics'), item.publish_tags || '']", html)
+            self.assertIn("[t('featuredImage'), item.publish_cover_image || '']", html)
             self.assertIn("Story preview 부제", html)
             self.assertIn("appendSyndicationPublishFields", html)
             self.assertIn("syndicationQuickCopyRows", html)
@@ -358,6 +364,31 @@ Body
 
         self.assertEqual(report["counts"], {"checked": 1, "already_done": 0, "verified": 1, "pending": 0})
         self.assertEqual(report["items"], [{"manual_key": "TOPIC-0007::x::en::x", "status": "verified"}])
+
+    def test_medium_topic_labels_fit_medium_editor_limit(self) -> None:
+        labels = medium_topic_labels(
+            [
+                "private file conversion workflow",
+                "offline-media-conversion",
+                "local media converter",
+                "Quivra",
+                "local media converter",
+                "privacy-first local media processing",
+            ]
+        )
+
+        self.assertEqual(
+            labels,
+            [
+                "private file conversion",
+                "offline media conversion",
+                "local media converter",
+                "Quivra",
+                "privacy first local media",
+            ],
+        )
+        self.assertLessEqual(len(labels), 5)
+        self.assertTrue(all(len(label) <= 25 for label in labels))
 
     def test_latest_git_time_falls_back_to_file_mtime(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
