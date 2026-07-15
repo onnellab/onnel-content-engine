@@ -35,12 +35,12 @@
         "slug": "convert-local-media-files-privately",
         "category": "media",
         "language": "en",
-        "status": "review",
-        "url": "generated/markdown/en/media/convert-local-media-files-privately.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/convert-local-media-files-privately/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 3
+        "score": 4
       }
     ],
     "related_apps": [
@@ -69,6 +69,14 @@
         "category": "reading",
         "cluster": "huge text file",
         "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "How to Rename Files Safely With a Preview Workflow",
+        "category": "productivity",
+        "cluster": "file renaming preview",
+        "topic_id": "TOPIC-0012",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
   },

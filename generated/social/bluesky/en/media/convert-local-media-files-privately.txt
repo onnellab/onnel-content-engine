@@ -1,4 +1,4 @@
-How can I convert local media files without sending them to a server is a handling issue, not just a processing choice.
+How can I convert local media files without sending them to a server is a workflow problem, not just a tool choice.
 
 Learn how to convert local media files privately, what to check bef...
 

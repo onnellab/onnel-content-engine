@@ -35,12 +35,12 @@
         "slug": "convert-local-media-files-privately",
         "category": "media",
         "language": "ko",
-        "status": "review",
-        "url": "generated/markdown/ko/media/convert-local-media-files-privately.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/convert-local-media-files-privately/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 2
+        "score": 3
       }
     ],
     "related_apps": [
