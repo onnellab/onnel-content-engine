@@ -1365,12 +1365,14 @@ def html_document(
         publicPending: '공개 미승인',
         completedAt: '게시 완료',
         copyMarkdown: '마크다운 복사',
+        copyFormatted: '서식 본문 복사',
         copyPost: '게시글 복사',
         copy: '복사',
         publishTitle: '제목',
         publishBody: '본문',
         publishTags: '태그',
         topics: '토픽',
+        topic: '토픽',
         canonicalUrl: 'Canonical URL',
         coverImage: '커버 이미지',
         featuredImage: '대표 이미지 URL',
@@ -1379,6 +1381,7 @@ def html_document(
         seoDescription: 'SEO description',
         copyBodyAndOpen: '본문 복사 후 열기',
         copyAndOpen: '복사 후 열기',
+        copyFormattedAndOpen: '서식 복사 후 열기',
         markDone: '완료 표시',
         undoDone: '완료 취소',
         copyImage: '이미지 복사',
@@ -1569,12 +1572,14 @@ def html_document(
         publicPending: 'public pending',
         completedAt: 'posted',
         copyMarkdown: 'Copy markdown',
+        copyFormatted: 'Copy formatted body',
         copyPost: 'Copy post',
         copy: 'Copy',
         publishTitle: 'Title',
         publishBody: 'Body',
         publishTags: 'Tags',
         topics: 'Topics',
+        topic: 'Topic',
         canonicalUrl: 'Canonical URL',
         coverImage: 'Cover image',
         featuredImage: 'Featured image URL',
@@ -1583,6 +1588,7 @@ def html_document(
         seoDescription: 'SEO description',
         copyBodyAndOpen: 'Copy body and open',
         copyAndOpen: 'Copy and open',
+        copyFormattedAndOpen: 'Copy formatted and open',
         markDone: 'Mark done',
         undoDone: 'Undo done',
         copyImage: 'Copy image',
@@ -2217,6 +2223,20 @@ def html_document(
       flash(button, t('copied'));
     }}
 
+    async function copyHtml(htmlText, plainText, button) {{
+      if (window.ClipboardItem && navigator.clipboard.write) {{
+        await navigator.clipboard.write([
+          new ClipboardItem({{
+            'text/html': new Blob([htmlText], {{ type: 'text/html' }}),
+            'text/plain': new Blob([plainText], {{ type: 'text/plain' }}),
+          }})
+        ]);
+      }} else {{
+        await navigator.clipboard.writeText(plainText);
+      }}
+      flash(button, t('copied'));
+    }}
+
     async function copyImage(src, button) {{
       if (!src || !window.ClipboardItem) {{
         flash(button, t('openImageFallback'));
@@ -2230,6 +2250,13 @@ def html_document(
 
     async function copyThenOpen(item, button) {{
       await navigator.clipboard.writeText(item.text);
+      window.open(item.open_url, '_blank', 'noopener,noreferrer');
+      flash(button, t('opened'));
+    }}
+
+    async function copyMediumThenOpen(item, textarea, button) {{
+      const plainText = copyAndOpenText(item, textarea);
+      await copyHtml(markdownToMediumHtml(plainText), plainText, button);
       window.open(item.open_url, '_blank', 'noopener,noreferrer');
       flash(button, t('opened'));
     }}
@@ -2412,6 +2439,10 @@ def html_document(
       return ['x', 'linkedin'].includes(item.platform);
     }}
 
+    function previewImageSrc(item) {{
+      return item.card_asset_href || (item.platform === 'medium' ? item.publish_cover_image || '' : '');
+    }}
+
     function copyField(labelText, value) {{
       const row = document.createElement('div');
       row.className = 'copy-field';
@@ -2436,10 +2467,11 @@ def html_document(
 
     function syndicationCopyRows(item) {{
       if (item.platform === 'medium') {{
+        const topics = mediumTopicRows(item);
         return [
           [t('publishTitle'), item.publish_title || displayTitle(item)],
           [t('storyPreviewSubtitle'), item.seo_description || ''],
-          [t('topics'), item.publish_tags || ''],
+          ...topics,
           [t('canonicalUrl'), item.publish_canonical_url || item.canonical_url || ''],
           [t('featuredImage'), item.publish_cover_image || ''],
         ].filter(([, value]) => value);
@@ -2452,6 +2484,15 @@ def html_document(
         [t('canonicalUrl'), item.publish_canonical_url || item.canonical_url || ''],
         [t('coverImage'), item.publish_cover_image || ''],
       ].filter(([, value]) => value);
+    }}
+
+    function mediumTopicRows(item) {{
+      return String(item.publish_tags || '')
+        .split(',')
+        .map((topic) => topic.trim())
+        .filter(Boolean)
+        .slice(0, 5)
+        .map((topic, index) => [`${{t('topic')}} ${{index + 1}}`, topic]);
     }}
 
     function syndicationQuickCopyRows(item) {{
@@ -2489,6 +2530,85 @@ def html_document(
     function copyAndOpenText(item, textarea) {{
       if (item.platform === 'hashnode') return publishBodyText({{ ...item, publish_body: textarea.value }});
       return titlePrefixedMarkdown(item, textarea.value);
+    }}
+
+    function escapeHtml(value) {{
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }}
+
+    function inlineMarkdownToHtml(value) {{
+      return escapeHtml(value)
+        .replace(/!\\[([^\\]]*)\\]\\((https?:\\/\\/[^\\s)]+)(?:\\s+&quot;[^&]*&quot;)?\\)/g, '<img src="$2" alt="$1">')
+        .replace(/\\[([^\\]]+)\\]\\((https?:\\/\\/[^\\s)]+)\\)/g, '<a href="$2">$1</a>')
+        .replace(/\\*\\*([^*]+)\\*\\*/g, '<strong>$1</strong>')
+        .replace(/\\*([^*]+)\\*/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>');
+    }}
+
+    function markdownToMediumHtml(markdown) {{
+      const lines = String(markdown || '').replace(/\\r\\n/g, '\\n').split('\\n');
+      const blocks = [];
+      let paragraph = [];
+      let listItems = [];
+      let listType = '';
+
+      function flushParagraph() {{
+        if (!paragraph.length) return;
+        blocks.push(`<p>${{inlineMarkdownToHtml(paragraph.join(' '))}}</p>`);
+        paragraph = [];
+      }}
+
+      function flushList() {{
+        if (!listItems.length) return;
+        const tag = listType === 'ol' ? 'ol' : 'ul';
+        blocks.push(`<${{tag}}>${{listItems.map((item) => `<li>${{inlineMarkdownToHtml(item)}}</li>`).join('')}}</${{tag}}>`);
+        listItems = [];
+        listType = '';
+      }}
+
+      function flushOpenBlocks() {{
+        flushParagraph();
+        flushList();
+      }}
+
+      lines.forEach((line) => {{
+        const trimmed = line.trim();
+        if (!trimmed) {{
+          flushOpenBlocks();
+          return;
+        }}
+        const heading = trimmed.match(/^(#{{1,6}})\\s+(.+)$/);
+        if (heading) {{
+          flushOpenBlocks();
+          const level = Math.min(heading[1].length, 3);
+          blocks.push(`<h${{level}}>${{inlineMarkdownToHtml(heading[2])}}</h${{level}}>`);
+          return;
+        }}
+        const quote = trimmed.match(/^>\\s*(.+)$/);
+        if (quote) {{
+          flushOpenBlocks();
+          blocks.push(`<blockquote>${{inlineMarkdownToHtml(quote[1])}}</blockquote>`);
+          return;
+        }}
+        const unordered = trimmed.match(/^[-*]\\s+(.+)$/);
+        const ordered = trimmed.match(/^\\d+\\.\\s+(.+)$/);
+        if (unordered || ordered) {{
+          flushParagraph();
+          const nextType = ordered ? 'ol' : 'ul';
+          if (listType && listType !== nextType) flushList();
+          listType = nextType;
+          listItems.push((unordered || ordered)[1]);
+          return;
+        }}
+        flushList();
+        paragraph.push(trimmed);
+      }});
+      flushOpenBlocks();
+      return blocks.join('\\n');
     }}
 
     function renderEmptyState() {{
@@ -2988,11 +3108,12 @@ def html_document(
     function card(item) {{
       const article = document.createElement('article');
       article.className = [isDue(item) ? 'is-due' : '', isDone(item) ? 'is-done' : ''].filter(Boolean).join(' ');
-      if (item.card_asset_href) {{
+      const previewSrc = previewImageSrc(item);
+      if (previewSrc) {{
         const img = document.createElement('img');
         img.className = 'thumb';
-        img.src = item.card_asset_href;
-        img.alt = item.topic_id + ' social card';
+        img.src = previewSrc;
+        img.alt = item.platform === 'medium' ? item.topic_id + ' featured image' : item.topic_id + ' social card';
         article.appendChild(img);
       }}
       const body = document.createElement('div');
@@ -3051,8 +3172,12 @@ def html_document(
       actions.className = 'actions';
       const open = document.createElement('button');
       open.className = 'primary';
-      open.textContent = item.platform === 'hashnode' ? t('copyBodyAndOpen') : t('copyAndOpen');
-      open.onclick = () => copyThenOpen({{ ...item, text: copyAndOpenText(item, textarea) }}, open);
+      open.textContent = item.platform === 'hashnode'
+        ? t('copyBodyAndOpen')
+        : item.platform === 'medium' ? t('copyFormattedAndOpen') : t('copyAndOpen');
+      open.onclick = () => item.platform === 'medium'
+        ? copyMediumThenOpen(item, textarea, open)
+        : copyThenOpen({{ ...item, text: copyAndOpenText(item, textarea) }}, open);
       const detailToggle = document.createElement('button');
       detailToggle.className = 'secondary';
       detailToggle.textContent = t('showDetails');
@@ -3062,8 +3187,12 @@ def html_document(
       }};
       const copy = document.createElement('button');
       copy.className = 'secondary';
-      copy.textContent = item.platform === 'hashnode' ? t('publishBody') + ' ' + t('copy') : item.kind === 'syndication' ? t('copyMarkdown') : t('copyPost');
-      copy.onclick = () => copyText(textarea.value, copy);
+      copy.textContent = item.platform === 'hashnode'
+        ? t('publishBody') + ' ' + t('copy')
+        : item.platform === 'medium' ? t('copyFormatted') : item.kind === 'syndication' ? t('copyMarkdown') : t('copyPost');
+      copy.onclick = () => item.platform === 'medium'
+        ? copyHtml(markdownToMediumHtml(copyAndOpenText(item, textarea)), copyAndOpenText(item, textarea), copy)
+        : copyText(textarea.value, copy);
       const doneButton = document.createElement('button');
       doneButton.className = 'secondary';
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
