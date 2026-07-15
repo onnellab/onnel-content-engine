@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-14T14:07:19+09:00",
+  "checked_at": "2026-07-15T11:27:43+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 12,
-    "already_done": 4,
-    "verified": 1,
-    "pending": 7
+    "already_done": 8,
+    "verified": 0,
+    "pending": 4
   },
   "items": [
     {
@@ -46,6 +46,30 @@
       "verification_confidence": "high"
     },
     {
+      "manual_key": "TOPIC-0007::x::en::x",
+      "topic_id": "TOPIC-0007",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab",
+      "verification_method": "user_confirmed_manual_publish",
+      "verification_confidence": "manual"
+    },
+    {
+      "manual_key": "TOPIC-0007::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0007",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mqnocpaqo72c",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0001::devto::en::markdown",
       "topic_id": "TOPIC-0001",
       "platform": "devto",
@@ -63,39 +87,27 @@
       "platform": "hashnode",
       "language": "en",
       "template_id": "markdown",
-      "status": "verified",
+      "status": "already_done",
       "reason": "",
       "posted_url": "https://onnellab.hashnode.dev/rss.xml",
       "verification_method": "hashnode_rss",
       "verification_confidence": "medium"
     },
     {
-      "manual_key": "TOPIC-0002::x::en::x",
-      "topic_id": "TOPIC-0002",
-      "platform": "x",
+      "manual_key": "TOPIC-0007::devto::en::markdown",
+      "topic_id": "TOPIC-0007",
+      "platform": "devto",
       "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-convert-local-media-files-privately-32o6",
       "verification_method": "",
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0002::bluesky::en::bluesky",
-      "topic_id": "TOPIC-0002",
-      "platform": "bluesky",
-      "language": "en",
-      "template_id": "bluesky",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0002::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0002",
+      "manual_key": "TOPIC-0007::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0007",
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
@@ -118,20 +130,8 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0002::devto::en::markdown",
-      "topic_id": "TOPIC-0002",
-      "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0002::hashnode::en::markdown",
-      "topic_id": "TOPIC-0002",
+      "manual_key": "TOPIC-0007::hashnode::en::markdown",
+      "topic_id": "TOPIC-0007",
       "platform": "hashnode",
       "language": "en",
       "template_id": "markdown",
@@ -142,8 +142,8 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0002::medium::en::markdown",
-      "topic_id": "TOPIC-0002",
+      "manual_key": "TOPIC-0007::medium::en::markdown",
+      "topic_id": "TOPIC-0007",
       "platform": "medium",
       "language": "en",
       "template_id": "markdown",
