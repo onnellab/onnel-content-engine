@@ -2256,7 +2256,7 @@ def html_document(
 
     async function copyMediumThenOpen(item, textarea, button) {{
       const plainText = mediumBodyText(item, textarea.value);
-      await copyHtml(markdownToMediumHtml(plainText), plainText, button);
+      await copyHtml(mediumHtmlText(item, plainText), plainText, button);
       window.open(item.open_url, '_blank', 'noopener,noreferrer');
       flash(button, t('opened'));
     }}
@@ -2473,7 +2473,6 @@ def html_document(
           [t('storyPreviewSubtitle'), item.seo_description || ''],
           ...topics,
           [t('canonicalUrl'), item.publish_canonical_url || item.canonical_url || ''],
-          [t('featuredImage'), item.publish_cover_image || ''],
         ].filter(([, value]) => value);
       }}
       return [
@@ -2621,6 +2620,14 @@ def html_document(
       }});
       flushOpenBlocks();
       return blocks.join('\\n');
+    }}
+
+    function mediumHtmlText(item, markdown) {{
+      const bodyHtml = markdownToMediumHtml(markdown);
+      const imageUrl = String(item.publish_cover_image || '').trim();
+      if (!imageUrl || bodyHtml.includes(imageUrl)) return bodyHtml;
+      const imageHtml = `<figure><img src="${{escapeHtml(imageUrl)}}" alt="${{escapeHtml(displayTitle(item))}}"></figure>`;
+      return `${{imageHtml}}\\n${{bodyHtml}}`;
     }}
 
     function renderEmptyState() {{
@@ -3202,9 +3209,14 @@ def html_document(
       copy.textContent = item.platform === 'hashnode'
         ? t('publishBody') + ' ' + t('copy')
         : item.platform === 'medium' ? t('copyFormatted') : item.kind === 'syndication' ? t('copyMarkdown') : t('copyPost');
-      copy.onclick = () => item.platform === 'medium'
-        ? copyHtml(markdownToMediumHtml(copyAndOpenText(item, textarea)), copyAndOpenText(item, textarea), copy)
-        : copyText(textarea.value, copy);
+      copy.onclick = () => {{
+        if (item.platform === 'medium') {{
+          const plainText = copyAndOpenText(item, textarea);
+          copyHtml(mediumHtmlText(item, plainText), plainText, copy);
+          return;
+        }}
+        copyText(textarea.value, copy);
+      }};
       const doneButton = document.createElement('button');
       doneButton.className = 'secondary';
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
@@ -3213,15 +3225,16 @@ def html_document(
       if (item.kind === 'syndication') {{
         syndicationQuickCopyRows(item).forEach(([labelText, value]) => actions.appendChild(copyValueButton(labelText, value)));
       }}
-      if (item.card_asset_href && !usesLinkPreviewCard(item)) {{
+      const imageActionSrc = previewImageSrc(item);
+      if (imageActionSrc && !usesLinkPreviewCard(item)) {{
         const copyImg = document.createElement('button');
         copyImg.className = 'secondary';
         copyImg.textContent = t('copyImage');
-        copyImg.onclick = () => copyImage(item.card_asset_href, copyImg);
+        copyImg.onclick = () => copyImage(imageActionSrc, copyImg);
         const openImg = document.createElement('a');
         openImg.className = 'button secondary';
         openImg.textContent = t('openImage');
-        openImg.href = item.card_asset_href;
+        openImg.href = imageActionSrc;
         openImg.target = '_blank';
         openImg.rel = 'noopener noreferrer';
         detail.append(copyImg, openImg);
