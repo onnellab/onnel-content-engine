@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-15T12:31:51+09:00",
+  "updated_at": "2026-07-15T14:44:12+09:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -61,6 +61,18 @@
       "verified_at": "2026-07-15T12:31:51+09:00",
       "verification_method": "user_confirmed_manual_publish",
       "verification_confidence": "manual"
+    },
+    "TOPIC-0001::medium::en::markdown": {
+      "topic_id": "TOPIC-0001",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "marked_at": "2026-07-15T14:44:12+09:00",
+      "marked_by": "publication_verifier",
+      "posted_url": "https://medium.com/feed/@onnellab.app",
+      "verified_at": "2026-07-15T14:44:12+09:00",
+      "verification_method": "medium_rss",
+      "verification_confidence": "medium"
     }
   }
 }

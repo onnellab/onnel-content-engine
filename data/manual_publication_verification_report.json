@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-15T13:21:13+09:00",
+  "checked_at": "2026-07-15T14:44:12+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 12,
     "already_done": 9,
-    "verified": 0,
-    "pending": 3
+    "verified": 1,
+    "pending": 2
   },
   "items": [
     {
@@ -123,11 +123,11 @@
       "platform": "medium",
       "language": "en",
       "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
+      "status": "verified",
+      "reason": "",
+      "posted_url": "https://medium.com/feed/@onnellab.app",
+      "verification_method": "medium_rss",
+      "verification_confidence": "medium"
     },
     {
       "manual_key": "TOPIC-0007::hashnode::en::markdown",
