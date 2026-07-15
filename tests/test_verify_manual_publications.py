@@ -117,7 +117,13 @@ class VerifyManualPublicationsTest(unittest.TestCase):
 
             def fetch_text(url: str, _headers: dict[str, str] | None = None) -> str:
                 self.assertIn("medium", url)
-                return f"<rss><item><link>{canonical_url}</link></item></rss>"
+                return (
+                    "<rss><channel><item>"
+                    "<title>How to Read Large TXT Files Without Lag</title>"
+                    "<link>https://medium.com/@onnellab.app/example</link>"
+                    f"<description>Originally published at {canonical_url}</description>"
+                    "</item></channel></rss>"
+                )
 
             def visual_text(url: str) -> str:
                 if "linkedin" in url:
@@ -150,6 +156,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             data = json.loads(state.read_text(encoding="utf-8"))
             self.assertIn("TOPIC-0001::bluesky::en::bluesky", data["done"])
             self.assertEqual(data["done"]["TOPIC-0001::devto::en::markdown"]["posted_url"], "https://dev.to/onnellab/example")
+            self.assertEqual(data["done"]["TOPIC-0001::medium::en::markdown"]["posted_url"], "https://medium.com/@onnellab.app/example")
             self.assertEqual(data["done"]["TOPIC-0001::x::en::x"]["posted_url"], "https://x.com/onnellab/status/123456789")
             self.assertEqual(data["done"]["TOPIC-0001::linkedin::en::linkedin"]["posted_url"], "https://www.linkedin.com/feed/update/urn:li:activity:123456789")
             self.assertEqual(data["done"]["TOPIC-0001::x::en::x"]["verification_method"], "x_public_page_visual")

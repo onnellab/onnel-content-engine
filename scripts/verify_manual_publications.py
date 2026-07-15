@@ -13,6 +13,7 @@ import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -181,6 +182,41 @@ def rss_url_for(platform: str) -> str:
     return ""
 
 
+def xml_local_name(tag: str) -> str:
+    return tag.rsplit("}", 1)[-1] if "}" in tag else tag
+
+
+def child_text(element: ET.Element, names: set[str]) -> str:
+    for child in list(element):
+        if xml_local_name(child.tag) in names and child.text:
+            return child.text.strip()
+    return ""
+
+
+def rss_item_url(item: ET.Element, fallback_url: str) -> str:
+    link = child_text(item, {"link"})
+    if link.startswith("http://") or link.startswith("https://"):
+        return link
+    guid = child_text(item, {"guid", "id"})
+    if guid.startswith("http://") or guid.startswith("https://"):
+        return guid
+    return fallback_url
+
+
+def rss_matching_item_url(text: str, canonical_url: str, slug: str, fallback_url: str) -> str:
+    try:
+        root = ET.fromstring(text)
+    except ET.ParseError:
+        return fallback_url if ((canonical_url and canonical_url in text) or (slug and slug in text)) else ""
+    for element in root.iter():
+        if xml_local_name(element.tag) not in {"item", "entry"}:
+            continue
+        haystack = "\n".join(value.strip() for value in element.itertext() if value and value.strip())
+        if (canonical_url and canonical_url in haystack) or (slug and slug in haystack):
+            return rss_item_url(element, fallback_url)
+    return ""
+
+
 def verify_rss(item: dict[str, Any], fetch_text: FetchText) -> Verification | None:
     platform = str(item.get("platform", ""))
     url = rss_url_for(platform)
@@ -189,8 +225,9 @@ def verify_rss(item: dict[str, Any], fetch_text: FetchText) -> Verification | No
     text = fetch_text(url, None)
     canonical_url = str(item.get("canonical_url", ""))
     slug = str(item.get("slug", ""))
-    if (canonical_url and canonical_url in text) or (slug and slug in text):
-        return result_for(item, url, f"{platform}_rss", "medium")
+    posted_url = rss_matching_item_url(text, canonical_url, slug, url)
+    if posted_url:
+        return result_for(item, posted_url, f"{platform}_rss", "medium")
     return None
 
 
