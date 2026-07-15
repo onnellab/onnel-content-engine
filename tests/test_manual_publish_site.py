@@ -21,6 +21,8 @@ class ManualPublishSiteTest(unittest.TestCase):
             social_draft.write_text("Post text\nhttps://onnellab.github.io/blog/en/example/", encoding="utf-8")
             syndication_draft = root / "devto.md"
             syndication_draft.write_text("# Article\n\nBody", encoding="utf-8")
+            medium_draft = root / "medium.md"
+            medium_draft.write_text("> ONNELLAB note\n\n# How to Read Large TXT Files Without Lag\n\nBody", encoding="utf-8")
             hashnode_draft = root / "hashnode.md"
             hashnode_draft.write_text(
                 """---
@@ -88,6 +90,16 @@ Body
                                 "slug": "example",
                                 "status": "draft",
                                 "draft_path": hashnode_draft.as_posix(),
+                                "canonical_url": "https://onnellab.github.io/blog/en/example/",
+                            },
+                            {
+                                "topic_id": "TOPIC-0001",
+                                "platform": "medium",
+                                "language": "en",
+                                "category": "reading",
+                                "slug": "example",
+                                "status": "draft",
+                                "draft_path": medium_draft.as_posix(),
                                 "canonical_url": "https://onnellab.github.io/blog/en/example/",
                             }
                         ]
@@ -166,9 +178,13 @@ Body
             self.assertIn('"publish_tags": "alpha,beta"', html)
             self.assertIn('"publish_canonical_url": "https://onnellab.github.io/blog/en/example/"', html)
             self.assertIn('"publish_cover_image": "https://onnellab.github.io/card.png"', html)
+            self.assertIn('"platform": "medium"', html)
+            self.assertIn('"publish_tags": "large TXT file reader, TXT viewer, plain text, reading workflow, VaultXT"', html)
+            self.assertIn('"publish_cover_image": "https://onnellab.github.io/blog-assets/en/read-large-txt-files-without-lag/social-card.png"', html)
             self.assertIn('"seo_description": "Learn why very large TXT files can feel slow', html)
-            self.assertIn("appendHashnodePublishFields", html)
-            self.assertIn("hashnodeQuickCopyRows", html)
+            self.assertIn("Story preview 부제", html)
+            self.assertIn("appendSyndicationPublishFields", html)
+            self.assertIn("syndicationQuickCopyRows", html)
             self.assertIn("copyBodyAndOpen", html)
             self.assertIn("본문 복사 후 열기", html)
             self.assertIn("copyAndOpenText", html)

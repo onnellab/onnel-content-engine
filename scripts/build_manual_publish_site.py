@@ -134,6 +134,27 @@ def hashnode_publish_fields(topic: dict[str, str] | None, draft_text: str) -> di
     }
 
 
+def syndication_publish_fields(topic: dict[str, str] | None, draft_text: str, canonical_url: str) -> dict[str, str]:
+    source_text = ""
+    if topic and topic.get("canonical_path"):
+        source_text = read_text(topic["canonical_path"])
+    title = frontmatter_value(source_text, "title") or frontmatter_value(draft_text, "title")
+    language = topic.get("primary_language", "") if topic else ""
+    slug = topic.get("slug", "") if topic else ""
+    site_root = canonical_url.split("/blog/", 1)[0].rstrip("/") if "/blog/" in canonical_url else "https://onnellab.github.io"
+    cover_image = f"{site_root}/blog-assets/{language}/{slug}/social-card.png" if language and slug else ""
+    topics = [tag.strip() for tag in frontmatter_value(source_text, "tags").split("|") if tag.strip()]
+    return {
+        "publish_title": title,
+        "publish_body": "",
+        "publish_tags": ", ".join(topics[:5]),
+        "publish_canonical_url": canonical_url,
+        "publish_cover_image": cover_image,
+        "seo_title": title,
+        "seo_description": frontmatter_value(source_text, "description"),
+    }
+
+
 def parse_topic_datetime(value: str) -> datetime | None:
     if not value:
         return None
@@ -686,15 +707,7 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
         fields = (
             hashnode_publish_fields(topic, text)
             if platform == "hashnode"
-            else {
-                "publish_title": "",
-                "publish_body": "",
-                "publish_tags": "",
-                "publish_canonical_url": "",
-                "publish_cover_image": "",
-                "seo_title": "",
-                "seo_description": "",
-            }
+            else syndication_publish_fields(topic, text, canonical_url)
         )
         items.append(
             {
@@ -1301,6 +1314,7 @@ def html_document(
         publishTags: '태그',
         canonicalUrl: 'Canonical URL',
         coverImage: '커버 이미지',
+        storyPreviewSubtitle: 'Story preview 부제',
         seoTitle: 'SEO title',
         seoDescription: 'SEO description',
         copyBodyAndOpen: '본문 복사 후 열기',
@@ -1502,6 +1516,7 @@ def html_document(
         publishTags: 'Tags',
         canonicalUrl: 'Canonical URL',
         coverImage: 'Cover image',
+        storyPreviewSubtitle: 'Story preview subtitle',
         seoTitle: 'SEO title',
         seoDescription: 'SEO description',
         copyBodyAndOpen: 'Copy body and open',
@@ -2338,24 +2353,24 @@ def html_document(
       return row;
     }}
 
-    function appendHashnodePublishFields(detail, item) {{
-      if (item.platform !== 'hashnode') return;
-      hashnodeCopyRows(item).forEach(([labelText, value]) => detail.appendChild(copyField(labelText, value)));
+    function appendSyndicationPublishFields(detail, item) {{
+      if (item.kind !== 'syndication') return;
+      syndicationCopyRows(item).forEach(([labelText, value]) => detail.appendChild(copyField(labelText, value)));
     }}
 
-    function hashnodeCopyRows(item) {{
+    function syndicationCopyRows(item) {{
       return [
         [t('publishTitle'), item.publish_title || displayTitle(item)],
         [t('seoTitle'), item.seo_title || item.publish_title || displayTitle(item)],
-        [t('seoDescription'), item.seo_description || ''],
+        [item.platform === 'medium' ? t('storyPreviewSubtitle') : t('seoDescription'), item.seo_description || ''],
         [t('publishTags'), item.publish_tags || ''],
         [t('canonicalUrl'), item.publish_canonical_url || item.canonical_url || ''],
         [t('coverImage'), item.publish_cover_image || ''],
       ].filter(([, value]) => value);
     }}
 
-    function hashnodeQuickCopyRows(item) {{
-      return hashnodeCopyRows(item).filter(([labelText]) => labelText !== t('coverImage'));
+    function syndicationQuickCopyRows(item) {{
+      return syndicationCopyRows(item).filter(([labelText]) => labelText !== t('coverImage'));
     }}
 
     function copyValueButton(labelText, value) {{
@@ -2966,8 +2981,8 @@ def html_document(
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
       doneButton.onclick = () => isDone(item) ? undoDone(item, doneButton) : markDone(item, doneButton);
       actions.append(open, doneButton, detailToggle);
-      if (item.platform === 'hashnode') {{
-        hashnodeQuickCopyRows(item).forEach(([labelText, value]) => actions.appendChild(copyValueButton(labelText, value)));
+      if (item.kind === 'syndication') {{
+        syndicationQuickCopyRows(item).forEach(([labelText, value]) => actions.appendChild(copyValueButton(labelText, value)));
       }}
       if (item.card_asset_href && !usesLinkPreviewCard(item)) {{
         const copyImg = document.createElement('button');
@@ -2982,7 +2997,7 @@ def html_document(
         openImg.rel = 'noopener noreferrer';
         detail.append(copyImg, openImg);
       }}
-      appendHashnodePublishFields(detail, item);
+      appendSyndicationPublishFields(detail, item);
       const note = document.createElement('div');
       note.className = 'note';
       note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '') + (usesLinkPreviewCard(item) ? ' / ' + t('noImageAttach') : '');
