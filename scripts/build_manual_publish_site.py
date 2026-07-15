@@ -2249,6 +2249,7 @@ def html_document(
 
     async function markDone(item, button) {{
       remoteState.done ||= {{}};
+      const previousDone = remoteState.done[item.manual_key];
       const localDone = {{
         [item.manual_key]: {{
         topic_id: item.topic_id,
@@ -2263,6 +2264,8 @@ def html_document(
         flash(button, t('saving'));
         await saveWithMerge('Mark manual publish item done', localDone);
       }} catch (error) {{
+        if (previousDone) remoteState.done[item.manual_key] = previousDone;
+        else delete remoteState.done[item.manual_key];
         flash(button, t('saveFailed'));
         setSync('saveError');
         console.error(error);

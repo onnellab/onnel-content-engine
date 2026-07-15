@@ -322,6 +322,8 @@ Body
             self.assertIn("completedAt", html)
             self.assertIn("게시 완료", html)
             self.assertIn("postedOrVerifiedAt(item)", html)
+            self.assertIn("const previousDone = remoteState.done[item.manual_key];", html)
+            self.assertIn("else delete remoteState.done[item.manual_key];", html)
             self.assertIn("const platformBadge = document.createElement('div');", html)
             self.assertNotIn("const platformBadge = document.createElement(platformProfile ? 'a' : 'div');", html)
             self.assertNotIn('id="sync-state"', html)
