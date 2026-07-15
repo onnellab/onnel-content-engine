@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-15T12:36:07+09:00",
+  "checked_at": "2026-07-15T12:42:57+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 12,
-    "already_done": 8,
+    "already_done": 9,
     "verified": 0,
-    "pending": 4
+    "pending": 3
   },
   "items": [
     {
@@ -70,6 +70,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0007::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0007",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/recent-activity/all/",
+      "verification_method": "user_confirmed_manual_publish",
+      "verification_confidence": "manual"
+    },
+    {
       "manual_key": "TOPIC-0001::devto::en::markdown",
       "topic_id": "TOPIC-0001",
       "platform": "devto",
@@ -102,18 +114,6 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://dev.to/onnellab/how-to-convert-local-media-files-privately-32o6",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0007::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0007",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
     },
