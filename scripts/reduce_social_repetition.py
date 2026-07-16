@@ -19,7 +19,7 @@ REPLACEMENTS = {
     "plain-text file": ["text document", "TXT document", "text export"],
     "large txt file": ["large text export", "big TXT document", "long text file"],
     "slow text file": ["laggy text document", "slow TXT document", "heavy text export"],
-    "tool choice": ["app decision", "setup decision", "processing choice"],
+    "tool choice": ["setup decision", "processing choice", "app decision"],
     "opens, renders, and searches": ["loads, displays, and searches", "reads, lays out, and searches"],
 }
 

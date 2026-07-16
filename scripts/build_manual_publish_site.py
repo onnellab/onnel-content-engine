@@ -1348,7 +1348,7 @@ def html_document(
         repetitionWarnings: '반복어 경고',
         copyRepetitionFixCommand: '반복어 수정 명령 복사',
         copyRepetitionWarnings: '경고 목록 복사',
-        repetitionFixCommand: 'python3 scripts/reduce_social_repetition.py && python3 scripts/build_manual_publish_site.py',
+        repetitionFixCommand: 'python3 scripts/fix_social_repetition.py',
         noWarnings: '경고 없음',
         qualityError: '점검 오류',
         siteStatusSummary: '메인 홈페이지와 앱 상세 페이지',
@@ -1555,7 +1555,7 @@ def html_document(
         repetitionWarnings: 'repetition warnings',
         copyRepetitionFixCommand: 'Copy fix command',
         copyRepetitionWarnings: 'Copy warnings',
-        repetitionFixCommand: 'python3 scripts/reduce_social_repetition.py && python3 scripts/build_manual_publish_site.py',
+        repetitionFixCommand: 'python3 scripts/fix_social_repetition.py',
         noWarnings: 'no warnings',
         qualityError: 'quality check error',
         siteStatusSummary: 'home and app landing pages',
@@ -2382,6 +2382,21 @@ def html_document(
       return Number.isNaN(date.getTime()) ? null : date;
     }}
 
+    function kstDateParts(date) {{
+      const parts = new Intl.DateTimeFormat('en-CA', {{
+        timeZone: 'Asia/Seoul',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }}).formatToParts(date);
+      return Object.fromEntries(parts.filter((part) => part.type !== 'literal').map((part) => [part.type, Number(part.value)]));
+    }}
+
+    function kstDayNumber(date) {{
+      const parts = kstDateParts(date);
+      return Math.floor(Date.UTC(parts.year, parts.month - 1, parts.day) / 86400000);
+    }}
+
     function formatDate(value) {{
       const date = parseDate(value);
       if (!date) return t('none');
@@ -2397,7 +2412,7 @@ def html_document(
     function daysAgo(value) {{
       const date = parseDate(value);
       if (!date) return t('noRecord');
-      const days = Math.max(0, Math.floor((Date.now() - date.getTime()) / 86400000));
+      const days = Math.max(0, kstDayNumber(new Date()) - kstDayNumber(date));
       if (days === 0) return t('today');
       if (currentLang === 'ko') return `${{days}}${{t('dayAgo')}}`;
       return `${{days}} ${{days === 1 ? t('dayAgo') : t('daysAgo')}}`;
@@ -2405,6 +2420,11 @@ def html_document(
 
     function latestDate(values) {{
       return values.map(parseDate).filter(Boolean).sort((a, b) => b - a)[0] || null;
+    }}
+
+    function verificationCheckedAtForPlatform(platform) {{
+      const rows = Array.isArray(verificationReport?.items) ? verificationReport.items : [];
+      return rows.some((row) => row.platform === platform) ? verificationReport?.checked_at || '' : '';
     }}
 
     function nextAutomatedBlogSlot() {{
@@ -2719,7 +2739,10 @@ def html_document(
         const failed = rows.filter((item) => !isDone(item) && item.status === 'failed');
         const drafts = rows.filter((item) => !isDone(item) && ['draft', 'approved'].includes(item.status));
         const latestPosted = latestDate(posted.map(postedOrVerifiedAt));
-        const latestAttempt = latestDate(rows.map((item) => item.last_attempt_at || item.approved_at || postedOrVerifiedAt(item)));
+        const latestAttempt = latestDate([
+          verificationCheckedAtForPlatform(rows[0]?.platform || ''),
+          ...rows.map((item) => item.last_attempt_at || item.approved_at),
+        ]);
         const nextDue = rows
           .filter((item) => !isDone(item) && !item.is_variant && item.due_at)
           .map((item) => dueDate(item))

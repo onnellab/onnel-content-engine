@@ -180,6 +180,16 @@ Each stage should remain independent.
 
 This makes the system easier to automate and maintain.
 
+## Repetition Fix
+
+When the manual publishing dashboard reports social repeated phrase warnings, run:
+
+```bash
+python3 scripts/fix_social_repetition.py
+```
+
+The command applies the existing social repetition reducer, rechecks the warnings, and rebuilds the manual publishing dashboard.
+
 ---
 
 # Content Categories
