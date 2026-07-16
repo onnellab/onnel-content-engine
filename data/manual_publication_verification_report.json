@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "checked_at": "2026-07-15T14:44:12+09:00",
+  "checked_at": "2026-07-16T10:55:22+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 12,
-    "already_done": 9,
-    "verified": 1,
+    "already_done": 10,
+    "verified": 0,
     "pending": 2
   },
   "items": [
@@ -106,6 +106,18 @@
       "verification_confidence": "medium"
     },
     {
+      "manual_key": "TOPIC-0001::medium::en::markdown",
+      "topic_id": "TOPIC-0001",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://medium.com/feed/@onnellab.app",
+      "verification_method": "medium_rss",
+      "verification_confidence": "medium"
+    },
+    {
       "manual_key": "TOPIC-0007::devto::en::markdown",
       "topic_id": "TOPIC-0007",
       "platform": "devto",
@@ -116,18 +128,6 @@
       "posted_url": "https://dev.to/onnellab/how-to-convert-local-media-files-privately-32o6",
       "verification_method": "",
       "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0001::medium::en::markdown",
-      "topic_id": "TOPIC-0001",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "verified",
-      "reason": "",
-      "posted_url": "https://medium.com/feed/@onnellab.app",
-      "verification_method": "medium_rss",
-      "verification_confidence": "medium"
     },
     {
       "manual_key": "TOPIC-0007::hashnode::en::markdown",
