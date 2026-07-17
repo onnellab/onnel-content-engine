@@ -12,7 +12,14 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from build_manual_publish_site import build_manual_publish_site, current_verification_report, latest_git_time, medium_topic_labels  # noqa: E402
+from build_manual_publish_site import (  # noqa: E402
+    HASHNODE_SEO_DESCRIPTION_LIMIT,
+    build_manual_publish_site,
+    current_verification_report,
+    hashnode_publish_fields,
+    latest_git_time,
+    medium_topic_labels,
+)
 
 
 class ManualPublishSiteTest(unittest.TestCase):
@@ -199,6 +206,8 @@ Body
             self.assertIn("if (item.platform === 'medium')", html)
             self.assertIn("function mediumTopicRows(item)", html)
             self.assertIn("`${t('topic')} ${index + 1}`", html)
+            self.assertIn("function hashnodeTagRows(item)", html)
+            self.assertIn("`${t('tagItem')} ${index + 1}`", html)
             self.assertNotIn("[t('featuredImage'), item.publish_cover_image || '']", html)
             self.assertIn("return syndicationCopyRows(item);", html)
             self.assertNotIn("labelText !== t('publishTitle')", html)
@@ -351,6 +360,8 @@ Body
             self.assertIn("verificationCheckedAtForPlatform(rows[0]?.platform || '')", html)
             self.assertNotIn("item.last_attempt_at || item.approved_at || postedOrVerifiedAt(item)", html)
             self.assertIn("const previousDone = remoteState.done[item.manual_key];", html)
+            self.assertIn("cache: 'no-store'", html)
+            self.assertIn("Object.assign(remoteState.done, localDone);\n      render();", html)
             self.assertIn("else delete remoteState.done[item.manual_key];", html)
             self.assertIn("const platformBadge = document.createElement('div');", html)
             self.assertNotIn("const platformBadge = document.createElement(platformProfile ? 'a' : 'div');", html)
@@ -409,6 +420,36 @@ Body
         )
         self.assertLessEqual(len(labels), 5)
         self.assertTrue(all(len(label) <= 25 for label in labels))
+
+    def test_hashnode_seo_description_is_limited(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "source.md"
+            source.write_text(
+                """---
+title: "Hashnode Title"
+description: "This description is intentionally long so the manual publishing dashboard never copies a Hashnode SEO description that exceeds the platform input limit when generated from article frontmatter."
+---
+
+Body
+""",
+                encoding="utf-8",
+            )
+            draft = """---
+title: "Hashnode Title"
+canonical_url: "https://onnellab.github.io/blog/en/example/"
+tags: "alpha,beta"
+cover_image: "https://onnellab.github.io/card.png"
+---
+
+# Hashnode Title
+
+Body
+"""
+
+            fields = hashnode_publish_fields({"canonical_path": source.as_posix()}, draft)
+
+        self.assertLessEqual(len(fields["seo_description"]), HASHNODE_SEO_DESCRIPTION_LIMIT)
+        self.assertNotIn("frontmatter", fields["seo_description"])
 
     def test_latest_git_time_falls_back_to_file_mtime(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

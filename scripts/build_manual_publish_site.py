@@ -51,6 +51,7 @@ PLATFORM_LABELS = {
 SOCIAL_DUE_DELAYS_DAYS = {"x": 0, "linkedin": 1, "bluesky": 1}
 SYNDICATION_DUE_DELAYS_DAYS = {"devto": 2, "hashnode": 3, "medium": 4}
 AUTOMATED_PLATFORMS = {"bluesky", "devto"}
+HASHNODE_SEO_DESCRIPTION_LIMIT = 160
 
 
 def read_json(path: Path) -> dict[str, object]:
@@ -176,6 +177,7 @@ def hashnode_publish_fields(topic: dict[str, str] | None, draft_text: str) -> di
     source_text = ""
     if topic and topic.get("canonical_path"):
         source_text = read_text(topic["canonical_path"])
+    seo_description = trim_text_to_limit(frontmatter_value(source_text, "description"), HASHNODE_SEO_DESCRIPTION_LIMIT)
     return {
         "publish_title": frontmatter_value(draft_text, "title"),
         "publish_body": markdown_body(draft_text),
@@ -183,7 +185,7 @@ def hashnode_publish_fields(topic: dict[str, str] | None, draft_text: str) -> di
         "publish_canonical_url": frontmatter_value(draft_text, "canonical_url"),
         "publish_cover_image": frontmatter_value(draft_text, "cover_image"),
         "seo_title": frontmatter_value(source_text, "title") or frontmatter_value(draft_text, "title"),
-        "seo_description": frontmatter_value(source_text, "description"),
+        "seo_description": seo_description,
     }
 
 
@@ -1371,6 +1373,7 @@ def html_document(
         publishTitle: '제목',
         publishBody: '본문',
         publishTags: '태그',
+        tagItem: '태그',
         topics: '토픽',
         topic: '토픽',
         canonicalUrl: 'Canonical URL',
@@ -1578,6 +1581,7 @@ def html_document(
         publishTitle: 'Title',
         publishBody: 'Body',
         publishTags: 'Tags',
+        tagItem: 'Tag',
         topics: 'Topics',
         topic: 'Topic',
         canonicalUrl: 'Canonical URL',
@@ -2083,6 +2087,7 @@ def html_document(
       const token = githubToken();
       const authHeaders = token ? {{ 'Authorization': 'Bearer ' + token }} : {{}};
       const response = await fetch('https://api.github.com' + path, {{
+        cache: 'no-store',
         ...options,
         headers: {{
           'Accept': 'application/vnd.github+json',
@@ -2330,6 +2335,7 @@ def html_document(
         }}
       }};
       Object.assign(remoteState.done, localDone);
+      render();
       try {{
         flash(button, t('saving'));
         await saveWithMerge('Mark manual publish item done', localDone);
@@ -2495,11 +2501,13 @@ def html_document(
           [t('canonicalUrl'), item.publish_canonical_url || item.canonical_url || ''],
         ].filter(([, value]) => value);
       }}
+      const tagRows = item.platform === 'hashnode' ? hashnodeTagRows(item) : [];
       return [
         [t('publishTitle'), item.publish_title || displayTitle(item)],
         [t('seoTitle'), item.seo_title || item.publish_title || displayTitle(item)],
         [t('seoDescription'), item.seo_description || ''],
         [t('publishTags'), item.publish_tags || ''],
+        ...tagRows,
         [t('canonicalUrl'), item.publish_canonical_url || item.canonical_url || ''],
         [t('coverImage'), item.publish_cover_image || ''],
       ].filter(([, value]) => value);
@@ -2512,6 +2520,15 @@ def html_document(
         .filter(Boolean)
         .slice(0, 5)
         .map((topic, index) => [`${{t('topic')}} ${{index + 1}}`, topic]);
+    }}
+
+    function hashnodeTagRows(item) {{
+      return String(item.publish_tags || '')
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+        .slice(0, 10)
+        .map((tag, index) => [`${{t('tagItem')}} ${{index + 1}}`, tag]);
     }}
 
     function syndicationQuickCopyRows(item) {{

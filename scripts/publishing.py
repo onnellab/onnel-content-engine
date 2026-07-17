@@ -18,7 +18,7 @@ import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin
 from xml.sax.saxutils import escape as xml_escape
@@ -26,6 +26,7 @@ from xml.sax.saxutils import escape as xml_escape
 from topic_management import DEFAULT_TOPICS_PATH, TOPIC_HEADER, TopicError, read_csv
 
 
+UTC = timezone.utc
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SITE_DIR = ROOT / "generated" / "html"
 DEFAULT_SITE_URL = "https://onnellab.github.io/"

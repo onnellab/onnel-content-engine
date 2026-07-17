@@ -15,13 +15,16 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from approve_social_post import project_root_for_manifest, write_manifest
 from publishing_adapters import AdapterError, require_adapter_ready
 from validate_social_posts import DEFAULT_MANIFEST_PATH, SocialValidationError, validate_social_posts
+
+
+UTC = timezone.utc
 
 
 class SocialPostingError(ValueError):
