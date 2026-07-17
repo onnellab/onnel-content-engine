@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-17T11:38:07+09:00",
+  "checked_at": "2026-07-17T16:09:54+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 12,
     "already_done": 10,
-    "verified": 0,
-    "pending": 2
+    "verified": 1,
+    "pending": 1
   },
   "items": [
     {
@@ -135,11 +135,11 @@
       "platform": "hashnode",
       "language": "en",
       "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
+      "status": "verified",
+      "reason": "",
+      "posted_url": "https://onnellab.hashnode.dev/how-to-convert-local-media-files-privately",
+      "verification_method": "hashnode_rss",
+      "verification_confidence": "medium"
     },
     {
       "manual_key": "TOPIC-0007::medium::en::markdown",
