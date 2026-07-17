@@ -1,4 +1,4 @@
-How can I convert local media files without sending them to a server is a process issue, not just a setup decision.
+How can I convert local media files without sending them to a server is a workflow problem, not just a tool choice.
 
 Use a local media converter when the file should stay on your device and the task is a focused format change, size adjustment, or compatibility fix. Before converting, identify the source format, target device, output format, quality needs, and whether the file contains private audio, video, or image content.
 
