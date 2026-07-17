@@ -177,6 +177,8 @@ When remote and local history conflict, Codex must compare the local and remote 
 
 Codex must commit and push after each completed task.
 
+If the completed task changes generated pages, dashboards, website output, or other published artifacts, Codex must also deploy or publish the affected page before reporting completion.
+
 After every 10 completed tasks, Codex must reread the instruction Markdown files before making further implementation decisions.
 
 The main GitHub Pages homepage repository is:

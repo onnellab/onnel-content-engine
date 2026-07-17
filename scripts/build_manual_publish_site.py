@@ -1205,6 +1205,7 @@ def html_document(
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
     const reportPath = 'data/manual_publication_verification_report.json';
+    const releasePublicationsPath = 'data/app_release_publications.csv';
     const stateBranch = 'main';
     const tokenKey = 'onnellab-manual-publish-token';
     const langKey = 'onnellab-manual-publish-lang';
@@ -1300,7 +1301,11 @@ def html_document(
         releaseSummary: '상태',
         releaseCandidate: '릴리즈 후보',
         plannedDate: '예정일',
+        githubReleasedAt: 'GitHub 공개일',
         githubRelease: 'GitHub Release',
+        approvePublicRelease: '공개 승인',
+        publicReleaseApproved: '공개 승인됨',
+        publicApprovalNote: 'Dashboard manual approval after public store release confirmation.',
         storeTitle: 'App Store / Play Store 현재 공개 버전',
         storeSummary: '현재 표시',
         currentVersion: '현재 버전',
@@ -1508,7 +1513,11 @@ def html_document(
         releaseSummary: 'status',
         releaseCandidate: 'release candidate',
         plannedDate: 'planned date',
+        githubReleasedAt: 'GitHub released',
         githubRelease: 'GitHub Release',
+        approvePublicRelease: 'Approve public',
+        publicReleaseApproved: 'public approved',
+        publicApprovalNote: 'Dashboard manual approval after public store release confirmation.',
         storeTitle: 'Current App Store / Play Store versions',
         storeSummary: 'currently shown',
         currentVersion: 'current version',
@@ -2223,6 +2232,118 @@ def html_document(
       }}
     }}
 
+    function parseCsv(text) {{
+      const rows = [];
+      let row = [];
+      let value = '';
+      let quoted = false;
+      for (let index = 0; index < text.length; index += 1) {{
+        const char = text[index];
+        if (quoted) {{
+          if (char === '"' && text[index + 1] === '"') {{
+            value += '"';
+            index += 1;
+          }} else if (char === '"') {{
+            quoted = false;
+          }} else {{
+            value += char;
+          }}
+        }} else if (char === '"') {{
+          quoted = true;
+        }} else if (char === ',') {{
+          row.push(value);
+          value = '';
+        }} else if (char === '\\n') {{
+          row.push(value);
+          rows.push(row);
+          row = [];
+          value = '';
+        }} else if (char !== '\\r') {{
+          value += char;
+        }}
+      }}
+      if (value || row.length) {{
+        row.push(value);
+        rows.push(row);
+      }}
+      return rows;
+    }}
+
+    function csvValue(value) {{
+      const text = String(value || '');
+      return /[",\\n\\r]/.test(text) ? `"${{text.replace(/"/g, '""')}}"` : text;
+    }}
+
+    function csvText(rows) {{
+      return rows.map((row) => row.map(csvValue).join(',')).join('\\n') + '\\n';
+    }}
+
+    async function savePublicReleaseApproval(item, approvedAt) {{
+      const data = await githubRequest(`/repos/${{stateRepo}}/contents/${{releasePublicationsPath}}?ref=${{stateBranch}}`);
+      const rows = parseCsv(decodeBase64Unicode(data.content));
+      const header = rows[0] && rows[0].length ? rows[0] : ['release_id', 'public_release', 'approved_at', 'notes'];
+      const releaseIdIndex = header.indexOf('release_id');
+      const publicIndex = header.indexOf('public_release');
+      const approvedIndex = header.indexOf('approved_at');
+      const notesIndex = header.indexOf('notes');
+      let found = false;
+      const nextRows = [header, ...rows.slice(1).filter((row) => row.some(Boolean)).map((row) => {{
+        const next = [...row];
+        while (next.length < header.length) next.push('');
+        if (next[releaseIdIndex] === item.release_id) {{
+          next[publicIndex] = 'true';
+          next[approvedIndex] = next[approvedIndex] || approvedAt;
+          next[notesIndex] = next[notesIndex] || t('publicApprovalNote');
+          found = true;
+        }}
+        return next;
+      }})];
+      if (!found) {{
+        const row = Array(header.length).fill('');
+        row[releaseIdIndex] = item.release_id;
+        row[publicIndex] = 'true';
+        row[approvedIndex] = approvedAt;
+        row[notesIndex] = t('publicApprovalNote');
+        nextRows.push(row);
+      }}
+      const payload = {{
+        message: `Approve public release ${{item.release_id}}`,
+        content: encodeBase64Unicode(csvText(nextRows)),
+        branch: stateBranch,
+        sha: data.sha,
+      }};
+      await githubRequest(`/repos/${{stateRepo}}/contents/${{releasePublicationsPath}}`, {{
+        method: 'PUT',
+        headers: {{ 'Content-Type': 'application/json' }},
+        body: JSON.stringify(payload),
+      }});
+    }}
+
+    async function approvePublicRelease(item, button) {{
+      if (!githubToken()) {{
+        setSync('viewOnly');
+        revealTokenInput();
+        return;
+      }}
+      const approvedAt = new Date().toISOString();
+      const previous = {{ public_release: item.public_release, approved_at: item.approved_at }};
+      item.public_release = 'true';
+      item.approved_at = approvedAt;
+      render();
+      try {{
+        flash(button, t('saving'));
+        await savePublicReleaseApproval(item, approvedAt);
+        setSync('synced');
+      }} catch (error) {{
+        item.public_release = previous.public_release;
+        item.approved_at = previous.approved_at;
+        flash(button, t('saveFailed'));
+        setSync('saveError');
+        console.error(error);
+        render();
+      }}
+    }}
+
     async function copyText(text, button) {{
       await navigator.clipboard.writeText(text);
       flash(button, t('copied'));
@@ -2412,7 +2533,9 @@ def html_document(
     function formatPublishedDate(value) {{
       if (!value) return t('none');
       if (/^\\d{{4}}-\\d{{2}}-\\d{{2}}$/.test(value)) return value;
-      return formatDate(value);
+      const date = parseDate(value);
+      if (!date) return String(value);
+      return new Intl.DateTimeFormat(t('dateLocale'), {{ dateStyle: 'medium', timeStyle: 'short' }}).format(date);
     }}
 
     function daysAgo(value) {{
@@ -3060,10 +3183,18 @@ def html_document(
               const status = document.createElement('span');
               status.textContent = `${{item.tag}} / ${{item.status}} / ${{item.release_channel || 'public'}} / ${{item.public_release === 'true' ? t('publicApproved') : t('publicPending')}}`;
               const planned = document.createElement('span');
-              planned.textContent = `${{t('plannedDate')}}: ${{item.release_date || t('none')}}`;
+              const releaseDateLabel = item.released_at ? t('githubReleasedAt') : t('plannedDate');
+              planned.textContent = `${{releaseDateLabel}}: ${{item.released_at ? formatDate(item.released_at) : item.release_date || t('none')}}`;
               const repo = document.createElement('span');
               repo.textContent = item.repository;
               row.append(label, status, planned, repo);
+              if (item.release_channel === 'public' && item.public_release !== 'true') {{
+                const approve = document.createElement('button');
+                approve.className = 'secondary';
+                approve.textContent = t('approvePublicRelease');
+                approve.onclick = () => approvePublicRelease(item, approve);
+                row.appendChild(approve);
+              }}
               if (item.release_url) {{
                 const link = document.createElement('a');
                 link.href = item.release_url;
