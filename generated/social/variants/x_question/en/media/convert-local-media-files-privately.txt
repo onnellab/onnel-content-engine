@@ -1,5 +1,5 @@
-Need to change a media file without uploading it?
+How can I convert local media files without sending them to a server is a workflow problem, not just a tool choice.
 
-Start with the target app, output format, quality needs, and privacy risk. A local converter fits when the file should stay on your device.
+Learn how to convert local media files privately, what to check before changing formats, and when a focused local media converter is...
 
 https://onnellab.github.io/blog/en/convert-local-media-files-privately/
