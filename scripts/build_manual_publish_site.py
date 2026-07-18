@@ -2050,12 +2050,26 @@ def html_document(
       }}
     }}
 
-    async function pollVerificationRun(maxAttempts = 36) {{
+    function isDispatchedVerificationRun(run, previousRunId, dispatchedAt) {{
+      if (!run) return false;
+      if (previousRunId && String(run.id) === String(previousRunId)) return false;
+      const createdAt = parseDate(run.created_at);
+      if (!createdAt || !dispatchedAt) return !previousRunId;
+      return createdAt.getTime() >= dispatchedAt - 15000;
+    }}
+
+    async function pollVerificationRun({{ previousRunId = null, dispatchedAt = 0, maxAttempts = 36 }} = {{}}) {{
       clearVerifyCountdown();
       let run = null;
       for (let attempt = 0; attempt < maxAttempts; attempt += 1) {{
         try {{
-          run = await latestVerificationRun();
+          const candidate = await latestVerificationRun();
+          if (!isDispatchedVerificationRun(candidate, previousRunId, dispatchedAt)) {{
+            setVerifyState('verificationQueued');
+            await new Promise((resolve) => setTimeout(resolve, attempt < 4 ? 5000 : 10000));
+            continue;
+          }}
+          run = candidate;
           setVerificationRunLink(run);
           setVerifyState(workflowRunLabel(run));
           if (run?.status === 'completed') {{
@@ -2122,13 +2136,20 @@ def html_document(
       verifyButtonLarge.disabled = true;
       verifyButtonPrimary.disabled = true;
       try {{
+        let previousRun = null;
+        try {{
+          previousRun = await latestVerificationRun();
+        }} catch (lookupError) {{
+          console.warn(lookupError);
+        }}
+        const dispatchedAt = Date.now();
         await githubRequest(`/repos/${{stateRepo}}/actions/workflows/verify-manual-publications.yml/dispatches`, {{
           method: 'POST',
           headers: {{ 'Content-Type': 'application/json' }},
           body: JSON.stringify({{ ref: stateBranch, inputs: {{ visual_public_pages: 'true' }} }}),
         }});
         setVerifyState('verificationQueued');
-        await pollVerificationRun();
+        await pollVerificationRun({{ previousRunId: previousRun?.id || null, dispatchedAt }});
       }} catch (error) {{
         clearVerifyCountdown();
         setVerifyState('verificationFailed');
