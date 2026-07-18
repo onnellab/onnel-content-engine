@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-17T16:09:54+09:00",
+  "updated_at": "2026-07-19T08:50:04+09:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -84,6 +84,18 @@
       "posted_url": "https://onnellab.hashnode.dev/how-to-convert-local-media-files-privately",
       "verified_at": "2026-07-17T16:09:54+09:00",
       "verification_method": "hashnode_rss",
+      "verification_confidence": "medium"
+    },
+    "TOPIC-0007::medium::en::markdown": {
+      "topic_id": "TOPIC-0007",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "marked_at": "2026-07-19T08:50:04+09:00",
+      "marked_by": "publication_verifier",
+      "posted_url": "https://medium.com/@onnellab.app/how-to-convert-local-media-files-privately-7fb0b33e7db0?source=rss-ff84b0f2e139------2",
+      "verified_at": "2026-07-19T08:50:04+09:00",
+      "verification_method": "medium_rss",
       "verification_confidence": "medium"
     }
   }
