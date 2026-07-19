@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "checked_at": "2026-07-19T08:50:04+09:00",
+  "checked_at": "2026-07-19T09:54:35+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 12,
-    "already_done": 11,
-    "verified": 1,
+    "already_done": 12,
+    "verified": 0,
     "pending": 0
   },
   "items": [
@@ -147,7 +147,7 @@
       "platform": "medium",
       "language": "en",
       "template_id": "markdown",
-      "status": "verified",
+      "status": "already_done",
       "reason": "",
       "posted_url": "https://medium.com/@onnellab.app/how-to-convert-local-media-files-privately-7fb0b33e7db0?source=rss-ff84b0f2e139------2",
       "verification_method": "medium_rss",
