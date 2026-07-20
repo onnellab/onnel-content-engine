@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-20T13:56:56+09:00",
+  "checked_at": "2026-07-20T15:38:57+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 12,
+    "checked": 18,
     "already_done": 12,
     "verified": 0,
-    "pending": 0
+    "pending": 6
   },
   "items": [
     {
@@ -152,6 +152,78 @@
       "posted_url": "https://medium.com/@onnellab.app/how-to-convert-local-media-files-privately-7fb0b33e7db0?source=rss-ff84b0f2e139------2",
       "verification_method": "medium_rss",
       "verification_confidence": "medium"
+    },
+    {
+      "manual_key": "TOPIC-0008::x::en::x",
+      "topic_id": "TOPIC-0008",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0008::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0008",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0008::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0008",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0008::devto::en::markdown",
+      "topic_id": "TOPIC-0008",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0008::hashnode::en::markdown",
+      "topic_id": "TOPIC-0008",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0008::medium::en::markdown",
+      "topic_id": "TOPIC-0008",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
     }
   ]
 }
