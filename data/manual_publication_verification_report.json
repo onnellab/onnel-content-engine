@@ -1,6 +1,10 @@
 {
   "version": 1,
+<<<<<<< Updated upstream
   "checked_at": "2026-07-21T08:49:48+09:00",
+=======
+  "checked_at": "2026-07-21T08:51:11+09:00",
+>>>>>>> Stashed changes
   "visual_public_pages": true,
   "counts": {
     "checked": 18,
