@@ -93,9 +93,40 @@ def next_slot(
     if now is None:
         return candidate
     current = now.astimezone(KST)
-    while candidate <= current:
-        candidate += timedelta(days=interval_days)
+    if candidate <= current:
+        return current.replace(microsecond=0)
     return candidate
+
+
+def publication_is_due(
+    rows: list[dict[str, str]],
+    now: datetime,
+    interval_days: int,
+    publication_time: str,
+) -> bool:
+    anchors = [
+        parsed.astimezone(KST)
+        for row in rows
+        for parsed in [parse_datetime(row["published_at"])]
+        if parsed
+    ]
+    if not anchors or any(row["status"] == "scheduled" for row in rows):
+        return False
+    return next_slot(max(anchors), interval_days, publication_time) <= now.astimezone(KST)
+
+
+def queue_shortage_message(rows: list[dict[str, str]], threshold: float) -> str:
+    idea_count = sum(row["status"] == "idea" for row in rows)
+    paired_ideas = sum(
+        all(language in {row["primary_language"] for row in group} for language in REQUIRED_PUBLICATION_LANGUAGES)
+        for group in grouped_by_publication(rows).values()
+        if all(row["status"] == "idea" for row in group)
+    )
+    return (
+        "publication cadence is overdue but no English/Korean review pair passed "
+        f"the {threshold:.1f} threshold; ideas={idea_count}, paired_ideas={paired_ideas}. "
+        "Prepare and review a bilingual idea pair before the next scheduled run."
+    )
 
 
 def schedule_ready_articles(
@@ -107,6 +138,7 @@ def schedule_ready_articles(
     publication_time: str = DEFAULT_PUBLICATION_TIME,
     now: datetime | None = None,
     limit: int = 1,
+    require_ready_when_due: bool = False,
 ) -> list[dict[str, str]]:
     rows = read_csv(topics_path, TOPIC_HEADER)
     now = now or datetime.now(KST)
@@ -134,6 +166,8 @@ def schedule_ready_articles(
         for topic in pair.values():
             row = store.edit(topic["id"], {"status": "scheduled", "scheduled_at": anchor.isoformat()})
             scheduled.append(row)
+    if require_ready_when_due and not scheduled and publication_is_due(rows, now, interval_days, publication_time):
+        raise SchedulingError(queue_shortage_message(rows, threshold))
     return scheduled
 
 
@@ -146,6 +180,11 @@ def main() -> int:
     parser.add_argument("--interval-days", type=int, default=DEFAULT_INTERVAL_DAYS)
     parser.add_argument("--publication-time", default=DEFAULT_PUBLICATION_TIME)
     parser.add_argument("--limit", type=int, default=1)
+    parser.add_argument(
+        "--require-ready-when-due",
+        action="store_true",
+        help="Fail instead of silently skipping an overdue publication cadence without a qualified review pair",
+    )
     args = parser.parse_args()
     try:
         rows = schedule_ready_articles(
@@ -156,6 +195,7 @@ def main() -> int:
             args.interval_days,
             args.publication_time,
             limit=args.limit,
+            require_ready_when_due=args.require_ready_when_due,
         )
     except (SchedulingError, TopicError, OSError, json.JSONDecodeError) as error:
         print(f"scheduling failed: {error}", file=sys.stderr)

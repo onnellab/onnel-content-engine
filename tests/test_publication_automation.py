@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from evaluate_article import evaluate_article
 from build_manual_publish_site import compose_url
 from publish_due_articles import publish_due_articles
-from schedule_ready_articles import schedule_ready_articles
+from schedule_ready_articles import SchedulingError, schedule_ready_articles
 from topic_management import TOPIC_HEADER, write_topics
 
 
@@ -219,7 +219,7 @@ class PublicationAutomationTest(unittest.TestCase):
         self.assertEqual(scheduled[0]["scheduled_at"], "2026-07-14T09:00:00+09:00")
         self.assertEqual(scheduled[1]["scheduled_at"], "2026-07-14T09:00:00+09:00")
 
-    def test_scheduling_skips_slots_that_are_already_past(self) -> None:
+    def test_scheduling_catches_up_an_overdue_slot_immediately(self) -> None:
         published = topic_row("published", "TOPIC-0002")
         published["slug"] = "already-published"
         published["canonical_path"] = "generated/markdown/en/reading/already-published.md"
@@ -242,8 +242,25 @@ class PublicationAutomationTest(unittest.TestCase):
         )
 
         self.assertEqual(len(scheduled), 2)
-        self.assertEqual(scheduled[0]["scheduled_at"], "2026-07-23T09:00:00+09:00")
-        self.assertEqual(scheduled[1]["scheduled_at"], "2026-07-23T09:00:00+09:00")
+        self.assertEqual(scheduled[0]["scheduled_at"], "2026-07-20T10:00:00+09:00")
+        self.assertEqual(scheduled[1]["scheduled_at"], "2026-07-20T10:00:00+09:00")
+
+    def test_due_cadence_fails_when_ideas_exist_but_no_review_pair_is_ready(self) -> None:
+        published = topic_row("published", "TOPIC-0001", "en")
+        published["published_at"] = "2026-07-14T09:00:00+09:00"
+        idea = topic_row("idea", "TOPIC-0002", "en")
+        idea["slug"] = "next-idea"
+        write_topics(self.topics_path, [published, idea])
+        write_topics(self.legacy_path, [published, idea])
+
+        with self.assertRaisesRegex(SchedulingError, "ideas=1, paired_ideas=0"):
+            schedule_ready_articles(
+                self.topics_path,
+                self.review_root,
+                self.legacy_path,
+                now=datetime(2026, 7, 20, 10, tzinfo=KST),
+                require_ready_when_due=True,
+            )
 
     def test_publishes_due_article_only_when_review_score_exceeds_threshold(self) -> None:
         en = topic_row("scheduled", "TOPIC-0001", "en")

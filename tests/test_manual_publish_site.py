@@ -289,6 +289,7 @@ Body
             self.assertIn("다음 게시 예정", html)
             self.assertIn("function nextBlogScheduledDate()", html)
             self.assertIn("function nextAutomatedBlogSlot()", html)
+            self.assertIn("function hasBilingualBlogQueue()", html)
             self.assertIn("86400000 * 3", html)
             self.assertIn("function atKstTime(date, hour, minute)", html)
             self.assertIn("while (next.getTime() <= Date.now())", html)

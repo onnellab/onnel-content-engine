@@ -41,6 +41,9 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Publish Due Articles", workflow)
         self.assertIn("Build", workflow)
         self.assertIn("Generate Distribution Drafts", workflow)
+        self.assertIn("Validate Distribution Supply", workflow)
+        self.assertIn("scripts/check_distribution_supply.py", workflow)
+        self.assertIn("--minimum-score 9.5", workflow)
         self.assertIn("Approve Due Core Distribution", workflow)
         self.assertIn("Deploy", workflow)
         self.assertIn("Post Due Core Distribution", workflow)
@@ -49,6 +52,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("--threshold 9.0", workflow)
         self.assertIn("--interval-days 3", workflow)
         self.assertIn("--publication-time 09:00", workflow)
+        self.assertIn("--require-ready-when-due", workflow)
         self.assertIn("ONNELLAB_GITHUB_PAGES_TOKEN", workflow)
         self.assertNotIn("Blogger", workflow)
 

@@ -339,6 +339,8 @@ scripts/schedule_ready_articles.py --threshold 9.0 --interval-days 3 --publicati
 
 Approved review articles are scheduled one at a time at a fixed three-day interval.
 
+Scheduled production runs also pass `--require-ready-when-due`. If the cadence is due but no English/Korean review pair clears the review threshold, the workflow fails with idea and paired-idea counts instead of reporting a successful zero-article publication. A qualified pair that arrives after its cadence is scheduled immediately so the same workflow run can publish it as a catch-up.
+
 The publication time is `09:00` Korea Standard Time.
 
 ---
@@ -398,8 +400,11 @@ The distribution draft stage runs after the canonical site build:
 ```text
 scripts/generate_social_posts.py --site-url https://onnellab.github.io/
 scripts/generate_syndication_drafts.py --site-url https://onnellab.github.io/
+scripts/check_distribution_supply.py --minimum-score 9.5
 scripts/approve_due_distribution.py --approved-by github-actions
 ```
+
+The fail-closed supply gate requires every published English article to have distinct X, LinkedIn, Bluesky, Dev.to, Hashnode, and Medium drafts. It also requires social and syndication averages of at least 9.5 / 10 and rejects repeated social phrasing before any due channel is approved.
 
 Core automated cadence:
 
@@ -417,6 +422,26 @@ LinkedIn remains manual.
 Hashnode remains export-only unless its paid API is enabled later.
 
 Medium remains disabled.
+
+---
+
+# Local Codex Content Supply
+
+Idea and bilingual article preparation runs locally so it can use `codex login` with the ChatGPT subscription instead of an API key. The daily task runs at 06:00 Asia/Seoul, catches up after a missed start, and calls:
+
+```text
+scripts/run_codex_content_supply.sh
+```
+
+The runner pulls `main`, exits without invoking Codex when at least one qualified English/Korean pair and eight ideas already exist, and otherwise asks Codex to complete a qualified bilingual pair and replenish the idea backlog. It validates content, restricts changed paths, commits, and pushes. The GitHub publishing workflow then schedules/publishes the canonical pair and creates all downstream media drafts.
+
+On Windows with WSL, install or refresh the durable scheduled task with:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File scripts/install_codex_content_supply_task.ps1
+```
+
+This local task requires the computer to be available and Codex to remain signed in with ChatGPT. It does not use a ChatGPT API key.
 
 ---
 

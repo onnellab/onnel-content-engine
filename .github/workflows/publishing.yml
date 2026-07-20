@@ -245,7 +245,7 @@ jobs:
         if: env.DRY_RUN != 'true'
         run: |
           set -euo pipefail
-          python3 scripts/schedule_ready_articles.py --threshold 9.0 --interval-days 3 --publication-time 09:00
+          python3 scripts/schedule_ready_articles.py --threshold 9.0 --interval-days 3 --publication-time 09:00 --require-ready-when-due
 
       - name: Schedule Ready Articles Dry Run
         if: env.DRY_RUN == 'true'
@@ -311,6 +311,23 @@ jobs:
             --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
             --output-dir /tmp/onnel-content-engine-dry-run/generated/syndication \
             --site-url "$SITE_URL"
+
+      - name: Validate Distribution Supply
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/check_distribution_supply.py --minimum-score 9.5
+
+      - name: Validate Distribution Supply Dry Run
+        if: env.DRY_RUN == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/check_distribution_supply.py \
+            --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --social-manifest /tmp/onnel-content-engine-dry-run/generated/social/manifest.json \
+            --syndication-manifest /tmp/onnel-content-engine-dry-run/generated/syndication/manifest.json \
+            --project-root /tmp/onnel-content-engine-dry-run \
+            --minimum-score 9.5
 
       - name: Approve Due Core Distribution
         if: env.DRY_RUN != 'true'

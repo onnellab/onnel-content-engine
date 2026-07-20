@@ -11,6 +11,7 @@ import tempfile
 from pathlib import Path
 
 from approve_due_distribution import approve_due_distribution
+from check_distribution_supply import require_distribution_supply
 from create_github_releases import create_github_releases
 from generate_all_image_specs import generate_all_image_specs
 from generate_all_image_assets import generate_all_image_assets
@@ -62,6 +63,18 @@ def quality_gate(social_manifest: Path, syndication_manifest: Path, minimum_scor
         raise PipelineError(f"social repetition warnings: {phrases}")
 
 
+def distribution_gate(topics_path: Path, social_manifest: Path, syndication_manifest: Path) -> None:
+    try:
+        require_distribution_supply(
+            topics_path=topics_path,
+            social_manifest=social_manifest,
+            syndication_manifest=syndication_manifest,
+            project_root=topics_path.resolve().parent.parent,
+        )
+    except ValueError as error:
+        raise PipelineError(str(error)) from error
+
+
 def copy_for_dry_run(destination: Path) -> None:
     for name in ["data", "topics", "templates", "generated"]:
         source = ROOT / name
@@ -105,6 +118,7 @@ def run_pipeline(
             generate_social_posts(topics_path, social_root, site_url)
             generate_syndication_drafts(topics_path, syndication_root, site_url)
             quality_gate(social_root / "manifest.json", syndication_root / "manifest.json")
+            distribution_gate(topics_path, social_root / "manifest.json", syndication_root / "manifest.json")
             approve_due_distribution(topics_path, social_root / "manifest.json", syndication_root / "manifest.json", dry_run=True)
             deploy_github_pages(topics_path=topics_path, homepage_repo=homepage_repo, dry_run=True)
         return
@@ -115,12 +129,17 @@ def run_pipeline(
     generate_all_image_assets()
     generate_all_internal_links()
     evaluate_all_articles()
-    schedule_ready_articles()
+    schedule_ready_articles(require_ready_when_due=True)
     publish_due_articles(site_url=site_url)
     build_site(site_url=site_url)
     generate_social_posts(site_url=site_url)
     generate_syndication_drafts(site_url=site_url)
     quality_gate(ROOT / "generated" / "social" / "manifest.json", ROOT / "generated" / "syndication" / "manifest.json")
+    distribution_gate(
+        ROOT / "data" / "topics.csv",
+        ROOT / "generated" / "social" / "manifest.json",
+        ROOT / "generated" / "syndication" / "manifest.json",
+    )
     approve_due_distribution()
     if deploy:
         deploy_github_pages(homepage_repo=homepage_repo)

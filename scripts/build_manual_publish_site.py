@@ -2595,11 +2595,22 @@ def html_document(
       return next;
     }}
 
+    function hasBilingualBlogQueue() {{
+      const groups = new Map();
+      blogItems.forEach((item) => {{
+        if (!['approved', 'research', 'outline', 'draft', 'image_planning', 'review'].includes(item.status)) return;
+        const key = `${{item.category || ''}}::${{item.slug || ''}}`;
+        if (!groups.has(key)) groups.set(key, new Set());
+        groups.get(key).add(item.language);
+      }});
+      return [...groups.values()].some((languages) => languages.has('en') && languages.has('ko'));
+    }}
+
     function nextBlogScheduledDate() {{
       return futureDates(blogItems
         .filter((item) => item.status === 'scheduled' && item.scheduled_at)
         .map((item) => item.scheduled_at))
-        .sort((a, b) => a - b)[0] || nextAutomatedBlogSlot();
+        .sort((a, b) => a - b)[0] || (hasBilingualBlogQueue() ? nextAutomatedBlogSlot() : null);
     }}
 
     function nextManualDueDate() {{

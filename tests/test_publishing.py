@@ -24,6 +24,7 @@ from publishing import (
     x_weighted_length,
 )
 from approve_due_distribution import approve_due_distribution
+from check_distribution_supply import DistributionSupplyError, require_distribution_supply
 from evaluate_social_templates import evaluate_social_templates, repetition_warnings
 from approve_social_post import approve_social_post
 from generate_syndication_drafts import generate_syndication_drafts
@@ -725,6 +726,33 @@ class PublishingTest(unittest.TestCase):
                 "en",
                 "editor",
                 output_dir / "manifest.json",
+            )
+
+    def test_distribution_supply_requires_every_supported_channel(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        syndication_dir = self.root / "generated" / "syndication"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        generate_syndication_drafts(self.topics_path, syndication_dir, "https://example.com/")
+
+        report = require_distribution_supply(
+            topics_path=self.topics_path,
+            social_manifest=social_dir / "manifest.json",
+            syndication_manifest=syndication_dir / "manifest.json",
+            project_root=self.root,
+        )
+
+        self.assertTrue(report["ready"])
+        self.assertEqual(report["published_source_count"], 1)
+        manifest_path = syndication_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["drafts"] = [item for item in manifest["drafts"] if item["platform"] != "medium"]
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaises(DistributionSupplyError):
+            require_distribution_supply(
+                topics_path=self.topics_path,
+                social_manifest=social_dir / "manifest.json",
+                syndication_manifest=manifest_path,
+                project_root=self.root,
             )
 
     def test_devto_adapter_posts_public_article_payload(self) -> None:
