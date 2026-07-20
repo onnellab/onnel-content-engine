@@ -75,6 +75,38 @@ def distribution_supply_report(
     social_score = float(social_quality["average_score"])
     syndication_score = float(syndication_quality["average_score"])
     repetition = social_quality.get("repetition_warnings") or []
+    low_quality = [
+        {
+            "topic_id": str(item.get("topic_id", "")),
+            "channel": "social",
+            "platform": str(item.get("platform", "")),
+            "score": float(item.get("score", 0.0)),
+        }
+        for item in social_quality.get("posts", [])
+        if isinstance(item, dict)
+        and not next(
+            (
+                post.get("is_variant")
+                for post in social
+                if post.get("topic_id") == item.get("topic_id")
+                and post.get("platform") == item.get("platform")
+                and post.get("language") == item.get("language")
+                and post.get("template_id") == item.get("template_id")
+            ),
+            False,
+        )
+        and float(item.get("score", 0.0)) < minimum_score
+    ]
+    low_quality.extend(
+        {
+            "topic_id": str(item.get("topic_id", "")),
+            "channel": "syndication",
+            "platform": str(item.get("platform", "")),
+            "score": float(item.get("score", 0.0)),
+        }
+        for item in syndication_quality.get("drafts", [])
+        if isinstance(item, dict) and float(item.get("score", 0.0)) < minimum_score
+    )
     failures: list[str] = []
     if missing:
         failures.append(f"{len(missing)} required channel draft(s) missing")
@@ -84,6 +116,8 @@ def distribution_supply_report(
         failures.append(f"syndication score {syndication_score}/10 is below {minimum_score}/10")
     if repetition:
         failures.append(f"{len(repetition)} social repetition warning(s)")
+    if low_quality:
+        failures.append(f"{len(low_quality)} individual channel draft(s) below {minimum_score}/10")
     return {
         "published_source_count": len(topics),
         "required_social_platforms": sorted(REQUIRED_SOCIAL_PLATFORMS),
@@ -92,6 +126,7 @@ def distribution_supply_report(
         "social_average_score": social_score,
         "syndication_average_score": syndication_score,
         "repetition_warnings": repetition,
+        "low_quality_drafts": low_quality,
         "minimum_score": minimum_score,
         "ready": not failures,
         "failures": failures,

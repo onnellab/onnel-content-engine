@@ -404,7 +404,7 @@ scripts/check_distribution_supply.py --minimum-score 9.5
 scripts/approve_due_distribution.py --approved-by github-actions
 ```
 
-The fail-closed supply gate requires every published English article to have distinct X, LinkedIn, Bluesky, Dev.to, Hashnode, and Medium drafts. It also requires social and syndication averages of at least 9.5 / 10 and rejects repeated social phrasing before any due channel is approved.
+The fail-closed supply gate requires every published English article to have distinct X, LinkedIn, Bluesky, Dev.to, Hashnode, and Medium drafts. It requires both channel averages and every individual primary draft to score at least 9.5 / 10, and rejects repeated social phrasing before any due channel is approved.
 
 Core automated cadence:
 

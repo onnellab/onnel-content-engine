@@ -391,11 +391,11 @@ def social_card_svg(article: Article) -> str:
     }
     badge_fill, badge_stroke, badge_text = category_colors.get(article.topic["category"], category_colors["reading"])
     font_defs, font_stack = social_card_font_defs(language)
+    font_defs_line = f"  {font_defs}\n" if font_defs else ""
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">{html.escape(article.title)}</title>
   <desc id="desc">{html.escape(article.description)}</desc>
-  {font_defs}
-  <rect width="1200" height="630" fill="#f8f4ec"/>
+{font_defs_line}  <rect width="1200" height="630" fill="#f8f4ec"/>
   <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
   <rect x="92" y="92" width="210" height="44" rx="22" fill="{badge_fill}" stroke="{badge_stroke}" stroke-width="1.4"/>
   <text x="118" y="121" fill="{badge_text}" font-family="{font_stack}" font-size="18" font-weight="700">{html.escape(category)}</text>
@@ -724,13 +724,13 @@ def render_x_template(article: Article, site_url: str, template_id: str) -> str:
     context = social_template_context(article, site_url, "x", template_id)
     template = load_social_template(template_id)
     rendered = render_social_template(template, context)
-    while x_weighted_length(rendered) > 280 and context["x_summary"]:
+    while x_weighted_length(rendered) > 240 and context["x_summary"]:
         context["x_summary"] = truncate_text(context["x_summary"], max(0, len(context["x_summary"]) - 8))
         rendered = render_social_template(template, context)
-    if x_weighted_length(rendered) > 280:
+    if x_weighted_length(rendered) > 240:
         context["x_summary"] = ""
         rendered = render_social_template(template, context)
-    while x_weighted_length(rendered) > 280 and context["question"]:
+    while x_weighted_length(rendered) > 240 and context["question"]:
         context["question"] = truncate_text(context["question"], max(0, len(context["question"]) - 8))
         rendered = render_social_template(template, context)
     return rendered
@@ -759,7 +759,18 @@ def render_linkedin_post(article: Article, site_url: str) -> str:
 
 def render_linkedin_template(article: Article, site_url: str, template_id: str) -> str:
     context = social_template_context(article, site_url, "linkedin", template_id)
-    return truncate_text(render_social_template(load_social_template(template_id), context), 900 if template_id == "linkedin_short" else 3000)
+    template = load_social_template(template_id)
+    rendered = render_social_template(template, context)
+    if len(rendered) > 900:
+        context["key_points"] = context["short_points"]
+        rendered = render_social_template(template, context)
+    while len(rendered) > 900 and context["lead"]:
+        context["lead"] = truncate_text(context["lead"], max(0, len(context["lead"]) - 24))
+        rendered = render_social_template(template, context)
+    while len(rendered) > 900 and context["hook"]:
+        context["hook"] = truncate_text(context["hook"], max(0, len(context["hook"]) - 16))
+        rendered = render_social_template(template, context)
+    return rendered
 
 
 def load_social_template(platform: str, template_dir: Path = DEFAULT_SOCIAL_TEMPLATE_DIR) -> str:
