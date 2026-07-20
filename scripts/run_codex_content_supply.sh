@@ -24,7 +24,7 @@ if python3 scripts/check_content_supply.py --require-healthy --minimum-ideas 8; 
   echo "content supply already healthy; Codex usage not required"
   exit 0
 fi
-codex login status | grep -q "Logged in using ChatGPT"
+codex login status 2>&1 | grep -q "Logged in using ChatGPT"
 
 RUN_STAMP="$(date +%Y%m%d-%H%M%S)"
 RUN_LOG="${LOG_DIR}/${RUN_STAMP}.log"
