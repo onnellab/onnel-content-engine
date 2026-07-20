@@ -2515,7 +2515,7 @@ def html_document(
       if (item.publishing_mode !== 'manual') return false;
       if (!['draft', 'failed', 'approved'].includes(item.status)) return false;
       const date = dueDate(item);
-      return date ? Date.now() >= date.getTime() : false;
+      return date ? kstDayNumber(date) <= kstDayNumber(new Date()) : false;
     }}
 
     function formatDue(item) {{
@@ -2545,6 +2545,11 @@ def html_document(
       return Math.floor(Date.UTC(parts.year, parts.month - 1, parts.day) / 86400000);
     }}
 
+    function atKstTime(date, hour, minute) {{
+      const parts = kstDateParts(date);
+      return new Date(Date.UTC(parts.year, parts.month - 1, parts.day, hour - 9, minute, 0, 0));
+    }}
+
     function formatDate(value) {{
       const date = parseDate(value);
       if (!date) return t('none');
@@ -2572,6 +2577,11 @@ def html_document(
       return values.map(parseDate).filter(Boolean).sort((a, b) => b - a)[0] || null;
     }}
 
+    function futureDates(values) {{
+      const now = Date.now();
+      return values.map(parseDate).filter((date) => date && date.getTime() > now);
+    }}
+
     function verificationCheckedAtForPlatform(platform) {{
       const rows = Array.isArray(verificationReport?.items) ? verificationReport.items : [];
       return rows.some((row) => row.platform === platform) ? verificationReport?.checked_at || '' : '';
@@ -2580,24 +2590,22 @@ def html_document(
     function nextAutomatedBlogSlot() {{
       const anchor = latestDate(blogItems.map((item) => item.published_at || item.scheduled_at));
       if (!anchor) return null;
-      const next = new Date(anchor.getTime() + (86400000 * 3));
-      next.setHours(9, 0, 0, 0);
+      let next = atKstTime(new Date(anchor.getTime() + (86400000 * 3)), 9, 0);
+      while (next.getTime() <= Date.now()) next = new Date(next.getTime() + (86400000 * 3));
       return next;
     }}
 
     function nextBlogScheduledDate() {{
-      return blogItems
+      return futureDates(blogItems
         .filter((item) => item.status === 'scheduled' && item.scheduled_at)
-        .map((item) => parseDate(item.scheduled_at))
-        .filter(Boolean)
+        .map((item) => item.scheduled_at))
         .sort((a, b) => a - b)[0] || nextAutomatedBlogSlot();
     }}
 
     function nextManualDueDate() {{
-      return items
+      return futureDates(items
         .filter((item) => item.publishing_mode === 'manual' && !isDone(item) && !item.is_variant && item.due_at)
-        .map((item) => dueDate(item))
-        .filter(Boolean)
+        .map((item) => item.due_at))
         .sort((a, b) => a - b)[0] || null;
     }}
 
@@ -2904,10 +2912,9 @@ def html_document(
           verificationCheckedAtForPlatform(rows[0]?.platform || ''),
           ...rows.map((item) => item.last_attempt_at || item.approved_at),
         ]);
-        const nextDue = rows
+        const nextDue = futureDates(rows
           .filter((item) => !isDone(item) && !item.is_variant && item.due_at)
-          .map((item) => dueDate(item))
-          .filter(Boolean)
+          .map((item) => item.due_at))
           .sort((a, b) => a - b)[0] || nextScheduled;
         const card = document.createElement('div');
         card.className = 'platform-card';
@@ -3298,7 +3305,12 @@ def html_document(
           && (currentView !== 'custom' || visibility === 'all' || (visibility === 'due' ? due : !done));
       }});
       const dueTotal = String(items.filter(isDue).length);
-      const manualTotal = String(items.filter((item) => item.publishing_mode === 'manual' && !item.is_variant && !isDone(item)).length);
+      const manualTotal = String(items.filter((item) =>
+        item.publishing_mode === 'manual'
+        && !item.is_variant
+        && !isDone(item)
+        && ['draft', 'failed', 'approved'].includes(item.status)
+      ).length);
       const postedTotal = String(items.filter((item) => !item.is_variant && isDone(item)).length);
       dueCountEls.forEach((element) => element.textContent = dueTotal);
       manualCountEl.textContent = manualTotal;
@@ -3506,9 +3518,17 @@ def html_document(
       currentView = 'custom';
       render();
     }}));
+    window.setInterval(render, 60000);
+    window.setInterval(() => loadRemoteState({{ refreshDashboardData: true }}), 900000);
+    document.addEventListener('visibilitychange', () => {{
+      if (document.visibilityState === 'visible') {{
+        render();
+        loadRemoteState({{ refreshDashboardData: true }});
+      }}
+    }});
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.warn);
     loadCredentials();
-    loadRemoteState();
+    loadRemoteState({{ refreshDashboardData: true }});
   </script>
 </body>
 </html>
@@ -3551,7 +3571,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v8';
+    return """const CACHE = 'onnellab-manual-publish-v9';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {

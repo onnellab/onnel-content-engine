@@ -721,7 +721,7 @@ def render_x_post(article: Article, site_url: str) -> str:
 
 
 def render_x_template(article: Article, site_url: str, template_id: str) -> str:
-    context = social_template_context(article, site_url, "x")
+    context = social_template_context(article, site_url, "x", template_id)
     template = load_social_template(template_id)
     rendered = render_social_template(template, context)
     while x_weighted_length(rendered) > 280 and context["x_summary"]:
@@ -737,7 +737,7 @@ def render_x_template(article: Article, site_url: str, template_id: str) -> str:
 
 
 def render_bluesky_template(article: Article, site_url: str, template_id: str) -> str:
-    context = social_template_context(article, site_url, "bluesky")
+    context = social_template_context(article, site_url, "bluesky", template_id)
     template = load_social_template(template_id)
     rendered = render_social_template(template, context)
     while len(rendered) > 260 and context["bsky_summary"]:
@@ -753,12 +753,12 @@ def render_bluesky_template(article: Article, site_url: str, template_id: str) -
 
 
 def render_linkedin_post(article: Article, site_url: str) -> str:
-    context = social_template_context(article, site_url, "linkedin")
+    context = social_template_context(article, site_url, "linkedin", "linkedin")
     return truncate_text(render_social_template(load_social_template("linkedin"), context), 3000)
 
 
 def render_linkedin_template(article: Article, site_url: str, template_id: str) -> str:
-    context = social_template_context(article, site_url, "linkedin")
+    context = social_template_context(article, site_url, "linkedin", template_id)
     return truncate_text(render_social_template(load_social_template(template_id), context), 900 if template_id == "linkedin_short" else 3000)
 
 
@@ -769,10 +769,15 @@ def load_social_template(platform: str, template_dir: Path = DEFAULT_SOCIAL_TEMP
     return path.read_text(encoding="utf-8")
 
 
-def social_hook(article: Article, platform: str = "") -> str:
+def social_hook(article: Article, platform: str = "", template_id: str = "") -> str:
     title = plain_text(article.title)
     question = plain_text(article.topic["primary_question"])
     haystack = f"{title} {question} {article.description}".lower()
+
+    def select(hooks: tuple[str, ...]) -> str:
+        variant_offset = 1 if template_id and template_id != platform else 0
+        return hooks[(stable_index(article.topic["id"], len(hooks)) + variant_offset) % len(hooks)]
+
     if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
         hooks_by_platform = {
             "x": (
@@ -796,7 +801,7 @@ def social_hook(article: Article, platform: str = "") -> str:
                 "Large plain-text files need a reading workflow before they need a new format.",
             ),
         )
-        return hooks[stable_index(article.topic["id"], len(hooks))]
+        return select(hooks)
     if "txt" in haystack and ("unreadable" in haystack or "encoding" in haystack or "utf-8" in haystack or "broken characters" in haystack):
         hooks_by_platform = {
             "x": (
@@ -813,9 +818,26 @@ def social_hook(article: Article, platform: str = "") -> str:
             ),
         }
         hooks = hooks_by_platform.get(platform, hooks_by_platform["x"])
-        return hooks[stable_index(article.topic["id"], len(hooks))]
+        return select(hooks)
     if question.lower().startswith("how can i "):
-        return question[0].upper() + question[1:].rstrip("?") + " is a workflow problem, not just a tool choice."
+        action = question[len("How can I ") :].rstrip("?")
+        action_lower = action[0].lower() + action[1:] if action else action
+        action_upper = action[0].upper() + action[1:] if action else action
+        hooks_by_platform = {
+            "x": (
+                f"{action_upper} is easier when the process is clear before choosing an app.",
+                f"Start with the constraints, then decide how to {action_lower}.",
+            ),
+            "bluesky": (
+                f"A practical way to {action_lower} starts with the constraints, not the app.",
+                f"Before you {action_lower}, separate the required result from the optional steps.",
+            ),
+            "linkedin": (
+                f"A reliable plan for how to {action_lower} starts with the result and constraints.",
+                f"The clearest way to {action_lower} is to separate the decision from the tool.",
+            ),
+        }
+        return select(hooks_by_platform.get(platform, hooks_by_platform["x"]))
     if question:
         return question.rstrip("?") + "."
     return title
@@ -954,7 +976,12 @@ def syndication_body(article: Article, body: str, platform: str) -> str:
     return body
 
 
-def social_template_context(article: Article, site_url: str, platform: str = "") -> dict[str, str]:
+def social_template_context(
+    article: Article,
+    site_url: str,
+    platform: str = "",
+    template_id: str = "",
+) -> dict[str, str]:
     markdown = article.markdown_path.read_text(encoding="utf-8")
     title = plain_text(article.title)
     description = plain_text(article.description)
@@ -977,7 +1004,7 @@ def social_template_context(article: Article, site_url: str, platform: str = "")
     lead = linkedin_lead(article, insight, description)
     return {
         "title": title,
-        "hook": truncate_text(social_hook(article, platform), 160),
+        "hook": truncate_text(social_hook(article, platform, template_id), 160),
         "question": truncate_text(plain_text(article.topic["primary_question"]), 120),
         "description": description,
         "insight": truncate_text(insight, 420),

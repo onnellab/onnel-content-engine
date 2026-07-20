@@ -44,8 +44,12 @@ def validate() -> None:
 
 
 def quality_gate(social_manifest: Path, syndication_manifest: Path, minimum_score: float = 9.5) -> None:
-    social = evaluate_social_templates(social_manifest)
-    syndication = evaluate_syndication_drafts(syndication_manifest)
+    social_project_root = social_manifest.resolve().parents[2]
+    syndication_project_root = syndication_manifest.resolve().parents[2]
+    if social_project_root != syndication_project_root:
+        raise PipelineError("quality manifests must belong to the same project root")
+    social = evaluate_social_templates(social_manifest, social_project_root)
+    syndication = evaluate_syndication_drafts(syndication_manifest, syndication_project_root)
     social_score = float(social["average_score"])
     syndication_score = float(syndication["average_score"])
     warnings = social.get("repetition_warnings") or []

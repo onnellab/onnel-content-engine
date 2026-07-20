@@ -219,6 +219,32 @@ class PublicationAutomationTest(unittest.TestCase):
         self.assertEqual(scheduled[0]["scheduled_at"], "2026-07-14T09:00:00+09:00")
         self.assertEqual(scheduled[1]["scheduled_at"], "2026-07-14T09:00:00+09:00")
 
+    def test_scheduling_skips_slots_that_are_already_past(self) -> None:
+        published = topic_row("published", "TOPIC-0002")
+        published["slug"] = "already-published"
+        published["canonical_path"] = "generated/markdown/en/reading/already-published.md"
+        published["published_url"] = "https://example.com/blog/en/already-published/"
+        published["published_at"] = "2026-07-14T09:00:00+09:00"
+        review_en = topic_row("review", "TOPIC-0001", "en")
+        review_ko = topic_row("review", "TOPIC-0003", "ko")
+        write_topics(self.topics_path, [published, review_en, review_ko])
+        write_topics(self.legacy_path, [published, review_en, review_ko])
+        for language in ["en", "ko"]:
+            review_path = self.review_root / language / "reading" / "read-large-txt-files" / "review.json"
+            review_path.parent.mkdir(parents=True)
+            review_path.write_text(json.dumps({"score": 9.2}), encoding="utf-8")
+
+        scheduled = schedule_ready_articles(
+            self.topics_path,
+            self.review_root,
+            self.legacy_path,
+            now=datetime(2026, 7, 20, 10, tzinfo=KST),
+        )
+
+        self.assertEqual(len(scheduled), 2)
+        self.assertEqual(scheduled[0]["scheduled_at"], "2026-07-23T09:00:00+09:00")
+        self.assertEqual(scheduled[1]["scheduled_at"], "2026-07-23T09:00:00+09:00")
+
     def test_publishes_due_article_only_when_review_score_exceeds_threshold(self) -> None:
         en = topic_row("scheduled", "TOPIC-0001", "en")
         ko = topic_row("scheduled", "TOPIC-0002", "ko")

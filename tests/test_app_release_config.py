@@ -28,7 +28,9 @@ def write_config(path: Path, rows: list[dict[str, str]]) -> None:
 
 class AppReleaseConfigTest(unittest.TestCase):
     def test_current_release_config_is_valid(self) -> None:
-        self.assertEqual(validate_app_release_config(), 6)
+        configured_count = len(read_config_rows())
+        self.assertGreater(configured_count, 0)
+        self.assertEqual(validate_app_release_config(), configured_count)
 
     def test_repository_must_use_owner_name(self) -> None:
         rows = read_config_rows()

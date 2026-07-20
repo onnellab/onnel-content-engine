@@ -66,26 +66,38 @@ def score_post(post: dict[str, object], project_root: Path = ROOT) -> dict[str, 
     }
 
 
+def repetition_warnings(posts: list[dict[str, object]], project_root: Path = ROOT) -> list[dict[str, object]]:
+    """Find repeated phrases among actionable primary drafts.
+
+    Posted history and mutually exclusive variants remain scoreable, but they do
+    not represent copy that will be published together and must not inflate the
+    repetition gate.
+    """
+    texts: list[str] = []
+    for post in posts:
+        if post.get("is_variant") or post.get("status") == "posted":
+            continue
+        draft_path = project_root / str(post["draft_path"])
+        if draft_path.exists():
+            texts.append(draft_path.read_text(encoding="utf-8").lower())
+    repeated: list[dict[str, object]] = []
+    for pattern in REPETITION_PATTERNS:
+        count = sum(text.count(pattern) for text in texts)
+        if count > 2:
+            repeated.append({"phrase": pattern, "count": count, "severity": "warning"})
+    return repeated
+
+
 def evaluate_social_templates(manifest_path: Path = DEFAULT_MANIFEST_PATH, project_root: Path = ROOT) -> dict[str, object]:
     validate_social_posts(manifest_path, project_root)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     posts = [post for post in manifest["posts"] if isinstance(post, dict)]
     evaluations = [score_post(post, project_root) for post in posts]
     average = round(sum(float(item["score"]) for item in evaluations) / len(evaluations), 2) if evaluations else 0.0
-    texts = []
-    for post in posts:
-        draft_path = project_root / str(post["draft_path"])
-        if draft_path.exists():
-            texts.append(draft_path.read_text(encoding="utf-8").lower())
-    repeated = []
-    for pattern in REPETITION_PATTERNS:
-        count = sum(text.count(pattern) for text in texts)
-        if count > 2:
-            repeated.append({"phrase": pattern, "count": count, "severity": "warning"})
     return {
         "type": "social_template_evaluation",
         "average_score": average,
-        "repetition_warnings": repeated,
+        "repetition_warnings": repetition_warnings(posts, project_root),
         "posts": evaluations,
     }
 

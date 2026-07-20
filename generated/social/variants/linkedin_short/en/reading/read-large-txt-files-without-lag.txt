@@ -1,4 +1,4 @@
-Teams often lose time on large TXT files because the first tool treats them like small notes.
+Large plain-text files need a reading workflow before they need a new format.
 
 The useful test is simple: decide whether the file needs quick reading, search, light edits, or full editing before choosing the tool.
 

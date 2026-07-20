@@ -79,10 +79,23 @@ def latest_publication_anchor(rows: list[dict[str, str]], now: datetime) -> date
     return max(anchors) if anchors else now.astimezone(KST)
 
 
-def next_slot(anchor: datetime, interval_days: int, publication_time: str) -> datetime:
+def next_slot(
+    anchor: datetime,
+    interval_days: int,
+    publication_time: str,
+    now: datetime | None = None,
+) -> datetime:
+    if interval_days <= 0:
+        raise SchedulingError("interval_days must be greater than zero")
     hour, minute = publication_clock(publication_time)
     candidate = anchor.astimezone(KST) + timedelta(days=interval_days)
-    return candidate.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    candidate = candidate.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    if now is None:
+        return candidate
+    current = now.astimezone(KST)
+    while candidate <= current:
+        candidate += timedelta(days=interval_days)
+    return candidate
 
 
 def schedule_ready_articles(
@@ -117,7 +130,7 @@ def schedule_ready_articles(
             raise SchedulingError("both English and Korean articles must be in review before scheduling")
         if any(review_score(row, review_root) <= threshold for row in pair.values()):
             continue
-        anchor = next_slot(anchor, interval_days, publication_time)
+        anchor = next_slot(anchor, interval_days, publication_time, now)
         for topic in pair.values():
             row = store.edit(topic["id"], {"status": "scheduled", "scheduled_at": anchor.isoformat()})
             scheduled.append(row)

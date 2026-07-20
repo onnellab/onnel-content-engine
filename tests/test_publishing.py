@@ -24,6 +24,7 @@ from publishing import (
     x_weighted_length,
 )
 from approve_due_distribution import approve_due_distribution
+from evaluate_social_templates import evaluate_social_templates, repetition_warnings
 from approve_social_post import approve_social_post
 from generate_syndication_drafts import generate_syndication_drafts
 from evaluate_syndication_drafts import evaluate_syndication_drafts
@@ -288,6 +289,12 @@ class PublishingTest(unittest.TestCase):
         self.assertNotIn("{{", linkedin_text)
         self.assertIn("Read the full article:", linkedin_text)
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", linkedin_text)
+        x_variant_text = (social_dir / "variants" / "x_question" / "en" / "reading" / "read-large-txt-files.txt").read_text(encoding="utf-8")
+        bluesky_variant_text = (social_dir / "variants" / "bluesky_question" / "en" / "reading" / "read-large-txt-files.txt").read_text(encoding="utf-8")
+        linkedin_variant_text = (social_dir / "variants" / "linkedin_short" / "en" / "reading" / "read-large-txt-files.txt").read_text(encoding="utf-8")
+        self.assertNotEqual(x_text.splitlines()[0], x_variant_text.splitlines()[0])
+        self.assertNotEqual(bluesky_text.splitlines()[0], bluesky_variant_text.splitlines()[0])
+        self.assertNotEqual(linkedin_text.splitlines()[0], linkedin_variant_text.splitlines()[0])
         manifest = (social_dir / "manifest.json").read_text(encoding="utf-8")
         self.assertIn('"status": "draft"', manifest)
         self.assertIn('"status": "variant"', manifest)
@@ -303,6 +310,7 @@ class PublishingTest(unittest.TestCase):
         self.assertIn('"retry_count": 0', manifest)
         self.assertIn('"impressions": 0', manifest)
         self.assertEqual(validate_social_posts(social_dir / "manifest.json", self.root), 6)
+        self.assertEqual(evaluate_social_templates(social_dir / "manifest.json", self.root)["repetition_warnings"], [])
 
         approved = approve_social_post(
             "TOPIC-0001",
@@ -330,6 +338,24 @@ class PublishingTest(unittest.TestCase):
         self.assertIn("bluesky: not ready", credential_report("bluesky"))
         with self.assertRaises(AdapterError):
             require_adapter_ready("bluesky", "social", {})
+
+    def test_repetition_gate_ignores_posted_history_and_mutually_exclusive_variants(self) -> None:
+        social_dir = self.root / "generated" / "social" / "repetition-test"
+        social_dir.mkdir(parents=True)
+        posts = []
+        for index, (is_variant, status) in enumerate(
+            [(False, "draft"), (True, "variant"), (True, "variant"), (False, "posted")]
+        ):
+            path = social_dir / f"post-{index}.txt"
+            path.write_text("This workflow problem should not be counted as four active posts.\n", encoding="utf-8")
+            posts.append({"draft_path": str(path.relative_to(self.root)), "is_variant": is_variant, "status": status})
+
+        self.assertEqual(repetition_warnings(posts, self.root), [])
+
+        for post in posts:
+            post["is_variant"] = False
+            post["status"] = "draft"
+        self.assertEqual(repetition_warnings(posts, self.root), [{"phrase": "workflow problem", "count": 4, "severity": "warning"}])
 
     def test_distribution_generation_preserves_manifest_state(self) -> None:
         social_dir = self.root / "generated" / "social"

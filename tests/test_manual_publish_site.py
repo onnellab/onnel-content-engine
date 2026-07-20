@@ -290,6 +290,12 @@ Body
             self.assertIn("function nextBlogScheduledDate()", html)
             self.assertIn("function nextAutomatedBlogSlot()", html)
             self.assertIn("86400000 * 3", html)
+            self.assertIn("function atKstTime(date, hour, minute)", html)
+            self.assertIn("while (next.getTime() <= Date.now())", html)
+            self.assertIn("function futureDates(values)", html)
+            self.assertIn("kstDayNumber(date) <= kstDayNumber(new Date())", html)
+            self.assertIn("window.setInterval(render, 60000)", html)
+            self.assertIn("refreshDashboardData: true", html)
             self.assertIn("|| nextScheduled", html)
             self.assertNotIn('"status": "archived"', html)
             self.assertIn("사이트 갱신 상태", html)
@@ -388,7 +394,7 @@ Body
             self.assertNotIn("favicon-16x16.png", manifest)
             self.assertTrue((output.parent / "manifest.webmanifest").exists())
             self.assertTrue((output.parent / "sw.js").exists())
-            self.assertIn("onnellab-manual-publish-v8", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("onnellab-manual-publish-v9", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_filters_stale_verification_report_items(self) -> None:
         report = current_verification_report(

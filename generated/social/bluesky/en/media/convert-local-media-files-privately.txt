@@ -1,5 +1,5 @@
-How can I convert local media files without sending them to a server is a workflow problem, not just a tool choice.
+Before you convert local media files without sending them to a server, separate the required result from the optional steps.
 
-Learn how to convert local media files privately, what to check bef...
+Learn how to convert local media files privately, w...
 
 https://onnellab.github.io/blog/en/convert-local-media-files-privately/
