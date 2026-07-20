@@ -352,6 +352,11 @@ Body
             self.assertIn("refreshVerificationRunLink", html)
             self.assertIn("verificationReportCoversRun", html)
             self.assertIn("completedVerificationLabel(run)", html)
+            self.assertIn("reconcileCompletedVerification", html)
+            self.assertIn("if (verificationReportCoversRun(run)) return true", html)
+            self.assertIn("reportReady ? completedVerificationLabel(run) : 'verificationTimedOut'", html)
+            self.assertIn("skipRunLinkRefresh: true", html)
+            self.assertIn("&_=${cacheKey}", html)
             self.assertIn("verification-report-data", html)
             self.assertNotIn("verification-summary", html)
             self.assertNotIn("renderVerificationSummary", html)
@@ -366,7 +371,6 @@ Body
             self.assertIn("verificationTimedOut", html)
             self.assertIn("githubRequestTimeoutMs = 15000", html)
             self.assertIn("controller.abort()", html)
-            self.assertIn("refreshDashboardData: true, preserveVerifyState: true", html)
             self.assertIn("setVerifyState('verificationTimedOut')", html)
             self.assertIn("자동 재확인", html)
             self.assertIn("verification-automatic", html)
@@ -402,7 +406,7 @@ Body
             self.assertNotIn("favicon-16x16.png", manifest)
             self.assertTrue((output.parent / "manifest.webmanifest").exists())
             self.assertTrue((output.parent / "sw.js").exists())
-            self.assertIn("onnellab-manual-publish-v10", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("onnellab-manual-publish-v11", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_filters_stale_verification_report_items(self) -> None:
         report = current_verification_report(

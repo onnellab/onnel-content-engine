@@ -2035,6 +2035,19 @@ def html_document(
       return 'verificationFailed';
     }}
 
+    async function reconcileCompletedVerification(run, maxAttempts = 10) {{
+      for (let attempt = 0; attempt < maxAttempts; attempt += 1) {{
+        await loadRemoteState({{
+          refreshDashboardData: attempt === 0,
+          preserveVerifyState: true,
+          skipRunLinkRefresh: true,
+        }});
+        if (verificationReportCoversRun(run)) return true;
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }}
+      return false;
+    }}
+
     async function latestVerificationRun() {{
       const query = new URLSearchParams({{
         branch: stateBranch,
@@ -2081,8 +2094,8 @@ def html_document(
           setVerificationRunLink(run);
           setVerifyState(workflowRunLabel(run));
           if (run?.status === 'completed') {{
-            await loadRemoteState({{ refreshDashboardData: true, preserveVerifyState: true }});
-            setVerifyState(completedVerificationLabel(run));
+            const reportReady = await reconcileCompletedVerification(run);
+            setVerifyState(reportReady ? completedVerificationLabel(run) : 'verificationTimedOut');
             return;
           }}
         }} catch (error) {{
@@ -2094,8 +2107,8 @@ def html_document(
         const finalRun = await latestVerificationRun();
         if (isDispatchedVerificationRun(finalRun, previousRunId, dispatchedAt) && finalRun?.status === 'completed') {{
           setVerificationRunLink(finalRun);
-          await loadRemoteState({{ refreshDashboardData: true, preserveVerifyState: true }});
-          setVerifyState(completedVerificationLabel(finalRun));
+          const reportReady = await reconcileCompletedVerification(finalRun);
+          setVerifyState(reportReady ? completedVerificationLabel(finalRun) : 'verificationTimedOut');
           return;
         }}
       }} catch (error) {{
@@ -2214,7 +2227,8 @@ def html_document(
       clearVerifyCountdown();
       setSync('syncing');
       try {{
-        const data = await githubRequest(`/repos/${{stateRepo}}/contents/${{statePath}}?ref=${{stateBranch}}`);
+        const cacheKey = Date.now();
+        const data = await githubRequest(`/repos/${{stateRepo}}/contents/${{statePath}}?ref=${{stateBranch}}&_=${{cacheKey}}`);
         remoteSha = data.sha;
         remoteState = JSON.parse(decodeBase64Unicode(data.content));
         remoteState.done ||= {{}};
@@ -2226,14 +2240,15 @@ def html_document(
           }}
         }}
         try {{
-          const reportData = await githubRequest(`/repos/${{stateRepo}}/contents/${{reportPath}}?ref=${{stateBranch}}`);
+          const reportData = await githubRequest(`/repos/${{stateRepo}}/contents/${{reportPath}}?ref=${{stateBranch}}&_=${{cacheKey}}`);
           verificationReport = JSON.parse(decodeBase64Unicode(reportData.content));
         }} catch (reportError) {{
           console.warn(reportError);
         }}
         setSync(githubToken() ? 'synced' : 'viewOnly');
         if (!options.preserveVerifyState) setVerifyState(githubToken() ? 'verificationReady' : 'verificationTokenRequired');
-        await refreshVerificationRunLink();
+        render();
+        if (!options.skipRunLinkRefresh) await refreshVerificationRunLink();
       }} catch (error) {{
         setSync('syncError');
         console.error(error);
@@ -3615,7 +3630,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v10';
+    return """const CACHE = 'onnellab-manual-publish-v11';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {

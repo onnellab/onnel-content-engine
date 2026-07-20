@@ -21,6 +21,63 @@ class VerifyManualPublicationsTest(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    def test_retries_pending_public_check_and_records_later_match(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            social = root / "social.json"
+            syndication = root / "syndication.json"
+            state = root / "state.json"
+            report = root / "report.json"
+            canonical_url = "https://onnellab.github.io/blog/en/retry-example/"
+            self.write_json(
+                social,
+                {
+                    "posts": [
+                        {
+                            "topic_id": "TOPIC-RETRY",
+                            "platform": "bluesky",
+                            "language": "en",
+                            "template_id": "bluesky",
+                            "status": "draft",
+                            "canonical_url": canonical_url,
+                            "is_variant": False,
+                        }
+                    ]
+                },
+            )
+            self.write_json(syndication, {"drafts": []})
+            self.write_json(state, {"version": 1, "done": {}})
+            calls = 0
+
+            def fetch_json(_url: str, _headers: dict[str, str] | None = None) -> object:
+                nonlocal calls
+                calls += 1
+                if calls == 1:
+                    return {"feed": []}
+                return {
+                    "feed": [
+                        {
+                            "post": {
+                                "uri": "at://did:plc:test/app.bsky.feed.post/retry123",
+                                "record": {"text": canonical_url},
+                            }
+                        }
+                    ]
+                }
+
+            verified = verify_manual_publications(
+                social,
+                syndication,
+                state,
+                report,
+                fetch_json=fetch_json,
+                retry_attempts=2,
+            )
+
+            self.assertEqual(calls, 2)
+            self.assertEqual([row.manual_key for row in verified], ["TOPIC-RETRY::bluesky::en::bluesky"])
+            self.assertIn("TOPIC-RETRY::bluesky::en::bluesky", json.loads(state.read_text(encoding="utf-8"))["done"])
+
     def test_verifies_public_api_rss_and_visual_pages_into_state(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

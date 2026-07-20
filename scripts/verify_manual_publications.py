@@ -10,6 +10,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -418,6 +419,8 @@ def verify_manual_publications(
     fetch_json: FetchJson = fetch_json_url,
     fetch_text: FetchText = fetch_text_url,
     visual_text: VisualText = playwright_page_text,
+    retry_attempts: int = 1,
+    retry_delay_seconds: float = 0,
 ) -> list[Verification]:
     state = load_json(state_path) or {"version": 1, "updated_at": "", "done": {}}
     items = load_items(social_manifest, syndication_manifest)
@@ -428,11 +431,19 @@ def verify_manual_publications(
         if already_done(item, state):
             already_done_items.append(item)
             continue
-        verification = verify_item(item, fetch_json, fetch_text, visual_text, visual_public_pages)
-        if verification:
-            verifications.append(verification)
-        else:
-            pending_items.append(item)
+        pending_items.append(item)
+    attempts = max(1, retry_attempts)
+    for attempt in range(attempts):
+        next_pending: list[dict[str, Any]] = []
+        for item in pending_items:
+            verification = verify_item(item, fetch_json, fetch_text, visual_text, visual_public_pages)
+            if verification:
+                verifications.append(verification)
+            else:
+                next_pending.append(item)
+        pending_items = next_pending
+        if pending_items and attempt + 1 < attempts and retry_delay_seconds > 0:
+            time.sleep(retry_delay_seconds)
     timestamp = (now or datetime.now(ZoneInfo("Asia/Seoul"))).replace(microsecond=0).isoformat()
     if verifications and not dry_run:
         update_state(state, verifications, datetime.fromisoformat(timestamp))
@@ -511,6 +522,8 @@ def main() -> int:
     parser.add_argument("--state", type=Path, default=DEFAULT_STATE)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument("--visual-public-pages", action="store_true", help="Use Playwright to inspect public Twitter/LinkedIn pages")
+    parser.add_argument("--retry-attempts", type=int, default=1, help="Retry pending public checks before reporting them")
+    parser.add_argument("--retry-delay-seconds", type=float, default=0, help="Delay between public check retries")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     try:
@@ -521,6 +534,8 @@ def main() -> int:
             args.report,
             visual_public_pages=args.visual_public_pages,
             dry_run=args.dry_run,
+            retry_attempts=args.retry_attempts,
+            retry_delay_seconds=args.retry_delay_seconds,
         )
     except (PublicationVerificationError, OSError, json.JSONDecodeError) as error:
         print(f"publication verification failed: {error}", file=sys.stderr)

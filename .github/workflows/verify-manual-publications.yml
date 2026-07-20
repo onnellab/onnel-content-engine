@@ -66,9 +66,9 @@ jobs:
         run: |
           set -euo pipefail
           if [ "${{ inputs.visual_public_pages }}" = "true" ]; then
-            python3 scripts/verify_manual_publications.py --visual-public-pages
+            python3 scripts/verify_manual_publications.py --visual-public-pages --retry-attempts 3 --retry-delay-seconds 5
           else
-            python3 scripts/verify_manual_publications.py
+            python3 scripts/verify_manual_publications.py --retry-attempts 3 --retry-delay-seconds 5
           fi
 
       - name: Check store homepage versions
