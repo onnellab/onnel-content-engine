@@ -28,11 +28,11 @@ codex login status 2>&1 | grep -q "Logged in using ChatGPT"
 
 RUN_STAMP="$(date +%Y%m%d-%H%M%S)"
 RUN_LOG="${LOG_DIR}/${RUN_STAMP}.log"
-codex --search exec \
-  --ephemeral \
+codex --search \
   --sandbox workspace-write \
   --ask-for-approval never \
   --cd "${CONTENT_ROOT}" \
+  exec --ephemeral \
   - < "${PROMPT_FILE}" | tee "${RUN_LOG}"
 
 python3 scripts/validate_topics.py
