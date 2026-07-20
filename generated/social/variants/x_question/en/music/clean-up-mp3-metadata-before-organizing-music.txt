@@ -1,0 +1,5 @@
+Start with the constraints, then decide how to clean up MP3 metadata before adding songs to a library.
+
+Clean up MP3 metadata safely with a backup-first workflow for titles, artists, albums, track numbers, artwork, and library verification.
+
+https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/

@@ -1,0 +1,11 @@
+A reliable plan for how to clean up MP3 metadata before adding songs to a library starts with the result and constraints.
+
+Work on copies, define one naming convention, correct the identity and ordering fields first, add artwork only after the text is consistent, save a small test batch, and inspect that batch in the destination player. Do not infer uncertain facts from filenames.
+
+Before changing tools:
+- Create a reversible workspace. Copy a small album or five representative tracks into a test folder. Never begin with the only copy of the collection.
+- Identify each recording. Listen briefly when the filename and current title disagree. Mark uncertain tracks instead of guessing.
+- Normalize identity fields. Make title, artist, album, and album artist consistent. Use album artist deliberately for compilations or releases where track artists vary.
+
+Read the full article:
+https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/

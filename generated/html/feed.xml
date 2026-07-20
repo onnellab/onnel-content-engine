@@ -26,11 +26,25 @@
     <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
+    <title>How to Clean Up MP3 Metadata Before Organizing Music</title>
+    <link>https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/</link>
+    <guid>https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/</guid>
+    <description>Clean up MP3 metadata safely with a backup-first workflow for titles, artists, albums, track numbers, artwork, and library verification.</description>
+    <pubDate>Mon, 20 Jul 2026 05:56:51 GMT</pubDate>
+  </item>
+  <item>
     <title>로컬 미디어 파일을 비공개로 변환하는 방법</title>
     <link>https://onnellab.github.io/blog/ko/convert-local-media-files-privately/</link>
     <guid>https://onnellab.github.io/blog/ko/convert-local-media-files-privately/</guid>
     <description>로컬 미디어 파일을 서버로 보내지 않고 변환할 때 확인할 항목, 출력 형식 선택 기준, 로컬 미디어 변환기가 맞는 상황을 설명합니다.</description>
     <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>음악 정리 전 MP3 메타데이터를 정돈하는 방법</title>
+    <link>https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/</link>
+    <guid>https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/</guid>
+    <description>제목, 아티스트, 앨범, 트랙 번호, 앨범 아트를 백업 우선 방식으로 점검하고 MP3 메타데이터를 안전하게 정돈하는 방법을 설명합니다.</description>
+    <pubDate>Mon, 20 Jul 2026 05:56:51 GMT</pubDate>
   </item>
 </channel>
 </rss>

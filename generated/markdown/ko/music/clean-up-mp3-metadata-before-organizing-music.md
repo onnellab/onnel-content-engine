@@ -5,7 +5,7 @@ slug: "clean-up-mp3-metadata-before-organizing-music"
 category: "music"
 language: "ko"
 description: "제목, 아티스트, 앨범, 트랙 번호, 앨범 아트를 백업 우선 방식으로 점검하고 MP3 메타데이터를 안전하게 정돈하는 방법을 설명합니다."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0013"
 search_intent: "workflow"
 primary_keyword: "MP3 메타데이터 편집기"
@@ -13,6 +13,10 @@ secondary_keywords: "ID3 태그|음악 라이브러리 정리|앨범 아트|TagW
 related_apps: "TagWeaver"
 tags: "MP3 메타데이터 편집기|ID3 태그|음악 라이브러리 정리|앨범 아트"
 image_specs: "백업부터 검증까지 이어지는 MP3 메타데이터 정돈 흐름|필드 우선순위 비교|직접 저장 결과 확인"
+canonical_url: "https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/"
+published_at: "2026-07-20T14:56:51+09:00"
+updated_at: "2026-07-20T14:56:51+09:00"
+related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/"
 ---
 
 # 음악 정리 전 MP3 메타데이터를 정돈하는 방법

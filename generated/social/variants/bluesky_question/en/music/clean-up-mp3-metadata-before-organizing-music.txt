@@ -1,0 +1,5 @@
+Before you clean up MP3 metadata before adding songs to a library, separate the required result from the optional steps.
+
+Clean up MP3 metadata safely with a backup-first wor...
+
+https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/

@@ -41,6 +41,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 4
+      },
+      {
+        "topic_id": "TOPIC-0008",
+        "title": "How to Clean Up MP3 Metadata Before Organizing Music",
+        "slug": "clean-up-mp3-metadata-before-organizing-music",
+        "category": "music",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/music/clean-up-mp3-metadata-before-organizing-music.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [

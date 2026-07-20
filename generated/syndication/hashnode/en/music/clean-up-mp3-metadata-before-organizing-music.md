@@ -1,23 +1,14 @@
 ---
 title: "How to Clean Up MP3 Metadata Before Organizing Music"
-card_title: "How to Clean Up MP3 Metadata Before Organizing Music"
-slug: "clean-up-mp3-metadata-before-organizing-music"
-category: "music"
-language: "en"
-description: "Clean up MP3 metadata safely with a backup-first workflow for titles, artists, albums, track numbers, artwork, and library verification."
-status: "published"
-topic_id: "TOPIC-0008"
-search_intent: "workflow"
-primary_keyword: "MP3 metadata editor"
-secondary_keywords: "ID3 tags|music library organization|album artwork|TagWeaver"
-related_apps: "TagWeaver"
-tags: "MP3 metadata editor|ID3 tags|music library organization|album artwork"
-image_specs: "Backup-first MP3 metadata cleanup workflow|Field consistency comparison|Manual save verification"
 canonical_url: "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
-published_at: "2026-07-20T14:56:51+09:00"
-updated_at: "2026-07-20T14:56:51+09:00"
-related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/"
+tags: "mp3-metadata-editor,id3-tags,music-library-organization,album-artwork"
+cover_image: "https://onnellab.github.io/blog-assets/en/clean-up-mp3-metadata-before-organizing-music/social-card.png"
+publication_id: ""
 ---
+
+> ONNELLAB note: These are implementation-minded notes from our plain-text workflow research.
+
+
 
 # How to Clean Up MP3 Metadata Before Organizing Music
 
@@ -64,7 +55,7 @@ The goal is not to make every field non-empty. The goal is to make the fields yo
 7. **Save and reopen the files.** Close the editor, reopen the test batch, and confirm that text, numbering, and artwork were actually written.
 8. **Test the destination library.** Import only the small batch. Inspect grouping, sort order, search results, non-Latin characters, and cover display before repeating the process.
 
-![Workflow diagram](/blog-assets/en/clean-up-mp3-metadata-before-organizing-music/workflow-diagram.svg "Backup-first MP3 metadata cleanup workflow")
+![Workflow diagram](https://onnellab.github.io/blog-assets/en/clean-up-mp3-metadata-before-organizing-music/workflow-diagram.svg "Backup-first MP3 metadata cleanup workflow")
 
 ## Field Priority Comparison
 
@@ -87,7 +78,7 @@ Changing metadata does not improve audio quality, repair damaged audio, or prove
 
 ## ONNELLAB Application
 
-[TagWeaver](/apps/tagweaver/) fits this manual, local cleanup workflow when you need an MP3 metadata editor for selected files. Its public store listings document editing for core identity fields, track and disc values, artwork, lyrics, and batch selections, with explicit save control. The current iOS listing also describes FLAC Vorbis Comment support, while the Google Play listing documents MP3 ID3 v2.3 and v2.4; check the relevant store listing for the format and platform you use.
+[TagWeaver](https://onnellab.github.io/apps/tagweaver/) fits this manual, local cleanup workflow when you need an MP3 metadata editor for selected files. Its public store listings document editing for core identity fields, track and disc values, artwork, lyrics, and batch selections, with explicit save control. The current iOS listing also describes FLAC Vorbis Comment support, while the Google Play listing documents MP3 ID3 v2.3 and v2.4; check the relevant store listing for the format and platform you use.
 
 The app is a tool for applying decisions, not a source of music facts. Establish conventions, verify the recording, and test the saved output before expanding a batch.
 
@@ -131,3 +122,7 @@ Totals such as `4/9` are useful when you know the complete release. A correct po
 ### Can changing tags reduce audio quality?
 
 A metadata-only save is conceptually separate from audio encoding. Keep a backup and verify the saved file because an editor's exact write behavior still matters.
+
+---
+
+Originally published at https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/
