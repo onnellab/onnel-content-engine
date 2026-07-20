@@ -1244,6 +1244,7 @@ def html_document(
         verificationReady: '실행',
         verificationTokenRequired: '토큰 필요',
         verificationFailed: '실패',
+        verificationTimedOut: '확인 시간 초과 · 실행 기록에서 상태를 확인해 주세요',
         verificationRefreshIn: '자동 재확인',
         secondsShort: '초',
         tokenNeededNote: 'ONNELLAB_GITHUB_PAGES_TOKEN 입력 후 동기화와 공개 확인을 실행할 수 있습니다.',
@@ -1390,7 +1391,7 @@ def html_document(
         copyBodyAndOpen: '본문 복사 후 열기',
         copyAndOpen: '복사 후 열기',
         copyFormattedAndOpen: '서식 복사 후 열기',
-        markDone: '완료 표시',
+        markDone: '게시 완료 반영',
         undoDone: '완료 취소',
         copyImage: '이미지 복사',
         openImage: '이미지 열기',
@@ -1456,6 +1457,7 @@ def html_document(
         verificationReady: 'Run',
         verificationTokenRequired: 'Token needed',
         verificationFailed: 'Failed',
+        verificationTimedOut: 'Check timed out · open the run log for its final status',
         verificationRefreshIn: 'auto refresh',
         secondsShort: 's',
         tokenNeededNote: 'Enter ONNELLAB_GITHUB_PAGES_TOKEN to run sync and public profile checks.',
@@ -1602,7 +1604,7 @@ def html_document(
         copyBodyAndOpen: 'Copy body and open',
         copyAndOpen: 'Copy and open',
         copyFormattedAndOpen: 'Copy formatted and open',
-        markDone: 'Mark done',
+        markDone: 'Apply publish completion',
         undoDone: 'Undo done',
         copyImage: 'Copy image',
         openImage: 'Open image',
@@ -1692,6 +1694,7 @@ def html_document(
     let verifyCountdownTimer = null;
     let verifyCountdownRemaining = 0;
     let latestVerificationRunUrl = '';
+    const githubRequestTimeoutMs = 15000;
 
     tokenInput.value = localStorage.getItem(tokenKey) || '';
 
@@ -2033,7 +2036,12 @@ def html_document(
     }}
 
     async function latestVerificationRun() {{
-      const query = new URLSearchParams({{ branch: stateBranch, event: 'workflow_dispatch', per_page: '1' }});
+      const query = new URLSearchParams({{
+        branch: stateBranch,
+        event: 'workflow_dispatch',
+        per_page: '1',
+        _: String(Date.now()),
+      }});
       const data = await githubRequest(`/repos/${{stateRepo}}/actions/workflows/verify-manual-publications.yml/runs?${{query.toString()}}`);
       return data.workflow_runs?.[0] || null;
     }}
@@ -2058,7 +2066,7 @@ def html_document(
       return createdAt.getTime() >= dispatchedAt - 15000;
     }}
 
-    async function pollVerificationRun({{ previousRunId = null, dispatchedAt = 0, maxAttempts = 36 }} = {{}}) {{
+    async function pollVerificationRun({{ previousRunId = null, dispatchedAt = 0, maxAttempts = 24 }} = {{}}) {{
       clearVerifyCountdown();
       let run = null;
       for (let attempt = 0; attempt < maxAttempts; attempt += 1) {{
@@ -2073,7 +2081,7 @@ def html_document(
           setVerificationRunLink(run);
           setVerifyState(workflowRunLabel(run));
           if (run?.status === 'completed') {{
-            await loadRemoteState({{ refreshDashboardData: true }});
+            await loadRemoteState({{ refreshDashboardData: true, preserveVerifyState: true }});
             setVerifyState(completedVerificationLabel(run));
             return;
           }}
@@ -2082,7 +2090,18 @@ def html_document(
         }}
         await new Promise((resolve) => setTimeout(resolve, attempt < 4 ? 5000 : 10000));
       }}
-      startVerifyCountdown(30);
+      try {{
+        const finalRun = await latestVerificationRun();
+        if (isDispatchedVerificationRun(finalRun, previousRunId, dispatchedAt) && finalRun?.status === 'completed') {{
+          setVerificationRunLink(finalRun);
+          await loadRemoteState({{ refreshDashboardData: true, preserveVerifyState: true }});
+          setVerifyState(completedVerificationLabel(finalRun));
+          return;
+        }}
+      }} catch (error) {{
+        console.warn(error);
+      }}
+      setVerifyState('verificationTimedOut');
     }}
 
     function revealTokenInput() {{
@@ -2109,20 +2128,27 @@ def html_document(
     async function githubRequest(path, options = {{}}) {{
       const token = githubToken();
       const authHeaders = token ? {{ 'Authorization': 'Bearer ' + token }} : {{}};
-      const response = await fetch('https://api.github.com' + path, {{
-        cache: 'no-store',
-        ...options,
-        headers: {{
-          'Accept': 'application/vnd.github+json',
-          'X-GitHub-Api-Version': '2022-11-28',
-          ...authHeaders,
-          ...(options.headers || {{}}),
-        }},
-      }});
-      const text = await response.text();
-      const data = text ? JSON.parse(text) : {{}};
-      if (!response.ok) throw new Error(data.message || 'GitHub request failed');
-      return data;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), githubRequestTimeoutMs);
+      try {{
+        const response = await fetch('https://api.github.com' + path, {{
+          cache: 'no-store',
+          ...options,
+          signal: options.signal || controller.signal,
+          headers: {{
+            'Accept': 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            ...authHeaders,
+            ...(options.headers || {{}}),
+          }},
+        }});
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : {{}};
+        if (!response.ok) throw new Error(data.message || 'GitHub request failed');
+        return data;
+      }} finally {{
+        clearTimeout(timeoutId);
+      }}
     }}
 
     async function triggerPublicationVerification() {{
@@ -2206,7 +2232,7 @@ def html_document(
           console.warn(reportError);
         }}
         setSync(githubToken() ? 'synced' : 'viewOnly');
-        setVerifyState(githubToken() ? 'verificationReady' : 'verificationTokenRequired');
+        if (!options.preserveVerifyState) setVerifyState(githubToken() ? 'verificationReady' : 'verificationTokenRequired');
         await refreshVerificationRunLink();
       }} catch (error) {{
         setSync('syncError');
@@ -2445,6 +2471,7 @@ def html_document(
     }}
 
     function pendingReportReason(item) {{
+      if (isDone(item)) return '';
       const row = verificationReportRecord(item);
       return row?.status === 'pending' ? row.reason || '' : '';
     }}
@@ -2467,13 +2494,19 @@ def html_document(
     async function markDone(item, button) {{
       remoteState.done ||= {{}};
       const previousDone = remoteState.done[item.manual_key];
+      const markedAt = new Date().toISOString();
       const localDone = {{
         [item.manual_key]: {{
         topic_id: item.topic_id,
         platform: item.platform,
         language: item.language,
         template_id: item.template_id,
-        marked_at: new Date().toISOString(),
+        marked_at: markedAt,
+        marked_by: 'manual_user_confirmation',
+        posted_url: item.posted_url || platformProfileUrl(item.platform),
+        verified_at: markedAt,
+        verification_method: 'user_confirmed_manual_publish',
+        verification_confidence: 'manual',
         }}
       }};
       Object.assign(remoteState.done, localDone);
@@ -3582,7 +3615,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v9';
+    return """const CACHE = 'onnellab-manual-publish-v10';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {

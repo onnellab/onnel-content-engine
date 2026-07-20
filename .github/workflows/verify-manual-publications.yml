@@ -16,6 +16,7 @@ jobs:
   verify:
     name: Verify manual publication completion
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     permissions:
       contents: write
     env:

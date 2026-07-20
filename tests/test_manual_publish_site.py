@@ -363,6 +363,11 @@ Body
             self.assertIn("className = 'spinner'", html)
             self.assertIn("verificationQueued", html)
             self.assertIn("verificationRunning", html)
+            self.assertIn("verificationTimedOut", html)
+            self.assertIn("githubRequestTimeoutMs = 15000", html)
+            self.assertIn("controller.abort()", html)
+            self.assertIn("refreshDashboardData: true, preserveVerifyState: true", html)
+            self.assertIn("setVerifyState('verificationTimedOut')", html)
             self.assertIn("자동 재확인", html)
             self.assertIn("verification-automatic", html)
             self.assertIn("공개 페이지 확인", html)
@@ -377,6 +382,8 @@ Body
             self.assertNotIn("item.last_attempt_at || item.approved_at || postedOrVerifiedAt(item)", html)
             self.assertIn("if (!date) return String(value);", html)
             self.assertIn("const previousDone = remoteState.done[item.manual_key];", html)
+            self.assertIn("verification_method: 'user_confirmed_manual_publish'", html)
+            self.assertIn("posted_url: item.posted_url || platformProfileUrl(item.platform)", html)
             self.assertIn("cache: 'no-store'", html)
             self.assertIn("Object.assign(remoteState.done, localDone);\n      render();", html)
             self.assertIn("else delete remoteState.done[item.manual_key];", html)
@@ -395,7 +402,7 @@ Body
             self.assertNotIn("favicon-16x16.png", manifest)
             self.assertTrue((output.parent / "manifest.webmanifest").exists())
             self.assertTrue((output.parent / "sw.js").exists())
-            self.assertIn("onnellab-manual-publish-v9", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("onnellab-manual-publish-v10", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_filters_stale_verification_report_items(self) -> None:
         report = current_verification_report(

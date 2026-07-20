@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-20T15:38:57+09:00",
+  "checked_at": "2026-07-20T15:58:25+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 18,
-    "already_done": 12,
+    "already_done": 13,
     "verified": 0,
-    "pending": 6
+    "pending": 5
   },
   "items": [
     {
@@ -159,11 +159,11 @@
       "platform": "x",
       "language": "en",
       "template_id": "x",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab",
+      "verification_method": "user_confirmed_manual_publish",
+      "verification_confidence": "manual"
     },
     {
       "manual_key": "TOPIC-0008::bluesky::en::bluesky",
