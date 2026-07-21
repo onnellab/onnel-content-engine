@@ -48,12 +48,12 @@
         "slug": "clean-up-mp3-metadata-before-organizing-music",
         "category": "music",
         "language": "en",
-        "status": "review",
-        "url": "generated/markdown/en/music/clean-up-mp3-metadata-before-organizing-music.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 2
+        "score": 3
       }
     ],
     "related_apps": [

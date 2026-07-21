@@ -1,10 +1,6 @@
 # App Release Status
 
-<<<<<<< Updated upstream
-Generated: 2026-07-21T08:49:52+09:00
-=======
-Generated: 2026-07-21T08:51:16+09:00
->>>>>>> Stashed changes
+Generated: 2026-07-21T11:40:54+09:00
 
 ## Summary
 
