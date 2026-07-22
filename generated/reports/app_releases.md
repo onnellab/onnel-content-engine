@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-07-22T12:02:39+09:00
+Generated: 2026-07-22T13:39:56+09:00
 
 ## Summary
 
@@ -41,7 +41,7 @@ Generated: 2026-07-22T12:02:39+09:00
 | REL-0004 | TagWeaver | ios | public | v2.2 | released | Released | https://github.com/onnellab/tagweaver/releases/tag/v2.2 | - | 사소한 버그를 수정하고 안정성을 개선했어요. | No action |
 | REL-0005 | ClipNest | ios | public | v1.0.2 | released | Released | https://github.com/onnellab/clipnest/releases/tag/v1.0.2 | - | 사소한 버그를 수정하고 안정성을 개선했어요. | No action |
 | REL-0006 | ClipNest | ios | private_test | v1.0.4 | planned | Private test; public Release disabled | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Private test only; do not publish public GitHub Release |
-| REL-0007 | Segra | android | public | v1.0.4 | planned | Waiting for artifact and public approval | - | - | Local Flutter build metadata version. | Replace placeholder with public patch notes |
+| REL-0007 | Segra | android | public | v1.0.4 | planned | Public approved, waiting for artifact | - | - | Local Flutter build metadata version. | Replace placeholder with public patch notes |
 
 ## Attention Queue
 
