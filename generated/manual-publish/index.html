@@ -2438,43 +2438,6 @@
           row.textContent = t('noStore');
           card.appendChild(row);
         }
-        const visibleFlutterDependencies = group.flutterDependencies.filter(displayFlutterDependency);
-        if (visibleFlutterDependencies.length) {
-          const dependencyHeader = document.createElement('div');
-          dependencyHeader.className = 'app-status-row is-store';
-          const dependencyTitle = document.createElement('b');
-          dependencyTitle.textContent = t('flutterDependencyVersions');
-          const dependencySummary = document.createElement('span');
-          dependencySummary.textContent = `${visibleFlutterDependencies.length} / ${t('dependencyStatusLabel')}`;
-          dependencyHeader.appendChild(dependencyTitle);
-          dependencyHeader.appendChild(dependencySummary);
-          card.appendChild(dependencyHeader);
-          visibleFlutterDependencies
-            .sort((a, b) => `${a.package_type}:${a.package_name}`.localeCompare(`${b.package_type}:${b.package_name}`))
-            .forEach((item) => {
-              const row = document.createElement('div');
-              row.className = 'app-status-row is-store';
-              const packageName = document.createElement('b');
-              const packageTitle = item.package_name || t('none');
-              const packageKind = item.package_type === 'flutter_sdk' ? t('flutterSdk') : t('flutterPlugin');
-              packageName.textContent = `${packageKind}: ${packageTitle}`;
-              const status = document.createElement('span');
-              status.textContent = `${t('dependencyStatusLabel')}: ${item.status || t('none')}`;
-              const declared = document.createElement('span');
-              declared.textContent = `${t('dependencyDeclared')}: ${item.declared_version || item.flutter_constraint || t('none')}`;
-              const resolved = document.createElement('span');
-              resolved.textContent = `${t('dependencyResolved')}: ${item.resolved_version || t('none')}`;
-              const source = document.createElement('span');
-              source.textContent = `${t('dependencySource')}: ${item.source || t('none')}`;
-              row.append(packageName, status, declared, resolved, source);
-              card.appendChild(row);
-            });
-        } else {
-          const row = document.createElement('div');
-          row.className = 'app-status-row is-store';
-          row.textContent = `${t('flutterDependencyVersions')}: ${t('none')}`;
-          card.appendChild(row);
-        }
         if (group.releases.length) {
           group.releases
             .sort((a, b) => a.platform.localeCompare(b.platform))
@@ -2512,6 +2475,43 @@
           const row = document.createElement('div');
           row.className = 'app-status-row is-release';
           row.textContent = t('noRelease');
+          card.appendChild(row);
+        }
+        const visibleFlutterDependencies = group.flutterDependencies.filter(displayFlutterDependency);
+        if (visibleFlutterDependencies.length) {
+          const dependencyHeader = document.createElement('div');
+          dependencyHeader.className = 'app-status-row is-store';
+          const dependencyTitle = document.createElement('b');
+          dependencyTitle.textContent = t('flutterDependencyVersions');
+          const dependencySummary = document.createElement('span');
+          dependencySummary.textContent = `${visibleFlutterDependencies.length} / ${t('dependencyStatusLabel')}`;
+          dependencyHeader.appendChild(dependencyTitle);
+          dependencyHeader.appendChild(dependencySummary);
+          card.appendChild(dependencyHeader);
+          visibleFlutterDependencies
+            .sort((a, b) => `${a.package_type}:${a.package_name}`.localeCompare(`${b.package_type}:${b.package_name}`))
+            .forEach((item) => {
+              const row = document.createElement('div');
+              row.className = 'app-status-row is-store';
+              const packageName = document.createElement('b');
+              const packageTitle = item.package_name || t('none');
+              const packageKind = item.package_type === 'flutter_sdk' ? t('flutterSdk') : t('flutterPlugin');
+              packageName.textContent = `${packageKind}: ${packageTitle}`;
+              const status = document.createElement('span');
+              status.textContent = `${t('dependencyStatusLabel')}: ${item.status || t('none')}`;
+              const declared = document.createElement('span');
+              declared.textContent = `${t('dependencyDeclared')}: ${item.declared_version || item.flutter_constraint || t('none')}`;
+              const resolved = document.createElement('span');
+              resolved.textContent = `${t('dependencyResolved')}: ${item.resolved_version || t('none')}`;
+              const source = document.createElement('span');
+              source.textContent = `${t('dependencySource')}: ${item.source || t('none')}`;
+              row.append(packageName, status, declared, resolved, source);
+              card.appendChild(row);
+            });
+        } else {
+          const row = document.createElement('div');
+          row.className = 'app-status-row is-store';
+          row.textContent = `${t('flutterDependencyVersions')}: ${t('none')}`;
           card.appendChild(row);
         }
         appStatusGrid.appendChild(card);
