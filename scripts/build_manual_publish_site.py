@@ -1359,6 +1359,7 @@ def html_document(
         appStatusSummary: '앱별 묶음',
         flutterSdk: 'Flutter SDK',
         flutterDependencyVersions: 'Flutter/플러그인 버전',
+        flutterPlugin: '플러그인',
         dependencyStatusLabel: '상태',
         dependencyResolved: '해결 버전',
         dependencyDeclared: '선언 버전',
@@ -1578,6 +1579,7 @@ def html_document(
         appStatusSummary: 'grouped by app',
         flutterSdk: 'Flutter SDK',
         flutterDependencyVersions: 'Flutter/plugin versions',
+        flutterPlugin: 'Plugin',
         dependencyStatusLabel: 'Status',
         dependencyResolved: 'Resolved',
         dependencyDeclared: 'Declared',
@@ -3295,12 +3297,16 @@ def html_document(
       return item.kind === 'home' ? t('homePageUpdated') : t('appPageUpdated');
     }}
 
+    function displayFlutterDependency(item) {{
+      return !(item.package_type === 'dependency' && item.declared_version === 'sdk:flutter');
+    }}
+
     function renderAppStatusSummary() {{
       appStatusGrid.textContent = '';
       const groups = appStatusGroups();
       const storeCount = storeItems.length;
       const releaseCount = releases.length;
-      const dependencyCount = flutterDependencyItems.length;
+      const dependencyCount = flutterDependencyItems.filter(displayFlutterDependency).length;
       const checkedDates = storeItems
         .map((item) => parseDate(item.checked_at))
         .filter((date) => date instanceof Date && !Number.isNaN(date.getTime()));
@@ -3342,24 +3348,25 @@ def html_document(
           row.textContent = t('noStore');
           card.appendChild(row);
         }}
-        if (group.flutterDependencies.length) {{
+        const visibleFlutterDependencies = group.flutterDependencies.filter(displayFlutterDependency);
+        if (visibleFlutterDependencies.length) {{
           const dependencyHeader = document.createElement('div');
           dependencyHeader.className = 'app-status-row is-store';
           const dependencyTitle = document.createElement('b');
           dependencyTitle.textContent = t('flutterDependencyVersions');
           const dependencySummary = document.createElement('span');
-          dependencySummary.textContent = `${{group.flutterDependencies.length}} / ${{t('dependencyStatusLabel')}}`;
+          dependencySummary.textContent = `${{visibleFlutterDependencies.length}} / ${{t('dependencyStatusLabel')}}`;
           dependencyHeader.appendChild(dependencyTitle);
           dependencyHeader.appendChild(dependencySummary);
           card.appendChild(dependencyHeader);
-          group.flutterDependencies
+          visibleFlutterDependencies
             .sort((a, b) => `${{a.package_type}}:${{a.package_name}}`.localeCompare(`${{b.package_type}}:${{b.package_name}}`))
             .forEach((item) => {{
               const row = document.createElement('div');
               row.className = 'app-status-row is-store';
               const packageName = document.createElement('b');
               const packageTitle = item.package_name || t('none');
-              const packageKind = item.package_type === 'flutter_sdk' ? t('flutterSdk') : t('flutterDependencyVersions');
+              const packageKind = item.package_type === 'flutter_sdk' ? t('flutterSdk') : t('flutterPlugin');
               packageName.textContent = `${{packageKind}}: ${{packageTitle}}`;
               const status = document.createElement('span');
               status.textContent = `${{t('dependencyStatusLabel')}}: ${{item.status || t('none')}}`;

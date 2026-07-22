@@ -4,15 +4,22 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import csv
+import json
+import os
 import re
 import sys
 from collections import defaultdict
 from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.parse import quote
+from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_REPOSITORIES_PATH = ROOT / "data" / "local_repositories.csv"
+APP_RELEASE_CONFIG_PATH = ROOT / "data" / "app_release_config.csv"
 LOCAL_REPOSITORIES_HEADER = [
     "app_id",
     "app_slug",
@@ -22,6 +29,7 @@ LOCAL_REPOSITORIES_HEADER = [
     "source_priority",
     "notes",
 ]
+APP_RELEASE_CONFIG_HEADER = ["app_id", "app_slug", "repository", "artifact_pattern", "notes"]
 OUTPUT_CSV_PATH = ROOT / "data" / "app_flutter_dependency_versions.csv"
 OUTPUT_REPORT_PATH = ROOT / "generated" / "reports" / "app_flutter_dependency_versions.md"
 OUTPUT_HEADER = [
@@ -47,6 +55,16 @@ def read_csv(path: Path, expected_header: list[str]) -> list[dict[str, str]]:
         if reader.fieldnames != expected_header:
             raise FlutterDependencySyncError(f"{path} header mismatch")
         return [{key: (value or "").strip() for key, value in row.items()} for row in reader]
+
+
+def app_release_repository_index(path: Path = APP_RELEASE_CONFIG_PATH) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    return {
+        row["app_id"]: row["repository"]
+        for row in read_csv(path, APP_RELEASE_CONFIG_HEADER)
+        if row.get("app_id") and row.get("repository")
+    }
 
 
 def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
@@ -106,10 +124,9 @@ def normalize_dependency_value(raw: str) -> str:
     return value.strip()
 
 
-def parse_pubspec(
-    path: Path,
+def parse_pubspec_lines(
+    lines: list[str],
 ) -> tuple[str, dict[str, str], dict[str, str]]:
-    text = path.read_text(encoding="utf-8").splitlines()
     flutter_constraint = ""
     dependencies: dict[str, str] = {}
     dev_dependencies: dict[str, str] = {}
@@ -117,7 +134,7 @@ def parse_pubspec(
     active_dependency: tuple[str, str] | None = None
     # tuple(package, section): capture nested entries like `git:` and `path:`
 
-    for raw_line in text:
+    for raw_line in lines:
         line = raw_line.rstrip()
         stripped = line.lstrip()
         if not stripped or stripped.startswith("#"):
@@ -171,11 +188,12 @@ def parse_pubspec(
     return flutter_constraint, dependencies, dev_dependencies
 
 
-def parse_pubspec_lock(path: Path) -> dict[str, str]:
-    if not path.exists():
-        return {}
+def parse_pubspec(path: Path) -> tuple[str, dict[str, str], dict[str, str]]:
+    return parse_pubspec_lines(path.read_text(encoding="utf-8").splitlines())
+
+
+def parse_pubspec_lock_lines(lines: list[str]) -> dict[str, str]:
     versions: dict[str, str] = {}
-    lines = path.read_text(encoding="utf-8").splitlines()
     in_packages = False
     current: str | None = None
     for raw_line in lines:
@@ -196,6 +214,86 @@ def parse_pubspec_lock(path: Path) -> dict[str, str]:
         if match_version:
             versions[current] = match_version.group(1)
     return versions
+
+
+def parse_pubspec_lock_sdks_lines(lines: list[str]) -> dict[str, str]:
+    sdks: dict[str, str] = {}
+    in_sdks = False
+    for raw_line in lines:
+        line = raw_line.rstrip()
+        if not in_sdks:
+            if line == "sdks:":
+                in_sdks = True
+            continue
+        if line and not line.startswith(" "):
+            break
+        match_sdk = re.match(r'^\s{2}([A-Za-z0-9_\\-]+):\s*"?([^"]+)"?\s*$', raw_line)
+        if match_sdk:
+            sdks[match_sdk.group(1)] = match_sdk.group(2).strip()
+    return sdks
+
+
+def parse_pubspec_lock(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    return parse_pubspec_lock_lines(path.read_text(encoding="utf-8").splitlines())
+
+
+def github_token() -> str:
+    return (
+        os.environ.get("GITHUB_TOKEN")
+        or os.environ.get("GH_TOKEN")
+        or os.environ.get("ONNELLAB_GITHUB_PAGES_TOKEN")
+        or ""
+    )
+
+
+def github_api_json(url: str, token: str) -> dict[str, object]:
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "onnel-content-engine",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = Request(url, headers=headers)
+    with urlopen(request, timeout=20) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def github_file_text(repository: str, path: str, token: str) -> str:
+    repo_data = github_api_json(f"https://api.github.com/repos/{repository}", token)
+    default_branch = str(repo_data.get("default_branch") or "main")
+    encoded_path = quote(path, safe="/")
+    content_url = (
+        f"https://api.github.com/repos/{repository}/contents/{encoded_path}"
+        f"?ref={quote(default_branch, safe='')}"
+    )
+    content = github_api_json(content_url, token)
+    if content.get("encoding") != "base64" or "content" not in content:
+        raise FlutterDependencySyncError(f"{repository}/{path} is not a base64 file response")
+    return base64.b64decode(str(content["content"])).decode("utf-8")
+
+
+def remote_pubspec_path(repository_name: str, app_slug: str, pubspec_path: str) -> str:
+    if "/" in pubspec_path:
+        return pubspec_path
+    if repository_name == "onnellab-text":
+        return f"{app_slug}/{pubspec_path}"
+    return pubspec_path
+
+
+def missing_repository_row(app_id: str, app_slug: str, status: str, source: str) -> dict[str, str]:
+    return {
+        "app_id": app_id,
+        "app_slug": app_slug,
+        "package_type": "repository",
+        "package_name": "path",
+        "declared_version": "",
+        "resolved_version": "",
+        "flutter_constraint": "",
+        "status": status,
+        "source": source,
+    }
 
 
 def dependency_rows(
@@ -243,31 +341,55 @@ def sync_flutter_plugin_versions(
     dry_run: bool = False,
 ) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
+    release_repositories = app_release_repository_index()
+    token = github_token()
 
     for repository in read_csv(repositories_path, LOCAL_REPOSITORIES_HEADER):
         app_id = repository["app_id"]
         app_slug = repository["app_slug"]
+        github_repository = release_repositories.get(app_id, "")
         repo_root = Path(repository["path"])
         pubspec_path = repo_root / repository["pubspec_path"]
         source = pubspec_path.as_posix()
 
         if not repo_root.exists():
-            rows.append(
-                {
-                    "app_id": app_id,
-                    "app_slug": app_slug,
-                    "package_type": "repository",
-                    "package_name": "path",
-                    "declared_version": "",
-                    "resolved_version": "",
-                    "flutter_constraint": "",
-                    "status": "missing_repo",
-                    "source": repo_root.as_posix(),
-                }
-            )
-            continue
+            if github_repository:
+                remote_pubspec = remote_pubspec_path(
+                    repository["repository_name"],
+                    app_slug,
+                    repository["pubspec_path"],
+                )
+                try:
+                    pubspec_text = github_file_text(github_repository, remote_pubspec, token)
+                    lock_path = str(Path(remote_pubspec).with_name("pubspec.lock")).replace("\\", "/")
+                    try:
+                        lock_text = github_file_text(github_repository, lock_path, token)
+                    except (FlutterDependencySyncError, HTTPError, URLError, TimeoutError, OSError):
+                        lock_text = ""
+                    flutter_constraint, dependencies, dev_dependencies = parse_pubspec_lines(
+                        pubspec_text.splitlines()
+                    )
+                    lock_lines = lock_text.splitlines() if lock_text else []
+                    lock_versions = parse_pubspec_lock_lines(lock_lines) if lock_lines else {}
+                    lock_sdks = parse_pubspec_lock_sdks_lines(lock_lines) if lock_lines else {}
+                    flutter_constraint = flutter_constraint or lock_sdks.get("flutter", "")
+                    has_lock = bool(lock_text)
+                    source = f"github:{github_repository}/{remote_pubspec}"
+                except (FlutterDependencySyncError, HTTPError, URLError, TimeoutError, OSError):
+                    rows.append(
+                        missing_repository_row(
+                            app_id,
+                            app_slug,
+                            "missing_repo_and_remote",
+                            f"{repo_root.as_posix()} | github:{github_repository}/{remote_pubspec}",
+                        )
+                    )
+                    continue
+            else:
+                rows.append(missing_repository_row(app_id, app_slug, "missing_repo", repo_root.as_posix()))
+                continue
 
-        if not pubspec_path.exists():
+        elif not pubspec_path.exists():
             rows.append(
                 {
                     "app_id": app_id,
@@ -282,11 +404,14 @@ def sync_flutter_plugin_versions(
                 }
             )
             continue
-
-        flutter_constraint, dependencies, dev_dependencies = parse_pubspec(pubspec_path)
-        lock_path = pubspec_path.with_name("pubspec.lock")
-        lock_versions = parse_pubspec_lock(lock_path)
-        has_lock = lock_path.exists()
+        else:
+            flutter_constraint, dependencies, dev_dependencies = parse_pubspec(pubspec_path)
+            lock_path = pubspec_path.with_name("pubspec.lock")
+            lock_lines = lock_path.read_text(encoding="utf-8").splitlines() if lock_path.exists() else []
+            lock_versions = parse_pubspec_lock_lines(lock_lines) if lock_lines else {}
+            lock_sdks = parse_pubspec_lock_sdks_lines(lock_lines) if lock_lines else {}
+            flutter_constraint = flutter_constraint or lock_sdks.get("flutter", "")
+            has_lock = lock_path.exists()
 
         rows.append(
             {
