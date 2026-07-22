@@ -38,6 +38,7 @@ DEFAULT_MELIVRA_AI_CREDIT_POLICY = ROOT / "data" / "melivra_ai_credit_policy.csv
 DEFAULT_FLUTTER_DEPENDENCY_VERSIONS = ROOT / "data" / "app_flutter_dependency_versions.csv"
 DEFAULT_HOMEPAGE_REPO = Path(os.environ.get("ONNELLAB_HOMEPAGE_REPO", "/mnt/c/dev/onnellab.github.io"))
 KST = ZoneInfo("Asia/Seoul")
+VERSION_PART_RE = re.compile(r"\d+|[A-Za-z]+")
 
 
 PLATFORM_LABELS = {
@@ -93,6 +94,42 @@ def read_csv_rows(path: Path) -> list[dict[str, str]]:
         return []
     with path.open("r", encoding="utf-8", newline="") as handle:
         return [{key: (value or "").strip() for key, value in row.items()} for row in csv.DictReader(handle)]
+
+
+def version_key(version: str) -> tuple[tuple[int, int | str], ...]:
+    key: list[tuple[int, int | str]] = []
+    for part in VERSION_PART_RE.findall(version):
+        if part.isdigit():
+            key.append((0, int(part)))
+        else:
+            key.append((1, part.lower()))
+    return tuple(key)
+
+
+def _release_id_to_int(release_id: str) -> int:
+    if release_id.startswith("REL-"):
+        try:
+            return int(release_id.removeprefix("REL-"))
+        except ValueError:
+            return 0
+    return 0
+
+
+def latest_platform_release_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Keep only the latest row per app/platform by version then release_id."""
+    latest: dict[tuple[str, str], dict[str, str]] = {}
+    for row in rows:
+        key = (row.get("app_id", ""), row.get("platform", ""))
+        current = latest.get(key)
+        if not current:
+            latest[key] = row
+            continue
+        if (version_key(row.get("version", "")) > version_key(current.get("version", ""))) or (
+            version_key(row.get("version", "")) == version_key(current.get("version", ""))
+            and _release_id_to_int(row.get("release_id", "")) > _release_id_to_int(current.get("release_id", ""))
+        ):
+            latest[key] = row
+    return list(latest.values())
 
 
 def read_topics(path: Path) -> dict[str, dict[str, str]]:
@@ -264,7 +301,7 @@ def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_p
         if row.get("release_id")
     }
     items: list[dict[str, str]] = []
-    for row in read_csv_rows(releases_path):
+    for row in latest_platform_release_rows(read_csv_rows(releases_path)):
         release_id = row.get("release_id", "")
         approval = approvals.get(release_id, {})
         public_release = approval.get("public_release", "").lower() == "true"
@@ -3264,7 +3301,13 @@ def html_document(
       const storeCount = storeItems.length;
       const releaseCount = releases.length;
       const dependencyCount = flutterDependencyItems.length;
-      appStatusSummary.textContent = `${{groups.length}} apps / ${{storeCount}} stores / ${{releaseCount}} releases / ${{dependencyCount}} plugin rows / ${{releaseSyncSummaryText()}}`;
+      const checkedDates = storeItems
+        .map((item) => parseDate(item.checked_at))
+        .filter((date) => date instanceof Date && !Number.isNaN(date.getTime()));
+      const latestCheckedAtText = checkedDates.length
+        ? `${{t('checkedAt')}}: ${{formatDate(new Date(Math.max(...checkedDates.map((value) => value.getTime())))}}`
+        : `${{t('checkedAt')}}: ${{t('none')}}`;
+      appStatusSummary.textContent = `${{groups.length}} apps / ${{storeCount}} stores / ${{releaseCount}} releases / ${{dependencyCount}} plugin rows / ${{latestCheckedAtText}} / ${{releaseSyncSummaryText()}}`;
       groups.forEach((group) => {{
         const card = document.createElement('div');
         card.className = 'app-status-card';
@@ -3282,9 +3325,7 @@ def html_document(
             version.textContent = `${{t('currentVersion')}}: ${{item.version || t('none')}} / ${{item.status || t('none')}}`;
             const published = document.createElement('span');
             published.textContent = `${{t('releasedDate')}}: ${{formatPublishedDate(item.published_at)}}`;
-            const checked = document.createElement('span');
-            checked.textContent = `${{t('checkedAt')}}: ${{formatDate(item.checked_at)}}`;
-            row.append(label, version, published, checked);
+            row.append(label, version, published);
             if (item.release_notes) {{
               const notes = document.createElement('span');
               notes.textContent = `${{t('releaseNotes')}}: ${{item.release_notes}}`;
