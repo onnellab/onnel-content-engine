@@ -3304,8 +3304,11 @@ def html_document(
       const checkedDates = storeItems
         .map((item) => parseDate(item.checked_at))
         .filter((date) => date instanceof Date && !Number.isNaN(date.getTime()));
+      const latestCheckedAt = checkedDates.length
+        ? new Date(Math.max(...checkedDates.map((value) => value.getTime())))
+        : null;
       const latestCheckedAtText = checkedDates.length
-        ? `${{t('checkedAt')}}: ${{formatDate(new Date(Math.max(...checkedDates.map((value) => value.getTime())))}}`
+        ? `${{t('checkedAt')}}: ${{formatDate(latestCheckedAt)}}`
         : `${{t('checkedAt')}}: ${{t('none')}}`;
       appStatusSummary.textContent = `${{groups.length}} apps / ${{storeCount}} stores / ${{releaseCount}} releases / ${{dependencyCount}} plugin rows / ${{latestCheckedAtText}} / ${{releaseSyncSummaryText()}}`;
       groups.forEach((group) => {{
