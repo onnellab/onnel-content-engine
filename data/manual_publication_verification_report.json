@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-21T11:41:04+09:00",
+  "checked_at": "2026-07-22T11:38:40+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 18,
-    "already_done": 13,
+    "already_done": 15,
     "verified": 0,
-    "pending": 5
+    "pending": 3
   },
   "items": [
     {
@@ -94,6 +94,30 @@
       "verification_confidence": "manual"
     },
     {
+      "manual_key": "TOPIC-0008::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0008",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mr7c6qrg6b2i",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0008::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0008",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
+      "verification_method": "user_confirmed_manual_publish",
+      "verification_confidence": "manual"
+    },
+    {
       "manual_key": "TOPIC-0001::devto::en::markdown",
       "topic_id": "TOPIC-0001",
       "platform": "devto",
@@ -164,30 +188,6 @@
       "posted_url": "https://medium.com/@onnellab.app/how-to-convert-local-media-files-privately-7fb0b33e7db0?source=rss-ff84b0f2e139------2",
       "verification_method": "medium_rss",
       "verification_confidence": "medium"
-    },
-    {
-      "manual_key": "TOPIC-0008::bluesky::en::bluesky",
-      "topic_id": "TOPIC-0008",
-      "platform": "bluesky",
-      "language": "en",
-      "template_id": "bluesky",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0008::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0008",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
     },
     {
       "manual_key": "TOPIC-0008::devto::en::markdown",
