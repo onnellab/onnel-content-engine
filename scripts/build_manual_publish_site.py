@@ -3155,11 +3155,16 @@ def html_document(
         groups.get(key).items.push(item);
       }});
       [...groups.values()].sort((a, b) => a.app_name.localeCompare(b.app_name)).forEach((group) => {{
-        const card = document.createElement('div');
+        const card = document.createElement('details');
         card.className = 'app-status-card';
+        const summary = document.createElement('summary');
         const title = document.createElement('strong');
         title.appendChild(profileLink(group.app_name || t('none'), group.app_slug ? `/apps/${{group.app_slug}}/` : '/apps/'));
-        card.appendChild(title);
+        const cardSummary = document.createElement('span');
+        const missingPrices = group.items.filter((item) => !item.price).length;
+        cardSummary.textContent = `${{group.items.length}} ${{t('paidProduct')}} / ${{missingPrices}} ${{t('priceCheckNeeded')}}`;
+        summary.append(title, cardSummary);
+        card.appendChild(summary);
         group.items.forEach((item) => {{
           const row = document.createElement('div');
           row.className = pricingRowClass(item);
