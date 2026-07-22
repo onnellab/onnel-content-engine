@@ -369,6 +369,8 @@ def blog_status_items(topics_path: Path = DEFAULT_TOPICS) -> list[dict[str, str]
         {
             "topic_id": row.get("id", ""),
             "title": row.get("working_title", ""),
+            "category": row.get("category", ""),
+            "slug": row.get("slug", ""),
             "language": row.get("primary_language", ""),
             "status": row.get("status", ""),
             "published_url": row.get("published_url", ""),
@@ -2722,22 +2724,44 @@ def html_document(
       return next;
     }}
 
-    function hasBilingualBlogQueue() {{
+    function blogQueueCount() {{
       const groups = new Map();
       blogItems.forEach((item) => {{
-        if (!['approved', 'research', 'outline', 'draft', 'image_planning', 'review'].includes(item.status)) return;
+        if (!['idea', 'approved', 'research', 'outline', 'draft', 'image_planning', 'review'].includes(item.status)) return;
         const key = `${{item.category || ''}}::${{item.slug || ''}}`;
-        if (!groups.has(key)) groups.set(key, new Set());
-        groups.get(key).add(item.language);
+        if (key === '::') return;
+        groups.set(key, true);
       }});
-      return [...groups.values()].some((languages) => languages.has('en') && languages.has('ko'));
+      return groups.size;
+    }}
+
+    function upcomingBlogScheduledDates(limit = 4) {{
+      const scheduled = futureDates(blogItems
+        .filter((item) => item.status === 'scheduled' && item.scheduled_at)
+        .map((item) => item.scheduled_at))
+        .sort((a, b) => a - b);
+      if (scheduled.length >= limit) return scheduled.slice(0, limit);
+      const slots = [...scheduled];
+      const queueSlots = Math.max(0, blogQueueCount() - slots.length);
+      let next = slots.length ? slots[slots.length - 1] : nextAutomatedBlogSlot();
+      while (next && slots.length < limit && slots.length < scheduled.length + queueSlots) {{
+        if (!slots.some((date) => date.getTime() === next.getTime())) slots.push(next);
+        next = new Date(next.getTime() + (86400000 * 3));
+      }}
+      return slots.slice(0, limit);
+    }}
+
+    function upcomingPlatformScheduledDates(platform, limit = 4) {{
+      const delayDays = platform === 'linkedin' || platform === 'bluesky' ? 1 : 0;
+      return upcomingBlogScheduledDates(limit).map((date) => new Date(date.getTime() + (86400000 * delayDays)));
+    }}
+
+    function scheduleDatesText(dates) {{
+      return dates.length ? dates.map((date) => formatDate(date.toISOString())).join(' / ') : t('none');
     }}
 
     function nextBlogScheduledDate() {{
-      return futureDates(blogItems
-        .filter((item) => item.status === 'scheduled' && item.scheduled_at)
-        .map((item) => item.scheduled_at))
-        .sort((a, b) => a - b)[0] || (hasBilingualBlogQueue() ? nextAutomatedBlogSlot() : null);
+      return upcomingBlogScheduledDates(1)[0] || null;
     }}
 
     function nextManualDueDate() {{
@@ -3020,7 +3044,8 @@ def html_document(
       }}, {{}});
       const platformSummaryBadges = [[t('blogPlatformName'), blogItems.length, platformProfileUrl('blog')]];
       const latestPublished = latestDate(blogItems.map((item) => item.published_at));
-      const nextScheduled = nextBlogScheduledDate();
+      const upcomingBlogDates = upcomingBlogScheduledDates(4);
+      const nextScheduled = upcomingBlogDates[0] || null;
       const blogCard = document.createElement('div');
       blogCard.className = 'platform-card';
       const blogTitle = document.createElement('strong');
@@ -3034,7 +3059,7 @@ def html_document(
       const blogLatest = document.createElement('span');
       blogLatest.textContent = t('latestPublished') + ': ' + (latestPublished ? `${{formatDate(latestPublished.toISOString())}} (${{daysAgo(latestPublished.toISOString())}})` : t('none'));
       const blogNext = document.createElement('span');
-      blogNext.textContent = t('nextScheduled') + ': ' + (nextScheduled ? formatDate(nextScheduled.toISOString()) : t('none'));
+      blogNext.textContent = t('nextScheduled') + ': ' + scheduleDatesText(upcomingBlogDates);
       blogCard.append(blogTitle, blogStatus, blogLatest, blogNext);
       platformSummary.appendChild(blogCard);
 
@@ -3050,10 +3075,14 @@ def html_document(
           verificationCheckedAtForPlatform(rows[0]?.platform || ''),
           ...rows.map((item) => item.last_attempt_at || item.approved_at),
         ]);
-        const nextDue = futureDates(rows
+        const rowNextDueDates = futureDates(rows
           .filter((item) => !isDone(item) && !item.is_variant && item.due_at)
           .map((item) => item.due_at))
-          .sort((a, b) => a - b)[0] || nextScheduled;
+          .sort((a, b) => a - b);
+        const upcomingPlatformDates = rowNextDueDates.length
+          ? rowNextDueDates.slice(0, 4)
+          : upcomingPlatformScheduledDates(rows[0]?.platform || '', 4);
+        const nextDue = upcomingPlatformDates[0] || nextScheduled;
         const card = document.createElement('div');
         card.className = 'platform-card';
         const title = document.createElement('strong');
@@ -3067,7 +3096,7 @@ def html_document(
         const postedLine = document.createElement('span');
         postedLine.textContent = t('lastPosted') + ': ' + (latestPosted ? `${{formatDate(latestPosted.toISOString())}} (${{daysAgo(latestPosted.toISOString())}})` : t('none'));
         const nextLine = document.createElement('span');
-        nextLine.textContent = t('nextScheduled') + ': ' + (nextDue ? formatDate(nextDue.toISOString()) : t('none'));
+        nextLine.textContent = t('nextScheduled') + ': ' + scheduleDatesText(upcomingPlatformDates);
         const attemptLine = document.createElement('span');
         attemptLine.textContent = t('lastUpdate') + ': ' + (latestAttempt ? `${{formatDate(latestAttempt.toISOString())}} (${{daysAgo(latestAttempt.toISOString())}})` : t('none'));
         card.append(title, status, postedLine, nextLine, attemptLine);
