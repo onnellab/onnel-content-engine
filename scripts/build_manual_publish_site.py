@@ -1024,6 +1024,11 @@ def html_document(
     .app-status-card strong {{ display: block; font-size: 15px; margin-bottom: 8px; }}
     .app-status-card strong a {{ display: inline-flex; align-items: center; min-height: 34px; padding: 4px 8px; margin: -4px -8px; border-radius: 6px; color: inherit; text-decoration: none; }}
     .app-status-card strong a:hover {{ background: var(--blue-soft); color: var(--blue); }}
+    .app-status-card summary {{ cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; width: auto; max-width: none; min-height: 0; border: 0; background: transparent; border-radius: 0; padding: 0; font-size: 15px; font-weight: 900; }}
+    .app-status-card summary:hover {{ background: transparent; color: var(--blue); }}
+    .app-status-card summary strong {{ min-width: 0; }}
+    .app-status-card summary span {{ flex: 0 0 auto; text-align: right; }}
+    .app-status-card summary::marker {{ color: var(--muted); }}
     .status-card span,
     .release-card span,
     .app-status-card span {{ display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }}
@@ -3318,11 +3323,16 @@ def html_document(
         : `${{t('checkedAt')}}: ${{t('none')}}`;
       appStatusSummary.textContent = `${{groups.length}} apps / ${{storeCount}} stores / ${{releaseCount}} releases / ${{dependencyCount}} plugin rows / ${{latestCheckedAtText}} / ${{releaseSyncSummaryText()}}`;
       groups.forEach((group) => {{
-        const card = document.createElement('div');
+        const card = document.createElement('details');
         card.className = 'app-status-card';
+        const summary = document.createElement('summary');
         const title = document.createElement('strong');
         title.appendChild(profileLink(group.app_name || t('none'), group.app_slug ? `/apps/${{group.app_slug}}/` : '/apps/'));
-        card.appendChild(title);
+        const visibleFlutterDependencies = group.flutterDependencies.filter(displayFlutterDependency);
+        const cardSummary = document.createElement('span');
+        cardSummary.textContent = `${{group.stores.length}} stores / ${{group.releases.length}} releases / ${{visibleFlutterDependencies.length}} plugins`;
+        summary.append(title, cardSummary);
+        card.appendChild(summary);
         group.stores
           .sort((a, b) => a.platform.localeCompare(b.platform))
           .forEach((item) => {{
@@ -3387,7 +3397,6 @@ def html_document(
           row.textContent = t('noRelease');
           card.appendChild(row);
         }}
-        const visibleFlutterDependencies = group.flutterDependencies.filter(displayFlutterDependency);
         if (visibleFlutterDependencies.length) {{
           const dependencyHeader = document.createElement('div');
           dependencyHeader.className = 'app-status-row is-store';
