@@ -35,6 +35,7 @@ DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
 DEFAULT_AI_PROVIDER_PRICING = ROOT / "data" / "ai_provider_pricing.csv"
 DEFAULT_AI_PROVIDER_PRICING_STATUS = ROOT / "data" / "ai_provider_pricing_status.json"
 DEFAULT_MELIVRA_AI_CREDIT_POLICY = ROOT / "data" / "melivra_ai_credit_policy.csv"
+DEFAULT_FLUTTER_DEPENDENCY_VERSIONS = ROOT / "data" / "app_flutter_dependency_versions.csv"
 DEFAULT_HOMEPAGE_REPO = Path(os.environ.get("ONNELLAB_HOMEPAGE_REPO", "/mnt/c/dev/onnellab.github.io"))
 KST = ZoneInfo("Asia/Seoul")
 
@@ -306,6 +307,23 @@ def store_status_items(store_versions_path: Path = DEFAULT_STORE_VERSIONS) -> li
             "notes": row.get("notes", ""),
         }
         for row in read_csv_rows(store_versions_path)
+    ]
+
+
+def flutter_dependency_status_items(path: Path = DEFAULT_FLUTTER_DEPENDENCY_VERSIONS) -> list[dict[str, str]]:
+    return [
+        {
+            "app_id": row.get("app_id", ""),
+            "app_slug": row.get("app_slug", ""),
+            "package_type": row.get("package_type", ""),
+            "package_name": row.get("package_name", ""),
+            "declared_version": row.get("declared_version", ""),
+            "resolved_version": row.get("resolved_version", ""),
+            "flutter_constraint": row.get("flutter_constraint", ""),
+            "status": row.get("status", ""),
+            "source": row.get("source", ""),
+        }
+        for row in read_csv_rows(path)
     ]
 
 
@@ -815,6 +833,7 @@ def html_document(
     releases: list[dict[str, str]] | None = None,
     blog_items: list[dict[str, str]] | None = None,
     store_items: list[dict[str, str]] | None = None,
+    flutter_dependency_items: list[dict[str, str]] | None = None,
     site_items: list[dict[str, object]] | None = None,
     pricing_items: list[dict[str, str]] | None = None,
     ai_provider_pricing_status: dict[str, object] | None = None,
@@ -835,6 +854,7 @@ def html_document(
     release_data = json.dumps(releases or [], ensure_ascii=False).replace("</", "<\\/")
     blog_data = json.dumps(blog_items or [], ensure_ascii=False).replace("</", "<\\/")
     store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
+    flutter_dependency_data = json.dumps(flutter_dependency_items or [], ensure_ascii=False).replace("</", "<\\/")
     site_data = json.dumps(site_items or [], ensure_ascii=False).replace("</", "<\\/")
     pricing_data = json.dumps(pricing_items or [], ensure_ascii=False).replace("</", "<\\/")
     ai_provider_pricing_status_data = json.dumps(ai_provider_pricing_status or {}, ensure_ascii=False).replace("</", "<\\/")
@@ -1185,6 +1205,7 @@ def html_document(
   <script id="release-data" type="application/json">{release_data}</script>
   <script id="blog-data" type="application/json">{blog_data}</script>
   <script id="store-data" type="application/json">{store_data}</script>
+  <script id="flutter-dependency-data" type="application/json">{flutter_dependency_data}</script>
   <script id="site-data" type="application/json">{site_data}</script>
   <script id="pricing-data" type="application/json">{pricing_data}</script>
   <script id="ai-provider-pricing-status-data" type="application/json">{ai_provider_pricing_status_data}</script>
@@ -1196,6 +1217,7 @@ def html_document(
     let releases = JSON.parse(document.getElementById('release-data').textContent);
     let blogItems = JSON.parse(document.getElementById('blog-data').textContent);
     let storeItems = JSON.parse(document.getElementById('store-data').textContent);
+    let flutterDependencyItems = JSON.parse(document.getElementById('flutter-dependency-data').textContent);
     let siteItems = JSON.parse(document.getElementById('site-data').textContent);
     let pricingItems = JSON.parse(document.getElementById('pricing-data').textContent);
     let aiProviderPricingStatus = JSON.parse(document.getElementById('ai-provider-pricing-status-data').textContent);
@@ -1298,6 +1320,12 @@ def html_document(
         lastUpdate: '최근 갱신',
         appStatusTitle: '앱 운영 상태',
         appStatusSummary: '앱별 묶음',
+        flutterSdk: 'Flutter SDK',
+        flutterDependencyVersions: 'Flutter/플러그인 버전',
+        dependencyStatusLabel: '상태',
+        dependencyResolved: '해결 버전',
+        dependencyDeclared: '선언 버전',
+        dependencySource: '출처',
         releaseTitle: 'GitHub에 올릴 릴리즈 후보',
         releaseSummary: '상태',
         releaseCandidate: '릴리즈 후보',
@@ -1511,6 +1539,12 @@ def html_document(
         lastUpdate: 'last update',
         appStatusTitle: 'App operation status',
         appStatusSummary: 'grouped by app',
+        flutterSdk: 'Flutter SDK',
+        flutterDependencyVersions: 'Flutter/plugin versions',
+        dependencyStatusLabel: 'Status',
+        dependencyResolved: 'Resolved',
+        dependencyDeclared: 'Declared',
+        dependencySource: 'Source',
         releaseTitle: 'GitHub Release candidates',
         releaseSummary: 'status',
         releaseCandidate: 'release candidate',
@@ -2215,6 +2249,7 @@ def html_document(
       releases = readEmbeddedJson(doc, 'release-data');
       blogItems = readEmbeddedJson(doc, 'blog-data');
       storeItems = readEmbeddedJson(doc, 'store-data');
+      flutterDependencyItems = readEmbeddedJson(doc, 'flutter-dependency-data');
       siteItems = readEmbeddedJson(doc, 'site-data');
       pricingItems = readEmbeddedJson(doc, 'pricing-data');
       aiProviderPricingStatus = readEmbeddedJson(doc, 'ai-provider-pricing-status-data');
@@ -3202,11 +3237,14 @@ def html_document(
       const groups = new Map();
       function ensure(item) {{
         const key = item.app_id || item.app_slug || item.app_name;
-        if (!groups.has(key)) groups.set(key, {{ app_name: item.app_name, app_slug: item.app_slug || item.app_id || '', stores: [], releases: [] }});
+        if (!groups.has(key)) groups.set(key, {{ app_name: item.app_name, app_slug: item.app_slug || item.app_id || '', stores: [], releases: [], flutterDependencies: [] }});
         return groups.get(key);
       }}
       storeItems.forEach((item) => ensure(item).stores.push(item));
       releases.forEach((item) => ensure(item).releases.push(item));
+      flutterDependencyItems.forEach((item) => {{
+        ensure(item).flutterDependencies.push(item);
+      }});
       return [...groups.values()].sort((a, b) => a.app_name.localeCompare(b.app_name));
     }}
 
@@ -3225,7 +3263,8 @@ def html_document(
       const groups = appStatusGroups();
       const storeCount = storeItems.length;
       const releaseCount = releases.length;
-      appStatusSummary.textContent = `${{groups.length}} apps / ${{storeCount}} stores / ${{releaseCount}} releases / ${{releaseSyncSummaryText()}}`;
+      const dependencyCount = flutterDependencyItems.length;
+      appStatusSummary.textContent = `${{groups.length}} apps / ${{storeCount}} stores / ${{releaseCount}} releases / ${{dependencyCount}} plugin rows / ${{releaseSyncSummaryText()}}`;
       groups.forEach((group) => {{
         const card = document.createElement('div');
         card.className = 'app-status-card';
@@ -3257,6 +3296,42 @@ def html_document(
           const row = document.createElement('div');
           row.className = 'app-status-row is-store';
           row.textContent = t('noStore');
+          card.appendChild(row);
+        }}
+        if (group.flutterDependencies.length) {{
+          const dependencyHeader = document.createElement('div');
+          dependencyHeader.className = 'app-status-row is-store';
+          const dependencyTitle = document.createElement('b');
+          dependencyTitle.textContent = t('flutterDependencyVersions');
+          const dependencySummary = document.createElement('span');
+          dependencySummary.textContent = `${{group.flutterDependencies.length}} / ${{t('dependencyStatusLabel')}}`;
+          dependencyHeader.appendChild(dependencyTitle);
+          dependencyHeader.appendChild(dependencySummary);
+          card.appendChild(dependencyHeader);
+          group.flutterDependencies
+            .sort((a, b) => `${{a.package_type}}:${{a.package_name}}`.localeCompare(`${{b.package_type}}:${{b.package_name}}`))
+            .forEach((item) => {{
+              const row = document.createElement('div');
+              row.className = 'app-status-row is-store';
+              const packageName = document.createElement('b');
+              const packageTitle = item.package_name || t('none');
+              const packageKind = item.package_type === 'flutter_sdk' ? t('flutterSdk') : t('flutterDependencyVersions');
+              packageName.textContent = `${{packageKind}}: ${{packageTitle}}`;
+              const status = document.createElement('span');
+              status.textContent = `${{t('dependencyStatusLabel')}}: ${{item.status || t('none')}}`;
+              const declared = document.createElement('span');
+              declared.textContent = `${{t('dependencyDeclared')}}: ${{item.declared_version || item.flutter_constraint || t('none')}}`;
+              const resolved = document.createElement('span');
+              resolved.textContent = `${{t('dependencyResolved')}}: ${{item.resolved_version || t('none')}}`;
+              const source = document.createElement('span');
+              source.textContent = `${{t('dependencySource')}}: ${{item.source || t('none')}}`;
+              row.append(packageName, status, declared, resolved, source);
+              card.appendChild(row);
+            }});
+        }} else {{
+          const row = document.createElement('div');
+          row.className = 'app-status-row is-store';
+          row.textContent = `${{t('flutterDependencyVersions')}}: ${{t('none')}}`;
           card.appendChild(row);
         }}
         if (group.releases.length) {{
@@ -3680,6 +3755,7 @@ def build_manual_publish_site(
     app_release_sync_status_path: Path = DEFAULT_APP_RELEASE_SYNC_STATUS,
     verification_report_path: Path = DEFAULT_VERIFICATION_REPORT,
     store_versions_path: Path = DEFAULT_STORE_VERSIONS,
+    flutter_dependency_versions_path: Path = DEFAULT_FLUTTER_DEPENDENCY_VERSIONS,
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
 ) -> Path:
     topics = read_topics(topics_path)
@@ -3688,6 +3764,7 @@ def build_manual_publish_site(
     releases = app_release_items(app_releases_path, app_release_publications_path)
     blog_items = blog_status_items(topics_path)
     store_items = store_status_items(store_versions_path)
+    flutter_dependency_items = flutter_dependency_status_items(flutter_dependency_versions_path)
     site_items = homepage_status_items(homepage_repo)
     pricing_items = product_pricing_items(homepage_repo)
     ai_provider_pricing_status = ai_provider_pricing_status_item()
@@ -3699,11 +3776,12 @@ def build_manual_publish_site(
         html_document(
             items,
             manual_state,
-            releases,
-            blog_items,
-            store_items,
-            site_items,
-            pricing_items,
+        releases,
+        blog_items,
+        store_items,
+        flutter_dependency_items,
+        site_items,
+        pricing_items,
             ai_provider_pricing_status,
             release_sync_status,
             verification_report,
@@ -3727,6 +3805,7 @@ def main() -> int:
     parser.add_argument("--app-release-sync-status", type=Path, default=DEFAULT_APP_RELEASE_SYNC_STATUS)
     parser.add_argument("--verification-report", type=Path, default=DEFAULT_VERIFICATION_REPORT)
     parser.add_argument("--store-versions", type=Path, default=DEFAULT_STORE_VERSIONS)
+    parser.add_argument("--flutter-dependency-versions", type=Path, default=DEFAULT_FLUTTER_DEPENDENCY_VERSIONS)
     parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPO)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
@@ -3741,6 +3820,7 @@ def main() -> int:
         args.app_release_sync_status,
         args.verification_report,
         args.store_versions,
+        args.flutter_dependency_versions,
         args.homepage_repo,
     )
     print(f"generated {output}")

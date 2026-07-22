@@ -1,0 +1,7 @@
+app_id,app_slug,package_type,package_name,declared_version,resolved_version,flutter_constraint,status,source
+APP-0006,aligna,repository,path,,,,missing_repo,/mnt/c/dev/projects/aligna
+APP-0005,clipnest,repository,path,,,,missing_repo,/mnt/c/dev/projects/clipnest
+APP-0001,quivra,repository,path,,,,missing_repo,/mnt/c/dev/projects/quivra
+APP-0004,segra,repository,path,,,,missing_repo,/mnt/c/dev/projects/segra
+APP-0002,tagweaver,repository,path,,,,missing_repo,/mnt/c/dev/projects/tagweaver2
+APP-0003,vaultxt,repository,path,,,,missing_repo,/home/lue/dev/onnellab-text/vaultxt

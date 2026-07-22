@@ -203,6 +203,14 @@ Sync `local_build_metadata` rows from configured app repositories with:
 scripts/sync_android_versions_from_repos.py
 ```
 
+현재 저장소의 앱별 Flutter SDK/플러그인 버전도 매핑 기반으로 동기화하려면:
+
+```text
+scripts/sync_flutter_plugin_versions.py
+```
+
+기본 출력은 `data/app_flutter_dependency_versions.csv`(기계 가공용), `generated/reports/app_flutter_dependency_versions.md`(한눈 보기용)입니다.
+
 Repository mappings are configured in:
 
 ```text
