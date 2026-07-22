@@ -58,6 +58,7 @@ PLAY_UPDATED_RE = re.compile(r'"146":\[\["([^"]+)"')
 PLAY_VISIBLE_UPDATED_RE = re.compile(
     r'<div class="[^"]*">(?:업데이트 날짜|Updated on)</div>\s*<div class="[^"]*">([^<]+)</div>'
 )
+LOCAL_FLUTTER_METADATA_NOTE = "Local Flutter build metadata version."
 
 
 class StoreVersionError(ValueError):
@@ -197,12 +198,15 @@ def google_play_from_source(store_url: str, app_id: str, android_versions: dict[
         "store_package": package,
         "version": row["version"],
         "last_updated": row["last_updated"],
-        "release_notes": row["release_notes"],
+        "release_notes": "" if row["release_notes"] == LOCAL_FLUTTER_METADATA_NOTE else row["release_notes"],
     }
 
 
 def google_play_lookup(store_url: str, app_id: str, android_versions: dict[str, dict[str, str]]) -> tuple[dict[str, str], str]:
     source = android_versions.get(app_id)
+    source_notes = ""
+    if source:
+        source_notes = "" if source["release_notes"] == LOCAL_FLUTTER_METADATA_NOTE else source["release_notes"]
     try:
         current = google_play_homepage_lookup(store_url)
         if source:
@@ -210,7 +214,7 @@ def google_play_lookup(store_url: str, app_id: str, android_versions: dict[str, 
                 raise StoreVersionError(f"Android version package does not match Play Store URL for {app_id}")
             current["version"] = current["version"] or source["version"]
             current["last_updated"] = current["last_updated"] or source["last_updated"]
-            current["release_notes"] = current["release_notes"] or source["release_notes"]
+            current["release_notes"] = current["release_notes"] or source_notes
             note = "Version/update date read from Google Play public page; release notes from Android snapshot."
         else:
             note = "Version/update date read from Google Play public page."

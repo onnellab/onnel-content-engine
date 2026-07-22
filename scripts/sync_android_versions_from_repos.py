@@ -91,7 +91,7 @@ def sync_android_versions_from_repos(
                 "package": play_package(app["play_store_url"]),
                 "version": version,
                 "last_updated": date,
-                "release_notes": "Local Flutter build metadata version.",
+                "release_notes": "",
                 "source": "local_build_metadata",
                 "notes": f"Imported from {pubspec_path.as_posix()} version {raw_version}; confirm against Play Console if needed.",
             }

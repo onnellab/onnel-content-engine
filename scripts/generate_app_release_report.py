@@ -148,6 +148,34 @@ def version_key(version: str) -> list[tuple[int, int | str]]:
     return key
 
 
+def release_id_to_int(value: str) -> int:
+    if value.startswith("REL-"):
+        try:
+            return int(value.removeprefix("REL-"))
+        except ValueError:
+            return 0
+    return 0
+
+
+def latest_release_rows(release_rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Keep one latest row per app/platform by version then release_id."""
+    latest: dict[tuple[str, str], dict[str, str]] = {}
+    for row in release_rows:
+        key = (row["app_id"], row["platform"])
+        current = latest.get(key)
+        if not current:
+            latest[key] = row
+            continue
+        row_key = version_key(row["version"])
+        current_key = version_key(current["version"])
+        if row_key > current_key:
+            latest[key] = row
+            continue
+        if row_key == current_key and release_id_to_int(row["release_id"]) > release_id_to_int(current["release_id"]):
+            latest[key] = row
+    return list(latest.values())
+
+
 def compare_versions(store_version: str, local_version: str) -> str:
     if not store_version or not local_version:
         return "unknown"
@@ -425,7 +453,7 @@ def generate_app_release_report(
     android_versions_path: Path = ANDROID_VERSIONS_PATH,
 ) -> str:
     store_rows = read_csv(store_versions_path, STORE_HEADER)
-    release_rows = read_csv(releases_path, RELEASE_HEADER)
+    release_rows = latest_release_rows(read_csv(releases_path, RELEASE_HEADER))
     config_rows = read_csv(config_path, CONFIG_HEADER)
     local_repo_rows = read_csv(local_repositories_path, LOCAL_REPOSITORIES_HEADER)
     local_metadata_rows = read_optional_csv(android_versions_path, ANDROID_HEADER)
