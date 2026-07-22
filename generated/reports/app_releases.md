@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-07-21T11:40:54+09:00
+Generated: 2026-07-22T11:38:30+09:00
 
 ## Summary
 
@@ -8,8 +8,9 @@ Generated: 2026-07-21T11:40:54+09:00
 | --- | --- | --- |
 | Store | failed | 1 |
 | Store | manual_check | 1 |
-| Store | unchanged | 11 |
-| GitHub Release | planned | 2 |
+| Store | unchanged | 10 |
+| Store | updated | 1 |
+| GitHub Release | planned | 3 |
 | GitHub Release | released | 4 |
 
 ## Store Snapshots
@@ -23,7 +24,7 @@ Generated: 2026-07-21T11:40:54+09:00
 | Melivra | ios | - | - | unknown | failed | - | onnellab/melivra | Fix store lookup error |
 | Quivra | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
 | Quivra | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
-| Segra | android | 1.0.2 | 1.0.2 | same | unchanged | released | onnellab/segra | No action |
+| Segra | android | 1.0.4 | 1.0.2 | store_ahead | updated | planned | onnellab/segra | Replace placeholder with public patch notes |
 | Segra | ios | 1.0.1 | 1.0.2 | local_ahead | unchanged | - | onnellab/segra | Platform rollout not public |
 | TagWeaver | android | 2.1.3 | 2.1.3 | same | unchanged | released | onnellab/tagweaver | No action |
 | TagWeaver | ios | 2.2 | 2.1.3 | store_ahead | unchanged | released | onnellab/tagweaver | No action |
@@ -40,6 +41,7 @@ Generated: 2026-07-21T11:40:54+09:00
 | REL-0004 | TagWeaver | ios | public | v2.2 | released | Released | https://github.com/onnellab/tagweaver/releases/tag/v2.2 | - | 사소한 버그를 수정하고 안정성을 개선했어요. | No action |
 | REL-0005 | ClipNest | ios | public | v1.0.2 | released | Released | https://github.com/onnellab/clipnest/releases/tag/v1.0.2 | - | 사소한 버그를 수정하고 안정성을 개선했어요. | No action |
 | REL-0006 | ClipNest | ios | private_test | v1.0.4 | planned | Private test; public Release disabled | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Private test only; do not publish public GitHub Release |
+| REL-0007 | Segra | android | public | v1.0.4 | planned | Waiting for artifact and public approval | - | - | Local Flutter build metadata version. | Replace placeholder with public patch notes |
 
 ## Attention Queue
 
@@ -51,3 +53,4 @@ Generated: 2026-07-21T11:40:54+09:00
 | Melivra | android | manual_check | Check Google Play update manually | Google Play has no stable public version lookup in this automation. |
 | VaultXT | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.3. Add release artifact, checksum, and keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |
 | ClipNest | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.2. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |
+| Segra | android | planned | Replace placeholder with public patch notes | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
