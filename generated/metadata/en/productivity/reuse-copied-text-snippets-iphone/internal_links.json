@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0010",
+    "title": "How to Reuse Copied Text Snippets on iPhone",
+    "slug": "reuse-copied-text-snippets-iphone",
+    "category": "productivity",
+    "language": "en",
+    "status": "scheduled",
+    "topic_clusters": [
+      "saved text snippets",
+      "iPhone clipboard workflow",
+      "local clipboard utility",
+      "ClipNest",
+      "clipboard snippet manager",
+      "productivity"
+    ],
+    "related_app_names": [
+      "ClipNest"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0007",
+        "title": "How to Convert Local Media Files Privately",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
+        "topic_id": "TOPIC-0001",
+        "title": "How to Read Large TXT Files Without Lag",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0008",
+        "title": "How to Clean Up MP3 Metadata Before Organizing Music",
+        "slug": "clean-up-mp3-metadata-before-organizing-music",
+        "category": "music",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0005",
+        "app_name": "ClipNest",
+        "slug": "clipnest",
+        "category": "productivity",
+        "url": "/apps/clipnest/",
+        "description": "A local iOS clipboard utility for saving and reusing copied text.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Productivity guide",
+        "category": "productivity",
+        "cluster": "productivity",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "saved text snippets cluster",
+        "category": "productivity",
+        "cluster": "saved text snippets",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

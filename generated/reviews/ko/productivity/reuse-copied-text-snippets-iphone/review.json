@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "type": "article_review",
+  "topic_id": "TOPIC-0017",
+  "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
+  "score": 10.0,
+  "threshold": 9.0,
+  "passed": true,
+  "checks": [
+    {
+      "name": "metadata_complete",
+      "passed": true,
+      "points": 1.2,
+      "max_points": 1.2,
+      "note": "Pre-publication frontmatter contains the fields needed for review and scheduling."
+    },
+    {
+      "name": "card_title_consistent",
+      "passed": true,
+      "points": 0.4,
+      "max_points": 0.4,
+      "note": "Blog list card title matches the article title so index and article pages stay consistent."
+    },
+    {
+      "name": "brand_spelling",
+      "passed": true,
+      "points": 0.4,
+      "max_points": 0.4,
+      "note": "Article text keeps the ONNELLAB brand spelling consistent."
+    },
+    {
+      "name": "required_sections",
+      "passed": true,
+      "points": 1.4,
+      "max_points": 1.4,
+      "note": "Article includes the required problem-first and publication sections."
+    },
+    {
+      "name": "short_answer_ready",
+      "passed": true,
+      "points": 0.6,
+      "max_points": 0.6,
+      "note": "Article exposes a direct short answer for readers, answer engines, and llms.txt summaries."
+    },
+    {
+      "name": "structured_answer",
+      "passed": true,
+      "points": 1.0,
+      "max_points": 1.0,
+      "note": "Article includes steps and a comparison table."
+    },
+    {
+      "name": "clear_definitions",
+      "passed": true,
+      "points": 0.8,
+      "max_points": 0.8,
+      "note": "Article defines important technical terms."
+    },
+    {
+      "name": "primary_keyword",
+      "passed": true,
+      "points": 0.8,
+      "max_points": 0.8,
+      "note": "Primary keyword appears naturally."
+    },
+    {
+      "name": "external_reference",
+      "passed": true,
+      "points": 0.8,
+      "max_points": 0.8,
+      "note": "Article cites an official or recognized external reference."
+    },
+    {
+      "name": "product_after_education",
+      "passed": true,
+      "points": 1.0,
+      "max_points": 1.0,
+      "note": "Product appears after the educational explanation, or the article explicitly has no related application."
+    },
+    {
+      "name": "publish_ready_image",
+      "passed": true,
+      "points": 1.0,
+      "max_points": 1.0,
+      "note": "At least one referenced blog image asset exists."
+    },
+    {
+      "name": "social_card_source",
+      "passed": true,
+      "points": 0.4,
+      "max_points": 0.4,
+      "note": "A language-specific workflow diagram is available for social card generation."
+    },
+    {
+      "name": "image_quality",
+      "passed": true,
+      "points": 1.0,
+      "max_points": 1.0,
+      "note": "Referenced image assets use language-specific paths, accessible SVG structure, word wrapping, and non-overlapping arrows."
+    },
+    {
+      "name": "internal_links",
+      "passed": true,
+      "points": 1.0,
+      "max_points": 1.0,
+      "note": "Internal link metadata exists; full credit requires at least one related article."
+    },
+    {
+      "name": "readability_depth",
+      "passed": true,
+      "points": 1.0,
+      "max_points": 1.0,
+      "note": "Article length supports a complete but focused answer."
+    },
+    {
+      "name": "translation_quality",
+      "passed": true,
+      "points": 1.0,
+      "max_points": 1.0,
+      "note": "Translation counterpart, section alignment, slug alignment, and localized terminology are valid."
+    }
+  ]
+}

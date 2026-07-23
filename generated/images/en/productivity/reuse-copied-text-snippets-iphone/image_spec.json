@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/productivity/reuse-copied-text-snippets-iphone.md",
+  "topic": {
+    "id": "TOPIC-0010",
+    "title": "How to Reuse Copied Text Snippets on iPhone",
+    "slug": "reuse-copied-text-snippets-iphone",
+    "category": "productivity",
+    "language": "en",
+    "primary_keyword": "clipboard snippet manager",
+    "related_apps": [
+      "ClipNest"
+    ]
+  },
+  "article_sections_detected": [
+    "How to Reuse Copied Text Snippets on iPhone",
+    "Question",
+    "Short Answer",
+    "Definitions That Matter",
+    "Why Copied Text Gets Lost",
+    "What To Check First",
+    "Recommended Workflow",
+    "Storage Approach Comparison",
+    "Practical Cautions",
+    "ONNELLAB Application",
+    "Related Topics",
+    "References",
+    "Conclusion",
+    "FAQ",
+    "Does iPhone keep a permanent clipboard history?",
+    "Should I save everything I copy?",
+    "Are text replacement and saved snippets the same?",
+    "Can I store passwords as snippets?",
+    "Why should I review text after pasting?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "What is the recommended workflow for clipboard snippet manager?",
+      "source_sections": [
+        "Short Answer",
+        "Recommended Workflow"
+      ],
+      "structure": [
+        "Problem",
+        "Process",
+        "Result"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating clipboard snippet manager?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "saved text snippets",
+        "iPhone clipboard workflow",
+        "local clipboard utility"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "ClipNest"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "How to Reuse Copied Text Snippets on iPhone Workflow",
+      "steps": [
+        "Problem",
+        "Explanation",
+        "Options",
+        "Recommended workflow",
+        "Optional application"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "clipboard snippet manager Comparison",
+      "items": [
+        "saved text snippets",
+        "iPhone clipboard workflow",
+        "local clipboard utility"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ]
+}

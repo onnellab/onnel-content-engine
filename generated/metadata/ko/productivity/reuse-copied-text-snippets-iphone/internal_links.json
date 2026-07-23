@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0017",
+    "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
+    "slug": "reuse-copied-text-snippets-iphone",
+    "category": "productivity",
+    "language": "ko",
+    "status": "scheduled",
+    "topic_clusters": [
+      "저장한 텍스트 조각",
+      "아이폰 클립보드 워크플로",
+      "로컬 클립보드 도구",
+      "ClipNest",
+      "아이폰 텍스트 조각 관리",
+      "productivity"
+    ],
+    "related_app_names": [
+      "ClipNest"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0005",
+        "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0011",
+        "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0013",
+        "title": "음악 정리 전 MP3 메타데이터를 정돈하는 방법",
+        "slug": "clean-up-mp3-metadata-before-organizing-music",
+        "category": "music",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0005",
+        "app_name": "ClipNest",
+        "slug": "clipnest",
+        "category": "productivity",
+        "url": "/apps/clipnest/",
+        "description": "A local iOS clipboard utility for saving and reusing copied text.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Productivity guide",
+        "category": "productivity",
+        "cluster": "productivity",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "저장한 텍스트 조각 cluster",
+        "category": "productivity",
+        "cluster": "저장한 텍스트 조각",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}
