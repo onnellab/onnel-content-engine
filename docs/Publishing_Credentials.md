@@ -80,3 +80,23 @@ Do not add a real Medium API adapter unless the platform provides a supported pu
 ## Rule
 
 Credential checks must run before any non-mock adapter posts content.
+
+---
+
+## Store Review Synchronization
+
+The review dashboard accepts short-lived runtime access tokens:
+
+```text
+APP_STORE_CONNECT_TOKEN
+GOOGLE_PLAY_ACCESS_TOKEN
+```
+
+The Apple token reads App Store Connect customer reviews. The Google token must
+use the `androidpublisher` scope and reads Google Play reviews.
+
+These values are read-only inputs for `scripts/sync_store_reviews.py`. Do not
+store them in the generated dashboard or commit them to the repository.
+
+Review reply publication remains manual even though both stores expose reply
+APIs. See `docs/Store_Review_Response_Guide.md`.

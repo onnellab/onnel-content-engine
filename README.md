@@ -190,6 +190,19 @@ python3 scripts/fix_social_repetition.py
 
 The command applies the existing social repetition reducer, rechecks the warnings, and rebuilds the manual publishing dashboard.
 
+## Store Review Replies
+
+Synchronize App Store and Google Play reviews, then rebuild the dashboard:
+
+```bash
+python3 scripts/sync_store_reviews.py
+python3 scripts/build_manual_publish_site.py
+```
+
+The dashboard shows synchronized reviews and creates Korean or English reply
+drafts from the repository-managed templates. Every draft requires human review
+and manual publication. See `docs/Store_Review_Response_Guide.md`.
+
 ---
 
 # Content Categories

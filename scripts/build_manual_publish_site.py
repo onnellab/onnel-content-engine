@@ -17,6 +17,7 @@ from zoneinfo import ZoneInfo
 
 from evaluate_social_templates import evaluate_social_templates
 from evaluate_syndication_drafts import evaluate_syndication_drafts
+from store_review_responses import generate_reply
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +31,7 @@ DEFAULT_APP_RELEASES = ROOT / "data" / "app_releases.csv"
 DEFAULT_APP_RELEASE_PUBLICATIONS = ROOT / "data" / "app_release_publications.csv"
 DEFAULT_APP_RELEASE_SYNC_STATUS = ROOT / "data" / "app_release_sync_status.json"
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
+DEFAULT_STORE_REVIEWS = ROOT / "data" / "store_reviews.csv"
 DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
 DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
 DEFAULT_AI_PROVIDER_PRICING = ROOT / "data" / "ai_provider_pricing.csv"
@@ -345,6 +347,39 @@ def store_status_items(store_versions_path: Path = DEFAULT_STORE_VERSIONS) -> li
         }
         for row in read_csv_rows(store_versions_path)
     ]
+
+
+def store_review_items(path: Path = DEFAULT_STORE_REVIEWS) -> list[dict[str, str]]:
+    items: list[dict[str, str]] = []
+    for row in read_csv_rows(path):
+        suggestion = generate_reply(row)
+        items.append(
+            {
+                "review_id": row.get("review_id", ""),
+                "app_id": row.get("app_id", ""),
+                "app_slug": row.get("app_slug", ""),
+                "app_name": row.get("app_name", ""),
+                "platform": row.get("platform", ""),
+                "rating": row.get("rating", ""),
+                "title": row.get("title", ""),
+                "body": row.get("body", ""),
+                "reviewer_language": row.get("reviewer_language", ""),
+                "territory": row.get("territory", ""),
+                "app_version": row.get("app_version", ""),
+                "created_at": row.get("created_at", ""),
+                "updated_at": row.get("updated_at", ""),
+                "developer_reply": row.get("developer_reply", ""),
+                "reply_updated_at": row.get("reply_updated_at", ""),
+                "status": row.get("status", "pending") or "pending",
+                "synced_at": row.get("synced_at", ""),
+                **suggestion,
+            }
+        )
+    return sorted(
+        items,
+        key=lambda item: (item.get("updated_at", ""), item.get("created_at", "")),
+        reverse=True,
+    )
 
 
 def flutter_dependency_status_items(path: Path = DEFAULT_FLUTTER_DEPENDENCY_VERSIONS) -> list[dict[str, str]]:
@@ -872,6 +907,7 @@ def html_document(
     releases: list[dict[str, str]] | None = None,
     blog_items: list[dict[str, str]] | None = None,
     store_items: list[dict[str, str]] | None = None,
+    store_reviews: list[dict[str, str]] | None = None,
     flutter_dependency_items: list[dict[str, str]] | None = None,
     site_items: list[dict[str, object]] | None = None,
     pricing_items: list[dict[str, str]] | None = None,
@@ -893,6 +929,7 @@ def html_document(
     release_data = json.dumps(releases or [], ensure_ascii=False).replace("</", "<\\/")
     blog_data = json.dumps(blog_items or [], ensure_ascii=False).replace("</", "<\\/")
     store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
+    store_review_data = json.dumps(store_reviews or [], ensure_ascii=False).replace("</", "<\\/")
     flutter_dependency_data = json.dumps(flutter_dependency_items or [], ensure_ascii=False).replace("</", "<\\/")
     site_data = json.dumps(site_items or [], ensure_ascii=False).replace("</", "<\\/")
     pricing_data = json.dumps(pricing_items or [], ensure_ascii=False).replace("</", "<\\/")
@@ -1045,6 +1082,14 @@ def html_document(
     .app-status-row.is-ai-loss {{ background: var(--bad-soft); border-color: #efb5b0; }}
     .ai-margin-badge {{ display: inline-flex; width: fit-content; max-width: 100%; margin: 2px 0 5px; padding: 4px 7px; border: 1px solid #b7d9c5; border-radius: 999px; color: var(--ok); background: #fff; font-size: 12px; font-weight: 900; }}
     .app-status-row.is-ai-loss .ai-margin-badge {{ color: var(--bad); border-color: #efb5b0; }}
+    .store-review-card {{ display: grid; gap: 9px; }}
+    .store-review-head {{ display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }}
+    .store-review-head strong {{ margin: 0; }}
+    .store-review-stars {{ color: #8a5c00; font-weight: 900; letter-spacing: 1px; white-space: nowrap; }}
+    .store-review-body {{ margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.55; }}
+    .store-review-meta {{ color: var(--muted); font-size: 12px; line-height: 1.45; }}
+    .store-review-actions {{ display: flex; gap: 8px; flex-wrap: wrap; }}
+    .store-review-reply {{ min-height: 118px; resize: vertical; }}
     input, select {{ width: 100%; min-height: 40px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 8px 10px; font: inherit; border-radius: 6px; }}
     input:focus, select:focus, textarea:focus {{ outline: 2px solid rgba(46,111,187,.2); border-color: var(--blue); }}
     input.needs-token {{ border-color: var(--blue); box-shadow: 0 0 0 3px rgba(46,111,187,.18); }}
@@ -1236,6 +1281,13 @@ def html_document(
       </div>
       <div id="app-status-grid" class="app-status-grid"></div>
     </details>
+    <details class="status-section" aria-label="Store customer reviews">
+      <summary id="store-review-title">스토어 리뷰 답변</summary>
+      <div class="release-head">
+        <span id="store-review-summary"></span>
+      </div>
+      <div id="store-review-grid" class="status-grid"></div>
+    </details>
     <details class="status-section" aria-label="Paid product pricing status">
       <summary id="pricing-status-title">유료 제품 가격</summary>
       <div class="release-head">
@@ -1249,6 +1301,7 @@ def html_document(
   <script id="release-data" type="application/json">{release_data}</script>
   <script id="blog-data" type="application/json">{blog_data}</script>
   <script id="store-data" type="application/json">{store_data}</script>
+  <script id="store-review-data" type="application/json">{store_review_data}</script>
   <script id="flutter-dependency-data" type="application/json">{flutter_dependency_data}</script>
   <script id="site-data" type="application/json">{site_data}</script>
   <script id="pricing-data" type="application/json">{pricing_data}</script>
@@ -1261,6 +1314,7 @@ def html_document(
     let releases = JSON.parse(document.getElementById('release-data').textContent);
     let blogItems = JSON.parse(document.getElementById('blog-data').textContent);
     let storeItems = JSON.parse(document.getElementById('store-data').textContent);
+    let storeReviewItems = JSON.parse(document.getElementById('store-review-data').textContent);
     let flutterDependencyItems = JSON.parse(document.getElementById('flutter-dependency-data').textContent);
     let siteItems = JSON.parse(document.getElementById('site-data').textContent);
     let pricingItems = JSON.parse(document.getElementById('pricing-data').textContent);
@@ -1382,6 +1436,17 @@ def html_document(
         publicApprovalNote: 'Dashboard manual approval after public store release confirmation.',
         storeTitle: 'App Store / Play Store 현재 공개 버전',
         storeSummary: '현재 표시',
+        storeReviewTitle: '스토어 리뷰 답변',
+        storeReviewSummary: '답변 전 리뷰와 템플릿 초안',
+        storeReviewGenerate: '답변 초안 생성',
+        storeReviewRegenerate: '초안 다시 생성',
+        storeReviewCopy: '답변 복사',
+        storeReviewExistingReply: '현재 스토어 답변',
+        storeReviewDraft: '검토할 답변 초안',
+        storeReviewPending: '답변 전',
+        storeReviewReplied: '답변됨',
+        storeReviewNoItems: '동기화된 스토어 리뷰가 없습니다.',
+        storeReviewHumanCheck: '게시 전 사람이 문맥과 사실을 확인해야 합니다.',
         currentVersion: '현재 버전',
         releasedDate: '현재 버전 게시일',
         releaseNotes: '출시 정보',
@@ -1602,6 +1667,17 @@ def html_document(
         publicApprovalNote: 'Dashboard manual approval after public store release confirmation.',
         storeTitle: 'Current App Store / Play Store versions',
         storeSummary: 'currently shown',
+        storeReviewTitle: 'Store review replies',
+        storeReviewSummary: 'Unanswered reviews and template drafts',
+        storeReviewGenerate: 'Generate reply draft',
+        storeReviewRegenerate: 'Regenerate draft',
+        storeReviewCopy: 'Copy reply',
+        storeReviewExistingReply: 'Current store reply',
+        storeReviewDraft: 'Reply draft for review',
+        storeReviewPending: 'unanswered',
+        storeReviewReplied: 'replied',
+        storeReviewNoItems: 'No synchronized store reviews.',
+        storeReviewHumanCheck: 'A person must verify context and facts before posting.',
         currentVersion: 'current version',
         releasedDate: 'current version published',
         releaseNotes: 'release info',
@@ -1760,6 +1836,8 @@ def html_document(
     const platformStatusSummary = document.getElementById('platform-status-summary');
     const appStatusGrid = document.getElementById('app-status-grid');
     const appStatusSummary = document.getElementById('app-status-summary');
+    const storeReviewGrid = document.getElementById('store-review-grid');
+    const storeReviewSummary = document.getElementById('store-review-summary');
     const siteStatusGrid = document.getElementById('site-status-grid');
     const siteStatusSummary = document.getElementById('site-status-summary');
     const pricingStatusGrid = document.getElementById('pricing-status-grid');
@@ -1791,6 +1869,7 @@ def html_document(
       document.getElementById('overview-sync-label').textContent = t('overviewSync');
       document.getElementById('overview-verify-label').textContent = t('overviewVerify');
       document.getElementById('app-status-title').textContent = t('appStatusTitle');
+      document.getElementById('store-review-title').textContent = t('storeReviewTitle');
       document.getElementById('platform-status-title').textContent = t('platformStatusTitle');
       document.getElementById('site-status-title').textContent = t('siteStatusTitle');
       document.getElementById('pricing-status-title').textContent = t('pricingStatusTitle');
@@ -2295,6 +2374,7 @@ def html_document(
       releases = readEmbeddedJson(doc, 'release-data');
       blogItems = readEmbeddedJson(doc, 'blog-data');
       storeItems = readEmbeddedJson(doc, 'store-data');
+      storeReviewItems = readEmbeddedJson(doc, 'store-review-data');
       flutterDependencyItems = readEmbeddedJson(doc, 'flutter-dependency-data');
       siteItems = readEmbeddedJson(doc, 'site-data');
       pricingItems = readEmbeddedJson(doc, 'pricing-data');
@@ -3340,6 +3420,89 @@ def html_document(
       return !(item.package_type === 'dependency' && item.declared_version === 'sdk:flutter');
     }}
 
+    function renderStoreReviews() {{
+      storeReviewGrid.textContent = '';
+      const pending = storeReviewItems.filter((item) => item.status !== 'replied' && !item.developer_reply);
+      storeReviewSummary.textContent = `${{storeReviewItems.length}} reviews / ${{pending.length}} ${{t('storeReviewPending')}} · ${{t('storeReviewHumanCheck')}}`;
+      if (!storeReviewItems.length) {{
+        const emptyCard = document.createElement('div');
+        emptyCard.className = 'status-card';
+        emptyCard.textContent = t('storeReviewNoItems');
+        storeReviewGrid.appendChild(emptyCard);
+        return;
+      }}
+      storeReviewItems.forEach((item) => {{
+        const card = document.createElement('article');
+        card.className = 'status-card store-review-card';
+
+        const head = document.createElement('div');
+        head.className = 'store-review-head';
+        const title = document.createElement('strong');
+        title.textContent = `${{item.app_name || item.app_slug}} · ${{storeLabel(item.platform)}}`;
+        const stars = document.createElement('span');
+        stars.className = 'store-review-stars';
+        const rating = Math.max(0, Math.min(5, Number(item.rating) || 0));
+        stars.textContent = `${{'★'.repeat(rating)}}${{'☆'.repeat(5 - rating)}}`;
+        head.append(title, stars);
+
+        const meta = document.createElement('div');
+        meta.className = 'store-review-meta';
+        meta.textContent = [
+          item.reviewer_language || 'unknown language',
+          item.territory || '',
+          item.app_version ? `v${{item.app_version}}` : '',
+          formatDate(item.updated_at || item.created_at),
+          item.status === 'replied' || item.developer_reply ? t('storeReviewReplied') : t('storeReviewPending'),
+        ].filter(Boolean).join(' · ');
+
+        const reviewTitle = document.createElement('strong');
+        reviewTitle.textContent = item.title || `${{item.rating || 0}} / 5`;
+        const body = document.createElement('p');
+        body.className = 'store-review-body';
+        body.textContent = item.body || '—';
+        card.append(head, meta, reviewTitle, body);
+
+        if (item.developer_reply) {{
+          const existingLabel = document.createElement('strong');
+          existingLabel.textContent = t('storeReviewExistingReply');
+          const existing = document.createElement('p');
+          existing.className = 'store-review-body';
+          existing.textContent = item.developer_reply;
+          card.append(existingLabel, existing);
+        }}
+
+        const replyLabel = document.createElement('label');
+        replyLabel.className = 'store-review-meta';
+        replyLabel.textContent = `${{t('storeReviewDraft')}} · ${{item.reply_category}} / ${{item.reply_language}}`;
+        const textarea = document.createElement('textarea');
+        textarea.className = 'store-review-reply';
+        textarea.placeholder = t('storeReviewHumanCheck');
+        textarea.setAttribute('aria-label', t('storeReviewDraft'));
+
+        const actions = document.createElement('div');
+        actions.className = 'store-review-actions';
+        const generate = document.createElement('button');
+        generate.type = 'button';
+        generate.textContent = t('storeReviewGenerate');
+        generate.onclick = () => {{
+          textarea.value = item.suggested_reply || '';
+          generate.textContent = t('storeReviewRegenerate');
+          textarea.focus();
+        }};
+        const copy = document.createElement('button');
+        copy.type = 'button';
+        copy.className = 'secondary';
+        copy.textContent = t('storeReviewCopy');
+        copy.onclick = async () => {{
+          if (!textarea.value) textarea.value = item.suggested_reply || '';
+          await copyText(textarea.value, copy);
+        }};
+        actions.append(generate, copy);
+        card.append(replyLabel, textarea, actions);
+        storeReviewGrid.appendChild(card);
+      }});
+    }}
+
     function renderAppStatusSummary() {{
       appStatusGrid.textContent = '';
       const groups = appStatusGroups();
@@ -3549,6 +3712,7 @@ def html_document(
       visible.forEach((item) => grid.appendChild(card(item)));
       renderPlatformSummary();
       renderAppStatusSummary();
+      renderStoreReviews();
       renderSiteStatusSummary();
       renderPricingStatusSummary();
       updateVariantToggle();
@@ -3799,7 +3963,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v11';
+    return """const CACHE = 'onnellab-manual-publish-v12';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -3851,6 +4015,7 @@ def build_manual_publish_site(
     store_versions_path: Path = DEFAULT_STORE_VERSIONS,
     flutter_dependency_versions_path: Path = DEFAULT_FLUTTER_DEPENDENCY_VERSIONS,
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
+    store_reviews_path: Path = DEFAULT_STORE_REVIEWS,
 ) -> Path:
     topics = read_topics(topics_path)
     items = social_items(social_manifest, topics) + syndication_items(syndication_manifest, topics)
@@ -3858,6 +4023,7 @@ def build_manual_publish_site(
     releases = app_release_items(app_releases_path, app_release_publications_path)
     blog_items = blog_status_items(topics_path)
     store_items = store_status_items(store_versions_path)
+    store_reviews = store_review_items(store_reviews_path)
     flutter_dependency_items = flutter_dependency_status_items(flutter_dependency_versions_path)
     site_items = homepage_status_items(homepage_repo)
     pricing_items = product_pricing_items(homepage_repo)
@@ -3870,12 +4036,13 @@ def build_manual_publish_site(
         html_document(
             items,
             manual_state,
-        releases,
-        blog_items,
-        store_items,
-        flutter_dependency_items,
-        site_items,
-        pricing_items,
+            releases,
+            blog_items,
+            store_items,
+            store_reviews,
+            flutter_dependency_items,
+            site_items,
+            pricing_items,
             ai_provider_pricing_status,
             release_sync_status,
             verification_report,
@@ -3899,6 +4066,7 @@ def main() -> int:
     parser.add_argument("--app-release-sync-status", type=Path, default=DEFAULT_APP_RELEASE_SYNC_STATUS)
     parser.add_argument("--verification-report", type=Path, default=DEFAULT_VERIFICATION_REPORT)
     parser.add_argument("--store-versions", type=Path, default=DEFAULT_STORE_VERSIONS)
+    parser.add_argument("--store-reviews", type=Path, default=DEFAULT_STORE_REVIEWS)
     parser.add_argument("--flutter-dependency-versions", type=Path, default=DEFAULT_FLUTTER_DEPENDENCY_VERSIONS)
     parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPO)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -3916,6 +4084,7 @@ def main() -> int:
         args.store_versions,
         args.flutter_dependency_versions,
         args.homepage_repo,
+        args.store_reviews,
     )
     print(f"generated {output}")
     return 0

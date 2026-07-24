@@ -19,6 +19,7 @@ from build_manual_publish_site import (  # noqa: E402
     hashnode_publish_fields,
     latest_git_time,
     medium_topic_labels,
+    store_review_items,
 )
 
 
@@ -278,6 +279,11 @@ Body
             self.assertIn('"platform": "android"', html)
             self.assertIn("상세 보기", html)
             self.assertIn("card-detail", html)
+            self.assertIn("스토어 리뷰 답변", html)
+            self.assertIn('id="store-review-data"', html)
+            self.assertIn("function renderStoreReviews()", html)
+            self.assertIn("storeReviewGenerate", html)
+            self.assertIn("storeReviewHumanCheck", html)
             self.assertIn("링크 카드 사용", html)
             self.assertIn("이미지 첨부 없이 링크 카드로 게시", html)
             self.assertIn("usesLinkPreviewCard", html)
@@ -289,7 +295,7 @@ Body
             self.assertIn("다음 게시 예정", html)
             self.assertIn("function nextBlogScheduledDate()", html)
             self.assertIn("function nextAutomatedBlogSlot()", html)
-            self.assertIn("function hasBilingualBlogQueue()", html)
+            self.assertIn("function blogQueueCount()", html)
             self.assertIn("86400000 * 3", html)
             self.assertIn("function atKstTime(date, hour, minute)", html)
             self.assertIn("while (next.getTime() <= Date.now())", html)
@@ -406,7 +412,7 @@ Body
             self.assertNotIn("favicon-16x16.png", manifest)
             self.assertTrue((output.parent / "manifest.webmanifest").exists())
             self.assertTrue((output.parent / "sw.js").exists())
-            self.assertIn("onnellab-manual-publish-v11", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("onnellab-manual-publish-v12", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_filters_stale_verification_report_items(self) -> None:
         report = current_verification_report(
@@ -488,6 +494,26 @@ Body
             value = latest_git_time(repo, [page])
 
         self.assertRegex(value, r"^\d{4}-\d{2}-\d{2}T")
+
+    def test_store_review_items_include_safe_template_draft(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            reviews = Path(temp) / "store_reviews.csv"
+            reviews.write_text(
+                "review_id,app_id,app_slug,app_name,platform,rating,title,body,"
+                "reviewer_language,territory,app_version,created_at,updated_at,"
+                "developer_reply,reply_updated_at,status,synced_at\n"
+                "review-1,APP-0001,quivra,Quivra,android,1,변환 오류,"
+                "파일을 고르면 앱이 멈춤,ko-KR,KR,1.0.6,"
+                "2026-07-20T10:00:00Z,2026-07-20T10:00:00Z,,,pending,"
+                "2026-07-24T10:00:00Z\n",
+                encoding="utf-8",
+            )
+
+            items = store_review_items(reviews)
+
+            self.assertEqual(items[0]["reply_category"], "bug")
+            self.assertEqual(items[0]["human_review_required"], "true")
+            self.assertIn("개인정보를 리뷰에 남기지 말고", items[0]["suggested_reply"])
 
 
 if __name__ == "__main__":
