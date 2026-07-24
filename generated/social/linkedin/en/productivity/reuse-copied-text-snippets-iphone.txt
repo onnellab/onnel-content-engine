@@ -1,0 +1,10 @@
+The clearest way to reuse copied text snippets on iPhone without losing track of them is to separate the decision from the tool.
+
+Save only genuinely reusable text in a dedicated snippet list, give each item enough context to recognize it, pin a small set of frequent items, and review the list regularly. Keep passwords, verification codes, payment details, and other secrets out of long-term clipboard history.
+
+Before changing tools:
+- Start with a small scope. Choose five to ten recurring items instead of importing every recent copy.
+- Capture intentionally. Copy one reusable item, open the place where you maintain snippets, and confirm the complete text was captured.
+
+Read the full article:
+https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/

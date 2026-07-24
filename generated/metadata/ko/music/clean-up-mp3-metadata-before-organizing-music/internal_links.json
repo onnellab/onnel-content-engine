@@ -54,6 +54,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0017",
+        "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
+        "slug": "reuse-copied-text-snippets-iphone",
+        "category": "productivity",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/productivity/reuse-copied-text-snippets-iphone.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [

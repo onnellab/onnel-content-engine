@@ -54,6 +54,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0010",
+        "title": "How to Reuse Copied Text Snippets on iPhone",
+        "slug": "reuse-copied-text-snippets-iphone",
+        "category": "productivity",
+        "language": "en",
+        "status": "scheduled",
+        "url": "generated/markdown/en/productivity/reuse-copied-text-snippets-iphone.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [

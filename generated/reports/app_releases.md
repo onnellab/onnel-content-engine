@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-07-24T11:13:42+09:00
+Generated: 2026-07-24T11:40:11+09:00
 
 ## Summary
 
@@ -8,8 +8,7 @@ Generated: 2026-07-24T11:13:42+09:00
 | --- | --- | --- |
 | Store | failed | 1 |
 | Store | manual_check | 1 |
-| Store | unchanged | 9 |
-| Store | updated | 2 |
+| Store | unchanged | 11 |
 | GitHub Release | planned | 4 |
 | GitHub Release | released | 1 |
 
@@ -25,8 +24,8 @@ Generated: 2026-07-24T11:13:42+09:00
 | Quivra | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
 | Quivra | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/quivra | No action |
 | Segra | android | 1.0.4 | 1.0.2 | store_ahead | unchanged | planned | onnellab/segra | Add release artifact and checksum |
-| Segra | ios | 1.0.4 | 1.0.2 | store_ahead | updated | - | onnellab/segra | Sync local metadata |
-| TagWeaver | android | 2.1.4 | 2.1.3 | store_ahead | updated | planned | onnellab/tagweaver | Add release artifact and checksum |
+| Segra | ios | 1.0.4 | 1.0.2 | store_ahead | unchanged | - | onnellab/segra | Sync local metadata |
+| TagWeaver | android | 2.1.4 | 2.1.3 | store_ahead | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
 | TagWeaver | ios | 2.2 | 2.1.3 | store_ahead | unchanged | released | onnellab/tagweaver | Sync local metadata |
 | VaultXT | android | 1.0.3 | 1.0.6 | local_ahead | unchanged | - | onnellab/onnellab-text | Covered by private test release row |
 | VaultXT | ios | 1.0.3 | 1.0.6 | local_ahead | unchanged | planned | onnellab/onnellab-text | Private test only; do not publish public GitHub Release |
@@ -47,7 +46,7 @@ Generated: 2026-07-24T11:13:42+09:00
 | --- | --- | --- | --- | --- |
 | TagWeaver | ios | unchanged | Sync local metadata | - |
 | VaultXT | android | unchanged | Covered by private test release row | Version/update date read from Google Play public page; release notes from Android snapshot. Imported from /home/lue/dev/onnellab-text/vaultxt/pubspec.yaml version 1.0.6+52; confirm against Play Console if needed. |
-| Segra | ios | updated | Sync local metadata | - |
+| Segra | ios | unchanged | Sync local metadata | - |
 | Melivra | ios | failed | Fix store lookup error | App Store lookup returned no result for 6783644955 |
 | Melivra | android | manual_check | Check Google Play update manually | Google Play has no stable public version lookup in this automation. |
 | TagWeaver | android | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
