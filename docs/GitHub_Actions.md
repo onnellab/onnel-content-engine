@@ -421,6 +421,8 @@ LinkedIn remains manual.
 
 Hashnode remains export-only unless its paid API is enabled later.
 
+Hashnode export drafts are generated with the `hashnode-native-v2` profile. The distribution supply gate rejects repeated canonical templates, repeated brand notes, body-level canonical notices, more than one product link, excessive external links, or drafts without enough technical evidence signals before manual publication.
+
 Medium remains disabled.
 
 ---

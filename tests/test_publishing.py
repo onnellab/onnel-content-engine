@@ -28,6 +28,7 @@ from check_distribution_supply import DistributionSupplyError, require_distribut
 from evaluate_social_templates import evaluate_social_templates, repetition_warnings
 from approve_social_post import approve_social_post
 from generate_syndication_drafts import generate_syndication_drafts
+from hashnode_content import HASHNODE_CONTENT_PROFILE, hashnode_automod_risks
 from evaluate_syndication_drafts import evaluate_syndication_drafts
 from approve_syndication_draft import SyndicationApprovalError, approve_syndication_draft
 from check_publishing_credentials import credential_report, credential_status
@@ -684,7 +685,16 @@ class PublishingTest(unittest.TestCase):
         self.assertNotIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", content)
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", content)
         self.assertIn("# How to Read Very Large TXT Files", content)
-        self.assertIn('cover_image: "https://example.com/blog-assets/en/read-large-txt-files/social-card.png"', hashnode_path.read_text(encoding="utf-8"))
+        hashnode_content = hashnode_path.read_text(encoding="utf-8")
+        self.assertIn('cover_image: "https://example.com/blog-assets/en/read-large-txt-files/social-card.png"', hashnode_content)
+        self.assertIn(f'content_profile: "{HASHNODE_CONTENT_PROFILE}"', hashnode_content)
+        self.assertIn('tags: "programming,performance,text-processing"', hashnode_content)
+        self.assertIn("## The constraint to solve", hashnode_content)
+        self.assertIn("## Implementation path", hashnode_content)
+        self.assertNotIn("ONNELLAB note:", hashnode_content)
+        self.assertNotIn("## Question", hashnode_content)
+        self.assertNotIn("Originally published at https://example.com/blog/en/read-large-txt-files/", hashnode_content)
+        self.assertEqual(hashnode_automod_risks(hashnode_content, "https://example.com/blog/en/read-large-txt-files/"), [])
         medium_content = medium_path.read_text(encoding="utf-8")
         self.assertTrue(medium_content.startswith("> ONNELLAB note:"))
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", medium_content)
@@ -804,7 +814,14 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(input_payload["publicationId"], "")
         self.assertEqual(input_payload["slug"], "read-large-txt-files")
         self.assertEqual(input_payload["originalArticleURL"], "https://example.com/blog/en/read-large-txt-files/")
-        self.assertEqual(input_payload["tags"], [{"slug": "large-txt-files", "name": "large-txt-files"}])
+        self.assertEqual(
+            input_payload["tags"],
+            [
+                {"slug": "programming", "name": "programming"},
+                {"slug": "performance", "name": "performance"},
+                {"slug": "text-processing", "name": "text-processing"},
+            ],
+        )
         with self.assertRaises(SyndicationPostingError):
             post_syndication_drafts(output_dir / "manifest.json", platform="hashnode", adapter="hashnode")
         self.assertEqual(
@@ -812,6 +829,38 @@ class PublishingTest(unittest.TestCase):
             "https://example.com/blog-assets/en/read-large-txt-files/social-card.png",
         )
         self.assertFalse(input_payload["settings"]["activateNewsletter"])
+
+    def test_hashnode_automod_gate_rejects_repetitive_promotional_copy(self) -> None:
+        content = """---
+title: "Repeated Draft"
+canonical_url: "https://example.com/original/"
+tags: "programming"
+cover_image: "https://example.com/card.png"
+publication_id: ""
+content_profile: "hashnode-native-v2"
+---
+
+> ONNELLAB note: This version keeps the implementation trade-offs visible.
+
+# Repeated Draft
+
+## Question
+
+What should I do?
+
+[Product](https://onnellab.github.io/apps/example/)
+[Store](https://play.google.com/store/apps/details?id=example)
+
+Originally published at https://example.com/original/
+"""
+
+        risks = hashnode_automod_risks(content, "https://example.com/original/")
+
+        self.assertIn("repeated ONNELLAB note is not allowed", risks)
+        self.assertIn("canonical URL must be set as metadata, not repeated in the body", risks)
+        self.assertIn("body must not repeat the article title as an H1", risks)
+        self.assertIn("generic canonical section headings must be adapted for Hashnode", risks)
+        self.assertIn("body may contain at most one product link", risks)
 
     def test_integrated_publishing_dry_run_report_lists_approved_payloads(self) -> None:
         social_dir = self.root / "generated" / "social"

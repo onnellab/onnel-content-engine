@@ -9,6 +9,7 @@ import re
 import sys
 from pathlib import Path
 
+from hashnode_content import HASHNODE_CONTENT_PROFILE, hashnode_automod_risks
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST_PATH = ROOT / "generated" / "syndication" / "manifest.json"
@@ -47,8 +48,20 @@ def score_draft(draft: dict[str, object], project_root: Path = ROOT) -> dict[str
         checks.append({"name": name, "passed": passed, "points": points if passed else 0.0, "max_points": points})
 
     add("canonical_frontmatter", platform == "medium" or metadata.get("canonical_url") == canonical_url, 1.5)
-    add("canonical_notice", f"Originally published at {canonical_url}" in content, 1.5)
-    add("body_preserved", bool(re.search(r"^#\s+", content, re.MULTILINE)), 1.0)
+    add(
+        "canonical_notice",
+        canonical_url not in content.split("\n---\n", 1)[-1]
+        if platform == "hashnode"
+        else f"Originally published at {canonical_url}" in content,
+        1.5,
+    )
+    add(
+        "body_preserved",
+        bool(re.search(r"^##\s+", content, re.MULTILINE))
+        if platform == "hashnode"
+        else bool(re.search(r"^#\s+", content, re.MULTILINE)),
+        1.0,
+    )
     add("distribution_status", draft.get("status") in {"draft", "approved", "posted"}, 0.8)
     add("platform_supported", platform in {"devto", "hashnode", "medium"}, 0.7)
     if platform == "devto":
@@ -59,6 +72,8 @@ def score_draft(draft: dict[str, object], project_root: Path = ROOT) -> dict[str
         add("hashnode_tags", bool(metadata.get("tags")), 0.8)
         add("hashnode_cover_image", metadata.get("cover_image", "").endswith("/social-card.png"), 1.2)
         add("hashnode_publication_placeholder", "publication_id" in metadata, 0.8)
+        add("hashnode_native_profile", metadata.get("content_profile") == HASHNODE_CONTENT_PROFILE, 1.0)
+        add("hashnode_automod_risk_gate", not hashnode_automod_risks(content, canonical_url), 1.5)
     if platform == "medium":
         add("medium_export_only", draft.get("status") in {"draft", "approved", "posted"}, 1.0)
         add("medium_no_api_claim", "published:" not in content, 0.8)

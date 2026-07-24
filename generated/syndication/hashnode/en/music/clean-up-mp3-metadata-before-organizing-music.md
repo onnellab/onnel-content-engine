@@ -1,24 +1,17 @@
 ---
 title: "How to Clean Up MP3 Metadata Before Organizing Music"
 canonical_url: "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
-tags: "mp3-metadata-editor,id3-tags,music-library-organization,album-artwork"
+tags: "programming,audio,metadata"
 cover_image: "https://onnellab.github.io/blog-assets/en/clean-up-mp3-metadata-before-organizing-music/social-card.png"
 publication_id: ""
+content_profile: "hashnode-native-v2"
 ---
 
-> ONNELLAB note: These are implementation-minded notes from our plain-text workflow research.
 
-
-
-# How to Clean Up MP3 Metadata Before Organizing Music
 
 An MP3 can play perfectly while appearing under the wrong artist, splitting one album into several groups, or sorting tracks out of order. Fixing those symptoms is easier before importing a large collection than after a music library has indexed every inconsistency.
 
-## Question
-
-How can I clean up MP3 metadata before adding songs to a library?
-
-## Short Answer
+## The constraint to solve
 
 Work on copies, define one naming convention, correct the identity and ordering fields first, add artwork only after the text is consistent, save a small test batch, and inspect that batch in the destination player. Do not infer uncertain facts from filenames. A careful MP3 metadata editor workflow favors consistent, verified values over filling every possible field.
 
@@ -36,7 +29,7 @@ Music players usually group and sort files from tag values, not from the visual 
 
 The goal is not to make every field non-empty. The goal is to make the fields you trust internally consistent. A guessed release year or composer can be harder to detect later than an intentionally blank field.
 
-## What to Check First
+## Preflight checks
 
 - Keep an untouched backup and edit duplicate files in a separate working folder.
 - Decide which source is authoritative for title, artist, album, and track order.
@@ -44,7 +37,7 @@ The goal is not to make every field non-empty. The goal is to make the fields yo
 - Check whether the destination player reads embedded metadata, a separate library database, or both.
 - Confirm that you have permission to use any artwork you plan to embed.
 
-## Recommended Workflow
+## Implementation path
 
 1. **Create a reversible workspace.** Copy a small album or five representative tracks into a test folder. Never begin with the only copy of the collection.
 2. **Identify each recording.** Listen briefly when the filename and current title disagree. Mark uncertain tracks instead of guessing.
@@ -76,53 +69,20 @@ Keep the first backup until the cleaned collection has survived an import and a 
 
 Changing metadata does not improve audio quality, repair damaged audio, or prove factual accuracy. It changes the descriptive layer around the recording. Also avoid converting audio merely to edit tags; conversion can alter the media while a tag edit should remain a metadata task.
 
-## ONNELLAB Application
+## When a focused tool helps
 
 [TagWeaver](https://onnellab.github.io/apps/tagweaver/) fits this manual, local cleanup workflow when you need an MP3 metadata editor for selected files. Its public store listings document editing for core identity fields, track and disc values, artwork, lyrics, and batch selections, with explicit save control. The current iOS listing also describes FLAC Vorbis Comment support, while the Google Play listing documents MP3 ID3 v2.3 and v2.4; check the relevant store listing for the format and platform you use.
 
 The app is a tool for applying decisions, not a source of music facts. Establish conventions, verify the recording, and test the saved output before expanding a batch.
-
-## Related Topics
-
-- How album artist differs from track artist in compilations
-- When to use track totals and disc totals
-- How text encoding affects non-Latin music tags
-- How to verify embedded artwork without changing audio
 
 ## References
 
 - [ID3.org: ID3v2.4.0 frame definitions](https://id3.org/id3v2.4.0-frames) defines the title, album, track, disc, and attached-picture frames used in MP3 tags.
 - [ID3.org: ID3v2.3.0 specification](https://id3.org/id3v2.3.0) documents the earlier ID3v2.3 structure still used by many files and tools.
 - [Apple Support: Add artwork to content in Music on Mac](https://support.apple.com/guide/music/add-artwork-mus1c6803257/mac) describes supported artwork files and manual artwork changes in Apple's music library workflow.
-- [TagWeaver on the App Store](https://apps.apple.com/app/id6759609875) is the official iOS product listing and format-capability reference.
-- [TagWeaver on Google Play](https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2) is the official Android product listing and ID3-capability reference.
+- TagWeaver on the App Store is the official iOS product listing and format-capability reference.
+- TagWeaver on Google Play is the official Android product listing and ID3-capability reference.
 
-## Conclusion
+## Takeaway
 
 Treat metadata cleanup as a controlled data-quality task: preserve the original, standardize trusted fields, order tracks explicitly, add artwork after the text is stable, and prove the result with a small import. That workflow prevents a fast batch edit from becoming a collection-wide mistake.
-
-## FAQ
-
-### Should I fill every empty tag?
-
-No. Complete but unverified metadata is less useful than a smaller set of accurate, consistent fields. Prioritize title, artist, album, album artist, and ordering.
-
-### Why does one album appear as two albums?
-
-Compare album and album-artist values character by character. Small spelling, punctuation, or spacing differences can lead a player to group tracks separately.
-
-### Is album artist the same as track artist?
-
-Not always. Track artist identifies the performer credited on one recording. Album artist can provide a shared grouping value across a compilation or album with varying track credits.
-
-### Should track numbers include totals?
-
-Totals such as `4/9` are useful when you know the complete release. A correct position without a total is safer than an incorrect total.
-
-### Can changing tags reduce audio quality?
-
-A metadata-only save is conceptually separate from audio encoding. Keep a backup and verify the saved file because an editor's exact write behavior still matters.
-
----
-
-Originally published at https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/

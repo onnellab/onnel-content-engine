@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 from evaluate_syndication_drafts import DEFAULT_MANIFEST_PATH, frontmatter
+from hashnode_content import HASHNODE_CONTENT_PROFILE, hashnode_automod_risks
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -65,9 +66,9 @@ def validate_draft(draft: dict[str, object], project_root: Path = ROOT) -> None:
     metadata = frontmatter(content)
     if platform != "medium" and metadata.get("canonical_url") != canonical_url:
         raise SyndicationValidationError(f"{topic_id} canonical frontmatter mismatch: {draft_path}")
-    if f"Originally published at {canonical_url}" not in content:
+    if platform != "hashnode" and f"Originally published at {canonical_url}" not in content:
         raise SyndicationValidationError(f"{topic_id} missing canonical notice: {draft_path}")
-    if not re.search(r"^#\s+", content, re.MULTILINE):
+    if platform != "hashnode" and not re.search(r"^#\s+", content, re.MULTILINE):
         raise SyndicationValidationError(f"{topic_id} draft body has no title heading: {draft_path}")
     if platform == "devto" and metadata.get("published") != "true":
         raise SyndicationValidationError(f"{topic_id} Dev.to draft must be public by default")
@@ -80,6 +81,11 @@ def validate_draft(draft: dict[str, object], project_root: Path = ROOT) -> None:
             raise SyndicationValidationError(f"{topic_id} Hashnode draft has invalid cover_image")
         if "publication_id" not in metadata:
             raise SyndicationValidationError(f"{topic_id} Hashnode draft has no publication_id placeholder")
+        if metadata.get("content_profile") != HASHNODE_CONTENT_PROFILE:
+            raise SyndicationValidationError(f"{topic_id} Hashnode draft has an outdated content profile")
+        risks = hashnode_automod_risks(content, canonical_url)
+        if risks:
+            raise SyndicationValidationError(f"{topic_id} Hashnode AutoMod risk: {'; '.join(risks)}")
 
 
 def validate_syndication_drafts(manifest_path: Path = DEFAULT_MANIFEST_PATH, project_root: Path | None = None) -> int:

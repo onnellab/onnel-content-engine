@@ -470,6 +470,19 @@ Hashnode drafts should include a `cover_image` field pointing to the generated s
 
 Hashnode Markdown should be copied into the Hashnode editor manually unless the publication is upgraded to a paid plan with GraphQL API access.
 
+Hashnode drafts use the `hashnode-native-v2` content profile. The generator must adapt the canonical article instead of copying its distribution structure verbatim:
+
+* omit the repeated H1 because Hashnode stores the title separately
+* remove generic `Question`, `Related Topics`, and `FAQ` sections
+* rename repeated `Short Answer`, checklist, workflow, product, and conclusion headings for a native technical reading flow
+* set the canonical URL through Hashnode metadata instead of repeating an `Originally published at` link in the body
+* omit the repeated `ONNELLAB note` block
+* use stable developer-community tags instead of SEO keyword tags
+* retain at most one product link and no more than eight external links
+* require at least two technical evidence signals, such as implementation steps, a comparison table, code or inline identifiers, or references
+
+`scripts/validate_syndication_drafts.py` fails closed when a Hashnode draft violates this AutoMod risk profile. A failed draft must be revised before it is approved or copied to Hashnode.
+
 Medium is export-only by default because its public API documentation is archived and no longer recommended for new integrations.
 
 Medium drafts must remain `status: draft` unless explicitly tracked as a manual action.

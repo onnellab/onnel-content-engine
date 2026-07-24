@@ -11,6 +11,7 @@ import sys
 from pathlib import Path
 from urllib.parse import urljoin
 
+from hashnode_content import HASHNODE_CONTENT_PROFILE, hashnode_native_body, hashnode_tag_list
 from publishing import DEFAULT_SITE_URL, PublishingError, article_public_url, load_publishable_articles, normalize_site_url, parse_front_matter, syndication_body, syndication_intro, syndication_note
 from publishing import EXTERNAL_DISTRIBUTION_LANGUAGES
 from topic_management import DEFAULT_TOPICS_PATH, TopicError
@@ -166,6 +167,7 @@ def generate_syndication_drafts(
             "body": body.strip(),
             "syndication_note": "",
             "syndication_intro": "",
+            "content_profile": "",
         }
         for platform in platforms:
             if platform not in PLATFORMS:
@@ -177,7 +179,16 @@ def generate_syndication_drafts(
             destination.parent.mkdir(parents=True, exist_ok=True)
             context["syndication_note"] = syndication_note(article, platform)
             context["syndication_intro"] = syndication_intro(article, platform)
-            context["body"] = absolutize_markdown_links(syndication_body(article, body.strip(), platform), site_url, platform)
+            platform_body = syndication_body(article, body.strip(), platform)
+            platform_body = absolutize_markdown_links(platform_body, site_url, platform)
+            if platform == "hashnode":
+                platform_body = hashnode_native_body(platform_body)
+                context["tags"] = hashnode_tag_list(article.topic["category"])
+                context["content_profile"] = HASHNODE_CONTENT_PROFILE
+            else:
+                context["tags"] = tag_list(metadata, article.topic)
+                context["content_profile"] = ""
+            context["body"] = platform_body
             destination.write_text(render_template(template_path.read_text(encoding="utf-8"), context), encoding="utf-8")
             item = {
                 "topic_id": article.topic["id"],
