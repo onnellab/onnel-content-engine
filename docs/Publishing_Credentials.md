@@ -92,12 +92,13 @@ short-lived JWT at runtime:
 APP_STORE_CONNECT_KEY_ID
 APP_STORE_CONNECT_ISSUER_ID
 APP_STORE_CONNECT_PRIVATE_KEY_BASE64
-GOOGLE_PLAY_ACCESS_TOKEN
+GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64
 ```
 
 `APP_STORE_CONNECT_TOKEN` remains available as a temporary runtime override.
-The Google token must use the `androidpublisher` scope and reads Google Play
-reviews.
+The Google service account is exchanged for a one-hour token with the
+`androidpublisher` scope. `GOOGLE_PLAY_ACCESS_TOKEN` remains available as a
+temporary override.
 
 These values are read-only inputs for `scripts/sync_store_reviews.py`. Do not
 store them in the generated dashboard or commit them to the repository.

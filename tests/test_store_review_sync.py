@@ -14,6 +14,7 @@ from sync_store_reviews import (  # noqa: E402
     app_store_connect_token,
     apple_review_rows,
     der_signature_to_raw,
+    google_service_account_assertion,
     google_review_rows,
 )
 
@@ -60,6 +61,34 @@ class StoreReviewSyncTest(unittest.TestCase):
         raw = der_signature_to_raw(der)
         self.assertEqual(raw[:32], b"\x00" * 31 + b"\x01")
         self.assertEqual(raw[32:], b"\x00" * 31 + b"\x02")
+
+    def test_builds_google_androidpublisher_service_account_assertion(self) -> None:
+        calls: list[tuple[bytes, str]] = []
+
+        def signer(signing_input: bytes, private_key: str) -> bytes:
+            calls.append((signing_input, private_key))
+            return b"rsa-signature"
+
+        token = google_service_account_assertion(
+            {
+                "client_email": "reviews@example.iam.gserviceaccount.com",
+                "private_key": "-----BEGIN PRIVATE KEY-----\ntest\n-----END PRIVATE KEY-----",
+            },
+            issued_at=1_800_000_000,
+            signer=signer,
+        )
+        header_segment, payload_segment, signature_segment = token.split(".")
+
+        def decode(segment: str) -> bytes:
+            return base64.urlsafe_b64decode(segment + "=" * (-len(segment) % 4))
+
+        self.assertEqual(json.loads(decode(header_segment)), {"alg": "RS256", "typ": "JWT"})
+        payload = json.loads(decode(payload_segment))
+        self.assertEqual(payload["scope"], "https://www.googleapis.com/auth/androidpublisher")
+        self.assertEqual(payload["aud"], "https://oauth2.googleapis.com/token")
+        self.assertEqual(payload["exp"] - payload["iat"], 60 * 60)
+        self.assertEqual(decode(signature_segment), b"rsa-signature")
+        self.assertEqual(calls[0][0], f"{header_segment}.{payload_segment}".encode("ascii"))
 
     def test_parses_apple_review_and_response(self) -> None:
         rows = apple_review_rows(

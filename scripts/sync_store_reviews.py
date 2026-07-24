@@ -120,6 +120,60 @@ def app_store_connect_token(
     return f"{signing_input.decode('ascii')}.{base64url(signature)}"
 
 
+def google_service_account_assertion(
+    service_account: dict[str, object],
+    issued_at: int | None = None,
+    signer=sign_es256,
+) -> str:
+    client_email = str(service_account.get("client_email", "")).strip()
+    private_key = str(service_account.get("private_key", "")).strip()
+    if not client_email or not private_key:
+        raise ValueError("Google Play service account JSON requires client_email and private_key")
+    now = int(time.time()) if issued_at is None else issued_at
+    header = {"alg": "RS256", "typ": "JWT"}
+    payload = {
+        "iss": client_email,
+        "scope": "https://www.googleapis.com/auth/androidpublisher",
+        "aud": "https://oauth2.googleapis.com/token",
+        "iat": now,
+        "exp": now + 60 * 60,
+    }
+    encoded_header = base64url(json.dumps(header, separators=(",", ":")).encode("utf-8"))
+    encoded_payload = base64url(json.dumps(payload, separators=(",", ":")).encode("utf-8"))
+    signing_input = f"{encoded_header}.{encoded_payload}".encode("ascii")
+    signature = signer(signing_input, private_key)
+    return f"{signing_input.decode('ascii')}.{base64url(signature)}"
+
+
+def google_play_access_token(service_account_json: str) -> str:
+    service_account = json.loads(service_account_json)
+    if not isinstance(service_account, dict):
+        raise ValueError("Google Play service account JSON must be an object")
+    assertion = google_service_account_assertion(service_account)
+    body = urllib.parse.urlencode(
+        {
+            "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "assertion": assertion,
+        }
+    ).encode("utf-8")
+    request = urllib.request.Request(
+        "https://oauth2.googleapis.com/token",
+        data=body,
+        headers={
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": "ONNELLAB-Store-Review-Sync/1.0",
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    access_token = str(payload.get("access_token", "") if isinstance(payload, dict) else "").strip()
+    if not access_token:
+        raise ValueError("Google OAuth response did not include an access token")
+    return access_token
+
+
 def now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
@@ -377,11 +431,17 @@ def main() -> int:
             private_key = base64.b64decode(encoded_private_key, validate=True).decode("utf-8")
         if key_id or issuer_id or private_key:
             apple_token = app_store_connect_token(key_id, issuer_id, private_key)
+    google_token = os.environ.get("GOOGLE_PLAY_ACCESS_TOKEN", "").strip()
+    if not google_token:
+        encoded_service_account = os.environ.get("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", "").strip()
+        if encoded_service_account:
+            service_account_json = base64.b64decode(encoded_service_account, validate=True).decode("utf-8")
+            google_token = google_play_access_token(service_account_json)
     counts = sync_reviews(
         stores_path=args.stores,
         output_path=args.output,
         apple_token=apple_token,
-        google_token=os.environ.get("GOOGLE_PLAY_ACCESS_TOKEN", ""),
+        google_token=google_token,
         apple_json_dir=args.apple_json_dir,
         google_json_dir=args.google_json_dir,
     )

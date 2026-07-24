@@ -25,7 +25,7 @@ For Apple, provide a newly issued App Store Connect API key:
 APP_STORE_CONNECT_KEY_ID
 APP_STORE_CONNECT_ISSUER_ID
 APP_STORE_CONNECT_PRIVATE_KEY_BASE64
-GOOGLE_PLAY_ACCESS_TOKEN
+GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64
 ```
 
 The dashboard converts the pasted PEM to single-line Base64 so the ignored env
@@ -35,10 +35,17 @@ it in memory and creates a 19-minute ES256 JWT at runtime. It also accepts
 temporary override. Do not commit tokens, API private keys, service-account
 JSON, review exports, or temporary authentication files.
 
+For Google Play, paste the service account JSON into the dashboard. The form
+converts the complete JSON to single-line Base64. At runtime the sync script
+creates a one-hour OAuth assertion with the `androidpublisher` scope and
+exchanges it for an access token. `GOOGLE_PLAY_ACCESS_TOKEN` remains available
+as a temporary override.
+
 The dashboard's **Store review connection** panel prepares the env block and
-commands. It saves only Key ID and Issuer ID in browser storage; the private key
-is cleared on refresh. After copying the env block into the gitignored local env
-file, synchronize the three Apple values to GitHub Actions:
+commands. It saves only Key ID and Issuer ID in browser storage; the Apple
+private key and Google service account JSON are cleared on refresh. After
+copying the env block into the gitignored local env file, synchronize the store
+credentials to GitHub Actions:
 
 ```bash
 python3 scripts/run_with_local_env.py -- python3 scripts/sync_store_review_secrets.py
@@ -51,9 +58,9 @@ python3 scripts/sync_store_reviews.py
 python3 scripts/build_manual_publish_site.py
 ```
 
-The Apple token needs access to customer reviews in App Store Connect. The
-Google token needs the `androidpublisher` scope and Play Console permission for
-the target apps.
+The Apple key needs access to customer reviews in App Store Connect. The Google
+service account must be linked in Play Console and have permission to view
+reviews for the target apps.
 
 The `sync-store-reviews.yml` workflow runs daily and can also be started from
 the dashboard with **Sync reviews now** after the GitHub token is connected.

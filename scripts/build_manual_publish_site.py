@@ -1258,8 +1258,8 @@ def html_document(
       <summary id="store-credential-panel-title" class="panel-summary">스토어 리뷰 연결</summary>
       <div class="credential-head">
         <div>
-          <h2 id="store-credentials-title">App Store 리뷰 연결</h2>
-          <p id="store-credentials-copy">재발급한 App Store Connect 키를 입력하면 GitHub Actions secret 설정값과 리뷰 동기화 명령을 만들 수 있습니다.</p>
+          <h2 id="store-credentials-title">App Store / Play Store 리뷰 연결</h2>
+          <p id="store-credentials-copy">Apple API 키와 Google Play 서비스 계정 JSON을 입력하면 GitHub Actions secret 설정값과 리뷰 동기화 명령을 만들 수 있습니다.</p>
         </div>
       </div>
       <div class="credential-grid">
@@ -1267,6 +1267,7 @@ def html_document(
         <label><span id="app-store-issuer-id-label">Issuer ID</span><input id="app-store-issuer-id" type="text" autocomplete="off"></label>
       </div>
       <label><span id="app-store-private-key-label">새 Private Key (.p8 PEM)</span><textarea id="app-store-private-key" class="credential-output" autocomplete="off" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label>
+      <label><span id="google-play-service-account-label">Google Play 서비스 계정 JSON</span><textarea id="google-play-service-account" class="credential-output" autocomplete="off" spellcheck="false" placeholder='{{"type":"service_account", ...}}'></textarea></label>
       <div class="credential-actions">
         <button id="save-store-credentials" type="button">연결 정보 저장</button>
         <button id="copy-store-env-block" type="button" class="secondary">스토어 env 블록 복사</button>
@@ -1276,7 +1277,7 @@ def html_document(
         <button id="clear-store-credentials" type="button" class="secondary">연결 정보 삭제</button>
       </div>
       <textarea id="store-credential-output" class="credential-output" readonly spellcheck="false"></textarea>
-      <div id="store-credential-note" class="note">Key ID와 Issuer ID만 이 브라우저에 저장됩니다. Private Key는 새로고침 시 지워지며 HTML·CSV·Git에 포함되지 않습니다.</div>
+      <div id="store-credential-note" class="note">Key ID와 Issuer ID만 이 브라우저에 저장됩니다. Apple Private Key와 Google 서비스 계정 JSON은 새로고침 시 지워지며 HTML·CSV·Git에 포함되지 않습니다.</div>
     </details>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
@@ -1409,11 +1410,12 @@ def html_document(
         postingRunHelp: '입력값 저장만으로는 자동 게시가 즉시 실행되지 않습니다. GitHub secrets 동기화 후 이 버튼으로 publishing workflow를 dry_run=false로 실행하세요.',
         credentialNote: '브라우저 저장은 자동 포스팅 실행 환경에 직접 전달되지 않습니다. env 블록을 docs/environment variables.md에 붙여넣은 뒤 secrets 동기화 명령을 실행하면 GitHub Actions 자동 포스팅에도 반영됩니다.',
         storeCredentialPanelTitle: '스토어 리뷰 연결',
-        storeCredentialsTitle: 'App Store 리뷰 연결',
-        storeCredentialsCopy: '재발급한 App Store Connect 키를 입력하면 GitHub Actions secret 설정값과 리뷰 동기화 명령을 만들 수 있습니다.',
+        storeCredentialsTitle: 'App Store / Play Store 리뷰 연결',
+        storeCredentialsCopy: 'Apple API 키와 Google Play 서비스 계정 JSON을 입력하면 GitHub Actions secret 설정값과 리뷰 동기화 명령을 만들 수 있습니다.',
         appStoreKeyId: 'Key ID',
         appStoreIssuerId: 'Issuer ID',
         appStorePrivateKey: '새 Private Key (.p8 PEM)',
+        googlePlayServiceAccount: 'Google Play 서비스 계정 JSON',
         saveStoreCredentials: '연결 정보 저장',
         clearStoreCredentials: '연결 정보 삭제',
         copyStoreEnvBlock: '스토어 env 블록 복사',
@@ -1421,7 +1423,7 @@ def html_document(
         copyStoreSyncCommand: '리뷰 동기화 명령 복사',
         runStoreSyncNow: '지금 리뷰 동기화',
         storeSyncStarted: '리뷰 동기화를 시작했습니다',
-        storeCredentialNote: 'Key ID와 Issuer ID만 이 브라우저에 저장됩니다. Private Key는 새로고침 시 지워지며 HTML·CSV·Git에 포함되지 않습니다.',
+        storeCredentialNote: 'Key ID와 Issuer ID만 이 브라우저에 저장됩니다. Apple Private Key와 Google 서비스 계정 JSON은 새로고침 시 지워지며 HTML·CSV·Git에 포함되지 않습니다.',
         credentialsSaved: '저장됨',
         credentialsCleared: '삭제됨',
         missingCredentials: '필수값 누락',
@@ -1654,11 +1656,12 @@ def html_document(
         postingRunHelp: 'Saving inputs alone does not run posting immediately. Sync GitHub secrets, then use this button to run the publishing workflow with dry_run=false.',
         credentialNote: 'Browser storage is not passed to the posting runtime. Paste the env block into docs/environment variables.md, then run the secrets sync command to connect GitHub Actions automated posting.',
         storeCredentialPanelTitle: 'Store review connection',
-        storeCredentialsTitle: 'App Store review connection',
-        storeCredentialsCopy: 'Enter a newly issued App Store Connect key to prepare GitHub Actions secrets and review sync commands.',
+        storeCredentialsTitle: 'App Store / Play Store review connection',
+        storeCredentialsCopy: 'Enter an Apple API key and Google Play service account JSON to prepare GitHub Actions secrets and review sync commands.',
         appStoreKeyId: 'Key ID',
         appStoreIssuerId: 'Issuer ID',
         appStorePrivateKey: 'New private key (.p8 PEM)',
+        googlePlayServiceAccount: 'Google Play service account JSON',
         saveStoreCredentials: 'Save connection details',
         clearStoreCredentials: 'Clear connection details',
         copyStoreEnvBlock: 'Copy store env block',
@@ -1666,7 +1669,7 @@ def html_document(
         copyStoreSyncCommand: 'Copy review sync command',
         runStoreSyncNow: 'Sync reviews now',
         storeSyncStarted: 'Store review sync started',
-        storeCredentialNote: 'Only Key ID and Issuer ID are saved in this browser. The private key is cleared on refresh and is never embedded in HTML, CSV, or Git.',
+        storeCredentialNote: 'Only Key ID and Issuer ID are saved in this browser. The Apple private key and Google service account JSON are cleared on refresh and never embedded in HTML, CSV, or Git.',
         credentialsSaved: 'Saved',
         credentialsCleared: 'Cleared',
         missingCredentials: 'Missing required values',
@@ -1878,6 +1881,7 @@ def html_document(
       keyId: document.getElementById('app-store-key-id'),
       issuerId: document.getElementById('app-store-issuer-id'),
       privateKey: document.getElementById('app-store-private-key'),
+      googleServiceAccount: document.getElementById('google-play-service-account'),
     }};
     const storeCredentialOutput = document.getElementById('store-credential-output');
     const syncAuthPanel = document.getElementById('sync-auth');
@@ -1958,6 +1962,7 @@ def html_document(
       document.getElementById('app-store-key-id-label').textContent = t('appStoreKeyId');
       document.getElementById('app-store-issuer-id-label').textContent = t('appStoreIssuerId');
       document.getElementById('app-store-private-key-label').textContent = t('appStorePrivateKey');
+      document.getElementById('google-play-service-account-label').textContent = t('googlePlayServiceAccount');
       document.getElementById('save-store-credentials').textContent = t('saveStoreCredentials');
       document.getElementById('clear-store-credentials').textContent = t('clearStoreCredentials');
       document.getElementById('copy-store-env-block').textContent = t('copyStoreEnvBlock');
@@ -2164,6 +2169,7 @@ def html_document(
         keyId: storeCredentialInputs.keyId.value.trim(),
         issuerId: storeCredentialInputs.issuerId.value.trim(),
         privateKey: storeCredentialInputs.privateKey.value.trim(),
+        googleServiceAccount: storeCredentialInputs.googleServiceAccount.value.trim(),
       }};
     }}
 
@@ -2176,6 +2182,7 @@ def html_document(
         console.warn(error);
       }}
       storeCredentialInputs.privateKey.value = '';
+      storeCredentialInputs.googleServiceAccount.value = '';
       updateStoreCredentialOutput();
     }}
 
@@ -2200,11 +2207,14 @@ def html_document(
       const values = storeCredentialValues();
       const privateKeyBytes = new TextEncoder().encode(values.privateKey);
       const privateKeyBase64 = btoa(Array.from(privateKeyBytes, (byte) => String.fromCharCode(byte)).join(''));
+      const googleServiceAccountBytes = new TextEncoder().encode(values.googleServiceAccount);
+      const googleServiceAccountBase64 = btoa(Array.from(googleServiceAccountBytes, (byte) => String.fromCharCode(byte)).join(''));
       return [
         '# ONNELLAB store review credentials',
         `export APP_STORE_CONNECT_KEY_ID=${{shellQuote(values.keyId)}}`,
         `export APP_STORE_CONNECT_ISSUER_ID=${{shellQuote(values.issuerId)}}`,
         `export APP_STORE_CONNECT_PRIVATE_KEY_BASE64=${{shellQuote(privateKeyBase64)}}`,
+        `export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64=${{shellQuote(googleServiceAccountBase64)}}`,
       ].join('\\n') + '\\n';
     }}
 
@@ -2222,6 +2232,7 @@ def html_document(
         values.keyId ? '' : 'APP_STORE_CONNECT_KEY_ID',
         values.issuerId ? '' : 'APP_STORE_CONNECT_ISSUER_ID',
         values.privateKey ? '' : 'APP_STORE_CONNECT_PRIVATE_KEY_BASE64',
+        values.googleServiceAccount ? '' : 'GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64',
       ].filter(Boolean);
       storeCredentialOutput.value = missing.length
         ? `${{t('missingCredentials')}}: ${{missing.join(', ')}}\\n\\n${{storeCredentialEnvBlock()}}`
