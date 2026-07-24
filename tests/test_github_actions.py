@@ -130,6 +130,17 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("public/manual-publish/sw.js", workflow)
         self.assertIn("Refresh manual publish dashboard", workflow)
 
+    def test_store_review_workflow_syncs_and_deploys_dashboard(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "sync-store-reviews.yml").read_text(encoding="utf-8")
+
+        self.assertIn("workflow_dispatch", workflow)
+        self.assertIn('cron: "20 0 * * *"', workflow)
+        self.assertIn("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", workflow)
+        self.assertIn("scripts/sync_store_reviews.py", workflow)
+        self.assertIn("scripts/build_manual_publish_site.py", workflow)
+        self.assertIn("data/store_reviews.csv", workflow)
+        self.assertIn("public/manual-publish/", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

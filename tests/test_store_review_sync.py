@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import unittest
+import base64
+import json
 
 import sys
 from pathlib import Path
@@ -8,7 +10,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from sync_store_reviews import apple_review_rows, google_review_rows  # noqa: E402
+from sync_store_reviews import (  # noqa: E402
+    app_store_connect_token,
+    apple_review_rows,
+    der_signature_to_raw,
+    google_review_rows,
+)
 
 
 STORE = {
@@ -19,6 +26,41 @@ STORE = {
 
 
 class StoreReviewSyncTest(unittest.TestCase):
+    def test_builds_short_lived_app_store_connect_jwt(self) -> None:
+        r = bytes.fromhex("01" * 32)
+        s = bytes.fromhex("80" + "02" * 31)
+        der = b"\x30\x45\x02\x20" + r + b"\x02\x21\x00" + s
+        calls: list[tuple[bytes, str]] = []
+
+        def signer(signing_input: bytes, private_key: str) -> bytes:
+            calls.append((signing_input, private_key))
+            return der
+
+        token = app_store_connect_token(
+            "KEY123",
+            "issuer-123",
+            "-----BEGIN PRIVATE KEY-----\ntest\n-----END PRIVATE KEY-----",
+            issued_at=1_800_000_000,
+            signer=signer,
+        )
+        header_segment, payload_segment, signature_segment = token.split(".")
+
+        def decode(segment: str) -> bytes:
+            return base64.urlsafe_b64decode(segment + "=" * (-len(segment) % 4))
+
+        self.assertEqual(json.loads(decode(header_segment)), {"alg": "ES256", "kid": "KEY123", "typ": "JWT"})
+        payload = json.loads(decode(payload_segment))
+        self.assertEqual(payload["aud"], "appstoreconnect-v1")
+        self.assertEqual(payload["exp"] - payload["iat"], 19 * 60)
+        self.assertEqual(len(decode(signature_segment)), 64)
+        self.assertEqual(calls[0][0], f"{header_segment}.{payload_segment}".encode("ascii"))
+
+    def test_converts_der_ecdsa_signature_to_raw(self) -> None:
+        der = b"\x30\x06\x02\x01\x01\x02\x01\x02"
+        raw = der_signature_to_raw(der)
+        self.assertEqual(raw[:32], b"\x00" * 31 + b"\x01")
+        self.assertEqual(raw[32:], b"\x00" * 31 + b"\x02")
+
     def test_parses_apple_review_and_response(self) -> None:
         rows = apple_review_rows(
             {

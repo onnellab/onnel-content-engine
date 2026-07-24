@@ -4,9 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import csv
 import json
 import os
+import subprocess
+import tempfile
+import time
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -35,6 +39,85 @@ FIELDS = [
     "status",
     "synced_at",
 ]
+
+
+def base64url(value: bytes) -> str:
+    return base64.urlsafe_b64encode(value).rstrip(b"=").decode("ascii")
+
+
+def der_signature_to_raw(signature: bytes, component_size: int = 32) -> bytes:
+    """Convert an ASN.1 DER ECDSA signature into the JWT r||s representation."""
+
+    def read_length(offset: int) -> tuple[int, int]:
+        if offset >= len(signature):
+            raise ValueError("truncated DER signature")
+        first = signature[offset]
+        offset += 1
+        if first < 0x80:
+            return first, offset
+        count = first & 0x7F
+        if count == 0 or count > 2 or offset + count > len(signature):
+            raise ValueError("invalid DER signature length")
+        return int.from_bytes(signature[offset : offset + count], "big"), offset + count
+
+    if not signature or signature[0] != 0x30:
+        raise ValueError("ECDSA signature is not a DER sequence")
+    sequence_length, offset = read_length(1)
+    if offset + sequence_length != len(signature):
+        raise ValueError("invalid DER sequence length")
+    components: list[bytes] = []
+    for _ in range(2):
+        if offset >= len(signature) or signature[offset] != 0x02:
+            raise ValueError("ECDSA signature component is not an integer")
+        length, offset = read_length(offset + 1)
+        value = signature[offset : offset + length]
+        offset += length
+        value = value.lstrip(b"\x00")
+        if not value or len(value) > component_size:
+            raise ValueError("invalid ECDSA signature component size")
+        components.append(value.rjust(component_size, b"\x00"))
+    if offset != len(signature):
+        raise ValueError("unexpected trailing DER signature bytes")
+    return b"".join(components)
+
+
+def sign_es256(signing_input: bytes, private_key: str) -> bytes:
+    normalized_key = private_key.strip().replace("\\n", "\n") + "\n"
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", delete=True) as key_file:
+        os.chmod(key_file.name, 0o600)
+        key_file.write(normalized_key)
+        key_file.flush()
+        result = subprocess.run(
+            ["openssl", "dgst", "-sha256", "-sign", key_file.name],
+            input=signing_input,
+            capture_output=True,
+            check=True,
+        )
+    return result.stdout
+
+
+def app_store_connect_token(
+    key_id: str,
+    issuer_id: str,
+    private_key: str,
+    issued_at: int | None = None,
+    signer=sign_es256,
+) -> str:
+    if not key_id.strip() or not issuer_id.strip() or not private_key.strip():
+        raise ValueError("App Store Connect Key ID, Issuer ID, and private key are required")
+    now = int(time.time()) if issued_at is None else issued_at
+    header = {"alg": "ES256", "kid": key_id.strip(), "typ": "JWT"}
+    payload = {
+        "iss": issuer_id.strip(),
+        "iat": now,
+        "exp": now + 19 * 60,
+        "aud": "appstoreconnect-v1",
+    }
+    encoded_header = base64url(json.dumps(header, separators=(",", ":")).encode("utf-8"))
+    encoded_payload = base64url(json.dumps(payload, separators=(",", ":")).encode("utf-8"))
+    signing_input = f"{encoded_header}.{encoded_payload}".encode("ascii")
+    signature = der_signature_to_raw(signer(signing_input, private_key))
+    return f"{signing_input.decode('ascii')}.{base64url(signature)}"
 
 
 def now_iso() -> str:
@@ -284,10 +367,20 @@ def main() -> int:
     parser.add_argument("--apple-json-dir", type=Path)
     parser.add_argument("--google-json-dir", type=Path)
     args = parser.parse_args()
+    apple_token = os.environ.get("APP_STORE_CONNECT_TOKEN", "").strip()
+    if not apple_token:
+        key_id = os.environ.get("APP_STORE_CONNECT_KEY_ID", "").strip()
+        issuer_id = os.environ.get("APP_STORE_CONNECT_ISSUER_ID", "").strip()
+        private_key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY", "").strip()
+        encoded_private_key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", "").strip()
+        if not private_key and encoded_private_key:
+            private_key = base64.b64decode(encoded_private_key, validate=True).decode("utf-8")
+        if key_id or issuer_id or private_key:
+            apple_token = app_store_connect_token(key_id, issuer_id, private_key)
     counts = sync_reviews(
         stores_path=args.stores,
         output_path=args.output,
-        apple_token=os.environ.get("APP_STORE_CONNECT_TOKEN", ""),
+        apple_token=apple_token,
         google_token=os.environ.get("GOOGLE_PLAY_ACCESS_TOKEN", ""),
         apple_json_dir=args.apple_json_dir,
         google_json_dir=args.google_json_dir,

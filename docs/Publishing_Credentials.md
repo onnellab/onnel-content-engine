@@ -85,15 +85,19 @@ Credential checks must run before any non-mock adapter posts content.
 
 ## Store Review Synchronization
 
-The review dashboard accepts short-lived runtime access tokens:
+The review dashboard accepts an App Store Connect API key and generates a
+short-lived JWT at runtime:
 
 ```text
-APP_STORE_CONNECT_TOKEN
+APP_STORE_CONNECT_KEY_ID
+APP_STORE_CONNECT_ISSUER_ID
+APP_STORE_CONNECT_PRIVATE_KEY_BASE64
 GOOGLE_PLAY_ACCESS_TOKEN
 ```
 
-The Apple token reads App Store Connect customer reviews. The Google token must
-use the `androidpublisher` scope and reads Google Play reviews.
+`APP_STORE_CONNECT_TOKEN` remains available as a temporary runtime override.
+The Google token must use the `androidpublisher` scope and reads Google Play
+reviews.
 
 These values are read-only inputs for `scripts/sync_store_reviews.py`. Do not
 store them in the generated dashboard or commit them to the repository.

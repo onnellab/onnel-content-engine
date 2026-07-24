@@ -1254,6 +1254,30 @@ def html_document(
       <div id="posting-run-note" class="note">입력값 저장만으로는 자동 게시가 즉시 실행되지 않습니다. GitHub secrets 동기화 후 이 버튼으로 publishing workflow를 dry_run=false로 실행하세요.</div>
       <div id="credential-note" class="note">복사한 env 블록을 docs/environment variables.md에 붙여넣으면 기존 자동 포스팅 스크립트가 해당 값을 읽습니다.</div>
     </details>
+    <details class="credential-panel" aria-label="Store review credentials">
+      <summary id="store-credential-panel-title" class="panel-summary">스토어 리뷰 연결</summary>
+      <div class="credential-head">
+        <div>
+          <h2 id="store-credentials-title">App Store 리뷰 연결</h2>
+          <p id="store-credentials-copy">재발급한 App Store Connect 키를 입력하면 GitHub Actions secret 설정값과 리뷰 동기화 명령을 만들 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="credential-grid">
+        <label><span id="app-store-key-id-label">Key ID</span><input id="app-store-key-id" type="text" autocomplete="off"></label>
+        <label><span id="app-store-issuer-id-label">Issuer ID</span><input id="app-store-issuer-id" type="text" autocomplete="off"></label>
+      </div>
+      <label><span id="app-store-private-key-label">새 Private Key (.p8 PEM)</span><textarea id="app-store-private-key" class="credential-output" autocomplete="off" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label>
+      <div class="credential-actions">
+        <button id="save-store-credentials" type="button">연결 정보 저장</button>
+        <button id="copy-store-env-block" type="button" class="secondary">스토어 env 블록 복사</button>
+        <button id="copy-store-secret-sync-command" type="button" class="secondary">스토어 secrets 동기화 명령 복사</button>
+        <button id="copy-store-sync-command" type="button" class="secondary">리뷰 동기화 명령 복사</button>
+        <button id="run-store-sync-now" type="button" class="secondary">지금 리뷰 동기화</button>
+        <button id="clear-store-credentials" type="button" class="secondary">연결 정보 삭제</button>
+      </div>
+      <textarea id="store-credential-output" class="credential-output" readonly spellcheck="false"></textarea>
+      <div id="store-credential-note" class="note">Key ID와 Issuer ID만 이 브라우저에 저장됩니다. Private Key는 새로고침 시 지워지며 HTML·CSV·Git에 포함되지 않습니다.</div>
+    </details>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
     <details class="platform-status" aria-label="Platform status">
@@ -1330,6 +1354,7 @@ def html_document(
     const tokenKey = 'onnellab-manual-publish-token';
     const langKey = 'onnellab-manual-publish-lang';
     const credentialStorageKey = 'onnellab-publishing-credentials';
+    const storeCredentialStorageKey = 'onnellab-store-review-credentials';
     const params = new URLSearchParams(window.location.search);
     const messages = {{
       ko: {{
@@ -1383,6 +1408,20 @@ def html_document(
         postingRunStarted: '자동 포스팅 실행 시작됨',
         postingRunHelp: '입력값 저장만으로는 자동 게시가 즉시 실행되지 않습니다. GitHub secrets 동기화 후 이 버튼으로 publishing workflow를 dry_run=false로 실행하세요.',
         credentialNote: '브라우저 저장은 자동 포스팅 실행 환경에 직접 전달되지 않습니다. env 블록을 docs/environment variables.md에 붙여넣은 뒤 secrets 동기화 명령을 실행하면 GitHub Actions 자동 포스팅에도 반영됩니다.',
+        storeCredentialPanelTitle: '스토어 리뷰 연결',
+        storeCredentialsTitle: 'App Store 리뷰 연결',
+        storeCredentialsCopy: '재발급한 App Store Connect 키를 입력하면 GitHub Actions secret 설정값과 리뷰 동기화 명령을 만들 수 있습니다.',
+        appStoreKeyId: 'Key ID',
+        appStoreIssuerId: 'Issuer ID',
+        appStorePrivateKey: '새 Private Key (.p8 PEM)',
+        saveStoreCredentials: '연결 정보 저장',
+        clearStoreCredentials: '연결 정보 삭제',
+        copyStoreEnvBlock: '스토어 env 블록 복사',
+        copyStoreSecretSyncCommand: '스토어 secrets 동기화 명령 복사',
+        copyStoreSyncCommand: '리뷰 동기화 명령 복사',
+        runStoreSyncNow: '지금 리뷰 동기화',
+        storeSyncStarted: '리뷰 동기화를 시작했습니다',
+        storeCredentialNote: 'Key ID와 Issuer ID만 이 브라우저에 저장됩니다. Private Key는 새로고침 시 지워지며 HTML·CSV·Git에 포함되지 않습니다.',
         credentialsSaved: '저장됨',
         credentialsCleared: '삭제됨',
         missingCredentials: '필수값 누락',
@@ -1614,6 +1653,20 @@ def html_document(
         postingRunStarted: 'Automated posting started',
         postingRunHelp: 'Saving inputs alone does not run posting immediately. Sync GitHub secrets, then use this button to run the publishing workflow with dry_run=false.',
         credentialNote: 'Browser storage is not passed to the posting runtime. Paste the env block into docs/environment variables.md, then run the secrets sync command to connect GitHub Actions automated posting.',
+        storeCredentialPanelTitle: 'Store review connection',
+        storeCredentialsTitle: 'App Store review connection',
+        storeCredentialsCopy: 'Enter a newly issued App Store Connect key to prepare GitHub Actions secrets and review sync commands.',
+        appStoreKeyId: 'Key ID',
+        appStoreIssuerId: 'Issuer ID',
+        appStorePrivateKey: 'New private key (.p8 PEM)',
+        saveStoreCredentials: 'Save connection details',
+        clearStoreCredentials: 'Clear connection details',
+        copyStoreEnvBlock: 'Copy store env block',
+        copyStoreSecretSyncCommand: 'Copy store secrets sync command',
+        copyStoreSyncCommand: 'Copy review sync command',
+        runStoreSyncNow: 'Sync reviews now',
+        storeSyncStarted: 'Store review sync started',
+        storeCredentialNote: 'Only Key ID and Issuer ID are saved in this browser. The private key is cleared on refresh and is never embedded in HTML, CSV, or Git.',
         credentialsSaved: 'Saved',
         credentialsCleared: 'Cleared',
         missingCredentials: 'Missing required values',
@@ -1821,6 +1874,12 @@ def html_document(
       devtoApiKey: document.getElementById('devto-api-key'),
     }};
     const credentialOutput = document.getElementById('credential-output');
+    const storeCredentialInputs = {{
+      keyId: document.getElementById('app-store-key-id'),
+      issuerId: document.getElementById('app-store-issuer-id'),
+      privateKey: document.getElementById('app-store-private-key'),
+    }};
+    const storeCredentialOutput = document.getElementById('store-credential-output');
     const syncAuthPanel = document.getElementById('sync-auth');
     const badgeButton = document.getElementById('enable-badge');
     const refreshButton = document.getElementById('refresh-state');
@@ -1893,6 +1952,19 @@ def html_document(
       document.getElementById('clear-credentials').textContent = t('clearCredentials');
       document.getElementById('posting-run-note').textContent = t('postingRunHelp');
       document.getElementById('credential-note').textContent = t('credentialNote');
+      document.getElementById('store-credential-panel-title').textContent = t('storeCredentialPanelTitle');
+      document.getElementById('store-credentials-title').textContent = t('storeCredentialsTitle');
+      document.getElementById('store-credentials-copy').textContent = t('storeCredentialsCopy');
+      document.getElementById('app-store-key-id-label').textContent = t('appStoreKeyId');
+      document.getElementById('app-store-issuer-id-label').textContent = t('appStoreIssuerId');
+      document.getElementById('app-store-private-key-label').textContent = t('appStorePrivateKey');
+      document.getElementById('save-store-credentials').textContent = t('saveStoreCredentials');
+      document.getElementById('clear-store-credentials').textContent = t('clearStoreCredentials');
+      document.getElementById('copy-store-env-block').textContent = t('copyStoreEnvBlock');
+      document.getElementById('copy-store-secret-sync-command').textContent = t('copyStoreSecretSyncCommand');
+      document.getElementById('copy-store-sync-command').textContent = t('copyStoreSyncCommand');
+      document.getElementById('run-store-sync-now').textContent = t('runStoreSyncNow');
+      document.getElementById('store-credential-note').textContent = t('storeCredentialNote');
       badgeButton.textContent = t('enableBadge');
       updateVariantToggle();
       filters.search.placeholder = t('searchPlaceholder');
@@ -2078,6 +2150,98 @@ def html_document(
         }});
         flash(button, t('postingRunStarted'));
         await refreshVerificationRunLink();
+      }} catch (error) {{
+        flash(button, t('verificationFailed'));
+        setSync('syncError');
+        console.error(error);
+      }} finally {{
+        button.disabled = false;
+      }}
+    }}
+
+    function storeCredentialValues() {{
+      return {{
+        keyId: storeCredentialInputs.keyId.value.trim(),
+        issuerId: storeCredentialInputs.issuerId.value.trim(),
+        privateKey: storeCredentialInputs.privateKey.value.trim(),
+      }};
+    }}
+
+    function loadStoreCredentials() {{
+      try {{
+        const saved = JSON.parse(localStorage.getItem(storeCredentialStorageKey) || '{{}}');
+        storeCredentialInputs.keyId.value = saved.keyId || '';
+        storeCredentialInputs.issuerId.value = saved.issuerId || '';
+      }} catch (error) {{
+        console.warn(error);
+      }}
+      storeCredentialInputs.privateKey.value = '';
+      updateStoreCredentialOutput();
+    }}
+
+    function saveStoreCredentials(button) {{
+      const values = storeCredentialValues();
+      localStorage.setItem(storeCredentialStorageKey, JSON.stringify({{
+        keyId: values.keyId,
+        issuerId: values.issuerId,
+      }}));
+      updateStoreCredentialOutput();
+      flash(button, t('credentialsSaved'));
+    }}
+
+    function clearStoreCredentials(button) {{
+      localStorage.removeItem(storeCredentialStorageKey);
+      Object.values(storeCredentialInputs).forEach((input) => {{ input.value = ''; }});
+      updateStoreCredentialOutput();
+      flash(button, t('credentialsCleared'));
+    }}
+
+    function storeCredentialEnvBlock() {{
+      const values = storeCredentialValues();
+      const privateKeyBytes = new TextEncoder().encode(values.privateKey);
+      const privateKeyBase64 = btoa(Array.from(privateKeyBytes, (byte) => String.fromCharCode(byte)).join(''));
+      return [
+        '# ONNELLAB store review credentials',
+        `export APP_STORE_CONNECT_KEY_ID=${{shellQuote(values.keyId)}}`,
+        `export APP_STORE_CONNECT_ISSUER_ID=${{shellQuote(values.issuerId)}}`,
+        `export APP_STORE_CONNECT_PRIVATE_KEY_BASE64=${{shellQuote(privateKeyBase64)}}`,
+      ].join('\\n') + '\\n';
+    }}
+
+    function storeSecretSyncCommand() {{
+      return 'python3 scripts/run_with_local_env.py -- python3 scripts/sync_store_review_secrets.py';
+    }}
+
+    function storeReviewSyncCommand() {{
+      return 'python3 scripts/run_with_local_env.py -- python3 scripts/sync_store_reviews.py && python3 scripts/build_manual_publish_site.py';
+    }}
+
+    function updateStoreCredentialOutput() {{
+      const values = storeCredentialValues();
+      const missing = [
+        values.keyId ? '' : 'APP_STORE_CONNECT_KEY_ID',
+        values.issuerId ? '' : 'APP_STORE_CONNECT_ISSUER_ID',
+        values.privateKey ? '' : 'APP_STORE_CONNECT_PRIVATE_KEY_BASE64',
+      ].filter(Boolean);
+      storeCredentialOutput.value = missing.length
+        ? `${{t('missingCredentials')}}: ${{missing.join(', ')}}\\n\\n${{storeCredentialEnvBlock()}}`
+        : storeCredentialEnvBlock() + '\\n' + storeSecretSyncCommand() + '\\n' + storeReviewSyncCommand();
+    }}
+
+    async function runStoreReviewSyncNow(button) {{
+      if (!githubToken()) {{
+        setSync('viewOnly');
+        revealTokenInput();
+        return;
+      }}
+      button.disabled = true;
+      try {{
+        await githubRequest(`/repos/${{stateRepo}}/actions/workflows/sync-store-reviews.yml/dispatches`, {{
+          method: 'POST',
+          headers: {{ 'Content-Type': 'application/json' }},
+          body: JSON.stringify({{ ref: stateBranch }}),
+        }});
+        flash(button, t('storeSyncStarted'));
       }} catch (error) {{
         flash(button, t('verificationFailed'));
         setSync('syncError');
@@ -3870,6 +4034,13 @@ def html_document(
     document.getElementById('copy-post-command').onclick = (event) => copyPostingCommand(event.currentTarget);
     document.getElementById('run-posting-now').onclick = (event) => runPostingNow(event.currentTarget);
     Object.values(credentialInputs).forEach((input) => input.addEventListener('input', updateCredentialOutput));
+    document.getElementById('save-store-credentials').onclick = (event) => saveStoreCredentials(event.currentTarget);
+    document.getElementById('clear-store-credentials').onclick = (event) => clearStoreCredentials(event.currentTarget);
+    document.getElementById('copy-store-env-block').onclick = (event) => copyText(storeCredentialEnvBlock(), event.currentTarget);
+    document.getElementById('copy-store-secret-sync-command').onclick = (event) => copyText(storeSecretSyncCommand(), event.currentTarget);
+    document.getElementById('copy-store-sync-command').onclick = (event) => copyText(storeReviewSyncCommand(), event.currentTarget);
+    document.getElementById('run-store-sync-now').onclick = (event) => runStoreReviewSyncNow(event.currentTarget);
+    Object.values(storeCredentialInputs).forEach((input) => input.addEventListener('input', updateStoreCredentialOutput));
     refreshButton.onclick = () => {{
       if (!githubToken()) {{
         setSync('viewOnly');
@@ -3920,6 +4091,7 @@ def html_document(
     }});
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.warn);
     loadCredentials();
+    loadStoreCredentials();
     loadRemoteState({{ refreshDashboardData: true }});
   </script>
 </body>

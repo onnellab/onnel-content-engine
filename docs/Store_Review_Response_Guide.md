@@ -19,15 +19,30 @@ posted without human review.
 
 ## Credentials
 
-Provide short-lived access tokens only at runtime:
+For Apple, provide a newly issued App Store Connect API key:
 
 ```text
-APP_STORE_CONNECT_TOKEN
+APP_STORE_CONNECT_KEY_ID
+APP_STORE_CONNECT_ISSUER_ID
+APP_STORE_CONNECT_PRIVATE_KEY_BASE64
 GOOGLE_PLAY_ACCESS_TOKEN
 ```
 
-Do not commit tokens, API private keys, service-account JSON, review exports, or
-temporary authentication files.
+The dashboard converts the pasted PEM to single-line Base64 so the ignored env
+file and GitHub Actions can transport it safely. `sync_store_reviews.py` decodes
+it in memory and creates a 19-minute ES256 JWT at runtime. It also accepts
+`APP_STORE_CONNECT_PRIVATE_KEY` directly and `APP_STORE_CONNECT_TOKEN` as a
+temporary override. Do not commit tokens, API private keys, service-account
+JSON, review exports, or temporary authentication files.
+
+The dashboard's **Store review connection** panel prepares the env block and
+commands. It saves only Key ID and Issuer ID in browser storage; the private key
+is cleared on refresh. After copying the env block into the gitignored local env
+file, synchronize the three Apple values to GitHub Actions:
+
+```bash
+python3 scripts/run_with_local_env.py -- python3 scripts/sync_store_review_secrets.py
+```
 
 Run:
 
@@ -39,6 +54,9 @@ python3 scripts/build_manual_publish_site.py
 The Apple token needs access to customer reviews in App Store Connect. The
 Google token needs the `androidpublisher` scope and Play Console permission for
 the target apps.
+
+The `sync-store-reviews.yml` workflow runs daily and can also be started from
+the dashboard with **Sync reviews now** after the GitHub token is connected.
 
 Official API references:
 

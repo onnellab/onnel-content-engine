@@ -199,6 +199,11 @@ python3 scripts/sync_store_reviews.py
 python3 scripts/build_manual_publish_site.py
 ```
 
+The dashboard's **Store review connection** panel accepts a newly issued Apple
+Key ID, Issuer ID, and `.p8` private key, then prepares the local env and GitHub
+Actions secret-sync commands. The private key is not embedded in the generated
+dashboard and is cleared from the form on refresh.
+
 The dashboard shows synchronized reviews and creates Korean or English reply
 drafts from the repository-managed templates. Every draft requires human review
 and manual publication. See `docs/Store_Review_Response_Guide.md`.

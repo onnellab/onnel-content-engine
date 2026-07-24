@@ -1,0 +1,82 @@
+name: Sync Store Reviews
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 0 * * *"
+
+concurrency:
+  group: sync-store-reviews
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      HOMEPAGE_REPO_PATH: .homepage
+
+    steps:
+      - name: Checkout content engine
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+
+      - name: Checkout homepage
+        uses: actions/checkout@v4
+        with:
+          repository: onnellab/onnellab.github.io
+          path: ${{ env.HOMEPAGE_REPO_PATH }}
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Synchronize reviews
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY_BASE64 }}
+          GOOGLE_PLAY_ACCESS_TOKEN: ${{ secrets.GOOGLE_PLAY_ACCESS_TOKEN }}
+        run: python3 scripts/sync_store_reviews.py
+
+      - name: Build dashboard
+        run: python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+
+      - name: Commit review snapshot
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin main
+          git add data/store_reviews.csv generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js
+          if git diff --cached --quiet; then
+            echo "No store review changes to commit"
+          else
+            git commit -m "Sync store reviews"
+            git push origin HEAD:main
+          fi
+
+      - name: Deploy dashboard
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOMEPAGE_REPO_PATH/public/manual-publish"
+          cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
+          cp generated/manual-publish/manifest.webmanifest "$HOMEPAGE_REPO_PATH/public/manual-publish/manifest.webmanifest"
+          cp generated/manual-publish/sw.js "$HOMEPAGE_REPO_PATH/public/manual-publish/sw.js"
+          cp generated/manual-publish/icon-180.png "$HOMEPAGE_REPO_PATH/public/manual-publish/icon-180.png"
+          cp generated/manual-publish/icon-192.png "$HOMEPAGE_REPO_PATH/public/manual-publish/icon-192.png"
+          cp generated/manual-publish/icon-512.png "$HOMEPAGE_REPO_PATH/public/manual-publish/icon-512.png"
+          git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
+          git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$HOMEPAGE_REPO_PATH" pull --rebase --autostash origin main
+          git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/
+          if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
+            echo "No dashboard changes to deploy"
+          else
+            git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh store review dashboard"
+            git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
+          fi
