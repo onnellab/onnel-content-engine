@@ -184,7 +184,13 @@ Body
             self.assertIn("Google Play 서비스 계정 JSON", html)
             self.assertIn("sync_store_review_secrets.py", html)
             self.assertIn("actions/workflows/sync-store-reviews.yml/dispatches", html)
-            self.assertIn("Apple Private Key와 Google 서비스 계정 JSON은 새로고침 시 지워지며", html)
+            self.assertIn("GitHub Secrets에 암호화 저장", html)
+            self.assertIn("actions/secrets/public-key", html)
+            self.assertIn("actions/secrets/${encodeURIComponent(name)}", html)
+            self.assertIn("crypto_box_seal", html)
+            self.assertIn("평문은 workflow 입력·HTML·CSV·Git에 포함되지 않습니다.", html)
+            self.assertIn('<script src="./libsodium-sumo.js"></script>', html)
+            self.assertIn('<script src="./libsodium-wrappers.js"></script>', html)
             self.assertIn("doneReportRecord", html)
             self.assertIn("verificationReportRecord", html)
             self.assertIn("current_verification_report", Path(ROOT / "scripts" / "build_manual_publish_site.py").read_text(encoding="utf-8"))
@@ -423,7 +429,10 @@ Body
             self.assertNotIn("favicon-16x16.png", manifest)
             self.assertTrue((output.parent / "manifest.webmanifest").exists())
             self.assertTrue((output.parent / "sw.js").exists())
-            self.assertIn("onnellab-manual-publish-v12", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertTrue((output.parent / "libsodium-sumo.js").exists())
+            self.assertTrue((output.parent / "libsodium-wrappers.js").exists())
+            self.assertIn("onnellab-manual-publish-v13", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("./libsodium-sumo.js", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_filters_stale_verification_report_items(self) -> None:
         report = current_verification_report(

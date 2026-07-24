@@ -41,11 +41,23 @@ creates a one-hour OAuth assertion with the `androidpublisher` scope and
 exchanges it for an access token. `GOOGLE_PLAY_ACCESS_TOKEN` remains available
 as a temporary override.
 
-The dashboard's **Store review connection** panel prepares the env block and
-commands. It saves only Key ID and Issuer ID in browser storage; the Apple
-private key and Google service account JSON are cleared on refresh. After
-copying the env block into the gitignored local env file, synchronize the store
-credentials to GitHub Actions:
+The dashboard's **Store review connection** panel can save all four values
+directly to GitHub Actions Secrets. It obtains the repository's Actions public
+key, encrypts each value in the browser with libsodium sealed-box encryption,
+and sends only the ciphertext to GitHub's Secrets API. Plaintext credentials
+are never sent as workflow inputs or written to generated HTML, CSV, or Git.
+
+The GitHub token connected to the dashboard must have repository access for:
+
+- Actions: read and write
+- Contents: read and write
+- Secrets: read and write
+
+Select **Encrypt and save to GitHub Secrets**, or enter all credentials and
+select **Sync reviews now** to save the encrypted secrets and dispatch the
+workflow in one step.
+
+The local env and CLI sync remain available as a fallback:
 
 ```bash
 python3 scripts/run_with_local_env.py -- python3 scripts/sync_store_review_secrets.py
@@ -64,6 +76,8 @@ reviews for the target apps.
 
 The `sync-store-reviews.yml` workflow runs daily and can also be started from
 the dashboard with **Sync reviews now** after the GitHub token is connected.
+The workflow fails clearly when any required store secret is missing instead of
+silently reporting success with every store skipped.
 
 Official API references:
 

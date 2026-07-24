@@ -205,6 +205,10 @@ JSON, then prepares the local env and GitHub Actions secret-sync commands. The
 private credentials are not embedded in the generated dashboard and are
 cleared from the form on refresh.
 
+The hosted form encrypts these values with the repository's GitHub Actions
+public key and can save them directly to Actions Secrets before dispatching the
+review sync workflow.
+
 The dashboard shows synchronized reviews and creates Korean or English reply
 drafts from the repository-managed templates. Every draft requires human review
 and manual publication. See `docs/Store_Review_Response_Guide.md`.

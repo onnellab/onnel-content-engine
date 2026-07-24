@@ -86,9 +86,11 @@ jobs:
           cp generated/manual-publish/icon-180.png "$HOMEPAGE_REPO_PATH/public/manual-publish/icon-180.png"
           cp generated/manual-publish/icon-192.png "$HOMEPAGE_REPO_PATH/public/manual-publish/icon-192.png"
           cp generated/manual-publish/icon-512.png "$HOMEPAGE_REPO_PATH/public/manual-publish/icon-512.png"
+          cp generated/manual-publish/libsodium-sumo.js "$HOMEPAGE_REPO_PATH/public/manual-publish/libsodium-sumo.js"
+          cp generated/manual-publish/libsodium-wrappers.js "$HOMEPAGE_REPO_PATH/public/manual-publish/libsodium-wrappers.js"
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/index.html public/manual-publish/manifest.webmanifest public/manual-publish/sw.js public/manual-publish/icon-180.png public/manual-publish/icon-192.png public/manual-publish/icon-512.png
+          git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/index.html public/manual-publish/manifest.webmanifest public/manual-publish/sw.js public/manual-publish/icon-180.png public/manual-publish/icon-192.png public/manual-publish/icon-512.png public/manual-publish/libsodium-sumo.js public/manual-publish/libsodium-wrappers.js
           if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
             echo "No manual publish dashboard changes to deploy"
           else

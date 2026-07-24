@@ -9,6 +9,7 @@ import json
 import math
 import os
 import re
+import shutil
 import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -21,6 +22,7 @@ from store_review_responses import generate_reply
 
 
 ROOT = Path(__file__).resolve().parents[1]
+LIBSODIUM_VENDOR_DIR = ROOT / "assets" / "vendor" / "libsodium"
 DEFAULT_TOPICS = ROOT / "data" / "topics.csv"
 DEFAULT_SOCIAL_MANIFEST = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.json"
@@ -1269,7 +1271,7 @@ def html_document(
       <label><span id="app-store-private-key-label">새 Private Key (.p8 PEM)</span><textarea id="app-store-private-key" class="credential-output" autocomplete="off" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label>
       <label><span id="google-play-service-account-label">Google Play 서비스 계정 JSON</span><textarea id="google-play-service-account" class="credential-output" autocomplete="off" spellcheck="false" placeholder='{{"type":"service_account", ...}}'></textarea></label>
       <div class="credential-actions">
-        <button id="save-store-credentials" type="button">연결 정보 저장</button>
+        <button id="save-store-credentials" type="button">GitHub Secrets에 암호화 저장</button>
         <button id="copy-store-env-block" type="button" class="secondary">스토어 env 블록 복사</button>
         <button id="copy-store-secret-sync-command" type="button" class="secondary">스토어 secrets 동기화 명령 복사</button>
         <button id="copy-store-sync-command" type="button" class="secondary">리뷰 동기화 명령 복사</button>
@@ -1277,7 +1279,7 @@ def html_document(
         <button id="clear-store-credentials" type="button" class="secondary">연결 정보 삭제</button>
       </div>
       <textarea id="store-credential-output" class="credential-output" readonly spellcheck="false"></textarea>
-      <div id="store-credential-note" class="note">Key ID와 Issuer ID만 이 브라우저에 저장됩니다. Apple Private Key와 Google 서비스 계정 JSON은 새로고침 시 지워지며 HTML·CSV·Git에 포함되지 않습니다.</div>
+      <div id="store-credential-note" class="note">민감 값은 브라우저 안에서 GitHub 공개키로 암호화된 뒤 Actions Secrets에 직접 저장됩니다. 평문은 workflow 입력·HTML·CSV·Git에 포함되지 않습니다.</div>
     </details>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
@@ -1334,6 +1336,8 @@ def html_document(
   <script id="release-sync-data" type="application/json">{release_sync_data}</script>
   <script id="verification-report-data" type="application/json">{verification_report_data}</script>
   <script id="quality-report-data" type="application/json">{quality_report_data}</script>
+  <script src="./libsodium-sumo.js"></script>
+  <script src="./libsodium-wrappers.js"></script>
   <script>
     let items = JSON.parse(document.getElementById('manual-data').textContent);
     let releases = JSON.parse(document.getElementById('release-data').textContent);
@@ -1416,14 +1420,17 @@ def html_document(
         appStoreIssuerId: 'Issuer ID',
         appStorePrivateKey: '새 Private Key (.p8 PEM)',
         googlePlayServiceAccount: 'Google Play 서비스 계정 JSON',
-        saveStoreCredentials: '연결 정보 저장',
+        saveStoreCredentials: 'GitHub Secrets에 암호화 저장',
         clearStoreCredentials: '연결 정보 삭제',
         copyStoreEnvBlock: '스토어 env 블록 복사',
         copyStoreSecretSyncCommand: '스토어 secrets 동기화 명령 복사',
         copyStoreSyncCommand: '리뷰 동기화 명령 복사',
         runStoreSyncNow: '지금 리뷰 동기화',
         storeSyncStarted: '리뷰 동기화를 시작했습니다',
-        storeCredentialNote: 'Key ID와 Issuer ID만 이 브라우저에 저장됩니다. Apple Private Key와 Google 서비스 계정 JSON은 새로고침 시 지워지며 HTML·CSV·Git에 포함되지 않습니다.',
+        storeSecretsSaved: 'GitHub Secrets 저장 완료',
+        storeSecretsSaving: 'Secrets 암호화 저장 중',
+        storeSecretPermissionError: 'GitHub 토큰에 Actions Secrets 쓰기 권한이 필요합니다.',
+        storeCredentialNote: '민감 값은 브라우저 안에서 GitHub 공개키로 암호화된 뒤 Actions Secrets에 직접 저장됩니다. 평문은 workflow 입력·HTML·CSV·Git에 포함되지 않습니다.',
         credentialsSaved: '저장됨',
         credentialsCleared: '삭제됨',
         missingCredentials: '필수값 누락',
@@ -1662,14 +1669,17 @@ def html_document(
         appStoreIssuerId: 'Issuer ID',
         appStorePrivateKey: 'New private key (.p8 PEM)',
         googlePlayServiceAccount: 'Google Play service account JSON',
-        saveStoreCredentials: 'Save connection details',
+        saveStoreCredentials: 'Encrypt and save to GitHub Secrets',
         clearStoreCredentials: 'Clear connection details',
         copyStoreEnvBlock: 'Copy store env block',
         copyStoreSecretSyncCommand: 'Copy store secrets sync command',
         copyStoreSyncCommand: 'Copy review sync command',
         runStoreSyncNow: 'Sync reviews now',
         storeSyncStarted: 'Store review sync started',
-        storeCredentialNote: 'Only Key ID and Issuer ID are saved in this browser. The Apple private key and Google service account JSON are cleared on refresh and never embedded in HTML, CSV, or Git.',
+        storeSecretsSaved: 'GitHub Secrets saved',
+        storeSecretsSaving: 'Encrypting and saving secrets',
+        storeSecretPermissionError: 'The GitHub token needs Actions Secrets write permission.',
+        storeCredentialNote: 'Sensitive values are encrypted in this browser with GitHub’s public key and saved directly to Actions Secrets. Plaintext is never placed in workflow inputs, HTML, CSV, or Git.',
         credentialsSaved: 'Saved',
         credentialsCleared: 'Cleared',
         missingCredentials: 'Missing required values',
@@ -2186,14 +2196,87 @@ def html_document(
       updateStoreCredentialOutput();
     }}
 
-    function saveStoreCredentials(button) {{
+    function storeSecretValues(values = storeCredentialValues()) {{
+      return {{
+        APP_STORE_CONNECT_KEY_ID: values.keyId,
+        APP_STORE_CONNECT_ISSUER_ID: values.issuerId,
+        APP_STORE_CONNECT_PRIVATE_KEY_BASE64: encodeBase64Unicode(values.privateKey),
+        GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64: encodeBase64Unicode(values.googleServiceAccount),
+      }};
+    }}
+
+    function missingStoreCredentialNames(values = storeCredentialValues()) {{
+      return [
+        values.keyId ? '' : 'APP_STORE_CONNECT_KEY_ID',
+        values.issuerId ? '' : 'APP_STORE_CONNECT_ISSUER_ID',
+        values.privateKey ? '' : 'APP_STORE_CONNECT_PRIVATE_KEY_BASE64',
+        values.googleServiceAccount ? '' : 'GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64',
+      ].filter(Boolean);
+    }}
+
+    async function encryptGitHubSecret(value, publicKey) {{
+      if (typeof sodium === 'undefined') throw new Error('libsodium is not available');
+      await sodium.ready;
+      const recipientKey = sodium.from_base64(publicKey, sodium.base64_variants.ORIGINAL);
+      const encrypted = sodium.crypto_box_seal(sodium.from_string(value), recipientKey);
+      return sodium.to_base64(encrypted, sodium.base64_variants.ORIGINAL);
+    }}
+
+    async function uploadStoreSecrets() {{
       const values = storeCredentialValues();
+      const missing = missingStoreCredentialNames(values);
+      if (missing.length) throw new Error(`${{t('missingCredentials')}}: ${{missing.join(', ')}}`);
+      JSON.parse(values.googleServiceAccount);
+      const publicKey = await githubRequest(`/repos/${{stateRepo}}/actions/secrets/public-key`);
+      for (const [name, value] of Object.entries(storeSecretValues(values))) {{
+        const encryptedValue = await encryptGitHubSecret(value, publicKey.key);
+        await githubRequest(`/repos/${{stateRepo}}/actions/secrets/${{encodeURIComponent(name)}}`, {{
+          method: 'PUT',
+          headers: {{ 'Content-Type': 'application/json' }},
+          body: JSON.stringify({{ encrypted_value: encryptedValue, key_id: publicKey.key_id }}),
+        }});
+      }}
       localStorage.setItem(storeCredentialStorageKey, JSON.stringify({{
         keyId: values.keyId,
         issuerId: values.issuerId,
       }}));
+      storeCredentialInputs.privateKey.value = '';
+      storeCredentialInputs.googleServiceAccount.value = '';
       updateStoreCredentialOutput();
-      flash(button, t('credentialsSaved'));
+    }}
+
+    async function requireRemoteStoreSecrets() {{
+      const required = Object.keys(storeSecretValues({{
+        keyId: 'configured',
+        issuerId: 'configured',
+        privateKey: 'configured',
+        googleServiceAccount: 'configured',
+      }}));
+      const data = await githubRequest(`/repos/${{stateRepo}}/actions/secrets?per_page=100`);
+      const configured = new Set((data.secrets || []).map((item) => item.name));
+      const missing = required.filter((name) => !configured.has(name));
+      if (missing.length) throw new Error(`${{t('missingCredentials')}}: ${{missing.join(', ')}}`);
+    }}
+
+    async function saveStoreCredentials(button) {{
+      if (!githubToken()) {{
+        revealTokenInput();
+        return false;
+      }}
+      button.disabled = true;
+      keepButtonLabel(button, t('storeSecretsSaving'));
+      try {{
+        await uploadStoreSecrets();
+        flash(button, t('storeSecretsSaved'));
+        return true;
+      }} catch (error) {{
+        storeCredentialOutput.value = `${{t('storeSecretPermissionError')}}\\n${{error.message || error}}`;
+        flash(button, t('verificationFailed'));
+        console.error(error);
+        return false;
+      }} finally {{
+        button.disabled = false;
+      }}
     }}
 
     function clearStoreCredentials(button) {{
@@ -2228,12 +2311,7 @@ def html_document(
 
     function updateStoreCredentialOutput() {{
       const values = storeCredentialValues();
-      const missing = [
-        values.keyId ? '' : 'APP_STORE_CONNECT_KEY_ID',
-        values.issuerId ? '' : 'APP_STORE_CONNECT_ISSUER_ID',
-        values.privateKey ? '' : 'APP_STORE_CONNECT_PRIVATE_KEY_BASE64',
-        values.googleServiceAccount ? '' : 'GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64',
-      ].filter(Boolean);
+      const missing = missingStoreCredentialNames(values);
       storeCredentialOutput.value = missing.length
         ? `${{t('missingCredentials')}}: ${{missing.join(', ')}}\\n\\n${{storeCredentialEnvBlock()}}`
         : storeCredentialEnvBlock() + '\\n' + storeSecretSyncCommand() + '\\n' + storeReviewSyncCommand();
@@ -2247,6 +2325,15 @@ def html_document(
       }}
       button.disabled = true;
       try {{
+        const values = storeCredentialValues();
+        const hasEnteredSensitiveCredentials = Boolean(values.privateKey || values.googleServiceAccount);
+        if (hasEnteredSensitiveCredentials) {{
+          const missing = missingStoreCredentialNames(values);
+          if (missing.length) throw new Error(`${{t('missingCredentials')}}: ${{missing.join(', ')}}`);
+          await uploadStoreSecrets();
+        }} else {{
+          await requireRemoteStoreSecrets();
+        }}
         await githubRequest(`/repos/${{stateRepo}}/actions/workflows/sync-store-reviews.yml/dispatches`, {{
           method: 'POST',
           headers: {{ 'Content-Type': 'application/json' }},
@@ -2254,6 +2341,7 @@ def html_document(
         }});
         flash(button, t('storeSyncStarted'));
       }} catch (error) {{
+        storeCredentialOutput.value = `${{t('storeSecretPermissionError')}}\\n${{error.message || error}}`;
         flash(button, t('verificationFailed'));
         setSync('syncError');
         console.error(error);
@@ -4146,8 +4234,8 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v12';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
+    return """const CACHE = 'onnellab-manual-publish-v13';
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './libsodium-sumo.js', './libsodium-wrappers.js'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
@@ -4235,6 +4323,8 @@ def build_manual_publish_site(
     )
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")
+    for asset_name in ("libsodium-sumo.js", "libsodium-wrappers.js"):
+        shutil.copyfile(LIBSODIUM_VENDOR_DIR / asset_name, output.parent / asset_name)
     return output
 
 

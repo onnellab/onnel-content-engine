@@ -103,5 +103,10 @@ temporary override.
 These values are read-only inputs for `scripts/sync_store_reviews.py`. Do not
 store them in the generated dashboard or commit them to the repository.
 
+The hosted dashboard may register these values through GitHub's Actions Secrets
+API. It encrypts each value locally with the repository public key before
+upload. The dashboard GitHub token therefore needs Secrets read/write
+permission in addition to its existing Actions and Contents permissions.
+
 Review reply publication remains manual even though both stores expose reply
 APIs. See `docs/Store_Review_Response_Guide.md`.

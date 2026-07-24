@@ -117,6 +117,8 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("generated/manual-publish/index.html", workflow)
         self.assertIn("generated/manual-publish/sw.js", workflow)
         self.assertIn("public/manual-publish/sw.js", workflow)
+        self.assertIn("public/manual-publish/libsodium-sumo.js", workflow)
+        self.assertIn("public/manual-publish/libsodium-wrappers.js", workflow)
 
     def test_devto_update_workflow_deploys_rebuilt_dashboard(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "update-devto-article.yml").read_text(encoding="utf-8")
@@ -128,6 +130,8 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("data/melivra_ai_credit_policy.csv", workflow)
         self.assertIn("generated/manual-publish/sw.js", workflow)
         self.assertIn("public/manual-publish/sw.js", workflow)
+        self.assertIn("public/manual-publish/libsodium-sumo.js", workflow)
+        self.assertIn("public/manual-publish/libsodium-wrappers.js", workflow)
         self.assertIn("Refresh manual publish dashboard", workflow)
 
     def test_store_review_workflow_syncs_and_deploys_dashboard(self) -> None:
@@ -137,6 +141,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn('cron: "20 0 * * *"', workflow)
         self.assertIn("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", workflow)
         self.assertIn("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", workflow)
+        self.assertIn("Missing required GitHub Actions secret", workflow)
         self.assertIn("scripts/sync_store_reviews.py", workflow)
         self.assertIn("scripts/build_manual_publish_site.py", workflow)
         self.assertIn("data/store_reviews.csv", workflow)
