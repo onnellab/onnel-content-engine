@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-24T11:12:36+09:00",
+  "checked_at": "2026-07-24T11:40:22+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 18,
-    "already_done": 15,
-    "verified": 2,
-    "pending": 1
+    "checked": 24,
+    "already_done": 18,
+    "verified": 0,
+    "pending": 6
   },
   "items": [
     {
@@ -190,12 +190,24 @@
       "verification_confidence": "medium"
     },
     {
+      "manual_key": "TOPIC-0008::devto::en::markdown",
+      "topic_id": "TOPIC-0008",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-clean-up-mp3-metadata-before-organizing-music-364n",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0008::hashnode::en::markdown",
       "topic_id": "TOPIC-0008",
       "platform": "hashnode",
       "language": "en",
       "template_id": "markdown",
-      "status": "verified",
+      "status": "already_done",
       "reason": "",
       "posted_url": "https://onnellab.hashnode.dev/how-to-clean-up-mp3-metadata-before-organizing-music",
       "verification_method": "hashnode_rss",
@@ -207,16 +219,76 @@
       "platform": "medium",
       "language": "en",
       "template_id": "markdown",
-      "status": "verified",
+      "status": "already_done",
       "reason": "",
       "posted_url": "https://medium.com/@onnellab.app/how-to-clean-up-mp3-metadata-before-organizing-music-25f7795e34bd?source=rss-ff84b0f2e139------2",
       "verification_method": "medium_rss",
       "verification_confidence": "medium"
     },
     {
-      "manual_key": "TOPIC-0008::devto::en::markdown",
-      "topic_id": "TOPIC-0008",
+      "manual_key": "TOPIC-0010::x::en::x",
+      "topic_id": "TOPIC-0010",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0010::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0010",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0010::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0010",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0010::devto::en::markdown",
+      "topic_id": "TOPIC-0010",
       "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0010::hashnode::en::markdown",
+      "topic_id": "TOPIC-0010",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0010::medium::en::markdown",
+      "topic_id": "TOPIC-0010",
+      "platform": "medium",
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
