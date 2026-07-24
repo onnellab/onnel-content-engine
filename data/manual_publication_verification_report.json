@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-07-22T11:38:40+09:00",
+  "checked_at": "2026-07-24T11:12:36+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 18,
     "already_done": 15,
-    "verified": 0,
-    "pending": 3
+    "verified": 2,
+    "pending": 1
   },
   "items": [
     {
@@ -190,33 +190,33 @@
       "verification_confidence": "medium"
     },
     {
-      "manual_key": "TOPIC-0008::devto::en::markdown",
-      "topic_id": "TOPIC-0008",
-      "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
       "manual_key": "TOPIC-0008::hashnode::en::markdown",
       "topic_id": "TOPIC-0008",
       "platform": "hashnode",
       "language": "en",
       "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
+      "status": "verified",
+      "reason": "",
+      "posted_url": "https://onnellab.hashnode.dev/how-to-clean-up-mp3-metadata-before-organizing-music",
+      "verification_method": "hashnode_rss",
+      "verification_confidence": "medium"
     },
     {
       "manual_key": "TOPIC-0008::medium::en::markdown",
       "topic_id": "TOPIC-0008",
       "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "verified",
+      "reason": "",
+      "posted_url": "https://medium.com/@onnellab.app/how-to-clean-up-mp3-metadata-before-organizing-music-25f7795e34bd?source=rss-ff84b0f2e139------2",
+      "verification_method": "medium_rss",
+      "verification_confidence": "medium"
+    },
+    {
+      "manual_key": "TOPIC-0008::devto::en::markdown",
+      "topic_id": "TOPIC-0008",
+      "platform": "devto",
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
