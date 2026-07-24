@@ -1276,6 +1276,7 @@ def html_document(
       <div class="credential-grid">
         <label><span id="app-store-key-id-label">Key ID</span><input id="app-store-key-id" type="text" autocomplete="off"></label>
         <label><span id="app-store-issuer-id-label">Issuer ID</span><input id="app-store-issuer-id" type="text" autocomplete="off"></label>
+        <label><span id="google-play-reports-bucket-label">Play 보고서 버킷</span><input id="google-play-reports-bucket" type="text" autocomplete="off" placeholder="pubsite_prod_rev_..."></label>
       </div>
       <label><span id="app-store-private-key-label">새 Private Key (.p8 PEM)</span><textarea id="app-store-private-key" class="credential-output" autocomplete="off" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label>
       <label><span id="google-play-service-account-label">Google Play 서비스 계정 JSON</span><textarea id="google-play-service-account" class="credential-output" autocomplete="off" spellcheck="false" placeholder='{{"type":"service_account", ...}}'></textarea></label>
@@ -1429,6 +1430,7 @@ def html_document(
         appStoreIssuerId: 'Issuer ID',
         appStorePrivateKey: '새 Private Key (.p8 PEM)',
         googlePlayServiceAccount: 'Google Play 서비스 계정 JSON',
+        googlePlayReportsBucket: 'Play 전체 리뷰 보고서 버킷',
         saveStoreCredentials: 'GitHub Secrets에 암호화 저장',
         clearStoreCredentials: '연결 정보 삭제',
         copyStoreEnvBlock: '스토어 env 블록 복사',
@@ -1683,6 +1685,7 @@ def html_document(
         appStoreIssuerId: 'Issuer ID',
         appStorePrivateKey: 'New private key (.p8 PEM)',
         googlePlayServiceAccount: 'Google Play service account JSON',
+        googlePlayReportsBucket: 'Play lifetime review reports bucket',
         saveStoreCredentials: 'Encrypt and save to GitHub Secrets',
         clearStoreCredentials: 'Clear connection details',
         copyStoreEnvBlock: 'Copy store env block',
@@ -1911,6 +1914,7 @@ def html_document(
       issuerId: document.getElementById('app-store-issuer-id'),
       privateKey: document.getElementById('app-store-private-key'),
       googleServiceAccount: document.getElementById('google-play-service-account'),
+      googleReportsBucket: document.getElementById('google-play-reports-bucket'),
     }};
     const storeCredentialOutput = document.getElementById('store-credential-output');
     const syncAuthPanel = document.getElementById('sync-auth');
@@ -1992,6 +1996,7 @@ def html_document(
       document.getElementById('app-store-issuer-id-label').textContent = t('appStoreIssuerId');
       document.getElementById('app-store-private-key-label').textContent = t('appStorePrivateKey');
       document.getElementById('google-play-service-account-label').textContent = t('googlePlayServiceAccount');
+      document.getElementById('google-play-reports-bucket-label').textContent = t('googlePlayReportsBucket');
       document.getElementById('save-store-credentials').textContent = t('saveStoreCredentials');
       document.getElementById('clear-store-credentials').textContent = t('clearStoreCredentials');
       document.getElementById('copy-store-env-block').textContent = t('copyStoreEnvBlock');
@@ -2199,6 +2204,7 @@ def html_document(
         issuerId: storeCredentialInputs.issuerId.value.trim(),
         privateKey: storeCredentialInputs.privateKey.value.trim(),
         googleServiceAccount: storeCredentialInputs.googleServiceAccount.value.trim(),
+        googleReportsBucket: storeCredentialInputs.googleReportsBucket.value.trim().replace(/^gs:\\/\\//, '').replace(/\\/+$/, ''),
       }};
     }}
 
@@ -2207,6 +2213,7 @@ def html_document(
         const saved = JSON.parse(localStorage.getItem(storeCredentialStorageKey) || '{{}}');
         storeCredentialInputs.keyId.value = saved.keyId || '';
         storeCredentialInputs.issuerId.value = saved.issuerId || '';
+        storeCredentialInputs.googleReportsBucket.value = saved.googleReportsBucket || '';
       }} catch (error) {{
         console.warn(error);
       }}
@@ -2216,12 +2223,14 @@ def html_document(
     }}
 
     function storeSecretValues(values = storeCredentialValues()) {{
-      return {{
+      const secrets = {{
         APP_STORE_CONNECT_KEY_ID: values.keyId,
         APP_STORE_CONNECT_ISSUER_ID: values.issuerId,
         APP_STORE_CONNECT_PRIVATE_KEY_BASE64: encodeBase64Unicode(values.privateKey),
         GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64: encodeBase64Unicode(values.googleServiceAccount),
       }};
+      if (values.googleReportsBucket) secrets.GOOGLE_PLAY_REPORTS_BUCKET = values.googleReportsBucket;
+      return secrets;
     }}
 
     function missingStoreCredentialNames(values = storeCredentialValues()) {{
@@ -2243,11 +2252,23 @@ def html_document(
 
     async function uploadStoreSecrets() {{
       const values = storeCredentialValues();
-      const missing = missingStoreCredentialNames(values);
-      if (missing.length) throw new Error(`${{t('missingCredentials')}}: ${{missing.join(', ')}}`);
-      JSON.parse(values.googleServiceAccount);
+      const bucketOnly = Boolean(
+        values.googleReportsBucket
+        && !values.privateKey
+        && !values.googleServiceAccount
+      );
+      let secrets;
+      if (bucketOnly) {{
+        await requireRemoteStoreSecrets();
+        secrets = {{ GOOGLE_PLAY_REPORTS_BUCKET: values.googleReportsBucket }};
+      }} else {{
+        const missing = missingStoreCredentialNames(values);
+        if (missing.length) throw new Error(`${{t('missingCredentials')}}: ${{missing.join(', ')}}`);
+        JSON.parse(values.googleServiceAccount);
+        secrets = storeSecretValues(values);
+      }}
       const publicKey = await githubRequest(`/repos/${{stateRepo}}/actions/secrets/public-key`);
-      for (const [name, value] of Object.entries(storeSecretValues(values))) {{
+      for (const [name, value] of Object.entries(secrets)) {{
         const encryptedValue = await encryptGitHubSecret(value, publicKey.key);
         await githubRequest(`/repos/${{stateRepo}}/actions/secrets/${{encodeURIComponent(name)}}`, {{
           method: 'PUT',
@@ -2258,6 +2279,7 @@ def html_document(
       localStorage.setItem(storeCredentialStorageKey, JSON.stringify({{
         keyId: values.keyId,
         issuerId: values.issuerId,
+        googleReportsBucket: values.googleReportsBucket,
       }}));
       storeCredentialInputs.privateKey.value = '';
       storeCredentialInputs.googleServiceAccount.value = '';
@@ -2317,6 +2339,9 @@ def html_document(
         `export APP_STORE_CONNECT_ISSUER_ID=${{shellQuote(values.issuerId)}}`,
         `export APP_STORE_CONNECT_PRIVATE_KEY_BASE64=${{shellQuote(privateKeyBase64)}}`,
         `export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64=${{shellQuote(googleServiceAccountBase64)}}`,
+        ...(values.googleReportsBucket
+          ? [`export GOOGLE_PLAY_REPORTS_BUCKET=${{shellQuote(values.googleReportsBucket)}}`]
+          : []),
       ].join('\\n') + '\\n';
     }}
 
@@ -2392,10 +2417,12 @@ def html_document(
           console.warn(lookupError);
         }}
         const values = storeCredentialValues();
-        const hasEnteredSensitiveCredentials = Boolean(values.privateKey || values.googleServiceAccount);
-        if (hasEnteredSensitiveCredentials) {{
-          const missing = missingStoreCredentialNames(values);
-          if (missing.length) throw new Error(`${{t('missingCredentials')}}: ${{missing.join(', ')}}`);
+        const hasEnteredCredentials = Boolean(
+          values.privateKey
+          || values.googleServiceAccount
+          || values.googleReportsBucket
+        );
+        if (hasEnteredCredentials) {{
           await uploadStoreSecrets();
         }} else {{
           await requireRemoteStoreSecrets();

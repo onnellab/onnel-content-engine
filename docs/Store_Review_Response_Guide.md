@@ -26,6 +26,7 @@ APP_STORE_CONNECT_KEY_ID
 APP_STORE_CONNECT_ISSUER_ID
 APP_STORE_CONNECT_PRIVATE_KEY_BASE64
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64
+GOOGLE_PLAY_REPORTS_BUCKET
 ```
 
 The dashboard converts the pasted PEM to single-line Base64 so the ignored env
@@ -37,11 +38,19 @@ JSON, review exports, or temporary authentication files.
 
 For Google Play, paste the service account JSON into the dashboard. The form
 converts the complete JSON to single-line Base64. At runtime the sync script
-creates a one-hour OAuth assertion with the `androidpublisher` scope and
-exchanges it for an access token. `GOOGLE_PLAY_ACCESS_TOKEN` remains available
-as a temporary override.
+creates a one-hour OAuth assertion with the `androidpublisher` and
+`devstorage.read_only` scopes and exchanges it for an access token.
+`GOOGLE_PLAY_ACCESS_TOKEN` remains available as a temporary override.
 
-The dashboard's **Store review connection** panel can save all four values
+The reviews API only returns reviews created or modified during the previous
+week. To include the complete review history, copy the Play Console report
+bucket name (`pubsite_prod_rev_...`) into the dashboard's **Play lifetime
+review reports bucket** field. The service account needs global **View app
+information** access. The sync then merges every monthly review CSV in that
+bucket with the recent API response.
+
+The dashboard's **Store review connection** panel can save the four required
+credentials and the optional reports bucket
 directly to GitHub Actions Secrets. It obtains the repository's Actions public
 key, encrypts each value in the browser with libsodium sealed-box encryption,
 and sends only the ciphertext to GitHub's Secrets API. Plaintext credentials

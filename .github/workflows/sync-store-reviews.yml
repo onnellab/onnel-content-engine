@@ -47,6 +47,7 @@ jobs:
           APP_STORE_CONNECT_PRIVATE_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY_BASE64 }}
           GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64 }}
           GOOGLE_PLAY_ACCESS_TOKEN: ${{ secrets.GOOGLE_PLAY_ACCESS_TOKEN }}
+          GOOGLE_PLAY_REPORTS_BUCKET: ${{ secrets.GOOGLE_PLAY_REPORTS_BUCKET }}
         run: |
           set -euo pipefail
           required=(

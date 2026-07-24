@@ -16,6 +16,7 @@ from sync_store_reviews import (  # noqa: E402
     der_signature_to_raw,
     fetch_apple_review_pages,
     fetch_google_review_pages,
+    google_report_review_rows,
     google_service_account_assertion,
     google_review_rows,
 )
@@ -86,7 +87,8 @@ class StoreReviewSyncTest(unittest.TestCase):
 
         self.assertEqual(json.loads(decode(header_segment)), {"alg": "RS256", "typ": "JWT"})
         payload = json.loads(decode(payload_segment))
-        self.assertEqual(payload["scope"], "https://www.googleapis.com/auth/androidpublisher")
+        self.assertIn("https://www.googleapis.com/auth/androidpublisher", payload["scope"])
+        self.assertIn("https://www.googleapis.com/auth/devstorage.read_only", payload["scope"])
         self.assertEqual(payload["aud"], "https://oauth2.googleapis.com/token")
         self.assertEqual(payload["exp"] - payload["iat"], 60 * 60)
         self.assertEqual(decode(signature_segment), b"rsa-signature")
@@ -204,6 +206,32 @@ class StoreReviewSyncTest(unittest.TestCase):
 
         self.assertEqual([item["reviewId"] for item in payload["reviews"]], ["google-1", "google-2"])
         self.assertIn("token=page+two", calls[1])
+
+    def test_reads_google_lifetime_review_report(self) -> None:
+        report = (
+            "Package Name,App Version Code,App Version Name,Reviewer Language,Review Submit Date and Time,"
+            "Review Submit Millis Since Epoch,Review Last Update Date and Time,"
+            "Review Last Update Millis Since Epoch,Star Rating,Review Title,Review Text,"
+            "Developer Reply Date and Time,Developer Reply Millis Since Epoch,Developer Reply Text,Review Link\n"
+            "com.onnellab.quivra2,77,1.0.6,ko,2026-01-02T03:04:05Z,1767323045000,"
+            "2026-01-02T03:04:05Z,1767323045000,5,좋아요,잘 사용하고 있어요.,,,,https://example/#ReviewPlace:id=review-77\n"
+        ).encode("utf-8")
+
+        rows = google_report_review_rows(
+            "gs://pubsite_prod_rev_123",
+            {**STORE, "store_package": "com.onnellab.quivra2"},
+            "token",
+            "2026-07-24T00:00:00Z",
+            json_fetcher=lambda _url, _token: {
+                "items": [{"name": "reviews/reviews_com.onnellab.quivra2_202601.csv"}]
+            },
+            bytes_fetcher=lambda _url, _token: report,
+        )
+
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["review_id"], "review-77")
+        self.assertEqual(rows[0]["platform"], "android")
+        self.assertEqual(rows[0]["body"], "잘 사용하고 있어요.")
 
 
 if __name__ == "__main__":

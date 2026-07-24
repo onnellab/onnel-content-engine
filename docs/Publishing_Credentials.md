@@ -93,12 +93,15 @@ APP_STORE_CONNECT_KEY_ID
 APP_STORE_CONNECT_ISSUER_ID
 APP_STORE_CONNECT_PRIVATE_KEY_BASE64
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64
+GOOGLE_PLAY_REPORTS_BUCKET
 ```
 
 `APP_STORE_CONNECT_TOKEN` remains available as a temporary runtime override.
 The Google service account is exchanged for a one-hour token with the
-`androidpublisher` scope. `GOOGLE_PLAY_ACCESS_TOKEN` remains available as a
-temporary override.
+`androidpublisher` and `devstorage.read_only` scopes.
+`GOOGLE_PLAY_REPORTS_BUCKET` enables lifetime monthly review CSV ingestion;
+without it the reviews API supplies only recently created or modified reviews.
+`GOOGLE_PLAY_ACCESS_TOKEN` remains available as a temporary override.
 
 These values are read-only inputs for `scripts/sync_store_reviews.py`. Do not
 store them in the generated dashboard or commit them to the repository.

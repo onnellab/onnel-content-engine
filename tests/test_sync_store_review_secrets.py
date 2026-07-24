@@ -24,6 +24,15 @@ class StoreReviewSecretSyncTest(unittest.TestCase):
         with patch.dict(os.environ, env, clear=True):
             self.assertEqual(sync_store_review_secrets(dry_run=True), list(SECRET_KEYS))
 
+    def test_syncs_optional_reports_bucket_when_present(self) -> None:
+        env = {key: f"value-{index}" for index, key in enumerate(SECRET_KEYS)}
+        env["GOOGLE_PLAY_REPORTS_BUCKET"] = "pubsite_prod_rev_123"
+        with patch.dict(os.environ, env, clear=True):
+            self.assertEqual(
+                sync_store_review_secrets(dry_run=True),
+                [*SECRET_KEYS, "GOOGLE_PLAY_REPORTS_BUCKET"],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

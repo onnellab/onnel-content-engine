@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import base64
 import csv
+import hashlib
+import io
 import json
 import os
 import subprocess
@@ -133,7 +135,10 @@ def google_service_account_assertion(
     header = {"alg": "RS256", "typ": "JWT"}
     payload = {
         "iss": client_email,
-        "scope": "https://www.googleapis.com/auth/androidpublisher",
+            "scope": (
+                "https://www.googleapis.com/auth/androidpublisher "
+                "https://www.googleapis.com/auth/devstorage.read_only"
+            ),
         "aud": "https://oauth2.googleapis.com/token",
         "iat": now,
         "exp": now + 60 * 60,
@@ -219,6 +224,19 @@ def fetch_json(url: str, token: str) -> dict[str, object]:
     return payload
 
 
+def fetch_bytes(url: str, token: str) -> bytes:
+    request = urllib.request.Request(
+        url,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "text/csv,application/octet-stream",
+            "User-Agent": "ONNELLAB-Store-Review-Sync/1.0",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=60) as response:
+        return response.read()
+
+
 def fetch_apple_review_pages(
     url: str,
     token: str,
@@ -270,6 +288,90 @@ def fetch_google_review_pages(
             (parsed.scheme, parsed.netloc, parsed.path, urllib.parse.urlencode(query), parsed.fragment)
         )
     return combined
+
+
+def google_report_review_rows(
+    bucket: str,
+    store: dict[str, str],
+    token: str,
+    synced_at: str,
+    json_fetcher=fetch_json,
+    bytes_fetcher=fetch_bytes,
+) -> list[dict[str, str]]:
+    bucket = bucket.removeprefix("gs://").strip().strip("/")
+    package = store.get("store_package", "")
+    if not bucket or not package:
+        return []
+    prefix = f"reviews/reviews_{package}_"
+    query = urllib.parse.urlencode({"prefix": prefix, "maxResults": "1000"})
+    list_url = f"https://storage.googleapis.com/storage/v1/b/{urllib.parse.quote(bucket, safe='')}/o?{query}"
+    object_names: list[str] = []
+    while list_url:
+        payload = json_fetcher(list_url, token)
+        items = payload.get("items", [])
+        if isinstance(items, list):
+            object_names.extend(
+                str(item.get("name", ""))
+                for item in items
+                if isinstance(item, dict) and str(item.get("name", "")).endswith(".csv")
+            )
+        page_token = str(payload.get("nextPageToken", "") or "").strip()
+        if not page_token:
+            break
+        query = urllib.parse.urlencode({"prefix": prefix, "maxResults": "1000", "pageToken": page_token})
+        list_url = f"https://storage.googleapis.com/storage/v1/b/{urllib.parse.quote(bucket, safe='')}/o?{query}"
+
+    rows: list[dict[str, str]] = []
+    for object_name in sorted(set(object_names)):
+        download_url = (
+            f"https://storage.googleapis.com/download/storage/v1/b/{urllib.parse.quote(bucket, safe='')}"
+            f"/o/{urllib.parse.quote(object_name, safe='')}?alt=media"
+        )
+        raw = bytes_fetcher(download_url, token)
+        encoding = "utf-16" if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else "utf-8-sig"
+        for source in csv.DictReader(io.StringIO(raw.decode(encoding))):
+            review_text = str(source.get("Review Text", "") or "").strip()
+            review_title = str(source.get("Review Title", "") or "").strip()
+            if not review_text and not review_title:
+                continue
+            review_link = str(source.get("Review Link", "") or "")
+            review_id = ""
+            marker = "ReviewPlace:id="
+            if marker in review_link:
+                review_id = urllib.parse.unquote(review_link.split(marker, 1)[1].split("&", 1)[0])
+            if not review_id:
+                identity = "|".join(
+                    [
+                        package,
+                        str(source.get("Review Submit Millis Since Epoch", "") or ""),
+                        review_title,
+                        review_text,
+                    ]
+                )
+                review_id = "report-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:24]
+            developer_reply = str(source.get("Developer Reply Text", "") or "").strip()
+            rows.append(
+                {
+                    "review_id": review_id,
+                    "app_id": store.get("app_id", ""),
+                    "app_slug": store.get("app_slug", ""),
+                    "app_name": store.get("app_name", ""),
+                    "platform": "android",
+                    "rating": str(source.get("Star Rating", "") or ""),
+                    "title": review_title,
+                    "body": review_text,
+                    "reviewer_language": str(source.get("Reviewer Language", "") or ""),
+                    "territory": "",
+                    "app_version": str(source.get("App Version Name", "") or ""),
+                    "created_at": str(source.get("Review Submit Date and Time", "") or ""),
+                    "updated_at": str(source.get("Review Last Update Date and Time", "") or ""),
+                    "developer_reply": developer_reply,
+                    "reply_updated_at": str(source.get("Developer Reply Date and Time", "") or ""),
+                    "status": "replied" if developer_reply else "pending",
+                    "synced_at": synced_at,
+                }
+            )
+    return rows
 
 
 def apple_review_rows(payload: dict[str, object], store: dict[str, str], synced_at: str) -> list[dict[str, str]]:
@@ -403,6 +505,7 @@ def sync_reviews(
     output_path: Path = DEFAULT_OUTPUT,
     apple_token: str = "",
     google_token: str = "",
+    google_reports_bucket: str = "",
     apple_json_dir: Path | None = None,
     google_json_dir: Path | None = None,
 ) -> dict[str, int]:
@@ -441,6 +544,16 @@ def sync_reviews(
             rows = apple_review_rows(payload, store, synced_at)
         elif platform == "android":
             package = store.get("store_package", "")
+            rows = []
+            if google_reports_bucket and google_token and package:
+                rows.extend(
+                    google_report_review_rows(
+                        google_reports_bucket,
+                        store,
+                        google_token,
+                        synced_at,
+                    )
+                )
             if payload is None and google_token and package:
                 payload = fetch_google_review_pages(
                     "https://androidpublisher.googleapis.com/androidpublisher/v3/"
@@ -448,9 +561,11 @@ def sync_reviews(
                     google_token,
                 )
             if payload is None:
-                counts["skipped"] += 1
-                continue
-            rows = google_review_rows(payload, store, synced_at)
+                if not rows:
+                    counts["skipped"] += 1
+                    continue
+            else:
+                rows.extend(google_review_rows(payload, store, synced_at))
         else:
             continue
         fetched.extend(rows)
@@ -495,6 +610,7 @@ def main() -> int:
         output_path=args.output,
         apple_token=apple_token,
         google_token=google_token,
+        google_reports_bucket=os.environ.get("GOOGLE_PLAY_REPORTS_BUCKET", "").strip(),
         apple_json_dir=args.apple_json_dir,
         google_json_dir=args.google_json_dir,
     )

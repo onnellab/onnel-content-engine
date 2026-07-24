@@ -16,6 +16,7 @@ SECRET_KEYS = (
     "APP_STORE_CONNECT_PRIVATE_KEY_BASE64",
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64",
 )
+OPTIONAL_SECRET_KEYS = ("GOOGLE_PLAY_REPORTS_BUCKET",)
 
 
 class SecretSyncError(ValueError):
@@ -42,7 +43,8 @@ def sync_store_review_secrets(
     if missing:
         raise SecretSyncError("missing required environment variables: " + ", ".join(missing))
     synced: list[str] = []
-    for key in SECRET_KEYS:
+    keys = list(SECRET_KEYS) + [key for key in OPTIONAL_SECRET_KEYS if os.environ.get(key, "").strip()]
+    for key in keys:
         sync_secret(repository, key, os.environ[key], dry_run)
         synced.append(key)
     return synced
