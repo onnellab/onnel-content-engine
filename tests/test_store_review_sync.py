@@ -14,6 +14,8 @@ from sync_store_reviews import (  # noqa: E402
     app_store_connect_token,
     apple_review_rows,
     der_signature_to_raw,
+    fetch_apple_review_pages,
+    fetch_google_review_pages,
     google_service_account_assertion,
     google_review_rows,
 )
@@ -162,6 +164,46 @@ class StoreReviewSyncTest(unittest.TestCase):
         self.assertEqual(rows[0]["body"], "파일을 고르면 멈춰요.")
         self.assertEqual(rows[0]["reviewer_language"], "ko")
         self.assertEqual(rows[0]["status"], "pending")
+
+    def test_fetches_every_apple_review_page(self) -> None:
+        calls: list[str] = []
+
+        def fetcher(url: str, _token: str) -> dict[str, object]:
+            calls.append(url)
+            if len(calls) == 1:
+                return {
+                    "data": [{"id": "apple-1"}],
+                    "included": [{"id": "reply-1"}],
+                    "links": {"next": "https://apple.example/reviews?cursor=next"},
+                }
+            return {"data": [{"id": "apple-2"}], "included": [], "links": {}}
+
+        payload = fetch_apple_review_pages("https://apple.example/reviews", "token", fetcher=fetcher)
+
+        self.assertEqual([item["id"] for item in payload["data"]], ["apple-1", "apple-2"])
+        self.assertEqual([item["id"] for item in payload["included"]], ["reply-1"])
+        self.assertEqual(len(calls), 2)
+
+    def test_fetches_every_google_review_page(self) -> None:
+        calls: list[str] = []
+
+        def fetcher(url: str, _token: str) -> dict[str, object]:
+            calls.append(url)
+            if len(calls) == 1:
+                return {
+                    "reviews": [{"reviewId": "google-1"}],
+                    "tokenPagination": {"nextPageToken": "page two"},
+                }
+            return {"reviews": [{"reviewId": "google-2"}]}
+
+        payload = fetch_google_review_pages(
+            "https://google.example/reviews?maxResults=200",
+            "token",
+            fetcher=fetcher,
+        )
+
+        self.assertEqual([item["reviewId"] for item in payload["reviews"]], ["google-1", "google-2"])
+        self.assertIn("token=page+two", calls[1])
 
 
 if __name__ == "__main__":

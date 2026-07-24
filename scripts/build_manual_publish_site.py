@@ -1084,7 +1084,16 @@ def html_document(
     .app-status-row.is-ai-loss {{ background: var(--bad-soft); border-color: #efb5b0; }}
     .ai-margin-badge {{ display: inline-flex; width: fit-content; max-width: 100%; margin: 2px 0 5px; padding: 4px 7px; border: 1px solid #b7d9c5; border-radius: 999px; color: var(--ok); background: #fff; font-size: 12px; font-weight: 900; }}
     .app-status-row.is-ai-loss .ai-margin-badge {{ color: var(--bad); border-color: #efb5b0; }}
-    .store-review-card {{ display: grid; gap: 9px; }}
+    .store-review-groups {{ display: grid; gap: 10px; }}
+    .store-review-group {{ border: 1px solid var(--line); background: var(--panel); border-radius: 8px; box-shadow: 0 8px 22px rgba(47, 38, 28, .05); overflow: hidden; }}
+    .store-review-group > summary {{ cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; padding: 11px 13px; font-size: 15px; font-weight: 900; }}
+    .store-review-group > summary:hover {{ color: var(--blue); background: var(--blue-soft); }}
+    .store-review-group > summary span {{ color: var(--muted); font-size: 12px; font-weight: 800; text-align: right; }}
+    .store-review-carousel {{ display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; align-items: stretch; padding: 0 12px 12px; }}
+    .store-review-track {{ display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; overscroll-behavior-inline: contain; }}
+    .store-review-card {{ display: grid; gap: 9px; flex: 0 0 min(520px, calc(100% - 4px)); scroll-snap-align: start; }}
+    .store-review-nav {{ align-self: center; min-width: 38px; padding: 8px; background: #fff; color: var(--ink); border-color: var(--line); }}
+    .store-review-empty {{ margin: 0 12px 12px; padding: 14px; border: 1px dashed var(--line); border-radius: 8px; color: var(--muted); font-size: 13px; }}
     .store-review-head {{ display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }}
     .store-review-head strong {{ margin: 0; }}
     .store-review-stars {{ color: #8a5c00; font-weight: 900; letter-spacing: 1px; white-space: nowrap; }}
@@ -1313,7 +1322,7 @@ def html_document(
       <div class="release-head">
         <span id="store-review-summary"></span>
       </div>
-      <div id="store-review-grid" class="status-grid"></div>
+      <div id="store-review-grid" class="store-review-groups"></div>
     </details>
     <details class="status-section" aria-label="Paid product pricing status">
       <summary id="pricing-status-title">유료 제품 가격</summary>
@@ -1427,6 +1436,10 @@ def html_document(
         copyStoreSyncCommand: '리뷰 동기화 명령 복사',
         runStoreSyncNow: '지금 리뷰 동기화',
         storeSyncStarted: '리뷰 동기화를 시작했습니다',
+        storeSyncWaiting: '리뷰 동기화 완료 대기 중',
+        storeSyncRefreshing: '최신 리뷰 불러오는 중',
+        storeSyncCompleted: '리뷰 동기화 완료',
+        storeSyncError: '리뷰 동기화에 실패했습니다.',
         storeSecretsSaved: 'GitHub Secrets 저장 완료',
         storeSecretsSaving: 'Secrets 암호화 저장 중',
         storeSecretsStoredDetail: 'GitHub Actions Secrets에 저장했습니다. 보안을 위해 Private Key와 Google Play JSON 입력칸을 비웠습니다.',
@@ -1677,6 +1690,10 @@ def html_document(
         copyStoreSyncCommand: 'Copy review sync command',
         runStoreSyncNow: 'Sync reviews now',
         storeSyncStarted: 'Store review sync started',
+        storeSyncWaiting: 'Waiting for review sync',
+        storeSyncRefreshing: 'Loading latest reviews',
+        storeSyncCompleted: 'Store review sync completed',
+        storeSyncError: 'Store review sync failed.',
         storeSecretsSaved: 'GitHub Secrets saved',
         storeSecretsSaving: 'Encrypting and saving secrets',
         storeSecretsStoredDetail: 'Saved to GitHub Actions Secrets. The private key and Google Play JSON fields were cleared for security.',
@@ -2311,6 +2328,47 @@ def html_document(
       return 'python3 scripts/run_with_local_env.py -- python3 scripts/sync_store_reviews.py && python3 scripts/build_manual_publish_site.py';
     }}
 
+    async function latestStoreReviewRun() {{
+      const query = new URLSearchParams({{
+        branch: stateBranch,
+        event: 'workflow_dispatch',
+        per_page: '1',
+        _: String(Date.now()),
+      }});
+      const data = await githubRequest(`/repos/${{stateRepo}}/actions/workflows/sync-store-reviews.yml/runs?${{query.toString()}}`);
+      return data.workflow_runs?.[0] || null;
+    }}
+
+    async function pollStoreReviewRun(previousRunId, dispatchedAt, maxAttempts = 24) {{
+      for (let attempt = 0; attempt < maxAttempts; attempt += 1) {{
+        const run = await latestStoreReviewRun();
+        if (isDispatchedVerificationRun(run, previousRunId, dispatchedAt) && run.status === 'completed') {{
+          return run;
+        }}
+        await new Promise((resolve) => setTimeout(resolve, attempt < 6 ? 5000 : 10000));
+      }}
+      throw new Error('Store review sync timed out');
+    }}
+
+    function storeReviewDataCoversRun(run) {{
+      const runDate = parseDate(run?.created_at);
+      if (!runDate) return false;
+      return storeReviewItems.some((item) => {{
+        const syncedAt = parseDate(item.synced_at);
+        return syncedAt && syncedAt.getTime() >= runDate.getTime() - 15000;
+      }});
+    }}
+
+    async function refreshPublishedStoreReviews(run, maxAttempts = 18) {{
+      for (let attempt = 0; attempt < maxAttempts; attempt += 1) {{
+        await refreshDashboardDataFromPublishedPage();
+        render();
+        if (storeReviewDataCoversRun(run)) return true;
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      }}
+      return false;
+    }}
+
     function updateStoreCredentialOutput() {{
       const values = storeCredentialValues();
       const missing = missingStoreCredentialNames(values);
@@ -2327,6 +2385,12 @@ def html_document(
       }}
       button.disabled = true;
       try {{
+        let previousRun = null;
+        try {{
+          previousRun = await latestStoreReviewRun();
+        }} catch (lookupError) {{
+          console.warn(lookupError);
+        }}
         const values = storeCredentialValues();
         const hasEnteredSensitiveCredentials = Boolean(values.privateKey || values.googleServiceAccount);
         if (hasEnteredSensitiveCredentials) {{
@@ -2336,15 +2400,21 @@ def html_document(
         }} else {{
           await requireRemoteStoreSecrets();
         }}
+        const dispatchedAt = Date.now();
         await githubRequest(`/repos/${{stateRepo}}/actions/workflows/sync-store-reviews.yml/dispatches`, {{
           method: 'POST',
           headers: {{ 'Content-Type': 'application/json' }},
           body: JSON.stringify({{ ref: stateBranch }}),
         }});
-        flash(button, t('storeSyncStarted'));
+        keepButtonLabel(button, t('storeSyncWaiting'));
+        const run = await pollStoreReviewRun(previousRun?.id || null, dispatchedAt);
+        if (run.conclusion !== 'success') throw new Error(`Workflow concluded with ${{run.conclusion || 'failure'}}`);
+        keepButtonLabel(button, t('storeSyncRefreshing'));
+        await refreshPublishedStoreReviews(run);
+        flash(button, t('storeSyncCompleted'), t('runStoreSyncNow'));
       }} catch (error) {{
-        storeCredentialOutput.value = `${{t('storeSecretPermissionError')}}\\n${{error.message || error}}`;
-        flash(button, t('verificationFailed'));
+        storeCredentialOutput.value = `${{t('storeSyncError')}}\\n${{error.message || error}}`;
+        flash(button, t('verificationFailed'), t('runStoreSyncNow'));
         setSync('syncError');
         console.error(error);
       }} finally {{
@@ -3685,86 +3755,152 @@ def html_document(
       return !(item.package_type === 'dependency' && item.declared_version === 'sdk:flutter');
     }}
 
+    function storeReviewCard(item) {{
+      const card = document.createElement('article');
+      card.className = 'status-card store-review-card';
+
+      const head = document.createElement('div');
+      head.className = 'store-review-head';
+      const title = document.createElement('strong');
+      title.textContent = storeLabel(item.platform);
+      const stars = document.createElement('span');
+      stars.className = 'store-review-stars';
+      const rating = Math.max(0, Math.min(5, Number(item.rating) || 0));
+      stars.textContent = `${{'★'.repeat(rating)}}${{'☆'.repeat(5 - rating)}}`;
+      head.append(title, stars);
+
+      const meta = document.createElement('div');
+      meta.className = 'store-review-meta';
+      meta.textContent = [
+        item.reviewer_language || 'unknown language',
+        item.territory || '',
+        item.app_version ? `v${{item.app_version}}` : '',
+        formatDate(item.updated_at || item.created_at),
+        item.status === 'replied' || item.developer_reply ? t('storeReviewReplied') : t('storeReviewPending'),
+      ].filter(Boolean).join(' · ');
+
+      const reviewTitle = document.createElement('strong');
+      reviewTitle.textContent = item.title || `${{item.rating || 0}} / 5`;
+      const body = document.createElement('p');
+      body.className = 'store-review-body';
+      body.textContent = item.body || '—';
+      card.append(head, meta, reviewTitle, body);
+
+      if (item.developer_reply) {{
+        const existingLabel = document.createElement('strong');
+        existingLabel.textContent = t('storeReviewExistingReply');
+        const existing = document.createElement('p');
+        existing.className = 'store-review-body';
+        existing.textContent = item.developer_reply;
+        card.append(existingLabel, existing);
+      }}
+
+      const replyLabel = document.createElement('label');
+      replyLabel.className = 'store-review-meta';
+      replyLabel.textContent = `${{t('storeReviewDraft')}} · ${{item.reply_category}} / ${{item.reply_language}}`;
+      const textarea = document.createElement('textarea');
+      textarea.className = 'store-review-reply';
+      textarea.placeholder = t('storeReviewHumanCheck');
+      textarea.setAttribute('aria-label', t('storeReviewDraft'));
+
+      const actions = document.createElement('div');
+      actions.className = 'store-review-actions';
+      const generate = document.createElement('button');
+      generate.type = 'button';
+      generate.textContent = t('storeReviewGenerate');
+      generate.onclick = () => {{
+        textarea.value = item.suggested_reply || '';
+        generate.textContent = t('storeReviewRegenerate');
+        textarea.focus();
+      }};
+      const copy = document.createElement('button');
+      copy.type = 'button';
+      copy.className = 'secondary';
+      copy.textContent = t('storeReviewCopy');
+      copy.onclick = async () => {{
+        if (!textarea.value) textarea.value = item.suggested_reply || '';
+        await copyText(textarea.value, copy);
+      }};
+      actions.append(generate, copy);
+      card.append(replyLabel, textarea, actions);
+      return card;
+    }}
+
     function renderStoreReviews() {{
       storeReviewGrid.textContent = '';
       const pending = storeReviewItems.filter((item) => item.status !== 'replied' && !item.developer_reply);
       storeReviewSummary.textContent = `${{storeReviewItems.length}} reviews / ${{pending.length}} ${{t('storeReviewPending')}} · ${{t('storeReviewHumanCheck')}}`;
-      if (!storeReviewItems.length) {{
+
+      const groups = new Map();
+      const ensure = (item) => {{
+        const key = item.app_id || item.app_slug || item.app_name;
+        if (!groups.has(key)) groups.set(key, {{
+          app_name: item.app_name || item.app_slug || key,
+          app_slug: item.app_slug || '',
+          reviews: [],
+        }});
+        return groups.get(key);
+      }};
+      storeItems.forEach(ensure);
+      storeReviewItems.forEach((item) => ensure(item).reviews.push(item));
+      const appGroups = [...groups.values()].sort((a, b) => a.app_name.localeCompare(b.app_name));
+
+      if (!appGroups.length) {{
         const emptyCard = document.createElement('div');
         emptyCard.className = 'status-card';
         emptyCard.textContent = t('storeReviewNoItems');
         storeReviewGrid.appendChild(emptyCard);
         return;
       }}
-      storeReviewItems.forEach((item) => {{
-        const card = document.createElement('article');
-        card.className = 'status-card store-review-card';
 
-        const head = document.createElement('div');
-        head.className = 'store-review-head';
-        const title = document.createElement('strong');
-        title.textContent = `${{item.app_name || item.app_slug}} · ${{storeLabel(item.platform)}}`;
-        const stars = document.createElement('span');
-        stars.className = 'store-review-stars';
-        const rating = Math.max(0, Math.min(5, Number(item.rating) || 0));
-        stars.textContent = `${{'★'.repeat(rating)}}${{'☆'.repeat(5 - rating)}}`;
-        head.append(title, stars);
-
-        const meta = document.createElement('div');
-        meta.className = 'store-review-meta';
-        meta.textContent = [
-          item.reviewer_language || 'unknown language',
-          item.territory || '',
-          item.app_version ? `v${{item.app_version}}` : '',
-          formatDate(item.updated_at || item.created_at),
-          item.status === 'replied' || item.developer_reply ? t('storeReviewReplied') : t('storeReviewPending'),
-        ].filter(Boolean).join(' · ');
-
-        const reviewTitle = document.createElement('strong');
-        reviewTitle.textContent = item.title || `${{item.rating || 0}} / 5`;
-        const body = document.createElement('p');
-        body.className = 'store-review-body';
-        body.textContent = item.body || '—';
-        card.append(head, meta, reviewTitle, body);
-
-        if (item.developer_reply) {{
-          const existingLabel = document.createElement('strong');
-          existingLabel.textContent = t('storeReviewExistingReply');
-          const existing = document.createElement('p');
-          existing.className = 'store-review-body';
-          existing.textContent = item.developer_reply;
-          card.append(existingLabel, existing);
+      let openedReviewGroup = false;
+      appGroups.forEach((group) => {{
+        const details = document.createElement('details');
+        details.className = 'store-review-group';
+        if (!openedReviewGroup && group.reviews.length) {{
+          details.open = true;
+          openedReviewGroup = true;
         }}
+        const summary = document.createElement('summary');
+        const name = document.createElement('b');
+        name.textContent = group.app_name;
+        const count = document.createElement('span');
+        const groupPending = group.reviews.filter((item) => item.status !== 'replied' && !item.developer_reply).length;
+        count.textContent = `${{group.reviews.length}} reviews · ${{groupPending}} ${{t('storeReviewPending')}}`;
+        summary.append(name, count);
+        details.appendChild(summary);
 
-        const replyLabel = document.createElement('label');
-        replyLabel.className = 'store-review-meta';
-        replyLabel.textContent = `${{t('storeReviewDraft')}} · ${{item.reply_category}} / ${{item.reply_language}}`;
-        const textarea = document.createElement('textarea');
-        textarea.className = 'store-review-reply';
-        textarea.placeholder = t('storeReviewHumanCheck');
-        textarea.setAttribute('aria-label', t('storeReviewDraft'));
-
-        const actions = document.createElement('div');
-        actions.className = 'store-review-actions';
-        const generate = document.createElement('button');
-        generate.type = 'button';
-        generate.textContent = t('storeReviewGenerate');
-        generate.onclick = () => {{
-          textarea.value = item.suggested_reply || '';
-          generate.textContent = t('storeReviewRegenerate');
-          textarea.focus();
-        }};
-        const copy = document.createElement('button');
-        copy.type = 'button';
-        copy.className = 'secondary';
-        copy.textContent = t('storeReviewCopy');
-        copy.onclick = async () => {{
-          if (!textarea.value) textarea.value = item.suggested_reply || '';
-          await copyText(textarea.value, copy);
-        }};
-        actions.append(generate, copy);
-        card.append(replyLabel, textarea, actions);
-        storeReviewGrid.appendChild(card);
+        if (!group.reviews.length) {{
+          const empty = document.createElement('div');
+          empty.className = 'store-review-empty';
+          empty.textContent = t('storeReviewNoItems');
+          details.appendChild(empty);
+        }} else {{
+          const carousel = document.createElement('div');
+          carousel.className = 'store-review-carousel';
+          const previous = document.createElement('button');
+          previous.type = 'button';
+          previous.className = 'store-review-nav';
+          previous.textContent = '‹';
+          previous.setAttribute('aria-label', 'Previous review');
+          const track = document.createElement('div');
+          track.className = 'store-review-track';
+          group.reviews.forEach((item) => track.appendChild(storeReviewCard(item)));
+          const next = document.createElement('button');
+          next.type = 'button';
+          next.className = 'store-review-nav';
+          next.textContent = '›';
+          next.setAttribute('aria-label', 'Next review');
+          const slide = (direction) => track.scrollBy({{
+            left: direction * Math.max(280, track.clientWidth * .9),
+            behavior: 'smooth',
+          }});
+          previous.onclick = () => slide(-1);
+          next.onclick = () => slide(1);
+          carousel.append(previous, track, next);
+          details.appendChild(carousel);
+        }}
+        storeReviewGrid.appendChild(details);
       }});
     }}
 

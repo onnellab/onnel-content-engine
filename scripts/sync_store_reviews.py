@@ -219,6 +219,59 @@ def fetch_json(url: str, token: str) -> dict[str, object]:
     return payload
 
 
+def fetch_apple_review_pages(
+    url: str,
+    token: str,
+    fetcher=fetch_json,
+    max_pages: int = 100,
+) -> dict[str, object]:
+    combined: dict[str, object] = {"data": [], "included": []}
+    next_url = url
+    seen: set[str] = set()
+    for _ in range(max_pages):
+        if not next_url or next_url in seen:
+            break
+        seen.add(next_url)
+        payload = fetcher(next_url, token)
+        for field in ("data", "included"):
+            values = payload.get(field, [])
+            if isinstance(values, list):
+                combined[field].extend(values)  # type: ignore[union-attr]
+        links = payload.get("links", {})
+        next_url = str(links.get("next", "") if isinstance(links, dict) else "").strip()
+    return combined
+
+
+def fetch_google_review_pages(
+    url: str,
+    token: str,
+    fetcher=fetch_json,
+    max_pages: int = 100,
+) -> dict[str, object]:
+    combined: dict[str, object] = {"reviews": []}
+    next_url = url
+    seen_tokens: set[str] = set()
+    for _ in range(max_pages):
+        payload = fetcher(next_url, token)
+        reviews = payload.get("reviews", [])
+        if isinstance(reviews, list):
+            combined["reviews"].extend(reviews)  # type: ignore[union-attr]
+        pagination = payload.get("tokenPagination", {})
+        next_token = str(
+            pagination.get("nextPageToken", "") if isinstance(pagination, dict) else ""
+        ).strip()
+        if not next_token or next_token in seen_tokens:
+            break
+        seen_tokens.add(next_token)
+        parsed = urllib.parse.urlsplit(url)
+        query = dict(urllib.parse.parse_qsl(parsed.query, keep_blank_values=True))
+        query["token"] = next_token
+        next_url = urllib.parse.urlunsplit(
+            (parsed.scheme, parsed.netloc, parsed.path, urllib.parse.urlencode(query), parsed.fragment)
+        )
+    return combined
+
+
 def apple_review_rows(payload: dict[str, object], store: dict[str, str], synced_at: str) -> list[dict[str, str]]:
     response_by_review: dict[str, dict[str, object]] = {}
     included = payload.get("included", [])
@@ -378,7 +431,7 @@ def sync_reviews(
                         "fields[customerReviewResponses]": "responseBody,lastModifiedDate,state,review",
                     }
                 )
-                payload = fetch_json(
+                payload = fetch_apple_review_pages(
                     f"https://api.appstoreconnect.apple.com/v1/apps/{urllib.parse.quote(app_id)}/customerReviews?{query}",
                     apple_token,
                 )
@@ -389,7 +442,7 @@ def sync_reviews(
         elif platform == "android":
             package = store.get("store_package", "")
             if payload is None and google_token and package:
-                payload = fetch_json(
+                payload = fetch_google_review_pages(
                     "https://androidpublisher.googleapis.com/androidpublisher/v3/"
                     f"applications/{urllib.parse.quote(package)}/reviews?maxResults=200",
                     google_token,
