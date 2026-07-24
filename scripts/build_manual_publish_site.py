@@ -1429,6 +1429,7 @@ def html_document(
         storeSyncStarted: '리뷰 동기화를 시작했습니다',
         storeSecretsSaved: 'GitHub Secrets 저장 완료',
         storeSecretsSaving: 'Secrets 암호화 저장 중',
+        storeSecretsStoredDetail: 'GitHub Actions Secrets에 저장했습니다. 보안을 위해 Private Key와 Google Play JSON 입력칸을 비웠습니다.',
         storeSecretPermissionError: 'GitHub 토큰에 Actions Secrets 쓰기 권한이 필요합니다.',
         storeCredentialNote: '민감 값은 브라우저 안에서 GitHub 공개키로 암호화된 뒤 Actions Secrets에 직접 저장됩니다. 평문은 workflow 입력·HTML·CSV·Git에 포함되지 않습니다.',
         credentialsSaved: '저장됨',
@@ -1678,6 +1679,7 @@ def html_document(
         storeSyncStarted: 'Store review sync started',
         storeSecretsSaved: 'GitHub Secrets saved',
         storeSecretsSaving: 'Encrypting and saving secrets',
+        storeSecretsStoredDetail: 'Saved to GitHub Actions Secrets. The private key and Google Play JSON fields were cleared for security.',
         storeSecretPermissionError: 'The GitHub token needs Actions Secrets write permission.',
         storeCredentialNote: 'Sensitive values are encrypted in this browser with GitHub’s public key and saved directly to Actions Secrets. Plaintext is never placed in workflow inputs, HTML, CSV, or Git.',
         credentialsSaved: 'Saved',
@@ -2242,7 +2244,7 @@ def html_document(
       }}));
       storeCredentialInputs.privateKey.value = '';
       storeCredentialInputs.googleServiceAccount.value = '';
-      updateStoreCredentialOutput();
+      storeCredentialOutput.value = t('storeSecretsStoredDetail');
     }}
 
     async function requireRemoteStoreSecrets() {{
@@ -2267,11 +2269,11 @@ def html_document(
       keepButtonLabel(button, t('storeSecretsSaving'));
       try {{
         await uploadStoreSecrets();
-        flash(button, t('storeSecretsSaved'));
+        flash(button, t('storeSecretsSaved'), t('saveStoreCredentials'));
         return true;
       }} catch (error) {{
         storeCredentialOutput.value = `${{t('storeSecretPermissionError')}}\\n${{error.message || error}}`;
-        flash(button, t('verificationFailed'));
+        flash(button, t('verificationFailed'), t('saveStoreCredentials'));
         console.error(error);
         return false;
       }} finally {{
@@ -2873,8 +2875,8 @@ def html_document(
       flash(button, t('opened'));
     }}
 
-    function flash(button, label) {{
-      const original = button.textContent;
+    function flash(button, label, restoreLabel = '') {{
+      const original = restoreLabel || button.textContent;
       button.textContent = label;
       setTimeout(() => {{ button.textContent = original; }}, 1200);
     }}
