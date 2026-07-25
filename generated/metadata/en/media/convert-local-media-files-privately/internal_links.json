@@ -43,6 +43,19 @@
         "score": 4
       },
       {
+        "topic_id": "TOPIC-0010",
+        "title": "How to Reuse Copied Text Snippets on iPhone",
+        "slug": "reuse-copied-text-snippets-iphone",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0008",
         "title": "How to Clean Up MP3 Metadata Before Organizing Music",
         "slug": "clean-up-mp3-metadata-before-organizing-music",
@@ -51,19 +64,6 @@
         "status": "published",
         "url": "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0010",
-        "title": "How to Reuse Copied Text Snippets on iPhone",
-        "slug": "reuse-copied-text-snippets-iphone",
-        "category": "productivity",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/productivity/reuse-copied-text-snippets-iphone.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3

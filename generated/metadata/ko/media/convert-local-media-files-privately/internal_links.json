@@ -61,12 +61,12 @@
         "slug": "reuse-copied-text-snippets-iphone",
         "category": "productivity",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/productivity/reuse-copied-text-snippets-iphone.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 2
+        "score": 3
       }
     ],
     "related_apps": [
