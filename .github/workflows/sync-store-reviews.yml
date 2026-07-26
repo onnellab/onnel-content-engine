@@ -55,6 +55,7 @@ jobs:
             APP_STORE_CONNECT_ISSUER_ID
             APP_STORE_CONNECT_PRIVATE_KEY_BASE64
             GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64
+            GOOGLE_PLAY_REPORTS_BUCKET
           )
           for name in "${required[@]}"; do
             if [ -z "${!name:-}" ]; then

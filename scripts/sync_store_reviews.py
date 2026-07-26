@@ -11,6 +11,7 @@ import io
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import time
 import urllib.parse
@@ -41,6 +42,11 @@ FIELDS = [
     "status",
     "synced_at",
 ]
+GOOGLE_REPORTS_BUCKET_PREFIX = "pubsite_prod_rev_"
+
+
+class StoreReviewSyncError(ValueError):
+    """Raised when a review sync would produce an incomplete snapshot."""
 
 
 def base64url(value: bytes) -> str:
@@ -247,8 +253,10 @@ def fetch_apple_review_pages(
     next_url = url
     seen: set[str] = set()
     for _ in range(max_pages):
-        if not next_url or next_url in seen:
+        if not next_url:
             break
+        if next_url in seen:
+            raise StoreReviewSyncError(f"Apple review pagination repeated a page URL: {next_url}")
         seen.add(next_url)
         payload = fetcher(next_url, token)
         for field in ("data", "included"):
@@ -257,6 +265,10 @@ def fetch_apple_review_pages(
                 combined[field].extend(values)  # type: ignore[union-attr]
         links = payload.get("links", {})
         next_url = str(links.get("next", "") if isinstance(links, dict) else "").strip()
+    if next_url:
+        raise StoreReviewSyncError(
+            f"Apple review pagination exceeded the safety limit of {max_pages} pages"
+        )
     return combined
 
 
@@ -278,8 +290,12 @@ def fetch_google_review_pages(
         next_token = str(
             pagination.get("nextPageToken", "") if isinstance(pagination, dict) else ""
         ).strip()
-        if not next_token or next_token in seen_tokens:
+        if not next_token:
             break
+        if next_token in seen_tokens:
+            raise StoreReviewSyncError(
+                f"Google Play review pagination repeated a page token: {next_token}"
+            )
         seen_tokens.add(next_token)
         parsed = urllib.parse.urlsplit(url)
         query = dict(urllib.parse.parse_qsl(parsed.query, keep_blank_values=True))
@@ -287,7 +303,68 @@ def fetch_google_review_pages(
         next_url = urllib.parse.urlunsplit(
             (parsed.scheme, parsed.netloc, parsed.path, urllib.parse.urlencode(query), parsed.fragment)
         )
+    else:
+        raise StoreReviewSyncError(
+            f"Google Play review pagination exceeded the safety limit of {max_pages} pages"
+        )
     return combined
+
+
+def normalize_google_reports_bucket(value: str) -> str:
+    normalized = value.strip().removeprefix("gs://").strip("/")
+    bucket = normalized.split("/", 1)[0]
+    if not bucket:
+        return ""
+    if not bucket.startswith(GOOGLE_REPORTS_BUCKET_PREFIX):
+        raise StoreReviewSyncError(
+            "GOOGLE_PLAY_REPORTS_BUCKET must be the Play Console review report bucket "
+            f"starting with {GOOGLE_REPORTS_BUCKET_PREFIX}"
+        )
+    return bucket
+
+
+def apple_store_app_id(store: dict[str, str]) -> str:
+    configured = store.get("store_app_id", "").strip()
+    if configured:
+        return configured
+    path = urllib.parse.urlsplit(store.get("store_url", "")).path
+    for segment in reversed(path.split("/")):
+        candidate = segment.removeprefix("id")
+        if candidate.isdigit():
+            return candidate
+    return ""
+
+
+def google_store_package(store: dict[str, str]) -> str:
+    configured = store.get("store_package", "").strip()
+    if configured:
+        return configured
+    query = urllib.parse.parse_qs(urllib.parse.urlsplit(store.get("store_url", "")).query)
+    return str(query.get("id", [""])[0]).strip()
+
+
+def apple_review_ids(payload: dict[str, object]) -> set[str]:
+    data = payload.get("data", [])
+    if not isinstance(data, list):
+        return set()
+    return {
+        str(item.get("id", "")).strip()
+        for item in data
+        if isinstance(item, dict) and str(item.get("id", "")).strip()
+    }
+
+
+def relationship_resource_id(resource: dict[str, object], relationship_name: str) -> str:
+    relationships = resource.get("relationships", {})
+    if not isinstance(relationships, dict):
+        return ""
+    relationship = relationships.get(relationship_name, {})
+    if not isinstance(relationship, dict):
+        return ""
+    data = relationship.get("data", {})
+    if not isinstance(data, dict):
+        return ""
+    return str(data.get("id", "") or "").strip()
 
 
 def google_report_review_rows(
@@ -297,16 +374,18 @@ def google_report_review_rows(
     synced_at: str,
     json_fetcher=fetch_json,
     bytes_fetcher=fetch_bytes,
+    max_pages: int = 100,
 ) -> list[dict[str, str]]:
-    bucket = bucket.removeprefix("gs://").strip().strip("/")
-    package = store.get("store_package", "")
+    bucket = normalize_google_reports_bucket(bucket)
+    package = google_store_package(store)
     if not bucket or not package:
         return []
     prefix = f"reviews/reviews_{package}_"
     query = urllib.parse.urlencode({"prefix": prefix, "maxResults": "1000"})
     list_url = f"https://storage.googleapis.com/storage/v1/b/{urllib.parse.quote(bucket, safe='')}/o?{query}"
     object_names: list[str] = []
-    while list_url:
+    seen_page_tokens: set[str] = set()
+    for _ in range(max_pages):
         payload = json_fetcher(list_url, token)
         items = payload.get("items", [])
         if isinstance(items, list):
@@ -318,8 +397,17 @@ def google_report_review_rows(
         page_token = str(payload.get("nextPageToken", "") or "").strip()
         if not page_token:
             break
+        if page_token in seen_page_tokens:
+            raise StoreReviewSyncError(
+                f"Google Play report pagination repeated a page token: {page_token}"
+            )
+        seen_page_tokens.add(page_token)
         query = urllib.parse.urlencode({"prefix": prefix, "maxResults": "1000", "pageToken": page_token})
         list_url = f"https://storage.googleapis.com/storage/v1/b/{urllib.parse.quote(bucket, safe='')}/o?{query}"
+    else:
+        raise StoreReviewSyncError(
+            f"Google Play report pagination exceeded the safety limit of {max_pages} pages"
+        )
 
     rows: list[dict[str, str]] = []
     for object_name in sorted(set(object_names)):
@@ -374,21 +462,23 @@ def google_report_review_rows(
     return rows
 
 
-def apple_review_rows(payload: dict[str, object], store: dict[str, str], synced_at: str) -> list[dict[str, str]]:
+def apple_review_rows(
+    payload: dict[str, object],
+    store: dict[str, str],
+    synced_at: str,
+    published_response_ids: set[str] | None = None,
+) -> list[dict[str, str]]:
+    response_by_id: dict[str, dict[str, object]] = {}
     response_by_review: dict[str, dict[str, object]] = {}
     included = payload.get("included", [])
     if isinstance(included, list):
         for item in included:
             if not isinstance(item, dict) or item.get("type") != "customerReviewResponses":
                 continue
-            relationships = item.get("relationships", {})
-            review_id = ""
-            if isinstance(relationships, dict):
-                review = relationships.get("review", {})
-                if isinstance(review, dict):
-                    data = review.get("data", {})
-                    if isinstance(data, dict):
-                        review_id = str(data.get("id", ""))
+            response_id = str(item.get("id", "") or "").strip()
+            if response_id:
+                response_by_id[response_id] = item
+            review_id = relationship_resource_id(item, "review")
             if review_id:
                 response_by_review[review_id] = item
 
@@ -403,11 +493,16 @@ def apple_review_rows(payload: dict[str, object], store: dict[str, str], synced_
         attributes = item.get("attributes", {})
         if not review_id or not isinstance(attributes, dict):
             continue
-        response = response_by_review.get(review_id, {})
+        response_id = relationship_resource_id(item, "response")
+        response = response_by_id.get(response_id) or response_by_review.get(review_id, {})
         response_attributes = response.get("attributes", {}) if isinstance(response, dict) else {}
         if not isinstance(response_attributes, dict):
             response_attributes = {}
-        developer_reply = str(response_attributes.get("responseBody", "") or "")
+        developer_reply = str(response_attributes.get("responseBody", "") or "").strip()
+        has_published_response = (
+            published_response_ids is not None and review_id in published_response_ids
+        )
+        has_response = bool(response_id or response or developer_reply or has_published_response)
         rows.append(
             {
                 "review_id": review_id,
@@ -429,7 +524,7 @@ def apple_review_rows(payload: dict[str, object], store: dict[str, str], synced_
                 "updated_at": str(attributes.get("createdDate", "") or ""),
                 "developer_reply": developer_reply,
                 "reply_updated_at": str(response_attributes.get("lastModifiedDate", "") or ""),
-                "status": "replied" if developer_reply else "pending",
+                "status": "replied" if has_response else "pending",
                 "synced_at": synced_at,
             }
         )
@@ -508,56 +603,96 @@ def sync_reviews(
     google_reports_bucket: str = "",
     apple_json_dir: Path | None = None,
     google_json_dir: Path | None = None,
+    require_google_history: bool = False,
 ) -> dict[str, int]:
+    google_reports_bucket = normalize_google_reports_bucket(google_reports_bucket)
+    if require_google_history and not google_reports_bucket:
+        raise StoreReviewSyncError(
+            "GOOGLE_PLAY_REPORTS_BUCKET is required for a complete Google Play review history; "
+            "the reviews API only exposes reviews created or modified within the last week"
+        )
     stores = read_csv_rows(stores_path)
     existing = {
-        (row.get("platform", ""), row.get("review_id", "")): row
+        (row.get("app_id", ""), row.get("platform", ""), row.get("review_id", "")): row
         for row in read_csv_rows(output_path)
         if row.get("review_id")
     }
     synced_at = now_iso()
     fetched: list[dict[str, str]] = []
-    counts = {"ios": 0, "android": 0, "skipped": 0}
+    counts = {
+        "ios": 0,
+        "android": 0,
+        "apple_published": 0,
+        "google_reports": 0,
+        "google_recent": 0,
+        "skipped": 0,
+    }
     for store in stores:
         platform = store.get("platform", "")
         slug = store.get("app_slug", "")
         payload = fixture_payload(apple_json_dir if platform == "ios" else google_json_dir, slug)
         if platform == "ios":
-            app_id = store.get("store_app_id", "")
+            app_id = apple_store_app_id(store)
+            published_response_ids: set[str] | None = None
             if payload is None and apple_token and app_id:
-                query = urllib.parse.urlencode(
+                parameters = {
+                    "limit": "200",
+                    "sort": "-createdDate",
+                    "include": "response",
+                    "fields[customerReviews]": "rating,title,body,createdDate,reviewTerritory,response",
+                    "fields[customerReviewResponses]": "responseBody,lastModifiedDate,state,review",
+                }
+                query = urllib.parse.urlencode(parameters)
+                reviews_url = (
+                    "https://api.appstoreconnect.apple.com/v1/apps/"
+                    f"{urllib.parse.quote(app_id)}/customerReviews"
+                )
+                payload = fetch_apple_review_pages(
+                    f"{reviews_url}?{query}",
+                    apple_token,
+                )
+                published_query = urllib.parse.urlencode(
                     {
                         "limit": "200",
                         "sort": "-createdDate",
-                        "include": "response",
-                        "fields[customerReviews]": "rating,title,body,createdDate,reviewTerritory,response",
-                        "fields[customerReviewResponses]": "responseBody,lastModifiedDate,state,review",
+                        "exists[publishedResponse]": "true",
                     }
                 )
-                payload = fetch_apple_review_pages(
-                    f"https://api.appstoreconnect.apple.com/v1/apps/{urllib.parse.quote(app_id)}/customerReviews?{query}",
+                published_payload = fetch_apple_review_pages(
+                    f"{reviews_url}?{published_query}",
                     apple_token,
                 )
+                published_response_ids = apple_review_ids(published_payload)
+                counts["apple_published"] += len(published_response_ids)
             if payload is None:
                 counts["skipped"] += 1
                 continue
-            rows = apple_review_rows(payload, store, synced_at)
+            rows = apple_review_rows(
+                payload,
+                store,
+                synced_at,
+                published_response_ids=published_response_ids,
+            )
         elif platform == "android":
-            package = store.get("store_package", "")
+            package = google_store_package(store)
             rows = []
-            if google_reports_bucket and google_token and package:
-                rows.extend(
-                    google_report_review_rows(
-                        google_reports_bucket,
-                        store,
-                        google_token,
-                        synced_at,
-                    )
+            if require_google_history and payload is None and package and not google_token:
+                raise StoreReviewSyncError(
+                    "Google Play credentials are required to read the lifetime review reports"
                 )
+            if google_reports_bucket and google_token and package:
+                report_rows = google_report_review_rows(
+                    google_reports_bucket,
+                    store,
+                    google_token,
+                    synced_at,
+                )
+                rows.extend(report_rows)
+                counts["google_reports"] += len(report_rows)
             if payload is None and google_token and package:
                 payload = fetch_google_review_pages(
                     "https://androidpublisher.googleapis.com/androidpublisher/v3/"
-                    f"applications/{urllib.parse.quote(package)}/reviews?maxResults=200",
+                    f"applications/{urllib.parse.quote(package)}/reviews?maxResults=100",
                     google_token,
                 )
             if payload is None:
@@ -565,14 +700,25 @@ def sync_reviews(
                     counts["skipped"] += 1
                     continue
             else:
-                rows.extend(google_review_rows(payload, store, synced_at))
+                recent_rows = google_review_rows(payload, store, synced_at)
+                rows.extend(recent_rows)
+                counts["google_recent"] += len(recent_rows)
         else:
             continue
+        unique_rows: dict[tuple[str, str, str], dict[str, str]] = {}
+        for row in rows:
+            key = (
+                row.get("app_id", ""),
+                row.get("platform", ""),
+                row.get("review_id", ""),
+            )
+            unique_rows[key] = row
+        rows = list(unique_rows.values())
         fetched.extend(rows)
         counts[platform] += len(rows)
 
     for row in fetched:
-        existing[(row["platform"], row["review_id"])] = row
+        existing[(row["app_id"], row["platform"], row["review_id"])] = row
     rows = sorted(
         existing.values(),
         key=lambda row: (row.get("updated_at", ""), row.get("created_at", "")),
@@ -588,7 +734,23 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--apple-json-dir", type=Path)
     parser.add_argument("--google-json-dir", type=Path)
+    parser.add_argument(
+        "--allow-recent-only",
+        action="store_true",
+        help="Allow Google Play sync without the lifetime report bucket",
+    )
     args = parser.parse_args()
+    google_reports_bucket = os.environ.get("GOOGLE_PLAY_REPORTS_BUCKET", "").strip()
+    try:
+        google_reports_bucket = normalize_google_reports_bucket(google_reports_bucket)
+        if not args.allow_recent_only and not google_reports_bucket:
+            raise StoreReviewSyncError(
+                "GOOGLE_PLAY_REPORTS_BUCKET is required for a complete Google Play review history; "
+                "use --allow-recent-only only for an intentional partial sync"
+            )
+    except StoreReviewSyncError as error:
+        print(f"store review sync failed: {error}", file=sys.stderr)
+        return 1
     apple_token = os.environ.get("APP_STORE_CONNECT_TOKEN", "").strip()
     if not apple_token:
         key_id = os.environ.get("APP_STORE_CONNECT_KEY_ID", "").strip()
@@ -605,15 +767,20 @@ def main() -> int:
         if encoded_service_account:
             service_account_json = base64.b64decode(encoded_service_account, validate=True).decode("utf-8")
             google_token = google_play_access_token(service_account_json)
-    counts = sync_reviews(
-        stores_path=args.stores,
-        output_path=args.output,
-        apple_token=apple_token,
-        google_token=google_token,
-        google_reports_bucket=os.environ.get("GOOGLE_PLAY_REPORTS_BUCKET", "").strip(),
-        apple_json_dir=args.apple_json_dir,
-        google_json_dir=args.google_json_dir,
-    )
+    try:
+        counts = sync_reviews(
+            stores_path=args.stores,
+            output_path=args.output,
+            apple_token=apple_token,
+            google_token=google_token,
+            google_reports_bucket=google_reports_bucket,
+            apple_json_dir=args.apple_json_dir,
+            google_json_dir=args.google_json_dir,
+            require_google_history=not args.allow_recent_only,
+        )
+    except StoreReviewSyncError as error:
+        print(f"store review sync failed: {error}", file=sys.stderr)
+        return 1
     print(json.dumps(counts, ensure_ascii=False))
     if counts["skipped"]:
         print(

@@ -43,14 +43,17 @@ creates a one-hour OAuth assertion with the `androidpublisher` and
 `GOOGLE_PLAY_ACCESS_TOKEN` remains available as a temporary override.
 
 The reviews API only returns reviews created or modified during the previous
-week. To include the complete review history, copy the Play Console report
-bucket name (`pubsite_prod_rev_...`) into the dashboard's **Play lifetime
-review reports bucket** field. The service account needs global **View app
-information** access. The sync then merges every monthly review CSV in that
-bucket with the recent API response.
+week. The lifetime report bucket is therefore required for dashboard syncs.
+Copy the Play Console report bucket name (`pubsite_prod_rev_...`) into the
+dashboard's **Play lifetime review reports bucket** field. The service account
+needs global **View app information** access. The sync then merges every monthly
+review CSV in that bucket with the recent API response. A sync without this
+bucket fails instead of silently publishing a partial review list. Local
+diagnostics may explicitly opt into a partial sync with
+`--allow-recent-only`.
 
-The dashboard's **Store review connection** panel can save the four required
-credentials and the optional reports bucket
+The dashboard's **Store review connection** panel can save all five required
+connection values
 directly to GitHub Actions Secrets. It obtains the repository's Actions public
 key, encrypts each value in the browser with libsodium sealed-box encryption,
 and sends only the ciphertext to GitHub's Secrets API. Plaintext credentials
@@ -72,7 +75,7 @@ The local env and CLI sync remain available as a fallback:
 python3 scripts/run_with_local_env.py -- python3 scripts/sync_store_review_secrets.py
 ```
 
-Run:
+Run after all five values are configured:
 
 ```bash
 python3 scripts/sync_store_reviews.py

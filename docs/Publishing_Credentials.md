@@ -99,8 +99,11 @@ GOOGLE_PLAY_REPORTS_BUCKET
 `APP_STORE_CONNECT_TOKEN` remains available as a temporary runtime override.
 The Google service account is exchanged for a one-hour token with the
 `androidpublisher` and `devstorage.read_only` scopes.
-`GOOGLE_PLAY_REPORTS_BUCKET` enables lifetime monthly review CSV ingestion;
-without it the reviews API supplies only recently created or modified reviews.
+`GOOGLE_PLAY_REPORTS_BUCKET` is required for lifetime monthly review CSV
+ingestion. Without it the reviews API supplies only recently created or
+modified reviews, so production and dashboard syncs fail rather than publish a
+partial list. Use `--allow-recent-only` only for an intentional local
+diagnostic.
 `GOOGLE_PLAY_ACCESS_TOKEN` remains available as a temporary override.
 
 These values are read-only inputs for `scripts/sync_store_reviews.py`. Do not

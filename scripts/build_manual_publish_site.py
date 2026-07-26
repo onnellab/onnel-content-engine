@@ -1276,7 +1276,7 @@ def html_document(
       <div class="credential-grid">
         <label><span id="app-store-key-id-label">Key ID</span><input id="app-store-key-id" type="text" autocomplete="off"></label>
         <label><span id="app-store-issuer-id-label">Issuer ID</span><input id="app-store-issuer-id" type="text" autocomplete="off"></label>
-        <label><span id="google-play-reports-bucket-label">Play 보고서 버킷</span><input id="google-play-reports-bucket" type="text" autocomplete="off" placeholder="pubsite_prod_rev_..."></label>
+        <label><span id="google-play-reports-bucket-label">Play 보고서 버킷</span><input id="google-play-reports-bucket" type="text" autocomplete="off" placeholder="pubsite_prod_rev_..." required></label>
       </div>
       <label><span id="app-store-private-key-label">새 Private Key (.p8 PEM)</span><textarea id="app-store-private-key" class="credential-output" autocomplete="off" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label>
       <label><span id="google-play-service-account-label">Google Play 서비스 계정 JSON</span><textarea id="google-play-service-account" class="credential-output" autocomplete="off" spellcheck="false" placeholder='{{"type":"service_account", ...}}'></textarea></label>
@@ -1425,12 +1425,12 @@ def html_document(
         credentialNote: '브라우저 저장은 자동 포스팅 실행 환경에 직접 전달되지 않습니다. env 블록을 docs/environment variables.md에 붙여넣은 뒤 secrets 동기화 명령을 실행하면 GitHub Actions 자동 포스팅에도 반영됩니다.',
         storeCredentialPanelTitle: '스토어 리뷰 연결',
         storeCredentialsTitle: 'App Store / Play Store 리뷰 연결',
-        storeCredentialsCopy: 'Apple API 키와 Google Play 서비스 계정 JSON을 입력하면 GitHub Actions secret 설정값과 리뷰 동기화 명령을 만들 수 있습니다.',
+        storeCredentialsCopy: 'Apple API 키, Google Play 서비스 계정 JSON, 전체 리뷰 보고서 버킷을 입력하면 누락 없는 리뷰 동기화를 연결할 수 있습니다.',
         appStoreKeyId: 'Key ID',
         appStoreIssuerId: 'Issuer ID',
         appStorePrivateKey: '새 Private Key (.p8 PEM)',
         googlePlayServiceAccount: 'Google Play 서비스 계정 JSON',
-        googlePlayReportsBucket: 'Play 전체 리뷰 보고서 버킷',
+        googlePlayReportsBucket: 'Play 전체 리뷰 보고서 버킷 (필수)',
         saveStoreCredentials: 'GitHub Secrets에 암호화 저장',
         clearStoreCredentials: '연결 정보 삭제',
         copyStoreEnvBlock: '스토어 env 블록 복사',
@@ -1446,7 +1446,7 @@ def html_document(
         storeSecretsSaving: 'Secrets 암호화 저장 중',
         storeSecretsStoredDetail: 'GitHub Actions Secrets에 저장했습니다. 보안을 위해 Private Key와 Google Play JSON 입력칸을 비웠습니다.',
         storeSecretPermissionError: 'GitHub 토큰에 Actions Secrets 쓰기 권한이 필요합니다.',
-        storeCredentialNote: '민감 값은 브라우저 안에서 GitHub 공개키로 암호화된 뒤 Actions Secrets에 직접 저장됩니다. 평문은 workflow 입력·HTML·CSV·Git에 포함되지 않습니다.',
+        storeCredentialNote: 'Google 리뷰 API는 최근 1주만 제공하므로 전체 보고서 버킷이 필수입니다. 민감 값은 브라우저 안에서 GitHub 공개키로 암호화된 뒤 Actions Secrets에 직접 저장됩니다.',
         credentialsSaved: '저장됨',
         credentialsCleared: '삭제됨',
         missingCredentials: '필수값 누락',
@@ -1680,12 +1680,12 @@ def html_document(
         credentialNote: 'Browser storage is not passed to the posting runtime. Paste the env block into docs/environment variables.md, then run the secrets sync command to connect GitHub Actions automated posting.',
         storeCredentialPanelTitle: 'Store review connection',
         storeCredentialsTitle: 'App Store / Play Store review connection',
-        storeCredentialsCopy: 'Enter an Apple API key and Google Play service account JSON to prepare GitHub Actions secrets and review sync commands.',
+        storeCredentialsCopy: 'Enter an Apple API key, Google Play service account JSON, and the lifetime review reports bucket to connect a complete review sync.',
         appStoreKeyId: 'Key ID',
         appStoreIssuerId: 'Issuer ID',
         appStorePrivateKey: 'New private key (.p8 PEM)',
         googlePlayServiceAccount: 'Google Play service account JSON',
-        googlePlayReportsBucket: 'Play lifetime review reports bucket',
+        googlePlayReportsBucket: 'Play lifetime review reports bucket (required)',
         saveStoreCredentials: 'Encrypt and save to GitHub Secrets',
         clearStoreCredentials: 'Clear connection details',
         copyStoreEnvBlock: 'Copy store env block',
@@ -1701,7 +1701,7 @@ def html_document(
         storeSecretsSaving: 'Encrypting and saving secrets',
         storeSecretsStoredDetail: 'Saved to GitHub Actions Secrets. The private key and Google Play JSON fields were cleared for security.',
         storeSecretPermissionError: 'The GitHub token needs Actions Secrets write permission.',
-        storeCredentialNote: 'Sensitive values are encrypted in this browser with GitHub’s public key and saved directly to Actions Secrets. Plaintext is never placed in workflow inputs, HTML, CSV, or Git.',
+        storeCredentialNote: 'The Google reviews API only exposes the previous week, so the lifetime reports bucket is required. Sensitive values are encrypted in this browser and saved directly to Actions Secrets.',
         credentialsSaved: 'Saved',
         credentialsCleared: 'Cleared',
         missingCredentials: 'Missing required values',
@@ -2204,7 +2204,10 @@ def html_document(
         issuerId: storeCredentialInputs.issuerId.value.trim(),
         privateKey: storeCredentialInputs.privateKey.value.trim(),
         googleServiceAccount: storeCredentialInputs.googleServiceAccount.value.trim(),
-        googleReportsBucket: storeCredentialInputs.googleReportsBucket.value.trim().replace(/^gs:\\/\\//, '').replace(/\\/+$/, ''),
+        googleReportsBucket: storeCredentialInputs.googleReportsBucket.value
+          .trim()
+          .replace(/^gs:\\/\\//, '')
+          .split('/', 1)[0],
       }};
     }}
 
@@ -2223,14 +2226,13 @@ def html_document(
     }}
 
     function storeSecretValues(values = storeCredentialValues()) {{
-      const secrets = {{
+      return {{
         APP_STORE_CONNECT_KEY_ID: values.keyId,
         APP_STORE_CONNECT_ISSUER_ID: values.issuerId,
         APP_STORE_CONNECT_PRIVATE_KEY_BASE64: encodeBase64Unicode(values.privateKey),
         GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64: encodeBase64Unicode(values.googleServiceAccount),
+        GOOGLE_PLAY_REPORTS_BUCKET: values.googleReportsBucket,
       }};
-      if (values.googleReportsBucket) secrets.GOOGLE_PLAY_REPORTS_BUCKET = values.googleReportsBucket;
-      return secrets;
     }}
 
     function missingStoreCredentialNames(values = storeCredentialValues()) {{
@@ -2239,6 +2241,7 @@ def html_document(
         values.issuerId ? '' : 'APP_STORE_CONNECT_ISSUER_ID',
         values.privateKey ? '' : 'APP_STORE_CONNECT_PRIVATE_KEY_BASE64',
         values.googleServiceAccount ? '' : 'GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64',
+        values.googleReportsBucket ? '' : 'GOOGLE_PLAY_REPORTS_BUCKET',
       ].filter(Boolean);
     }}
 
@@ -2252,6 +2255,12 @@ def html_document(
 
     async function uploadStoreSecrets() {{
       const values = storeCredentialValues();
+      if (
+        values.googleReportsBucket
+        && !values.googleReportsBucket.startsWith('pubsite_prod_rev_')
+      ) {{
+        throw new Error('GOOGLE_PLAY_REPORTS_BUCKET must start with pubsite_prod_rev_');
+      }}
       const bucketOnly = Boolean(
         values.googleReportsBucket
         && !values.privateKey
@@ -2259,7 +2268,7 @@ def html_document(
       );
       let secrets;
       if (bucketOnly) {{
-        await requireRemoteStoreSecrets();
+        await requireRemoteStoreSecrets(false);
         secrets = {{ GOOGLE_PLAY_REPORTS_BUCKET: values.googleReportsBucket }};
       }} else {{
         const missing = missingStoreCredentialNames(values);
@@ -2286,13 +2295,14 @@ def html_document(
       storeCredentialOutput.value = t('storeSecretsStoredDetail');
     }}
 
-    async function requireRemoteStoreSecrets() {{
-      const required = Object.keys(storeSecretValues({{
-        keyId: 'configured',
-        issuerId: 'configured',
-        privateKey: 'configured',
-        googleServiceAccount: 'configured',
-      }}));
+    async function requireRemoteStoreSecrets(includeReportsBucket = true) {{
+      const required = [
+        'APP_STORE_CONNECT_KEY_ID',
+        'APP_STORE_CONNECT_ISSUER_ID',
+        'APP_STORE_CONNECT_PRIVATE_KEY_BASE64',
+        'GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64',
+        ...(includeReportsBucket ? ['GOOGLE_PLAY_REPORTS_BUCKET'] : []),
+      ];
       const data = await githubRequest(`/repos/${{stateRepo}}/actions/secrets?per_page=100`);
       const configured = new Set((data.secrets || []).map((item) => item.name));
       const missing = required.filter((name) => !configured.has(name));
@@ -2339,9 +2349,7 @@ def html_document(
         `export APP_STORE_CONNECT_ISSUER_ID=${{shellQuote(values.issuerId)}}`,
         `export APP_STORE_CONNECT_PRIVATE_KEY_BASE64=${{shellQuote(privateKeyBase64)}}`,
         `export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64=${{shellQuote(googleServiceAccountBase64)}}`,
-        ...(values.googleReportsBucket
-          ? [`export GOOGLE_PLAY_REPORTS_BUCKET=${{shellQuote(values.googleReportsBucket)}}`]
-          : []),
+        `export GOOGLE_PLAY_REPORTS_BUCKET=${{shellQuote(values.googleReportsBucket)}}`,
       ].join('\\n') + '\\n';
     }}
 

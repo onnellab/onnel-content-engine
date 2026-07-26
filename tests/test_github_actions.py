@@ -141,6 +141,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn('cron: "20 0 * * *"', workflow)
         self.assertIn("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", workflow)
         self.assertIn("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", workflow)
+        self.assertIn("GOOGLE_PLAY_REPORTS_BUCKET", workflow)
         self.assertIn("Missing required GitHub Actions secret", workflow)
         self.assertIn("scripts/sync_store_reviews.py", workflow)
         self.assertIn("scripts/build_manual_publish_site.py", workflow)

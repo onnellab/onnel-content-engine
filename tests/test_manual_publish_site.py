@@ -180,9 +180,21 @@ Body
             self.assertIn('id="app-store-private-key"', html)
             self.assertIn('id="google-play-service-account"', html)
             self.assertIn('id="google-play-reports-bucket"', html)
+            self.assertIn(
+                'id="google-play-reports-bucket" type="text" autocomplete="off" '
+                'placeholder="pubsite_prod_rev_..." required',
+                html,
+            )
             self.assertIn("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", html)
             self.assertIn("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", html)
             self.assertIn("GOOGLE_PLAY_REPORTS_BUCKET", html)
+            self.assertIn("Play 전체 리뷰 보고서 버킷 (필수)", html)
+            self.assertIn("Google 리뷰 API는 최근 1주만 제공하므로", html)
+            self.assertIn("requireRemoteStoreSecrets(false)", html)
+            self.assertIn(
+                "GOOGLE_PLAY_REPORTS_BUCKET must start with pubsite_prod_rev_",
+                html,
+            )
             self.assertIn("Google Play 서비스 계정 JSON", html)
             self.assertIn("sync_store_review_secrets.py", html)
             self.assertIn("actions/workflows/sync-store-reviews.yml/dispatches", html)

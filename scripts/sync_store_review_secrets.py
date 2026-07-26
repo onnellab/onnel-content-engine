@@ -10,13 +10,14 @@ import sys
 
 
 DEFAULT_REPOSITORY = "onnellab/onnel-content-engine"
+GOOGLE_REPORTS_BUCKET_PREFIX = "pubsite_prod_rev_"
 SECRET_KEYS = (
     "APP_STORE_CONNECT_KEY_ID",
     "APP_STORE_CONNECT_ISSUER_ID",
     "APP_STORE_CONNECT_PRIVATE_KEY_BASE64",
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64",
+    "GOOGLE_PLAY_REPORTS_BUCKET",
 )
-OPTIONAL_SECRET_KEYS = ("GOOGLE_PLAY_REPORTS_BUCKET",)
 
 
 class SecretSyncError(ValueError):
@@ -42,10 +43,17 @@ def sync_store_review_secrets(
     missing = [key for key in SECRET_KEYS if not os.environ.get(key, "").strip()]
     if missing:
         raise SecretSyncError("missing required environment variables: " + ", ".join(missing))
+    reports_bucket = os.environ["GOOGLE_PLAY_REPORTS_BUCKET"].strip().removeprefix("gs://")
+    reports_bucket = reports_bucket.strip("/").split("/", 1)[0]
+    if not reports_bucket.startswith(GOOGLE_REPORTS_BUCKET_PREFIX):
+        raise SecretSyncError(
+            "GOOGLE_PLAY_REPORTS_BUCKET must start with "
+            f"{GOOGLE_REPORTS_BUCKET_PREFIX}"
+        )
     synced: list[str] = []
-    keys = list(SECRET_KEYS) + [key for key in OPTIONAL_SECRET_KEYS if os.environ.get(key, "").strip()]
-    for key in keys:
-        sync_secret(repository, key, os.environ[key], dry_run)
+    for key in SECRET_KEYS:
+        value = reports_bucket if key == "GOOGLE_PLAY_REPORTS_BUCKET" else os.environ[key]
+        sync_secret(repository, key, value, dry_run)
         synced.append(key)
     return synced
 

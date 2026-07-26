@@ -1,24 +1,31 @@
 from __future__ import annotations
 
-import unittest
 import base64
 import json
-
 import sys
+import tempfile
+import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import sync_store_reviews as store_review_sync  # noqa: E402
 from sync_store_reviews import (  # noqa: E402
+    StoreReviewSyncError,
     app_store_connect_token,
     apple_review_rows,
+    apple_store_app_id,
     der_signature_to_raw,
     fetch_apple_review_pages,
     fetch_google_review_pages,
     google_report_review_rows,
     google_service_account_assertion,
     google_review_rows,
+    google_store_package,
+    normalize_google_reports_bucket,
+    sync_reviews,
 )
 
 
@@ -108,6 +115,14 @@ class StoreReviewSyncTest(unittest.TestCase):
                             "createdDate": "2026-07-20T10:00:00Z",
                             "reviewTerritory": "USA",
                         },
+                        "relationships": {
+                            "response": {
+                                "data": {
+                                    "type": "customerReviewResponses",
+                                    "id": "response-1",
+                                }
+                            }
+                        },
                     }
                 ],
                 "included": [
@@ -120,10 +135,9 @@ class StoreReviewSyncTest(unittest.TestCase):
                         },
                         "relationships": {
                             "review": {
-                                "data": {
-                                    "type": "customerReviews",
-                                    "id": "apple-1",
-                                }
+                                "links": {
+                                    "related": "https://apple.example/reviews/apple-1",
+                                },
                             }
                         },
                     }
@@ -136,6 +150,74 @@ class StoreReviewSyncTest(unittest.TestCase):
         self.assertEqual(rows[0]["platform"], "ios")
         self.assertEqual(rows[0]["developer_reply"], "We are investigating.")
         self.assertEqual(rows[0]["status"], "replied")
+
+    def test_uses_published_response_filter_when_apple_omits_included_body(self) -> None:
+        rows = apple_review_rows(
+            {
+                "data": [
+                    {
+                        "type": "customerReviews",
+                        "id": "apple-1",
+                        "attributes": {
+                            "rating": 5,
+                            "title": "Great",
+                            "body": "Exactly what I needed.",
+                            "createdDate": "2026-07-20T10:00:00Z",
+                        },
+                    }
+                ]
+            },
+            STORE,
+            "2026-07-24T00:00:00Z",
+            published_response_ids={"apple-1"},
+        )
+
+        self.assertEqual(rows[0]["developer_reply"], "")
+        self.assertEqual(rows[0]["status"], "replied")
+
+    def test_sync_cross_checks_apple_published_response_ids(self) -> None:
+        all_reviews = {
+            "data": [
+                {
+                    "type": "customerReviews",
+                    "id": "apple-1",
+                    "attributes": {
+                        "rating": 5,
+                        "title": "Great",
+                        "body": "Exactly what I needed.",
+                        "createdDate": "2026-07-20T10:00:00Z",
+                    },
+                }
+            ],
+            "included": [],
+        }
+        published_reviews = {"data": [{"type": "customerReviews", "id": "apple-1"}]}
+        with tempfile.TemporaryDirectory() as temp:
+            stores = Path(temp) / "stores.csv"
+            output = Path(temp) / "reviews.csv"
+            stores.write_text(
+                "app_id,app_slug,app_name,platform,store_url,store_app_id,store_package\n"
+                "APP-0001,quivra,Quivra,ios,https://apps.apple.com/app/id123,123,\n",
+                encoding="utf-8",
+            )
+            with patch.object(
+                store_review_sync,
+                "fetch_apple_review_pages",
+                side_effect=[all_reviews, published_reviews],
+            ) as fetch_pages:
+                counts = sync_reviews(
+                    stores_path=stores,
+                    output_path=output,
+                    apple_token="token",
+                    google_reports_bucket="pubsite_prod_rev_123",
+                    require_google_history=True,
+                )
+
+            rows = store_review_sync.read_csv_rows(output)
+
+        self.assertEqual(counts["apple_published"], 1)
+        self.assertEqual(rows[0]["status"], "replied")
+        self.assertIn("exists%5BpublishedResponse%5D=true", fetch_pages.call_args_list[1].args[0])
 
     def test_parses_google_title_body_and_language(self) -> None:
         rows = google_review_rows(
@@ -186,6 +268,17 @@ class StoreReviewSyncTest(unittest.TestCase):
         self.assertEqual([item["id"] for item in payload["included"]], ["reply-1"])
         self.assertEqual(len(calls), 2)
 
+    def test_rejects_repeated_apple_review_page(self) -> None:
+        def fetcher(url: str, _token: str) -> dict[str, object]:
+            return {"data": [], "links": {"next": url}}
+
+        with self.assertRaisesRegex(StoreReviewSyncError, "repeated a page URL"):
+            fetch_apple_review_pages(
+                "https://apple.example/reviews",
+                "token",
+                fetcher=fetcher,
+            )
+
     def test_fetches_every_google_review_page(self) -> None:
         calls: list[str] = []
 
@@ -199,13 +292,27 @@ class StoreReviewSyncTest(unittest.TestCase):
             return {"reviews": [{"reviewId": "google-2"}]}
 
         payload = fetch_google_review_pages(
-            "https://google.example/reviews?maxResults=200",
+            "https://google.example/reviews?maxResults=100",
             "token",
             fetcher=fetcher,
         )
 
         self.assertEqual([item["reviewId"] for item in payload["reviews"]], ["google-1", "google-2"])
         self.assertIn("token=page+two", calls[1])
+
+    def test_rejects_repeated_google_review_page_token(self) -> None:
+        def fetcher(_url: str, _token: str) -> dict[str, object]:
+            return {
+                "reviews": [],
+                "tokenPagination": {"nextPageToken": "same-token"},
+            }
+
+        with self.assertRaisesRegex(StoreReviewSyncError, "repeated a page token"):
+            fetch_google_review_pages(
+                "https://google.example/reviews?maxResults=100",
+                "token",
+                fetcher=fetcher,
+            )
 
     def test_reads_google_lifetime_review_report(self) -> None:
         report = (
@@ -232,6 +339,35 @@ class StoreReviewSyncTest(unittest.TestCase):
         self.assertEqual(rows[0]["review_id"], "review-77")
         self.assertEqual(rows[0]["platform"], "android")
         self.assertEqual(rows[0]["body"], "잘 사용하고 있어요.")
+
+    def test_normalizes_and_validates_google_reports_bucket(self) -> None:
+        self.assertEqual(
+            normalize_google_reports_bucket("gs://pubsite_prod_rev_123/reviews/"),
+            "pubsite_prod_rev_123",
+        )
+        with self.assertRaisesRegex(StoreReviewSyncError, "must be the Play Console"):
+            normalize_google_reports_bucket("ordinary-project-bucket")
+
+    def test_derives_store_identifiers_from_urls(self) -> None:
+        self.assertEqual(
+            apple_store_app_id({"store_url": "https://apps.apple.com/us/app/name/id6759609875"}),
+            "6759609875",
+        )
+        self.assertEqual(
+            google_store_package(
+                {
+                    "store_url": (
+                        "https://play.google.com/store/apps/details?"
+                        "id=com.onnellab.tagweaver2&hl=en"
+                    )
+                }
+            ),
+            "com.onnellab.tagweaver2",
+        )
+
+    def test_complete_sync_requires_google_lifetime_reports_bucket(self) -> None:
+        with self.assertRaisesRegex(StoreReviewSyncError, "complete Google Play review history"):
+            sync_reviews(require_google_history=True)
 
 
 if __name__ == "__main__":
