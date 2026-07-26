@@ -14,9 +14,11 @@ import subprocess
 import sys
 import tempfile
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 
@@ -43,10 +45,78 @@ FIELDS = [
     "synced_at",
 ]
 GOOGLE_REPORTS_BUCKET_PREFIX = "pubsite_prod_"
+TRANSIENT_HTTP_STATUSES = {408, 425, 429, 500, 502, 503, 504}
+HTTP_MAX_ATTEMPTS = 5
+HTTP_MAX_RETRY_DELAY_SECONDS = 60.0
 
 
 class StoreReviewSyncError(ValueError):
     """Raised when a review sync would produce an incomplete snapshot."""
+
+
+def retry_delay_seconds(
+    error: urllib.error.HTTPError,
+    attempt: int,
+    now: datetime | None = None,
+) -> float:
+    """Return a bounded Retry-After or exponential backoff delay."""
+    retry_after = str(error.headers.get("Retry-After", "") if error.headers else "").strip()
+    if retry_after:
+        try:
+            return min(max(float(retry_after), 0.0), HTTP_MAX_RETRY_DELAY_SECONDS)
+        except ValueError:
+            try:
+                retry_at = parsedate_to_datetime(retry_after)
+                if retry_at.tzinfo is None:
+                    retry_at = retry_at.replace(tzinfo=timezone.utc)
+                current = now or datetime.now(timezone.utc)
+                return min(
+                    max((retry_at - current).total_seconds(), 0.0),
+                    HTTP_MAX_RETRY_DELAY_SECONDS,
+                )
+            except (TypeError, ValueError, OverflowError):
+                pass
+    return min(2.0 ** (attempt - 1), HTTP_MAX_RETRY_DELAY_SECONDS)
+
+
+def urlopen_with_retry(
+    request: urllib.request.Request,
+    timeout: int,
+    *,
+    opener=None,
+    sleeper=None,
+    max_attempts: int = HTTP_MAX_ATTEMPTS,
+):
+    """Open an HTTP request with bounded retries for transient failures."""
+    if max_attempts < 1:
+        raise ValueError("max_attempts must be at least 1")
+    opener = opener or urllib.request.urlopen
+    sleeper = sleeper or time.sleep
+    host = urllib.parse.urlsplit(request.full_url).netloc
+    for attempt in range(1, max_attempts + 1):
+        try:
+            return opener(request, timeout=timeout)
+        except urllib.error.HTTPError as error:
+            if error.code not in TRANSIENT_HTTP_STATUSES or attempt == max_attempts:
+                raise
+            delay = retry_delay_seconds(error, attempt)
+            print(
+                f"Transient HTTP {error.code} from {host}; retrying "
+                f"{attempt + 1}/{max_attempts} in {delay:g}s",
+                file=sys.stderr,
+            )
+            sleeper(delay)
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == max_attempts:
+                raise
+            delay = min(2.0 ** (attempt - 1), HTTP_MAX_RETRY_DELAY_SECONDS)
+            print(
+                f"Transient network error from {host}; retrying "
+                f"{attempt + 1}/{max_attempts} in {delay:g}s",
+                file=sys.stderr,
+            )
+            sleeper(delay)
+    raise AssertionError("unreachable")
 
 
 def base64url(value: bytes) -> str:
@@ -177,7 +247,7 @@ def google_play_access_token(service_account_json: str) -> str:
         },
         method="POST",
     )
-    with urllib.request.urlopen(request, timeout=30) as response:
+    with urlopen_with_retry(request, timeout=30) as response:
         payload = json.loads(response.read().decode("utf-8"))
     access_token = str(payload.get("access_token", "") if isinstance(payload, dict) else "").strip()
     if not access_token:
@@ -223,7 +293,7 @@ def fetch_json(url: str, token: str) -> dict[str, object]:
             "User-Agent": "ONNELLAB-Store-Review-Sync/1.0",
         },
     )
-    with urllib.request.urlopen(request, timeout=30) as response:
+    with urlopen_with_retry(request, timeout=30) as response:
         payload = json.loads(response.read().decode("utf-8"))
     if not isinstance(payload, dict):
         raise ValueError("store review response is not a JSON object")
@@ -239,7 +309,7 @@ def fetch_bytes(url: str, token: str) -> bytes:
             "User-Agent": "ONNELLAB-Store-Review-Sync/1.0",
         },
     )
-    with urllib.request.urlopen(request, timeout=60) as response:
+    with urlopen_with_retry(request, timeout=60) as response:
         return response.read()
 
 
@@ -327,6 +397,8 @@ def apple_store_app_id(store: dict[str, str]) -> str:
     configured = store.get("store_app_id", "").strip()
     if configured:
         return configured
+    if store.get("status", "").strip().lower() == "failed":
+        return ""
     path = urllib.parse.urlsplit(store.get("store_url", "")).path
     for segment in reversed(path.split("/")):
         candidate = segment.removeprefix("id")
@@ -625,6 +697,7 @@ def sync_reviews(
         "apple_published": 0,
         "google_reports": 0,
         "google_recent": 0,
+        "unavailable": 0,
         "skipped": 0,
     }
     for store in stores:
@@ -634,6 +707,13 @@ def sync_reviews(
         if platform == "ios":
             app_id = apple_store_app_id(store)
             published_response_ids: set[str] | None = None
+            if (
+                payload is None
+                and not app_id
+                and store.get("status", "").strip().lower() == "failed"
+            ):
+                counts["unavailable"] += 1
+                continue
             if payload is None and apple_token and app_id:
                 parameters = {
                     "limit": "200",

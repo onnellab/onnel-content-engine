@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import base64
+import email.message
+import io
 import json
 import sys
 import tempfile
 import unittest
+import urllib.error
+import urllib.request
 from pathlib import Path
 from unittest.mock import patch
 
@@ -25,7 +29,9 @@ from sync_store_reviews import (  # noqa: E402
     google_review_rows,
     google_store_package,
     normalize_google_reports_bucket,
+    retry_delay_seconds,
     sync_reviews,
+    urlopen_with_retry,
 )
 
 
@@ -100,6 +106,70 @@ class StoreReviewSyncTest(unittest.TestCase):
         self.assertEqual(payload["exp"] - payload["iat"], 60 * 60)
         self.assertEqual(decode(signature_segment), b"rsa-signature")
         self.assertEqual(calls[0][0], f"{header_segment}.{payload_segment}".encode("ascii"))
+
+    def test_retries_transient_http_failures(self) -> None:
+        calls: list[int] = []
+        delays: list[float] = []
+        headers = email.message.Message()
+        headers["Retry-After"] = "3"
+
+        def opener(_request: urllib.request.Request, timeout: int):
+            calls.append(timeout)
+            if len(calls) == 1:
+                raise urllib.error.HTTPError(
+                    "https://apple.example/reviews",
+                    500,
+                    "Internal Server Error",
+                    headers,
+                    io.BytesIO(),
+                )
+            return io.BytesIO(b"ok")
+
+        request = urllib.request.Request("https://apple.example/reviews")
+        with urlopen_with_retry(
+            request,
+            timeout=30,
+            opener=opener,
+            sleeper=delays.append,
+        ) as response:
+            self.assertEqual(response.read(), b"ok")
+
+        self.assertEqual(calls, [30, 30])
+        self.assertEqual(delays, [3.0])
+
+    def test_does_not_retry_permanent_http_failure(self) -> None:
+        calls = 0
+
+        def opener(_request: urllib.request.Request, timeout: int):
+            nonlocal calls
+            calls += 1
+            raise urllib.error.HTTPError(
+                "https://apple.example/reviews",
+                403,
+                "Forbidden",
+                email.message.Message(),
+                io.BytesIO(),
+            )
+
+        with self.assertRaises(urllib.error.HTTPError):
+            urlopen_with_retry(
+                urllib.request.Request("https://apple.example/reviews"),
+                timeout=30,
+                opener=opener,
+                sleeper=lambda _delay: None,
+            )
+
+        self.assertEqual(calls, 1)
+
+    def test_uses_exponential_retry_delay_without_retry_after(self) -> None:
+        error = urllib.error.HTTPError(
+            "https://apple.example/reviews",
+            500,
+            "Internal Server Error",
+            email.message.Message(),
+            io.BytesIO(),
+        )
+        self.assertEqual(retry_delay_seconds(error, attempt=3), 4.0)
 
     def test_parses_apple_review_and_response(self) -> None:
         rows = apple_review_rows(
@@ -368,6 +438,38 @@ class StoreReviewSyncTest(unittest.TestCase):
             ),
             "com.onnellab.tagweaver2",
         )
+        self.assertEqual(
+            apple_store_app_id(
+                {
+                    "store_url": "https://apps.apple.com/app/id6783644955",
+                    "status": "failed",
+                }
+            ),
+            "",
+        )
+
+    def test_sync_classifies_unavailable_apple_store_without_calling_api(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            stores = Path(temp) / "stores.csv"
+            output = Path(temp) / "reviews.csv"
+            stores.write_text(
+                "app_id,app_slug,app_name,platform,store_url,store_app_id,status\n"
+                "APP-0007,melivra,Melivra,ios,"
+                "https://apps.apple.com/app/id6783644955,,failed\n",
+                encoding="utf-8",
+            )
+            with patch.object(store_review_sync, "fetch_apple_review_pages") as fetch_pages:
+                counts = sync_reviews(
+                    stores_path=stores,
+                    output_path=output,
+                    apple_token="token",
+                    google_reports_bucket="pubsite_prod_123",
+                    require_google_history=True,
+                )
+
+        fetch_pages.assert_not_called()
+        self.assertEqual(counts["unavailable"], 1)
+        self.assertEqual(counts["skipped"], 0)
 
     def test_complete_sync_requires_google_lifetime_reports_bucket(self) -> None:
         with self.assertRaisesRegex(StoreReviewSyncError, "complete Google Play review history"):
