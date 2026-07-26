@@ -104,6 +104,11 @@ ingestion. Without it the reviews API supplies only recently created or
 modified reviews, so production and dashboard syncs fail rather than publish a
 partial list. Use `--allow-recent-only` only for an intentional local
 diagnostic.
+The service account must have the Play Console account-level **View app
+information and download bulk reports (read-only)** permission
+(`CAN_VIEW_NON_FINANCIAL_DATA_GLOBAL`). Per-app review access alone cannot read
+the private report bucket, and Google notes that permission changes may take up
+to 48 hours to propagate.
 `GOOGLE_PLAY_ACCESS_TOKEN` remains available as a temporary override.
 
 These values are read-only inputs for `scripts/sync_store_reviews.py`. Do not

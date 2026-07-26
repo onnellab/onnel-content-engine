@@ -410,6 +410,31 @@ class StoreReviewSyncTest(unittest.TestCase):
         self.assertEqual(rows[0]["platform"], "android")
         self.assertEqual(rows[0]["body"], "잘 사용하고 있어요.")
 
+    def test_explains_google_report_bucket_permission_denial(self) -> None:
+        def denied(_url: str, _token: str) -> dict[str, object]:
+            raise urllib.error.HTTPError(
+                "https://storage.googleapis.com/storage/v1/b/pubsite_prod_123/o",
+                403,
+                "Forbidden",
+                email.message.Message(),
+                io.BytesIO(),
+            )
+
+        with self.assertRaisesRegex(
+            StoreReviewSyncError,
+            "reviews@example.iam.gserviceaccount.com.*"
+            "View app information and download bulk reports.*"
+            "CAN_VIEW_NON_FINANCIAL_DATA_GLOBAL",
+        ):
+            google_report_review_rows(
+                "pubsite_prod_123",
+                {**STORE, "store_package": "com.onnellab.quivra2"},
+                "token",
+                "2026-07-24T00:00:00Z",
+                json_fetcher=denied,
+                principal="reviews@example.iam.gserviceaccount.com",
+            )
+
     def test_normalizes_and_validates_google_reports_bucket(self) -> None:
         self.assertEqual(
             normalize_google_reports_bucket("gs://pubsite_prod_123/reviews/"),

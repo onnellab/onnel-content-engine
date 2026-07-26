@@ -415,6 +415,17 @@ def google_store_package(store: dict[str, str]) -> str:
     return str(query.get("id", [""])[0]).strip()
 
 
+def google_report_access_error(bucket: str, principal: str = "") -> StoreReviewSyncError:
+    identity = principal or "the configured Google Play service account"
+    return StoreReviewSyncError(
+        f"Google Play report bucket {bucket} denied access to {identity}. "
+        "In Play Console > Users and permissions, grant this service account "
+        "the account-level 'View app information and download bulk reports "
+        "(read-only)' permission (CAN_VIEW_NON_FINANCIAL_DATA_GLOBAL). "
+        "Google notes that permission changes may take up to 48 hours to propagate."
+    )
+
+
 def apple_review_ids(payload: dict[str, object]) -> set[str]:
     data = payload.get("data", [])
     if not isinstance(data, list):
@@ -447,6 +458,7 @@ def google_report_review_rows(
     json_fetcher=fetch_json,
     bytes_fetcher=fetch_bytes,
     max_pages: int = 100,
+    principal: str = "",
 ) -> list[dict[str, str]]:
     bucket = normalize_google_reports_bucket(bucket)
     package = google_store_package(store)
@@ -458,7 +470,12 @@ def google_report_review_rows(
     object_names: list[str] = []
     seen_page_tokens: set[str] = set()
     for _ in range(max_pages):
-        payload = json_fetcher(list_url, token)
+        try:
+            payload = json_fetcher(list_url, token)
+        except urllib.error.HTTPError as error:
+            if error.code == 403:
+                raise google_report_access_error(bucket, principal) from error
+            raise
         items = payload.get("items", [])
         if isinstance(items, list):
             object_names.extend(
@@ -487,7 +504,12 @@ def google_report_review_rows(
             f"https://storage.googleapis.com/download/storage/v1/b/{urllib.parse.quote(bucket, safe='')}"
             f"/o/{urllib.parse.quote(object_name, safe='')}?alt=media"
         )
-        raw = bytes_fetcher(download_url, token)
+        try:
+            raw = bytes_fetcher(download_url, token)
+        except urllib.error.HTTPError as error:
+            if error.code == 403:
+                raise google_report_access_error(bucket, principal) from error
+            raise
         encoding = "utf-16" if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else "utf-8-sig"
         for source in csv.DictReader(io.StringIO(raw.decode(encoding))):
             review_text = str(source.get("Review Text", "") or "").strip()
@@ -676,6 +698,7 @@ def sync_reviews(
     apple_json_dir: Path | None = None,
     google_json_dir: Path | None = None,
     require_google_history: bool = False,
+    google_principal: str = "",
 ) -> dict[str, int]:
     google_reports_bucket = normalize_google_reports_bucket(google_reports_bucket)
     if require_google_history and not google_reports_bucket:
@@ -766,6 +789,7 @@ def sync_reviews(
                     store,
                     google_token,
                     synced_at,
+                    principal=google_principal,
                 )
                 rows.extend(report_rows)
                 counts["google_reports"] += len(report_rows)
@@ -842,10 +866,14 @@ def main() -> int:
         if key_id or issuer_id or private_key:
             apple_token = app_store_connect_token(key_id, issuer_id, private_key)
     google_token = os.environ.get("GOOGLE_PLAY_ACCESS_TOKEN", "").strip()
+    google_principal = ""
     if not google_token:
         encoded_service_account = os.environ.get("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", "").strip()
         if encoded_service_account:
             service_account_json = base64.b64decode(encoded_service_account, validate=True).decode("utf-8")
+            service_account = json.loads(service_account_json)
+            if isinstance(service_account, dict):
+                google_principal = str(service_account.get("client_email", "") or "").strip()
             google_token = google_play_access_token(service_account_json)
     try:
         counts = sync_reviews(
@@ -857,6 +885,7 @@ def main() -> int:
             apple_json_dir=args.apple_json_dir,
             google_json_dir=args.google_json_dir,
             require_google_history=not args.allow_recent_only,
+            google_principal=google_principal,
         )
     except StoreReviewSyncError as error:
         print(f"store review sync failed: {error}", file=sys.stderr)

@@ -46,11 +46,14 @@ The reviews API only returns reviews created or modified during the previous
 week. The lifetime report bucket is therefore required for dashboard syncs.
 Copy the Play Console review report URI (`gs://pubsite_prod_.../reviews/`) into the
 dashboard's **Play lifetime review reports bucket** field. The service account
-needs global **View app information** access. The sync then merges every monthly
-review CSV in that bucket with the recent API response. A sync without this
-bucket fails instead of silently publishing a partial review list. Local
-diagnostics may explicitly opt into a partial sync with
-`--allow-recent-only`.
+needs the account-level **View app information and download bulk reports
+(read-only)** permission (`CAN_VIEW_NON_FINANCIAL_DATA_GLOBAL`), not only
+per-app review access. Google notes that permission changes can take up to 48
+hours to propagate. The sync then merges every monthly review CSV in that
+bucket with the recent API response. A sync without this bucket, or without
+permission to read it, fails with the exact missing permission instead of
+silently publishing a partial review list. Local diagnostics may explicitly
+opt into a partial sync with `--allow-recent-only`.
 
 The dashboard's **Store review connection** panel can save all five required
 connection values
