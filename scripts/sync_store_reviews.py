@@ -42,7 +42,7 @@ FIELDS = [
     "status",
     "synced_at",
 ]
-GOOGLE_REPORTS_BUCKET_PREFIX = "pubsite_prod_rev_"
+GOOGLE_REPORTS_BUCKET_PREFIX = "pubsite_prod_"
 
 
 class StoreReviewSyncError(ValueError):

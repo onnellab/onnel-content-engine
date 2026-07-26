@@ -201,7 +201,7 @@ python3 scripts/build_manual_publish_site.py
 
 The dashboard's **Store review connection** panel accepts a newly issued Apple
 Key ID, Issuer ID, and `.p8` private key plus a Google Play service account
-JSON and the Play lifetime review reports bucket (`pubsite_prod_rev_...`), then
+JSON and the Play lifetime review reports URI (`gs://pubsite_prod_.../reviews/`), then
 prepares the local env and GitHub Actions secret-sync commands. The reports
 bucket is required because the reviews API only exposes the previous week. The
 private credentials are not embedded in the generated dashboard and are

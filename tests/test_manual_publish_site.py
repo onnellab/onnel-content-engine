@@ -182,7 +182,7 @@ Body
             self.assertIn('id="google-play-reports-bucket"', html)
             self.assertIn(
                 'id="google-play-reports-bucket" type="text" autocomplete="off" '
-                'placeholder="pubsite_prod_rev_..." required',
+                'placeholder="gs://pubsite_prod_.../reviews/" required',
                 html,
             )
             self.assertIn("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", html)
@@ -192,7 +192,7 @@ Body
             self.assertIn("Google 리뷰 API는 최근 1주만 제공하므로", html)
             self.assertIn("requireRemoteStoreSecrets(false)", html)
             self.assertIn(
-                "GOOGLE_PLAY_REPORTS_BUCKET must start with pubsite_prod_rev_",
+                "GOOGLE_PLAY_REPORTS_BUCKET must start with pubsite_prod_",
                 html,
             )
             self.assertIn("Google Play 서비스 계정 JSON", html)

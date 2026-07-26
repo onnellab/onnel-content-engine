@@ -1276,7 +1276,7 @@ def html_document(
       <div class="credential-grid">
         <label><span id="app-store-key-id-label">Key ID</span><input id="app-store-key-id" type="text" autocomplete="off"></label>
         <label><span id="app-store-issuer-id-label">Issuer ID</span><input id="app-store-issuer-id" type="text" autocomplete="off"></label>
-        <label><span id="google-play-reports-bucket-label">Play 보고서 버킷</span><input id="google-play-reports-bucket" type="text" autocomplete="off" placeholder="pubsite_prod_rev_..." required></label>
+        <label><span id="google-play-reports-bucket-label">Play 보고서 버킷</span><input id="google-play-reports-bucket" type="text" autocomplete="off" placeholder="gs://pubsite_prod_.../reviews/" required></label>
       </div>
       <label><span id="app-store-private-key-label">새 Private Key (.p8 PEM)</span><textarea id="app-store-private-key" class="credential-output" autocomplete="off" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label>
       <label><span id="google-play-service-account-label">Google Play 서비스 계정 JSON</span><textarea id="google-play-service-account" class="credential-output" autocomplete="off" spellcheck="false" placeholder='{{"type":"service_account", ...}}'></textarea></label>
@@ -2257,9 +2257,9 @@ def html_document(
       const values = storeCredentialValues();
       if (
         values.googleReportsBucket
-        && !values.googleReportsBucket.startsWith('pubsite_prod_rev_')
+        && !values.googleReportsBucket.startsWith('pubsite_prod_')
       ) {{
-        throw new Error('GOOGLE_PLAY_REPORTS_BUCKET must start with pubsite_prod_rev_');
+        throw new Error('GOOGLE_PLAY_REPORTS_BUCKET must start with pubsite_prod_');
       }}
       const bucketOnly = Boolean(
         values.googleReportsBucket

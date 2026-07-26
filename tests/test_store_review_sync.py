@@ -209,7 +209,7 @@ class StoreReviewSyncTest(unittest.TestCase):
                     stores_path=stores,
                     output_path=output,
                     apple_token="token",
-                    google_reports_bucket="pubsite_prod_rev_123",
+                    google_reports_bucket="pubsite_prod_123",
                     require_google_history=True,
                 )
 
@@ -325,7 +325,7 @@ class StoreReviewSyncTest(unittest.TestCase):
         ).encode("utf-8")
 
         rows = google_report_review_rows(
-            "gs://pubsite_prod_rev_123",
+            "gs://pubsite_prod_123",
             {**STORE, "store_package": "com.onnellab.quivra2"},
             "token",
             "2026-07-24T00:00:00Z",
@@ -341,6 +341,10 @@ class StoreReviewSyncTest(unittest.TestCase):
         self.assertEqual(rows[0]["body"], "잘 사용하고 있어요.")
 
     def test_normalizes_and_validates_google_reports_bucket(self) -> None:
+        self.assertEqual(
+            normalize_google_reports_bucket("gs://pubsite_prod_123/reviews/"),
+            "pubsite_prod_123",
+        )
         self.assertEqual(
             normalize_google_reports_bucket("gs://pubsite_prod_rev_123/reviews/"),
             "pubsite_prod_rev_123",

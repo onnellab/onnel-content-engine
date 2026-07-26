@@ -44,7 +44,7 @@ creates a one-hour OAuth assertion with the `androidpublisher` and
 
 The reviews API only returns reviews created or modified during the previous
 week. The lifetime report bucket is therefore required for dashboard syncs.
-Copy the Play Console report bucket name (`pubsite_prod_rev_...`) into the
+Copy the Play Console review report URI (`gs://pubsite_prod_.../reviews/`) into the
 dashboard's **Play lifetime review reports bucket** field. The service account
 needs global **View app information** access. The sync then merges every monthly
 review CSV in that bucket with the recent API response. A sync without this

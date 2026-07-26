@@ -17,7 +17,7 @@ class StoreReviewSecretSyncTest(unittest.TestCase):
     @staticmethod
     def complete_env() -> dict[str, str]:
         env = {key: f"value-{index}" for index, key in enumerate(SECRET_KEYS)}
-        env["GOOGLE_PLAY_REPORTS_BUCKET"] = "pubsite_prod_rev_123"
+        env["GOOGLE_PLAY_REPORTS_BUCKET"] = "pubsite_prod_123"
         return env
 
     def test_requires_all_apple_credentials(self) -> None:

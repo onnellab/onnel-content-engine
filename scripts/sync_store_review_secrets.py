@@ -10,7 +10,7 @@ import sys
 
 
 DEFAULT_REPOSITORY = "onnellab/onnel-content-engine"
-GOOGLE_REPORTS_BUCKET_PREFIX = "pubsite_prod_rev_"
+GOOGLE_REPORTS_BUCKET_PREFIX = "pubsite_prod_"
 SECRET_KEYS = (
     "APP_STORE_CONNECT_KEY_ID",
     "APP_STORE_CONNECT_ISSUER_ID",
