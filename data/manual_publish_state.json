@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-25T10:42:44.853Z",
+  "updated_at": "2026-07-27T12:14:04.405Z",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -167,6 +167,18 @@
       "marked_by": "manual_user_confirmation",
       "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
       "verified_at": "2026-07-25T10:42:44.839Z",
+      "verification_method": "user_confirmed_manual_publish",
+      "verification_confidence": "manual"
+    },
+    "TOPIC-0010::hashnode::en::markdown": {
+      "topic_id": "TOPIC-0010",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "marked_at": "2026-07-27T12:14:04.396Z",
+      "marked_by": "manual_user_confirmation",
+      "posted_url": "https://hashnode.com/@onnellab",
+      "verified_at": "2026-07-27T12:14:04.396Z",
       "verification_method": "user_confirmed_manual_publish",
       "verification_confidence": "manual"
     }
