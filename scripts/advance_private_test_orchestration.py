@@ -13,7 +13,7 @@ def main() -> int:
  if active:
   status=active['status']; task_id=active['task_id']; release_id=active['release_id']; platform=active['platform']
   tasks=load('ai_coder_tasks.json',{'tasks':[]}).get('tasks',[]); task=next((x for x in tasks if x.get('task_id')==task_id),{})
-  builds=load('private_test_build_requests.json',{'requests':[]}).get('requests',[]); build=next((x for x in builds if x.get('release_id')==release_id),{})
+  builds=load('private_test_build_requests.json',{'requests':[]}).get('requests',[]); build=next((x for x in reversed(builds) if x.get('release_id')==release_id and x.get('status')!='retry_superseded'),{})
   ready=load('internal_test_readiness.json',{'records':[]}).get('records',[]); upload=load('internal_store_submissions.json',{'submissions':[]}).get('submissions',[])
   try: transitioned=datetime.fromisoformat(active.get('last_transition_at',''))
   except ValueError: transitioned=None

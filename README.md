@@ -362,6 +362,9 @@ Use **Start Private Test Orchestration** for the one-approval chain. It advances
 merge, platform build, readiness, and internal upload only after each recorded
 gate succeeds; a dispatched stage that produces no evidence for six hours is
 marked failed instead of progressing.
+Use **Retry Private Test Orchestration** after fixing a recorded failure. It
+resumes from the latest safe evidence and preserves previous attempts. An
+ambiguous store-upload outcome cannot be retried until the console is checked.
 For a merged Coder task, **Dispatch Private Test Build** starts exactly one
 mapped Codemagic app/workflow/branch build after `BUILD_PRIVATE_TEST` approval.
 Set its mapping in `data/codemagic_builds.csv`; the mapped branch must still

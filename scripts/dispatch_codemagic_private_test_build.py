@@ -75,7 +75,20 @@ def create_immutable_tag(repository: str, release_id: str, commit: str) -> str:
         with urllib.request.urlopen(request, timeout=60):
             return tag
     except urllib.error.HTTPError as error:
-        raise SystemExit(f"GitHub private-test tag creation failed with HTTP {error.code}") from error
+        if error.code != 422:
+            raise SystemExit(f"GitHub private-test tag creation failed with HTTP {error.code}") from error
+        verify = urllib.request.Request(
+            f"https://api.github.com/repos/{repository}/git/ref/tags/{urllib.parse.quote(tag, safe='')}",
+            headers={"Accept": "application/vnd.github+json", "Authorization": f"Bearer {token}", "User-Agent": "ONNELLAB content engine"},
+        )
+        try:
+            with urllib.request.urlopen(verify, timeout=60) as response:
+                existing = json.loads(response.read().decode("utf-8")).get("object", {}).get("sha")
+        except urllib.error.HTTPError as verify_error:
+            raise SystemExit(f"GitHub private-test tag verification failed with HTTP {verify_error.code}") from verify_error
+        if existing != commit:
+            raise SystemExit("existing private-test tag does not match the recorded merge commit")
+        return tag
 
 
 def main() -> int:
@@ -100,8 +113,8 @@ def main() -> int:
         raise SystemExit("configured Codemagic branch is not exactly the recorded merged commit")
     payload = json.loads(REQUESTS_PATH.read_text(encoding="utf-8"))
     requests = payload.get("requests")
-    if not isinstance(requests, list) or any(item.get("release_id") == args.release_id for item in requests):
-        raise SystemExit("private test build request is invalid or already recorded")
+    if not isinstance(requests, list) or any(item.get("release_id") == args.release_id and item.get("status") != "retry_superseded" for item in requests):
+        raise SystemExit("private test build request is invalid or already active")
     tag = create_immutable_tag(release["repository"], args.release_id, task["merge_commit"])
     build_id = start_build(build["codemagic_app_id"], build["workflow_id"], tag)
     build["build_id"] = build_id
