@@ -4,7 +4,7 @@ canonical_url: "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-ip
 tags: "productivity,software-engineering,developer-tools"
 cover_image: "https://onnellab.github.io/blog-assets/en/reuse-copied-text-snippets-iphone/social-card.png"
 publication_id: ""
-content_profile: "hashnode-native-v2"
+content_profile: "hashnode-native-v3"
 ---
 
 
@@ -71,7 +71,7 @@ Retention is a privacy decision. “Frequently used” does not mean “safe to 
 
 ## When a focused tool helps
 
-[ClipNest](https://onnellab.github.io/apps/clipnest/) fits a deliberate iPhone clipboard workflow when you want selected copied text available from a keyboard-based snippet list. Its official App Store listing says that it checks the current clipboard once when the ClipNest keyboard opens, saves new text locally, supports pinning and duplicate handling, and does not constantly monitor the clipboard.
+ClipNest fits a deliberate iPhone clipboard workflow when you want selected copied text available from a keyboard-based snippet list. Its official App Store listing says that it checks the current clipboard once when the ClipNest keyboard opens, saves new text locally, supports pinning and duplicate handling, and does not constantly monitor the clipboard.
 
 That event-based behavior is important: open the keyboard when you intend to capture or reuse text, then verify what was saved. The app can reduce navigation between source notes and destination fields, but it does not decide whether a snippet is current, appropriate, or safe to retain.
 
@@ -79,7 +79,7 @@ That event-based behavior is important: open the keyboard when you intend to cap
 
 - [Apple Support: Select, cut, copy, and paste text on iPhone](https://support.apple.com/guide/iphone/select-cut-copy-and-paste-text-iph1a9cae52c/ios) documents the standard iPhone text selection and clipboard actions.
 - [Apple Support: Copy and paste between iPhone and other Apple devices](https://support.apple.com/guide/iphone/copy-and-paste-between-devices-iph220ea8dca/ios) explains Universal Clipboard requirements and notes that copied content is available briefly.
-- [Apple Platform Security: Handoff security](https://support.apple.com/guide/security/handoff-security-secf78dbe639/web) describes how Universal Clipboard uses Handoff to transfer clipboard content between a user’s devices.
+- Apple Platform Security: Handoff security describes how Universal Clipboard uses Handoff to transfer clipboard content between a user’s devices.
 - ClipNest on the App Store is the official product listing for its capture trigger, local storage, pinning, duplicate handling, and privacy disclosure.
 
 ## Takeaway

@@ -4,7 +4,7 @@ canonical_url: "https://onnellab.github.io/blog/en/read-large-txt-files-without-
 tags: "programming,performance,text-processing"
 cover_image: "https://onnellab.github.io/blog-assets/en/read-large-txt-files-without-lag/social-card.png"
 publication_id: ""
-content_profile: "hashnode-native-v2"
+content_profile: "hashnode-native-v3"
 ---
 
 For large plain-text files, the practical bottleneck is usually the path from bytes to visible lines: decoding, layout, search, and memory use all show up in the reading experience.
@@ -76,7 +76,7 @@ If the file has a meaningful structure, such as chapters, logs by date, or expor
 
 ## When a focused tool helps
 
-This is the kind of workflow [VaultXT](https://onnellab.github.io/apps/vaultxt/) is built around: open the plain-text file first, then search, bookmark, or edit only when the task actually needs it.
+This is the kind of workflow VaultXT is built around: open the plain-text file first, then search, bookmark, or edit only when the task actually needs it.
 
 It is not meant to make every document workflow more complex. It is most relevant when the recurring problem is opening and navigating large TXT files, not formatting rich documents.
 

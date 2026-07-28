@@ -4,7 +4,7 @@ canonical_url: "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-
 tags: "programming,audio,metadata"
 cover_image: "https://onnellab.github.io/blog-assets/en/clean-up-mp3-metadata-before-organizing-music/social-card.png"
 publication_id: ""
-content_profile: "hashnode-native-v2"
+content_profile: "hashnode-native-v3"
 ---
 
 
@@ -71,7 +71,7 @@ Changing metadata does not improve audio quality, repair damaged audio, or prove
 
 ## When a focused tool helps
 
-[TagWeaver](https://onnellab.github.io/apps/tagweaver/) fits this manual, local cleanup workflow when you need an MP3 metadata editor for selected files. Its public store listings document editing for core identity fields, track and disc values, artwork, lyrics, and batch selections, with explicit save control. The current iOS listing also describes FLAC Vorbis Comment support, while the Google Play listing documents MP3 ID3 v2.3 and v2.4; check the relevant store listing for the format and platform you use.
+TagWeaver fits this manual, local cleanup workflow when you need an MP3 metadata editor for selected files. Its public store listings document editing for core identity fields, track and disc values, artwork, lyrics, and batch selections, with explicit save control. The current iOS listing also describes FLAC Vorbis Comment support, while the Google Play listing documents MP3 ID3 v2.3 and v2.4; check the relevant store listing for the format and platform you use.
 
 The app is a tool for applying decisions, not a source of music facts. Establish conventions, verify the recording, and test the saved output before expanding a batch.
 
@@ -79,7 +79,7 @@ The app is a tool for applying decisions, not a source of music facts. Establish
 
 - [ID3.org: ID3v2.4.0 frame definitions](https://id3.org/id3v2.4.0-frames) defines the title, album, track, disc, and attached-picture frames used in MP3 tags.
 - [ID3.org: ID3v2.3.0 specification](https://id3.org/id3v2.3.0) documents the earlier ID3v2.3 structure still used by many files and tools.
-- [Apple Support: Add artwork to content in Music on Mac](https://support.apple.com/guide/music/add-artwork-mus1c6803257/mac) describes supported artwork files and manual artwork changes in Apple's music library workflow.
+- Apple Support: Add artwork to content in Music on Mac describes supported artwork files and manual artwork changes in Apple's music library workflow.
 - TagWeaver on the App Store is the official iOS product listing and format-capability reference.
 - TagWeaver on Google Play is the official Android product listing and ID3-capability reference.
 

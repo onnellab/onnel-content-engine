@@ -801,7 +801,14 @@ class PublishingTest(unittest.TestCase):
     def test_hashnode_adapter_is_export_only_without_paid_api(self) -> None:
         output_dir = self.root / "generated" / "syndication"
         generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
-        approve_syndication_draft("TOPIC-0001", "hashnode", "en", "editor", output_dir / "manifest.json")
+        approve_syndication_draft(
+            "TOPIC-0001",
+            "hashnode",
+            "en",
+            "editor",
+            output_dir / "manifest.json",
+            automod_reviewed_by="hashnode-editor",
+        )
 
         dry_run = post_syndication_drafts(output_dir / "manifest.json", platform="hashnode", adapter="hashnode", dry_run=True)
 
@@ -860,7 +867,56 @@ Originally published at https://example.com/original/
         self.assertIn("canonical URL must be set as metadata, not repeated in the body", risks)
         self.assertIn("body must not repeat the article title as an H1", risks)
         self.assertIn("generic canonical section headings must be adapted for Hashnode", risks)
-        self.assertIn("body may contain at most one product link", risks)
+        self.assertIn("body must not contain product or store links", risks)
+
+    def test_hashnode_automod_gate_rejects_promotional_language_and_link_volume(self) -> None:
+        content = f'''---
+title: "Technical Draft"
+canonical_url: "https://example.com/original/"
+tags: "programming"
+cover_image: "https://example.com/card.png"
+publication_id: ""
+content_profile: "{HASHNODE_CONTENT_PROFILE}"
+---
+
+## Implementation
+
+Run `tool verify` before deploying.
+
+1. Reproduce the issue.
+2. Compare the output.
+
+[One](https://example.com/1)
+[Two](https://example.com/2)
+[Three](https://example.com/3)
+[Four](https://example.com/4)
+
+Download now for the best app.
+'''
+
+        risks = hashnode_automod_risks(content, "https://example.com/original/")
+
+        self.assertIn("body contains more than three external links", risks)
+        self.assertIn("body contains promotional call-to-action language", risks)
+
+    def test_hashnode_approval_requires_human_automod_review_and_daily_cadence(self) -> None:
+        output_dir = self.root / "generated" / "syndication"
+        generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
+        manifest = output_dir / "manifest.json"
+
+        with self.assertRaisesRegex(SyndicationApprovalError, "automod-reviewed-by"):
+            approve_syndication_draft("TOPIC-0001", "hashnode", "en", "editor", manifest)
+
+        approved = approve_syndication_draft(
+            "TOPIC-0001",
+            "hashnode",
+            "en",
+            "editor",
+            manifest,
+            now=datetime.fromisoformat("2026-07-20T09:00:00+09:00"),
+            automod_reviewed_by="hashnode-editor",
+        )
+        self.assertEqual(approved["automod_reviewed_by"], "hashnode-editor")
 
     def test_integrated_publishing_dry_run_report_lists_approved_payloads(self) -> None:
         social_dir = self.root / "generated" / "social"

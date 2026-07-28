@@ -6,7 +6,7 @@ from __future__ import annotations
 import re
 
 
-HASHNODE_CONTENT_PROFILE = "hashnode-native-v2"
+HASHNODE_CONTENT_PROFILE = "hashnode-native-v3"
 HASHNODE_CATEGORY_TAGS = {
     "reading": ("programming", "performance", "text-processing"),
     "music": ("programming", "audio", "metadata"),
@@ -29,7 +29,14 @@ PRODUCT_URL_RE = re.compile(
     re.IGNORECASE,
 )
 MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[([^\]]+)\]\((https?://[^)\s]+)\)")
+MARKDOWN_URL_RE = re.compile(
+    r"(!?)\[([^\]]*)\]\((https?://[^)\s]+)(?:\s+\"[^\"]*\")?\)"
+)
 EXTERNAL_URL_RE = re.compile(r"https?://[^)\s>\"]+")
+PROMOTIONAL_LANGUAGE_RE = re.compile(
+    r"\b(?:buy|download now|free trial|limited offer|best app|our app|check out|install today)\b",
+    re.IGNORECASE,
+)
 
 
 def hashnode_tag_list(category: str) -> str:
@@ -38,7 +45,7 @@ def hashnode_tag_list(category: str) -> str:
     return ",".join(tags)
 
 
-def _limit_product_links(markdown: str, limit: int = 1) -> str:
+def _limit_product_links(markdown: str, limit: int = 0) -> str:
     retained = 0
 
     def replace(match: re.Match[str]) -> str:
@@ -50,6 +57,20 @@ def _limit_product_links(markdown: str, limit: int = 1) -> str:
         return match.group(0) if retained <= limit else label
 
     return MARKDOWN_LINK_RE.sub(replace, markdown)
+
+
+def _limit_external_links(markdown: str, limit: int = 3) -> str:
+    """Keep a small citation budget without leaving malformed Markdown."""
+    retained = 0
+
+    def replace(match: re.Match[str]) -> str:
+        nonlocal retained
+        retained += 1
+        if retained <= limit:
+            return match.group(0)
+        return match.group(2)  # Keep useful anchor text, discard the URL.
+
+    return MARKDOWN_URL_RE.sub(replace, markdown)
 
 
 def hashnode_native_body(body: str) -> str:
@@ -79,7 +100,10 @@ def hashnode_native_body(body: str) -> str:
 
     adapted = "\n".join(output).strip()
     adapted = re.sub(r"(?m)^>\s*ONNELLAB note:.*(?:\n|$)", "", adapted)
+    # Product and store links make a syndicated post look promotional. The
+    # canonical URL belongs in Hashnode's original-URL field, not the body.
     adapted = _limit_product_links(adapted)
+    adapted = _limit_external_links(adapted)
     return re.sub(r"\n{3,}", "\n\n", adapted).strip()
 
 
@@ -114,11 +138,13 @@ def hashnode_automod_risks(content: str, canonical_url: str) -> list[str]:
         risks.append("generic canonical section headings must be adapted for Hashnode")
 
     product_links = PRODUCT_URL_RE.findall(body)
-    if len(product_links) > 1:
-        risks.append("body may contain at most one product link")
+    if product_links:
+        risks.append("body must not contain product or store links")
     external_links = EXTERNAL_URL_RE.findall(body)
-    if len(external_links) > 8:
-        risks.append("body contains more than eight external links")
+    if len(external_links) > 3:
+        risks.append("body contains more than three external links")
+    if PROMOTIONAL_LANGUAGE_RE.search(body):
+        risks.append("body contains promotional call-to-action language")
 
     technical_signals = sum(
         (

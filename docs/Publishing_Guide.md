@@ -470,7 +470,7 @@ Hashnode drafts should include a `cover_image` field pointing to the generated s
 
 Hashnode Markdown should be copied into the Hashnode editor manually unless the publication is upgraded to a paid plan with GraphQL API access.
 
-Hashnode drafts use the `hashnode-native-v2` content profile. The generator must adapt the canonical article instead of copying its distribution structure verbatim:
+Hashnode drafts use the `hashnode-native-v3` content profile. The generator must adapt the canonical article instead of copying its distribution structure verbatim:
 
 * omit the repeated H1 because Hashnode stores the title separately
 * remove generic `Question`, `Related Topics`, and `FAQ` sections
@@ -478,10 +478,15 @@ Hashnode drafts use the `hashnode-native-v2` content profile. The generator must
 * set the canonical URL through Hashnode metadata instead of repeating an `Originally published at` link in the body
 * omit the repeated `ONNELLAB note` block
 * use stable developer-community tags instead of SEO keyword tags
-* retain at most one product link and no more than eight external links
+* remove product and store links from the body and allow no more than three external links
+* reject promotional calls to action such as download-now, pricing, or purchase copy
 * require at least two technical evidence signals, such as implementation steps, a comparison table, code or inline identifiers, or references
 
-`scripts/validate_syndication_drafts.py` fails closed when a Hashnode draft violates this AutoMod risk profile. A failed draft must be revised before it is approved or copied to Hashnode.
+`scripts/validate_syndication_drafts.py` fails closed when a Hashnode draft violates this AutoMod risk profile. A failed draft must be revised before it is approved or copied to Hashnode. Hashnode is never included in automated distribution approval. A human must review technical relevance and non-promotional wording, then approve with an auditable reviewer record; approvals are limited to one per 24 hours:
+
+```text
+scripts/approve_syndication_draft.py TOPIC-0001 hashnode en --approved-by editor --automod-reviewed-by hashnode-editor
+```
 
 Medium is export-only by default because its public API documentation is archived and no longer recommended for new integrations.
 
