@@ -225,6 +225,9 @@ publisher may consume them. The approval CLI is useful for audited local use:
 python3 scripts/store_review_approvals.py REVIEW_ID --reply "Approved reply" --approver "your-name"
 ```
 
+To create personalized, fact-grounded AI drafts before review, configure
+`OPENAI_API_KEY` and run `python3 scripts/generate_ai_review_drafts.py`.
+
 ---
 
 # Content Categories
