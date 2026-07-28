@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       task_id: {description: Approved AI-Coder task ID, required: true, type: string}
-      repository: {description: App repository, for example onnellab/tagweaver, required: true, type: string}
+      repository: {description: "App repository, for example onnellab/tagweaver", required: true, type: string}
       ref: {description: Draft PR branch or commit SHA, required: true, type: string}
       pr_url: {description: Draft PR URL, required: true, type: string}
       confirm_qa: {description: Type QA to run app checks, required: true, type: string}
@@ -63,14 +63,16 @@ jobs:
           fi
           build=0
           [[ "$debug_build" == "0" && "$release_bundle" == "0" ]] || build=1
-          echo "format=$format" >> "$GITHUB_OUTPUT"
-          echo "analyze=$analyze" >> "$GITHUB_OUTPUT"
-          echo "tests=$tests" >> "$GITHUB_OUTPUT"
-          echo "performance=$performance" >> "$GITHUB_OUTPUT"
-          echo "build=$build" >> "$GITHUB_OUTPUT"
-          echo "debug_build=$debug_build" >> "$GITHUB_OUTPUT"
-          echo "release_bundle=$release_bundle" >> "$GITHUB_OUTPUT"
-          echo "patch_notes=$patch_notes" >> "$GITHUB_OUTPUT"
+          {
+            echo "format=$format"
+            echo "analyze=$analyze"
+            echo "tests=$tests"
+            echo "performance=$performance"
+            echo "build=$build"
+            echo "debug_build=$debug_build"
+            echo "release_bundle=$release_bundle"
+            echo "patch_notes=$patch_notes"
+          } >> "$GITHUB_OUTPUT"
           exit 0
       - name: Write QA audit report
         working-directory: content-engine

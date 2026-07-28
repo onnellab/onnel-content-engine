@@ -33,11 +33,13 @@ jobs:
           flutter test; tests=$?
           flutter build appbundle --release; android_bundle=$?
           flutter build ios --release --no-codesign; ios_archive=$?
-          echo "pub_get=$pub_get" >> "$GITHUB_OUTPUT"
-          echo "analyze=$analyze" >> "$GITHUB_OUTPUT"
-          echo "tests=$tests" >> "$GITHUB_OUTPUT"
-          echo "android_bundle=$android_bundle" >> "$GITHUB_OUTPUT"
-          echo "ios_archive=$ios_archive" >> "$GITHUB_OUTPUT"
+          {
+            echo "pub_get=$pub_get"
+            echo "analyze=$analyze"
+            echo "tests=$tests"
+            echo "android_bundle=$android_bundle"
+            echo "ios_archive=$ios_archive"
+          } >> "$GITHUB_OUTPUT"
       - name: Record release candidate result
         working-directory: content-engine
         env:

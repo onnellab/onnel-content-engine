@@ -20,9 +20,11 @@ class GitHubActionsTest(unittest.TestCase):
 
     def test_actionlint_workflow_protects_workflow_changes(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "validate-workflows.yml").read_text(encoding="utf-8")
+        config = (ROOT / ".github" / "actionlint.yaml").read_text(encoding="utf-8")
 
         self.assertIn("docker://rhysd/actionlint:1.7.7", workflow)
         self.assertIn('".github/workflows/**"', workflow)
+        self.assertIn("onnellab-ai-coder", config)
 
     def test_workflow_documents_required_stages_and_dry_run(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "publishing.yml").read_text(encoding="utf-8")

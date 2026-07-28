@@ -26,7 +26,8 @@ jobs:
         run: |
           gh pr ready "$PR_NUMBER" --repo "$REPOSITORY"
           gh pr merge "$PR_NUMBER" --repo "$REPOSITORY" --squash --delete-branch
-          echo "merge_commit=$(gh pr view \"$PR_NUMBER\" --repo \"$REPOSITORY\" --json mergeCommit --jq '.mergeCommit.oid')" >> "$GITHUB_OUTPUT"
+          merge_commit="$(gh pr view "$PR_NUMBER" --repo "$REPOSITORY" --json mergeCommit --jq '.mergeCommit.oid')"
+          echo "merge_commit=$merge_commit" >> "$GITHUB_OUTPUT"
       - name: Record merge approval
         env:
           TASK_ID: ${{ inputs.task_id }}

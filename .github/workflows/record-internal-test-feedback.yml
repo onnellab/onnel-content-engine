@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       release_id: {description: Successfully uploaded private-test release ID, required: true, type: string}
-      kind: {description: crash, data_loss, security, bug, performance, or usability, required: true, type: choice, options: [crash, data_loss, security, bug, performance, usability]}
-      summary: {description: Short issue summary. Do not include personal data, passwords, tokens, or files., required: true, type: string}
-      reproduction: {description: Reproduction steps only. Do not include personal data, passwords, tokens, or files., required: true, type: string}
+      kind: {description: "crash, data_loss, security, bug, performance, or usability", required: true, type: choice, options: [crash, data_loss, security, bug, performance, usability]}
+      summary: {description: "Short issue summary. Do not include personal data, passwords, tokens, or files.", required: true, type: string}
+      reproduction: {description: "Reproduction steps only. Do not include personal data, passwords, tokens, or files.", required: true, type: string}
       confirm: {description: Type TEST_FEEDBACK to record this report, required: true, type: string}
 permissions: {contents: write}
 jobs:
