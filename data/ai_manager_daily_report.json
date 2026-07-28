@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T09:24:35+00:00",
+  "generated_at": "2026-07-28T10:50:30+00:00",
   "summary": {
     "reviews_triaged": 10,
     "high_risk_reports": 1,
@@ -10,6 +10,11 @@
     "new_crash_incidents": 0,
     "doctor_high_findings": 0,
     "coder_tasks_proposed": 0,
+    "coder_draft_prs": 0,
+    "policy_assessments_pending": 0,
+    "policy_assessment_failures": 0,
+    "release_candidates_failed": 0,
+    "ios_device_qa_blocked": 0,
     "os_updates_to_review": 0,
     "os_impact_tasks": 0,
     "store_policy_tasks": 0,
