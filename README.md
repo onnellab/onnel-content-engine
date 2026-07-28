@@ -342,6 +342,10 @@ For Slack, Discord, or a generic HTTPS webhook, enable
 `OPS_MANAGER_WEBHOOK_URL` Actions secret. Only the Manager summary is sent;
 credentials, review text, telemetry, and approval controls are never sent.
 
+Before enabling any future Play/App Store upload adapter, run **Check Store
+Submission Credentials** with `CREDENTIALS`. It validates only the Secret
+shape and never contacts a store API, uploads a binary, or submits a build.
+
 ## Store-alert mailbox
 
 `collect_gmail_policy_alerts.py` supports a dedicated Gmail label using OAuth
