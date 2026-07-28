@@ -288,6 +288,11 @@ repeated alerts. Set `enabled` to `true` in
 `data/ai_manager_notification_config.json` only after choosing the target
 repository. The report is informational and cannot authorize any action.
 
+For Slack, Discord, or a generic HTTPS webhook, enable
+`data/ai_manager_webhook_config.json` and set the
+`OPS_MANAGER_WEBHOOK_URL` Actions secret. Only the Manager summary is sent;
+credentials, review text, telemetry, and approval controls are never sent.
+
 ## Store-alert mailbox
 
 `collect_gmail_policy_alerts.py` supports a dedicated Gmail label using OAuth

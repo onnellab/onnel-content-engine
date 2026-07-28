@@ -27,6 +27,10 @@ jobs:
       - name: Update optional GitHub manager notification
         run: python3 scripts/publish_ai_manager_issue.py
         env: {GITHUB_TOKEN: ${{ github.token }}}
+      - name: Send optional manager webhook
+        run: python3 scripts/publish_ai_manager_webhook.py
+        env:
+          OPS_MANAGER_WEBHOOK_URL: ${{ secrets.OPS_MANAGER_WEBHOOK_URL }}
       - run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
