@@ -99,8 +99,29 @@ def fill_ready_app_releases(
     for row in rows:
         if row["status"] != "planned":
             continue
-        if (row.get("release_channel") or "public") != "public":
-            append_note(row, "Private test channel; not promoted to public GitHub Release.")
+        if (row.get("release_channel") or "public") == "private_test":
+            if row["artifact_path"] and row["checksum_sha256"]:
+                row["status"] = "ready"
+                append_note(row, "Private test artifact ready for manual internal-store upload.")
+                updated.append(dict(row))
+                continue
+            if row["artifact_path"] or row["checksum_sha256"]:
+                raise FillReadyReleaseError(f"{row['release_id']} artifact_path and checksum_sha256 must be filled together")
+            cfg = config.get(row["app_id"])
+            if not cfg:
+                continue
+            pattern = format_artifact_pattern(cfg["artifact_pattern"], row)
+            artifacts = candidate_artifacts(pattern)
+            if not artifacts:
+                continue
+            if len(artifacts) > 1:
+                raise FillReadyReleaseError(f"{row['release_id']} artifact pattern matched multiple files: {pattern}")
+            artifact = artifacts[0]
+            safe_artifact(artifact, row["release_id"])
+            row["artifact_path"] = relative(artifact)
+            row["checksum_sha256"] = checksum(artifact)
+            row["status"] = "ready"
+            append_note(row, "Private test artifact ready for manual internal-store upload.")
             updated.append(dict(row))
             continue
         approved = is_public_approved(row["release_id"], approvals)
