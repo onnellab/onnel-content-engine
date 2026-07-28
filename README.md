@@ -362,6 +362,10 @@ Each successful upload is recorded in `data/internal_store_submissions.json`
 with its workflow-run URL and SHA-256; this audit record does not promote or
 publish it.
 
+After Play/TestFlight processing completes, use **Approve Internal Test
+Availability** with console evidence. Only then can **Record Internal Test
+Feedback** accept reports for that build.
+
 Use **Record Internal Test Feedback** to log only a short issue summary and
 reproduction steps for an uploaded build. Do not enter personal data, passwords,
 tokens, logs, or files. Crash, data-loss, and security reports become proposed

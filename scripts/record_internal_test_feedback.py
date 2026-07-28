@@ -28,9 +28,9 @@ def main() -> int:
     parser.add_argument("--reproduction", required=True)
     args = parser.parse_args()
 
-    uploads = json.loads((ROOT / "data" / "internal_store_submissions.json").read_text(encoding="utf-8")).get("submissions", [])
-    if not any(item.get("release_id") == args.release_id and item.get("status") == "uploaded" for item in uploads):
-        raise SystemExit("feedback requires a recorded successful internal upload")
+    availability = json.loads((ROOT / "data" / "internal_test_availability.json").read_text(encoding="utf-8")).get("records", [])
+    if not any(item.get("release_id") == args.release_id and item.get("status") == "available_to_testers" for item in availability):
+        raise SystemExit("feedback requires a confirmed available-to-testers internal build")
     with (ROOT / "data" / "app_releases.csv").open(encoding="utf-8", newline="") as handle:
         release = next((row for row in csv.DictReader(handle) if row["release_id"] == args.release_id), None)
     if not release:
