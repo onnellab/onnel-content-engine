@@ -23,6 +23,13 @@ jobs:
         env:
           RELEASE_ID: ${{ inputs.release_id }}
         run: python3 scripts/prepare_internal_store_submission.py "$RELEASE_ID" --github-output "$GITHUB_OUTPUT"
+      - name: Require matching no-upload preflight
+        env:
+          RELEASE_ID: ${{ inputs.release_id }}
+          PROVIDER: ${{ steps.release.outputs.provider }}
+          IDENTIFIER: ${{ steps.release.outputs.identifier }}
+          CHECKSUM_SHA256: ${{ steps.release.outputs.checksum_sha256 }}
+        run: python3 scripts/verify_internal_test_readiness.py "$RELEASE_ID" --provider "$PROVIDER" --identifier "$IDENTIFIER" --checksum-sha256 "$CHECKSUM_SHA256"
       - uses: ruby/setup-ruby@v1
         with: {ruby-version: '3.3'}
       - run: gem install fastlane --no-document

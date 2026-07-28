@@ -356,6 +356,8 @@ calculates and validates its SHA-256 metadata, and does not commit the binary
 to this repository.
 Run **Check Internal Test Readiness** first to perform those checks plus the
 relevant credential-shape check without contacting or uploading to a store.
+**Submit Internal Store Build** requires a matching successful preflight,
+including the exact SHA-256, before it can upload.
 Each successful upload is recorded in `data/internal_store_submissions.json`
 with its workflow-run URL and SHA-256; this audit record does not promote or
 publish it.
