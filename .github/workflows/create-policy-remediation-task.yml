@@ -4,6 +4,8 @@ on:
     inputs:
       task_id: {description: Policy task with FAIL assessment, required: true, type: string}
       approver: {description: Human scope reviewer, required: true, type: string}
+      scope: {description: Exact approved remediation scope, required: true, type: string}
+      allowed_paths: {description: Pipe-separated app-relative files allowed to change, required: true, type: string}
       confirm: {description: Type REMEDIATE to create a proposed Coder task, required: true, type: string}
 permissions: {contents: write}
 jobs:
@@ -12,7 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: python3 scripts/create_policy_remediation_task.py '${{ inputs.task_id }}' --approver '${{ inputs.approver }}' --confirm
+      - run: |
+          args=()
+          while IFS= read -r path; do args+=(--allowed-path "$path"); done < <(printf '%s' "$ALLOWED_PATHS" | tr '|' '\n')
+          python3 scripts/create_policy_remediation_task.py "$TASK_ID" --approver "$APPROVER" --scope "$SCOPE" --confirm "${args[@]}"
+        env:
+          TASK_ID: ${{ inputs.task_id }}
+          APPROVER: ${{ inputs.approver }}
+          SCOPE: ${{ inputs.scope }}
+          ALLOWED_PATHS: ${{ inputs.allowed_paths }}
       - run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com

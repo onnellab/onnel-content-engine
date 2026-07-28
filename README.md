@@ -368,6 +368,9 @@ Only a recorded policy `FAIL` can be escalated with **Create Policy Remediation
 Task**. It creates a *proposed* AI-Coder task, so the normal separate Draft PR
 approval remains mandatory. Restricted security, privacy, billing, auth,
 cryptography, migration, signing, and store-metadata changes remain blocked.
+The escalation must name an exact remediation scope and app-relative allowed
+file paths; the Coder runner rejects every policy-remediation diff outside that
+allowlist.
 
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:

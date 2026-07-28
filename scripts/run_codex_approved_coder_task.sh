@@ -41,6 +41,17 @@ codex exec -s workspace-write -C "$app_path" "Read '$packet' and '$engine_root/p
 
 changed="$(git -C "$app_path" diff --name-only)"
 [[ -n "$changed" ]] || { echo "Codex made no changes; no PR created" >&2; exit 1; }
+if ! CHANGED="$changed" python3 - "$packet" <<'PY'
+import json,os,sys
+task=json.load(open(sys.argv[1]))['task']
+if task.get('origin') != 'store_policy_assessment': raise SystemExit(0)
+allowed=task.get('allowed_paths',[])
+if not allowed: raise SystemExit('policy remediation has no approved allowed_paths')
+changed=[line.strip() for line in os.environ['CHANGED'].splitlines() if line.strip()]
+outside=[path for path in changed if path not in allowed]
+if outside: raise SystemExit('policy remediation changed path outside approval: '+outside[0])
+PY
+then exit 1; fi
 if printf '%s\n' "$changed" | rg -n '(^|/)(ios/Runner/Info\.plist|android/app/src/main/AndroidManifest\.xml|.*secret.*|.*credential.*|.*migration.*|.*database.*|.*billing.*|.*payment.*|.*auth.*|.*crypto.*)$' -i; then
   echo "protected-path change detected; stopping before commit" >&2; exit 1
 fi
