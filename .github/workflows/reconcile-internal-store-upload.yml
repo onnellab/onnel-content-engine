@@ -1,0 +1,40 @@
+name: Reconcile Internal Store Upload
+on:
+  workflow_dispatch:
+    inputs:
+      orchestration_id: {description: Timed-out private-test orchestration ID, required: true, type: string}
+      outcome:
+        description: Store-console verified upload outcome
+        required: true
+        type: choice
+        options: [uploaded, not_uploaded]
+      approver: {description: Human who checked the store console, required: true, type: string}
+      evidence_url: {description: Official Play Console or App Store Connect evidence URL, required: true, type: string}
+      confirm: {description: Type RECONCILE_UPLOAD after checking the store console, required: true, type: string}
+permissions: {contents: write, actions: write}
+jobs:
+  reconcile:
+    if: inputs.confirm == 'RECONCILE_UPLOAD'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: result
+        env:
+          ORCHESTRATION_ID: ${{ inputs.orchestration_id }}
+          OUTCOME: ${{ inputs.outcome }}
+          APPROVER: ${{ inputs.approver }}
+          EVIDENCE_URL: ${{ inputs.evidence_url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python3 scripts/reconcile_internal_store_upload.py "$ORCHESTRATION_ID" --outcome "$OUTCOME" --approver "$APPROVER" --evidence-url "$EVIDENCE_URL" --run-url "$RUN_URL" --github-output "$GITHUB_OUTPUT"
+      - run: python3 scripts/generate_ai_manager_report.py
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/private_test_orchestrations.json data/internal_store_submissions.json data/internal_store_upload_reconciliations.json data/ai_manager_daily_report.json
+          git commit -m "Reconcile internal store upload outcome"
+          git pull --rebase origin main
+          git push
+      - if: steps.result.outputs.action == 'advance'
+        env:
+          GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+        run: gh workflow run advance-private-test-orchestration.yml

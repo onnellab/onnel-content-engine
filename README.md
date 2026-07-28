@@ -365,6 +365,12 @@ marked failed instead of progressing.
 Use **Retry Private Test Orchestration** after fixing a recorded failure. It
 resumes from the latest safe evidence and preserves previous attempts. An
 ambiguous store-upload outcome cannot be retried until the console is checked.
+For that exact timeout, use **Reconcile Internal Store Upload** after checking
+the official Play Console or App Store Connect page. Record `uploaded` to close
+the orchestration without another upload, or `not_uploaded` to dispatch only
+the already-preflighted upload again. Both outcomes require a human approver,
+an official console HTTPS evidence URL, and retain a separate reconciliation
+audit in `data/internal_store_upload_reconciliations.json`.
 For a merged Coder task, **Dispatch Private Test Build** starts exactly one
 mapped Codemagic app/workflow/branch build after `BUILD_PRIVATE_TEST` approval.
 Set its mapping in `data/codemagic_builds.csv`; the mapped branch must still
