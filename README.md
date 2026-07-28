@@ -242,6 +242,12 @@ It runs Flutter analysis and tests, then asks Codex to emit the required
 evidence-only QA JSON. A missing objective iOS/device fact produces `STOP`,
 which correctly prevents the merge gate from passing.
 
+The GitHub **Run App QA Gate** follows the Flutter template's portable gates:
+format verification, analyze, tests, template patch-note validation when
+provided by the app, Android debug APK, and Android release AAB. iOS archive
+and device verification remain a macOS/Codemagic gate rather than a Linux
+substitute.
+
 ## Sentry crash collection
 
 Add each app's Sentry organization/project and platform to
