@@ -364,6 +364,11 @@ A PASS is blocked while that build has high/critical internal-test findings.
 The result is an audit record only: it cannot promote, submit, or publish a
 release.
 
+To require this result before public submission preparation, set `enabled` to
+`true` in `data/internal_test_gate_config.json`. An empty `required_apps` list
+applies it to every app; otherwise list the app slugs to protect. The gate then
+requires a passed private-test build with the same app, platform, and version.
+
 ## Store-alert mailbox
 
 `collect_gmail_policy_alerts.py` supports a dedicated Gmail label using OAuth

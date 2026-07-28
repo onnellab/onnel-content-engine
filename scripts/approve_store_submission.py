@@ -13,6 +13,23 @@ from validate_app_releases import RELEASES_PATH, read_csv, RELEASE_HEADER
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def require_matching_internal_test(release: dict[str, str], releases: list[dict[str, str]]) -> None:
+    config = json.loads((ROOT / "data" / "internal_test_gate_config.json").read_text(encoding="utf-8"))
+    enabled = config.get("enabled")
+    required_apps = config.get("required_apps")
+    if not isinstance(enabled, bool) or not isinstance(required_apps, list) or not all(isinstance(app, str) for app in required_apps):
+        raise SystemExit("internal test gate configuration is invalid")
+    if not enabled or (required_apps and release["app_slug"] not in required_apps):
+        return
+    results = json.loads((ROOT / "data" / "internal_test_results.json").read_text(encoding="utf-8")).get("results", [])
+    releases_by_id = {item["release_id"]: item for item in releases}
+    for result in results:
+        tested = releases_by_id.get(result.get("release_id", ""))
+        if result.get("status") == "passed" and tested and tested["release_channel"] == "private_test" and all(tested[field] == release[field] for field in ("app_slug", "platform", "version")):
+            return
+    raise SystemExit("public submission requires a passed internal test for the same app, platform, and version")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("release_id")
@@ -20,9 +37,11 @@ def main() -> int:
     parser.add_argument("--approver", required=True)
     parser.add_argument("--confirm", action="store_true")
     args = parser.parse_args()
-    release = next((item for item in read_csv(RELEASES_PATH, RELEASE_HEADER) if item["release_id"] == args.release_id), None)
+    releases = read_csv(RELEASES_PATH, RELEASE_HEADER)
+    release = next((item for item in releases if item["release_id"] == args.release_id), None)
     if not release or release["release_type"] != "binary" or release["release_channel"] != "public":
         raise SystemExit("release must be a public binary release")
+    require_matching_internal_test(release, releases)
     candidate_path = ROOT / "data" / "release-candidate-reports" / f"{args.task_id}.json"
     if not candidate_path.is_file():
         raise SystemExit(f"release candidate report not found: {candidate_path.relative_to(ROOT)}")
