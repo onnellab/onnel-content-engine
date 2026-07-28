@@ -26,6 +26,14 @@ and creates a repository commit. It does **not** publish the reply: queued
 records remain a deliberate boundary until the separate store publisher is
 implemented and enabled.
 
+## Publishing one approved reply
+
+The publisher is deliberately one-at-a-time. Dispatch **Publish Approved Store
+Review Reply** and enter the exact `approval_id` plus `PUBLISH`. It publishes
+only a `queued` record, then changes that record to `published` with the store
+response ID. Running the script without `--confirm-publish` is always a dry
+run. Google Play replies are limited to approximately 350 characters.
+
 `data/store_review_triage.json` is an audit snapshot. It groups repeated
 reports, cites the applicable `docs/operations/*_FACTS.md` lines, and may
 create an unverified GitHub issue draft. It never writes to GitHub, a store,
