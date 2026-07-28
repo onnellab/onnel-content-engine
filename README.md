@@ -232,6 +232,16 @@ branch, blocks protected-path changes, runs `flutter analyze`, and only then
 pushes a Draft PR. It never merges, deploys, publishes, or changes store
 settings. The generated PR must still pass the QA and human merge gates.
 
+For a recorded Draft PR, generate the detailed read-only Codex QA report:
+
+```bash
+scripts/run_codex_qa_report.sh TASK_ID
+```
+
+It runs Flutter analysis and tests, then asks Codex to emit the required
+evidence-only QA JSON. A missing objective iOS/device fact produces `STOP`,
+which correctly prevents the merge gate from passing.
+
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:
 
