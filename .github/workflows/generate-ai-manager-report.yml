@@ -12,10 +12,12 @@ jobs:
         with: {python-version: '3.x'}
       - name: Collect configured Sentry crashes
         run: python3 scripts/collect_sentry_crashes.py
-        env: {SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}}
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Collect configured Crashlytics issues
         run: python3 scripts/collect_crashlytics_incidents.py
-        env: {FIREBASE_CRASHLYTICS_ACCESS_TOKEN: ${{ secrets.FIREBASE_CRASHLYTICS_ACCESS_TOKEN }}}
+        env:
+          FIREBASE_CRASHLYTICS_ACCESS_TOKEN: ${{ secrets.FIREBASE_CRASHLYTICS_ACCESS_TOKEN }}
       - name: Run AI-Doctor correlation
         run: python3 scripts/analyze_incidents.py
       - name: Analyze internal tester feedback
@@ -28,7 +30,8 @@ jobs:
         run: python3 scripts/generate_ai_manager_report.py
       - name: Update optional GitHub manager notification
         run: python3 scripts/publish_ai_manager_issue.py
-        env: {GITHUB_TOKEN: ${{ github.token }}}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Send optional manager webhook
         run: python3 scripts/publish_ai_manager_webhook.py
         env:

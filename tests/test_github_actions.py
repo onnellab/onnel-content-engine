@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 import sys
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -12,6 +13,17 @@ from run_pipeline import run_pipeline
 
 
 class GitHubActionsTest(unittest.TestCase):
+    def test_all_workflow_yaml_is_parseable(self) -> None:
+        for path in sorted((ROOT / ".github" / "workflows").glob("*.yml")):
+            with self.subTest(workflow=path.name):
+                self.assertIsInstance(yaml.safe_load(path.read_text(encoding="utf-8")), dict)
+
+    def test_actionlint_workflow_protects_workflow_changes(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "validate-workflows.yml").read_text(encoding="utf-8")
+
+        self.assertIn("docker://rhysd/actionlint:1.7.7", workflow)
+        self.assertIn('".github/workflows/**"', workflow)
+
     def test_workflow_documents_required_stages_and_dry_run(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "publishing.yml").read_text(encoding="utf-8")
 

@@ -9,7 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 scripts/collect_sentry_crashes.py
-        env: {SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}}
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - run: python3 scripts/analyze_incidents.py
       - run: python3 scripts/generate_ai_coder_tasks.py
       - run: python3 scripts/generate_ai_manager_report.py
