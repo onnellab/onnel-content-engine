@@ -276,6 +276,10 @@ only a non-reversible message fingerprint and the mapped app/store/kind are
 kept. Leave `data/gmail_policy_alert_config.json` disabled until a dedicated
 mailbox, label, and exact mapping rules are ready.
 
+Policy tasks require a separate `ASSESS` approval before a local Codex
+read-only assessment packet can be generated. That approval does not permit a
+patch, store response, appeal, submission, or release.
+
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:
 
