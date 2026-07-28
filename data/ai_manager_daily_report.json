@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T08:37:08+00:00",
+  "generated_at": "2026-07-28T08:47:36+00:00",
   "summary": {
     "reviews_triaged": 10,
     "high_risk_reports": 1,
@@ -9,7 +9,8 @@
     "issues_created": 0,
     "new_crash_incidents": 0,
     "doctor_high_findings": 0,
-    "coder_tasks_proposed": 0
+    "coder_tasks_proposed": 0,
+    "os_updates_to_review": 0
   },
   "requires_attention": [
     {
