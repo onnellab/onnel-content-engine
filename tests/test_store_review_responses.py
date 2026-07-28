@@ -62,6 +62,11 @@ class StoreReviewResponsesTest(unittest.TestCase):
         self.assertEqual(no_text["reply_category"], "no_text")
         self.assertEqual(positive["human_review_required"], "true")
 
+    def test_uses_fact_approved_app_override_for_pricing_confusion(self) -> None:
+        result = generate_reply({"app_name": "TagWeaver", "app_slug": "tagweaver", "rating": "1", "body": "not free as stated", "reviewer_language": "en"})
+        self.assertEqual(result["reply_category"], "pricing_confusion")
+        self.assertIn("batch editing", result["suggested_reply"])
+
 
 if __name__ == "__main__":
     unittest.main()

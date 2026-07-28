@@ -67,6 +67,7 @@ KEYWORDS = {
         "support for",
     ),
 }
+PRICING_CONFUSION_KEYWORDS = ("not free", "actually a paid", "paid app", "free as stated", "무료가 아니", "유료")
 
 
 def load_templates(path: Path = DEFAULT_TEMPLATES) -> dict[str, object]:
@@ -90,6 +91,8 @@ def classify_review(review: dict[str, str]) -> str:
     text = review_text(review).lower()
     if not text:
         return "no_text"
+    if any(keyword in text for keyword in PRICING_CONFUSION_KEYWORDS):
+        return "pricing_confusion"
     for category in ("billing", "privacy", "bug", "feature"):
         if any(keyword in text for keyword in KEYWORDS[category]):
             return category
@@ -115,7 +118,11 @@ def generate_reply(
     language_templates = template_data.get(language)
     if not isinstance(language_templates, dict):
         raise ValueError(f"missing store review templates for {language}")
-    template = language_templates.get(category)
+    app_overrides = template_data.get("app_overrides", {})
+    app_templates = app_overrides.get(review.get("app_slug", "").strip().lower(), {}) if isinstance(app_overrides, dict) else {}
+    localized_override = app_templates.get(language, {}) if isinstance(app_templates, dict) else {}
+    template = localized_override.get(category) if isinstance(localized_override, dict) else None
+    template = template or language_templates.get(category)
     if not isinstance(template, str) or not template.strip():
         raise ValueError(f"missing store review template for {language}/{category}")
     reply = template.format(app_name=clean_app_name(review.get("app_name", "")))
