@@ -17,6 +17,7 @@ def main() -> int:
     tasks=[]
     for finding in findings:
         if not finding.get("github_issue_recommended"): continue
+        if finding.get("diagnosis_status") != "DIAGNOSED": continue
         slug=finding.get("app_slug","")
         task_id=finding.get("finding_id")
         task={"task_id":task_id,"app_slug":slug,"repository":repos.get(slug,""),"status":"proposed","finding":finding,"constraints":["Create a draft PR only; never merge or deploy.","Reproduce or add a failing test before changing production code.","Do not modify billing, authentication, privacy, cryptography, or database migrations.","Run the app repository's relevant tests and report results."]}

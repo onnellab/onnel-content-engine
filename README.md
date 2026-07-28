@@ -327,6 +327,12 @@ review draft packets, validates them, and commits only those allowed files.
 It never approves or publishes replies, creates issues, runs Coder tasks,
 merges PRs, submits builds, or deploys.
 
+The same local cycle prepares bounded code context for pending high-risk
+Doctor findings and runs Codex in read-only mode. It records recent commits,
+candidate code paths, reproduction evidence, and a `DIAGNOSED` or `STOP`
+result. Only `DIAGNOSED` findings may become proposed Coder tasks; diagnosis
+still grants no permission to edit code or create a PR.
+
 ## Store submission gate
 
 Public binary releases require a passing detailed QA report and a human
