@@ -258,6 +258,20 @@ never crash stack traces or user reports. The collector uses Firebase's
 official Crashlytics REST API and records `not_configured` or `token_missing`
 until a dedicated read-only OAuth integration is available.
 
+## Local Codex Scout schedule
+
+On a Linux/WSL machine where Codex is already signed in, install the daily
+draft-only timer manually:
+
+```bash
+scripts/install_local_ai_scout_timer.sh
+```
+
+It runs at 09:15 local machine time, refuses a dirty worktree, creates only
+review draft packets, validates them, and commits only those allowed files.
+It never approves or publishes replies, creates issues, runs Coder tasks,
+merges PRs, submits builds, or deploys.
+
 ## Store submission gate
 
 Public binary releases require a passing detailed QA report and a human

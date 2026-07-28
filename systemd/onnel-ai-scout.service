@@ -1,0 +1,7 @@
+[Unit]
+Description=ONNELLAB local Codex AI Scout (draft-only)
+
+[Service]
+Type=oneshot
+WorkingDirectory=/mnt/c/dev/onnel-content-engine
+ExecStart=/mnt/c/dev/onnel-content-engine/scripts/run_local_ai_scout_cycle.sh
