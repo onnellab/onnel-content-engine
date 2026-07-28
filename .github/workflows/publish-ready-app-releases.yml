@@ -2,21 +2,15 @@ name: ONNELLAB Publish Ready App Releases
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/publish-ready-app-releases.yml"
-      - "data/app_releases.csv"
-      - "data/app_release_publications.csv"
-      - "data/app_pricing.csv"
-      - "data/ai_provider_pricing.csv"
-      - "data/melivra_ai_credit_policy.csv"
-      - "scripts/build_manual_publish_site.py"
-      - "scripts/sync_ai_provider_pricing.py"
+    inputs:
+      confirm_release:
+        description: Type RELEASE to authorize public GitHub release publication
+        required: true
+        type: string
 
 jobs:
   publish-ready-app-releases:
+    if: inputs.confirm_release == 'RELEASE'
     name: Publish ready app release notes
     runs-on: ubuntu-latest
     permissions:
