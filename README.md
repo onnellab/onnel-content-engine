@@ -284,6 +284,8 @@ scripts/run_ios_device_qa.sh TASK_ID IOS_DEVICE_ID --execute
 The runner rejects simulators, requires a recorded Draft PR, and stores a
 `PASS`, `FAIL`, or `STOP` evidence report. If no integration test exists, it
 records `STOP` instead of treating an unsigned build as device verification.
+It refuses a dirty engine worktree and commits the resulting evidence report
+before returning, including `FAIL` and `STOP` results.
 
 For iOS apps, the local Codex QA packet now includes that physical-device
 report. Without a recorded device `PASS`, the iOS device-risk check must stay

@@ -10,6 +10,13 @@ if [[ -z "$task_id" || -z "$device_id" || "$confirm" != "--execute" ]]; then
   exit 2
 fi
 [[ "$(uname -s)" == "Darwin" ]] || { echo "iOS physical-device QA requires macOS" >&2; exit 1; }
+[[ -z "$(git -C "$root" status --porcelain)" ]] || { echo "refusing iOS QA: content-engine worktree has local changes" >&2; exit 1; }
+git -C "$root" pull --ff-only origin main
+publish_report() {
+  git -C "$root" add "data/ios-device-qa-reports/${task_id}.json"
+  git -C "$root" commit -m "Record iOS device QA result for ${task_id}"
+  git -C "$root" push origin HEAD:main
+}
 packet="$(mktemp "${TMPDIR:-/tmp}/ios-device-qa.XXXXXX.json")"
 devices="$(mktemp "${TMPDIR:-/tmp}/flutter-devices.XXXXXX.json")"
 trap 'rm -f "$packet" "$devices"' EXIT
@@ -37,6 +44,7 @@ import json,sys
 json.dump({'task_id':sys.argv[2],'device_id':sys.argv[3],'status':'STOP','evidence':'No integration_test/*_test.dart exists; physical device verification cannot be claimed.'},open(sys.argv[1],'w'),indent=2); open(sys.argv[1],'a').write('\n')
 PY
   echo "STOP: no integration test; report recorded at $report" >&2
+  publish_report
   exit 1
 fi
 set +e
@@ -48,5 +56,9 @@ import json,sys
 status='PASS' if sys.argv[4]=='0' else 'FAIL'
 json.dump({'task_id':sys.argv[2],'device_id':sys.argv[3],'status':status,'evidence':'flutter test integration_test executed on selected physical iOS device.'},open(sys.argv[1],'w'),indent=2); open(sys.argv[1],'a').write('\n')
 PY
-[[ "$result" == "0" ]] || exit "$result"
+if [[ "$result" != "0" ]]; then
+  publish_report
+  exit "$result"
+fi
+publish_report
 echo "PASS: physical iOS device QA report recorded at $report"
