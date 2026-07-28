@@ -5,6 +5,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
+import urllib.parse
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -38,6 +40,24 @@ def start_build(app_id: str, workflow_id: str, branch: str) -> str:
     return build_id
 
 
+def branch_head(repository: str, branch: str) -> str:
+    token = os.environ.get("GITHUB_TOKEN")
+    if not token:
+        raise SystemExit("GITHUB_TOKEN is required to verify the build branch")
+    request = urllib.request.Request(
+        f"https://api.github.com/repos/{repository}/commits/{urllib.parse.quote(branch, safe='')}",
+        headers={"Accept": "application/vnd.github+json", "Authorization": f"Bearer {token}", "User-Agent": "ONNELLAB content engine"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            sha = json.loads(response.read().decode("utf-8")).get("sha")
+    except urllib.error.HTTPError as error:
+        raise SystemExit(f"GitHub branch-head lookup failed with HTTP {error.code}") from error
+    if not isinstance(sha, str) or not re.fullmatch(r"[0-9a-f]{40}", sha):
+        raise SystemExit("GitHub branch-head response did not include a full commit SHA")
+    return sha
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("task_id")
@@ -56,6 +76,8 @@ def main() -> int:
     build = next((item for item in builds if item["release_id"] == args.release_id), None)
     if not build or not build["codemagic_app_id"] or not build["workflow_id"] or not build["branch"] or build["build_id"]:
         raise SystemExit("release requires an unused Codemagic app/workflow/branch mapping")
+    if not re.fullmatch(r"[0-9a-f]{40}", task.get("merge_commit", "")) or branch_head(release["repository"], build["branch"]) != task["merge_commit"]:
+        raise SystemExit("configured Codemagic branch is not exactly the recorded merged commit")
     payload = json.loads(REQUESTS_PATH.read_text(encoding="utf-8"))
     requests = payload.get("requests")
     if not isinstance(requests, list) or any(item.get("release_id") == args.release_id for item in requests):

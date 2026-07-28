@@ -18,6 +18,7 @@ jobs:
           TASK_ID: ${{ inputs.task_id }}
         run: python3 scripts/prepare_ai_pr_merge.py "$TASK_ID" --github-output "$GITHUB_OUTPUT"
       - name: Merge one approved PR
+        id: merge_pr
         env:
           GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
           REPOSITORY: ${{ steps.merge.outputs.repository }}
@@ -25,13 +26,15 @@ jobs:
         run: |
           gh pr ready "$PR_NUMBER" --repo "$REPOSITORY"
           gh pr merge "$PR_NUMBER" --repo "$REPOSITORY" --squash --delete-branch
+          echo "merge_commit=$(gh pr view \"$PR_NUMBER\" --repo \"$REPOSITORY\" --json mergeCommit --jq '.mergeCommit.oid')" >> "$GITHUB_OUTPUT"
       - name: Record merge approval
         env:
           TASK_ID: ${{ inputs.task_id }}
           REPOSITORY: ${{ steps.merge.outputs.repository }}
           PR_NUMBER: ${{ steps.merge.outputs.pr_number }}
           APPROVER: ${{ inputs.approver }}
-        run: python3 scripts/record_ai_coder_merge.py "$TASK_ID" --repository "$REPOSITORY" --pr-number "$PR_NUMBER" --approver "$APPROVER"
+          MERGE_COMMIT: ${{ steps.merge_pr.outputs.merge_commit }}
+        run: python3 scripts/record_ai_coder_merge.py "$TASK_ID" --repository "$REPOSITORY" --pr-number "$PR_NUMBER" --approver "$APPROVER" --merge-commit "$MERGE_COMMIT"
       - run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
