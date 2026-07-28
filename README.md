@@ -358,6 +358,9 @@ Run **Check Internal Test Readiness** first to perform those checks plus the
 relevant credential-shape check without contacting or uploading to a store.
 **Submit Internal Store Build** requires a matching successful preflight,
 including the exact SHA-256, before it can upload.
+For a merged Coder task, **Dispatch Private Test Build** starts exactly one
+mapped Codemagic app/workflow/branch build after `BUILD_PRIVATE_TEST` approval.
+Set its mapping in `data/codemagic_builds.csv`; it never submits a store build.
 Each successful upload is recorded in `data/internal_store_submissions.json`
 with its workflow-run URL and SHA-256; this audit record does not promote or
 publish it.

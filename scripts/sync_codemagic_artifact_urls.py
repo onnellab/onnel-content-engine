@@ -19,7 +19,7 @@ from validate_app_releases import RELEASE_HEADER, RELEASES_PATH, ROOT
 
 
 CODEMAGIC_BUILDS_PATH = ROOT / "data" / "codemagic_builds.csv"
-CODEMAGIC_BUILDS_HEADER = ["release_id", "codemagic_app_id", "workflow_id", "build_id", "artifact_name", "notes"]
+CODEMAGIC_BUILDS_HEADER = ["release_id", "codemagic_app_id", "workflow_id", "branch", "build_id", "artifact_name", "notes"]
 ARTIFACT_SUFFIXES = (".ipa", ".aab", ".apk")
 
 

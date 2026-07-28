@@ -1,0 +1,27 @@
+name: Dispatch Private Test Build
+on:
+  workflow_dispatch:
+    inputs:
+      task_id: {description: Merged AI-Coder task ID, required: true, type: string}
+      release_id: {description: Matching planned private-test binary release ID, required: true, type: string}
+      approver: {description: Human build approver, required: true, type: string}
+      confirm: {description: Type BUILD_PRIVATE_TEST to start Codemagic, required: true, type: string}
+permissions: {contents: write}
+jobs:
+  dispatch:
+    if: inputs.confirm == 'BUILD_PRIVATE_TEST'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          TASK_ID: ${{ inputs.task_id }}
+          RELEASE_ID: ${{ inputs.release_id }}
+          APPROVER: ${{ inputs.approver }}
+          CODEMAGIC_API_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
+        run: python3 scripts/dispatch_codemagic_private_test_build.py "$TASK_ID" --release-id "$RELEASE_ID" --approver "$APPROVER"
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/codemagic_builds.csv data/private_test_build_requests.json
+          git diff --cached --quiet || git commit -m "Dispatch private test build"
+          git push
