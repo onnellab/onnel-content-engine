@@ -275,6 +275,16 @@ Android release AAB, and iOS `--no-codesign` release build results. It does not
 sign, upload, submit, or deploy anything, and it is not a substitute for an
 iOS real-device gate.
 
+On a signed-in macOS QA machine, run a real-device integration test with:
+
+```bash
+scripts/run_ios_device_qa.sh TASK_ID IOS_DEVICE_ID --execute
+```
+
+The runner rejects simulators, requires a recorded Draft PR, and stores a
+`PASS`, `FAIL`, or `STOP` evidence report. If no integration test exists, it
+records `STOP` instead of treating an unsigned build as device verification.
+
 ## Sentry crash collection
 
 Add each app's Sentry organization/project and platform to
