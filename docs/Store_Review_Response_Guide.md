@@ -8,7 +8,9 @@ reply draft from the repository-managed templates.
 The workflow is:
 
 1. Synchronize reviews from the official store APIs.
-2. Rebuild the dashboard.
+2. Run `python3 scripts/triage_store_reviews.py` to create the fact-grounded
+   action snapshot.
+3. Rebuild the dashboard.
 3. Open **Store review replies**.
 4. Select **Generate reply draft**.
 5. Verify the facts and tone, edit if needed, and copy the reply.
@@ -16,6 +18,12 @@ The workflow is:
 
 Reply publication is intentionally manual. A generated draft must never be
 posted without human review.
+
+`data/store_review_triage.json` is an audit snapshot. It groups repeated
+reports, cites the applicable `docs/operations/*_FACTS.md` lines, and may
+create an unverified GitHub issue draft. It never writes to GitHub, a store,
+or a deployment system. Approve and create any issue in the relevant app
+repository after verifying reproduction and privacy-safe wording.
 
 ## Credentials
 

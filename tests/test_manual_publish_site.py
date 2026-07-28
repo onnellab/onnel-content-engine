@@ -557,6 +557,20 @@ Body
             self.assertEqual(items[0]["human_review_required"], "true")
             self.assertIn("개인정보를 리뷰에 남기지 말고", items[0]["suggested_reply"])
 
+    def test_store_review_items_include_fact_grounded_triage(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            reviews = Path(temp) / "store_reviews.csv"
+            reviews.write_text(
+                "review_id,app_slug,app_name,rating,title,body,reviewer_language\n"
+                "review-1,tagweaver,TagWeaver,1,,not free as stated,en\n",
+                encoding="utf-8",
+            )
+            items = store_review_items(reviews)
+
+        self.assertEqual(items[0]["triage"]["category"], "pricing_confusion")
+        self.assertTrue(items[0]["triage"]["requires_human_approval"])
+        self.assertTrue(items[0]["triage"]["facts"])
+
     def test_store_review_items_hide_cross_source_aliases(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             reviews = Path(temp) / "store_reviews.csv"

@@ -19,6 +19,7 @@ from zoneinfo import ZoneInfo
 from evaluate_social_templates import evaluate_social_templates
 from evaluate_syndication_drafts import evaluate_syndication_drafts
 from store_review_responses import generate_reply
+from triage_store_reviews import triage_reviews
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,6 +35,7 @@ DEFAULT_APP_RELEASE_PUBLICATIONS = ROOT / "data" / "app_release_publications.csv
 DEFAULT_APP_RELEASE_SYNC_STATUS = ROOT / "data" / "app_release_sync_status.json"
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 DEFAULT_STORE_REVIEWS = ROOT / "data" / "store_reviews.csv"
+DEFAULT_STORE_REVIEW_TRIAGE = ROOT / "data" / "store_review_triage.json"
 DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
 DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
 DEFAULT_AI_PROVIDER_PRICING = ROOT / "data" / "ai_provider_pricing.csv"
@@ -351,7 +353,7 @@ def store_status_items(store_versions_path: Path = DEFAULT_STORE_VERSIONS) -> li
     ]
 
 
-def store_review_items(path: Path = DEFAULT_STORE_REVIEWS) -> list[dict[str, str]]:
+def store_review_items(path: Path = DEFAULT_STORE_REVIEWS) -> list[dict[str, object]]:
     # The sync normally removes Google Play report/API aliases. Keep the
     # dashboard defensive for an already-generated or manually imported CSV.
     def fingerprint(row: dict[str, str]) -> tuple[str, ...]:
@@ -375,7 +377,12 @@ def store_review_items(path: Path = DEFAULT_STORE_REVIEWS) -> list[dict[str, str
             and not row.get("review_id", "").startswith("report-")
         ):
             source_rows[key] = row
-    items: list[dict[str, str]] = []
+    triage = triage_reviews(list(source_rows.values()), (
+        ROOT / "docs" / "operations" / "APP_FACTS.md",
+        ROOT / "docs" / "operations" / "PRICING_FACTS.md",
+    ))
+    triage_by_review_id = {item["review_id"]: item for item in triage["items"]}
+    items: list[dict[str, object]] = []
     for row in source_rows.values():
         suggestion = generate_reply(row)
         items.append(
@@ -398,6 +405,7 @@ def store_review_items(path: Path = DEFAULT_STORE_REVIEWS) -> list[dict[str, str
                 "status": row.get("status", "pending") or "pending",
                 "synced_at": row.get("synced_at", ""),
                 **suggestion,
+                "triage": triage_by_review_id.get(row.get("review_id", ""), {}),
             }
         )
     return sorted(
@@ -3848,6 +3856,35 @@ def html_document(
       }}
       card.append(body);
 
+      const triage = item.triage || {{}};
+      if (triage.category) {{
+        const triageSummary = document.createElement('p');
+        triageSummary.className = 'store-review-meta';
+        const actions = triage.actions || {{}};
+        triageSummary.textContent = [
+          `AI triage: ${{triage.category}}`,
+          triage.similar_reviews ? `similar: ${{triage.similar_reviews}}` : '',
+          actions.github_issue === 'approval_required' ? 'issue draft available' : '',
+          triage.requires_human_approval ? 'manual approval required' : '',
+        ].filter(Boolean).join(' · ');
+        card.append(triageSummary);
+        if (Array.isArray(triage.facts) && triage.facts.length) {{
+          const facts = document.createElement('p');
+          facts.className = 'store-review-meta';
+          facts.textContent = `Approved facts: ${{triage.facts.map((fact) => fact.text).join(' ')}}`;
+          card.append(facts);
+        }}
+        if (triage.issue_draft) {{
+          const issueLabel = document.createElement('strong');
+          issueLabel.textContent = 'GitHub issue draft (approval required)';
+          const issue = document.createElement('textarea');
+          issue.className = 'store-review-reply';
+          issue.readOnly = true;
+          issue.value = triage.issue_draft;
+          card.append(issueLabel, issue);
+        }}
+      }}
+
       if (item.developer_reply) {{
         const existingLabel = document.createElement('strong');
         existingLabel.textContent = t('storeReviewExistingReply');
@@ -4487,6 +4524,7 @@ def build_manual_publish_site(
     flutter_dependency_versions_path: Path = DEFAULT_FLUTTER_DEPENDENCY_VERSIONS,
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
     store_reviews_path: Path = DEFAULT_STORE_REVIEWS,
+    store_review_triage_path: Path = DEFAULT_STORE_REVIEW_TRIAGE,
 ) -> Path:
     topics = read_topics(topics_path)
     items = social_items(social_manifest, topics) + syndication_items(syndication_manifest, topics)
@@ -4495,6 +4533,14 @@ def build_manual_publish_site(
     blog_items = blog_status_items(topics_path)
     store_items = store_status_items(store_versions_path)
     store_reviews = store_review_items(store_reviews_path)
+    # Persist the exact triage data shown in the dashboard so every proposed
+    # action has an auditable, repository-managed snapshot.
+    triage_payload = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+        "items": [item["triage"] for item in store_reviews],
+    }
+    store_review_triage_path.write_text(json.dumps(triage_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     flutter_dependency_items = flutter_dependency_status_items(flutter_dependency_versions_path)
     site_items = homepage_status_items(homepage_repo)
     pricing_items = product_pricing_items(homepage_repo)
@@ -4540,6 +4586,7 @@ def main() -> int:
     parser.add_argument("--verification-report", type=Path, default=DEFAULT_VERIFICATION_REPORT)
     parser.add_argument("--store-versions", type=Path, default=DEFAULT_STORE_VERSIONS)
     parser.add_argument("--store-reviews", type=Path, default=DEFAULT_STORE_REVIEWS)
+    parser.add_argument("--store-review-triage", type=Path, default=DEFAULT_STORE_REVIEW_TRIAGE)
     parser.add_argument("--flutter-dependency-versions", type=Path, default=DEFAULT_FLUTTER_DEPENDENCY_VERSIONS)
     parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPO)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -4558,6 +4605,7 @@ def main() -> int:
         args.flutter_dependency_versions,
         args.homepage_repo,
         args.store_reviews,
+        args.store_review_triage,
     )
     print(f"generated {output}")
     return 0

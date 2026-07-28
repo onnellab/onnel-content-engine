@@ -196,6 +196,7 @@ Synchronize App Store and Google Play reviews, then rebuild the dashboard:
 
 ```bash
 python3 scripts/sync_store_reviews.py
+python3 scripts/triage_store_reviews.py
 python3 scripts/build_manual_publish_site.py
 ```
 
@@ -212,8 +213,10 @@ public key and can save them directly to Actions Secrets before dispatching the
 review sync workflow.
 
 The dashboard shows synchronized reviews and creates Korean or English reply
-drafts from the repository-managed templates. Every draft requires human review
-and manual publication. See `docs/Store_Review_Response_Guide.md`.
+drafts from the repository-managed templates. It also creates a deterministic
+triage snapshot with risk flags, approved facts, repeated-review counts, and
+approval-only GitHub issue drafts. Every draft requires human review and manual
+publication. See `docs/Store_Review_Response_Guide.md`.
 
 ---
 
