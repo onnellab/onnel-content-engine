@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T14:56:10+00:00",
+  "generated_at": "2026-07-28T15:14:16+00:00",
   "summary": {
     "reviews_triaged": 10,
     "high_risk_reports": 1,
@@ -11,7 +11,10 @@
     "new_crash_incidents": 0,
     "doctor_high_findings": 0,
     "coder_tasks_proposed": 0,
+    "coder_tasks_approved_pending": 0,
     "coder_draft_prs": 0,
+    "qa_reports_passed": 0,
+    "qa_reports_blocked": 0,
     "policy_assessments_pending": 0,
     "policy_assessment_failures": 0,
     "release_candidates_failed": 0,
