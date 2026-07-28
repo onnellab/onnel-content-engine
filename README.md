@@ -260,6 +260,13 @@ exact blocking reason. This gate never uploads an AAB/IPA, changes store
 metadata, submits a review, or releases an app; provider connections remain
 disabled until separately configured.
 
+## Manager notification
+
+The daily Manager report can update one GitHub issue instead of creating
+repeated alerts. Set `enabled` to `true` in
+`data/ai_manager_notification_config.json` only after choosing the target
+repository. The report is informational and cannot authorize any action.
+
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:
 

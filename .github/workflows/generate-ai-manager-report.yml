@@ -2,7 +2,7 @@ name: Generate AI Manager Report
 on:
   schedule: [{cron: '40 0 * * *'}]
   workflow_dispatch:
-permissions: {contents: write}
+permissions: {contents: write, issues: write}
 jobs:
   report:
     runs-on: ubuntu-latest
@@ -21,6 +21,9 @@ jobs:
         run: python3 scripts/analyze_os_update_impact.py
       - name: Generate manager report
         run: python3 scripts/generate_ai_manager_report.py
+      - name: Update optional GitHub manager notification
+        run: python3 scripts/publish_ai_manager_issue.py
+        env: {GITHUB_TOKEN: ${{ github.token }}}
       - run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
