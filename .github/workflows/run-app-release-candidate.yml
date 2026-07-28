@@ -1,0 +1,70 @@
+name: Run App Release Candidate Gate
+on:
+  workflow_dispatch:
+    inputs:
+      task_id: {description: QA-passed task ID, required: true, type: string}
+      repository: {description: App repository, required: true, type: string}
+      ref: {description: Draft PR branch or commit SHA, required: true, type: string}
+      pr_url: {description: Draft PR URL, required: true, type: string}
+      confirm_release_candidate: {description: Type CANDIDATE to run macOS release builds, required: true, type: string}
+permissions: {contents: write}
+jobs:
+  candidate:
+    if: inputs.confirm_release_candidate == 'CANDIDATE'
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+        with: {path: content-engine}
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
+          path: app
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+      - uses: subosito/flutter-action@v2
+        with: {channel: stable, cache: true}
+      - name: Run release candidate checks
+        id: candidate
+        working-directory: app
+        run: |
+          set +e
+          flutter pub get; pub_get=$?
+          flutter analyze; analyze=$?
+          flutter test; tests=$?
+          flutter build appbundle --release; android_bundle=$?
+          flutter build ios --release --no-codesign; ios_archive=$?
+          echo "pub_get=$pub_get" >> "$GITHUB_OUTPUT"
+          echo "analyze=$analyze" >> "$GITHUB_OUTPUT"
+          echo "tests=$tests" >> "$GITHUB_OUTPUT"
+          echo "android_bundle=$android_bundle" >> "$GITHUB_OUTPUT"
+          echo "ios_archive=$ios_archive" >> "$GITHUB_OUTPUT"
+      - name: Record release candidate result
+        working-directory: content-engine
+        env:
+          TASK_ID: ${{ inputs.task_id }}
+          REPOSITORY: ${{ inputs.repository }}
+          PR_URL: ${{ inputs.pr_url }}
+          PUB_GET: ${{ steps.candidate.outputs.pub_get }}
+          ANALYZE: ${{ steps.candidate.outputs.analyze }}
+          TESTS: ${{ steps.candidate.outputs.tests }}
+          ANDROID_BUNDLE: ${{ steps.candidate.outputs.android_bundle }}
+          IOS_ARCHIVE: ${{ steps.candidate.outputs.ios_archive }}
+        run: |
+          mkdir -p data/release-candidate-reports
+          python3 - <<'PY'
+          import json, os
+          result = lambda key: "passed" if os.environ[key] == "0" else "failed"
+          report = {"task_id":os.environ["TASK_ID"],"repository":os.environ["REPOSITORY"],"pr_url":os.environ["PR_URL"],"pub_get":result("PUB_GET"),"static_analysis":result("ANALYZE"),"tests":result("TESTS"),"android_release_bundle":result("ANDROID_BUNDLE"),"ios_unsigned_release_build":result("IOS_ARCHIVE"),"submission_or_deployment":"not_attempted"}
+          open("data/release-candidate-reports/" + os.environ["TASK_ID"] + ".json", "w").write(json.dumps(report, indent=2) + "\n")
+          PY
+      - name: Commit release candidate report
+        working-directory: content-engine
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/release-candidate-reports/
+          git diff --cached --quiet || git commit -m "Record app release candidate result"
+          git push
+      - name: Fail if release candidate failed
+        if: steps.candidate.outputs.pub_get != '0' || steps.candidate.outputs.analyze != '0' || steps.candidate.outputs.tests != '0' || steps.candidate.outputs.android_bundle != '0' || steps.candidate.outputs.ios_archive != '0'
+        run: exit 1

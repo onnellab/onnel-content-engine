@@ -248,6 +248,12 @@ provided by the app, Android debug APK, and Android release AAB. iOS archive
 and device verification remain a macOS/Codemagic gate rather than a Linux
 substitute.
 
+Use **Run App Release Candidate Gate** after the detailed QA report passes. It
+runs on macOS and records Flutter dependency resolution, analysis, tests,
+Android release AAB, and iOS `--no-codesign` release build results. It does not
+sign, upload, submit, or deploy anything, and it is not a substitute for an
+iOS real-device gate.
+
 ## Sentry crash collection
 
 Add each app's Sentry organization/project and platform to
