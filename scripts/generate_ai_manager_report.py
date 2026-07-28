@@ -15,6 +15,11 @@ def main() -> int:
     triage = load("store_review_triage.json", {"items": []})
     approvals = load("store_review_approvals.json", {"approvals": []})
     issues = load("review_issue_publications.json", {"items": []})
+    crash_rows = []
+    crash_path = ROOT / "data" / "crash_incidents.csv"
+    if crash_path.exists():
+        import csv
+        with crash_path.open(encoding="utf-8", newline="") as handle: crash_rows = list(csv.DictReader(handle))
     items = triage.get("items", []) if isinstance(triage, dict) else []
     queued = approvals.get("approvals", []) if isinstance(approvals, dict) else []
     issue_items = issues.get("items", []) if isinstance(issues, dict) else []
@@ -22,7 +27,7 @@ def main() -> int:
     pricing = [item for item in items if item.get("category") == "pricing_confusion" and item.get("similar_reviews", 0) >= 3]
     report = {
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
-        "summary": {"reviews_triaged": len(items), "high_risk_reports": len(high), "pricing_patterns": len(pricing), "replies_queued": sum(item.get("status") == "queued" for item in queued), "replies_published": sum(item.get("status") == "published" for item in queued), "issues_created": len(issue_items)},
+        "summary": {"reviews_triaged": len(items), "high_risk_reports": len(high), "pricing_patterns": len(pricing), "replies_queued": sum(item.get("status") == "queued" for item in queued), "replies_published": sum(item.get("status") == "published" for item in queued), "issues_created": len(issue_items), "new_crash_incidents": sum(row.get("status") == "new" for row in crash_rows)},
         "requires_attention": [{"review_id": item.get("review_id"), "category": item.get("category"), "actions": item.get("actions")} for item in high + pricing],
     }
     output = ROOT / "data" / "ai_manager_daily_report.json"

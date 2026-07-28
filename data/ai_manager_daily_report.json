@@ -1,12 +1,13 @@
 {
-  "generated_at": "2026-07-28T08:31:36+00:00",
+  "generated_at": "2026-07-28T08:35:30+00:00",
   "summary": {
     "reviews_triaged": 10,
     "high_risk_reports": 1,
     "pricing_patterns": 0,
     "replies_queued": 0,
     "replies_published": 0,
-    "issues_created": 0
+    "issues_created": 0,
+    "new_crash_incidents": 0
   },
   "requires_attention": [
     {
