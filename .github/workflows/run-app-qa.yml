@@ -44,6 +44,13 @@ jobs:
           analyze=$?
           flutter test
           tests=$?
+          if [[ -f tool/performance_gate.sh ]]; then
+            bash tool/performance_gate.sh
+            performance=$?
+          else
+            echo "tool/performance_gate.sh is not configured" >&2
+            performance=2
+          fi
           flutter build apk --debug
           debug_build=$?
           flutter build appbundle --release
@@ -59,6 +66,7 @@ jobs:
           echo "format=$format" >> "$GITHUB_OUTPUT"
           echo "analyze=$analyze" >> "$GITHUB_OUTPUT"
           echo "tests=$tests" >> "$GITHUB_OUTPUT"
+          echo "performance=$performance" >> "$GITHUB_OUTPUT"
           echo "build=$build" >> "$GITHUB_OUTPUT"
           echo "debug_build=$debug_build" >> "$GITHUB_OUTPUT"
           echo "release_bundle=$release_bundle" >> "$GITHUB_OUTPUT"
@@ -77,12 +85,14 @@ jobs:
           PATCH_NOTES: ${{ steps.qa.outputs.patch_notes }}
           DEBUG_BUILD: ${{ steps.qa.outputs.debug_build }}
           RELEASE_BUNDLE: ${{ steps.qa.outputs.release_bundle }}
+          PERFORMANCE: ${{ steps.qa.outputs.performance }}
         run: |
           mkdir -p data/qa-reports
           python3 - <<'PY'
           import json, os
           result = lambda key: "passed" if os.environ[key] == "0" else "failed"
-          report = {"task_id":os.environ["TASK_ID"],"repository":os.environ["REPOSITORY"],"pr_url":os.environ["PR_URL"],"tests":result("TESTS"),"build":result("BUILD"),"static_analysis":result("ANALYZE"),"format":result("FORMAT"),"patch_notes":result("PATCH_NOTES"),"android_debug_build":result("DEBUG_BUILD"),"android_release_bundle":result("RELEASE_BUNDLE"),"risk":"Awaiting platform/device gate.","rollback":"Revert the draft PR commit.","checks":[]}
+          performance = "passed" if os.environ["PERFORMANCE"] == "0" else "not_configured" if os.environ["PERFORMANCE"] == "2" else "failed"
+          report = {"task_id":os.environ["TASK_ID"],"repository":os.environ["REPOSITORY"],"pr_url":os.environ["PR_URL"],"tests":result("TESTS"),"build":result("BUILD"),"static_analysis":result("ANALYZE"),"performance":performance,"format":result("FORMAT"),"patch_notes":result("PATCH_NOTES"),"android_debug_build":result("DEBUG_BUILD"),"android_release_bundle":result("RELEASE_BUNDLE"),"risk":"Awaiting platform/device gate.","rollback":"Revert the draft PR commit.","checks":[]}
           open("data/qa-reports/" + os.environ["TASK_ID"] + ".json", "w").write(json.dumps(report, indent=2) + "\n")
           PY
       - name: Commit QA audit report
@@ -94,5 +104,5 @@ jobs:
           git diff --cached --quiet || git commit -m "Record app QA result"
           git push
       - name: Fail when core QA failed
-        if: steps.qa.outputs.format != '0' || steps.qa.outputs.analyze != '0' || steps.qa.outputs.tests != '0' || steps.qa.outputs.build != '0' || steps.qa.outputs.patch_notes != '0'
+        if: steps.qa.outputs.format != '0' || steps.qa.outputs.analyze != '0' || steps.qa.outputs.tests != '0' || steps.qa.outputs.performance != '0' || steps.qa.outputs.build != '0' || steps.qa.outputs.patch_notes != '0'
         run: exit 1

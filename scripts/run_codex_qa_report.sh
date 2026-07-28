@@ -28,11 +28,18 @@ app_path="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["app
 set +e
 (cd "$app_path" && flutter analyze) >"${packet}.analyze" 2>&1; analyze=$?
 (cd "$app_path" && flutter test) >"${packet}.test" 2>&1; tests=$?
+if [[ -f "$app_path/tool/performance_gate.sh" ]]; then
+  (cd "$app_path" && bash tool/performance_gate.sh) >"${packet}.performance" 2>&1; performance=$?
+else
+  echo "tool/performance_gate.sh is not configured" >"${packet}.performance"
+  performance=2
+fi
 set -e
-python3 - "$packet" "$analyze" "$tests" <<'PY'
+python3 - "$packet" "$analyze" "$tests" "$performance" <<'PY'
 import json, pathlib, sys
 path=pathlib.Path(sys.argv[1]); data=json.loads(path.read_text(encoding='utf-8'))
-data['command_results']={'flutter_analyze':'passed' if sys.argv[2]=='0' else 'failed','flutter_test':'passed' if sys.argv[3]=='0' else 'failed'}
+performance='passed' if sys.argv[4]=='0' else 'not_configured' if sys.argv[4]=='2' else 'failed'
+data['command_results']={'flutter_analyze':'passed' if sys.argv[2]=='0' else 'failed','flutter_test':'passed' if sys.argv[3]=='0' else 'failed','performance':performance}
 path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 PY
 

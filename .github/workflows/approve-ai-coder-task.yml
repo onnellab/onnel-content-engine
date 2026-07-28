@@ -5,7 +5,7 @@ on:
       task_id: {description: Proposed task ID, required: true, type: string}
       approver: {description: Human approver name, required: true, type: string}
       confirm: {description: Type APPROVE to authorize Draft PR work, required: true, type: string}
-permissions: {contents: write}
+permissions: {actions: write, contents: write}
 jobs:
   approve:
     if: inputs.confirm == 'APPROVE'
@@ -65,3 +65,9 @@ jobs:
           git commit -m "Record AI coder Draft PR for ${TASK_ID}"
           git pull --rebase origin main
           git push origin HEAD:main
+      - name: Dispatch portable QA gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TASK_ID: ${{ inputs.task_id }}
+        run: python3 scripts/dispatch_ai_coder_qa.py "$TASK_ID" --execute

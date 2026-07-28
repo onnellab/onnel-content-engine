@@ -3,7 +3,10 @@
 Read `docs/operations/QA_VERIFICATION_POLICY.md` first. For an approved
 AI-Coder task and its draft PR, run relevant tests, production build, and
 static analysis. Write `qa_report.json` with `task_id`, `repository`, `pr_url`,
-`tests`, `build`, `static_analysis`, `risk`, `rollback`, and `checks`.
+`tests`, `build`, `static_analysis`, `performance`, `risk`, `rollback`, and
+`checks`. `performance` must reproduce the prepared app-specific
+`tool/performance_gate.sh` result; a missing gate is `not_configured`, never a
+pass.
 `checks` must cover every required policy check with `status` (PASS/FAIL/STOP),
 severity (CRITICAL/HIGH/LOW), and objective evidence. Use `No action required`
 only for PASS with evidence. Do not merge, deploy, weaken tests, or mark a

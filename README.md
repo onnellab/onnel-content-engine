@@ -273,9 +273,12 @@ which correctly prevents the merge gate from passing.
 
 The GitHub **Run App QA Gate** follows the Flutter template's portable gates:
 format verification, analyze, tests, template patch-note validation when
-provided by the app, Android debug APK, and Android release AAB. iOS archive
-and device verification remain a macOS/Codemagic gate rather than a Linux
-substitute.
+provided by the app, the app-owned `tool/performance_gate.sh`, Android debug
+APK, and Android release AAB. A missing or failing performance gate is
+recorded and blocks merge rather than being treated as a pass. A newly created
+audited Draft PR automatically dispatches this portable QA workflow. iOS
+archive and device verification remain a macOS/Codemagic gate rather than a
+Linux substitute.
 
 Use **Run App Release Candidate Gate** after the detailed QA report passes. It
 runs on macOS and records Flutter dependency resolution, analysis, tests,
