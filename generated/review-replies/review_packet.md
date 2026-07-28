@@ -1,0 +1,166 @@
+# Codex review reply packet
+
+Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts.json`.
+
+[
+  {
+    "review": {
+      "review_id": "fc0a6e51-79d1-4aea-8aad-5954a7541b7a",
+      "app_id": "APP-0003",
+      "app_slug": "vaultxt",
+      "app_name": "VaultXT",
+      "platform": "android",
+      "rating": "1",
+      "title": "",
+      "body": "$6.99 to edit files",
+      "reviewer_language": "en",
+      "territory": "",
+      "app_version": "1.0.3",
+      "created_at": "2026-07-25T22:30:58+00:00",
+      "updated_at": "2026-07-25T22:30:58+00:00",
+      "developer_reply": "",
+      "reply_updated_at": "",
+      "status": "pending",
+      "synced_at": "2026-07-27T04:08:15+00:00"
+    },
+    "triage": {
+      "review_id": "fc0a6e51-79d1-4aea-8aad-5954a7541b7a",
+      "category": "general_feedback",
+      "risk_flags": [],
+      "similarity_key": "general_feedback",
+      "similar_reviews": 1,
+      "facts": [
+        {
+          "text": "VaultXT is a text editor and viewer for plain-text files.",
+          "source": "docs/operations/APP_FACTS.md:8"
+        },
+        {
+          "text": "Claims about large-file limits or crash fixes require a verified issue and released version.",
+          "source": "docs/operations/APP_FACTS.md:9"
+        },
+        {
+          "text": "VaultXT Pro is a one-time purchase; it is not a subscription.",
+          "source": "docs/operations/PRICING_FACTS.md:10"
+        }
+      ],
+      "requires_human_approval": true,
+      "actions": {
+        "reply": "recommended",
+        "github_issue": "not_needed",
+        "store_copy": "not_needed",
+        "code_change": "not_needed"
+      },
+      "issue_draft": ""
+    }
+  },
+  {
+    "review": {
+      "review_id": "report-6b652b2227b5da3cd8607adf",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "platform": "android",
+      "rating": "5",
+      "title": "",
+      "body": "Tageditor",
+      "reviewer_language": "en",
+      "territory": "",
+      "app_version": "1.0.5",
+      "created_at": "2026-06-23T18:29:06Z",
+      "updated_at": "2026-06-23T18:29:06Z",
+      "developer_reply": "",
+      "reply_updated_at": "",
+      "status": "pending",
+      "synced_at": "2026-07-28T08:07:39+00:00"
+    },
+    "triage": {
+      "review_id": "report-6b652b2227b5da3cd8607adf",
+      "category": "praise",
+      "risk_flags": [],
+      "similarity_key": "praise",
+      "similar_reviews": 1,
+      "facts": [
+        {
+          "text": "TagWeaver is a focused editor for MP3 metadata.",
+          "source": "docs/operations/APP_FACTS.md:6"
+        },
+        {
+          "text": "TagWeaver supports editing one track at a time in the free experience.",
+          "source": "docs/operations/APP_FACTS.md:7"
+        },
+        {
+          "text": "Editing an individual file is available without the optional Pro upgrade.",
+          "source": "docs/operations/PRICING_FACTS.md:7"
+        },
+        {
+          "text": "Batch editing multiple files is included in TagWeaver Pro.",
+          "source": "docs/operations/PRICING_FACTS.md:8"
+        },
+        {
+          "text": "TagWeaver Pro is a one-time purchase; it is not a subscription.",
+          "source": "docs/operations/PRICING_FACTS.md:9"
+        }
+      ],
+      "requires_human_approval": false,
+      "actions": {
+        "reply": "recommended",
+        "github_issue": "not_needed",
+        "store_copy": "not_needed",
+        "code_change": "not_needed"
+      },
+      "issue_draft": ""
+    }
+  },
+  {
+    "review": {
+      "review_id": "report-a0d3339ac24a86567e3f9185",
+      "app_id": "APP-0003",
+      "app_slug": "vaultxt",
+      "app_name": "VaultXT",
+      "platform": "android",
+      "rating": "1",
+      "title": "",
+      "body": "this is actually a paid app",
+      "reviewer_language": "en",
+      "territory": "",
+      "app_version": "1.0.3",
+      "created_at": "2026-06-15T23:34:49Z",
+      "updated_at": "2026-06-15T23:34:49Z",
+      "developer_reply": "",
+      "reply_updated_at": "",
+      "status": "pending",
+      "synced_at": "2026-07-28T08:07:39+00:00"
+    },
+    "triage": {
+      "review_id": "report-a0d3339ac24a86567e3f9185",
+      "category": "pricing_confusion",
+      "risk_flags": [
+        "billing"
+      ],
+      "similarity_key": "pricing_free_vs_pro_confusion",
+      "similar_reviews": 1,
+      "facts": [
+        {
+          "text": "VaultXT is a text editor and viewer for plain-text files.",
+          "source": "docs/operations/APP_FACTS.md:8"
+        },
+        {
+          "text": "Claims about large-file limits or crash fixes require a verified issue and released version.",
+          "source": "docs/operations/APP_FACTS.md:9"
+        },
+        {
+          "text": "VaultXT Pro is a one-time purchase; it is not a subscription.",
+          "source": "docs/operations/PRICING_FACTS.md:10"
+        }
+      ],
+      "requires_human_approval": true,
+      "actions": {
+        "reply": "recommended",
+        "github_issue": "not_needed",
+        "store_copy": "not_needed",
+        "code_change": "not_needed"
+      },
+      "issue_draft": ""
+    }
+  }
+]

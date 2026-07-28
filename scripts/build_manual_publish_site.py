@@ -36,6 +36,7 @@ DEFAULT_APP_RELEASE_SYNC_STATUS = ROOT / "data" / "app_release_sync_status.json"
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 DEFAULT_STORE_REVIEWS = ROOT / "data" / "store_reviews.csv"
 DEFAULT_STORE_REVIEW_TRIAGE = ROOT / "data" / "store_review_triage.json"
+DEFAULT_STORE_REVIEW_AI_DRAFTS = ROOT / "data" / "store_review_ai_drafts.json"
 DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
 DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
 DEFAULT_AI_PROVIDER_PRICING = ROOT / "data" / "ai_provider_pricing.csv"
@@ -353,7 +354,7 @@ def store_status_items(store_versions_path: Path = DEFAULT_STORE_VERSIONS) -> li
     ]
 
 
-def store_review_items(path: Path = DEFAULT_STORE_REVIEWS) -> list[dict[str, object]]:
+def store_review_items(path: Path = DEFAULT_STORE_REVIEWS, ai_drafts_path: Path = DEFAULT_STORE_REVIEW_AI_DRAFTS) -> list[dict[str, object]]:
     # The sync normally removes Google Play report/API aliases. Keep the
     # dashboard defensive for an already-generated or manually imported CSV.
     def fingerprint(row: dict[str, str]) -> tuple[str, ...]:
@@ -377,6 +378,11 @@ def store_review_items(path: Path = DEFAULT_STORE_REVIEWS) -> list[dict[str, obj
             and not row.get("review_id", "").startswith("report-")
         ):
             source_rows[key] = row
+    ai_drafts: dict[str, dict[str, object]] = {}
+    if ai_drafts_path.exists():
+        payload = json.loads(ai_drafts_path.read_text(encoding="utf-8"))
+        if isinstance(payload, dict) and isinstance(payload.get("drafts"), list):
+            ai_drafts = {str(item.get("review_id", "")): item for item in payload["drafts"] if isinstance(item, dict)}
     triage = triage_reviews(list(source_rows.values()), (
         ROOT / "docs" / "operations" / "APP_FACTS.md",
         ROOT / "docs" / "operations" / "PRICING_FACTS.md",
@@ -385,6 +391,10 @@ def store_review_items(path: Path = DEFAULT_STORE_REVIEWS) -> list[dict[str, obj
     items: list[dict[str, object]] = []
     for row in source_rows.values():
         suggestion = generate_reply(row)
+        custom = ai_drafts.get(row.get("review_id", ""), {})
+        if isinstance(custom.get("reply"), str) and custom["reply"].strip():
+            suggestion["suggested_reply"] = custom["reply"].strip()
+            suggestion["reply_category"] = "codex_custom"
         items.append(
             {
                 "review_id": row.get("review_id", ""),

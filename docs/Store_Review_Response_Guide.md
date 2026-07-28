@@ -42,12 +42,11 @@ repository after verifying reproduction and privacy-safe wording.
 
 ## Custom AI drafts
 
-Run `OPENAI_API_KEY=... python3 scripts/generate_ai_review_drafts.py` to make
-one tailored draft for every unanswered review. Each call receives only the
-review, approved app facts, and the no-promise/no-personal-data policy. The
-result is stored in `data/store_review_ai_drafts.json`; it is still a draft and
-requires the normal approval queue. If validation fails, the generator records
-the safe template fallback instead.
+Run `python3 scripts/generate_ai_review_drafts.py` to create a review packet,
+then give it to Codex with `prompts/codex_review_replies.md`. Codex writes the
+tailored drafts to `data/store_review_ai_drafts.json`; they still require the
+normal approval queue. This uses the ChatGPT/Codex subscription workflow and
+does not require an API key.
 
 ## Credentials
 
