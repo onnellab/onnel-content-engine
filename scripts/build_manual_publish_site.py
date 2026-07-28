@@ -37,6 +37,7 @@ DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 DEFAULT_STORE_REVIEWS = ROOT / "data" / "store_reviews.csv"
 DEFAULT_STORE_REVIEW_TRIAGE = ROOT / "data" / "store_review_triage.json"
 DEFAULT_STORE_REVIEW_AI_DRAFTS = ROOT / "data" / "store_review_ai_drafts.json"
+DEFAULT_AI_MANAGER_REPORT = ROOT / "data" / "ai_manager_daily_report.json"
 DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
 DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
 DEFAULT_AI_PROVIDER_PRICING = ROOT / "data" / "ai_provider_pricing.csv"
@@ -958,6 +959,7 @@ def html_document(
     release_sync_status: dict[str, object] | None = None,
     verification_report: dict[str, object] | None = None,
     quality_report: dict[str, object] | None = None,
+    ai_manager_report: dict[str, object] | None = None,
 ) -> str:
     manual_state = manual_state or {"done": {}, "updated_at": "", "version": 1}
     verification_report = current_verification_report(verification_report or {}, items)
@@ -980,6 +982,7 @@ def html_document(
     release_sync_data = json.dumps(release_sync_status or {}, ensure_ascii=False).replace("</", "<\\/")
     verification_report_data = json.dumps(verification_report or {}, ensure_ascii=False).replace("</", "<\\/")
     quality_report_data = json.dumps(quality_report or {}, ensure_ascii=False).replace("</", "<\\/")
+    ai_manager_report_data = json.dumps(ai_manager_report or {}, ensure_ascii=False).replace("</", "<\\/")
     total = len(items)
     manual = sum(
         1
@@ -1359,6 +1362,10 @@ def html_document(
       </div>
       <div id="app-status-grid" class="app-status-grid"></div>
     </details>
+    <details class="status-section" aria-label="AI operation status">
+      <summary>AI 운영 게이트 <span id="ai-manager-summary"></span></summary>
+      <div id="ai-manager-grid" class="app-status-grid"></div>
+    </details>
     <details class="status-section" aria-label="Store customer reviews">
       <summary id="store-review-title">스토어 리뷰 답변</summary>
       <div class="release-head">
@@ -1387,6 +1394,7 @@ def html_document(
   <script id="release-sync-data" type="application/json">{release_sync_data}</script>
   <script id="verification-report-data" type="application/json">{verification_report_data}</script>
   <script id="quality-report-data" type="application/json">{quality_report_data}</script>
+  <script id="ai-manager-report-data" type="application/json">{ai_manager_report_data}</script>
   <script src="./libsodium-sumo.js"></script>
   <script src="./libsodium-wrappers.js"></script>
   <script>
@@ -1402,6 +1410,9 @@ def html_document(
     let releaseSyncStatus = JSON.parse(document.getElementById('release-sync-data').textContent);
     let verificationReport = JSON.parse(document.getElementById('verification-report-data').textContent);
     let qualityReport = JSON.parse(document.getElementById('quality-report-data').textContent);
+    let aiManagerReport = JSON.parse(document.getElementById('ai-manager-report-data').textContent);
+    const aiManagerGrid = document.getElementById('ai-manager-grid');
+    const aiManagerSummary = document.getElementById('ai-manager-summary');
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
     const storeReviewApprovalsPath = 'data/store_review_approvals.json';
@@ -2067,6 +2078,7 @@ def html_document(
       renderAppStatusSummary();
       renderSiteStatusSummary();
       renderPricingStatusSummary();
+      renderAiManagerSummary();
       renderQualityStatusSummary();
     }}
 
@@ -3639,6 +3651,24 @@ def html_document(
       }});
     }}
 
+    function renderAiManagerSummary() {{
+      aiManagerGrid.textContent = '';
+      const summary = aiManagerReport.summary || {{}};
+      const attention = aiManagerReport.requires_attention || [];
+      aiManagerSummary.textContent = `${{attention.length}} attention / ${{aiManagerReport.generated_at || 'not generated'}}`;
+      Object.entries(summary).forEach(([key, value]) => {{
+        const card = document.createElement('div');
+        card.className = 'app-status-card';
+        const title = document.createElement('strong');
+        title.textContent = key.replaceAll('_', ' ');
+        const row = document.createElement('div');
+        row.className = 'app-status-row';
+        row.innerHTML = `<b>count</b><span>${{value}}</span>`;
+        card.append(title, row);
+        aiManagerGrid.appendChild(card);
+      }});
+    }}
+
     function renderSiteStatusSummary() {{
       siteStatusGrid.textContent = '';
       const appCount = siteItems.filter((item) => item.kind === 'app').length;
@@ -4597,6 +4627,7 @@ def build_manual_publish_site(
     blog_items = blog_status_items(topics_path)
     store_items = store_status_items(store_versions_path)
     store_reviews = store_review_items(store_reviews_path)
+    ai_manager_report = json.loads(DEFAULT_AI_MANAGER_REPORT.read_text(encoding="utf-8")) if DEFAULT_AI_MANAGER_REPORT.exists() else {}
     # Persist the exact triage data shown in the dashboard so every proposed
     # action has an auditable, repository-managed snapshot.
     triage_payload = {
@@ -4628,6 +4659,7 @@ def build_manual_publish_site(
             release_sync_status,
             verification_report,
             quality_report,
+            ai_manager_report,
         ),
         encoding="utf-8",
     )
