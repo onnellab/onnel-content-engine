@@ -16,7 +16,12 @@ task=next((item for item in json.loads((root/'data/ai_coder_tasks.json').read_te
 if not task or task.get('status') != 'draft_pr_created': raise SystemExit('task must have a recorded Draft PR')
 local=next((row for row in csv.DictReader((root/'data/local_repositories.csv').open(encoding='utf-8', newline='')) if row['app_slug'] == task.get('app_slug')), None)
 if not local or not (pathlib.Path(local['path']).expanduser()/local['pubspec_path']).is_file(): raise SystemExit('mapped local Flutter checkout is unavailable')
-json.dump({'task':task, 'app_path':local['path'], 'report_path':str(root/'data/qa-reports'/f'{task_id}.json')}, output.open('w'), ensure_ascii=False, indent=2)
+apps={row['slug']:row for row in csv.DictReader((root/'data/apps_registry.csv').open(encoding='utf-8',newline=''))}
+app=apps.get(task.get('app_slug'),{})
+device_path=root/'data/ios-device-qa-reports'/f'{task_id}.json'
+try: device_report=json.loads(device_path.read_text(encoding='utf-8'))
+except (OSError,json.JSONDecodeError): device_report=None
+json.dump({'task':task, 'app_path':local['path'], 'report_path':str(root/'data/qa-reports'/f'{task_id}.json'), 'ios_device_required':'ios' in app.get('platforms','').split('|'), 'ios_device_report':device_report}, output.open('w'), ensure_ascii=False, indent=2)
 PY
 
 app_path="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["app_path"])' "$packet")"
@@ -31,7 +36,7 @@ data['command_results']={'flutter_analyze':'passed' if sys.argv[2]=='0' else 'fa
 path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 PY
 
-codex exec -s read-only -C "$app_path" -o "$report" "Read '$packet', '$engine_root/prompts/codex_qa.md', and the app repository. First read AGENTS.md, CODEX_BOOT.md, CODEX.md, and SKILLS/00_SKILL_INDEX.md when they exist; app rules override this prompt. Do not edit any file. Return only one JSON object matching docs/operations/QA_REPORT_EXAMPLE.json. Use command_results from the packet for tests/static_analysis. Every required check must be PASS, FAIL, or STOP with file/rule evidence. Never infer device/platform facts; use STOP if evidence is unavailable."
+codex exec -s read-only -C "$app_path" -o "$report" "Read '$packet', '$engine_root/prompts/codex_qa.md', and the app repository. First read AGENTS.md, CODEX_BOOT.md, CODEX.md, and SKILLS/00_SKILL_INDEX.md when they exist; app rules override this prompt. Do not edit any file. Use command_results from the packet for tests/static_analysis. If ios_device_required is true, ios_device_risk must be STOP unless ios_device_report has status PASS; cite that report only as evidence, never infer a physical-device pass. Do not edit any file. Return only one JSON object matching docs/operations/QA_REPORT_EXAMPLE.json. Every required check must be PASS, FAIL, or STOP with file/rule evidence. Never infer device/platform facts; use STOP if evidence is unavailable."
 python3 -m json.tool "$report" >/dev/null
 mkdir -p "$engine_root/data/qa-reports"
 cp "$report" "$engine_root/data/qa-reports/${task_id}.json"

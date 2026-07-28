@@ -285,6 +285,10 @@ The runner rejects simulators, requires a recorded Draft PR, and stores a
 `PASS`, `FAIL`, or `STOP` evidence report. If no integration test exists, it
 records `STOP` instead of treating an unsigned build as device verification.
 
+For iOS apps, the local Codex QA packet now includes that physical-device
+report. Without a recorded device `PASS`, the iOS device-risk check must stay
+`STOP`, which blocks the final merge gate.
+
 ## Sentry crash collection
 
 Add each app's Sentry organization/project and platform to
