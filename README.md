@@ -237,6 +237,11 @@ When an app was created from `onnellab-flutter-template`, the runner uses its
 formatting, patch-note, and app-specific safety rules in the app repository as
 the source of truth.
 
+All local Codex Coder, QA, and policy-assessment runners read template app
+entry rules (`AGENTS.md`, `CODEX_BOOT.md`, `CODEX.md`, and the skill index)
+when present. Those app-level constraints override the engine's generic task
+prompt.
+
 For a recorded Draft PR, generate the detailed read-only Codex QA report:
 
 ```bash

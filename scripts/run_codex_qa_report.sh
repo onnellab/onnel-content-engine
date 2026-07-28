@@ -31,7 +31,7 @@ data['command_results']={'flutter_analyze':'passed' if sys.argv[2]=='0' else 'fa
 path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 PY
 
-codex exec -s read-only -C "$app_path" -o "$report" "Read '$packet', '$engine_root/prompts/codex_qa.md', and the app repository. Do not edit any file. Return only one JSON object matching docs/operations/QA_REPORT_EXAMPLE.json. Use command_results from the packet for tests/static_analysis. Every required check must be PASS, FAIL, or STOP with file/rule evidence. Never infer device/platform facts; use STOP if evidence is unavailable."
+codex exec -s read-only -C "$app_path" -o "$report" "Read '$packet', '$engine_root/prompts/codex_qa.md', and the app repository. First read AGENTS.md, CODEX_BOOT.md, CODEX.md, and SKILLS/00_SKILL_INDEX.md when they exist; app rules override this prompt. Do not edit any file. Return only one JSON object matching docs/operations/QA_REPORT_EXAMPLE.json. Use command_results from the packet for tests/static_analysis. Every required check must be PASS, FAIL, or STOP with file/rule evidence. Never infer device/platform facts; use STOP if evidence is unavailable."
 python3 -m json.tool "$report" >/dev/null
 mkdir -p "$engine_root/data/qa-reports"
 cp "$report" "$engine_root/data/qa-reports/${task_id}.json"

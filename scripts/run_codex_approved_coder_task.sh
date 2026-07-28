@@ -37,7 +37,7 @@ if git -C "$app_path" show-ref --verify --quiet "refs/heads/$branch" || git -C "
 fi
 git -C "$app_path" switch -c "$branch"
 
-codex exec -s workspace-write -C "$app_path" "Read '$packet' and '$engine_root/prompts/codex_bugfix.md'. Implement only the approved task. First reproduce the issue or add a failing test. Do not touch billing, auth, privacy, cryptography, database migrations, signing, store metadata, or CI secrets. Do not commit, push, merge, deploy, publish, or create a PR. Run the relevant tests and report their results in your final response."
+codex exec -s workspace-write -C "$app_path" "Read '$packet' and '$engine_root/prompts/codex_bugfix.md'. Before inspecting or changing code, read AGENTS.md, CODEX_BOOT.md, CODEX.md, and SKILLS/00_SKILL_INDEX.md when they exist; those app rules override this prompt. Implement only the approved task. First reproduce the issue or add a failing test. Do not touch billing, auth, privacy, cryptography, database migrations, signing, store metadata, or CI secrets. Do not commit, push, merge, deploy, publish, or create a PR. Run the relevant tests and report their results in your final response."
 
 changed="$(git -C "$app_path" diff --name-only)"
 [[ -n "$changed" ]] || { echo "Codex made no changes; no PR created" >&2; exit 1; }
