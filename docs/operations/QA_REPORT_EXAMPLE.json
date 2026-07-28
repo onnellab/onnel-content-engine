@@ -1,0 +1,1 @@
+{"task_id":"crash-example","repository":"onnellab/example","pr_url":"https://github.com/onnellab/example/pull/1","tests":"passed","build":"passed","static_analysis":"passed","risk":"Low; isolated null handling.","rollback":"Revert the draft PR commit."}
