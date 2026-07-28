@@ -1,0 +1,21 @@
+name: Create Policy Remediation Task
+on:
+  workflow_dispatch:
+    inputs:
+      task_id: {description: Policy task with FAIL assessment, required: true, type: string}
+      approver: {description: Human scope reviewer, required: true, type: string}
+      confirm: {description: Type REMEDIATE to create a proposed Coder task, required: true, type: string}
+permissions: {contents: write}
+jobs:
+  create:
+    if: inputs.confirm == 'REMEDIATE'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/create_policy_remediation_task.py '${{ inputs.task_id }}' --approver '${{ inputs.approver }}' --confirm
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/ai_coder_tasks.json
+          git diff --cached --quiet || git commit -m "Create policy remediation task"
+          git push

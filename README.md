@@ -289,6 +289,11 @@ scripts/run_codex_policy_assessment.sh TASK_ID
 The runner uses Codex read-only mode and rejects results unless they explicitly
 state `patch_authorized: false` with evidence references.
 
+Only a recorded policy `FAIL` can be escalated with **Create Policy Remediation
+Task**. It creates a *proposed* AI-Coder task, so the normal separate Draft PR
+approval remains mandatory. Restricted security, privacy, billing, auth,
+cryptography, migration, signing, and store-metadata changes remain blocked.
+
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:
 

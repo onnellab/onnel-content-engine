@@ -23,6 +23,9 @@ def main() -> int:
             task.update({key:value for key,value in existing.items() if key not in {"finding","app_slug","repository","constraints"}})
             task["finding"]=finding; task["app_slug"]=slug; task["repository"]=repos.get(slug,"")
         tasks.append(task)
+    # Policy remediation tasks are human-created from a recorded FAIL assessment;
+    # keep them intact when daily crash-derived tasks are regenerated.
+    tasks.extend(task for task in previous if task.get("origin") == "store_policy_assessment" and task.get("task_id") not in {item.get("task_id") for item in tasks})
     output={"generated_at":datetime.now(timezone.utc).replace(microsecond=0).isoformat(),"tasks":tasks}
     path.write_text(json.dumps(output,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(f"generated {path}")
