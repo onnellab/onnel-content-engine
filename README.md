@@ -307,6 +307,12 @@ never crash stack traces or user reports. The collector uses Firebase's
 official Crashlytics REST API and records `not_configured` or `token_missing`
 until a dedicated read-only OAuth integration is available.
 
+The daily **Collect GitHub Issues** workflow reads open Issue metadata from
+every app repository in `data/app_release_config.csv`. It excludes pull
+requests and deliberately stores no issue body, author, comment, attachment,
+or log content. Open/closed observations are preserved in
+`data/github_issues.json`; the monitor cannot edit or close an app issue.
+
 ## Local Codex Scout schedule
 
 On a Linux/WSL machine where Codex is already signed in, install the daily

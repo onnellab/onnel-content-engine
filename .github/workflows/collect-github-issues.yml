@@ -1,0 +1,26 @@
+name: Collect GitHub Issues
+on:
+  schedule:
+    - cron: "25 0 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+  issues: read
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect app issue metadata
+        env:
+          GITHUB_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+        run: python3 scripts/collect_github_issues.py
+      - run: python3 scripts/generate_ai_manager_report.py
+      - name: Commit issue audit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/github_issues.json data/github_issue_sync_status.json data/ai_manager_daily_report.json
+          git diff --cached --quiet || git commit -m "Collect app GitHub issues"
+          git pull --rebase --autostash origin main
+          git push
