@@ -9,3 +9,7 @@ secrets. Stop and report if the task affects billing, authentication, privacy,
 cryptography, database migrations, or cannot be reproduced. Include the
 reproduction evidence, changed files, tests run, risk, and rollback note in the
 draft PR body.
+
+After creating the Draft PR, request **Run App QA Gate** with the exact task
+ID, repository, branch/commit, and PR URL. Do not request human merge approval
+until the QA artifact is complete.

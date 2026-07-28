@@ -1,0 +1,72 @@
+name: Run App QA Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      task_id: {description: Approved AI-Coder task ID, required: true, type: string}
+      repository: {description: App repository, for example onnellab/tagweaver, required: true, type: string}
+      ref: {description: Draft PR branch or commit SHA, required: true, type: string}
+      pr_url: {description: Draft PR URL, required: true, type: string}
+      confirm_qa: {description: Type QA to run app checks, required: true, type: string}
+
+permissions: {contents: write}
+
+jobs:
+  qa:
+    if: inputs.confirm_qa == 'QA'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {path: content-engine}
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
+          path: app
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+      - uses: subosito/flutter-action@v2
+        with: {channel: stable}
+      - name: Run Flutter QA
+        id: qa
+        working-directory: app
+        run: |
+          set +e
+          flutter pub get
+          flutter analyze
+          analyze=$?
+          flutter test
+          tests=$?
+          flutter build apk --debug
+          build=$?
+          echo "analyze=$analyze" >> "$GITHUB_OUTPUT"
+          echo "tests=$tests" >> "$GITHUB_OUTPUT"
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Write QA audit report
+        working-directory: content-engine
+        env:
+          TASK_ID: ${{ inputs.task_id }}
+          REPOSITORY: ${{ inputs.repository }}
+          PR_URL: ${{ inputs.pr_url }}
+          ANALYZE: ${{ steps.qa.outputs.analyze }}
+          TESTS: ${{ steps.qa.outputs.tests }}
+          BUILD: ${{ steps.qa.outputs.build }}
+        run: |
+          mkdir -p data/qa-reports
+          python3 - <<'PY'
+          import json, os
+          result = lambda key: "passed" if os.environ[key] == "0" else "failed"
+          report = {"task_id":os.environ["TASK_ID"],"repository":os.environ["REPOSITORY"],"pr_url":os.environ["PR_URL"],"tests":result("TESTS"),"build":result("BUILD"),"static_analysis":result("ANALYZE"),"risk":"Awaiting platform/device gate.","rollback":"Revert the draft PR commit.","checks":[]}
+          open("data/qa-reports/" + os.environ["TASK_ID"] + ".json", "w").write(json.dumps(report, indent=2) + "\n")
+          PY
+      - name: Commit QA audit report
+        working-directory: content-engine
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/qa-reports/
+          git diff --cached --quiet || git commit -m "Record app QA result"
+          git push
+      - name: Fail when core QA failed
+        if: steps.qa.outputs.analyze != '0' || steps.qa.outputs.tests != '0' || steps.qa.outputs.build != '0'
+        run: exit 1
