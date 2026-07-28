@@ -19,13 +19,13 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUESTS_PATH = ROOT / "data" / "private_test_build_requests.json"
 
 
-def start_build(app_id: str, workflow_id: str, branch: str) -> str:
+def start_build(app_id: str, workflow_id: str, tag: str) -> str:
     token = os.environ.get("CODEMAGIC_API_TOKEN")
     if not token:
         raise SystemExit("CODEMAGIC_API_TOKEN is required")
     request = urllib.request.Request(
         "https://api.codemagic.io/builds",
-        data=json.dumps({"appId": app_id, "workflowId": workflow_id, "branch": branch, "labels": ["onnellab-private-test"]}).encode(),
+        data=json.dumps({"appId": app_id, "workflowId": workflow_id, "tag": tag, "labels": ["onnellab-private-test"]}).encode(),
         headers={"Content-Type": "application/json", "Accept": "application/json", "x-auth-token": token, "User-Agent": "ONNELLAB content engine"},
         method="POST",
     )
@@ -58,6 +58,26 @@ def branch_head(repository: str, branch: str) -> str:
     return sha
 
 
+def create_immutable_tag(repository: str, release_id: str, commit: str) -> str:
+    token = os.environ.get("GITHUB_TOKEN")
+    if not token:
+        raise SystemExit("GITHUB_TOKEN is required to create the private-test tag")
+    if not re.fullmatch(r"[A-Za-z0-9._-]+", release_id):
+        raise SystemExit("release ID cannot be used in a Git tag")
+    tag = f"private-test/{release_id}-{commit[:12]}"
+    request = urllib.request.Request(
+        f"https://api.github.com/repos/{repository}/git/refs",
+        data=json.dumps({"ref": f"refs/tags/{tag}", "sha": commit}).encode(),
+        headers={"Accept": "application/vnd.github+json", "Authorization": f"Bearer {token}", "User-Agent": "ONNELLAB content engine"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=60):
+            return tag
+    except urllib.error.HTTPError as error:
+        raise SystemExit(f"GitHub private-test tag creation failed with HTTP {error.code}") from error
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("task_id")
@@ -82,11 +102,12 @@ def main() -> int:
     requests = payload.get("requests")
     if not isinstance(requests, list) or any(item.get("release_id") == args.release_id for item in requests):
         raise SystemExit("private test build request is invalid or already recorded")
-    build_id = start_build(build["codemagic_app_id"], build["workflow_id"], build["branch"])
+    tag = create_immutable_tag(release["repository"], args.release_id, task["merge_commit"])
+    build_id = start_build(build["codemagic_app_id"], build["workflow_id"], tag)
     build["build_id"] = build_id
     build["notes"] = f"Private-test build requested for {args.task_id}."
     write_csv(CODEMAGIC_BUILDS_PATH, CODEMAGIC_BUILDS_HEADER, builds)
-    requests.append({"task_id": args.task_id, "release_id": args.release_id, "codemagic_build_id": build_id, "branch": build["branch"], "status": "dispatched", "approved_by": args.approver, "dispatched_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat()})
+    requests.append({"task_id": args.task_id, "release_id": args.release_id, "codemagic_build_id": build_id, "branch": build["branch"], "tag": tag, "merge_commit": task["merge_commit"], "status": "dispatched", "approved_by": args.approver, "dispatched_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat()})
     REQUESTS_PATH.write_text(json.dumps({"requests": requests}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"dispatched Codemagic private-test build {build_id} for {args.release_id}")
     return 0

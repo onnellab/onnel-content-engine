@@ -361,7 +361,9 @@ including the exact SHA-256, before it can upload.
 For a merged Coder task, **Dispatch Private Test Build** starts exactly one
 mapped Codemagic app/workflow/branch build after `BUILD_PRIVATE_TEST` approval.
 Set its mapping in `data/codemagic_builds.csv`; the mapped branch must still
-resolve to the recorded merge SHA, and it never submits a store build.
+resolve to the recorded merge SHA. The approved workflow then creates one
+immutable `private-test/...` Git tag and builds that tag; it never submits a
+store build.
 Each successful upload is recorded in `data/internal_store_submissions.json`
 with its workflow-run URL and SHA-256; this audit record does not promote or
 publish it.
