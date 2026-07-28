@@ -35,6 +35,9 @@ jobs:
         run: |
           flutter pub get
           flutter build appbundle --release
+          aab_files=(build/app/outputs/bundle/release/*-release.aab)
+          [[ "${#aab_files[@]}" == "1" && -f "${aab_files[0]}" ]]
+          jarsigner -verify -certs "${aab_files[0]}"
       - id: aab_upload
         if: steps.android_build.outcome == 'success'
         continue-on-error: true
