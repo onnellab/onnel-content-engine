@@ -64,11 +64,11 @@ class AiManagerAutomationTest(unittest.TestCase):
         self.assertIn("merge-approved-app-pr.yml", result)
         self.assertIn("This report is informational", result)
 
-    def test_internal_issue_enabled_but_external_webhook_stays_disabled(self) -> None:
+    def test_public_repo_issue_and_external_webhook_stay_disabled(self) -> None:
         issue = json.loads((ROOT / "data" / "ai_manager_notification_config.json").read_text())
         webhook = json.loads((ROOT / "data" / "ai_manager_webhook_config.json").read_text())
 
-        self.assertTrue(issue["enabled"])
+        self.assertFalse(issue["enabled"])
         self.assertEqual(issue["repository"], "onnellab/onnel-content-engine")
         self.assertFalse(webhook["enabled"])
 

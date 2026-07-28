@@ -1,5 +1,5 @@
 {
-  "enabled": true,
+  "enabled": false,
   "repository": "onnellab/onnel-content-engine",
   "title": "AI Manager daily operations report"
 }
