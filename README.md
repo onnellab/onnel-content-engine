@@ -218,6 +218,20 @@ triage snapshot with risk flags, approved facts, repeated-review counts, and
 approval-only GitHub issue drafts. Every draft requires human review and manual
 publication. See `docs/Store_Review_Response_Guide.md`.
 
+## Approved AI-Coder tasks
+
+After a task has been approved through **Approve AI Coder Task**, a signed-in
+local Codex environment can create exactly one audited Draft PR:
+
+```bash
+scripts/run_codex_approved_coder_task.sh TASK_ID --execute
+```
+
+The runner requires a clean mapped local Flutter checkout, creates a dedicated
+branch, blocks protected-path changes, runs `flutter analyze`, and only then
+pushes a Draft PR. It never merges, deploys, publishes, or changes store
+settings. The generated PR must still pass the QA and human merge gates.
+
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:
 

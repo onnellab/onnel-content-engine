@@ -13,3 +13,7 @@ draft PR body.
 After creating the Draft PR, request **Run App QA Gate** with the exact task
 ID, repository, branch/commit, and PR URL. Do not request human merge approval
 until the QA artifact is complete.
+
+When invoked by `run_codex_approved_coder_task.sh`, do not create the branch,
+commit, push, or PR yourself. The runner performs those audited actions only
+after checking the resulting diff.
