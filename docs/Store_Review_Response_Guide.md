@@ -19,6 +19,13 @@ The workflow is:
 Reply publication is intentionally manual. A generated draft must never be
 posted without human review.
 
+Selecting **Approve & queue** in the dashboard records the exact edited reply,
+review ID, platform, timestamp, and approval actor in
+`data/store_review_approvals.json`. This requires the dashboard GitHub token
+and creates a repository commit. It does **not** publish the reply: queued
+records remain a deliberate boundary until the separate store publisher is
+implemented and enabled.
+
 `data/store_review_triage.json` is an audit snapshot. It groups repeated
 reports, cites the applicable `docs/operations/*_FACTS.md` lines, and may
 create an unverified GitHub issue draft. It never writes to GitHub, a store,

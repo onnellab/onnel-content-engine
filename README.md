@@ -218,6 +218,13 @@ triage snapshot with risk flags, approved facts, repeated-review counts, and
 approval-only GitHub issue drafts. Every draft requires human review and manual
 publication. See `docs/Store_Review_Response_Guide.md`.
 
+Approved replies are recorded in `data/store_review_approvals.json` before any
+publisher may consume them. The approval CLI is useful for audited local use:
+
+```bash
+python3 scripts/store_review_approvals.py REVIEW_ID --reply "Approved reply" --approver "your-name"
+```
+
 ---
 
 # Content Categories

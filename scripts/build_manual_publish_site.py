@@ -1394,6 +1394,7 @@ def html_document(
     let qualityReport = JSON.parse(document.getElementById('quality-report-data').textContent);
     const stateRepo = 'onnellab/onnel-content-engine';
     const statePath = 'data/manual_publish_state.json';
+    const storeReviewApprovalsPath = 'data/store_review_approvals.json';
     const reportPath = 'data/manual_publication_verification_report.json';
     const releasePublicationsPath = 'data/app_release_publications.csv';
     const stateBranch = 'main';
@@ -2844,6 +2845,38 @@ def html_document(
       setSync('synced');
     }}
 
+    async function queueApprovedStoreReply(item, reply) {{
+      if (!githubToken()) throw new Error('GitHub token is required to record approval');
+      const cleanReply = String(reply || '').replace(/\\s+/g, ' ').trim();
+      if (!cleanReply) throw new Error('A reply is required before approval');
+      if (cleanReply.length > 1000) throw new Error('Reply exceeds the 1000 character approval limit');
+      if (/(will be fixed|next update|guaranteed|refund approved|다음 업데이트|고쳐드리|환불해드리)/i.test(cleanReply)) {{
+        throw new Error('Reply contains a prohibited promise and cannot be queued');
+      }}
+      const data = await githubRequest(`/repos/${{stateRepo}}/contents/${{storeReviewApprovalsPath}}?ref=${{stateBranch}}`);
+      const approvals = JSON.parse(decodeBase64Unicode(data.content));
+      approvals.approvals ||= [];
+      if (approvals.approvals.some((entry) => entry.review_id === item.review_id && ['queued', 'published'].includes(entry.status))) {{
+        throw new Error('This review already has an active approval');
+      }}
+      const approvedAt = new Date().toISOString();
+      approvals.approvals.push({{
+        approval_id: `review-${{item.review_id}}`, review_id: item.review_id,
+        app_id: item.app_id || '', app_slug: item.app_slug || '', platform: item.platform || '',
+        reply: cleanReply, approved_at: approvedAt, approved_by: 'dashboard_token_holder',
+        note: '', status: 'queued', publication: {{ attempts: 0, published_at: '', external_response_id: '' }},
+      }});
+      approvals.updated_at = approvedAt;
+      await githubRequest(`/repos/${{stateRepo}}/contents/${{storeReviewApprovalsPath}}`, {{
+        method: 'PUT', headers: {{ 'Content-Type': 'application/json' }},
+        body: JSON.stringify({{
+          message: `Queue approved reply for ${{item.review_id}}`,
+          content: encodeBase64Unicode(JSON.stringify(approvals, null, 2) + '\n'),
+          branch: stateBranch, sha: data.sha,
+        }}),
+      }});
+    }}
+
     async function saveWithMerge(message, localDone) {{
       try {{
         await saveRemoteState(message);
@@ -3920,7 +3953,28 @@ def html_document(
         if (!textarea.value) textarea.value = item.suggested_reply || '';
         await copyText(textarea.value, copy);
       }};
-      actions.append(generate, copy);
+      const approve = document.createElement('button');
+      approve.type = 'button';
+      approve.className = 'secondary';
+      approve.textContent = 'Approve & queue';
+      approve.onclick = async () => {{
+        if (!githubToken()) {{
+          setSync('viewOnly');
+          revealTokenInput();
+          return;
+        }}
+        try {{
+          flash(approve, 'Saving approval…');
+          await queueApprovedStoreReply(item, textarea.value || item.suggested_reply || '');
+          approve.disabled = true;
+          approve.textContent = 'Queued — not published';
+          setSync('synced');
+        }} catch (error) {{
+          flash(approve, 'Approval not saved');
+          console.error(error);
+        }}
+      }};
+      actions.append(generate, copy, approve);
       card.append(replyLabel, textarea, actions);
       return card;
     }}
