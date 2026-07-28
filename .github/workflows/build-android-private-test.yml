@@ -29,28 +29,37 @@ jobs:
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
       - uses: subosito/flutter-action@v2
         with: {channel: stable}
-      - working-directory: app
+      - id: android_build
+        continue-on-error: true
+        working-directory: app
         run: |
           flutter pub get
           flutter build appbundle --release
-      - uses: actions/upload-artifact@v4
+      - id: aab_upload
+        if: steps.android_build.outcome == 'success'
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.source.outputs.artifact_name }}
           path: app/build/app/outputs/bundle/release/*-release.aab
           if-no-files-found: error
           retention-days: 14
-      - working-directory: content-engine
+      - if: always() && steps.source.outcome == 'success'
+        working-directory: content-engine
         env:
           TASK_ID: ${{ inputs.task_id }}
           RELEASE_ID: ${{ inputs.release_id }}
           TAG: ${{ steps.source.outputs.tag }}
           RUN_ID: ${{ github.run_id }}
           ARTIFACT_NAME: ${{ steps.source.outputs.artifact_name }}
+          BUILD_STATUS: ${{ steps.android_build.outcome == 'success' && steps.aab_upload.outcome == 'success' && 'artifact_ready' || 'failed' }}
           APPROVER: ${{ inputs.approver }}
         run: |
-          python3 scripts/record_android_private_test_build.py "$TASK_ID" --release-id "$RELEASE_ID" --tag "$TAG" --run-id "$RUN_ID" --artifact-name "$ARTIFACT_NAME" --approver "$APPROVER"
+          python3 scripts/record_android_private_test_build.py "$TASK_ID" --release-id "$RELEASE_ID" --tag "$TAG" --run-id "$RUN_ID" --artifact-name "$ARTIFACT_NAME" --status "$BUILD_STATUS" --approver "$APPROVER"
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add data/private_test_build_requests.json
           git diff --cached --quiet || git commit -m "Record Android private test AAB"
           git push
+      - if: steps.android_build.outcome != 'success' || steps.aab_upload.outcome != 'success'
+        run: exit 1
