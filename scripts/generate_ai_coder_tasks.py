@@ -9,13 +9,22 @@ ROOT=Path(__file__).resolve().parents[1]
 def main() -> int:
     findings=json.loads((ROOT/"data/ai_doctor_findings.json").read_text(encoding="utf-8")).get("findings",[])
     with (ROOT/"data/app_release_config.csv").open(encoding="utf-8",newline="") as handle: repos={row["app_slug"]:row["repository"] for row in csv.DictReader(handle)}
+    path=ROOT/"data/ai_coder_tasks.json"
+    previous=json.loads(path.read_text(encoding="utf-8")).get("tasks",[]) if path.exists() else []
+    previous_by_id={task.get("task_id"):task for task in previous}
     tasks=[]
     for finding in findings:
         if not finding.get("github_issue_recommended"): continue
         slug=finding.get("app_slug","")
-        tasks.append({"task_id":finding.get("finding_id"),"app_slug":slug,"repository":repos.get(slug,""),"status":"proposed","finding":finding,"constraints":["Create a draft PR only; never merge or deploy.","Reproduce or add a failing test before changing production code.","Do not modify billing, authentication, privacy, cryptography, or database migrations.","Run the app repository's relevant tests and report results."]})
+        task_id=finding.get("finding_id")
+        task={"task_id":task_id,"app_slug":slug,"repository":repos.get(slug,""),"status":"proposed","finding":finding,"constraints":["Create a draft PR only; never merge or deploy.","Reproduce or add a failing test before changing production code.","Do not modify billing, authentication, privacy, cryptography, or database migrations.","Run the app repository's relevant tests and report results."]}
+        existing=previous_by_id.get(task_id,{})
+        if existing.get("status") in {"approved_for_draft_pr","draft_pr_created","merged","closed"}:
+            task.update({key:value for key,value in existing.items() if key not in {"finding","app_slug","repository","constraints"}})
+            task["finding"]=finding; task["app_slug"]=slug; task["repository"]=repos.get(slug,"")
+        tasks.append(task)
     output={"generated_at":datetime.now(timezone.utc).replace(microsecond=0).isoformat(),"tasks":tasks}
-    path=ROOT/"data/ai_coder_tasks.json"; path.write_text(json.dumps(output,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    path.write_text(json.dumps(output,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(f"generated {path}")
     return 0
 if __name__=="__main__": raise SystemExit(main())

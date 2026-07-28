@@ -242,6 +242,15 @@ It runs Flutter analysis and tests, then asks Codex to emit the required
 evidence-only QA JSON. A missing objective iOS/device fact produces `STOP`,
 which correctly prevents the merge gate from passing.
 
+## Sentry crash collection
+
+Add each app's Sentry organization/project and platform to
+`data/sentry_crash_sources.json`, then store a read-only `SENTRY_AUTH_TOKEN`
+in GitHub Actions secrets. The daily collector imports unresolved issues into
+the crash ledger and regenerates Doctor, Coder, and Manager outputs. Without a
+token it records `token_missing` and exits successfully; it never silently
+uses a personal browser session.
+
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:
 

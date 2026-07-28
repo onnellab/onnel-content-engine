@@ -10,6 +10,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.x'}
+      - name: Collect configured Sentry crashes
+        run: python3 scripts/collect_sentry_crashes.py
+        env: {SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}}
       - name: Run AI-Doctor correlation
         run: python3 scripts/analyze_incidents.py
       - name: Prepare AI-Coder tasks
@@ -21,6 +24,6 @@ jobs:
       - run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add data/ai_doctor_findings.json data/ai_coder_tasks.json data/os_update_impact_tasks.json data/ai_manager_daily_report.json
+          git add data/crash_incidents.csv data/crash_sync_status.json data/ai_doctor_findings.json data/ai_coder_tasks.json data/os_update_impact_tasks.json data/ai_manager_daily_report.json
           git diff --cached --quiet || git commit -m "Generate AI manager report"
           git push
