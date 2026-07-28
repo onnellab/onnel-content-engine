@@ -1,0 +1,23 @@
+name: Create Approved Review Issue
+on:
+  workflow_dispatch:
+    inputs:
+      review_id: {description: Exact eligible review ID, required: true, type: string}
+      confirm_create: {description: Type CREATE to authorize issue creation, required: true, type: string}
+permissions: {contents: write, issues: write}
+jobs:
+  create:
+    if: inputs.confirm_create == 'CREATE'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.x'}
+      - run: python3 scripts/create_review_issue.py "${{ inputs.review_id }}" --confirm-create
+        env: {GITHUB_TOKEN: '${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}'}
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/review_issue_publications.json
+          git diff --cached --quiet || git commit -m "Create review issue"
+          git push
