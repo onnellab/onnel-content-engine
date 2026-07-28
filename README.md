@@ -355,7 +355,8 @@ The workflow resolves the selected release's Codemagic artifact at run time,
 calculates and validates its SHA-256 metadata, and does not commit the binary
 to this repository.
 Each successful upload is recorded in `data/internal_store_submissions.json`
-with its workflow-run URL; this audit record does not promote or publish it.
+with its workflow-run URL and SHA-256; this audit record does not promote or
+publish it.
 
 Use **Record Internal Test Feedback** to log only a short issue summary and
 reproduction steps for an uploaded build. Do not enter personal data, passwords,

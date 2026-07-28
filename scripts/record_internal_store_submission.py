@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -16,8 +17,11 @@ def main() -> int:
     parser.add_argument("release_id")
     parser.add_argument("--provider", choices=("google_play", "app_store"), required=True)
     parser.add_argument("--identifier", required=True)
+    parser.add_argument("--checksum-sha256", required=True)
     parser.add_argument("--run-url", required=True)
     args = parser.parse_args()
+    if not re.fullmatch(r"[0-9a-f]{64}", args.checksum_sha256):
+        raise SystemExit("checksum must be a 64-character lowercase SHA-256")
 
     payload = json.loads(PATH.read_text(encoding="utf-8"))
     submissions = payload.get("submissions")
@@ -30,6 +34,7 @@ def main() -> int:
             "release_id": args.release_id,
             "provider": args.provider,
             "identifier": args.identifier,
+            "checksum_sha256": args.checksum_sha256,
             "channel": "internal" if args.provider == "google_play" else "testflight",
             "status": "uploaded",
             "uploaded_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
