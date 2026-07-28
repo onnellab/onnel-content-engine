@@ -1,0 +1,29 @@
+name: Start Private Test Orchestration
+on:
+  workflow_dispatch:
+    inputs:
+      task_id: {description: QA-passed Draft PR task ID, required: true, type: string}
+      release_id: {description: Matching planned private-test release ID, required: true, type: string}
+      approver: {description: Human approver, required: true, type: string}
+      confirm: {description: Type START_PRIVATE_TEST to authorize the chain, required: true, type: string}
+permissions: {contents: write, actions: write}
+jobs:
+  start:
+    if: inputs.confirm == 'START_PRIVATE_TEST'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          TASK_ID: ${{ inputs.task_id }}
+          RELEASE_ID: ${{ inputs.release_id }}
+          APPROVER: ${{ inputs.approver }}
+        run: python3 scripts/start_private_test_orchestration.py "$TASK_ID" --release-id "$RELEASE_ID" --approver "$APPROVER" --confirm
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/private_test_orchestrations.json
+          git commit -m "Start private test orchestration"
+          git push
+      - env:
+          GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+        run: gh workflow run advance-private-test-orchestration.yml

@@ -1,0 +1,35 @@
+name: Advance Private Test Orchestration
+on:
+  schedule: [{cron: '*/5 * * * *'}]
+  workflow_dispatch:
+permissions: {contents: write, actions: write}
+jobs:
+  advance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: next
+        run: python3 scripts/advance_private_test_orchestration.py --github-output "$GITHUB_OUTPUT"
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/private_test_orchestrations.json
+          git diff --cached --quiet || git commit -m "Advance private test orchestration"
+          git pull --rebase origin main
+          git push
+      - env:
+          GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+          ACTION: ${{ steps.next.outputs.action }}
+          TASK_ID: ${{ steps.next.outputs.task_id }}
+          RELEASE_ID: ${{ steps.next.outputs.release_id }}
+          APPROVER: ${{ steps.next.outputs.approver }}
+        run: |
+          case "$ACTION" in
+            merge) gh workflow run merge-approved-app-pr.yml -f task_id="$TASK_ID" -f approver="$APPROVER" -f confirm_merge=MERGE ;;
+            android_build) gh workflow run build-android-private-test.yml -f task_id="$TASK_ID" -f release_id="$RELEASE_ID" -f approver="$APPROVER" -f confirm=BUILD_ANDROID_PRIVATE_TEST ;;
+            ios_build) gh workflow run dispatch-private-test-build.yml -f task_id="$TASK_ID" -f release_id="$RELEASE_ID" -f approver="$APPROVER" -f confirm=BUILD_PRIVATE_TEST ;;
+            readiness) gh workflow run check-internal-test-readiness.yml -f release_id="$RELEASE_ID" -f confirm=CHECK_INTERNAL_TEST ;;
+            upload) gh workflow run submit-internal-store-build.yml -f release_id="$RELEASE_ID" -f confirm=INTERNAL_TEST ;;
+            none) true ;;
+            *) exit 1 ;;
+          esac

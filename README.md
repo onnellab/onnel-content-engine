@@ -358,6 +358,10 @@ Run **Check Internal Test Readiness** first to perform those checks plus the
 relevant credential-shape check without contacting or uploading to a store.
 **Submit Internal Store Build** requires a matching successful preflight,
 including the exact SHA-256, before it can upload.
+Use **Start Private Test Orchestration** for the one-approval chain. It advances
+merge, platform build, readiness, and internal upload only after each recorded
+gate succeeds; a dispatched stage that produces no evidence for six hours is
+marked failed instead of progressing.
 For a merged Coder task, **Dispatch Private Test Build** starts exactly one
 mapped Codemagic app/workflow/branch build after `BUILD_PRIVATE_TEST` approval.
 Set its mapping in `data/codemagic_builds.csv`; the mapped branch must still
