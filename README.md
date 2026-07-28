@@ -267,6 +267,15 @@ repeated alerts. Set `enabled` to `true` in
 `data/ai_manager_notification_config.json` only after choosing the target
 repository. The report is informational and cannot authorize any action.
 
+## Store-alert mailbox
+
+`collect_gmail_policy_alerts.py` supports a dedicated Gmail label using OAuth
+refresh-token secrets. It reads only message metadata for exact configured
+sender and subject mappings. It stores neither email bodies nor addresses;
+only a non-reversible message fingerprint and the mapped app/store/kind are
+kept. Leave `data/gmail_policy_alert_config.json` disabled until a dedicated
+mailbox, label, and exact mapping rules are ready.
+
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:
 

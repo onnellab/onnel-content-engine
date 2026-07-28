@@ -7,10 +7,15 @@ jobs:
   steps:
    - uses: actions/checkout@v4
    - run: python3 scripts/collect_store_policy_updates.py
+   - run: python3 scripts/collect_gmail_policy_alerts.py
+     env:
+      GMAIL_CLIENT_ID: ${{ secrets.GMAIL_POLICY_ALERT_CLIENT_ID }}
+      GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_POLICY_ALERT_CLIENT_SECRET }}
+      GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_POLICY_ALERT_REFRESH_TOKEN }}
    - run: python3 scripts/analyze_store_policy_impact.py
    - run: |
       git config user.name github-actions[bot]
       git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      git add data/store_policy_watchlist.json data/store_policy_impact_tasks.json
+      git add data/store_policy_watchlist.json data/store_policy_alerts.json data/gmail_policy_alert_sync_status.json data/store_policy_impact_tasks.json
       git diff --cached --quiet || git commit -m "Collect store policy update status"
       git push
