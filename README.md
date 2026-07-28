@@ -251,6 +251,15 @@ the crash ledger and regenerates Doctor, Coder, and Manager outputs. Without a
 token it records `token_missing` and exits successfully; it never silently
 uses a personal browser session.
 
+## Store submission gate
+
+Public binary releases require a passing detailed QA report and a human
+**Approve Store Submission** workflow confirmation before they can become
+submission candidates. `evaluate_store_submission_readiness.py` records the
+exact blocking reason. This gate never uploads an AAB/IPA, changes store
+metadata, submits a review, or releases an app; provider connections remain
+disabled until separately configured.
+
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:
 

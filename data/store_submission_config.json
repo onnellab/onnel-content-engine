@@ -1,0 +1,4 @@
+{
+  "google_play": {"enabled": false, "mode": "manual_connection_required"},
+  "app_store": {"enabled": false, "mode": "manual_connection_required"}
+}

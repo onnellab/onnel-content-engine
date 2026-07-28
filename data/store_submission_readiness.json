@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-07-28T09:22:52+00:00",
+  "records": [
+    {
+      "release_id": "REL-0007",
+      "app_slug": "segra",
+      "platform": "android",
+      "store": "google_play",
+      "status": "blocked",
+      "reasons": [
+        "release artifact and public release readiness are not complete",
+        "human submission approval with QA PASS is missing",
+        "google_play connection is not enabled"
+      ],
+      "approval": {}
+    },
+    {
+      "release_id": "REL-0008",
+      "app_slug": "tagweaver",
+      "platform": "android",
+      "store": "google_play",
+      "status": "blocked",
+      "reasons": [
+        "release artifact and public release readiness are not complete",
+        "human submission approval with QA PASS is missing",
+        "google_play connection is not enabled"
+      ],
+      "approval": {}
+    },
+    {
+      "release_id": "REL-0009",
+      "app_slug": "quivra",
+      "platform": "ios",
+      "store": "app_store",
+      "status": "blocked",
+      "reasons": [
+        "release artifact and public release readiness are not complete",
+        "human submission approval with QA PASS is missing",
+        "app_store connection is not enabled"
+      ],
+      "approval": {}
+    },
+    {
+      "release_id": "REL-0010",
+      "app_slug": "tagweaver",
+      "platform": "ios",
+      "store": "app_store",
+      "status": "blocked",
+      "reasons": [
+        "release artifact and public release readiness are not complete",
+        "human submission approval with QA PASS is missing",
+        "app_store connection is not enabled"
+      ],
+      "approval": {}
+    },
+    {
+      "release_id": "REL-0011",
+      "app_slug": "segra",
+      "platform": "android",
+      "store": "google_play",
+      "status": "blocked",
+      "reasons": [
+        "release artifact and public release readiness are not complete",
+        "human submission approval with QA PASS is missing",
+        "google_play connection is not enabled"
+      ],
+      "approval": {}
+    }
+  ]
+}
