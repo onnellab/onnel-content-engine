@@ -1,0 +1,52 @@
+name: Check Internal Test Readiness
+on:
+  workflow_dispatch:
+    inputs:
+      release_id: {description: private_test binary release ID, required: true, type: string}
+      confirm: {description: Type CHECK_INTERNAL_TEST for a no-upload preflight, required: true, type: string}
+permissions: {contents: write}
+jobs:
+  check:
+    if: inputs.confirm == 'CHECK_INTERNAL_TEST'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve verified private-test artifact
+        env:
+          CODEMAGIC_API_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
+        run: |
+          python3 scripts/sync_codemagic_artifact_urls.py
+          python3 scripts/download_codemagic_artifacts.py
+          python3 scripts/fill_ready_app_releases.py
+          python3 scripts/validate_app_releases.py
+      - id: release
+        env:
+          RELEASE_ID: ${{ inputs.release_id }}
+        run: python3 scripts/prepare_internal_store_submission.py "$RELEASE_ID" --github-output "$GITHUB_OUTPUT"
+      - name: Validate Google Play credential shape
+        if: steps.release.outputs.provider == 'google_play'
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: python3 scripts/check_store_submission_credentials.py google_play
+      - name: Validate App Store credential shape
+        if: steps.release.outputs.provider == 'app_store'
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+        run: python3 scripts/check_store_submission_credentials.py app_store
+      - name: Record successful no-upload preflight
+        env:
+          RELEASE_ID: ${{ inputs.release_id }}
+          PROVIDER: ${{ steps.release.outputs.provider }}
+          IDENTIFIER: ${{ steps.release.outputs.identifier }}
+          CHECKSUM_SHA256: ${{ steps.release.outputs.checksum_sha256 }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 scripts/record_internal_test_readiness.py "$RELEASE_ID" --provider "$PROVIDER" --identifier "$IDENTIFIER" --checksum-sha256 "$CHECKSUM_SHA256" --run-url "$RUN_URL"
+          python3 scripts/generate_ai_manager_report.py
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/internal_test_readiness.json data/ai_manager_daily_report.json
+          git diff --cached --quiet || git commit -m "Record internal test readiness"
+          git push

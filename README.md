@@ -354,6 +354,8 @@ customers. Configure the per-app package/bundle identifier in
 The workflow resolves the selected release's Codemagic artifact at run time,
 calculates and validates its SHA-256 metadata, and does not commit the binary
 to this repository.
+Run **Check Internal Test Readiness** first to perform those checks plus the
+relevant credential-shape check without contacting or uploading to a store.
 Each successful upload is recorded in `data/internal_store_submissions.json`
 with its workflow-run URL and SHA-256; this audit record does not promote or
 publish it.
