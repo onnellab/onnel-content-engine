@@ -3,8 +3,6 @@ on:
   workflow_dispatch:
     inputs:
       task_id: {description: QA-passed task ID, required: true, type: string}
-      repository: {description: App repository, required: true, type: string}
-      pr_number: {description: Draft PR number, required: true, type: string}
       approver: {description: Human merger name, required: true, type: string}
       confirm_merge: {description: Type MERGE to authorize squash merge, required: true, type: string}
 permissions: {contents: write, pull-requests: write}
@@ -14,31 +12,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify QA gate
-        run: python3 scripts/validate_ai_qa_report.py "data/qa-reports/${{ inputs.task_id }}.json"
+      - id: merge
+        name: Resolve QA-passed Coder PR
+        env:
+          TASK_ID: ${{ inputs.task_id }}
+        run: python3 scripts/prepare_ai_pr_merge.py "$TASK_ID" --github-output "$GITHUB_OUTPUT"
       - name: Merge one approved PR
         env:
           GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
-        run: gh pr merge "${{ inputs.pr_number }}" --repo "${{ inputs.repository }}" --squash --delete-branch
+          REPOSITORY: ${{ steps.merge.outputs.repository }}
+          PR_NUMBER: ${{ steps.merge.outputs.pr_number }}
+        run: |
+          gh pr ready "$PR_NUMBER" --repo "$REPOSITORY"
+          gh pr merge "$PR_NUMBER" --repo "$REPOSITORY" --squash --delete-branch
       - name: Record merge approval
         env:
           TASK_ID: ${{ inputs.task_id }}
-          REPOSITORY: ${{ inputs.repository }}
-          PR_NUMBER: ${{ inputs.pr_number }}
+          REPOSITORY: ${{ steps.merge.outputs.repository }}
+          PR_NUMBER: ${{ steps.merge.outputs.pr_number }}
           APPROVER: ${{ inputs.approver }}
-        run: |
-          python3 - <<'PY'
-          import json, os
-          from datetime import datetime, timezone
-          path='data/ai_merge_approvals.json'
-          try: data=json.load(open(path))
-          except FileNotFoundError: data={'schema_version':1,'items':[]}
-          data['items'].append({'task_id':os.environ['TASK_ID'],'repository':os.environ['REPOSITORY'],'pr_number':os.environ['PR_NUMBER'],'approved_by':os.environ['APPROVER'],'merged_at':datetime.now(timezone.utc).replace(microsecond=0).isoformat()})
-          open(path,'w').write(json.dumps(data,indent=2)+'\n')
-          PY
+        run: python3 scripts/record_ai_coder_merge.py "$TASK_ID" --repository "$REPOSITORY" --pr-number "$PR_NUMBER" --approver "$APPROVER"
       - run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add data/ai_merge_approvals.json
-          git commit -m "Record approved app PR merge"
+          git add data/ai_coder_tasks.json data/ai_merge_approvals.json
+          git diff --cached --quiet || git commit -m "Record approved app PR merge"
           git push
