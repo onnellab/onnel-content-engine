@@ -86,10 +86,6 @@ def validate_draft(draft: dict[str, object], project_root: Path = ROOT) -> None:
         risks = hashnode_automod_risks(content, canonical_url)
         if risks:
             raise SyndicationValidationError(f"{topic_id} Hashnode AutoMod risk: {'; '.join(risks)}")
-        if status in {"approved", "posted"} and not str(draft.get("automod_reviewed_by", "")).strip():
-            raise SyndicationValidationError(
-                f"{topic_id} Hashnode approval requires an automod_reviewed_by record"
-            )
 
 
 def validate_syndication_drafts(manifest_path: Path = DEFAULT_MANIFEST_PATH, project_root: Path | None = None) -> int:

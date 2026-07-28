@@ -482,11 +482,7 @@ Hashnode drafts use the `hashnode-native-v3` content profile. The generator must
 * reject promotional calls to action such as download-now, pricing, or purchase copy
 * require at least two technical evidence signals, such as implementation steps, a comparison table, code or inline identifiers, or references
 
-`scripts/validate_syndication_drafts.py` fails closed when a Hashnode draft violates this AutoMod risk profile. A failed draft must be revised before it is approved or copied to Hashnode. Hashnode is never included in automated distribution approval. A human must review technical relevance and non-promotional wording, then approve with an auditable reviewer record; approvals are limited to one per 24 hours:
-
-```text
-scripts/approve_syndication_draft.py TOPIC-0001 hashnode en --approved-by editor --automod-reviewed-by hashnode-editor
-```
+`scripts/validate_syndication_drafts.py` fails closed when a Hashnode draft violates this AutoMod risk profile. A failed draft must be revised before it is approved or copied to Hashnode. Hashnode remains excluded from automated distribution approval, but an individual safe draft can be approved with the standard syndication command.
 
 Medium is export-only by default because its public API documentation is archived and no longer recommended for new integrations.
 

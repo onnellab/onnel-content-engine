@@ -801,14 +801,7 @@ class PublishingTest(unittest.TestCase):
     def test_hashnode_adapter_is_export_only_without_paid_api(self) -> None:
         output_dir = self.root / "generated" / "syndication"
         generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
-        approve_syndication_draft(
-            "TOPIC-0001",
-            "hashnode",
-            "en",
-            "editor",
-            output_dir / "manifest.json",
-            automod_reviewed_by="hashnode-editor",
-        )
+        approve_syndication_draft("TOPIC-0001", "hashnode", "en", "editor", output_dir / "manifest.json")
 
         dry_run = post_syndication_drafts(output_dir / "manifest.json", platform="hashnode", adapter="hashnode", dry_run=True)
 
@@ -899,13 +892,10 @@ Download now for the best app.
         self.assertIn("body contains more than three external links", risks)
         self.assertIn("body contains promotional call-to-action language", risks)
 
-    def test_hashnode_approval_requires_human_automod_review_and_daily_cadence(self) -> None:
+    def test_hashnode_approval_uses_standard_syndication_approval(self) -> None:
         output_dir = self.root / "generated" / "syndication"
         generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
         manifest = output_dir / "manifest.json"
-
-        with self.assertRaisesRegex(SyndicationApprovalError, "automod-reviewed-by"):
-            approve_syndication_draft("TOPIC-0001", "hashnode", "en", "editor", manifest)
 
         approved = approve_syndication_draft(
             "TOPIC-0001",
@@ -914,9 +904,8 @@ Download now for the best app.
             "editor",
             manifest,
             now=datetime.fromisoformat("2026-07-20T09:00:00+09:00"),
-            automod_reviewed_by="hashnode-editor",
         )
-        self.assertEqual(approved["automod_reviewed_by"], "hashnode-editor")
+        self.assertEqual(approved["status"], "approved")
 
     def test_integrated_publishing_dry_run_report_lists_approved_payloads(self) -> None:
         social_dir = self.root / "generated" / "social"

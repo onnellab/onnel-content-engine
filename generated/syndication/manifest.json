@@ -17,9 +17,7 @@
       "last_attempt_at": "2026-07-28T15:45:39+09:00",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0001",
@@ -38,9 +36,7 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0001",
@@ -59,9 +55,7 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0007",
@@ -80,9 +74,7 @@
       "last_attempt_at": "2026-07-15T11:27:41+09:00",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0007",
@@ -101,9 +93,7 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0007",
@@ -122,9 +112,7 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0008",
@@ -143,9 +131,7 @@
       "last_attempt_at": "2026-07-24T11:40:20+09:00",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0008",
@@ -164,9 +150,7 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0008",
@@ -185,9 +169,7 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0010",
@@ -206,9 +188,7 @@
       "last_attempt_at": "2026-07-26T11:46:56+09:00",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0010",
@@ -227,9 +207,7 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     },
     {
       "topic_id": "TOPIC-0010",
@@ -248,9 +226,7 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0,
-      "automod_reviewed_by": "",
-      "automod_reviewed_at": ""
+      "retry_count": 0
     }
   ]
 }

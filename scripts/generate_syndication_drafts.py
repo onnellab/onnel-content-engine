@@ -97,8 +97,6 @@ SYNDICATION_STATE_FIELDS = (
     "error",
     "error_type",
     "retry_count",
-    "automod_reviewed_by",
-    "automod_reviewed_at",
 )
 
 
@@ -210,11 +208,6 @@ def generate_syndication_drafts(
                 "error": "",
                 "error_type": "",
                 "retry_count": 0,
-                # Hashnode drafts are never automatically approved. This is
-                # an explicit editorial record that the native version was
-                # checked for technical relevance and non-promotional copy.
-                "automod_reviewed_by": "",
-                "automod_reviewed_at": "",
             }
             apply_previous_syndication_state(item, state)
             manifest.append(item)
