@@ -26,6 +26,9 @@ jobs:
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
       - uses: subosito/flutter-action@v2
         with: {channel: stable}
+      - name: Verify declared Flutter template contract
+        working-directory: app
+        run: python3 ../content-engine/scripts/validate_flutter_template_contract.py .
       - name: Run Flutter QA
         id: qa
         working-directory: app

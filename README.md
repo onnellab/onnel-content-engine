@@ -242,6 +242,11 @@ entry rules (`AGENTS.md`, `CODEX_BOOT.md`, `CODEX.md`, and the skill index)
 when present. Those app-level constraints override the engine's generic task
 prompt.
 
+Apps declaring `.onnellab-template-version` are checked by the App QA Gate for
+their required template entry rules, quality-gate scripts, and Korean/English
+patch-note/store-copy documents. Apps without the marker remain supported as
+legacy apps rather than being falsely treated as template compliant.
+
 For a recorded Draft PR, generate the detailed read-only Codex QA report:
 
 ```bash
