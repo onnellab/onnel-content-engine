@@ -232,6 +232,14 @@ branch, blocks protected-path changes, runs `flutter analyze`, and only then
 pushes a Draft PR. It never merges, deploys, publishes, or changes store
 settings. The generated PR must still pass the QA and human merge gates.
 
+The approval workflow can continue automatically on a dedicated self-hosted
+runner only when repository variable `AI_CODER_RUNNER_ENABLED` is exactly
+`true`. The runner must carry the `onnellab-ai-coder` label, have Codex already
+signed in, and receive the scoped `AI_CODER_GITHUB_TOKEN` secret. Missing
+configuration fails before app mutation; the default disabled state records
+approval without queueing Coder work. A successful run commits the Draft PR
+URL, branch, and commit back to the task audit ledger.
+
 When an app was created from `onnellab-flutter-template`, the runner uses its
 `tool/quality_gate.sh` instead of the basic analysis/test fallback. That keeps
 formatting, patch-note, and app-specific safety rules in the app repository as

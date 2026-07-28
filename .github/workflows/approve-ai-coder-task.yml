@@ -12,10 +12,56 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: python3 scripts/approve_ai_coder_task.py "${{ inputs.task_id }}" --approver "${{ inputs.approver }}" --confirm
+      - name: Record human approval
+        env:
+          TASK_ID: ${{ inputs.task_id }}
+          APPROVER: ${{ inputs.approver }}
+        run: python3 scripts/approve_ai_coder_task.py "$TASK_ID" --approver "$APPROVER" --confirm
       - run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add data/ai_coder_tasks.json
           git commit -m "Approve AI coder task"
           git push
+      - name: Report Coder runner state
+        env:
+          CODER_ENABLED: ${{ vars.AI_CODER_RUNNER_ENABLED }}
+        run: |
+          if [[ "$CODER_ENABLED" == "true" ]]; then
+            echo "Approved task will continue on the dedicated AI-Coder runner."
+          else
+            echo "::notice::Draft PR execution is disabled. Set AI_CODER_RUNNER_ENABLED=true only after the dedicated runner and credentials are ready."
+          fi
+
+  execute-draft-pr:
+    needs: approve
+    if: vars.AI_CODER_RUNNER_ENABLED == 'true'
+    runs-on: [self-hosted, onnellab-ai-coder]
+    timeout-minutes: 90
+    concurrency:
+      group: ai-coder-${{ inputs.task_id }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify dedicated runner
+        env:
+          AI_CODER_GITHUB_TOKEN: ${{ secrets.AI_CODER_GITHUB_TOKEN }}
+        run: bash scripts/preflight_ai_coder_runner.sh
+      - name: Create audited Draft PR
+        env:
+          GH_TOKEN: ${{ secrets.AI_CODER_GITHUB_TOKEN }}
+          TASK_ID: ${{ inputs.task_id }}
+        run: bash scripts/run_codex_approved_coder_task.sh "$TASK_ID" --execute
+      - name: Commit Draft PR audit record
+        env:
+          TASK_ID: ${{ inputs.task_id }}
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/ai_coder_tasks.json
+          git diff --cached --quiet && { echo "Draft PR audit record is missing" >&2; exit 1; }
+          git commit -m "Record AI coder Draft PR for ${TASK_ID}"
+          git pull --rebase origin main
+          git push origin HEAD:main
