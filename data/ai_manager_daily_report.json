@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-07-28T08:31:36+00:00",
+  "summary": {
+    "reviews_triaged": 10,
+    "high_risk_reports": 1,
+    "pricing_patterns": 0,
+    "replies_queued": 0,
+    "replies_published": 0,
+    "issues_created": 0
+  },
+  "requires_attention": [
+    {
+      "review_id": "report-778e20f8ea133bd166d1d9ca",
+      "category": "bug",
+      "actions": {
+        "reply": "not_needed",
+        "github_issue": "approval_required",
+        "store_copy": "not_needed",
+        "code_change": "investigate"
+      }
+    }
+  ]
+}

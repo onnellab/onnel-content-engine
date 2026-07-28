@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+"""Create a concise daily operations report without external AI/API calls."""
+from __future__ import annotations
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+def load(name: str, default: object) -> object:
+    path = ROOT / "data" / name
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
+
+def main() -> int:
+    triage = load("store_review_triage.json", {"items": []})
+    approvals = load("store_review_approvals.json", {"approvals": []})
+    issues = load("review_issue_publications.json", {"items": []})
+    items = triage.get("items", []) if isinstance(triage, dict) else []
+    queued = approvals.get("approvals", []) if isinstance(approvals, dict) else []
+    issue_items = issues.get("items", []) if isinstance(issues, dict) else []
+    high = [item for item in items if item.get("category") in {"bug", "data_loss", "security"}]
+    pricing = [item for item in items if item.get("category") == "pricing_confusion" and item.get("similar_reviews", 0) >= 3]
+    report = {
+        "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+        "summary": {"reviews_triaged": len(items), "high_risk_reports": len(high), "pricing_patterns": len(pricing), "replies_queued": sum(item.get("status") == "queued" for item in queued), "replies_published": sum(item.get("status") == "published" for item in queued), "issues_created": len(issue_items)},
+        "requires_attention": [{"review_id": item.get("review_id"), "category": item.get("category"), "actions": item.get("actions")} for item in high + pricing],
+    }
+    output = ROOT / "data" / "ai_manager_daily_report.json"
+    output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"generated {output}")
+    return 0
+if __name__ == "__main__": raise SystemExit(main())
