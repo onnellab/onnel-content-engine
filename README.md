@@ -346,6 +346,12 @@ Before enabling any future Play/App Store upload adapter, run **Check Store
 Submission Credentials** with `CREDENTIALS`. It validates only the Secret
 shape and never contacts a store API, uploads a binary, or submits a build.
 
+**Submit Internal Store Build** accepts only a `private_test` binary release.
+It uploads Android builds solely to Play `internal` and iOS builds solely to
+TestFlight. It cannot submit App Review, promote a Play release, or publish to
+customers. Configure the per-app package/bundle identifier in
+`data/internal_store_submission_config.json` before use.
+
 ## Store-alert mailbox
 
 `collect_gmail_policy_alerts.py` supports a dedicated Gmail label using OAuth

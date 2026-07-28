@@ -1,0 +1,41 @@
+name: Submit Internal Store Build
+on:
+  workflow_dispatch:
+    inputs:
+      release_id: {description: private_test binary release ID, required: true, type: string}
+      confirm: {description: Type INTERNAL_TEST to upload only to internal testing, required: true, type: string}
+permissions: {contents: read}
+jobs:
+  submit:
+    if: inputs.confirm == 'INTERNAL_TEST'
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - id: release
+        env:
+          RELEASE_ID: ${{ inputs.release_id }}
+        run: python3 scripts/prepare_internal_store_submission.py "$RELEASE_ID" --github-output "$GITHUB_OUTPUT"
+      - uses: ruby/setup-ruby@v1
+        with: {ruby-version: '3.3'}
+      - run: gem install fastlane --no-document
+      - name: Upload Android internal build only
+        if: steps.release.outputs.provider == 'google_play'
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          python3 scripts/check_store_submission_credentials.py google_play
+          printf '%s' "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > /tmp/google-play.json
+          fastlane supply --aab '${{ steps.release.outputs.artifact }}' --track internal --package_name '${{ steps.release.outputs.identifier }}' --json_key /tmp/google-play.json --skip_upload_metadata true --skip_upload_changelogs true --skip_upload_images true --skip_upload_screenshots true
+      - name: Upload iOS TestFlight build only
+        if: steps.release.outputs.provider == 'app_store'
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+        run: |
+          python3 scripts/check_store_submission_credentials.py app_store
+          python3 - <<'PY'
+          import json,os
+          json.dump({'key_id':os.environ['APP_STORE_CONNECT_KEY_ID'],'issuer_id':os.environ['APP_STORE_CONNECT_ISSUER_ID'],'key':os.environ['APP_STORE_CONNECT_PRIVATE_KEY']},open('/tmp/appstore-key.json','w'))
+          PY
+          fastlane pilot upload --ipa '${{ steps.release.outputs.artifact }}' --api_key_path /tmp/appstore-key.json --skip_waiting_for_build_processing true
