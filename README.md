@@ -251,6 +251,13 @@ the crash ledger and regenerates Doctor, Coder, and Manager outputs. Without a
 token it records `token_missing` and exits successfully; it never silently
 uses a personal browser session.
 
+Firebase Crashlytics can use the same ledger through
+`data/crashlytics_crash_sources.json` and a short-lived
+`FIREBASE_CRASHLYTICS_ACCESS_TOKEN` secret. It imports issue metadata only,
+never crash stack traces or user reports. The collector uses Firebase's
+official Crashlytics REST API and records `not_configured` or `token_missing`
+until a dedicated read-only OAuth integration is available.
+
 ## Store submission gate
 
 Public binary releases require a passing detailed QA report and a human
