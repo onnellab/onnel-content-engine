@@ -1,0 +1,20 @@
+name: Collect Private Test Build Status
+on:
+  schedule: [{cron: '15 * * * *'}]
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          CODEMAGIC_API_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
+        run: python3 scripts/collect_codemagic_private_test_builds.py
+      - run: python3 scripts/generate_ai_manager_report.py
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/private_test_build_requests.json data/private_test_build_sync_status.json data/codemagic_artifacts.csv data/ai_manager_daily_report.json
+          git diff --cached --quiet || git commit -m "Collect private test build status"
+          git push
