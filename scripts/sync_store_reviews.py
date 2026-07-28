@@ -284,6 +284,67 @@ def write_csv_rows(path: Path, rows: list[dict[str, str]]) -> None:
         writer.writerows({field: row.get(field, "") for field in FIELDS} for row in rows)
 
 
+def normalized_review_timestamp(value: str) -> str:
+    """Normalize equivalent ISO-8601 timestamps for cross-source matching."""
+    try:
+        parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+    except ValueError:
+        return value.strip()
+    if parsed.tzinfo is None:
+        return value.strip()
+    return parsed.astimezone(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def review_fingerprint(row: dict[str, str]) -> tuple[str, ...]:
+    """Return a stable identity for a review when Google exposes different IDs.
+
+    The Play lifetime report and the recent-reviews API do not always share an
+    identifier.  The submitted content, rating, and original submission time
+    are immutable review attributes and therefore safely identify that overlap.
+    """
+    normalize_text = lambda value: " ".join(value.split()).casefold()
+    return (
+        row.get("app_id", ""),
+        row.get("platform", ""),
+        normalize_text(row.get("rating", "")),
+        normalize_text(row.get("title", "")),
+        normalize_text(row.get("body", "")),
+        normalized_review_timestamp(row.get("created_at", "")),
+    )
+
+
+def merge_review_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Merge source aliases while preferring the canonical Play API ID."""
+    by_fingerprint: dict[tuple[str, ...], list[dict[str, str]]] = {}
+    for row in rows:
+        by_fingerprint.setdefault(review_fingerprint(row), []).append(row)
+
+    merged: list[dict[str, str]] = []
+    for matches in by_fingerprint.values():
+        # Lifetime-report fallback IDs are useful only when Play did not supply
+        # its canonical review ID. Prefer the latter for future incremental syncs.
+        ranked = sorted(
+            matches,
+            key=lambda row: (
+                row.get("review_id", "").startswith("report-"),
+                not bool(row.get("developer_reply", "")),
+                row.get("updated_at", ""),
+            ),
+        )
+        combined = dict(ranked[0])
+        for row in ranked[1:]:
+            for field in FIELDS:
+                if not combined.get(field, "") and row.get(field, ""):
+                    combined[field] = row[field]
+        combined["status"] = (
+            "replied"
+            if combined.get("developer_reply") or any(row.get("status") == "replied" for row in matches)
+            else "pending"
+        )
+        merged.append(combined)
+    return merged
+
+
 def fetch_json(url: str, token: str) -> dict[str, object]:
     request = urllib.request.Request(
         url,
@@ -817,14 +878,14 @@ def sync_reviews(
                 row.get("review_id", ""),
             )
             unique_rows[key] = row
-        rows = list(unique_rows.values())
+        rows = merge_review_rows(list(unique_rows.values()))
         fetched.extend(rows)
         counts[platform] += len(rows)
 
     for row in fetched:
         existing[(row["app_id"], row["platform"], row["review_id"])] = row
     rows = sorted(
-        existing.values(),
+        merge_review_rows(list(existing.values())),
         key=lambda row: (row.get("updated_at", ""), row.get("created_at", "")),
         reverse=True,
     )

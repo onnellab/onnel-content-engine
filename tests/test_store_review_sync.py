@@ -31,6 +31,7 @@ from sync_store_reviews import (  # noqa: E402
     normalize_google_reports_bucket,
     retry_delay_seconds,
     sync_reviews,
+    merge_review_rows,
     urlopen_with_retry,
 )
 
@@ -43,6 +44,18 @@ STORE = {
 
 
 class StoreReviewSyncTest(unittest.TestCase):
+    def test_merges_google_report_and_recent_api_aliases(self) -> None:
+        report = {
+            "review_id": "report-derived", "app_id": "APP-0001", "platform": "android",
+            "rating": "1", "title": "", "body": "Crashes on launch", "created_at": "2026-07-25T22:30:58Z",
+            "updated_at": "2026-07-25T22:30:58Z", "developer_reply": "", "status": "pending",
+        }
+        recent = {**report, "review_id": "play-canonical", "created_at": "2026-07-25T22:30:58+00:00"}
+
+        rows = merge_review_rows([report, recent])
+
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["review_id"], "play-canonical")
     def test_builds_short_lived_app_store_connect_jwt(self) -> None:
         r = bytes.fromhex("01" * 32)
         s = bytes.fromhex("80" + "02" * 31)

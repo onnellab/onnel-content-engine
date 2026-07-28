@@ -557,6 +557,20 @@ Body
             self.assertEqual(items[0]["human_review_required"], "true")
             self.assertIn("개인정보를 리뷰에 남기지 말고", items[0]["suggested_reply"])
 
+    def test_store_review_items_hide_cross_source_aliases(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            reviews = Path(temp) / "store_reviews.csv"
+            reviews.write_text(
+                "review_id,app_id,app_slug,app_name,platform,rating,title,body,reviewer_language,territory,app_version,created_at,updated_at,developer_reply,reply_updated_at,status,synced_at\n"
+                "report-derived,APP-0001,quivra,Quivra,android,1,,Crashes on launch,en,,,2026-07-25T22:30:58Z,2026-07-25T22:30:58Z,,,pending,2026-07-28T00:00:00Z\n"
+                "play-canonical,APP-0001,quivra,Quivra,android,1,,Crashes on launch,en,,,2026-07-25T22:30:58+00:00,2026-07-25T22:30:58+00:00,,,pending,2026-07-28T00:00:00Z\n",
+                encoding="utf-8",
+            )
+            items = store_review_items(reviews)
+
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["review_id"], "play-canonical")
+
 
 if __name__ == "__main__":
     unittest.main()

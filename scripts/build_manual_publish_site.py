@@ -11,7 +11,7 @@ import os
 import re
 import shutil
 import subprocess
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import quote
 from zoneinfo import ZoneInfo
@@ -352,8 +352,31 @@ def store_status_items(store_versions_path: Path = DEFAULT_STORE_VERSIONS) -> li
 
 
 def store_review_items(path: Path = DEFAULT_STORE_REVIEWS) -> list[dict[str, str]]:
-    items: list[dict[str, str]] = []
+    # The sync normally removes Google Play report/API aliases. Keep the
+    # dashboard defensive for an already-generated or manually imported CSV.
+    def fingerprint(row: dict[str, str]) -> tuple[str, ...]:
+        normalize_text = lambda value: " ".join(value.split()).casefold()
+        timestamp = row.get("created_at", "").strip().replace("Z", "+00:00")
+        try:
+            timestamp = datetime.fromisoformat(timestamp).astimezone(timezone.utc).replace(microsecond=0).isoformat()
+        except ValueError:
+            pass
+        return (
+            row.get("app_id", ""), row.get("platform", ""), normalize_text(row.get("rating", "")),
+            normalize_text(row.get("title", "")), normalize_text(row.get("body", "")), timestamp,
+        )
+
+    source_rows: dict[tuple[str, ...], dict[str, str]] = {}
     for row in read_csv_rows(path):
+        key = fingerprint(row)
+        prior = source_rows.get(key)
+        if prior is None or (
+            prior.get("review_id", "").startswith("report-")
+            and not row.get("review_id", "").startswith("report-")
+        ):
+            source_rows[key] = row
+    items: list[dict[str, str]] = []
+    for row in source_rows.values():
         suggestion = generate_reply(row)
         items.append(
             {
@@ -3814,12 +3837,16 @@ def html_document(
         item.status === 'replied' || item.developer_reply ? t('storeReviewReplied') : t('storeReviewPending'),
       ].filter(Boolean).join(' · ');
 
-      const reviewTitle = document.createElement('strong');
-      reviewTitle.textContent = item.title || `${{item.rating || 0}} / 5`;
       const body = document.createElement('p');
       body.className = 'store-review-body';
       body.textContent = item.body || '—';
-      card.append(head, meta, reviewTitle, body);
+      card.append(head, meta);
+      if (item.title) {{
+        const reviewTitle = document.createElement('strong');
+        reviewTitle.textContent = item.title;
+        card.append(reviewTitle);
+      }}
+      card.append(body);
 
       if (item.developer_reply) {{
         const existingLabel = document.createElement('strong');
