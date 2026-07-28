@@ -23,6 +23,22 @@ def main() -> int:
     release = next((item for item in read_csv(RELEASES_PATH, RELEASE_HEADER) if item["release_id"] == args.release_id), None)
     if not release or release["release_type"] != "binary" or release["release_channel"] != "public":
         raise SystemExit("release must be a public binary release")
+    candidate_path = ROOT / "data" / "release-candidate-reports" / f"{args.task_id}.json"
+    if not candidate_path.is_file():
+        raise SystemExit(f"release candidate report not found: {candidate_path.relative_to(ROOT)}")
+    candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+    candidate_keys = ("pub_get", "static_analysis", "tests", "android_release_bundle", "ios_unsigned_release_build")
+    if candidate.get("task_id") != args.task_id or any(candidate.get(key) != "passed" for key in candidate_keys):
+        raise SystemExit("release candidate did not pass every required build check")
+    with (ROOT / "data" / "apps_registry.csv").open(encoding="utf-8", newline="") as handle:
+        import csv
+        app = next((item for item in csv.DictReader(handle) if item["slug"] == release["app_slug"]), None)
+    if not app:
+        raise SystemExit("release app is missing from registry")
+    if "ios" in app.get("platforms", "").split("|"):
+        device_path = ROOT / "data" / "ios-device-qa-reports" / f"{args.task_id}.json"
+        if not device_path.is_file() or json.loads(device_path.read_text(encoding="utf-8")).get("status") != "PASS":
+            raise SystemExit("iOS public release requires a recorded physical-device QA PASS")
     report = ROOT / "data" / "qa-reports" / f"{args.task_id}.json"
     if not report.is_file():
         raise SystemExit(f"QA report not found: {report.relative_to(ROOT)}")
