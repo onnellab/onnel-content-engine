@@ -280,6 +280,15 @@ Policy tasks require a separate `ASSESS` approval before a local Codex
 read-only assessment packet can be generated. That approval does not permit a
 patch, store response, appeal, submission, or release.
 
+Run one approved assessment with:
+
+```bash
+scripts/run_codex_policy_assessment.sh TASK_ID
+```
+
+The runner uses Codex read-only mode and rejects results unless they explicitly
+state `patch_authorized: false` with evidence references.
+
 Approved replies are recorded in `data/store_review_approvals.json` before any
 publisher may consume them. The approval CLI is useful for audited local use:
 
