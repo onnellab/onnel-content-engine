@@ -230,6 +230,15 @@ To create personalized drafts without an API, run
 `generated/review-replies/review_packet.md` to Codex with
 `prompts/codex_review_replies.md`.
 
+On a machine signed into the Codex CLI, run the full local draft-only workflow:
+
+```bash
+bash scripts/run_codex_review_drafts.sh
+```
+
+It permits only the review-draft file and packet outputs, validates the result,
+and never publishes, queues, commits, or pushes.
+
 ---
 
 # Content Categories
