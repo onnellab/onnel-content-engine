@@ -232,6 +232,11 @@ branch, blocks protected-path changes, runs `flutter analyze`, and only then
 pushes a Draft PR. It never merges, deploys, publishes, or changes store
 settings. The generated PR must still pass the QA and human merge gates.
 
+When an app was created from `onnellab-flutter-template`, the runner uses its
+`tool/quality_gate.sh` instead of the basic analysis/test fallback. That keeps
+formatting, patch-note, and app-specific safety rules in the app repository as
+the source of truth.
+
 For a recorded Draft PR, generate the detailed read-only Codex QA report:
 
 ```bash

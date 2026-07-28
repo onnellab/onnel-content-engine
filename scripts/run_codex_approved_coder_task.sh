@@ -44,7 +44,9 @@ changed="$(git -C "$app_path" diff --name-only)"
 if printf '%s\n' "$changed" | rg -n '(^|/)(ios/Runner/Info\.plist|android/app/src/main/AndroidManifest\.xml|.*secret.*|.*credential.*|.*migration.*|.*database.*|.*billing.*|.*payment.*|.*auth.*|.*crypto.*)$' -i; then
   echo "protected-path change detected; stopping before commit" >&2; exit 1
 fi
-if [[ -f "$app_path/pubspec.yaml" ]]; then
+if [[ -x "$app_path/tool/quality_gate.sh" ]]; then
+  (cd "$app_path" && bash tool/quality_gate.sh)
+elif [[ -f "$app_path/pubspec.yaml" ]]; then
   (cd "$app_path" && flutter analyze && flutter test)
 fi
 git -C "$app_path" add -A
