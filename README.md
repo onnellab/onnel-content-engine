@@ -359,6 +359,11 @@ reproduction steps for an uploaded build. Do not enter personal data, passwords,
 tokens, logs, or files. Crash, data-loss, and security reports become proposed
 reproduction-first Coder tasks and still require a separate human approval.
 
+After testing, use **Approve Internal Test Result** with an HTTPS evidence link.
+A PASS is blocked while that build has high/critical internal-test findings.
+The result is an audit record only: it cannot promote, submit, or publish a
+release.
+
 ## Store-alert mailbox
 
 `collect_gmail_policy_alerts.py` supports a dedicated Gmail label using OAuth

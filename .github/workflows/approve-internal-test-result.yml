@@ -1,0 +1,30 @@
+name: Approve Internal Test Result
+on:
+  workflow_dispatch:
+    inputs:
+      release_id: {description: Successfully uploaded private-test release ID, required: true, type: string}
+      outcome: {description: Human internal-test outcome, required: true, type: choice, options: [pass, fail]}
+      approver: {description: Human approver name, required: true, type: string}
+      evidence_url: {description: HTTPS link to the test evidence, required: true, type: string}
+      confirm: {description: Type INTERNAL_TEST_RESULT to record, required: true, type: string}
+permissions: {contents: write}
+jobs:
+  approve:
+    if: inputs.confirm == 'INTERNAL_TEST_RESULT'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Record human test outcome
+        env:
+          RELEASE_ID: ${{ inputs.release_id }}
+          OUTCOME: ${{ inputs.outcome }}
+          APPROVER: ${{ inputs.approver }}
+          EVIDENCE_URL: ${{ inputs.evidence_url }}
+        run: python3 scripts/approve_internal_test_result.py "$RELEASE_ID" --outcome "$OUTCOME" --approver "$APPROVER" --evidence-url "$EVIDENCE_URL" --confirm
+      - run: python3 scripts/generate_ai_manager_report.py
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/internal_test_results.json data/ai_manager_daily_report.json
+          git diff --cached --quiet || git commit -m "Record internal test result"
+          git push
