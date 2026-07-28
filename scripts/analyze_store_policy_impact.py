@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+"""Create evidence-only review tasks for changed official store-policy pages."""
+from __future__ import annotations
+import csv,json
+from datetime import datetime,timezone
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+def main() -> int:
+ sources=json.loads((ROOT/"data/store_policy_watchlist.json").read_text(encoding="utf-8")).get("sources",[])
+ changed=[source for source in sources if source.get("status")=="changed"]
+ with (ROOT/"data/apps_registry.csv").open(encoding="utf-8",newline="") as handle: apps=list(csv.DictReader(handle))
+ tasks=[]
+ for source in changed:
+  platform="android" if source.get("store")=="google_play" else "ios"
+  for app in apps:
+   if platform in app.get("platforms",""):
+    tasks.append({"task_id":f"policy-{source['store']}-{app['app_slug']}","app_slug":app["app_slug"],"store":source["store"],"status":"review_required","evidence":{"url":source["url"],"content_hash":source.get("content_hash"),"checked_at":source.get("checked_at")},"scope":["store listing","permissions and privacy disclosures","billing and subscriptions","SDK policy implications"],"conclusion":"No violation inferred. Compare the changed official policy with app code and store metadata before action."})
+ path=ROOT/"data/store_policy_impact_tasks.json"; path.write_text(json.dumps({"generated_at":datetime.now(timezone.utc).replace(microsecond=0).isoformat(),"tasks":tasks},ensure_ascii=False,indent=2)+"\n",encoding="utf-8"); print(f"generated {path}"); return 0
+if __name__=="__main__": raise SystemExit(main())
