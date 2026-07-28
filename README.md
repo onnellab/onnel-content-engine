@@ -354,6 +354,11 @@ customers. Configure the per-app package/bundle identifier in
 Each successful upload is recorded in `data/internal_store_submissions.json`
 with its workflow-run URL; this audit record does not promote or publish it.
 
+Use **Record Internal Test Feedback** to log only a short issue summary and
+reproduction steps for an uploaded build. Do not enter personal data, passwords,
+tokens, logs, or files. Crash, data-loss, and security reports become proposed
+reproduction-first Coder tasks and still require a separate human approval.
+
 ## Store-alert mailbox
 
 `collect_gmail_policy_alerts.py` supports a dedicated Gmail label using OAuth

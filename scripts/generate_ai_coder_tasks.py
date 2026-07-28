@@ -8,6 +8,8 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 def main() -> int:
     findings=json.loads((ROOT/"data/ai_doctor_findings.json").read_text(encoding="utf-8")).get("findings",[])
+    internal_path=ROOT/"data/internal_test_findings.json"
+    if internal_path.exists(): findings.extend(json.loads(internal_path.read_text(encoding="utf-8")).get("findings",[]))
     with (ROOT/"data/app_release_config.csv").open(encoding="utf-8",newline="") as handle: repos={row["app_slug"]:row["repository"] for row in csv.DictReader(handle)}
     path=ROOT/"data/ai_coder_tasks.json"
     previous=json.loads(path.read_text(encoding="utf-8")).get("tasks",[]) if path.exists() else []

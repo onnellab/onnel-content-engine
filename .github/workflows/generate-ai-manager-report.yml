@@ -18,6 +18,8 @@ jobs:
         env: {FIREBASE_CRASHLYTICS_ACCESS_TOKEN: ${{ secrets.FIREBASE_CRASHLYTICS_ACCESS_TOKEN }}}
       - name: Run AI-Doctor correlation
         run: python3 scripts/analyze_incidents.py
+      - name: Analyze internal tester feedback
+        run: python3 scripts/analyze_internal_test_feedback.py
       - name: Prepare AI-Coder tasks
         run: python3 scripts/generate_ai_coder_tasks.py
       - name: Assess OS update impact
@@ -34,6 +36,6 @@ jobs:
       - run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add data/crash_incidents.csv data/crash_sync_status.json data/crashlytics_sync_status.json data/ai_doctor_findings.json data/ai_coder_tasks.json data/os_update_impact_tasks.json data/ai_manager_daily_report.json
+          git add data/crash_incidents.csv data/crash_sync_status.json data/crashlytics_sync_status.json data/ai_doctor_findings.json data/internal_test_findings.json data/ai_coder_tasks.json data/os_update_impact_tasks.json data/ai_manager_daily_report.json
           git diff --cached --quiet || git commit -m "Generate AI manager report"
           git push
