@@ -15,6 +15,7 @@ def main() -> int:
     triage = load("store_review_triage.json", {"items": []})
     approvals = load("store_review_approvals.json", {"approvals": []})
     issues = load("review_issue_publications.json", {"items": []})
+    doctor = load("ai_doctor_findings.json", {"findings": []})
     crash_rows = []
     crash_path = ROOT / "data" / "crash_incidents.csv"
     if crash_path.exists():
@@ -27,7 +28,7 @@ def main() -> int:
     pricing = [item for item in items if item.get("category") == "pricing_confusion" and item.get("similar_reviews", 0) >= 3]
     report = {
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
-        "summary": {"reviews_triaged": len(items), "high_risk_reports": len(high), "pricing_patterns": len(pricing), "replies_queued": sum(item.get("status") == "queued" for item in queued), "replies_published": sum(item.get("status") == "published" for item in queued), "issues_created": len(issue_items), "new_crash_incidents": sum(row.get("status") == "new" for row in crash_rows)},
+        "summary": {"reviews_triaged": len(items), "high_risk_reports": len(high), "pricing_patterns": len(pricing), "replies_queued": sum(item.get("status") == "queued" for item in queued), "replies_published": sum(item.get("status") == "published" for item in queued), "issues_created": len(issue_items), "new_crash_incidents": sum(row.get("status") == "new" for row in crash_rows), "doctor_high_findings": sum(item.get("severity") in {"high", "critical"} for item in doctor.get("findings", []))},
         "requires_attention": [{"review_id": item.get("review_id"), "category": item.get("category"), "actions": item.get("actions")} for item in high + pricing],
     }
     output = ROOT / "data" / "ai_manager_daily_report.json"
