@@ -12,4 +12,5 @@ in natural language, but do not copy the review verbatim. Use only supplied
 facts. Never claim an unverified cause, fix, release date, refund result, or
 future feature. Never ask for personal data in public. Keep the review's
 language where practical; otherwise use English. Do not publish, queue, commit,
-or edit any other file.
+or edit any other file. Run `python3 scripts/validate_store_review_drafts.py`
+before returning the draft file for approval.

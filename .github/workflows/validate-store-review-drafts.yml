@@ -1,0 +1,13 @@
+name: Validate Store Review Drafts
+on:
+  pull_request:
+    paths: [data/store_review_ai_drafts.json, data/store_reviews.csv, docs/operations/**, scripts/validate_store_review_drafts.py]
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.x' }
+      - run: python3 scripts/validate_store_review_drafts.py
