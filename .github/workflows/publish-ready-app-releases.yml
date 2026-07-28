@@ -75,7 +75,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing_status.json generated/reports/app_releases.md generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js generated/manual-publish/icon-180.png generated/manual-publish/icon-192.png generated/manual-publish/icon-512.png
+          git add data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing.csv data/ai_provider_pricing_status.json data/melivra_ai_credit_policy.csv generated/reports/app_releases.md generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js generated/manual-publish/icon-180.png generated/manual-publish/icon-192.png generated/manual-publish/icon-512.png
           if git diff --cached --quiet; then
             echo "No content engine release state changes"
           else

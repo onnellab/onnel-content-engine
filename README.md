@@ -381,6 +381,15 @@ Each successful upload is recorded in `data/internal_store_submissions.json`
 with its workflow-run URL and SHA-256; this audit record does not promote or
 publish it.
 
+**Sync Internal Store Processing Status** checks pending uploads hourly through
+the official Android Publisher and App Store Connect APIs. It records the
+provider state, exact Android version code or Apple build ID, official API URL,
+check time, and state-change history in
+`data/internal_store_processing_status.json`. The Play API requires a temporary
+edit to read the internal track; the collector always deletes that edit and
+never commits it. The collector cannot upload, promote, submit for review, or
+mark a build available to testers.
+
 After Play/TestFlight processing completes, use **Approve Internal Test
 Availability** with console evidence. Only then can **Record Internal Test
 Feedback** accept reports for that build.
