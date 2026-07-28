@@ -65,6 +65,7 @@ jobs:
           done
           python3 scripts/sync_store_reviews.py
           python3 scripts/triage_store_reviews.py
+          python3 scripts/generate_ai_review_drafts.py
 
       - name: Build dashboard
         run: python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
@@ -75,7 +76,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase --autostash origin main
-          git add data/store_reviews.csv data/store_review_triage.json generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js
+          git add data/store_reviews.csv data/store_review_triage.json generated/review-replies/review_packet.json generated/review-replies/review_packet.md generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js
           if git diff --cached --quiet; then
             echo "No store review changes to commit"
           else
