@@ -355,10 +355,11 @@ disabled until separately configured.
 
 ## Manager notification
 
-The daily Manager report can update one GitHub issue instead of creating
-repeated alerts. Set `enabled` to `true` in
-`data/ai_manager_notification_config.json` only after choosing the target
-repository. The report is informational and cannot authorize any action.
+The daily Manager report updates one issue in this private operations
+repository instead of creating repeated alerts. It summarizes pending Coder
+approvals, Draft PRs, portable QA passes/blocks, and private-test/store gates,
+then links to the existing human approval workflows. The report is
+informational and cannot authorize any action.
 
 For Slack, Discord, or a generic HTTPS webhook, enable
 `data/ai_manager_webhook_config.json` and set the

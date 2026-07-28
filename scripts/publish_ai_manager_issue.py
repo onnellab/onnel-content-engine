@@ -24,13 +24,29 @@ def request(path: str, token: str, method: str = "GET", payload: object | None =
         raise RuntimeError(f"GitHub notification request failed: {error}") from error
 
 
-def body(report: dict) -> str:
+def attention_id(item: dict) -> str:
+    for key in ("review_id", "task_id", "finding_id", "release_id", "orchestration_id"):
+        if item.get(key):
+            return str(item[key])
+    return "unidentified"
+
+
+def body(report: dict, repository: str = "") -> str:
     summary = report.get("summary", {})
     lines = ["<!-- ai-manager-report: keep this issue open; the automation updates it. -->", "# AI Manager daily operations report", "", f"Generated: `{report.get('generated_at', '')}`", "", "## Summary"]
     lines.extend(f"- {key.replace('_', ' ')}: **{value}**" for key, value in summary.items())
     attention = report.get("requires_attention", [])
     lines.extend(["", "## Requires attention"])
-    lines.extend(f"- `{item.get('review_id', 'unknown')}` — {item.get('category', 'unknown')}" for item in attention) if attention else lines.append("- No reported review items require attention.")
+    lines.extend(f"- `{attention_id(item)}` — {item.get('category', 'unknown')}" for item in attention) if attention else lines.append("- No reported operations require attention.")
+    if repository:
+        workflow_root = f"https://github.com/{repository}/actions/workflows"
+        lines.extend([
+            "",
+            "## Human approval workflows",
+            f"- [Approve one proposed Coder task]({workflow_root}/approve-ai-coder-task.yml)",
+            f"- [Merge one QA-passed Draft PR]({workflow_root}/merge-approved-app-pr.yml)",
+            f"- [Start private-test orchestration]({workflow_root}/start-private-test-orchestration.yml)",
+        ])
     lines.extend(["", "This report is informational. It does not approve replies, code changes, merges, submissions, or releases."])
     return "\n".join(lines) + "\n"
 
@@ -49,7 +65,7 @@ def main() -> int:
     report = json.loads((ROOT / "data/ai_manager_daily_report.json").read_text(encoding="utf-8"))
     issues = request(f"/repos/{repository}/issues?state=open&per_page=100", token)
     existing = next((item for item in issues if isinstance(item, dict) and item.get("title") == title and "pull_request" not in item), None) if isinstance(issues, list) else None
-    payload = {"title": title, "body": body(report)}
+    payload = {"title": title, "body": body(report, repository)}
     if existing:
         request(f"/repos/{repository}/issues/{existing['number']}", token, "PATCH", payload)
         print(f"updated manager issue #{existing['number']}")
