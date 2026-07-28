@@ -11,12 +11,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - id: source
+        env:
+          RELEASE_ID: ${{ inputs.release_id }}
+        run: python3 scripts/resolve_private_test_artifact_source.py "$RELEASE_ID" --github-output "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v4
+        if: steps.source.outputs.source == 'github_actions'
+        with:
+          name: ${{ steps.source.outputs.artifact_name }}
+          run-id: ${{ steps.source.outputs.github_run_id }}
+          github-token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+          path: ${{ steps.source.outputs.artifact_dir }}
       - name: Resolve verified private-test artifact
+        if: steps.source.outputs.source == 'codemagic'
         env:
           CODEMAGIC_API_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
         run: |
           python3 scripts/sync_codemagic_artifact_urls.py
           python3 scripts/download_codemagic_artifacts.py
+          python3 scripts/fill_ready_app_releases.py
+          python3 scripts/validate_app_releases.py
+      - name: Validate downloaded Android private-test artifact
+        if: steps.source.outputs.source == 'github_actions'
+        run: |
           python3 scripts/fill_ready_app_releases.py
           python3 scripts/validate_app_releases.py
       - id: release

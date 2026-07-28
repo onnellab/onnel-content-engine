@@ -88,8 +88,8 @@ def main() -> int:
     release = next((item for item in releases if item["release_id"] == args.release_id), None)
     tasks = json.loads((ROOT / "data" / "ai_coder_tasks.json").read_text(encoding="utf-8")).get("tasks", [])
     task = next((item for item in tasks if item.get("task_id") == args.task_id), None)
-    if not release or release["release_type"] != "binary" or release["release_channel"] != "private_test" or release["status"] != "planned":
-        raise SystemExit("release must be a planned private_test binary")
+    if not release or release["platform"] != "ios" or release["release_type"] != "binary" or release["release_channel"] != "private_test" or release["status"] != "planned":
+        raise SystemExit("release must be a planned iOS private_test binary")
     if not task or task.get("status") != "merged" or task.get("app_slug") != release["app_slug"] or task.get("repository") != release["repository"]:
         raise SystemExit("merged Coder task must match the selected private-test release app")
     builds = read_csv(CODEMAGIC_BUILDS_PATH, CODEMAGIC_BUILDS_HEADER)
