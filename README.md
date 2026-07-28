@@ -351,6 +351,8 @@ It uploads Android builds solely to Play `internal` and iOS builds solely to
 TestFlight. It cannot submit App Review, promote a Play release, or publish to
 customers. Configure the per-app package/bundle identifier in
 `data/internal_store_submission_config.json` before use.
+Each successful upload is recorded in `data/internal_store_submissions.json`
+with its workflow-run URL; this audit record does not promote or publish it.
 
 ## Store-alert mailbox
 
