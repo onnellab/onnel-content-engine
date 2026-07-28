@@ -247,6 +247,12 @@ their required template entry rules, quality-gate scripts, and Korean/English
 patch-note/store-copy documents. Apps without the marker remain supported as
 legacy apps rather than being falsely treated as template compliant.
 
+For a template-based app, **Propose App Template Quality Gate Sync** creates a
+Draft PR containing only `.github/workflows/ci.yml`, `tool/quality_gate.sh`,
+and `tool/verify_patch_notes.sh` from a selected template ref. It requires the
+explicit `TEMPLATE_SYNC` confirmation, creates no PR when those files already
+match, and never merges or deploys.
+
 For a recorded Draft PR, generate the detailed read-only Codex QA report:
 
 ```bash

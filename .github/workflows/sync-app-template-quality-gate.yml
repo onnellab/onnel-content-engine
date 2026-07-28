@@ -1,0 +1,55 @@
+name: Propose App Template Quality Gate Sync
+on:
+  workflow_dispatch:
+    inputs:
+      repository: {description: Template-based app repository, required: true, type: string}
+      ref: {description: Base branch, required: true, default: main, type: string}
+      template_ref: {description: Template branch or tag, required: true, default: main, type: string}
+      confirm_sync: {description: Type TEMPLATE_SYNC to create one Draft PR, required: true, type: string}
+permissions: {contents: write, pull-requests: write}
+jobs:
+  sync:
+    if: inputs.confirm_sync == 'TEMPLATE_SYNC'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
+          path: app
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+      - uses: actions/checkout@v4
+        with:
+          repository: onnellab/onnellab-flutter-template
+          ref: ${{ inputs.template_ref }}
+          path: template-source
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+      - name: Verify template-based app and prepare branch
+        working-directory: app
+        run: |
+          set -euo pipefail
+          test -s .onnellab-template-version
+          git switch -c "automation/template-quality-gate-${{ github.run_id }}"
+          mkdir -p .github/workflows tool
+          cp ../template-source/template/.github/workflows/ci.yml .github/workflows/ci.yml
+          cp ../template-source/template/tool/quality_gate.sh tool/quality_gate.sh
+          cp ../template-source/template/tool/verify_patch_notes.sh tool/verify_patch_notes.sh
+          chmod +x tool/quality_gate.sh tool/verify_patch_notes.sh
+      - name: Create Draft PR only when files differ
+        working-directory: app
+        env:
+          GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+          REPOSITORY: ${{ inputs.repository }}
+          BASE_REF: ${{ inputs.ref }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet; then
+            echo "Template quality-gate files are already current"
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add .github/workflows/ci.yml tool/quality_gate.sh tool/verify_patch_notes.sh
+          git commit -m "Sync Flutter template quality gate"
+          git push -u origin HEAD
+          gh pr create --repo "$REPOSITORY" --base "$BASE_REF" --head "$(git branch --show-current)" --draft --title "Sync Flutter template quality gate" --body "This Draft PR updates only the template CI and quality-gate scripts. Review the diff before merging. It does not change app behavior, store metadata, signing, or deployment settings."
