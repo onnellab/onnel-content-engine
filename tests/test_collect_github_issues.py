@@ -134,6 +134,7 @@ class GitHubIssueCollectorTest(unittest.TestCase):
 
         self.assertIn("issues: read", workflow)
         self.assertIn("collect_github_issues.py", workflow)
+        self.assertIn("ONNELLAB_RELEASE_TOKEN", workflow)
         self.assertIn("ONNELLAB_GITHUB_PAGES_TOKEN", workflow)
         self.assertNotIn("issues: write", workflow)
         self.assertNotIn("gh issue", workflow)
