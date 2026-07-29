@@ -344,6 +344,9 @@ every app repository in `data/app_release_config.csv`. It excludes pull
 requests and deliberately stores no issue body, author, comment, attachment,
 or log content. Open/closed observations are preserved in
 `data/github_issues.json`; the monitor cannot edit or close an app issue.
+Private app repositories require the dedicated `AI_SCOUT_GITHUB_TOKEN` Actions
+secret with read-only repository metadata and Issues access. Release and Pages
+tokens remain fallbacks for repositories they can already read.
 
 ## Local Codex Scout schedule
 
