@@ -6,12 +6,14 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import generate_ai_manager_report
 import publish_ai_manager_issue
+import publish_ai_manager_telegram
 
 
 class AiManagerAutomationTest(unittest.TestCase):
@@ -67,10 +69,50 @@ class AiManagerAutomationTest(unittest.TestCase):
     def test_public_repo_issue_and_external_webhook_stay_disabled(self) -> None:
         issue = json.loads((ROOT / "data" / "ai_manager_notification_config.json").read_text())
         webhook = json.loads((ROOT / "data" / "ai_manager_webhook_config.json").read_text())
+        telegram = json.loads((ROOT / "data" / "ai_manager_telegram_config.json").read_text())
 
         self.assertFalse(issue["enabled"])
         self.assertEqual(issue["repository"], "onnellab/onnel-content-engine")
         self.assertFalse(webhook["enabled"])
+        self.assertFalse(telegram["enabled"])
+
+    def test_telegram_report_is_informational_and_links_to_approval_workflows(self) -> None:
+        report = {
+            "generated_at": "2026-07-29T00:00:00+00:00",
+            "summary": {"coder_tasks_approved_pending": 1, "qa_reports_passed": 2},
+            "requires_attention": [
+                {"task_id": "coder-1", "category": "coder_approved_pending"}
+            ],
+        }
+
+        text = publish_ai_manager_telegram.message(report)
+        buttons = publish_ai_manager_telegram.keyboard("onnellab/onnel-content-engine")
+
+        self.assertIn("coder-1", text)
+        self.assertIn("Informational only", text)
+        urls = [
+            button["url"]
+            for row in buttons["inline_keyboard"]
+            for button in row
+        ]
+        self.assertTrue(any("approve-ai-coder-task.yml" in url for url in urls))
+        self.assertTrue(any("merge-approved-app-pr.yml" in url for url in urls))
+        self.assertNotIn("callback_data", json.dumps(buttons))
+
+    def test_telegram_error_does_not_expose_bot_token(self) -> None:
+        token = "123456:secret-token"
+        error = HTTPError(
+            f"https://api.telegram.org/bot{token}/sendMessage",
+            401,
+            "Unauthorized",
+            {},
+            None,
+        )
+        with patch.object(publish_ai_manager_telegram, "urlopen", side_effect=error):
+            with self.assertRaisesRegex(RuntimeError, "HTTP 401") as raised:
+                publish_ai_manager_telegram.send(token, {"chat_id": "1", "text": "test"})
+
+        self.assertNotIn(token, str(raised.exception))
 
 
 if __name__ == "__main__":

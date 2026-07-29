@@ -1,0 +1,5 @@
+{
+  "enabled": false,
+  "repository": "onnellab/onnel-content-engine",
+  "max_attention_items": 8
+}

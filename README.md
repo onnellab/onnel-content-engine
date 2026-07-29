@@ -388,6 +388,12 @@ For Slack, Discord, or a generic HTTPS webhook, enable
 `OPS_MANAGER_WEBHOOK_URL` Actions secret. Only the Manager summary is sent;
 credentials, review text, telemetry, and approval controls are never sent.
 
+For a Telegram summary with links to the existing audited GitHub approval
+workflows, enable `data/ai_manager_telegram_config.json` and set the
+`TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` Actions secrets. Telegram buttons
+open GitHub workflow pages; they never approve, merge, publish, or deploy
+through Telegram callbacks.
+
 Before enabling any future Play/App Store upload adapter, run **Check Store
 Submission Credentials** with `CREDENTIALS`. It validates only the Secret
 shape and never contacts a store API, uploads a binary, or submits a build.
