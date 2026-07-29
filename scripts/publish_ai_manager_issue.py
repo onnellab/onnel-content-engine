@@ -60,12 +60,15 @@ def main() -> int:
     if not token:
         raise SystemExit("GITHUB_TOKEN is required when notifications are enabled")
     repository, title = str(config.get("repository", "")), str(config.get("title", ""))
+    workflow_repository = str(config.get("workflow_repository", repository))
     if "/" not in repository or not title:
         raise SystemExit("notification repository and title are required")
+    if "/" not in workflow_repository:
+        raise SystemExit("workflow repository is required")
     report = json.loads((ROOT / "data/ai_manager_daily_report.json").read_text(encoding="utf-8"))
     issues = request(f"/repos/{repository}/issues?state=open&per_page=100", token)
     existing = next((item for item in issues if isinstance(item, dict) and item.get("title") == title and "pull_request" not in item), None) if isinstance(issues, list) else None
-    payload = {"title": title, "body": body(report, repository)}
+    payload = {"title": title, "body": body(report, workflow_repository)}
     if existing:
         request(f"/repos/{repository}/issues/{existing['number']}", token, "PATCH", payload)
         print(f"updated manager issue #{existing['number']}")

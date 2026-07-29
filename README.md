@@ -379,10 +379,12 @@ disabled until separately configured.
 
 ## Manager notification
 
-The daily Manager report updates one GitHub issue in the private
-`onnellab/onnellab-ops` repository instead of creating repeated alerts. It uses
-the dedicated `OPS_MANAGER_GITHUB_TOKEN` secret when configured, otherwise the
-existing release token, and never posts the report to this public repository.
+The daily Manager report can update one GitHub issue in the private
+`onnellab/onnellab-ops` repository instead of creating repeated alerts. Keep
+the notification disabled until a dedicated `OPS_MANAGER_GITHUB_TOKEN` with
+Issues read/write access to that repository is configured; the existing
+release token does not have access. The issue links back to the approval
+workflows in this automation repository and is never posted publicly.
 The report summarizes pending Coder approvals, Draft PRs, portable QA
 passes/blocks, and private-test/store gates, then links to existing human
 approval workflows. It is informational and cannot authorize any action.
