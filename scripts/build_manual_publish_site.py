@@ -391,14 +391,15 @@ def store_review_items(path: Path = DEFAULT_STORE_REVIEWS, ai_drafts_path: Path 
     triage_by_review_id = {item["review_id"]: item for item in triage["items"]}
     items: list[dict[str, object]] = []
     for row in source_rows.values():
-        suggestion = generate_reply(row)
+        is_replied = bool(row.get("developer_reply", "").strip()) or row.get("status") == "replied"
+        suggestion = {} if is_replied else generate_reply(row)
         custom = ai_drafts.get(row.get("review_id", ""), {})
-        if isinstance(custom.get("reply"), str) and custom["reply"].strip():
+        if not is_replied and isinstance(custom.get("reply"), str) and custom["reply"].strip():
             suggestion["suggested_reply"] = custom["reply"].strip()
             suggestion["reply_category"] = "codex_custom"
-        suggestion["approval_translation_required"] = requires_korean_approval_translation(row)
-        suggestion["review_translation_ko"] = str(custom.get("review_translation_ko", "")).strip()
-        suggestion["reply_translation_ko"] = str(custom.get("reply_translation_ko", "")).strip()
+        suggestion["approval_translation_required"] = not is_replied and requires_korean_approval_translation(row)
+        suggestion["review_translation_ko"] = "" if is_replied else str(custom.get("review_translation_ko", "")).strip()
+        suggestion["reply_translation_ko"] = "" if is_replied else str(custom.get("reply_translation_ko", "")).strip()
         items.append(
             {
                 "review_id": row.get("review_id", ""),
@@ -3906,6 +3907,7 @@ def html_document(
     function storeReviewCard(item) {{
       const card = document.createElement('article');
       card.className = 'status-card store-review-card';
+      const isReplied = item.status === 'replied' || Boolean(item.developer_reply);
 
       const head = document.createElement('div');
       head.className = 'store-review-head';
@@ -3914,7 +3916,8 @@ def html_document(
       const stars = document.createElement('span');
       stars.className = 'store-review-stars';
       const rating = Math.max(0, Math.min(5, Number(item.rating) || 0));
-      stars.textContent = `${{'★'.repeat(rating)}}${{'☆'.repeat(5 - rating)}}`;
+      stars.textContent = `${{rating}} / 5`;
+      stars.setAttribute('aria-label', `Rating ${{rating}} out of 5`);
       head.append(title, stars);
 
       const meta = document.createElement('div');
@@ -3938,7 +3941,7 @@ def html_document(
       }}
       card.append(body);
 
-      const translationRequired = Boolean(item.approval_translation_required);
+      const translationRequired = !isReplied && Boolean(item.approval_translation_required);
       let replyTranslation = null;
       if (translationRequired) {{
         const reviewTranslationLabel = document.createElement('strong');
@@ -3994,6 +3997,7 @@ def html_document(
         existing.textContent = item.developer_reply;
         card.append(existingLabel, existing);
       }}
+      if (isReplied) return card;
 
       const replyLabel = document.createElement('label');
       replyLabel.className = 'store-review-meta';

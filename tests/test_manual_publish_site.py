@@ -206,6 +206,10 @@ Body
             self.assertIn("리뷰 한국어 번역 (승인 참고용)", html)
             self.assertIn("답변 한국어 번역 (승인 참고용 · 게시되지 않음)", html)
             self.assertIn("reply: cleanReply", html)
+            self.assertIn("const isReplied = item.status === 'replied' || Boolean(item.developer_reply);", html)
+            self.assertIn("if (isReplied) return card;", html)
+            self.assertIn("stars.textContent = `${rating} / 5`;", html)
+            self.assertNotIn("'★'.repeat(rating)", html)
             self.assertIn("JSON.stringify(approvals, null, 2) + '\\n'", html)
             self.assertNotIn("JSON.stringify(approvals, null, 2) + '\n'", html)
             self.assertIn("track.scrollBy", html)
@@ -610,6 +614,42 @@ Body
         self.assertEqual(item["review_translation_ko"], "파일을 열 수 없습니다.")
         self.assertEqual(item["reply_translation_ko"], "알려주셔서 감사합니다.")
         self.assertEqual(item["suggested_reply"], "Gracias por avisarnos.")
+
+    def test_store_review_items_do_not_generate_drafts_for_replied_reviews(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            reviews = root / "store_reviews.csv"
+            drafts = root / "store_review_ai_drafts.json"
+            reviews.write_text(
+                "review_id,app_slug,app_name,rating,title,body,reviewer_language,status,developer_reply\n"
+                "review-es,vaultxt,VaultXT,1,,No puedo abrir el archivo.,es,replied,Gracias por avisarnos.\n",
+                encoding="utf-8",
+            )
+            drafts.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "drafts": [
+                            {
+                                "review_id": "review-es",
+                                "reply": "This stale draft must not be shown.",
+                                "review_translation_ko": "파일을 열 수 없습니다.",
+                                "reply_translation_ko": "오래된 답변 초안입니다.",
+                            }
+                        ],
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+
+            item = store_review_items(reviews, drafts)[0]
+
+        self.assertFalse(item["approval_translation_required"])
+        self.assertEqual(item["review_translation_ko"], "")
+        self.assertEqual(item["reply_translation_ko"], "")
+        self.assertNotIn("suggested_reply", item)
+        self.assertNotIn("reply_category", item)
 
     def test_store_review_items_hide_cross_source_aliases(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
