@@ -2,6 +2,7 @@
   "task_id": "crash-example",
   "repository": "onnellab/example",
   "pr_url": "https://github.com/onnellab/example/pull/1",
+  "qa_profile": "default",
   "tests": "passed",
   "build": "passed",
   "static_analysis": "passed",

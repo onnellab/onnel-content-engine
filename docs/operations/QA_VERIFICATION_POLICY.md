@@ -17,6 +17,12 @@ only `CRITICAL`, `HIGH`, or `LOW`. A final PASS additionally requires analyze
 lifecycle safety, and no Spec/Anchor/AGENTS violation. A missing performance
 gate is `not_configured` and blocks merge. Ambiguity is FAIL.
 
+The prepared QA packet selects exactly one `qa_profile`. Reports must reproduce
+that value. For `flutter_riverpod_firestore_autosave_v1`, the additional
+blocking checks in `FIRESTORE_AUTOSAVE_QA_PROFILE.md` are mandatory. This
+conditional profile does not apply to apps without objective Riverpod,
+Firestore, and autosave evidence.
+
 For Flutter layout stabilization, perform up to ten actual edit rounds in the
 app repository. Prioritize bottom actions, fixed Columns, forms/keyboards,
 modal sheets, SafeArea, scrolling, text scale, and hard-coded heights. Fix

@@ -198,6 +198,52 @@ class AiCoderExecutionTest(unittest.TestCase):
         self.assertEqual(missing.returncode, 1)
         self.assertIn("performance", missing.stderr)
 
+    def test_firestore_autosave_profile_requires_specialized_checks(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            report = json.loads(
+                (ROOT / "docs" / "operations" / "QA_REPORT_EXAMPLE.json").read_text()
+            )
+            report["qa_profile"] = "flutter_riverpod_firestore_autosave_v1"
+            path = Path(raw) / "qa.json"
+            path.write_text(json.dumps(report), encoding="utf-8")
+            missing = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "validate_ai_qa_report.py"), str(path)],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(missing.returncode, 1)
+            self.assertIn("autosave_flush_integrity", missing.stderr)
+
+            for name in (
+                "architecture_state_boundary",
+                "riverpod_listener_lifecycle",
+                "autosave_flush_integrity",
+                "resource_disposal",
+                "firestore_query_index",
+                "firestore_security_rules",
+                "quiet_sync_ux",
+                "localization_tone",
+            ):
+                report["checks"].append(
+                    {
+                        "name": name,
+                        "status": "PASS",
+                        "severity": "LOW",
+                        "evidence": f"{name} objective test evidence",
+                    }
+                )
+            path.write_text(json.dumps(report), encoding="utf-8")
+            valid = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "validate_ai_qa_report.py"), str(path)],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(valid.returncode, 0, valid.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
