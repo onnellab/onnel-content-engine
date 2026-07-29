@@ -101,6 +101,42 @@ def main() -> int:
         }
         finding.update(preserved_diagnosis(previous.get(finding_id, {})))
         findings.append(finding)
+    correlated_review_ids = {
+        review_id
+        for finding in findings
+        for review_id in finding.get("related_review_ids", [])
+    }
+    for item in triage:
+        review_id = str(item.get("review_id", ""))
+        review = reviews.get(review_id, {})
+        actions = item.get("actions", {})
+        if (
+            not review_id
+            or review_id in correlated_review_ids
+            or not isinstance(actions, dict)
+            or actions.get("code_change") != "investigate"
+        ):
+            continue
+        category = str(item.get("category", ""))
+        finding_id = f"review-{review_id}"
+        finding = {
+            "finding_id": finding_id,
+            "origin": "store_review",
+            "app_slug": review.get("app_slug"),
+            "severity": "critical" if category in {"data_loss", "security"} else "high",
+            "review": review,
+            "related_review_ids": [review_id],
+            "hypothesis": "A high-risk store review identifies a symptom; reproduction and code evidence are required.",
+            "recommended_actions": [
+                "prepare a read-only app code context",
+                "reproduce on the reported app version when available",
+                "correlate with telemetry when a crash source becomes available",
+            ],
+            "github_issue_recommended": True,
+            "diagnosis_status": "pending",
+        }
+        finding.update(preserved_diagnosis(previous.get(finding_id, {})))
+        findings.append(finding)
     output = {
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "findings": findings,

@@ -120,6 +120,39 @@ class AiDoctorAutomationTest(unittest.TestCase):
         self.assertEqual(finding["severity"], "high")
         self.assertEqual(finding["diagnosis_status"], "STOP")
 
+    def test_analyzer_creates_finding_for_high_risk_review_without_telemetry(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            data = root / "data"
+            data.mkdir()
+            (data / "store_reviews.csv").write_text(
+                "review_id,app_slug,app_version,title,body\n"
+                "review-1,vaultxt,1.0.3,,Crashes when opening a 100MB txt file\n",
+                encoding="utf-8",
+            )
+            (data / "store_review_triage.json").write_text(
+                json.dumps(
+                    {
+                        "items": [
+                            {
+                                "review_id": "review-1",
+                                "category": "bug",
+                                "actions": {"code_change": "investigate"},
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with patch.object(analyze_incidents, "ROOT", root):
+                self.assertEqual(analyze_incidents.main(), 0)
+            finding = json.loads((data / "ai_doctor_findings.json").read_text())["findings"][0]
+
+        self.assertEqual(finding["finding_id"], "review-review-1")
+        self.assertEqual(finding["origin"], "store_review")
+        self.assertEqual(finding["severity"], "high")
+        self.assertEqual(finding["diagnosis_status"], "pending")
+
     def test_records_only_evidence_backed_diagnosis(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29T06:32:33+00:00",
+  "generated_at": "2026-07-29T06:34:13+00:00",
   "summary": {
     "reviews_triaged": 10,
     "high_risk_reports": 1,
@@ -9,7 +9,7 @@
     "issues_created": 0,
     "open_app_github_issues": 0,
     "new_crash_incidents": 0,
-    "doctor_high_findings": 0,
+    "doctor_high_findings": 1,
     "coder_tasks_proposed": 0,
     "coder_tasks_approved_pending": 0,
     "coder_draft_prs": 0,

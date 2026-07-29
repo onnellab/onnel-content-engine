@@ -34,6 +34,8 @@ def search_terms(finding: dict) -> list[str]:
         [
             str(finding.get("crash", {}).get("title", "")),
             str(finding.get("github_issue", {}).get("title", "")),
+            str(finding.get("review", {}).get("title", "")),
+            str(finding.get("review", {}).get("body", "")),
         ]
     )
     return sorted({value.lower() for value in TOKEN.findall(text) if value.lower() not in STOP_WORDS})[:8]

@@ -23,7 +23,7 @@ def main() -> int:
         slug=finding.get("app_slug","")
         task_id=finding.get("finding_id")
         diagnosis=finding.get("diagnosis",{})
-        source=finding.get("github_issue") or finding.get("crash") or finding.get("internal_test_feedback") or {}
+        source=finding.get("github_issue") or finding.get("crash") or finding.get("review") or finding.get("internal_test_feedback") or {}
         symptom=source.get("title") or source.get("summary") or finding.get("hypothesis","")
         ticket={
             "observed_symptom":symptom,
