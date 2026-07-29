@@ -48,6 +48,12 @@ tailored drafts to `data/store_review_ai_drafts.json`; they still require the
 normal approval queue. This uses the ChatGPT/Codex subscription workflow and
 does not require an API key.
 
+For a non-Korean review, the approval dashboard shows both the localized
+review/reply and their Korean translations. Both translations are required
+before **Approve & queue** is enabled. They are approval context only: the
+approval queue and store publisher receive only the localized `reply`, never
+either Korean translation.
+
 ## Credentials
 
 For Apple, provide a newly issued App Store Connect API key:

@@ -203,6 +203,9 @@ Body
             self.assertIn("리뷰 동기화 완료 대기 중", html)
             self.assertIn("store-review-group", html)
             self.assertIn("store-review-track", html)
+            self.assertIn("리뷰 한국어 번역 (승인 참고용)", html)
+            self.assertIn("답변 한국어 번역 (승인 참고용 · 게시되지 않음)", html)
+            self.assertIn("reply: cleanReply", html)
             self.assertIn("track.scrollBy", html)
             self.assertIn("GitHub Secrets에 암호화 저장", html)
             self.assertIn("보안을 위해 Private Key와 Google Play JSON 입력칸을 비웠습니다.", html)
@@ -570,6 +573,41 @@ Body
         self.assertEqual(items[0]["triage"]["category"], "pricing_confusion")
         self.assertTrue(items[0]["triage"]["requires_human_approval"])
         self.assertTrue(items[0]["triage"]["facts"])
+
+    def test_store_review_items_include_approval_only_korean_translations(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            reviews = root / "store_reviews.csv"
+            drafts = root / "store_review_ai_drafts.json"
+            reviews.write_text(
+                "review_id,app_slug,app_name,rating,title,body,reviewer_language,status\n"
+                "review-es,vaultxt,VaultXT,1,,No puedo abrir el archivo.,es,pending\n",
+                encoding="utf-8",
+            )
+            drafts.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "drafts": [
+                            {
+                                "review_id": "review-es",
+                                "reply": "Gracias por avisarnos.",
+                                "review_translation_ko": "파일을 열 수 없습니다.",
+                                "reply_translation_ko": "알려주셔서 감사합니다.",
+                            }
+                        ],
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+
+            item = store_review_items(reviews, drafts)[0]
+
+        self.assertTrue(item["approval_translation_required"])
+        self.assertEqual(item["review_translation_ko"], "파일을 열 수 없습니다.")
+        self.assertEqual(item["reply_translation_ko"], "알려주셔서 감사합니다.")
+        self.assertEqual(item["suggested_reply"], "Gracias por avisarnos.")
 
     def test_store_review_items_hide_cross_source_aliases(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

@@ -87,6 +87,16 @@ def review_text(review: dict[str, str]) -> str:
     )
 
 
+def requires_korean_approval_translation(review: dict[str, str]) -> bool:
+    language = review.get("reviewer_language", "").strip().lower().replace("_", "-")
+    if language == "ko" or language.startswith("ko-"):
+        return False
+    text = review_text(review)
+    if not language and re.search(r"[가-힣]", text):
+        return False
+    return bool(language or text)
+
+
 def classify_review(review: dict[str, str]) -> str:
     text = review_text(review).lower()
     if not text:

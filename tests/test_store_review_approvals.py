@@ -17,6 +17,8 @@ class StoreReviewApprovalsTest(unittest.TestCase):
         record = approve_review(self.reviews, payload, "review-1", "Thanks for the feedback.", "owner")
         self.assertEqual(record["status"], "queued")
         self.assertEqual(payload["approvals"][0]["reply"], "Thanks for the feedback.")
+        self.assertNotIn("review_translation_ko", record)
+        self.assertNotIn("reply_translation_ko", record)
 
     def test_rejects_unverified_fix_promise(self) -> None:
         with self.assertRaisesRegex(ValueError, "prohibited"):

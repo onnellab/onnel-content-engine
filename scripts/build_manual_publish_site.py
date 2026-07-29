@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 
 from evaluate_social_templates import evaluate_social_templates
 from evaluate_syndication_drafts import evaluate_syndication_drafts
-from store_review_responses import generate_reply
+from store_review_responses import generate_reply, requires_korean_approval_translation
 from triage_store_reviews import triage_reviews
 
 
@@ -396,6 +396,9 @@ def store_review_items(path: Path = DEFAULT_STORE_REVIEWS, ai_drafts_path: Path 
         if isinstance(custom.get("reply"), str) and custom["reply"].strip():
             suggestion["suggested_reply"] = custom["reply"].strip()
             suggestion["reply_category"] = "codex_custom"
+        suggestion["approval_translation_required"] = requires_korean_approval_translation(row)
+        suggestion["review_translation_ko"] = str(custom.get("review_translation_ko", "")).strip()
+        suggestion["reply_translation_ko"] = str(custom.get("reply_translation_ko", "")).strip()
         items.append(
             {
                 "review_id": row.get("review_id", ""),
@@ -1564,6 +1567,9 @@ def html_document(
         storeReviewReplied: '답변됨',
         storeReviewNoItems: '동기화된 스토어 리뷰가 없습니다.',
         storeReviewHumanCheck: '게시 전 사람이 문맥과 사실을 확인해야 합니다.',
+        storeReviewOriginalTranslation: '리뷰 한국어 번역 (승인 참고용)',
+        storeReviewReplyTranslation: '답변 한국어 번역 (승인 참고용 · 게시되지 않음)',
+        storeReviewTranslationMissing: '외국어 리뷰와 답변의 한국어 번역이 있어야 승인할 수 있습니다.',
         currentVersion: '현재 버전',
         releasedDate: '현재 버전 게시일',
         releaseNotes: '출시 정보',
@@ -1819,6 +1825,9 @@ def html_document(
         storeReviewReplied: 'replied',
         storeReviewNoItems: 'No synchronized store reviews.',
         storeReviewHumanCheck: 'A person must verify context and facts before posting.',
+        storeReviewOriginalTranslation: 'Korean review translation (approval context only)',
+        storeReviewReplyTranslation: 'Korean reply translation (approval context only · never published)',
+        storeReviewTranslationMissing: 'Korean translations of the foreign-language review and reply are required for approval.',
         currentVersion: 'current version',
         releasedDate: 'current version published',
         releaseNotes: 'release info',
@@ -3929,6 +3938,25 @@ def html_document(
       }}
       card.append(body);
 
+      const translationRequired = Boolean(item.approval_translation_required);
+      let replyTranslation = null;
+      if (translationRequired) {{
+        const reviewTranslationLabel = document.createElement('strong');
+        reviewTranslationLabel.textContent = t('storeReviewOriginalTranslation');
+        const reviewTranslation = document.createElement('p');
+        reviewTranslation.className = 'store-review-body';
+        reviewTranslation.textContent = item.review_translation_ko || t('storeReviewTranslationMissing');
+        const replyTranslationLabel = document.createElement('label');
+        replyTranslationLabel.className = 'store-review-meta';
+        replyTranslationLabel.textContent = t('storeReviewReplyTranslation');
+        replyTranslation = document.createElement('textarea');
+        replyTranslation.className = 'store-review-reply';
+        replyTranslation.value = item.reply_translation_ko || '';
+        replyTranslation.placeholder = t('storeReviewTranslationMissing');
+        replyTranslation.setAttribute('aria-label', t('storeReviewReplyTranslation'));
+        card.append(reviewTranslationLabel, reviewTranslation, replyTranslationLabel, replyTranslation);
+      }}
+
       const triage = item.triage || {{}};
       if (triage.category) {{
         const triageSummary = document.createElement('p');
@@ -3997,7 +4025,27 @@ def html_document(
       approve.type = 'button';
       approve.className = 'secondary';
       approve.textContent = 'Approve & queue';
+      const translationsReady = () => !translationRequired || (
+        /[가-힣]/.test(item.review_translation_ko || '') &&
+        /[가-힣]/.test(replyTranslation?.value || '')
+      );
+      approve.disabled = !translationsReady();
+      if (replyTranslation) {{
+        replyTranslation.addEventListener('input', () => {{
+          approve.disabled = !translationsReady();
+        }});
+        textarea.addEventListener('input', () => {{
+          if (textarea.value.trim() !== String(item.suggested_reply || '').trim()) {{
+            replyTranslation.value = '';
+          }}
+          approve.disabled = !translationsReady();
+        }});
+      }}
       approve.onclick = async () => {{
+        if (!translationsReady()) {{
+          flash(approve, t('storeReviewTranslationMissing'));
+          return;
+        }}
         if (!githubToken()) {{
           setSync('viewOnly');
           revealTokenInput();

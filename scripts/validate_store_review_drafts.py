@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 from build_manual_publish_site import read_csv_rows
+from store_review_responses import requires_korean_approval_translation
 from triage_store_reviews import triage_reviews
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +42,13 @@ def validate(drafts_path: Path, reviews_path: Path) -> list[str]:
         facts = draft.get("facts", [])
         if not isinstance(facts, list) or any(not isinstance(fact, dict) or fact.get("source") not in allowed for fact in facts): errors.append(f"{prefix}: facts must use approved sources")
         if review and review.get("reviewer_language", "").lower().startswith("ko") and not re.search(r"[가-힣]", reply): errors.append(f"{prefix}: Korean review requires Korean reply")
+        if review and requires_korean_approval_translation(review):
+            review_translation = str(draft.get("review_translation_ko", "")).strip()
+            reply_translation = str(draft.get("reply_translation_ko", "")).strip()
+            if not review_translation or not re.search(r"[가-힣]", review_translation):
+                errors.append(f"{prefix}: foreign-language review requires review_translation_ko")
+            if not reply_translation or not re.search(r"[가-힣]", reply_translation):
+                errors.append(f"{prefix}: foreign-language reply requires reply_translation_ko")
     return errors
 
 

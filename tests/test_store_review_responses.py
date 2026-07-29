@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import unittest
+import json
+import tempfile
 
 import sys
 from pathlib import Path
@@ -8,7 +10,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from store_review_responses import classify_review, generate_reply  # noqa: E402
+from store_review_responses import (  # noqa: E402
+    classify_review,
+    generate_reply,
+    requires_korean_approval_translation,
+)
+from validate_store_review_drafts import validate  # noqa: E402
 
 
 class StoreReviewResponsesTest(unittest.TestCase):
@@ -66,6 +73,50 @@ class StoreReviewResponsesTest(unittest.TestCase):
         result = generate_reply({"app_name": "TagWeaver", "app_slug": "tagweaver", "rating": "1", "body": "not free as stated", "reviewer_language": "en"})
         self.assertEqual(result["reply_category"], "pricing_confusion")
         self.assertIn("batch editing", result["suggested_reply"])
+
+    def test_foreign_review_requires_korean_approval_translation(self) -> None:
+        self.assertTrue(
+            requires_korean_approval_translation(
+                {"body": "No puedo abrir el archivo.", "reviewer_language": "es"}
+            )
+        )
+        self.assertFalse(
+            requires_korean_approval_translation(
+                {"body": "파일을 열 수 없습니다.", "reviewer_language": "ko-KR"}
+            )
+        )
+
+    def test_foreign_draft_requires_both_korean_translations(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            reviews = root / "reviews.csv"
+            drafts = root / "drafts.json"
+            reviews.write_text(
+                "review_id,app_slug,app_name,rating,title,body,reviewer_language,status,developer_reply\n"
+                "review-es,vaultxt,VaultXT,1,,No puedo abrir el archivo.,es,pending,\n",
+                encoding="utf-8",
+            )
+            payload = {
+                "schema_version": 1,
+                "drafts": [
+                    {
+                        "review_id": "review-es",
+                        "reply": "Gracias por avisarnos.",
+                        "source": "codex",
+                        "facts": [],
+                    }
+                ],
+            }
+            drafts.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+            errors = validate(drafts, reviews)
+            self.assertTrue(any("review_translation_ko" in error for error in errors))
+            self.assertTrue(any("reply_translation_ko" in error for error in errors))
+
+            payload["drafts"][0]["review_translation_ko"] = "파일을 열 수 없습니다."
+            payload["drafts"][0]["reply_translation_ko"] = "알려주셔서 감사합니다."
+            drafts.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+            self.assertEqual(validate(drafts, reviews), [])
 
 
 if __name__ == "__main__":
