@@ -59,6 +59,21 @@ def candidate_files(app_path: Path, terms: list[str]) -> list[str]:
     return sorted(candidates)[:40]
 
 
+def resolve_app_path(local: dict[str, str]) -> Path:
+    configured = Path(local["path"]).expanduser().resolve()
+    pubspec = local["pubspec_path"]
+    candidates = [
+        configured,
+        ROOT.parent / local["repository_name"],
+        ROOT.parent / local["repository_name"] / local["app_slug"],
+    ]
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / pubspec).is_file():
+            return resolved
+    return configured
+
+
 def prepare(finding_id: str) -> dict:
     if not SAFE_ID.fullmatch(finding_id):
         raise SystemExit("finding ID is invalid")
@@ -70,7 +85,7 @@ def prepare(finding_id: str) -> dict:
         local = next((row for row in csv.DictReader(handle) if row["app_slug"] == finding.get("app_slug")), None)
     if not local:
         raise SystemExit("finding app has no local repository mapping")
-    app_path = Path(local["path"]).expanduser().resolve()
+    app_path = resolve_app_path(local)
     if not (app_path / local["pubspec_path"]).is_file():
         raise SystemExit(f"mapped Flutter repository is unavailable: {app_path}")
     if git(app_path, "rev-parse", "--is-inside-work-tree", check=False) != "true":

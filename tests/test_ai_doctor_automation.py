@@ -74,6 +74,25 @@ class AiDoctorAutomationTest(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "finding ID is invalid"):
             prepare_ai_doctor_context.prepare("../finding")
 
+    def test_resolves_shared_repository_checkout_beside_engine(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            engine = root / "onnel-content-engine"
+            app = root / "onnellab-text" / "vaultxt"
+            engine.mkdir()
+            app.mkdir(parents=True)
+            (app / "pubspec.yaml").write_text("name: vaultxt\n", encoding="utf-8")
+            local = {
+                "path": "/missing/home/vaultxt",
+                "repository_name": "onnellab-text",
+                "app_slug": "vaultxt",
+                "pubspec_path": "pubspec.yaml",
+            }
+            with patch.object(prepare_ai_doctor_context, "ROOT", engine):
+                resolved = prepare_ai_doctor_context.resolve_app_path(local)
+
+        self.assertEqual(resolved, app)
+
     def test_analyzer_creates_github_finding_and_preserves_diagnosis(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
