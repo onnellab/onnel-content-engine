@@ -1,5 +1,23 @@
 {
   "schema_version": 1,
-  "updated_at": "",
-  "approvals": []
+  "updated_at": "2026-07-29T02:46:39.335Z",
+  "approvals": [
+    {
+      "approval_id": "review-report-6b652b2227b5da3cd8607adf",
+      "review_id": "report-6b652b2227b5da3cd8607adf",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "platform": "android",
+      "reply": "Thanks for the five-star rating! We're glad you chose TagWeaver for editing MP3 metadata.",
+      "approved_at": "2026-07-29T02:46:39.335Z",
+      "approved_by": "dashboard_token_holder",
+      "note": "",
+      "status": "queued",
+      "publication": {
+        "attempts": 0,
+        "published_at": "",
+        "external_response_id": ""
+      }
+    }
+  ]
 }
