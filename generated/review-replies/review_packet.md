@@ -71,7 +71,7 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "developer_reply": "",
       "reply_updated_at": "",
       "status": "pending",
-      "synced_at": "2026-07-29T03:05:24+00:00"
+      "synced_at": "2026-07-29T03:45:05+00:00"
     },
     "triage": {
       "review_id": "report-6b652b2227b5da3cd8607adf",
@@ -129,7 +129,7 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "developer_reply": "",
       "reply_updated_at": "",
       "status": "pending",
-      "synced_at": "2026-07-29T03:05:24+00:00"
+      "synced_at": "2026-07-29T03:45:05+00:00"
     },
     "triage": {
       "review_id": "report-a0d3339ac24a86567e3f9185",
