@@ -2902,7 +2902,7 @@ def html_document(
         method: 'PUT', headers: {{ 'Content-Type': 'application/json' }},
         body: JSON.stringify({{
           message: `Queue approved reply for ${{item.review_id}}`,
-          content: encodeBase64Unicode(JSON.stringify(approvals, null, 2) + '\n'),
+          content: encodeBase64Unicode(JSON.stringify(approvals, null, 2) + '\\n'),
           branch: stateBranch, sha: data.sha,
         }}),
       }});

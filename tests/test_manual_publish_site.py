@@ -206,6 +206,8 @@ Body
             self.assertIn("리뷰 한국어 번역 (승인 참고용)", html)
             self.assertIn("답변 한국어 번역 (승인 참고용 · 게시되지 않음)", html)
             self.assertIn("reply: cleanReply", html)
+            self.assertIn("JSON.stringify(approvals, null, 2) + '\\n'", html)
+            self.assertNotIn("JSON.stringify(approvals, null, 2) + '\n'", html)
             self.assertIn("track.scrollBy", html)
             self.assertIn("GitHub Secrets에 암호화 저장", html)
             self.assertIn("보안을 위해 Private Key와 Google Play JSON 입력칸을 비웠습니다.", html)
