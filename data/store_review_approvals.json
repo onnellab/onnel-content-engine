@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-07-29T02:46:39.335Z",
+  "updated_at": "2026-07-29T02:57:46+00:00",
   "approvals": [
     {
       "approval_id": "review-report-6b652b2227b5da3cd8607adf",
@@ -12,11 +12,12 @@
       "approved_at": "2026-07-29T02:46:39.335Z",
       "approved_by": "dashboard_token_holder",
       "note": "",
-      "status": "queued",
+      "status": "failed",
       "publication": {
-        "attempts": 0,
+        "attempts": 1,
         "published_at": "",
-        "external_response_id": ""
+        "external_response_id": "",
+        "error": "Google Play report-only reviews do not expose an API reviewId; a manual Play Console reply is required"
       }
     }
   ]
