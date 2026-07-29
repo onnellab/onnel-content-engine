@@ -1571,6 +1571,13 @@ def html_document(
         storeReviewOriginalTranslation: '리뷰 한국어 번역 (승인 참고용)',
         storeReviewReplyTranslation: '답변 한국어 번역 (승인 참고용 · 게시되지 않음)',
         storeReviewTranslationMissing: '외국어 리뷰와 답변의 한국어 번역이 있어야 승인할 수 있습니다.',
+        storeReviewApprovePublish: '승인 및 게시',
+        storeReviewSavingApproval: '승인 저장 중…',
+        storeReviewRequestingPublish: '게시 요청 중…',
+        storeReviewPublishRequested: '게시 요청 완료',
+        storeReviewRetryPublish: '게시 다시 요청',
+        storeReviewApprovalFailed: '승인 저장 실패',
+        storeReviewPublishFailed: '승인은 저장됐지만 게시 요청에 실패했습니다.',
         currentVersion: '현재 버전',
         releasedDate: '현재 버전 게시일',
         releaseNotes: '출시 정보',
@@ -1829,6 +1836,13 @@ def html_document(
         storeReviewOriginalTranslation: 'Korean review translation (approval context only)',
         storeReviewReplyTranslation: 'Korean reply translation (approval context only · never published)',
         storeReviewTranslationMissing: 'Korean translations of the foreign-language review and reply are required for approval.',
+        storeReviewApprovePublish: 'Approve & publish',
+        storeReviewSavingApproval: 'Saving approval…',
+        storeReviewRequestingPublish: 'Requesting publication…',
+        storeReviewPublishRequested: 'Publication requested',
+        storeReviewRetryPublish: 'Retry publication',
+        storeReviewApprovalFailed: 'Approval not saved',
+        storeReviewPublishFailed: 'Approval was saved, but publication could not be requested.',
         currentVersion: 'current version',
         releasedDate: 'current version published',
         releaseNotes: 'release info',
@@ -2892,8 +2906,9 @@ def html_document(
         throw new Error('This review already has an active approval');
       }}
       const approvedAt = new Date().toISOString();
+      const approvalId = `review-${{item.review_id}}`;
       approvals.approvals.push({{
-        approval_id: `review-${{item.review_id}}`, review_id: item.review_id,
+        approval_id: approvalId, review_id: item.review_id,
         app_id: item.app_id || '', app_slug: item.app_slug || '', platform: item.platform || '',
         reply: cleanReply, approved_at: approvedAt, approved_by: 'dashboard_token_holder',
         note: '', status: 'queued', publication: {{ attempts: 0, published_at: '', external_response_id: '' }},
@@ -2905,6 +2920,18 @@ def html_document(
           message: `Queue approved reply for ${{item.review_id}}`,
           content: encodeBase64Unicode(JSON.stringify(approvals, null, 2) + '\\n'),
           branch: stateBranch, sha: data.sha,
+        }}),
+      }});
+      return approvalId;
+    }}
+
+    async function dispatchApprovedStoreReply(approvalId) {{
+      await githubRequest(`/repos/${{stateRepo}}/actions/workflows/publish-store-review-reply.yml/dispatches`, {{
+        method: 'POST',
+        headers: {{ 'Content-Type': 'application/json' }},
+        body: JSON.stringify({{
+          ref: stateBranch,
+          inputs: {{ approval_id: approvalId, confirm_publish: 'PUBLISH' }},
         }}),
       }});
     }}
@@ -4028,7 +4055,8 @@ def html_document(
       const approve = document.createElement('button');
       approve.type = 'button';
       approve.className = 'secondary';
-      approve.textContent = 'Approve & queue';
+      approve.textContent = t('storeReviewApprovePublish');
+      let queuedApprovalId = '';
       const translationsReady = () => !translationRequired || (
         /[가-힣]/.test(item.review_translation_ko || '') &&
         /[가-힣]/.test(replyTranslation?.value || '')
@@ -4056,13 +4084,23 @@ def html_document(
           return;
         }}
         try {{
-          flash(approve, 'Saving approval…');
-          await queueApprovedStoreReply(item, textarea.value || item.suggested_reply || '');
           approve.disabled = true;
-          approve.textContent = 'Queued — not published';
+          if (!queuedApprovalId) {{
+            flash(approve, t('storeReviewSavingApproval'));
+            queuedApprovalId = await queueApprovedStoreReply(item, textarea.value || item.suggested_reply || '');
+          }}
+          flash(approve, t('storeReviewRequestingPublish'));
+          await dispatchApprovedStoreReply(queuedApprovalId);
+          approve.disabled = true;
+          approve.textContent = t('storeReviewPublishRequested');
           setSync('synced');
         }} catch (error) {{
-          flash(approve, 'Approval not saved');
+          approve.disabled = false;
+          if (queuedApprovalId) {{
+            flash(approve, t('storeReviewPublishFailed'), t('storeReviewRetryPublish'));
+          }} else {{
+            flash(approve, t('storeReviewApprovalFailed'), t('storeReviewApprovePublish'));
+          }}
           console.error(error);
         }}
       }};
@@ -4617,7 +4655,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v13';
+    return """const CACHE = 'onnellab-manual-publish-v14';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './libsodium-sumo.js', './libsodium-wrappers.js'];
 
 self.addEventListener('install', (event) => {
