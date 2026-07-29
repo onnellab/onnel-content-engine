@@ -18,7 +18,7 @@ if [[ "${AI_CODER_SECURITY_SCAN_ENABLED:-true}" != "false" ]]; then
     echo "Codex Security gate requires Node.js 22 or later" >&2
     exit 1
   }
-  node_major="$(node -p 'Number(process.versions.node.split(\".\")[0])')"
+  node_major="$(node -p 'Number(process.versions.node.split(".")[0])')"
   [[ "$node_major" -ge 22 ]] || {
     echo "Codex Security gate requires Node.js 22 or later" >&2
     exit 1
