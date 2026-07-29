@@ -25,6 +25,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STORES = ROOT / "data" / "store_versions.csv"
 DEFAULT_OUTPUT = ROOT / "data" / "store_reviews.csv"
+DEFAULT_OVERRIDES = ROOT / "data" / "store_review_overrides.json"
 FIELDS = [
     "review_id",
     "app_id",
@@ -32,6 +33,7 @@ FIELDS = [
     "app_name",
     "platform",
     "rating",
+    "review_kind",
     "title",
     "body",
     "reviewer_language",
@@ -52,6 +54,26 @@ HTTP_MAX_RETRY_DELAY_SECONDS = 60.0
 
 class StoreReviewSyncError(ValueError):
     """Raised when a review sync would produce an incomplete snapshot."""
+
+
+def apply_review_overrides(
+    rows: list[dict[str, str]],
+    overrides_path: Path = DEFAULT_OVERRIDES,
+) -> list[dict[str, str]]:
+    overrides: dict[str, object] = {}
+    if overrides_path.exists():
+        payload = json.loads(overrides_path.read_text(encoding="utf-8"))
+        if isinstance(payload, dict) and isinstance(payload.get("reviews"), dict):
+            overrides = payload["reviews"]
+    for row in rows:
+        has_text = bool(row.get("title", "").strip() or row.get("body", "").strip())
+        row["review_kind"] = "review" if has_text else "rating_only"
+        override = overrides.get(row.get("review_id", ""))
+        if isinstance(override, dict) and override.get("review_kind") in {"review", "rating_only"}:
+            row["review_kind"] = str(override["review_kind"])
+        if row["review_kind"] == "rating_only" and not row.get("developer_reply", "").strip():
+            row["status"] = "rating_only"
+    return rows
 
 
 def retry_delay_seconds(
@@ -760,6 +782,7 @@ def sync_reviews(
     google_json_dir: Path | None = None,
     require_google_history: bool = False,
     google_principal: str = "",
+    overrides_path: Path = DEFAULT_OVERRIDES,
 ) -> dict[str, int]:
     google_reports_bucket = normalize_google_reports_bucket(google_reports_bucket)
     if require_google_history and not google_reports_bucket:
@@ -889,7 +912,7 @@ def sync_reviews(
         key=lambda row: (row.get("updated_at", ""), row.get("created_at", "")),
         reverse=True,
     )
-    write_csv_rows(output_path, rows)
+    write_csv_rows(output_path, apply_review_overrides(rows, overrides_path))
     return counts
 
 

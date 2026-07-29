@@ -56,6 +56,8 @@ def approve_review(
     review = reviews.get(review_id)
     if not review:
         raise ValueError(f"unknown review ID: {review_id}")
+    if review.get("review_kind") == "rating_only":
+        raise ValueError("rating-only entries do not accept developer replies")
     if review.get("developer_reply") or review.get("status") == "replied":
         raise ValueError("a reply is already published for this review")
     clean_reply = validate_reply(reply)

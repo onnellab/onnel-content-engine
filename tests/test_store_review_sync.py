@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import sync_store_reviews as store_review_sync  # noqa: E402
 from sync_store_reviews import (  # noqa: E402
     StoreReviewSyncError,
+    apply_review_overrides,
     app_store_connect_token,
     apple_review_rows,
     apple_store_app_id,
@@ -44,6 +45,30 @@ STORE = {
 
 
 class StoreReviewSyncTest(unittest.TestCase):
+    def test_distinguishes_rating_only_rows_and_applies_confirmed_override(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            overrides = Path(temp) / "overrides.json"
+            overrides.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "reviews": {"report-star": {"review_kind": "rating_only"}},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            rows = apply_review_overrides(
+                [
+                    {"review_id": "blank", "title": "", "body": ""},
+                    {"review_id": "text", "title": "", "body": "Helpful"},
+                    {"review_id": "report-star", "title": "", "body": "Tageditor"},
+                ],
+                overrides,
+            )
+
+        self.assertEqual([row["review_kind"] for row in rows], ["rating_only", "review", "rating_only"])
+        self.assertEqual([row.get("status") for row in rows], ["rating_only", None, "rating_only"])
+
     def test_merges_google_report_and_recent_api_aliases(self) -> None:
         report = {
             "review_id": "report-derived", "app_id": "APP-0001", "platform": "android",

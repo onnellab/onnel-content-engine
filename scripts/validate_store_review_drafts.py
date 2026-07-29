@@ -30,7 +30,13 @@ def validate(drafts_path: Path, reviews_path: Path) -> list[str]:
         if not isinstance(draft, dict): errors.append(f"{prefix}: must be an object"); continue
         review_id, reply = str(draft.get("review_id", "")), str(draft.get("reply", "")).strip()
         review = reviews.get(review_id)
-        if not review or review.get("developer_reply") or review.get("status") == "replied": errors.append(f"{prefix}: unknown or non-pending review_id")
+        if (
+            not review
+            or review.get("review_kind") == "rating_only"
+            or review.get("developer_reply")
+            or review.get("status") == "replied"
+        ):
+            errors.append(f"{prefix}: unknown or non-pending text review_id")
         if not review_id or review_id in ids: errors.append(f"{prefix}: review_id must be unique")
         ids.add(review_id)
         if not reply or len(reply) > 350: errors.append(f"{prefix}: reply must be 1-350 characters")

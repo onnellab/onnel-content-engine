@@ -57,6 +57,8 @@ def matching_categories(text: str) -> list[str]:
 
 
 def classify(row: dict[str, str]) -> tuple[str, list[str], str]:
+    if row.get("review_kind") == "rating_only":
+        return "rating_only", [], "rating_only"
     text = " ".join((row.get("title", ""), row.get("body", ""))).casefold()
     flags = matching_categories(text)
     if any(term in text for term in PRICING_CONFUSION):
@@ -104,9 +106,11 @@ def triage_reviews(rows: list[dict[str, str]], fact_paths: tuple[Path, ...]) -> 
         facts = facts_for_app(row.get("app_slug", ""), fact_paths)
         sensitive = {"billing", "privacy", "security", "data_loss"}.intersection(flags)
         requires_issue = category in {"bug", "data_loss", "security"} or (category == "pricing_confusion" and counts[key] >= 3)
-        requires_manual = rating <= 3 or bool(sensitive) or category not in {"praise", "general_feedback"}
+        requires_manual = category != "rating_only" and (
+            rating <= 3 or bool(sensitive) or category not in {"praise", "general_feedback"}
+        )
         actions = {
-            "reply": "recommended" if not row.get("developer_reply", "") else "not_needed",
+            "reply": "recommended" if category != "rating_only" and not row.get("developer_reply", "") else "not_needed",
             "github_issue": "approval_required" if requires_issue else "not_needed",
             "store_copy": "review_recommended" if category == "pricing_confusion" and counts[key] >= 3 else "not_needed",
             "code_change": "investigate" if category in {"bug", "data_loss", "security"} else "not_needed",

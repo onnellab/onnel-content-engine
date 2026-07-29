@@ -24,6 +24,17 @@ class StoreReviewApprovalsTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "prohibited"):
             approve_review(self.reviews, {"schema_version": 1, "approvals": []}, "review-1", "It will be fixed next update.", "owner")
 
+    def test_rejects_reply_approval_for_rating_only_entry(self) -> None:
+        self.reviews["review-1"]["review_kind"] = "rating_only"
+        with self.assertRaisesRegex(ValueError, "rating-only"):
+            approve_review(
+                self.reviews,
+                {"schema_version": 1, "approvals": []},
+                "review-1",
+                "Thanks for the rating.",
+                "owner",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

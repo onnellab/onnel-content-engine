@@ -21,7 +21,12 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--markdown", type=Path, default=DEFAULT_MARKDOWN)
     args = parser.parse_args()
-    rows = [row for row in read_csv_rows(args.reviews) if not row.get("developer_reply") and row.get("status") != "replied"]
+    rows = [
+        row for row in read_csv_rows(args.reviews)
+        if row.get("review_kind") != "rating_only"
+        and not row.get("developer_reply")
+        and row.get("status") != "replied"
+    ]
     triage = {item["review_id"]: item for item in triage_reviews(rows, (ROOT / "docs/operations/APP_FACTS.md", ROOT / "docs/operations/PRICING_FACTS.md"))["items"]}
     packet = [{"review": row, "triage": triage.get(row.get("review_id", ""), {})} for row in rows]
     args.output.parent.mkdir(parents=True, exist_ok=True)

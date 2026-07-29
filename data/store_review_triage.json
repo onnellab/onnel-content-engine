@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-29T03:45:13+00:00",
+  "generated_at": "2026-07-29T06:07:16+00:00",
   "items": [
     {
       "review_id": "fc0a6e51-79d1-4aea-8aad-5954a7541b7a",
@@ -142,10 +142,10 @@
     },
     {
       "review_id": "report-6b652b2227b5da3cd8607adf",
-      "category": "praise",
+      "category": "rating_only",
       "risk_flags": [],
-      "similarity_key": "praise",
-      "similar_reviews": 2,
+      "similarity_key": "rating_only",
+      "similar_reviews": 1,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",
@@ -170,7 +170,7 @@
       ],
       "requires_human_approval": false,
       "actions": {
-        "reply": "recommended",
+        "reply": "not_needed",
         "github_issue": "not_needed",
         "store_copy": "not_needed",
         "code_change": "not_needed"
@@ -318,7 +318,7 @@
       "category": "praise",
       "risk_flags": [],
       "similarity_key": "praise",
-      "similar_reviews": 2,
+      "similar_reviews": 1,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",

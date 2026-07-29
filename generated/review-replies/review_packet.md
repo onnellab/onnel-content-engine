@@ -11,6 +11,7 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "app_name": "VaultXT",
       "platform": "android",
       "rating": "1",
+      "review_kind": "review",
       "title": "",
       "body": "$6.99 to edit files",
       "reviewer_language": "en",
@@ -55,70 +56,13 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
   },
   {
     "review": {
-      "review_id": "report-6b652b2227b5da3cd8607adf",
-      "app_id": "APP-0002",
-      "app_slug": "tagweaver",
-      "app_name": "TagWeaver",
-      "platform": "android",
-      "rating": "5",
-      "title": "",
-      "body": "Tageditor",
-      "reviewer_language": "en",
-      "territory": "",
-      "app_version": "1.0.5",
-      "created_at": "2026-06-23T18:29:06Z",
-      "updated_at": "2026-06-23T18:29:06Z",
-      "developer_reply": "",
-      "reply_updated_at": "",
-      "status": "pending",
-      "synced_at": "2026-07-29T03:45:05+00:00"
-    },
-    "triage": {
-      "review_id": "report-6b652b2227b5da3cd8607adf",
-      "category": "praise",
-      "risk_flags": [],
-      "similarity_key": "praise",
-      "similar_reviews": 1,
-      "facts": [
-        {
-          "text": "TagWeaver is a focused editor for MP3 metadata.",
-          "source": "docs/operations/APP_FACTS.md:6"
-        },
-        {
-          "text": "TagWeaver supports editing one track at a time in the free experience.",
-          "source": "docs/operations/APP_FACTS.md:7"
-        },
-        {
-          "text": "Editing an individual file is available without the optional Pro upgrade.",
-          "source": "docs/operations/PRICING_FACTS.md:7"
-        },
-        {
-          "text": "Batch editing multiple files is included in TagWeaver Pro.",
-          "source": "docs/operations/PRICING_FACTS.md:8"
-        },
-        {
-          "text": "TagWeaver Pro is a one-time purchase; it is not a subscription.",
-          "source": "docs/operations/PRICING_FACTS.md:9"
-        }
-      ],
-      "requires_human_approval": false,
-      "actions": {
-        "reply": "recommended",
-        "github_issue": "not_needed",
-        "store_copy": "not_needed",
-        "code_change": "not_needed"
-      },
-      "issue_draft": ""
-    }
-  },
-  {
-    "review": {
       "review_id": "report-a0d3339ac24a86567e3f9185",
       "app_id": "APP-0003",
       "app_slug": "vaultxt",
       "app_name": "VaultXT",
       "platform": "android",
       "rating": "1",
+      "review_kind": "review",
       "title": "",
       "body": "this is actually a paid app",
       "reviewer_language": "en",
