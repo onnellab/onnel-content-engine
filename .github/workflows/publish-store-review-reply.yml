@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.x' }
       - name: Publish exactly one approved reply
+        id: publish_reply
+        continue-on-error: true
         env:
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
@@ -31,6 +33,7 @@ jobs:
           GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64 }}
         run: python3 scripts/publish_store_review_reply.py "${{ inputs.approval_id }}" --confirm-publish
       - name: Commit publication audit result
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -38,3 +41,6 @@ jobs:
           git diff --cached --quiet || git commit -m "Publish approved store review reply"
           git pull --rebase --autostash origin main
           git push origin HEAD:main
+      - name: Fail when publication failed
+        if: steps.publish_reply.outcome == 'failure'
+        run: exit 1

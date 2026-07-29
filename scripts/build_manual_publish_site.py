@@ -1578,6 +1578,7 @@ def html_document(
         storeReviewRetryPublish: '게시 다시 요청',
         storeReviewApprovalFailed: '승인 저장 실패',
         storeReviewPublishFailed: '승인은 저장됐지만 게시 요청에 실패했습니다.',
+        storeReviewManualPublishRequired: '이 과거 리뷰는 API 게시 ID가 없어 Play Console에서 수동 답변해야 합니다.',
         currentVersion: '현재 버전',
         releasedDate: '현재 버전 게시일',
         releaseNotes: '출시 정보',
@@ -1843,6 +1844,7 @@ def html_document(
         storeReviewRetryPublish: 'Retry publication',
         storeReviewApprovalFailed: 'Approval not saved',
         storeReviewPublishFailed: 'Approval was saved, but publication could not be requested.',
+        storeReviewManualPublishRequired: 'This historical review has no API publication ID and requires a manual Play Console reply.',
         currentVersion: 'current version',
         releasedDate: 'current version published',
         releaseNotes: 'release info',
@@ -4057,20 +4059,22 @@ def html_document(
       approve.className = 'secondary';
       approve.textContent = t('storeReviewApprovePublish');
       let queuedApprovalId = '';
+      const requiresManualPlayReply = item.platform === 'android' && item.review_id.startsWith('report-');
       const translationsReady = () => !translationRequired || (
         /[가-힣]/.test(item.review_translation_ko || '') &&
         /[가-힣]/.test(replyTranslation?.value || '')
       );
-      approve.disabled = !translationsReady();
+      approve.disabled = requiresManualPlayReply || !translationsReady();
+      if (requiresManualPlayReply) approve.textContent = t('storeReviewManualPublishRequired');
       if (replyTranslation) {{
         replyTranslation.addEventListener('input', () => {{
-          approve.disabled = !translationsReady();
+          approve.disabled = requiresManualPlayReply || !translationsReady();
         }});
         textarea.addEventListener('input', () => {{
           if (textarea.value.trim() !== String(item.suggested_reply || '').trim()) {{
             replyTranslation.value = '';
           }}
-          approve.disabled = !translationsReady();
+          approve.disabled = requiresManualPlayReply || !translationsReady();
         }});
       }}
       approve.onclick = async () => {{
@@ -4655,7 +4659,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v14';
+    return """const CACHE = 'onnellab-manual-publish-v15';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './libsodium-sumo.js', './libsodium-wrappers.js'];
 
 self.addEventListener('install', (event) => {

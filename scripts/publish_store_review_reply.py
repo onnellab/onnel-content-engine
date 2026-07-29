@@ -60,6 +60,11 @@ def package_for(record: dict[str, object], stores_path: Path) -> str:
 def publish(record: dict[str, object], apple_token: str, google_token: str, stores_path: Path, requester=json_request) -> str:
     reply = str(record["reply"])
     if record.get("platform") == "android":
+        if str(record.get("review_id", "")).startswith("report-"):
+            raise ValueError(
+                "Google Play report-only reviews do not expose an API reviewId; "
+                "a manual Play Console reply is required"
+            )
         if len(reply) > 350:
             raise ValueError("Google Play review replies must be at most approximately 350 characters")
         package = package_for(record, stores_path)
@@ -99,9 +104,22 @@ def main() -> int:
         print(f"dry run: would publish {args.approval_id}; pass --confirm-publish to write externally")
         return 0
     apple, google = credentials()
-    external_id = publish(record, apple, google, args.stores)
+    attempts = int(record.get("publication", {}).get("attempts", 0)) + 1
+    try:
+        external_id = publish(record, apple, google, args.stores)
+    except Exception as error:
+        record["status"] = "failed"
+        record["publication"] = {
+            "attempts": attempts,
+            "published_at": "",
+            "external_response_id": "",
+            "error": str(error),
+        }
+        payload["updated_at"] = now_iso()
+        args.approvals.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        raise
     record["status"] = "published"
-    record["publication"] = {"attempts": int(record.get("publication", {}).get("attempts", 0)) + 1, "published_at": now_iso(), "external_response_id": external_id}
+    record["publication"] = {"attempts": attempts, "published_at": now_iso(), "external_response_id": external_id}
     payload["updated_at"] = now_iso()
     args.approvals.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"published {args.approval_id}")

@@ -34,6 +34,27 @@ class StoreReviewPublisherTest(unittest.TestCase):
         self.assertIn("reviews/review-1:reply", calls[0][0])
         self.assertEqual(calls[0][3], {"replyText": "Gracias por avisarnos."})
 
+    def test_google_report_only_id_requires_manual_play_console_reply(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            stores = Path(temp) / "stores.csv"
+            stores.write_text(
+                "app_id,platform,store_url\n"
+                "APP-1,android,https://play.google.com/store/apps/details?id=com.example.app\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "manual Play Console reply"):
+                publish(
+                    {
+                        "platform": "android",
+                        "app_id": "APP-1",
+                        "review_id": "report-generated-id",
+                        "reply": "Thanks for the feedback.",
+                    },
+                    "",
+                    "token",
+                    stores,
+                )
+
 
 if __name__ == "__main__":
     unittest.main()

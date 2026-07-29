@@ -162,6 +162,13 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("data/store_reviews.csv", workflow)
         self.assertIn("public/manual-publish/", workflow)
 
+    def test_store_review_reply_workflow_commits_failed_publication_audit(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "publish-store-review-reply.yml").read_text(encoding="utf-8")
+
+        self.assertIn("continue-on-error: true", workflow)
+        self.assertIn("if: always()", workflow)
+        self.assertIn("steps.publish_reply.outcome == 'failure'", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

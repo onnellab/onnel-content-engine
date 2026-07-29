@@ -210,6 +210,8 @@ Body
             self.assertIn("confirm_publish: 'PUBLISH'", html)
             self.assertIn("await dispatchApprovedStoreReply(queuedApprovalId)", html)
             self.assertNotIn("Queued — not published", html)
+            self.assertIn("item.review_id.startsWith('report-')", html)
+            self.assertIn("storeReviewManualPublishRequired", html)
             self.assertIn("const isReplied = item.status === 'replied' || Boolean(item.developer_reply);", html)
             self.assertIn("if (isReplied) return card;", html)
             self.assertIn("stars.textContent = `${rating} / 5`;", html)
@@ -466,7 +468,7 @@ Body
             self.assertTrue((output.parent / "sw.js").exists())
             self.assertTrue((output.parent / "libsodium-sumo.js").exists())
             self.assertTrue((output.parent / "libsodium-wrappers.js").exists())
-            self.assertIn("onnellab-manual-publish-v14", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("onnellab-manual-publish-v15", (output.parent / "sw.js").read_text(encoding="utf-8"))
             self.assertIn("./libsodium-sumo.js", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_filters_stale_verification_report_items(self) -> None:
