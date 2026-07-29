@@ -34,7 +34,8 @@ jobs:
           cp ../template-source/template/.github/workflows/ci.yml .github/workflows/ci.yml
           cp ../template-source/template/tool/quality_gate.sh tool/quality_gate.sh
           cp ../template-source/template/tool/verify_patch_notes.sh tool/verify_patch_notes.sh
-          chmod +x tool/quality_gate.sh tool/verify_patch_notes.sh
+          cp ../template-source/template/tool/codex_security_gate.sh tool/codex_security_gate.sh
+          chmod +x tool/quality_gate.sh tool/verify_patch_notes.sh tool/codex_security_gate.sh
       - name: Create Draft PR only when files differ
         working-directory: app
         env:
@@ -49,7 +50,7 @@ jobs:
           fi
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add .github/workflows/ci.yml tool/quality_gate.sh tool/verify_patch_notes.sh
+          git add .github/workflows/ci.yml tool/quality_gate.sh tool/verify_patch_notes.sh tool/codex_security_gate.sh
           git commit -m "Sync Flutter template quality gate"
           git push -u origin HEAD
-          gh pr create --repo "$REPOSITORY" --base "$BASE_REF" --head "$(git branch --show-current)" --draft --title "Sync Flutter template quality gate" --body "This Draft PR updates only the template CI and quality-gate scripts. Review the diff before merging. It does not change app behavior, store metadata, signing, or deployment settings."
+          gh pr create --repo "$REPOSITORY" --base "$BASE_REF" --head "$(git branch --show-current)" --draft --title "Sync Flutter template quality gate" --body "This Draft PR updates only the template CI and quality-gate scripts, including the required Codex Security gate implementation. Review the diff before merging. It does not change app behavior, store metadata, signing, or deployment settings."
