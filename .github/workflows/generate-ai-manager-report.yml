@@ -31,7 +31,7 @@ jobs:
       - name: Update optional GitHub manager notification
         run: python3 scripts/publish_ai_manager_issue.py
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.OPS_MANAGER_GITHUB_TOKEN || secrets.ONNELLAB_RELEASE_TOKEN || github.token }}
       - name: Send optional manager webhook
         run: python3 scripts/publish_ai_manager_webhook.py
         env:

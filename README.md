@@ -379,10 +379,11 @@ disabled until separately configured.
 
 ## Manager notification
 
-The daily Manager report can update one GitHub issue instead of creating
-repeated alerts. GitHub Issue notification is disabled because this repository
-is public; enable it only after selecting a private operations repository. The
-report summarizes pending Coder approvals, Draft PRs, portable QA
+The daily Manager report updates one GitHub issue in the private
+`onnellab/onnellab-ops` repository instead of creating repeated alerts. It uses
+the dedicated `OPS_MANAGER_GITHUB_TOKEN` secret when configured, otherwise the
+existing release token, and never posts the report to this public repository.
+The report summarizes pending Coder approvals, Draft PRs, portable QA
 passes/blocks, and private-test/store gates, then links to existing human
 approval workflows. It is informational and cannot authorize any action.
 
