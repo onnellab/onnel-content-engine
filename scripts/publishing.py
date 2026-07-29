@@ -371,7 +371,7 @@ def social_card_font_defs(language: str) -> tuple[str, str]:
             "</style></defs>"
         )
         return defs, "ONNELLAB Korean, Noto Sans KR, Malgun Gothic, system-ui, sans-serif"
-    return "", "Noto Sans KR, Malgun Gothic, system-ui, sans-serif"
+    return "", "ONNELLAB Korean, Noto Sans KR, Malgun Gothic, system-ui, sans-serif"
 
 
 def social_card_svg(article: Article) -> str:
@@ -1360,6 +1360,8 @@ def deploy_github_pages(
     _ = site_dir
     _ = repository
     _ = deploy_dir
+    if dry_run and not homepage_repo.is_dir():
+        return []
     validate_homepage_repository(homepage_repo)
     if dry_run:
         return export_markdown_to_homepage(topics_path, homepage_repo, dry_run=True)
