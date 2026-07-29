@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "drafts": [
+    {
+      "review_id": "fc0a6e51-79d1-4aea-8aad-5954a7541b7a",
+      "reply": "Thanks for the feedback. We understand that the one-time Pro price for editing was not what you expected. VaultXT Pro is a one-time purchase, not a subscription.",
+      "review_translation_ko": "파일을 편집하려면 6.99달러라니",
+      "reply_translation_ko": "의견을 보내주셔서 감사합니다. 편집을 위한 일회성 Pro 가격이 기대하신 것과 달랐다는 점을 이해합니다. VaultXT Pro는 구독이 아닌 일회성 구매입니다.",
+      "source": "codex",
+      "facts": [
+        {
+          "text": "VaultXT Pro is a one-time purchase; it is not a subscription.",
+          "source": "docs/operations/PRICING_FACTS.md:10"
+        }
+      ]
+    },
+    {
+      "review_id": "report-6b652b2227b5da3cd8607adf",
+      "reply": "Thanks for the five-star rating! We're glad you chose TagWeaver for editing MP3 metadata.",
+      "review_translation_ko": "태그 편집기",
+      "reply_translation_ko": "별점 5점을 주셔서 감사합니다! MP3 메타데이터 편집에 TagWeaver를 선택해 주셔서 기쁩니다.",
+      "source": "codex",
+      "facts": [
+        {
+          "text": "TagWeaver is a focused editor for MP3 metadata.",
+          "source": "docs/operations/APP_FACTS.md:6"
+        }
+      ]
+    },
+    {
+      "review_id": "report-a0d3339ac24a86567e3f9185",
+      "reply": "Thanks for sharing your concern. We understand that the paid upgrade may not have been clear. VaultXT Pro is a one-time purchase rather than a subscription.",
+      "review_translation_ko": "이 앱은 사실 유료 앱입니다",
+      "reply_translation_ko": "우려를 전해주셔서 감사합니다. 유료 업그레이드가 명확하지 않았을 수 있다는 점을 이해합니다. VaultXT Pro는 구독이 아닌 일회성 구매입니다.",
+      "source": "codex",
+      "facts": [
+        {
+          "text": "VaultXT Pro is a one-time purchase; it is not a subscription.",
+          "source": "docs/operations/PRICING_FACTS.md:10"
+        }
+      ]
+    }
+  ]
+}
