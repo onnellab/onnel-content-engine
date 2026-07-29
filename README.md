@@ -227,10 +227,13 @@ local Codex environment can create exactly one audited Draft PR:
 scripts/run_codex_approved_coder_task.sh TASK_ID --execute
 ```
 
-The runner requires a clean mapped local Flutter checkout, creates a dedicated
-branch, blocks protected-path changes, runs `flutter analyze`, and only then
-pushes a Draft PR. It never merges, deploys, publishes, or changes store
-settings. The generated PR must still pass the QA and human merge gates.
+The runner clones the approved repository into a new temporary workspace,
+creates a dedicated branch from `origin/main`, blocks changes outside the
+ticket's approved paths, runs the repository quality gate, and only then
+pushes a Draft PR. The temporary clone is deleted after the run, so a failed
+patch cannot contaminate a long-lived app checkout. It never merges, deploys,
+publishes, or changes store settings. The generated PR must still pass the QA
+and human merge gates.
 
 The approval workflow can continue automatically on a dedicated self-hosted
 runner only when repository variable `AI_CODER_RUNNER_ENABLED` is exactly
@@ -239,6 +242,24 @@ signed in, and receive the scoped `AI_CODER_GITHUB_TOKEN` secret. Missing
 configuration fails before app mutation; the default disabled state records
 approval without queueing Coder work. A successful run commits the Draft PR
 URL, branch, and commit back to the task audit ledger.
+
+All Coder executions share the `ai-coder-global` concurrency group, so the
+dedicated runner processes exactly one patch at a time even when different
+tasks are approved together. Every task must record the symptom, reproduction,
+expected result, allowed and prohibited paths, verification commands,
+performance baseline, completion criteria, and explicit `GREEN`, `YELLOW`, or
+`RED` risk class. `RED` is never executable. `YELLOW` requires the separate
+plan-approval checkbox before any repository is cloned.
+
+Install `@openai/codex-security` on the dedicated runner. Unless repository
+variable `AI_CODER_SECURITY_SCAN_ENABLED` is explicitly `false`, the runner
+scans only the uncommitted patch with `codex-security scan --working-tree`
+after the app quality gate. High/critical findings, incomplete coverage, or a
+scanner error stop the run before commit and PR creation. This optional gate
+requires Node.js 22 or later and an authenticated Codex Security installation;
+scan artifacts remain in a private temporary directory outside the app clone
+and are deleted after the run. The gate uses the runner's authenticated Codex
+account; disabling it requires an explicit repository-variable change.
 
 When an app was created from `onnellab-flutter-template`, the runner uses its
 `tool/quality_gate.sh` instead of the basic analysis/test fallback. That keeps

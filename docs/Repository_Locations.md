@@ -8,6 +8,13 @@ Machine-readable app repository mappings live in:
 data/local_repositories.csv
 ```
 
+These paths describe the home PC. `onnellab-text` and `melivra` use their
+primary WSL checkouts under `/home/lue/dev`; the other app repositories use
+Windows checkouts under `C:\dev\projects` (mounted as `/mnt/c/dev/projects` in
+WSL). AI Doctor and local QA may read these long-lived checkouts. The approved
+AI-Coder patch runner does not edit them; it creates and removes a fresh
+temporary clone for every task.
+
 Android version metadata can be synced from those mappings with:
 
 ```text
@@ -38,7 +45,5 @@ generated/reports/app_flutter_dependency_versions.md
 
 | Repository | Path | Notes |
 | --- | --- | --- |
-| onnellab-text | `/mnt/c/dev/onnellab-text` | Windows-mounted checkout. |
-| melivra | `/mnt/c/dev/projects/melivra` | Windows-mounted project checkout. |
 | onnel-content-engine | `/mnt/c/dev/onnel-content-engine` | Content automation repository. |
 | onnellab.github.io | `/mnt/c/dev/onnellab.github.io` | Main ONNELLAB homepage repository. |

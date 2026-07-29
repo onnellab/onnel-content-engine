@@ -1,8 +1,8 @@
 app_id,app_slug,repository_name,path,pubspec_path,source_priority,notes
-APP-0001,quivra,quivra,/mnt/c/dev/projects/quivra,pubspec.yaml,primary,Flutter app checkout.
-APP-0002,tagweaver,tagweaver,/mnt/c/dev/projects/tagweaver2,pubspec.yaml,primary,Flutter app checkout uses tagweaver2 directory.
-APP-0003,vaultxt,onnellab-text,/home/lue/dev/onnellab-text/vaultxt,pubspec.yaml,primary,Primary WSL checkout under onnellab-text.
-APP-0004,segra,segra,/mnt/c/dev/projects/segra,pubspec.yaml,primary,Flutter app checkout.
-APP-0005,clipnest,clipnest,/mnt/c/dev/projects/clipnest,pubspec.yaml,primary,Flutter app checkout.
-APP-0006,aligna,aligna,/mnt/c/dev/projects/aligna,pubspec.yaml,primary,Flutter app checkout.
-APP-0007,melivra,melivra,/mnt/c/dev/projects/melivra,pubspec.yaml,primary,Flutter app checkout.
+APP-0001,quivra,quivra,/mnt/c/dev/projects/quivra,pubspec.yaml,primary,Home PC Windows checkout under C:\dev\projects.
+APP-0002,tagweaver,tagweaver,/mnt/c/dev/projects/tagweaver2,pubspec.yaml,primary,Home PC Windows checkout under C:\dev\projects; directory is tagweaver2.
+APP-0003,vaultxt,onnellab-text,/home/lue/dev/onnellab-text/vaultxt,pubspec.yaml,primary,Home PC primary WSL checkout under onnellab-text.
+APP-0004,segra,segra,/mnt/c/dev/projects/segra,pubspec.yaml,primary,Home PC Windows checkout under C:\dev\projects.
+APP-0005,clipnest,clipnest,/mnt/c/dev/projects/clipnest,pubspec.yaml,primary,Home PC Windows checkout under C:\dev\projects.
+APP-0006,aligna,aligna,/mnt/c/dev/projects/aligna,pubspec.yaml,primary,Home PC Windows checkout under C:\dev\projects.
+APP-0007,melivra,melivra,/home/lue/dev/melivra,pubspec.yaml,primary,Home PC primary WSL checkout.

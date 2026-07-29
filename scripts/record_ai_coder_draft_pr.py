@@ -16,6 +16,7 @@ def main() -> int:
     parser.add_argument("--branch", required=True)
     parser.add_argument("--pr-url", required=True)
     parser.add_argument("--commit", required=True)
+    parser.add_argument("--security-scan", choices=("passed", "not_enabled"), required=True)
     args = parser.parse_args()
     if not args.pr_url.startswith("https://github.com/"):
         parser.error("--pr-url must be a GitHub HTTPS PR URL")
@@ -25,7 +26,8 @@ def main() -> int:
     if not task or task.get("status") != "approved_for_draft_pr":
         raise SystemExit("task must be approved_for_draft_pr")
     task.update({"status": "draft_pr_created", "branch": args.branch, "pr_url": args.pr_url,
-                 "commit": args.commit, "draft_pr_created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat()})
+                 "commit": args.commit, "security_scan": args.security_scan,
+                 "draft_pr_created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat()})
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"recorded Draft PR for {args.task_id}")
     return 0

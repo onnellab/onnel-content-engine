@@ -5,6 +5,8 @@ import csv, json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from ai_coder_task_contract import contract_errors
+
 ROOT=Path(__file__).resolve().parents[1]
 def main() -> int:
     findings=json.loads((ROOT/"data/ai_doctor_findings.json").read_text(encoding="utf-8")).get("findings",[])
@@ -20,7 +22,22 @@ def main() -> int:
         if finding.get("diagnosis_status") != "DIAGNOSED": continue
         slug=finding.get("app_slug","")
         task_id=finding.get("finding_id")
-        task={"task_id":task_id,"app_slug":slug,"repository":repos.get(slug,""),"status":"proposed","finding":finding,"constraints":["Create a draft PR only; never merge or deploy.","Reproduce or add a failing test before changing production code.","Do not modify billing, authentication, privacy, cryptography, or database migrations.","Run the app repository's relevant tests and report results."]}
+        diagnosis=finding.get("diagnosis",{})
+        source=finding.get("github_issue") or finding.get("crash") or finding.get("internal_test_feedback") or {}
+        symptom=source.get("title") or source.get("summary") or finding.get("hypothesis","")
+        ticket={
+            "observed_symptom":symptom,
+            "reproduction":diagnosis.get("reproduction",""),
+            "expected_result":diagnosis.get("expected_result",""),
+            "allowed_paths":diagnosis.get("recommended_scope",[]),
+            "prohibited_paths":["billing","authentication","authorization","privacy","cryptography","database migrations","release signing","store metadata","secrets"],
+            "verification_commands":diagnosis.get("verification_commands",[]),
+            "performance_baseline":diagnosis.get("performance_baseline",""),
+            "completion_criteria":diagnosis.get("completion_criteria",""),
+        }
+        task={"task_id":task_id,"app_slug":slug,"repository":repos.get(slug,""),"status":"proposed","risk_class":diagnosis.get("risk_class",""),"ticket":ticket,"finding":finding,"constraints":["Create a draft PR only; never merge or deploy.","Reproduce or add a failing test before changing production code.","Do not modify billing, authentication, authorization, privacy, cryptography, database migrations, signing, store metadata, or secrets.","Run every approved verification command and the app repository quality gate."]}
+        task["intake_status"]="ready" if not contract_errors(task) else "blocked"
+        if task["intake_status"]=="blocked": task["intake_errors"]=contract_errors(task)
         existing=previous_by_id.get(task_id,{})
         if existing.get("status") in {"approved_for_draft_pr","draft_pr_created","merged","closed"}:
             task.update({key:value for key,value in existing.items() if key not in {"finding","app_slug","repository","constraints"}})

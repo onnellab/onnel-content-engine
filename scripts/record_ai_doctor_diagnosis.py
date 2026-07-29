@@ -8,6 +8,8 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+from ai_coder_task_contract import RISK_CLASSES, safe_relative_path
+
 ROOT = Path(__file__).resolve().parents[1]
 SAFE_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,119}")
 
@@ -28,6 +30,23 @@ def main() -> int:
         raise SystemExit("a diagnosis requires hypotheses and objective evidence")
     if not report.get("reproduction") or not report.get("risk"):
         raise SystemExit("Doctor report requires reproduction and risk")
+    if report["status"] == "DIAGNOSED":
+        required_text = ("expected_result", "performance_baseline", "completion_criteria")
+        if any(not isinstance(report.get(key), str) or not report[key].strip() for key in required_text):
+            raise SystemExit("Doctor diagnosis is missing the fixed Coder ticket contract")
+        scope = report.get("recommended_scope")
+        commands = report.get("verification_commands")
+        if (
+            not isinstance(scope, list)
+            or not scope
+            or not all(safe_relative_path(item) for item in scope)
+            or not isinstance(commands, list)
+            or not commands
+            or not all(isinstance(item, str) and item.strip() for item in commands)
+        ):
+            raise SystemExit("Doctor diagnosis requires safe scope and verification commands")
+        if report.get("risk_class") not in RISK_CLASSES:
+            raise SystemExit("Doctor diagnosis requires GREEN, YELLOW, or RED risk_class")
     findings_path = ROOT / "data" / "ai_doctor_findings.json"
     payload = json.loads(findings_path.read_text(encoding="utf-8"))
     finding = next((item for item in payload.get("findings", []) if item.get("finding_id") == args.finding_id), None)

@@ -5,6 +5,7 @@ on:
       task_id: {description: Proposed task ID, required: true, type: string}
       approver: {description: Human approver name, required: true, type: string}
       confirm: {description: Type APPROVE to authorize Draft PR work, required: true, type: string}
+      approve_yellow_plan: {description: Separately approve a YELLOW task plan, required: false, default: false, type: boolean}
 permissions: {actions: write, contents: write}
 jobs:
   approve:
@@ -16,7 +17,11 @@ jobs:
         env:
           TASK_ID: ${{ inputs.task_id }}
           APPROVER: ${{ inputs.approver }}
-        run: python3 scripts/approve_ai_coder_task.py "$TASK_ID" --approver "$APPROVER" --confirm
+          APPROVE_YELLOW_PLAN: ${{ inputs.approve_yellow_plan }}
+        run: |
+          args=()
+          [[ "$APPROVE_YELLOW_PLAN" != "true" ]] || args+=(--approve-plan)
+          python3 scripts/approve_ai_coder_task.py "$TASK_ID" --approver "$APPROVER" --confirm "${args[@]}"
       - run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
@@ -39,7 +44,7 @@ jobs:
     runs-on: [self-hosted, onnellab-ai-coder]
     timeout-minutes: 90
     concurrency:
-      group: ai-coder-${{ inputs.task_id }}
+      group: ai-coder-global
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
@@ -48,11 +53,13 @@ jobs:
       - name: Verify dedicated runner
         env:
           AI_CODER_GITHUB_TOKEN: ${{ secrets.AI_CODER_GITHUB_TOKEN }}
+          AI_CODER_SECURITY_SCAN_ENABLED: ${{ vars.AI_CODER_SECURITY_SCAN_ENABLED }}
         run: bash scripts/preflight_ai_coder_runner.sh
       - name: Create audited Draft PR
         env:
           GH_TOKEN: ${{ secrets.AI_CODER_GITHUB_TOKEN }}
           TASK_ID: ${{ inputs.task_id }}
+          AI_CODER_SECURITY_SCAN_ENABLED: ${{ vars.AI_CODER_SECURITY_SCAN_ENABLED }}
         run: bash scripts/run_codex_approved_coder_task.sh "$TASK_ID" --execute
       - name: Commit Draft PR audit record
         env:

@@ -138,7 +138,12 @@ class AiDoctorAutomationTest(unittest.TestCase):
                         "hypotheses": ["Parser retains the entire input"],
                         "evidence": ["lib/parser.dart:Parser.open"],
                         "reproduction": "test/parser_large_file_test.dart",
+                        "expected_result": "Large files open without retaining the entire input.",
                         "recommended_scope": ["lib/parser.dart"],
+                        "verification_commands": ["flutter test test/parser_large_file_test.dart"],
+                        "performance_baseline": "Parser memory benchmark must not regress.",
+                        "completion_criteria": "Regression test and existing parser tests pass.",
+                        "risk_class": "YELLOW",
                         "risk": "memory pressure",
                     }
                 ),

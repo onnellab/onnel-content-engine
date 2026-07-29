@@ -13,6 +13,22 @@ for command in codex gh git rg flutter python3; do
     exit 1
   }
 done
+if [[ "${AI_CODER_SECURITY_SCAN_ENABLED:-true}" != "false" ]]; then
+  command -v node >/dev/null || {
+    echo "Codex Security gate requires Node.js 22 or later" >&2
+    exit 1
+  }
+  node_major="$(node -p 'Number(process.versions.node.split(\".\")[0])')"
+  [[ "$node_major" -ge 22 ]] || {
+    echo "Codex Security gate requires Node.js 22 or later" >&2
+    exit 1
+  }
+  command -v codex-security >/dev/null || {
+    echo "AI_CODER_SECURITY_SCAN_ENABLED requires an installed codex-security CLI" >&2
+    exit 1
+  }
+  codex-security login status >/dev/null
+fi
 git -C "$engine_root" diff --quiet
 git -C "$engine_root" diff --cached --quiet
 codex login status >/dev/null
