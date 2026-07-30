@@ -909,12 +909,12 @@ def write_privacy_pages(
         slug = str(policy["app_slug"])
         app_name = str(policy["app_name"])
         alternate_urls = {
-            "en": public_url(site_url, f"apps/{slug}/privacy/"),
-            "ko": public_url(site_url, f"apps/{slug}/privacy/ko/"),
-            "x-default": public_url(site_url, f"apps/{slug}/privacy/"),
+            "en": public_url(site_url, f"privacy/{slug}/"),
+            "ko": public_url(site_url, f"privacy/{slug}/ko/"),
+            "x-default": public_url(site_url, f"privacy/{slug}/"),
         }
         for language, suffix in (("en", ""), ("ko", "ko/")):
-            url_path = f"apps/{slug}/privacy/{suffix}"
+            url_path = f"privacy/{slug}/{suffix}"
             output = site_dir / url_path / "index.html"
             output.parent.mkdir(parents=True, exist_ok=True)
             title = f"{app_name} {'개인정보 처리방침' if language == 'ko' else 'Privacy Policy'}"
@@ -924,19 +924,24 @@ def write_privacy_pages(
                 else f"Privacy Policy for the {app_name} app."
             )
             body = markdown_to_html(localized_policy_markdown(policy, language, developer_name, contact_email))
-            output.write_text(
-                html_document(
-                    title,
-                    description,
-                    public_url(site_url, url_path),
-                    public_url(site_url, "feed.xml"),
-                    body,
-                    language=language,
-                    alternate_urls=alternate_urls,
-                    inline_style=PRIVACY_PAGE_STYLE,
-                ),
-                encoding="utf-8",
+            document = html_document(
+                title,
+                description,
+                public_url(site_url, url_path),
+                public_url(site_url, "feed.xml"),
+                body,
+                language=language,
+                alternate_urls=alternate_urls,
+                inline_style=PRIVACY_PAGE_STYLE,
             )
+            output.write_text(document, encoding="utf-8")
+            compatibility_paths = (
+                site_dir / "apps" / slug / "privacy" / suffix / "index.html",
+                site_dir / slug / "privacy" / suffix / "index.html",
+            )
+            for compatibility_output in compatibility_paths:
+                compatibility_output.parent.mkdir(parents=True, exist_ok=True)
+                compatibility_output.write_text(document, encoding="utf-8")
             pages.append(PrivacyPage(slug, language, url_path, output))
     return pages
 

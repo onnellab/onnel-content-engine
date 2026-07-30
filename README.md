@@ -501,9 +501,14 @@ privacy policies. The site build validates that every beta or released app has
 one policy and generates English and Korean pages at:
 
 ```text
-https://onnellab.github.io/apps/{app_slug}/privacy/
-https://onnellab.github.io/apps/{app_slug}/privacy/ko/
+https://onnellab.github.io/privacy/{app_slug}/
+https://onnellab.github.io/privacy/{app_slug}/ko/
 ```
+
+For compatibility with previously shared store URLs, the same build also
+publishes `/apps/{app_slug}/privacy/`, `/{app_slug}/privacy/`, and their Korean
+variants. These aliases declare the `/privacy/{app_slug}/` URL as canonical;
+use the canonical URL for new store listings and documentation.
 
 The homepage deployment copies these static pages into the shared
 `onnellab.github.io` repository. New apps must add a registry entry instead of

@@ -179,13 +179,29 @@ class PublishingTest(unittest.TestCase):
         self.assertTrue((self.site_dir / "index.html").exists())
         self.assertTrue((self.site_dir / "feed.xml").exists())
         self.assertTrue((self.site_dir / "sitemap.xml").exists())
-        privacy_en = self.site_dir / "apps" / "vaultxt" / "privacy" / "index.html"
-        privacy_ko = self.site_dir / "apps" / "vaultxt" / "privacy" / "ko" / "index.html"
+        privacy_en = self.site_dir / "privacy" / "vaultxt" / "index.html"
+        privacy_ko = self.site_dir / "privacy" / "vaultxt" / "ko" / "index.html"
+        privacy_apps_en = self.site_dir / "apps" / "vaultxt" / "privacy" / "index.html"
+        privacy_apps_ko = self.site_dir / "apps" / "vaultxt" / "privacy" / "ko" / "index.html"
+        privacy_legacy_en = self.site_dir / "vaultxt" / "privacy" / "index.html"
+        privacy_legacy_ko = self.site_dir / "vaultxt" / "privacy" / "ko" / "index.html"
         self.assertTrue(privacy_en.exists())
         self.assertTrue(privacy_ko.exists())
+        self.assertTrue(privacy_apps_en.exists())
+        self.assertTrue(privacy_apps_ko.exists())
+        self.assertTrue(privacy_legacy_en.exists())
+        self.assertTrue(privacy_legacy_ko.exists())
         self.assertIn("VaultXT Privacy Policy", privacy_en.read_text(encoding="utf-8"))
         self.assertIn("VaultXT 개인정보 처리방침", privacy_ko.read_text(encoding="utf-8"))
-        self.assertIn("https://example.com/apps/vaultxt/privacy/", (self.site_dir / "sitemap.xml").read_text(encoding="utf-8"))
+        self.assertIn(
+            '<link rel="canonical" href="https://example.com/privacy/vaultxt/">',
+            privacy_apps_en.read_text(encoding="utf-8"),
+        )
+        self.assertIn(
+            '<link rel="canonical" href="https://example.com/privacy/vaultxt/ko/">',
+            privacy_legacy_ko.read_text(encoding="utf-8"),
+        )
+        self.assertIn("https://example.com/privacy/vaultxt/", (self.site_dir / "sitemap.xml").read_text(encoding="utf-8"))
         self.assertTrue((self.site_dir / "favicon.svg").exists())
         self.assertTrue((self.site_dir / "favicon-32x32.png").exists())
         self.assertTrue((self.site_dir / "apple-touch-icon.png").exists())

@@ -48,15 +48,17 @@ jobs:
 
       - name: Copy privacy pages to homepage
         run: |
-          mkdir -p "$HOMEPAGE_REPO_PATH/public/apps"
-          cp -R "$PRIVACY_OUTPUT_PATH/apps/." "$HOMEPAGE_REPO_PATH/public/apps/"
+          mkdir -p "$HOMEPAGE_REPO_PATH/public"
+          cp -R "$PRIVACY_OUTPUT_PATH/." "$HOMEPAGE_REPO_PATH/public/"
 
       - name: Commit homepage privacy pages
         working-directory: ${{ env.HOMEPAGE_REPO_PATH }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/apps
+          while IFS= read -r directory; do
+            git add "public/$directory"
+          done < <(find "$PRIVACY_OUTPUT_PATH" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
           if git diff --cached --quiet; then
             echo "No app privacy policy changes to publish"
           else
