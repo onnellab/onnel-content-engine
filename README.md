@@ -251,6 +251,13 @@ performance baseline, completion criteria, and explicit `GREEN`, `YELLOW`, or
 `RED` risk class. `RED` is never executable. `YELLOW` requires the separate
 plan-approval checkbox before any repository is cloned.
 
+An app GitHub issue labeled `ai-fix` enters the existing privacy-minimized
+Issue collector and read-only Doctor diagnosis path. The label is treated as a
+human request to continue only when the resulting task is contract-complete
+and classified `GREEN`; the local Scout then dispatches the normal audited
+approval workflow. `YELLOW`, `RED`, incomplete, and undiagnosed issues never
+auto-dispatch. Removing the label before collection withdraws that signal.
+
 Install `@openai/codex-security` on the dedicated runner. Unless repository
 variable `AI_CODER_SECURITY_SCAN_ENABLED` is explicitly `false`, the runner
 scans only the uncommitted patch with `codex-security scan --working-tree`
@@ -336,8 +343,15 @@ Firebase Crashlytics can use the same ledger through
 `data/crashlytics_crash_sources.json` and a short-lived
 `FIREBASE_CRASHLYTICS_ACCESS_TOKEN` secret. It imports issue metadata only,
 never crash stack traces or user reports. The collector uses Firebase's
-official Crashlytics REST API and records `not_configured` or `token_missing`
-until a dedicated read-only OAuth integration is available.
+official Crashlytics REST API and records `not_applicable`, `not_configured`,
+or `token_missing` until a dedicated read-only OAuth integration is available.
+
+Both provider configuration files also maintain explicit coverage for every
+release app. Apps that do not integrate the provider are recorded as
+`not_applicable` with a reason, while `configured` coverage is rejected unless
+a matching provider source exists. Run
+`python3 scripts/validate_crash_source_config.py` after changing the app
+registry or adding a crash SDK.
 
 The daily **Collect GitHub Issues** workflow reads open Issue metadata from
 every app repository in `data/app_release_config.csv`. It excludes pull
@@ -394,11 +408,24 @@ For Slack, Discord, or a generic HTTPS webhook, enable
 `OPS_MANAGER_WEBHOOK_URL` Actions secret. Only the Manager summary is sent;
 credentials, review text, telemetry, and approval controls are never sent.
 
-For a Telegram summary with links to the existing audited GitHub approval
-workflows, enable `data/ai_manager_telegram_config.json` and set the
-`TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` Actions secrets. Telegram buttons
-open GitHub workflow pages; they never approve, merge, publish, or deploy
-through Telegram callbacks.
+Telegram delivery is intentionally disabled. Operations notifications use the
+GitHub-backed ChatGPT scheduled monitor described below.
+
+## ChatGPT scheduled GitHub monitor
+
+GitHub publishes a privacy-minimized monitor snapshot at
+`data/chatgpt_monitor_snapshot.json` whenever Coder approval, Draft PR, QA,
+merge, rework, discard, or the periodic Manager cycle changes relevant state.
+The separate **Generate ChatGPT GitHub Monitor** workflow refreshes it every 30
+minutes as a stale-state guard.
+
+Create one hourly, current-chat scheduled task in ChatGPT web or the desktop
+app using `prompts/chatgpt_github_monitor.md`. It reads the snapshot through the
+connected GitHub tool, checks recent failed/cancelled Actions runs, deduplicates
+by stable notification key or run ID, and returns exactly `NO_UPDATE` when
+nothing meaningful changed. The task is read-only; approval, merge, rework,
+and discard remain explicit GitHub workflows. See
+`docs/operations/CHATGPT_GITHUB_MONITOR.md` for the schedule and setup.
 
 Before enabling any future Play/App Store upload adapter, run **Check Store
 Submission Credentials** with `CREDENTIALS`. It validates only the Secret
@@ -475,6 +502,17 @@ sender and subject mappings. It stores neither email bodies nor addresses;
 only a non-reversible message fingerprint and the mapped app/store/kind are
 kept. Leave `data/gmail_policy_alert_config.json` disabled until a dedicated
 mailbox, label, and exact mapping rules are ready.
+
+The scheduled workflow supports two mailboxes without committing either email
+address. The aliases are `developer` and `official`; configure the shared OAuth
+client as `GMAIL_POLICY_ALERT_CLIENT_ID` and `GMAIL_POLICY_ALERT_CLIENT_SECRET`,
+then store each mailbox refresh token separately as
+`GMAIL_POLICY_ALERT_REFRESH_TOKEN_DEVELOPER` and
+`GMAIL_POLICY_ALERT_REFRESH_TOKEN_OFFICIAL`. Collection status is namespaced by
+alias. Message fingerprints use RFC `Message-ID` when present, so the same
+message in both mailboxes becomes one dashboard alert while retaining both
+non-sensitive account aliases as sources; the fallback identity is namespaced
+by account.
 
 Policy tasks require a separate `ASSESS` approval before a local Codex
 read-only assessment packet can be generated. That approval does not permit a

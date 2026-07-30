@@ -1,6 +1,7 @@
 {
-  "checked_at": "2026-07-29T08:18:29+00:00",
+  "checked_at": "2026-07-30T00:50:37+00:00",
   "configured_apps": 0,
-  "state": "not_configured",
+  "covered_apps": 7,
+  "state": "not_applicable",
   "imported": 0
 }

@@ -21,6 +21,7 @@ def main() -> int:
     parser.add_argument("--summary", required=True, help="Sanitized alert summary; do not include account or customer data")
     parser.add_argument("--reference-url", default="")
     parser.add_argument("--occurred-at", default="")
+    parser.add_argument("--event-key", default="", help="Stable non-sensitive identifier used to deduplicate repeated notices")
     parser.add_argument("--output", type=Path, default=ROOT / "data/store_policy_alerts.json")
     args = parser.parse_args()
     summary = " ".join(args.summary.split())
@@ -34,10 +35,15 @@ def main() -> int:
     except ValueError:
         parser.error("--occurred-at must be ISO-8601")
     payload = json.loads(args.output.read_text(encoding="utf-8")) if args.output.exists() else {"alerts": []}
-    alert_id = hashlib.sha256(f"{args.store}|{args.app_slug}|{args.kind}|{summary}|{occurred_at}".encode()).hexdigest()[:16]
+    event_key = args.event_key.strip()
+    if event_key and not all(character.isalnum() or character in "-_." for character in event_key):
+        parser.error("--event-key may contain only letters, digits, dash, underscore, and dot")
+    identity = event_key or f"{summary}|{occurred_at}"
+    alert_id = hashlib.sha256(f"{args.store}|{args.app_slug}|{args.kind}|{identity}".encode()).hexdigest()[:16]
     alert = {"alert_id": alert_id, "store": args.store, "app_slug": args.app_slug, "kind": args.kind,
              "summary": summary, "reference_url": args.reference_url, "occurred_at": occurred_at,
              "imported_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(), "status": "new"}
+    if event_key: alert["event_key"] = event_key
     alerts = {item.get("alert_id"): item for item in payload.get("alerts", [])}
     alerts[alert_id] = alert
     args.output.write_text(json.dumps({"alerts": sorted(alerts.values(), key=lambda item: item["occurred_at"], reverse=True)}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

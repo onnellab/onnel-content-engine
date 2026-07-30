@@ -16,8 +16,10 @@ def main() -> int:
  for source in changed:
   platform="android" if source.get("store")=="google_play" else "ios"
   for app in apps:
+   app_slug=app.get("app_slug") or app.get("slug")
+   if not app_slug: continue
    if platform in app.get("platforms",""):
-    task={"task_id":f"policy-{source['store']}-{app['app_slug']}","app_slug":app["app_slug"],"store":source["store"],"status":"review_required","evidence":{"url":source["url"],"content_hash":source.get("content_hash"),"checked_at":source.get("checked_at")},"scope":["store listing","permissions and privacy disclosures","billing and subscriptions","SDK policy implications"],"conclusion":"No violation inferred. Compare the changed official policy with app code and store metadata before action."}; task.update({key:value for key,value in existing_by_id.get(task["task_id"],{}).items() if key in {"status","approved_by","approved_at"}}); tasks.append(task)
+    task={"task_id":f"policy-{source['store']}-{app_slug}","app_slug":app_slug,"store":source["store"],"status":"review_required","evidence":{"url":source["url"],"content_hash":source.get("content_hash"),"checked_at":source.get("checked_at")},"scope":["store listing","permissions and privacy disclosures","billing and subscriptions","SDK policy implications"],"conclusion":"No violation inferred. Compare the changed official policy with app code and store metadata before action."}; task.update({key:value for key,value in existing_by_id.get(task["task_id"],{}).items() if key in {"status","approved_by","approved_at"}}); tasks.append(task)
  for alert in alerts:
   if alert.get("status") != "new": continue
   task={"task_id":f"policy-alert-{alert['alert_id']}","app_slug":alert["app_slug"],"store":alert["store"],"status":"review_required","evidence":{"alert_id":alert["alert_id"],"kind":alert["kind"],"summary":alert["summary"],"reference_url":alert.get("reference_url", ""),"occurred_at":alert["occurred_at"]},"scope":["stated store requirement only"],"conclusion":"Console alert recorded. Do not infer a remedy; verify the cited requirement and obtain human approval before any store submission, appeal, or release."}; task.update({key:value for key,value in existing_by_id.get(task["task_id"],{}).items() if key in {"status","approved_by","approved_at"}}); tasks.append(task)

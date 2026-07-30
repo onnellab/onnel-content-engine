@@ -245,6 +245,8 @@ Body
             self.assertIn("python3 scripts/fix_social_repetition.py", html)
             self.assertIn(".app-status-card { display: flex; flex-direction: column; gap: 10px; }", html)
             self.assertIn(".app-status-row:only-of-type { flex: 1 1 auto; }", html)
+            self.assertIn("const policyAlerts = aiManagerReport.policy_alerts || [];", html)
+            self.assertIn("detailValue.textContent = alert.summary", html)
             self.assertIn('id="lang-toggle"', html)
             self.assertIn("https://twitter.com/intent/tweet", html)
             self.assertIn("https://dev.to/new", html)

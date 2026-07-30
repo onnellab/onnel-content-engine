@@ -1,4 +1,415 @@
 {
-  "generated_at": "2026-07-29T03:27:35+00:00",
-  "tasks": []
+  "generated_at": "2026-07-30T03:01:05+00:00",
+  "tasks": [
+    {
+      "task_id": "policy-google_play-quivra",
+      "app_slug": "quivra",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
+        "content_hash": "c43db7cddd42d5320263be0f77804c481e5ab2f22e76860235ba80f0091b3859",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-tagweaver",
+      "app_slug": "tagweaver",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
+        "content_hash": "c43db7cddd42d5320263be0f77804c481e5ab2f22e76860235ba80f0091b3859",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-vaultxt",
+      "app_slug": "vaultxt",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
+        "content_hash": "c43db7cddd42d5320263be0f77804c481e5ab2f22e76860235ba80f0091b3859",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-segra",
+      "app_slug": "segra",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
+        "content_hash": "c43db7cddd42d5320263be0f77804c481e5ab2f22e76860235ba80f0091b3859",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-aligna",
+      "app_slug": "aligna",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
+        "content_hash": "c43db7cddd42d5320263be0f77804c481e5ab2f22e76860235ba80f0091b3859",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-melivra",
+      "app_slug": "melivra",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
+        "content_hash": "c43db7cddd42d5320263be0f77804c481e5ab2f22e76860235ba80f0091b3859",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-quivra",
+      "app_slug": "quivra",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
+        "content_hash": "fe3b810e62b77954d8cb4ef47ff72994bd6576e36ef5c83406cda2f88be4bb57",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-tagweaver",
+      "app_slug": "tagweaver",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
+        "content_hash": "fe3b810e62b77954d8cb4ef47ff72994bd6576e36ef5c83406cda2f88be4bb57",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-vaultxt",
+      "app_slug": "vaultxt",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
+        "content_hash": "fe3b810e62b77954d8cb4ef47ff72994bd6576e36ef5c83406cda2f88be4bb57",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-segra",
+      "app_slug": "segra",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
+        "content_hash": "fe3b810e62b77954d8cb4ef47ff72994bd6576e36ef5c83406cda2f88be4bb57",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-aligna",
+      "app_slug": "aligna",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
+        "content_hash": "fe3b810e62b77954d8cb4ef47ff72994bd6576e36ef5c83406cda2f88be4bb57",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-melivra",
+      "app_slug": "melivra",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
+        "content_hash": "fe3b810e62b77954d8cb4ef47ff72994bd6576e36ef5c83406cda2f88be4bb57",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-app_store-quivra",
+      "app_slug": "quivra",
+      "store": "app_store",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/app-store/review/guidelines/",
+        "content_hash": "59bc9cdd945a4a6a639f80df233348bc7cd45cc0af02a0886f736108b0dd6a88",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-app_store-tagweaver",
+      "app_slug": "tagweaver",
+      "store": "app_store",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/app-store/review/guidelines/",
+        "content_hash": "59bc9cdd945a4a6a639f80df233348bc7cd45cc0af02a0886f736108b0dd6a88",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-app_store-vaultxt",
+      "app_slug": "vaultxt",
+      "store": "app_store",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/app-store/review/guidelines/",
+        "content_hash": "59bc9cdd945a4a6a639f80df233348bc7cd45cc0af02a0886f736108b0dd6a88",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-app_store-segra",
+      "app_slug": "segra",
+      "store": "app_store",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/app-store/review/guidelines/",
+        "content_hash": "59bc9cdd945a4a6a639f80df233348bc7cd45cc0af02a0886f736108b0dd6a88",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-app_store-clipnest",
+      "app_slug": "clipnest",
+      "store": "app_store",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/app-store/review/guidelines/",
+        "content_hash": "59bc9cdd945a4a6a639f80df233348bc7cd45cc0af02a0886f736108b0dd6a88",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-app_store-aligna",
+      "app_slug": "aligna",
+      "store": "app_store",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/app-store/review/guidelines/",
+        "content_hash": "59bc9cdd945a4a6a639f80df233348bc7cd45cc0af02a0886f736108b0dd6a88",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-app_store-melivra",
+      "app_slug": "melivra",
+      "store": "app_store",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/app-store/review/guidelines/",
+        "content_hash": "59bc9cdd945a4a6a639f80df233348bc7cd45cc0af02a0886f736108b0dd6a88",
+        "checked_at": "2026-07-30T03:01:04+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-alert-462fe34a0cfb9d96",
+      "app_slug": "tagweaver",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "alert_id": "462fe34a0cfb9d96",
+        "kind": "billing",
+        "summary": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다.",
+        "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
+        "occurred_at": "2026-07-30T00:00:00+00:00"
+      },
+      "scope": [
+        "stated store requirement only"
+      ],
+      "conclusion": "Console alert recorded. Do not infer a remedy; verify the cited requirement and obtain human approval before any store submission, appeal, or release."
+    },
+    {
+      "task_id": "policy-alert-f6061cafa1cdc8c7",
+      "app_slug": "melivra",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "alert_id": "f6061cafa1cdc8c7",
+        "kind": "billing",
+        "summary": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다.",
+        "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
+        "occurred_at": "2026-07-30T00:00:00+00:00"
+      },
+      "scope": [
+        "stated store requirement only"
+      ],
+      "conclusion": "Console alert recorded. Do not infer a remedy; verify the cited requirement and obtain human approval before any store submission, appeal, or release."
+    },
+    {
+      "task_id": "policy-alert-a2acc7751c07280c",
+      "app_slug": "segra",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "alert_id": "a2acc7751c07280c",
+        "kind": "billing",
+        "summary": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다.",
+        "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
+        "occurred_at": "2026-07-30T00:00:00+00:00"
+      },
+      "scope": [
+        "stated store requirement only"
+      ],
+      "conclusion": "Console alert recorded. Do not infer a remedy; verify the cited requirement and obtain human approval before any store submission, appeal, or release."
+    },
+    {
+      "task_id": "policy-alert-5b85a6e4d77c1be8",
+      "app_slug": "vaultxt",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "alert_id": "5b85a6e4d77c1be8",
+        "kind": "billing",
+        "summary": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다.",
+        "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
+        "occurred_at": "2026-07-30T00:00:00+00:00"
+      },
+      "scope": [
+        "stated store requirement only"
+      ],
+      "conclusion": "Console alert recorded. Do not infer a remedy; verify the cited requirement and obtain human approval before any store submission, appeal, or release."
+    }
+  ]
 }

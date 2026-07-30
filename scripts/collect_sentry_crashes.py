@@ -31,12 +31,15 @@ def fetch(url: str, token: str) -> list[dict]:
 def main() -> int:
     config = json.loads((ROOT / "data/sentry_crash_sources.json").read_text(encoding="utf-8"))
     projects = config.get("projects", [])
+    coverage = config.get("coverage", [])
     token = os.environ.get("SENTRY_AUTH_TOKEN", "")
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-    status = {"checked_at": now, "configured_projects": len(projects), "connected": bool(token), "imported": 0, "state": "not_configured"}
+    status = {"checked_at": now, "configured_projects": len(projects), "covered_apps": len(coverage), "connected": bool(token), "imported": 0, "state": "not_configured"}
     if not projects:
+        if coverage and all(item.get("state") == "not_applicable" for item in coverage):
+            status["state"] = "not_applicable"
         (ROOT / "data/crash_sync_status.json").write_text(json.dumps(status, indent=2) + "\n", encoding="utf-8")
-        print("no Sentry projects configured")
+        print(status["state"])
         return 0
     if not token:
         status["state"] = "token_missing"

@@ -1,0 +1,21 @@
+name: Generate ChatGPT GitHub Monitor
+on:
+  schedule: [{cron: '10,40 * * * *'}]
+  workflow_dispatch: {}
+permissions: {contents: write}
+concurrency:
+  group: chatgpt-monitor-snapshot
+  cancel-in-progress: false
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/generate_chatgpt_monitor_snapshot.py
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/chatgpt_monitor_snapshot.json
+          git diff --cached --quiet || git commit -m "Refresh ChatGPT monitor snapshot"
+          git pull --rebase --autostash origin main
+          git push

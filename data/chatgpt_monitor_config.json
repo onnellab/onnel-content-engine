@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "enabled": true,
+  "repository": "onnellab/onnel-content-engine",
+  "schedule": "RRULE:FREQ=HOURLY;INTERVAL=1",
+  "destination": "current_chat",
+  "lookback_hours": 2,
+  "notify_states": [
+    "coder_execution_pending",
+    "draft_pr_qa_pending",
+    "draft_pr_qa_blocked",
+    "draft_pr_ready"
+  ]
+}

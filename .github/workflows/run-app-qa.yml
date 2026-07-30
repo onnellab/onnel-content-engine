@@ -100,9 +100,10 @@ jobs:
       - name: Commit QA audit report
         working-directory: content-engine
         run: |
+          python3 scripts/generate_chatgpt_monitor_snapshot.py
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add data/qa-reports/
+          git add data/qa-reports/ data/chatgpt_monitor_snapshot.json
           git diff --cached --quiet || git commit -m "Record app QA result"
           git push
       - name: Fail when core QA failed

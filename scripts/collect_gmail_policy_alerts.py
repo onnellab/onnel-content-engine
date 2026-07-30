@@ -9,6 +9,7 @@ import os
 import re
 import sys
 from datetime import datetime, timezone
+from email.utils import parseaddr
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
@@ -18,6 +19,25 @@ ROOT = Path(__file__).resolve().parents[1]
 GMAIL = "https://gmail.googleapis.com/gmail/v1/users/me"
 
 
+def record_sync(account_alias: str, state: str, imported: int, checked_at: str) -> None:
+    path = ROOT / "data/gmail_policy_alert_sync_status.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        payload = {}
+    accounts = payload.get("accounts", {}) if isinstance(payload.get("accounts"), dict) else {}
+    accounts[account_alias] = {"checked_at": checked_at, "state": state, "imported": imported}
+    states = {item.get("state") for item in accounts.values() if isinstance(item, dict)}
+    aggregate_state = "collected" if "collected" in states else "disabled" if states == {"disabled"} else "not_connected"
+    result = {
+        "checked_at": checked_at,
+        "state": aggregate_state,
+        "imported": sum(int(item.get("imported", 0)) for item in accounts.values() if isinstance(item, dict)),
+        "accounts": accounts,
+    }
+    path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+
+
 def call(url: str, method: str = "GET", token: str = "", payload: bytes | None = None, content_type: str = "application/json") -> dict:
     headers = {"Accept": "application/json"}
     if token: headers["Authorization"] = f"Bearer {token}"
@@ -25,7 +45,20 @@ def call(url: str, method: str = "GET", token: str = "", payload: bytes | None =
     try:
         with urlopen(Request(url, data=payload, headers=headers, method=method), timeout=30) as response:
             data = json.loads(response.read().decode("utf-8"))
-    except (HTTPError, URLError, TimeoutError, json.JSONDecodeError) as error:
+    except HTTPError as error:
+        detail = ""
+        try:
+            error_payload = json.loads(error.read().decode("utf-8"))
+            error_object = error_payload.get("error", {}) if isinstance(error_payload, dict) else {}
+            if isinstance(error_object, dict):
+                status = str(error_object.get("status") or "")
+                message = str(error_object.get("message") or "")
+                detail = ": ".join(value for value in (status, message) if value)
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            pass
+        suffix = f" ({detail})" if detail else ""
+        raise RuntimeError(f"Gmail policy alert collection failed: HTTP {error.code}{suffix}") from error
+    except (URLError, TimeoutError, json.JSONDecodeError) as error:
         raise RuntimeError(f"Gmail policy alert collection failed: {error}") from error
     if not isinstance(data, dict): raise RuntimeError("Gmail response was not an object")
     return data
@@ -48,9 +81,12 @@ def headers(message: dict) -> dict[str, str]:
 def main() -> int:
     config = json.loads((ROOT / "data/gmail_policy_alert_config.json").read_text(encoding="utf-8"))
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-    sync = {"checked_at": now, "state": "disabled", "imported": 0}
+    account_alias = os.environ.get("GMAIL_ACCOUNT_ALIAS", "default").strip() or "default"
+    if not re.fullmatch(r"[a-z0-9_-]{1,40}", account_alias):
+        raise RuntimeError("GMAIL_ACCOUNT_ALIAS must be a short non-sensitive alias")
+    imported = 0
     if not config.get("enabled"):
-        (ROOT / "data/gmail_policy_alert_sync_status.json").write_text(json.dumps(sync, indent=2) + "\n", encoding="utf-8")
+        record_sync(account_alias, "disabled", imported, now)
         print("Gmail policy alert collection is disabled")
         return 0
     label, rules = str(config.get("label", "")), config.get("rules", [])
@@ -62,22 +98,37 @@ def main() -> int:
     alerts = {item.get("alert_id"): item for item in payload.get("alerts", [])}
     for item in listing.get("messages", []):
         if not isinstance(item, dict) or not item.get("id"): continue
-        message = call(f"{GMAIL}/messages/{item['id']}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date", token=token)
+        message = call(f"{GMAIL}/messages/{item['id']}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date&metadataHeaders=Message-ID", token=token)
         meta = headers(message); sender, subject = meta.get("from", ""), meta.get("subject", "")
         for index, rule in enumerate(rules):
             if not isinstance(rule, dict): continue
-            if rule.get("sender") != sender or not re.search(str(rule.get("subject_pattern", "^$")), subject, re.IGNORECASE): continue
-            store, slug, kind = rule.get("store"), rule.get("app_slug"), rule.get("kind")
-            if store not in {"google_play", "app_store"} or kind not in {"warning", "rejection", "deadline", "metadata", "privacy", "billing", "other"} or not isinstance(slug, str) or not slug: continue
-            fingerprint = hashlib.sha256(str(item["id"]).encode()).hexdigest()[:12]
+            sender_address = parseaddr(sender)[1].lower()
+            if str(rule.get("sender", "")).lower() != sender_address or not re.search(str(rule.get("subject_pattern", "^$")), subject, re.IGNORECASE): continue
+            store, kind = rule.get("store"), rule.get("kind")
+            slugs = rule.get("app_slugs")
+            if not isinstance(slugs, list): slugs = [rule.get("app_slug")]
+            slugs = [slug for slug in slugs if isinstance(slug, str) and slug]
+            if store not in {"google_play", "app_store"} or kind not in {"warning", "rejection", "deadline", "metadata", "privacy", "billing", "other"} or not slugs: continue
+            message_identity = meta.get("message-id", "").strip() or f"{account_alias}|{item['id']}"
+            fingerprint = hashlib.sha256(message_identity.encode()).hexdigest()[:12]
             summary = f"Mapped mailbox policy alert detected (rule {index}; message {fingerprint}). Review the store console."
-            alert_id = hashlib.sha256(f"gmail|{item['id']}|{index}".encode()).hexdigest()[:16]
-            alerts.setdefault(alert_id, {"alert_id": alert_id, "store": store, "app_slug": slug, "kind": kind, "summary": summary, "reference_url": "", "occurred_at": now, "imported_at": now, "status": "new", "source": "gmail_mapped_alert"})
-            sync["imported"] += 1
+            event_key = str(rule.get("event_key", "")).strip()
+            for slug in slugs:
+                existing = next((alert for alert in alerts.values() if event_key and alert.get("event_key") == event_key and alert.get("app_slug") == slug), None)
+                identity = event_key or message_identity
+                alert_id = hashlib.sha256(f"gmail|{identity}|{slug}|{index}".encode()).hexdigest()[:16]
+                target = existing or alerts.get(alert_id)
+                if target is None:
+                    target = {"alert_id": alert_id, "store": store, "app_slug": slug, "kind": kind, "summary": summary, "reference_url": "", "occurred_at": now, "imported_at": now, "status": "new", "source": "gmail_mapped_alert", "source_accounts": [account_alias]}
+                    if event_key: target["event_key"] = event_key
+                    alerts[alert_id] = target
+                    imported += 1
+                else:
+                    source_accounts = target.setdefault("source_accounts", [])
+                    if account_alias not in source_accounts: source_accounts.append(account_alias)
     alerts_path.write_text(json.dumps({"alerts": sorted(alerts.values(), key=lambda item: item["occurred_at"], reverse=True)}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    sync["state"] = "collected"
-    (ROOT / "data/gmail_policy_alert_sync_status.json").write_text(json.dumps(sync, indent=2) + "\n", encoding="utf-8")
-    print(f"collected {sync['imported']} mapped Gmail policy alerts")
+    record_sync(account_alias, "collected", imported, now)
+    print(f"collected {imported} mapped Gmail policy alerts for {account_alias}")
     return 0
 
 

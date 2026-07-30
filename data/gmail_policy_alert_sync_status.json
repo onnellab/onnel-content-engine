@@ -1,5 +1,17 @@
 {
-  "checked_at": "2026-07-29T03:27:35+00:00",
-  "state": "disabled",
-  "imported": 0
+  "checked_at": "2026-07-30T03:01:05+00:00",
+  "state": "collected",
+  "imported": 0,
+  "accounts": {
+    "developer": {
+      "checked_at": "2026-07-30T03:01:05+00:00",
+      "state": "collected",
+      "imported": 0
+    },
+    "official": {
+      "checked_at": "2026-07-30T03:01:05+00:00",
+      "state": "collected",
+      "imported": 0
+    }
+  }
 }

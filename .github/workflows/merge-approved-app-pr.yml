@@ -37,8 +37,9 @@ jobs:
           MERGE_COMMIT: ${{ steps.merge_pr.outputs.merge_commit }}
         run: python3 scripts/record_ai_coder_merge.py "$TASK_ID" --repository "$REPOSITORY" --pr-number "$PR_NUMBER" --approver "$APPROVER" --merge-commit "$MERGE_COMMIT"
       - run: |
+          python3 scripts/generate_chatgpt_monitor_snapshot.py
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add data/ai_coder_tasks.json data/ai_merge_approvals.json
+          git add data/ai_coder_tasks.json data/ai_merge_approvals.json data/chatgpt_monitor_snapshot.json
           git diff --cached --quiet || git commit -m "Record approved app PR merge"
           git push
