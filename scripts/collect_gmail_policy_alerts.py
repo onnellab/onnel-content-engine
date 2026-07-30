@@ -51,7 +51,9 @@ def call(url: str, method: str = "GET", token: str = "", payload: bytes | None =
             error_payload = json.loads(error.read().decode("utf-8"))
             error_object = error_payload.get("error", {}) if isinstance(error_payload, dict) else {}
             if isinstance(error_object, dict):
-                detail = str(error_object.get("status") or error_object.get("message") or "")
+                status = str(error_object.get("status") or "")
+                message = str(error_object.get("message") or "")
+                detail = ": ".join(value for value in (status, message) if value)
         except (json.JSONDecodeError, UnicodeDecodeError):
             pass
         suffix = f" ({detail})" if detail else ""
