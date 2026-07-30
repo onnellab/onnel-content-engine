@@ -10,7 +10,10 @@
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T01:56:59+00:00",
       "status": "new",
-      "event_key": "google-play-billing-8-deadline-2026-08-31"
+      "event_key": "google-play-billing-8-deadline-2026-08-31",
+      "source_accounts": [
+        "developer"
+      ]
     },
     {
       "alert_id": "f6061cafa1cdc8c7",
@@ -22,7 +25,10 @@
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:20+00:00",
       "status": "new",
-      "event_key": "google-play-billing-8-deadline-2026-08-31"
+      "event_key": "google-play-billing-8-deadline-2026-08-31",
+      "source_accounts": [
+        "developer"
+      ]
     },
     {
       "alert_id": "a2acc7751c07280c",
@@ -34,7 +40,10 @@
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:20+00:00",
       "status": "new",
-      "event_key": "google-play-billing-8-deadline-2026-08-31"
+      "event_key": "google-play-billing-8-deadline-2026-08-31",
+      "source_accounts": [
+        "developer"
+      ]
     },
     {
       "alert_id": "5b85a6e4d77c1be8",
@@ -46,7 +55,10 @@
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:21+00:00",
       "status": "new",
-      "event_key": "google-play-billing-8-deadline-2026-08-31"
+      "event_key": "google-play-billing-8-deadline-2026-08-31",
+      "source_accounts": [
+        "developer"
+      ]
     }
   ]
 }
