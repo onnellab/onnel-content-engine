@@ -494,6 +494,25 @@ To require this result before public submission preparation, set `enabled` to
 applies it to every app; otherwise list the app slugs to protect. The gate then
 requires a passed private-test build with the same app, platform, and version.
 
+## Central app privacy policies
+
+`data/app_privacy_policies.json` is the canonical registry for public app
+privacy policies. The site build validates that every beta or released app has
+one policy and generates English and Korean pages at:
+
+```text
+https://onnellab.github.io/apps/{app_slug}/privacy/
+https://onnellab.github.io/apps/{app_slug}/privacy/ko/
+```
+
+The homepage deployment copies these static pages into the shared
+`onnellab.github.io` repository. New apps must add a registry entry instead of
+creating another privacy-policy repository. Existing standalone policy pages
+remain available as legacy links until every shipped app and store listing has
+moved to the central URL. Run `python3 scripts/validate_app_privacy_policies.py`
+before publishing, and review the policy whenever an app adds an SDK, remote
+processing, analytics, advertising, account, payment, or data-retention change.
+
 ## Store-alert mailbox
 
 `collect_gmail_policy_alerts.py` supports a dedicated Gmail label using OAuth

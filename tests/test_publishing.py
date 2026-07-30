@@ -119,6 +119,38 @@ class PublishingTest(unittest.TestCase):
         self.markdown_path.parent.mkdir(parents=True)
         self.ko_markdown_path.parent.mkdir(parents=True)
         write_topics(self.topics_path, [topic_row(), topic_row(topic_id="TOPIC-0002", language="ko")])
+        (self.topics_path.parent / "apps_registry.csv").write_text(
+            "slug,status,product_group\n"
+            "vaultxt,released,apps\n",
+            encoding="utf-8",
+        )
+        (self.topics_path.parent / "app_privacy_policies.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "developer_name": "ONNELLAB",
+                    "contact_email": "privacy@example.com",
+                    "policies": [
+                        {
+                            "app_slug": "vaultxt",
+                            "app_name": "VaultXT",
+                            "last_updated": "2026-07-30",
+                            "legacy_urls": [],
+                            "in_app_purchase": True,
+                            "local_data": {
+                                "en": ["Plain-text files selected by the user"],
+                                "ko": ["사용자가 선택한 일반 텍스트 파일"],
+                            },
+                            "local_processing": {
+                                "en": ["Files are processed on the device."],
+                                "ko": ["파일은 기기에서 처리됩니다."],
+                            },
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
         self.markdown_path.write_text(MARKDOWN, encoding="utf-8")
         self.ko_markdown_path.write_text(
             MARKDOWN.replace('language: "en"', 'language: "ko"').replace('/blog-assets/en/', '/blog-assets/ko/'),
@@ -147,6 +179,13 @@ class PublishingTest(unittest.TestCase):
         self.assertTrue((self.site_dir / "index.html").exists())
         self.assertTrue((self.site_dir / "feed.xml").exists())
         self.assertTrue((self.site_dir / "sitemap.xml").exists())
+        privacy_en = self.site_dir / "apps" / "vaultxt" / "privacy" / "index.html"
+        privacy_ko = self.site_dir / "apps" / "vaultxt" / "privacy" / "ko" / "index.html"
+        self.assertTrue(privacy_en.exists())
+        self.assertTrue(privacy_ko.exists())
+        self.assertIn("VaultXT Privacy Policy", privacy_en.read_text(encoding="utf-8"))
+        self.assertIn("VaultXT 개인정보 처리방침", privacy_ko.read_text(encoding="utf-8"))
+        self.assertIn("https://example.com/apps/vaultxt/privacy/", (self.site_dir / "sitemap.xml").read_text(encoding="utf-8"))
         self.assertTrue((self.site_dir / "favicon.svg").exists())
         self.assertTrue((self.site_dir / "favicon-32x32.png").exists())
         self.assertTrue((self.site_dir / "apple-touch-icon.png").exists())

@@ -10,6 +10,7 @@ This module does not support Blogger.
 from __future__ import annotations
 
 import argparse
+import csv
 import html
 import json
 import os
@@ -30,6 +31,8 @@ UTC = timezone.utc
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SITE_DIR = ROOT / "generated" / "html"
 DEFAULT_SITE_URL = "https://onnellab.github.io/"
+DEFAULT_PRIVACY_POLICIES_PATH = ROOT / "data" / "app_privacy_policies.json"
+DEFAULT_APPS_REGISTRY_PATH = ROOT / "data" / "apps_registry.csv"
 DEFAULT_SOCIAL_TEMPLATE_DIR = ROOT / "templates" / "social"
 DEFAULT_SOCIAL_OUTPUT_DIR = ROOT / "generated" / "social"
 LOCAL_RSVG_CONVERT = ROOT / ".tools" / "librsvg2-bin" / "usr" / "bin" / "rsvg-convert"
@@ -40,6 +43,22 @@ DEFAULT_HOMEPAGE_REPOSITORY_PATH = Path(
 )
 FAVICON_VERSION = "20260712-ol-transparent-v2"
 FAVICON_ASSET_NAMES = ("favicon.svg", "favicon-32x32.png", "apple-touch-icon.png", "site.webmanifest")
+PRIVACY_PAGE_STYLE = """
+  <style>
+    :root { color-scheme: light; --bg: #faf8f5; --text: #35322e; --muted: #706a62; --line: #ddd6cc; --link: #315f86; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; }
+    main { width: min(820px, calc(100% - 40px)); margin: 0 auto; padding: 64px 0 88px; }
+    h1 { margin: 0 0 12px; font-size: clamp(2rem, 6vw, 3.25rem); line-height: 1.12; }
+    h2 { margin: 46px 0 14px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 1.25rem; }
+    p, ul { margin: 0 0 16px; }
+    ul { padding-left: 1.3rem; }
+    li { margin: 6px 0; }
+    a { color: var(--link); text-underline-offset: 0.18em; }
+    main > p:nth-of-type(-n+3) { color: var(--muted); }
+    @media (max-width: 640px) { main { width: min(100% - 32px, 820px); padding-top: 42px; } }
+  </style>
+"""
 PUBLISHABLE_STATUSES = {"published"}
 REQUIRED_PUBLICATION_LANGUAGES = {"en", "ko"}
 EXTERNAL_DISTRIBUTION_LANGUAGES = {"en"}
@@ -67,6 +86,14 @@ class Article:
     description: str
     social_image_path: str
     social_image_url: str
+
+
+@dataclass(frozen=True)
+class PrivacyPage:
+    app_slug: str
+    language: str
+    url_path: str
+    html_path: Path
 
 
 @dataclass(frozen=True)
@@ -498,6 +525,9 @@ def html_document(
     feed_url: str,
     body_html: str,
     social_image_url: str = "",
+    language: str = "en",
+    alternate_urls: dict[str, str] | None = None,
+    inline_style: str = "",
 ) -> str:
     image_meta = ""
     if social_image_url:
@@ -506,8 +536,14 @@ def html_document(
             f'  <meta property="og:image" content="{escaped_image}">\n'
             f'  <meta name="twitter:image" content="{escaped_image}">\n'
         )
+    alternates = "\n".join(
+        f'  <link rel="alternate" hreflang="{html.escape(code, quote=True)}" href="{html.escape(url, quote=True)}">'
+        for code, url in (alternate_urls or {}).items()
+    )
+    if alternates:
+        alternates += "\n"
     return f"""<!doctype html>
-<html lang="en">
+<html lang="{html.escape(language, quote=True)}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -519,7 +555,7 @@ def html_document(
   <link rel="manifest" href="/site.webmanifest?v={FAVICON_VERSION}">
   <meta name="theme-color" content="#f8f4ec">
   <link rel="canonical" href="{html.escape(canonical_url, quote=True)}">
-  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="{html.escape(feed_url, quote=True)}">
+{alternates}  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="{html.escape(feed_url, quote=True)}">
   <meta property="og:type" content="article">
   <meta property="og:title" content="{html.escape(title, quote=True)}">
   <meta property="og:description" content="{html.escape(description, quote=True)}">
@@ -527,7 +563,7 @@ def html_document(
   <meta name="twitter:card" content="{'summary_large_image' if social_image_url else 'summary'}">
   <meta name="twitter:title" content="{html.escape(title, quote=True)}">
   <meta name="twitter:description" content="{html.escape(description, quote=True)}">
-{image_meta.rstrip()}
+{image_meta.rstrip()}{inline_style}
 </head>
 <body>
   <main>
@@ -685,8 +721,234 @@ def write_rss(site_dir: Path, site_url: str, articles: list[Article]) -> None:
     (site_dir / "feed.xml").write_text(rss, encoding="utf-8")
 
 
-def write_sitemap(site_dir: Path, site_url: str, articles: list[Article]) -> None:
+def localized_policy_markdown(policy: dict[str, object], language: str, developer_name: str, contact_email: str) -> str:
+    app_name = str(policy["app_name"])
+    local_data = policy["local_data"]
+    local_processing = policy["local_processing"]
+    if not isinstance(local_data, dict) or not isinstance(local_processing, dict):
+        raise PublishingError(f"{app_name} privacy policy has invalid localized data")
+    data_items = local_data.get(language)
+    processing_items = local_processing.get(language)
+    if not isinstance(data_items, list) or not data_items or not all(isinstance(item, str) and item for item in data_items):
+        raise PublishingError(f"{app_name} privacy policy has invalid {language} local_data")
+    if not isinstance(processing_items, list) or not processing_items or not all(isinstance(item, str) and item for item in processing_items):
+        raise PublishingError(f"{app_name} privacy policy has invalid {language} local_processing")
+    remote = policy.get("remote_processing")
+    has_remote = isinstance(remote, dict)
+    purchase = bool(policy.get("in_app_purchase"))
+    bullets = lambda values: "\n".join(f"- {value}" for value in values)
+    if language == "ko":
+        remote_section = (
+            "## 3. 선택형 서버 처리\n\n"
+            + bullets(remote["data"]["ko"])
+            + f"\n\n{remote['purpose']['ko']}\n"
+            if has_remote
+            else "## 3. 서버 전송\n\n위에 명시한 앱 기능은 ONNELLAB 서버로 파일 내용이나 사용 기록을 전송하지 않습니다.\n"
+        )
+        purchase_section = (
+            "앱 내 구매는 Apple App Store 또는 Google Play가 처리합니다. "
+            f"{app_name}와 {developer_name}은 카드번호나 은행계좌 정보에 접근하거나 저장하지 않습니다. "
+            "스토어가 제공하는 상품·거래·구매 권한 정보는 구매 확인 및 복원에 사용될 수 있습니다."
+            if purchase
+            else "앱 구매가 발생하는 경우 결제는 해당 앱 스토어가 처리하며 ONNELLAB은 카드번호나 은행계좌 정보를 직접 처리하지 않습니다."
+        )
+        retention = (
+            str(remote["retention"]["ko"])
+            if has_remote
+            else "앱이 관리하는 로컬 데이터는 해당 기능의 삭제 동작 또는 앱 삭제를 통해 기기에서 제거할 수 있습니다. 사용자가 관리하는 원본 및 결과 파일은 사용자가 직접 보관하거나 삭제합니다. ONNELLAB 서버에는 보관되는 앱 콘텐츠가 없습니다."
+        )
+        return f"""# {app_name} 개인정보 처리방침
+
+[English](../) · [ONNELLAB](/)
+
+이 개인정보 처리방침은 {developer_name}이 제공하는 {app_name} 앱에 적용됩니다.
+
+**최종 업데이트:** {policy['last_updated']}
+
+## 1. 계정 및 개인 식별 정보
+
+{app_name}는 이름, 이메일 주소 또는 전화번호로 가입하거나 로그인하도록 요구하지 않습니다. 아래에 별도로 명시한 선택형 서버 기능을 제외하면 앱 콘텐츠와 사용 기록은 ONNELLAB로 전송되지 않습니다.
+
+## 2. 앱이 접근하거나 기기에 저장하는 데이터
+
+{bullets(data_items)}
+
+{bullets(processing_items)}
+
+{remote_section}
+## 4. 결제 정보
+
+{purchase_section}
+
+## 5. 광고, 분석 및 제3자 제공
+
+{app_name}는 광고 SDK, 사용자 행동 분석 SDK 또는 제3자 추적 도구를 사용하지 않습니다. 데이터는 위에 설명한 기능 제공 목적 외에는 판매하지 않으며, 사용자가 운영체제 공유 기능이나 다른 앱을 통해 직접 전달한 경우는 해당 서비스의 처리방침이 적용됩니다.
+
+## 6. 보관 및 삭제
+
+{retention}
+
+## 7. 보안 및 아동의 개인정보
+
+{developer_name}은 전송이 필요한 데이터에 합리적인 기술적·관리적 보호조치를 적용합니다. {app_name}는 만 13세 미만 아동을 대상으로 설계되지 않았으며 아동의 개인정보를 고의로 수집하지 않습니다.
+
+## 8. 변경 및 문의
+
+앱 기능이나 법적·스토어 요구사항이 변경되면 이 문서를 수정하고 최종 업데이트일을 변경합니다.
+
+개인정보 관련 문의 또는 삭제 요청: [{contact_email}](mailto:{contact_email})
+"""
+    remote_section = (
+        "## 3. Optional server processing\n\n"
+        + bullets(remote["data"]["en"])
+        + f"\n\n{remote['purpose']['en']}\n"
+        if has_remote
+        else "## 3. Server transmission\n\nThe app features described above do not transmit file contents or usage history to an ONNELLAB server.\n"
+    )
+    purchase_section = (
+        "In-app purchases are processed by Apple App Store or Google Play. "
+        f"Neither {app_name} nor {developer_name} accesses or stores card or bank-account details. "
+        "Product, transaction, and entitlement information supplied by the store may be used to verify and restore purchases."
+        if purchase
+        else "If an app purchase occurs, the applicable app store processes the payment; ONNELLAB does not directly process card or bank-account details."
+    )
+    retention = (
+        str(remote["retention"]["en"])
+        if has_remote
+        else "App-managed local data can be removed through the applicable delete controls or by uninstalling the app. Source and output files controlled by the user remain under the user's control. ONNELLAB retains no app content on its servers."
+    )
+    return f"""# {app_name} Privacy Policy
+
+[한국어](ko/) · [ONNELLAB](/)
+
+This Privacy Policy applies to the {app_name} app provided by {developer_name}.
+
+**Last updated:** {policy['last_updated']}
+
+## 1. Accounts and direct identifiers
+
+{app_name} does not require registration or sign-in with a name, email address, or phone number. Except for an optional server feature described below, app content and usage history are not transmitted to ONNELLAB.
+
+## 2. Data accessed or stored on the device
+
+{bullets(data_items)}
+
+{bullets(processing_items)}
+
+{remote_section}
+## 4. Payment information
+
+{purchase_section}
+
+## 5. Advertising, analytics, and sharing
+
+{app_name} does not use advertising SDKs, behavioral analytics SDKs, or third-party tracking tools. Data is not sold or shared outside the purposes described above. If the user deliberately hands content to another app or service through the operating-system share features, that service's policy applies.
+
+## 6. Retention and deletion
+
+{retention}
+
+## 7. Security and children's privacy
+
+{developer_name} applies reasonable technical and organizational safeguards to data that must be transmitted. {app_name} is not directed to children under 13 and does not knowingly collect personal information from children.
+
+## 8. Changes and contact
+
+If app functionality or legal or store requirements change, this document will be updated and its last-updated date will change.
+
+Privacy questions or deletion requests: [{contact_email}](mailto:{contact_email})
+"""
+
+
+def load_privacy_policies(policies_path: Path, apps_registry_path: Path) -> tuple[dict[str, object], list[dict[str, object]]]:
+    if not policies_path.exists():
+        raise PublishingError(f"privacy policy registry does not exist: {policies_path}")
+    payload = json.loads(policies_path.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != 1:
+        raise PublishingError("privacy policy registry must use schema_version 1")
+    policies = payload.get("policies")
+    if not isinstance(policies, list):
+        raise PublishingError("privacy policy registry has no policies list")
+    by_slug: dict[str, dict[str, object]] = {}
+    for policy in policies:
+        if not isinstance(policy, dict):
+            raise PublishingError("privacy policy registry contains a non-object policy")
+        slug = policy.get("app_slug")
+        if not isinstance(slug, str) or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+            raise PublishingError(f"invalid privacy policy app_slug: {slug}")
+        if slug in by_slug:
+            raise PublishingError(f"duplicate privacy policy app_slug: {slug}")
+        if not policy.get("app_name") or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(policy.get("last_updated", ""))):
+            raise PublishingError(f"{slug} privacy policy is missing app_name or a valid last_updated date")
+        by_slug[slug] = policy
+    with apps_registry_path.open(encoding="utf-8", newline="") as handle:
+        registry = list(csv.DictReader(handle))
+    public_slugs = {row["slug"] for row in registry if row.get("status") in {"beta", "released"} and row.get("product_group") == "apps"}
+    missing = public_slugs - set(by_slug)
+    extra = set(by_slug) - {row["slug"] for row in registry}
+    if missing:
+        raise PublishingError(f"public apps missing privacy policies: {', '.join(sorted(missing))}")
+    if extra:
+        raise PublishingError(f"privacy policies reference unknown apps: {', '.join(sorted(extra))}")
+    return payload, [by_slug[slug] for slug in sorted(by_slug)]
+
+
+def write_privacy_pages(
+    site_dir: Path,
+    site_url: str,
+    policies_path: Path,
+    apps_registry_path: Path,
+) -> list[PrivacyPage]:
+    payload, policies = load_privacy_policies(policies_path, apps_registry_path)
+    developer_name = str(payload.get("developer_name") or "ONNELLAB")
+    contact_email = str(payload.get("contact_email") or "")
+    if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", contact_email):
+        raise PublishingError("privacy policy registry has an invalid contact_email")
+    pages: list[PrivacyPage] = []
+    for policy in policies:
+        slug = str(policy["app_slug"])
+        app_name = str(policy["app_name"])
+        alternate_urls = {
+            "en": public_url(site_url, f"apps/{slug}/privacy/"),
+            "ko": public_url(site_url, f"apps/{slug}/privacy/ko/"),
+            "x-default": public_url(site_url, f"apps/{slug}/privacy/"),
+        }
+        for language, suffix in (("en", ""), ("ko", "ko/")):
+            url_path = f"apps/{slug}/privacy/{suffix}"
+            output = site_dir / url_path / "index.html"
+            output.parent.mkdir(parents=True, exist_ok=True)
+            title = f"{app_name} {'개인정보 처리방침' if language == 'ko' else 'Privacy Policy'}"
+            description = (
+                f"{app_name} 앱의 개인정보 처리방침입니다."
+                if language == "ko"
+                else f"Privacy Policy for the {app_name} app."
+            )
+            body = markdown_to_html(localized_policy_markdown(policy, language, developer_name, contact_email))
+            output.write_text(
+                html_document(
+                    title,
+                    description,
+                    public_url(site_url, url_path),
+                    public_url(site_url, "feed.xml"),
+                    body,
+                    language=language,
+                    alternate_urls=alternate_urls,
+                    inline_style=PRIVACY_PAGE_STYLE,
+                ),
+                encoding="utf-8",
+            )
+            pages.append(PrivacyPage(slug, language, url_path, output))
+    return pages
+
+
+def write_sitemap(
+    site_dir: Path,
+    site_url: str,
+    articles: list[Article],
+    additional_paths: list[str] | None = None,
+) -> None:
     urls = [site_url] + [public_url(site_url, article.url_path) for article in articles]
+    urls.extend(public_url(site_url, path) for path in (additional_paths or []))
     entries = "\n".join(f"  <url><loc>{xml_escape(url)}</loc></url>" for url in urls)
     sitemap = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -1215,8 +1477,16 @@ def generate_social_posts(
     return posts
 
 
-def build_site(topics_path: Path = DEFAULT_TOPICS_PATH, site_dir: Path = DEFAULT_SITE_DIR, site_url: str = DEFAULT_SITE_URL) -> list[Article]:
+def build_site(
+    topics_path: Path = DEFAULT_TOPICS_PATH,
+    site_dir: Path = DEFAULT_SITE_DIR,
+    site_url: str = DEFAULT_SITE_URL,
+    privacy_policies_path: Path | None = None,
+    apps_registry_path: Path | None = None,
+) -> list[Article]:
     site_url = normalize_site_url(site_url)
+    privacy_policies_path = privacy_policies_path or topics_path.parent / "app_privacy_policies.json"
+    apps_registry_path = apps_registry_path or topics_path.parent / "apps_registry.csv"
     if site_dir.exists():
         shutil.rmtree(site_dir)
     site_dir.mkdir(parents=True)
@@ -1225,9 +1495,10 @@ def build_site(topics_path: Path = DEFAULT_TOPICS_PATH, site_dir: Path = DEFAULT
     for article in articles:
         write_social_card(article, topics_path.parent.parent)
         write_article(article, site_url)
+    privacy_pages = write_privacy_pages(site_dir, site_url, privacy_policies_path, apps_registry_path)
     write_index(site_dir, site_url, articles)
     write_rss(site_dir, site_url, articles)
-    write_sitemap(site_dir, site_url, articles)
+    write_sitemap(site_dir, site_url, articles, [page.url_path for page in privacy_pages])
     return articles
 
 
@@ -1309,6 +1580,34 @@ def export_site_icons_to_homepage(homepage_repo: Path, dry_run: bool, project_ro
         shutil.copy2(source, destination)
 
 
+def export_privacy_pages_to_homepage(
+    site_dir: Path,
+    topics_path: Path,
+    homepage_repo: Path,
+    dry_run: bool,
+) -> list[HomepageExport]:
+    policies_path = topics_path.parent / "app_privacy_policies.json"
+    apps_registry_path = topics_path.parent / "apps_registry.csv"
+    _, policies = load_privacy_policies(policies_path, apps_registry_path)
+    exports: list[HomepageExport] = []
+    for policy in policies:
+        slug = str(policy["app_slug"])
+        for language, suffix in (("en", ""), ("ko", "ko/")):
+            source = site_dir / "apps" / slug / "privacy" / suffix / "index.html"
+            destination = homepage_repo / "public" / "apps" / slug / "privacy" / suffix / "index.html"
+            if not source.exists():
+                raise PublishingError(f"generated privacy page does not exist: {source}")
+            action = "create"
+            if destination.exists():
+                action = "unchanged" if destination.read_bytes() == source.read_bytes() else "overwrite"
+            exports.append(HomepageExport(f"privacy-{slug}-{language}", source, destination, action))
+            if dry_run or action == "unchanged":
+                continue
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+    return exports
+
+
 def export_markdown_to_homepage(
     topics_path: Path = DEFAULT_TOPICS_PATH,
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPOSITORY_PATH,
@@ -1357,20 +1656,22 @@ def deploy_github_pages(
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPOSITORY_PATH,
     dry_run: bool = False,
 ) -> list[HomepageExport]:
-    _ = site_dir
     _ = repository
     _ = deploy_dir
     if dry_run and not homepage_repo.is_dir():
         return []
     validate_homepage_repository(homepage_repo)
     if dry_run:
-        return export_markdown_to_homepage(topics_path, homepage_repo, dry_run=True)
+        exports = export_markdown_to_homepage(topics_path, homepage_repo, dry_run=True)
+        exports.extend(export_privacy_pages_to_homepage(site_dir, topics_path, homepage_repo, dry_run=True))
+        return exports
 
     run_homepage_command(["git", "pull", "--rebase", "origin", branch], homepage_repo)
     exports = export_markdown_to_homepage(topics_path, homepage_repo, dry_run=False)
+    exports.extend(export_privacy_pages_to_homepage(site_dir, topics_path, homepage_repo, dry_run=False))
     run_homepage_command(["npm", "run", "build"], homepage_repo)
     run_homepage_command(
-        ["git", "add", "src/content/blog", "public/blog-assets", *[f"public/{name}" for name in FAVICON_ASSET_NAMES]],
+        ["git", "add", "src/content/blog", "public/blog-assets", "public/apps", *[f"public/{name}" for name in FAVICON_ASSET_NAMES]],
         homepage_repo,
     )
     diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=homepage_repo)
@@ -1387,6 +1688,8 @@ def main() -> int:
     parser.add_argument("--topics", type=Path, default=DEFAULT_TOPICS_PATH)
     parser.add_argument("--site-dir", type=Path, default=DEFAULT_SITE_DIR)
     parser.add_argument("--site-url", default=DEFAULT_SITE_URL)
+    parser.add_argument("--privacy-policies", type=Path)
+    parser.add_argument("--apps-registry", type=Path)
     parser.add_argument("--deploy", action="store_true", help="Deploy the built site to the GitHub Pages homepage repository")
     parser.add_argument("--repository", default=DEFAULT_PAGES_REPOSITORY)
     parser.add_argument("--branch", default=DEFAULT_PAGES_BRANCH)
@@ -1395,7 +1698,13 @@ def main() -> int:
     parser.add_argument("--social", action="store_true", help="Generate social distribution drafts for published articles")
     args = parser.parse_args()
     try:
-        articles = build_site(args.topics, args.site_dir, args.site_url)
+        articles = build_site(
+            args.topics,
+            args.site_dir,
+            args.site_url,
+            privacy_policies_path=args.privacy_policies,
+            apps_registry_path=args.apps_registry,
+        )
         if args.social:
             posts = generate_social_posts(args.topics, site_url=args.site_url)
             for post in posts:

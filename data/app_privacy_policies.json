@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "developer_name": "ONNELLAB",
+  "contact_email": "onnellab.app@gmail.com",
+  "policies": [
+    {
+      "app_slug": "quivra",
+      "app_name": "Quivra",
+      "last_updated": "2026-07-30",
+      "legacy_urls": ["https://onnellab.github.io/quivra-privacy-policy/"],
+      "in_app_purchase": false,
+      "local_data": {
+        "en": ["Media files that the user explicitly selects", "Converted output files and app preferences stored on the device"],
+        "ko": ["사용자가 명시적으로 선택한 미디어 파일", "기기에 저장되는 변환 결과 파일과 앱 설정"]
+      },
+      "local_processing": {
+        "en": ["Selected files are converted on the device.", "Source and converted files are not uploaded to an ONNELLAB server."],
+        "ko": ["선택한 파일은 기기에서 변환됩니다.", "원본 파일과 변환 결과는 ONNELLAB 서버로 업로드되지 않습니다."]
+      }
+    },
+    {
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "last_updated": "2026-07-30",
+      "legacy_urls": ["https://onnellab.github.io/tagweaver-privacy-policy/"],
+      "in_app_purchase": true,
+      "local_data": {
+        "en": ["MP3 files and metadata that the user explicitly selects", "Artwork selected from the photo library or camera", "App preferences and purchase entitlement stored on the device"],
+        "ko": ["사용자가 명시적으로 선택한 MP3 파일과 메타데이터", "사진 보관함 또는 카메라에서 선택한 앨범 이미지", "기기에 저장되는 앱 설정과 구매 권한 정보"]
+      },
+      "local_processing": {
+        "en": ["Tag editing and artwork processing occur on the device.", "Selected file contents are not uploaded to an ONNELLAB server."],
+        "ko": ["태그 편집과 앨범 이미지 처리는 기기에서 이루어집니다.", "선택한 파일 내용은 ONNELLAB 서버로 업로드되지 않습니다."]
+      }
+    },
+    {
+      "app_slug": "vaultxt",
+      "app_name": "VaultXT",
+      "last_updated": "2026-07-30",
+      "legacy_urls": ["https://onnellab.github.io/vaultxt-privacy-policy/"],
+      "in_app_purchase": true,
+      "local_data": {
+        "en": ["Plain-text files that the user explicitly opens or edits", "Recovery data, reading state, and app preferences stored on the device", "Purchase entitlement stored on the device"],
+        "ko": ["사용자가 명시적으로 열거나 편집한 일반 텍스트 파일", "기기에 저장되는 복구 데이터, 읽기 상태와 앱 설정", "기기에 저장되는 구매 권한 정보"]
+      },
+      "local_processing": {
+        "en": ["Opening, viewing, editing, search, and recovery operations occur on the device.", "File contents are not uploaded to an ONNELLAB server."],
+        "ko": ["파일 열기, 보기, 편집, 검색과 복구 작업은 기기에서 이루어집니다.", "파일 내용은 ONNELLAB 서버로 업로드되지 않습니다."]
+      }
+    },
+    {
+      "app_slug": "segra",
+      "app_name": "Segra",
+      "last_updated": "2026-07-30",
+      "legacy_urls": ["https://onnellab.github.io/segra-privacy-policy/"],
+      "in_app_purchase": true,
+      "local_data": {
+        "en": ["Audio and image files that the user explicitly selects", "Generated audio or video files and app preferences stored on the device", "Purchase entitlement stored on the device"],
+        "ko": ["사용자가 명시적으로 선택한 오디오 및 이미지 파일", "기기에 저장되는 생성 오디오·영상 파일과 앱 설정", "기기에 저장되는 구매 권한 정보"]
+      },
+      "local_processing": {
+        "en": ["Audio trimming and media generation occur on the device.", "Selected files are not uploaded to an ONNELLAB server unless the user later shares an output through another app."],
+        "ko": ["오디오 구간 편집과 미디어 생성은 기기에서 이루어집니다.", "사용자가 결과물을 다른 앱으로 직접 공유하지 않는 한 선택한 파일은 ONNELLAB 서버로 업로드되지 않습니다."]
+      }
+    },
+    {
+      "app_slug": "clipnest",
+      "app_name": "ClipNest",
+      "last_updated": "2026-07-30",
+      "legacy_urls": ["https://onnellab.github.io/clipnest-privacy-policy/"],
+      "in_app_purchase": false,
+      "local_data": {
+        "en": ["Clipboard text accessed when the user activates the ClipNest keyboard and permits paste", "Saved text snippets, pins, and app preferences stored in the app's local database"],
+        "ko": ["사용자가 ClipNest 키보드를 활성화하고 붙여넣기를 허용했을 때 접근하는 클립보드 텍스트", "앱의 로컬 데이터베이스에 저장되는 텍스트 조각, 고정 상태와 앱 설정"]
+      },
+      "local_processing": {
+        "en": ["Clipboard access is user-initiated; ClipNest does not continuously monitor the clipboard in the background.", "Saved clipboard text is not uploaded to an ONNELLAB server."],
+        "ko": ["클립보드 접근은 사용자의 명시적 동작으로 시작되며 ClipNest는 백그라운드에서 클립보드를 계속 감시하지 않습니다.", "저장된 클립보드 텍스트는 ONNELLAB 서버로 업로드되지 않습니다."]
+      }
+    },
+    {
+      "app_slug": "aligna",
+      "app_name": "Aligna",
+      "last_updated": "2026-07-30",
+      "legacy_urls": ["https://onnellab.github.io/aligna-privacy-policy/"],
+      "in_app_purchase": true,
+      "local_data": {
+        "en": ["Files and file metadata that the user explicitly selects", "Rename rules, previews, app preferences, and purchase entitlement stored on the device"],
+        "ko": ["사용자가 명시적으로 선택한 파일과 파일 메타데이터", "기기에 저장되는 이름 변경 규칙, 미리보기, 앱 설정과 구매 권한 정보"]
+      },
+      "local_processing": {
+        "en": ["Preview and rename operations occur on the device.", "Selected files are not uploaded to an ONNELLAB server.", "On iOS, a newly named copy may be saved instead of changing the original file directly."],
+        "ko": ["미리보기와 이름 변경 작업은 기기에서 이루어집니다.", "선택한 파일은 ONNELLAB 서버로 업로드되지 않습니다.", "iOS에서는 원본 파일을 직접 변경하는 대신 새 이름의 복사본으로 저장될 수 있습니다."]
+      }
+    },
+    {
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "last_updated": "2026-07-30",
+      "legacy_urls": ["https://onnellab.github.io/melivra-privacy-policy/"],
+      "in_app_purchase": true,
+      "local_data": {
+        "en": ["Local audio files and their media metadata", "Library entries, playback history, bookmarks, playlists, search history, AI results, and app preferences stored on the device", "Purchase entitlement and AI credit balance information"],
+        "ko": ["로컬 오디오 파일과 미디어 메타데이터", "기기에 저장되는 라이브러리 항목, 재생 기록, 북마크, 재생목록, 검색 기록, AI 결과와 앱 설정", "구매 권한과 AI 크레딧 잔액 정보"]
+      },
+      "local_processing": {
+        "en": ["Library browsing and ordinary audio playback occur on the device without uploading the audio.", "AI transcript or translation processing starts only after the user selects audio and approves the disclosed credit estimate and upload."],
+        "ko": ["라이브러리 탐색과 일반 오디오 재생은 오디오 업로드 없이 기기에서 이루어집니다.", "AI 대본 또는 번역 처리는 사용자가 오디오를 선택하고 안내된 크레딧 예상량과 업로드를 승인한 뒤에만 시작됩니다."]
+      },
+      "remote_processing": {
+        "data": {
+          "en": ["An anonymous server-issued subject identifier", "The selected audio file for an approved AI job", "Store product and transaction identifiers used to verify AI credit purchases", "AI job status, credit ledger entries, transcripts, translations, and generated result metadata"],
+          "ko": ["서버가 발급한 익명 주체 식별자", "승인된 AI 작업을 위해 선택한 오디오 파일", "AI 크레딧 구매 확인에 사용하는 스토어 상품 및 거래 식별자", "AI 작업 상태, 크레딧 원장 항목, 대본, 번역과 생성 결과 메타데이터"]
+        },
+        "purpose": {
+          "en": "This data is used only to verify purchases, maintain the AI credit balance, process the requested transcript or translation, return the result, prevent duplicate grants, and handle operational support.",
+          "ko": "이 데이터는 구매 확인, AI 크레딧 잔액 유지, 요청한 대본·번역 처리와 결과 전달, 중복 지급 방지 및 운영 지원을 위해서만 사용됩니다."
+        },
+        "retention": {
+          "en": "Uploaded source audio is not retained long-term after result generation. Job, result, transaction-verification, and credit-ledger records may be retained for service delivery, duplicate-payment prevention, accounting, dispute handling, and legal obligations. Deletion questions or requests can be sent to the contact address below.",
+          "ko": "업로드된 원본 오디오는 결과 생성 후 장기 보관하지 않습니다. 작업·결과·거래 확인·크레딧 원장 기록은 서비스 제공, 중복 결제 방지, 회계, 분쟁 처리와 법적 의무를 위해 필요한 기간 동안 보관될 수 있습니다. 삭제 문의 또는 요청은 아래 연락처로 보낼 수 있습니다."
+        }
+      }
+    }
+  ]
+}

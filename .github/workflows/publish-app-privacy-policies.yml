@@ -1,0 +1,66 @@
+name: Publish App Privacy Policies
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - data/app_privacy_policies.json
+      - data/apps_registry.csv
+      - scripts/publishing.py
+      - scripts/build_app_privacy_pages.py
+      - scripts/validate_app_privacy_policies.py
+      - .github/workflows/publish-app-privacy-policies.yml
+
+concurrency:
+  group: publish-app-privacy-policies
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      HOMEPAGE_REPO_PATH: .homepage
+      SITE_URL: https://onnellab.github.io/
+      PRIVACY_OUTPUT_PATH: /tmp/onnellab-app-privacy-pages
+    steps:
+      - name: Checkout content engine
+        uses: actions/checkout@v4
+
+      - name: Checkout homepage
+        uses: actions/checkout@v4
+        with:
+          repository: onnellab/onnellab.github.io
+          path: ${{ env.HOMEPAGE_REPO_PATH }}
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+
+      - name: Validate policy registry
+        run: python3 scripts/validate_app_privacy_policies.py
+
+      - name: Build privacy pages
+        run: |
+          python3 scripts/build_app_privacy_pages.py \
+            --site-dir "$PRIVACY_OUTPUT_PATH" \
+            --site-url "$SITE_URL"
+
+      - name: Copy privacy pages to homepage
+        run: |
+          mkdir -p "$HOMEPAGE_REPO_PATH/public/apps"
+          cp -R "$PRIVACY_OUTPUT_PATH/apps/." "$HOMEPAGE_REPO_PATH/public/apps/"
+
+      - name: Commit homepage privacy pages
+        working-directory: ${{ env.HOMEPAGE_REPO_PATH }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/apps
+          if git diff --cached --quiet; then
+            echo "No app privacy policy changes to publish"
+          else
+            git commit -m "Publish centralized app privacy policies"
+            git pull --rebase origin main
+            git push origin main
+          fi

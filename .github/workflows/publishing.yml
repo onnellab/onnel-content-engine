@@ -71,6 +71,7 @@ jobs:
           set -euo pipefail
           python3 scripts/validate_topics.py
           python3 scripts/validate_apps_registry.py
+          python3 scripts/validate_app_privacy_policies.py
           python3 scripts/validate_app_release_config.py
           python3 scripts/validate_android_store_versions.py
           python3 scripts/validate_app_releases.py
@@ -290,6 +291,8 @@ jobs:
           python3 scripts/build_site.py \
             --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
             --site-dir /tmp/onnel-content-engine-dry-run/generated/html \
+            --privacy-policies /tmp/onnel-content-engine-dry-run/data/app_privacy_policies.json \
+            --apps-registry /tmp/onnel-content-engine-dry-run/data/apps_registry.csv \
             --site-url "$SITE_URL"
 
       - name: Generate Distribution Drafts
@@ -367,6 +370,7 @@ jobs:
           set -euo pipefail
           python3 scripts/deploy_github_pages.py \
             --topics /tmp/onnel-content-engine-dry-run/data/topics.csv \
+            --site-dir /tmp/onnel-content-engine-dry-run/generated/html \
             --homepage-repo "$HOMEPAGE_REPO_PATH" \
             --dry-run
 
