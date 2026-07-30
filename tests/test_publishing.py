@@ -200,6 +200,10 @@ class PublishingTest(unittest.TestCase):
         self.assertIn('<nav class="topbar" aria-label="Navigation">', privacy_en_html)
         self.assertIn('<a class="home-link" href="https://example.com/">ONNELLAB</a>', privacy_en_html)
         self.assertIn(
+            '.home-link { color: #737067; font-family: "Avenir Next", Avenir, "Helvetica Neue", Arial, sans-serif;',
+            privacy_en_html,
+        )
+        self.assertIn(
             '<a class="language-link" href="https://example.com/privacy/vaultxt/ko/">한국어</a>',
             privacy_en_html,
         )
