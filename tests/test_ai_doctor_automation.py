@@ -218,6 +218,7 @@ class AiDoctorAutomationTest(unittest.TestCase):
 
         self.assertIn('run_codex_doctor.sh "$finding_id" --execute', script)
         self.assertLess(script.index("run_codex_doctor.sh"), script.index("generate_ai_coder_tasks.py"))
+        self.assertIn("dispatch_ai_fix_tasks.py --execute", script)
         self.assertIn("git ls-files --others --exclude-standard", script)
         self.assertIn("codex exec -s read-only", doctor)
         self.assertNotIn("git commit", doctor)

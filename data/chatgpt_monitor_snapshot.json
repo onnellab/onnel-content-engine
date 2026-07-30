@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-30T00:51:15+00:00",
+  "repository": "onnellab/onnel-content-engine",
+  "schedule": "RRULE:FREQ=HOURLY;INTERVAL=1",
+  "lookback_hours": 2,
+  "source_of_truth": "GitHub task ledger, QA reports, Draft PRs, and Actions runs",
+  "items": []
+}

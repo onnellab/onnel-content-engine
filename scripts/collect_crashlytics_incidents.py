@@ -9,9 +9,9 @@ from urllib.request import Request, urlopen
 ROOT=Path(__file__).resolve().parents[1]
 FIELDS=["incident_id","app_slug","platform","app_version","os_version","title","affected_users","event_count","first_seen","last_seen","source","status"]
 def main() -> int:
- sources=json.loads((ROOT/"data/crashlytics_crash_sources.json").read_text(encoding="utf-8")).get("apps",[]); token=os.environ.get("FIREBASE_CRASHLYTICS_ACCESS_TOKEN",""); now=datetime.now(timezone.utc).replace(microsecond=0).isoformat(); state={"checked_at":now,"configured_apps":len(sources),"state":"not_configured","imported":0}
+ config=json.loads((ROOT/"data/crashlytics_crash_sources.json").read_text(encoding="utf-8")); sources=config.get("apps",[]); coverage=config.get("coverage",[]); token=os.environ.get("FIREBASE_CRASHLYTICS_ACCESS_TOKEN",""); now=datetime.now(timezone.utc).replace(microsecond=0).isoformat(); state={"checked_at":now,"configured_apps":len(sources),"covered_apps":len(coverage),"state":"not_configured","imported":0}
  if not sources or not token:
-  state["state"]="token_missing" if sources else "not_configured"; (ROOT/"data/crashlytics_sync_status.json").write_text(json.dumps(state,indent=2)+"\n",encoding="utf-8"); print(state["state"]); return 0
+  state["state"]="token_missing" if sources else "not_applicable" if coverage and all(item.get("state")=="not_applicable" for item in coverage) else "not_configured"; (ROOT/"data/crashlytics_sync_status.json").write_text(json.dumps(state,indent=2)+"\n",encoding="utf-8"); print(state["state"]); return 0
  with (ROOT/"data/crash_incidents.csv").open(encoding="utf-8",newline="") as h: incidents={r["incident_id"]:r for r in csv.DictReader(h)}
  for source in sources:
   for key in ("app_slug","project","app_id","platform"):

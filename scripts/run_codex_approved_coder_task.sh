@@ -14,9 +14,10 @@ fi
 packet="$(mktemp "${TMPDIR:-/tmp}/codex-coder-task.XXXXXX.json")"
 workspace="$(mktemp -d "${TMPDIR:-/tmp}/onnel-ai-coder.XXXXXX")"
 pr_body="$(mktemp "${TMPDIR:-/tmp}/codex-coder-pr.XXXXXX.md")"
+verification_results="$(mktemp "${TMPDIR:-/tmp}/codex-coder-verification.XXXXXX.json")"
 security_root=""
 cleanup() {
-  rm -f "$packet" "$pr_body"
+  rm -f "$packet" "$pr_body" "$verification_results"
   rm -rf "$workspace"
   [[ -z "$security_root" ]] || rm -rf "$security_root"
 }
@@ -38,7 +39,9 @@ json.dump({'task':task}, output.open('w', encoding='utf-8'), ensure_ascii=False,
 PY
 
 repository="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["task"]["repository"])' "$packet")"
+attempt="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["task"].get("attempt", 1))' "$packet")"
 branch="ai/fix-${task_id//[^A-Za-z0-9._-]/-}"
+[[ "$attempt" == "1" ]] || branch="${branch}-v${attempt}"
 app_path="$workspace/repository"
 git clone --filter=blob:none --no-tags "https://github.com/${repository}.git" "$app_path"
 git -C "$app_path" switch -c "$branch" origin/main
@@ -74,6 +77,9 @@ else
   (cd "$app_path" && flutter analyze && flutter test)
 fi
 
+python3 "$engine_root/scripts/run_ai_coder_verifications.py" \
+  "$packet" "$app_path" "$verification_results"
+
 security_scan="not_enabled"
 if [[ "${AI_CODER_SECURITY_SCAN_ENABLED:-true}" != "false" ]]; then
   security_root="$(mktemp -d "${TMPDIR:-/tmp}/onnel-codex-security.XXXXXX")"
@@ -86,14 +92,33 @@ if [[ "${AI_CODER_SECURITY_SCAN_ENABLED:-true}" != "false" ]]; then
   security_scan="passed"
 fi
 
+# Quality and ticket-specific gates may generate files. Re-evaluate the final
+# patch boundary after every command and immediately before staging anything.
+changed="$({ git -C "$app_path" diff --name-only; git -C "$app_path" ls-files --others --exclude-standard; } | sort -u)"
+[[ -n "$changed" ]] || { echo "validated patch has no remaining changes; no PR created" >&2; exit 1; }
+if ! CHANGED="$changed" python3 - "$packet" <<'PY'
+import json, os, sys
+packet=json.load(open(sys.argv[1], encoding='utf-8'))
+allowed=packet['task']['ticket']['allowed_paths']
+changed=[line.strip() for line in os.environ['CHANGED'].splitlines() if line.strip()]
+outside=[path for path in changed if not any(path == item.rstrip('/') or path.startswith(item.rstrip('/') + '/') for item in allowed)]
+if outside: raise SystemExit('post-verification change outside approved ticket paths: '+outside[0])
+PY
+then exit 1; fi
+if printf '%s\n' "$changed" | rg -n '(^|/)(ios/Runner/Info\.plist|android/app/src/main/AndroidManifest\.xml|.*secret.*|.*credential.*|.*migration.*|.*database.*|.*billing.*|.*payment.*|.*auth.*|.*crypto.*)$' -i; then
+  echo "post-verification protected-path change detected; stopping before commit" >&2
+  exit 1
+fi
+
 git -C "$app_path" add -A
 git -C "$app_path" commit -m "Fix ${task_id}"
 commit="$(git -C "$app_path" rev-parse HEAD)"
 git -C "$app_path" push -u origin "$branch"
-python3 - "$packet" "$security_scan" >"$pr_body" <<'PY'
+python3 - "$packet" "$security_scan" "$verification_results" >"$pr_body" <<'PY'
 import json, sys
 task=json.load(open(sys.argv[1], encoding='utf-8'))['task']
 ticket=task['ticket']
+verification=json.load(open(sys.argv[3], encoding='utf-8'))
 print(f"# AI-Coder task: {task['task_id']}\n")
 print("Human-approved Draft PR only. QA gate is required before merge.\n")
 print(f"- Risk class: `{task['risk_class']}`")
@@ -104,13 +129,14 @@ print(f"- Codex Security diff scan: `{sys.argv[2]}`\n")
 print("## Completion criteria\n")
 print(ticket['completion_criteria'])
 print("\n## Verification commands\n")
-for command in ticket['verification_commands']:
-    print(f"- `{command}`")
+for result in verification['results']:
+    print(f"- `{result['command']}`: **{result['status']}** (exit {result['exit_code']})")
 PY
 pr_url="$(cd "$app_path" && gh pr create --draft --base main --head "$branch" --title "Fix ${task_id}" --body-file "$pr_body")"
 python3 "$engine_root/scripts/record_ai_coder_draft_pr.py" "$task_id" \
   --branch "$branch" \
   --pr-url "$pr_url" \
   --commit "$commit" \
-  --security-scan "$security_scan"
+  --security-scan "$security_scan" \
+  --verification-results "$verification_results"
 echo "Draft PR created: $pr_url"

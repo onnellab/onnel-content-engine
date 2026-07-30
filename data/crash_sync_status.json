@@ -1,7 +1,8 @@
 {
-  "checked_at": "2026-07-29T08:18:29+00:00",
+  "checked_at": "2026-07-30T00:50:36+00:00",
   "configured_projects": 0,
+  "covered_apps": 7,
   "connected": false,
   "imported": 0,
-  "state": "not_configured"
+  "state": "not_applicable"
 }

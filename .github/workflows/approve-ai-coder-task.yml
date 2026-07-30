@@ -23,9 +23,10 @@ jobs:
           [[ "$APPROVE_YELLOW_PLAN" != "true" ]] || args+=(--approve-plan)
           python3 scripts/approve_ai_coder_task.py "$TASK_ID" --approver "$APPROVER" --confirm "${args[@]}"
       - run: |
+          python3 scripts/generate_chatgpt_monitor_snapshot.py
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add data/ai_coder_tasks.json
+          git add data/ai_coder_tasks.json data/chatgpt_monitor_snapshot.json
           git commit -m "Approve AI coder task"
           git push
       - name: Report Coder runner state
@@ -65,9 +66,10 @@ jobs:
         env:
           TASK_ID: ${{ inputs.task_id }}
         run: |
+          python3 scripts/generate_chatgpt_monitor_snapshot.py
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add data/ai_coder_tasks.json
+          git add data/ai_coder_tasks.json data/chatgpt_monitor_snapshot.json
           git diff --cached --quiet && { echo "Draft PR audit record is missing" >&2; exit 1; }
           git commit -m "Record AI coder Draft PR for ${TASK_ID}"
           git pull --rebase origin main

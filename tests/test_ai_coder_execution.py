@@ -16,6 +16,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import dispatch_ai_coder_qa
 import approve_ai_coder_task
+import run_ai_coder_verifications
+import dispatch_ai_fix_tasks
+import prepare_ai_pr_action
+import record_ai_coder_pr_action
 from ai_coder_task_contract import contract_errors, path_is_allowed
 
 
@@ -116,6 +120,121 @@ class AiCoderExecutionTest(unittest.TestCase):
         self.assertIn('AI_CODER_SECURITY_SCAN_ENABLED', runner)
         self.assertIn('ls-files --others --exclude-standard', runner)
         self.assertNotIn("local_repositories.csv", runner)
+        self.assertIn("run_ai_coder_verifications.py", runner)
+        self.assertIn("--verification-results", runner)
+        self.assertIn("post-verification change outside approved ticket paths", runner)
+
+    def test_approved_verification_commands_are_executed_and_recorded(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            packet = root / "packet.json"
+            output = root / "results.json"
+            packet.write_text(
+                json.dumps({"task": {"ticket": {"verification_commands": ["true", "false", "true"]}}}),
+                encoding="utf-8",
+            )
+            with patch.object(
+                sys,
+                "argv",
+                ["run_ai_coder_verifications.py", str(packet), str(root), str(output)],
+            ):
+                with self.assertRaisesRegex(SystemExit, "verification command failed"):
+                    run_ai_coder_verifications.main()
+
+            result = json.loads(output.read_text(encoding="utf-8"))
+
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual([item["command"] for item in result["results"]], ["true", "false"])
+        self.assertEqual(result["results"][1]["exit_code"], 1)
+
+    def test_ai_fix_dispatches_only_ready_green_github_tasks(self) -> None:
+        green = self.complete_task("GREEN")
+        green.update(
+            {
+                "status": "proposed",
+                "intake_status": "ready",
+                "finding": {"github_issue": {"labels": ["bug", "ai-fix"]}},
+            }
+        )
+        yellow = self.complete_task("YELLOW")
+        yellow.update(
+            {
+                "task_id": "yellow-1",
+                "status": "proposed",
+                "intake_status": "ready",
+                "finding": {"github_issue": {"labels": ["ai-fix"]}},
+            }
+        )
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            (root / "data").mkdir()
+            (root / "data" / "ai_coder_tasks.json").write_text(
+                json.dumps({"tasks": [green, yellow]}), encoding="utf-8"
+            )
+            with patch.object(dispatch_ai_fix_tasks, "ROOT", root), patch.object(
+                subprocess, "run"
+            ) as run, patch.object(
+                sys, "argv", ["dispatch_ai_fix_tasks.py", "--execute"]
+            ):
+                self.assertEqual(dispatch_ai_fix_tasks.main(), 0)
+
+        self.assertEqual(run.call_count, 1)
+        command = run.call_args.args[0]
+        self.assertIn("task_id=finding-1", command)
+        self.assertIn("approver=github-ai-fix-label", command)
+
+    def test_rework_closes_current_attempt_and_returns_task_to_proposed(self) -> None:
+        task = self.complete_task("GREEN")
+        task.update(
+            {
+                "status": "draft_pr_created",
+                "repository": "onnellab/sample",
+                "branch": "ai/fix-finding-1",
+                "pr_url": "https://github.com/onnellab/sample/pull/7",
+                "commit": "a" * 40,
+                "verification": {"status": "passed"},
+            }
+        )
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            data = root / "data"
+            data.mkdir()
+            task_path = data / "ai_coder_tasks.json"
+            task_path.write_text(json.dumps({"tasks": [task]}), encoding="utf-8")
+            output = root / "github-output"
+            with patch.object(prepare_ai_pr_action, "ROOT", root), patch.object(
+                sys,
+                "argv",
+                ["prepare_ai_pr_action.py", "finding-1", "--github-output", str(output)],
+            ):
+                self.assertEqual(prepare_ai_pr_action.main(), 0)
+            github_output = output.read_text(encoding="utf-8")
+            with patch.object(record_ai_coder_pr_action, "ROOT", root), patch.object(
+                sys,
+                "argv",
+                [
+                    "record_ai_coder_pr_action.py", "finding-1", "--action", "rework",
+                    "--actor", "owner", "--reason", "Add the missing regression case.",
+                ],
+            ):
+                self.assertEqual(record_ai_coder_pr_action.main(), 0)
+            updated = json.loads(task_path.read_text(encoding="utf-8"))["tasks"][0]
+
+        self.assertIn("repository=onnellab/sample", github_output)
+        self.assertEqual(updated["status"], "proposed")
+        self.assertEqual(updated["attempt"], 2)
+        self.assertNotIn("pr_url", updated)
+        self.assertEqual(updated["pr_action_history"][0]["action"], "rework")
+
+    def test_pr_resolution_workflows_require_explicit_human_confirmation(self) -> None:
+        rework = (ROOT / ".github/workflows/rework-ai-coder-task.yml").read_text()
+        discard = (ROOT / ".github/workflows/discard-ai-coder-task.yml").read_text()
+
+        self.assertIn("inputs.confirm == 'REWORK'", rework)
+        self.assertIn("inputs.confirm == 'DISCARD'", discard)
+        self.assertIn("gh pr close", rework)
+        self.assertIn("gh pr close", discard)
+        self.assertNotIn("gh pr merge", rework + discard)
 
     def test_preflight_fails_before_cli_checks_without_token(self) -> None:
         result = subprocess.run(

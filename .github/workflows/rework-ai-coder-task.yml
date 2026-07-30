@@ -1,0 +1,37 @@
+name: Request AI Coder Rework
+on:
+  workflow_dispatch:
+    inputs:
+      task_id: {description: Draft PR task ID, required: true, type: string}
+      actor: {description: Human requesting rework, required: true, type: string}
+      reason: {description: Required bounded rework reason, required: true, type: string}
+      confirm: {description: Type REWORK to close the Draft PR and return the task to proposal, required: true, type: string}
+permissions: {contents: write, pull-requests: write}
+jobs:
+  rework:
+    if: inputs.confirm == 'REWORK'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: pr
+        env: {TASK_ID: "${{ inputs.task_id }}"}
+        run: python3 scripts/prepare_ai_pr_action.py "$TASK_ID" --github-output "$GITHUB_OUTPUT"
+      - name: Close superseded Draft PR
+        env:
+          GH_TOKEN: ${{ secrets.AI_CODER_GITHUB_TOKEN }}
+          REPOSITORY: ${{ steps.pr.outputs.repository }}
+          PR_NUMBER: ${{ steps.pr.outputs.pr_number }}
+        run: gh pr close "$PR_NUMBER" --repo "$REPOSITORY" --delete-branch --comment "Closed for human-requested AI-Coder rework."
+      - name: Record rework request
+        env:
+          TASK_ID: ${{ inputs.task_id }}
+          ACTOR: ${{ inputs.actor }}
+          REASON: ${{ inputs.reason }}
+        run: python3 scripts/record_ai_coder_pr_action.py "$TASK_ID" --action rework --actor "$ACTOR" --reason "$REASON"
+      - run: |
+          python3 scripts/generate_chatgpt_monitor_snapshot.py
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/ai_coder_tasks.json data/chatgpt_monitor_snapshot.json
+          git commit -m "Request AI coder rework"
+          git push

@@ -79,7 +79,8 @@ def main() -> int:
         if issue.get("status") != "open":
             continue
         labels = {str(label).lower() for label in issue.get("labels", [])}
-        high = bool(labels & {"bug", "crash", "security", "data-loss", "data loss"}) or bool(
+        ai_fix_requested = "ai-fix" in labels
+        high = ai_fix_requested or bool(labels & {"bug", "crash", "security", "data-loss", "data loss"}) or bool(
             HIGH_RISK.search(str(issue.get("title", "")))
         )
         finding_id = f"github-{issue.get('app_slug', '')}-{issue.get('number', '')}"
@@ -97,6 +98,7 @@ def main() -> int:
                 "reproduce before proposing a change",
             ],
             "github_issue_recommended": high,
+            "ai_fix_requested": ai_fix_requested,
             "diagnosis_status": "pending",
         }
         finding.update(preserved_diagnosis(previous.get(finding_id, {})))

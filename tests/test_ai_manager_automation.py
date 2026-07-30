@@ -27,7 +27,12 @@ class AiManagerAutomationTest(unittest.TestCase):
                     {
                         "tasks": [
                             {"task_id": "approved-1", "status": "approved_for_draft_pr"},
-                            {"task_id": "draft-1", "status": "draft_pr_created"},
+                            {
+                                "task_id": "draft-1",
+                                "status": "draft_pr_created",
+                                "repository": "onnellab/sample",
+                                "pr_url": "https://github.com/onnellab/sample/pull/1",
+                            },
                         ]
                     }
                 ),
@@ -52,6 +57,8 @@ class AiManagerAutomationTest(unittest.TestCase):
         self.assertEqual(report["summary"]["coder_tasks_approved_pending"], 1)
         self.assertEqual(report["summary"]["qa_reports_blocked"], 1)
         self.assertIn("qa_blocked", {item["category"] for item in report["requires_attention"]})
+        self.assertEqual(report["actionable_prs"][0]["task_id"], "draft-1")
+        self.assertEqual(report["actionable_prs"][0]["qa_status"], "blocked")
 
     def test_issue_body_has_stable_ids_and_human_workflow_links(self) -> None:
         report = {
