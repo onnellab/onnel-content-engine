@@ -45,18 +45,57 @@ FAVICON_VERSION = "20260712-ol-transparent-v2"
 FAVICON_ASSET_NAMES = ("favicon.svg", "favicon-32x32.png", "apple-touch-icon.png", "site.webmanifest")
 PRIVACY_PAGE_STYLE = """
   <style>
-    :root { color-scheme: light; --bg: #faf8f5; --text: #35322e; --muted: #706a62; --line: #ddd6cc; --link: #315f86; }
+    @font-face {
+      font-family: "SUIT Variable";
+      font-weight: 45 920;
+      font-style: normal;
+      font-display: swap;
+      src: url("https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.woff2") format("woff2-variations");
+    }
+    :root {
+      color-scheme: light;
+      --background: #faf8f5;
+      --surface: #f0ece5;
+      --text: #3e3e3e;
+      --muted: #766f66;
+      --divider: #ded7cd;
+      --accent: #afc8e8;
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; }
-    main { width: min(820px, calc(100% - 40px)); margin: 0 auto; padding: 64px 0 88px; }
-    h1 { margin: 0 0 12px; font-size: clamp(2rem, 6vw, 3.25rem); line-height: 1.12; }
-    h2 { margin: 46px 0 14px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 1.25rem; }
-    p, ul { margin: 0 0 16px; }
-    ul { padding-left: 1.3rem; }
-    li { margin: 6px 0; }
-    a { color: var(--link); text-underline-offset: 0.18em; }
-    main > p:nth-of-type(-n+3) { color: var(--muted); }
-    @media (max-width: 640px) { main { width: min(100% - 32px, 820px); padding-top: 42px; } }
+    html, body { margin: 0; background: var(--background); }
+    main {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 72px 28px 88px;
+      background: var(--background);
+      color: var(--text);
+      font-family: "SUIT Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.72;
+    }
+    h1 { margin: 0 0 14px; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.08; font-weight: 760; letter-spacing: 0; }
+    h2 { margin: 56px 0 18px; font-size: 1.35rem; line-height: 1.25; font-weight: 720; }
+    h3 { margin: 32px 0 10px; font-size: 1.02rem; line-height: 1.35; font-weight: 680; }
+    p { margin: 0 0 14px; }
+    ul { margin: 0 0 18px; padding-left: 1.25rem; }
+    li { margin: 7px 0; }
+    hr { margin: 44px 0; border: 0; border-top: 1px solid var(--divider); }
+    a { color: #3d5f82; text-decoration-color: rgba(61, 95, 130, 0.36); text-underline-offset: 0.18em; }
+    a:hover { text-decoration-color: currentColor; }
+    main > p:first-of-type { max-width: 620px; margin-bottom: 28px; color: var(--muted); font-size: 1.05rem; }
+    strong { font-weight: 720; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 34px; }
+    .topbar a { text-decoration: none; }
+    .home-link { color: #737067; font-size: 14px; font-weight: 560; letter-spacing: 0; }
+    .language-link { min-height: 34px; display: inline-flex; align-items: center; border: 1px solid #ded6ca; border-radius: 999px; padding: 6px 12px; background: rgba(255, 253, 248, 0.72); color: #5f5a50; font-size: 13px; font-weight: 650; line-height: 1.35; }
+    .home-link:hover, .home-link:focus-visible { color: #3e3e3e; }
+    .language-link:hover, .language-link:focus-visible { border-color: #cfc5b7; background: #fffdf8; }
+    .topbar a:focus-visible { outline: 2px solid #827d72; outline-offset: 3px; }
+    @media (max-width: 640px) {
+      main { padding: 48px 20px 64px; font-size: 15px; }
+      h2 { margin-top: 44px; }
+      hr { margin: 34px 0; }
+    }
   </style>
 """
 PUBLISHABLE_STATUSES = {"published"}
@@ -187,7 +226,10 @@ def markdown_to_html(markdown: str) -> str:
         ordered = re.match(r"^\d+\.\s+(.+)$", stripped)
         quote = re.match(r"^>\s?(.+)$", stripped)
         image = IMAGE_RE.match(stripped)
-        if heading:
+        if stripped in {"---", "***", "___"}:
+            flush_all()
+            blocks.append("<hr>")
+        elif heading:
             flush_all()
             level = min(len(heading.group(1)), 6)
             blocks.append(f"<h{level}>{inline_markdown(heading.group(2))}</h{level}>")
@@ -739,11 +781,11 @@ def localized_policy_markdown(policy: dict[str, object], language: str, develope
     bullets = lambda values: "\n".join(f"- {value}" for value in values)
     if language == "ko":
         remote_section = (
-            "## 3. 선택형 서버 처리\n\n"
+            "### 3. 선택형 서버 처리\n\n"
             + bullets(remote["data"]["ko"])
             + f"\n\n{remote['purpose']['ko']}\n"
             if has_remote
-            else "## 3. 서버 전송\n\n위에 명시한 앱 기능은 ONNELLAB 서버로 파일 내용이나 사용 기록을 전송하지 않습니다.\n"
+            else "### 3. 서버 전송\n\n위에 명시한 앱 기능은 ONNELLAB 서버로 파일 내용이나 사용 기록을 전송하지 않습니다.\n"
         )
         purchase_section = (
             "앱 내 구매는 Apple App Store 또는 Google Play가 처리합니다. "
@@ -759,51 +801,55 @@ def localized_policy_markdown(policy: dict[str, object], language: str, develope
         )
         return f"""# {app_name} 개인정보 처리방침
 
-[English](../) · [ONNELLAB](/)
-
 이 개인정보 처리방침은 {developer_name}이 제공하는 {app_name} 앱에 적용됩니다.
 
 **최종 업데이트:** {policy['last_updated']}
 
-## 1. 계정 및 개인 식별 정보
+---
+
+## 개인정보 처리방침
+
+{app_name}는 사용자의 개인정보를 중요하게 생각하며 아래와 같은 방식으로 운영됩니다.
+
+### 1. 계정 및 개인 식별 정보
 
 {app_name}는 이름, 이메일 주소 또는 전화번호로 가입하거나 로그인하도록 요구하지 않습니다. 아래에 별도로 명시한 선택형 서버 기능을 제외하면 앱 콘텐츠와 사용 기록은 ONNELLAB로 전송되지 않습니다.
 
-## 2. 앱이 접근하거나 기기에 저장하는 데이터
+### 2. 앱이 접근하거나 기기에 저장하는 데이터
 
 {bullets(data_items)}
 
 {bullets(processing_items)}
 
 {remote_section}
-## 4. 결제 정보
+### 4. 결제 정보
 
 {purchase_section}
 
-## 5. 광고, 분석 및 제3자 제공
+### 5. 광고, 분석 및 제3자 제공
 
 {app_name}는 광고 SDK, 사용자 행동 분석 SDK 또는 제3자 추적 도구를 사용하지 않습니다. 데이터는 위에 설명한 기능 제공 목적 외에는 판매하지 않으며, 사용자가 운영체제 공유 기능이나 다른 앱을 통해 직접 전달한 경우는 해당 서비스의 처리방침이 적용됩니다.
 
-## 6. 보관 및 삭제
+### 6. 보관 및 삭제
 
 {retention}
 
-## 7. 보안 및 아동의 개인정보
+### 7. 보안 및 아동의 개인정보
 
 {developer_name}은 전송이 필요한 데이터에 합리적인 기술적·관리적 보호조치를 적용합니다. {app_name}는 만 13세 미만 아동을 대상으로 설계되지 않았으며 아동의 개인정보를 고의로 수집하지 않습니다.
 
-## 8. 변경 및 문의
+### 8. 변경 및 문의
 
 앱 기능이나 법적·스토어 요구사항이 변경되면 이 문서를 수정하고 최종 업데이트일을 변경합니다.
 
 개인정보 관련 문의 또는 삭제 요청: [{contact_email}](mailto:{contact_email})
 """
     remote_section = (
-        "## 3. Optional server processing\n\n"
+        "### 3. Optional server processing\n\n"
         + bullets(remote["data"]["en"])
         + f"\n\n{remote['purpose']['en']}\n"
         if has_remote
-        else "## 3. Server transmission\n\nThe app features described above do not transmit file contents or usage history to an ONNELLAB server.\n"
+        else "### 3. Server transmission\n\nThe app features described above do not transmit file contents or usage history to an ONNELLAB server.\n"
     )
     purchase_section = (
         "In-app purchases are processed by Apple App Store or Google Play. "
@@ -819,40 +865,44 @@ def localized_policy_markdown(policy: dict[str, object], language: str, develope
     )
     return f"""# {app_name} Privacy Policy
 
-[한국어](ko/) · [ONNELLAB](/)
-
 This Privacy Policy applies to the {app_name} app provided by {developer_name}.
 
 **Last updated:** {policy['last_updated']}
 
-## 1. Accounts and direct identifiers
+---
+
+## Privacy Policy
+
+{app_name} values your privacy. This app operates as described below.
+
+### 1. Accounts and direct identifiers
 
 {app_name} does not require registration or sign-in with a name, email address, or phone number. Except for an optional server feature described below, app content and usage history are not transmitted to ONNELLAB.
 
-## 2. Data accessed or stored on the device
+### 2. Data accessed or stored on the device
 
 {bullets(data_items)}
 
 {bullets(processing_items)}
 
 {remote_section}
-## 4. Payment information
+### 4. Payment information
 
 {purchase_section}
 
-## 5. Advertising, analytics, and sharing
+### 5. Advertising, analytics, and sharing
 
 {app_name} does not use advertising SDKs, behavioral analytics SDKs, or third-party tracking tools. Data is not sold or shared outside the purposes described above. If the user deliberately hands content to another app or service through the operating-system share features, that service's policy applies.
 
-## 6. Retention and deletion
+### 6. Retention and deletion
 
 {retention}
 
-## 7. Security and children's privacy
+### 7. Security and children's privacy
 
 {developer_name} applies reasonable technical and organizational safeguards to data that must be transmitted. {app_name} is not directed to children under 13 and does not knowingly collect personal information from children.
 
-## 8. Changes and contact
+### 8. Changes and contact
 
 If app functionality or legal or store requirements change, this document will be updated and its last-updated date will change.
 
@@ -923,7 +973,18 @@ def write_privacy_pages(
                 if language == "ko"
                 else f"Privacy Policy for the {app_name} app."
             )
-            body = markdown_to_html(localized_policy_markdown(policy, language, developer_name, contact_email))
+            home_url = public_url(site_url, "ko/" if language == "ko" else "")
+            language_url = alternate_urls["en" if language == "ko" else "ko"]
+            language_label = "English" if language == "ko" else "한국어"
+            navigation = (
+                '<nav class="topbar" aria-label="Navigation">\n'
+                f'  <a class="home-link" href="{html.escape(home_url, quote=True)}">ONNELLAB</a>\n'
+                f'  <a class="language-link" href="{html.escape(language_url, quote=True)}">{language_label}</a>\n'
+                "</nav>"
+            )
+            body = navigation + "\n" + markdown_to_html(
+                localized_policy_markdown(policy, language, developer_name, contact_email)
+            )
             document = html_document(
                 title,
                 description,

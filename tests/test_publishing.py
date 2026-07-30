@@ -191,8 +191,28 @@ class PublishingTest(unittest.TestCase):
         self.assertTrue(privacy_apps_ko.exists())
         self.assertTrue(privacy_legacy_en.exists())
         self.assertTrue(privacy_legacy_ko.exists())
-        self.assertIn("VaultXT Privacy Policy", privacy_en.read_text(encoding="utf-8"))
-        self.assertIn("VaultXT 개인정보 처리방침", privacy_ko.read_text(encoding="utf-8"))
+        privacy_en_html = privacy_en.read_text(encoding="utf-8")
+        privacy_ko_html = privacy_ko.read_text(encoding="utf-8")
+        self.assertIn("VaultXT Privacy Policy", privacy_en_html)
+        self.assertIn("VaultXT 개인정보 처리방침", privacy_ko_html)
+        self.assertIn('--background: #faf8f5;', privacy_en_html)
+        self.assertIn('font-family: "SUIT Variable";', privacy_en_html)
+        self.assertIn('<nav class="topbar" aria-label="Navigation">', privacy_en_html)
+        self.assertIn('<a class="home-link" href="https://example.com/">ONNELLAB</a>', privacy_en_html)
+        self.assertIn(
+            '<a class="language-link" href="https://example.com/privacy/vaultxt/ko/">한국어</a>',
+            privacy_en_html,
+        )
+        self.assertIn('<a class="home-link" href="https://example.com/ko/">ONNELLAB</a>', privacy_ko_html)
+        self.assertIn(
+            '<a class="language-link" href="https://example.com/privacy/vaultxt/">English</a>',
+            privacy_ko_html,
+        )
+        self.assertLess(privacy_en_html.index('class="home-link"'), privacy_en_html.index("<h1>"))
+        self.assertLess(privacy_en_html.index('class="language-link"'), privacy_en_html.index("<h1>"))
+        self.assertIn("<hr>", privacy_en_html)
+        self.assertIn("<h2>Privacy Policy</h2>", privacy_en_html)
+        self.assertIn("<h3>1. Accounts and direct identifiers</h3>", privacy_en_html)
         self.assertIn(
             '<link rel="canonical" href="https://example.com/privacy/vaultxt/">',
             privacy_apps_en.read_text(encoding="utf-8"),
