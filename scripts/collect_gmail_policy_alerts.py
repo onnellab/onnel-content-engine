@@ -45,7 +45,18 @@ def call(url: str, method: str = "GET", token: str = "", payload: bytes | None =
     try:
         with urlopen(Request(url, data=payload, headers=headers, method=method), timeout=30) as response:
             data = json.loads(response.read().decode("utf-8"))
-    except (HTTPError, URLError, TimeoutError, json.JSONDecodeError) as error:
+    except HTTPError as error:
+        detail = ""
+        try:
+            error_payload = json.loads(error.read().decode("utf-8"))
+            error_object = error_payload.get("error", {}) if isinstance(error_payload, dict) else {}
+            if isinstance(error_object, dict):
+                detail = str(error_object.get("status") or error_object.get("message") or "")
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            pass
+        suffix = f" ({detail})" if detail else ""
+        raise RuntimeError(f"Gmail policy alert collection failed: HTTP {error.code}{suffix}") from error
+    except (URLError, TimeoutError, json.JSONDecodeError) as error:
         raise RuntimeError(f"Gmail policy alert collection failed: {error}") from error
     if not isinstance(data, dict): raise RuntimeError("Gmail response was not an object")
     return data
