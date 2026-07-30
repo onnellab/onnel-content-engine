@@ -9,7 +9,9 @@
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T01:56:59+00:00",
-      "status": "new",
+      "status": "verification_pending",
+      "operational_note": "Billing Library 요구사항을 반영한 버전을 활성 트랙에 출시했습니다. Google Play Console의 경고 해제 재검사를 기다리고 있습니다.",
+      "status_updated_at": "2026-07-30T04:11:52+00:00",
       "event_key": "google-play-billing-8-deadline-2026-08-31",
       "source_accounts": [
         "developer"
@@ -24,7 +26,9 @@
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:20+00:00",
-      "status": "new",
+      "status": "development",
+      "operational_note": "출시 전 개발 중인 앱입니다. 출시 준비 과정에서 Billing Library 요구사항을 반영해야 합니다.",
+      "status_updated_at": "2026-07-30T04:11:52+00:00",
       "event_key": "google-play-billing-8-deadline-2026-08-31",
       "source_accounts": [
         "developer"
@@ -39,7 +43,9 @@
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:20+00:00",
-      "status": "new",
+      "status": "verification_pending",
+      "operational_note": "Billing Library 요구사항을 반영한 버전을 활성 트랙에 출시했습니다. Google Play Console의 경고 해제 재검사를 기다리고 있습니다.",
+      "status_updated_at": "2026-07-30T04:11:52+00:00",
       "event_key": "google-play-billing-8-deadline-2026-08-31",
       "source_accounts": [
         "developer"
@@ -54,7 +60,9 @@
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:21+00:00",
-      "status": "new",
+      "status": "update_in_progress",
+      "operational_note": "대규모 패치를 개발 중이므로 Billing Library 업데이트와 활성 트랙 출시는 아직 완료되지 않았습니다.",
+      "status_updated_at": "2026-07-30T04:11:52+00:00",
       "event_key": "google-play-billing-8-deadline-2026-08-31",
       "source_accounts": [
         "developer"

@@ -70,6 +70,8 @@ def main() -> int:
             "summary": item.get("evidence", {}).get("summary"),
             "reference_url": item.get("evidence", {}).get("reference_url"),
             "occurred_at": item.get("evidence", {}).get("occurred_at"),
+            "operational_note": item.get("evidence", {}).get("operational_note"),
+            "status_updated_at": item.get("evidence", {}).get("status_updated_at"),
         }
         for item in policy_tasks
         if isinstance(item.get("evidence"), dict) and item.get("evidence", {}).get("alert_id")

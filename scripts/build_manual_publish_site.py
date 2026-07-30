@@ -3734,6 +3734,16 @@ def html_document(
         detailValue.textContent = alert.summary || 'Review the store console warning.';
         detail.append(detailLabel, detailValue);
         card.append(title, state, detail);
+        if (alert.operational_note) {{
+          const note = document.createElement('div');
+          note.className = 'app-status-row';
+          const noteLabel = document.createElement('b');
+          noteLabel.textContent = 'current action';
+          const noteValue = document.createElement('span');
+          noteValue.textContent = alert.operational_note;
+          note.append(noteLabel, noteValue);
+          card.appendChild(note);
+        }}
         if (alert.occurred_at) {{
           const occurred = document.createElement('div');
           occurred.className = 'app-status-row';
