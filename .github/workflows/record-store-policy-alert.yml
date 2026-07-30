@@ -9,6 +9,7 @@ on:
       summary: {description: Sanitized alert summary; no personal/account data, required: true, type: string}
       reference_url: {description: Optional official HTTPS URL, required: false, type: string}
       occurred_at: {description: Optional ISO-8601 timestamp, required: false, type: string}
+      event_key: {description: Optional stable deduplication key, required: false, type: string}
       confirm_alert: {description: Type ALERT to record, required: true, type: string}
 
 permissions: {contents: write}
@@ -27,6 +28,7 @@ jobs:
           --summary '${{ inputs.summary }}'
           --reference-url '${{ inputs.reference_url }}'
           --occurred-at '${{ inputs.occurred_at }}'
+          --event-key '${{ inputs.event_key }}'
       - run: python3 scripts/analyze_store_policy_impact.py
       - run: python3 scripts/generate_ai_manager_report.py
       - run: |

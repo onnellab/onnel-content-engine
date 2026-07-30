@@ -503,6 +503,17 @@ only a non-reversible message fingerprint and the mapped app/store/kind are
 kept. Leave `data/gmail_policy_alert_config.json` disabled until a dedicated
 mailbox, label, and exact mapping rules are ready.
 
+The scheduled workflow supports two mailboxes without committing either email
+address. The aliases are `developer` and `official`; configure the shared OAuth
+client as `GMAIL_POLICY_ALERT_CLIENT_ID` and `GMAIL_POLICY_ALERT_CLIENT_SECRET`,
+then store each mailbox refresh token separately as
+`GMAIL_POLICY_ALERT_REFRESH_TOKEN_DEVELOPER` and
+`GMAIL_POLICY_ALERT_REFRESH_TOKEN_OFFICIAL`. Collection status is namespaced by
+alias. Message fingerprints use RFC `Message-ID` when present, so the same
+message in both mailboxes becomes one dashboard alert while retaining both
+non-sensitive account aliases as sources; the fallback identity is namespaced
+by account.
+
 Policy tasks require a separate `ASSESS` approval before a local Codex
 read-only assessment packet can be generated. That approval does not permit a
 patch, store response, appeal, submission, or release.

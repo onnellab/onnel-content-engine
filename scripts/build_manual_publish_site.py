@@ -3701,6 +3701,7 @@ def html_document(
       aiManagerGrid.textContent = '';
       const summary = aiManagerReport.summary || {{}};
       const attention = aiManagerReport.requires_attention || [];
+      const policyAlerts = aiManagerReport.policy_alerts || [];
       aiManagerSummary.textContent = `${{attention.length}} attention / ${{aiManagerReport.generated_at || 'not generated'}}`;
       Object.entries(summary).forEach(([key, value]) => {{
         const card = document.createElement('div');
@@ -3711,6 +3712,46 @@ def html_document(
         row.className = 'app-status-row';
         row.innerHTML = `<b>count</b><span>${{value}}</span>`;
         card.append(title, row);
+        aiManagerGrid.appendChild(card);
+      }});
+      policyAlerts.forEach((alert) => {{
+        const card = document.createElement('div');
+        card.className = 'app-status-card';
+        const title = document.createElement('strong');
+        title.textContent = `${{alert.app_slug || 'unknown app'}} · ${{alert.store || 'store'}}`;
+        const state = document.createElement('div');
+        state.className = 'app-status-row is-store';
+        const stateLabel = document.createElement('b');
+        stateLabel.textContent = alert.kind || 'policy alert';
+        const stateValue = document.createElement('span');
+        stateValue.textContent = alert.status || 'review_required';
+        state.append(stateLabel, stateValue);
+        const detail = document.createElement('div');
+        detail.className = 'app-status-row';
+        const detailLabel = document.createElement('b');
+        detailLabel.textContent = 'requirement';
+        const detailValue = document.createElement('span');
+        detailValue.textContent = alert.summary || 'Review the store console warning.';
+        detail.append(detailLabel, detailValue);
+        card.append(title, state, detail);
+        if (alert.occurred_at) {{
+          const occurred = document.createElement('div');
+          occurred.className = 'app-status-row';
+          const occurredLabel = document.createElement('b');
+          occurredLabel.textContent = 'detected';
+          const occurredValue = document.createElement('span');
+          occurredValue.textContent = formatDate(alert.occurred_at);
+          occurred.append(occurredLabel, occurredValue);
+          card.appendChild(occurred);
+        }}
+        if (alert.reference_url) {{
+          const link = document.createElement('a');
+          link.href = alert.reference_url;
+          link.target = '_blank';
+          link.rel = 'noopener';
+          link.textContent = 'official reference';
+          card.appendChild(link);
+        }}
         aiManagerGrid.appendChild(card);
       }});
     }}

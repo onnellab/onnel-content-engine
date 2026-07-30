@@ -60,6 +60,56 @@ class AiManagerAutomationTest(unittest.TestCase):
         self.assertEqual(report["actionable_prs"][0]["task_id"], "draft-1")
         self.assertEqual(report["actionable_prs"][0]["qa_status"], "blocked")
 
+    def test_report_surfaces_store_policy_alert_details(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            data = root / "data"
+            data.mkdir(parents=True)
+            (data / "store_policy_impact_tasks.json").write_text(
+                json.dumps(
+                    {
+                        "tasks": [
+                            {
+                                "task_id": "policy-alert-billing-1",
+                                "app_slug": "tagweaver",
+                                "store": "google_play",
+                                "status": "review_required",
+                                "evidence": {
+                                    "alert_id": "billing-1",
+                                    "kind": "billing",
+                                    "summary": "Billing Library 8.0.0+ required by 2026-08-31.",
+                                    "reference_url": "",
+                                    "occurred_at": "2026-07-30T00:00:00+00:00",
+                                },
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (data / "gmail_policy_alert_sync_status.json").write_text(
+                json.dumps(
+                    {
+                        "accounts": {
+                            "developer": {"state": "collected"},
+                            "official": {"state": "disabled"},
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with patch.object(generate_ai_manager_report, "ROOT", root):
+                self.assertEqual(generate_ai_manager_report.main(), 0)
+            report = json.loads((data / "ai_manager_daily_report.json").read_text())
+
+        self.assertEqual(report["summary"]["store_policy_tasks"], 1)
+        self.assertEqual(report["summary"]["store_policy_mailboxes_connected"], 1)
+        self.assertEqual(report["policy_alerts"][0]["app_slug"], "tagweaver")
+        self.assertEqual(report["policy_alerts"][0]["kind"], "billing")
+        alert = next(item for item in report["requires_attention"] if item["category"] == "store_policy_alert")
+        self.assertEqual(alert["task_id"], "policy-alert-billing-1")
+        self.assertIn("8.0.0", alert["actions"])
+
     def test_issue_body_has_stable_ids_and_human_workflow_links(self) -> None:
         report = {
             "generated_at": "2026-07-28T00:00:00+00:00",

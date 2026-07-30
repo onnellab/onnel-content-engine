@@ -4,14 +4,26 @@ permissions: {contents: write}
 jobs:
  collect:
   runs-on: ubuntu-latest
+  env:
+   GMAIL_CLIENT_ID: ${{ secrets.GMAIL_POLICY_ALERT_CLIENT_ID }}
+   GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_POLICY_ALERT_CLIENT_SECRET }}
+   GMAIL_POLICY_REFRESH_DEVELOPER: ${{ secrets.GMAIL_POLICY_ALERT_REFRESH_TOKEN_DEVELOPER }}
+   GMAIL_POLICY_REFRESH_OFFICIAL: ${{ secrets.GMAIL_POLICY_ALERT_REFRESH_TOKEN_OFFICIAL }}
   steps:
    - uses: actions/checkout@v4
    - run: python3 scripts/collect_store_policy_updates.py
-   - run: python3 scripts/collect_gmail_policy_alerts.py
+   - name: Collect developer-account policy mail
+     if: env.GMAIL_POLICY_REFRESH_DEVELOPER != ''
+     run: python3 scripts/collect_gmail_policy_alerts.py
      env:
-      GMAIL_CLIENT_ID: ${{ secrets.GMAIL_POLICY_ALERT_CLIENT_ID }}
-      GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_POLICY_ALERT_CLIENT_SECRET }}
-      GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_POLICY_ALERT_REFRESH_TOKEN }}
+      GMAIL_ACCOUNT_ALIAS: developer
+      GMAIL_REFRESH_TOKEN: ${{ env.GMAIL_POLICY_REFRESH_DEVELOPER }}
+   - name: Collect official-account policy mail
+     if: env.GMAIL_POLICY_REFRESH_OFFICIAL != ''
+     run: python3 scripts/collect_gmail_policy_alerts.py
+     env:
+      GMAIL_ACCOUNT_ALIAS: official
+      GMAIL_REFRESH_TOKEN: ${{ env.GMAIL_POLICY_REFRESH_OFFICIAL }}
    - run: python3 scripts/analyze_store_policy_impact.py
    - run: |
       git config user.name github-actions[bot]
