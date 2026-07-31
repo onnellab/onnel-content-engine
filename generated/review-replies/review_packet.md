@@ -73,7 +73,7 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "developer_reply": "",
       "reply_updated_at": "",
       "status": "pending",
-      "synced_at": "2026-07-30T03:36:18+00:00"
+      "synced_at": "2026-07-31T03:55:26+00:00"
     },
     "triage": {
       "review_id": "report-a0d3339ac24a86567e3f9185",
