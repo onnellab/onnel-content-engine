@@ -1,15 +1,15 @@
 {
-  "checked_at": "2026-08-08T02:09:06+00:00",
+  "checked_at": "2026-08-09T02:21:24+00:00",
   "state": "collected",
   "imported": 0,
   "accounts": {
     "developer": {
-      "checked_at": "2026-08-08T02:09:05+00:00",
+      "checked_at": "2026-08-09T02:21:23+00:00",
       "state": "collected",
       "imported": 0
     },
     "official": {
-      "checked_at": "2026-08-08T02:09:06+00:00",
+      "checked_at": "2026-08-09T02:21:24+00:00",
       "state": "collected",
       "imported": 0
     }
