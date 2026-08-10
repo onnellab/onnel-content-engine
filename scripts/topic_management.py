@@ -131,6 +131,45 @@ class TopicError(ValueError):
     """Raised when a topic management operation violates the specification."""
 
 
+def _normalized_publication_url(value: object) -> str:
+    if not isinstance(value, str) or not value:
+        return ""
+    while value.endswith("/") and not value.endswith("://"):
+        value = value[:-1]
+    return value
+
+
+def _require_current_published_topic(project_root: Path, item: dict[str, object]) -> dict[str, str]:
+    """Return the authoritative published topic matching a manifest item's identity."""
+    topics_path = project_root / "data" / "topics.csv"
+    try:
+        rows = read_csv(topics_path, TOPIC_HEADER)
+    except OSError as error:
+        raise TopicError(f"cannot verify current topic authority from {topics_path}: {error}") from error
+    topic_id = item.get("topic_id")
+    matches = [row for row in rows if row["id"] == topic_id]
+    if len(matches) != 1:
+        raise TopicError(f"topic {topic_id!r} must exist exactly once in {topics_path}")
+    topic = matches[0]
+    if topic["status"] != "published":
+        raise TopicError(f"topic {topic_id!r} current status is {topic['status']!r}, not 'published'")
+    identity_fields = (
+        ("slug", "slug"),
+        ("language", "primary_language"),
+        ("category", "category"),
+    )
+    for manifest_field, topic_field in identity_fields:
+        if item.get(manifest_field) != topic[topic_field]:
+            raise TopicError(
+                f"topic {topic_id!r} manifest {manifest_field} does not match authoritative {topic_field}"
+            )
+    if _normalized_publication_url(item.get("canonical_url")) != _normalized_publication_url(
+        topic["published_url"]
+    ):
+        raise TopicError(f"topic {topic_id!r} manifest canonical_url does not match authoritative published_url")
+    return topic
+
+
 def read_csv(path: Path, header: list[str]) -> list[dict[str, str]]:
     with path.open("r", encoding="utf-8", newline="") as file:
         reader = csv.DictReader(file)

@@ -98,15 +98,51 @@ def item_key(item: dict[str, Any]) -> str:
     )
 
 
+def social_manifest_project_root(social_manifest: Path) -> Path:
+    resolved_manifest = social_manifest.resolve()
+    if resolved_manifest.parent.name == "social" and resolved_manifest.parent.parent.name == "generated":
+        return resolved_manifest.parents[2]
+    return resolved_manifest.parent
+
+
+def social_draft_text(post: dict[str, Any], project_root: Path) -> str:
+    raw_path = str(post.get("draft_path", "")).strip()
+    if not raw_path:
+        return ""
+    draft_path = Path(raw_path)
+    if not draft_path.is_absolute():
+        draft_path = project_root / draft_path
+    try:
+        resolved_root = project_root.resolve()
+        resolved_draft = draft_path.resolve(strict=True)
+        resolved_draft.relative_to(resolved_root)
+        if not resolved_draft.is_file():
+            return ""
+        return resolved_draft.read_text(encoding="utf-8").strip()
+    except (OSError, UnicodeError, ValueError):
+        return ""
+
+
 def load_items(social_manifest: Path, syndication_manifest: Path) -> list[dict[str, Any]]:
     items: list[dict[str, Any]] = []
     social = load_json(social_manifest)
+    project_root = social_manifest_project_root(social_manifest)
+    bluesky_store_draft_counts: dict[str, int] = {}
     for post in social.get("posts", []):
         if isinstance(post, dict) and not post.get("is_variant"):
             item = dict(post)
             item["kind"] = "social"
             item["manual_key"] = item_key(item)
+            if item.get("platform") == "bluesky" and item.get("link_strategy") == "store_install":
+                draft_text = social_draft_text(item, project_root)
+                item["_verification_draft_text"] = draft_text
+                if draft_text and is_published_source(item):
+                    bluesky_store_draft_counts[draft_text] = bluesky_store_draft_counts.get(draft_text, 0) + 1
             items.append(item)
+    for item in items:
+        draft_text = str(item.get("_verification_draft_text", ""))
+        if draft_text:
+            item["_verification_draft_text_is_unique"] = bluesky_store_draft_counts.get(draft_text) == 1
     syndication = load_json(syndication_manifest)
     for draft in syndication.get("drafts", []):
         if isinstance(draft, dict):
@@ -139,16 +175,43 @@ def bsky_post_url(handle: str, uri: str) -> str:
     return f"https://bsky.app/profile/{handle}/post/{rkey}"
 
 
+def social_verification_urls(item: dict[str, Any]) -> list[str]:
+    destinations = str(item.get("destination_urls", ""))
+    urls = [url.strip() for url in destinations.split("|") if url.strip()]
+    target_url = str(item.get("target_url", "")).strip()
+    if target_url and target_url not in urls:
+        urls.insert(0, target_url)
+    canonical_url = str(item.get("canonical_url", "")).strip()
+    return urls or ([canonical_url] if canonical_url else [])
+
+
+def is_published_source(item: dict[str, Any]) -> bool:
+    source_status = str(item.get("source_status", "")).strip()
+    return item.get("publish_after_canonical") is not True and (not source_status or source_status == "published")
+
+
 def verify_bluesky(item: dict[str, Any], fetch_json: FetchJson) -> Verification | None:
     handle = os.environ.get("BLUESKY_HANDLE", "onnellab.bsky.social")
     query = urllib.parse.urlencode({"actor": handle, "limit": "100", "filter": "posts_with_replies"})
     data = fetch_json(f"{PUBLIC_API_BSKY}/xrpc/app.bsky.feed.getAuthorFeed?{query}", None)
-    canonical_url = str(item.get("canonical_url", ""))
+    verification_urls = social_verification_urls(item)
+    requires_draft_evidence = item.get("link_strategy") == "store_install"
+    draft_text = str(item.get("_verification_draft_text", ""))
+    draft_text_is_unique = item.get("_verification_draft_text_is_unique") is True
     for row in data.get("feed", []) if isinstance(data, dict) else []:
         post = row.get("post", {}) if isinstance(row, dict) else {}
-        if canonical_url and canonical_url in "\n".join(strings_in(post)):
+        haystack = "\n".join(strings_in(post))
+        has_matching_url = any(url in haystack for url in verification_urls)
+        record = post.get("record", {}) if isinstance(post, dict) else {}
+        record_text = record.get("text", "") if isinstance(record, dict) else ""
+        has_exact_draft = bool(
+            draft_text and draft_text_is_unique and isinstance(record_text, str) and record_text.strip() == draft_text
+        )
+        matches_item = has_matching_url and (has_exact_draft if requires_draft_evidence else True)
+        if matches_item:
             uri = str(post.get("uri", ""))
-            return result_for(item, bsky_post_url(handle, uri) if uri else canonical_url, "bluesky_author_feed", "high")
+            fallback_url = verification_urls[0] if verification_urls else ""
+            return result_for(item, bsky_post_url(handle, uri) if uri else fallback_url, "bluesky_author_feed", "high")
     return None
 
 
@@ -318,17 +381,17 @@ def verify_public_page(item: dict[str, Any], visual_text: VisualText) -> Verific
         return None
     verification_url = public_activity_url(platform, url)
     text = visual_text(verification_url)
-    canonical_url = str(item.get("canonical_url", ""))
+    verification_urls = social_verification_urls(item)
     title = first_line_from_draft(item)
-    canonical_host = urllib.parse.urlparse(canonical_url).netloc
+    verification_hosts = [urllib.parse.urlparse(url).netloc for url in verification_urls]
     has_title = bool(title and title in text)
-    has_canonical_url = bool(canonical_url and canonical_url in text)
-    has_canonical_card = bool(canonical_host and canonical_host in text and has_title)
-    if has_title and (has_canonical_url or has_canonical_card):
+    has_target_url = any(url in text for url in verification_urls)
+    has_target_card = any(host and host in text for host in verification_hosts) and has_title
+    if has_title and (has_target_url or has_target_card):
         posted_url = public_post_url_from_visual_text(platform, text, verification_url)
         return result_for(item, posted_url, f"{platform}_public_page_visual", "low")
     print(
-        f"checked {platform} public page but found no matching title plus canonical URL or domain: {verification_url}",
+        f"checked {platform} public page but found no matching title plus target URL or domain: {verification_url}",
         file=sys.stderr,
     )
     return None
@@ -423,7 +486,7 @@ def verify_manual_publications(
     retry_delay_seconds: float = 0,
 ) -> list[Verification]:
     state = load_json(state_path) or {"version": 1, "updated_at": "", "done": {}}
-    items = load_items(social_manifest, syndication_manifest)
+    items = [item for item in load_items(social_manifest, syndication_manifest) if is_published_source(item)]
     verifications: list[Verification] = []
     already_done_items: list[dict[str, Any]] = []
     pending_items: list[dict[str, Any]] = []

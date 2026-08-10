@@ -16,6 +16,7 @@ from zoneinfo import ZoneInfo
 from approve_syndication_draft import write_manifest
 from evaluate_syndication_drafts import DEFAULT_MANIFEST_PATH, frontmatter
 from publishing_adapters import AdapterError, require_adapter_ready
+from topic_management import TopicError, _require_current_published_topic
 from validate_syndication_drafts import SyndicationValidationError, project_root_for_manifest, validate_syndication_drafts
 
 
@@ -63,6 +64,10 @@ def approved_drafts(manifest: dict[str, object], platform: str | None = None) ->
     seen: set[tuple[object, object, object]] = set()
     for draft in selected:
         key = (draft.get("topic_id"), draft.get("platform"), draft.get("language"))
+        if draft.get("publish_after_canonical") is True:
+            raise SyndicationPostingError(
+                f"approved syndication draft cannot be posted before canonical publication: {key}"
+            )
         if key in seen:
             raise SyndicationPostingError(f"duplicate approved syndication draft: {key}")
         seen.add(key)
@@ -217,6 +222,13 @@ def post_syndication_drafts(
     if adapter != "mock" and platform is None and adapter in {"devto", "hashnode"}:
         platform = adapter
     drafts = approved_drafts(manifest, platform)
+    for draft in drafts:
+        try:
+            _require_current_published_topic(project_root, draft)
+        except TopicError as error:
+            raise SyndicationPostingError(
+                f"approved syndication draft cannot be posted before canonical publication: {error}"
+            ) from error
     timestamp = (now or datetime.now(ZoneInfo("Asia/Seoul"))).replace(microsecond=0).isoformat()
     if dry_run:
         if verbose:

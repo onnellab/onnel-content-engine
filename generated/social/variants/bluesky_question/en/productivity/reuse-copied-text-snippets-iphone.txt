@@ -2,4 +2,5 @@ A practical way to reuse copied text snippets on iPhone without losing track of 
 
 Build a deliberate iPhone clipboard workflow for savi...
 
-https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/
+Install ClipNest:
+App Store: https://apps.apple.com/app/id6779928552

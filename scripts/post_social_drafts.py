@@ -21,6 +21,7 @@ from zoneinfo import ZoneInfo
 
 from approve_social_post import project_root_for_manifest, write_manifest
 from publishing_adapters import AdapterError, require_adapter_ready
+from topic_management import TopicError, _require_current_published_topic
 from validate_social_posts import DEFAULT_MANIFEST_PATH, SocialValidationError, validate_social_posts
 
 
@@ -70,6 +71,10 @@ def approved_posts(manifest: dict[str, object], platform: str | None = None) -> 
     seen: set[tuple[object, object, object, object]] = set()
     for post in selected:
         key = (post.get("topic_id"), post.get("platform"), post.get("language"), post.get("template_id"))
+        if post.get("publish_after_canonical") is True:
+            raise SocialPostingError(
+                f"approved social draft cannot be posted before canonical publication: {key}"
+            )
         if key in seen:
             raise SocialPostingError(f"duplicate approved social draft: {key}")
         seen.add(key)
@@ -242,7 +247,7 @@ def bluesky_external_card_metadata(post: dict[str, object], project_root: Path) 
     title = non_url_lines[0] if non_url_lines else str(post["slug"])
     description = non_url_lines[1] if len(non_url_lines) > 1 else title
     return {
-        "uri": str(post["canonical_url"]),
+        "uri": str(post.get("target_url") or post["canonical_url"]),
         "title": title[:300],
         "description": description[:300],
         "thumb_path": str(post["card_asset_path"]),
@@ -354,6 +359,13 @@ def post_social_drafts(
     if adapter != "mock" and platform is None and adapter in {"bluesky", "x", "linkedin"}:
         platform = adapter
     posts = approved_posts(manifest, platform)
+    for post in posts:
+        try:
+            _require_current_published_topic(project_root, post)
+        except TopicError as error:
+            raise SocialPostingError(
+                f"approved social draft cannot be posted before canonical publication: {error}"
+            ) from error
     timestamp = (now or datetime.now(ZoneInfo("Asia/Seoul"))).replace(microsecond=0).isoformat()
     if dry_run:
         if verbose:

@@ -1,0 +1,10 @@
+Should I use TXT or EPUB for long reading.
+
+Choose EPUB when the document is primarily a book to read. A well-made reflowable EPUB can adapt to screen size and reader settings while preserving chapters, headings, a table of contents, book metadata, emphasis, links, and image descriptions.
+
+- Preserve the source. Keep the original TXT read-only or versioned. Convert a copy, not the only recoverable file.
+- Identify the encoding. Decode correctly, then normalize a working copy to UTF-8 if permitted. Inspect non-Latin characters, quotation marks, dashes, and symbols.
+
+Install VaultXT:
+App Store: https://apps.apple.com/app/id6760122045
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt

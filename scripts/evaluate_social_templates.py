@@ -34,7 +34,10 @@ def score_post(post: dict[str, object], project_root: Path = ROOT) -> dict[str, 
     def add(name: str, passed: bool, points: float) -> None:
         checks.append({"name": name, "passed": passed, "points": points if passed else 0.0, "max_points": points})
 
-    add("canonical_url", str(post["canonical_url"]) in text, 1.5)
+    target_url = str(post.get("target_url", "")) or str(post["canonical_url"])
+    add("target_url", target_url in text, 1.5)
+    cta = str(post.get("cta_text", ""))
+    add("cta", not cta or cta in text, 0.5)
     add("no_placeholders", not PLACEHOLDER_RE.search(text), 1.0)
     add("png_card", str(post["card_asset_path"]).endswith(".png"), 1.0)
     add("template_tracked", bool(post.get("template_id")) and bool(post.get("template_path")), 1.0)
@@ -47,7 +50,7 @@ def score_post(post: dict[str, object], project_root: Path = ROOT) -> dict[str, 
         add("bluesky_length", len(text) <= 300, 1.8)
         add("bluesky_compact", len(text) <= 260, 1.0)
     if platform == "linkedin":
-        cta = "전체 글 읽기:" if language == "ko" else "Read the full article:"
+        cta = cta or ("전체 글 읽기:" if language == "ko" else "Read the full article:")
         bullet_count = sum(1 for line in text.splitlines() if line.startswith("- "))
         add("linkedin_cta", cta in text, 1.2)
         add("linkedin_bullets", 0 < bullet_count <= 3, 1.0)

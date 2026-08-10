@@ -359,6 +359,11 @@ Body
             self.assertIn("function atKstTime(date, hour, minute)", html)
             self.assertIn("while (next.getTime() <= Date.now())", html)
             self.assertIn("function futureDates(values)", html)
+            self.assertIn("function nextManualDueDate()", html)
+            self.assertIn(".map((item) => parseDate(item.due_at))", html)
+            self.assertIn("hashnode: 3, medium: 4", html)
+            self.assertNotIn("flatMap((platform) => upcomingPlatformScheduledDates(platform, 1))", html)
+            self.assertNotIn("const queueSlots = Math.max(0, blogQueueCount() - slots.length)", html)
             self.assertIn("kstDayNumber(date) <= kstDayNumber(new Date())", html)
             self.assertIn("window.setInterval(render, 60000)", html)
             self.assertIn("refreshDashboardData: true", html)
@@ -475,6 +480,84 @@ Body
             self.assertTrue((output.parent / "libsodium-wrappers.js").exists())
             self.assertIn("onnellab-manual-publish-v16", (output.parent / "sw.js").read_text(encoding="utf-8"))
             self.assertIn("./libsodium-sumo.js", (output.parent / "sw.js").read_text(encoding="utf-8"))
+
+    def test_prepublication_items_are_review_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            social_draft = root / "social.txt"
+            syndication_draft = root / "syndication.md"
+            social_draft.write_text("Review social body", encoding="utf-8")
+            syndication_draft.write_text("# Review article\n\nBody", encoding="utf-8")
+            social_manifest = root / "social.json"
+            syndication_manifest = root / "syndication.json"
+            social_manifest.write_text(
+                json.dumps(
+                    {
+                        "posts": [
+                            {
+                                "topic_id": "TOPIC-0001",
+                                "platform": "linkedin",
+                                "language": "en",
+                                "slug": "example",
+                                "template_id": "linkedin",
+                                "status": "draft",
+                                "source_status": "review",
+                                "publish_after_canonical": True,
+                                "draft_path": social_draft.as_posix(),
+                                "canonical_url": "https://onnellab.github.io/blog/en/example/",
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            syndication_manifest.write_text(
+                json.dumps(
+                    {
+                        "drafts": [
+                            {
+                                "topic_id": "TOPIC-0001",
+                                "platform": "devto",
+                                "language": "en",
+                                "slug": "example",
+                                "status": "draft",
+                                "source_status": "scheduled",
+                                "publish_after_canonical": True,
+                                "draft_path": syndication_draft.as_posix(),
+                                "canonical_url": "https://onnellab.github.io/blog/en/example/",
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            output = root / "manual" / "index.html"
+
+            build_manual_publish_site(
+                social_manifest,
+                syndication_manifest,
+                output,
+                ROOT / "data" / "topics.csv",
+                root / "missing-manual-state.json",
+            )
+
+            html = output.read_text(encoding="utf-8")
+            data_match = re.search(r'<script id="manual-data" type="application/json">(.*?)</script>', html, re.S)
+            self.assertIsNotNone(data_match)
+            items = json.loads(html_lib.unescape(data_match.group(1)))
+            self.assertEqual({item["source_status"] for item in items}, {"review", "scheduled"})
+            self.assertTrue(all(item["publish_after_canonical"] for item in items))
+            self.assertIn('<strong id="manual-count">0</strong>', html)
+            self.assertIn("function isPrepublication(item)", html)
+            self.assertIn("item.is_variant || isPrepublication(item)", html)
+            self.assertIn("done || isPrepublication(item)", html)
+            self.assertIn("&& !isPrepublication(item)\n        && !isDone(item)", html)
+            self.assertIn("if (isPrepublication(item)) actions.append(detailToggle)", html)
+            self.assertIn("item.kind === 'syndication' && !isPrepublication(item)", html)
+            self.assertIn("if (!isPrepublication(item)) appendSyndicationPublishFields(detail, item)", html)
+            self.assertIn("if (!isPrepublication(item)) detail.append(copy)", html)
+            self.assertIn("공개 전 검토 전용", html)
+            self.assertIn("Prepublication review only", html)
 
     def test_filters_stale_verification_report_items(self) -> None:
         report = current_verification_report(

@@ -1,5 +1,5 @@
-Before you clean up MP3 metadata before adding songs to a library, separate the required result from the optional steps.
+Before you clean up MP3 metadata before adding songs to a library, separate the required result from...
 
-Clean up MP3 metadata safely with a backup-first wor...
-
-https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/
+Install TagWeaver:
+App Store: https://apps.apple.com/app/id6759609875
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2

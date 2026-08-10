@@ -1,0 +1,7 @@
+Start with the constraints, then decide how to trim an audio recording without turning it into a full editing project.
+
+Trim an audio recordin...
+
+Install Segra:
+App Store: https://apps.apple.com/app/id6779433972
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.segra

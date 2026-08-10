@@ -656,12 +656,19 @@ def validate_publishable_language_pairs(rows: list[dict[str, str]]) -> None:
             )
 
 
-def load_publishable_articles(topics_path: Path, site_dir: Path, site_url: str) -> list[Article]:
+def load_publishable_articles(
+    topics_path: Path,
+    site_dir: Path,
+    site_url: str,
+    statuses: set[str] | None = None,
+) -> list[Article]:
     rows = read_csv(topics_path, TOPIC_HEADER)
-    validate_publishable_language_pairs(rows)
+    allowed_statuses = statuses or PUBLISHABLE_STATUSES
+    if statuses is None:
+        validate_publishable_language_pairs(rows)
     articles: list[Article] = []
     for topic in rows:
-        if topic["status"] not in PUBLISHABLE_STATUSES:
+        if topic["status"] not in allowed_statuses:
             continue
         if not topic["canonical_path"]:
             raise PublishingError(f"{topic['id']} is publishable but has no canonical_path")
@@ -1044,6 +1051,35 @@ def article_public_url(article: Article, site_url: str) -> str:
     return article.topic["published_url"] or public_url(site_url, article.url_path)
 
 
+def app_registry_by_name(path: Path) -> dict[str, dict[str, str]]:
+    if not path.exists():
+        return {}
+    with path.open(encoding="utf-8", newline="") as handle:
+        rows = [dict(row) for row in csv.DictReader(handle)]
+    registry: dict[str, dict[str, str]] = {}
+    for row in rows:
+        for key in (row.get("app_name", ""), row.get("slug", "")):
+            if key.strip():
+                registry[key.strip().casefold()] = row
+    return registry
+
+
+def attach_social_install_links(article: Article, registry: dict[str, dict[str, str]]) -> None:
+    related_apps = [name.strip() for name in article.topic.get("related_apps", "").split("|") if name.strip()]
+    for related_app in related_apps:
+        app = registry.get(related_app.casefold())
+        if not app:
+            continue
+        app_store_url = app.get("app_store_url", "").strip()
+        play_store_url = app.get("play_store_url", "").strip()
+        if not (app_store_url or play_store_url):
+            continue
+        article.topic["social_app_name"] = app.get("app_name", "").strip() or related_app
+        article.topic["social_app_store_url"] = app_store_url
+        article.topic["social_play_store_url"] = play_store_url
+        return
+
+
 def render_x_post(article: Article, site_url: str) -> str:
     return render_x_template(article, site_url, "x")
 
@@ -1076,6 +1112,9 @@ def render_bluesky_template(article: Article, site_url: str, template_id: str) -
         rendered = render_social_template(template, context)
     while len(rendered) > 260 and context["question"]:
         context["question"] = truncate_text(context["question"], max(0, len(context["question"]) - 8))
+        rendered = render_social_template(template, context)
+    while len(rendered) > 260 and context["hook"]:
+        context["hook"] = truncate_text(context["hook"], max(0, len(context["hook"]) - 8))
         rendered = render_social_template(template, context)
     return rendered
 
@@ -1324,7 +1363,16 @@ def social_template_context(
     markdown = article.markdown_path.read_text(encoding="utf-8")
     title = plain_text(article.title)
     description = plain_text(article.description)
-    url = article_public_url(article, site_url)
+    canonical_url = article_public_url(article, site_url)
+    app_name = article.topic.get("social_app_name", "").strip()
+    app_store_url = article.topic.get("social_app_store_url", "").strip()
+    play_store_url = article.topic.get("social_play_store_url", "").strip()
+    install_links: list[str] = []
+    if app_store_url:
+        install_links.append(f"App Store: {app_store_url}")
+    if play_store_url:
+        install_links.append(f"Google Play: {play_store_url}")
+    url = "\n".join(install_links) or canonical_url
     short_answer = first_paragraph_from_text(
         section_text(markdown, ("Short Answer", "요약 답변"))
     ) or description
@@ -1337,7 +1385,10 @@ def social_template_context(
     short_points_text = "\n".join(f"- {item}" for item in short_points)
     fixed_length = len(title) + len(url) + 4
     x_summary_limit = max(0, 280 - fixed_length)
-    cta = "전체 글 읽기:" if article.topic["primary_language"] == "ko" else "Read the full article:"
+    if install_links:
+        cta = f"{app_name} 설치:" if article.topic["primary_language"] == "ko" else f"Install {app_name}:"
+    else:
+        cta = "전체 글 읽기:" if article.topic["primary_language"] == "ko" else "Read the full article:"
     insight = first_sentences(short_answer, 2)
     summary = social_summary(article, description, platform)
     lead = linkedin_lead(article, insight, description)
@@ -1352,6 +1403,10 @@ def social_template_context(
         "short_points": short_points_text,
         "cta": cta,
         "url": url,
+        "target_url": app_store_url or play_store_url or canonical_url,
+        "destination_urls": "|".join(filter(None, (app_store_url, play_store_url))),
+        "link_strategy": "store_install" if install_links else "canonical_article",
+        "cta_text": cta,
         "x_summary": truncate_text(summary, x_summary_limit),
         "bsky_summary": truncate_text(summary, 160),
     }
@@ -1411,8 +1466,11 @@ def manifest_item(
     project_root: Path,
     weighted_length: int,
 ) -> dict[str, str | int | bool]:
+    context = social_template_context(article, site_url, template.platform, template.template_id)
     return {
         "topic_id": article.topic["id"],
+        "source_status": article.topic["status"],
+        "publish_after_canonical": article.topic["status"] != "published",
         "platform": template.platform,
         "language": article.topic["primary_language"],
         "category": article.topic["category"],
@@ -1422,6 +1480,10 @@ def manifest_item(
         "is_variant": template.is_variant,
         "draft_path": str(destination.relative_to(project_root)),
         "canonical_url": article_public_url(article, site_url),
+        "target_url": context["target_url"],
+        "destination_urls": context["destination_urls"],
+        "link_strategy": context["link_strategy"],
+        "cta_text": context["cta_text"],
         "card_asset_path": str(card_path.relative_to(project_root)),
         "weighted_length": weighted_length,
         "status": "variant" if template.is_variant else "draft",
@@ -1481,11 +1543,17 @@ def previous_social_state(output_dir: Path) -> dict[tuple[str, str, str, str], d
             str(post.get("template_id", "")),
         )
         if all(key):
+            draft_path = output_dir.parents[1] / str(post.get("draft_path", ""))
+            if draft_path.exists():
+                post = dict(post)
+                post["_draft_text"] = draft_path.read_text(encoding="utf-8").strip()
             state[key] = post
     return state
 
 
-def apply_previous_social_state(item: dict[str, object], state: dict[tuple[str, str, str, str], dict[str, object]]) -> None:
+def apply_previous_social_state(
+    item: dict[str, object], state: dict[tuple[str, str, str, str], dict[str, object]]
+) -> dict[str, object] | None:
     key = (
         str(item.get("topic_id", "")),
         str(item.get("platform", "")),
@@ -1494,10 +1562,13 @@ def apply_previous_social_state(item: dict[str, object], state: dict[tuple[str, 
     )
     previous = state.get(key)
     if not previous:
-        return
+        return None
+    if item.get("publish_after_canonical") is True and previous.get("status") != "posted":
+        return None
     for field in SOCIAL_STATE_FIELDS:
         if field in previous:
             item[field] = previous[field]
+    return previous
 
 
 def generate_social_posts(
@@ -1505,6 +1576,7 @@ def generate_social_posts(
     output_dir: Path = DEFAULT_SOCIAL_OUTPUT_DIR,
     site_url: str = DEFAULT_SITE_URL,
     platforms: tuple[str, ...] = ("x", "linkedin", "bluesky"),
+    include_prepublication: bool = False,
 ) -> list[SocialPost]:
     site_url = normalize_site_url(site_url)
     state = previous_social_state(output_dir)
@@ -1512,13 +1584,25 @@ def generate_social_posts(
         shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True)
     project_root = topics_path.parent.parent
-    articles = load_publishable_articles(topics_path, project_root / ".social-export-check", site_url)
+    statuses = (
+        PUBLISHABLE_STATUSES | {"draft", "image_planning", "review", "scheduled"}
+        if include_prepublication
+        else None
+    )
+    articles = load_publishable_articles(
+        topics_path,
+        project_root / ".social-export-check",
+        site_url,
+        statuses=statuses,
+    )
+    app_registry = app_registry_by_name(topics_path.parent / "apps_registry.csv")
     posts: list[SocialPost] = []
     manifest_items: list[dict[str, str | int]] = []
     templates = social_templates(platforms)
     for article in articles:
         if article.topic["primary_language"] not in EXTERNAL_DISTRIBUTION_LANGUAGES:
             continue
+        attach_social_install_links(article, app_registry)
         card_path = write_social_card(article, project_root)
         for template in templates:
             text = render_social_template_post(article, template, site_url)
@@ -1533,11 +1617,24 @@ def generate_social_posts(
                 else social_destination_for(output_dir, template.platform, article.topic)
             )
             destination.parent.mkdir(parents=True, exist_ok=True)
+            item = manifest_item(article, template, destination, card_path, site_url, project_root, weighted_length)
+            previous = apply_previous_social_state(item, state)
+            if previous and previous.get("status") == "posted" and previous.get("_draft_text"):
+                text = str(previous["_draft_text"])
+                weighted_length = x_weighted_length(text) if template.platform == "x" else len(text)
+                item["weighted_length"] = weighted_length
+                for field in ("target_url", "destination_urls", "link_strategy", "cta_text"):
+                    if field in previous:
+                        item[field] = previous[field]
+                if "target_url" not in previous:
+                    item["target_url"] = item["canonical_url"]
+                    item["destination_urls"] = ""
+                    item["link_strategy"] = "canonical_article"
+                if str(item.get("cta_text", "")) not in text:
+                    item["cta_text"] = ""
             destination.write_text(text + "\n", encoding="utf-8")
             if not template.is_variant:
                 posts.append(SocialPost(article.topic["id"], template.platform, destination, text))
-            item = manifest_item(article, template, destination, card_path, site_url, project_root, weighted_length)
-            apply_previous_social_state(item, state)
             manifest_items.append(item)
     (output_dir / "manifest.json").write_text(json.dumps({"posts": manifest_items}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return posts

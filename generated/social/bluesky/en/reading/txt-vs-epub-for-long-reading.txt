@@ -1,0 +1,7 @@
+Should I use TXT or EPUB for long reading.
+
+Compare TXT and EPUB for long reading, including reflow, typ...
+
+Install VaultXT:
+App Store: https://apps.apple.com/app/id6760122045
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt

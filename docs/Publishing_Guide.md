@@ -161,6 +161,16 @@ Generated social approval metadata is stored at:
 generated/social/manifest.json
 ```
 
+To prepare channel copy while articles are still in draft, image-planning,
+review, or scheduled status, run:
+
+```text
+python3 scripts/generate_social_posts.py --include-prepublication
+```
+
+These entries carry `publish_after_canonical: true`. They are review material;
+their links must not be posted before the canonical article is public.
+
 Each manifest item should keep operational posting fields:
 
 * `status`
@@ -392,6 +402,17 @@ Generated syndication metadata is stored at:
 ```text
 generated/syndication/manifest.json
 ```
+
+To prepare syndication drafts while articles are still in draft, image-planning,
+review, or scheduled status, run:
+
+```text
+python3 scripts/generate_syndication_drafts.py --include-prepublication
+```
+
+These entries carry `publish_after_canonical: true` and are for review only.
+They must not be approved or posted before the canonical article is public.
+The default CI invocation remains published-only.
 
 Evaluate syndication drafts with:
 

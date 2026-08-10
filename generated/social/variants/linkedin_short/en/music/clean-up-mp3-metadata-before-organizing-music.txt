@@ -5,5 +5,6 @@ Work on copies, define one naming convention, correct the identity and ordering 
 - Create a reversible workspace. Copy a small album or five representative tracks into a test folder. Never begin with the only copy of the collection.
 - Identify each recording. Listen briefly when the filename and current title disagree. Mark uncertain tracks instead of guessing.
 
-Read the full article:
-https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/
+Install TagWeaver:
+App Store: https://apps.apple.com/app/id6759609875
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2

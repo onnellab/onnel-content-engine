@@ -125,6 +125,26 @@ def previous_syndication_state(output_dir: Path) -> dict[tuple[str, str, str], d
     return state
 
 
+def _previous_posted_draft_bodies(
+    state: dict[tuple[str, str, str], dict[str, object]],
+    output_dir: Path,
+    project_root: Path,
+) -> dict[tuple[str, str, str], bytes]:
+    output_root = output_dir.resolve()
+    bodies: dict[tuple[str, str, str], bytes] = {}
+    for key, draft in state.items():
+        if draft.get("status") != "posted":
+            continue
+        draft_path = (project_root / str(draft.get("draft_path", ""))).resolve()
+        if not draft_path.is_relative_to(output_root):
+            raise SyndicationError(f"posted syndication draft is outside output directory: {draft_path}")
+        try:
+            bodies[key] = draft_path.read_bytes()
+        except OSError as error:
+            raise SyndicationError(f"cannot preserve posted syndication draft: {draft_path}: {error}") from error
+    return bodies
+
+
 def apply_previous_syndication_state(item: dict[str, object], state: dict[tuple[str, str, str], dict[str, object]]) -> None:
     key = (
         str(item.get("topic_id", "")),
@@ -133,6 +153,22 @@ def apply_previous_syndication_state(item: dict[str, object], state: dict[tuple[
     )
     previous = state.get(key)
     if not previous:
+        return
+    if item.get("publish_after_canonical") is True and previous.get("status") != "posted":
+        item.update(
+            {
+                "status": "draft",
+                "approved_by": "",
+                "approved_at": "",
+                "post_id": "",
+                "posted_url": "",
+                "posted_at": "",
+                "last_attempt_at": "",
+                "error": "",
+                "error_type": "",
+                "retry_count": 0,
+            }
+        )
         return
     for field in SYNDICATION_STATE_FIELDS:
         if field in previous:
@@ -144,14 +180,26 @@ def generate_syndication_drafts(
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     site_url: str = DEFAULT_SITE_URL,
     platforms: tuple[str, ...] = PLATFORMS,
+    include_prepublication: bool = False,
 ) -> list[dict[str, object]]:
     site_url = normalize_site_url(site_url)
+    project_root = topics_path.parent.parent
     state = previous_syndication_state(output_dir)
+    posted_bodies = _previous_posted_draft_bodies(state, output_dir, project_root)
+    statuses = (
+        {"published", "draft", "image_planning", "review", "scheduled"}
+        if include_prepublication
+        else None
+    )
+    articles = load_publishable_articles(
+        topics_path,
+        project_root / ".syndication-export-check",
+        site_url,
+        statuses=statuses,
+    )
     if output_dir.exists():
         shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True)
-    project_root = topics_path.parent.parent
-    articles = load_publishable_articles(topics_path, project_root / ".syndication-export-check", site_url)
     manifest: list[dict[str, object]] = []
     for article in articles:
         if article.topic["primary_language"] not in EXTERNAL_DISTRIBUTION_LANGUAGES:
@@ -192,6 +240,8 @@ def generate_syndication_drafts(
             destination.write_text(render_template(template_path.read_text(encoding="utf-8"), context), encoding="utf-8")
             item = {
                 "topic_id": article.topic["id"],
+                "source_status": article.topic["status"],
+                "publish_after_canonical": article.topic["status"] != "published",
                 "platform": platform,
                 "language": article.topic["primary_language"],
                 "category": article.topic["category"],
@@ -210,6 +260,13 @@ def generate_syndication_drafts(
                 "retry_count": 0,
             }
             apply_previous_syndication_state(item, state)
+            key = (
+                str(item["topic_id"]),
+                str(item["platform"]),
+                str(item["language"]),
+            )
+            if item.get("status") == "posted" and key in posted_bodies:
+                destination.write_bytes(posted_bodies[key])
             manifest.append(item)
     (output_dir / "manifest.json").write_text(json.dumps({"drafts": manifest}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return manifest
@@ -220,9 +277,19 @@ def main() -> int:
     parser.add_argument("--topics", type=Path, default=DEFAULT_TOPICS_PATH)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--site-url", default=DEFAULT_SITE_URL)
+    parser.add_argument(
+        "--include-prepublication",
+        action="store_true",
+        help="Also prepare drafts for draft, image-planning, review, and scheduled articles",
+    )
     args = parser.parse_args()
     try:
-        drafts = generate_syndication_drafts(args.topics, args.output_dir, args.site_url)
+        drafts = generate_syndication_drafts(
+            args.topics,
+            args.output_dir,
+            args.site_url,
+            include_prepublication=args.include_prepublication,
+        )
     except (SyndicationError, PublishingError, TopicError, OSError, json.JSONDecodeError) as error:
         print(f"syndication generation failed: {error}", file=sys.stderr)
         return 1

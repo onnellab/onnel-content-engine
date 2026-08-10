@@ -7,5 +7,6 @@ Before changing tools:
 - Confirm the encoding if the text appears broken or unreadable.
 - Use a plain-text reader or editor instead of a word processor.
 
-Read the full article:
-https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/
+Install VaultXT:
+App Store: https://apps.apple.com/app/id6760122045
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt

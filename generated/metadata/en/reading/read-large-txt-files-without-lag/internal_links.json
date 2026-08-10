@@ -43,6 +43,19 @@
         "score": 4
       },
       {
+        "topic_id": "TOPIC-0012",
+        "title": "How to Rename Files Safely With a Preview Workflow",
+        "slug": "rename-files-safely-preview-workflow",
+        "category": "productivity",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/productivity/rename-files-safely-preview-workflow.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0008",
         "title": "How to Clean Up MP3 Metadata Before Organizing Music",
         "slug": "clean-up-mp3-metadata-before-organizing-music",

@@ -1,0 +1,7 @@
+Start with the constraints, then decide how to choose an output format before converting a media file.
+
+Choose a media output format from its dest...
+
+Install Quivra:
+App Store: https://apps.apple.com/app/id6759565093
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.quivra2

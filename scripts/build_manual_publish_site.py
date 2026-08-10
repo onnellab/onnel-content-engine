@@ -853,6 +853,7 @@ def social_items(manifest_path: Path, topics: dict[str, dict[str, str]]) -> list
         draft_path = str(post.get("draft_path", ""))
         text = read_text(draft_path)
         canonical_url = str(post.get("canonical_url", ""))
+        target_url = str(post.get("target_url", "")) or canonical_url
         card_asset_path = str(post.get("card_asset_path", ""))
         topic = topics.get(str(topic_id), {})
         items.append(
@@ -869,8 +870,13 @@ def social_items(manifest_path: Path, topics: dict[str, dict[str, str]]) -> list
                 "manual_key": item_key(topic_id, platform, language, template_id),
                 "is_variant": bool(post.get("is_variant")),
                 "status": post.get("status", ""),
+                "source_status": post.get("source_status", ""),
+                "publish_after_canonical": bool(post.get("publish_after_canonical", False)),
                 "draft_path": draft_path,
                 "canonical_url": canonical_url,
+                "target_url": target_url,
+                "destination_urls": post.get("destination_urls", ""),
+                "link_strategy": post.get("link_strategy", "canonical_article"),
                 "card_asset_path": card_asset_path,
                 "card_asset_href": asset_href(card_asset_path),
                 "text": text,
@@ -888,7 +894,7 @@ def social_items(manifest_path: Path, topics: dict[str, dict[str, str]]) -> list
                 "last_attempt_at": post.get("last_attempt_at", ""),
                 "error_type": post.get("error_type", ""),
                 "error": post.get("error", ""),
-                "open_url": compose_url(platform, text, canonical_url),
+                "open_url": compose_url(platform, text, target_url),
                 "due_at": due_at_for(topics.get(str(topic_id)), platform, "social"),
             }
         )
@@ -928,6 +934,8 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
                 "manual_key": item_key(topic_id, platform, language, template_id),
                 "is_variant": False,
                 "status": draft.get("status", ""),
+                "source_status": draft.get("source_status", ""),
+                "publish_after_canonical": bool(draft.get("publish_after_canonical", False)),
                 "draft_path": draft_path,
                 "canonical_url": canonical_url,
                 "card_asset_path": "",
@@ -998,6 +1006,7 @@ def html_document(
         for item in items
         if item["publishing_mode"] == "manual"
         and not item["is_variant"]
+        and not item.get("publish_after_canonical", False)
         and not item_is_done(item)
         and item["status"] in {"draft", "failed", "approved"}
     )
@@ -1699,6 +1708,8 @@ def html_document(
         openImageFallback: '이미지 열기',
         length: '길이',
         dueAt: '게시 예정',
+        reviewOnly: '공개 전 검토 전용',
+        reviewOnlyNote: 'Canonical 게시 전에는 내용만 검토할 수 있습니다. 게시 작업은 비활성화됩니다.',
         dateLocale: 'ko-KR',
       }},
       en: {{
@@ -1966,6 +1977,8 @@ def html_document(
         openImageFallback: 'Open image',
         length: 'length',
         dueAt: 'due',
+        reviewOnly: 'Prepublication review only',
+        reviewOnlyNote: 'Review the content only. Publishing actions stay disabled until the canonical article is published.',
         dateLocale: 'en-US',
       }},
     }};
@@ -3127,6 +3140,10 @@ def html_document(
       return item.status === 'posted' || Boolean(remoteState.done?.[item.manual_key]) || Boolean(doneReportRecord(item));
     }}
 
+    function isPrepublication(item) {{
+      return item.publish_after_canonical === true;
+    }}
+
     function doneRecord(item) {{
       return remoteState.done?.[item.manual_key] || doneReportRecord(item) || null;
     }}
@@ -3222,7 +3239,7 @@ def html_document(
     }}
 
     function isDue(item) {{
-      if (isDone(item) || item.is_variant) return false;
+      if (isDone(item) || item.is_variant || isPrepublication(item)) return false;
       if (item.publishing_mode !== 'manual') return false;
       if (!['draft', 'failed', 'approved'].includes(item.status)) return false;
       const date = dueDate(item);
@@ -3318,23 +3335,15 @@ def html_document(
     }}
 
     function upcomingBlogScheduledDates(limit = 4) {{
-      const scheduled = futureDates(blogItems
+      return futureDates(blogItems
         .filter((item) => item.status === 'scheduled' && item.scheduled_at)
         .map((item) => item.scheduled_at))
-        .sort((a, b) => a - b);
-      if (scheduled.length >= limit) return scheduled.slice(0, limit);
-      const slots = [...scheduled];
-      const queueSlots = Math.max(0, blogQueueCount() - slots.length);
-      let next = slots.length ? slots[slots.length - 1] : nextAutomatedBlogSlot();
-      while (next && slots.length < limit && slots.length < scheduled.length + queueSlots) {{
-        if (!slots.some((date) => date.getTime() === next.getTime())) slots.push(next);
-        next = new Date(next.getTime() + (86400000 * 3));
-      }}
-      return slots.slice(0, limit);
+        .sort((a, b) => a - b)
+        .slice(0, limit);
     }}
 
     function upcomingPlatformScheduledDates(platform, limit = 4) {{
-      const delayDays = platform === 'linkedin' || platform === 'bluesky' ? 1 : 0;
+      const delayDays = {{ linkedin: 1, bluesky: 1, devto: 2, hashnode: 3, medium: 4 }}[platform] || 0;
       return upcomingBlogScheduledDates(limit).map((date) => new Date(date.getTime() + (86400000 * delayDays)));
     }}
 
@@ -3347,9 +3356,10 @@ def html_document(
     }}
 
     function nextManualDueDate() {{
-      return futureDates(items
-        .filter((item) => item.publishing_mode === 'manual' && !isDone(item) && !item.is_variant && item.due_at)
-        .map((item) => item.due_at))
+      return items
+        .filter((item) => item.publishing_mode === 'manual' && !isDone(item) && !item.is_variant && !isPrepublication(item) && item.due_at)
+        .map((item) => parseDate(item.due_at))
+        .filter(Boolean)
         .sort((a, b) => a - b)[0] || null;
     }}
 
@@ -3650,20 +3660,18 @@ def html_document(
         const rows = items.filter((item) => item.platform_label === label && !item.is_variant);
         platformSummaryBadges.push([label, rows.length, platformProfileUrl(rows[0]?.platform || label)]);
         const posted = rows.filter((item) => isDone(item));
-        const failed = rows.filter((item) => !isDone(item) && item.status === 'failed');
-        const drafts = rows.filter((item) => !isDone(item) && ['draft', 'approved'].includes(item.status));
+        const failed = rows.filter((item) => !isDone(item) && !isPrepublication(item) && item.status === 'failed');
+        const drafts = rows.filter((item) => !isDone(item) && !isPrepublication(item) && ['draft', 'approved'].includes(item.status));
         const latestPosted = latestDate(posted.map(postedOrVerifiedAt));
         const latestAttempt = latestDate([
           verificationCheckedAtForPlatform(rows[0]?.platform || ''),
           ...rows.map((item) => item.last_attempt_at || item.approved_at),
         ]);
         const rowNextDueDates = futureDates(rows
-          .filter((item) => !isDone(item) && !item.is_variant && item.due_at)
+          .filter((item) => !isDone(item) && !item.is_variant && !isPrepublication(item) && item.due_at)
           .map((item) => item.due_at))
           .sort((a, b) => a - b);
-        const upcomingPlatformDates = rowNextDueDates.length
-          ? rowNextDueDates.slice(0, 4)
-          : upcomingPlatformScheduledDates(rows[0]?.platform || '', 4);
+        const upcomingPlatformDates = rowNextDueDates.slice(0, 4);
         const nextDue = upcomingPlatformDates[0] || nextScheduled;
         const card = document.createElement('div');
         card.className = 'platform-card';
@@ -4436,7 +4444,7 @@ def html_document(
         const due = isDue(item);
         if (item.is_variant && !showVariants) return false;
         if (currentView === 'due' && !due) return false;
-        if (currentView === 'manual' && (item.publishing_mode !== 'manual' || done)) return false;
+        if (currentView === 'manual' && (item.publishing_mode !== 'manual' || done || isPrepublication(item))) return false;
         if (currentView === 'done' && !done) return false;
         return (!query || haystack.includes(query))
           && (!platform || item.platform_label === platform)
@@ -4449,6 +4457,7 @@ def html_document(
       const manualTotal = String(items.filter((item) =>
         item.publishing_mode === 'manual'
         && !item.is_variant
+        && !isPrepublication(item)
         && !isDone(item)
         && ['draft', 'failed', 'approved'].includes(item.status)
       ).length);
@@ -4496,6 +4505,9 @@ def html_document(
         item.language,
         isDone(item) ? t('doneTag') : item.status,
       ];
+      if (isPrepublication(item)) {{
+        statusParts.push(t('reviewOnly'));
+      }}
       if (isDue(item)) {{
         statusParts.push(t('dueTag'));
       }}
@@ -4525,7 +4537,9 @@ def html_document(
       summary.className = 'card-summary';
       const summaryNote = document.createElement('div');
       summaryNote.className = 'note';
-      summaryNote.textContent = isDone(item)
+      summaryNote.textContent = isPrepublication(item)
+        ? t('reviewOnlyNote')
+        : isDone(item)
         ? t('completedAt') + ' ' + formatDate(postedOrVerifiedAt(item))
         : item.due_at ? t('dueAt') + ' ' + formatDue(item) : t('noRecord');
       const textarea = document.createElement('textarea');
@@ -4567,12 +4581,13 @@ def html_document(
       doneButton.className = 'secondary';
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
       doneButton.onclick = () => isDone(item) ? undoDone(item, doneButton) : markDone(item, doneButton);
-      actions.append(open, doneButton, detailToggle);
-      if (item.kind === 'syndication') {{
+      if (isPrepublication(item)) actions.append(detailToggle);
+      else actions.append(open, doneButton, detailToggle);
+      if (item.kind === 'syndication' && !isPrepublication(item)) {{
         syndicationQuickCopyRows(item).forEach(([labelText, value]) => actions.appendChild(copyValueButton(labelText, value)));
       }}
       const imageActionSrc = previewImageSrc(item);
-      if (imageActionSrc && !usesLinkPreviewCard(item)) {{
+      if (imageActionSrc && !usesLinkPreviewCard(item) && !isPrepublication(item)) {{
         const copyImg = document.createElement('button');
         copyImg.className = 'secondary';
         copyImg.textContent = t('copyImage');
@@ -4585,7 +4600,7 @@ def html_document(
         openImg.rel = 'noopener noreferrer';
         detail.append(copyImg, openImg);
       }}
-      appendSyndicationPublishFields(detail, item);
+      if (!isPrepublication(item)) appendSyndicationPublishFields(detail, item);
       const note = document.createElement('div');
       note.className = 'note';
       note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '') + (usesLinkPreviewCard(item) ? ' / ' + t('noImageAttach') : '');
@@ -4596,7 +4611,9 @@ def html_document(
         pending.textContent = `${{t('verificationPendingReason')}}: ${{pendingReason}}`;
         detail.appendChild(pending);
       }}
-      detail.append(textarea, copy, note);
+      detail.append(textarea);
+      if (!isPrepublication(item)) detail.append(copy);
+      detail.append(note);
       summary.append(summaryNote);
       if (item.error) {{
         const error = document.createElement('div');

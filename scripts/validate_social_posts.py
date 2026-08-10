@@ -51,6 +51,7 @@ def validate_post(post: dict[str, object], project_root: Path = ROOT) -> None:
     draft_path = project_root / require_string(post, "draft_path")
     card_asset_path = project_root / require_string(post, "card_asset_path")
     canonical_url = require_string(post, "canonical_url")
+    target_url = str(post.get("target_url", "")) or canonical_url
     status = require_string(post, "status")
     template_id = require_string(post, "template_id")
     template_path = project_root / require_string(post, "template_path")
@@ -90,14 +91,17 @@ def validate_post(post: dict[str, object], project_root: Path = ROOT) -> None:
         raise SocialValidationError(f"{topic_id} draft is empty: {draft_path}")
     if PLACEHOLDER_RE.search(text):
         raise SocialValidationError(f"{topic_id} draft has unresolved placeholder: {draft_path}")
-    if canonical_url not in text:
-        raise SocialValidationError(f"{topic_id} draft does not include canonical URL: {draft_path}")
+    if target_url not in text:
+        raise SocialValidationError(f"{topic_id} draft does not include its target URL: {draft_path}")
+    cta = str(post.get("cta_text", ""))
+    if cta and cta not in text:
+        raise SocialValidationError(f"{topic_id} draft is missing its CTA: {draft_path}")
     if platform == "x" and x_weighted_length(text) > 280:
         raise SocialValidationError(f"{topic_id} X draft exceeds weighted length: {x_weighted_length(text)}")
     if platform == "bluesky" and len(text) > 300:
         raise SocialValidationError(f"{topic_id} Bluesky draft exceeds length: {len(text)}")
     if platform == "linkedin":
-        cta = "전체 글 읽기:" if language == "ko" else "Read the full article:"
+        cta = cta or ("전체 글 읽기:" if language == "ko" else "Read the full article:")
         if cta not in text:
             raise SocialValidationError(f"{topic_id} LinkedIn draft is missing CTA: {draft_path}")
 

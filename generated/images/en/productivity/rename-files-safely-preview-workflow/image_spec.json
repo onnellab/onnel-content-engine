@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/productivity/rename-files-safely-preview-workflow.md",
+  "topic": {
+    "id": "TOPIC-0012",
+    "title": "How to Rename Files Safely With a Preview Workflow",
+    "slug": "rename-files-safely-preview-workflow",
+    "category": "productivity",
+    "language": "en",
+    "primary_keyword": "file renaming preview",
+    "related_apps": [
+      "Aligna"
+    ]
+  },
+  "article_sections_detected": [
+    "How to Rename Files Safely With a Preview Workflow",
+    "Question",
+    "Short Answer",
+    "Definitions That Matter",
+    "Why Batch Renames Go Wrong",
+    "What To Check First",
+    "Recommended Workflow",
+    "Renaming Approach Comparison",
+    "Practical Cautions",
+    "ONNELLAB Application",
+    "Related Topics",
+    "References",
+    "Conclusion",
+    "FAQ",
+    "Is a preview the same as an undo feature?",
+    "Can I change file formats by renaming extensions?",
+    "What should I do when two files get the same preview name?",
+    "Should numbering follow selection order or current sort order?",
+    "Why can a successful rename still break another app?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "What is the recommended workflow for file renaming preview?",
+      "source_sections": [
+        "Short Answer",
+        "Recommended Workflow"
+      ],
+      "structure": [
+        "Problem",
+        "Process",
+        "Result"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating file renaming preview?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "batch rename",
+        "rename rules",
+        "preview before apply"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Aligna"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "How to Rename Files Safely With a Preview Workflow Workflow",
+      "steps": [
+        "Problem",
+        "Explanation",
+        "Options",
+        "Recommended workflow",
+        "Optional application"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "file renaming preview Comparison",
+      "items": [
+        "batch rename",
+        "rename rules",
+        "preview before apply"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ]
+}

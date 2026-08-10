@@ -1,5 +1,5 @@
-A practical way to convert local media files without sending them to a server starts with the constraints, not the app.
+A practical way to convert local media files without sending them to a server starts with the constraints, n...
 
-Learn how to convert local media files privately, what to c...
-
-https://onnellab.github.io/blog/en/convert-local-media-files-privately/
+Install Quivra:
+App Store: https://apps.apple.com/app/id6759565093
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.quivra2

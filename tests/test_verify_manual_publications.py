@@ -78,6 +78,223 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             self.assertEqual([row.manual_key for row in verified], ["TOPIC-RETRY::bluesky::en::bluesky"])
             self.assertIn("TOPIC-RETRY::bluesky::en::bluesky", json.loads(state.read_text(encoding="utf-8"))["done"])
 
+    def test_excludes_prepublication_items_from_verification(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            social = root / "social.json"
+            syndication = root / "syndication.json"
+            state = root / "state.json"
+            report = root / "report.json"
+            self.write_json(
+                social,
+                {
+                    "posts": [
+                        {
+                            "topic_id": "TOPIC-DEFERRED",
+                            "source_status": "published",
+                            "publish_after_canonical": True,
+                            "platform": "bluesky",
+                            "language": "en",
+                            "template_id": "bluesky",
+                            "status": "draft",
+                            "canonical_url": "https://example.com/deferred",
+                            "is_variant": False,
+                        },
+                        {
+                            "topic_id": "TOPIC-DRAFT",
+                            "source_status": "draft",
+                            "publish_after_canonical": False,
+                            "platform": "bluesky",
+                            "language": "en",
+                            "template_id": "bluesky",
+                            "status": "draft",
+                            "canonical_url": "https://example.com/draft",
+                            "is_variant": False,
+                        },
+                    ]
+                },
+            )
+            self.write_json(syndication, {"drafts": []})
+            self.write_json(state, {"version": 1, "updated_at": "", "done": {}})
+
+            verified = verify_manual_publications(
+                social,
+                syndication,
+                state,
+                report,
+                fetch_json=lambda _url, _headers=None: self.fail("prepublication item was checked"),
+            )
+
+            self.assertEqual(verified, [])
+            self.assertEqual(json.loads(state.read_text(encoding="utf-8"))["done"], {})
+            self.assertEqual(json.loads(report.read_text(encoding="utf-8"))["counts"]["checked"], 0)
+
+    def test_shared_store_url_alone_does_not_verify_multiple_bluesky_topics(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            social = root / "generated" / "social" / "manifest.json"
+            syndication = root / "syndication.json"
+            state = root / "state.json"
+            report = root / "report.json"
+            store_url = "https://apps.apple.com/app/id123456789"
+            posts = []
+            for topic_id, slug in (("TOPIC-ONE", "one"), ("TOPIC-TWO", "two")):
+                draft_path = root / "generated" / "social" / "bluesky" / f"{slug}.txt"
+                draft_path.parent.mkdir(parents=True, exist_ok=True)
+                draft_path.write_text(f"Topic {slug} evidence\n\n{store_url}\n", encoding="utf-8")
+                posts.append(
+                    {
+                        "topic_id": topic_id,
+                        "source_status": "published",
+                        "publish_after_canonical": False,
+                        "platform": "bluesky",
+                        "language": "en",
+                        "template_id": "bluesky",
+                        "status": "draft",
+                        "canonical_url": f"https://example.com/{slug}",
+                        "target_url": store_url,
+                        "destination_urls": store_url,
+                        "link_strategy": "store_install",
+                        "draft_path": draft_path.relative_to(root).as_posix(),
+                        "is_variant": False,
+                    }
+                )
+            self.write_json(social, {"posts": posts})
+            self.write_json(syndication, {"drafts": []})
+            self.write_json(state, {"version": 1, "updated_at": "", "done": {}})
+
+            verified = verify_manual_publications(
+                social,
+                syndication,
+                state,
+                report,
+                fetch_json=lambda _url, _headers=None: {
+                    "feed": [{"post": {"uri": "at://did/app.bsky.feed.post/shared", "record": {"text": store_url}}}]
+                },
+            )
+
+            self.assertEqual(verified, [])
+            self.assertEqual(json.loads(state.read_text(encoding="utf-8"))["done"], {})
+
+    def test_store_link_bluesky_feed_record_verifies_only_its_exact_draft_topic(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            social = root / "generated" / "social" / "manifest.json"
+            syndication = root / "syndication.json"
+            state = root / "state.json"
+            report = root / "report.json"
+            store_url = "https://apps.apple.com/app/id123456789"
+            draft_texts = {
+                "TOPIC-ONE": f"Topic one exact evidence\n\n{store_url}",
+                "TOPIC-TWO": f"Topic two exact evidence\n\n{store_url}",
+            }
+            posts = []
+            for topic_id, slug in (("TOPIC-ONE", "one"), ("TOPIC-TWO", "two")):
+                draft_path = root / "generated" / "social" / "bluesky" / f"{slug}.txt"
+                draft_path.parent.mkdir(parents=True, exist_ok=True)
+                draft_path.write_text(draft_texts[topic_id] + "\n", encoding="utf-8")
+                posts.append(
+                    {
+                        "topic_id": topic_id,
+                        "source_status": "published",
+                        "publish_after_canonical": False,
+                        "platform": "bluesky",
+                        "language": "en",
+                        "template_id": "bluesky",
+                        "status": "draft",
+                        "canonical_url": f"https://example.com/{slug}",
+                        "target_url": store_url,
+                        "destination_urls": store_url,
+                        "link_strategy": "store_install",
+                        "draft_path": draft_path.relative_to(root).as_posix(),
+                        "is_variant": False,
+                    }
+                )
+            self.write_json(
+                social,
+                {"posts": posts},
+            )
+            self.write_json(syndication, {"drafts": []})
+            self.write_json(state, {"version": 1, "updated_at": "", "done": {}})
+
+            verified = verify_manual_publications(
+                social,
+                syndication,
+                state,
+                report,
+                fetch_json=lambda _url, _headers=None: {
+                    "feed": [
+                        {
+                            "post": {
+                                "uri": "at://did/app.bsky.feed.post/topic-one",
+                                "record": {"text": draft_texts["TOPIC-ONE"]},
+                            }
+                        }
+                    ]
+                },
+            )
+
+            self.assertEqual([row.manual_key for row in verified], ["TOPIC-ONE::bluesky::en::bluesky"])
+            report_data = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(report_data["counts"]["verified"], 1)
+            self.assertEqual(report_data["counts"]["pending"], 1)
+
+    def test_store_link_bluesky_fails_closed_for_draft_outside_project_root(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project_root = root / "project"
+            social = project_root / "generated" / "social" / "manifest.json"
+            syndication = project_root / "generated" / "syndication" / "manifest.json"
+            state = project_root / "state.json"
+            report = project_root / "report.json"
+            store_url = "https://apps.apple.com/app/id123456789"
+            draft_text = f"Outside-root topic evidence\n\n{store_url}"
+            outside_draft = root / "outside.txt"
+            outside_draft.write_text(draft_text + "\n", encoding="utf-8")
+            self.write_json(
+                social,
+                {
+                    "posts": [
+                        {
+                            "topic_id": "TOPIC-OUTSIDE",
+                            "source_status": "published",
+                            "publish_after_canonical": False,
+                            "platform": "bluesky",
+                            "language": "en",
+                            "template_id": "bluesky",
+                            "status": "draft",
+                            "target_url": store_url,
+                            "destination_urls": store_url,
+                            "link_strategy": "store_install",
+                            "draft_path": "../outside.txt",
+                            "is_variant": False,
+                        }
+                    ]
+                },
+            )
+            self.write_json(syndication, {"drafts": []})
+            self.write_json(state, {"version": 1, "updated_at": "", "done": {}})
+
+            verified = verify_manual_publications(
+                social,
+                syndication,
+                state,
+                report,
+                fetch_json=lambda _url, _headers=None: {
+                    "feed": [
+                        {
+                            "post": {
+                                "uri": "at://did/app.bsky.feed.post/outside",
+                                "record": {"text": draft_text},
+                            }
+                        }
+                    ]
+                },
+            )
+
+            self.assertEqual(verified, [])
+            self.assertEqual(json.loads(state.read_text(encoding="utf-8"))["done"], {})
+
     def test_verifies_public_api_rss_and_visual_pages_into_state(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

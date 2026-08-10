@@ -26,7 +26,7 @@ from publishing import (
 from approve_due_distribution import approve_due_distribution
 from check_distribution_supply import DistributionSupplyError, require_distribution_supply
 from evaluate_social_templates import evaluate_social_templates, repetition_warnings
-from approve_social_post import approve_social_post
+from approve_social_post import SocialApprovalError, approve_social_post
 from generate_syndication_drafts import generate_syndication_drafts
 from hashnode_content import HASHNODE_CONTENT_PROFILE, hashnode_automod_risks
 from evaluate_syndication_drafts import evaluate_syndication_drafts
@@ -165,6 +165,28 @@ class PublishingTest(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.tmp.cleanup()
+
+    def write_private_draft_topic(self) -> dict[str, str]:
+        private = topic_row(status="draft", topic_id="TOPIC-0012")
+        private.update(
+            {
+                "category": "research",
+                "working_title": "Private Draft",
+                "slug": "private-draft",
+                "canonical_path": "generated/markdown/en/research/private-draft.md",
+                "published_url": "https://example.com/blog/en/private-draft/",
+            }
+        )
+        private_path = self.root / private["canonical_path"]
+        private_path.parent.mkdir(parents=True, exist_ok=True)
+        private_path.write_text(
+            MARKDOWN.replace('title: "How to Read Very Large TXT Files"', 'title: "Private Draft"')
+            .replace('slug: "read-large-txt-files"', 'slug: "private-draft"')
+            .replace('category: "reading"', 'category: "research"')
+            .replace('topic_id: "TOPIC-0001"', 'topic_id: "TOPIC-0012"'),
+            encoding="utf-8",
+        )
+        return private
 
     def test_build_site_generates_html_rss_and_sitemap(self) -> None:
         before = self.markdown_path.read_text(encoding="utf-8")
@@ -421,6 +443,248 @@ class PublishingTest(unittest.TestCase):
         self.assertIn("bluesky: not ready", credential_report("bluesky"))
         with self.assertRaises(AdapterError):
             require_adapter_ready("bluesky", "social", {})
+
+    def test_product_social_posts_use_direct_store_install_links(self) -> None:
+        (self.root / "data" / "apps_registry.csv").write_text(
+            "app_id,app_name,slug,app_store_url,play_store_url\n"
+            "APP-0003,VaultXT,vaultxt,https://apps.apple.com/app/id6760122045,"
+            "https://play.google.com/store/apps/details?id=com.onnellab.vaultxt\n",
+            encoding="utf-8",
+        )
+        social_dir = self.root / "generated" / "social"
+
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+
+        manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
+        x_post = next(post for post in manifest["posts"] if post["template_id"] == "x")
+        x_text = (self.root / x_post["draft_path"]).read_text(encoding="utf-8")
+        linkedin_post = next(post for post in manifest["posts"] if post["template_id"] == "linkedin")
+        linkedin_text = (self.root / linkedin_post["draft_path"]).read_text(encoding="utf-8")
+
+        self.assertEqual(x_post["link_strategy"], "store_install")
+        self.assertEqual(x_post["target_url"], "https://apps.apple.com/app/id6760122045")
+        self.assertIn("App Store: https://apps.apple.com/app/id6760122045", x_text)
+        self.assertIn("Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt", x_text)
+        self.assertNotIn("https://example.com/blog/", x_text)
+        self.assertIn("Install VaultXT:", linkedin_text)
+        self.assertEqual(validate_social_posts(social_dir / "manifest.json", self.root), 6)
+
+    def test_prepublication_social_posts_can_be_prepared_before_release(self) -> None:
+        rows = [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")]
+        write_topics(self.topics_path, rows)
+        social_dir = self.root / "generated" / "social"
+
+        posts = generate_social_posts(
+            self.topics_path,
+            social_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+
+        self.assertEqual(len(posts), 3)
+        manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
+        self.assertTrue(all(post["source_status"] == "draft" for post in manifest["posts"]))
+        self.assertTrue(all(post["publish_after_canonical"] for post in manifest["posts"]))
+        self.assertEqual(validate_social_posts(social_dir / "manifest.json", self.root), 6)
+        x_post = next(post for post in manifest["posts"] if post["template_id"] == "x")
+        x_post.pop("publish_after_canonical")
+        x_post.pop("source_status")
+        (social_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaises(SocialApprovalError):
+            approve_social_post("TOPIC-0001", "x", "en", "editor", social_dir / "manifest.json")
+
+    def test_prepublication_social_regeneration_resets_unposted_state(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        manifest_path = social_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        x_post = next(post for post in manifest["posts"] if post["template_id"] == "x")
+        x_variant = next(post for post in manifest["posts"] if post["template_id"] == "x_question")
+        for post, status in ((x_post, "approved"), (x_variant, "failed")):
+            post.update(
+                {
+                    "status": status,
+                    "approved_by": "editor",
+                    "approved_at": "2026-07-20T09:00:00+09:00",
+                    "post_id": "stale-id",
+                    "posted_url": "https://social.example/stale",
+                    "posted_at": "2026-07-20T10:00:00+09:00",
+                    "last_attempt_at": "2026-07-20T10:00:00+09:00",
+                    "error": "temporary failure",
+                    "error_type": "transient",
+                    "retry_count": 2,
+                    "impressions": 10,
+                    "clicks": 3,
+                    "engagements": 4,
+                    "last_metrics_at": "2026-07-21T09:00:00+09:00",
+                }
+            )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        write_topics(
+            self.topics_path,
+            [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")],
+        )
+
+        generate_social_posts(
+            self.topics_path,
+            social_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+
+        regenerated = json.loads(manifest_path.read_text(encoding="utf-8"))
+        for template_id, expected_status in (("x", "draft"), ("x_question", "variant")):
+            with self.subTest(template_id=template_id):
+                post = next(item for item in regenerated["posts"] if item["template_id"] == template_id)
+                self.assertTrue(post["publish_after_canonical"])
+                self.assertEqual(post["status"], expected_status)
+                for field in (
+                    "approved_by",
+                    "approved_at",
+                    "post_id",
+                    "posted_url",
+                    "posted_at",
+                    "last_attempt_at",
+                    "error",
+                    "error_type",
+                    "last_metrics_at",
+                ):
+                    self.assertEqual(post[field], "")
+                for field in ("retry_count", "impressions", "clicks", "engagements"):
+                    self.assertEqual(post[field], 0)
+
+    def test_prepublication_social_regeneration_preserves_posted_state_and_copy(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        manifest_path = social_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        posted = next(post for post in manifest["posts"] if post["template_id"] == "x")
+        original_text = (self.root / posted["draft_path"]).read_text(encoding="utf-8")
+        posted.update(
+            {
+                "status": "posted",
+                "approved_by": "editor",
+                "approved_at": "2026-07-20T09:00:00+09:00",
+                "post_id": "1234",
+                "posted_url": "https://social.example/1234",
+                "posted_at": "2026-07-20T10:00:00+09:00",
+                "last_attempt_at": "2026-07-20T10:00:00+09:00",
+            }
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        write_topics(
+            self.topics_path,
+            [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")],
+        )
+
+        generate_social_posts(
+            self.topics_path,
+            social_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+
+        regenerated = json.loads(manifest_path.read_text(encoding="utf-8"))
+        posted = next(post for post in regenerated["posts"] if post["template_id"] == "x")
+        self.assertTrue(posted["publish_after_canonical"])
+        self.assertEqual(posted["status"], "posted")
+        self.assertEqual(posted["approved_by"], "editor")
+        self.assertEqual(posted["post_id"], "1234")
+        self.assertEqual(posted["posted_url"], "https://social.example/1234")
+        self.assertEqual(posted["posted_at"], "2026-07-20T10:00:00+09:00")
+        self.assertEqual((self.root / posted["draft_path"]).read_text(encoding="utf-8"), original_text)
+
+    def test_prepublication_social_posting_fails_closed_before_dry_run_or_adapter(self) -> None:
+        rows = [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")]
+        write_topics(self.topics_path, rows)
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(
+            self.topics_path,
+            social_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+        manifest_path = social_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        x_post = next(post for post in manifest["posts"] if post["template_id"] == "x")
+        x_post["status"] = "approved"
+        x_post["approved_by"] = "tampered-client"
+        x_post["approved_at"] = "2026-07-20T09:00:00+09:00"
+        x_post.pop("publish_after_canonical")
+        x_post.pop("source_status")
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+        with patch("post_social_drafts.require_adapter_ready") as adapter_preflight:
+            with self.assertRaisesRegex(SocialPostingError, "before canonical publication"):
+                post_social_drafts(manifest_path, platform="x", adapter="x", dry_run=True)
+
+        adapter_preflight.assert_not_called()
+
+    def test_social_topic_identity_swap_fails_approval_and_posting_before_adapter(self) -> None:
+        private = self.write_private_draft_topic()
+        write_topics(
+            self.topics_path,
+            [topic_row(), topic_row(topic_id="TOPIC-0002", language="ko"), private],
+        )
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(
+            self.topics_path,
+            social_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+        manifest_path = social_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["posts"] = [post for post in manifest["posts"] if post["topic_id"] == "TOPIC-0012"]
+        swapped = next(post for post in manifest["posts"] if post["template_id"] == "x")
+        swapped.update(
+            {
+                "topic_id": "TOPIC-0001",
+                "source_status": "published",
+                "publish_after_canonical": False,
+            }
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+        with self.assertRaisesRegex(SocialApprovalError, "manifest slug"):
+            approve_social_post("TOPIC-0001", "x", "en", "editor", manifest_path)
+
+        swapped.update(
+            {
+                "status": "approved",
+                "approved_by": "tampered-client",
+                "approved_at": "2026-07-20T09:00:00+09:00",
+            }
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        with patch("post_social_drafts.require_adapter_ready") as adapter_preflight:
+            with self.assertRaisesRegex(SocialPostingError, "manifest slug"):
+                post_social_drafts(manifest_path, platform="x", adapter="x", dry_run=True)
+        adapter_preflight.assert_not_called()
+
+    def test_social_regeneration_preserves_already_posted_copy(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        manifest_path = social_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        posted = next(post for post in manifest["posts"] if post["template_id"] == "x")
+        original_text = (self.root / posted["draft_path"]).read_text(encoding="utf-8")
+        posted["status"] = "posted"
+        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+        (self.root / "data" / "apps_registry.csv").write_text(
+            "app_id,app_name,slug,app_store_url,play_store_url\n"
+            "APP-0003,VaultXT,vaultxt,https://apps.apple.com/app/id6760122045,"
+            "https://play.google.com/store/apps/details?id=com.onnellab.vaultxt\n",
+            encoding="utf-8",
+        )
+
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+
+        regenerated = json.loads(manifest_path.read_text(encoding="utf-8"))
+        posted = next(post for post in regenerated["posts"] if post["template_id"] == "x")
+        self.assertEqual((self.root / posted["draft_path"]).read_text(encoding="utf-8"), original_text)
+        self.assertEqual(posted["link_strategy"], "canonical_article")
+        self.assertEqual(posted["target_url"], posted["canonical_url"])
 
     def test_repetition_gate_ignores_posted_history_and_mutually_exclusive_variants(self) -> None:
         social_dir = self.root / "generated" / "social" / "repetition-test"
@@ -818,6 +1082,238 @@ class PublishingTest(unittest.TestCase):
                 "editor",
                 output_dir / "manifest.json",
             )
+
+    def test_syndication_drafts_default_to_published_sources_only(self) -> None:
+        rows = [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")]
+        write_topics(self.topics_path, rows)
+        output_dir = self.root / "generated" / "syndication"
+
+        drafts = generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
+
+        self.assertEqual(drafts, [])
+        manifest = json.loads((output_dir / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest, {"drafts": []})
+
+    def test_prepublication_syndication_drafts_are_generated_but_cannot_be_approved(self) -> None:
+        output_dir = self.root / "generated" / "syndication"
+
+        for source_status in ("draft", "review"):
+            with self.subTest(source_status=source_status):
+                rows = [
+                    topic_row(status=source_status),
+                    topic_row(status=source_status, topic_id="TOPIC-0002", language="ko"),
+                ]
+                write_topics(self.topics_path, rows)
+
+                drafts = generate_syndication_drafts(
+                    self.topics_path,
+                    output_dir,
+                    "https://example.com/",
+                    include_prepublication=True,
+                )
+
+                self.assertEqual(len(drafts), 3)
+                self.assertEqual({draft["platform"] for draft in drafts}, {"devto", "hashnode", "medium"})
+                self.assertEqual({draft["language"] for draft in drafts}, {"en"})
+                self.assertTrue(all(draft["source_status"] == source_status for draft in drafts))
+                self.assertTrue(all(draft["publish_after_canonical"] is True for draft in drafts))
+                manifest_path = output_dir / "manifest.json"
+                self.assertEqual(validate_syndication_drafts(manifest_path, self.root), 3)
+                evaluation = evaluate_syndication_drafts(manifest_path, self.root)
+                self.assertEqual(len(evaluation["drafts"]), 3)
+                self.assertGreaterEqual(evaluation["average_score"], 9.0)
+
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                devto = next(draft for draft in manifest["drafts"] if draft["platform"] == "devto")
+                devto.pop("publish_after_canonical")
+                devto.pop("source_status")
+                manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+                manifest_before = manifest_path.read_text(encoding="utf-8")
+                with self.assertRaisesRegex(SyndicationApprovalError, "before canonical publication"):
+                    approve_syndication_draft("TOPIC-0001", "devto", "en", "editor", manifest_path)
+                self.assertEqual(manifest_path.read_text(encoding="utf-8"), manifest_before)
+
+    def test_prepublication_syndication_regeneration_resets_unposted_state(self) -> None:
+        output_dir = self.root / "generated" / "syndication"
+        generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
+        manifest_path = output_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        devto = next(draft for draft in manifest["drafts"] if draft["platform"] == "devto")
+        devto.update(
+            {
+                "status": "approved",
+                "approved_by": "editor",
+                "approved_at": "2026-07-20T09:00:00+09:00",
+            }
+        )
+        hashnode = next(draft for draft in manifest["drafts"] if draft["platform"] == "hashnode")
+        hashnode.update(
+            {
+                "status": "failed",
+                "approved_by": "editor",
+                "approved_at": "2026-07-20T09:00:00+09:00",
+                "last_attempt_at": "2026-07-21T09:00:00+09:00",
+                "error": "temporary failure",
+                "error_type": "transient",
+                "retry_count": 2,
+            }
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        write_topics(
+            self.topics_path,
+            [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")],
+        )
+
+        regenerated = generate_syndication_drafts(
+            self.topics_path,
+            output_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+
+        for platform in ("devto", "hashnode"):
+            with self.subTest(platform=platform):
+                draft = next(item for item in regenerated if item["platform"] == platform)
+                self.assertEqual(draft["status"], "draft")
+                self.assertEqual(draft["approved_by"], "")
+                self.assertEqual(draft["approved_at"], "")
+                self.assertEqual(draft["post_id"], "")
+                self.assertEqual(draft["posted_url"], "")
+                self.assertEqual(draft["posted_at"], "")
+                self.assertEqual(draft["last_attempt_at"], "")
+                self.assertEqual(draft["error"], "")
+                self.assertEqual(draft["error_type"], "")
+                self.assertEqual(draft["retry_count"], 0)
+
+    def test_prepublication_syndication_regeneration_preserves_posted_state(self) -> None:
+        output_dir = self.root / "generated" / "syndication"
+        generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
+        manifest_path = output_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        posted = next(draft for draft in manifest["drafts"] if draft["platform"] == "devto")
+        posted_path = self.root / posted["draft_path"]
+        original_posted_body = posted_path.read_bytes()
+        posted.update(
+            {
+                "status": "posted",
+                "approved_by": "editor",
+                "approved_at": "2026-07-20T09:00:00+09:00",
+                "post_id": "1234",
+                "posted_url": "https://dev.to/onnel/example",
+                "posted_at": "2026-07-21T09:00:00+09:00",
+                "last_attempt_at": "2026-07-21T09:00:00+09:00",
+            }
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        self.markdown_path.write_text(
+            MARKDOWN.replace("Choose a stable reader.", "Use newly revised source content."),
+            encoding="utf-8",
+        )
+        write_topics(
+            self.topics_path,
+            [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")],
+        )
+
+        regenerated = generate_syndication_drafts(
+            self.topics_path,
+            output_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+
+        posted = next(draft for draft in regenerated if draft["platform"] == "devto")
+        self.assertTrue(posted["publish_after_canonical"])
+        self.assertEqual(posted["status"], "posted")
+        self.assertEqual(posted["approved_by"], "editor")
+        self.assertEqual(posted["post_id"], "1234")
+        self.assertEqual(posted["posted_url"], "https://dev.to/onnel/example")
+        self.assertEqual(posted["posted_at"], "2026-07-21T09:00:00+09:00")
+        self.assertEqual(posted_path.read_bytes(), original_posted_body)
+
+    def test_prepublication_syndication_posting_fails_closed_before_dry_run_or_adapter(self) -> None:
+        rows = [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")]
+        write_topics(self.topics_path, rows)
+        output_dir = self.root / "generated" / "syndication"
+        generate_syndication_drafts(
+            self.topics_path,
+            output_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+        manifest_path = output_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        devto = next(draft for draft in manifest["drafts"] if draft["platform"] == "devto")
+        devto["status"] = "approved"
+        devto["approved_by"] = "tampered-client"
+        devto["approved_at"] = "2026-07-20T09:00:00+09:00"
+        devto.pop("publish_after_canonical")
+        devto.pop("source_status")
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+        with patch("post_syndication_drafts.require_adapter_ready") as adapter_preflight:
+            with self.assertRaisesRegex(SyndicationPostingError, "before canonical publication"):
+                post_syndication_drafts(manifest_path, platform="devto", adapter="devto", dry_run=True)
+
+        adapter_preflight.assert_not_called()
+
+    def test_syndication_topic_identity_swap_fails_approval_and_posting_before_adapter(self) -> None:
+        private = self.write_private_draft_topic()
+        write_topics(
+            self.topics_path,
+            [topic_row(), topic_row(topic_id="TOPIC-0002", language="ko"), private],
+        )
+        output_dir = self.root / "generated" / "syndication"
+        generate_syndication_drafts(
+            self.topics_path,
+            output_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+        manifest_path = output_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["drafts"] = [draft for draft in manifest["drafts"] if draft["topic_id"] == "TOPIC-0012"]
+        swapped = next(draft for draft in manifest["drafts"] if draft["platform"] == "devto")
+        swapped.update(
+            {
+                "topic_id": "TOPIC-0001",
+                "source_status": "published",
+                "publish_after_canonical": False,
+            }
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+        with self.assertRaisesRegex(SyndicationApprovalError, "manifest slug"):
+            approve_syndication_draft("TOPIC-0001", "devto", "en", "editor", manifest_path)
+
+        swapped.update(
+            {
+                "status": "approved",
+                "approved_by": "tampered-client",
+                "approved_at": "2026-07-20T09:00:00+09:00",
+            }
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        with patch("post_syndication_drafts.require_adapter_ready") as adapter_preflight:
+            with self.assertRaisesRegex(SyndicationPostingError, "manifest slug"):
+                post_syndication_drafts(manifest_path, platform="devto", adapter="devto", dry_run=True)
+        adapter_preflight.assert_not_called()
+
+    def test_syndication_generation_canonical_error_preserves_existing_output(self) -> None:
+        output_dir = self.root / "generated" / "syndication"
+        generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
+        manifest_path = output_dir / "manifest.json"
+        draft_path = output_dir / "devto" / "en" / "reading" / "read-large-txt-files.md"
+        previous_manifest = manifest_path.read_text(encoding="utf-8")
+        previous_draft = draft_path.read_text(encoding="utf-8")
+        rows = [topic_row(), topic_row(topic_id="TOPIC-0002", language="ko")]
+        rows[0]["canonical_path"] = ""
+        write_topics(self.topics_path, rows)
+
+        with self.assertRaisesRegex(PublishingError, "no canonical_path"):
+            generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
+
+        self.assertEqual(manifest_path.read_text(encoding="utf-8"), previous_manifest)
+        self.assertEqual(draft_path.read_text(encoding="utf-8"), previous_draft)
 
     def test_distribution_supply_requires_every_supported_channel(self) -> None:
         social_dir = self.root / "generated" / "social"

@@ -1,0 +1,9 @@
+A reliable plan for how to choose an output format before converting a media file starts with the result and constraints.
+
+Choose the destination first: the app, device, website, editor, or archive that must use the result. Then check the exact container and codecs that destination accepts, followed by the features you must preserve—quality, file size, editability, transparency, subtitles, and metadata.
+
+- Choose a media output format from its destination, codec compatibility, quality, size, editability, transparency, subtitles, and metadata needs.
+
+Install Quivra:
+App Store: https://apps.apple.com/app/id6759565093
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.quivra2

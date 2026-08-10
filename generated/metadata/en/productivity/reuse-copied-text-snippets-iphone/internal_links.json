@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0012",
+        "title": "How to Rename Files Safely With a Preview Workflow",
+        "slug": "rename-files-safely-preview-workflow",
+        "category": "productivity",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/productivity/rename-files-safely-preview-workflow.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",

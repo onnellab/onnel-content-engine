@@ -1,0 +1,11 @@
+The clearest way to trim an audio recording without turning it into a full editing project is to separate the decision from the tool.
+
+Keep the original recording, work on a copy, mark precise in and out points by listening as well as looking at the waveform, preview both boundaries, and export a new file with deliberate format settings. Use a lossless output when preserving the decoded audio matters; use a lossy codec only when compatibility or file size justifies re-encoding.
+
+Before changing tools:
+- Preserve the original. Back it up or duplicate it, and confirm the working file opens and plays.
+- Define the destination. Decide whether the clip is for archive, transcription, presentation, messaging, or another known use.
+
+Install Segra:
+App Store: https://apps.apple.com/app/id6779433972
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.segra

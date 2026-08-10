@@ -1,0 +1,10 @@
+A reliable plan for how to rename batches of files without applying mistakes starts with the result and constraints.
+
+Work on a copy when the files matter, define one small rule at a time, and inspect a complete file renaming preview before applying anything. Check that every original maps to one unique destination, preserve extensions unless changing them is intentional, test a repr...
+
+- Define the target pattern. Write one example old name and its exact desired result. Use an unambiguous structure such as `2026-08_client_subject_001.ext`.
+- Choose a representative test set. Include short and long names, duplicate-looking items, multiple extensions, non-Latin characters, and at least one file that should stay unchanged.
+
+Install Aligna:
+App Store: https://apps.apple.com/app/id6783642658
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.aligna

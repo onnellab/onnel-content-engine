@@ -11,6 +11,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from validate_social_posts import validate_social_posts
+from topic_management import TopicError, _require_current_published_topic
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,6 +69,17 @@ def approve_social_post(
     if len(matches) > 1:
         raise SocialApprovalError(f"multiple social drafts matched: {topic_id} {platform} {language}")
     post = matches[0]
+    try:
+        _require_current_published_topic(project_root_for_manifest(manifest_path), post)
+    except TopicError as error:
+        raise SocialApprovalError(
+            f"social draft cannot be approved before canonical publication: "
+            f"{topic_id} {platform} {language}: {error}"
+        ) from error
+    if post.get("publish_after_canonical"):
+        raise SocialApprovalError(
+            f"social draft cannot be approved before canonical publication: {topic_id} {platform} {language}"
+        )
     if post.get("status") == "posted":
         raise SocialApprovalError(f"social draft is already posted: {topic_id} {platform} {language}")
     if post.get("status") == "variant" and not allow_variant:

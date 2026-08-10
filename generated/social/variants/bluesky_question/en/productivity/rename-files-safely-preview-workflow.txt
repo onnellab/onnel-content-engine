@@ -1,0 +1,5 @@
+A practical way to rename batches of files without applying mistakes starts with the constraints, not the app.
+
+Install Aligna:
+App Store: https://apps.apple.com/app/id6783642658
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.aligna

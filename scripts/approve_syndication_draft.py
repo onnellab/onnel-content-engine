@@ -11,6 +11,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from evaluate_syndication_drafts import DEFAULT_MANIFEST_PATH
+from topic_management import TopicError, _require_current_published_topic
 from validate_syndication_drafts import SyndicationValidationError, project_root_for_manifest, validate_syndication_drafts
 
 
@@ -59,6 +60,17 @@ def approve_syndication_draft(
     if len(matches) > 1:
         raise SyndicationApprovalError(f"multiple syndication drafts matched: {topic_id} {platform} {language}")
     draft = matches[0]
+    try:
+        _require_current_published_topic(project_root_for_manifest(manifest_path), draft)
+    except TopicError as error:
+        raise SyndicationApprovalError(
+            f"syndication draft cannot be approved before canonical publication: "
+            f"{topic_id} {platform} {language}: {error}"
+        ) from error
+    if draft.get("publish_after_canonical"):
+        raise SyndicationApprovalError(
+            f"syndication draft cannot be approved before canonical publication: {topic_id} {platform} {language}"
+        )
     if draft.get("status") == "posted":
         raise SyndicationApprovalError(f"syndication draft is already posted: {topic_id} {platform} {language}")
     timestamp = (now or datetime.now(ZoneInfo("Asia/Seoul"))).replace(microsecond=0).isoformat()
