@@ -30,6 +30,53 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0022",
+        "title": "대용량 텍스트 파일이 느리게 열리는 이유",
+        "slug": "large-text-file-slow-to-open",
+        "category": "reading",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/reading/large-text-file-slow-to-open.md",
+        "destination": "scheduled_article",
+        "relationship": "prerequisite",
+        "shared_clusters": [
+          "reading",
+          "가상 렌더링",
+          "대용량 파일 성능"
+        ],
+        "score": 18
+      },
+      {
+        "topic_id": "TOPIC-0021",
+        "title": "긴 글 읽기를 위한 TXT와 EPUB 비교",
+        "slug": "txt-vs-epub-for-long-reading",
+        "category": "reading",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/reading/txt-vs-epub-for-long-reading.md",
+        "destination": "scheduled_article",
+        "relationship": "comparison",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 13
+      },
+      {
+        "topic_id": "TOPIC-0032",
+        "title": "원본을 바꾸지 않고 대용량 로그 파일을 검토하는 방법",
+        "slug": "inspect-large-log-file-without-altering-original",
+        "category": "reading",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/reading/inspect-large-log-file-without-altering-original.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0011",
         "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
         "slug": "convert-local-media-files-privately",
@@ -67,19 +114,6 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0019",
-        "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
-        "slug": "rename-files-safely-preview-workflow",
-        "category": "productivity",
-        "language": "ko",
-        "status": "review",
-        "url": "generated/markdown/ko/productivity/rename-files-safely-preview-workflow.md",
-        "destination": "draft_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 2
       }
     ],
     "related_apps": [

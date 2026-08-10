@@ -9,7 +9,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from evaluate_article import DEFAULT_REVIEW_ROOT, DEFAULT_THRESHOLD
+from evaluate_article import DEFAULT_REVIEW_ROOT, DEFAULT_THRESHOLD, REVIEW_VERSION, markdown_path_for, score_article
 from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEADER, TopicError, TopicStore, read_csv
 
 
@@ -42,6 +42,60 @@ def review_score(topic: dict[str, str], review_root: Path) -> float:
         raise SchedulingError(f"{topic['id']} has no review file: {path}")
     data = json.loads(path.read_text(encoding="utf-8"))
     return float(data.get("score", 0.0))
+
+
+def current_review_score(
+    topic: dict[str, str],
+    topics_path: Path,
+    review_root: Path,
+    threshold: float,
+    metadata_root: Path | None = None,
+    assets_root: Path | None = None,
+) -> float:
+    """Return a score only when the persisted review still matches the article."""
+    path = review_path_for(topic, review_root)
+    if not path.exists():
+        raise SchedulingError(f"{topic['id']} has no review file: {path}")
+    persisted = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(persisted, dict):
+        raise SchedulingError(f"{topic['id']} review report is not an object")
+
+    repository_root = topics_path.parent.parent
+    metadata_root = metadata_root or repository_root / "generated" / "metadata"
+    assets_root = assets_root or repository_root / "generated" / "assets" / "blog"
+    try:
+        markdown = markdown_path_for(topic, topics_path).read_text(encoding="utf-8")
+        current = score_article(topic, markdown, topics_path, metadata_root, assets_root)
+    except (OSError, ValueError) as error:
+        raise SchedulingError(f"{topic['id']} could not be re-evaluated: {error}") from error
+
+    def report_is_publishable(report: dict[str, object]) -> bool:
+        checks = report.get("checks")
+        fingerprint = report.get("input_fingerprint")
+        try:
+            score = float(report["score"])
+        except (KeyError, TypeError, ValueError):
+            return False
+        return (
+            report.get("version") == REVIEW_VERSION
+            and report.get("topic_id") == topic["id"]
+            and isinstance(fingerprint, str)
+            and bool(fingerprint)
+            and score > threshold
+            and report.get("passed") is True
+            and isinstance(checks, list)
+            and bool(checks)
+            and all(isinstance(check, dict) and check.get("passed") is True for check in checks)
+        )
+
+    if not report_is_publishable(persisted):
+        raise SchedulingError(f"{topic['id']} persisted review is incomplete or did not pass all checks")
+    if not report_is_publishable(current):
+        raise SchedulingError(f"{topic['id']} current article evaluation did not pass all checks")
+    for field in ("version", "topic_id", "input_fingerprint", "score", "passed", "checks"):
+        if persisted.get(field) != current.get(field):
+            raise SchedulingError(f"{topic['id']} persisted review is stale for the current article")
+    return float(current["score"])
 
 
 def publication_key(topic: dict[str, str]) -> tuple[str, str]:
@@ -160,7 +214,11 @@ def schedule_ready_articles(
         pair = require_language_pair(group)
         if any(row["status"] != "review" for row in pair.values()):
             raise SchedulingError("both English and Korean articles must be in review before scheduling")
-        if any(review_score(row, review_root) <= threshold for row in pair.values()):
+        try:
+            scores = [current_review_score(row, topics_path, review_root, threshold) for row in pair.values()]
+        except SchedulingError:
+            continue
+        if any(score <= threshold for score in scores):
             continue
         anchor = next_slot(anchor, interval_days, publication_time, now)
         for topic in pair.values():

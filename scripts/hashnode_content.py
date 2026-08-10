@@ -33,6 +33,9 @@ MARKDOWN_URL_RE = re.compile(
     r"(!?)\[([^\]]*)\]\((https?://[^)\s]+)(?:\s+\"[^\"]*\")?\)"
 )
 EXTERNAL_URL_RE = re.compile(r"https?://[^)\s>\"]+")
+EXTERNAL_URL_TOKEN_RE = re.compile(
+    r"<(?P<autolink>https?://[^>\s\"`]+)>|(?P<plain>https?://[^)\s>\"`]+)"
+)
 PROMOTIONAL_LANGUAGE_RE = re.compile(
     r"\b(?:buy|download now|free trial|limited offer|best app|our app|check out|install today)\b",
     re.IGNORECASE,
@@ -60,7 +63,13 @@ def _limit_product_links(markdown: str, limit: int = 0) -> str:
 
 
 def _limit_external_links(markdown: str, limit: int = 3) -> str:
-    """Keep a small citation budget without leaving malformed Markdown."""
+    """Keep a small citation budget without leaving malformed Markdown.
+
+    Explicit Markdown links are the most useful citations, so they receive the
+    budget first. Plain URLs and autolinks may use only the remaining slots.
+    Over-budget URLs retain their stable identifier text without remaining
+    clickable external links.
+    """
     retained = 0
 
     def replace(match: re.Match[str]) -> str:
@@ -70,7 +79,25 @@ def _limit_external_links(markdown: str, limit: int = 3) -> str:
             return match.group(0)
         return match.group(2)  # Keep useful anchor text, discard the URL.
 
-    return MARKDOWN_URL_RE.sub(replace, markdown)
+    adapted = MARKDOWN_URL_RE.sub(replace, markdown)
+    markdown_url_spans = [
+        (match.start(3), match.end(3))
+        for match in MARKDOWN_URL_RE.finditer(adapted)
+    ]
+
+    def replace_url_token(match: re.Match[str]) -> str:
+        nonlocal retained
+        url = match.group("autolink") or match.group("plain")
+        url_start = match.start("autolink") if match.group("autolink") else match.start("plain")
+        if any(start <= url_start < end for start, end in markdown_url_spans):
+            return match.group(0)
+        retained += 1
+        if retained <= limit:
+            return match.group(0)
+        identifier = re.sub(r"^https?://", "", url, count=1)
+        return identifier
+
+    return EXTERNAL_URL_TOKEN_RE.sub(replace_url_token, adapted)
 
 
 def hashnode_native_body(body: str) -> str:

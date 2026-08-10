@@ -10,15 +10,15 @@ How can I trim an audio recording without turning it into a full editing project
 
 ## Short Answer
 
-Keep the original recording, work on a copy, mark precise in and out points by listening as well as looking at the waveform, preview both boundaries, and export a new file with deliberate format settings. Use a lossless output when preserving the decoded audio matters; use a lossy codec only when compatibility or file size justifies re-encoding. Finally, reopen the exported clip and verify its start, end, duration, channels, metadata, and playback before treating the trim as finished.
+Keep the original, work on a copy, set in and out points by listening as well as viewing the waveform, preview both boundaries, and export a new file deliberately. Prefer lossless output when preserving decoded audio matters; re-encode only for a clear compatibility or size need. Reopen the export and verify its boundaries, duration, channels, metadata, and playback.
 
-Trimming is a narrow task: keep one continuous part of a recording and remove material before or after it. If that is all you need, a focused audio trimming app can be more direct than a multitrack editor. The safe workflow is still the same regardless of the tool.
+Trimming keeps one continuous part of a recording and removes material before or after it. For that narrow task, a focused audio trimming app can be more direct than a multitrack editor. The safe workflow is the same in any tool.
 
 ## Define the Result Before You Cut
 
-First decide what the clip is for. A spoken quotation may need a little room before the first word and after the last breath. A meeting excerpt may need an exact sentence while retaining enough context to remain accurate. A sound effect may need a clean, immediate start. An archival copy should favor preservation over small size, while a clip for a messaging app may favor compatibility.
+First decide what the clip is for. A quotation may need room before the first word and after the last breath. A meeting excerpt may need an exact sentence with enough context to remain accurate. A sound effect may need a clean start. An archival copy should favor preservation, while a messaging clip may favor compatibility.
 
-Write down the intended start and end in timestamps if precision matters. An **in point** is where the kept audio begins; an **out point** is where it ends. Record timestamps from one consistent time display. Switching between elapsed time, timecode, and sample positions midway through a task makes transcription errors more likely.
+Write down the intended start and end if precision matters. An **in point** is where the kept audio begins; an **out point** is where it ends. Use one time display throughout the task to avoid transcription errors.
 
 Trimming does not repair clipping, remove background noise, balance loudness, or mix multiple recordings. Those are separate editing tasks. Keeping the scope narrow prevents an easy cleanup from becoming an unnecessary production project.
 
@@ -26,17 +26,17 @@ Trimming does not repair clipping, remove background noise, balance loudness, or
 
 Do not trim the only copy. Preserve the original under its existing name, then create a working copy or confirm that the app always writes a separate export. Give the result a distinct name such as `interview-2026-08-03-topic-a-trim.wav`; do not rely on “final” alone to identify it later.
 
-Recordings can contain voices, locations, names, notifications, or confidential discussion outside the wanted segment. A local workflow keeps the file on the device during trimming and avoids an upload that the task may not require. If an online service is necessary, review its storage, retention, deletion, and access terms before sending the recording. Trimming sensitive words from the audible clip also does not prove that identifying metadata has been removed.
+Recordings can contain voices, locations, names, notifications, or confidential discussion outside the wanted segment. A local workflow avoids an unnecessary upload. If an online service is necessary, review its storage, retention, deletion, and access terms first. Removing audible material also does not prove that identifying metadata is gone.
 
 ## Lossless Trim or Re-encode?
 
 “Lossless” can describe both a codec and a workflow, so it helps to separate the two.
 
-With uncompressed PCM audio such as a typical WAV file, an app can decode, cut, and write PCM without introducing lossy codec damage, provided it does not change the sample rate, bit depth, channels, or apply processing. FLAC compression is also lossless: decoding and re-encoding valid PCM as FLAC preserves the audio samples, although tags or other container metadata may still change.
+With uncompressed PCM audio, an app can cut and write matching PCM without lossy codec damage if it does not change the sample rate, bit depth, channels, or apply processing. FLAC is also lossless, although tags or container metadata may change during export.
 
 MP3, AAC, Opus, and Vorbis are lossy codecs. Exporting decoded audio to one of them performs a new lossy encode. Repeated lossy generations can accumulate changes, so avoid converting an already compressed recording merely because the editor offers a familiar default.
 
-Some tools offer **stream copy**, **smart copy**, or “no re-encode” cutting for compressed files. This copies compressed frames rather than encoding the audio again. It can preserve the existing encoded data, but exact boundaries may be limited by codec frames, packets, or container structure. A sample-accurate requested timestamp and a no-re-encode cut are not always compatible. Preview the actual output instead of assuming the label guarantees the boundary you intended.
+Some tools offer **stream copy** or “no re-encode” cutting for compressed files. This copies compressed frames, but available boundaries may be limited by frames, packets, or the container. A sample-accurate timestamp and a no-re-encode cut are not always compatible, so preview the output.
 
 | Method | What happens | Main advantage | Main limitation |
 | --- | --- | --- | --- |
@@ -47,11 +47,11 @@ Some tools offer **stream copy**, **smart copy**, or “no re-encode” cutting 
 
 ## Choose Boundaries With Your Eyes and Ears
 
-A waveform plots signal amplitude over time. It is useful for finding long silence, a loud transient, or the general shape of speech, but it does not tell you whether a breath, consonant, room tone, or sentence context should remain. Use the waveform to navigate and listening to decide.
+A waveform plots signal amplitude over time. It helps find silence, transients, and speech, but cannot decide whether a breath, consonant, room tone, or sentence context should remain. Navigate visually and decide by listening.
 
 Make a rough selection, then loop or replay a few seconds around the in point. Listen once from before the boundary and once starting exactly at it. Repeat at the out point. Headphones can reveal clipped consonants, breaths, low-level room tone, and clicks that a phone speaker hides. For speech, leave natural timing unless the destination requires a hard cut.
 
-Zoom in only after the rough boundaries are correct. If the app accepts numeric positions, enter the in and out values directly and confirm that the resulting duration matches `out minus in`. Numeric precision does not replace listening: a perfectly entered timestamp can still fall in the middle of a sound.
+Zoom in only after the rough boundaries are correct. If the app accepts numeric positions, enter them and confirm that duration matches `out minus in`. A precise timestamp can still fall in the middle of a sound, so listen again.
 
 ## Avoid Clicks at the Start and End
 
@@ -63,9 +63,9 @@ If a click remains, move the boundary slightly into nearby silence or apply a ve
 
 For a preservation copy, match the source sample rate and channel layout unless there is a documented destination requirement. Changing the sample rate performs resampling; converting stereo to mono combines or selects channels and can remove spatial information. A mono voice recording does not gain detail by exporting it as stereo, and a stereo recording should not be collapsed to mono accidentally.
 
-Choose the codec for the destination, not by extension alone. WAV is a container and can carry different encodings; a filename ending in `.wav` does not by itself describe the audio data. Check what the receiving player, archive, transcription service, or publishing system accepts. If you need both a master and a small delivery file, export a lossless master first and derive the delivery copy from that master rather than repeatedly encoding the lossy copy.
+Choose the codec for the destination, not by extension alone. WAV is a container that can carry different encodings. Check what the receiving system accepts. If you need both a master and a small delivery file, export a lossless master first and derive the delivery copy from it.
 
-Metadata deserves a separate check. Title, artist, comments, artwork, dates, location-related fields, and application-specific tags can be preserved, dropped, or rewritten during export. ID3, for example, stores audio metadata inside a file through defined frames. Copy only fields that are accurate and appropriate for the clip, and inspect sensitive outputs with a metadata-aware tool when privacy matters.
+Metadata deserves a separate check. Titles, comments, artwork, dates, locations, and app-specific tags may be preserved, dropped, or rewritten. ID3 stores metadata in defined frames. Keep only accurate, appropriate fields, and inspect sensitive outputs with a metadata-aware tool.
 
 ## Recommended Workflow
 
@@ -82,9 +82,9 @@ Metadata deserves a separate check. Title, artist, comments, artwork, dates, loc
 
 ![Audio trimming workflow](https://onnellab.github.io/blog-assets/en/trim-audio-recordings-without-full-editor/workflow-diagram.svg "Backup-first workflow for selecting, previewing, exporting, and verifying an audio clip")
 
-## Where Segra Fits
+## ONNELLAB Application
 
-[Segra](https://onnellab.github.io/apps/segra/) is a focused iOS and Android audio utility for trimming and organizing audio segments. It fits when the job is to isolate and arrange useful sections without opening a full audio-production application.
+[Segra](https://onnellab.github.io/apps/segra/) is documented as an iOS and Android utility for trimming and merging audio files. It may fit a focused trim or merge, but it should not be treated as a full audio-production application.
 
 Segra does not replace the decisions in this guide. You still need to protect the source, choose boundaries by listening, select an appropriate output, and verify the saved clip. For processing, effects, multitrack mixing, or other production work, use a tool designed for that broader scope.
 

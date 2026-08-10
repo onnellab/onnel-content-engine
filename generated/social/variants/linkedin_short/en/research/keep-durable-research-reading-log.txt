@@ -1,9 +1,9 @@
 A reliable plan for how to keep a research reading log that remains useful after a project ends starts with the result and constraints.
 
-Give every source a stable identity, record the locator and access date...
+Give every source a stable identity, locator, and access date; distinguish quotations from paraphrases; and connect notes to claims. Preserve enough context to prevent misreading.
 
-- Capture. Create the record while the source is open. Copy the canonical bibliographic details, DOI or other identifier, the exact access URL, access date, locator, note type, and minimal evidence. Give the record a local ID immediately.
-- Verify. Resolve the DOI through `https://doi.org/`, compare author, title, date, version, and container with the item you read, and correct metadata against the registration agency or publisher record. Reopen the locator and compare every quote character by character. A resolving link alone does not prove that the metadata or version is correct.
+- Capture. While the source is open, record bibliographic details, identifier, exact access URL and date, locator, note type, minimal evidence, and a local ID.
+- Verify. Resolve the identifier; compare author, title, date, version, and container with an official record; then reopen the locator and check quotations. Resolution alone does not prove the version is correct.
 
 Read the full article:
 https://onnellab.github.io/blog/en/keep-durable-research-reading-log/

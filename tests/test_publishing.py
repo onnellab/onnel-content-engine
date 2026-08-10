@@ -1083,6 +1083,40 @@ class PublishingTest(unittest.TestCase):
                 output_dir / "manifest.json",
             )
 
+    def test_hashnode_generator_budgets_plain_and_autolink_research_urls_deterministically(self) -> None:
+        research_shape = MARKDOWN + """
+
+## References
+
+Store a stable identifier such as `https://doi.org/10.xxxx/xxxxx` and keep the
+resolver guidance at <https://doi.org/doi-handbook/> for later verification.
+
+- [DOI Handbook](https://www.doi.org/doi-handbook/html/) documents resolution.
+- [Crossref display guidelines](https://www.crossref.org/display-guidelines/) preserve DOI usefulness.
+- [Crossref metadata](https://www.crossref.org/documentation/retrieve-metadata/) supports verification.
+- [DataCite versions](https://support.datacite.org/docs/connecting-versions) distinguishes editions.
+"""
+        self.markdown_path.write_text(research_shape, encoding="utf-8")
+        output_dir = self.root / "generated" / "syndication"
+
+        generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
+        hashnode_path = output_dir / "hashnode" / "en" / "reading" / "read-large-txt-files.md"
+        first = hashnode_path.read_text(encoding="utf-8")
+
+        self.assertEqual(hashnode_automod_risks(first, "https://example.com/blog/en/read-large-txt-files/"), [])
+        self.assertIn("`doi.org/10.xxxx/xxxxx`", first)
+        self.assertIn("doi.org/doi-handbook/", first)
+        self.assertNotIn("<doi.org/doi-handbook/>", first)
+        self.assertIn("[DOI Handbook](https://www.doi.org/doi-handbook/html/)", first)
+        self.assertIn("[Crossref display guidelines](https://www.crossref.org/display-guidelines/)", first)
+        self.assertNotIn("https://www.crossref.org/documentation/retrieve-metadata/", first)
+        hashnode_body = first.split("\n---\n", 1)[1]
+        self.assertEqual(hashnode_body.count("http://") + hashnode_body.count("https://"), 3)
+        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 3)
+
+        generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
+        self.assertEqual(hashnode_path.read_text(encoding="utf-8"), first)
+
     def test_syndication_drafts_default_to_published_sources_only(self) -> None:
         rows = [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")]
         write_topics(self.topics_path, rows)

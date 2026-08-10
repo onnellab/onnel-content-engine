@@ -2,7 +2,7 @@
 title: "How to Turn Rough Notes Into a Structured First Draft"
 published: true
 canonical_url: "https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/"
-tags: "structure-rough-notes"
+tags: "structure-rough-notes,first-draft-workflow,outline-from-notes,source-audit"
 ---
 
 > ONNELLAB note: This version focuses on the rendering and workflow details behind large text files.
@@ -11,7 +11,7 @@ tags: "structure-rough-notes"
 
 # How to Turn Rough Notes Into a Structured First Draft
 
-Rough notes are valuable because they capture observations before they have been compressed into a polished argument. The difficulty is giving those fragments a readable order without quietly changing what they meant. A dependable method preserves the raw notes, creates a traceable working layer, and delays sentence-level polishing until the draft's logic is visible.
+Rough notes capture observations before they become a polished argument. The challenge is ordering them without changing their meaning. A dependable method preserves the raw notes, creates a traceable working layer, and delays polishing until the draft's logic is visible.
 
 ## Question
 
@@ -93,9 +93,9 @@ Fact-check AI-assisted text claim by claim. Require links or citations only as l
 
 Keep AI-generated bridge sentences under the same standard. A sentence such as “This delay was inevitable” may be a new conclusion even if every surrounding fact came from the notes. Mark, support, narrow, or remove it.
 
-## Where ONNELLAB Fits
+## ONNELLAB Application
 
-[Melivra](https://onnellab.github.io/apps/melivra/) is listed by ONNELLAB as a writing utility for iOS and Android with optional Pro and AI credit purchases. If you evaluate it for this workflow, first confirm that its current store listing, privacy information, and available writing controls fit your material and review requirements. This workflow does not assume that Melivra provides outlining, provenance, local-processing, or fact-checking features; verify current product documentation before relying on any of them.
+ONNELLAB currently has no application whose documented capabilities match this notes-to-draft workflow. Use the method with tools that meet your privacy, provenance, and review requirements; the workflow does not depend on a particular product.
 
 ## Related Topics
 
@@ -108,8 +108,6 @@ Keep AI-generated bridge sentences under the same standard. A sentence such as �
 
 - [NIST AI 600-1: Generative Artificial Intelligence Profile](https://doi.org/10.6028/NIST.AI.600-1) provides official guidance on content provenance, data origin, human oversight, privacy risk, and evaluating output against known ground truth.
 - [W3C PROV-O Recommendation](https://www.w3.org/TR/prov-o/) defines a provenance model centered on entities, activities, agents, and derivation relationships.
-- [Melivra on the App Store](https://apps.apple.com/app/id6783644955) is the official iOS store destination recorded in the ONNELLAB app registry.
-- [Melivra on Google Play](https://play.google.com/store/apps/details?id=com.onnellab.melivra) is the official Android store destination recorded in the ONNELLAB app registry.
 
 ## Conclusion
 

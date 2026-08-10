@@ -10,6 +10,7 @@ topic_id: "TOPIC-0021"
 search_intent: "compare"
 primary_keyword: "긴 글 TXT EPUB 비교"
 secondary_keywords: "긴 글 읽기|일반 텍스트|EPUB 변환|읽기 워크플로"
+tags: "TXT EPUB 비교|긴 글 읽기|일반 텍스트|EPUB 변환|VaultXT"
 related_apps: "VaultXT"
 canonical_url: ""
 published_at: ""
@@ -33,7 +34,7 @@ image_specs: "Workflow diagram for 긴 글 TXT EPUB 비교|Comparison diagram fo
 
 ## TXT와 EPUB이 실제로 저장하는 것
 
-TXT 파일은 바이트로 표현된 문자들의 연속입니다. 줄바꿈과 공백으로 문단이나 구간을 짐작할 수 있지만, 특정 줄이 장 제목인지, 어떤 구절이 강조인지, 어느 문장이 각주 링크인지 선언하는 공통 구조는 없습니다. **인코딩은** 도구가 바이트를 문자로 해석하는 대응 규칙입니다. 다른 인코딩을 적용하면 글자가 깨질 수 있습니다. 새 텍스트 작업 흐름을 만든다면 UTF-8이 가장 상호운용하기 좋은 기본값입니다.
+TXT 파일은 바이트로 표현된 문자들의 연속입니다. 줄바꿈과 공백으로 문단이나 구간을 짐작할 수 있지만, 특정 줄이 장 제목인지, 어떤 구절이 강조인지, 어느 문장이 각주 링크인지 선언하는 공통 구조는 없습니다. 인코딩은 도구가 바이트를 문자로 해석하는 대응 규칙입니다. 다른 인코딩을 적용하면 글자가 깨질 수 있습니다. 새 텍스트 작업 흐름을 만든다면 UTF-8이 가장 상호운용하기 좋은 기본값입니다.
 
 EPUB은 웹 기술 기반 자원을 묶은 출판물 패키지입니다. 일반적으로 구조화된 콘텐츠 문서, 스타일, 필수 탐색 문서, 출판 메타데이터, 패키지에 포함된 자원을 식별하는 매니페스트가 들어 있습니다. 이런 구조 덕분에 EPUB 리더는 하나로 이어진 문자만 보여 주는 대신 장, 읽기 순서, 제목, 링크, 이미지, 도서 정보를 표현할 수 있습니다.
 
@@ -123,7 +124,7 @@ VaultXT가 일반 텍스트를 완성된 EPUB으로 제작하거나, 빠진 의�
 - [W3C: EPUB 3.3](https://www.w3.org/TR/epub-33/)은 EPUB 출판 형식, 패키지 메타데이터, 탐색, 읽기 순서, 레이아웃 어휘를 정의합니다.
 - [W3C: EPUB Reading Systems 3.3](https://www.w3.org/TR/epub-rs-33/)은 호환 읽기 시스템이 EPUB 출판물을 처리하고 표현하는 방법을 정의합니다.
 - [W3C: EPUB Accessibility 1.1](https://www.w3.org/TR/epub-a11y-11/)은 EPUB 출판물의 접근성 적합성과 검색 가능성 요구사항을 정의합니다.
-- [WHATWG: Encoding Standard](https://encoding.spec.whatwg.org/)는 UTF-8을 포함한 문자 인코딩 이름과 상호운용 가능한 디코딩 동작을 정의합니다.
+- [WHATWG: 인코딩 표준](https://encoding.spec.whatwg.org/)은 UTF-8을 포함한 문자 인코딩 이름과 상호운용 가능한 디코딩 동작을 정의합니다.
 - [W3C: EPUBCheck](https://www.w3.org/publishing/epubcheck/)는 EPUB 출판물의 적합성을 검사하는 공식 검증 도구를 제공합니다.
 
 ## 결론

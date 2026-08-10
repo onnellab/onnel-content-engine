@@ -9,7 +9,7 @@ content_profile: "hashnode-native-v3"
 
 
 
-Rough notes are valuable because they capture observations before they have been compressed into a polished argument. The difficulty is giving those fragments a readable order without quietly changing what they meant. A dependable method preserves the raw notes, creates a traceable working layer, and delays sentence-level polishing until the draft's logic is visible.
+Rough notes capture observations before they become a polished argument. The challenge is ordering them without changing their meaning. A dependable method preserves the raw notes, creates a traceable working layer, and delays polishing until the draft's logic is visible.
 
 ## The constraint to solve
 
@@ -89,14 +89,12 @@ Keep AI-generated bridge sentences under the same standard. A sentence such as â
 
 ## When a focused tool helps
 
-Melivra is listed by ONNELLAB as a writing utility for iOS and Android with optional Pro and AI credit purchases. If you evaluate it for this workflow, first confirm that its current store listing, privacy information, and available writing controls fit your material and review requirements. This workflow does not assume that Melivra provides outlining, provenance, local-processing, or fact-checking features; verify current product documentation before relying on any of them.
+ONNELLAB currently has no application whose documented capabilities match this notes-to-draft workflow. Use the method with tools that meet your privacy, provenance, and review requirements; the workflow does not depend on a particular product.
 
 ## References
 
 - [NIST AI 600-1: Generative Artificial Intelligence Profile](https://doi.org/10.6028/NIST.AI.600-1) provides official guidance on content provenance, data origin, human oversight, privacy risk, and evaluating output against known ground truth.
 - [W3C PROV-O Recommendation](https://www.w3.org/TR/prov-o/) defines a provenance model centered on entities, activities, agents, and derivation relationships.
-- Melivra on the App Store is the official iOS store destination recorded in the ONNELLAB app registry.
-- Melivra on Google Play is the official Android store destination recorded in the ONNELLAB app registry.
 
 ## Takeaway
 

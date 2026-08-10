@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0016",
+    "title": "How to Keep a Durable Research Reading Log",
+    "slug": "keep-durable-research-reading-log",
+    "category": "research",
+    "language": "en",
+    "status": "scheduled",
+    "topic_clusters": [
+      "source notes",
+      "citation trail",
+      "research synthesis",
+      "evergreen notes",
+      "research reading log",
+      "research"
+    ],
+    "related_app_names": []
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0001",
+        "title": "How to Read Large TXT Files Without Lag",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0003",
+        "title": "TXT vs EPUB for Long Reading",
+        "slug": "txt-vs-epub-for-long-reading",
+        "category": "reading",
+        "language": "en",
+        "status": "scheduled",
+        "url": "generated/markdown/en/reading/txt-vs-epub-for-long-reading.md",
+        "destination": "scheduled_article",
+        "relationship": "comparison",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0007",
+        "title": "How to Convert Local Media Files Privately",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0008",
+        "title": "How to Clean Up MP3 Metadata Before Organizing Music",
+        "slug": "clean-up-mp3-metadata-before-organizing-music",
+        "category": "music",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0009",
+        "title": "How to Trim Audio Recordings Without a Full Editor",
+        "slug": "trim-audio-recordings-without-full-editor",
+        "category": "media",
+        "language": "en",
+        "status": "scheduled",
+        "url": "generated/markdown/en/media/trim-audio-recordings-without-full-editor.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0010",
+        "title": "How to Reuse Copied Text Snippets on iPhone",
+        "slug": "reuse-copied-text-snippets-iphone",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Research guide",
+        "category": "research",
+        "cluster": "research",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "source notes cluster",
+        "category": "research",
+        "cluster": "source notes",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "How to Inspect a Large Log File Without Altering the Original",
+        "category": "reading",
+        "cluster": "inspect large log file safely",
+        "topic_id": "TOPIC-0031",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

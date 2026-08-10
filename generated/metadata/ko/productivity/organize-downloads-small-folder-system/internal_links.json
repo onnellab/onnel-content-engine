@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0028",
+    "title": "작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법",
+    "slug": "organize-downloads-small-folder-system",
+    "category": "productivity",
+    "language": "ko",
+    "status": "scheduled",
+    "topic_clusters": [
+      "다운로드 정리",
+      "간단한 파일 분류",
+      "지속 가능한 폴더",
+      "파일 이름",
+      "productivity"
+    ],
+    "related_app_names": []
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0017",
+        "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
+        "slug": "reuse-copied-text-snippets-iphone",
+        "category": "productivity",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0019",
+        "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
+        "slug": "rename-files-safely-preview-workflow",
+        "category": "productivity",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/productivity/rename-files-safely-preview-workflow.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
+        "topic_id": "TOPIC-0024",
+        "title": "거친 메모를 구조화된 초안으로 바꾸는 방법",
+        "slug": "turn-rough-notes-into-structured-first-draft",
+        "category": "productivity",
+        "language": "ko",
+        "status": "draft",
+        "url": "generated/markdown/ko/productivity/turn-rough-notes-into-structured-first-draft.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
+        "topic_id": "TOPIC-0005",
+        "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0011",
+        "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0013",
+        "title": "음악 정리 전 MP3 메타데이터를 정돈하는 방법",
+        "slug": "clean-up-mp3-metadata-before-organizing-music",
+        "category": "music",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Productivity guide",
+        "category": "productivity",
+        "cluster": "productivity",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "다운로드 정리 cluster",
+        "category": "productivity",
+        "cluster": "다운로드 정리",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

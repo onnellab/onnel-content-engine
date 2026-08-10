@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/research/keep-durable-research-reading-log.md",
+  "topic": {
+    "id": "TOPIC-0016",
+    "title": "How to Keep a Durable Research Reading Log",
+    "slug": "keep-durable-research-reading-log",
+    "category": "research",
+    "language": "en",
+    "primary_keyword": "research reading log",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "How to Keep a Durable Research Reading Log",
+    "Question",
+    "Short Answer",
+    "Why Reading Logs Stop Being Useful",
+    "The Minimum Durable Log Schema",
+    "Quote, Paraphrase, Summary, and Observation",
+    "Connect Claims to Evidence, Not Just Sources",
+    "Recommended Workflow",
+    "Stable Identifiers and the Limits of Links",
+    "Copyright and Privacy Boundaries",
+    "Export, Backup, and Recovery",
+    "Project-End Handoff",
+    "ONNELLAB Application",
+    "References",
+    "Conclusion",
+    "FAQ",
+    "Is a DOI enough to make a reading note durable?",
+    "Should every highlight become a log record?",
+    "Can I paraphrase without recording a page or section?",
+    "What should I do when a link breaks?",
+    "How often should I review the log?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "What is the recommended workflow for research reading log?",
+      "source_sections": [
+        "Short Answer",
+        "Recommended Workflow"
+      ],
+      "structure": [
+        "Problem",
+        "Process",
+        "Result"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating research reading log?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "source notes",
+        "citation trail",
+        "research synthesis"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "No related application is referenced; decorative screenshots are not required.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "How to Keep a Durable Research Reading Log Workflow",
+      "steps": [
+        "Problem",
+        "Explanation",
+        "Options",
+        "Recommended workflow",
+        "Optional application"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "research reading log Comparison",
+      "items": [
+        "source notes",
+        "citation trail",
+        "research synthesis"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ]
+}

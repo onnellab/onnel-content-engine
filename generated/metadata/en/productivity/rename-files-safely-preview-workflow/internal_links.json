@@ -14,7 +14,7 @@
     "slug": "rename-files-safely-preview-workflow",
     "category": "productivity",
     "language": "en",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
       "batch rename",
       "rename rules",
@@ -45,6 +45,36 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0020",
+        "title": "How to Organize Downloads With a Small, Durable Folder System",
+        "slug": "organize-downloads-small-folder-system",
+        "category": "productivity",
+        "language": "en",
+        "status": "scheduled",
+        "url": "generated/markdown/en/productivity/organize-downloads-small-folder-system.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0014",
+        "title": "How to Turn Rough Notes Into a Structured First Draft",
+        "slug": "turn-rough-notes-into-structured-first-draft",
+        "category": "productivity",
+        "language": "en",
+        "status": "draft",
+        "url": "generated/markdown/en/productivity/turn-rough-notes-into-structured-first-draft.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0001",
         "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
@@ -58,6 +88,19 @@
         "score": 5
       },
       {
+        "topic_id": "TOPIC-0004",
+        "title": "What Makes Large Text Files Slow to Open",
+        "slug": "large-text-file-slow-to-open",
+        "category": "reading",
+        "language": "en",
+        "status": "scheduled",
+        "url": "generated/markdown/en/reading/large-text-file-slow-to-open.md",
+        "destination": "scheduled_article",
+        "relationship": "prerequisite",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",
@@ -69,19 +112,6 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0008",
-        "title": "How to Clean Up MP3 Metadata Before Organizing Music",
-        "slug": "clean-up-mp3-metadata-before-organizing-music",
-        "category": "music",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
       }
     ],
     "related_apps": [

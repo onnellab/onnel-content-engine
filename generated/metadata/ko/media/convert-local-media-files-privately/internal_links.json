@@ -30,6 +30,51 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0027",
+        "title": "미디어 변환 전에 출력 형식을 선택하는 방법",
+        "slug": "choose-media-output-format-before-conversion",
+        "category": "media",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/media/choose-media-output-format-before-conversion.md",
+        "destination": "scheduled_article",
+        "relationship": "comparison",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 12
+      },
+      {
+        "topic_id": "TOPIC-0023",
+        "title": "전문 편집기 없이 오디오 녹음을 자르는 방법",
+        "slug": "trim-audio-recordings-without-full-editor",
+        "category": "media",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/media/trim-audio-recordings-without-full-editor.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 9
+      },
+      {
+        "topic_id": "TOPIC-0025",
+        "title": "오디오 클립을 합치기 전에 확인하는 방법",
+        "slug": "verify-audio-clips-before-combining",
+        "category": "media",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/media/verify-audio-clips-before-combining.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0005",
         "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
         "slug": "read-large-txt-files-without-lag",
@@ -67,19 +112,6 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0019",
-        "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
-        "slug": "rename-files-safely-preview-workflow",
-        "category": "productivity",
-        "language": "ko",
-        "status": "review",
-        "url": "generated/markdown/ko/productivity/rename-files-safely-preview-workflow.md",
-        "destination": "draft_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 2
       }
     ],
     "related_apps": [

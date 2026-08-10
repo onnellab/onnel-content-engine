@@ -1,0 +1,11 @@
+A reliable plan for how to inspect a large log file without altering the original starts with the result and constraints.
+
+To inspect a large log file safely, set the source aside and review a clearly named working copy. Record where the source came from, when it was obtained, its visible filename, and its byte size before beginning.
+
+Before changing tools:
+- Define the question. State the symptom, component, approximate interval, and the decision the review should support.
+- Set the source aside. Record basic provenance and create a working copy in a separate, clearly labeled location. Perform all navigation on the copy.
+
+Install VaultXT:
+App Store: https://apps.apple.com/app/id6760122045
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt

@@ -35,9 +35,39 @@
         "slug": "rename-files-safely-preview-workflow",
         "category": "productivity",
         "language": "ko",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/ko/productivity/rename-files-safely-preview-workflow.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
+        "topic_id": "TOPIC-0024",
+        "title": "거친 메모를 구조화된 초안으로 바꾸는 방법",
+        "slug": "turn-rough-notes-into-structured-first-draft",
+        "category": "productivity",
+        "language": "ko",
+        "status": "draft",
+        "url": "generated/markdown/ko/productivity/turn-rough-notes-into-structured-first-draft.md",
         "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
+        "topic_id": "TOPIC-0028",
+        "title": "작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법",
+        "slug": "organize-downloads-small-folder-system",
+        "category": "productivity",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/productivity/organize-downloads-small-folder-system.md",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"

@@ -1,8 +1,9 @@
 {
-  "version": 1,
+  "version": 2,
   "type": "article_review",
   "topic_id": "TOPIC-0010",
   "title": "How to Reuse Copied Text Snippets on iPhone",
+  "input_fingerprint": "6b367efc774a1c134a4efd35d675bb6660c362ed32266e87a0fb5af7f672531e",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

@@ -16,9 +16,7 @@ Treat Downloads as an inbox, not as a permanent library. Process each completed 
 
 A browser, mail app, chat app, and cloud service can all place unrelated files in Downloads. The folder describes how the files arrived, not why they matter. A receipt, installer, photo export, research paper, and duplicate attachment therefore accumulate in the same location even though they have different lifecycles.
 
-An inbox model gives the folder one job: receive and briefly hold completed downloads. The decision is not “Which of 40 topic folders fits?” It is “What happens next, and where is the stable home?” This keeps the system small enough to use under time pressure.
-
-Do not force every file into the four-category system. If a contract belongs to an existing client project or a photo belongs in a managed photo library, that established home wins. The four categories are a dependable fallback for files without a clearer owner.
+An inbox model gives the folder one job: briefly hold completed downloads. Ask what happens next and where the stable home is. If a file already belongs to a client project, photo library, or other managed system, that established home wins; the four categories are a fallback.
 
 ## Use Four Durable Categories
 
@@ -31,7 +29,7 @@ Create the categories under a stable location that is included in your normal ba
 | **Archive** | Work is closed, but retention, evidence, or history matters | A documented retention rule allows deletion | Paid invoice or final delivery receipt |
 | **Temporary** | The file is a transfer copy, one-time export, or short-lived input | Its stated review date arrives and the source/output is confirmed | Attachment copied to another device |
 
-Keep category depth shallow. One optional level such as `Archive/2026` or `Reference/Travel` is often enough. Add a subfolder only when several real files need it and you can explain the distinction in one sentence. Empty speculative hierarchies create more choices without improving retrieval.
+Keep category depth shallow. Add one level such as `Archive/2026` only when several real files need it and the distinction is easy to explain.
 
 ## Decide Each File With a Short Triage
 
@@ -43,36 +41,15 @@ For each completed download, ask these questions in order:
 4. **Is it a true duplicate or a distinct version?** Compare identity before deleting.
 5. **What is the next state?** Choose Action, Reference, Archive, Temporary, or Delete.
 
-This is lifecycle-based organization. File-type folders such as `PDF`, `Images`, and `ZIP` can look tidy, but they mix active forms, long-term records, and disposable copies simply because their extensions match. Type remains available through search and sorting; lifecycle is the decision the folder system needs to express.
+File-type folders such as `PDF` or `ZIP` mix active forms, long-term records, and disposable copies. Search can still filter by type; folders should express lifecycle.
 
 ## Use Names That Preserve Identity
 
-A useful filename distinguishes the file without requiring its folder to explain everything. Keep names compact and stable. A pattern such as `2026-08-03_source_subject_status.ext` works when date, source, and state genuinely aid retrieval. For sequential revisions, use a fixed-width version such as `proposal_v03.docx`, not `proposal_final_really-final.docx`.
-
-Practical naming rules:
-
-- retain the real extension; renaming `.pdf` to `.docx` does not convert content;
-- use the date represented by the file—issue date, event date, or export date—not automatically today's date;
-- choose one date order, preferably year first when lexical sorting matters;
-- keep the subject meaningful but short, and omit fields that never help search;
-- use `draft`, `review`, or a version number only when versions actually coexist;
-- avoid changing a name if an application, shortcut, automation, or shared link depends on the current path.
-
-Name important keepers during triage, not every disposable download. Renaming everything adds work without adding durable value.
+A compact pattern such as `2026-08-03_source_subject_status.ext` works when those fields aid retrieval. Retain the real extension—renaming `.pdf` to `.docx` does not convert content—and use the date represented by the file. Use fixed-width versions such as `proposal_v03.docx` only when revisions coexist. Do not rename paths used by apps, shortcuts, automation, or shared links. Rename durable keepers, not every disposable download.
 
 ## Duplicate and Version Decisions
 
-Similar names do not prove that two files are identical. A browser may add `(1)` to an exact repeat, but it can also add that suffix to a newer document that reused the same server filename. Compare file size, dates, source, and content. For important or binary files, a trusted file-information or checksum tool can provide stronger evidence than a name.
-
-| Situation | Safe decision |
-| --- | --- |
-| Same content, same purpose, one authoritative location | Keep the authoritative copy; remove the extra after opening or otherwise verifying it |
-| Same name, different content | Treat as versions; rename with a meaningful version, date, or status |
-| Original plus edited/exported derivative | Keep the editable master and only the derivatives still needed for delivery or evidence |
-| Cloud copy and local synced copy | Understand the sync relationship before deleting either one |
-| Uncertain whether the file is needed | Move it to Temporary with a review date rather than guessing |
-
-Files by Google, for example, marks an item as the original during its duplicate-cleanup flow and recommends keeping it. Regardless of platform, review the proposed deletion set instead of treating an automated “duplicate” label as permission to delete every copy.
+Similar names do not prove identity. `(1)` can mark an exact repeat or a newer document that reused a server filename. Compare size, date, source, and content; for important binary files, a trusted checksum tool is stronger evidence. Keep the authoritative copy, treat different content as versions, and understand cloud sync before deleting either location. When uncertain, use Temporary with a review date. Files by Google identifies an original in its duplicate-cleanup flow; on any platform, review the proposed deletion set instead of trusting a label.
 
 ## Quarantine Is a Decision State, Not a Security Sandbox
 
@@ -82,27 +59,13 @@ You may use a plainly named `Hold for Review` location to keep an uncertain item
 
 ## A Repeatable Review Cadence
 
-Use a cadence small enough to survive a busy month:
-
-- **At download time:** move high-value files with an obvious home immediately. Leave the rest in the inbox.
-- **Twice a week or weekly:** spend 10–15 minutes processing the oldest items first. Stop when the timer ends rather than redesigning the system.
-- **Monthly:** review Temporary items whose dates have arrived, completed Action items, old installers, and unusually large files.
-- **Quarterly or when categories become crowded:** merge redundant subfolders, check whether archived material still follows retention needs, and test recovery of an important backed-up file.
-
-The exact interval is adjustable. The important part is a visible next review date and a process short enough to repeat. An empty Downloads folder is not the goal; a folder whose remaining items are recent and understood is.
+Move high-value files with an obvious home immediately. Weekly, spend 10–15 minutes on the oldest items. Monthly, review dated Temporary items, completed Action items, installers, and large files. Periodically check retention and restore one important backed-up file. The goal is not an empty folder, but recent and understood remaining items.
 
 ## Set Conservative Automation Boundaries
 
 Automation is useful for narrow, reversible rules. It can identify files older than a threshold, group by source, or move known disposable exports into Temporary. It should not decide whether a contract is obsolete, whether two differently sized files are equivalent, or whether a suspicious download is safe.
 
-Before enabling any rule:
-
-1. restrict it to one explicit folder and exclude in-progress download extensions;
-2. preview or log every proposed move and deletion;
-3. test with varied copies, including duplicate names and files that should remain untouched;
-4. prefer moving to Temporary or the system trash over permanent deletion;
-5. account for cloud sync, open files, and applications that store paths;
-6. review the first several runs before scheduling it unattended.
+Before enabling a rule, restrict it to one folder, exclude in-progress downloads, preview or log every action, and test duplicate names plus files that must remain untouched. Prefer Temporary or trash to permanent deletion, account for sync and stored paths, and review several runs before unattended scheduling.
 
 Age alone is weak evidence. Microsoft states that Windows Storage Sense does not manage Downloads unless the user configures it to do so. If you enable an automatic Downloads cleanup on any platform, understand exactly whether “old” means creation time, last modified time, or last opened time, and keep important material elsewhere.
 
@@ -111,14 +74,6 @@ Age alone is weak evidence. Microsoft states that Windows Storage Sense does not
 Move keepers from Downloads into a location covered by a tested backup plan. A backup should let you recover an earlier or deleted copy; test that recovery occasionally. Sync is valuable for access across devices, but it can also propagate changes. Microsoft documents that adding, changing, or deleting an item in a OneDrive folder changes the cloud copy and vice versa. A synced second location is therefore not automatically an independent backup against accidental deletion.
 
 Before a large cleanup, confirm that backup has completed and that you know how to restore. Let sync finish before making another large batch of moves. Do not delete a local-looking cloud placeholder to “save space” until you understand the provider's online-only control and deletion behavior.
-
-## Mobile and Desktop Need Different Habits
-
-Desktop file managers usually offer larger detail views, multi-selection, side-by-side windows, and easier inspection of names, dates, sizes, and paths. Use that visibility for large triage sessions, duplicate comparison, and batch renaming. Windows File Explorer officially supports moving files, changing views, searching local and cloud locations, and pinning frequently used folders.
-
-Mobile file managers work well for immediate decisions and small batches, but their available locations and actions can depend on the storage provider and app. Apple Files supports browsing Downloads and moving, renaming, duplicating, and deleting items; Files by Google supports searching and moving or copying files into folders. On a small screen, process fewer items at a time, verify the destination before a move, and avoid broad deletion selections that you cannot review comfortably.
-
-Use the same four meanings across devices even when the controls differ. Consistent category names reduce the need to relearn the system on every screen.
 
 ## Recommended Workflow
 
@@ -132,6 +87,10 @@ Use the same four meanings across devices even when the controls differ. Consist
 8. Let backup and sync complete, then schedule the next short review.
 
 ![Workflow diagram](https://onnellab.github.io/blog-assets/en/organize-downloads-small-folder-system/workflow-diagram.svg "Process Downloads as an inbox into four durable lifecycle categories")
+
+## ONNELLAB Application
+
+No ONNELLAB application is required for this folder-based workflow. Use the file manager and backup tools you already trust, and verify their move, trash, sync, and restore behavior before a large cleanup.
 
 ## References
 

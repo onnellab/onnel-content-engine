@@ -1,6 +1,6 @@
 The clearest way to trim an audio recording without turning it into a full editing project is to separate the decision from the tool.
 
-Keep the original recording, work on a copy, mark precise in and out points by listening as well as looking at the waveform, preview both boundaries, and export a new file with deliberate format settings. Use a lossless output when preserving the decoded audio matters; use a lossy codec only when compatibility or file size justifies re-encoding.
+Keep the original, work on a copy, set in and out points by listening as well as viewing the waveform, preview both boundaries, and export a new file deliberately. Prefer lossless output when preserving decoded audio matters; re-encode only for a clear compatibility or size need.
 
 Before changing tools:
 - Preserve the original. Back it up or duplicate it, and confirm the working file opens and plays.

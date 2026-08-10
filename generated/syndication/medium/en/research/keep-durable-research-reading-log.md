@@ -4,7 +4,7 @@
 
 # How to Keep a Durable Research Reading Log
 
-A research reading log becomes durable when another person—or your future self—can identify the exact source, recover the relevant passage, understand what you concluded, and see how that conclusion supports a project claim. A folder of PDFs and free-form highlights may help during reading, but it usually loses meaning when filenames, links, and project context change.
+A durable research reading log lets another person identify the source, recover evidence, understand your interpretation, and connect it to a claim. PDFs and free-form highlights often lose meaning when links and context change.
 
 ## Question
 
@@ -12,7 +12,7 @@ How can I keep a research reading log that remains useful after a project ends?
 
 ## Short Answer
 
-Give every source a stable identity, record the locator and access date, distinguish quotations from paraphrases, and connect each note to a specific claim or question. Preserve enough surrounding context to prevent a passage from being misread. Move each entry through a visible workflow—capture, verify, summarize, synthesize, and review—then export the collection in open, documented formats with independent backups and a project-end handoff note.
+Give every source a stable identity, locator, and access date; distinguish quotations from paraphrases; and connect notes to claims. Preserve enough context to prevent misreading. Move entries through capture, verification, summary, synthesis, and review, then create open-format exports, independent backups, and a handoff note.
 
 The durable unit is not the highlight. It is a traceable relationship:
 
@@ -20,94 +20,92 @@ The durable unit is not the highlight. It is a traceable relationship:
 
 ## Why Reading Logs Stop Being Useful
 
-Most fragile logs preserve content but not provenance. A quotation may lack a page number. A URL may point to a publisher home page rather than the item read. A paraphrase may later look like the author's exact wording. Tags may describe a broad topic without showing which claim the source supports. Even a DOI does not preserve your local context or guarantee access to the full text.
+Fragile logs preserve content but not provenance: a quotation lacks a page, a URL points only to a publisher home page, a paraphrase looks like exact wording, or broad tags replace a claim link. A DOI still cannot preserve local context or guarantee full-text access.
 
-Durability therefore has two parts. **Referential durability** means the source can still be identified when its location changes. **Interpretive durability** means the note still explains what was observed, how it was represented, and why it mattered. A DOI helps with the first part; a careful reading record supplies the second.
+**Referential durability** keeps the source identifiable when its location changes. **Interpretive durability** preserves what you observed, how you represented it, and why it mattered. A stable identifier helps with the first; the reading record supplies the second.
 
 ## The Minimum Durable Log Schema
 
-Use one record per source version. If an article, dataset, report, or preprint changes substantially, create a new record and link the versions rather than silently overwriting the earlier note.
+Use one record per source version. When a source changes substantially, create a new record and link versions instead of overwriting the earlier note.
 
 | Field | What to record | Why it matters |
 | --- | --- | --- |
-| `record_id` | A local, immutable ID such as `RL-2026-0042` | Keeps internal links stable when titles or filenames change |
-| `source_identity` | Author or organization, title, container, date, version or edition | Distinguishes the work actually consulted |
-| `stable_identifier` | DOI as `doi.org/...`, or another registered identifier when available | Separates identity from a changeable location |
-| `locator` | Exact URL or repository path used; page, section, figure, table, timestamp, or dataset row | Lets a reviewer recover the evidence within the source |
+| `record_id` | Immutable ID such as `RL-2026-0042` | Keeps internal links stable |
+| `source_identity` | Author, title, container, date, version | Identifies the work consulted |
+| `stable_identifier` | Full `https://doi.org/...` URL or another registered ID | Separates identity from location |
+| `locator` | Access URL plus page, section, figure, timestamp, or dataset row | Recovers evidence within the source |
 | `accessed_at` | Full date in `YYYY-MM-DD` | Records when a changeable web resource was observed |
-| `note_type` | `quote`, `paraphrase`, `summary`, or `observation` | Prevents your wording from being mistaken for source wording |
-| `evidence` | A short quotation, precise paraphrase, result, or data observation | Preserves the relevant support without copying the whole work |
-| `context` | Population, method, conditions, exceptions, and nearby argument | Reduces cherry-picking and scope errors |
-| `claim_link` | The claim, research question, or claim ID this evidence bears on | Makes the citation trail inspectable |
-| `relevance` | One or two sentences explaining why the evidence matters | Preserves project reasoning rather than topic similarity alone |
+| `note_type` | `quote`, `paraphrase`, `summary`, or `observation` | Separates your wording from the source |
+| `evidence` | Short quotation, paraphrase, result, or observation | Preserves relevant support |
+| `context` | Population, method, conditions, exceptions | Reduces scope errors |
+| `claim_link` | Related claim, question, or claim ID | Makes the trail inspectable |
+| `relevance` | Why the evidence matters | Preserves project reasoning |
 | `status` | `captured`, `verified`, `summarized`, `synthesized`, `reviewed`, or `needs_review` | Shows what has and has not been checked |
-| `tags` | A small controlled set for topic, method, population, or project | Supports retrieval without replacing explicit claim links |
+| `tags` | Controlled topic, method, population, or project terms | Supports retrieval |
 
-Optional fields can record rights or license, language, file checksum, archive location, conflicts, and related record IDs. Keep the required set small enough that it is completed consistently. A large schema with mostly empty fields is less durable than a modest schema used every time.
+Optional fields can cover rights, language, checksums, archives, conflicts, and related records. A modest schema completed every time is better than a large, mostly empty one.
 
 ## Quote, Paraphrase, Summary, and Observation
 
 Mark representation explicitly at capture time.
 
-- A **quote** reproduces exact wording. Keep quotation marks, the most precise available locator, and only enough text for the research purpose.
-- A **paraphrase** restates a specific passage in your own words. It still needs a citation and locator; changing the wording does not make the idea yours.
-- A **summary** compresses a larger argument or work. Record the covered range and avoid attaching a single page if the note describes the entire paper.
-- An **observation** records something you derived, such as a pattern noticed across a table. Label it as your analysis and retain the source data locator.
+- A **quote** reproduces exact wording and needs quotation marks and a precise locator.
+- A **paraphrase** restates a passage but still needs a citation and locator.
+- A **summary** compresses a wider range; record that range.
+- An **observation** is your analysis; label it and retain the source-data locator.
 
-Do not “clean up” a quotation without marking omissions or changes. If a PDF has printed page numbers, record those rather than only the viewer's page count. For HTML, use a stable heading plus paragraph description; for audio or video, use a timestamp range; for datasets, identify the version, table or file, variables, and relevant rows or query.
+Mark any omission or change to a quotation. Use printed PDF pages where available, stable HTML headings, timestamp ranges for media, and dataset version plus table, variables, and relevant rows or query.
 
 ## Connect Claims to Evidence, Not Just Sources
 
-A bibliography shows what was read. A claim-evidence link shows what the reading does.
+A bibliography shows what was read; a claim-evidence link shows what the reading does. Give important claims stable local IDs. For each record, state whether the evidence **supports**, **qualifies**, **contradicts**, or only **provides context for** the linked claim. This prevents several adjacent citations from appearing to support a statement when only one does.
 
-Assign important project claims stable local IDs, for example `C-014: the intervention improved retention under delayed testing`. A source record can then state whether its evidence **supports**, **qualifies**, **contradicts**, or merely **provides context for** `C-014`. This prevents a common failure in synthesis: several citations accumulating beside a sentence even though only one directly supports it.
-
-Record limitations beside the evidence. Sample, geography, date range, measurement method, confidence interval, comparison group, and author-stated caveats can determine whether a finding transfers to your claim. “Relevant” should explain that relationship: “Directly tests the same outcome in adults, but the follow-up is only seven days” is more useful than “important paper.”
+Record limitations beside the evidence. Sample, geography, date range, method, uncertainty, comparison group, and author caveats affect whether a finding transfers. “Same adult outcome, but only seven days of follow-up” is more useful than “important paper.”
 
 ## Recommended Workflow
 
-1. **Capture.** Create the record while the source is open. Copy the canonical bibliographic details, DOI or other identifier, the exact access URL, access date, locator, note type, and minimal evidence. Give the record a local ID immediately.
-2. **Verify.** Resolve the DOI through doi.org, compare author, title, date, version, and container with the item you read, and correct metadata against the registration agency or publisher record. Reopen the locator and compare every quote character by character. A resolving link alone does not prove that the metadata or version is correct.
-3. **Summarize.** Write the source's central question, method, result, and limitations in your own words. Keep this separate from quoted text. If you cannot explain the evidence without rereading, the record is not ready for synthesis.
-4. **Synthesize.** Link the record to claims and to other records. State whether sources converge, differ because of methods or populations, or genuinely conflict. Preserve disagreement instead of averaging it into a vague conclusion.
-5. **Review.** Recheck high-impact claims before publication or handoff. Confirm identifiers, links, quote boundaries, locators, rights constraints, personal data, and status. Set completed records to `reviewed` and unresolved issues to `needs_review`; never let an unchecked capture appear verified.
+1. **Capture.** While the source is open, record bibliographic details, identifier, exact access URL and date, locator, note type, minimal evidence, and a local ID.
+2. **Verify.** Resolve the identifier; compare author, title, date, version, and container with an official record; then reopen the locator and check quotations. Resolution alone does not prove the version is correct.
+3. **Summarize.** Separately state the question, method, result, and limitations in your own words.
+4. **Synthesize.** Link records to claims and explain whether sources converge, differ, or conflict.
+5. **Review.** Before publication or handoff, recheck identifiers, quote boundaries, locators, rights, personal data, and status. Use `reviewed` or `needs_review` honestly.
 
 ![Research reading log workflow](https://onnellab.github.io/blog-assets/en/keep-durable-research-reading-log/workflow-diagram.svg "Capture, verify, summarize, synthesize, and review each source record")
 
-The workflow is cyclical. Synthesis may expose a missing comparison, sending you back to capture. A new source version may require verification again. Status describes the current evidence state, not the value or prestige of the source.
+Repeat capture or verification when synthesis exposes a gap or a new version appears. Status describes processing state, not source prestige.
 
 ## Stable Identifiers and the Limits of Links
 
-Prefer a DOI when a source has one and display it as a full resolvable DOI URL, such as `doi.org/10.xxxx/xxxxx`. The DOI identifies a referent independently of its current web location, while the DOI record can be maintained as locations change. Keep the exact URL you accessed as a separate field because it documents the copy, repository, or landing page actually consulted.
+Prefer a DOI when available and display it as a full URL such as `https://doi.org/10.xxxx/xxxxx`. Keep the exact accessed URL separately because it identifies the copy, repository, or landing page consulted.
 
-Persistence is a managed promise, not a frozen page. DOI resolution depends on registrants maintaining records, and it does not guarantee that you have subscription rights, that supplemental files remain unchanged, or that a cited page is available. A plain URL is a locator rather than a complete identity. For a source without a registered identifier, capture full bibliographic details, version, URL, access date, and—when lawful and permitted—an institutional archive or local preservation copy.
+Persistence depends on maintained records; it does not guarantee access, unchanged supplements, or an available cited page. Without a registered identifier, record full bibliographic details, version, URL, access date, and a permitted archive copy when appropriate.
 
-When a source has multiple versions, record the identifier for the exact version read. DataCite's related-identifier model can express relationships such as previous version, new version, or version of a collection. Do not replace a preprint note with the final article and assume every quotation, page number, or result is identical.
+For multiple versions, identify the exact one read and link version relationships. Never replace a preprint note with the final article while assuming quotations, pages, and results are identical.
 
 ## Copyright and Privacy Boundaries
 
-A reading log is not permission to reproduce a source. Store the smallest excerpt needed to support analysis, preserve attribution and locator, and link to an authorized copy instead of redistributing full text. Copyright exceptions vary by jurisdiction and purpose. The U.S. Copyright Office, for example, states that fair use is case-specific and provides no fixed safe word count or percentage. Check the license, institutional policy, and applicable law before sharing a log or source package.
+A reading log is not permission to reproduce a source. Store the smallest necessary excerpt, preserve attribution and locator, and link to an authorized copy instead of redistributing full text. Copyright exceptions vary; the U.S. Copyright Office provides no fixed safe word count or percentage. Check the license, policy, and applicable law before sharing.
 
-Research notes can also contain personal data: interview quotations, participant IDs, email addresses, health details, or sensitive annotations about individuals. Minimize what you collect, separate access-controlled data from the general reading log, use pseudonymous IDs where appropriate, and remove secrets from exports. The GDPR's data-minimization principle is a useful operational rule even when that regulation is not the governing law: retain only data adequate, relevant, and necessary for the stated purpose.
+Notes can contain personal data. Minimize collection, separate access-controlled material, use pseudonymous IDs where appropriate, and remove secrets from exports. Retain only data adequate, relevant, and necessary for the stated purpose.
 
 ## Export, Backup, and Recovery
 
-Do not let a single application be the only readable form of the log. Export at documented intervals and after major milestones.
+Export in documented formats at set intervals and major milestones.
 
 | Format | Best use | Preservation note |
 | --- | --- | --- |
-| UTF-8 plain text or Markdown | Human-readable records and narrative summaries | Keep links and field labels explicit; avoid tool-only extensions |
-| CSV | Flat tables and spreadsheet interchange | Document encoding, delimiter, line endings, and how lists or line breaks are escaped |
-| JSON | Structured fields, arrays, and machine processing | Validate exports and retain a short data dictionary |
-| PDF/A or searchable PDF | Fixed review or handoff snapshot | Use as a reading copy, not the sole editable or machine-readable source |
+| UTF-8 text or Markdown | Human-readable records | Keep links and field labels explicit |
+| CSV | Flat-table exchange | Document encoding, delimiter, and escaping |
+| JSON | Structured fields and arrays | Validate and retain a data dictionary |
+| PDF/A or searchable PDF | Fixed review snapshot | Do not use as the sole editable source |
 
-An export is not a backup until another copy is independent of the working system. Keep multiple copies in separate storage locations, include attachments only when rights permit, and periodically restore a sample into a clean folder. Check that identifiers, Unicode text, line breaks, and record relationships survived. A checksum can reveal accidental file changes, but it cannot prove that a quotation is accurate or that the collection is complete.
+An export becomes a backup only when a copy is independent of the working system. Keep separate copies, include only permitted attachments, and periodically restore a sample. Check identifiers, Unicode, line breaks, and relationships. A checksum detects file changes, not inaccurate quotations or missing records.
 
-Use filenames that do not depend on titles alone, for example `RL-2026-0042.md`, and include a manifest listing record count, export date, schema version, included attachments, excluded restricted material, and checksum method. The Library of Congress recommends considering sustainability and continued accessibility when selecting formats; open, well-documented representations reduce dependence on one vendor, but no format removes the need for migration and review.
+Use ID-based filenames such as `RL-2026-0042.md`. A manifest should list record count, export date, schema version, attachments, exclusions, and checksum method. Open, documented formats reduce vendor dependence but still require review and migration.
 
 ## Project-End Handoff
 
-At project close, create a handoff package that someone can inspect without your original software or memory:
+At project close, create a handoff package usable without the original software:
 
 1. the exported log in at least one human-readable and one structured format;
 2. a README stating the research question, scope, date range, schema, status meanings, tag vocabulary, and folder layout;
@@ -116,18 +114,22 @@ At project close, create a handoff package that someone can inspect without your
 5. a list of `needs_review` records, broken or restricted links, missing sources, and unresolved disagreements;
 6. the date and method of the last restoration check, plus the next review owner and date.
 
-Do not flatten uncertainty during handoff. A clearly labeled unresolved record is safer than a polished statement whose evidence cannot be recovered.
+Keep uncertainty visible. A labeled unresolved record is safer than a polished claim with unrecoverable evidence.
+
+## ONNELLAB Application
+
+No current ONNELLAB app is required or specifically documented for this product-neutral workflow. Use any tool that can preserve the schema, stable links, open exports, and access controls described above; the method should remain portable if that tool changes.
 
 ## References
 
 - [DOI Foundation: DOI Handbook](https://www.doi.org/doi-handbook/html/) defines DOI names, resolution, metadata, and persistence responsibilities.
-- Crossref: Display guidelines recommends presenting Crossref DOIs as full resolvable DOI links.
-- Crossref: Metadata retrieval documents official methods for checking deposited Crossref metadata.
-- DataCite: Connecting versions with related identifiers explains how registered resource versions and formats can be related without conflating them.
+- [Crossref: Display guidelines](https://www.crossref.org/display-guidelines/) recommends presenting Crossref DOIs as full resolvable DOI links.
+- [Crossref: Metadata retrieval](https://www.crossref.org/documentation/retrieve-metadata/) documents official methods for checking deposited Crossref metadata.
+- [DataCite: Connecting versions](https://support.datacite.org/docs/connecting-versions) explains how registered resource versions and formats can be related without conflating them.
 - [Library of Congress: Recommended Formats Statement](https://www.loc.gov/preservation/resources/rfs/) describes format characteristics that support long-term survival and accessibility.
-- IETF RFC 4180: Common Format and MIME Type for CSV Files and IETF RFC 8259: The JavaScript Object Notation Data Interchange Format document interoperable CSV and JSON representations.
-- U.S. Copyright Office: Fair Use FAQ explains that quotation limits cannot be reduced to a universal word count or percentage.
-- EUR-Lex: Regulation (EU) 2016/679, Article 5 states the principles of purpose limitation, data minimization, and accuracy for personal data.
+- [IETF RFC 4180](https://www.rfc-editor.org/rfc/rfc4180) and [IETF RFC 8259](https://www.rfc-editor.org/rfc/rfc8259) document interoperable CSV and JSON representations.
+- [U.S. Copyright Office: Fair Use Index](https://www.copyright.gov/fair-use/) explains that fair use depends on the circumstances.
+- [EUR-Lex: Regulation (EU) 2016/679, Article 5](https://eur-lex.europa.eu/eli/reg/2016/679/oj) states principles including purpose limitation, data minimization, and accuracy.
 
 ## Conclusion
 
@@ -153,7 +155,7 @@ Resolve the stable identifier, search the registration metadata or official repo
 
 ### How often should I review the log?
 
-Review records before synthesis, before a high-impact claim is published, and at project handoff. Also schedule periodic checks for long-running work, especially for changeable web sources and living datasets.
+Review before synthesis, high-impact publication, and handoff. Periodically recheck changeable web sources and living datasets.
 
 ---
 

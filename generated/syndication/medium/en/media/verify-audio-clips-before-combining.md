@@ -18,23 +18,23 @@ No meter or waveform replaces listening. Peak level helps reveal clipping risk, 
 
 Combining should begin with a written inventory rather than a folder sorted by whichever column happens to be active. For every clip, record the source filename, intended position, approximate duration, take or scene label, and any planned trim. Open each file once to confirm that its label matches its content. A valid file with the wrong take is still the wrong input.
 
-Use sequence numbers such as `001-introduction`, `002-interview-a`, and `003-closing` on working copies, or keep an ordered manifest if filenames must not change. Sequence numbers should use equal-width padding so lexical sorting does not place clip 10 before clip 2. Do not rename or trim the only source copies. Keeping the inventory separate also makes it easier to reverse a decision without reconstructing the original folder.
+Use equal-width sequence numbers such as `001-introduction` on working copies, or keep an ordered manifest if filenames must not change. Do not rename or trim the only source copies.
 
-Compare the inventory's expected total with the source durations. This is not yet a final duration prediction: trims remove time, while overlaps and crossfades make the combined result shorter than a simple sum. The purpose is to catch a missing, duplicated, unexpectedly short, or unexpectedly long input early.
+Compare the inventory with source durations. Trims and overlaps change the final total; this early check instead catches missing, duplicated, or unusually short or long inputs.
 
 ## Check Technical Compatibility Before Editing
 
 The filename extension does not fully describe an audio stream. Inspect the container and codec, along with sample rate, sample format or bit depth where reported, channel count, and channel layout. Also note whether a file has unusual start-time metadata or appears truncated. Two files named `.wav`, for example, are not necessarily identical in all of these properties.
 
-Sample rate is the number of audio samples represented per second. Channel layout describes how channels are assigned, such as one mono channel or a left-right stereo pair. These properties need a deliberate policy for a single output. A mono voice clip should not silently become left-only audio in a stereo project, and clips with different sample rates should not be treated as though their sample grids already match.
+Sample rate is the number of represented samples per second; channel layout assigns channels, such as mono or left-right stereo. Set both deliberately for the output. A mono voice clip should not silently become left-only audio in a stereo project.
 
 Choose the output specification from the destination's requirements and the source material, not from a supposed universal setting. If all inputs already have compatible streams and no gain, resampling, trimming, or crossfade is required, a tool may be able to concatenate without encoding the audio again. If properties differ or audio processing is required, the normal path is to decode, convert to a common working specification, process, and encode the output. Keep any conversion outputs as new files so the originals remain available.
 
 ## Listen to Whole Clips, Then Listen to Every Boundary
 
-First listen to each clip from start to finish with attention to intelligibility, distortion, dropouts, background changes, and whether the beginning or ending is cut off. A waveform can point to suspicious regions, but it cannot tell whether a quiet region is an intentional pause, room tone, or missing speech.
+Listen to each clip from start to finish for intelligibility, distortion, dropouts, background changes, and cut-off beginnings or endings. A waveform can flag suspicious regions, but cannot identify an intentional pause, room tone, or missing speech.
 
-Next, arrange the clips in order and audition a window around every join. Listen once through speakers or headphones that make editing practical, then perform a continuity pass without stopping after each boundary. The second pass reveals pacing problems that isolated inspection can miss.
+Arrange the clips and audition every join, then make a continuous pass to reveal pacing problems that isolated inspection can miss.
 
 At each boundary, ask:
 
@@ -50,7 +50,7 @@ A click can occur when a cut creates an abrupt waveform discontinuity. Moving th
 
 ## Treat Silence, Overlap, and Crossfades as Timing Decisions
 
-Silence is not automatically an error. A spoken sentence may need a natural pause, and room tone may make a join less conspicuous than absolute digital silence. Remove only the time that does not serve the recording. For speech, preserve enough consonant onset, breath, and phrase ending to keep the delivery natural. For music or ambience, allow decays to finish unless the creative intent requires a sharper cut.
+Silence is not automatically an error. Preserve natural pauses, speech onsets and endings, and useful room tone. For music or ambience, let decays finish unless the intent requires a sharper cut.
 
 Overlap is also contextual. Accidental overlap repeats material and should be corrected. Intentional overlap enables a crossfade, where one clip fades out while the next fades in. A crossfade can smooth a compatible transition, but it is not a universal repair: it shortens the resulting timeline by the overlap duration and can blur words, beats, or unrelated background sounds. Prefer a clean butt join when the source already has a natural boundary, a short fade when only an edge clicks, and a crossfade when two clips genuinely should overlap.
 
@@ -60,11 +60,11 @@ Overlap is also contextual. Accidental overlap repeats material and should be co
 
 Peak level reports the highest signal excursion found by the meter. It is important for detecting or preventing overload, but two clips with similar peaks can still sound different in level. Loudness measurement evaluates audio over time and is generally more useful for comparing how prominent speech or programme material feels. The EBU's loudness work explicitly distinguishes loudness normalisation from relying on peak meters alone.
 
-Use meters to locate differences, then confirm the transition by ear. Compare representative spoken phrases or musical sections rather than a breath, click, or isolated transient. Do not force every clip to the same peak value and assume the sequence will sound consistent. Likewise, do not apply a broadcast loudness target blindly to a personal recording; delivery platforms and production contexts can have their own requirements.
+Use meters to locate differences, then confirm transitions by ear with representative phrases or musical sections. Matching peaks does not guarantee consistent perceived level, and a broadcast target should not be applied blindly to a personal recording.
 
-Leave headroom between normal programme peaks and the output limit so that gain changes, crossfades, resampling, or encoding do not unexpectedly overload the result. There is no single headroom number that suits every destination. Follow the delivery specification when one exists and inspect the final encoded file, not only the edit timeline.
+Leave headroom so processing does not unexpectedly overload the result. Follow the delivery specification when one exists and inspect the final encoded file, not only the edit timeline.
 
-Make level changes reversible. Prefer non-destructive clip gain or automation in a project, or create normalized working copies alongside the sources. Record what gain was applied. Avoid repeatedly normalizing and overwriting lossy files, because each new encode can introduce another generation of loss. After adjustment, listen across every affected boundary again; a technically even meter reading can still produce an unnatural transition.
+Keep level changes reversible and record applied gain. Avoid repeatedly normalizing and overwriting lossy files. After adjustment, listen across every affected boundary again.
 
 ## Choose Concatenation or Re-encoding Deliberately
 
@@ -74,13 +74,13 @@ Make level changes reversible. Prefer non-destructive clip gain or automation in
 | Decode, process, and re-encode | Resampling, channel mapping, gain changes, fades, crossfades, or mixed formats are required | Encoding choices can change quality and file size | Common format, peaks, loudness, joins, and final playback |
 | Lossless intermediate, then delivery encode | Several edits are needed before a lossy final format | Requires more storage and one extra workflow stage | Intermediate integrity and final destination compatibility |
 
-FFmpeg's concat demuxer is a useful example of the distinction: its official documentation requires files to have the same streams, including matching codecs and time bases. It adjusts timestamps so files play one after another, and it warns that incorrect input duration can cause artifacts. FFmpeg also provides an `acrossfade` audio filter for intentional overlaps and a `loudnorm` filter for EBU R128-style measurements and normalisation. These are separate operations; using a filter means the workflow is no longer a simple packet-level copy.
+FFmpeg's concat demuxer illustrates the distinction: its documentation requires the same streams, including codecs and time bases, and warns that incorrect input duration can cause artifacts. Its `acrossfade` and `loudnorm` filters perform processing, so using them is not simple packet-level copying.
 
 ## Recommended Workflow
 
 ### Export a Test and Verify the Result
 
-Export to a new filename rather than replacing the source or the previous accepted version. For a long or consequential project, first render a test containing several representative joins: a quiet-to-loud transition, a boundary with ambience, a crossfade if used, and the ending. Open that file in the actual target player or device when possible.
+Export to a new filename. For a consequential project, first render representative joins—including an ambience boundary and any crossfade—and test them in the target player or device when possible.
 
 Then create the full review export and verify it systematically:
 
@@ -91,7 +91,7 @@ Then create the full review export and verify it systematically:
 5. Scan the final file for clipped peaks or other meter warnings, then listen to the flagged regions.
 6. Copy the accepted file to its delivery location and compute a checksum before and after transfer when byte-for-byte transfer integrity matters.
 
-A checksum proves that two file copies contain the same bytes. It does not prove that the order is correct, the audio sounds good, or the selected export settings are appropriate. Keep the checksum with a clear version label, and retain the sources, manifest, and project or processing notes until the delivered copy has been accepted.
+A checksum proves only that two copies contain the same bytes. Retain the sources, manifest, and processing notes until delivery is accepted.
 
 ## ONNELLAB Application
 

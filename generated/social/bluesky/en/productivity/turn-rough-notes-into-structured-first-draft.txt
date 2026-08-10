@@ -1,5 +1,6 @@
-Before you turn rough notes into a structured first draft without losing the original ideas, separate...
+Before you turn rough notes into a structured first draft without losing the original ideas, separate the required result from the optional steps.
 
-Install Melivra:
-App Store: https://apps.apple.com/app/id6783644955
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.melivra
+Turn...
+
+Read the full article:
+https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/

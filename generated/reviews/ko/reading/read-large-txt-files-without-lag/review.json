@@ -1,8 +1,9 @@
 {
-  "version": 1,
+  "version": 2,
   "type": "article_review",
   "topic_id": "TOPIC-0005",
   "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+  "input_fingerprint": "c261f2eba99934848903d3cf523480aab12eb472e8d03bf7febc7ad9ebcfbcf0",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

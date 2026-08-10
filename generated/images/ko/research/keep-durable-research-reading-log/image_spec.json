@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/research/keep-durable-research-reading-log.md",
+  "topic": {
+    "id": "TOPIC-0026",
+    "title": "오래 활용할 수 있는 연구 독서 기록을 만드는 방법",
+    "slug": "keep-durable-research-reading-log",
+    "category": "research",
+    "language": "ko",
+    "primary_keyword": "연구 독서 기록 관리 방법",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "오래 활용할 수 있는 연구 독서 기록을 만드는 방법",
+    "질문",
+    "요약 답변",
+    "독서 기록이 금방 쓸모없어지는 이유",
+    "지속 가능한 최소 기록 스키마",
+    "직접 인용, 바꿔 쓰기, 요약, 관찰 구분하기",
+    "출처가 아니라 주장과 근거를 연결하기",
+    "권장 워크플로",
+    "안정적인 식별자와 링크의 한계",
+    "저작권과 개인정보 경계",
+    "내보내기, 백업, 복구",
+    "프로젝트 종료 인계",
+    "ONNELLAB 앱",
+    "참고 자료",
+    "결론",
+    "자주 묻는 질문",
+    "DOI만 있으면 독서 기록이 오래 유지되나요?",
+    "모든 하이라이트를 기록으로 만들어야 하나요?",
+    "바꿔 쓴 문장에도 쪽이나 절을 기록해야 하나요?",
+    "링크가 끊기면 어떻게 해야 하나요?",
+    "독서 기록은 얼마나 자주 검토해야 하나요?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "연구 독서 기록 관리 방법에 권장되는 워크플로는 무엇인가요?",
+      "source_sections": [
+        "요약 답변",
+        "권장 워크플로"
+      ],
+      "structure": [
+        "문제",
+        "과정",
+        "결과"
+      ],
+      "notes": "차분하고 간결한 워크플로 다이어그램을 사용합니다. 이미지는 장식이 아니라 과정을 설명해야 합니다."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "연구 독서 기록 관리 방법 주제를 판단할 때 어떤 개념이나 접근법이 중요한가요?",
+      "source_sections": [
+        "이 문제가 생기는 이유",
+        "먼저 확인할 항목"
+      ],
+      "compare": [
+        "출처 메모",
+        "인용 추적",
+        "연구 종합"
+      ],
+      "notes": "비교는 균형 있게 작성하고, ONNELLAB 제품을 모든 상황의 우월한 해답처럼 제시하지 않습니다."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "관련 애플리케이션이 없으므로 장식용 스크린샷은 필요하지 않습니다.",
+    "applications": [],
+    "rules": [
+      "실제 기능을 설명할 때에만 스크린샷을 사용합니다.",
+      "불필요한 UI는 잘라냅니다.",
+      "관련 컨트롤이나 워크플로 영역만 강조합니다.",
+      "높은 해상도를 유지합니다.",
+      "스크린샷을 장식으로 사용하지 않습니다."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "오래 활용할 수 있는 연구 독서 기록을 만드는 방법 워크플로",
+      "steps": [
+        "문제",
+        "설명",
+        "선택지",
+        "권장 워크플로",
+        "선택 애플리케이션"
+      ],
+      "layout": "세로 또는 좌우 순서형"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "연구 독서 기록 관리 방법 비교",
+      "items": [
+        "출처 메모",
+        "인용 추적",
+        "연구 종합"
+      ],
+      "layout": "나란히 비교하는 표"
+    }
+  ],
+  "prohibited": [
+    "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+    "이 단계에서는 스크린샷을 만들지 않습니다.",
+    "이 단계에서는 에셋을 게시하지 않습니다.",
+    "설명 목적이 없는 장식용 이미지는 사용하지 않습니다."
+  ]
+}

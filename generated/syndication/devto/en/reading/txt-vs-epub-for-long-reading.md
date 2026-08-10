@@ -2,7 +2,7 @@
 title: "TXT vs EPUB for Long Reading"
 published: true
 canonical_url: "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/"
-tags: "txt-vs-epub"
+tags: "txt-vs-epub,long-reading,plain-text,epub-conversion"
 ---
 
 > ONNELLAB note: This version focuses on the rendering and workflow details behind large text files.

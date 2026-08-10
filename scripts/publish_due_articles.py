@@ -12,7 +12,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from evaluate_article import DEFAULT_REVIEW_ROOT, DEFAULT_THRESHOLD
-from schedule_ready_articles import grouped_by_publication, require_language_pair, review_score
+from schedule_ready_articles import SchedulingError, current_review_score, grouped_by_publication, require_language_pair
 from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEADER, TopicError, TopicStore, read_csv
 
 
@@ -138,9 +138,16 @@ def publish_due_articles(
         if any(parse_datetime(row["scheduled_at"]).astimezone(KST) > now.astimezone(KST) for row in pair.values()):
             continue
         for topic in pair.values():
-            score = review_score(topic, review_root)
-            if score <= threshold:
-                raise DuePublicationError(f"{topic['id']} review score {score} does not exceed {threshold}")
+            try:
+                current_review_score(
+                    topic,
+                    topics_path,
+                    review_root,
+                    threshold,
+                    metadata_root=metadata_root,
+                )
+            except SchedulingError as error:
+                raise DuePublicationError(str(error)) from error
         for topic in pair.values():
             published_at = topic["scheduled_at"]
             path = markdown_path(topic, topics_path)

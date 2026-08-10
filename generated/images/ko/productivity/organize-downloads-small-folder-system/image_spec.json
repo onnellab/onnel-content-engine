@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/productivity/organize-downloads-small-folder-system.md",
+  "topic": {
+    "id": "TOPIC-0028",
+    "title": "작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법",
+    "slug": "organize-downloads-small-folder-system",
+    "category": "productivity",
+    "language": "ko",
+    "primary_keyword": "다운로드 정리",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법",
+    "질문",
+    "요약 답변",
+    "다운로드 폴더를 받은 편지함으로 보는 이유",
+    "네 가지 지속 가능한 분류",
+    "짧은 질문으로 파일을 분류하세요",
+    "정체성을 보존하는 파일 이름",
+    "중복과 버전을 구분하는 방법",
+    "격리는 판단 상태이지 보안 샌드박스가 아닙니다",
+    "반복할 수 있는 검토 주기",
+    "자동화는 보수적인 경계 안에서 사용하세요",
+    "백업과 동기화는 다른 보호 수단입니다",
+    "권장 워크플로",
+    "ONNELLAB 앱",
+    "참고 자료",
+    "결론",
+    "자주 묻는 질문",
+    "매일 다운로드 폴더를 완전히 비워야 하나요?",
+    "모든 파일 형식이나 주제마다 폴더를 만들어야 하나요?",
+    "이름에 `(1)`이 붙은 파일은 모두 삭제해도 되나요?",
+    "동기화 서비스는 백업인가요?",
+    "의심스러운 파일을 격리 폴더로 옮기면 충분한가요?",
+    "자동화로 어떤 파일을 삭제해야 하나요?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "다운로드 정리에 권장되는 워크플로는 무엇인가요?",
+      "source_sections": [
+        "요약 답변",
+        "권장 워크플로"
+      ],
+      "structure": [
+        "문제",
+        "과정",
+        "결과"
+      ],
+      "notes": "차분하고 간결한 워크플로 다이어그램을 사용합니다. 이미지는 장식이 아니라 과정을 설명해야 합니다."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "다운로드 정리 주제를 판단할 때 어떤 개념이나 접근법이 중요한가요?",
+      "source_sections": [
+        "이 문제가 생기는 이유",
+        "먼저 확인할 항목"
+      ],
+      "compare": [
+        "다운로드 정리",
+        "간단한 파일 분류",
+        "지속 가능한 폴더"
+      ],
+      "notes": "비교는 균형 있게 작성하고, ONNELLAB 제품을 모든 상황의 우월한 해답처럼 제시하지 않습니다."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "관련 애플리케이션이 없으므로 장식용 스크린샷은 필요하지 않습니다.",
+    "applications": [],
+    "rules": [
+      "실제 기능을 설명할 때에만 스크린샷을 사용합니다.",
+      "불필요한 UI는 잘라냅니다.",
+      "관련 컨트롤이나 워크플로 영역만 강조합니다.",
+      "높은 해상도를 유지합니다.",
+      "스크린샷을 장식으로 사용하지 않습니다."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법 워크플로",
+      "steps": [
+        "문제",
+        "설명",
+        "선택지",
+        "권장 워크플로",
+        "선택 애플리케이션"
+      ],
+      "layout": "세로 또는 좌우 순서형"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "다운로드 정리 비교",
+      "items": [
+        "다운로드 정리",
+        "간단한 파일 분류",
+        "지속 가능한 폴더"
+      ],
+      "layout": "나란히 비교하는 표"
+    }
+  ],
+  "prohibited": [
+    "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+    "이 단계에서는 스크린샷을 만들지 않습니다.",
+    "이 단계에서는 에셋을 게시하지 않습니다.",
+    "설명 목적이 없는 장식용 이미지는 사용하지 않습니다."
+  ]
+}

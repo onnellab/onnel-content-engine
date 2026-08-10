@@ -10,6 +10,7 @@ topic_id: "TOPIC-0022"
 search_intent: "learn"
 primary_keyword: "대용량 텍스트 파일 열기 지연"
 secondary_keywords: "대용량 파일 성능|긴 줄|메모리 사용량|가상 렌더링"
+tags: "대용량 텍스트 파일|대용량 파일 성능|긴 줄|메모리 사용량|가상 렌더링"
 related_apps: "VaultXT"
 canonical_url: ""
 published_at: ""
@@ -126,7 +127,7 @@ image_specs: "보호된 원본에서 대표 복사본으로 이어지는 진단 
 
 ## 참고 자료
 
-- [WHATWG Encoding Standard](https://encoding.spec.whatwg.org/)은 디코딩 알고리즘, 인코딩 레이블, 바이트 순서 표시 처리, 스트리밍 디코더 인터페이스를 정의합니다.
+- [WHATWG 인코딩 표준](https://encoding.spec.whatwg.org/)은 디코딩 알고리즘, 인코딩 레이블, 바이트 순서 표시 처리, 스트리밍 디코더 인터페이스를 정의합니다.
 - [The Unicode Standard](https://www.unicode.org/versions/latest/)는 유니코드 문자와 인코딩 형식의 1차 표준입니다.
 - [Microsoft .NET `File.ReadLines` 문서](https://learn.microsoft.com/en-us/dotnet/api/system.io.file.readlines)는 전체 배열을 기다리는 방식과 순차적으로 줄을 열거하는 방식의 차이를 설명해 스트리밍의 장단점을 보여 줍니다.
 - [Visual Studio Code 구문 강조 가이드](https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide)는 구문 강조를 위해 수행하는 토큰화와 테마 적용 과정을 설명합니다.

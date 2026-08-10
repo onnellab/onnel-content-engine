@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -17,7 +18,22 @@ DEFAULT_METADATA_ROOT = ROOT / "generated" / "metadata"
 DEFAULT_ASSETS_ROOT = ROOT / "generated" / "assets" / "blog"
 DEFAULT_REVIEW_ROOT = ROOT / "generated" / "reviews"
 DEFAULT_THRESHOLD = 9.0
+REVIEW_VERSION = 2
 FORBIDDEN_LOCAL_BRAND = "\uc628\ub128\ub7a9"
+FINGERPRINT_TOPIC_FIELDS = (
+    "id",
+    "category",
+    "primary_question",
+    "working_title",
+    "slug",
+    "primary_language",
+    "search_intent",
+    "related_apps",
+    "primary_keyword",
+    "secondary_keywords",
+    "source_type",
+    "canonical_path",
+)
 
 
 class ArticleEvaluationError(ValueError):
@@ -99,11 +115,49 @@ def related_article_count(path: Path) -> int:
     return len(data.get("recommendations", {}).get("related_articles", []))
 
 
+def _article_input_fingerprint(
+    topic: dict[str, str],
+    markdown: str,
+    metadata_root: Path,
+    assets_root: Path,
+) -> str:
+    links_path = metadata_path(topic, metadata_root)
+    if links_path.exists():
+        links_input = {"state": "present", "sha256": hashlib.sha256(links_path.read_bytes()).hexdigest()}
+    else:
+        links_input = {"state": "absent"}
+
+    asset_inputs: list[dict[str, str]] = []
+    for asset in sorted(set(blog_asset_paths(markdown))):
+        asset_path = assets_root / asset.removeprefix("/blog-assets/")
+        if asset_path.exists():
+            asset_inputs.append(
+                {"path": asset, "state": "present", "sha256": hashlib.sha256(asset_path.read_bytes()).hexdigest()}
+            )
+        else:
+            asset_inputs.append({"path": asset, "state": "absent"})
+
+    fingerprint_input = {
+        "assets": asset_inputs,
+        "evaluator_version": REVIEW_VERSION,
+        "internal_links": links_input,
+        "markdown_sha256": hashlib.sha256(markdown.encode("utf-8")).hexdigest(),
+        "topic": {field: topic.get(field, "") for field in FINGERPRINT_TOPIC_FIELDS},
+    }
+    canonical = json.dumps(
+        fingerprint_input,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
 SECTION_ALIASES = {
     "question": {"question", "질문"},
     "short_answer": {"short answer", "짧은 답변", "요약 답변", "핵심 답변", "요약"},
     "recommended_workflow": {"recommended workflow", "권장 워크플로"},
-    "onnellab_application": {"onnellab application", "onnellab 앱"},
+    "onnellab_application": {"onnellab application", "where onnellab fits", "onnellab 앱"},
     "references": {"references", "참고 자료"},
     "conclusion": {"conclusion", "결론"},
     "faq": {"faq", "자주 묻는 질문"},
@@ -111,19 +165,27 @@ SECTION_ALIASES = {
 
 
 def has_required_sections(found_sections: set[str]) -> bool:
-    return all(aliases & found_sections for aliases in SECTION_ALIASES.values())
+    required = (aliases for key, aliases in SECTION_ALIASES.items() if key != "onnellab_application")
+    return all(aliases & found_sections for aliases in required)
 
 
 def has_clear_definitions(body: str) -> bool:
-    lowered = body.lower()
-    return any(
-        phrase in lowered
-        for phrase in [
-            "virtual rendering is",
-            "encoding is",
-            "가상 렌더링은",
-            "인코딩은",
-        ]
+    prose = human_readable_prose(body)
+    return bool(
+        re.search(
+            r"(?:^|[.!?]\s+|\n)(?!No\b)(?!(?:This|It)\s+(?:is|are|means|refers to)\b)"
+            r"[A-Z][A-Za-z0-9 /-]{1,60}\s+"
+            r"(?:is|are|means|refers to)\s+\S",
+            prose,
+            flags=re.MULTILINE,
+        )
+        or re.search(
+            r"(?:^|\n|[.!?]\s*)(?!(?:이것|그것)(?:은|는|이|가)\b)"
+            r"[가-힣A-Za-z0-9 /-]{1,40}(?:은|는|이|가)\s+[^.\n]{2,240}"
+            r"(?:뜻합니다|의미합니다|말합니다|개념입니다|방법입니다|과정입니다|기술입니다|규칙입니다)",
+            prose,
+            flags=re.MULTILINE,
+        )
     )
 
 
@@ -142,13 +204,7 @@ def has_short_answer(metadata: dict[str, str], found_sections: set[str], body: s
 
 
 def find_product_section(body: str) -> int:
-    lowered = body.lower()
-    positions = [
-        lowered.find("## onnellab application"),
-        lowered.find("## onnellab 앱"),
-    ]
-    valid = [position for position in positions if position >= 0]
-    return min(valid, default=-1)
+    return _find_section_position(body, "onnellab_application")
 
 
 def has_reference_section(found_sections: set[str]) -> bool:
@@ -157,6 +213,85 @@ def has_reference_section(found_sections: set[str]) -> bool:
 
 def section_keys(found_sections: set[str]) -> set[str]:
     return {key for key, aliases in SECTION_ALIASES.items() if aliases & found_sections}
+
+
+def human_readable_prose(body: str) -> str:
+    output: list[str] = []
+    index = 0
+    length = len(body)
+    while index < length:
+        fence = body[index : index + 3]
+        if fence in {"```", "~~~"}:
+            closing = body.find(fence, index + 3)
+            if closing < 0:
+                output.append(fence)
+                index += 3
+                continue
+            output.append(" ")
+            index = closing + 3
+            continue
+        if body[index] == "`":
+            closing = body.find("`", index + 1)
+            if closing < 0:
+                output.append("`")
+                index += 1
+                continue
+            output.append(" ")
+            index = closing + 1
+            continue
+        if body.startswith("](", index) and (index == 0 or body[index - 1] != "\\"):
+            destination_start = index
+            output.append("]")
+            index += 2
+            depth = 1
+            while index < length and depth:
+                if body[index] == "\\" and index + 1 < length:
+                    index += 2
+                    continue
+                if body[index] == "(":
+                    depth += 1
+                elif body[index] == ")":
+                    depth -= 1
+                index += 1
+            if depth:
+                output[-1] = body[destination_start:]
+                index = length
+            continue
+        lowered = body[index : index + 9].lower()
+        if lowered.startswith("<http://") or lowered.startswith("<https://"):
+            closing = body.find(">", index + 1)
+            index = length if closing < 0 else closing + 1
+            output.append(" ")
+            continue
+        if body[index : index + 7].lower() == "http://" or body[index : index + 8].lower() == "https://":
+            while index < length and not body[index].isspace():
+                index += 1
+            output.append(" ")
+            continue
+        if body[index] == "*":
+            index += 1
+            continue
+        output.append(body[index])
+        index += 1
+    return "".join(output)
+
+
+def _h2_heading_positions(body: str) -> list[tuple[str, int]]:
+    prose = human_readable_prose(body)
+    return [
+        (match.group(1).strip().lower(), match.start())
+        for match in re.finditer(r"^##[ \t]+(.+?)\s*$", prose, flags=re.MULTILINE)
+    ]
+
+
+def _find_section_position(body: str, section_key: str) -> int:
+    aliases = SECTION_ALIASES[section_key]
+    return next((position for heading, position in _h2_heading_positions(body) if heading in aliases), -1)
+
+
+def _contains_term(prose: str, term: str) -> bool:
+    trailing_boundary = r"(?:(?!\w)|(?=[은는이가을를의과와도에에서로으]))"
+    return bool(re.search(rf"(?<!\w){re.escape(term)}{trailing_boundary}", prose, flags=re.IGNORECASE))
 
 
 def find_counterpart(topic: dict[str, str], topics_path: Path) -> dict[str, str] | None:
@@ -193,13 +328,32 @@ def translation_quality_passes(
     if topic["primary_language"] == "ko":
         if FORBIDDEN_LOCAL_BRAND in body:
             return False, "Korean articles must keep the brand spelling as ONNELLAB."
-        forbidden_terms = ["plain-text", "rich text"]
-        lowered_body = body.lower()
-        found_forbidden = [term for term in forbidden_terms if term in lowered_body]
+        source_text = human_readable_prose(
+            "\n".join(
+                [
+                    *(str(value) for value in counterpart_metadata.values()),
+                    counterpart_body,
+                    counterpart.get("primary_question", ""),
+                    counterpart.get("working_title", ""),
+                    counterpart.get("primary_keyword", ""),
+                    counterpart.get("secondary_keywords", ""),
+                ]
+            )
+        )
+        terminology = [
+            (("plain text", "plain-text"), "일반 텍스트"),
+            (("rich text",), None),
+            (("encoding",), "인코딩"),
+            (("virtual rendering",), "가상 렌더링"),
+        ]
+        relevant_terms = [entry for entry in terminology if any(_contains_term(source_text, term) for term in entry[0])]
+        forbidden_terms = sorted({term for source_terms, _ in relevant_terms for term in source_terms})
+        visible_body = human_readable_prose(body)
+        found_forbidden = [term for term in forbidden_terms if _contains_term(visible_body, term)]
         if found_forbidden:
             return False, f"Korean translation contains avoidable English mixed terms: {', '.join(found_forbidden)}."
-        required_korean_terms = ["일반 텍스트", "인코딩", "가상 렌더링"]
-        missing_terms = [term for term in required_korean_terms if term not in body]
+        required_korean_terms = [localized_term for _, localized_term in relevant_terms if localized_term]
+        missing_terms = [term for term in required_korean_terms if not _contains_term(visible_body, term)]
         if missing_terms:
             return False, f"Korean translation is missing required localized term(s): {', '.join(missing_terms)}."
     return True, "Translation counterpart, section alignment, slug alignment, and localized terminology are valid."
@@ -274,7 +428,14 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
     brand_ok, brand_note = brand_spelling_passes(metadata, body)
     add("brand_spelling", brand_ok, 0.4, brand_note)
 
-    add("required_sections", has_required_sections(found_sections), 1.4, "Article includes the required problem-first and publication sections.")
+    related_apps = split_pipe(topic["related_apps"])
+    add(
+        "required_sections",
+        has_required_sections(found_sections)
+        and (not related_apps or bool(SECTION_ALIASES["onnellab_application"] & found_sections)),
+        1.4,
+        "Article includes the required problem-first and publication sections.",
+    )
     add("short_answer_ready", has_short_answer(metadata, found_sections, body), 0.6, "Article exposes a direct short answer for readers, answer engines, and llms.txt summaries.")
 
     add("structured_answer", bool(re.search(r"^\d+\.\s+", body, flags=re.MULTILINE)) and "|" in body, 1.0, "Article includes steps and a comparison table.")
@@ -283,11 +444,15 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
     add("external_reference", "https://" in body and has_reference_section(found_sections), 0.8, "Article cites an official or recognized external reference.")
 
     app_section = find_product_section(body)
-    related_apps = split_pipe(topic["related_apps"])
-    first_app = min((body.lower().find(app.lower()) for app in related_apps if app.lower() in body.lower()), default=-1)
+    workflow_section = _find_section_position(body, "recommended_workflow")
+    visible_body = human_readable_prose(body).lower()
+    first_app = min(
+        (visible_body.find(app.lower()) for app in related_apps if app.lower() in visible_body),
+        default=-1,
+    )
     add(
         "product_after_education",
-        app_section >= 0 and (not related_apps or first_app >= app_section),
+        not related_apps or (workflow_section >= 0 and app_section > workflow_section and first_app >= app_section),
         1.0,
         "Product appears after the educational explanation, or the article explicitly has no related application.",
     )
@@ -330,10 +495,11 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
     max_points = sum(float(check["max_points"]) for check in checks)
     score = round(points / max_points * 10, 2) if max_points else 0.0
     return {
-        "version": 1,
+        "version": REVIEW_VERSION,
         "type": "article_review",
         "topic_id": topic["id"],
         "title": topic["working_title"],
+        "input_fingerprint": _article_input_fingerprint(topic, markdown, metadata_root, assets_root),
         "score": score,
         "threshold": DEFAULT_THRESHOLD,
         "passed": score > DEFAULT_THRESHOLD,
