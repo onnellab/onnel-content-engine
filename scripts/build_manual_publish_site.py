@@ -49,6 +49,13 @@ KST = ZoneInfo("Asia/Seoul")
 VERSION_PART_RE = re.compile(r"\d+|[A-Za-z]+")
 
 
+class _StoreReviewTriagePathOmitted:
+    pass
+
+
+_STORE_REVIEW_TRIAGE_PATH_OMITTED = _StoreReviewTriagePathOmitted()
+
+
 PLATFORM_LABELS = {
     "x": "Twitter",
     "linkedin": "LinkedIn",
@@ -4791,7 +4798,7 @@ def build_manual_publish_site(
     flutter_dependency_versions_path: Path = DEFAULT_FLUTTER_DEPENDENCY_VERSIONS,
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
     store_reviews_path: Path = DEFAULT_STORE_REVIEWS,
-    store_review_triage_path: Path = DEFAULT_STORE_REVIEW_TRIAGE,
+    store_review_triage_path: Path | _StoreReviewTriagePathOmitted = _STORE_REVIEW_TRIAGE_PATH_OMITTED,
 ) -> Path:
     topics = read_topics(topics_path)
     items = social_items(social_manifest, topics) + syndication_items(syndication_manifest, topics)
@@ -4808,7 +4815,14 @@ def build_manual_publish_site(
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "items": [item["triage"] for item in store_reviews],
     }
-    store_review_triage_path.write_text(json.dumps(triage_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if store_review_triage_path is _STORE_REVIEW_TRIAGE_PATH_OMITTED:
+        triage_output_path = DEFAULT_STORE_REVIEW_TRIAGE if output == DEFAULT_OUTPUT else None
+    else:
+        if not isinstance(store_review_triage_path, Path):
+            raise TypeError("store_review_triage_path must be a pathlib.Path")
+        triage_output_path = store_review_triage_path
+    if triage_output_path is not None:
+        triage_output_path.write_text(json.dumps(triage_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     flutter_dependency_items = flutter_dependency_status_items(flutter_dependency_versions_path)
     site_items = homepage_status_items(homepage_repo)
     pricing_items = product_pricing_items(homepage_repo)
@@ -4855,7 +4869,7 @@ def main() -> int:
     parser.add_argument("--verification-report", type=Path, default=DEFAULT_VERIFICATION_REPORT)
     parser.add_argument("--store-versions", type=Path, default=DEFAULT_STORE_VERSIONS)
     parser.add_argument("--store-reviews", type=Path, default=DEFAULT_STORE_REVIEWS)
-    parser.add_argument("--store-review-triage", type=Path, default=DEFAULT_STORE_REVIEW_TRIAGE)
+    parser.add_argument("--store-review-triage", type=Path, default=_STORE_REVIEW_TRIAGE_PATH_OMITTED)
     parser.add_argument("--flutter-dependency-versions", type=Path, default=DEFAULT_FLUTTER_DEPENDENCY_VERSIONS)
     parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPO)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)

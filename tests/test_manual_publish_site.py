@@ -1,17 +1,20 @@
 from __future__ import annotations
 
+from collections.abc import Iterator
+from contextlib import contextmanager
 import html as html_lib
 import json
 import re
+import sys
 import tempfile
 import unittest
 from pathlib import Path
-
-import sys
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import build_manual_publish_site as manual_publish_site_module  # noqa: E402
 from build_manual_publish_site import (  # noqa: E402
     HASHNODE_SEO_DESCRIPTION_LIMIT,
     build_manual_publish_site,
@@ -24,6 +27,146 @@ from build_manual_publish_site import (  # noqa: E402
 
 
 class ManualPublishSiteTest(unittest.TestCase):
+    @contextmanager
+    def _lightweight_triage_build(self) -> Iterator[None]:
+        with (
+            patch.object(manual_publish_site_module, "homepage_status_items", return_value=[]),
+            patch.object(manual_publish_site_module, "product_pricing_items", return_value=[]),
+            patch.object(manual_publish_site_module, "quality_report_item", return_value={}),
+            patch.object(manual_publish_site_module, "html_document", return_value="dashboard"),
+            patch.object(manual_publish_site_module.shutil, "copyfile"),
+        ):
+            yield
+
+    def _triage_build_inputs(self, root: Path, output: Path) -> dict[str, Path]:
+        social_manifest = root / "social.json"
+        syndication_manifest = root / "syndication.json"
+        topics = root / "topics.csv"
+        social_manifest.write_text(json.dumps({"posts": []}), encoding="utf-8")
+        syndication_manifest.write_text(json.dumps({"drafts": []}), encoding="utf-8")
+        topics.write_text("id\n", encoding="utf-8")
+        return {
+            "social_manifest": social_manifest,
+            "syndication_manifest": syndication_manifest,
+            "output": output,
+            "topics_path": topics,
+            "manual_state_path": root / "manual-state.json",
+            "app_releases_path": root / "app-releases.csv",
+            "app_release_publications_path": root / "app-release-publications.csv",
+            "app_release_sync_status_path": root / "app-release-sync-status.json",
+            "verification_report_path": root / "verification-report.json",
+            "store_versions_path": root / "store-versions.csv",
+            "flutter_dependency_versions_path": root / "flutter-dependencies.csv",
+            "homepage_repo": root / "homepage",
+            "store_reviews_path": root / "store-reviews.csv",
+        }
+
+    def _triage_cli_argv(self, inputs: dict[str, Path]) -> list[str]:
+        flags = {
+            "social_manifest": "--social-manifest",
+            "syndication_manifest": "--syndication-manifest",
+            "output": "--output",
+            "topics_path": "--topics",
+            "manual_state_path": "--manual-state",
+            "app_releases_path": "--app-releases",
+            "app_release_publications_path": "--app-release-publications",
+            "app_release_sync_status_path": "--app-release-sync-status",
+            "verification_report_path": "--verification-report",
+            "store_versions_path": "--store-versions",
+            "flutter_dependency_versions_path": "--flutter-dependency-versions",
+            "homepage_repo": "--homepage-repo",
+            "store_reviews_path": "--store-reviews",
+        }
+        argv = ["build_manual_publish_site.py"]
+        for name, value in inputs.items():
+            argv.extend((flags[name], str(value)))
+        return argv
+
+    def test_omitted_triage_path_writes_default_for_default_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "default-output" / "index.html"
+            triage = root / "default-triage.json"
+            inputs = self._triage_build_inputs(root, output)
+
+            with (
+                patch.object(manual_publish_site_module, "DEFAULT_OUTPUT", output),
+                patch.object(manual_publish_site_module, "DEFAULT_STORE_REVIEW_TRIAGE", triage),
+                self._lightweight_triage_build(),
+            ):
+                build_manual_publish_site(**inputs)
+
+            payload = json.loads(triage.read_text(encoding="utf-8"))
+            self.assertEqual(payload["schema_version"], 1)
+            self.assertEqual(payload["items"], [])
+
+    def test_omitted_triage_path_does_not_write_for_custom_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "custom-output" / "index.html"
+            omitted_default = root / "omitted-default-triage.json"
+
+            with (
+                patch.object(manual_publish_site_module, "DEFAULT_STORE_REVIEW_TRIAGE", omitted_default),
+                self._lightweight_triage_build(),
+            ):
+                build_manual_publish_site(**self._triage_build_inputs(root, output))
+
+            self.assertFalse(omitted_default.exists())
+
+    def test_explicit_triage_path_writes_for_custom_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "custom-output" / "index.html"
+            triage = root / "explicit-triage.json"
+            inputs = self._triage_build_inputs(root, output)
+
+            with self._lightweight_triage_build():
+                build_manual_publish_site(**inputs, store_review_triage_path=triage)
+
+            payload = json.loads(triage.read_text(encoding="utf-8"))
+            self.assertEqual(payload["schema_version"], 1)
+            self.assertEqual(payload["items"], [])
+
+    def test_explicit_none_triage_path_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            inputs = self._triage_build_inputs(root, root / "custom-output" / "index.html")
+
+            with self._lightweight_triage_build(), self.assertRaisesRegex(TypeError, "pathlib.Path"):
+                build_manual_publish_site(**inputs, store_review_triage_path=None)  # type: ignore[arg-type]
+
+    def test_cli_omitted_triage_path_does_not_write_for_custom_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "custom-output" / "index.html"
+            omitted_default = root / "omitted-default-triage.json"
+            inputs = self._triage_build_inputs(root, output)
+            argv = self._triage_cli_argv(inputs)
+
+            with (
+                patch.object(sys, "argv", argv),
+                patch.object(manual_publish_site_module, "DEFAULT_STORE_REVIEW_TRIAGE", omitted_default),
+                self._lightweight_triage_build(),
+            ):
+                self.assertEqual(manual_publish_site_module.main(), 0)
+
+            self.assertFalse(omitted_default.exists())
+
+    def test_cli_explicit_triage_path_writes_for_custom_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "custom-output" / "index.html"
+            triage = root / "explicit-triage.json"
+            inputs = self._triage_build_inputs(root, output)
+            argv = self._triage_cli_argv(inputs)
+            argv.extend(("--store-review-triage", str(triage)))
+
+            with patch.object(sys, "argv", argv), self._lightweight_triage_build():
+                self.assertEqual(manual_publish_site_module.main(), 0)
+
+            self.assertTrue(triage.exists())
+
     def test_builds_dashboard_with_social_and_syndication_drafts(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
