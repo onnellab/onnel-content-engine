@@ -1,5 +1,0 @@
-A practical way to inspect a large log file without altering the original starts with the constraints, n...
-
-Install VaultXT:
-App Store: https://apps.apple.com/app/id6760122045
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt

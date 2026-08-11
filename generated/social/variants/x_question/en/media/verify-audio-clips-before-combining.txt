@@ -1,7 +1,0 @@
-Start with the constraints, then decide how to verify audio clips before combining them into one file.
-
-Verify audio clip order, format, boundari...
-
-Install Segra:
-App Store: https://apps.apple.com/app/id6779433972
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.segra

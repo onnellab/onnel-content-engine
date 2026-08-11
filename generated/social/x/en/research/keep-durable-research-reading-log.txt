@@ -1,6 +1,0 @@
-Start with the constraints, then decide how to keep a research reading log that remains useful after a project ends.
-
-Build a durable research reading log that preserves source ident...
-
-Read the full article:
-https://onnellab.github.io/blog/en/keep-durable-research-reading-log/

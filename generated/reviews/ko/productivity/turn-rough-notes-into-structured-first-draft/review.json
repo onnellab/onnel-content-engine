@@ -1,12 +1,12 @@
 {
   "version": 2,
   "type": "article_review",
-  "topic_id": "TOPIC-0028",
-  "title": "작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법",
-  "input_fingerprint": "a2ecc3313d821b5352767ab61269921fec3ffa87e2721fc2bf446f465702ef96",
-  "score": 10.0,
+  "topic_id": "TOPIC-0024",
+  "title": "거친 메모를 구조화된 초안으로 바꾸는 방법",
+  "input_fingerprint": "4fa45447d7b3004b09c6cdca4a15bc9fe01de608829d2c85d3712afeed19b519",
+  "score": 8.84,
   "threshold": 9.0,
-  "passed": true,
+  "passed": false,
   "checks": [
     {
       "name": "metadata_complete",
@@ -52,15 +52,15 @@
     },
     {
       "name": "clear_definitions",
-      "passed": true,
-      "points": 0.8,
+      "passed": false,
+      "points": 0.0,
       "max_points": 0.8,
       "note": "Article defines important technical terms."
     },
     {
       "name": "primary_keyword",
-      "passed": true,
-      "points": 0.8,
+      "passed": false,
+      "points": 0.0,
       "max_points": 0.8,
       "note": "Primary keyword appears naturally."
     },

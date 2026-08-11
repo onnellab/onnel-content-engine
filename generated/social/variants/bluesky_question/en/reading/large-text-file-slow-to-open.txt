@@ -1,7 +1,0 @@
-What makes a large text file slow to open.
-
-Learn why large text files open slowly, how line structur...
-
-Install VaultXT:
-App Store: https://apps.apple.com/app/id6760122045
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt

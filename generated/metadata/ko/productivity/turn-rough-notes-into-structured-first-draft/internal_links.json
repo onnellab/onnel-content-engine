@@ -9,23 +9,21 @@
     "knowledge_graph": "docs/Knowledge_Graph.md"
   },
   "topic": {
-    "id": "TOPIC-0019",
-    "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
-    "slug": "rename-files-safely-preview-workflow",
+    "id": "TOPIC-0024",
+    "title": "거친 메모를 구조화된 초안으로 바꾸는 방법",
+    "slug": "turn-rough-notes-into-structured-first-draft",
     "category": "productivity",
     "language": "ko",
-    "status": "scheduled",
+    "status": "review",
     "topic_clusters": [
-      "파일명 일괄 변경",
-      "이름 변경 규칙",
-      "적용 전 미리보기",
-      "Aligna",
-      "파일 이름 일괄 변경 미리보기",
+      "메모 기반 초안",
+      "개요 만들기",
+      "글 수정",
+      "출처 감사",
+      "메모 구조화 초안",
       "productivity"
     ],
-    "related_app_names": [
-      "Aligna"
-    ]
+    "related_app_names": []
   },
   "recommendations": {
     "related_articles": [
@@ -45,14 +43,14 @@
         "score": 10
       },
       {
-        "topic_id": "TOPIC-0024",
-        "title": "거친 메모를 구조화된 초안으로 바꾸는 방법",
-        "slug": "turn-rough-notes-into-structured-first-draft",
+        "topic_id": "TOPIC-0019",
+        "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
+        "slug": "rename-files-safely-preview-workflow",
         "category": "productivity",
         "language": "ko",
-        "status": "review",
-        "url": "generated/markdown/ko/productivity/turn-rough-notes-into-structured-first-draft.md",
-        "destination": "draft_article",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/productivity/rename-files-safely-preview-workflow.md",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"
@@ -114,18 +112,7 @@
         "score": 3
       }
     ],
-    "related_apps": [
-      {
-        "app_id": "APP-0006",
-        "app_name": "Aligna",
-        "slug": "aligna",
-        "category": "productivity",
-        "url": "/apps/aligna/",
-        "description": "A rule-based file-renaming utility with preview-before-apply workflows.",
-        "relationship": "solution",
-        "priority": 1
-      }
-    ],
+    "related_apps": [],
     "related_guides": [
       {
         "type": "broader_topic",
@@ -136,9 +123,9 @@
       },
       {
         "type": "topic_cluster",
-        "title": "파일명 일괄 변경 cluster",
+        "title": "메모 기반 초안 cluster",
         "category": "productivity",
-        "cluster": "파일명 일괄 변경",
+        "cluster": "메모 기반 초안",
         "reason": "Connects the article to its nearest conceptual cluster."
       }
     ]

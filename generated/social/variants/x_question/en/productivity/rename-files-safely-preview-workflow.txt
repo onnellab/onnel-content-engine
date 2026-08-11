@@ -1,7 +1,0 @@
-Rename batches of files without applying mistakes is easier when the process is clear before choosing an app.
-
-Use a file renaming preview to...
-
-Install Aligna:
-App Store: https://apps.apple.com/app/id6783642658
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.aligna

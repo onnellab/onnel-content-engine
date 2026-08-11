@@ -3,8 +3,8 @@
   "type": "article_review",
   "topic_id": "TOPIC-0029",
   "title": "How to Number Tracks in a Multi-Disc MP3 Album",
-  "input_fingerprint": "a91bdee05b5136cc9ca73588b3f35975beadea00a65c4bf5717820df21f136fe",
-  "score": 10.0,
+  "input_fingerprint": "60a6d622084c735e023f84a3cb0d9267b7d68fa581e5ca1cfae2d83ead8cb1df",
+  "score": 9.28,
   "threshold": 9.0,
   "passed": true,
   "checks": [
@@ -94,10 +94,10 @@
     },
     {
       "name": "image_quality",
-      "passed": true,
-      "points": 1.0,
+      "passed": false,
+      "points": 0.0,
       "max_points": 1.0,
-      "note": "Referenced image assets use language-specific paths, accessible SVG structure, word wrapping, and non-overlapping arrows."
+      "note": "SVG text must wrap on spaces instead of truncating with an ellipsis."
     },
     {
       "name": "internal_links",
