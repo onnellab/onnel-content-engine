@@ -85,6 +85,19 @@
         "score": 3
       },
       {
+        "topic_id": "TOPIC-0021",
+        "title": "긴 글 읽기를 위한 TXT와 EPUB 비교",
+        "slug": "txt-vs-epub-for-long-reading",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/",
+        "destination": "published_article",
+        "relationship": "comparison",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
         "topic_id": "TOPIC-0019",
         "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
         "slug": "rename-files-safely-preview-workflow",
@@ -94,19 +107,6 @@
         "url": "generated/markdown/ko/productivity/rename-files-safely-preview-workflow.md",
         "destination": "scheduled_article",
         "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 2
-      },
-      {
-        "topic_id": "TOPIC-0021",
-        "title": "긴 글 읽기를 위한 TXT와 EPUB 비교",
-        "slug": "txt-vs-epub-for-long-reading",
-        "category": "reading",
-        "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/reading/txt-vs-epub-for-long-reading.md",
-        "destination": "scheduled_article",
-        "relationship": "comparison",
         "shared_clusters": [],
         "score": 2
       }

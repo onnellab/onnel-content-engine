@@ -59,6 +59,19 @@
         "score": 3
       },
       {
+        "topic_id": "TOPIC-0003",
+        "title": "TXT vs EPUB for Long Reading",
+        "slug": "txt-vs-epub-for-long-reading",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/",
+        "destination": "published_article",
+        "relationship": "comparison",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",
@@ -93,19 +106,6 @@
         "status": "published",
         "url": "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0015",
-        "title": "How to Verify Audio Clips Before Combining Them",
-        "slug": "verify-audio-clips-before-combining",
-        "category": "media",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/media/verify-audio-clips-before-combining.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3

@@ -46,6 +46,19 @@
         "score": 17
       },
       {
+        "topic_id": "TOPIC-0003",
+        "title": "TXT vs EPUB for Long Reading",
+        "slug": "txt-vs-epub-for-long-reading",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/",
+        "destination": "published_article",
+        "relationship": "comparison",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0001",
         "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
@@ -55,19 +68,6 @@
         "url": "https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/",
         "destination": "published_article",
         "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0003",
-        "title": "TXT vs EPUB for Long Reading",
-        "slug": "txt-vs-epub-for-long-reading",
-        "category": "reading",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/reading/txt-vs-epub-for-long-reading.md",
-        "destination": "scheduled_article",
-        "relationship": "comparison",
         "shared_clusters": [],
         "score": 3
       },

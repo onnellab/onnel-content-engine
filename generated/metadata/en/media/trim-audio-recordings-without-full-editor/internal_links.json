@@ -102,15 +102,15 @@
         "score": 3
       },
       {
-        "topic_id": "TOPIC-0010",
-        "title": "How to Reuse Copied Text Snippets on iPhone",
-        "slug": "reuse-copied-text-snippets-iphone",
-        "category": "productivity",
+        "topic_id": "TOPIC-0003",
+        "title": "TXT vs EPUB for Long Reading",
+        "slug": "txt-vs-epub-for-long-reading",
+        "category": "reading",
         "language": "en",
         "status": "published",
-        "url": "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/",
+        "url": "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/",
         "destination": "published_article",
-        "relationship": "cross_domain",
+        "relationship": "comparison",
         "shared_clusters": [],
         "score": 3
       }

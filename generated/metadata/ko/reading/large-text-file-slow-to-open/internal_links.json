@@ -52,14 +52,14 @@
         "slug": "txt-vs-epub-for-long-reading",
         "category": "reading",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/reading/txt-vs-epub-for-long-reading.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/",
+        "destination": "published_article",
         "relationship": "comparison",
         "shared_clusters": [
           "reading"
         ],
-        "score": 12
+        "score": 13
       },
       {
         "topic_id": "TOPIC-0032",
