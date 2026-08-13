@@ -1,0 +1,5 @@
+Start with the constraints, then decide how to rename batches of files without applying mistakes.
+
+Install Aligna:
+App Store: https://apps.apple.com/app/id6783642658
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.aligna

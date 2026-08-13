@@ -5,6 +5,5 @@ Choose EPUB when the document is primarily a book to read. A well-made reflowabl
 - Preserve the source. Keep the original TXT read-only or versioned. Convert a copy, not the only recoverable file.
 - Identify the encoding. Decode correctly, then normalize a working copy to UTF-8 if permitted. Inspect non-Latin characters, quotation marks, dashes, and symbols.
 
-Install VaultXT:
-App Store: https://apps.apple.com/app/id6760122045
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt
+Read the full article:
+https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/

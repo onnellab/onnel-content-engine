@@ -1,0 +1,11 @@
+The clearest way to trim an audio recording without turning it into a full editing project is to separate the decision from the tool.
+
+Keep the original, work on a copy, set in and out points by listening as well as viewing the waveform, preview both boundaries, and export a new file deliberately. Prefer lossless output when preserving decoded audio matters; re-encode only for a clear compatibility or size need.
+
+Before changing tools:
+- Preserve the original. Back it up or duplicate it, and confirm the working file opens and plays.
+- Define the destination. Decide whether the clip is for archive, transcription, presentation, messaging, or another known use.
+- Inspect the source. Note its format, codec, sample rate, channel count, duration, and relevant metadata.
+
+Read the full article:
+https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/

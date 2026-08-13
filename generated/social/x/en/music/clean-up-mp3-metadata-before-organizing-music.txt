@@ -1,7 +1,5 @@
 Clean up MP3 metadata before adding songs to a library is easier when the process is clear before choosing an app.
 
-Clean up MP3 metadata...
-
 Install TagWeaver:
 App Store: https://apps.apple.com/app/id6759609875
 Google Play: https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2

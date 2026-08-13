@@ -1,0 +1,9 @@
+The clearest way to inspect a large log file without altering the original is to separate the decision from the tool.
+
+To inspect a large log file safely, set the source aside and review a clearly named working copy. Record where the source came from, when it was obtained, its visible filename, and its byte size before beginning.
+
+- Define the question. State the symptom, component, approximate interval, and the decision the review should support.
+- Set the source aside. Record basic provenance and create a working copy in a separate, clearly labeled location. Perform all navigation on the copy.
+
+Read the full article:
+https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/

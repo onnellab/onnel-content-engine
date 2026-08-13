@@ -1,0 +1,10 @@
+The clearest way to turn rough notes into a structured first draft without losing the original ideas is to separate the decision from the tool.
+
+Keep the original notes unchanged. In a working copy, split them into atomic ideas, label each idea as a claim, evidence, example, question, or action, and define the draft's purpose, audience, and central claim.
+
+Before changing tools:
+- Freeze the capture. Save the original notes as a read-only snapshot or version. Record when and where they came from. Continue in a separate working copy.
+- Assign stable IDs. Give each paragraph, bullet, image, quotation, or voice-note transcription an identifier such as `N01`, `N02`, and `N03`. IDs are more reliable than copying changing text into comments.
+
+Read the full article:
+https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/

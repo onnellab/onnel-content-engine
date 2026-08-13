@@ -7,6 +7,5 @@ Before changing tools:
 - Identify the target use: playback, upload, archive, editing, or sharing.
 - Choose the output format based on the target app or device, not only the file extension.
 
-Install Quivra:
-App Store: https://apps.apple.com/app/id6759565093
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.quivra2
+Read the full article:
+https://onnellab.github.io/blog/en/convert-local-media-files-privately/

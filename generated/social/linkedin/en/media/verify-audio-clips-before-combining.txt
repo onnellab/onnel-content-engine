@@ -1,0 +1,11 @@
+A reliable plan for how to verify audio clips before combining them into one file starts with the result and constraints.
+
+Make an inventory, lock the intended order, and check that every clip opens and contains the expected material. Compare the clips' codec, sample rate, sample format, and channel layout before deciding whether they can be concatenated directly or must be converted.
+
+Before changing tools:
+- Confirm the file opens, seeks, and plays from beginning to end.
+- Check the reported codec, sample rate, channel layout, and duration against the intended output.
+- Compare duration with the inventory: start with the sum of source durations, subtract trims and intentional overlaps, and account for any inserted gaps.
+
+Read the full article:
+https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/

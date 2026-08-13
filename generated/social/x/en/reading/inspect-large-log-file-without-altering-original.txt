@@ -1,0 +1,5 @@
+Inspect a large log file without altering the original is easier when the process is clear before choosing an app.
+
+Install VaultXT:
+App Store: https://apps.apple.com/app/id6760122045
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt

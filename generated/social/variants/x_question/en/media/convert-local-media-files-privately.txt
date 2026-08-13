@@ -1,6 +1,4 @@
-Convert local media files without sending them to a server is easier when the process is clear before choosing an app.
-
-Learn how to convert local...
+How can I convert local media files without sending them to a server?
 
 Install Quivra:
 App Store: https://apps.apple.com/app/id6759565093

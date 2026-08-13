@@ -1,0 +1,5 @@
+A practical way to verify audio clips before combining them into one file starts with the constraints, not the app.
+
+Install Segra:
+App Store: https://apps.apple.com/app/id6779433972
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.segra

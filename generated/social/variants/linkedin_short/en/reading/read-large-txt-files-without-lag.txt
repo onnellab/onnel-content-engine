@@ -5,6 +5,5 @@ The useful test is simple: decide whether the file needs quick reading, search, 
 - Start by opening a copy of the file, not the only original.
 - Confirm the encoding if the text appears broken or unreadable.
 
-Install VaultXT:
-App Store: https://apps.apple.com/app/id6760122045
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt
+Read the full article:
+https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/

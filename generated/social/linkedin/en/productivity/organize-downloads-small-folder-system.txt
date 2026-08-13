@@ -1,0 +1,11 @@
+A reliable plan for how to organize downloaded files without building a complicated folder system starts with the result and constraints.
+
+Treat Downloads as an inbox, not as a permanent library. Process each completed download into one of four durable destinations: Action for something that needs a next step, Reference for information you expect to reuse, Archive for closed records you must retain, and Temporary for disposable files with a review or deletion date.
+
+Before changing tools:
+- Create Action, Reference, Archive, and Temporary in a stable backed-up location.
+- Write a simple naming rule and a Temporary review interval.
+- Sort Downloads by oldest first and separate incomplete or suspicious items without opening them.
+
+Read the full article:
+https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/

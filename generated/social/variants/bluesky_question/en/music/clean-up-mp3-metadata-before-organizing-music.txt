@@ -1,4 +1,4 @@
-Before you clean up MP3 metadata before adding songs to a library, separate the required result...
+How can I clean up MP3 metadata before adding songs to a library?
 
 Install TagWeaver:
 App Store: https://apps.apple.com/app/id6759609875

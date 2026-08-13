@@ -7,6 +7,5 @@ Before changing tools:
 - Identify the encoding. Decode correctly, then normalize a working copy to UTF-8 if permitted. Inspect non-Latin characters, quotation marks, dashes, and symbols.
 - Mark structure explicitly. Identify title, author, language, chapters, scene breaks, quotations, notes, links, and images. Do not rely on silent guesses.
 
-Install VaultXT:
-App Store: https://apps.apple.com/app/id6760122045
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt
+Read the full article:
+https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/
