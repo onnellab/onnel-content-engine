@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-08-12T10:55:25+09:00",
+  "checked_at": "2026-08-13T10:57:47+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 30,
-    "already_done": 25,
+    "already_done": 26,
     "verified": 0,
-    "pending": 5
+    "pending": 4
   },
   "items": [
     {
@@ -202,6 +202,18 @@
       "verification_confidence": "medium"
     },
     {
+      "manual_key": "TOPIC-0003::devto::en::markdown",
+      "topic_id": "TOPIC-0003",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/txt-vs-epub-for-long-reading-meb",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0007::devto::en::markdown",
       "topic_id": "TOPIC-0007",
       "platform": "devto",
@@ -327,18 +339,6 @@
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0003::devto::en::markdown",
-      "topic_id": "TOPIC-0003",
-      "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
       "status": "pending",
       "reason": "No matching public post found",
       "posted_url": "",
