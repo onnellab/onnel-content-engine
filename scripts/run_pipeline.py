@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import json
 import shutil
 import subprocess
 import sys
 import tempfile
+from contextlib import ExitStack
 from pathlib import Path
 
 from approve_due_distribution import approve_due_distribution
@@ -44,13 +46,102 @@ def validate() -> None:
     run_command([sys.executable, "scripts/validate_foundation.py"])
 
 
+def published_social_gate_manifest(manifest_path: Path) -> Path:
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    posts = payload.get("posts")
+    if not isinstance(posts, list):
+        raise PipelineError(f"social manifest has no posts: {manifest_path}")
+    published_posts = [
+        post
+        for post in posts
+        if isinstance(post, dict)
+        and post.get("source_status", "published") == "published"
+        and not post.get("is_variant")
+        and post.get("status") != "posted"
+    ]
+    return write_social_gate_manifest(manifest_path, published_posts, "actionable")
+
+
+def published_social_coverage_manifest(manifest_path: Path) -> Path:
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    posts = payload.get("posts")
+    if not isinstance(posts, list):
+        raise PipelineError(f"social manifest has no posts: {manifest_path}")
+    published_posts = [
+        post
+        for post in posts
+        if isinstance(post, dict)
+        and post.get("source_status", "published") == "published"
+        and not post.get("is_variant")
+    ]
+    return write_social_gate_manifest(manifest_path, published_posts, "coverage")
+
+
+def write_social_gate_manifest(manifest_path: Path, posts: list[dict[str, object]], purpose: str) -> Path:
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        prefix=f".published-social-{purpose}-",
+        suffix=".json",
+        dir=manifest_path.parent,
+        delete=False,
+    ) as handle:
+        json.dump({"posts": posts}, handle, indent=2, ensure_ascii=False)
+        handle.write("\n")
+        return Path(handle.name)
+
+
+def evaluate_actionable_social(manifest_path: Path, project_root: Path) -> dict[str, object]:
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if not payload.get("posts"):
+        return {"average_score": 10.0, "repetition_warnings": [], "posts": []}
+    return evaluate_social_templates(manifest_path, project_root)
+
+
+def syndication_gate_manifest(manifest_path: Path, actionable_only: bool) -> Path:
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    drafts = payload.get("drafts")
+    if not isinstance(drafts, list):
+        raise PipelineError(f"syndication manifest has no drafts: {manifest_path}")
+    selected = [
+        draft
+        for draft in drafts
+        if isinstance(draft, dict)
+        and draft.get("source_status", "published") == "published"
+        and (not actionable_only or draft.get("status") != "posted")
+    ]
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        prefix=f".published-syndication-{'actionable' if actionable_only else 'coverage'}-",
+        suffix=".json",
+        dir=manifest_path.parent,
+        delete=False,
+    ) as handle:
+        json.dump({"drafts": selected}, handle, indent=2, ensure_ascii=False)
+        handle.write("\n")
+        return Path(handle.name)
+
+
+def evaluate_actionable_syndication(manifest_path: Path, project_root: Path) -> dict[str, object]:
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if not payload.get("drafts"):
+        return {"average_score": 10.0, "drafts": []}
+    return evaluate_syndication_drafts(manifest_path, project_root)
+
+
 def quality_gate(social_manifest: Path, syndication_manifest: Path, minimum_score: float = 9.5) -> None:
     social_project_root = social_manifest.resolve().parents[2]
     syndication_project_root = syndication_manifest.resolve().parents[2]
     if social_project_root != syndication_project_root:
         raise PipelineError("quality manifests must belong to the same project root")
-    social = evaluate_social_templates(social_manifest, social_project_root)
-    syndication = evaluate_syndication_drafts(syndication_manifest, syndication_project_root)
+    with ExitStack() as cleanup:
+        gate_manifest = published_social_gate_manifest(social_manifest)
+        cleanup.callback(gate_manifest.unlink, missing_ok=True)
+        syndication_gate_manifest_path = syndication_gate_manifest(syndication_manifest, actionable_only=True)
+        cleanup.callback(syndication_gate_manifest_path.unlink, missing_ok=True)
+        social = evaluate_actionable_social(gate_manifest, social_project_root)
+        syndication = evaluate_actionable_syndication(syndication_gate_manifest_path, syndication_project_root)
     social_score = float(social["average_score"])
     syndication_score = float(syndication["average_score"])
     warnings = social.get("repetition_warnings") or []
@@ -64,15 +155,43 @@ def quality_gate(social_manifest: Path, syndication_manifest: Path, minimum_scor
 
 
 def distribution_gate(topics_path: Path, social_manifest: Path, syndication_manifest: Path) -> None:
-    try:
-        require_distribution_supply(
-            topics_path=topics_path,
-            social_manifest=social_manifest,
-            syndication_manifest=syndication_manifest,
-            project_root=topics_path.resolve().parent.parent,
-        )
-    except ValueError as error:
-        raise PipelineError(str(error)) from error
+    with ExitStack() as cleanup:
+        coverage_manifest = published_social_coverage_manifest(social_manifest)
+        cleanup.callback(coverage_manifest.unlink, missing_ok=True)
+        actionable_manifest = published_social_gate_manifest(social_manifest)
+        cleanup.callback(actionable_manifest.unlink, missing_ok=True)
+        syndication_coverage_manifest = syndication_gate_manifest(syndication_manifest, actionable_only=False)
+        cleanup.callback(syndication_coverage_manifest.unlink, missing_ok=True)
+        syndication_actionable_manifest = syndication_gate_manifest(syndication_manifest, actionable_only=True)
+        cleanup.callback(syndication_actionable_manifest.unlink, missing_ok=True)
+        try:
+            require_distribution_supply(
+                topics_path=topics_path,
+                social_manifest=coverage_manifest,
+                syndication_manifest=syndication_coverage_manifest,
+                project_root=topics_path.resolve().parent.parent,
+                minimum_score=0.0,
+            )
+            social = evaluate_actionable_social(actionable_manifest, topics_path.resolve().parent.parent)
+            syndication = evaluate_actionable_syndication(
+                syndication_actionable_manifest, topics_path.resolve().parent.parent
+            )
+            low_social = [
+                item for item in social.get("posts", [])
+                if isinstance(item, dict) and float(item.get("score", 0.0)) < 9.5
+            ]
+            low_syndication = [
+                item for item in syndication.get("drafts", [])
+                if isinstance(item, dict) and float(item.get("score", 0.0)) < 9.5
+            ]
+            if float(social["average_score"]) < 9.5 or low_social:
+                raise PipelineError("actionable social distribution quality is below 9.5/10")
+            if float(syndication["average_score"]) < 9.5 or low_syndication:
+                raise PipelineError("syndication distribution quality is below 9.5/10")
+            if social.get("repetition_warnings"):
+                raise PipelineError("actionable social distribution has repetition warnings")
+        except ValueError as error:
+            raise PipelineError(str(error)) from error
 
 
 def copy_for_dry_run(destination: Path) -> None:
@@ -115,8 +234,10 @@ def run_pipeline(
             schedule_ready_articles(topics_path, review_root, legacy_topics_path)
             publish_due_articles(topics_path, review_root, legacy_topics_path, site_url=site_url)
             build_site(topics_path, html_root, site_url)
-            generate_social_posts(topics_path, social_root, site_url)
-            generate_syndication_drafts(topics_path, syndication_root, site_url)
+            generate_social_posts(topics_path, social_root, site_url, include_prepublication=True)
+            generate_syndication_drafts(
+                topics_path, syndication_root, site_url, include_prepublication=True
+            )
             quality_gate(social_root / "manifest.json", syndication_root / "manifest.json")
             distribution_gate(topics_path, social_root / "manifest.json", syndication_root / "manifest.json")
             approve_due_distribution(topics_path, social_root / "manifest.json", syndication_root / "manifest.json", dry_run=True)
@@ -132,8 +253,8 @@ def run_pipeline(
     schedule_ready_articles(require_ready_when_due=True)
     publish_due_articles(site_url=site_url)
     build_site(site_url=site_url)
-    generate_social_posts(site_url=site_url)
-    generate_syndication_drafts(site_url=site_url)
+    generate_social_posts(site_url=site_url, include_prepublication=True)
+    generate_syndication_drafts(site_url=site_url, include_prepublication=True)
     quality_gate(ROOT / "generated" / "social" / "manifest.json", ROOT / "generated" / "syndication" / "manifest.json")
     distribution_gate(
         ROOT / "data" / "topics.csv",

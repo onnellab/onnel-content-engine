@@ -2,8 +2,7 @@
 
 {{lead}}
 
-Before changing tools:
-{{key_points}}
+{{points_block}}
 
 {{cta}}
 {{url}}

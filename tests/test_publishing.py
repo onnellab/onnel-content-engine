@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import tempfile
+import threading
 import unittest
 import json
+import subprocess
+import time
 from datetime import datetime
 from pathlib import Path
 from unittest.mock import patch
@@ -11,6 +14,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+import publishing as publishing_module
 
 from publishing import (
     DEFAULT_HOMEPAGE_REPOSITORY_PATH,
@@ -42,8 +46,9 @@ from publishing_dry_run_report import publishing_dry_run_report
 from social_post_report import social_post_report
 from syndication_report import syndication_report
 from topic_management import write_topics
-from validate_social_posts import validate_social_posts
+from validate_social_posts import SocialValidationError, validate_social_posts
 from validate_syndication_drafts import validate_syndication_drafts
+from run_pipeline import distribution_gate, quality_gate
 
 
 def topic_row(status: str = "published", topic_id: str = "TOPIC-0001", language: str = "en") -> dict[str, str]:
@@ -459,7 +464,7 @@ class PublishingTest(unittest.TestCase):
         with self.assertRaises(AdapterError):
             require_adapter_ready("bluesky", "social", {})
 
-    def test_x_templates_do_not_end_a_summary_with_a_partial_word(self) -> None:
+    def test_all_social_templates_fit_without_generator_ellipsis(self) -> None:
         english_topic = topic_row(topic_id="TOPIC-0003")
         english_topic.update(
             {
@@ -512,16 +517,129 @@ class PublishingTest(unittest.TestCase):
 
         generate_social_posts(self.topics_path, social_dir, "https://onnellab.github.io/")
 
-        paths = (
-            social_dir / "x" / "en" / "reading" / "txt-vs-epub-for-long-reading.txt",
-            social_dir / "variants" / "x_question" / "en" / "reading" / "txt-vs-epub-for-long-reading.txt",
+        manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(manifest["posts"]), 6)
+        for post in manifest["posts"]:
+            with self.subTest(template_id=post["template_id"]):
+                text = (self.root / post["draft_path"]).read_text(encoding="utf-8")
+                self.assertNotIn("...", text)
+                self.assertNotIn("…", text)
+                if post["platform"] == "x":
+                    self.assertLessEqual(x_weighted_length(text), 240)
+                elif post["platform"] == "bluesky":
+                    self.assertLessEqual(len(text.strip()), 260)
+                else:
+                    self.assertLessEqual(len(text.strip()), 900)
+        x_question = next(post for post in manifest["posts"] if post["template_id"] == "x_question")
+        bluesky_question = next(post for post in manifest["posts"] if post["template_id"] == "bluesky_question")
+        self.assertEqual(
+            (self.root / x_question["draft_path"]).read_text(encoding="utf-8").splitlines()[0],
+            english_topic["primary_question"],
         )
-        for path in paths:
-            with self.subTest(path=path):
-                text = path.read_text(encoding="utf-8")
-                self.assertLessEqual(x_weighted_length(text), 240)
-                self.assertNotIn("edi...", text)
-                self.assertIn("accessibility,...", text)
+        self.assertEqual(
+            (self.root / bluesky_question["draft_path"]).read_text(encoding="utf-8").splitlines()[0],
+            english_topic["primary_question"],
+        )
+
+    def test_social_generation_failure_preserves_entire_previous_output_tree(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        before = {
+            path.relative_to(social_dir): path.read_bytes()
+            for path in social_dir.rglob("*")
+            if path.is_file()
+        }
+        rows = [topic_row(), topic_row(topic_id="TOPIC-0002", language="ko")]
+        rows[0]["primary_question"] = "Can I " + "safely " * 80 + "read this file?"
+        write_topics(self.topics_path, rows)
+
+        with self.assertRaisesRegex(PublishingError, "x_question cannot fit complete blocks"):
+            generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+
+        after = {
+            path.relative_to(social_dir): path.read_bytes()
+            for path in social_dir.rglob("*")
+            if path.is_file()
+        }
+        self.assertEqual(after, before)
+        self.assertEqual(list(social_dir.parent.glob(f".{social_dir.name}.staging-*")), [])
+        self.assertEqual(list(social_dir.parent.glob(f".{social_dir.name}.backup-*")), [])
+
+    def test_concurrent_social_generation_serializes_swap_without_backup_leak(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        first_at_swap = threading.Event()
+        second_rendered = threading.Event()
+        second_published = threading.Event()
+        failures: list[BaseException] = []
+        original_rename = Path.rename
+        original_render = publishing_module.render_social_template_post
+
+        def coordinated_render(*args: object, **kwargs: object) -> str:
+            if threading.current_thread().name == "social-second":
+                second_rendered.set()
+            return original_render(*args, **kwargs)
+
+        def coordinated_rename(path: Path, target: Path) -> Path:
+            is_staging_swap = path.parent == social_dir.parent and path.name.startswith(f".{social_dir.name}.staging-")
+            if is_staging_swap and threading.current_thread().name == "social-first":
+                first_at_swap.set()
+                if second_rendered.wait(0.4):
+                    second_published.wait(2.0)
+            result = original_rename(path, target)
+            if is_staging_swap and threading.current_thread().name == "social-second":
+                second_published.set()
+            return result
+
+        def run_generation() -> None:
+            try:
+                generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+            except BaseException as error:
+                failures.append(error)
+
+        with patch.object(publishing_module, "render_social_template_post", side_effect=coordinated_render), patch.object(
+            Path, "rename", coordinated_rename
+        ):
+            first = threading.Thread(target=run_generation, name="social-first")
+            second = threading.Thread(target=run_generation, name="social-second")
+            first.start()
+            self.assertTrue(first_at_swap.wait(2.0))
+            second.start()
+            first.join(5.0)
+            second.join(5.0)
+
+        self.assertFalse(first.is_alive())
+        self.assertFalse(second.is_alive())
+        self.assertEqual(failures, [])
+        self.assertTrue((social_dir / "manifest.json").exists())
+        self.assertEqual(list(social_dir.parent.glob(f".{social_dir.name}.staging-*")), [])
+        self.assertEqual(list(social_dir.parent.glob(f".{social_dir.name}.backup-*")), [])
+
+    def test_subprocess_social_generation_waits_for_stable_process_lock(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        child_code = (
+            "import sys; from pathlib import Path; "
+            f"sys.path.insert(0, {str(ROOT / 'scripts')!r}); "
+            "from publishing import generate_social_posts; "
+            f"generate_social_posts(Path({str(self.topics_path)!r}), Path({str(social_dir)!r}), 'https://example.com/')"
+        )
+
+        with publishing_module.social_process_lock(social_dir):
+            child = subprocess.Popen(
+                [sys.executable, "-c", child_code],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+            time.sleep(0.3)
+            self.assertIsNone(child.poll())
+
+        stdout, stderr = child.communicate(timeout=10)
+        self.assertEqual(child.returncode, 0, msg=f"stdout={stdout}\nstderr={stderr}")
+        self.assertTrue((social_dir / "manifest.json").exists())
+        self.assertEqual(list(social_dir.parent.glob(f".{social_dir.name}.staging-*")), [])
+        self.assertEqual(list(social_dir.parent.glob(f".{social_dir.name}.backup-*")), [])
 
     def test_product_social_posts_use_direct_store_install_links(self) -> None:
         (self.root / "data" / "apps_registry.csv").write_text(
@@ -535,18 +653,42 @@ class PublishingTest(unittest.TestCase):
         generate_social_posts(self.topics_path, social_dir, "https://example.com/")
 
         manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
-        x_post = next(post for post in manifest["posts"] if post["template_id"] == "x")
-        x_text = (self.root / x_post["draft_path"]).read_text(encoding="utf-8")
-        linkedin_post = next(post for post in manifest["posts"] if post["template_id"] == "linkedin")
-        linkedin_text = (self.root / linkedin_post["draft_path"]).read_text(encoding="utf-8")
-
-        self.assertEqual(x_post["link_strategy"], "store_install")
-        self.assertEqual(x_post["target_url"], "https://apps.apple.com/app/id6760122045")
-        self.assertIn("App Store: https://apps.apple.com/app/id6760122045", x_text)
-        self.assertIn("Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt", x_text)
-        self.assertNotIn("https://example.com/blog/", x_text)
-        self.assertIn("Install VaultXT:", linkedin_text)
+        for post in manifest["posts"]:
+            text = (self.root / post["draft_path"]).read_text(encoding="utf-8")
+            with self.subTest(template_id=post["template_id"]):
+                if post["platform"] in {"x", "bluesky"}:
+                    self.assertEqual(post["link_strategy"], "store_install")
+                    self.assertEqual(post["target_url"], "https://apps.apple.com/app/id6760122045")
+                    self.assertEqual(
+                        post["destination_urls"],
+                        "https://apps.apple.com/app/id6760122045|"
+                        "https://play.google.com/store/apps/details?id=com.onnellab.vaultxt",
+                    )
+                    self.assertEqual(post["cta_text"], "Install VaultXT:")
+                    self.assertIn("App Store: https://apps.apple.com/app/id6760122045", text)
+                    self.assertIn("Google Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt", text)
+                    self.assertNotIn("https://example.com/blog/", text)
+                else:
+                    self.assertEqual(post["link_strategy"], "canonical_article")
+                    self.assertEqual(post["target_url"], post["canonical_url"])
+                    self.assertEqual(post["destination_urls"], "")
+                    self.assertEqual(post["cta_text"], "Read the full article:")
+                    self.assertIn(post["canonical_url"], text)
+                    self.assertNotIn("apps.apple.com", text)
+                    self.assertNotIn("play.google.com", text)
         self.assertEqual(validate_social_posts(social_dir / "manifest.json", self.root), 6)
+
+    def test_social_posts_without_store_destinations_are_canonical_on_every_template(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+
+        manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
+        for post in manifest["posts"]:
+            with self.subTest(template_id=post["template_id"]):
+                self.assertEqual(post["link_strategy"], "canonical_article")
+                self.assertEqual(post["target_url"], post["canonical_url"])
+                self.assertEqual(post["destination_urls"], "")
+                self.assertEqual(post["cta_text"], "Read the full article:")
 
     def test_prepublication_social_posts_can_be_prepared_before_release(self) -> None:
         rows = [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")]
@@ -571,6 +713,28 @@ class PublishingTest(unittest.TestCase):
         (social_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
         with self.assertRaises(SocialApprovalError):
             approve_social_post("TOPIC-0001", "x", "en", "editor", social_dir / "manifest.json")
+
+    def test_prepublication_social_posts_include_review_and_scheduled_sources(self) -> None:
+        rows = [
+            topic_row(status="review"),
+            topic_row(status="review", topic_id="TOPIC-0002", language="ko"),
+        ]
+        scheduled = self.write_private_draft_topic()
+        scheduled["status"] = "scheduled"
+        rows.append(scheduled)
+        write_topics(self.topics_path, rows)
+        social_dir = self.root / "generated" / "social"
+
+        generate_social_posts(
+            self.topics_path,
+            social_dir,
+            "https://example.com/",
+            include_prepublication=True,
+        )
+
+        manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual({post["source_status"] for post in manifest["posts"]}, {"review", "scheduled"})
+        self.assertTrue(all(post["publish_after_canonical"] for post in manifest["posts"]))
 
     def test_prepublication_social_regeneration_resets_unposted_state(self) -> None:
         social_dir = self.root / "generated" / "social"
@@ -672,6 +836,176 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(posted["posted_url"], "https://social.example/1234")
         self.assertEqual(posted["posted_at"], "2026-07-20T10:00:00+09:00")
         self.assertEqual((self.root / posted["draft_path"]).read_text(encoding="utf-8"), original_text)
+
+    def test_posted_legacy_copy_links_and_state_are_preserved_byte_for_byte(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        manifest_path = social_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        posted = next(post for post in manifest["posts"] if post["template_id"] == "linkedin")
+        legacy_text = "Legacy educational summary...\n\nInstall VaultXT:\nhttps://legacy.example/store"
+        legacy_path = self.root / posted["draft_path"]
+        legacy_path.write_text(legacy_text, encoding="utf-8")
+        posted.update(
+            {
+                "status": "posted",
+                "link_strategy": "store_install",
+                "target_url": "https://legacy.example/store",
+                "destination_urls": "https://legacy.example/store",
+                "cta_text": "Install VaultXT:",
+                "approved_by": "legacy-editor",
+                "post_id": "legacy-123",
+                "posted_url": "https://linkedin.example/legacy-123",
+                "weighted_length": 777,
+            }
+        )
+        historical_metadata = {
+            field: posted[field]
+            for field in (
+                "canonical_url",
+                "target_url",
+                "destination_urls",
+                "link_strategy",
+                "cta_text",
+                "card_asset_path",
+                "weighted_length",
+            )
+        }
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        rows = [topic_row(), topic_row(topic_id="TOPIC-0002", language="ko")]
+        rows[0]["published_url"] = "https://example.com/blog/en/new-canonical-location/"
+        write_topics(self.topics_path, rows)
+
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+
+        regenerated = json.loads(manifest_path.read_text(encoding="utf-8"))
+        preserved = next(post for post in regenerated["posts"] if post["template_id"] == "linkedin")
+        self.assertEqual(legacy_path.read_bytes(), legacy_text.encode("utf-8"))
+        for field in (
+            "status",
+            "link_strategy",
+            "target_url",
+            "destination_urls",
+            "cta_text",
+            "approved_by",
+            "post_id",
+            "posted_url",
+        ):
+            self.assertEqual(preserved[field], posted[field])
+        for field, expected in historical_metadata.items():
+            self.assertEqual(preserved[field], expected)
+        self.assertEqual(validate_social_posts(manifest_path, self.root), 6)
+
+    def test_posted_legacy_linkedin_is_coverage_but_not_actionable_quality_input(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        syndication_dir = self.root / "generated" / "syndication"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        generate_syndication_drafts(self.topics_path, syndication_dir, "https://example.com/")
+        manifest_path = social_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        linkedin = next(post for post in manifest["posts"] if post["template_id"] == "linkedin")
+        linkedin["status"] = "posted"
+        (self.root / linkedin["draft_path"]).write_text(
+            "Legacy LinkedIn summary...\n\nRead the full article:\n" + linkedin["canonical_url"] + "\n",
+            encoding="utf-8",
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+        quality_gate(manifest_path, syndication_dir / "manifest.json")
+        distribution_gate(self.topics_path, manifest_path, syndication_dir / "manifest.json")
+
+    def test_social_validator_rejects_unposted_ellipsis_and_link_policy_tampering(self) -> None:
+        (self.root / "data" / "apps_registry.csv").write_text(
+            "app_id,app_name,slug,app_store_url,play_store_url\n"
+            "APP-0003,VaultXT,vaultxt,https://apps.apple.com/app/id6760122045,"
+            "https://play.google.com/store/apps/details?id=com.onnellab.vaultxt\n",
+            encoding="utf-8",
+        )
+        social_dir = self.root / "generated" / "social"
+        manifest_path = social_dir / "manifest.json"
+
+        def generated_manifest() -> dict[str, object]:
+            generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+            return json.loads(manifest_path.read_text(encoding="utf-8"))
+
+        manifest = generated_manifest()
+        x_post = next(post for post in manifest["posts"] if post["template_id"] == "x")
+        x_path = self.root / x_post["draft_path"]
+        x_path.write_text(x_path.read_text(encoding="utf-8").replace("The fix", "The fix...", 1), encoding="utf-8")
+        with self.assertRaisesRegex(SocialValidationError, "ellipsis"):
+            validate_social_posts(manifest_path, self.root)
+
+        manifest = generated_manifest()
+        x_post = next(post for post in manifest["posts"] if post["template_id"] == "x")
+        x_post.update(
+            {
+                "link_strategy": "canonical_article",
+                "target_url": x_post["canonical_url"],
+                "destination_urls": "",
+                "cta_text": "Read the full article:",
+            }
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(SocialValidationError, "link strategy"):
+            validate_social_posts(manifest_path, self.root)
+
+        manifest = generated_manifest()
+        linkedin = next(post for post in manifest["posts"] if post["template_id"] == "linkedin")
+        linkedin.update(
+            {
+                "link_strategy": "store_install",
+                "target_url": "https://apps.apple.com/app/id6760122045",
+                "destination_urls": "https://apps.apple.com/app/id6760122045",
+                "cta_text": "Install VaultXT:",
+            }
+        )
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(SocialValidationError, "link strategy"):
+            validate_social_posts(manifest_path, self.root)
+
+    def test_social_validator_rejects_corrupt_posted_link_metadata(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        manifest_path = social_dir / "manifest.json"
+
+        def posted_manifest() -> tuple[dict[str, object], dict[str, object]]:
+            if manifest_path.exists():
+                prior = json.loads(manifest_path.read_text(encoding="utf-8"))
+                for item in prior["posts"]:
+                    item["status"] = "variant" if item["is_variant"] else "draft"
+                manifest_path.write_text(json.dumps(prior, indent=2) + "\n", encoding="utf-8")
+            generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            posted = next(post for post in manifest["posts"] if post["template_id"] == "x")
+            posted["status"] = "posted"
+            return manifest, posted
+
+        for field, corrupt, message in (
+            ("target_url", 123, "target_url"),
+            ("destination_urls", [], "destination_urls"),
+            ("link_strategy", None, "link_strategy"),
+            ("cta_text", {}, "cta_text"),
+            ("weighted_length", "240", "weighted_length"),
+        ):
+            with self.subTest(field=field):
+                manifest, posted = posted_manifest()
+                posted[field] = corrupt
+                manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+                with self.assertRaisesRegex(SocialValidationError, message):
+                    validate_social_posts(manifest_path, self.root)
+
+        manifest, posted = posted_manifest()
+        posted["target_url"] = "not-a-url"
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(SocialValidationError, "invalid target_url"):
+            validate_social_posts(manifest_path, self.root)
+
+        manifest, posted = posted_manifest()
+        posted["link_strategy"] = "canonical_article"
+        posted["target_url"] = "https://legacy.example/store"
+        posted["destination_urls"] = ""
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(SocialValidationError, "canonical target"):
+            validate_social_posts(manifest_path, self.root)
 
     def test_prepublication_social_posting_fails_closed_before_dry_run_or_adapter(self) -> None:
         rows = [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")]

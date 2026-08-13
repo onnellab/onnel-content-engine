@@ -18,6 +18,7 @@ from build_manual_publish_site import compose_url
 from publish_due_articles import DuePublicationError, publish_due_articles
 from schedule_ready_articles import SchedulingError, schedule_ready_articles
 from topic_management import TOPIC_HEADER, write_topics
+import run_pipeline as pipeline_module
 
 
 KST = timezone(timedelta(hours=9))
@@ -230,6 +231,77 @@ class PublicationAutomationTest(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.tmp.cleanup()
+
+    def test_pipeline_requests_prepublication_distribution_drafts_in_live_and_dry_runs(self) -> None:
+        stage_names = (
+            "validate",
+            "create_github_releases",
+            "generate_all_markdown",
+            "generate_all_image_specs",
+            "generate_all_image_assets",
+            "generate_all_internal_links",
+            "evaluate_all_articles",
+            "schedule_ready_articles",
+            "publish_due_articles",
+            "build_site",
+            "quality_gate",
+            "distribution_gate",
+            "approve_due_distribution",
+            "deploy_github_pages",
+        )
+        for dry_run in (False, True):
+            with self.subTest(dry_run=dry_run):
+                patches = [patch.object(pipeline_module, name) for name in stage_names]
+                patches.append(patch.object(pipeline_module, "copy_for_dry_run"))
+                mocks = [item.start() for item in patches]
+                self.addCleanup(lambda active=patches: [item.stop() for item in active])
+                with patch.object(pipeline_module, "generate_social_posts") as generate_social, patch.object(
+                    pipeline_module, "generate_syndication_drafts"
+                ) as generate_syndication:
+                    pipeline_module.run_pipeline(dry_run=dry_run)
+                self.assertTrue(generate_social.call_args.kwargs["include_prepublication"])
+                self.assertTrue(generate_syndication.call_args.kwargs["include_prepublication"])
+                for item in patches:
+                    item.stop()
+
+    def test_quality_gate_cleans_first_temp_when_second_temp_creation_fails(self) -> None:
+        social_manifest = self.root / "generated" / "social" / "manifest.json"
+        syndication_manifest = self.root / "generated" / "syndication" / "manifest.json"
+        social_manifest.parent.mkdir(parents=True, exist_ok=True)
+        syndication_manifest.parent.mkdir(parents=True, exist_ok=True)
+        social_manifest.write_text('{"posts": []}\n', encoding="utf-8")
+        syndication_manifest.write_text('{"drafts": []}\n', encoding="utf-8")
+
+        with patch.object(pipeline_module, "syndication_gate_manifest", side_effect=RuntimeError("injected")):
+            with self.assertRaisesRegex(RuntimeError, "injected"):
+                pipeline_module.quality_gate(social_manifest, syndication_manifest)
+
+        self.assertEqual(list(social_manifest.parent.glob(".published-social-*.json")), [])
+        self.assertEqual(list(syndication_manifest.parent.glob(".published-syndication-*.json")), [])
+
+    def test_distribution_gate_cleans_all_temps_when_intermediate_creation_fails(self) -> None:
+        social_manifest = self.root / "generated" / "social" / "manifest.json"
+        syndication_manifest = self.root / "generated" / "syndication" / "manifest.json"
+        social_manifest.parent.mkdir(parents=True, exist_ok=True)
+        syndication_manifest.parent.mkdir(parents=True, exist_ok=True)
+        social_manifest.write_text('{"posts": []}\n', encoding="utf-8")
+        syndication_manifest.write_text('{"drafts": []}\n', encoding="utf-8")
+        original = pipeline_module.syndication_gate_manifest
+        calls = 0
+
+        def fail_second(path: Path, actionable_only: bool) -> Path:
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                raise RuntimeError("injected intermediate failure")
+            return original(path, actionable_only)
+
+        with patch.object(pipeline_module, "syndication_gate_manifest", side_effect=fail_second):
+            with self.assertRaisesRegex(RuntimeError, "injected intermediate failure"):
+                pipeline_module.distribution_gate(self.topics_path, social_manifest, syndication_manifest)
+
+        self.assertEqual(list(social_manifest.parent.glob(".published-social-*.json")), [])
+        self.assertEqual(list(syndication_manifest.parent.glob(".published-syndication-*.json")), [])
 
     def read_rows(self) -> list[dict[str, str]]:
         with self.topics_path.open("r", encoding="utf-8", newline="") as file:

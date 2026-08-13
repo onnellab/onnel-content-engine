@@ -170,6 +170,46 @@ python3 scripts/generate_social_posts.py --include-prepublication
 
 These entries carry `publish_after_canonical: true`. They are review material;
 their links must not be posted before the canonical article is public.
+The main publishing pipeline requests this prepublication set so `review` and
+`scheduled` drafts remain available across routine regeneration. Regeneration
+resets unposted approval/error/metrics state to the generated draft defaults;
+an existing `posted` item keeps its exact draft bytes, link metadata, and
+operational state as historical evidence.
+
+Social regeneration is transactional. The generator builds the complete draft
+tree and manifest in a sibling staging directory on the same filesystem, then
+swaps it into place only after every card, template, and manifest write
+succeeds. A generation failure leaves the prior social tree unchanged and
+removes its staging directory. Concurrent generation for the same output path
+is serialized through the swap so one run cannot publish into another run's
+backup window.
+The process lock is a stable file under the sibling ignored `.tools` directory;
+it is never unlinked. POSIX processes coordinate with `flock`, while native
+Windows processes use `msvcrt` byte locking. WSL and native Windows use
+different lock kernels, so they must not generate the same social output path
+concurrently; that cross-kernel case is outside the supported boundary.
+
+Educational social drafts use this link matrix for both primary templates and
+variants:
+
+| Store destinations available | X | Bluesky | LinkedIn |
+| --- | --- | --- | --- |
+| Yes | `store_install`; Install CTA; App Store and/or Google Play destination | `store_install`; Install CTA; App Store and/or Google Play destination | `canonical_article`; Read full article CTA; canonical target; empty `destination_urls` |
+| No | `canonical_article`; Read full article CTA; canonical target; empty `destination_urls` | `canonical_article`; Read full article CTA; canonical target; empty `destination_urls` | `canonical_article`; Read full article CTA; canonical target; empty `destination_urls` |
+
+Social generation must never add `...` or `…`. X, Bluesky, and LinkedIn
+drafts are fitted from complete hooks, questions, sentences, and list points.
+When a compact target would be exceeded, optional complete blocks are removed
+in deterministic order, and a complete title may replace an overlong primary
+hook; sentence fragments are never silently sliced. The
+internal targets are X `<= 240` weighted characters, Bluesky `<= 260`
+characters, and LinkedIn `<= 900` characters. Validation fails closed for any
+unposted draft that contains an ellipsis or disagrees with the link matrix.
+Posted historical items are exempt from these new copy/link checks.
+They still require typed, syntactically valid, internally consistent link
+metadata and valid artifact paths. Quality scoring evaluates only actionable,
+non-posted primary drafts. Posted primary history still counts as platform
+coverage, while variants do neither.
 
 Each manifest item should keep operational posting fields:
 
@@ -350,8 +390,8 @@ The X adapter posts generated draft text to `https://api.x.com/2/tweets`:
 * requires `X_CLIENT_ID`, `X_CLIENT_SECRET`, and `X_REFRESH_TOKEN`
 * refreshes an OAuth 2.0 access token through `POST https://api.x.com/2/oauth2/token`
 * sends `Authorization: Bearer <refreshed_access_token>`
-* keeps the canonical URL in the post text
-* relies on the canonical page Open Graph and Twitter card metadata for website card rendering
+* keeps the manifest-selected target URL in the post text
+* uses store destinations for app-linked educational posts and otherwise relies on canonical-page card metadata
 
 The X app must request `tweet.write`, `tweet.read`, `users.read`, and `offline.access`. `offline.access` is required so the content engine can refresh short-lived access tokens during scheduled automation.
 
@@ -369,7 +409,7 @@ The Bluesky adapter posts text with clickable link facets and website card embed
 * uploads the generated 1200x630 social card PNG with `com.atproto.repo.uploadBlob`
 * posts an `app.bsky.feed.post` record with `com.atproto.repo.createRecord`
 * adds `app.bsky.richtext.facet#link` facets for URLs in the draft
-* attaches an `app.bsky.embed.external` website card using the canonical URL, draft title, draft description, and uploaded thumbnail blob
+* attaches an `app.bsky.embed.external` card using the manifest-selected target URL, draft title, draft description, and uploaded thumbnail blob
 
 Before the first real Bluesky post, run:
 
@@ -412,7 +452,10 @@ python3 scripts/generate_syndication_drafts.py --include-prepublication
 
 These entries carry `publish_after_canonical: true` and are for review only.
 They must not be approved or posted before the canonical article is public.
-The default CI invocation remains published-only.
+The routine live and dry-run pipelines request this prepublication set so
+current review and scheduled drafts persist. Published quality gates evaluate
+only published actionable drafts; posted history remains coverage, and
+prepublication drafts do not affect the published gate.
 
 Evaluate syndication drafts with:
 

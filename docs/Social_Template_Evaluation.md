@@ -37,10 +37,11 @@ generated/assets/blog/{language}/{slug}/social-card.png
 ## X Template
 
 ```text
-{{title}}
+{{hook}}
 
 {{x_summary}}
 
+{{cta}}
 {{url}}
 ```
 
@@ -50,8 +51,8 @@ generated/assets/blog/{language}/{slug}/social-card.png
 | --- | --- |
 | Platform fit | Good. X needs a short post with one clear link. |
 | Link card support | Good, provided the target page includes `twitter:*` and Open Graph metadata. |
-| Canonical integrity | Good. The post points back to the article and does not introduce new claims. |
-| Brevity | Good. The generator truncates the summary for the 280-character surface. |
+| Link integrity | X uses store-install destinations when an article's related app has store URLs; otherwise it uses the canonical article. |
+| Brevity | Good. The generator keeps complete blocks under the 240-weighted-character internal target. |
 | Korean support | Good. The generator validates weighted length before writing drafts. |
 | Risk | Low to medium. The weighted counter is local and should still be checked against platform API responses before unattended posting. |
 
@@ -72,11 +73,11 @@ The SVG file remains the reproducible source for the PNG card.
 ## LinkedIn Template
 
 ```text
-{{title}}
+{{hook}}
 
-{{insight}}
+{{lead}}
 
-{{key_points}}
+{{points_block}}
 
 {{cta}}
 {{url}}
@@ -89,7 +90,7 @@ The SVG file remains the reproducible source for the PNG card.
 | Platform fit | Good. LinkedIn benefits from a short professional insight before the link. |
 | Link card support | Good, because the canonical page includes Open Graph metadata. |
 | Reader value | Stronger than X. It includes a short article insight and selected workflow points. |
-| Canonical integrity | Good. Points are extracted from the article, not invented separately. |
+| Canonical integrity | Required. LinkedIn always points to the canonical article, even when store destinations exist. |
 | Product neutrality | Good. The template does not force app promotion into the social post. |
 | Korean support | Good. The CTA is localized. |
 | Risk | Low to medium. The post can become too generic if the article description is weak or workflow bullets are missing. |
@@ -104,16 +105,31 @@ Avoid turning LinkedIn posts into launch announcements unless the article itself
 
 ---
 
-## Cross-Channel Evaluation
+## Cross-Channel Link Matrix
 
-| Dimension | X | LinkedIn |
-| --- | --- | --- |
-| Primary role | Fast distribution | Professional explanation |
-| Ideal length | Very short | Short to medium |
-| Main conversion path | Link card click | Insight plus link card click |
-| Best source fields | Title, description, URL | Title, short answer, workflow points, URL |
-| Image dependency | High | Medium |
-| API readiness | Needs platform API response validation | Needs author/account approval workflow |
+The matrix applies equally to primary templates and variants.
+
+| Store destinations available | X | Bluesky | LinkedIn |
+| --- | --- | --- | --- |
+| Yes | `store_install`; Install CTA; store target(s) | `store_install`; Install CTA; store target(s) | `canonical_article`; Read full article CTA; canonical target; empty `destination_urls` |
+| No | `canonical_article`; Read full article CTA; canonical target; empty `destination_urls` | `canonical_article`; Read full article CTA; canonical target; empty `destination_urls` | `canonical_article`; Read full article CTA; canonical target; empty `destination_urls` |
+
+Syndication is outside this matrix and continues to use only the canonical or
+platform-original article URL.
+
+## Complete-Block Fitting
+
+No unposted social template output may contain generator-added `...` or `…`.
+The generator starts with complete hooks, questions, summaries, leads, and list
+points. If an internal target is exceeded, it removes optional complete blocks
+in a deterministic order. A primary compact template may select the complete
+article title when its complete hook cannot fit. It does not slice a sentence or append an ellipsis.
+If required complete blocks still cannot fit, generation fails instead of
+silently producing a fragment.
+
+Internal targets are X `<= 240` weighted characters, Bluesky `<= 260`
+characters, and LinkedIn `<= 900` characters. `x_question` and
+`bluesky_question` begin with the source question, including its question mark.
 
 ---
 
@@ -122,14 +138,20 @@ Avoid turning LinkedIn posts into launch announcements unless the article itself
 Before automatic API posting is added, each generated post should pass these checks:
 
 * No unresolved `{{placeholder}}` values.
-* The URL points to the canonical published article.
-* X posts remain valid under local X weighted character counting.
-* LinkedIn posts include a localized CTA.
+* Link strategy, target, destinations, and localized CTA match the platform matrix.
+* Unposted copy contains neither `...` nor `…`.
+* X, Bluesky, and LinkedIn posts remain within their internal targets.
 * The canonical article page includes Open Graph metadata.
 * The canonical article page points card metadata at the generated PNG social card asset.
 * `generated/social/manifest.json` records each draft with `status: draft`.
 * The social post does not introduce claims absent from the article.
 * Product mentions remain article-driven, not channel-driven.
+
+Posted history is not rescored against current copy, CTA, length, or link-matrix
+policy. It must still pass structural metadata, URL consistency, and artifact
+validation. Gate scoring includes only actionable non-posted primary drafts;
+posted primary items count only for platform coverage, and variants are
+excluded from both roles.
 
 ---
 
@@ -168,11 +190,12 @@ The short LinkedIn variant should still include one or two extracted article poi
 
 The default LinkedIn template should keep the insight section compact, preferably two sentences before the bullet list.
 
-The X question variant should truncate long questions before posting so the generated draft remains valid under weighted character counting.
+Question-led variants keep the complete source question. If the required question and link block cannot fit, generation fails for review rather than truncating it.
 
 Current automated evaluation dimensions include:
 
-* canonical URL presence
+* platform link strategy, target URL, destination URLs, and CTA
+* no ellipsis in unposted drafts
 * unresolved placeholder checks
 * PNG card checks
 * template tracking

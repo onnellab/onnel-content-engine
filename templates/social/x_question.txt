@@ -1,4 +1,4 @@
-{{hook}}
+{{question}}
 
 {{x_summary}}
 

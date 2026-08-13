@@ -18,6 +18,10 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import threading
+import time
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -108,6 +112,9 @@ BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
 BLOG_ASSET_RE = re.compile(r"\]\((/blog-assets/[^)\s\"]+)")
 IMAGE_RE = re.compile(r"^!\[([^\]]*)\]\(([^)\s]+)(?:\s+\"([^\"]+)\")?\)$")
 SOCIAL_PLACEHOLDER_RE = re.compile(r"\{\{([a-zA-Z0-9_]+)\}\}")
+SOCIAL_ELLIPSIS_RE = re.compile(r"\.{3}|…")
+SOCIAL_GENERATION_LOCKS: dict[Path, threading.Lock] = {}
+SOCIAL_GENERATION_LOCKS_GUARD = threading.Lock()
 
 
 class PublishingError(ValueError):
@@ -1097,15 +1104,15 @@ def render_x_template(article: Article, site_url: str, template_id: str) -> str:
     context = social_template_context(article, site_url, "x", template_id)
     template = load_social_template(template_id)
     rendered = render_social_template(template, context)
-    while x_weighted_length(rendered) > 240 and context["x_summary"]:
-        context["x_summary"] = truncate_text(context["x_summary"], max(0, len(context["x_summary"]) - 8))
-        rendered = render_social_template(template, context)
     if x_weighted_length(rendered) > 240:
         context["x_summary"] = ""
         rendered = render_social_template(template, context)
-    while x_weighted_length(rendered) > 240 and context["question"]:
-        context["question"] = truncate_text(context["question"], max(0, len(context["question"]) - 8))
+    if template_id == "x" and (x_weighted_length(rendered) > 240 or SOCIAL_ELLIPSIS_RE.search(rendered)):
+        context["hook"] = context["title"]
         rendered = render_social_template(template, context)
+    if x_weighted_length(rendered) > 240:
+        raise PublishingError(f"{article.topic['id']} {template_id} cannot fit complete blocks within 240 weighted characters")
+    require_social_text_without_ellipsis(article, template_id, rendered)
     return rendered
 
 
@@ -1113,24 +1120,20 @@ def render_bluesky_template(article: Article, site_url: str, template_id: str) -
     context = social_template_context(article, site_url, "bluesky", template_id)
     template = load_social_template(template_id)
     rendered = render_social_template(template, context)
-    while len(rendered) > 260 and context["bsky_summary"]:
-        context["bsky_summary"] = truncate_text(context["bsky_summary"], max(0, len(context["bsky_summary"]) - 8))
-        rendered = render_social_template(template, context)
-    if len(rendered) > 300:
+    if len(rendered) > 260:
         context["bsky_summary"] = ""
         rendered = render_social_template(template, context)
-    while len(rendered) > 260 and context["question"]:
-        context["question"] = truncate_text(context["question"], max(0, len(context["question"]) - 8))
+    if template_id == "bluesky" and (len(rendered) > 260 or SOCIAL_ELLIPSIS_RE.search(rendered)):
+        context["hook"] = context["title"]
         rendered = render_social_template(template, context)
-    while len(rendered) > 260 and context["hook"]:
-        context["hook"] = truncate_text(context["hook"], max(0, len(context["hook"]) - 8))
-        rendered = render_social_template(template, context)
+    if len(rendered) > 260:
+        raise PublishingError(f"{article.topic['id']} {template_id} cannot fit complete blocks within 260 characters")
+    require_social_text_without_ellipsis(article, template_id, rendered)
     return rendered
 
 
 def render_linkedin_post(article: Article, site_url: str) -> str:
-    context = social_template_context(article, site_url, "linkedin", "linkedin")
-    return truncate_text(render_social_template(load_social_template("linkedin"), context), 3000)
+    return render_linkedin_template(article, site_url, "linkedin")
 
 
 def render_linkedin_template(article: Article, site_url: str, template_id: str) -> str:
@@ -1138,15 +1141,24 @@ def render_linkedin_template(article: Article, site_url: str, template_id: str) 
     template = load_social_template(template_id)
     rendered = render_social_template(template, context)
     if len(rendered) > 900:
-        context["key_points"] = context["short_points"]
+        context["points_block"] = context["short_points_block"]
         rendered = render_social_template(template, context)
-    while len(rendered) > 900 and context["lead"]:
-        context["lead"] = truncate_text(context["lead"], max(0, len(context["lead"]) - 24))
+    if len(rendered) > 900:
+        context["points_block"] = ""
+        context["short_points"] = ""
         rendered = render_social_template(template, context)
-    while len(rendered) > 900 and context["hook"]:
-        context["hook"] = truncate_text(context["hook"], max(0, len(context["hook"]) - 16))
+    if len(rendered) > 900:
+        context["lead"] = ""
         rendered = render_social_template(template, context)
+    if len(rendered) > 900:
+        raise PublishingError(f"{article.topic['id']} {template_id} cannot fit complete blocks within 900 characters")
+    require_social_text_without_ellipsis(article, template_id, rendered)
     return rendered
+
+
+def require_social_text_without_ellipsis(article: Article, template_id: str, text: str) -> None:
+    if SOCIAL_ELLIPSIS_RE.search(text):
+        raise PublishingError(f"{article.topic['id']} {template_id} contains an ellipsis; revise the complete source blocks")
 
 
 def load_social_template(platform: str, template_dir: Path = DEFAULT_SOCIAL_TEMPLATE_DIR) -> str:
@@ -1376,10 +1388,11 @@ def social_template_context(
     app_name = article.topic.get("social_app_name", "").strip()
     app_store_url = article.topic.get("social_app_store_url", "").strip()
     play_store_url = article.topic.get("social_play_store_url", "").strip()
+    use_store_install = platform in {"x", "bluesky"} and bool(app_store_url or play_store_url)
     install_links: list[str] = []
-    if app_store_url:
+    if use_store_install and app_store_url:
         install_links.append(f"App Store: {app_store_url}")
-    if play_store_url:
+    if use_store_install and play_store_url:
         install_links.append(f"Google Play: {play_store_url}")
     url = "\n".join(install_links) or canonical_url
     short_answer = first_paragraph_from_text(
@@ -1392,32 +1405,34 @@ def social_template_context(
     key_points_text = "\n".join(f"- {item}" for item in key_points) if key_points else f"- {description}"
     short_points = key_points[:2] if key_points else [description]
     short_points_text = "\n".join(f"- {item}" for item in short_points)
-    fixed_length = len(title) + len(url) + 4
-    x_summary_limit = max(0, 280 - fixed_length)
-    if install_links:
+    if use_store_install:
         cta = f"{app_name} 설치:" if article.topic["primary_language"] == "ko" else f"Install {app_name}:"
     else:
         cta = "전체 글 읽기:" if article.topic["primary_language"] == "ko" else "Read the full article:"
     insight = first_sentences(short_answer, 2)
     summary = social_summary(article, description, platform)
     lead = linkedin_lead(article, insight, description)
+    points_block = f"Before changing tools:\n{key_points_text}"
+    short_points_block = f"Before changing tools:\n{short_points_text}"
     return {
         "title": title,
-        "hook": truncate_text(social_hook(article, platform, template_id), 160),
-        "question": truncate_text(plain_text(article.topic["primary_question"]), 120),
+        "hook": social_hook(article, platform, template_id),
+        "question": plain_text(article.topic["primary_question"]),
         "description": description,
-        "insight": truncate_text(insight, 420),
-        "lead": truncate_text(lead, 360),
+        "insight": insight,
+        "lead": lead,
         "key_points": key_points_text,
         "short_points": short_points_text,
+        "points_block": points_block,
+        "short_points_block": short_points_block,
         "cta": cta,
         "url": url,
-        "target_url": app_store_url or play_store_url or canonical_url,
-        "destination_urls": "|".join(filter(None, (app_store_url, play_store_url))),
-        "link_strategy": "store_install" if install_links else "canonical_article",
+        "target_url": (app_store_url or play_store_url) if use_store_install else canonical_url,
+        "destination_urls": "|".join(filter(None, (app_store_url, play_store_url))) if use_store_install else "",
+        "link_strategy": "store_install" if use_store_install else "canonical_article",
         "cta_text": cta,
-        "x_summary": truncate_text(summary, x_summary_limit),
-        "bsky_summary": truncate_text(summary, 160),
+        "x_summary": summary if not SOCIAL_ELLIPSIS_RE.search(summary) else "",
+        "bsky_summary": summary if not SOCIAL_ELLIPSIS_RE.search(summary) else "",
     }
 
 
@@ -1529,6 +1544,16 @@ SOCIAL_STATE_FIELDS = (
     "last_metrics_at",
 )
 
+SOCIAL_POSTED_HISTORY_FIELDS = (
+    "canonical_url",
+    "target_url",
+    "destination_urls",
+    "link_strategy",
+    "cta_text",
+    "card_asset_path",
+    "weighted_length",
+)
+
 
 def previous_social_state(output_dir: Path) -> dict[tuple[str, str, str, str], dict[str, object]]:
     path = output_dir / "manifest.json"
@@ -1555,7 +1580,7 @@ def previous_social_state(output_dir: Path) -> dict[tuple[str, str, str, str], d
             draft_path = output_dir.parents[1] / str(post.get("draft_path", ""))
             if draft_path.exists():
                 post = dict(post)
-                post["_draft_text"] = draft_path.read_text(encoding="utf-8").strip()
+                post["_draft_text"] = draft_path.read_text(encoding="utf-8")
             state[key] = post
     return state
 
@@ -1577,7 +1602,55 @@ def apply_previous_social_state(
     for field in SOCIAL_STATE_FIELDS:
         if field in previous:
             item[field] = previous[field]
+    if previous.get("status") == "posted":
+        for field in SOCIAL_POSTED_HISTORY_FIELDS:
+            if field in previous:
+                item[field] = previous[field]
     return previous
+
+
+@contextmanager
+def social_generation_lock(output_dir: Path):
+    key = output_dir.resolve()
+    with SOCIAL_GENERATION_LOCKS_GUARD:
+        lock = SOCIAL_GENERATION_LOCKS.setdefault(key, threading.Lock())
+    with lock:
+        yield
+
+
+@contextmanager
+def social_process_lock(output_dir: Path):
+    lock_dir = output_dir.parent / ".tools"
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    lock_path = lock_dir / f"{output_dir.name}.generation.lock"
+    with lock_path.open("a+b") as handle:
+        handle.seek(0, os.SEEK_END)
+        if handle.tell() == 0:
+            handle.write(b"\0")
+            handle.flush()
+        handle.seek(0)
+        if os.name == "nt":
+            import msvcrt
+
+            while True:
+                try:
+                    msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+                    break
+                except OSError:
+                    time.sleep(0.05)
+            try:
+                yield
+            finally:
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
 def generate_social_posts(
@@ -1587,66 +1660,93 @@ def generate_social_posts(
     platforms: tuple[str, ...] = ("x", "linkedin", "bluesky"),
     include_prepublication: bool = False,
 ) -> list[SocialPost]:
+    with social_generation_lock(output_dir):
+        with social_process_lock(output_dir):
+            return _generate_social_posts_locked(
+                topics_path, output_dir, site_url, platforms, include_prepublication
+            )
+
+
+def _generate_social_posts_locked(
+    topics_path: Path = DEFAULT_TOPICS_PATH,
+    output_dir: Path = DEFAULT_SOCIAL_OUTPUT_DIR,
+    site_url: str = DEFAULT_SITE_URL,
+    platforms: tuple[str, ...] = ("x", "linkedin", "bluesky"),
+    include_prepublication: bool = False,
+) -> list[SocialPost]:
     site_url = normalize_site_url(site_url)
     state = previous_social_state(output_dir)
-    if output_dir.exists():
-        shutil.rmtree(output_dir)
-    output_dir.mkdir(parents=True)
+    output_dir.parent.mkdir(parents=True, exist_ok=True)
+    staging_dir = Path(tempfile.mkdtemp(prefix=f".{output_dir.name}.staging-", dir=output_dir.parent))
+    backup_dir: Path | None = None
     project_root = topics_path.parent.parent
     statuses = (
         PUBLISHABLE_STATUSES | {"draft", "image_planning", "review", "scheduled"}
         if include_prepublication
         else None
     )
-    articles = load_publishable_articles(
-        topics_path,
-        project_root / ".social-export-check",
-        site_url,
-        statuses=statuses,
-    )
-    app_registry = app_registry_by_name(topics_path.parent / "apps_registry.csv")
-    posts: list[SocialPost] = []
-    manifest_items: list[dict[str, str | int]] = []
-    templates = social_templates(platforms)
-    for article in articles:
-        if article.topic["primary_language"] not in EXTERNAL_DISTRIBUTION_LANGUAGES:
-            continue
-        attach_social_install_links(article, app_registry)
-        card_path = write_social_card(article, project_root)
-        for template in templates:
-            text = render_social_template_post(article, template, site_url)
-            weighted_length = x_weighted_length(text) if template.platform == "x" else len(text)
-            if template.platform == "x" and weighted_length > 280:
-                raise PublishingError(f"{article.topic['id']} X post exceeds weighted length: {weighted_length}")
-            if template.platform == "bluesky" and weighted_length > 300:
-                raise PublishingError(f"{article.topic['id']} Bluesky post exceeds length: {weighted_length}")
-            destination = (
-                social_variant_destination_for(output_dir, template.template_id, article.topic)
-                if template.is_variant
-                else social_destination_for(output_dir, template.platform, article.topic)
-            )
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            item = manifest_item(article, template, destination, card_path, site_url, project_root, weighted_length)
-            previous = apply_previous_social_state(item, state)
-            if previous and previous.get("status") == "posted" and previous.get("_draft_text"):
-                text = str(previous["_draft_text"])
+    try:
+        articles = load_publishable_articles(
+            topics_path,
+            project_root / ".social-export-check",
+            site_url,
+            statuses=statuses,
+        )
+        app_registry = app_registry_by_name(topics_path.parent / "apps_registry.csv")
+        posts: list[SocialPost] = []
+        manifest_items: list[dict[str, str | int]] = []
+        templates = social_templates(platforms)
+        for article in articles:
+            if article.topic["primary_language"] not in EXTERNAL_DISTRIBUTION_LANGUAGES:
+                continue
+            attach_social_install_links(article, app_registry)
+            card_path = write_social_card(article, project_root)
+            for template in templates:
+                text = render_social_template_post(article, template, site_url)
                 weighted_length = x_weighted_length(text) if template.platform == "x" else len(text)
-                item["weighted_length"] = weighted_length
-                for field in ("target_url", "destination_urls", "link_strategy", "cta_text"):
-                    if field in previous:
-                        item[field] = previous[field]
-                if "target_url" not in previous:
-                    item["target_url"] = item["canonical_url"]
-                    item["destination_urls"] = ""
-                    item["link_strategy"] = "canonical_article"
-                if str(item.get("cta_text", "")) not in text:
-                    item["cta_text"] = ""
-            destination.write_text(text + "\n", encoding="utf-8")
-            if not template.is_variant:
-                posts.append(SocialPost(article.topic["id"], template.platform, destination, text))
-            manifest_items.append(item)
-    (output_dir / "manifest.json").write_text(json.dumps({"posts": manifest_items}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    return posts
+                if template.platform == "x" and weighted_length > 280:
+                    raise PublishingError(f"{article.topic['id']} X post exceeds weighted length: {weighted_length}")
+                if template.platform == "bluesky" and weighted_length > 300:
+                    raise PublishingError(f"{article.topic['id']} Bluesky post exceeds length: {weighted_length}")
+                final_destination = (
+                    social_variant_destination_for(output_dir, template.template_id, article.topic)
+                    if template.is_variant
+                    else social_destination_for(output_dir, template.platform, article.topic)
+                )
+                staged_destination = staging_dir / final_destination.relative_to(output_dir)
+                staged_destination.parent.mkdir(parents=True, exist_ok=True)
+                item = manifest_item(
+                    article, template, final_destination, card_path, site_url, project_root, weighted_length
+                )
+                previous = apply_previous_social_state(item, state)
+                posted_history = bool(previous and previous.get("status") == "posted" and previous.get("_draft_text"))
+                if posted_history:
+                    text = str(previous["_draft_text"])
+                staged_destination.write_text(text if posted_history else text + "\n", encoding="utf-8")
+                if not template.is_variant:
+                    posts.append(SocialPost(article.topic["id"], template.platform, final_destination, text))
+                manifest_items.append(item)
+        (staging_dir / "manifest.json").write_text(
+            json.dumps({"posts": manifest_items}, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+
+        if output_dir.exists():
+            backup_dir = Path(tempfile.mkdtemp(prefix=f".{output_dir.name}.backup-", dir=output_dir.parent))
+            backup_dir.rmdir()
+            output_dir.rename(backup_dir)
+        try:
+            staging_dir.rename(output_dir)
+        except Exception:
+            if backup_dir is not None and backup_dir.exists() and not output_dir.exists():
+                backup_dir.rename(output_dir)
+            raise
+        if backup_dir is not None and backup_dir.exists():
+            shutil.rmtree(backup_dir)
+        return posts
+    finally:
+        if staging_dir.exists():
+            shutil.rmtree(staging_dir)
 
 
 def build_site(
