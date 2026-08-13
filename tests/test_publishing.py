@@ -541,6 +541,29 @@ class PublishingTest(unittest.TestCase):
             english_topic["primary_question"],
         )
 
+    def test_current_topic_0012_primary_linkedin_keeps_a_complete_point(self) -> None:
+        articles = publishing_module.load_publishable_articles(
+            ROOT / "data" / "topics.csv",
+            self.root / "site-check",
+            publishing_module.DEFAULT_SITE_URL,
+            statuses=publishing_module.PUBLISHABLE_STATUSES
+            | {"draft", "image_planning", "review", "scheduled"},
+        )
+        article = next(item for item in articles if item.topic["id"] == "TOPIC-0012")
+        publishing_module.attach_social_install_links(
+            article,
+            publishing_module.app_registry_by_name(ROOT / "data" / "apps_registry.csv"),
+        )
+
+        text = publishing_module.render_linkedin_template(
+            article, publishing_module.DEFAULT_SITE_URL, "linkedin"
+        )
+
+        bullets = [line for line in text.splitlines() if line.startswith("- ")]
+        self.assertGreaterEqual(len(bullets), 1)
+        self.assertTrue(all(not line.endswith(("...", "…")) for line in bullets))
+        self.assertLessEqual(len(text), 900)
+
     def test_social_generation_failure_preserves_entire_previous_output_tree(self) -> None:
         social_dir = self.root / "generated" / "social"
         generate_social_posts(self.topics_path, social_dir, "https://example.com/")

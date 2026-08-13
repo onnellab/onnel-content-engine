@@ -1140,8 +1140,14 @@ def render_linkedin_template(article: Article, site_url: str, template_id: str) 
     context = social_template_context(article, site_url, "linkedin", template_id)
     template = load_social_template(template_id)
     rendered = render_social_template(template, context)
-    if len(rendered) > 900:
+    if len(rendered) > 900 and template_id == "linkedin":
         context["points_block"] = context["short_points_block"]
+        rendered = render_social_template(template, context)
+    if len(rendered) > 900 and template_id == "linkedin":
+        context["points_block"] = context["single_point_block"]
+        rendered = render_social_template(template, context)
+    if len(rendered) > 900 and template_id == "linkedin_short":
+        context["short_points"] = context["single_point"]
         rendered = render_social_template(template, context)
     if len(rendered) > 900:
         context["points_block"] = ""
@@ -1405,6 +1411,7 @@ def social_template_context(
     key_points_text = "\n".join(f"- {item}" for item in key_points) if key_points else f"- {description}"
     short_points = key_points[:2] if key_points else [description]
     short_points_text = "\n".join(f"- {item}" for item in short_points)
+    single_point_text = f"- {(key_points or [description])[0]}"
     if use_store_install:
         cta = f"{app_name} 설치:" if article.topic["primary_language"] == "ko" else f"Install {app_name}:"
     else:
@@ -1414,6 +1421,7 @@ def social_template_context(
     lead = linkedin_lead(article, insight, description)
     points_block = f"Before changing tools:\n{key_points_text}"
     short_points_block = f"Before changing tools:\n{short_points_text}"
+    single_point_block = f"Before changing tools:\n{single_point_text}"
     return {
         "title": title,
         "hook": social_hook(article, platform, template_id),
@@ -1423,8 +1431,10 @@ def social_template_context(
         "lead": lead,
         "key_points": key_points_text,
         "short_points": short_points_text,
+        "single_point": single_point_text,
         "points_block": points_block,
         "short_points_block": short_points_block,
+        "single_point_block": single_point_block,
         "cta": cta,
         "url": url,
         "target_url": (app_store_url or play_store_url) if use_store_install else canonical_url,
