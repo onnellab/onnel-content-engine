@@ -1,6 +1,6 @@
 Start with the constraints, then decide how to clean up MP3 metadata before adding songs to a library.
 
-Clean up MP3 metadata safely with a back...
+Clean up MP3 metadata safely with a...
 
 Install TagWeaver:
 App Store: https://apps.apple.com/app/id6759609875

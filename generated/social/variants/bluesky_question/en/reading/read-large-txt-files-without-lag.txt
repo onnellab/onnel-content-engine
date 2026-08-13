@@ -1,6 +1,6 @@
 Large TXT files are a good reminder that plain text can still be hard to read.
 
-Opening the file is o...
+Opening the file is...
 
 Install VaultXT:
 App Store: https://apps.apple.com/app/id6760122045
