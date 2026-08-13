@@ -388,11 +388,20 @@ def list_items_from_text(value: str, limit: int = 3) -> list[str]:
 
 
 def truncate_text(value: str, limit: int) -> str:
+    if limit <= 0:
+        return ""
     if len(value) <= limit:
         return value
     if limit <= 3:
         return value[:limit]
-    return value[: limit - 3].rstrip() + "..."
+    cutoff = limit - 3
+    prefix = value[:cutoff].rstrip()
+    if len(prefix) < cutoff or value[cutoff].isspace() or re.search(r"[,.;:!?…)}\]]$", prefix):
+        return prefix + "..."
+    boundary = re.search(r"\s+\S*$", prefix)
+    if boundary and prefix[: boundary.start()].rstrip():
+        prefix = prefix[: boundary.start()].rstrip()
+    return prefix + "..."
 
 
 def wrap_text(value: str, max_chars: int, max_lines: int) -> list[str]:

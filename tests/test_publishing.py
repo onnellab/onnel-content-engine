@@ -21,6 +21,7 @@ from publishing import (
     build_site,
     export_markdown_to_homepage,
     generate_social_posts,
+    truncate_text,
     x_weighted_length,
 )
 from approve_due_distribution import approve_due_distribution
@@ -165,6 +166,20 @@ class PublishingTest(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.tmp.cleanup()
+
+    def test_truncate_text_prefers_whole_words_without_changing_short_values(self) -> None:
+        self.assertEqual(truncate_text("short", 8), "short")
+        self.assertEqual(truncate_text("exact", 5), "exact")
+        self.assertEqual(truncate_text("alpha beta gamma", 11), "alpha...")
+        self.assertEqual(truncate_text("alpha beta,gamma", 14), "alpha beta,...")
+        self.assertLessEqual(len(truncate_text("alpha beta gamma", 11)), 11)
+
+    def test_truncate_text_keeps_deterministic_fallbacks(self) -> None:
+        self.assertEqual(truncate_text("abcdefgh", -1), "")
+        for limit, expected in ((0, ""), (1, "a"), (2, "ab"), (3, "abc")):
+            with self.subTest(limit=limit):
+                self.assertEqual(truncate_text("abcdefgh", limit), expected)
+        self.assertEqual(truncate_text("abcdefgh", 6), "abc...")
 
     def write_private_draft_topic(self) -> dict[str, str]:
         private = topic_row(status="draft", topic_id="TOPIC-0012")
@@ -443,6 +458,70 @@ class PublishingTest(unittest.TestCase):
         self.assertIn("bluesky: not ready", credential_report("bluesky"))
         with self.assertRaises(AdapterError):
             require_adapter_ready("bluesky", "social", {})
+
+    def test_x_templates_do_not_end_a_summary_with_a_partial_word(self) -> None:
+        english_topic = topic_row(topic_id="TOPIC-0003")
+        english_topic.update(
+            {
+                "primary_question": "Should I use TXT or EPUB for long reading?",
+                "working_title": "TXT vs EPUB for Long Reading",
+                "slug": "txt-vs-epub-for-long-reading",
+                "related_apps": "VaultXT",
+                "canonical_path": "generated/markdown/en/reading/txt-vs-epub-for-long-reading.md",
+                "published_url": "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/",
+            }
+        )
+        korean_topic = topic_row(topic_id="TOPIC-0021", language="ko")
+        korean_topic.update(
+            {
+                "slug": "txt-vs-epub-for-long-reading",
+                "canonical_path": "generated/markdown/ko/reading/txt-vs-epub-for-long-reading.md",
+                "published_url": "https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/",
+            }
+        )
+        write_topics(self.topics_path, [english_topic, korean_topic])
+        reproduction_markdown = MARKDOWN.replace(
+            'title: "How to Read Very Large TXT Files"',
+            'title: "TXT vs EPUB for Long Reading"',
+        ).replace(
+            'slug: "read-large-txt-files"',
+            'slug: "txt-vs-epub-for-long-reading"',
+        ).replace(
+            'description: "A practical guide to reading very large TXT files without unnecessary lag."',
+            'description: "Compare TXT and EPUB for long reading, including reflow, typography, navigation, accessibility, editing, conversion, and a reversible workflow."',
+        ).replace(
+            'topic_id: "TOPIC-0001"',
+            'topic_id: "TOPIC-0003"',
+        )
+        reproduction_path = self.root / english_topic["canonical_path"]
+        reproduction_path.parent.mkdir(parents=True, exist_ok=True)
+        reproduction_path.write_text(reproduction_markdown, encoding="utf-8")
+        korean_reproduction_path = self.root / korean_topic["canonical_path"]
+        korean_reproduction_path.parent.mkdir(parents=True, exist_ok=True)
+        korean_reproduction_path.write_text(
+            reproduction_markdown.replace('language: "en"', 'language: "ko"'),
+            encoding="utf-8",
+        )
+        (self.root / "data" / "apps_registry.csv").write_text(
+            "app_id,app_name,slug,app_store_url,play_store_url\n"
+            "APP-0003,VaultXT,vaultxt,https://apps.apple.com/app/id6760122045,"
+            "https://play.google.com/store/apps/details?id=com.onnellab.vaultxt\n",
+            encoding="utf-8",
+        )
+        social_dir = self.root / "generated" / "social"
+
+        generate_social_posts(self.topics_path, social_dir, "https://onnellab.github.io/")
+
+        paths = (
+            social_dir / "x" / "en" / "reading" / "txt-vs-epub-for-long-reading.txt",
+            social_dir / "variants" / "x_question" / "en" / "reading" / "txt-vs-epub-for-long-reading.txt",
+        )
+        for path in paths:
+            with self.subTest(path=path):
+                text = path.read_text(encoding="utf-8")
+                self.assertLessEqual(x_weighted_length(text), 240)
+                self.assertNotIn("edi...", text)
+                self.assertIn("accessibility,...", text)
 
     def test_product_social_posts_use_direct_store_install_links(self) -> None:
         (self.root / "data" / "apps_registry.csv").write_text(
