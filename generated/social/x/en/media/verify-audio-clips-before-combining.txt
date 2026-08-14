@@ -1,5 +1,0 @@
-Verify audio clips before combining them into one file is easier when the process is clear before choosing an app.
-
-Install Segra:
-App Store: https://apps.apple.com/app/id6779433972
-Google Play: https://play.google.com/store/apps/details?id=com.onnellab.segra
