@@ -75,6 +75,19 @@
         "score": 9
       },
       {
+        "topic_id": "TOPIC-0004",
+        "title": "What Makes Large Text Files Slow to Open",
+        "slug": "large-text-file-slow-to-open",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/",
+        "destination": "published_article",
+        "relationship": "prerequisite",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",
@@ -97,19 +110,6 @@
         "url": "https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/",
         "destination": "published_article",
         "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0003",
-        "title": "TXT vs EPUB for Long Reading",
-        "slug": "txt-vs-epub-for-long-reading",
-        "category": "reading",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/",
-        "destination": "published_article",
-        "relationship": "comparison",
         "shared_clusters": [],
         "score": 3
       }

@@ -89,6 +89,19 @@
         "score": 4
       },
       {
+        "topic_id": "TOPIC-0004",
+        "title": "What Makes Large Text Files Slow to Open",
+        "slug": "large-text-file-slow-to-open",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/",
+        "destination": "published_article",
+        "relationship": "prerequisite",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0008",
         "title": "How to Clean Up MP3 Metadata Before Organizing Music",
         "slug": "clean-up-mp3-metadata-before-organizing-music",
@@ -96,19 +109,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0010",
-        "title": "How to Reuse Copied Text Snippets on iPhone",
-        "slug": "reuse-copied-text-snippets-iphone",
-        "category": "productivity",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

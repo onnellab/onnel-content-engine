@@ -93,12 +93,12 @@
         "slug": "large-text-file-slow-to-open",
         "category": "reading",
         "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/reading/large-text-file-slow-to-open.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/",
+        "destination": "published_article",
         "relationship": "prerequisite",
         "shared_clusters": [],
-        "score": 4
+        "score": 5
       },
       {
         "topic_id": "TOPIC-0007",

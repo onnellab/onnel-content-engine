@@ -72,6 +72,19 @@
         "score": 3
       },
       {
+        "topic_id": "TOPIC-0004",
+        "title": "What Makes Large Text Files Slow to Open",
+        "slug": "large-text-file-slow-to-open",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/",
+        "destination": "published_article",
+        "relationship": "prerequisite",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",
@@ -96,19 +109,6 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0004",
-        "title": "What Makes Large Text Files Slow to Open",
-        "slug": "large-text-file-slow-to-open",
-        "category": "reading",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/reading/large-text-file-slow-to-open.md",
-        "destination": "scheduled_article",
-        "relationship": "prerequisite",
-        "shared_clusters": [],
-        "score": 2
       }
     ],
     "related_apps": [
