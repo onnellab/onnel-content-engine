@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-08-15T10:12:57+09:00",
+  "checked_at": "2026-08-16T10:16:52+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 36,
-    "already_done": 27,
+    "already_done": 28,
     "verified": 0,
-    "pending": 9
+    "pending": 8
   },
   "items": [
     {
@@ -226,6 +226,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0004::devto::en::markdown",
+      "topic_id": "TOPIC-0004",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/what-makes-large-text-files-slow-to-open-3cg8",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0007::devto::en::markdown",
       "topic_id": "TOPIC-0007",
       "platform": "devto",
@@ -397,18 +409,6 @@
       "manual_key": "TOPIC-0003::medium::en::markdown",
       "topic_id": "TOPIC-0003",
       "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0004::devto::en::markdown",
-      "topic_id": "TOPIC-0004",
-      "platform": "devto",
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
