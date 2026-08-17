@@ -47,6 +47,13 @@
     <pubDate>Mon, 20 Jul 2026 05:56:51 GMT</pubDate>
   </item>
   <item>
+    <title>How to Trim Audio Recordings Without a Full Editor</title>
+    <link>https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/</link>
+    <guid>https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/</guid>
+    <description>Trim an audio recording safely with precise in and out points, click-free boundaries, deliberate export settings, and a verified local copy.</description>
+    <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>How to Reuse Copied Text Snippets on iPhone</title>
     <link>https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/</link>
     <guid>https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/</guid>
@@ -87,6 +94,13 @@
     <guid>https://onnellab.github.io/blog/ko/large-text-file-slow-to-open/</guid>
     <description>대용량 텍스트 파일이 느리게 열리는 원인을 읽기, 디코딩, 줄 구조, 레이아웃, 검색, 메모리 단계로 나누고 안전하게 진단하는 방법을 설명합니다.</description>
     <pubDate>Fri, 14 Aug 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>전문 편집기 없이 오디오 녹음을 자르는 방법</title>
+    <link>https://onnellab.github.io/blog/ko/trim-audio-recordings-without-full-editor/</link>
+    <guid>https://onnellab.github.io/blog/ko/trim-audio-recordings-without-full-editor/</guid>
+    <description>정확한 시작점과 끝점, 클릭 없는 경계, 목적에 맞는 내보내기 설정, 로컬 사본 검증으로 오디오 녹음을 안전하게 자르는 방법을 설명합니다.</description>
+    <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>

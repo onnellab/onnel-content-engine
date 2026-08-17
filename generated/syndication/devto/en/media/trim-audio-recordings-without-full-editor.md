@@ -1,23 +1,13 @@
 ---
 title: "How to Trim Audio Recordings Without a Full Editor"
-card_title: "How to Trim Audio Recordings Without a Full Editor"
-slug: "trim-audio-recordings-without-full-editor"
-category: "media"
-language: "en"
-description: "Trim an audio recording safely with precise in and out points, click-free boundaries, deliberate export settings, and a verified local copy."
-status: "published"
-topic_id: "TOPIC-0009"
-search_intent: "solve"
-primary_keyword: "audio trimming app"
-secondary_keywords: "audio segments|recording cleanup|simple audio workflow|Segra"
-related_apps: "Segra"
-tags: "audio trimming app|audio segments|recording cleanup|audio merging|Segra"
+published: true
 canonical_url: "https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/"
-published_at: "2026-08-17T09:00:00+09:00"
-updated_at: "2026-08-17T09:00:00+09:00"
-image_specs: "Workflow diagram for audio trimming app|Comparison diagram for practical options|Screenshot requirements for related applications"
-related_articles: "How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|TXT vs EPUB for Long Reading => https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/"
+tags: "audio-trimming-app,audio-segments,recording-cleanup,audio-merging"
 ---
+
+> ONNELLAB note: This version focuses on the rendering and workflow details behind large text files.
+
+
 
 # How to Trim Audio Recordings Without a Full Editor
 
@@ -97,17 +87,17 @@ Metadata deserves a separate check. Titles, comments, artwork, dates, locations,
 9. **Verify the export.** Reopen the saved file in an independent player if possible. Check the beginning, end, duration, seeking, both channels, and audible quality.
 10. **Retain the original.** Keep it until the clip has reached its destination and passed any downstream check.
 
-![Audio trimming workflow](/blog-assets/en/trim-audio-recordings-without-full-editor/workflow-diagram.svg "Backup-first workflow for selecting, previewing, exporting, and verifying an audio clip")
+![Audio trimming workflow](https://onnellab.github.io/blog-assets/en/trim-audio-recordings-without-full-editor/workflow-diagram.png "Backup-first workflow for selecting, previewing, exporting, and verifying an audio clip")
 
 ## ONNELLAB Application
 
-[Segra](/apps/segra/) is documented as an iOS and Android utility for trimming and merging audio files. It may fit a focused trim or merge, but it should not be treated as a full audio-production application.
+[Segra](https://onnellab.github.io/apps/segra/) is documented as an iOS and Android utility for trimming and merging audio files. It may fit a focused trim or merge, but it should not be treated as a full audio-production application.
 
 Segra does not replace the decisions in this guide. You still need to protect the source, choose boundaries by listening, select an appropriate output, and verify the saved clip. For processing, effects, multitrack mixing, or other production work, use a tool designed for that broader scope.
 
 ## Related Topics
 
-- [How to convert local media files privately](/blog/en/convert-local-media-files-privately/)
+- [How to convert local media files privately](https://onnellab.github.io/blog/en/convert-local-media-files-privately/)
 - Choosing an audio output format for archive and delivery
 - Verifying audio clips before combining them
 - Cleaning metadata before sharing a recording
@@ -150,3 +140,7 @@ The timeline preview does not prove that the correct range, format, channels, or
 ### Does trimming remove private information?
 
 It removes audible material outside the kept range when the export is correct, but metadata may remain. Verify both playback and metadata, and prefer a local workflow when the recording is sensitive.
+
+---
+
+Originally published at https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/
