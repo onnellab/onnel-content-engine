@@ -73,6 +73,19 @@
         "score": 9
       },
       {
+        "topic_id": "TOPIC-0009",
+        "title": "How to Trim Audio Recordings Without a Full Editor",
+        "slug": "trim-audio-recordings-without-full-editor",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0001",
         "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
@@ -95,19 +108,6 @@
         "url": "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/",
         "destination": "published_article",
         "relationship": "comparison",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0004",
-        "title": "What Makes Large Text Files Slow to Open",
-        "slug": "large-text-file-slow-to-open",
-        "category": "reading",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/",
-        "destination": "published_article",
-        "relationship": "prerequisite",
         "shared_clusters": [],
         "score": 3
       }

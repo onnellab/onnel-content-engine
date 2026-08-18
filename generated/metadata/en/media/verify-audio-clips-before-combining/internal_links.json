@@ -35,15 +35,15 @@
         "slug": "trim-audio-recordings-without-full-editor",
         "category": "media",
         "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/media/trim-audio-recordings-without-full-editor.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "media",
           "segra"
         ],
-        "score": 17
+        "score": 18
       },
       {
         "topic_id": "TOPIC-0007",

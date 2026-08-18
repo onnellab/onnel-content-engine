@@ -98,13 +98,13 @@
         "score": 3
       },
       {
-        "topic_id": "TOPIC-0010",
-        "title": "How to Reuse Copied Text Snippets on iPhone",
-        "slug": "reuse-copied-text-snippets-iphone",
-        "category": "productivity",
+        "topic_id": "TOPIC-0009",
+        "title": "How to Trim Audio Recordings Without a Full Editor",
+        "slug": "trim-audio-recordings-without-full-editor",
+        "category": "media",
         "language": "en",
         "status": "published",
-        "url": "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/",
+        "url": "https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

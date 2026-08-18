@@ -45,6 +45,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0009",
+        "title": "How to Trim Audio Recordings Without a Full Editor",
+        "slug": "trim-audio-recordings-without-full-editor",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 10
+      },
+      {
         "topic_id": "TOPIC-0015",
         "title": "How to Verify Audio Clips Before Combining Them",
         "slug": "verify-audio-clips-before-combining",
@@ -58,21 +73,6 @@
           "media"
         ],
         "score": 10
-      },
-      {
-        "topic_id": "TOPIC-0009",
-        "title": "How to Trim Audio Recordings Without a Full Editor",
-        "slug": "trim-audio-recordings-without-full-editor",
-        "category": "media",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/media/trim-audio-recordings-without-full-editor.md",
-        "destination": "scheduled_article",
-        "relationship": "deeper",
-        "shared_clusters": [
-          "media"
-        ],
-        "score": 9
       },
       {
         "topic_id": "TOPIC-0001",
