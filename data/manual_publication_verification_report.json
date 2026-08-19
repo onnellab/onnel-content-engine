@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-08-18T10:12:50+09:00",
+  "checked_at": "2026-08-19T10:13:24+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 42,
-    "already_done": 29,
+    "already_done": 30,
     "verified": 0,
-    "pending": 13
+    "pending": 12
   },
   "items": [
     {
@@ -322,6 +322,18 @@
       "verification_confidence": "medium"
     },
     {
+      "manual_key": "TOPIC-0009::devto::en::markdown",
+      "topic_id": "TOPIC-0009",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-trim-audio-recordings-without-a-full-editor-5db0",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0010::devto::en::markdown",
       "topic_id": "TOPIC-0010",
       "platform": "devto",
@@ -469,18 +481,6 @@
       "manual_key": "TOPIC-0004::medium::en::markdown",
       "topic_id": "TOPIC-0004",
       "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0009::devto::en::markdown",
-      "topic_id": "TOPIC-0009",
-      "platform": "devto",
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
