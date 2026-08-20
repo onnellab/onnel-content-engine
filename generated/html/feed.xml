@@ -68,6 +68,13 @@
     <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
+    <title>How to Rename Files Safely With a Preview Workflow</title>
+    <link>https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/</link>
+    <guid>https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/</guid>
+    <description>Use a file renaming preview to test rules, catch collisions, and apply a reversible batch rename without losing file identity.</description>
+    <pubDate>Thu, 20 Aug 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>음악 정리 전 MP3 메타데이터를 정돈하는 방법</title>
     <link>https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/</link>
     <guid>https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/</guid>
@@ -80,6 +87,13 @@
     <guid>https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/</guid>
     <description>아이폰에서 자주 쓰는 텍스트를 선별해 저장하고, 맥락을 붙여 정리하며, 안전하게 다시 사용하는 워크플로를 설명합니다.</description>
     <pubDate>Thu, 23 Jul 2026 23:24:05 GMT</pubDate>
+  </item>
+  <item>
+    <title>미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법</title>
+    <link>https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/</link>
+    <guid>https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/</guid>
+    <description>파일명 일괄 변경 전에 규칙과 충돌을 미리 확인하고, 복구 가능한 상태에서 안전하게 적용하는 과정을 설명합니다.</description>
+    <pubDate>Thu, 20 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>긴 글 읽기를 위한 TXT와 EPUB 비교</title>

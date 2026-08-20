@@ -1,23 +1,13 @@
 ---
 title: "How to Rename Files Safely With a Preview Workflow"
-card_title: "How to Rename Files Safely With a Preview Workflow"
-slug: "rename-files-safely-preview-workflow"
-category: "productivity"
-language: "en"
-description: "Use a file renaming preview to test rules, catch collisions, and apply a reversible batch rename without losing file identity."
-status: "published"
-topic_id: "TOPIC-0012"
-search_intent: "workflow"
-primary_keyword: "file renaming preview"
-secondary_keywords: "batch rename|rename rules|preview before apply|Aligna"
-related_apps: "Aligna"
-tags: "file renaming preview|batch rename|rename rules|file organization"
+published: true
 canonical_url: "https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/"
-published_at: "2026-08-20T09:00:00+09:00"
-updated_at: "2026-08-20T09:00:00+09:00"
-image_specs: "Plan-to-preview-to-apply renaming workflow|Manual and rule-based rename comparison|Collision and extension checks"
-related_articles: "How to Reuse Copied Text Snippets on iPhone => https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/"
+tags: "file-renaming-preview,batch-rename,rename-rules,file-organization"
 ---
+
+> ONNELLAB note: This version focuses on the rendering and workflow details behind large text files.
+
+
 
 # How to Rename Files Safely With a Preview Workflow
 
@@ -65,7 +55,7 @@ Names also participate in workflows outside the folder. A document may be linked
 7. **Apply to the test set.** Open several renamed files in the app that normally uses them. Confirm content, sort order, links, and sidecar relationships.
 8. **Run the full batch.** Keep the backup until the destination workflow has been checked. Record the rule or naming convention for the next batch.
 
-![Workflow diagram](/blog-assets/en/rename-files-safely-preview-workflow/workflow-diagram.svg "Plan rules, inspect a preview, test a subset, and apply a batch rename")
+![Workflow diagram](https://onnellab.github.io/blog-assets/en/rename-files-safely-preview-workflow/workflow-diagram.png "Plan rules, inspect a preview, test a subset, and apply a batch rename")
 
 ## Renaming Approach Comparison
 
@@ -87,7 +77,7 @@ If another application owns the library, prefer its built-in rename or relink wo
 
 ## ONNELLAB Application
 
-[Aligna](/apps/aligna/) fits this workflow when you want rule-based filename changes with a preview-before-apply step. Use it after deciding the naming convention: select an explicit batch, build small rules, inspect the proposed destinations, and apply only when the mapping is understandable.
+[Aligna](https://onnellab.github.io/apps/aligna/) fits this workflow when you want rule-based filename changes with a preview-before-apply step. Use it after deciding the naming convention: select an explicit batch, build small rules, inspect the proposed destinations, and apply only when the mapping is understandable.
 
 On iOS, saving may produce a newly named copy rather than changing every source in place, depending on the storage provider and workflow. Confirm the destination and keep the original until the copy has been opened successfully. The app reduces repetitive editing, but backups, external references, and the meaning of filenames remain the user's responsibility.
 
@@ -130,3 +120,7 @@ Choose deliberately and confirm it in the preview. If order carries meaning, sor
 ### Why can a successful rename still break another app?
 
 The other app may store the previous path or filename. Use its relink feature, rename within the owning app when possible, or retain a mapping that lets you repair references.
+
+---
+
+Originally published at https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/

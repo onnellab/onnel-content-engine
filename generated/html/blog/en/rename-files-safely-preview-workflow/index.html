@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Rename Files Safely With a Preview Workflow</title>
+  <meta name="description" content="Use a file renaming preview to test rules, catch collisions, and apply a reversible batch rename without losing file identity.">
+  <link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20260712-ol-transparent-v2" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260712-ol-transparent-v2">
+  <link rel="manifest" href="/site.webmanifest?v=20260712-ol-transparent-v2">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Rename Files Safely With a Preview Workflow">
+  <meta property="og:description" content="Use a file renaming preview to test rules, catch collisions, and apply a reversible batch rename without losing file identity.">
+  <meta property="og:url" content="https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Rename Files Safely With a Preview Workflow">
+  <meta name="twitter:description" content="Use a file renaming preview to test rules, catch collisions, and apply a reversible batch rename without losing file identity.">
+  <meta property="og:image" content="https://onnellab.github.io/blog-assets/en/rename-files-safely-preview-workflow/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.github.io/blog-assets/en/rename-files-safely-preview-workflow/social-card.png">
+</head>
+<body>
+  <main>
+<h1>How to Rename Files Safely With a Preview Workflow</h1>
+<p>Renaming one file is simple. Renaming a folder full of invoices, scans, photos, or project exports is different: one broad replacement can remove useful context, create duplicate destinations, or change an extension that an app needs. The safest approach separates planning from writing changes to storage.</p>
+<h2>Question</h2>
+<p>How can I rename batches of files without applying mistakes?</p>
+<h2>Short Answer</h2>
+<p>Work on a copy when the files matter, define one small rule at a time, and inspect a complete file renaming preview before applying anything. Check that every original maps to one unique destination, preserve extensions unless changing them is intentional, test a representative subset, and verify the resulting files in their destination app. A preview is evidence of what a rule intends to do; it is not a backup or a guarantee that every external reference will keep working.</p>
+<h2>Definitions That Matter</h2>
+<p>A <strong>rename rule</strong> transforms part of a filename. Examples include adding a date prefix, replacing spaces with hyphens, or numbering files in a selected order. A <strong>batch rename</strong> applies one or more rules to several selected files.</p>
+<p>A <strong>file renaming preview</strong> is a before-and-after list calculated without committing the new names. A useful preview displays every affected file, unchanged items, collisions, invalid names, and the final extension.</p>
+<p>An <strong>extension</strong> is the suffix such as `.pdf`, `.jpg`, or `.txt` that many systems and apps use as a format hint. Renaming an extension does not convert the file&#x27;s contents. <strong>Encoding is</strong> the rule that maps text characters to bytes; it affects text inside a file, not the filename transformation itself. <strong>Virtual rendering is</strong> a way to draw only visible rows in a long list. It can help a large preview remain usable, but it does not validate the rename rule.</p>
+<h2>Why Batch Renames Go Wrong</h2>
+<p>Rules operate on patterns, while real folders contain exceptions. A replacement intended for `draft report` may also alter `draft reporting notes`. Sequential numbering can become misleading when the selection order differs from the order shown on screen. Removing a prefix can make two distinct source files resolve to the same destination name.</p>
+<p>Names also participate in workflows outside the folder. A document may be linked from a project file, imported into a media library, referenced by a script, or synchronized by another service. A technically valid new name can still break that relationship. This is why “the preview looks tidy” and “the whole workflow remains valid” are separate checks.</p>
+<h2>What To Check First</h2>
+<ul><li>Identify which part of each name carries identity: date, client, sequence, version, or subject.</li><li>Decide the final sort order before adding numbers.</li><li>Confirm whether extensions should remain unchanged.</li><li>Look for hidden files, folders, and sidecar files that should not be included.</li><li>Note apps, shortcuts, scripts, or project documents that refer to the current paths.</li><li>Make a backup or a working copy when recovery would be costly.</li></ul>
+<h2>Recommended Workflow</h2>
+<ol><li><strong>Define the target pattern.</strong> Write one example old name and its exact desired result. Use an unambiguous structure such as `2026-08_client_subject_001.ext`.</li><li><strong>Choose a representative test set.</strong> Include short and long names, duplicate-looking items, multiple extensions, non-Latin characters, and at least one file that should stay unchanged.</li><li><strong>Apply one rule at a time.</strong> Add the prefix, replacement, case change, or numbering step separately so the source of an unexpected result remains visible.</li><li><strong>Review the full preview.</strong> Scan both columns, search for blank or nearly identical names, and confirm that the number of source and destination rows matches.</li><li><strong>Check collisions and validity.</strong> Every destination in the same folder must be unique. Reject reserved or unsupported characters and names that exceed practical path limits.</li><li><strong>Preserve extensions.</strong> Treat the basename and extension as separate fields unless you are performing a real format conversion with an appropriate tool.</li><li><strong>Apply to the test set.</strong> Open several renamed files in the app that normally uses them. Confirm content, sort order, links, and sidecar relationships.</li><li><strong>Run the full batch.</strong> Keep the backup until the destination workflow has been checked. Record the rule or naming convention for the next batch.</li></ol>
+<figure><img src="/blog-assets/en/rename-files-safely-preview-workflow/workflow-diagram.svg" alt="Workflow diagram" title="Plan rules, inspect a preview, test a subset, and apply a batch rename"></figure>
+<h2>Renaming Approach Comparison</h2>
+<table><thead><tr><th>Approach</th><th>Best for</th><th>Main risk</th><th>Safe habit</th></tr></thead><tbody><tr><td>Rename files one by one</td><td>A few unrelated files</td><td>Inconsistent spelling and numbering</td><td>Keep the target pattern beside the folder</td></tr><tr><td>Built-in file manager rename</td><td>A small, simple selection</td><td>Limited preview or rule control</td><td>Test on copies and preserve extensions</td></tr><tr><td>Rule-based batch rename</td><td>Repeated patterns across many files</td><td>One broad rule affects every match</td><td>Preview every destination and check collisions</td></tr><tr><td>Scripted rename</td><td>Versioned, repeatable technical workflows</td><td>A logic or path error can affect a large tree</td><td>Use a dry run, constrain the directory, and log mappings</td></tr><tr><td>Rename during export</td><td>Files created by the same application</td><td>Source identity may be lost after export</td><td>Retain an export manifest or original copy</td></tr></tbody></table>
+<h2>Practical Cautions</h2>
+<p>Do not use rename as a substitute for conversion. Changing `photo.heic` to `photo.jpg` changes only the label, not the encoded image. Use a converter when the format itself must change.</p>
+<p>Treat folders as boundaries. A recursive operation can include archives, application data, or nested projects that follow different conventions. Start with one explicit folder and inspect subfolders separately. Cloud synchronization also deserves time to settle; applying a second batch while the first is still syncing can make diagnosis harder.</p>
+<p>If another application owns the library, prefer its built-in rename or relink workflow. Media editors, development tools, and catalog applications may maintain internal references that a file manager cannot update. Keep a mapping of old and new names when auditability matters.</p>
+<h2>ONNELLAB Application</h2>
+<p><a href="/apps/aligna/">Aligna</a> fits this workflow when you want rule-based filename changes with a preview-before-apply step. Use it after deciding the naming convention: select an explicit batch, build small rules, inspect the proposed destinations, and apply only when the mapping is understandable.</p>
+<p>On iOS, saving may produce a newly named copy rather than changing every source in place, depending on the storage provider and workflow. Confirm the destination and keep the original until the copy has been opened successfully. The app reduces repetitive editing, but backups, external references, and the meaning of filenames remain the user&#x27;s responsibility.</p>
+<h2>Related Topics</h2>
+<ul><li>How to choose a durable date and sequence format for filenames</li><li>How to organize a downloads folder with a small number of categories</li><li>When a file extension change requires real format conversion</li><li>How to keep an old-to-new filename manifest for shared projects</li></ul>
+<h2>References</h2>
+<ul><li><a href="https://support.apple.com/guide/iphone/organize-files-and-folders-iphc61044c11/ios">Apple Support: Organize files and folders in Files on iPhone</a> documents the Files app&#x27;s standard organization and rename controls.</li><li><a href="https://developer.android.com/reference/android/provider/DocumentsContract#renameDocument(android.content.ContentResolver,%20android.net.Uri,%20java.lang.String">Android Developers: DocumentsContract.renameDocument</a>) documents that a document provider may return a new document URI after a rename, which is relevant to stored references.</li><li><a href="https://apps.apple.com/app/id6783642658">Aligna on the App Store</a> is the official iOS installation listing.</li><li><a href="https://play.google.com/store/apps/details?id=com.onnellab.aligna">Aligna on Google Play</a> is the official Android installation listing.</li></ul>
+<h2>Conclusion</h2>
+<p>A safe batch rename is a controlled mapping from known sources to unique destinations. Define the pattern, preview every result, protect extensions, test a varied subset, and keep recovery material until the real workflow has been verified. The tool can automate the transformation; the preview and follow-up checks make it trustworthy.</p>
+<h2>FAQ</h2>
+<h3>Is a preview the same as an undo feature?</h3>
+<p>No. A preview shows intended names before application. Undo or restoration depends on the tool, storage provider, and whether an old-to-new mapping or backup exists.</p>
+<h3>Can I change file formats by renaming extensions?</h3>
+<p>No. An extension is a name-based hint. Converting content requires a tool that reads the source format and writes the target format.</p>
+<h3>What should I do when two files get the same preview name?</h3>
+<p>Stop before applying. Add a stable distinguishing field such as a sequence, date, source, or short identifier, then regenerate the preview and confirm uniqueness.</p>
+<h3>Should numbering follow selection order or current sort order?</h3>
+<p>Choose deliberately and confirm it in the preview. If order carries meaning, sort by the authoritative field first and test the first, middle, and last results.</p>
+<h3>Why can a successful rename still break another app?</h3>
+<p>The other app may store the previous path or filename. Use its relink feature, rename within the owning app when possible, or retain a mapping that lets you repair references.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>How to Reuse Copied Text Snippets on iPhone</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/">Read article</a></article>
+<article class="related-article-card"><h3>How to Read Large TXT Files Without Lag</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/">Read article</a></article>
+<article class="related-article-card"><h3>What Makes Large Text Files Slow to Open</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/large-text-file-slow-to-open/">Read article</a></article>
+<article class="related-article-card"><h3>How to Convert Local Media Files Privately</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/convert-local-media-files-privately/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

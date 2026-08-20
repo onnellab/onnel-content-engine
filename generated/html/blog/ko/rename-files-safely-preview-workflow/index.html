@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법</title>
+  <meta name="description" content="파일명 일괄 변경 전에 규칙과 충돌을 미리 확인하고, 복구 가능한 상태에서 안전하게 적용하는 과정을 설명합니다.">
+  <link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20260712-ol-transparent-v2" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260712-ol-transparent-v2">
+  <link rel="manifest" href="/site.webmanifest?v=20260712-ol-transparent-v2">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법">
+  <meta property="og:description" content="파일명 일괄 변경 전에 규칙과 충돌을 미리 확인하고, 복구 가능한 상태에서 안전하게 적용하는 과정을 설명합니다.">
+  <meta property="og:url" content="https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법">
+  <meta name="twitter:description" content="파일명 일괄 변경 전에 규칙과 충돌을 미리 확인하고, 복구 가능한 상태에서 안전하게 적용하는 과정을 설명합니다.">
+  <meta property="og:image" content="https://onnellab.github.io/blog-assets/ko/rename-files-safely-preview-workflow/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.github.io/blog-assets/ko/rename-files-safely-preview-workflow/social-card.png">
+</head>
+<body>
+  <main>
+<h1>미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법</h1>
+<p>파일 하나의 이름을 바꾸는 일은 단순합니다. 하지만 영수증, 스캔 문서, 사진, 프로젝트 내보내기 파일이 가득한 폴더에서는 한 번의 넓은 치환이 중요한 맥락을 없애거나 같은 목적지 이름을 만들거나 앱이 필요로 하는 확장자를 바꿀 수 있습니다. 안전한 방법은 계획과 실제 저장소 변경을 분리하는 것입니다.</p>
+<h2>질문</h2>
+<p>실수 없이 여러 파일의 이름을 한꺼번에 바꾸려면 어떻게 해야 하나요?</p>
+<h2>요약 답변</h2>
+<p>파일이 중요하면 복사본에서 작업하고, 작은 규칙을 하나씩 만든 뒤 모든 결과를 파일 이름 일괄 변경 미리보기에서 확인하세요. 각 원본이 하나의 고유한 목적지에 대응하는지, 확장자가 의도치 않게 바뀌지 않는지 확인하고, 다양한 표본에 먼저 적용한 다음 실제로 사용하는 앱에서 파일을 열어 봐야 합니다. 미리보기는 규칙이 만들 결과를 보여 주지만 백업이나 외부 참조의 정상 동작까지 보장하지는 않습니다.</p>
+<h2>알아둘 정의</h2>
+<p><strong>이름 변경 규칙</strong>은 파일 이름의 일부를 일정한 방식으로 바꾸는 규칙입니다. 날짜 접두어 추가, 공백을 하이픈으로 치환, 선택한 순서에 따른 번호 붙이기가 예입니다. <strong>파일명 일괄 변경</strong>은 여러 선택 파일에 하나 이상의 규칙을 적용하는 작업입니다.</p>
+<p><strong>파일 이름 일괄 변경 미리보기</strong>는 새 이름을 저장하기 전에 원본과 예상 결과를 나란히 계산한 목록입니다. 좋은 미리보기는 영향을 받는 모든 파일, 바뀌지 않는 항목, 이름 충돌, 유효하지 않은 이름, 최종 확장자를 보여 줍니다.</p>
+<p><strong>확장자</strong>는 `.pdf`, `.jpg`, `.txt`처럼 많은 시스템과 앱이 파일 형식을 짐작하는 데 쓰는 이름 끝부분입니다. 확장자 이름만 바꿔도 파일 내용은 변환되지 않습니다. <strong>인코딩은</strong> 텍스트 문자를 저장 바이트에 대응시키는 규칙으로, 파일 안의 글자에는 영향을 주지만 파일명 변환 규칙과는 별개입니다. <strong>가상 렌더링은</strong> 긴 목록에서 화면에 보이는 행만 그리는 표시 기법입니다. 큰 미리보기의 사용성을 도울 수는 있어도 규칙의 정확성을 검증하지는 않습니다.</p>
+<p>파일 이름 자체는 서식 없는 <strong>일반 텍스트</strong>이지만 운영체제와 저장소마다 허용하는 문자와 길이 규칙이 다를 수 있습니다. 따라서 화면에 입력할 수 있다는 사실만으로 모든 목적지에서 유효하다고 가정해서는 안 됩니다.</p>
+<h2>일괄 변경에서 실수가 생기는 이유</h2>
+<p>규칙은 패턴을 대상으로 하지만 실제 폴더에는 예외가 섞여 있습니다. `초안 보고서`를 고치려던 치환이 `초안 보고 자료`까지 바꿀 수 있습니다. 선택 순서와 화면 정렬 순서가 다르면 연속 번호의 의미가 달라집니다. 접두어를 지운 결과 서로 다른 두 원본이 같은 목적지 이름이 될 수도 있습니다.</p>
+<p>파일 이름은 폴더 밖의 작업에도 연결됩니다. 문서가 프로젝트 파일에 링크되어 있거나, 미디어 보관함에 등록되어 있거나, 스크립트가 경로를 참조하거나, 다른 서비스가 동기화할 수 있습니다. 기술적으로 유효한 새 이름이어도 그 연결은 끊길 수 있습니다. 따라서 ‘미리보기가 깔끔하다’와 ‘전체 작업 흐름이 정상이다’는 서로 다른 확인 항목입니다.</p>
+<h2>먼저 확인할 항목</h2>
+<ul><li>날짜, 고객, 순서, 버전, 주제 중 무엇이 각 파일의 정체성을 나타내는지 찾습니다.</li><li>번호를 붙이기 전에 최종 정렬 순서를 결정합니다.</li><li>확장자를 그대로 유지할지 확인합니다.</li><li>숨김 파일, 폴더, 보조 파일을 선택에서 제외해야 하는지 살핍니다.</li><li>현재 경로를 참조하는 앱, 바로가기, 스크립트, 프로젝트 문서를 기록합니다.</li><li>복구 비용이 크다면 백업이나 작업용 복사본을 만듭니다.</li></ul>
+<h2>권장 워크플로</h2>
+<ol><li><strong>목표 형식을 정의합니다.</strong> 원래 이름 하나와 원하는 결과를 정확히 적습니다. `2026-08_고객_주제_001.ext`처럼 뜻이 분명한 구조를 사용합니다.</li><li><strong>다양한 표본을 고릅니다.</strong> 짧고 긴 이름, 비슷한 항목, 여러 확장자, 한글 등 비라틴 문자, 바뀌지 않아야 할 파일을 포함합니다.</li><li><strong>규칙을 하나씩 적용합니다.</strong> 접두어, 치환, 대소문자, 번호 규칙을 분리하면 예상 밖 결과를 만든 원인을 찾기 쉽습니다.</li><li><strong>전체 미리보기를 읽습니다.</strong> 두 열을 훑고, 비어 있거나 거의 같은 이름을 찾으며, 원본과 목적지 행의 수가 같은지 확인합니다.</li><li><strong>충돌과 유효성을 확인합니다.</strong> 같은 폴더의 목적지는 모두 고유해야 합니다. 사용할 수 없는 문자, 예약 이름, 지나치게 긴 경로를 거부합니다.</li><li><strong>확장자를 보호합니다.</strong> 실제 형식 변환을 하는 경우가 아니라면 기본 이름과 확장자를 별도 필드로 다룹니다.</li><li><strong>표본에 먼저 적용합니다.</strong> 평소 사용하는 앱에서 여러 결과 파일을 열고 내용, 정렬, 링크, 보조 파일 관계를 확인합니다.</li><li><strong>전체 묶음을 처리합니다.</strong> 목적지 작업이 정상인지 확인할 때까지 백업을 보관하고, 다음 작업을 위해 규칙이나 이름 규약을 기록합니다.</li></ol>
+<figure><img src="/blog-assets/ko/rename-files-safely-preview-workflow/workflow-diagram.svg" alt="워크플로 다이어그램" title="규칙을 계획하고 미리보기를 확인한 뒤 표본과 전체 묶음에 적용하는 과정"></figure>
+<h2>이름 변경 방법 비교</h2>
+<table><thead><tr><th>방법</th><th>알맞은 용도</th><th>주요 위험</th><th>안전한 습관</th></tr></thead><tbody><tr><td>파일을 하나씩 변경</td><td>서로 관련 없는 소수 파일</td><td>표기와 번호가 일관되지 않을 수 있음</td><td>목표 형식을 폴더 옆에 적어 두기</td></tr><tr><td>파일 관리자의 기본 변경</td><td>작고 단순한 선택 항목</td><td>미리보기나 규칙 제어가 제한될 수 있음</td><td>복사본에서 시험하고 확장자 유지하기</td></tr><tr><td>규칙 기반 일괄 변경</td><td>많은 파일의 반복 패턴</td><td>넓은 규칙이 모든 일치 항목에 영향</td><td>모든 목적지를 미리 보고 충돌 확인하기</td></tr><tr><td>스크립트 기반 변경</td><td>버전 관리되는 반복 기술 작업</td><td>논리나 경로 오류가 큰 트리에 영향</td><td>시험 실행하고 폴더를 제한하며 대응표 기록하기</td></tr><tr><td>내보낼 때 이름 지정</td><td>같은 앱이 생성한 파일</td><td>내보낸 뒤 원본 정체성을 잃을 수 있음</td><td>내보내기 목록이나 원본 복사본 보관하기</td></tr></tbody></table>
+<h2>실용적인 주의사항</h2>
+<p>이름 변경을 변환 대신 사용하지 마세요. `사진.heic`를 `사진.jpg`로 바꿔도 표시 이름만 달라지고 이미지 인코딩은 그대로입니다. 형식 자체를 바꿔야 한다면 원본을 읽고 대상 형식으로 쓰는 변환 도구가 필요합니다.</p>
+<p>폴더를 작업 경계로 취급하세요. 재귀 작업은 서로 다른 규칙을 따르는 보관 파일, 앱 데이터, 하위 프로젝트까지 포함할 수 있습니다. 명시적인 폴더 하나에서 시작하고 하위 폴더는 따로 확인하세요. 클라우드 동기화가 끝날 시간도 필요합니다. 첫 변경이 동기화되는 동안 두 번째 묶음을 적용하면 문제 원인을 찾기 어려워집니다.</p>
+<p>다른 앱이 보관함을 관리한다면 그 앱의 자체 이름 변경이나 다시 연결 기능을 우선하세요. 미디어 편집기, 개발 도구, 자료 관리 앱은 파일 관리자가 갱신할 수 없는 내부 참조를 유지할 수 있습니다. 감사 가능성이 중요하면 이전 이름과 새 이름의 대응표를 남기세요.</p>
+<h2>ONNELLAB 앱</h2>
+<p><a href="/apps/aligna/">Aligna</a>는 적용 전 미리보기가 있는 규칙 기반 파일 이름 변경이 필요할 때 이 과정에 맞습니다. 먼저 이름 규약을 정한 다음, 명시적인 묶음을 선택하고 작은 규칙을 만들며, 제안된 목적지를 살핀 뒤 대응 관계를 이해할 수 있을 때만 적용하세요.</p>
+<p>iOS에서는 저장소 제공자와 작업 방식에 따라 원본을 제자리에서 바꾸는 대신 새 이름의 복사본을 저장할 수 있습니다. 목적지를 확인하고 새 파일을 정상적으로 열 때까지 원본을 보관하세요. 앱은 반복 편집을 줄이지만 백업, 외부 참조, 파일 이름의 의미까지 대신 결정하지는 않습니다.</p>
+<h2>관련 주제</h2>
+<ul><li>파일명에 오래 쓸 수 있는 날짜와 순서 형식을 정하는 방법</li><li>적은 수의 분류로 다운로드 폴더를 정리하는 방법</li><li>확장자 변경에 실제 파일 형식 변환이 필요한 경우</li><li>공유 프로젝트에서 이전 이름과 새 이름의 대응표를 유지하는 방법</li></ul>
+<h2>참고 자료</h2>
+<ul><li><a href="https://support.apple.com/ko-kr/guide/iphone/iphc61044c11/ios">Apple 지원: iPhone의 파일 앱에서 파일 및 폴더 정리하기</a>는 파일 앱의 기본 정리와 이름 변경 기능을 설명합니다.</li><li><a href="https://developer.android.com/reference/android/provider/DocumentsContract#renameDocument(android.content.ContentResolver,%20android.net.Uri,%20java.lang.String">Android Developers: DocumentsContract.renameDocument</a>)는 문서 제공자가 이름 변경 뒤 새로운 문서 URI를 반환할 수 있음을 설명하며, 저장한 참조를 점검해야 하는 이유가 됩니다.</li><li><a href="https://apps.apple.com/kr/app/id6783642658">App Store의 Aligna</a>는 공식 iOS 설치 페이지입니다.</li><li><a href="https://play.google.com/store/apps/details?id=com.onnellab.aligna">Google Play의 Aligna</a>는 공식 Android 설치 페이지입니다.</li></ul>
+<h2>결론</h2>
+<p>안전한 일괄 이름 변경은 알려진 원본을 고유한 목적지에 대응시키는 통제된 작업입니다. 형식을 정의하고, 모든 결과를 미리 보고, 확장자를 보호하며, 다양한 표본으로 시험하고, 실제 작업이 정상인지 확인할 때까지 복구 자료를 보관하세요. 도구는 변환을 자동화하지만 미리보기와 후속 확인이 그 결과를 신뢰할 수 있게 만듭니다.</p>
+<h2>자주 묻는 질문</h2>
+<h3>미리보기는 실행 취소 기능과 같은가요?</h3>
+<p>아닙니다. 미리보기는 적용 전 예상 이름을 보여 줍니다. 실행 취소나 복원 가능 여부는 도구와 저장소 제공자, 이전·새 이름 대응표나 백업의 존재에 따라 달라집니다.</p>
+<h3>확장자 이름을 바꾸면 파일 형식도 변환되나요?</h3>
+<p>아닙니다. 확장자는 이름에 포함된 형식 힌트입니다. 내용 변환에는 원본 형식을 읽고 대상 형식을 쓰는 도구가 필요합니다.</p>
+<h3>두 파일의 미리보기 이름이 같으면 어떻게 해야 하나요?</h3>
+<p>적용을 멈추세요. 순서, 날짜, 출처, 짧은 식별자처럼 안정적인 구분 필드를 추가한 뒤 미리보기를 다시 만들고 고유성을 확인해야 합니다.</p>
+<h3>번호는 선택 순서와 현재 정렬 순서 중 무엇을 따라야 하나요?</h3>
+<p>의도적으로 선택하고 미리보기에서 확인하세요. 순서에 의미가 있다면 권위 있는 필드를 기준으로 먼저 정렬하고 첫째, 중간, 마지막 결과를 시험합니다.</p>
+<h3>이름 변경이 성공했는데도 다른 앱에서 파일을 못 찾는 이유는 무엇인가요?</h3>
+<p>다른 앱이 이전 경로나 이름을 저장했을 수 있습니다. 가능하면 해당 앱 안에서 이름을 바꾸고, 다시 연결 기능을 쓰거나, 참조를 복구할 수 있도록 대응표를 보관하세요.</p>
+<section class="related-articles" aria-label="관련 글">
+<h2>관련 글</h2>
+<article class="related-article-card"><h3>아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법</h3><a class="related-article-link" href="https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/">글 열기</a></article>
+<article class="related-article-card"><h3>대용량 TXT 파일을 지연 없이 읽는 방법</h3><a class="related-article-link" href="https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/">글 열기</a></article>
+<article class="related-article-card"><h3>로컬 미디어 파일을 비공개로 변환하는 방법</h3><a class="related-article-link" href="https://onnellab.github.io/blog/ko/convert-local-media-files-privately/">글 열기</a></article>
+<article class="related-article-card"><h3>음악 정리 전 MP3 메타데이터를 정돈하는 방법</h3><a class="related-article-link" href="https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/">글 열기</a></article>
+</section>
+  </main>
+</body>
+</html>
