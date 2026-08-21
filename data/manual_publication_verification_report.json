@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-08-20T10:12:35+09:00",
+  "checked_at": "2026-08-21T10:16:46+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 48,
-    "already_done": 30,
+    "already_done": 31,
     "verified": 0,
-    "pending": 18
+    "pending": 17
   },
   "items": [
     {
@@ -188,6 +188,18 @@
       "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
       "verification_method": "user_confirmed_manual_publish",
       "verification_confidence": "manual"
+    },
+    {
+      "manual_key": "TOPIC-0012::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0012",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mtkllvwfbr2n",
+      "verification_method": "",
+      "verification_confidence": ""
     },
     {
       "manual_key": "TOPIC-0001::devto::en::markdown",
@@ -449,18 +461,6 @@
       "template_id": "x",
       "status": "pending",
       "reason": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0012::bluesky::en::bluesky",
-      "topic_id": "TOPIC-0012",
-      "platform": "bluesky",
-      "language": "en",
-      "template_id": "bluesky",
-      "status": "pending",
-      "reason": "No matching public post found",
       "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
