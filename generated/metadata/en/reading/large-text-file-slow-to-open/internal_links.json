@@ -77,6 +77,19 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0012",
+        "title": "How to Rename Files Safely With a Preview Workflow",
+        "slug": "rename-files-safely-preview-workflow",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",
@@ -98,19 +111,6 @@
         "status": "published",
         "url": "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0012",
-        "title": "How to Rename Files Safely With a Preview Workflow",
-        "slug": "rename-files-safely-preview-workflow",
-        "category": "productivity",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/productivity/rename-files-safely-preview-workflow.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 4

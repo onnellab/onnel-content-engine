@@ -48,14 +48,14 @@
         "slug": "rename-files-safely-preview-workflow",
         "category": "productivity",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/productivity/rename-files-safely-preview-workflow.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"
         ],
-        "score": 9
+        "score": 10
       },
       {
         "topic_id": "TOPIC-0028",
