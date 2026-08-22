@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-08-21T10:16:46+09:00",
+  "checked_at": "2026-08-22T10:12:32+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 48,
-    "already_done": 31,
+    "already_done": 32,
     "verified": 0,
-    "pending": 17
+    "pending": 16
   },
   "items": [
     {
@@ -382,6 +382,18 @@
       "verification_confidence": "manual"
     },
     {
+      "manual_key": "TOPIC-0012::devto::en::markdown",
+      "topic_id": "TOPIC-0012",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-rename-files-safely-with-a-preview-workflow-3d1a",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0003::x::en::x",
       "topic_id": "TOPIC-0003",
       "platform": "x",
@@ -541,18 +553,6 @@
       "manual_key": "TOPIC-0009::medium::en::markdown",
       "topic_id": "TOPIC-0009",
       "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0012::devto::en::markdown",
-      "topic_id": "TOPIC-0012",
-      "platform": "devto",
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
