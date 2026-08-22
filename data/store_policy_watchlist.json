@@ -4,22 +4,22 @@
       "store": "google_play",
       "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
       "status": "changed",
-      "content_hash": "27a0182a23c2d56bba6772cfb1bd547a019612ffa39a527c21d3fc93eb7e88aa",
-      "checked_at": "2026-08-21T01:49:35+00:00"
+      "content_hash": "d901cf7bad6e8dddcef2b7fa083d7a42b9793252478d6fd1505f44872f1008bc",
+      "checked_at": "2026-08-22T01:42:41+00:00"
     },
     {
       "store": "google_play",
       "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
       "status": "changed",
-      "content_hash": "ffdecea3507a690c54ac444e2878195ac6d5e6d1c60ed52712d3d2e94dd0c3fb",
-      "checked_at": "2026-08-21T01:49:35+00:00"
+      "content_hash": "ef5eb2ba00cc852e4c0c88b9713622b72deecce00c2dc7ef5b6a91929d207ce9",
+      "checked_at": "2026-08-22T01:42:41+00:00"
     },
     {
       "store": "app_store",
       "url": "https://developer.apple.com/app-store/review/guidelines/",
       "status": "changed",
-      "content_hash": "d5706ce9340fedc628af08e6a45f15add52640caa224ad1c2f6211fc58caffde",
-      "checked_at": "2026-08-21T01:49:35+00:00"
+      "content_hash": "cba0d4adfd75d0f113f1518441ede97b2c1e1f7c02be774d8b5708267070ea77",
+      "checked_at": "2026-08-22T01:42:41+00:00"
     }
   ]
 }
