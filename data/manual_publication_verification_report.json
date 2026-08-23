@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-08-22T10:12:32+09:00",
+  "checked_at": "2026-08-23T10:18:37+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 48,
+    "checked": 54,
     "already_done": 32,
     "verified": 0,
-    "pending": 16
+    "pending": 22
   },
   "items": [
     {
@@ -490,6 +490,42 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0015::x::en::x",
+      "topic_id": "TOPIC-0015",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0015::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0015",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0015::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0015",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0003::hashnode::en::markdown",
       "topic_id": "TOPIC-0003",
       "platform": "hashnode",
@@ -576,6 +612,42 @@
     {
       "manual_key": "TOPIC-0012::medium::en::markdown",
       "topic_id": "TOPIC-0012",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0015::devto::en::markdown",
+      "topic_id": "TOPIC-0015",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0015::hashnode::en::markdown",
+      "topic_id": "TOPIC-0015",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0015::medium::en::markdown",
+      "topic_id": "TOPIC-0015",
       "platform": "medium",
       "language": "en",
       "template_id": "markdown",
