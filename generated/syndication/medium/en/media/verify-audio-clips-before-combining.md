@@ -1,23 +1,6 @@
----
-title: "How to Verify Audio Clips Before Combining Them"
-card_title: "How to Verify Audio Clips Before Combining Them"
-slug: "verify-audio-clips-before-combining"
-category: "media"
-language: "en"
-description: "Verify audio clip order, format, boundaries, loudness, and export integrity before combining recordings into one dependable file."
-status: "published"
-topic_id: "TOPIC-0015"
-search_intent: "workflow"
-primary_keyword: "verify audio clips before merging"
-secondary_keywords: "audio merge order|clip boundaries|volume consistency|Segra"
-related_apps: "Segra"
-tags: "audio clip verification|audio merge order|clip boundaries|loudness consistency|Segra"
-canonical_url: "https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/"
-published_at: "2026-08-23T09:00:00+09:00"
-updated_at: "2026-08-23T09:00:00+09:00"
-image_specs: "Workflow diagram for verify audio clips before merging|Comparison diagram for practical options|Screenshot requirements for related applications"
-related_articles: "How to Trim Audio Recordings Without a Full Editor => https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
----
+> ONNELLAB note: This edit keeps the reader workflow first and treats the product mention as context.
+
+
 
 # How to Verify Audio Clips Before Combining Them
 
@@ -71,7 +54,7 @@ Silence is not automatically an error. Preserve natural pauses, speech onsets an
 
 Overlap is also contextual. Accidental overlap repeats material and should be corrected. Intentional overlap enables a crossfade, where one clip fades out while the next fades in. A crossfade can smooth a compatible transition, but it is not a universal repair: it shortens the resulting timeline by the overlap duration and can blur words, beats, or unrelated background sounds. Prefer a clean butt join when the source already has a natural boundary, a short fade when only an edge clicks, and a crossfade when two clips genuinely should overlap.
 
-![Workflow diagram](/blog-assets/en/verify-audio-clips-before-combining/workflow-diagram.svg "Workflow for inventorying, checking, joining, and verifying audio clips")
+![Workflow diagram](https://onnellab.github.io/blog-assets/en/verify-audio-clips-before-combining/workflow-diagram.svg "Workflow for inventorying, checking, joining, and verifying audio clips")
 
 ## Match Perceived Loudness Without Chasing Peaks
 
@@ -112,7 +95,7 @@ A checksum proves only that two copies contain the same bytes. Retain the source
 
 ## ONNELLAB Application
 
-After the verification method is clear, [Segra](/apps/segra/) may fit the preparation stage when the task is trimming and organizing audio segments. That is the documented scope relevant to this workflow. It should not be treated as a full audio-production application, and this article does not assume that it performs final concatenation, loudness conformance, or delivery verification. Use a tool whose documented capabilities cover those later steps when they are required.
+After the verification method is clear, [Segra](https://onnellab.github.io/apps/segra/) may fit the preparation stage when the task is trimming and organizing audio segments. That is the documented scope relevant to this workflow. It should not be treated as a full audio-production application, and this article does not assume that it performs final concatenation, loudness conformance, or delivery verification. Use a tool whose documented capabilities cover those later steps when they are required.
 
 ## References
 
@@ -141,3 +124,7 @@ No. A clean join preserves timing and may be ideal at a natural boundary. Crossf
 ### Can a checksum confirm that the combined audio is correct?
 
 It can confirm that a file did not change during copying. It cannot confirm editorial order, audible quality, completeness, or compatibility, so playback and duration checks are still required.
+
+---
+
+Originally published at https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/

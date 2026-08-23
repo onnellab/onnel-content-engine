@@ -82,6 +82,13 @@
     <pubDate>Mon, 20 Jul 2026 05:56:51 GMT</pubDate>
   </item>
   <item>
+    <title>How to Verify Audio Clips Before Combining Them</title>
+    <link>https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/</link>
+    <guid>https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/</guid>
+    <description>Verify audio clip order, format, boundaries, loudness, and export integrity before combining recordings into one dependable file.</description>
+    <pubDate>Sun, 23 Aug 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법</title>
     <link>https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/</link>
     <guid>https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/</guid>
@@ -115,6 +122,13 @@
     <guid>https://onnellab.github.io/blog/ko/trim-audio-recordings-without-full-editor/</guid>
     <description>정확한 시작점과 끝점, 클릭 없는 경계, 목적에 맞는 내보내기 설정, 로컬 사본 검증으로 오디오 녹음을 안전하게 자르는 방법을 설명합니다.</description>
     <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>오디오 클립을 합치기 전에 확인하는 방법</title>
+    <link>https://onnellab.github.io/blog/ko/verify-audio-clips-before-combining/</link>
+    <guid>https://onnellab.github.io/blog/ko/verify-audio-clips-before-combining/</guid>
+    <description>여러 오디오 클립을 하나의 파일로 합치기 전에 순서, 형식, 경계, 음량, 내보내기 무결성을 확인하는 방법을 설명합니다.</description>
+    <pubDate>Sun, 23 Aug 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>
