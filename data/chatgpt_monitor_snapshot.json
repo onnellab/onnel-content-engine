@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-23T10:34:48+00:00",
+  "generated_at": "2026-08-23T10:54:34+00:00",
   "repository": "onnellab/onnel-content-engine",
   "schedule": "RRULE:FREQ=HOURLY;INTERVAL=1",
   "lookback_hours": 2,
