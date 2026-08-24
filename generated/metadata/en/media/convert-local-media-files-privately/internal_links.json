@@ -45,6 +45,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0015",
+        "title": "How to Verify Audio Clips Before Combining Them",
+        "slug": "verify-audio-clips-before-combining",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 11
+      },
+      {
         "topic_id": "TOPIC-0009",
         "title": "How to Trim Audio Recordings Without a Full Editor",
         "slug": "trim-audio-recordings-without-full-editor",
@@ -53,21 +68,6 @@
         "status": "published",
         "url": "https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/",
         "destination": "published_article",
-        "relationship": "deeper",
-        "shared_clusters": [
-          "media"
-        ],
-        "score": 10
-      },
-      {
-        "topic_id": "TOPIC-0015",
-        "title": "How to Verify Audio Clips Before Combining Them",
-        "slug": "verify-audio-clips-before-combining",
-        "category": "media",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/media/verify-audio-clips-before-combining.md",
-        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "media"

@@ -59,6 +59,19 @@
         "score": 4
       },
       {
+        "topic_id": "TOPIC-0015",
+        "title": "How to Verify Audio Clips Before Combining Them",
+        "slug": "verify-audio-clips-before-combining",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0001",
         "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
@@ -94,19 +107,6 @@
         "url": "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/",
         "destination": "published_article",
         "relationship": "prerequisite",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0007",
-        "title": "How to Convert Local Media Files Privately",
-        "slug": "convert-local-media-files-privately",
-        "category": "media",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.github.io/blog/en/convert-local-media-files-privately/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
       }

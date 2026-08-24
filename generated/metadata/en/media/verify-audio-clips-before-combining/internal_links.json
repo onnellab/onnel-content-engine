@@ -14,7 +14,7 @@
     "slug": "verify-audio-clips-before-combining",
     "category": "media",
     "language": "en",
-    "status": "scheduled",
+    "status": "published",
     "topic_clusters": [
       "audio merge order",
       "clip boundaries",

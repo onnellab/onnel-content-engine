@@ -65,14 +65,14 @@
         "slug": "verify-audio-clips-before-combining",
         "category": "media",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/media/verify-audio-clips-before-combining.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/verify-audio-clips-before-combining/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "media"
         ],
-        "score": 9
+        "score": 10
       },
       {
         "topic_id": "TOPIC-0005",

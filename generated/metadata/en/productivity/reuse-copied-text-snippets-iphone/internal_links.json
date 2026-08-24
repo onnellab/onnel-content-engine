@@ -101,17 +101,17 @@
         "score": 4
       },
       {
-        "topic_id": "TOPIC-0001",
-        "title": "How to Read Large TXT Files Without Lag",
-        "slug": "read-large-txt-files-without-lag",
-        "category": "reading",
+        "topic_id": "TOPIC-0015",
+        "title": "How to Verify Audio Clips Before Combining Them",
+        "slug": "verify-audio-clips-before-combining",
+        "category": "media",
         "language": "en",
         "status": "published",
-        "url": "https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/",
+        "url": "https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 3
+        "score": 4
       }
     ],
     "related_apps": [
