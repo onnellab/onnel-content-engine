@@ -22,7 +22,7 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "developer_reply": "",
       "reply_updated_at": "",
       "status": "pending",
-      "synced_at": "2026-08-23T02:02:14+00:00"
+      "synced_at": "2026-08-24T02:00:25+00:00"
     },
     "triage": {
       "review_id": "01c61214-a153-466b-9890-1de1f2cb4157",
@@ -132,7 +132,7 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "developer_reply": "",
       "reply_updated_at": "",
       "status": "pending",
-      "synced_at": "2026-08-23T02:02:14+00:00"
+      "synced_at": "2026-08-24T02:00:25+00:00"
     },
     "triage": {
       "review_id": "report-a0d3339ac24a86567e3f9185",
