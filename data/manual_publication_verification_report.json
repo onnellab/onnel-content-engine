@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-08-23T10:18:37+09:00",
+  "checked_at": "2026-08-24T10:16:28+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 54,
-    "already_done": 32,
+    "already_done": 33,
     "verified": 0,
-    "pending": 22
+    "pending": 21
   },
   "items": [
     {
@@ -198,6 +198,18 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mtkllvwfbr2n",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0015::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0015",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mts4y4tw7o2g",
       "verification_method": "",
       "verification_confidence": ""
     },
@@ -497,18 +509,6 @@
       "template_id": "x",
       "status": "pending",
       "reason": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0015::bluesky::en::bluesky",
-      "topic_id": "TOPIC-0015",
-      "platform": "bluesky",
-      "language": "en",
-      "template_id": "bluesky",
-      "status": "pending",
-      "reason": "No matching public post found",
       "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
