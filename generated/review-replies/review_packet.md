@@ -5,6 +5,65 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
 [
   {
     "review": {
+      "review_id": "873ee7f8-107e-4b31-8876-51d88b27fa5c",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "platform": "android",
+      "rating": "4",
+      "review_kind": "review",
+      "title": "",
+      "body": "This is a great and simple app for modfying tags for your music files, although I am facing a bug where I am unable to change the cover art of a flac file (unable to save), while mp3's work perfectly.",
+      "reviewer_language": "en",
+      "territory": "",
+      "app_version": "2.2.2",
+      "created_at": "2026-08-24T21:45:11+00:00",
+      "updated_at": "2026-08-24T21:45:11+00:00",
+      "developer_reply": "",
+      "reply_updated_at": "",
+      "status": "pending",
+      "synced_at": "2026-08-25T01:55:59+00:00"
+    },
+    "triage": {
+      "review_id": "873ee7f8-107e-4b31-8876-51d88b27fa5c",
+      "category": "praise",
+      "risk_flags": [],
+      "similarity_key": "praise",
+      "similar_reviews": 1,
+      "facts": [
+        {
+          "text": "TagWeaver is a focused editor for MP3 metadata.",
+          "source": "docs/operations/APP_FACTS.md:6"
+        },
+        {
+          "text": "TagWeaver supports editing one track at a time in the free experience.",
+          "source": "docs/operations/APP_FACTS.md:7"
+        },
+        {
+          "text": "Editing an individual file is available without the optional Pro upgrade.",
+          "source": "docs/operations/PRICING_FACTS.md:7"
+        },
+        {
+          "text": "Batch editing multiple files is included in TagWeaver Pro.",
+          "source": "docs/operations/PRICING_FACTS.md:8"
+        },
+        {
+          "text": "TagWeaver Pro is a one-time purchase; it is not a subscription.",
+          "source": "docs/operations/PRICING_FACTS.md:9"
+        }
+      ],
+      "requires_human_approval": false,
+      "actions": {
+        "reply": "recommended",
+        "github_issue": "not_needed",
+        "store_copy": "not_needed",
+        "code_change": "not_needed"
+      },
+      "issue_draft": ""
+    }
+  },
+  {
+    "review": {
       "review_id": "01c61214-a153-466b-9890-1de1f2cb4157",
       "app_id": "APP-0002",
       "app_slug": "tagweaver",
@@ -22,7 +81,7 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "developer_reply": "",
       "reply_updated_at": "",
       "status": "pending",
-      "synced_at": "2026-08-24T02:00:25+00:00"
+      "synced_at": "2026-08-25T01:55:59+00:00"
     },
     "triage": {
       "review_id": "01c61214-a153-466b-9890-1de1f2cb4157",
@@ -132,7 +191,7 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "developer_reply": "",
       "reply_updated_at": "",
       "status": "pending",
-      "synced_at": "2026-08-24T02:00:25+00:00"
+      "synced_at": "2026-08-25T01:55:59+00:00"
     },
     "triage": {
       "review_id": "report-a0d3339ac24a86567e3f9185",
