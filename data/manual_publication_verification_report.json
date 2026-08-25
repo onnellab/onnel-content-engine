@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-08-24T10:16:28+09:00",
+  "checked_at": "2026-08-25T10:14:43+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 54,
-    "already_done": 33,
+    "already_done": 34,
     "verified": 0,
-    "pending": 21
+    "pending": 20
   },
   "items": [
     {
@@ -406,6 +406,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0015::devto::en::markdown",
+      "topic_id": "TOPIC-0015",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-verify-audio-clips-before-combining-them-43e1",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0003::x::en::x",
       "topic_id": "TOPIC-0003",
       "platform": "x",
@@ -613,18 +625,6 @@
       "manual_key": "TOPIC-0012::medium::en::markdown",
       "topic_id": "TOPIC-0012",
       "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0015::devto::en::markdown",
-      "topic_id": "TOPIC-0015",
-      "platform": "devto",
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
