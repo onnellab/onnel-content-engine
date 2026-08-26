@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Keep a Durable Research Reading Log</title>
+  <meta name="description" content="Build a durable research reading log that preserves source identity, claim-to-evidence links, context, and handoff-ready records beyond one project.">
+  <link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20260712-ol-transparent-v2" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260712-ol-transparent-v2">
+  <link rel="manifest" href="/site.webmanifest?v=20260712-ol-transparent-v2">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.github.io/blog/en/keep-durable-research-reading-log/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Keep a Durable Research Reading Log">
+  <meta property="og:description" content="Build a durable research reading log that preserves source identity, claim-to-evidence links, context, and handoff-ready records beyond one project.">
+  <meta property="og:url" content="https://onnellab.github.io/blog/en/keep-durable-research-reading-log/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Keep a Durable Research Reading Log">
+  <meta name="twitter:description" content="Build a durable research reading log that preserves source identity, claim-to-evidence links, context, and handoff-ready records beyond one project.">
+  <meta property="og:image" content="https://onnellab.github.io/blog-assets/en/keep-durable-research-reading-log/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.github.io/blog-assets/en/keep-durable-research-reading-log/social-card.png">
+</head>
+<body>
+  <main>
+<h1>How to Keep a Durable Research Reading Log</h1>
+<p>A durable research reading log lets another person identify the source, recover evidence, understand your interpretation, and connect it to a claim. PDFs and free-form highlights often lose meaning when links and context change.</p>
+<h2>Question</h2>
+<p>How can I keep a research reading log that remains useful after a project ends?</p>
+<h2>Short Answer</h2>
+<p>Give every source a stable identity, locator, and access date; distinguish quotations from paraphrases; and connect notes to claims. Preserve enough context to prevent misreading. Move entries through capture, verification, summary, synthesis, and review, then create open-format exports, independent backups, and a handoff note.</p>
+<p>The durable unit is not the highlight. It is a traceable relationship:</p>
+<p><strong>source → passage or result → interpretation → project claim → review status</strong></p>
+<h2>Why Reading Logs Stop Being Useful</h2>
+<p>Fragile logs preserve content but not provenance: a quotation lacks a page, a URL points only to a publisher home page, a paraphrase looks like exact wording, or broad tags replace a claim link. A DOI still cannot preserve local context or guarantee full-text access.</p>
+<p><strong>Referential durability</strong> keeps the source identifiable when its location changes. <strong>Interpretive durability</strong> preserves what you observed, how you represented it, and why it mattered. A stable identifier helps with the first; the reading record supplies the second.</p>
+<h2>The Minimum Durable Log Schema</h2>
+<p>Use one record per source version. When a source changes substantially, create a new record and link versions instead of overwriting the earlier note.</p>
+<table><thead><tr><th>Field</th><th>What to record</th><th>Why it matters</th></tr></thead><tbody><tr><td>`record_id`</td><td>Immutable ID such as `RL-2026-0042`</td><td>Keeps internal links stable</td></tr><tr><td>`source_identity`</td><td>Author, title, container, date, version</td><td>Identifies the work consulted</td></tr><tr><td>`stable_identifier`</td><td>Full `https://doi.org/...` URL or another registered ID</td><td>Separates identity from location</td></tr><tr><td>`locator`</td><td>Access URL plus page, section, figure, timestamp, or dataset row</td><td>Recovers evidence within the source</td></tr><tr><td>`accessed_at`</td><td>Full date in `YYYY-MM-DD`</td><td>Records when a changeable web resource was observed</td></tr><tr><td>`note_type`</td><td>`quote`, `paraphrase`, `summary`, or `observation`</td><td>Separates your wording from the source</td></tr><tr><td>`evidence`</td><td>Short quotation, paraphrase, result, or observation</td><td>Preserves relevant support</td></tr><tr><td>`context`</td><td>Population, method, conditions, exceptions</td><td>Reduces scope errors</td></tr><tr><td>`claim_link`</td><td>Related claim, question, or claim ID</td><td>Makes the trail inspectable</td></tr><tr><td>`relevance`</td><td>Why the evidence matters</td><td>Preserves project reasoning</td></tr><tr><td>`status`</td><td>`captured`, `verified`, `summarized`, `synthesized`, `reviewed`, or `needs_review`</td><td>Shows what has and has not been checked</td></tr><tr><td>`tags`</td><td>Controlled topic, method, population, or project terms</td><td>Supports retrieval</td></tr></tbody></table>
+<p>Optional fields can cover rights, language, checksums, archives, conflicts, and related records. A modest schema completed every time is better than a large, mostly empty one.</p>
+<h2>Quote, Paraphrase, Summary, and Observation</h2>
+<p>Mark representation explicitly at capture time.</p>
+<ul><li>A <strong>quote</strong> reproduces exact wording and needs quotation marks and a precise locator.</li><li>A <strong>paraphrase</strong> restates a passage but still needs a citation and locator.</li><li>A <strong>summary</strong> compresses a wider range; record that range.</li><li>An <strong>observation</strong> is your analysis; label it and retain the source-data locator.</li></ul>
+<p>Mark any omission or change to a quotation. Use printed PDF pages where available, stable HTML headings, timestamp ranges for media, and dataset version plus table, variables, and relevant rows or query.</p>
+<h2>Connect Claims to Evidence, Not Just Sources</h2>
+<p>A bibliography shows what was read; a claim-evidence link shows what the reading does. Give important claims stable local IDs. For each record, state whether the evidence <strong>supports</strong>, <strong>qualifies</strong>, <strong>contradicts</strong>, or only <strong>provides context for</strong> the linked claim. This prevents several adjacent citations from appearing to support a statement when only one does.</p>
+<p>Record limitations beside the evidence. Sample, geography, date range, method, uncertainty, comparison group, and author caveats affect whether a finding transfers. “Same adult outcome, but only seven days of follow-up” is more useful than “important paper.”</p>
+<h2>Recommended Workflow</h2>
+<ol><li><strong>Capture.</strong> While the source is open, record bibliographic details, identifier, exact access URL and date, locator, note type, minimal evidence, and a local ID.</li><li><strong>Verify.</strong> Resolve the identifier; compare author, title, date, version, and container with an official record; then reopen the locator and check quotations. Resolution alone does not prove the version is correct.</li><li><strong>Summarize.</strong> Separately state the question, method, result, and limitations in your own words.</li><li><strong>Synthesize.</strong> Link records to claims and explain whether sources converge, differ, or conflict.</li><li><strong>Review.</strong> Before publication or handoff, recheck identifiers, quote boundaries, locators, rights, personal data, and status. Use `reviewed` or `needs_review` honestly.</li></ol>
+<figure><img src="/blog-assets/en/keep-durable-research-reading-log/workflow-diagram.svg" alt="Research reading log workflow" title="Capture, verify, summarize, synthesize, and review each source record"></figure>
+<p>Repeat capture or verification when synthesis exposes a gap or a new version appears. Status describes processing state, not source prestige.</p>
+<h2>Stable Identifiers and the Limits of Links</h2>
+<p>Prefer a DOI when available and display it as a full URL such as `https://doi.org/10.xxxx/xxxxx`. Keep the exact accessed URL separately because it identifies the copy, repository, or landing page consulted.</p>
+<p>Persistence depends on maintained records; it does not guarantee access, unchanged supplements, or an available cited page. Without a registered identifier, record full bibliographic details, version, URL, access date, and a permitted archive copy when appropriate.</p>
+<p>For multiple versions, identify the exact one read and link version relationships. Never replace a preprint note with the final article while assuming quotations, pages, and results are identical.</p>
+<h2>Copyright and Privacy Boundaries</h2>
+<p>A reading log is not permission to reproduce a source. Store the smallest necessary excerpt, preserve attribution and locator, and link to an authorized copy instead of redistributing full text. Copyright exceptions vary; the U.S. Copyright Office provides no fixed safe word count or percentage. Check the license, policy, and applicable law before sharing.</p>
+<p>Notes can contain personal data. Minimize collection, separate access-controlled material, use pseudonymous IDs where appropriate, and remove secrets from exports. Retain only data adequate, relevant, and necessary for the stated purpose.</p>
+<h2>Export, Backup, and Recovery</h2>
+<p>Export in documented formats at set intervals and major milestones.</p>
+<table><thead><tr><th>Format</th><th>Best use</th><th>Preservation note</th></tr></thead><tbody><tr><td>UTF-8 text or Markdown</td><td>Human-readable records</td><td>Keep links and field labels explicit</td></tr><tr><td>CSV</td><td>Flat-table exchange</td><td>Document encoding, delimiter, and escaping</td></tr><tr><td>JSON</td><td>Structured fields and arrays</td><td>Validate and retain a data dictionary</td></tr><tr><td>PDF/A or searchable PDF</td><td>Fixed review snapshot</td><td>Do not use as the sole editable source</td></tr></tbody></table>
+<p>An export becomes a backup only when a copy is independent of the working system. Keep separate copies, include only permitted attachments, and periodically restore a sample. Check identifiers, Unicode, line breaks, and relationships. A checksum detects file changes, not inaccurate quotations or missing records.</p>
+<p>Use ID-based filenames such as `RL-2026-0042.md`. A manifest should list record count, export date, schema version, attachments, exclusions, and checksum method. Open, documented formats reduce vendor dependence but still require review and migration.</p>
+<h2>Project-End Handoff</h2>
+<p>At project close, create a handoff package usable without the original software:</p>
+<ol><li>the exported log in at least one human-readable and one structured format;</li><li>a README stating the research question, scope, date range, schema, status meanings, tag vocabulary, and folder layout;</li><li>a claim index linking each major claim to supporting, qualifying, and contradictory records;</li><li>a manifest of files, versions, checksums, licenses, and access restrictions;</li><li>a list of `needs_review` records, broken or restricted links, missing sources, and unresolved disagreements;</li><li>the date and method of the last restoration check, plus the next review owner and date.</li></ol>
+<p>Keep uncertainty visible. A labeled unresolved record is safer than a polished claim with unrecoverable evidence.</p>
+<h2>ONNELLAB Application</h2>
+<p>No current ONNELLAB app is required or specifically documented for this product-neutral workflow. Use any tool that can preserve the schema, stable links, open exports, and access controls described above; the method should remain portable if that tool changes.</p>
+<h2>References</h2>
+<ul><li><a href="https://www.doi.org/doi-handbook/html/">DOI Foundation: DOI Handbook</a> defines DOI names, resolution, metadata, and persistence responsibilities.</li><li><a href="https://www.crossref.org/display-guidelines/">Crossref: Display guidelines</a> recommends presenting Crossref DOIs as full resolvable DOI links.</li><li><a href="https://www.crossref.org/documentation/retrieve-metadata/">Crossref: Metadata retrieval</a> documents official methods for checking deposited Crossref metadata.</li><li><a href="https://support.datacite.org/docs/connecting-versions">DataCite: Connecting versions</a> explains how registered resource versions and formats can be related without conflating them.</li><li><a href="https://www.loc.gov/preservation/resources/rfs/">Library of Congress: Recommended Formats Statement</a> describes format characteristics that support long-term survival and accessibility.</li><li><a href="https://www.rfc-editor.org/rfc/rfc4180">IETF RFC 4180</a> and <a href="https://www.rfc-editor.org/rfc/rfc8259">IETF RFC 8259</a> document interoperable CSV and JSON representations.</li><li><a href="https://www.copyright.gov/fair-use/">U.S. Copyright Office: Fair Use Index</a> explains that fair use depends on the circumstances.</li><li><a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj">EUR-Lex: Regulation (EU) 2016/679, Article 5</a> states principles including purpose limitation, data minimization, and accuracy.</li></ul>
+<h2>Conclusion</h2>
+<p>A durable research reading log preserves more than citations. It identifies the exact source and version, distinguishes source language from your interpretation, locates the evidence, connects it to a claim, records limitations, and exposes review state. Open exports, tested backups, and a clear handoff package then keep that reasoning usable after the original project and software are gone.</p>
+<h2>FAQ</h2>
+<h3>Is a DOI enough to make a reading note durable?</h3>
+<p>No. A DOI improves source identification and resolution, but the note still needs the version, evidence locator, access date, context, claim link, and review status. It also does not replace a lawful backup or guarantee access to full text.</p>
+<h3>Should every highlight become a log record?</h3>
+<p>No. Capture evidence that bears on a research question, method decision, or claim. Unfiltered highlights create review debt and make important evidence harder to find.</p>
+<h3>Can I paraphrase without recording a page or section?</h3>
+<p>A paraphrase still depends on the source. Record the most precise locator available so a reviewer can compare your wording with the original context.</p>
+<h3>What should I do when a link breaks?</h3>
+<p>Resolve the stable identifier, search the registration metadata or official repository, and record the replacement locator without deleting the old access history. If the source cannot be recovered, mark the entry `needs_review` and do not rely on it for a critical claim.</p>
+<h3>How often should I review the log?</h3>
+<p>Review before synthesis, high-impact publication, and handoff. Periodically recheck changeable web sources and living datasets.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>TXT vs EPUB for Long Reading</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/">Read article</a></article>
+<article class="related-article-card"><h3>How to Trim Audio Recordings Without a Full Editor</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/">Read article</a></article>
+<article class="related-article-card"><h3>How to Read Large TXT Files Without Lag</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/">Read article</a></article>
+<article class="related-article-card"><h3>What Makes Large Text Files Slow to Open</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/large-text-file-slow-to-open/">Read article</a></article>
+<article class="related-article-card"><h3>How to Convert Local Media Files Privately</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/convert-local-media-files-privately/">Read article</a></article>
+<article class="related-article-card"><h3>How to Clean Up MP3 Metadata Before Organizing Music</h3><a class="related-article-link" href="https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

@@ -1,23 +1,6 @@
----
-title: "How to Keep a Durable Research Reading Log"
-card_title: "How to Keep a Durable Research Reading Log"
-slug: "keep-durable-research-reading-log"
-category: "research"
-language: "en"
-description: "Build a durable research reading log that preserves source identity, claim-to-evidence links, context, and handoff-ready records beyond one project."
-status: "published"
-topic_id: "TOPIC-0016"
-search_intent: "workflow"
-primary_keyword: "research reading log"
-secondary_keywords: "source notes|citation trail|research synthesis|evergreen notes"
-related_apps: ""
-tags: "research reading log|source notes|citation trail|research synthesis|durable notes"
-canonical_url: "https://onnellab.github.io/blog/en/keep-durable-research-reading-log/"
-published_at: "2026-08-26T09:00:00+09:00"
-updated_at: "2026-08-26T09:00:00+09:00"
-image_specs: "Capture-to-review research reading log workflow|Minimum durable log schema|Project-end handoff package"
-related_articles: "TXT vs EPUB for Long Reading => https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
----
+> ONNELLAB note: This version keeps the practical checklist and leaves the product details secondary.
+
+
 
 # How to Keep a Durable Research Reading Log
 
@@ -87,7 +70,7 @@ Record limitations beside the evidence. Sample, geography, date range, method, u
 4. **Synthesize.** Link records to claims and explain whether sources converge, differ, or conflict.
 5. **Review.** Before publication or handoff, recheck identifiers, quote boundaries, locators, rights, personal data, and status. Use `reviewed` or `needs_review` honestly.
 
-![Research reading log workflow](/blog-assets/en/keep-durable-research-reading-log/workflow-diagram.svg "Capture, verify, summarize, synthesize, and review each source record")
+![Research reading log workflow](https://onnellab.github.io/blog-assets/en/keep-durable-research-reading-log/workflow-diagram.svg "Capture, verify, summarize, synthesize, and review each source record")
 
 Repeat capture or verification when synthesis exposes a gap or a new version appears. Status describes processing state, not source prestige.
 
@@ -173,3 +156,7 @@ Resolve the stable identifier, search the registration metadata or official repo
 ### How often should I review the log?
 
 Review before synthesis, high-impact publication, and handoff. Periodically recheck changeable web sources and living datasets.
+
+---
+
+Originally published at https://onnellab.github.io/blog/en/keep-durable-research-reading-log/

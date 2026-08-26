@@ -1,33 +1,17 @@
 ---
 title: "How to Keep a Durable Research Reading Log"
-card_title: "How to Keep a Durable Research Reading Log"
-slug: "keep-durable-research-reading-log"
-category: "research"
-language: "en"
-description: "Build a durable research reading log that preserves source identity, claim-to-evidence links, context, and handoff-ready records beyond one project."
-status: "published"
-topic_id: "TOPIC-0016"
-search_intent: "workflow"
-primary_keyword: "research reading log"
-secondary_keywords: "source notes|citation trail|research synthesis|evergreen notes"
-related_apps: ""
-tags: "research reading log|source notes|citation trail|research synthesis|durable notes"
 canonical_url: "https://onnellab.github.io/blog/en/keep-durable-research-reading-log/"
-published_at: "2026-08-26T09:00:00+09:00"
-updated_at: "2026-08-26T09:00:00+09:00"
-image_specs: "Capture-to-review research reading log workflow|Minimum durable log schema|Project-end handoff package"
-related_articles: "TXT vs EPUB for Long Reading => https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
+tags: "software-engineering,research,data"
+cover_image: "https://onnellab.github.io/blog-assets/en/keep-durable-research-reading-log/social-card.png"
+publication_id: ""
+content_profile: "hashnode-native-v3"
 ---
 
-# How to Keep a Durable Research Reading Log
+
 
 A durable research reading log lets another person identify the source, recover evidence, understand your interpretation, and connect it to a claim. PDFs and free-form highlights often lose meaning when links and context change.
 
-## Question
-
-How can I keep a research reading log that remains useful after a project ends?
-
-## Short Answer
+## The constraint to solve
 
 Give every source a stable identity, locator, and access date; distinguish quotations from paraphrases; and connect notes to claims. Preserve enough context to prevent misreading. Move entries through capture, verification, summary, synthesis, and review, then create open-format exports, independent backups, and a handoff note.
 
@@ -49,7 +33,7 @@ Use one record per source version. When a source changes substantially, create a
 | --- | --- | --- |
 | `record_id` | Immutable ID such as `RL-2026-0042` | Keeps internal links stable |
 | `source_identity` | Author, title, container, date, version | Identifies the work consulted |
-| `stable_identifier` | Full `https://doi.org/...` URL or another registered ID | Separates identity from location |
+| `stable_identifier` | Full `doi.org/...` URL or another registered ID | Separates identity from location |
 | `locator` | Access URL plus page, section, figure, timestamp, or dataset row | Recovers evidence within the source |
 | `accessed_at` | Full date in `YYYY-MM-DD` | Records when a changeable web resource was observed |
 | `note_type` | `quote`, `paraphrase`, `summary`, or `observation` | Separates your wording from the source |
@@ -79,7 +63,7 @@ A bibliography shows what was read; a claim-evidence link shows what the reading
 
 Record limitations beside the evidence. Sample, geography, date range, method, uncertainty, comparison group, and author caveats affect whether a finding transfers. “Same adult outcome, but only seven days of follow-up” is more useful than “important paper.”
 
-## Recommended Workflow
+## Implementation path
 
 1. **Capture.** While the source is open, record bibliographic details, identifier, exact access URL and date, locator, note type, minimal evidence, and a local ID.
 2. **Verify.** Resolve the identifier; compare author, title, date, version, and container with an official record; then reopen the locator and check quotations. Resolution alone does not prove the version is correct.
@@ -87,13 +71,13 @@ Record limitations beside the evidence. Sample, geography, date range, method, u
 4. **Synthesize.** Link records to claims and explain whether sources converge, differ, or conflict.
 5. **Review.** Before publication or handoff, recheck identifiers, quote boundaries, locators, rights, personal data, and status. Use `reviewed` or `needs_review` honestly.
 
-![Research reading log workflow](/blog-assets/en/keep-durable-research-reading-log/workflow-diagram.svg "Capture, verify, summarize, synthesize, and review each source record")
+![Research reading log workflow](https://onnellab.github.io/blog-assets/en/keep-durable-research-reading-log/workflow-diagram.svg "Capture, verify, summarize, synthesize, and review each source record")
 
 Repeat capture or verification when synthesis exposes a gap or a new version appears. Status describes processing state, not source prestige.
 
 ## Stable Identifiers and the Limits of Links
 
-Prefer a DOI when available and display it as a full URL such as `https://doi.org/10.xxxx/xxxxx`. Keep the exact accessed URL separately because it identifies the copy, repository, or landing page consulted.
+Prefer a DOI when available and display it as a full URL such as `doi.org/10.xxxx/xxxxx`. Keep the exact accessed URL separately because it identifies the copy, repository, or landing page consulted.
 
 Persistence depends on maintained records; it does not guarantee access, unchanged supplements, or an available cited page. Without a registered identifier, record full bibliographic details, version, URL, access date, and a permitted archive copy when appropriate.
 
@@ -133,7 +117,7 @@ At project close, create a handoff package usable without the original software:
 
 Keep uncertainty visible. A labeled unresolved record is safer than a polished claim with unrecoverable evidence.
 
-## ONNELLAB Application
+## When a focused tool helps
 
 No current ONNELLAB app is required or specifically documented for this product-neutral workflow. Use any tool that can preserve the schema, stable links, open exports, and access controls described above; the method should remain portable if that tool changes.
 
@@ -141,35 +125,13 @@ No current ONNELLAB app is required or specifically documented for this product-
 
 - [DOI Foundation: DOI Handbook](https://www.doi.org/doi-handbook/html/) defines DOI names, resolution, metadata, and persistence responsibilities.
 - [Crossref: Display guidelines](https://www.crossref.org/display-guidelines/) recommends presenting Crossref DOIs as full resolvable DOI links.
-- [Crossref: Metadata retrieval](https://www.crossref.org/documentation/retrieve-metadata/) documents official methods for checking deposited Crossref metadata.
-- [DataCite: Connecting versions](https://support.datacite.org/docs/connecting-versions) explains how registered resource versions and formats can be related without conflating them.
-- [Library of Congress: Recommended Formats Statement](https://www.loc.gov/preservation/resources/rfs/) describes format characteristics that support long-term survival and accessibility.
-- [IETF RFC 4180](https://www.rfc-editor.org/rfc/rfc4180) and [IETF RFC 8259](https://www.rfc-editor.org/rfc/rfc8259) document interoperable CSV and JSON representations.
-- [U.S. Copyright Office: Fair Use Index](https://www.copyright.gov/fair-use/) explains that fair use depends on the circumstances.
-- [EUR-Lex: Regulation (EU) 2016/679, Article 5](https://eur-lex.europa.eu/eli/reg/2016/679/oj) states principles including purpose limitation, data minimization, and accuracy.
+- Crossref: Metadata retrieval documents official methods for checking deposited Crossref metadata.
+- DataCite: Connecting versions explains how registered resource versions and formats can be related without conflating them.
+- Library of Congress: Recommended Formats Statement describes format characteristics that support long-term survival and accessibility.
+- IETF RFC 4180 and IETF RFC 8259 document interoperable CSV and JSON representations.
+- U.S. Copyright Office: Fair Use Index explains that fair use depends on the circumstances.
+- EUR-Lex: Regulation (EU) 2016/679, Article 5 states principles including purpose limitation, data minimization, and accuracy.
 
-## Conclusion
+## Takeaway
 
 A durable research reading log preserves more than citations. It identifies the exact source and version, distinguishes source language from your interpretation, locates the evidence, connects it to a claim, records limitations, and exposes review state. Open exports, tested backups, and a clear handoff package then keep that reasoning usable after the original project and software are gone.
-
-## FAQ
-
-### Is a DOI enough to make a reading note durable?
-
-No. A DOI improves source identification and resolution, but the note still needs the version, evidence locator, access date, context, claim link, and review status. It also does not replace a lawful backup or guarantee access to full text.
-
-### Should every highlight become a log record?
-
-No. Capture evidence that bears on a research question, method decision, or claim. Unfiltered highlights create review debt and make important evidence harder to find.
-
-### Can I paraphrase without recording a page or section?
-
-A paraphrase still depends on the source. Record the most precise locator available so a reviewer can compare your wording with the original context.
-
-### What should I do when a link breaks?
-
-Resolve the stable identifier, search the registration metadata or official repository, and record the replacement locator without deleting the old access history. If the source cannot be recovered, mark the entry `needs_review` and do not rely on it for a critical claim.
-
-### How often should I review the log?
-
-Review before synthesis, high-impact publication, and handoff. Periodically recheck changeable web sources and living datasets.
