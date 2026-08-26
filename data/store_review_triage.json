@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-25T01:56:08+00:00",
+  "generated_at": "2026-08-26T02:01:53+00:00",
   "items": [
     {
       "review_id": "873ee7f8-107e-4b31-8876-51d88b27fa5c",
@@ -32,7 +32,7 @@
       ],
       "requires_human_approval": false,
       "actions": {
-        "reply": "recommended",
+        "reply": "not_needed",
         "github_issue": "not_needed",
         "store_copy": "not_needed",
         "code_change": "not_needed"
@@ -69,7 +69,7 @@
       ],
       "requires_human_approval": true,
       "actions": {
-        "reply": "recommended",
+        "reply": "not_needed",
         "github_issue": "not_needed",
         "store_copy": "not_needed",
         "code_change": "not_needed"
