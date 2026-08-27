@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-08-26T10:17:00+09:00
+Generated: 2026-08-27T16:48:12+09:00
 
 ## Summary
 
@@ -8,7 +8,8 @@ Generated: 2026-08-26T10:17:00+09:00
 | --- | --- | --- |
 | Store | failed | 1 |
 | Store | manual_check | 1 |
-| Store | unchanged | 11 |
+| Store | unchanged | 10 |
+| Store | updated | 1 |
 | GitHub Release | planned | 6 |
 
 ## Store Snapshots
@@ -24,7 +25,7 @@ Generated: 2026-08-26T10:17:00+09:00
 | Quivra | ios | 1.0.7 | 1.0.6 | store_ahead | unchanged | planned | onnellab/quivra | Add release artifact and checksum |
 | Segra | android | 1.0.5 | 1.0.2 | store_ahead | unchanged | planned | onnellab/segra | Add release artifact and checksum |
 | Segra | ios | 1.0.4 | 1.0.2 | store_ahead | unchanged | - | onnellab/segra | Sync local metadata |
-| TagWeaver | android | 2.2.2 | 2.1.3 | store_ahead | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
+| TagWeaver | android | 2.3.0 | 2.1.3 | store_ahead | updated | planned | onnellab/tagweaver | Add release artifact and checksum |
 | TagWeaver | ios | 2.2.2 | 2.1.3 | store_ahead | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
 | VaultXT | android | 1.0.3 | 1.0.6 | local_ahead | unchanged | - | onnellab/onnellab-text | Covered by private test release row |
 | VaultXT | ios | 1.0.3 | 1.0.6 | local_ahead | unchanged | planned | onnellab/onnellab-text | Private test only; do not publish public GitHub Release |
@@ -33,7 +34,7 @@ Generated: 2026-08-26T10:17:00+09:00
 
 | ID | App | Platform | Channel | Tag | Status | Publication gate | Release URL | Artifact | Store notes | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| REL-0008 | TagWeaver | android | public | v2.1.4 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
+| REL-0012 | TagWeaver | android | public | v2.3.0 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
 | REL-0002 | VaultXT | ios | private_test | v1.0.6 | planned | Private test; public Release disabled | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Private test only; do not publish public GitHub Release |
 | REL-0011 | Segra | android | public | v1.0.5 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
 | REL-0010 | TagWeaver | ios | public | v2.2.2 | planned | Waiting for artifact and public approval | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Add release artifact and checksum |

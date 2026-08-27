@@ -101,17 +101,17 @@
         "score": 4
       },
       {
-        "topic_id": "TOPIC-0007",
-        "title": "How to Convert Local Media Files Privately",
-        "slug": "convert-local-media-files-privately",
-        "category": "media",
+        "topic_id": "TOPIC-0016",
+        "title": "How to Keep a Durable Research Reading Log",
+        "slug": "keep-durable-research-reading-log",
+        "category": "research",
         "language": "en",
         "status": "published",
-        "url": "https://onnellab.github.io/blog/en/convert-local-media-files-privately/",
+        "url": "https://onnellab.github.io/blog/en/keep-durable-research-reading-log/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 3
+        "score": 4
       }
     ],
     "related_apps": [
