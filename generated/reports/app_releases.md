@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-08-27T16:48:12+09:00
+Generated: 2026-08-28T18:52:44+09:00
 
 ## Summary
 
@@ -25,8 +25,8 @@ Generated: 2026-08-27T16:48:12+09:00
 | Quivra | ios | 1.0.7 | 1.0.6 | store_ahead | unchanged | planned | onnellab/quivra | Add release artifact and checksum |
 | Segra | android | 1.0.5 | 1.0.2 | store_ahead | unchanged | planned | onnellab/segra | Add release artifact and checksum |
 | Segra | ios | 1.0.4 | 1.0.2 | store_ahead | unchanged | - | onnellab/segra | Sync local metadata |
-| TagWeaver | android | 2.3.0 | 2.1.3 | store_ahead | updated | planned | onnellab/tagweaver | Add release artifact and checksum |
-| TagWeaver | ios | 2.2.2 | 2.1.3 | store_ahead | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
+| TagWeaver | android | 2.3.0 | 2.1.3 | store_ahead | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
+| TagWeaver | ios | 2.3.0 | 2.1.3 | store_ahead | updated | planned | onnellab/tagweaver | Add release artifact and checksum |
 | VaultXT | android | 1.0.3 | 1.0.6 | local_ahead | unchanged | - | onnellab/onnellab-text | Covered by private test release row |
 | VaultXT | ios | 1.0.3 | 1.0.6 | local_ahead | unchanged | planned | onnellab/onnellab-text | Private test only; do not publish public GitHub Release |
 
@@ -37,7 +37,7 @@ Generated: 2026-08-27T16:48:12+09:00
 | REL-0012 | TagWeaver | android | public | v2.3.0 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
 | REL-0002 | VaultXT | ios | private_test | v1.0.6 | planned | Private test; public Release disabled | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Private test only; do not publish public GitHub Release |
 | REL-0011 | Segra | android | public | v1.0.5 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
-| REL-0010 | TagWeaver | ios | public | v2.2.2 | planned | Waiting for artifact and public approval | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Add release artifact and checksum |
+| REL-0010 | TagWeaver | ios | public | v2.2.2 | planned | Waiting for artifact and public approval | - | - | FLAC 파일의 커버 이미지가 저장되지 않을 수 있던 문제를 해결했습니다. 일본어, 중국어 번체·간체, 포르투갈어(브라질), 독일어, 프랑스어, 스페인어 등 7개 UI 언어를 추가하고 사소한 오류를 수정했습니다. | Add release artifact and checksum |
 | REL-0006 | ClipNest | ios | private_test | v1.0.4 | planned | Private test; public Release disabled | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Private test only; do not publish public GitHub Release |
 | REL-0009 | Quivra | ios | public | v1.0.7 | planned | Waiting for artifact and public approval | - | - | 일부 정상적인 MP4 파일이 변환 도중 너무 일찍 중단될 수 있던 문제를 수정했어요. 변환이 실제로 진행 중인 동안에는 긴 파일도 안정적으로 완료할 수 있도록 개선했어요. 변환할 수 없는 파일에 불필요한 재시도를 줄여 실패 결과를 더 빠르게 확인할 수 있어요. 파일 선택 화면에서는 Quivra가 지원하는 WAV, M4A, MOV, MP4 파일만 선택할 수 있도록 정리했어요. 기존 변환 음질과 영상 품질은 그대로 유지하면서 변환 안정성을 높였어요. | Add release artifact and checksum |
 
