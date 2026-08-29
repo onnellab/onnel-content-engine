@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-08-28T18:52:44+09:00
+Generated: 2026-08-29T14:52:44+09:00
 
 ## Summary
 
@@ -8,8 +8,7 @@ Generated: 2026-08-28T18:52:44+09:00
 | --- | --- | --- |
 | Store | failed | 1 |
 | Store | manual_check | 1 |
-| Store | unchanged | 10 |
-| Store | updated | 1 |
+| Store | unchanged | 11 |
 | GitHub Release | planned | 6 |
 
 ## Store Snapshots
@@ -26,7 +25,7 @@ Generated: 2026-08-28T18:52:44+09:00
 | Segra | android | 1.0.5 | 1.0.2 | store_ahead | unchanged | planned | onnellab/segra | Add release artifact and checksum |
 | Segra | ios | 1.0.4 | 1.0.2 | store_ahead | unchanged | - | onnellab/segra | Sync local metadata |
 | TagWeaver | android | 2.3.0 | 2.1.3 | store_ahead | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
-| TagWeaver | ios | 2.3.0 | 2.1.3 | store_ahead | updated | planned | onnellab/tagweaver | Add release artifact and checksum |
+| TagWeaver | ios | 2.3.0 | 2.1.3 | store_ahead | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
 | VaultXT | android | 1.0.3 | 1.0.6 | local_ahead | unchanged | - | onnellab/onnellab-text | Covered by private test release row |
 | VaultXT | ios | 1.0.3 | 1.0.6 | local_ahead | unchanged | planned | onnellab/onnellab-text | Private test only; do not publish public GitHub Release |
 

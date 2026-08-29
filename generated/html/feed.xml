@@ -103,6 +103,13 @@
     <pubDate>Thu, 23 Jul 2026 23:24:05 GMT</pubDate>
   </item>
   <item>
+    <title>How to Choose a Media Output Format Before Conversion</title>
+    <link>https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/</link>
+    <guid>https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/</guid>
+    <description>Choose a media output format from its destination, codec compatibility, quality, size, editability, transparency, subtitles, and metadata needs.</description>
+    <pubDate>Sat, 29 Aug 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법</title>
     <link>https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/</link>
     <guid>https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/</guid>
@@ -143,6 +150,13 @@
     <guid>https://onnellab.github.io/blog/ko/keep-durable-research-reading-log/</guid>
     <description>출처 식별 정보, 주장과 근거의 연결, 맥락을 보존해 프로젝트가 끝난 뒤에도 인계할 수 있는 연구 독서 기록을 만드는 방법을 설명합니다.</description>
     <pubDate>Wed, 26 Aug 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>미디어 변환 전에 출력 형식을 선택하는 방법</title>
+    <link>https://onnellab.github.io/blog/ko/choose-media-output-format-before-conversion/</link>
+    <guid>https://onnellab.github.io/blog/ko/choose-media-output-format-before-conversion/</guid>
+    <description>대상 기기와 앱의 호환성, 품질, 용량, 편집성, 투명도, 자막, 메타데이터를 기준으로 미디어 출력 형식을 선택하는 방법을 설명합니다.</description>
+    <pubDate>Sat, 29 Aug 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>
