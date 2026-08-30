@@ -72,6 +72,19 @@
         "score": 4
       },
       {
+        "topic_id": "TOPIC-0018",
+        "title": "How to Choose a Media Output Format Before Conversion",
+        "slug": "choose-media-output-format-before-conversion",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/",
+        "destination": "published_article",
+        "relationship": "comparison",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0001",
         "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
@@ -94,19 +107,6 @@
         "url": "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/",
         "destination": "published_article",
         "relationship": "comparison",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0004",
-        "title": "What Makes Large Text Files Slow to Open",
-        "slug": "large-text-file-slow-to-open",
-        "category": "reading",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/",
-        "destination": "published_article",
-        "relationship": "prerequisite",
         "shared_clusters": [],
         "score": 3
       }

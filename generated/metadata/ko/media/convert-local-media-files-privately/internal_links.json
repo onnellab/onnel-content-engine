@@ -35,14 +35,14 @@
         "slug": "choose-media-output-format-before-conversion",
         "category": "media",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/media/choose-media-output-format-before-conversion.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/choose-media-output-format-before-conversion/",
+        "destination": "published_article",
         "relationship": "comparison",
         "shared_clusters": [
           "media"
         ],
-        "score": 12
+        "score": 13
       },
       {
         "topic_id": "TOPIC-0023",

@@ -46,6 +46,21 @@
         "score": 18
       },
       {
+        "topic_id": "TOPIC-0018",
+        "title": "How to Choose a Media Output Format Before Conversion",
+        "slug": "choose-media-output-format-before-conversion",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/",
+        "destination": "published_article",
+        "relationship": "comparison",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",
@@ -55,21 +70,6 @@
         "url": "https://onnellab.github.io/blog/en/convert-local-media-files-privately/",
         "destination": "published_article",
         "relationship": "deeper",
-        "shared_clusters": [
-          "media"
-        ],
-        "score": 11
-      },
-      {
-        "topic_id": "TOPIC-0018",
-        "title": "How to Choose a Media Output Format Before Conversion",
-        "slug": "choose-media-output-format-before-conversion",
-        "category": "media",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/media/choose-media-output-format-before-conversion.md",
-        "destination": "scheduled_article",
-        "relationship": "comparison",
         "shared_clusters": [
           "media"
         ],
