@@ -117,6 +117,13 @@
     <pubDate>Thu, 20 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
+    <title>How to Organize Downloads With a Small, Durable Folder System</title>
+    <link>https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/</link>
+    <guid>https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/</guid>
+    <description>Treat Downloads as an inbox, sort keepers into four durable categories, and use safe rules for names, duplicates, temporary files, and recurring review.</description>
+    <pubDate>Tue, 01 Sep 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>긴 글 읽기를 위한 TXT와 EPUB 비교</title>
     <link>https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/</link>
     <guid>https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/</guid>
@@ -157,6 +164,13 @@
     <guid>https://onnellab.github.io/blog/ko/choose-media-output-format-before-conversion/</guid>
     <description>대상 기기와 앱의 호환성, 품질, 용량, 편집성, 투명도, 자막, 메타데이터를 기준으로 미디어 출력 형식을 선택하는 방법을 설명합니다.</description>
     <pubDate>Sat, 29 Aug 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법</title>
+    <link>https://onnellab.github.io/blog/ko/organize-downloads-small-folder-system/</link>
+    <guid>https://onnellab.github.io/blog/ko/organize-downloads-small-folder-system/</guid>
+    <description>다운로드 폴더를 받은 편지함처럼 처리하고, 네 가지 지속 가능한 분류와 안전한 파일명·중복·임시 파일 검토 규칙으로 정리하는 방법입니다.</description>
+    <pubDate>Tue, 01 Sep 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>

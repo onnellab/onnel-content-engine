@@ -1,23 +1,13 @@
 ---
 title: "How to Organize Downloads With a Small, Durable Folder System"
-card_title: "How to Organize Downloads With a Small, Durable Folder System"
-slug: "organize-downloads-small-folder-system"
-category: "productivity"
-language: "en"
-description: "Treat Downloads as an inbox, sort keepers into four durable categories, and use safe rules for names, duplicates, temporary files, and recurring review."
-status: "published"
-topic_id: "TOPIC-0020"
-search_intent: "workflow"
-primary_keyword: "organize downloads"
-secondary_keywords: "download folder cleanup|simple file organization|durable folders|file naming"
-related_apps: ""
-tags: "organize downloads|download folder cleanup|simple file organization|durable folders|file naming"
+published: true
 canonical_url: "https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/"
-published_at: "2026-09-01T09:00:00+09:00"
-updated_at: "2026-09-01T09:00:00+09:00"
-image_specs: "Workflow diagram for organize downloads folder|Comparison diagram for practical options|Screenshot requirements for related applications"
-related_articles: "How to Rename Files Safely With a Preview Workflow => https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/|How to Reuse Copied Text Snippets on iPhone => https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/"
+tags: "organize-downloads,download-folder-cleanup,simple-file-organization,durable-folders"
 ---
+
+> ONNELLAB note: This is a field note for developers and power users who work with large text files.
+
+
 
 # How to Organize Downloads With a Small, Durable Folder System
 
@@ -103,7 +93,7 @@ Before a large cleanup, confirm that backup has completed and that you know how 
 7. Review every proposed deletion before moving it to trash.
 8. Let backup and sync complete, then schedule the next short review.
 
-![Workflow diagram](/blog-assets/en/organize-downloads-small-folder-system/workflow-diagram.svg "Process Downloads as an inbox into four durable lifecycle categories")
+![Workflow diagram](https://onnellab.github.io/blog-assets/en/organize-downloads-small-folder-system/workflow-diagram.png "Process Downloads as an inbox into four durable lifecycle categories")
 
 ## ONNELLAB Application
 
@@ -148,3 +138,7 @@ No. An ordinary folder does not make a file safe. Leave it unopened, respect pla
 ### What should automation delete?
 
 Only items covered by a narrow, tested, reversible rule. For uncertain files, automation should flag or move them to Temporary for review rather than permanently delete them.
+
+---
+
+Originally published at https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/
