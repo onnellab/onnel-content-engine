@@ -54,6 +54,19 @@
         "score": 4
       },
       {
+        "topic_id": "TOPIC-0020",
+        "title": "How to Organize Downloads With a Small, Durable Folder System",
+        "slug": "organize-downloads-small-folder-system",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0001",
         "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
@@ -87,19 +100,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.github.io/blog/en/convert-local-media-files-privately/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0008",
-        "title": "How to Clean Up MP3 Metadata Before Organizing Music",
-        "slug": "clean-up-mp3-metadata-before-organizing-music",
-        "category": "music",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

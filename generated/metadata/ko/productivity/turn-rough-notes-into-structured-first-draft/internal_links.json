@@ -63,14 +63,14 @@
         "slug": "organize-downloads-small-folder-system",
         "category": "productivity",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/productivity/organize-downloads-small-folder-system.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/organize-downloads-small-folder-system/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"
         ],
-        "score": 9
+        "score": 10
       },
       {
         "topic_id": "TOPIC-0005",
