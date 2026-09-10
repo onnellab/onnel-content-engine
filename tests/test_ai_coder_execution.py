@@ -115,8 +115,9 @@ class AiCoderExecutionTest(unittest.TestCase):
 
         self.assertIn('workspace="$(mktemp -d', runner)
         self.assertIn('git clone --filter=blob:none --no-tags', runner)
-        self.assertIn('--working-tree', runner)
-        self.assertIn('--fail-on-severity high', runner)
+        self.assertIn('FREE_SECURITY_REPOSITORY="$app_path"', runner)
+        self.assertIn('python3 "$engine_root/tool/free_security_gate.py" standard', runner)
+        self.assertNotIn('codex-security', runner)
         self.assertIn('AI_CODER_SECURITY_SCAN_ENABLED', runner)
         self.assertIn('ls-files --others --exclude-standard', runner)
         self.assertNotIn("local_repositories.csv", runner)
@@ -248,6 +249,53 @@ class AiCoderExecutionTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 1)
         self.assertIn("AI_CODER_GITHUB_TOKEN is required", result.stderr)
+
+    def test_preflight_requires_free_scanners_without_paid_scan_login(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            scripts = root / "scripts"
+            scripts.mkdir()
+            preflight = scripts / "preflight_ai_coder_runner.sh"
+            preflight.write_text(
+                (ROOT / "scripts" / preflight.name).read_text()
+            )
+            (root / "tool").mkdir()
+            for name in ("free_security_gate.py", "security_rules.yml"):
+                (root / "tool" / name).write_text("fixture bundle\n")
+            binary = root / "bin"
+            binary.mkdir()
+            commands = root / "commands.txt"
+            for name in (
+                "codex", "gh", "git", "rg", "flutter", "python3",
+                "gitleaks", "semgrep", "osv-scanner", "codex-security",
+            ):
+                stub = binary / name
+                stub.write_text(
+                    '#!/bin/sh\nprintf "%s\\n" "${0##*/}" '
+                    '>> "$PROBE_COMMAND_LOG"\nexit 0\n'
+                )
+                stub.chmod(0o755)
+            environment = {
+                "PATH": f"{binary}:/usr/bin:/bin",
+                "AI_CODER_GITHUB_TOKEN": "fixture-not-a-credential",
+                "AI_CODER_SECURITY_SCAN_ENABLED": "true",
+                "PROBE_COMMAND_LOG": str(commands),
+            }
+            result = subprocess.run(
+                ["/bin/bash", str(preflight)], env=environment,
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertNotIn("codex-security", commands.read_text())
+            commands.write_text("")
+            (binary / "gitleaks").unlink()
+            missing = subprocess.run(
+                ["/bin/bash", str(preflight)], env=environment,
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(missing.returncode, 1)
+            self.assertIn("requires installed scanner: gitleaks", missing.stderr)
+            self.assertEqual(commands.read_text(), "")
 
     def test_qa_dispatch_uses_recorded_commit_and_pr(self) -> None:
         with tempfile.TemporaryDirectory() as raw:

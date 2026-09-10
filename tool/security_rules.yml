@@ -1,0 +1,32 @@
+rules:
+  - id: onnelab-dart-insecure-certificate-callback
+    languages: [dart]
+    message: TLS certificate validation callback accepts an invalid certificate
+    severity: ERROR
+    pattern-regex: 'badCertificateCallback\s*(?::|=)\s*\([^)]*\)\s*=>\s*true\b'
+
+  - id: onnelab-java-webview-ssl-error-proceed
+    languages: [java]
+    message: WebView continues after an SSL certificate error
+    severity: ERROR
+    pattern-regex: '(?s)onReceivedSslError\s*\([^)]*SslErrorHandler\s+([A-Za-z_$][A-Za-z0-9_$]*)[^)]*\).*?\1\.proceed\s*\('
+
+  - id: onnelab-kotlin-webview-ssl-error-proceed
+    languages: [kotlin]
+    message: WebView continues after an SSL certificate error
+    severity: ERROR
+    pattern-regex: '(?s)onReceivedSslError\s*\([^)]*([A-Za-z_$][A-Za-z0-9_$]*)\s*:\s*SslErrorHandler[^)]*\).*?\1\.proceed\s*\('
+
+  - id: onnelab-python-requests-verify-false
+    languages: [python]
+    message: TLS certificate verification is disabled
+    severity: ERROR
+    pattern-either:
+      - pattern: requests.$METHOD(..., verify=False, ...)
+      - pattern: httpx.$METHOD(..., verify=False, ...)
+
+  - id: onnelab-node-tls-reject-unauthorized-false
+    languages: [javascript, typescript]
+    message: TLS certificate verification is disabled
+    severity: ERROR
+    pattern: '{..., rejectUnauthorized: false, ...}'

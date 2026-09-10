@@ -82,13 +82,8 @@ python3 "$engine_root/scripts/run_ai_coder_verifications.py" \
 
 security_scan="not_enabled"
 if [[ "${AI_CODER_SECURITY_SCAN_ENABLED:-true}" != "false" ]]; then
-  security_root="$(mktemp -d "${TMPDIR:-/tmp}/onnel-codex-security.XXXXXX")"
-  chmod 700 "$security_root"
-  codex-security scan "$app_path" \
-    --working-tree \
-    --output-dir "$security_root/results" \
-    --json \
-    --fail-on-severity high >"$security_root/summary.json"
+  FREE_SECURITY_REPOSITORY="$app_path" \
+    python3 "$engine_root/tool/free_security_gate.py" standard
   security_scan="passed"
 fi
 
@@ -125,7 +120,7 @@ print(f"- Risk class: `{task['risk_class']}`")
 print(f"- Observed symptom: {ticket['observed_symptom']}")
 print(f"- Expected result: {ticket['expected_result']}")
 print(f"- Performance baseline: {ticket['performance_baseline']}")
-print(f"- Codex Security diff scan: `{sys.argv[2]}`\n")
+print(f"- Free local security diff scan: `{sys.argv[2]}`\n")
 print("## Completion criteria\n")
 print(ticket['completion_criteria'])
 print("\n## Verification commands\n")

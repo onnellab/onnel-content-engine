@@ -258,15 +258,17 @@ and classified `GREEN`; the local Scout then dispatches the normal audited
 approval workflow. `YELLOW`, `RED`, incomplete, and undiagnosed issues never
 auto-dispatch. Removing the label before collection withdraws that signal.
 
-Install `@openai/codex-security` on the dedicated runner. Unless repository
-variable `AI_CODER_SECURITY_SCAN_ENABLED` is explicitly `false`, the runner
-scans only the uncommitted patch with `codex-security scan --working-tree`
-after the app quality gate. High/critical findings, incomplete coverage, or a
-scanner error stop the run before commit and PR creation. This optional gate
-requires Node.js 22 or later and an authenticated Codex Security installation;
-scan artifacts remain in a private temporary directory outside the app clone
-and are deleted after the run. The gate uses the runner's authenticated Codex
-account; disabling it requires an explicit repository-variable change.
+Install the free Gitleaks CLI, Semgrep Community Edition, and OSV-Scanner on
+the dedicated runner. Unless repository variable `AI_CODER_SECURITY_SCAN_ENABLED`
+is explicitly `false`, the runner invokes the engine-owned free security gate
+after the app quality gate. The gate scans the reviewable working-tree changes
+and dependency lockfiles, using local Semgrep rules with metrics disabled and
+free public OSV vulnerability data. No paid scanner, model scan, scanner login,
+or paid API fallback is allowed. Blocking findings, incomplete supported-source
+coverage, and scanner errors stop the run before commit and PR creation.
+Temporary reports remain outside the app clone; output contains finding
+metadata only. These deterministic checks retain their documented coverage
+limits and do not replace the app's tests and source review.
 
 When an app was created from `onnellab-flutter-template`, the runner uses its
 `tool/quality_gate.sh` instead of the basic analysis/test fallback. That keeps

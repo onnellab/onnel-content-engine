@@ -14,20 +14,17 @@ for command in codex gh git rg flutter python3; do
   }
 done
 if [[ "${AI_CODER_SECURITY_SCAN_ENABLED:-true}" != "false" ]]; then
-  command -v node >/dev/null || {
-    echo "Codex Security gate requires Node.js 22 or later" >&2
+  for scanner in gitleaks semgrep osv-scanner; do
+    command -v "$scanner" >/dev/null || {
+      echo "Free security gate requires installed scanner: $scanner" >&2
+      exit 1
+    }
+  done
+  [[ -f "$engine_root/tool/free_security_gate.py" &&
+     -f "$engine_root/tool/security_rules.yml" ]] || {
+    echo "Free security gate bundle is incomplete" >&2
     exit 1
   }
-  node_major="$(node -p 'Number(process.versions.node.split(".")[0])')"
-  [[ "$node_major" -ge 22 ]] || {
-    echo "Codex Security gate requires Node.js 22 or later" >&2
-    exit 1
-  }
-  command -v codex-security >/dev/null || {
-    echo "AI_CODER_SECURITY_SCAN_ENABLED requires an installed codex-security CLI" >&2
-    exit 1
-  }
-  codex-security login status >/dev/null
 fi
 git -C "$engine_root" diff --quiet
 git -C "$engine_root" diff --cached --quiet
