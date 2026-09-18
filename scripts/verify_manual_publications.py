@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
@@ -18,6 +19,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from html.parser import HTMLParser
 from typing import Any, Callable
 from zoneinfo import ZoneInfo
 
@@ -257,28 +259,177 @@ def child_text(element: ET.Element, names: set[str]) -> str:
     return ""
 
 
+def normalized_evidence_url(value: str, base_url: str = "") -> str:
+    """Compare complete HTTP URLs, not substrings; keep meaningful query data."""
+    value = html.unescape(value).strip()
+    if not value or any(char.isspace() or ord(char) < 32 for char in value):
+        return ""
+    try:
+        parsed = urllib.parse.urlsplit(urllib.parse.urljoin(base_url, value))
+        if parsed.scheme not in {"http", "https"} or not parsed.hostname or parsed.username or parsed.password:
+            return ""
+        port = parsed.port
+        host = parsed.hostname.lower()
+        if ":" in host:
+            host = f"[{host}]"
+        if port and port != (443 if parsed.scheme == "https" else 80):
+            host += f":{port}"
+        # Decode only unreserved characters: an encoded slash must not turn into
+        # a path separator, and case-sensitive paths must not be folded.
+        def unreserved(match: re.Match[str]) -> str:
+            char = chr(int(match.group(1), 16))
+            return char if char.isascii() and (char.isalnum() or char in "-._~") else match.group(0).upper()
+        path = re.sub(r"%([0-9a-fA-F]{2})", unreserved, parsed.path).rstrip("/") or "/"
+        query = urllib.parse.urlencode(sorted(
+            (key, val) for key, val in urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
+            if not key.lower().startswith("utm_")
+        ))
+        return urllib.parse.urlunsplit((parsed.scheme, host, path, query, ""))
+    except ValueError:
+        return ""
+
+
+def is_feed_article_url(value: str, feed_url: str) -> bool:
+    candidate = normalized_evidence_url(value, feed_url)
+    feed = normalized_evidence_url(feed_url)
+    if not candidate or not feed or candidate == feed:
+        return False
+    parsed, source = urllib.parse.urlsplit(candidate), urllib.parse.urlsplit(feed)
+    if parsed.netloc != source.netloc:
+        return False
+    parts = [part for part in parsed.path.split("/") if part]
+    if not parts or parts[-1].lower() in {"rss", "feed", "rss.xml", "feed.xml", "atom.xml"}:
+        return False
+    if parsed.hostname in {"medium.com", "www.medium.com"}:
+        if len(parts) < 2 or parts[0] in {"feed", "tag"}:
+            return False
+        feed_parts = source.path.strip("/").split("/")
+        if len(feed_parts) == 2 and feed_parts[0] == "feed" and feed_parts[1].startswith("@"):
+            if parts[0] != feed_parts[1]:
+                return False
+    return True
+
+
 def rss_item_url(item: ET.Element, fallback_url: str) -> str:
-    link = child_text(item, {"link"})
-    if link.startswith("http://") or link.startswith("https://"):
-        return link
-    guid = child_text(item, {"guid", "id"})
-    if guid.startswith("http://") or guid.startswith("https://"):
-        return guid
-    return fallback_url
+    """Return an entry permalink; the feed URL is a base, never a fallback."""
+    links: list[str] = []
+    is_atom = xml_local_name(item.tag) == "entry"
+    for child in list(item):
+        if xml_local_name(child.tag) != "link":
+            continue
+        if child.get("rel", "alternate") != "alternate":
+            continue
+        if child.get("type", "text/html") not in {"text/html", "application/xhtml+xml"}:
+            continue
+        value = child.get("href", "") if is_atom else (child.text or "").strip()
+        if value and is_feed_article_url(value, fallback_url):
+            links.append(urllib.parse.urljoin(fallback_url, value))
+    if not links and not is_atom:
+        for child in list(item):
+            if xml_local_name(child.tag) == "guid" and child.get("isPermaLink", "true").lower() == "true":
+                value = (child.text or "").strip()
+                if is_feed_article_url(value, fallback_url):
+                    links.append(urllib.parse.urljoin(fallback_url, value))
+    unique = {normalized_evidence_url(link): link for link in links}
+    return next(iter(unique.values())) if len(unique) == 1 else ""
+
+
+class _SourceAttributionParser(HTMLParser):
+    """Keep paragraph boundaries so a related link cannot become attribution."""
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.blocks: list[str] = []
+        self.parts: list[str] = []
+        self.ignored = 0
+
+    def flush(self) -> None:
+        self.blocks.append("".join(self.parts))
+        self.parts = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in {"script", "style"}:
+            self.ignored += 1
+        if self.ignored:
+            return
+        if tag in {"p", "div", "li", "br", "h1", "h2", "h3", "blockquote"}:
+            self.flush()
+        if tag == "a":
+            href = dict(attrs).get("href")
+            if href:
+                self.parts.append(" " + href + " ")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in {"script", "style"} and self.ignored:
+            self.ignored -= 1
+        if not self.ignored and tag in {"p", "div", "li", "h1", "h2", "h3", "blockquote"}:
+            self.flush()
+
+    def handle_data(self, data: str) -> None:
+        if not self.ignored:
+            self.parts.append(data)
+
+
+def rss_source_urls(item: ET.Element) -> set[str]:
+    """Accept explicit source attribution, never an arbitrary related link."""
+    urls: set[str] = set()
+    for child in list(item):
+        name = xml_local_name(child.tag)
+        if name == "link" and child.get("rel") == "canonical":
+            urls.add(normalized_evidence_url(child.get("href", "") or child.text or ""))
+        if name not in {"description", "summary", "content", "encoded"}:
+            continue
+        parser = _SourceAttributionParser()
+        content = (child.text or "") + "".join(ET.tostring(node, encoding="unicode") for node in child)
+        parser.feed(content)
+        parser.close()
+        parser.flush()
+        for block in parser.blocks:
+            for match in re.finditer(r"\boriginally\s+published\s+(?:at|on)\s*:?\s*(https?://[^\s<>\"']+)", block, re.I):
+                urls.add(normalized_evidence_url(match.group(1).rstrip(".,);")))
+    return urls - {""}
 
 
 def rss_matching_item_url(text: str, canonical_url: str, slug: str, fallback_url: str) -> str:
+    """Find one provable article in a valid RSS/Atom feed, otherwise stay pending.
+
+    An exact original-source URL or an exact permalink slug is evidence. Words
+    in prose, related links, partial URL matches and feed URLs are not evidence.
+    Ambiguous matches deliberately do not mark a draft as published.
+    """
     try:
         root = ET.fromstring(text)
     except ET.ParseError:
-        return fallback_url if ((canonical_url and canonical_url in text) or (slug and slug in text)) else ""
-    for element in root.iter():
-        if xml_local_name(element.tag) not in {"item", "entry"}:
+        return ""
+    if xml_local_name(root.tag) == "rss":
+        entries = [entry for channel in root if xml_local_name(channel.tag) == "channel"
+                   for entry in channel if xml_local_name(entry.tag) == "item"]
+    elif root.tag == "{http://www.w3.org/2005/Atom}feed":
+        entries = list(root.findall("{http://www.w3.org/2005/Atom}entry"))
+    else:
+        return ""
+    canonical = normalized_evidence_url(canonical_url)
+    expected_slug = str(slug).strip()
+    if not expected_slug or any(char in expected_slug for char in "/?#"):
+        expected_slug = ""
+    matches: dict[str, str] = {}
+    for element in entries:
+        posted_url = rss_item_url(element, fallback_url)
+        if not posted_url:
             continue
-        haystack = "\n".join(value.strip() for value in element.itertext() if value and value.strip())
-        if (canonical_url and canonical_url in haystack) or (slug and slug in haystack):
-            return rss_item_url(element, fallback_url)
-    return ""
+        sources = rss_source_urls(element)
+        parsed = urllib.parse.urlsplit(posted_url)
+        leaf = urllib.parse.unquote(parsed.path.rstrip("/").rsplit("/", 1)[-1])
+        # Medium adds a post ID to the full slug; arbitrary suffixes do not match.
+        if parsed.hostname in {"medium.com", "www.medium.com"}:
+            leaf = re.sub(r"-[0-9a-f]{12}$", "", leaf)
+        if sources:
+            matched = bool(canonical and sources == {canonical})
+        else:
+            matched = bool((canonical and normalized_evidence_url(posted_url) == canonical)
+                           or (expected_slug and leaf == expected_slug))
+        if matched:
+            matches[normalized_evidence_url(posted_url)] = posted_url
+    return next(iter(matches.values())) if len(matches) == 1 else ""
 
 
 def verify_rss(item: dict[str, Any], fetch_text: FetchText) -> Verification | None:
@@ -423,11 +574,16 @@ def result_for(item: dict[str, Any], posted_url: str, method: str, confidence: s
 
 def verify_item(
     item: dict[str, Any],
-    fetch_json: FetchJson = fetch_json_url,
-    fetch_text: FetchText = fetch_text_url,
-    visual_text: VisualText = playwright_page_text,
+    fetch_json: FetchJson | None = None,
+    fetch_text: FetchText | None = None,
+    visual_text: VisualText | None = None,
     visual_public_pages: bool = False,
 ) -> Verification | None:
+    # Resolve adapters at call time so tests cannot accidentally retain a live
+    # network function captured when this module was imported.
+    fetch_json = fetch_json if fetch_json is not None else fetch_json_url
+    fetch_text = fetch_text if fetch_text is not None else fetch_text_url
+    visual_text = visual_text if visual_text is not None else playwright_page_text
     platform = item.get("platform")
     try:
         if platform == "bluesky":
@@ -479,9 +635,9 @@ def verify_manual_publications(
     visual_public_pages: bool = False,
     dry_run: bool = False,
     now: datetime | None = None,
-    fetch_json: FetchJson = fetch_json_url,
-    fetch_text: FetchText = fetch_text_url,
-    visual_text: VisualText = playwright_page_text,
+    fetch_json: FetchJson | None = None,
+    fetch_text: FetchText | None = None,
+    visual_text: VisualText | None = None,
     retry_attempts: int = 1,
     retry_delay_seconds: float = 0,
 ) -> list[Verification]:

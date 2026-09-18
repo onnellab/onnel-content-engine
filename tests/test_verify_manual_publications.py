@@ -17,6 +17,15 @@ from verify_manual_publications import public_activity_url, public_post_url_from
 
 
 class VerifyManualPublicationsTest(unittest.TestCase):
+    def setUp(self) -> None:
+        for name in ("fetch_json_url", "fetch_text_url", "playwright_page_text"):
+            patcher = unittest.mock.patch(
+                f"verify_manual_publications.{name}",
+                side_effect=AssertionError("Unit tests must inject a deterministic fetch adapter"),
+            )
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
     def write_json(self, path: Path, value: dict[str, object]) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -409,7 +418,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                 {
                     "BLUESKY_HANDLE": "onnellab.bsky.social",
                     "DEVTO_USERNAME": "onnellab",
-                    "MEDIUM_RSS_URL": "https://medium.com/feed/@onnellab",
+                    "MEDIUM_RSS_URL": "https://medium.com/feed/@onnellab.app",
                     "X_PUBLIC_PROFILE_URL": "https://x.com/onnellab",
                     "LINKEDIN_PUBLIC_PROFILE_URL": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
                 },
@@ -513,6 +522,12 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                 state,
                 report,
                 now=datetime(2026, 7, 13, 9, 0, tzinfo=ZoneInfo("Asia/Seoul")),
+                fetch_text=lambda _url, _headers=None: (
+                    "<rss><channel><item><title>Unrelated article</title>"
+                    "<link>https://onnellab.hashnode.dev/another-post</link>"
+                    "<description>A different article, not the requested post.</description>"
+                    "</item></channel></rss>"
+                ),
             )
 
             self.assertEqual(verified, [])

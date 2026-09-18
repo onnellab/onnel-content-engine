@@ -304,6 +304,30 @@ Twitter defaults to `https://x.com/onnellab` when no X profile variable is set. 
 
 Twitter and LinkedIn public-page verification is intentionally marked low confidence because those pages can change, hide posts, rate-limit anonymous users, or render different content by region. Use it as a convenience check, not as the source of record.
 
+### RSS publication evidence
+
+Medium and Hashnode verification must match a **single actual article**, not a
+substring in the whole feed. Parse valid RSS/Atom first. Use the entry's RSS
+link (or a GUID marked as a permalink), or its Atom alternate HTML link. Feed,
+profile, foreign-origin and missing article URLs are not publication evidence.
+
+An exact canonical URL in an explicit `Originally published at/on` attribution
+or canonical link can identify an article whose public slug differs from the
+source. Otherwise, the full final permalink slug must equal the manifest slug;
+Medium's 12-hex-digit post-ID suffix is allowed. A slug inside ordinary prose,
+a related-link URL, a title, or a longer slug is not sufficient. Meaningful URL
+queries and language paths remain distinct; fragment and UTM decoration do not.
+Conflicting source attribution and multiple matching articles remain pending.
+Malformed XML never falls back to reporting the RSS index as the article.
+
+The parser follows the RSS item-link/GUID distinction and Atom alternate-link
+semantics: https://www.rssboard.org/rss-specification and
+https://www.rfc-editor.org/rfc/rfc4287.html#section-4.2.7.
+
+The unit tests inject fixed responses and reject accidental live fetches.
+Production adapters remain available and are resolved when called. Verification
+only changes local operational state; it does not publish posts or replies.
+
 Evaluate template quality with:
 
 ```text
