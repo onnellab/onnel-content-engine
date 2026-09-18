@@ -836,3 +836,20 @@ Publish consistently.
 Preserve quality.
 
 Let every article strengthen the ecosystem.
+
+### Dashboard publication integrity
+
+Treat generated dashboard HTML as one derived snapshot, never as a line-merge
+source of truth. An autostash can leave conflict markers in the working file;
+a successful `git pull` alone is not proof that a generated artifact is valid.
+Direct dashboard deployment workflows validate embedded JSON, unique DOM IDs
+and absence of conflict markers before committing/copying, and validate the
+homepage target again after pulling. Review and operational-status syncs rebuild
+the artifact from their current data after pulling. Conflicts in source data
+must stop publication for resolution; never silently choose a side.
+
+Run `python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html`
+before a manual dashboard deployment. The source and homepage artifact must both
+pass. The two legacy TOPIC-0001 RSS-index URLs were repaired using positively
+matched live articles; `data/manual_publication_url_repairs.json` preserves the
+old URLs and evidence hashes. Human approvals and publication counts were kept.

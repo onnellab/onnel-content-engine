@@ -75,6 +75,8 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
+          git diff --check
           git add data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing.csv data/ai_provider_pricing_status.json data/melivra_ai_credit_policy.csv generated/reports/app_releases.md generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js generated/manual-publish/icon-180.png generated/manual-publish/icon-192.png generated/manual-publish/icon-512.png
           if git diff --cached --quiet; then
             echo "No content engine release state changes"
@@ -88,6 +90,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$HOMEPAGE_REPO_PATH/public/manual-publish"
+          python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
           cp generated/manual-publish/manifest.webmanifest "$HOMEPAGE_REPO_PATH/public/manual-publish/manifest.webmanifest"
           cp generated/manual-publish/sw.js "$HOMEPAGE_REPO_PATH/public/manual-publish/sw.js"
@@ -98,6 +101,8 @@ jobs:
           cp generated/manual-publish/libsodium-wrappers.js "$HOMEPAGE_REPO_PATH/public/manual-publish/libsodium-wrappers.js"
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
+          git -C "$HOMEPAGE_REPO_PATH" diff --check
           git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/index.html public/manual-publish/manifest.webmanifest public/manual-publish/sw.js public/manual-publish/icon-180.png public/manual-publish/icon-192.png public/manual-publish/icon-512.png public/manual-publish/libsodium-sumo.js public/manual-publish/libsodium-wrappers.js
           if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
             echo "No manual publish dashboard changes"

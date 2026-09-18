@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T05:42:20.318Z",
+  "updated_at": "2026-09-18T22:06:57+09:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -33,8 +33,8 @@
       "template_id": "markdown",
       "marked_at": "2026-07-14T14:07:19+09:00",
       "marked_by": "publication_verifier",
-      "posted_url": "https://onnellab.hashnode.dev/rss.xml",
-      "verified_at": "2026-07-14T14:07:19+09:00",
+      "posted_url": "https://onnellab.hashnode.dev/how-to-read-large-txt-files-without-lag",
+      "verified_at": "2026-09-18T22:06:57+09:00",
       "verification_method": "hashnode_rss",
       "verification_confidence": "medium"
     },
@@ -69,8 +69,8 @@
       "template_id": "markdown",
       "marked_at": "2026-07-15T14:44:12+09:00",
       "marked_by": "publication_verifier",
-      "posted_url": "https://medium.com/feed/@onnellab.app",
-      "verified_at": "2026-07-15T14:44:12+09:00",
+      "posted_url": "https://medium.com/@onnellab.app/how-to-read-large-txt-files-without-lag-9468be7e802d?source=rss-ff84b0f2e139------2",
+      "verified_at": "2026-09-18T22:06:57+09:00",
       "verification_method": "medium_rss",
       "verification_confidence": "medium"
     },

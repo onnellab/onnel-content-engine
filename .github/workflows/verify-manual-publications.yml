@@ -134,6 +134,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase --autostash origin main
+          git diff --check
           git add data/manual_publish_state.json data/manual_publication_verification_report.json data/app_flutter_dependency_versions.csv data/android_store_versions.csv data/store_versions.csv data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing_status.json generated/reports/app_flutter_dependency_versions.md generated/reports/app_releases.md
           if git diff --cached --quiet; then
             echo "No manual publication or dashboard snapshot changes to commit"
@@ -151,6 +152,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$HOMEPAGE_REPO_PATH/public/manual-publish"
+          python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
           cp generated/manual-publish/manifest.webmanifest "$HOMEPAGE_REPO_PATH/public/manual-publish/manifest.webmanifest"
           cp generated/manual-publish/sw.js "$HOMEPAGE_REPO_PATH/public/manual-publish/sw.js"
@@ -162,6 +164,9 @@ jobs:
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git -C "$HOMEPAGE_REPO_PATH" pull --rebase --autostash origin main
+          cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
+          python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
+          git -C "$HOMEPAGE_REPO_PATH" diff --check
           git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/index.html public/manual-publish/manifest.webmanifest public/manual-publish/sw.js public/manual-publish/icon-180.png public/manual-publish/icon-192.png public/manual-publish/icon-512.png public/manual-publish/libsodium-sumo.js public/manual-publish/libsodium-wrappers.js
           if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
             echo "No manual publish dashboard changes to deploy"

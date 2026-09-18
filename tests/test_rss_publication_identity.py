@@ -147,6 +147,14 @@ class RssIdentityTest(unittest.TestCase):
         self.assertEqual(result.posted_url, ARTICLE)
         fetch.assert_called_once()
 
+    def test_saved_automatic_rss_records_use_article_urls(self):
+        state = json.loads(v.DEFAULT_STATE.read_text(encoding='utf-8'))
+        with patch.dict('os.environ', {}, clear=True):
+            for key, record in state.get('done', {}).items():
+                if record.get('marked_by') != 'publication_verifier' or record.get('verification_method') not in {'hashnode_rss', 'medium_rss'}:
+                    continue
+                self.assertTrue(v.is_feed_article_url(record.get('posted_url', ''), v.rss_url_for(record['platform'])), key)
+
     def test_negative_evidence_does_not_modify_done_state(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)

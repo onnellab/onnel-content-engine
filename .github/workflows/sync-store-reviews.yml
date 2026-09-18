@@ -77,6 +77,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase --autostash origin main
+          python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+          python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
+          git diff --check
           git add data/store_reviews.csv data/store_reviews_archive.json data/store_review_sync_status.json data/store_review_triage.json generated/review-replies/review_packet.json generated/review-replies/review_packet.md generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js
           if git diff --cached --quiet; then
             echo "No store review changes to commit"
@@ -89,6 +92,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$HOMEPAGE_REPO_PATH/public/manual-publish"
+          python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
           cp generated/manual-publish/manifest.webmanifest "$HOMEPAGE_REPO_PATH/public/manual-publish/manifest.webmanifest"
           cp generated/manual-publish/sw.js "$HOMEPAGE_REPO_PATH/public/manual-publish/sw.js"
@@ -100,6 +104,9 @@ jobs:
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git -C "$HOMEPAGE_REPO_PATH" pull --rebase --autostash origin main
+          cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
+          python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
+          git -C "$HOMEPAGE_REPO_PATH" diff --check
           git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/
           if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
             echo "No dashboard changes to deploy"
