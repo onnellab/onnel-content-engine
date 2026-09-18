@@ -349,21 +349,6 @@ jobs:
             --approved-by github-actions \
             --dry-run
 
-      - name: Commit Content Engine Outputs
-        if: env.DRY_RUN != 'true'
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          mkdir -p generated/assets generated/metadata generated/reviews generated/html
-          git add data/topics.csv data/app_releases.csv data/app_release_config.csv data/store_versions.csv topics/topics.csv generated/markdown generated/images generated/assets generated/metadata generated/reports generated/reviews generated/html generated/social generated/syndication
-          if git diff --cached --quiet; then
-            echo "No content engine changes to commit"
-          else
-            git commit -m "Run scheduled publishing automation"
-            git push origin HEAD:main
-          fi
-
       - name: Deploy Dry Run
         if: env.DRY_RUN == 'true'
         run: |
@@ -389,6 +374,44 @@ jobs:
           python3 scripts/deploy_github_pages.py \
             --homepage-repo "$HOMEPAGE_REPO_PATH" \
             --branch main
+
+      - name: Wait For Pages Deployment
+        if: env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN }}
+        run: |
+          set -euo pipefail
+          homepage_sha="$(git -C "$HOMEPAGE_REPO_PATH" rev-parse HEAD)"
+          for attempt in $(seq 1 60); do
+            state="$(gh api "repos/onnellab/onnellab.github.io/commits/$homepage_sha/status" --jq '[.statuses[] | select(.context == "onnellab/pages-deploy")][0].state // ""')"
+            if [ "$state" = "success" ]; then
+              echo "GitHub Pages deployment is live for $homepage_sha"
+              exit 0
+            fi
+            if [ "$state" = "failure" ] || [ "$state" = "error" ]; then
+              echo "GitHub Pages deployment failed for $homepage_sha" >&2
+              exit 1
+            fi
+            sleep 5
+          done
+          echo "Timed out waiting for GitHub Pages deployment for $homepage_sha" >&2
+          exit 1
+
+      - name: Commit Content Engine Outputs
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p generated/assets generated/metadata generated/reviews generated/html
+          git add data/topics.csv data/app_releases.csv data/app_release_config.csv data/store_versions.csv topics/topics.csv generated/markdown generated/images generated/assets generated/metadata generated/reports generated/reviews generated/html generated/social generated/syndication
+          if git diff --cached --quiet; then
+            echo "No content engine changes to commit"
+          else
+            git commit -m "Run scheduled publishing automation"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
 
       - name: Post Due Core Distribution
         id: post_core_distribution
