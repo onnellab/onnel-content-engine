@@ -52,6 +52,31 @@ class DashboardIntegrityTest(unittest.TestCase):
         self.assertLess(deploy.index('pull --rebase origin main'), deploy.index('cp generated/manual-publish/index.html'))
         self.assertGreater(deploy.rindex('scripts/validate_manual_publish_site.py'), deploy.rindex('pull --rebase origin main'))
 
+
+    def test_dashboard_writers_share_one_queue_and_refresh_event_checkout(self):
+        root = Path(__file__).resolve().parents[1]
+        names = [
+            'publish-ready-app-releases.yml',
+            'sync-app-operational-status.yml',
+            'sync-store-reviews.yml',
+            'update-devto-article.yml',
+            'verify-manual-publications.yml',
+        ]
+        for name in names:
+            text = (root / '.github' / 'workflows' / name).read_text()
+            steps = text.split('    steps:', 1)[1]
+            with self.subTest(workflow=name):
+                self.assertIn('group: onnellab-manual-dashboard-writer', text)
+                self.assertIn('cancel-in-progress: false', text)
+                refresh = steps.index('- name: Refresh main before dashboard mutation')
+                pull = steps.index('git pull --ff-only origin main', refresh)
+                build = steps.find('scripts/build_manual_publish_site.py')
+                self.assertGreater(pull, refresh)
+                if build >= 0:
+                    self.assertLess(pull, build)
+        devto = (root / '.github/workflows/update-devto-article.yml').read_text().split('    steps:', 1)[1]
+        self.assertLess(devto.index('git pull --ff-only origin main'), devto.index('scripts/update_devto_article.py'))
+
     def test_every_direct_deployer_validates_source_and_destination(self):
         root = Path(__file__).resolve().parents[1]
         found = []

@@ -8,6 +8,10 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: onnellab-manual-dashboard-writer
+  cancel-in-progress: false
+
 jobs:
   publish-ready-app-releases:
     if: inputs.confirm_release == 'RELEASE'
@@ -30,6 +34,9 @@ jobs:
           repository: onnellab/onnellab.github.io
           path: ${{ env.HOMEPAGE_REPO_PATH }}
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+
+      - name: Refresh main before dashboard mutation
+        run: git pull --ff-only origin main
 
       - name: Configure Python
         uses: actions/setup-python@v5

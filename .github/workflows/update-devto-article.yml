@@ -26,6 +26,10 @@ on:
         required: true
         default: en
 
+concurrency:
+  group: onnellab-manual-dashboard-writer
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -45,6 +49,9 @@ jobs:
           repository: onnellab/onnellab.github.io
           path: ${{ env.HOMEPAGE_REPO_PATH }}
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+      - name: Refresh main before dashboard mutation
+        run: git pull --ff-only origin main
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

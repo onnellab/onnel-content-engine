@@ -6,7 +6,7 @@ on:
     - cron: "17 */6 * * *"
 
 concurrency:
-  group: onnellab-app-operational-status
+  group: onnellab-manual-dashboard-writer
   cancel-in-progress: false
 
 jobs:
@@ -31,6 +31,9 @@ jobs:
           repository: onnellab/onnellab.github.io
           path: ${{ env.HOMEPAGE_REPO_PATH }}
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+
+      - name: Refresh main before dashboard mutation
+        run: git pull --ff-only origin main
 
       - name: Configure Python
         uses: actions/setup-python@v5
