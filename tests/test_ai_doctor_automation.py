@@ -90,8 +90,11 @@ class AiDoctorAutomationTest(unittest.TestCase):
             }
             with patch.object(prepare_ai_doctor_context, "ROOT", engine):
                 resolved = prepare_ai_doctor_context.resolve_app_path(local)
+            # The resolver returns a physical path. macOS /tmp is a symlink;
+            # compare normalized paths while the temporary tree still exists.
+            expected = app.resolve(strict=True)
 
-        self.assertEqual(resolved, app)
+        self.assertEqual(resolved, expected)
 
     def test_analyzer_creates_github_finding_and_preserves_diagnosis(self) -> None:
         with tempfile.TemporaryDirectory() as raw:

@@ -1,0 +1,53 @@
+name: Offline Python Unit Tests
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'tests/**'
+      - 'templates/**'
+      - 'requirements-test.txt'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'tests/**'
+      - 'templates/**'
+      - 'requirements-test.txt'
+      - '.github/workflows/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: unit-tests-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    name: Unit tests (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: '3.12'
+          - os: ubuntu-latest
+            python: '3.14'
+          - os: macos-latest
+            python: '3.14'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: requirements-test.txt
+      - name: Install declared test dependencies
+        run: python -m pip install -r requirements-test.txt
+      - name: Run complete suite without live network calls
+        run: python scripts/run_unit_tests.py
+      - name: Ensure tests did not mutate tracked operational state
+        run: git diff --exit-code

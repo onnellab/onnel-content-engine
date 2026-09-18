@@ -75,6 +75,13 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("ONNELLAB_GITHUB_PAGES_TOKEN", workflow)
         self.assertNotIn("Blogger", workflow)
 
+    def test_unit_workflow_runs_full_offline_suite_on_linux_and_macos(self) -> None:
+        workflow = (ROOT / ".github/workflows/unit-tests.yml").read_text(encoding="utf-8")
+        for expected in ("ubuntu-latest", "macos-latest", "requirements-test.txt", "python scripts/run_unit_tests.py", "git diff --exit-code", "contents: read"):
+            self.assertIn(expected, workflow)
+        live = (ROOT / ".github/workflows/verify-manual-publications.yml").read_text(encoding="utf-8")
+        self.assertLess(live.index("--pattern 'test_*publication*.py'"), live.index("- name: Verify manual publications"))
+
     def test_dry_run_pipeline_does_not_modify_repository_topics(self) -> None:
         topics_path = ROOT / "data" / "topics.csv"
         legacy_path = ROOT / "topics" / "topics.csv"

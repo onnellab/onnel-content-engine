@@ -669,3 +669,25 @@ Solve real problems.
 Share useful knowledge.
 
 Let the products speak through their usefulness.
+
+## Deterministic unit tests
+
+Use the same explicit test dependency and runner on Linux/WSL, macOS and CI:
+
+```sh
+python3 -m venv .tools/test-venv
+.tools/test-venv/bin/python -m pip install -r requirements-test.txt
+.tools/test-venv/bin/python scripts/run_unit_tests.py
+```
+
+The runner rejects live DNS/socket calls in the test process, including attempts
+swallowed by a broad exception handler. Inject fixed transport responses instead
+of consulting current public feeds. This is not a subprocess security sandbox;
+mock subprocess-based live browser tools separately. No matching tests is an
+error, not a successful run. A failed feed query or missing evidence must never
+be turned into a publication success just to make a test pass.
+
+The `Offline Python Unit Tests` workflow runs the full suite on Ubuntu with
+Python 3.12/3.14 and macOS with Python 3.14. The manual-publication workflow also
+runs the offline publication tests before any live verification. Test output
+must not alter tracked reviews, publishing approvals, or generated dashboards.

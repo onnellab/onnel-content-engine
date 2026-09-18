@@ -1,0 +1,2 @@
+# Unit tests use the standard library except workflow-YAML validation.
+PyYAML==6.0.3
