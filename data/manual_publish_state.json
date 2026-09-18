@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T05:41:25.169Z",
+  "updated_at": "2026-09-18T05:42:20.318Z",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -323,6 +323,18 @@
       "marked_by": "manual_user_confirmation",
       "posted_url": "https://x.com/onnellab",
       "verified_at": "2026-09-18T05:41:25.138Z",
+      "verification_method": "user_confirmed_manual_publish",
+      "verification_confidence": "manual"
+    },
+    "TOPIC-0003::linkedin::en::linkedin": {
+      "topic_id": "TOPIC-0003",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "marked_at": "2026-09-18T05:42:20.287Z",
+      "marked_by": "manual_user_confirmation",
+      "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
+      "verified_at": "2026-09-18T05:42:20.287Z",
       "verification_method": "user_confirmed_manual_publish",
       "verification_confidence": "manual"
     }
