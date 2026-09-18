@@ -153,3 +153,27 @@ Official API references:
 Synchronized reviews are stored in `data/store_reviews.csv`. This is operational
 dashboard data, not a credential store. The dashboard does not display reviewer
 names and renders review text with `textContent` rather than HTML.
+
+## Current review reconciliation
+
+`data/store_reviews.csv` is the current authenticated review snapshot, not an
+append-only history or the store's aggregate star-rating count. Google monthly
+reports discover review IDs (including modern `?reviewId=` links); the recent
+API is only an additional discovery source. Every known real Google review ID
+is refreshed with `reviews.get`, including old reviews absent from the last-week
+list. The current response body and developer reply replace cached values.
+Apple pages are fully exhausted before reconciling its snapshot.
+
+Google 404/410 responses remove the record from the current snapshot but do not
+establish who removed it or why. Historical report-only rows with no current ID
+are **unverified**, not declared deleted. Removed records and superseded aliases
+are retained in `data/store_reviews_archive.json`; they do not feed pending reply
+drafts. Archived real Google IDs are rechecked and can reappear. 403, rate limits,
+transient failures or malformed responses abort before writing a new snapshot.
+`data/store_review_sync_status.json` records per-store checks, source coverage,
+review counts and the CSV checksum. Not-released apps are explicitly skipped.
+
+For a read-only investigation, run **Audit Store Review State** from GitHub
+Actions. It uses the existing store secrets and uploads a three-day audit
+artifact; it never posts replies or changes dashboard data. Do not put tokens,
+private keys, service-account JSON or reviewer identities into audit output.

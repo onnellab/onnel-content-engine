@@ -45,6 +45,8 @@ FIELDS = [
     "reply_updated_at",
     "status",
     "synced_at",
+    "verified_at",
+    "verification_source",
 ]
 GOOGLE_REPORTS_BUCKET_PREFIX = "pubsite_prod_"
 TRANSIENT_HTTP_STATUSES = {408, 425, 429, 500, 502, 503, 504}
@@ -68,7 +70,7 @@ def apply_review_overrides(
     for row in rows:
         has_text = bool(row.get("title", "").strip() or row.get("body", "").strip())
         row["review_kind"] = "review" if has_text else "rating_only"
-        override = overrides.get(row.get("review_id", ""))
+        override = overrides.get(row.get("review_id", "")) or overrides.get(row.get("_report_alias", ""))
         if isinstance(override, dict) and override.get("review_kind") in {"review", "rating_only"}:
             row["review_kind"] = str(override["review_kind"])
         if row["review_kind"] == "rating_only" and not row.get("developer_reply", "").strip():
@@ -321,8 +323,9 @@ def review_fingerprint(row: dict[str, str]) -> tuple[str, ...]:
     """Return a stable identity for a review when Google exposes different IDs.
 
     The Play lifetime report and the recent-reviews API do not always share an
-    identifier.  The submitted content, rating, and original submission time
-    are immutable review attributes and therefore safely identify that overlap.
+    identifier. Exact content/rating/timestamp matches can reconcile a legacy
+    alias, but text and ratings may change. Full authenticated syncs instead use
+    canonical store IDs and individually refresh every known Google review.
     """
     normalize_text = lambda value: " ".join(value.split()).casefold()
     return (
@@ -412,6 +415,10 @@ def fetch_apple_review_pages(
             raise StoreReviewSyncError(f"Apple review pagination repeated a page URL: {next_url}")
         seen.add(next_url)
         payload = fetcher(next_url, token)
+        if not isinstance(payload.get("data"), list):
+            raise StoreReviewSyncError("Apple review list is malformed; previous snapshot retained")
+        if any(not isinstance(item, dict) or not item.get("id") for item in payload["data"]):
+            raise StoreReviewSyncError("Apple review list contains invalid records")
         for field in ("data", "included"):
             values = payload.get(field, [])
             if isinstance(values, list):
@@ -437,6 +444,8 @@ def fetch_google_review_pages(
     for _ in range(max_pages):
         payload = fetcher(next_url, token)
         reviews = payload.get("reviews", [])
+        if not isinstance(reviews, list) or any(not isinstance(item, dict) or not item.get("reviewId") for item in reviews):
+            raise StoreReviewSyncError("Google recent review list is malformed")
         if isinstance(reviews, list):
             combined["reviews"].extend(reviews)  # type: ignore[union-attr]
         pagination = payload.get("tokenPagination", {})
@@ -533,6 +542,100 @@ def relationship_resource_id(resource: dict[str, object], relationship_name: str
     return str(data.get("id", "") or "").strip()
 
 
+def google_review_id_from_link(link: str) -> str:
+    """Extract a real review ID from current or legacy Play report links."""
+    parsed = urllib.parse.urlsplit(link)
+    for part in (parsed.query, parsed.fragment):
+        for key, value in urllib.parse.parse_qsl(part):
+            if key.casefold() in {"reviewid", "review_id"} and value.strip():
+                return value.strip()
+    marker = "ReviewPlace:id="
+    if marker in link:
+        return urllib.parse.unquote(link.split(marker, 1)[1].split("&", 1)[0]).strip()
+    return ""
+
+
+def google_report_fallback_id(package: str, source: dict[str, str]) -> str:
+    # Retain this legacy identity solely to migrate/archive old report aliases.
+    identity = "|".join([package, str(source.get("Review Submit Millis Since Epoch", "") or ""),
+                         str(source.get("Review Title", "") or "").strip(),
+                         str(source.get("Review Text", "") or "").strip()])
+    return "report-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:24]
+
+
+def review_key(row: dict[str, str]) -> tuple[str, str, str]:
+    return row.get("app_id", ""), row.get("platform", ""), row.get("review_id", "")
+
+
+def reconcile_google_current_reviews(
+    store: dict[str, str], prior: list[dict[str, str]], reports: list[dict[str, str]],
+    recent: list[dict[str, str]], token: str, checked_at: str,
+    archive: list[dict[str, object]], fetcher=None,
+) -> tuple[list[dict[str, str]], list[dict[str, object]]]:
+    """Verify every known canonical ID; never infer deletion from a recent list.
+
+    404/410 means not retrievable, not proof of who removed the review. Historical
+    report-only records without a matching stable ID are archived as unverified.
+    Other HTTP failures abort the entire sync before writing any data.
+    """
+    fetcher = fetcher or fetch_json
+    report_by_id = {r["review_id"]: r for r in reports if not r["review_id"].startswith("report-")}
+    aliases = {r["_report_alias"]: r["review_id"] for r in reports if r.get("_report_alias") and not r["review_id"].startswith("report-")}
+    candidates = {r["review_id"]: r for r in prior + reports + recent if r.get("review_id") and not r["review_id"].startswith("report-")}
+    for entry in archive:
+        row = entry.get("review", {})
+        if isinstance(row, dict) and (row.get("app_id"), row.get("platform")) == (store["app_id"], "android"):
+            rid = str(row.get("review_id", ""))
+            if rid and not rid.startswith("report-") and entry.get("reason") == "store_not_found":
+                candidates.setdefault(rid, row)
+    prior_by_id = {r["review_id"]: r for r in prior}
+    base = "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/" + urllib.parse.quote(google_store_package(store), safe="") + "/reviews/"
+    current = []
+    records = []
+    unavailable = set()
+    for rid in sorted(candidates):
+        try:
+            payload = fetcher(base + urllib.parse.quote(rid, safe=""), token)
+        except urllib.error.HTTPError as error:
+            if error.code not in {404, 410}:
+                raise
+            unavailable.add(rid)
+            records.append({"review": candidates[rid], "reason": "store_not_found", "http_status": error.code, "checked_at": checked_at})
+            continue
+        if payload.get("reviewId") != rid:
+            raise StoreReviewSyncError("Google individual review ID did not match the requested ID")
+        comments = payload.get("comments")
+        if not isinstance(comments, list) or not any(isinstance(c, dict) and isinstance(c.get("userComment"), dict) for c in comments):
+            raise StoreReviewSyncError("Google individual review is missing its user comment")
+        row = google_review_rows({"reviews": [payload]}, store, checked_at)[0]
+        source = report_by_id.get(rid) or prior_by_id.get(rid) or {}
+        # The API exposes lastModified, not original submission time. Keep the
+        # report's creation time while always accepting current text and replies.
+        row["created_at"] = source.get("created_at") or row["created_at"]
+        row["_report_alias"] = source.get("_report_alias", "")
+        row["verified_at"] = checked_at
+        row["verification_source"] = "google_reviews_get"
+        current.append(row)
+    for old in prior + reports:
+        rid = old.get("review_id", "")
+        if not rid.startswith("report-"):
+            continue
+        canonical = aliases.get(rid, "")
+        records.append({"review": old,
+                        "reason": "superseded_alias" if canonical else "unverified_report_history",
+                        "canonical_review_id": canonical, "checked_at": checked_at})
+    return current, records
+
+
+def merge_review_archive(existing: list[dict[str, object]], additions: list[dict[str, object]]) -> list[dict[str, object]]:
+    entries = {review_key(e["review"]): dict(e) for e in existing if isinstance(e, dict) and isinstance(e.get("review"), dict)}
+    for entry in additions:
+        key = review_key(entry["review"])
+        previous = entries.get(key)
+        entries[key] = {**entry, "archived_at": (previous or {}).get("archived_at", entry["checked_at"])}
+    return sorted(entries.values(), key=lambda e: review_key(e["review"]))
+
+
 def google_report_review_rows(
     bucket: str,
     store: dict[str, str],
@@ -594,30 +697,25 @@ def google_report_review_rows(
                 raise google_report_access_error(bucket, principal) from error
             raise
         encoding = "utf-16" if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else "utf-8-sig"
-        for source in csv.DictReader(io.StringIO(raw.decode(encoding))):
+        reader = csv.DictReader(io.StringIO(raw.decode(encoding)), strict=True)
+        required_columns = {"Package Name", "Star Rating", "Review Title", "Review Text", "Review Submit Millis Since Epoch"}
+        if not required_columns.issubset(reader.fieldnames or []):
+            raise StoreReviewSyncError("Google review report is missing required columns")
+        for source in reader:
+            if None in source or any(value is None for value in source.values()) or source.get("Package Name") != package:
+                raise StoreReviewSyncError("Google review report contains incomplete or mismatched rows")
             review_text = str(source.get("Review Text", "") or "").strip()
             review_title = str(source.get("Review Title", "") or "").strip()
             if not review_text and not review_title:
                 continue
             review_link = str(source.get("Review Link", "") or "")
-            review_id = ""
-            marker = "ReviewPlace:id="
-            if marker in review_link:
-                review_id = urllib.parse.unquote(review_link.split(marker, 1)[1].split("&", 1)[0])
-            if not review_id:
-                identity = "|".join(
-                    [
-                        package,
-                        str(source.get("Review Submit Millis Since Epoch", "") or ""),
-                        review_title,
-                        review_text,
-                    ]
-                )
-                review_id = "report-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:24]
+            legacy_id = google_report_fallback_id(package, source)
+            review_id = google_review_id_from_link(review_link) or legacy_id
             developer_reply = str(source.get("Developer Reply Text", "") or "").strip()
             rows.append(
                 {
                     "review_id": review_id,
+                    "_report_alias": legacy_id,
                     "app_id": store.get("app_id", ""),
                     "app_slug": store.get("app_slug", ""),
                     "app_name": store.get("app_name", ""),
@@ -730,7 +828,7 @@ def google_review_rows(payload: dict[str, object], store: dict[str, str], synced
                     user_comment = comment["userComment"]
                 if isinstance(comment.get("developerComment"), dict):
                     developer_comment = comment["developerComment"]
-        text = str(user_comment.get("text", "") or "")
+        text = str(user_comment.get("originalText") or user_comment.get("text", "") or "")
         title, separator, body = text.partition("\t")
         if not separator:
             title, body = "", title
@@ -783,6 +881,8 @@ def sync_reviews(
     require_google_history: bool = False,
     google_principal: str = "",
     overrides_path: Path = DEFAULT_OVERRIDES,
+    archive_path: Path | None = None,
+    sync_status_path: Path | None = None,
 ) -> dict[str, int]:
     google_reports_bucket = normalize_google_reports_bucket(google_reports_bucket)
     if require_google_history and not google_reports_bucket:
@@ -791,6 +891,14 @@ def sync_reviews(
             "the reviews API only exposes reviews created or modified within the last week"
         )
     stores = read_csv_rows(stores_path)
+    archive_path = archive_path or output_path.with_name("store_reviews_archive.json")
+    sync_status_path = sync_status_path or output_path.with_name("store_review_sync_status.json")
+    archive_payload = json.loads(archive_path.read_text(encoding="utf-8")) if archive_path.exists() else {"records": []}
+    if not isinstance(archive_payload, dict) or not isinstance(archive_payload.get("records"), list):
+        raise StoreReviewSyncError("Review archive is malformed")
+    archived = archive_payload["records"]
+    archive_additions = []
+    store_states = []
     existing = {
         (row.get("app_id", ""), row.get("platform", ""), row.get("review_id", "")): row
         for row in read_csv_rows(output_path)
@@ -810,6 +918,16 @@ def sync_reviews(
     for store in stores:
         platform = store.get("platform", "")
         slug = store.get("app_slug", "")
+        scope = (store.get("app_id", ""), platform)
+        prior = [r for key, r in existing.items() if key[:2] == scope]
+        state = {"app_id": scope[0], "app_slug": slug, "app_name": store.get("app_name", ""),
+                 "platform": platform, "checked_at": synced_at, "state": "skipped", "current_reviews": None}
+        store_states.append(state)
+        if store.get("status", "").strip().lower() == "not_released":
+            state["state"] = "not_released"
+            counts["unavailable"] += 1
+            continue
+        verified = False
         payload = fixture_payload(apple_json_dir if platform == "ios" else google_json_dir, slug)
         if platform == "ios":
             app_id = apple_store_app_id(store)
@@ -820,6 +938,7 @@ def sync_reviews(
                 and store.get("status", "").strip().lower() == "failed"
             ):
                 counts["unavailable"] += 1
+                state["state"] = "unavailable"
                 continue
             if payload is None and apple_token and app_id:
                 parameters = {
@@ -851,6 +970,7 @@ def sync_reviews(
                 )
                 published_response_ids = apple_review_ids(published_payload)
                 counts["apple_published"] += len(published_response_ids)
+                verified = True
             if payload is None:
                 counts["skipped"] += 1
                 continue
@@ -860,9 +980,19 @@ def sync_reviews(
                 synced_at,
                 published_response_ids=published_response_ids,
             )
+            if verified:
+                if len(rows) != len(payload.get("data", [])):
+                    raise StoreReviewSyncError("Apple full review list could not be parsed completely")
+                active_ids = {r["review_id"] for r in rows}
+                for row in rows:
+                    row["verified_at"] = synced_at
+                    row["verification_source"] = "apple_complete_review_list"
+                archive_additions.extend({"review": r, "reason": "not_in_complete_apple_list", "checked_at": synced_at} for r in prior if r["review_id"] not in active_ids)
         elif platform == "android":
             package = google_store_package(store)
             rows = []
+            report_rows = []
+            recent_rows = []
             if require_google_history and payload is None and package and not google_token:
                 raise StoreReviewSyncError(
                     "Google Play credentials are required to read the lifetime review reports"
@@ -891,8 +1021,23 @@ def sync_reviews(
                 recent_rows = google_review_rows(payload, store, synced_at)
                 rows.extend(recent_rows)
                 counts["google_recent"] += len(recent_rows)
+            if google_reports_bucket and google_token and package and google_json_dir is None:
+                rows, records = reconcile_google_current_reviews(store, prior, report_rows, recent_rows, google_token, synced_at, archived)
+                archive_additions.extend(records)
+                verified = True
+                state["report_rows"] = len(report_rows)
+                state["recent_rows"] = len(recent_rows)
+                state["not_found"] = sum(r["reason"] == "store_not_found" for r in records)
         else:
             continue
+        if verified:
+            for key in [key for key in existing if key[:2] == scope]:
+                del existing[key]
+            state["state"] = "verified"
+            state["current_reviews"] = sum(bool(r.get("title", "").strip() or r.get("body", "").strip()) for r in rows)
+            state["source"] = "google_reviews_get_with_full_report_inventory" if platform == "android" else "apple_complete_review_list"
+        else:
+            state["state"] = "partial"
         unique_rows: dict[tuple[str, str, str], dict[str, str]] = {}
         for row in rows:
             key = (
@@ -901,18 +1046,36 @@ def sync_reviews(
                 row.get("review_id", ""),
             )
             unique_rows[key] = row
-        rows = merge_review_rows(list(unique_rows.values()))
+        rows = list(unique_rows.values()) if verified else merge_review_rows(list(unique_rows.values()))
         fetched.extend(rows)
         counts[platform] += len(rows)
 
     for row in fetched:
         existing[(row["app_id"], row["platform"], row["review_id"])] = row
     rows = sorted(
-        merge_review_rows(list(existing.values())),
+        list(existing.values()),
         key=lambda row: (row.get("updated_at", ""), row.get("created_at", "")),
         reverse=True,
     )
-    write_csv_rows(output_path, apply_review_overrides(rows, overrides_path))
+    rows = apply_review_overrides(rows, overrides_path)
+    history = merge_review_archive(archived, archive_additions)
+    status_payload = {"schema_version": 1, "checked_at": synced_at,
+                      "count_basis": "currently_retrievable_written_reviews_not_star_ratings",
+                      "stores": store_states, "historical_records": len(history)}
+    # Collect and validate every store before touching the previous snapshot.
+    # Staged files are on the same filesystem; errors/403/429/5xx never erase data.
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=output_path.parent) as temp:
+        staged = Path(temp)
+        write_csv_rows(staged / "reviews.csv", rows)
+        status_payload["snapshot_sha256"] = hashlib.sha256((staged / "reviews.csv").read_bytes()).hexdigest()
+        (staged / "archive.json").write_text(json.dumps({"schema_version": 1, "records": history}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        (staged / "status.json").write_text(json.dumps(status_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        for target in (archive_path, sync_status_path):
+            target.parent.mkdir(parents=True, exist_ok=True)
+        os.replace(staged / "archive.json", archive_path)
+        os.replace(staged / "reviews.csv", output_path)
+        os.replace(staged / "status.json", sync_status_path)
     return counts
 
 
@@ -973,6 +1136,9 @@ def main() -> int:
         )
     except StoreReviewSyncError as error:
         print(f"store review sync failed: {error}", file=sys.stderr)
+        return 1
+    except urllib.error.HTTPError as error:
+        print(f"store review sync failed: HTTP {error.code}; previous snapshot retained", file=sys.stderr)
         return 1
     print(json.dumps(counts, ensure_ascii=False))
     if counts["skipped"]:

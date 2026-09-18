@@ -13,17 +13,7 @@ from pathlib import Path
 import sync_store_reviews as sync
 
 
-def review_id_from_link(link: str) -> str:
-    """Support old and current Play Console report links without guessing IDs."""
-    parsed = urllib.parse.urlsplit(link)
-    for part in (parsed.query, parsed.fragment):
-        for key, value in urllib.parse.parse_qsl(part):
-            if key.casefold() in {"reviewid", "review_id"} and value.strip():
-                return value.strip()
-    marker = "ReviewPlace:id="
-    if marker in link:
-        return urllib.parse.unquote(link.split(marker, 1)[1].split("&", 1)[0]).strip()
-    return ""
+review_id_from_link = sync.google_review_id_from_link
 
 
 def credentials() -> tuple[str, str, str]:
