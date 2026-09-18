@@ -1,46 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T04:52:44+00:00",
+  "generated_at": "2026-09-18T12:45:32+00:00",
   "items": [
-    {
-      "review_id": "report-2c2fdd68d98568b7096be719",
-      "category": "billing",
-      "risk_flags": [
-        "billing"
-      ],
-      "similarity_key": "billing",
-      "similar_reviews": 2,
-      "facts": [
-        {
-          "text": "TagWeaver is a focused editor for MP3 metadata.",
-          "source": "docs/operations/APP_FACTS.md:6"
-        },
-        {
-          "text": "TagWeaver supports editing one track at a time in the free experience.",
-          "source": "docs/operations/APP_FACTS.md:7"
-        },
-        {
-          "text": "Editing an individual file is available without the optional Pro upgrade.",
-          "source": "docs/operations/PRICING_FACTS.md:7"
-        },
-        {
-          "text": "Batch editing multiple files is included in TagWeaver Pro.",
-          "source": "docs/operations/PRICING_FACTS.md:8"
-        },
-        {
-          "text": "TagWeaver Pro is a one-time purchase; it is not a subscription.",
-          "source": "docs/operations/PRICING_FACTS.md:9"
-        }
-      ],
-      "requires_human_approval": true,
-      "actions": {
-        "reply": "not_needed",
-        "github_issue": "not_needed",
-        "store_copy": "not_needed",
-        "code_change": "not_needed"
-      },
-      "issue_draft": ""
-    },
     {
       "review_id": "873ee7f8-107e-4b31-8876-51d88b27fa5c",
       "category": "billing",
@@ -48,7 +9,7 @@
         "billing"
       ],
       "similarity_key": "billing",
-      "similar_reviews": 2,
+      "similar_reviews": 1,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",
@@ -72,43 +33,6 @@
         }
       ],
       "requires_human_approval": true,
-      "actions": {
-        "reply": "not_needed",
-        "github_issue": "not_needed",
-        "store_copy": "not_needed",
-        "code_change": "not_needed"
-      },
-      "issue_draft": ""
-    },
-    {
-      "review_id": "report-c346b9c885f7c9b3e91bc465",
-      "category": "praise",
-      "risk_flags": [],
-      "similarity_key": "praise",
-      "similar_reviews": 2,
-      "facts": [
-        {
-          "text": "TagWeaver is a focused editor for MP3 metadata.",
-          "source": "docs/operations/APP_FACTS.md:6"
-        },
-        {
-          "text": "TagWeaver supports editing one track at a time in the free experience.",
-          "source": "docs/operations/APP_FACTS.md:7"
-        },
-        {
-          "text": "Editing an individual file is available without the optional Pro upgrade.",
-          "source": "docs/operations/PRICING_FACTS.md:7"
-        },
-        {
-          "text": "Batch editing multiple files is included in TagWeaver Pro.",
-          "source": "docs/operations/PRICING_FACTS.md:8"
-        },
-        {
-          "text": "TagWeaver Pro is a one-time purchase; it is not a subscription.",
-          "source": "docs/operations/PRICING_FACTS.md:9"
-        }
-      ],
-      "requires_human_approval": false,
       "actions": {
         "reply": "not_needed",
         "github_issue": "not_needed",
@@ -122,7 +46,7 @@
       "category": "general_feedback",
       "risk_flags": [],
       "similarity_key": "general_feedback",
-      "similar_reviews": 4,
+      "similar_reviews": 3,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",
@@ -148,35 +72,6 @@
       "requires_human_approval": true,
       "actions": {
         "reply": "not_needed",
-        "github_issue": "not_needed",
-        "store_copy": "not_needed",
-        "code_change": "not_needed"
-      },
-      "issue_draft": ""
-    },
-    {
-      "review_id": "fc0a6e51-79d1-4aea-8aad-5954a7541b7a",
-      "category": "general_feedback",
-      "risk_flags": [],
-      "similarity_key": "general_feedback",
-      "similar_reviews": 4,
-      "facts": [
-        {
-          "text": "VaultXT is a text editor and viewer for plain-text files.",
-          "source": "docs/operations/APP_FACTS.md:8"
-        },
-        {
-          "text": "Claims about large-file limits or crash fixes require a verified issue and released version.",
-          "source": "docs/operations/APP_FACTS.md:9"
-        },
-        {
-          "text": "VaultXT Pro is a one-time purchase; it is not a subscription.",
-          "source": "docs/operations/PRICING_FACTS.md:10"
-        }
-      ],
-      "requires_human_approval": true,
-      "actions": {
-        "reply": "recommended",
         "github_issue": "not_needed",
         "store_copy": "not_needed",
         "code_change": "not_needed"
@@ -190,7 +85,7 @@
         "billing"
       ],
       "similarity_key": "pricing_free_vs_pro_confusion",
-      "similar_reviews": 2,
+      "similar_reviews": 1,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",
@@ -223,7 +118,7 @@
       "issue_draft": ""
     },
     {
-      "review_id": "report-778e20f8ea133bd166d1d9ca",
+      "review_id": "d0be20cd-9d2e-4f45-b3cf-4e7a89837265",
       "category": "bug",
       "risk_flags": [
         "bug"
@@ -260,43 +155,6 @@
         "feature"
       ],
       "similarity_key": "feature_request",
-      "similar_reviews": 2,
-      "facts": [
-        {
-          "text": "TagWeaver is a focused editor for MP3 metadata.",
-          "source": "docs/operations/APP_FACTS.md:6"
-        },
-        {
-          "text": "TagWeaver supports editing one track at a time in the free experience.",
-          "source": "docs/operations/APP_FACTS.md:7"
-        },
-        {
-          "text": "Editing an individual file is available without the optional Pro upgrade.",
-          "source": "docs/operations/PRICING_FACTS.md:7"
-        },
-        {
-          "text": "Batch editing multiple files is included in TagWeaver Pro.",
-          "source": "docs/operations/PRICING_FACTS.md:8"
-        },
-        {
-          "text": "TagWeaver Pro is a one-time purchase; it is not a subscription.",
-          "source": "docs/operations/PRICING_FACTS.md:9"
-        }
-      ],
-      "requires_human_approval": true,
-      "actions": {
-        "reply": "not_needed",
-        "github_issue": "not_needed",
-        "store_copy": "not_needed",
-        "code_change": "not_needed"
-      },
-      "issue_draft": ""
-    },
-    {
-      "review_id": "report-6b652b2227b5da3cd8607adf",
-      "category": "rating_only",
-      "risk_flags": [],
-      "similarity_key": "rating_only",
       "similar_reviews": 1,
       "facts": [
         {
@@ -320,7 +178,7 @@
           "source": "docs/operations/PRICING_FACTS.md:9"
         }
       ],
-      "requires_human_approval": false,
+      "requires_human_approval": true,
       "actions": {
         "reply": "not_needed",
         "github_issue": "not_needed",
@@ -330,42 +188,11 @@
       "issue_draft": ""
     },
     {
-      "review_id": "report-a0d3339ac24a86567e3f9185",
-      "category": "pricing_confusion",
-      "risk_flags": [
-        "billing"
-      ],
-      "similarity_key": "pricing_free_vs_pro_confusion",
-      "similar_reviews": 2,
-      "facts": [
-        {
-          "text": "VaultXT is a text editor and viewer for plain-text files.",
-          "source": "docs/operations/APP_FACTS.md:8"
-        },
-        {
-          "text": "Claims about large-file limits or crash fixes require a verified issue and released version.",
-          "source": "docs/operations/APP_FACTS.md:9"
-        },
-        {
-          "text": "VaultXT Pro is a one-time purchase; it is not a subscription.",
-          "source": "docs/operations/PRICING_FACTS.md:10"
-        }
-      ],
-      "requires_human_approval": true,
-      "actions": {
-        "reply": "recommended",
-        "github_issue": "not_needed",
-        "store_copy": "not_needed",
-        "code_change": "not_needed"
-      },
-      "issue_draft": ""
-    },
-    {
-      "review_id": "report-8cd06b8208fdc8054bf6d2e4",
+      "review_id": "d52818fd-cde9-425b-8753-90a2aaaf5e30",
       "category": "general_feedback",
       "risk_flags": [],
       "similarity_key": "general_feedback",
-      "similar_reviews": 4,
+      "similar_reviews": 3,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",
@@ -398,11 +225,11 @@
       "issue_draft": ""
     },
     {
-      "review_id": "report-2cf602014841fd72b7e493aa",
+      "review_id": "2d6db60b-48c2-4b01-bc55-13378bee7235",
       "category": "general_feedback",
       "risk_flags": [],
       "similarity_key": "general_feedback",
-      "similar_reviews": 4,
+      "similar_reviews": 3,
       "facts": [
         {
           "text": "VaultXT is a text editor and viewer for plain-text files.",
@@ -427,50 +254,11 @@
       "issue_draft": ""
     },
     {
-      "review_id": "report-4ae4d00c5bb0eddb44faeede",
-      "category": "feature_request",
-      "risk_flags": [
-        "feature"
-      ],
-      "similarity_key": "feature_request",
-      "similar_reviews": 2,
-      "facts": [
-        {
-          "text": "TagWeaver is a focused editor for MP3 metadata.",
-          "source": "docs/operations/APP_FACTS.md:6"
-        },
-        {
-          "text": "TagWeaver supports editing one track at a time in the free experience.",
-          "source": "docs/operations/APP_FACTS.md:7"
-        },
-        {
-          "text": "Editing an individual file is available without the optional Pro upgrade.",
-          "source": "docs/operations/PRICING_FACTS.md:7"
-        },
-        {
-          "text": "Batch editing multiple files is included in TagWeaver Pro.",
-          "source": "docs/operations/PRICING_FACTS.md:8"
-        },
-        {
-          "text": "TagWeaver Pro is a one-time purchase; it is not a subscription.",
-          "source": "docs/operations/PRICING_FACTS.md:9"
-        }
-      ],
-      "requires_human_approval": true,
-      "actions": {
-        "reply": "not_needed",
-        "github_issue": "not_needed",
-        "store_copy": "not_needed",
-        "code_change": "not_needed"
-      },
-      "issue_draft": ""
-    },
-    {
-      "review_id": "report-ca50567554b778bfd4a6dd54",
+      "review_id": "4dde3c57-cfa9-4ac1-acee-ad602251da81",
       "category": "praise",
       "risk_flags": [],
       "similarity_key": "praise",
-      "similar_reviews": 2,
+      "similar_reviews": 1,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",

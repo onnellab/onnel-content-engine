@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-09-18T12:45:20+00:00",
+  "count_basis": "currently_retrievable_written_reviews_not_star_ratings",
+  "stores": [
+    {
+      "app_id": "APP-0001",
+      "app_slug": "quivra",
+      "app_name": "Quivra",
+      "platform": "ios",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 0,
+      "source": "apple_complete_review_list"
+    },
+    {
+      "app_id": "APP-0001",
+      "app_slug": "quivra",
+      "app_name": "Quivra",
+      "platform": "android",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 0,
+      "report_rows": 0,
+      "recent_rows": 0,
+      "not_found": 0,
+      "source": "google_reviews_get_with_full_report_inventory"
+    },
+    {
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "platform": "ios",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 1,
+      "source": "apple_complete_review_list"
+    },
+    {
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "platform": "android",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 5,
+      "report_rows": 6,
+      "recent_rows": 0,
+      "not_found": 1,
+      "source": "google_reviews_get_with_full_report_inventory"
+    },
+    {
+      "app_id": "APP-0003",
+      "app_slug": "vaultxt",
+      "app_name": "VaultXT",
+      "platform": "ios",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 0,
+      "source": "apple_complete_review_list"
+    },
+    {
+      "app_id": "APP-0003",
+      "app_slug": "vaultxt",
+      "app_name": "VaultXT",
+      "platform": "android",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 2,
+      "report_rows": 3,
+      "recent_rows": 0,
+      "not_found": 2,
+      "source": "google_reviews_get_with_full_report_inventory"
+    },
+    {
+      "app_id": "APP-0004",
+      "app_slug": "segra",
+      "app_name": "Segra",
+      "platform": "ios",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 0,
+      "source": "apple_complete_review_list"
+    },
+    {
+      "app_id": "APP-0004",
+      "app_slug": "segra",
+      "app_name": "Segra",
+      "platform": "android",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 0,
+      "report_rows": 0,
+      "recent_rows": 0,
+      "not_found": 0,
+      "source": "google_reviews_get_with_full_report_inventory"
+    },
+    {
+      "app_id": "APP-0005",
+      "app_slug": "clipnest",
+      "app_name": "ClipNest",
+      "platform": "ios",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 0,
+      "source": "apple_complete_review_list"
+    },
+    {
+      "app_id": "APP-0006",
+      "app_slug": "aligna",
+      "app_name": "Aligna",
+      "platform": "ios",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 0,
+      "source": "apple_complete_review_list"
+    },
+    {
+      "app_id": "APP-0006",
+      "app_slug": "aligna",
+      "app_name": "Aligna",
+      "platform": "android",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "verified",
+      "current_reviews": 0,
+      "report_rows": 0,
+      "recent_rows": 0,
+      "not_found": 0,
+      "source": "google_reviews_get_with_full_report_inventory"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "ios",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "not_released",
+      "current_reviews": null
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "android",
+      "checked_at": "2026-09-18T12:45:20+00:00",
+      "state": "not_released",
+      "current_reviews": null
+    }
+  ],
+  "historical_records": 12,
+  "snapshot_sha256": "d7cfa1fbdffa3a2d350e7393330a79485a11d91b56e69fa7ed286e47db49e6b8"
+}
