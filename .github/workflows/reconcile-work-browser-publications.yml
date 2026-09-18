@@ -48,7 +48,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/reconcile_work_browser_publications.py
-          python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+          python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH" --store-review-triage /tmp/work-browser-triage.json
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           git diff --check
 

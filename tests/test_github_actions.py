@@ -207,6 +207,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn('cron: "17 * * * *"', workflow)
         self.assertIn("scripts/reconcile_work_browser_publications.py", workflow)
         self.assertIn("data/work_browser_publications.json", workflow)
+        self.assertIn("--store-review-triage /tmp/work-browser-triage.json", workflow)
         self.assertIn("group: onnellab-manual-dashboard-writer", workflow)
         self.assertIn("public/manual-publish/", workflow)
 
