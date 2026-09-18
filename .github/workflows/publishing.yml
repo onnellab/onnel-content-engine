@@ -392,6 +392,7 @@ jobs:
               echo "GitHub Pages deployment failed for $homepage_sha" >&2
               exit 1
             fi
+            echo "Waiting for GitHub Pages deployment ($attempt/60): ${state:-pending}"
             sleep 5
           done
           echo "Timed out waiting for GitHub Pages deployment for $homepage_sha" >&2
