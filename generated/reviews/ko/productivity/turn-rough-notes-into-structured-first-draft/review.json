@@ -3,10 +3,10 @@
   "type": "article_review",
   "topic_id": "TOPIC-0024",
   "title": "거친 메모를 구조화된 초안으로 바꾸는 방법",
-  "input_fingerprint": "04b09e5ea7d68bd85bbcbcc98870b4cfa61edd09b819ce0474c63e5c3af6086d",
-  "score": 8.84,
+  "input_fingerprint": "3df1ba2cfd7f6c0fe95972ef479f89435bce38ea9eb1723e6ffac3de2ed9da9a",
+  "score": 10.0,
   "threshold": 9.0,
-  "passed": false,
+  "passed": true,
   "checks": [
     {
       "name": "metadata_complete",
@@ -52,15 +52,15 @@
     },
     {
       "name": "clear_definitions",
-      "passed": false,
-      "points": 0.0,
+      "passed": true,
+      "points": 0.8,
       "max_points": 0.8,
       "note": "Article defines important technical terms."
     },
     {
       "name": "primary_keyword",
-      "passed": false,
-      "points": 0.0,
+      "passed": true,
+      "points": 0.8,
       "max_points": 0.8,
       "note": "Primary keyword appears naturally."
     },

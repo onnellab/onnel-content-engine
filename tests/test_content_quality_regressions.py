@@ -15,6 +15,9 @@ class ContentQualityRegressionsTest(unittest.TestCase):
     def test_large_txt_language_pair_passes_every_readiness_check(self) -> None:
         self.assert_articles_publishable(("TOPIC-0001", "TOPIC-0005"))
 
+    def test_notes_to_draft_language_pair_passes_every_readiness_check(self) -> None:
+        self.assert_articles_publishable(("TOPIC-0014", "TOPIC-0024"))
+
     def assert_articles_publishable(self, topic_ids: tuple[str, ...]) -> None:
         topics_path = ROOT / "data" / "topics.csv"
         for topic_id in topic_ids:
