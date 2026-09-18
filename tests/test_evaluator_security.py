@@ -59,7 +59,7 @@ class EvaluatorSecurityTest(unittest.TestCase):
             def fingerprint(current_topic: dict[str, str] = topic, current_markdown: str = markdown) -> str:
                 with patch("evaluate_article.translation_quality_passes", return_value=(True, "valid")):
                     review = score_article(current_topic, current_markdown, root / "topics.csv", metadata_root, assets_root)
-                self.assertEqual(review["version"], 2)
+                self.assertEqual(review["version"], 3)
                 return str(review["input_fingerprint"])
 
             baseline = fingerprint()
