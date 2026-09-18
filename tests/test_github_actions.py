@@ -202,6 +202,14 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("data/store_reviews.csv", workflow)
         self.assertIn("public/manual-publish/", workflow)
 
+    def test_work_browser_reconciliation_is_scheduled_and_deploys_dashboard(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "reconcile-work-browser-publications.yml").read_text(encoding="utf-8")
+        self.assertIn('cron: "17 * * * *"', workflow)
+        self.assertIn("scripts/reconcile_work_browser_publications.py", workflow)
+        self.assertIn("data/work_browser_publications.json", workflow)
+        self.assertIn("group: onnellab-manual-dashboard-writer", workflow)
+        self.assertIn("public/manual-publish/", workflow)
+
     def test_store_review_reply_workflow_commits_failed_publication_audit(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "publish-store-review-reply.yml").read_text(encoding="utf-8")
 

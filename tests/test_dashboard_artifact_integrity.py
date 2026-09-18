@@ -61,6 +61,7 @@ class DashboardIntegrityTest(unittest.TestCase):
             'sync-store-reviews.yml',
             'update-devto-article.yml',
             'verify-manual-publications.yml',
+            'reconcile-work-browser-publications.yml',
         ]
         for name in names:
             text = (root / '.github' / 'workflows' / name).read_text()
@@ -88,7 +89,7 @@ class DashboardIntegrityTest(unittest.TestCase):
             self.assertIn('python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html', text, path.name)
             self.assertIn('python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"', text, path.name)
             self.assertIn('git -C "$HOMEPAGE_REPO_PATH" diff --check', text, path.name)
-        self.assertEqual(len(found), 5)
+        self.assertEqual(len(found), 6)
 
 
 if __name__ == '__main__':

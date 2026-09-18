@@ -70,6 +70,7 @@ PLATFORM_LABELS = {
 SOCIAL_DUE_DELAYS_DAYS = {"x": 0, "linkedin": 1, "bluesky": 1}
 SYNDICATION_DUE_DELAYS_DAYS = {"devto": 2, "hashnode": 3, "medium": 4}
 AUTOMATED_PLATFORMS = {"bluesky", "devto"}
+WORK_BROWSER_PLATFORMS = {"x", "linkedin", "hashnode", "medium"}
 HASHNODE_SEO_DESCRIPTION_LIMIT = 160
 
 
@@ -347,7 +348,7 @@ def apply_manual_publish_schedule(
             raise ValueError(f"invalid manual publish backlog publish_at: {due}")
         scheduled[key] = entry
     for item in items:
-        if item.get("publishing_mode") != "manual":
+        if item.get("publishing_mode") not in {"manual", "work_browser"}:
             continue
         original_due = str(item.get("due_at", "") or "")
         item["original_due_at"] = original_due
@@ -368,7 +369,11 @@ def item_key(topic_id: object, platform: str, language: object, template_id: obj
 
 
 def publishing_mode(platform: str) -> str:
-    return "automatic" if platform in AUTOMATED_PLATFORMS else "manual"
+    if platform in AUTOMATED_PLATFORMS:
+        return "automatic"
+    if platform in WORK_BROWSER_PLATFORMS:
+        return "work_browser"
+    return "manual"
 
 
 def public_release_notes_url(row: dict[str, str]) -> str:
@@ -1360,7 +1365,7 @@ def html_document(
   <main>
     <section class="overview" aria-label="Publish overview">
       <button class="metric-card" type="button" data-view="due"><span id="overview-due-label">오늘 할 일</span><strong class="due-count">0</strong></button>
-      <button class="metric-card" type="button" data-view="manual"><span id="overview-manual-label">수동 대기</span><strong id="manual-count">{manual}</strong></button>
+      <button class="metric-card" type="button" data-view="manual"><span id="overview-manual-label">Work 게시 대기</span><strong id="manual-count">{manual}</strong></button>
       <button class="metric-card" type="button" data-view="done"><span id="overview-posted-label">게시 완료</span><strong id="posted-count">{posted}</strong></button>
     </section>
     <section class="atm-action" aria-label="Primary verification action">
@@ -1389,7 +1394,7 @@ def html_document(
         <input id="search" type="search" placeholder="토픽, 매체, 언어, 상태 검색">
         <select id="language"><option value="">모든 언어</option></select>
         <select id="status"><option value="">모든 상태</option></select>
-        <select id="mode"><option value="manual">수동만</option><option value="automatic">자동화만</option><option value="">전체</option></select>
+        <select id="mode"><option value="work_browser">Work 자동</option><option value="automatic">API 자동</option><option value="manual">수동만</option><option value="">전체</option></select>
       </div>
       <div class="auth" id="sync-auth" hidden>
         <input id="token" type="password" autocomplete="off" placeholder="ONNELLAB_GITHUB_PAGES_TOKEN">
@@ -1629,8 +1634,9 @@ def html_document(
         allPlatforms: '모든 매체',
         allLanguages: '모든 언어',
         allStatuses: '모든 상태',
+        workBrowserOnly: 'Work 자동만',
         manualOnly: '수동만',
-        automaticOnly: '자동화만',
+        automaticOnly: 'API 자동만',
         allModes: '전체',
         activeOnly: '진행 항목만',
         showDone: '완료 포함',
@@ -1796,7 +1802,7 @@ def html_document(
         showDetails: '상세 보기',
         hideDetails: '상세 숨기기',
         overviewDue: '오늘 할 일',
-        overviewManual: '수동 대기',
+        overviewManual: 'Work 게시 대기',
         overviewPosted: '게시 완료',
         overviewSync: '동기화',
         dueTag: '예정',
@@ -1807,7 +1813,8 @@ def html_document(
         verificationPendingReason: '확인 결과',
         variantTag: '대안',
         manualMode: '수동 게시 필요',
-        automaticMode: '자동화 대상',
+        workBrowserMode: 'Work 자동 게시',
+        automaticMode: 'API 자동 게시',
         showVariants: '대안 보기',
         hideVariants: '대안 숨기기',
         variantsCount: '개 대안',
@@ -1911,8 +1918,9 @@ def html_document(
         allPlatforms: 'All platforms',
         allLanguages: 'All languages',
         allStatuses: 'All statuses',
+        workBrowserOnly: 'Work browser only',
         manualOnly: 'Manual only',
-        automaticOnly: 'Automated only',
+        automaticOnly: 'API automated only',
         allModes: 'All',
         activeOnly: 'Active only',
         showDone: 'Show done',
@@ -2078,7 +2086,7 @@ def html_document(
         showDetails: 'Show details',
         hideDetails: 'Hide details',
         overviewDue: 'Due today',
-        overviewManual: 'Waiting',
+        overviewManual: 'Work queue',
         overviewPosted: 'Posted',
         overviewSync: 'Sync',
         dueTag: 'due',
@@ -2089,7 +2097,8 @@ def html_document(
         verificationPendingReason: 'check result',
         variantTag: 'variant',
         manualMode: 'Manual publish',
-        automaticMode: 'Automated',
+        workBrowserMode: 'Work browser automation',
+        automaticMode: 'API automation',
         showVariants: 'Show alternatives',
         hideVariants: 'Hide alternatives',
         variantsCount: 'alternatives',
@@ -2233,9 +2242,10 @@ def html_document(
       filters.platform.options[0].textContent = t('allPlatforms');
       filters.language.options[0].textContent = t('allLanguages');
       filters.status.options[0].textContent = t('allStatuses');
-      filters.mode.options[0].textContent = t('manualOnly');
+      filters.mode.options[0].textContent = t('workBrowserOnly');
       filters.mode.options[1].textContent = t('automaticOnly');
-      filters.mode.options[2].textContent = t('allModes');
+      filters.mode.options[2].textContent = t('manualOnly');
+      filters.mode.options[3].textContent = t('allModes');
       filters.visibility.options[0].textContent = t('dueOnly');
       filters.visibility.options[1].textContent = t('activeOnly');
       filters.visibility.options[2].textContent = t('showDone');
@@ -2261,11 +2271,11 @@ def html_document(
     function applyView(view) {{
       currentView = view;
       if (view === 'due') {{
-        filters.mode.value = 'manual';
+        filters.mode.value = 'work_browser';
         filters.visibility.value = 'due';
         filters.status.value = '';
       }} else if (view === 'manual') {{
-        filters.mode.value = 'manual';
+        filters.mode.value = 'work_browser';
         filters.visibility.value = 'active';
         filters.status.value = '';
       }} else if (view === 'done') {{
@@ -3403,7 +3413,7 @@ def html_document(
 
     function isDue(item) {{
       if (isDone(item) || item.is_variant || isPrepublication(item)) return false;
-      if (item.publishing_mode !== 'manual') return false;
+      if (!['work_browser', 'manual'].includes(item.publishing_mode)) return false;
       if (!['draft', 'failed', 'approved'].includes(item.status)) return false;
       const date = dueDate(item);
       return date ? kstDayNumber(date) <= kstDayNumber(new Date()) : false;
@@ -3520,7 +3530,7 @@ def html_document(
 
     function nextManualDueDate() {{
       return items
-        .filter((item) => item.publishing_mode === 'manual' && !isDone(item) && !item.is_variant && !isPrepublication(item) && dueDate(item))
+        .filter((item) => ['work_browser', 'manual'].includes(item.publishing_mode) && !isDone(item) && !item.is_variant && !isPrepublication(item) && dueDate(item))
         .map((item) => dueDate(item))
         .filter(Boolean)
         .sort((a, b) => a - b)[0] || null;
@@ -3842,8 +3852,9 @@ def html_document(
         const title = document.createElement('strong');
         const titleText = profileLink(label, platformProfileUrl(rows[0]?.platform || label));
         const modeTag = document.createElement('span');
-        modeTag.className = 'tag ' + (rows[0]?.publishing_mode === 'automatic' ? 'mode-automatic' : 'mode-manual');
-        modeTag.textContent = rows[0]?.publishing_mode === 'automatic' ? t('automaticMode') : t('manualMode');
+        const platformMode = rows[0]?.publishing_mode || 'manual';
+        modeTag.className = 'tag ' + (platformMode === 'manual' ? 'mode-manual' : 'mode-automatic');
+        modeTag.textContent = platformMode === 'work_browser' ? t('workBrowserMode') : platformMode === 'automatic' ? t('automaticMode') : t('manualMode');
         title.append(titleText, modeTag);
         const status = document.createElement('span');
         status.textContent = `${{posted.length}} ${{t('postedWord')}} / ${{drafts.length}} ${{t('waitingWord')}} / ${{failed.length}} ${{t('failedWord')}}`;
@@ -4643,7 +4654,7 @@ def html_document(
         const due = isDue(item);
         if (item.is_variant && !showVariants) return false;
         if (currentView === 'due' && !due) return false;
-        if (currentView === 'manual' && (item.publishing_mode !== 'manual' || done || isPrepublication(item))) return false;
+        if (currentView === 'manual' && (!['work_browser', 'manual'].includes(item.publishing_mode) || done || isPrepublication(item))) return false;
         if (currentView === 'done' && !done) return false;
         return (!query || haystack.includes(query))
           && (!platform || item.platform_label === platform)
@@ -4659,7 +4670,7 @@ def html_document(
       }});
       const dueTotal = String(items.filter(isDue).length);
       const manualTotal = String(items.filter((item) =>
-        item.publishing_mode === 'manual'
+        ['work_browser', 'manual'].includes(item.publishing_mode)
         && !item.is_variant
         && !isPrepublication(item)
         && !isDone(item)
@@ -4705,14 +4716,14 @@ def html_document(
       const meta = document.createElement('div');
       meta.className = 'meta';
       const statusParts = [
-        item.publishing_mode === 'manual' ? t('manualMode') : t('automaticMode'),
+        item.publishing_mode === 'work_browser' ? t('workBrowserMode') : item.publishing_mode === 'automatic' ? t('automaticMode') : t('manualMode'),
         item.language,
         isDone(item) ? t('doneTag') : item.status,
       ];
       if (isPrepublication(item)) {{
         statusParts.push(t('reviewOnly'));
       }}
-      if (item.publishing_mode === 'manual' && item.manual_publish_schedule_kind) {{
+      if (['work_browser', 'manual'].includes(item.publishing_mode) && item.manual_publish_schedule_kind) {{
         statusParts.push(t(item.manual_publish_schedule_kind === 'backlog' ? 'backlogScheduleTag' : 'scheduledPublishTag'));
       }}
       if (isDue(item)) {{
@@ -4789,6 +4800,7 @@ def html_document(
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
       doneButton.onclick = () => isDone(item) ? undoDone(item, doneButton) : markDone(item, doneButton);
       if (isPrepublication(item)) actions.append(detailToggle);
+      else if (item.publishing_mode === 'work_browser') actions.append(open, detailToggle);
       else actions.append(open, doneButton, detailToggle);
       if (item.kind === 'syndication' && !isPrepublication(item)) {{
         syndicationQuickCopyRows(item).forEach(([labelText, value]) => actions.appendChild(copyValueButton(labelText, value)));
