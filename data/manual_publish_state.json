@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T05:39:31.053Z",
+  "updated_at": "2026-09-18T05:40:34.341Z",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -215,6 +215,18 @@
       "marked_by": "manual_user_confirmation",
       "posted_url": "https://hashnode.com/@onnellab",
       "verified_at": "2026-09-18T05:39:31.008Z",
+      "verification_method": "user_confirmed_manual_publish",
+      "verification_confidence": "manual"
+    },
+    "TOPIC-0016::x::en::x": {
+      "topic_id": "TOPIC-0016",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "marked_at": "2026-09-18T05:40:34.301Z",
+      "marked_by": "manual_user_confirmation",
+      "posted_url": "https://x.com/onnellab",
+      "verified_at": "2026-09-18T05:40:34.301Z",
       "verification_method": "user_confirmed_manual_publish",
       "verification_confidence": "manual"
     }
