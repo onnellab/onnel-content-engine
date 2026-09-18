@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T05:36:43.646Z",
+  "updated_at": "2026-09-18T05:39:31.053Z",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -203,6 +203,18 @@
       "marked_by": "manual_user_confirmation",
       "posted_url": "https://medium.com/@onnellab.app",
       "verified_at": "2026-09-18T05:36:43.599Z",
+      "verification_method": "user_confirmed_manual_publish",
+      "verification_confidence": "manual"
+    },
+    "TOPIC-0020::hashnode::en::markdown": {
+      "topic_id": "TOPIC-0020",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "marked_at": "2026-09-18T05:39:31.008Z",
+      "marked_by": "manual_user_confirmation",
+      "posted_url": "https://hashnode.com/@onnellab",
+      "verified_at": "2026-09-18T05:39:31.008Z",
       "verification_method": "user_confirmed_manual_publish",
       "verification_confidence": "manual"
     }
