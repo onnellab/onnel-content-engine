@@ -79,6 +79,9 @@ class GitHubActionsTest(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/unit-tests.yml").read_text(encoding="utf-8")
         for expected in ("ubuntu-latest", "macos-latest", "requirements-test.txt", "python scripts/run_unit_tests.py", "git diff --exit-code", "contents: read"):
             self.assertIn(expected, workflow)
+        self.assertIn("sudo apt-get install -y librsvg2-bin", workflow)
+        self.assertIn("brew install librsvg", workflow)
+        self.assertIn("rsvg-convert --version", workflow)
         live = (ROOT / ".github/workflows/verify-manual-publications.yml").read_text(encoding="utf-8")
         self.assertLess(live.index("--pattern 'test_*publication*.py'"), live.index("- name: Verify manual publications"))
 

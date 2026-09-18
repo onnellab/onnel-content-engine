@@ -672,7 +672,11 @@ Let the products speak through their usefulness.
 
 ## Deterministic unit tests
 
-Use the same explicit test dependency and runner on Linux/WSL, macOS and CI:
+Use the same explicit test dependencies and runner on Linux/WSL, macOS and CI.
+The existing publishing integration tests render real SVG assets: install
+`librsvg2-bin` with apt on Linux/WSL, or `librsvg` with Homebrew on macOS.
+The full-suite CI installs this renderer explicitly rather than skipping those
+tests or replacing images with mocks.
 
 ```sh
 python3 -m venv .tools/test-venv
