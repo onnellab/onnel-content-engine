@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "type": "article_review",
   "topic_id": "TOPIC-0017",
   "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
-  "input_fingerprint": "94e730cfa882fb58987bdada407abb81a8aef6d6616de126182453cef92618b3",
+  "input_fingerprint": "8b93b04684e19ca059071073abe3857d1369ca47b619a67f6cf9046cc4dbb50a",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

@@ -18,7 +18,7 @@ DEFAULT_METADATA_ROOT = ROOT / "generated" / "metadata"
 DEFAULT_ASSETS_ROOT = ROOT / "generated" / "assets" / "blog"
 DEFAULT_REVIEW_ROOT = ROOT / "generated" / "reviews"
 DEFAULT_THRESHOLD = 9.0
-REVIEW_VERSION = 2
+REVIEW_VERSION = 3
 FORBIDDEN_LOCAL_BRAND = "\uc628\ub128\ub7a9"
 FINGERPRINT_TOPIC_FIELDS = (
     "id",
@@ -494,6 +494,7 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
     points = sum(float(check["points"]) for check in checks)
     max_points = sum(float(check["max_points"]) for check in checks)
     score = round(points / max_points * 10, 2) if max_points else 0.0
+    all_checks_passed = all(check.get("passed") is True for check in checks)
     return {
         "version": REVIEW_VERSION,
         "type": "article_review",
@@ -502,7 +503,7 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
         "input_fingerprint": _article_input_fingerprint(topic, markdown, metadata_root, assets_root),
         "score": score,
         "threshold": DEFAULT_THRESHOLD,
-        "passed": score > DEFAULT_THRESHOLD,
+        "passed": score > DEFAULT_THRESHOLD and all_checks_passed,
         "checks": checks,
     }
 

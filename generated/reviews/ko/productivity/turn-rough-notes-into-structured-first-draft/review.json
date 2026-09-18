@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "type": "article_review",
   "topic_id": "TOPIC-0024",
   "title": "거친 메모를 구조화된 초안으로 바꾸는 방법",
-  "input_fingerprint": "78c62e55f148290f3b6ba5cc5ddd9f7b84e4228cb13366ce8bc741676ee138e6",
+  "input_fingerprint": "04b09e5ea7d68bd85bbcbcc98870b4cfa61edd09b819ce0474c63e5c3af6086d",
   "score": 8.84,
   "threshold": 9.0,
   "passed": false,

@@ -39,11 +39,6 @@ def html_escape(value: str) -> str:
     )
 
 
-def svg_text(value: str, max_chars: int = 34) -> str:
-    value = " ".join(value.split())
-    return html_escape(value[: max_chars - 1] + "…") if len(value) > max_chars else html_escape(value)
-
-
 def wrap_words(value: str, max_chars: int) -> list[str]:
     words = " ".join(value.split()).split(" ")
     if not words:
@@ -98,7 +93,6 @@ def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str
 
 def encoding_workflow_svg(title: str, keyword: str, language: str) -> str:
     title_lines = wrap_words(title, 36 if language == "en" else 22)
-    keyword_text = svg_text(keyword, 34)
     if language == "ko":
         header = "인코딩 진단"
         subtitle = "깨진 글자는 파일 손상보다 디코딩 불일치인 경우가 많습니다."
@@ -127,6 +121,7 @@ def encoding_workflow_svg(title: str, keyword: str, language: str) -> str:
         desc = f"Encoding diagnosis diagram for {keyword}."
         sample_bad = "ÃªÂ¸Â ? □"
         sample_good = "Readable text"
+    header_lines = wrap_words(f"{header} · {keyword}", 68 if language == "en" else 34)
     panel_svg = []
     for index, (heading, detail) in enumerate(panels):
         x = 72 + index * 214
@@ -155,7 +150,7 @@ def encoding_workflow_svg(title: str, keyword: str, language: str) -> str:
   <desc id="desc">{html_escape(desc)}</desc>
   <rect width="1200" height="675" fill="#f7f1e7"/>
   <rect x="46" y="42" width="1108" height="591" rx="20" fill="#fffaf1" stroke="#d9c9ab" stroke-width="1.8"/>
-  <text x="78" y="105" fill="#2f2d29" font-family="{SVG_FONT_STACK}" font-size="20" font-weight="800">{html_escape(header)} · {keyword_text}</text>
+  <text fill="#2f2d29" font-family="{SVG_FONT_STACK}" font-size="20" font-weight="800">{svg_tspans(header_lines, 78, 105, 23)}</text>
   <text fill="#2f2d29" font-family="{SVG_FONT_STACK}" font-size="40" font-weight="760">{svg_tspans(title_lines, 78, 168, 47)}</text>
   <text x="78" y="296" fill="#6b5f4d" font-family="{SVG_FONT_STACK}" font-size="18">{html_escape(subtitle)}</text>
   <g aria-label="byte sequence">{byte_cells}{byte_labels}</g>
@@ -177,8 +172,8 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
         return encoding_workflow_svg(title, keyword, language)
     title_lines = wrap_words(title, 38)
     raw_keyword = keyword
-    keyword = svg_text(keyword, 36)
     subtitle, bottom_message, steps, footer, description_label = localized_steps(language)
+    subtitle_lines = wrap_words(f"{subtitle} · {raw_keyword}", 80 if language == "en" else 42)
     cards = []
     card_width = 190
     card_gap = 84
@@ -203,7 +198,7 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
   <rect width="1200" height="675" fill="#fbf7ef"/>
   <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
   <text fill="#30302c" font-family="{SVG_FONT_STACK}" font-size="38" font-weight="680">{svg_tspans(title_lines, 92, 112, 44)}</text>
-  <text x="92" y="184" fill="#69645c" font-family="{SVG_FONT_STACK}" font-size="19">{html_escape(subtitle)} · {keyword}</text>
+  <text fill="#69645c" font-family="{SVG_FONT_STACK}" font-size="19">{svg_tspans(subtitle_lines, 92, 184, 23)}</text>
   {''.join(cards)}
   {arrows}
   <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.6"/>

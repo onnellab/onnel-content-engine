@@ -335,6 +335,25 @@ class PublicationAutomationTest(unittest.TestCase):
         self.assertIn("image_quality", check_names)
         self.assertIn("translation_quality", check_names)
 
+    def test_review_passed_requires_every_check_to_pass(self) -> None:
+        en = topic_row("review")
+        ko = topic_row("review", "TOPIC-0002", "ko")
+        write_topics(self.topics_path, [en, ko])
+        self.asset_path.write_text(self.asset_path.read_text(encoding="utf-8").replace("Check file", "Check file…"), encoding="utf-8")
+
+        review = score_article(
+            en,
+            MARKDOWN,
+            self.topics_path,
+            self.root / "generated" / "metadata",
+            self.root / "generated" / "assets" / "blog",
+        )
+        checks = {check["name"]: check for check in review["checks"]}
+
+        self.assertGreater(review["score"], 9.0)
+        self.assertFalse(checks["image_quality"]["passed"])
+        self.assertFalse(review["passed"])
+
     def test_clear_definitions_accept_topic_independent_prose(self) -> None:
         examples = {
             "reading": "A line ending is a marker that separates one line from the next.",

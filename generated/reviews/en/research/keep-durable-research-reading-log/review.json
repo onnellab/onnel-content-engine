@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "type": "article_review",
   "topic_id": "TOPIC-0016",
   "title": "How to Keep a Durable Research Reading Log",
-  "input_fingerprint": "f4af2c075458c5dbc39cb51770285fa87e4d6c599a6a44edd722399f7504c08d",
+  "input_fingerprint": "383af5811b2b6e427ee00a8f4de25069f565cc0cda68a682713b48d5a9855112",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

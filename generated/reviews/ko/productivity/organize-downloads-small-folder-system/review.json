@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "type": "article_review",
   "topic_id": "TOPIC-0028",
   "title": "작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법",
-  "input_fingerprint": "33a54ed4210102155438baf482fb614e06642898a30643f85f1f5fb22e5fa808",
+  "input_fingerprint": "53f3799e38a2b86f608bc29e4b8d1058e075c8a0365f9dad1f3b6c477e6637d2",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

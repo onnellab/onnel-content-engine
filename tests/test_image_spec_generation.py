@@ -149,6 +149,23 @@ class ImageSpecGenerationTest(unittest.TestCase):
         self.assertIn("Readable text", svg)
         self.assertNotIn("A practical workflow", svg)
 
+    def test_workflow_asset_wraps_long_keywords_without_ellipsis(self) -> None:
+        keyword = "number tracks in a multi-disc MP3 album with verified disc totals and positions"
+        svg = workflow_svg("How to Number Tracks in a Multi-Disc MP3 Album", keyword, "en")
+
+        self.assertNotIn("…", svg)
+        self.assertNotIn("...", svg)
+        self.assertIn("verified disc totals and positions", svg)
+        self.assertIn("<tspan", svg)
+
+    def test_encoding_asset_wraps_long_keywords_without_ellipsis(self) -> None:
+        keyword = "unreadable UTF-8 text after importing a legacy plain text archive"
+        svg = workflow_svg("How to Inspect Text Encoding", keyword, "en")
+
+        self.assertNotIn("…", svg)
+        self.assertNotIn("...", svg)
+        self.assertIn("legacy plain text archive", svg)
+
 
 if __name__ == "__main__":
     unittest.main()

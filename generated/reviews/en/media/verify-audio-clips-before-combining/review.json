@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "type": "article_review",
   "topic_id": "TOPIC-0015",
   "title": "How to Verify Audio Clips Before Combining Them",
-  "input_fingerprint": "1761594a1888165472a447440e0390ad8e43c12d4d80ac833c7ba27187bf9029",
+  "input_fingerprint": "5bdf5581c5d514d17a1be3285420169652695082bc4ac01450b63cc9e05b042f",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "type": "article_review",
   "topic_id": "TOPIC-0011",
   "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
-  "input_fingerprint": "34fb60daab7b5587f862d3e49bdf9e4514a8c6dc64eb3cc945b024b8a1a52a6f",
+  "input_fingerprint": "100e45d6f850691a0aa34d073406a3e21e0fdf74e45054b945e22c417b60ef25",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

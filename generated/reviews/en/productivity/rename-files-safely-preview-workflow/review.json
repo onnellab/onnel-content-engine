@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "type": "article_review",
   "topic_id": "TOPIC-0012",
   "title": "How to Rename Files Safely With a Preview Workflow",
-  "input_fingerprint": "865b3025857a2a0bf0fd02329b7a87b799e907237e25a8b58a8423d6534fd24c",
+  "input_fingerprint": "16596cbff4d87155bd417db60998cb11a51a65501c0b79174cd9aa70759e6aff",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

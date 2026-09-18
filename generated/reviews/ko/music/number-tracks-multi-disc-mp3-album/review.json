@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "type": "article_review",
   "topic_id": "TOPIC-0030",
   "title": "여러 장으로 된 MP3 앨범의 트랙 번호를 매기는 방법",
-  "input_fingerprint": "d72937950083a3ec2277c5ff35640a6f2259e0d115167a95331d086cdba37bc5",
+  "input_fingerprint": "dbe5ba7df0be755a9e2da1f23bdacf52a8265c17bc0955030766c8e18735aa20",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

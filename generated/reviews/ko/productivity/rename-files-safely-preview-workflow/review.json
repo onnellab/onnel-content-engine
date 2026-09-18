@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "type": "article_review",
   "topic_id": "TOPIC-0019",
   "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
-  "input_fingerprint": "85b394c5232408d2c9d42b770892e9b72c504d81d81e60be390c8c632c6431af",
+  "input_fingerprint": "2c4bb5ff06bca8bfd794f03777e036f4623b7eac46aa270edc6944b99a531f98",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,
