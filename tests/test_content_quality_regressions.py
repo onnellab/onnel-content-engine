@@ -1,6 +1,7 @@
 """Keep repaired source articles aligned with the unchanged publication gate."""
 from __future__ import annotations
 
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -26,6 +27,10 @@ class ContentQualityRegressionsTest(unittest.TestCase):
                 markdown = markdown_path_for(topic, topics_path).read_text(encoding="utf-8")
                 metadata, _ = parse_front_matter(markdown)
                 self.assertEqual(metadata["primary_keyword"], topic["primary_keyword"])
+                spec_path = (ROOT / "generated" / "images" / topic["primary_language"]
+                             / topic["category"] / topic["slug"] / "image_spec.json")
+                spec = json.loads(spec_path.read_text(encoding="utf-8"))
+                self.assertEqual(spec["topic"]["primary_keyword"], topic["primary_keyword"])
                 review = score_article(
                     topic, markdown, topics_path,
                     ROOT / "generated" / "metadata",
