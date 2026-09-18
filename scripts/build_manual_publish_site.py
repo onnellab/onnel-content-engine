@@ -38,6 +38,7 @@ DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 DEFAULT_STORE_REVIEWS = ROOT / "data" / "store_reviews.csv"
 DEFAULT_STORE_REVIEW_TRIAGE = ROOT / "data" / "store_review_triage.json"
 DEFAULT_STORE_REVIEW_AI_DRAFTS = ROOT / "data" / "store_review_ai_drafts.json"
+DEFAULT_MANUAL_PUBLISH_SCHEDULE = ROOT / "data" / "manual_publish_schedule.json"
 DEFAULT_AI_MANAGER_REPORT = ROOT / "data" / "ai_manager_daily_report.json"
 DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
 DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
@@ -314,6 +315,52 @@ def due_at_for(topic: dict[str, str] | None, platform: str, kind: str) -> str:
     if delay is None:
         return ""
     return (base + timedelta(days=delay)).isoformat()
+
+
+def apply_manual_publish_schedule(
+    items: list[dict[str, object]],
+    path: Path = DEFAULT_MANUAL_PUBLISH_SCHEDULE,
+) -> list[dict[str, object]]:
+    """Overlay a frozen backlog schedule without changing future source due dates.
+
+    Keys present in the schedule keep their assigned backlog slot forever. New
+    manual items that are not present in the frozen backlog retain their normal
+    due_at calculated from the canonical publication schedule.
+    """
+    payload: dict[str, object] = {}
+    if path.exists():
+        payload = read_json(path)
+        if payload.get("schema_version") != 1 or not isinstance(payload.get("backlog"), list):
+            raise ValueError("manual publish schedule must contain schema_version=1 and a backlog list")
+    scheduled: dict[str, dict[str, object]] = {}
+    for entry in payload.get("backlog", []) if isinstance(payload, dict) else []:
+        if not isinstance(entry, dict):
+            raise ValueError("manual publish backlog entries must be objects")
+        key = str(entry.get("manual_key", "")).strip()
+        due = str(entry.get("publish_at", "")).strip()
+        if not key or not due:
+            raise ValueError("manual publish backlog entries require manual_key and publish_at")
+        if key in scheduled:
+            raise ValueError(f"duplicate manual publish backlog key: {key}")
+        parsed = parse_topic_datetime(due)
+        if parsed is None:
+            raise ValueError(f"invalid manual publish backlog publish_at: {due}")
+        scheduled[key] = entry
+    for item in items:
+        if item.get("publishing_mode") != "manual":
+            continue
+        original_due = str(item.get("due_at", "") or "")
+        item["original_due_at"] = original_due
+        entry = scheduled.get(str(item.get("manual_key", "")))
+        if entry:
+            item["manual_publish_due_at"] = str(entry["publish_at"])
+            item["manual_publish_schedule_kind"] = "backlog"
+            item["manual_publish_sequence"] = int(entry.get("sequence", 0) or 0)
+        else:
+            item["manual_publish_due_at"] = original_due
+            item["manual_publish_schedule_kind"] = "scheduled"
+            item["manual_publish_sequence"] = 0
+    return items
 
 
 def item_key(topic_id: object, platform: str, language: object, template_id: object) -> str:
@@ -1737,6 +1784,10 @@ def html_document(
         copyAndOpen: '복사 후 열기',
         copyFormattedAndOpen: '서식 복사 후 열기',
         markDone: '게시 완료 반영',
+        publishedUrlPrompt: '실제로 공개된 게시물의 고유 주소를 붙여넣어 주세요. 프로필·피드 주소만으로는 완료 처리할 수 없어요.',
+        publishedUrlRequired: '실제 게시물 고유 주소가 필요해요. 게시하지 못했다면 완료 처리하지 말고 대기 상태로 두세요.',
+        backlogScheduleTag: '밀린 발행',
+        scheduledPublishTag: '원래 일정',
         undoDone: '완료 취소',
         copyImage: '이미지 복사',
         openImage: '이미지 열기',
@@ -2015,6 +2066,10 @@ def html_document(
         copyAndOpen: 'Copy and open',
         copyFormattedAndOpen: 'Copy formatted and open',
         markDone: 'Apply publish completion',
+        publishedUrlPrompt: 'Paste the public permalink of the post that was actually published. A profile or feed URL is not enough.',
+        publishedUrlRequired: 'A specific public post URL is required. If publishing failed, leave the item pending.',
+        backlogScheduleTag: 'backlog slot',
+        scheduledPublishTag: 'original schedule',
         undoDone: 'Undo done',
         copyImage: 'Copy image',
         openImage: 'Open image',
@@ -3256,7 +3311,44 @@ def html_document(
       return ['', ''];
     }}
 
+    function normalizedPublicUrl(value) {{
+      try {{
+        const url = new URL(String(value || '').trim());
+        if (!['http:', 'https:'].includes(url.protocol)) return '';
+        url.hash = '';
+        const text = url.toString();
+        return text.endsWith('/') ? text.slice(0, -1) : text;
+      }} catch {{
+        return '';
+      }}
+    }}
+
+    function isSpecificPublishedUrl(item, value) {{
+      const normalized = normalizedPublicUrl(value);
+      if (!normalized) return false;
+      const profile = normalizedPublicUrl(platformProfileUrl(item.platform));
+      if (profile && normalized === profile) return false;
+      const url = new URL(normalized);
+      let host = url.hostname.toLowerCase();
+      if (host.startsWith('www.')) host = host.slice(4);
+      let path = url.pathname;
+      while (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
+      if (!path || path === '/rss.xml' || path === '/new-story') return false;
+      if (item.platform === 'x') return ['x.com', 'twitter.com'].includes(host) && path.includes('/status/') && path.split('/').filter(Boolean).length >= 3;
+      if (item.platform === 'linkedin') return host.endsWith('linkedin.com') && (path.startsWith('/feed/update/urn:li:') || path.startsWith('/posts/'));
+      if (item.platform === 'hashnode') return host.endsWith('hashnode.dev') && path !== '/';
+      if (item.platform === 'medium') return host === 'medium.com' && path.split('/').filter(Boolean).length >= 2;
+      return true;
+    }}
+
     async function markDone(item, button) {{
+      const suggested = isSpecificPublishedUrl(item, item.posted_url) ? item.posted_url : '';
+      const publicUrl = window.prompt(t('publishedUrlPrompt'), suggested);
+      if (publicUrl === null) return;
+      if (!isSpecificPublishedUrl(item, publicUrl)) {{
+        window.alert(t('publishedUrlRequired'));
+        return;
+      }}
       remoteState.done ||= {{}};
       const previousDone = remoteState.done[item.manual_key];
       const markedAt = new Date().toISOString();
@@ -3268,7 +3360,7 @@ def html_document(
         template_id: item.template_id,
         marked_at: markedAt,
         marked_by: 'manual_user_confirmation',
-        posted_url: item.posted_url || platformProfileUrl(item.platform),
+        posted_url: normalizedPublicUrl(publicUrl),
         verified_at: markedAt,
         verification_method: 'user_confirmed_manual_publish',
         verification_confidence: 'manual',
@@ -3303,8 +3395,9 @@ def html_document(
     }}
 
     function dueDate(item) {{
-      if (!item.due_at) return null;
-      const date = new Date(item.due_at);
+      const value = item.manual_publish_due_at || item.due_at;
+      if (!value) return null;
+      const date = new Date(value);
       return Number.isNaN(date.getTime()) ? null : date;
     }}
 
@@ -3427,8 +3520,8 @@ def html_document(
 
     function nextManualDueDate() {{
       return items
-        .filter((item) => item.publishing_mode === 'manual' && !isDone(item) && !item.is_variant && !isPrepublication(item) && item.due_at)
-        .map((item) => parseDate(item.due_at))
+        .filter((item) => item.publishing_mode === 'manual' && !isDone(item) && !item.is_variant && !isPrepublication(item) && dueDate(item))
+        .map((item) => dueDate(item))
         .filter(Boolean)
         .sort((a, b) => a - b)[0] || null;
     }}
@@ -3737,9 +3830,10 @@ def html_document(
           verificationCheckedAtForPlatform(rows[0]?.platform || ''),
           ...rows.map((item) => item.last_attempt_at || item.approved_at),
         ]);
-        const rowNextDueDates = futureDates(rows
-          .filter((item) => !isDone(item) && !item.is_variant && !isPrepublication(item) && item.due_at)
-          .map((item) => item.due_at))
+        const rowNextDueDates = rows
+          .filter((item) => !isDone(item) && !item.is_variant && !isPrepublication(item) && dueDate(item))
+          .map((item) => dueDate(item))
+          .filter((date) => date && date.getTime() > Date.now())
           .sort((a, b) => a - b);
         const upcomingPlatformDates = rowNextDueDates.slice(0, 4);
         const nextDue = upcomingPlatformDates[0] || nextScheduled;
@@ -4557,6 +4651,11 @@ def html_document(
           && (!status || item.status === status)
           && (!mode || item.publishing_mode === mode)
           && (currentView !== 'custom' || visibility === 'all' || (visibility === 'due' ? due : !done));
+      }}).sort((a, b) => {{
+        if (!['due', 'manual'].includes(currentView)) return 0;
+        const aDue = dueDate(a)?.getTime() ?? Number.MAX_SAFE_INTEGER;
+        const bDue = dueDate(b)?.getTime() ?? Number.MAX_SAFE_INTEGER;
+        return aDue - bDue || String(a.manual_key).localeCompare(String(b.manual_key));
       }});
       const dueTotal = String(items.filter(isDue).length);
       const manualTotal = String(items.filter((item) =>
@@ -4613,6 +4712,9 @@ def html_document(
       if (isPrepublication(item)) {{
         statusParts.push(t('reviewOnly'));
       }}
+      if (item.publishing_mode === 'manual' && item.manual_publish_schedule_kind) {{
+        statusParts.push(t(item.manual_publish_schedule_kind === 'backlog' ? 'backlogScheduleTag' : 'scheduledPublishTag'));
+      }}
       if (isDue(item)) {{
         statusParts.push(t('dueTag'));
       }}
@@ -4646,7 +4748,7 @@ def html_document(
         ? t('reviewOnlyNote')
         : isDone(item)
         ? t('completedAt') + ' ' + formatDate(postedOrVerifiedAt(item))
-        : item.due_at ? t('dueAt') + ' ' + formatDue(item) : t('noRecord');
+        : dueDate(item) ? t('dueAt') + ' ' + formatDue(item) : t('noRecord');
       const textarea = document.createElement('textarea');
       textarea.value = publishBodyText(item);
       textarea.spellcheck = false;
@@ -4708,7 +4810,7 @@ def html_document(
       if (!isPrepublication(item)) appendSyndicationPublishFields(detail, item);
       const note = document.createElement('div');
       note.className = 'note';
-      note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (item.due_at ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '') + (usesLinkPreviewCard(item) ? ' / ' + t('noImageAttach') : '');
+      note.textContent = item.draft_path + ' / ' + t('length') + ' ' + item.length + (dueDate(item) ? ' / ' + t('dueAt') + ' ' + formatDue(item) : '') + (usesLinkPreviewCard(item) ? ' / ' + t('noImageAttach') : '');
       const pendingReason = pendingReportReason(item);
       if (pendingReason) {{
         const pending = document.createElement('div');
@@ -4900,6 +5002,7 @@ def build_manual_publish_site(
 ) -> Path:
     topics = read_topics(topics_path)
     items = social_items(social_manifest, topics) + syndication_items(syndication_manifest, topics)
+    apply_manual_publish_schedule(items)
     manual_state = manual_state_item(manual_state_path)
     releases = app_release_items(app_releases_path, app_release_publications_path)
     blog_items = blog_status_items(topics_path)

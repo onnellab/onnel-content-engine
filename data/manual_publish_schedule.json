@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "frozen_at": "2026-09-19T07:40:43+09:00",
+    "first_publish_at": "2026-09-19T09:00:00+09:00",
+    "interval_days": 1,
+    "future_manual_items": "use_original_due_at",
+    "rule": "Frozen historical backlog: one item per KST day. New manual items not listed here keep their normal due_at even if that creates an additional item on the same day."
+  },
+  "backlog": [
+    {
+      "sequence": 1,
+      "manual_key": "TOPIC-0003::hashnode::en::markdown",
+      "platform": "hashnode",
+      "topic_id": "TOPIC-0003",
+      "title": "TXT vs EPUB for Long Reading",
+      "original_due_at": "2026-08-14T09:00:00+09:00",
+      "publish_at": "2026-09-19T09:00:00+09:00"
+    },
+    {
+      "sequence": 2,
+      "manual_key": "TOPIC-0004::x::en::x",
+      "platform": "x",
+      "topic_id": "TOPIC-0004",
+      "title": "What Makes Large Text Files Slow to Open",
+      "original_due_at": "2026-08-14T09:00:00+09:00",
+      "publish_at": "2026-09-20T09:00:00+09:00"
+    },
+    {
+      "sequence": 3,
+      "manual_key": "TOPIC-0003::medium::en::markdown",
+      "platform": "medium",
+      "topic_id": "TOPIC-0003",
+      "title": "TXT vs EPUB for Long Reading",
+      "original_due_at": "2026-08-15T09:00:00+09:00",
+      "publish_at": "2026-09-21T09:00:00+09:00"
+    },
+    {
+      "sequence": 4,
+      "manual_key": "TOPIC-0004::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "topic_id": "TOPIC-0004",
+      "title": "What Makes Large Text Files Slow to Open",
+      "original_due_at": "2026-08-15T09:00:00+09:00",
+      "publish_at": "2026-09-22T09:00:00+09:00"
+    },
+    {
+      "sequence": 5,
+      "manual_key": "TOPIC-0004::hashnode::en::markdown",
+      "platform": "hashnode",
+      "topic_id": "TOPIC-0004",
+      "title": "What Makes Large Text Files Slow to Open",
+      "original_due_at": "2026-08-17T09:00:00+09:00",
+      "publish_at": "2026-09-23T09:00:00+09:00"
+    },
+    {
+      "sequence": 6,
+      "manual_key": "TOPIC-0009::x::en::x",
+      "platform": "x",
+      "topic_id": "TOPIC-0009",
+      "title": "How to Trim Audio Recordings Without a Full Editor",
+      "original_due_at": "2026-08-17T09:00:00+09:00",
+      "publish_at": "2026-09-24T09:00:00+09:00"
+    },
+    {
+      "sequence": 7,
+      "manual_key": "TOPIC-0004::medium::en::markdown",
+      "platform": "medium",
+      "topic_id": "TOPIC-0004",
+      "title": "What Makes Large Text Files Slow to Open",
+      "original_due_at": "2026-08-18T09:00:00+09:00",
+      "publish_at": "2026-09-25T09:00:00+09:00"
+    },
+    {
+      "sequence": 8,
+      "manual_key": "TOPIC-0009::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "topic_id": "TOPIC-0009",
+      "title": "How to Trim Audio Recordings Without a Full Editor",
+      "original_due_at": "2026-08-18T09:00:00+09:00",
+      "publish_at": "2026-09-26T09:00:00+09:00"
+    },
+    {
+      "sequence": 9,
+      "manual_key": "TOPIC-0009::hashnode::en::markdown",
+      "platform": "hashnode",
+      "topic_id": "TOPIC-0009",
+      "title": "How to Trim Audio Recordings Without a Full Editor",
+      "original_due_at": "2026-08-20T09:00:00+09:00",
+      "publish_at": "2026-09-27T09:00:00+09:00"
+    },
+    {
+      "sequence": 10,
+      "manual_key": "TOPIC-0012::x::en::x",
+      "platform": "x",
+      "topic_id": "TOPIC-0012",
+      "title": "How to Rename Files Safely With a Preview Workflow",
+      "original_due_at": "2026-08-20T09:00:00+09:00",
+      "publish_at": "2026-09-28T09:00:00+09:00"
+    },
+    {
+      "sequence": 11,
+      "manual_key": "TOPIC-0009::medium::en::markdown",
+      "platform": "medium",
+      "topic_id": "TOPIC-0009",
+      "title": "How to Trim Audio Recordings Without a Full Editor",
+      "original_due_at": "2026-08-21T09:00:00+09:00",
+      "publish_at": "2026-09-29T09:00:00+09:00"
+    },
+    {
+      "sequence": 12,
+      "manual_key": "TOPIC-0012::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "topic_id": "TOPIC-0012",
+      "title": "How to Rename Files Safely With a Preview Workflow",
+      "original_due_at": "2026-08-21T09:00:00+09:00",
+      "publish_at": "2026-09-30T09:00:00+09:00"
+    },
+    {
+      "sequence": 13,
+      "manual_key": "TOPIC-0012::hashnode::en::markdown",
+      "platform": "hashnode",
+      "topic_id": "TOPIC-0012",
+      "title": "How to Rename Files Safely With a Preview Workflow",
+      "original_due_at": "2026-08-23T09:00:00+09:00",
+      "publish_at": "2026-10-01T09:00:00+09:00"
+    },
+    {
+      "sequence": 14,
+      "manual_key": "TOPIC-0015::x::en::x",
+      "platform": "x",
+      "topic_id": "TOPIC-0015",
+      "title": "How to Verify Audio Clips Before Combining Them",
+      "original_due_at": "2026-08-23T09:00:00+09:00",
+      "publish_at": "2026-10-02T09:00:00+09:00"
+    },
+    {
+      "sequence": 15,
+      "manual_key": "TOPIC-0012::medium::en::markdown",
+      "platform": "medium",
+      "topic_id": "TOPIC-0012",
+      "title": "How to Rename Files Safely With a Preview Workflow",
+      "original_due_at": "2026-08-24T09:00:00+09:00",
+      "publish_at": "2026-10-03T09:00:00+09:00"
+    },
+    {
+      "sequence": 16,
+      "manual_key": "TOPIC-0015::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "topic_id": "TOPIC-0015",
+      "title": "How to Verify Audio Clips Before Combining Them",
+      "original_due_at": "2026-08-24T09:00:00+09:00",
+      "publish_at": "2026-10-04T09:00:00+09:00"
+    },
+    {
+      "sequence": 17,
+      "manual_key": "TOPIC-0015::hashnode::en::markdown",
+      "platform": "hashnode",
+      "topic_id": "TOPIC-0015",
+      "title": "How to Verify Audio Clips Before Combining Them",
+      "original_due_at": "2026-08-26T09:00:00+09:00",
+      "publish_at": "2026-10-05T09:00:00+09:00"
+    },
+    {
+      "sequence": 18,
+      "manual_key": "TOPIC-0016::x::en::x",
+      "platform": "x",
+      "topic_id": "TOPIC-0016",
+      "title": "How to Keep a Durable Research Reading Log",
+      "original_due_at": "2026-08-26T09:00:00+09:00",
+      "publish_at": "2026-10-06T09:00:00+09:00"
+    },
+    {
+      "sequence": 19,
+      "manual_key": "TOPIC-0015::medium::en::markdown",
+      "platform": "medium",
+      "topic_id": "TOPIC-0015",
+      "title": "How to Verify Audio Clips Before Combining Them",
+      "original_due_at": "2026-08-27T09:00:00+09:00",
+      "publish_at": "2026-10-07T09:00:00+09:00"
+    },
+    {
+      "sequence": 20,
+      "manual_key": "TOPIC-0016::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "topic_id": "TOPIC-0016",
+      "title": "How to Keep a Durable Research Reading Log",
+      "original_due_at": "2026-08-27T09:00:00+09:00",
+      "publish_at": "2026-10-08T09:00:00+09:00"
+    },
+    {
+      "sequence": 21,
+      "manual_key": "TOPIC-0016::hashnode::en::markdown",
+      "platform": "hashnode",
+      "topic_id": "TOPIC-0016",
+      "title": "How to Keep a Durable Research Reading Log",
+      "original_due_at": "2026-08-29T09:00:00+09:00",
+      "publish_at": "2026-10-09T09:00:00+09:00"
+    },
+    {
+      "sequence": 22,
+      "manual_key": "TOPIC-0018::x::en::x",
+      "platform": "x",
+      "topic_id": "TOPIC-0018",
+      "title": "How to Choose a Media Output Format Before Conversion",
+      "original_due_at": "2026-08-29T09:00:00+09:00",
+      "publish_at": "2026-10-10T09:00:00+09:00"
+    },
+    {
+      "sequence": 23,
+      "manual_key": "TOPIC-0016::medium::en::markdown",
+      "platform": "medium",
+      "topic_id": "TOPIC-0016",
+      "title": "How to Keep a Durable Research Reading Log",
+      "original_due_at": "2026-08-30T09:00:00+09:00",
+      "publish_at": "2026-10-11T09:00:00+09:00"
+    },
+    {
+      "sequence": 24,
+      "manual_key": "TOPIC-0018::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "topic_id": "TOPIC-0018",
+      "title": "How to Choose a Media Output Format Before Conversion",
+      "original_due_at": "2026-08-30T09:00:00+09:00",
+      "publish_at": "2026-10-12T09:00:00+09:00"
+    },
+    {
+      "sequence": 25,
+      "manual_key": "TOPIC-0018::hashnode::en::markdown",
+      "platform": "hashnode",
+      "topic_id": "TOPIC-0018",
+      "title": "How to Choose a Media Output Format Before Conversion",
+      "original_due_at": "2026-09-01T09:00:00+09:00",
+      "publish_at": "2026-10-13T09:00:00+09:00"
+    },
+    {
+      "sequence": 26,
+      "manual_key": "TOPIC-0020::x::en::x",
+      "platform": "x",
+      "topic_id": "TOPIC-0020",
+      "title": "How to Organize Downloads With a Small, Durable Folder System",
+      "original_due_at": "2026-09-01T09:00:00+09:00",
+      "publish_at": "2026-10-14T09:00:00+09:00"
+    },
+    {
+      "sequence": 27,
+      "manual_key": "TOPIC-0018::medium::en::markdown",
+      "platform": "medium",
+      "topic_id": "TOPIC-0018",
+      "title": "How to Choose a Media Output Format Before Conversion",
+      "original_due_at": "2026-09-02T09:00:00+09:00",
+      "publish_at": "2026-10-15T09:00:00+09:00"
+    },
+    {
+      "sequence": 28,
+      "manual_key": "TOPIC-0020::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "topic_id": "TOPIC-0020",
+      "title": "How to Organize Downloads With a Small, Durable Folder System",
+      "original_due_at": "2026-09-02T09:00:00+09:00",
+      "publish_at": "2026-10-16T09:00:00+09:00"
+    },
+    {
+      "sequence": 29,
+      "manual_key": "TOPIC-0020::hashnode::en::markdown",
+      "platform": "hashnode",
+      "topic_id": "TOPIC-0020",
+      "title": "How to Organize Downloads With a Small, Durable Folder System",
+      "original_due_at": "2026-09-04T09:00:00+09:00",
+      "publish_at": "2026-10-17T09:00:00+09:00"
+    }
+  ]
+}

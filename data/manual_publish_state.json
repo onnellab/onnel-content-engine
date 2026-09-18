@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T22:06:57+09:00",
+  "updated_at": "2026-09-19T07:40:43+09:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -201,118 +201,10 @@
       "template_id": "markdown",
       "marked_at": "2026-09-18T05:36:43.599Z",
       "marked_by": "manual_user_confirmation",
-      "posted_url": "https://medium.com/@onnellab.app",
-      "verified_at": "2026-09-18T05:36:43.599Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    "TOPIC-0020::hashnode::en::markdown": {
-      "topic_id": "TOPIC-0020",
-      "platform": "hashnode",
-      "language": "en",
-      "template_id": "markdown",
-      "marked_at": "2026-09-18T05:39:31.008Z",
-      "marked_by": "manual_user_confirmation",
-      "posted_url": "https://hashnode.com/@onnellab",
-      "verified_at": "2026-09-18T05:39:31.008Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    "TOPIC-0016::x::en::x": {
-      "topic_id": "TOPIC-0016",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "marked_at": "2026-09-18T05:40:34.301Z",
-      "marked_by": "manual_user_confirmation",
-      "posted_url": "https://x.com/onnellab",
-      "verified_at": "2026-09-18T05:40:34.301Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    "TOPIC-0018::x::en::x": {
-      "topic_id": "TOPIC-0018",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "marked_at": "2026-09-18T05:40:35.659Z",
-      "marked_by": "manual_user_confirmation",
-      "posted_url": "https://x.com/onnellab",
-      "verified_at": "2026-09-18T05:40:35.659Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    "TOPIC-0016::linkedin::en::linkedin": {
-      "topic_id": "TOPIC-0016",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "marked_at": "2026-09-18T05:40:37.714Z",
-      "marked_by": "manual_user_confirmation",
-      "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
-      "verified_at": "2026-09-18T05:40:37.714Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    "TOPIC-0018::linkedin::en::linkedin": {
-      "topic_id": "TOPIC-0018",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "marked_at": "2026-09-18T05:40:39.686Z",
-      "marked_by": "manual_user_confirmation",
-      "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
-      "verified_at": "2026-09-18T05:40:39.686Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    "TOPIC-0020::linkedin::en::linkedin": {
-      "topic_id": "TOPIC-0020",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "marked_at": "2026-09-18T05:40:41.021Z",
-      "marked_by": "manual_user_confirmation",
-      "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
-      "verified_at": "2026-09-18T05:40:41.021Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    "TOPIC-0020::x::en::x": {
-      "topic_id": "TOPIC-0020",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "marked_at": "2026-09-18T05:40:42.394Z",
-      "marked_by": "manual_user_confirmation",
-      "posted_url": "https://x.com/onnellab",
-      "verified_at": "2026-09-18T05:40:42.394Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    "TOPIC-0016::medium::en::markdown": {
-      "topic_id": "TOPIC-0016",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "marked_at": "2026-09-18T05:40:47.254Z",
-      "marked_by": "manual_user_confirmation",
-      "posted_url": "https://medium.com/@onnellab.app",
-      "verified_at": "2026-09-18T05:40:47.254Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    "TOPIC-0018::medium::en::markdown": {
-      "topic_id": "TOPIC-0018",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "marked_at": "2026-09-18T05:40:50.404Z",
-      "marked_by": "manual_user_confirmation",
-      "posted_url": "https://medium.com/@onnellab.app",
-      "verified_at": "2026-09-18T05:40:50.404Z",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
+      "posted_url": "https://medium.com/@onnellab.app/how-to-organize-downloads-with-a-small-durable-folder-system-b500e4a4ab89?source=rss-ff84b0f2e139------2",
+      "verified_at": "2026-09-19T07:43:04+09:00",
+      "verification_method": "medium_rss",
+      "verification_confidence": "medium"
     },
     "TOPIC-0003::x::en::x": {
       "topic_id": "TOPIC-0003",

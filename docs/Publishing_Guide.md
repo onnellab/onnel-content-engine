@@ -259,6 +259,16 @@ Before API posting, validate social drafts with:
 scripts/validate_social_posts.py
 ```
 
+### Manual backlog catch-up schedule
+
+The one-time backlog is stored in `data/manual_publish_schedule.json`. It freezes only the manual-publishing items that were already overdue when browser-based publishing was introduced. Each listed item has an explicit KST `publish_at`; finishing an earlier item does not pull later backlog entries forward. The September 2026 migration uses one backlog item per day at 09:00 KST.
+
+New manual items created after the freeze are **not** appended automatically to this backlog. They retain the existing platform `due_at` derived from the canonical article publication date. If a new item's normal date overlaps a backlog day, both may be due that day; preserving the new item's intended publication date takes priority over keeping a global one-post-per-day limit.
+
+Items that had been marked complete only because their canonical page or image returned 404 are reopened once those source assets are healthy. `data/manual_publication_requeues.json` records the repaired completion records. A genuinely published item is not reopened merely because it was manually confirmed.
+
+Future manual completion requires the **specific public post permalink**. Profile pages, feeds, and editor URLs are not sufficient completion evidence. A failed browser publishing attempt must remain pending rather than being marked done.
+
 ### Verify manual publication completion
 
 After manually posting to external platforms, scan public platform surfaces and update the hosted dashboard state with:
