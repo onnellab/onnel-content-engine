@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-18T11:12:00+00:00",
+  "generated_at": "2026-09-18T14:59:14+00:00",
   "summary": {
-    "reviews_triaged": 14,
+    "reviews_triaged": 8,
     "high_risk_reports": 1,
     "pricing_patterns": 0,
     "replies_queued": 0,
@@ -44,7 +44,7 @@
   },
   "requires_attention": [
     {
-      "review_id": "report-778e20f8ea133bd166d1d9ca",
+      "review_id": "d0be20cd-9d2e-4f45-b3cf-4e7a89837265",
       "category": "bug",
       "actions": {
         "reply": "not_needed",
