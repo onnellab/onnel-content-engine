@@ -13,7 +13,7 @@ secondary_keywords: "huge text file|TXT viewer|large file performance|virtual re
 related_apps: "VaultXT"
 canonical_url: "https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/"
 published_at: "2026-07-11T00:00:00+09:00"
-updated_at: "2026-07-11T00:00:00+09:00"
+updated_at: "2026-09-18T16:31:54+09:00"
 tags: "large TXT file reader|TXT viewer|plain text|reading workflow|VaultXT"
 image_specs: "Workflow diagram showing why large TXT files become slow|Comparison diagram for loading the whole file vs rendering only visible text|VaultXT screenshot requirement for large-file reading controls"
 ---
@@ -89,7 +89,7 @@ Splitting a large TXT file can help when the document is too large for the tools
 
 If the file has a meaningful structure, such as chapters, logs by date, or exported sections, splitting can make the document easier to manage. If the file is just one continuous export, splitting may create more files to track without solving the underlying reading workflow.
 
-## Where VaultXT Fits
+## Where ONNELLAB Fits
 
 This is the kind of workflow [VaultXT](/apps/vaultxt/) is built around: open the plain-text file first, then search, bookmark, or edit only when the task actually needs it.
 

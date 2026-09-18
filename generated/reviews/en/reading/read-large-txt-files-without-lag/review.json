@@ -3,10 +3,10 @@
   "type": "article_review",
   "topic_id": "TOPIC-0001",
   "title": "How to Read Large TXT Files Without Lag",
-  "input_fingerprint": "9f71ded8f6e62f8226fa3d88070033670465b96e47baaf012f2c7c295f214a02",
-  "score": 7.54,
+  "input_fingerprint": "aa4bc7fb6bce6d98a2bd3def68d30c0941723b66279f9dd19dc56c7e493a35fa",
+  "score": 10.0,
   "threshold": 9.0,
-  "passed": false,
+  "passed": true,
   "checks": [
     {
       "name": "metadata_complete",
@@ -31,8 +31,8 @@
     },
     {
       "name": "required_sections",
-      "passed": false,
-      "points": 0.0,
+      "passed": true,
+      "points": 1.4,
       "max_points": 1.4,
       "note": "Article includes the required problem-first and publication sections."
     },
@@ -73,8 +73,8 @@
     },
     {
       "name": "product_after_education",
-      "passed": false,
-      "points": 0.0,
+      "passed": true,
+      "points": 1.0,
       "max_points": 1.0,
       "note": "Product appears after the educational explanation, or the article explicitly has no related application."
     },
@@ -115,10 +115,10 @@
     },
     {
       "name": "translation_quality",
-      "passed": false,
-      "points": 0.0,
+      "passed": true,
+      "points": 1.0,
       "max_points": 1.0,
-      "note": "Translated article is missing counterpart section(s): onnellab_application."
+      "note": "Translation counterpart, section alignment, slug alignment, and localized terminology are valid."
     }
   ]
 }
