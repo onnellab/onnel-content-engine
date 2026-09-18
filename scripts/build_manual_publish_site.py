@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import os
@@ -387,6 +388,17 @@ def store_status_items(store_versions_path: Path = DEFAULT_STORE_VERSIONS) -> li
     ]
 
 
+def store_review_sync_status_item(reviews_path: Path = DEFAULT_STORE_REVIEWS) -> dict[str, object]:
+    path = reviews_path.with_name("store_review_sync_status.json")
+    if not path.exists() or not reviews_path.exists():
+        return {}
+    payload = read_json(path)
+    if not isinstance(payload, dict):
+        return {}
+    digest = hashlib.sha256(reviews_path.read_bytes()).hexdigest()
+    return {**payload, "snapshot_matches": payload.get("snapshot_sha256") == digest}
+
+
 def store_review_items(path: Path = DEFAULT_STORE_REVIEWS, ai_drafts_path: Path = DEFAULT_STORE_REVIEW_AI_DRAFTS) -> list[dict[str, object]]:
     # The sync normally removes Google Play report/API aliases. Keep the
     # dashboard defensive for an already-generated or manually imported CSV.
@@ -402,15 +414,16 @@ def store_review_items(path: Path = DEFAULT_STORE_REVIEWS, ai_drafts_path: Path 
             normalize_text(row.get("title", "")), normalize_text(row.get("body", "")), timestamp,
         )
 
+    raw_rows = read_csv_rows(path)
+    canonical_fingerprints = {fingerprint(row) for row in raw_rows if row.get("review_id") and not row["review_id"].startswith("report-")}
     source_rows: dict[tuple[str, ...], dict[str, str]] = {}
-    for row in read_csv_rows(path):
-        key = fingerprint(row)
-        prior = source_rows.get(key)
-        if prior is None or (
-            prior.get("review_id", "").startswith("report-")
-            and not row.get("review_id", "").startswith("report-")
-        ):
-            source_rows[key] = row
+    for row in raw_rows:
+        rid = row.get("review_id", "")
+        if rid.startswith("report-") and fingerprint(row) in canonical_fingerprints:
+            continue
+        # Real IDs, not mutable text/rating/timestamps, identify current reviews.
+        key = (row.get("app_id", ""), row.get("platform", ""), rid) if rid else fingerprint(row)
+        source_rows[key] = row
     ai_drafts: dict[str, dict[str, object]] = {}
     if ai_drafts_path.exists():
         payload = json.loads(ai_drafts_path.read_text(encoding="utf-8"))
@@ -456,6 +469,8 @@ def store_review_items(path: Path = DEFAULT_STORE_REVIEWS, ai_drafts_path: Path 
                 "reply_updated_at": row.get("reply_updated_at", ""),
                 "status": row.get("status", "pending") or "pending",
                 "synced_at": row.get("synced_at", ""),
+                "verified_at": row.get("verified_at", ""),
+                "verification_source": row.get("verification_source", ""),
                 **suggestion,
                 "triage": triage_by_review_id.get(row.get("review_id", ""), {}),
             }
@@ -1009,6 +1024,7 @@ def html_document(
     verification_report: dict[str, object] | None = None,
     quality_report: dict[str, object] | None = None,
     ai_manager_report: dict[str, object] | None = None,
+    store_review_sync_status: dict[str, object] | None = None,
 ) -> str:
     manual_state = manual_state or {"done": {}, "updated_at": "", "version": 1}
     verification_report = current_verification_report(verification_report or {}, items)
@@ -1024,6 +1040,7 @@ def html_document(
     blog_data = json.dumps(blog_items or [], ensure_ascii=False).replace("</", "<\\/")
     store_data = json.dumps(store_items or [], ensure_ascii=False).replace("</", "<\\/")
     store_review_data = json.dumps(store_reviews or [], ensure_ascii=False).replace("</", "<\\/")
+    store_review_sync_data = json.dumps(store_review_sync_status or {}, ensure_ascii=False).replace("</", "<\\/")
     flutter_dependency_data = json.dumps(flutter_dependency_items or [], ensure_ascii=False).replace("</", "<\\/")
     site_data = json.dumps(site_items or [], ensure_ascii=False).replace("</", "<\\/")
     pricing_data = json.dumps(pricing_items or [], ensure_ascii=False).replace("</", "<\\/")
@@ -1437,6 +1454,7 @@ def html_document(
   <script id="blog-data" type="application/json">{blog_data}</script>
   <script id="store-data" type="application/json">{store_data}</script>
   <script id="store-review-data" type="application/json">{store_review_data}</script>
+  <script id="store-review-sync-data" type="application/json">{store_review_sync_data}</script>
   <script id="flutter-dependency-data" type="application/json">{flutter_dependency_data}</script>
   <script id="site-data" type="application/json">{site_data}</script>
   <script id="pricing-data" type="application/json">{pricing_data}</script>
@@ -1453,6 +1471,7 @@ def html_document(
     let blogItems = JSON.parse(document.getElementById('blog-data').textContent);
     let storeItems = JSON.parse(document.getElementById('store-data').textContent);
     let storeReviewItems = JSON.parse(document.getElementById('store-review-data').textContent);
+    let storeReviewSyncStatus = JSON.parse(document.getElementById('store-review-sync-data').textContent);
     let flutterDependencyItems = JSON.parse(document.getElementById('flutter-dependency-data').textContent);
     let siteItems = JSON.parse(document.getElementById('site-data').textContent);
     let pricingItems = JSON.parse(document.getElementById('pricing-data').textContent);
@@ -1615,6 +1634,13 @@ def html_document(
         storeReviewPending: '답변 전',
         storeReviewReplied: '답변됨',
         storeReviewRatingOnly: '별점만',
+        storeReviewCurrent: '현재 리뷰',
+        storeReviewSaved: '저장된 리뷰 (현재 상태 미확인)',
+        storeReviewArchived: '과거·미조회 기록 별도 보관',
+        storeReviewChecked: '스토어 확인',
+        storeReviewNotReleased: '미출시 · 수집 대상 아님',
+        storeReviewUnverified: '현재 조회 상태 미확인',
+        storeReviewCountBasis: '본문이 있는 리뷰 기준 · 별점 총수와 다를 수 있어요.',
         storeReviewNoItems: '동기화된 스토어 리뷰가 없습니다.',
         storeReviewHumanCheck: '게시 전 사람이 문맥과 사실을 확인해야 합니다.',
         storeReviewOriginalTranslation: '리뷰 한국어 번역 (승인 참고용)',
@@ -1886,6 +1912,13 @@ def html_document(
         storeReviewPending: 'unanswered',
         storeReviewReplied: 'replied',
         storeReviewRatingOnly: 'rating only',
+        storeReviewCurrent: 'current reviews',
+        storeReviewSaved: 'saved reviews (current state unverified)',
+        storeReviewArchived: 'historical/unavailable records archived separately',
+        storeReviewChecked: 'store checked',
+        storeReviewNotReleased: 'not released · not collected',
+        storeReviewUnverified: 'current retrieval state unverified',
+        storeReviewCountBasis: 'Written reviews, not the total number of star ratings.',
         storeReviewNoItems: 'No synchronized store reviews.',
         storeReviewHumanCheck: 'A person must verify context and facts before posting.',
         storeReviewOriginalTranslation: 'Korean review translation (approval context only)',
@@ -2881,6 +2914,7 @@ def html_document(
       blogItems = readEmbeddedJson(doc, 'blog-data');
       storeItems = readEmbeddedJson(doc, 'store-data');
       storeReviewItems = readEmbeddedJson(doc, 'store-review-data');
+      storeReviewSyncStatus = readEmbeddedJson(doc, 'store-review-sync-data');
       flutterDependencyItems = readEmbeddedJson(doc, 'flutter-dependency-data');
       siteItems = readEmbeddedJson(doc, 'site-data');
       pricingItems = readEmbeddedJson(doc, 'pricing-data');
@@ -4223,7 +4257,14 @@ def html_document(
     function renderStoreReviews() {{
       storeReviewGrid.textContent = '';
       const pending = storeReviewItems.filter((item) => item.review_kind !== 'rating_only' && item.status !== 'replied' && !item.developer_reply);
-      storeReviewSummary.textContent = `${{storeReviewItems.length}} reviews / ${{pending.length}} ${{t('storeReviewPending')}} · ${{t('storeReviewHumanCheck')}}`;
+      const states = Array.isArray(storeReviewSyncStatus.stores) ? storeReviewSyncStatus.stores : [];
+      const snapshotVerified = storeReviewSyncStatus.snapshot_matches === true && states.length > 0;
+      const allVerified = snapshotVerified && states.every((state) => ['verified', 'not_released'].includes(state.state));
+      const countLabel = t(allVerified ? 'storeReviewCurrent' : 'storeReviewSaved');
+      const writtenCount = storeReviewItems.filter((item) => item.review_kind !== 'rating_only').length;
+      const checked = snapshotVerified && storeReviewSyncStatus.checked_at ? ` · ${{t('storeReviewChecked')}}: ${{new Date(storeReviewSyncStatus.checked_at).toLocaleString()}}` : '';
+      const archived = snapshotVerified && storeReviewSyncStatus.historical_records ? ` · ${{t('storeReviewArchived')}}: ${{storeReviewSyncStatus.historical_records}}` : '';
+      storeReviewSummary.textContent = `${{writtenCount}} ${{countLabel}} / ${{pending.length}} ${{t('storeReviewPending')}}${{checked}}${{archived}} · ${{t('storeReviewCountBasis')}}`;
 
       const groups = new Map();
       const ensure = (item) => {{
@@ -4260,9 +4301,20 @@ def html_document(
         name.textContent = group.app_name;
         const count = document.createElement('span');
         const groupPending = group.reviews.filter((item) => item.review_kind !== 'rating_only' && item.status !== 'replied' && !item.developer_reply).length;
-        count.textContent = `${{group.reviews.length}} reviews · ${{groupPending}} ${{t('storeReviewPending')}}`;
+        const groupStates = states.filter((state) => state.app_slug === group.app_slug);
+        const groupVerified = snapshotVerified && groupStates.length > 0 && groupStates.every((state) => state.state === 'verified');
+        const prerelease = groupStates.length > 0 && groupStates.every((state) => state.state === 'not_released');
+        const written = group.reviews.filter((item) => item.review_kind !== 'rating_only').length;
+        const ratingOnly = group.reviews.length - written;
+        count.textContent = prerelease ? t('storeReviewNotReleased') : `${{written}} ${{t(groupVerified ? 'storeReviewCurrent' : 'storeReviewSaved')}} · ${{groupPending}} ${{t('storeReviewPending')}}${{ratingOnly ? ` · ${{ratingOnly}} ${{t('storeReviewRatingOnly')}}` : ''}}`;
         summary.append(name, count);
         details.appendChild(summary);
+        if (snapshotVerified && groupStates.length) {{
+          const sourceNote = document.createElement('p');
+          sourceNote.className = 'store-review-empty';
+          sourceNote.textContent = groupStates.map((state) => `${{state.platform === 'ios' ? 'App Store' : 'Google Play'}}: ${{state.state === 'verified' ? state.current_reviews : t(state.state === 'not_released' ? 'storeReviewNotReleased' : 'storeReviewUnverified')}}`).join(' · ');
+          details.appendChild(sourceNote);
+        }}
 
         if (!group.reviews.length) {{
           const empty = document.createElement('div');
@@ -4893,6 +4945,7 @@ def build_manual_publish_site(
             verification_report,
             quality_report,
             ai_manager_report,
+            store_review_sync_status_item(store_reviews_path),
         ),
         encoding="utf-8",
     )
