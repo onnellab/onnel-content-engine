@@ -68,8 +68,13 @@ jobs:
           python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
       - name: Commit updated publication state
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin main
+          # Merge authoritative inputs first; derived HTML must then be rebuilt.
+          # A source-data conflict fails the builder/check rather than choosing a side.
+          python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           git diff --check
           git add data/ai_provider_pricing_status.json generated/syndication/manifest.json generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js generated/manual-publish/icon-180.png generated/manual-publish/icon-192.png generated/manual-publish/icon-512.png
@@ -77,10 +82,24 @@ jobs:
             echo "No generated state changes"
           else
             git commit -m "Update Dev.to published article state"
-            git push
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "::error::Could not push after refreshing main; snapshot was not forced"
+                exit 1
+              fi
+              git pull --rebase origin main
+              python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
+              git diff --check
+            done
           fi
       - name: Deploy manual publish dashboard
         run: |
+          set -euo pipefail
+          # Pull the clean homepage before copying the generated snapshot into it.
+          git -C "$HOMEPAGE_REPO_PATH" pull --rebase origin main
           mkdir -p "$HOMEPAGE_REPO_PATH/public/manual-publish"
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
@@ -101,5 +120,7 @@ jobs:
           else
             git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh manual publish dashboard"
             git -C "$HOMEPAGE_REPO_PATH" pull --rebase origin main
+            python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
+            git -C "$HOMEPAGE_REPO_PATH" diff --check
             git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
           fi

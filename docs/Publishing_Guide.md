@@ -853,3 +853,9 @@ before a manual dashboard deployment. The source and homepage artifact must both
 pass. The two legacy TOPIC-0001 RSS-index URLs were repaired using positively
 matched live articles; `data/manual_publication_url_repairs.json` preserves the
 old URLs and evidence hashes. Human approvals and publication counts were kept.
+
+The Dev.to state writer refreshes `main` before rebuilding and committing its
+snapshot. Push rejection is retried with a normal rebase, at most three times,
+never a force push. A true conflicting change is not automatically discarded:
+rebase or validation fails closed for operator resolution. The clean homepage
+is pulled before copying output, and any post-commit rebase is validated again.

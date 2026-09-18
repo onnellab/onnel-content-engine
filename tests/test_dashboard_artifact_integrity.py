@@ -39,6 +39,19 @@ class DashboardIntegrityTest(unittest.TestCase):
         with self.assertRaisesRegex(DashboardArtifactError, 'missing'):
             self.validate('<html><body>Incomplete build</body></html>')
 
+    def test_devto_refreshes_main_before_regenerating_and_committing_snapshot(self):
+        root = Path(__file__).resolve().parents[1]
+        text = (root / '.github/workflows/update-devto-article.yml').read_text()
+        commit = text.split('- name: Commit updated publication state', 1)[1].split('- name: Deploy', 1)[0]
+        self.assertLess(commit.index('git pull --rebase --autostash origin main'), commit.index('python3 scripts/build_manual_publish_site.py'))
+        self.assertLess(commit.index('python3 scripts/build_manual_publish_site.py'), commit.index('git add '))
+        self.assertIn('for attempt in 1 2 3', commit)
+        self.assertIn('git pull --rebase origin main', commit)
+        self.assertNotIn('--force', commit)
+        deploy = text.split('- name: Deploy manual publish dashboard', 1)[1]
+        self.assertLess(deploy.index('pull --rebase origin main'), deploy.index('cp generated/manual-publish/index.html'))
+        self.assertGreater(deploy.rindex('scripts/validate_manual_publish_site.py'), deploy.rindex('pull --rebase origin main'))
+
     def test_every_direct_deployer_validates_source_and_destination(self):
         root = Path(__file__).resolve().parents[1]
         found = []
