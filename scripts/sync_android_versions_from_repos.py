@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync Android version source data from local Flutter app repositories."""
+"""Sync Android fallback version data from mapped Flutter app repositories."""
 
 from __future__ import annotations
 
@@ -12,6 +12,13 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from check_store_versions import ANDROID_HEADER, ANDROID_VERSIONS_PATH, play_package
+from sync_flutter_plugin_versions import (
+    app_release_repository_index,
+    app_version_from_pubspec,
+    github_file_text,
+    github_token,
+    remote_pubspec_path,
+)
 from validate_android_store_versions import validate_android_store_versions
 from validate_apps_registry import APP_HEADER, APPS_PATH
 
@@ -66,6 +73,8 @@ def sync_android_versions_from_repos(
     rows: list[dict[str, str]] = []
     date = today or datetime.now(KST).date().isoformat()
     seen: set[str] = set()
+    release_repositories = app_release_repository_index()
+    token = github_token()
 
     for repo in read_csv(repositories_path, LOCAL_REPOSITORIES_HEADER):
         app_id = repo["app_id"]
@@ -81,9 +90,19 @@ def sync_android_versions_from_repos(
             continue
         repo_path = Path(repo["path"])
         pubspec_path = repo_path / repo["pubspec_path"]
-        if not pubspec_path.exists():
+        source_description = pubspec_path.as_posix()
+        if pubspec_path.exists():
+            version, raw_version = pubspec_version(pubspec_path)
+        elif not repo_path.exists() and release_repositories.get(app_id):
+            github_repository = release_repositories[app_id]
+            remote_pubspec = remote_pubspec_path(repo["repository_name"], app["slug"], repo["pubspec_path"])
+            pubspec_text = github_file_text(github_repository, remote_pubspec, token)
+            version, raw_version = app_version_from_pubspec(pubspec_text)
+            if not version:
+                raise AndroidRepoSyncError(f"{github_repository}/{remote_pubspec} has no version field")
+            source_description = f"github:{github_repository}/{remote_pubspec}"
+        else:
             raise AndroidRepoSyncError(f"{app_id} pubspec_path does not exist: {pubspec_path}")
-        version, raw_version = pubspec_version(pubspec_path)
         rows.append(
             {
                 "app_id": app_id,
@@ -93,7 +112,7 @@ def sync_android_versions_from_repos(
                 "last_updated": date,
                 "release_notes": "",
                 "source": "local_build_metadata",
-                "notes": f"Imported from {pubspec_path.as_posix()} version {raw_version}; confirm against Play Console if needed.",
+                "notes": f"Imported from {source_description} version {raw_version}; confirm against Play Console if needed.",
             }
         )
 
@@ -105,7 +124,7 @@ def sync_android_versions_from_repos(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Sync Android version rows from local Flutter app repositories")
+    parser = argparse.ArgumentParser(description="Sync Android fallback version rows from mapped Flutter app repositories")
     parser.add_argument("--repositories", type=Path, default=LOCAL_REPOSITORIES_PATH)
     parser.add_argument("--output", type=Path, default=ANDROID_VERSIONS_PATH)
     parser.add_argument("--date", help="Override last_updated date in YYYY-MM-DD format")

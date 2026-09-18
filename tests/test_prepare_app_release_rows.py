@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from check_store_versions import STORE_HEADER  # noqa: E402
 from prepare_app_release_rows import prepare_app_release_rows  # noqa: E402
 from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER  # noqa: E402
+from sync_flutter_plugin_versions import OUTPUT_HEADER as FLUTTER_VERSIONS_HEADER  # noqa: E402
 from validate_app_releases import RELEASE_HEADER, validate_app_releases  # noqa: E402
 
 
@@ -116,11 +117,53 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
             row = additions[0]
             self.assertEqual(row["tag"], "v1.2.4")
             self.assertEqual(row["version"], "1.2.4")
-            self.assertIn("local build metadata", row["notes"])
+            self.assertIn("repository build metadata", row["notes"])
             self.assertIn("Store version: 1.2.3", row["notes"])
             self.assertEqual(row["release_channel"], "private_test")
             self.assertEqual(row["compatibility"], "ios private test build.")
             self.assertEqual(validate_app_releases(releases), 1)
+
+    def test_repository_main_snapshot_takes_precedence_over_stale_local_checkout(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store_versions = root / "store_versions.csv"
+            releases = root / "app_releases.csv"
+            local_repositories = root / "local_repositories.csv"
+            flutter_versions = root / "app_flutter_dependency_versions.csv"
+            app = root / "vaultxt"
+            app.mkdir()
+            (app / "pubspec.yaml").write_text("name: vaultxt\nversion: 1.2.3+9\n", encoding="utf-8")
+            write_store_versions(store_versions, status="unchanged", version="1.2.3")
+            write_releases(releases)
+            write_local_repositories(local_repositories, app)
+            snapshot = {field: "" for field in FLUTTER_VERSIONS_HEADER}
+            snapshot.update(
+                {
+                    "app_id": "APP-0003",
+                    "app_slug": "vaultxt",
+                    "package_type": "app_version",
+                    "package_name": "vaultxt",
+                    "declared_version": "1.2.4+10",
+                    "resolved_version": "1.2.4",
+                    "status": "ok",
+                    "source": "github:onnellab/onnellab-text/vaultxt/pubspec.yaml",
+                }
+            )
+            with flutter_versions.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=FLUTTER_VERSIONS_HEADER, lineterminator="\n")
+                writer.writeheader()
+                writer.writerow(snapshot)
+
+            additions = prepare_app_release_rows(
+                store_versions,
+                releases,
+                local_repositories_path=local_repositories,
+                now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
+            )
+
+            self.assertEqual(len(additions), 1)
+            self.assertEqual(additions[0]["version"], "1.2.4")
+            self.assertEqual(additions[0]["release_channel"], "private_test")
 
     def test_unchanged_snapshot_does_not_create_row(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -133,6 +176,52 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
 
             self.assertEqual(additions, [])
             self.assertEqual(validate_app_releases(releases), 0)
+
+    def test_newer_public_store_version_archives_obsolete_active_candidate(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            store_versions = Path(temp) / "store_versions.csv"
+            releases = Path(temp) / "app_releases.csv"
+            write_store_versions(store_versions, status="updated", version="1.2.4")
+            existing = {field: "" for field in RELEASE_HEADER}
+            existing.update(
+                {
+                    "release_id": "REL-0001",
+                    "app_id": "APP-0003",
+                    "app_slug": "vaultxt",
+                    "app_name": "VaultXT",
+                    "repository": "onnellab/onnellab-text",
+                    "tag": "v1.2.3",
+                    "version": "1.2.3",
+                    "platform": "ios",
+                    "build_type": "release",
+                    "release_type": "binary",
+                    "release_channel": "public",
+                    "status": "planned",
+                    "release_date": "2026-07-10",
+                    "release_title": "VaultXT v1.2.3",
+                    "summary": "VaultXT 1.2.3 public store update detected.",
+                    "changes": "Older changes.",
+                    "compatibility": "ios public release.",
+                    "upgrade_notes": "No special upgrade steps documented yet.",
+                    "notes": "Waiting for artifact.",
+                }
+            )
+            write_releases(releases, [existing])
+
+            additions = prepare_app_release_rows(
+                store_versions,
+                releases,
+                now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
+            )
+
+            self.assertEqual(len(additions), 1)
+            self.assertEqual(additions[0]["version"], "1.2.4")
+            with releases.open("r", encoding="utf-8", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+            self.assertEqual(rows[0]["status"], "archived")
+            self.assertIn("Superseded by confirmed public store version 1.2.4", rows[0]["notes"])
+            self.assertEqual(rows[1]["status"], "planned")
+            self.assertEqual(validate_app_releases(releases), 2)
 
     def test_duplicate_app_platform_version_is_skipped(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -271,7 +360,7 @@ class PrepareAppReleaseRowsTest(unittest.TestCase):
 
             self.assertEqual(len(additions), 1)
             self.assertEqual(additions[0]["tag"], "v1.2.4")
-            self.assertIn("local build metadata", additions[0]["notes"])
+            self.assertIn("repository build metadata", additions[0]["notes"])
 
     def test_updated_store_snapshot_uses_previous_public_release_tag(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 from check_store_versions import ANDROID_HEADER, ANDROID_VERSIONS_PATH, STORE_HEADER, STORE_VERSIONS_PATH
 from prepare_app_release_rows import CONFIG_HEADER, CONFIG_PATH
 from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER, LOCAL_REPOSITORIES_PATH, pubspec_version
+from sync_flutter_plugin_versions import OUTPUT_CSV_PATH as FLUTTER_DEPENDENCY_VERSIONS_PATH, OUTPUT_HEADER as FLUTTER_DEPENDENCY_HEADER
 from validate_app_releases import RELEASE_HEADER, RELEASES_PATH
 
 
@@ -57,6 +58,8 @@ def store_action(row: dict[str, str]) -> str:
         return "Check Google Play update manually"
     if status == "failed":
         return "Fix store lookup error"
+    if status == "not_released":
+        return "No public store rollout yet"
     if status == "new":
         return "Baseline snapshot recorded"
     if status == "unchanged":
@@ -135,6 +138,16 @@ def local_metadata_version_index(rows: list[dict[str, str]]) -> dict[str, str]:
         row["app_id"]: row["version"]
         for row in rows
         if row.get("source") == "local_build_metadata" and row.get("app_id") and row.get("version")
+    }
+
+
+def repository_version_index(rows: list[dict[str, str]]) -> dict[str, str]:
+    return {
+        row["app_id"]: row.get("resolved_version", "") or row.get("declared_version", "").split("+", 1)[0]
+        for row in rows
+        if row.get("package_type") == "app_version"
+        and row.get("app_id")
+        and (row.get("resolved_version") or row.get("declared_version"))
     }
 
 
@@ -306,11 +319,14 @@ def report_markdown(
     config_rows: list[dict[str, str]],
     local_repo_rows: list[dict[str, str]],
     local_metadata_rows: list[dict[str, str]],
+    repository_version_rows: list[dict[str, str]],
     publication_rows: list[dict[str, str]],
     generated_at: datetime,
 ) -> str:
     config = config_index(config_rows)
-    local_versions = local_version_index(local_repo_rows)
+    local_versions = repository_version_index(repository_version_rows)
+    for app_id, version in local_version_index(local_repo_rows).items():
+        local_versions.setdefault(app_id, version)
     for app_id, version in local_metadata_version_index(local_metadata_rows).items():
         local_versions.setdefault(app_id, version)
     releases = release_index(release_rows)
@@ -372,7 +388,7 @@ def report_markdown(
         )
     lines.extend(
         table(
-            ["App", "Platform", "Store version/package", "Local version", "Comparison", "Store", "Release", "Repository", "Next action"],
+            ["App", "Platform", "Store version/package", "Repository version", "Comparison", "Store", "Release", "Repository", "Next action"],
             store_table,
         )
     )
@@ -451,14 +467,37 @@ def generate_app_release_report(
     publications_path: Path = PUBLICATIONS_PATH,
     now: datetime | None = None,
     android_versions_path: Path = ANDROID_VERSIONS_PATH,
+    flutter_versions_path: Path | None = None,
 ) -> str:
     store_rows = read_csv(store_versions_path, STORE_HEADER)
     release_rows = latest_release_rows(read_csv(releases_path, RELEASE_HEADER))
     config_rows = read_csv(config_path, CONFIG_HEADER)
     local_repo_rows = read_csv(local_repositories_path, LOCAL_REPOSITORIES_HEADER)
     local_metadata_rows = read_optional_csv(android_versions_path, ANDROID_HEADER)
+    if flutter_versions_path is None:
+        production_inputs = (
+            store_versions_path.resolve() == STORE_VERSIONS_PATH.resolve()
+            and releases_path.resolve() == RELEASES_PATH.resolve()
+            and local_repositories_path.resolve() == LOCAL_REPOSITORIES_PATH.resolve()
+        )
+        if production_inputs:
+            flutter_versions_path = FLUTTER_DEPENDENCY_VERSIONS_PATH
+        elif local_repositories_path.resolve() != LOCAL_REPOSITORIES_PATH.resolve():
+            flutter_versions_path = local_repositories_path.parent / "app_flutter_dependency_versions.csv"
+        else:
+            flutter_versions_path = store_versions_path.parent / "app_flutter_dependency_versions.csv"
+    repository_version_rows = read_optional_csv(flutter_versions_path, FLUTTER_DEPENDENCY_HEADER)
     publication_rows = read_optional_csv(publications_path, PUBLICATION_HEADER)
-    text = report_markdown(store_rows, release_rows, config_rows, local_repo_rows, local_metadata_rows, publication_rows, now or datetime.now(KST))
+    text = report_markdown(
+        store_rows,
+        release_rows,
+        config_rows,
+        local_repo_rows,
+        local_metadata_rows,
+        repository_version_rows,
+        publication_rows,
+        now or datetime.now(KST),
+    )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(text, encoding="utf-8")
     return text
@@ -471,6 +510,7 @@ def main() -> int:
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     parser.add_argument("--local-repositories", type=Path, default=LOCAL_REPOSITORIES_PATH)
     parser.add_argument("--android-versions", type=Path, default=ANDROID_VERSIONS_PATH)
+    parser.add_argument("--flutter-versions", type=Path, default=FLUTTER_DEPENDENCY_VERSIONS_PATH)
     parser.add_argument("--output", type=Path, default=REPORT_PATH)
     parser.add_argument("--publications", type=Path, default=PUBLICATIONS_PATH)
     args = parser.parse_args()
@@ -483,6 +523,7 @@ def main() -> int:
             args.output,
             args.publications,
             android_versions_path=args.android_versions,
+            flutter_versions_path=args.flutter_versions,
         )
     except (AppReleaseReportError, OSError) as error:
         print(f"generate app release report failed: {error}", file=sys.stderr)

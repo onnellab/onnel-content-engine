@@ -212,10 +212,19 @@ def google_play_lookup(store_url: str, app_id: str, android_versions: dict[str, 
         if source:
             if source["package"] != current["store_package"]:
                 raise StoreVersionError(f"Android version package does not match Play Store URL for {app_id}")
-            current["version"] = current["version"] or source["version"]
-            current["last_updated"] = current["last_updated"] or source["last_updated"]
-            current["release_notes"] = current["release_notes"] or source_notes
-            note = "Version/update date read from Google Play public page; release notes from Android snapshot."
+            public_version = current["version"]
+            source_matches_public = not public_version or source["version"] == public_version
+            if not current["version"]:
+                current["version"] = source["version"]
+            if source_matches_public:
+                current["last_updated"] = current["last_updated"] or source["last_updated"]
+                current["release_notes"] = current["release_notes"] or source_notes
+                note = "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata."
+            else:
+                note = (
+                    "Version/update date read from Google Play public page; "
+                    f"Android snapshot version {source['version']} is stale for public version {public_version} and was not merged."
+                )
         else:
             note = "Version/update date read from Google Play public page."
         return current, note
@@ -246,6 +255,28 @@ def store_rows_from_apps(
     rows: list[dict[str, str]] = []
     for app in read_csv(apps_path, APP_HEADER):
         candidates = [("ios", app["app_store_url"]), ("android", app["play_store_url"])]
+        if app.get("status") != "released":
+            for platform, store_url in candidates:
+                if not store_url:
+                    continue
+                rows.append(
+                    {
+                        "app_id": app["app_id"],
+                        "app_slug": app["slug"],
+                        "app_name": app["app_name"],
+                        "platform": platform,
+                        "store_url": store_url,
+                        "store_app_id": app_store_id(store_url) if platform == "ios" else "",
+                        "store_package": play_package(store_url) if platform == "android" else "",
+                        "version": "",
+                        "last_updated": "",
+                        "release_notes": "",
+                        "checked_at": now,
+                        "status": "not_released",
+                        "notes": f"App registry status is {app.get('status') or 'unknown'}; public store lookup skipped.",
+                    }
+                )
+            continue
         for platform, store_url in candidates:
             if not store_url:
                 continue
@@ -262,11 +293,13 @@ def store_rows_from_apps(
                     status = "updated"
                 if platform == "android":
                     if current["version"]:
-                        notes = " ".join(
-                            part
-                            for part in [notes, android_versions.get(app["app_id"], {}).get("notes", "")]
-                            if part
+                        android_source = android_versions.get(app["app_id"], {})
+                        source_note = (
+                            android_source.get("notes", "")
+                            if android_source.get("version") == current["version"]
+                            else ""
                         )
+                        notes = " ".join(part for part in [notes, source_note] if part)
                     else:
                         status = "manual_check"
                 else:

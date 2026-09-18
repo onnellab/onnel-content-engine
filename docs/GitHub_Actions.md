@@ -117,7 +117,7 @@ It writes:
 data/store_versions.csv
 ```
 
-App Store rows can be marked `new`, `unchanged`, or `updated`. Google Play rows are recorded as `manual_check` with the package ID because this workflow does not use Play Store scraping as a release source of truth.
+Released App Store and Google Play rows can be marked `new`, `unchanged`, or `updated`. Google Play public-page metadata is used when available and falls back to the maintained Android snapshot. Apps whose registry status is not `released` are recorded as `not_released` without treating a preconfigured store URL as a lookup failure.
 
 Android version source rows can be supplied in:
 
@@ -144,6 +144,8 @@ Local app repository mappings are stored in:
 ```text
 data/local_repositories.csv
 ```
+
+App operational status is also refreshed independently from content publication by `.github/workflows/sync-app-operational-status.yml` every six hours and on manual dispatch. That workflow reads each app repository's default branch through `scripts/sync_flutter_plugin_versions.py`, refreshes public store snapshots, release candidates and GitHub Release status, rebuilds the manual dashboard, and deploys the dashboard even when a blog publication run is failing. The repository/main app version and public store version remain separate signals.
 
 The validation stage dry-runs local metadata sync:
 
@@ -221,7 +223,7 @@ using:
 scripts/generate_app_release_report.py
 ```
 
-The report includes local-versus-store version comparison using `data/local_repositories.csv`. Rows with `local_ahead` are added to the attention queue as release preparation items.
+The report compares the public store version with the GitHub-default-branch app version in `data/app_flutter_dependency_versions.csv`; a readable local checkout from `data/local_repositories.csv` is only a fallback. Rows with `local_ahead` are added to the attention queue as release preparation items.
 
 The attention issue stage then creates, updates, reopens, or closes one fixed GitHub Issue:
 

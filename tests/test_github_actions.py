@@ -109,6 +109,12 @@ class GitHubActionsTest(unittest.TestCase):
     def test_manual_publication_verification_refreshes_store_snapshots(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "verify-manual-publications.yml").read_text(encoding="utf-8")
 
+        self.assertIn("Sync GitHub main app versions and Flutter dependencies", workflow)
+        self.assertIn("scripts/sync_flutter_plugin_versions.py", workflow)
+        self.assertIn("scripts/sync_android_versions_from_repos.py", workflow)
+        self.assertIn("data/app_flutter_dependency_versions.csv", workflow)
+        self.assertIn("data/android_store_versions.csv", workflow)
+        self.assertIn("generated/reports/app_flutter_dependency_versions.md", workflow)
         self.assertIn("Check store homepage versions", workflow)
         self.assertIn("scripts/check_store_versions.py", workflow)
         self.assertIn("Prepare app release candidates", workflow)
@@ -120,6 +126,25 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Sync AI provider pricing assumptions", workflow)
         self.assertIn("scripts/sync_ai_provider_pricing.py", workflow)
         self.assertIn("git pull --rebase --autostash origin main", workflow)
+
+    def test_app_operational_status_sync_is_independent_and_scheduled(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "sync-app-operational-status.yml").read_text(encoding="utf-8")
+
+        self.assertIn('cron: "17 */6 * * *"', workflow)
+        self.assertIn("scripts/sync_flutter_plugin_versions.py", workflow)
+        self.assertIn("scripts/sync_android_versions_from_repos.py", workflow)
+        self.assertIn("scripts/check_store_versions.py", workflow)
+        self.assertIn("scripts/prepare_app_release_rows.py", workflow)
+        self.assertIn("scripts/sync_github_release_status.py --allow-missing-token", workflow)
+        self.assertIn("scripts/generate_app_release_report.py", workflow)
+        self.assertIn("scripts/build_manual_publish_site.py", workflow)
+        self.assertIn("data/app_flutter_dependency_versions.csv", workflow)
+        self.assertIn("data/android_store_versions.csv", workflow)
+        self.assertIn("data/store_versions.csv", workflow)
+        self.assertIn("generated/reports/app_releases.md", workflow)
+        self.assertIn("public/manual-publish/", workflow)
+        self.assertNotIn("publish_due_articles.py", workflow)
+        self.assertNotIn("deploy_github_pages.py", workflow)
 
     def test_ready_app_release_workflow_is_release_only(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "publish-ready-app-releases.yml").read_text(encoding="utf-8")

@@ -203,13 +203,13 @@ Sync `local_build_metadata` rows from configured app repositories with:
 scripts/sync_android_versions_from_repos.py
 ```
 
-현재 저장소의 앱별 Flutter SDK/플러그인 버전도 매핑 기반으로 동기화하려면:
+현재 저장소의 앱 자체 버전과 Flutter SDK/플러그인 버전은 다음 명령으로 동기화합니다.
 
 ```text
 scripts/sync_flutter_plugin_versions.py
 ```
 
-기본 출력은 `data/app_flutter_dependency_versions.csv`(기계 가공용), `generated/reports/app_flutter_dependency_versions.md`(한눈 보기용)입니다.
+로컬 체크아웃을 사용할 수 없으면 GitHub의 앱 저장소 기본 브랜치에서 `pubspec.yaml`/`pubspec.lock`을 읽습니다. `app_version` 행은 운영 대시보드와 릴리즈 리포트에서 GitHub main의 현재 앱 버전으로 사용하며, 공개 스토어 버전과 별도로 표시합니다. 기본 출력은 `data/app_flutter_dependency_versions.csv`(기계 가공용), `generated/reports/app_flutter_dependency_versions.md`(한눈 보기용)입니다.
 
 Repository mappings are configured in:
 
@@ -223,7 +223,7 @@ Import a Play Console style CSV export with:
 scripts/import_android_store_versions.py path/to/play-console-export.csv
 ```
 
-Google Play package URLs are recorded as `manual_check` only when no Android source row exists, because this automation does not depend on an unstable public Play Store scraping path.
+Google Play public-page version/date metadata is used when it can be read reliably. The maintained Android snapshot is only fallback metadata; snapshot notes are merged only when its version matches the public version. If neither source yields a version, the row is recorded as `manual_check`.
 
 Use the snapshot as a signal. Create a GitHub Release row only when the new public release is confirmed and the change notes can be tied to that public version. If GitHub should host only the permanent patch-notes page, set `release_type=notes_only`.
 
@@ -233,7 +233,7 @@ Release candidate rows can be prepared from updated store snapshots:
 scripts/prepare_app_release_rows.py
 ```
 
-The generated rows use `status=planned`. Binary rows do not upload anything until `artifact_path`, `checksum_sha256`, final release notes, and public release approval are present. Notes-only rows can become `ready` after final release notes and public release approval are present.
+The generated rows use `status=planned`. When a newer public store version is confirmed for the same app/platform, older `planned` or `ready` rows are changed to `archived` so the operational queue does not keep obsolete release candidates active. Binary rows do not upload anything until `artifact_path`, `checksum_sha256`, final release notes, and public release approval are present. Notes-only rows can become `ready` after final release notes and public release approval are present.
 
 Release artifacts are configured in:
 

@@ -4,6 +4,7 @@ import csv
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import sys
 
@@ -70,6 +71,26 @@ class SyncAndroidVersionsFromReposTest(unittest.TestCase):
 
             self.assertEqual(len(rows), 1)
             self.assertFalse(output.exists())
+
+    def test_missing_local_repo_falls_back_to_github_main(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            app = root / "missing-vaultxt"
+            repos = root / "local_repositories.csv"
+            output = root / "android_store_versions.csv"
+            write_repositories(repos, app)
+
+            with patch(
+                "sync_android_versions_from_repos.app_release_repository_index",
+                return_value={"APP-0003": "onnellab/onnellab-text"},
+            ), patch("sync_android_versions_from_repos.github_token", return_value="token"), patch(
+                "sync_android_versions_from_repos.github_file_text",
+                return_value="name: vaultxt\nversion: 2.0.0+65\n",
+            ):
+                rows = sync_android_versions_from_repos(repos, output, today="2026-09-18")
+
+            self.assertEqual(rows[0]["version"], "2.0.0")
+            self.assertIn("github:onnellab/onnellab-text/pubspec.yaml", rows[0]["notes"])
 
     def test_missing_pubspec_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

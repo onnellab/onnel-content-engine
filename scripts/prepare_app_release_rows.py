@@ -13,6 +13,7 @@ from zoneinfo import ZoneInfo
 
 from check_store_versions import STORE_HEADER, STORE_VERSIONS_PATH
 from sync_android_versions_from_repos import LOCAL_REPOSITORIES_HEADER, LOCAL_REPOSITORIES_PATH, pubspec_version
+from sync_flutter_plugin_versions import OUTPUT_CSV_PATH as FLUTTER_VERSIONS_PATH, OUTPUT_HEADER as FLUTTER_VERSIONS_HEADER
 from validate_app_releases import RELEASE_HEADER, RELEASES_PATH
 
 
@@ -34,6 +35,12 @@ def read_csv(path: Path, expected_header: list[str]) -> list[dict[str, str]]:
         if reader.fieldnames != expected_header:
             raise PrepareAppReleaseError(f"{path} header mismatch")
         return [{key: (value or "").strip() for key, value in row.items()} for row in reader]
+
+
+def read_optional_csv(path: Path, expected_header: list[str]) -> list[dict[str, str]]:
+    if not path.exists():
+        return []
+    return read_csv(path, expected_header)
 
 
 def write_releases(path: Path, rows: list[dict[str, str]]) -> None:
@@ -82,6 +89,16 @@ def local_version_index(rows: list[dict[str, str]]) -> dict[str, str]:
         version, _raw = pubspec_version(pubspec_path)
         versions[row["app_id"]] = version
     return versions
+
+
+def repository_version_index(rows: list[dict[str, str]]) -> dict[str, str]:
+    return {
+        row["app_id"]: row.get("resolved_version", "") or row.get("declared_version", "").split("+", 1)[0]
+        for row in rows
+        if row.get("package_type") == "app_version"
+        and row.get("app_id")
+        and (row.get("resolved_version") or row.get("declared_version"))
+    }
 
 
 def version_key(version: str) -> list[tuple[int, int | str]]:
@@ -146,6 +163,33 @@ def latest_public_release_tag(rows: list[dict[str, str]], snapshot: dict[str, st
     return candidates[0]["tag"]
 
 
+def archive_superseded_active_releases(
+    rows: list[dict[str, str]],
+    snapshots: list[dict[str, str]],
+) -> bool:
+    """Archive planned/ready rows once a newer public store version is confirmed."""
+    current_public: dict[tuple[str, str], dict[str, str]] = {}
+    for snapshot in snapshots:
+        if snapshot.get("status") not in {"new", "updated", "unchanged"} or not snapshot.get("version"):
+            continue
+        if snapshot.get("platform") == "android" and "public page lookup failed" in snapshot.get("notes", "").lower():
+            continue
+        current_public[(snapshot.get("app_id", ""), snapshot.get("platform", ""))] = snapshot
+
+    changed = False
+    for row in rows:
+        if row.get("status") not in {"planned", "ready"}:
+            continue
+        snapshot = current_public.get((row.get("app_id", ""), row.get("platform", "")))
+        if not snapshot or version_key(snapshot["version"]) <= version_key(row.get("version", "")):
+            continue
+        row["status"] = "archived"
+        note = f"Superseded by confirmed public store version {snapshot['version']} on {snapshot['platform']}."
+        row["notes"] = " ".join(part for part in [row.get("notes", ""), note] if part)
+        changed = True
+    return changed
+
+
 def refresh_existing_local_ahead_release(
     row: dict[str, str],
     snapshot: dict[str, str],
@@ -153,7 +197,14 @@ def refresh_existing_local_ahead_release(
 ) -> bool:
     if row.get("status") not in {"planned", "ready"}:
         return False
-    if "local build metadata is ahead of the store snapshot" not in row.get("summary", ""):
+    summary = row.get("summary", "")
+    if not any(
+        phrase in summary
+        for phrase in (
+            "local build metadata is ahead of the store snapshot",
+            "repository build metadata is ahead of the store snapshot",
+        )
+    ):
         return False
     if row.get("version") != snapshot.get("version"):
         return False
@@ -164,7 +215,7 @@ def refresh_existing_local_ahead_release(
     row["changes"] = snapshot["release_notes"] or f"{snapshot['app_name']} {snapshot['version']} store update detected."
     row["compatibility"] = f"{snapshot['platform']} public release."
     row["notes"] = (
-        "Updated from local-ahead metadata after the same version was confirmed on the public store. "
+        "Updated from repository-ahead metadata after the same version was confirmed on the public store. "
         "Add release artifact, checksum, and set status=ready after verifying the release build."
     )
     return True
@@ -184,11 +235,11 @@ def planned_row(
     if reason == "local_ahead":
         previous_tag = tag_for(store_version) if store_version else ""
         notes = (
-            "Generated from local build metadata because local version is ahead of store snapshot. "
+            "Generated from repository build metadata because repository version is ahead of store snapshot. "
             f"Store version: {store_version or 'unknown'}. "
             "Add release artifact and checksum only for private testing. Keep private until the version is publicly released."
         )
-        summary = f"{snapshot['app_name']} {snapshot['version']} local build metadata is ahead of the store snapshot."
+        summary = f"{snapshot['app_name']} {snapshot['version']} repository build metadata is ahead of the store snapshot."
         release_channel = "private_test"
         compatibility = f"{snapshot['platform']} private test build."
     else:
@@ -235,17 +286,33 @@ def prepare_app_release_rows(
     owner: str = "onnellab",
     dry_run: bool = False,
     now: datetime | None = None,
+    flutter_versions_path: Path | None = None,
 ) -> list[dict[str, str]]:
     timestamp = now or datetime.now(KST)
     snapshots = read_csv(store_versions_path, STORE_HEADER)
     releases = read_csv(releases_path, RELEASE_HEADER)
     config = release_config(config_path)
-    local_versions = local_version_index(read_csv(local_repositories_path, LOCAL_REPOSITORIES_HEADER))
+    if flutter_versions_path is None:
+        production_inputs = (
+            store_versions_path.resolve() == STORE_VERSIONS_PATH.resolve()
+            and releases_path.resolve() == RELEASES_PATH.resolve()
+            and local_repositories_path.resolve() == LOCAL_REPOSITORIES_PATH.resolve()
+        )
+        if production_inputs:
+            flutter_versions_path = FLUTTER_VERSIONS_PATH
+        elif local_repositories_path.resolve() != LOCAL_REPOSITORIES_PATH.resolve():
+            flutter_versions_path = local_repositories_path.parent / "app_flutter_dependency_versions.csv"
+        else:
+            flutter_versions_path = store_versions_path.parent / "app_flutter_dependency_versions.csv"
+    local_versions = repository_version_index(read_optional_csv(flutter_versions_path, FLUTTER_VERSIONS_HEADER))
+    for app_id, version in local_version_index(read_csv(local_repositories_path, LOCAL_REPOSITORIES_HEADER)).items():
+        local_versions.setdefault(app_id, version)
+    superseded = archive_superseded_active_releases(releases, snapshots)
     seen = existing_keys(releases)
     seen_tags = existing_release_tags(releases)
     release_by_tag = release_index_by_tag(releases)
     additions: list[dict[str, str]] = []
-    refreshed = False
+    refreshed = superseded
     next_id = next_release_id(releases)
     next_number = int(next_id.removeprefix("REL-"))
 
@@ -258,7 +325,7 @@ def prepare_app_release_rows(
             reason = "local_ahead"
             candidate["version"] = local_version
             candidate["release_notes"] = (
-                f"Local build metadata version {local_version} is ahead of store snapshot {snapshot['version'] or 'unknown'}."
+                f"Repository build metadata version {local_version} is ahead of store snapshot {snapshot['version'] or 'unknown'}."
             )
         elif snapshot["status"] == "updated":
             reason = "store_updated"
@@ -307,11 +374,20 @@ def main() -> int:
     parser.add_argument("--releases", type=Path, default=RELEASES_PATH)
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     parser.add_argument("--local-repositories", type=Path, default=LOCAL_REPOSITORIES_PATH)
+    parser.add_argument("--flutter-versions", type=Path, default=FLUTTER_VERSIONS_PATH)
     parser.add_argument("--owner", default="onnellab")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     try:
-        additions = prepare_app_release_rows(args.store_versions, args.releases, args.config, args.local_repositories, args.owner, args.dry_run)
+        additions = prepare_app_release_rows(
+            args.store_versions,
+            args.releases,
+            args.config,
+            args.local_repositories,
+            args.owner,
+            args.dry_run,
+            flutter_versions_path=args.flutter_versions,
+        )
     except (PrepareAppReleaseError, OSError) as error:
         print(f"prepare app release rows failed: {error}", file=sys.stderr)
         return 1

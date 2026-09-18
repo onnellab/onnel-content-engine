@@ -1,22 +1,19 @@
-name: ONNELLAB Verify Manual Publications
+name: Sync app operational status
 
 on:
   workflow_dispatch:
-    inputs:
-      visual_public_pages:
-        description: "Inspect public Twitter/LinkedIn profile pages with Playwright"
-        required: true
-        default: "true"
-        type: choice
-        options:
-          - "true"
-          - "false"
+  schedule:
+    - cron: "17 */6 * * *"
+
+concurrency:
+  group: onnellab-app-operational-status
+  cancel-in-progress: false
 
 jobs:
-  verify:
-    name: Verify manual publication completion
+  sync:
+    name: Refresh app versions and dashboard
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     permissions:
       contents: write
     env:
@@ -40,37 +37,6 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Configure Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - name: Install Playwright
-        run: |
-          set -euo pipefail
-          npm install playwright
-          npx playwright install chromium --with-deps
-
-      - name: Verify manual publications
-        env:
-          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
-          DEVTO_USERNAME: ${{ secrets.DEVTO_USERNAME }}
-          MEDIUM_RSS_URL: ${{ secrets.MEDIUM_RSS_URL }}
-          MEDIUM_USERNAME: ${{ secrets.MEDIUM_USERNAME }}
-          HASHNODE_RSS_URL: ${{ secrets.HASHNODE_RSS_URL }}
-          HASHNODE_BLOG_URL: ${{ secrets.HASHNODE_BLOG_URL }}
-          X_PUBLIC_PROFILE_URL: ${{ secrets.X_PUBLIC_PROFILE_URL || 'https://x.com/onnellab' }}
-          X_USERNAME: ${{ secrets.X_USERNAME }}
-          LINKEDIN_PUBLIC_PROFILE_URL: ${{ secrets.LINKEDIN_PUBLIC_PROFILE_URL || 'https://www.linkedin.com/in/onnel-lab-b5b9b0421/' }}
-          LINKEDIN_PROFILE_URL: ${{ secrets.LINKEDIN_PROFILE_URL }}
-        run: |
-          set -euo pipefail
-          if [ "${{ inputs.visual_public_pages }}" = "true" ]; then
-            python3 scripts/verify_manual_publications.py --visual-public-pages --retry-attempts 3 --retry-delay-seconds 5
-          else
-            python3 scripts/verify_manual_publications.py --retry-attempts 3 --retry-delay-seconds 5
-          fi
-
       - name: Sync GitHub main app versions and Flutter dependencies
         env:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
@@ -85,7 +51,7 @@ jobs:
           set -euo pipefail
           python3 scripts/sync_android_versions_from_repos.py
 
-      - name: Check store homepage versions
+      - name: Check public store versions
         run: |
           set -euo pipefail
           python3 scripts/check_store_versions.py
@@ -94,11 +60,6 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/prepare_app_release_rows.py
-
-      - name: Fill ready app release rows
-        run: |
-          set -euo pipefail
-          python3 scripts/fill_ready_app_releases.py
 
       - name: Sync GitHub release status
         env:
@@ -113,36 +74,36 @@ jobs:
           set -euo pipefail
           python3 scripts/generate_app_release_report.py
 
-      - name: Validate app pricing
+      - name: Build operational dashboard
         run: |
           set -euo pipefail
-          python3 scripts/validate_app_pricing.py
+          python3 scripts/build_manual_publish_site.py \
+            --homepage-repo "$HOMEPAGE_REPO_PATH" \
+            --store-review-triage /tmp/store-review-triage.json
 
-      - name: Sync AI provider pricing assumptions
-        run: |
-          set -euo pipefail
-          python3 scripts/sync_ai_provider_pricing.py
-
-      - name: Commit verified state and dashboard snapshots
+      - name: Commit operational status snapshot
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase --autostash origin main
-          git add data/manual_publish_state.json data/manual_publication_verification_report.json data/app_flutter_dependency_versions.csv data/android_store_versions.csv data/store_versions.csv data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing_status.json generated/reports/app_flutter_dependency_versions.md generated/reports/app_releases.md
+          git add \
+            data/app_flutter_dependency_versions.csv \
+            data/android_store_versions.csv \
+            data/store_versions.csv \
+            data/app_releases.csv \
+            data/app_release_sync_status.json \
+            generated/reports/app_flutter_dependency_versions.md \
+            generated/reports/app_releases.md \
+            generated/manual-publish/
           if git diff --cached --quiet; then
-            echo "No manual publication or dashboard snapshot changes to commit"
+            echo "No app operational status changes to commit"
           else
-            git commit -m "Update verified publication and dashboard state"
+            git commit -m "Refresh app operational status"
             git push origin HEAD:main
           fi
 
-      - name: Build manual publish dashboard
-        run: |
-          set -euo pipefail
-          python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
-
-      - name: Deploy manual publish dashboard
+      - name: Deploy operational dashboard
         run: |
           set -euo pipefail
           mkdir -p "$HOMEPAGE_REPO_PATH/public/manual-publish"
@@ -157,10 +118,10 @@ jobs:
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git -C "$HOMEPAGE_REPO_PATH" pull --rebase --autostash origin main
-          git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/index.html public/manual-publish/manifest.webmanifest public/manual-publish/sw.js public/manual-publish/icon-180.png public/manual-publish/icon-192.png public/manual-publish/icon-512.png public/manual-publish/libsodium-sumo.js public/manual-publish/libsodium-wrappers.js
+          git -C "$HOMEPAGE_REPO_PATH" add public/manual-publish/
           if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
-            echo "No manual publish dashboard changes to deploy"
+            echo "No operational dashboard changes to deploy"
           else
-            git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh manual publish dashboard"
+            git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh app operational dashboard"
             git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
           fi

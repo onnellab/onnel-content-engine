@@ -21,7 +21,7 @@ Android version metadata can be synced from those mappings with:
 scripts/sync_android_versions_from_repos.py
 ```
 
-Flutter SDK 버전 제약과 앱별 직접 의존성(플러그인) 버전 스냅샷도 매번 동일한 매핑에서 관리할 수 있습니다.
+Flutter SDK 버전 제약, 앱 자체 버전, 앱별 직접 의존성(플러그인) 버전 스냅샷은 `scripts/sync_flutter_plugin_versions.py`로 관리합니다. 로컬 매핑 경로가 없는 Mac 또는 GitHub Actions에서는 `data/app_release_config.csv`의 GitHub 저장소를 기준으로 각 저장소 기본 브랜치의 `pubspec.yaml`과 `pubspec.lock`을 읽습니다. 따라서 운영 상태의 앱 버전 기준은 특정 PC의 오래된 체크아웃이 아니라 GitHub main에 맞춥니다.
 
 ```text
 scripts/sync_flutter_plugin_versions.py

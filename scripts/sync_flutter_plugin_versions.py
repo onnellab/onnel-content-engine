@@ -43,6 +43,7 @@ OUTPUT_HEADER = [
     "status",
     "source",
 ]
+APP_VERSION_RE = re.compile(r"^version:\s*([0-9A-Za-z_.+\-]+)\s*$", re.MULTILINE)
 
 
 class FlutterDependencySyncError(ValueError):
@@ -80,9 +81,9 @@ def write_report(path: Path, rows: list[dict[str, str]]) -> None:
         groups[row["app_slug"]].append(row)
 
     lines: list[str] = [
-        "# Flutter SDK + plugin dependency snapshot",
+        "# App + Flutter SDK + plugin dependency snapshot",
         "",
-        "Generated from local repositories in `data/local_repositories.csv`.",
+        "Generated from app repository mappings; GitHub default branches are used when mapped local checkouts are unavailable.",
         "",
     ]
     for app_slug in sorted(groups):
@@ -113,6 +114,14 @@ def write_report(path: Path, rows: list[dict[str, str]]) -> None:
         lines.append("")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def app_version_from_pubspec(text: str) -> tuple[str, str]:
+    match = APP_VERSION_RE.search(text)
+    if not match:
+        return "", ""
+    raw = match.group(1)
+    return raw.split("+", 1)[0], raw
 
 
 def normalize_dependency_value(raw: str) -> str:
@@ -361,6 +370,7 @@ def sync_flutter_plugin_versions(
                 )
                 try:
                     pubspec_text = github_file_text(github_repository, remote_pubspec, token)
+                    app_version, app_version_raw = app_version_from_pubspec(pubspec_text)
                     lock_path = str(Path(remote_pubspec).with_name("pubspec.lock")).replace("\\", "/")
                     try:
                         lock_text = github_file_text(github_repository, lock_path, token)
@@ -405,13 +415,29 @@ def sync_flutter_plugin_versions(
             )
             continue
         else:
-            flutter_constraint, dependencies, dev_dependencies = parse_pubspec(pubspec_path)
+            pubspec_text = pubspec_path.read_text(encoding="utf-8")
+            app_version, app_version_raw = app_version_from_pubspec(pubspec_text)
+            flutter_constraint, dependencies, dev_dependencies = parse_pubspec_lines(pubspec_text.splitlines())
             lock_path = pubspec_path.with_name("pubspec.lock")
             lock_lines = lock_path.read_text(encoding="utf-8").splitlines() if lock_path.exists() else []
             lock_versions = parse_pubspec_lock_lines(lock_lines) if lock_lines else {}
             lock_sdks = parse_pubspec_lock_sdks_lines(lock_lines) if lock_lines else {}
             flutter_constraint = flutter_constraint or lock_sdks.get("flutter", "")
             has_lock = lock_path.exists()
+
+        rows.append(
+            {
+                "app_id": app_id,
+                "app_slug": app_slug,
+                "package_type": "app_version",
+                "package_name": app_slug,
+                "declared_version": app_version_raw,
+                "resolved_version": app_version,
+                "flutter_constraint": "",
+                "status": "ok" if app_version else "missing_app_version",
+                "source": source,
+            }
+        )
 
         rows.append(
             {

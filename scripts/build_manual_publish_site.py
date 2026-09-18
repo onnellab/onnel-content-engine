@@ -131,9 +131,11 @@ def _release_id_to_int(release_id: str) -> int:
 
 
 def latest_platform_release_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
-    """Keep only the latest row per app/platform by version then release_id."""
+    """Keep only the latest non-archived row per app/platform by version then release_id."""
     latest: dict[tuple[str, str], dict[str, str]] = {}
     for row in rows:
+        if row.get("status") == "archived":
+            continue
         key = (row.get("app_id", ""), row.get("platform", ""))
         current = latest.get(key)
         if not current:
@@ -143,6 +145,29 @@ def latest_platform_release_rows(rows: list[dict[str, str]]) -> list[dict[str, s
             version_key(row.get("version", "")) == version_key(current.get("version", ""))
             and _release_id_to_int(row.get("release_id", "")) > _release_id_to_int(current.get("release_id", ""))
         ):
+            latest[key] = row
+    return list(latest.values())
+
+
+def latest_app_release_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Keep the latest non-archived GitHub Release state per app.
+
+    Store rows already carry platform-specific rollout state. The dashboard's GitHub
+    Release card is repository-level, so showing an older Android candidate beside a
+    newer iOS row for the same repository makes the operation state look stale.
+    """
+    latest: dict[str, dict[str, str]] = {}
+    for row in rows:
+        if row.get("status") == "archived":
+            continue
+        key = row.get("app_id", "") or row.get("app_slug", "")
+        current = latest.get(key)
+        if not current:
+            latest[key] = row
+            continue
+        candidate_key = (version_key(row.get("version", "")), _release_id_to_int(row.get("release_id", "")))
+        current_key = (version_key(current.get("version", "")), _release_id_to_int(current.get("release_id", "")))
+        if candidate_key > current_key:
             latest[key] = row
     return list(latest.values())
 
@@ -316,7 +341,7 @@ def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_p
         if row.get("release_id")
     }
     items: list[dict[str, str]] = []
-    for row in latest_platform_release_rows(read_csv_rows(releases_path)):
+    for row in latest_app_release_rows(read_csv_rows(releases_path)):
         release_id = row.get("release_id", "")
         approval = approvals.get(release_id, {})
         public_release = approval.get("public_release", "").lower() == "true"
@@ -1561,6 +1586,8 @@ def html_document(
         appStatusTitle: '앱 운영 상태',
         appStatusSummary: '앱별 묶음',
         flutterSdk: 'Flutter SDK',
+        repositoryMainVersion: 'GitHub main 앱 버전',
+        repositoryBuildVersion: '빌드 포함 버전',
         flutterDependencyVersions: 'Flutter/플러그인 버전',
         flutterPlugin: '플러그인',
         dependencyStatusLabel: '상태',
@@ -1830,6 +1857,8 @@ def html_document(
         appStatusTitle: 'App operation status',
         appStatusSummary: 'grouped by app',
         flutterSdk: 'Flutter SDK',
+        repositoryMainVersion: 'GitHub main app version',
+        repositoryBuildVersion: 'version with build',
         flutterDependencyVersions: 'Flutter/plugin versions',
         flutterPlugin: 'Plugin',
         dependencyStatusLabel: 'Status',
@@ -4003,6 +4032,7 @@ def html_document(
     }}
 
     function displayFlutterDependency(item) {{
+      if (item.package_type === 'app_version') return false;
       return !(item.package_type === 'dependency' && item.declared_version === 'sdk:flutter');
     }}
 
@@ -4290,11 +4320,27 @@ def html_document(
         const summary = document.createElement('summary');
         const title = document.createElement('strong');
         title.appendChild(profileLink(group.app_name || t('none'), group.app_slug ? `/apps/${{group.app_slug}}/` : '/apps/'));
+        const repositoryVersion = group.flutterDependencies.find((item) => item.package_type === 'app_version');
         const visibleFlutterDependencies = group.flutterDependencies.filter(displayFlutterDependency);
         const cardSummary = document.createElement('span');
-        cardSummary.textContent = `${{group.stores.length}} stores / ${{group.releases.length}} releases / ${{visibleFlutterDependencies.length}} plugins`;
+        const repositoryVersionLabel = repositoryVersion?.resolved_version || repositoryVersion?.declared_version || t('none');
+        cardSummary.textContent = `repo ${{repositoryVersionLabel}} / ${{group.stores.length}} stores / ${{group.releases.length}} releases / ${{visibleFlutterDependencies.length}} plugins`;
         summary.append(title, cardSummary);
         card.appendChild(summary);
+        if (repositoryVersion) {{
+          const repositoryRow = document.createElement('div');
+          repositoryRow.className = 'app-status-row is-release';
+          const repositoryTitle = document.createElement('b');
+          repositoryTitle.textContent = t('repositoryMainVersion');
+          const repositoryCurrent = document.createElement('span');
+          repositoryCurrent.textContent = `${{t('currentVersion')}}: ${{repositoryVersion.resolved_version || t('none')}}`;
+          const repositoryBuild = document.createElement('span');
+          repositoryBuild.textContent = `${{t('repositoryBuildVersion')}}: ${{repositoryVersion.declared_version || t('none')}}`;
+          const repositorySource = document.createElement('span');
+          repositorySource.textContent = `${{t('dependencySource')}}: ${{repositoryVersion.source || t('none')}}`;
+          repositoryRow.append(repositoryTitle, repositoryCurrent, repositoryBuild, repositorySource);
+          card.appendChild(repositoryRow);
+        }}
         group.stores
           .sort((a, b) => a.platform.localeCompare(b.platform))
           .forEach((item) => {{
