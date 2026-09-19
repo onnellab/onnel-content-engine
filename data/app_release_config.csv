@@ -6,3 +6,4 @@ APP-0004,segra,onnellab/segra,generated/releases/segra/{version}/{platform}/*-re
 APP-0005,clipnest,onnellab/clipnest,generated/releases/clipnest/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
 APP-0006,aligna,onnellab/aligna,generated/releases/aligna/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
 APP-0007,melivra,onnellab/melivra,generated/releases/melivra/{version}/{platform}/*-release.*,Update repository if the app uses a different GitHub repo.
+APP-0008,papira,onnellab/papira,generated/releases/papira/{version}/{platform}/*-release.*,Store launch review pending; collect repository metadata without publishing releases.

@@ -923,7 +923,7 @@ def sync_reviews(
         state = {"app_id": scope[0], "app_slug": slug, "app_name": store.get("app_name", ""),
                  "platform": platform, "checked_at": synced_at, "state": "skipped", "current_reviews": None}
         store_states.append(state)
-        if store.get("status", "").strip().lower() == "not_released":
+        if store.get("status", "").strip().lower() in {"not_released", "in_review"}:
             state["state"] = "not_released"
             counts["unavailable"] += 1
             continue

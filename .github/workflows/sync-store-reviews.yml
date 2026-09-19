@@ -79,7 +79,6 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git pull --rebase --autostash origin main
           python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           git diff --check
@@ -88,12 +87,20 @@ jobs:
             echo "No store review changes to commit"
           else
             git commit -m "Sync store reviews"
+            git pull --rebase origin main
+            python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+            python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
+            git add data/store_review_triage.json generated/manual-publish/
+            if ! git diff --cached --quiet; then
+              git commit -m "Rebuild review dashboard after source synchronization"
+            fi
             git push origin HEAD:main
           fi
 
       - name: Deploy dashboard
         run: |
           set -euo pipefail
+          git -C "$HOMEPAGE_REPO_PATH" pull --rebase origin main
           mkdir -p "$HOMEPAGE_REPO_PATH/public/manual-publish"
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
@@ -106,7 +113,6 @@ jobs:
           cp generated/manual-publish/libsodium-wrappers.js "$HOMEPAGE_REPO_PATH/public/manual-publish/libsodium-wrappers.js"
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git -C "$HOMEPAGE_REPO_PATH" pull --rebase --autostash origin main
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
           python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/manual-publish/index.html"
           git -C "$HOMEPAGE_REPO_PATH" diff --check

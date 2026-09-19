@@ -534,6 +534,23 @@ class StoreReviewSyncTest(unittest.TestCase):
         self.assertEqual(counts["unavailable"], 1)
         self.assertEqual(counts["skipped"], 0)
 
+    def test_in_review_apps_do_not_fetch_store_reviews(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            stores = Path(temp) / "stores.csv"
+            output = Path(temp) / "reviews.csv"
+            stores.write_text(
+                "app_id,app_slug,app_name,platform,store_url,store_app_id,status\n"
+                "APP-0008,papira,Papira,ios,,,in_review\n"
+                "APP-0008,papira,Papira,android,https://play.google.com/store/apps/details?id=com.onnellab.papira,,in_review\n",
+                encoding="utf-8",
+            )
+            with patch.object(store_review_sync, "fetch_apple_review_pages") as apple, patch.object(store_review_sync, "fetch_google_review_pages") as google:
+                counts = sync_reviews(stores_path=stores, output_path=output, google_reports_bucket="pubsite_prod_123", require_google_history=True)
+            apple.assert_not_called()
+            google.assert_not_called()
+            self.assertEqual(counts["unavailable"], 2)
+            self.assertEqual(counts["skipped"], 0)
+
     def test_complete_sync_requires_google_lifetime_reports_bucket(self) -> None:
         with self.assertRaisesRegex(StoreReviewSyncError, "complete Google Play review history"):
             sync_reviews(require_google_history=True)

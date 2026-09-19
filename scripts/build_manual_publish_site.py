@@ -3888,6 +3888,18 @@ def html_document(
       const attention = aiManagerReport.requires_attention || [];
       const policyAlerts = aiManagerReport.policy_alerts || [];
       aiManagerSummary.textContent = `${{attention.length}} attention / ${{aiManagerReport.generated_at || 'not generated'}}`;
+      const refresh = aiManagerReport.refresh_status || {{}};
+      if (refresh.generated_at) {{
+        const status = refresh.status || 'unknown';
+        const incomplete = (refresh.steps || []).filter((step) => ['failed', 'unavailable'].includes(step.status));
+        aiManagerSummary.textContent += ` / source refresh: ${{status}} / ${{refresh.generated_at}}`;
+        incomplete.forEach((step) => {{
+          const card = document.createElement('div');
+          card.className = 'app-status-card';
+          card.textContent = `${{step.script}}: ${{step.status}}`;
+          aiManagerGrid.appendChild(card);
+        }});
+      }}
       Object.entries(summary).forEach(([key, value]) => {{
         const card = document.createElement('div');
         card.className = 'app-status-card';

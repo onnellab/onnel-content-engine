@@ -17,6 +17,17 @@ import publish_ai_manager_telegram
 
 
 class AiManagerAutomationTest(unittest.TestCase):
+    def test_report_preserves_partial_source_refresh_status(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            (root / "data").mkdir()
+            freshness = {"generated_at": "2026-09-20T01:00:00+00:00", "status": "partial", "steps": [{"script": "collect_os_updates.py", "status": "failed"}]}
+            (root / "data/ai_operations_refresh_status.json").write_text(json.dumps(freshness))
+            with patch.object(generate_ai_manager_report, "ROOT", root):
+                self.assertEqual(generate_ai_manager_report.main(), 0)
+            report = json.loads((root / "data/ai_manager_daily_report.json").read_text())
+            self.assertEqual(report["refresh_status"], freshness)
+
     def test_report_excludes_dismissed_reviews_and_deferred_policy_but_keeps_active(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)

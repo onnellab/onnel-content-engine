@@ -1,0 +1,53 @@
+name: Refresh AI Operations Sources
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: onnellab-manual-dashboard-writer
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Refresh source records and derived metrics
+        id: sources
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.AI_SCOUT_GITHUB_TOKEN || secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY_BASE64 }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64 }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_PLAY_ACCESS_TOKEN: ${{ secrets.GOOGLE_PLAY_ACCESS_TOKEN }}
+          GOOGLE_PLAY_REPORTS_BUCKET: ${{ secrets.GOOGLE_PLAY_REPORTS_BUCKET }}
+          GMAIL_CLIENT_ID: ${{ secrets.GMAIL_POLICY_ALERT_CLIENT_ID }}
+          GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_POLICY_ALERT_CLIENT_SECRET }}
+          GMAIL_POLICY_REFRESH_DEVELOPER: ${{ secrets.GMAIL_POLICY_ALERT_REFRESH_TOKEN_DEVELOPER }}
+          GMAIL_POLICY_REFRESH_OFFICIAL: ${{ secrets.GMAIL_POLICY_ALERT_REFRESH_TOKEN_OFFICIAL }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          FIREBASE_CRASHLYTICS_ACCESS_TOKEN: ${{ secrets.FIREBASE_CRASHLYTICS_ACCESS_TOKEN }}
+          CODEMAGIC_API_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
+        run: python3 -B scripts/refresh_ai_operations.py
+      - name: Commit refreshed records including partial audit
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git diff --check
+          git add data/
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh all AI operation sources and record freshness'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Fail when any source could not be refreshed
+        if: steps.sources.outcome == 'failure'
+        run: exit 1

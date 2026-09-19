@@ -1,12 +1,45 @@
 {
   "apps": [],
   "coverage": [
-    {"app_slug": "quivra", "state": "not_applicable", "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."},
-    {"app_slug": "tagweaver", "state": "not_applicable", "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."},
-    {"app_slug": "vaultxt", "state": "not_applicable", "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."},
-    {"app_slug": "segra", "state": "not_applicable", "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."},
-    {"app_slug": "clipnest", "state": "not_applicable", "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."},
-    {"app_slug": "aligna", "state": "not_applicable", "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."},
-    {"app_slug": "melivra", "state": "not_applicable", "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."}
+    {
+      "app_slug": "quivra",
+      "state": "not_applicable",
+      "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."
+    },
+    {
+      "app_slug": "tagweaver",
+      "state": "not_applicable",
+      "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."
+    },
+    {
+      "app_slug": "vaultxt",
+      "state": "not_applicable",
+      "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."
+    },
+    {
+      "app_slug": "segra",
+      "state": "not_applicable",
+      "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."
+    },
+    {
+      "app_slug": "clipnest",
+      "state": "not_applicable",
+      "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."
+    },
+    {
+      "app_slug": "aligna",
+      "state": "not_applicable",
+      "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."
+    },
+    {
+      "app_slug": "melivra",
+      "state": "not_applicable",
+      "reason": "No Firebase Crashlytics SDK is declared in the app pubspec."
+    },
+    {
+      "app_slug": "papira",
+      "state": "not_applicable",
+      "reason": "No Firebase Crashlytics SDK is declared in the app pubspec (checked 2026-09-20)."
+    }
   ]
 }
