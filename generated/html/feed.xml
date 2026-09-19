@@ -172,5 +172,19 @@
     <description>다운로드 폴더를 받은 편지함처럼 처리하고, 네 가지 지속 가능한 분류와 안전한 파일명·중복·임시 파일 검토 규칙으로 정리하는 방법입니다.</description>
     <pubDate>Tue, 01 Sep 2026 00:00:00 GMT</pubDate>
   </item>
+  <item>
+    <title>How to Number Tracks in a Multi-Disc MP3 Album</title>
+    <link>https://onnellab.github.io/blog/en/number-tracks-multi-disc-mp3-album/</link>
+    <guid>https://onnellab.github.io/blog/en/number-tracks-multi-disc-mp3-album/</guid>
+    <description>Number tracks in a multi-disc MP3 album safely by separating track position from disc position, preserving originals, and testing a small copy.</description>
+    <pubDate>Fri, 04 Sep 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>여러 장으로 된 MP3 앨범의 트랙 번호를 매기는 방법</title>
+    <link>https://onnellab.github.io/blog/ko/number-tracks-multi-disc-mp3-album/</link>
+    <guid>https://onnellab.github.io/blog/ko/number-tracks-multi-disc-mp3-album/</guid>
+    <description>트랙 위치와 디스크 위치를 분리하고 원본을 보존한 뒤 소량의 복사본으로 검증하며 다중 디스크 MP3 트랙 번호를 안전하게 정리하는 방법입니다.</description>
+    <pubDate>Fri, 04 Sep 2026 00:00:00 GMT</pubDate>
+  </item>
 </channel>
 </rss>

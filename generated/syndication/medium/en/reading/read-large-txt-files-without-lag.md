@@ -73,7 +73,7 @@ Splitting a large TXT file can help when the document is too large for the tools
 
 If the file has a meaningful structure, such as chapters, logs by date, or exported sections, splitting can make the document easier to manage. If the file is just one continuous export, splitting may create more files to track without solving the underlying reading workflow.
 
-## Where VaultXT Fits
+## Where ONNELLAB Fits
 
 This is the kind of workflow [VaultXT](https://onnellab.github.io/apps/vaultxt/) is built around: open the plain-text file first, then search, bookmark, or edit only when the task actually needs it.
 

@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0004",
   "title": "What Makes Large Text Files Slow to Open",
-  "input_fingerprint": "ba06330d1852274468999ea2593d0883e93440a25468b1877853aadb281934be",
+  "input_fingerprint": "f0cc30fe27743357c8a6d7682e282fbb5b7ea815cfb89610dfc48d01a2f86d20",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,
