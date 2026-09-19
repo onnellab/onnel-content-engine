@@ -1,44 +1,4 @@
 {
-  "generated_at": "2026-09-19T04:44:24+00:00",
-  "findings": [
-    {
-      "finding_id": "review-d0be20cd-9d2e-4f45-b3cf-4e7a89837265",
-      "origin": "store_review",
-      "app_slug": "vaultxt",
-      "severity": "high",
-      "review": {
-        "review_id": "d0be20cd-9d2e-4f45-b3cf-4e7a89837265",
-        "app_id": "APP-0003",
-        "app_slug": "vaultxt",
-        "app_name": "VaultXT",
-        "platform": "android",
-        "rating": "1",
-        "review_kind": "review",
-        "title": "",
-        "body": "Dando crash, não importa o txt. Embora diz \"Largo\" só deve funcionar com arquivos pequenos abaixo de 10mb. 50Mb não funciona!",
-        "reviewer_language": "en",
-        "territory": "",
-        "app_version": "1.0.3",
-        "created_at": "2026-07-11T18:06:10Z",
-        "updated_at": "2026-07-11T18:07:19+00:00",
-        "developer_reply": "Obrigado pelo seu feedback. Pedimos desculpas pelas falhas e pela demora no retorno. A versão 2.0 já está disponível, com melhorias na edição de arquivos grandes. Poderia atualizar o app e nos dizer se ele ainda fecha ao abrir arquivos de 50 MB? Obrigado por nos ajudar a melhorar o VaultXT.",
-        "reply_updated_at": "2026-09-15T01:14:24+00:00",
-        "status": "replied",
-        "synced_at": "2026-09-18T22:51:31+00:00",
-        "verified_at": "2026-09-18T22:51:31+00:00",
-        "verification_source": "google_reviews_get"
-      },
-      "related_review_ids": [
-        "d0be20cd-9d2e-4f45-b3cf-4e7a89837265"
-      ],
-      "hypothesis": "A high-risk store review identifies a symptom; reproduction and code evidence are required.",
-      "recommended_actions": [
-        "prepare a read-only app code context",
-        "reproduce on the reported app version when available",
-        "correlate with telemetry when a crash source becomes available"
-      ],
-      "github_issue_recommended": true,
-      "diagnosis_status": "pending"
-    }
-  ]
+  "generated_at": "2026-09-19T23:49:16+00:00",
+  "findings": []
 }
