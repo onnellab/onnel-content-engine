@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-09-19T23:02:20+00:00",
+  "generated_at": "2026-09-19T23:41:25+00:00",
   "summary": {
     "reviews_triaged": 8,
-    "high_risk_reports": 1,
+    "high_risk_reports": 0,
     "pricing_patterns": 0,
     "replies_queued": 0,
     "replies_published": 0,
@@ -21,7 +21,7 @@
     "ios_device_qa_blocked": 0,
     "os_updates_to_review": 1,
     "os_impact_tasks": 0,
-    "store_policy_tasks": 23,
+    "store_policy_tasks": 20,
     "store_policy_mailboxes_connected": 2,
     "store_submissions_blocked": 5,
     "internal_test_uploads": 0,
@@ -42,90 +42,19 @@
     "android_aab_expiring": 0,
     "android_aab_expired": 0
   },
-  "requires_attention": [
-    {
-      "review_id": "d0be20cd-9d2e-4f45-b3cf-4e7a89837265",
-      "category": "bug",
-      "actions": {
-        "reply": "not_needed",
-        "github_issue": "approval_required",
-        "store_copy": "not_needed",
-        "code_change": "investigate"
-      }
-    },
-    {
-      "task_id": "policy-alert-462fe34a0cfb9d96",
-      "app_slug": "tagweaver",
-      "category": "store_policy_alert",
-      "actions": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다."
-    },
-    {
-      "task_id": "policy-alert-f6061cafa1cdc8c7",
-      "app_slug": "melivra",
-      "category": "store_policy_alert",
-      "actions": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다."
-    },
-    {
-      "task_id": "policy-alert-a2acc7751c07280c",
-      "app_slug": "segra",
-      "category": "store_policy_alert",
-      "actions": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다."
-    },
-    {
-      "task_id": "policy-alert-5b85a6e4d77c1be8",
-      "app_slug": "vaultxt",
-      "category": "store_policy_alert",
-      "actions": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다."
-    }
-  ],
+  "requires_attention": [],
   "policy_alerts": [
     {
-      "task_id": "policy-alert-462fe34a0cfb9d96",
-      "app_slug": "tagweaver",
-      "store": "google_play",
-      "status": "verification_pending",
-      "kind": "billing",
-      "summary": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다.",
-      "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
-      "occurred_at": "2026-07-30T00:00:00+00:00",
-      "operational_note": "Billing Library 요구사항을 반영한 버전을 활성 트랙에 출시했습니다. Google Play Console의 경고 해제 재검사를 기다리고 있습니다.",
-      "status_updated_at": "2026-07-30T04:11:52+00:00"
-    },
-    {
       "task_id": "policy-alert-f6061cafa1cdc8c7",
       "app_slug": "melivra",
       "store": "google_play",
-      "status": "development",
+      "status": "deferred",
       "kind": "billing",
       "summary": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다.",
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
-      "operational_note": "출시 전 개발 중인 앱입니다. 출시 준비 과정에서 Billing Library 요구사항을 반영해야 합니다.",
-      "status_updated_at": "2026-07-30T04:11:52+00:00"
-    },
-    {
-      "task_id": "policy-alert-a2acc7751c07280c",
-      "app_slug": "segra",
-      "store": "google_play",
-      "status": "verification_pending",
-      "kind": "billing",
-      "summary": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다.",
-      "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
-      "occurred_at": "2026-07-30T00:00:00+00:00",
-      "operational_note": "Billing Library 요구사항을 반영한 버전을 활성 트랙에 출시했습니다. Google Play Console의 경고 해제 재검사를 기다리고 있습니다.",
-      "status_updated_at": "2026-07-30T04:11:52+00:00"
-    },
-    {
-      "task_id": "policy-alert-5b85a6e4d77c1be8",
-      "app_slug": "vaultxt",
-      "store": "google_play",
-      "status": "update_in_progress",
-      "kind": "billing",
-      "summary": "Google Play Billing Library 8.0.0 이상이 필요합니다. 조치 기한은 2026-08-31이며, 이후 규정을 충족하지 않은 앱 업데이트는 출시할 수 없습니다. Google은 최신 수익 창출 기능을 위해 버전 9 업데이트를 권장합니다. 서드 파티 SDK가 Billing Library를 포함하면 해당 SDK도 업데이트하고 활성 게시 트랙에 새 앱 버전을 출시해야 합니다.",
-      "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
-      "occurred_at": "2026-07-30T00:00:00+00:00",
-      "operational_note": "대규모 패치를 개발 중이므로 Billing Library 업데이트와 활성 트랙 출시는 아직 완료되지 않았습니다.",
-      "status_updated_at": "2026-07-30T04:11:52+00:00"
+      "operational_note": "사용자 지시에 따라 미출시 개발 앱의 출시 전 확인 항목으로 보류합니다. Billing Library 요구사항 해결 완료를 의미하지 않으며 출시 준비 시 재확인해야 합니다.",
+      "status_updated_at": "2026-09-19T23:38:30+00:00"
     }
   ],
   "actionable_prs": []

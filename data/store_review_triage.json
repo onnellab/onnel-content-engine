@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T04:44:52+00:00",
+  "generated_at": "2026-09-19T23:42:10+00:00",
   "items": [
     {
       "review_id": "873ee7f8-107e-4b31-8876-51d88b27fa5c",
@@ -139,14 +139,16 @@
           "source": "docs/operations/PRICING_FACTS.md:10"
         }
       ],
-      "requires_human_approval": true,
+      "requires_human_approval": false,
       "actions": {
         "reply": "not_needed",
-        "github_issue": "approval_required",
+        "github_issue": "not_needed",
         "store_copy": "not_needed",
-        "code_change": "investigate"
+        "code_change": "not_needed"
       },
-      "issue_draft": "## Customer report (unverified)\n- App: VaultXT\n- Platform/version: android 1.0.3\n- Category: bug\n- Similarity key: bug\n\n## Sanitized summary\nCustomer reported a possible product problem. Review the original in the approval dashboard; do not copy personal data into this issue.\n\n## Required before implementation\n- Reproduce or identify telemetry evidence.\n- Confirm affected versions and rollback path."
+      "issue_draft": "",
+      "operational_status": "dismissed",
+      "operational_note": "Historical VaultXT report addressed operationally after version 2.0; fix is not verified. Preserve the original category and body, and do not create a code action from this dismissal."
     },
     {
       "review_id": "00000192-e776-1303-5099-ad2300000000",

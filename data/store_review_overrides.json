@@ -4,6 +4,11 @@
     "report-6b652b2227b5da3cd8607adf": {
       "review_kind": "rating_only",
       "note": "Confirmed as a star-only Google Play rating; Tageditor is not review text."
+    },
+    "d0be20cd-9d2e-4f45-b3cf-4e7a89837265": {
+      "updated_at": "2026-07-11T18:07:19+00:00",
+      "operational_status": "dismissed",
+      "note": "Historical VaultXT report addressed operationally after version 2.0; fix is not verified. Preserve the original category and body, and do not create a code action from this dismissal."
     }
   }
 }

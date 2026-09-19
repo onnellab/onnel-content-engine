@@ -167,7 +167,7 @@ SOURCE_TYPES = {
     "release_note",
 }
 
-APP_STATUSES = {"concept", "planning", "development", "beta", "released", "paused", "retired"}
+APP_STATUSES = {"concept", "planning", "development", "beta", "in_review", "released", "paused", "retired"}
 PRODUCT_GROUPS = {"apps", "games", "fonts", "research", "internal"}
 APP_CATEGORIES = TOPIC_CATEGORIES | {"internal"}
 PLATFORMS = {"ios", "android", "windows", "macos", "web", "linux", "steam"}
@@ -256,6 +256,8 @@ def validate_apps() -> dict[str, dict[str, str]]:
                 raise ValueError(f"{app_id} has unsupported platform: {platform}")
         if row["status"] == "released" and row["content_eligible"] == "true" and not row["official_site_path"]:
             raise ValueError(f"{app_id} is released and eligible but has no official_site_path")
+        if row["status"] == "in_review" and row["content_eligible"] != "false":
+            raise ValueError(f"{app_id} is in_review and must have content_eligible=false")
         if row["official_site_path"] and not row["official_site_path"].startswith("/"):
             raise ValueError(f"{app_id} official_site_path must be site-relative")
         validate_url(row["app_store_url"], "app_store_url", app_id)

@@ -117,7 +117,7 @@ It writes:
 data/store_versions.csv
 ```
 
-Released App Store and Google Play rows can be marked `new`, `unchanged`, or `updated`. Google Play public-page metadata is used when available and falls back to the maintained Android snapshot. Apps whose registry status is not `released` are recorded as `not_released` without treating a preconfigured store URL as a lookup failure.
+Released App Store and Google Play rows can be marked `new`, `unchanged`, or `updated`. Google Play public-page metadata is used when available and falls back to the maintained Android snapshot. Apps whose registry status is `in_review` are recorded for each configured iOS or Android platform with blank version/date fields and no public lookup; other non-released apps are recorded as `not_released` without treating a preconfigured store URL as a lookup failure.
 
 Android version source rows can be supplied in:
 

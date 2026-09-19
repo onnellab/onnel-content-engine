@@ -22,6 +22,7 @@ DEFAULT_REVIEWS = ROOT / "data" / "store_reviews.csv"
 DEFAULT_OUTPUT = ROOT / "data" / "store_review_triage.json"
 DEFAULT_APP_FACTS = ROOT / "docs" / "operations" / "APP_FACTS.md"
 DEFAULT_PRICING_FACTS = ROOT / "docs" / "operations" / "PRICING_FACTS.md"
+DEFAULT_OVERRIDES = ROOT / "data" / "store_review_overrides.json"
 
 RISK_TERMS = {
     "billing": ("paid", "pay", "payment", "purchase", "refund", "charged", "free", "결제", "구매", "환불", "무료"),
@@ -37,6 +38,26 @@ PRICING_CONFUSION = ("not free", "actually a paid", "paid app", "free as stated"
 def read_reviews(path: Path) -> list[dict[str, str]]:
     with path.open(encoding="utf-8", newline="") as handle:
         return [{key: (value or "").strip() for key, value in row.items()} for row in csv.DictReader(handle)]
+
+
+def read_review_dismissals(path: Path = DEFAULT_OVERRIDES) -> dict[str, dict[str, str]]:
+    """Read bounded, update-bound operational dismissals.
+
+    A dismissal is valid only when the source row's review_id and updated_at
+    both match the recorded values. This lets a later review update alert
+    again without changing the original review classification or body.
+    """
+    if not path.exists():
+        return {}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    reviews = payload.get("reviews", {}) if isinstance(payload, dict) else {}
+    return {
+        str(review_id): value
+        for review_id, value in reviews.items()
+        if isinstance(value, dict)
+        and value.get("operational_status") == "dismissed"
+        and value.get("updated_at")
+    }
 
 
 def facts_for_app(app_slug: str, paths: tuple[Path, ...]) -> list[dict[str, str]]:
@@ -94,9 +115,14 @@ def issue_draft(row: dict[str, str], category: str, key: str) -> str:
     ))
 
 
-def triage_reviews(rows: list[dict[str, str]], fact_paths: tuple[Path, ...]) -> dict[str, object]:
+def triage_reviews(
+    rows: list[dict[str, str]],
+    fact_paths: tuple[Path, ...],
+    overrides_path: Path = DEFAULT_OVERRIDES,
+) -> dict[str, object]:
     classified = [classify(row) for row in rows]
     counts = Counter(key for _, _, key in classified)
+    dismissals = read_review_dismissals(overrides_path)
     items: list[dict[str, object]] = []
     for row, (category, flags, key) in zip(rows, classified):
         try:
@@ -115,12 +141,25 @@ def triage_reviews(rows: list[dict[str, str]], fact_paths: tuple[Path, ...]) -> 
             "store_copy": "review_recommended" if category == "pricing_confusion" and counts[key] >= 3 else "not_needed",
             "code_change": "investigate" if category in {"bug", "data_loss", "security"} else "not_needed",
         }
-        items.append({
+        item: dict[str, object] = {
             "review_id": row.get("review_id", ""), "category": category, "risk_flags": flags,
             "similarity_key": key, "similar_reviews": counts[key], "facts": facts,
             "requires_human_approval": requires_manual, "actions": actions,
             "issue_draft": issue_draft(row, category, key) if requires_issue else "",
-        })
+        }
+        dismissal = dismissals.get(row.get("review_id", ""))
+        if dismissal and dismissal.get("updated_at") == row.get("updated_at", ""):
+            item["requires_human_approval"] = False
+            item["actions"] = {
+                "reply": "not_needed",
+                "github_issue": "not_needed",
+                "store_copy": "not_needed",
+                "code_change": "not_needed",
+            }
+            item["issue_draft"] = ""
+            item["operational_status"] = "dismissed"
+            item["operational_note"] = dismissal.get("note", "")
+        items.append(item)
     return {"schema_version": 1, "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(), "items": items}
 
 
@@ -130,8 +169,9 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--app-facts", type=Path, default=DEFAULT_APP_FACTS)
     parser.add_argument("--pricing-facts", type=Path, default=DEFAULT_PRICING_FACTS)
+    parser.add_argument("--overrides", type=Path, default=DEFAULT_OVERRIDES)
     args = parser.parse_args()
-    payload = triage_reviews(read_reviews(args.reviews), (args.app_facts, args.pricing_facts))
+    payload = triage_reviews(read_reviews(args.reviews), (args.app_facts, args.pricing_facts), args.overrides)
     args.output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"generated {args.output}")
     return 0

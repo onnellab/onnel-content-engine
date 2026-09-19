@@ -255,6 +255,29 @@ def store_rows_from_apps(
     rows: list[dict[str, str]] = []
     for app in read_csv(apps_path, APP_HEADER):
         candidates = [("ios", app["app_store_url"]), ("android", app["play_store_url"])]
+        if app.get("status") == "in_review":
+            configured_platforms = set(filter(None, app.get("platforms", "").split("|")))
+            for platform in ("ios", "android"):
+                if platform not in configured_platforms:
+                    continue
+                rows.append(
+                    {
+                        "app_id": app["app_id"],
+                        "app_slug": app["slug"],
+                        "app_name": app["app_name"],
+                        "platform": platform,
+                        "store_url": app["app_store_url"] if platform == "ios" else app["play_store_url"],
+                        "store_app_id": app_store_id(app["app_store_url"]) if platform == "ios" and app["app_store_url"] else "",
+                        "store_package": play_package(app["play_store_url"]) if platform == "android" and app["play_store_url"] else "",
+                        "version": "",
+                        "last_updated": "",
+                        "release_notes": "",
+                        "checked_at": now,
+                        "status": "in_review",
+                        "notes": "App status is in_review in the user registry; public store lookup skipped.",
+                    }
+                )
+            continue
         if app.get("status") != "released":
             for platform, store_url in candidates:
                 if not store_url:

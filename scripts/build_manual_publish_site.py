@@ -1708,6 +1708,7 @@ def html_document(
         storeReviewPublishFailed: '승인은 저장됐지만 게시 요청에 실패했습니다.',
         storeReviewManualPublishRequired: '이 과거 리뷰는 API 게시 ID가 없어 Play Console에서 수동 답변해야 합니다.',
         currentVersion: '현재 버전',
+        storeInReview: '출시 검토 중',
         releasedDate: '현재 버전 게시일',
         releaseNotes: '출시 정보',
         releaseSyncStatus: 'GitHub Release 확인',
@@ -1992,6 +1993,7 @@ def html_document(
         storeReviewPublishFailed: 'Approval was saved, but publication could not be requested.',
         storeReviewManualPublishRequired: 'This historical review has no API publication ID and requires a manual Play Console reply.',
         currentVersion: 'current version',
+        storeInReview: 'Under launch review',
         releasedDate: 'current version published',
         releaseNotes: 'release info',
         releaseSyncStatus: 'GitHub Release check',
@@ -4506,7 +4508,7 @@ def html_document(
             const label = document.createElement('b');
             label.textContent = storeLabel(item.platform);
             const version = document.createElement('span');
-            version.textContent = `${{t('currentVersion')}}: ${{item.version || t('none')}} / ${{item.status || t('none')}}`;
+            version.textContent = `${{t('currentVersion')}}: ${{item.version || t('none')}} / ${{item.status === 'in_review' ? t('storeInReview') : (item.status || t('none'))}}`;
             const published = document.createElement('span');
             published.textContent = `${{t('releasedDate')}}: ${{formatPublishedDate(item.published_at)}}`;
             row.append(label, version, published);

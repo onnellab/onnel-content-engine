@@ -70,7 +70,60 @@ def write_existing(path: Path, version: str) -> None:
         writer.writerow(row)
 
 
+def write_in_review_apps(path: Path, urls: bool = False) -> None:
+    row = {
+        "app_id": "APP-0002", "app_name": "Papira", "slug": "papira", "status": "in_review",
+        "product_group": "apps", "primary_category": "productivity", "platforms": "ios|android",
+        "pricing_model": "freemium", "content_eligible": "false", "official_site_path": "",
+        "app_store_url": "https://apps.apple.com/app/id6759565094" if urls else "",
+        "play_store_url": "https://play.google.com/store/apps/details?id=com.onnellab.papira" if urls else "",
+        "docs_path": "", "one_line_description": "Organize notes and documents.",
+        "primary_language": "en", "notes": "",
+    }
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=APP_HEADER, lineterminator="\n")
+        writer.writeheader()
+        writer.writerow(row)
+
+
 class StoreVersionsTest(unittest.TestCase):
+    def test_in_review_rows_survive_refresh_without_store_lookups(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            apps = Path(temp) / "apps.csv"
+            output = Path(temp) / "store_versions.csv"
+            write_in_review_apps(apps, urls=True)
+            with output.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=STORE_HEADER, lineterminator="\n")
+                writer.writeheader()
+                for platform in ("ios", "android"):
+                    writer.writerow({
+                        field: {"app_id": "APP-0002", "app_slug": "papira", "app_name": "Papira",
+                                "platform": platform, "version": "0.9.0", "last_updated": "2026-07-01",
+                                "status": "updated"}.get(field, "") for field in STORE_HEADER
+                    })
+            with patch("check_store_versions.app_store_lookup", side_effect=AssertionError("iOS lookup called")) as ios_lookup, patch(
+                "check_store_versions.google_play_lookup", side_effect=AssertionError("Android lookup called")
+            ) as android_lookup:
+                rows = check_store_versions(apps, output, Path(temp) / "missing.csv", dry_run=True)
+            self.assertEqual([row["platform"] for row in rows], ["ios", "android"])
+            self.assertEqual([row["status"] for row in rows], ["in_review", "in_review"])
+            self.assertTrue(all(not row["version"] and not row["last_updated"] for row in rows))
+            self.assertTrue(all("user registry" in row["notes"] for row in rows))
+            self.assertEqual(rows[0]["store_app_id"], "6759565094")
+            self.assertEqual(rows[1]["store_package"], "com.onnellab.papira")
+            ios_lookup.assert_not_called()
+            android_lookup.assert_not_called()
+
+    def test_in_review_with_missing_url_has_safe_blank_store_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            apps = Path(temp) / "apps.csv"
+            write_in_review_apps(apps)
+            rows = check_store_versions(apps, Path(temp) / "store_versions.csv", Path(temp) / "missing.csv", dry_run=True)
+            for row in rows:
+                self.assertEqual(row["store_url"], "")
+                self.assertEqual(row["store_app_id"], "")
+                self.assertEqual(row["store_package"], "")
+
     def test_extracts_store_identifiers(self) -> None:
         self.assertEqual(app_store_id("https://apps.apple.com/app/id6759565093"), "6759565093")
         self.assertEqual(

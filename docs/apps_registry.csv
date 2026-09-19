@@ -141,6 +141,7 @@ concept
 planning
 development
 beta
+in_review
 released
 paused
 retired
@@ -152,6 +153,7 @@ Meaning:
 * `planning`: specification work is active
 * `development`: implementation is active
 * `beta`: externally or internally testable
+* `in_review`: submitted for initial store launch review; not publicly available and `content_eligible` must be `false`
 * `released`: publicly available
 * `paused`: work is temporarily suspended
 * `retired`: no longer distributed or supported

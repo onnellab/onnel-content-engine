@@ -9,13 +9,14 @@
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T01:56:59+00:00",
-      "status": "verification_pending",
-      "operational_note": "Billing Library 요구사항을 반영한 버전을 활성 트랙에 출시했습니다. Google Play Console의 경고 해제 재검사를 기다리고 있습니다.",
-      "status_updated_at": "2026-07-30T04:11:52+00:00",
+      "status": "resolved",
+      "operational_note": "사용자가 Billing Library 요구사항 해결 완료를 확인했습니다. 운영 attention을 종결합니다. 이번 갱신에서 Google Play Console을 별도로 재검증하지 않았습니다.",
+      "status_updated_at": "2026-09-19T23:38:30+00:00",
       "event_key": "google-play-billing-8-deadline-2026-08-31",
       "source_accounts": [
         "developer"
-      ]
+      ],
+      "status_source": "user_instruction"
     },
     {
       "alert_id": "f6061cafa1cdc8c7",
@@ -26,13 +27,14 @@
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:20+00:00",
-      "status": "development",
-      "operational_note": "출시 전 개발 중인 앱입니다. 출시 준비 과정에서 Billing Library 요구사항을 반영해야 합니다.",
-      "status_updated_at": "2026-07-30T04:11:52+00:00",
+      "status": "deferred",
+      "operational_note": "사용자 지시에 따라 미출시 개발 앱의 출시 전 확인 항목으로 보류합니다. Billing Library 요구사항 해결 완료를 의미하지 않으며 출시 준비 시 재확인해야 합니다.",
+      "status_updated_at": "2026-09-19T23:38:30+00:00",
       "event_key": "google-play-billing-8-deadline-2026-08-31",
       "source_accounts": [
         "developer"
-      ]
+      ],
+      "status_source": "user_instruction"
     },
     {
       "alert_id": "a2acc7751c07280c",
@@ -43,13 +45,14 @@
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:20+00:00",
-      "status": "verification_pending",
-      "operational_note": "Billing Library 요구사항을 반영한 버전을 활성 트랙에 출시했습니다. Google Play Console의 경고 해제 재검사를 기다리고 있습니다.",
-      "status_updated_at": "2026-07-30T04:11:52+00:00",
+      "status": "resolved",
+      "operational_note": "사용자가 Billing Library 요구사항 해결 완료를 확인했습니다. 운영 attention을 종결합니다. 이번 갱신에서 Google Play Console을 별도로 재검증하지 않았습니다.",
+      "status_updated_at": "2026-09-19T23:38:30+00:00",
       "event_key": "google-play-billing-8-deadline-2026-08-31",
       "source_accounts": [
         "developer"
-      ]
+      ],
+      "status_source": "user_instruction"
     },
     {
       "alert_id": "5b85a6e4d77c1be8",
@@ -60,13 +63,14 @@
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:21+00:00",
-      "status": "update_in_progress",
-      "operational_note": "대규모 패치를 개발 중이므로 Billing Library 업데이트와 활성 트랙 출시는 아직 완료되지 않았습니다.",
-      "status_updated_at": "2026-07-30T04:11:52+00:00",
+      "status": "resolved",
+      "operational_note": "사용자가 Billing Library 요구사항 해결 완료를 확인했습니다. 운영 attention을 종결합니다. 이번 갱신에서 Google Play Console을 별도로 재검증하지 않았습니다.",
+      "status_updated_at": "2026-09-19T23:38:30+00:00",
       "event_key": "google-play-billing-8-deadline-2026-08-31",
       "source_accounts": [
         "developer"
-      ]
+      ],
+      "status_source": "user_instruction"
     }
   ]
 }

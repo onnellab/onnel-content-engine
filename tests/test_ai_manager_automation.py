@@ -17,6 +17,29 @@ import publish_ai_manager_telegram
 
 
 class AiManagerAutomationTest(unittest.TestCase):
+    def test_report_excludes_dismissed_reviews_and_deferred_policy_but_keeps_active(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            data = root / "data"
+            data.mkdir(parents=True)
+            (data / "store_review_triage.json").write_text(json.dumps({"items": [
+                {"review_id": "dismissed", "category": "bug", "operational_status": "dismissed"},
+                {"review_id": "active", "category": "bug", "actions": {"code_change": "investigate"}},
+            ]}), encoding="utf-8")
+            (data / "store_policy_impact_tasks.json").write_text(json.dumps({"tasks": [
+                {"task_id": "deferred", "status": "deferred", "evidence": {"alert_id": "d"}},
+                {"task_id": "active-policy", "status": "review_required", "evidence": {"alert_id": "a"}},
+            ]}), encoding="utf-8")
+            with patch.object(generate_ai_manager_report, "ROOT", root):
+                self.assertEqual(generate_ai_manager_report.main(), 0)
+            report = json.loads((data / "ai_manager_daily_report.json").read_text())
+
+        attention = report["requires_attention"]
+        self.assertIn("active", {item.get("review_id") for item in attention})
+        self.assertNotIn("dismissed", {item.get("review_id") for item in attention})
+        self.assertIn("active-policy", {item.get("task_id") for item in attention})
+        self.assertNotIn("deferred", {item.get("task_id") for item in attention})
+
     def test_report_surfaces_coder_and_performance_qa_state(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
