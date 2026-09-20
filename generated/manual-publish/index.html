@@ -119,6 +119,11 @@
     .app-status-card summary strong { min-width: 0; }
     .app-status-card summary span { flex: 0 0 auto; text-align: right; }
     .app-status-card summary::marker { color: var(--muted); }
+    #app-status-grid { grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); }
+    #app-status-grid > .app-status-card { min-width: 0; }
+    #app-status-grid > .app-status-card > summary { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
+    #app-status-grid > .app-status-card > summary strong a { max-width: 100%; overflow-wrap: anywhere; }
+    #app-status-grid > .app-status-card > summary > span { min-width: 0; text-align: left; }
     .status-card span,
     .release-card span,
     .app-status-card span { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
