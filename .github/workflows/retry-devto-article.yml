@@ -1,0 +1,60 @@
+name: Retry One Dev.to Article
+on:
+  workflow_dispatch:
+    inputs:
+      topic_id:
+        description: Exact topic ID authorized for retry
+        required: true
+        type: string
+      language:
+        description: Draft language
+        required: true
+        default: en
+        type: string
+permissions:
+  contents: write
+concurrency:
+  group: onnellab-manual-dashboard-writer
+  cancel-in-progress: false
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Refresh main after waiting for other writers
+        run: git pull --ff-only origin main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reconcile or publish the selected article
+        id: publish
+        continue-on-error: true
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          RETRY_TOPIC_ID: ${{ inputs.topic_id }}
+          RETRY_LANGUAGE: ${{ inputs.language }}
+        run: python3 -B scripts/retry_devto_article.py --topic-id "$RETRY_TOPIC_ID" --language "$RETRY_LANGUAGE"
+      - name: Save provider result
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git diff --check
+          git add generated/syndication/manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record selected Dev.to publication retry result'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Retain provider result if repository update fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: devto-retry-result
+          path: generated/syndication/manifest.json
+      - name: Report unsuccessful publication
+        if: steps.publish.outcome == 'failure'
+        run: exit 1
