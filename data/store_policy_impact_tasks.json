@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-19T23:38:30+00:00",
+  "generated_at": "2026-09-20T00:00:56+00:00",
   "tasks": [
     {
       "task_id": "policy-google_play-quivra",
@@ -8,8 +8,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "4925986e063562e613ee85b991751463a8178284ca6e891700dd2b0f39f9afac",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "1c02f054914088cc64cae561b4a9fcbd2c7e8b06e5ef4da837e161ede69a9d7c",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -26,8 +26,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "4925986e063562e613ee85b991751463a8178284ca6e891700dd2b0f39f9afac",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "1c02f054914088cc64cae561b4a9fcbd2c7e8b06e5ef4da837e161ede69a9d7c",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -44,8 +44,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "4925986e063562e613ee85b991751463a8178284ca6e891700dd2b0f39f9afac",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "1c02f054914088cc64cae561b4a9fcbd2c7e8b06e5ef4da837e161ede69a9d7c",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -62,8 +62,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "4925986e063562e613ee85b991751463a8178284ca6e891700dd2b0f39f9afac",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "1c02f054914088cc64cae561b4a9fcbd2c7e8b06e5ef4da837e161ede69a9d7c",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -80,8 +80,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "4925986e063562e613ee85b991751463a8178284ca6e891700dd2b0f39f9afac",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "1c02f054914088cc64cae561b4a9fcbd2c7e8b06e5ef4da837e161ede69a9d7c",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -98,8 +98,26 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "4925986e063562e613ee85b991751463a8178284ca6e891700dd2b0f39f9afac",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "1c02f054914088cc64cae561b4a9fcbd2c7e8b06e5ef4da837e161ede69a9d7c",
+        "checked_at": "2026-09-20T00:00:53+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-papira",
+      "app_slug": "papira",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
+        "content_hash": "1c02f054914088cc64cae561b4a9fcbd2c7e8b06e5ef4da837e161ede69a9d7c",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -116,8 +134,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "f88850b805d3da59bb1ea70d3cbdd0fcf260a02801a224ac3feec2b0219d528a",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "ab9c34b29c32f1859494ec16ea1b4fa304c8857a819cb089c67e1eb676dae8fc",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -134,8 +152,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "f88850b805d3da59bb1ea70d3cbdd0fcf260a02801a224ac3feec2b0219d528a",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "ab9c34b29c32f1859494ec16ea1b4fa304c8857a819cb089c67e1eb676dae8fc",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -152,8 +170,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "f88850b805d3da59bb1ea70d3cbdd0fcf260a02801a224ac3feec2b0219d528a",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "ab9c34b29c32f1859494ec16ea1b4fa304c8857a819cb089c67e1eb676dae8fc",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -170,8 +188,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "f88850b805d3da59bb1ea70d3cbdd0fcf260a02801a224ac3feec2b0219d528a",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "ab9c34b29c32f1859494ec16ea1b4fa304c8857a819cb089c67e1eb676dae8fc",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -188,8 +206,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "f88850b805d3da59bb1ea70d3cbdd0fcf260a02801a224ac3feec2b0219d528a",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "ab9c34b29c32f1859494ec16ea1b4fa304c8857a819cb089c67e1eb676dae8fc",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -206,8 +224,26 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "f88850b805d3da59bb1ea70d3cbdd0fcf260a02801a224ac3feec2b0219d528a",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "ab9c34b29c32f1859494ec16ea1b4fa304c8857a819cb089c67e1eb676dae8fc",
+        "checked_at": "2026-09-20T00:00:53+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-google_play-papira",
+      "app_slug": "papira",
+      "store": "google_play",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
+        "content_hash": "ab9c34b29c32f1859494ec16ea1b4fa304c8857a819cb089c67e1eb676dae8fc",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -224,8 +260,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "0f6eaf2587f7e203fdb46bac7a3d47454afe1990e678daf58ba2792072cc773c",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "202e24a22b5d6c2581eaaf2d4be11b598f2cd205728c5ecfef70729003373368",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -242,8 +278,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "0f6eaf2587f7e203fdb46bac7a3d47454afe1990e678daf58ba2792072cc773c",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "202e24a22b5d6c2581eaaf2d4be11b598f2cd205728c5ecfef70729003373368",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -260,8 +296,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "0f6eaf2587f7e203fdb46bac7a3d47454afe1990e678daf58ba2792072cc773c",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "202e24a22b5d6c2581eaaf2d4be11b598f2cd205728c5ecfef70729003373368",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -278,8 +314,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "0f6eaf2587f7e203fdb46bac7a3d47454afe1990e678daf58ba2792072cc773c",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "202e24a22b5d6c2581eaaf2d4be11b598f2cd205728c5ecfef70729003373368",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -296,8 +332,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "0f6eaf2587f7e203fdb46bac7a3d47454afe1990e678daf58ba2792072cc773c",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "202e24a22b5d6c2581eaaf2d4be11b598f2cd205728c5ecfef70729003373368",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -314,8 +350,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "0f6eaf2587f7e203fdb46bac7a3d47454afe1990e678daf58ba2792072cc773c",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "202e24a22b5d6c2581eaaf2d4be11b598f2cd205728c5ecfef70729003373368",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",
@@ -332,8 +368,26 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "0f6eaf2587f7e203fdb46bac7a3d47454afe1990e678daf58ba2792072cc773c",
-        "checked_at": "2026-09-19T04:25:54+00:00"
+        "content_hash": "202e24a22b5d6c2581eaaf2d4be11b598f2cd205728c5ecfef70729003373368",
+        "checked_at": "2026-09-20T00:00:53+00:00"
+      },
+      "scope": [
+        "store listing",
+        "permissions and privacy disclosures",
+        "billing and subscriptions",
+        "SDK policy implications"
+      ],
+      "conclusion": "No violation inferred. Compare the changed official policy with app code and store metadata before action."
+    },
+    {
+      "task_id": "policy-app_store-papira",
+      "app_slug": "papira",
+      "store": "app_store",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/app-store/review/guidelines/",
+        "content_hash": "202e24a22b5d6c2581eaaf2d4be11b598f2cd205728c5ecfef70729003373368",
+        "checked_at": "2026-09-20T00:00:53+00:00"
       },
       "scope": [
         "store listing",

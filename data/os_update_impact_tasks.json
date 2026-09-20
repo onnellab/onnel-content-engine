@@ -1,4 +1,131 @@
 {
-  "generated_at": "2026-07-29T08:18:29+00:00",
-  "tasks": []
+  "generated_at": "2026-09-20T00:00:56+00:00",
+  "tasks": [
+    {
+      "task_id": "os-android-quivra",
+      "app_slug": "quivra",
+      "platform": "android",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.android.com/about/versions",
+        "content_hash": "f520f23eed9cc6edd360eb915cd86b65ac9ed268c535c94129ef69bd509a8307",
+        "checked_at": "2026-09-20T00:00:51+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-android-tagweaver",
+      "app_slug": "tagweaver",
+      "platform": "android",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.android.com/about/versions",
+        "content_hash": "f520f23eed9cc6edd360eb915cd86b65ac9ed268c535c94129ef69bd509a8307",
+        "checked_at": "2026-09-20T00:00:51+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-android-vaultxt",
+      "app_slug": "vaultxt",
+      "platform": "android",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.android.com/about/versions",
+        "content_hash": "f520f23eed9cc6edd360eb915cd86b65ac9ed268c535c94129ef69bd509a8307",
+        "checked_at": "2026-09-20T00:00:51+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-android-segra",
+      "app_slug": "segra",
+      "platform": "android",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.android.com/about/versions",
+        "content_hash": "f520f23eed9cc6edd360eb915cd86b65ac9ed268c535c94129ef69bd509a8307",
+        "checked_at": "2026-09-20T00:00:51+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-android-aligna",
+      "app_slug": "aligna",
+      "platform": "android",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.android.com/about/versions",
+        "content_hash": "f520f23eed9cc6edd360eb915cd86b65ac9ed268c535c94129ef69bd509a8307",
+        "checked_at": "2026-09-20T00:00:51+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-android-melivra",
+      "app_slug": "melivra",
+      "platform": "android",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.android.com/about/versions",
+        "content_hash": "f520f23eed9cc6edd360eb915cd86b65ac9ed268c535c94129ef69bd509a8307",
+        "checked_at": "2026-09-20T00:00:51+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-android-papira",
+      "app_slug": "papira",
+      "platform": "android",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.android.com/about/versions",
+        "content_hash": "f520f23eed9cc6edd360eb915cd86b65ac9ed268c535c94129ef69bd509a8307",
+        "checked_at": "2026-09-20T00:00:51+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    }
+  ]
 }

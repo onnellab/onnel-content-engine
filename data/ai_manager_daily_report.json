@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-19T23:49:16+00:00",
+  "generated_at": "2026-09-20T00:00:56+00:00",
   "summary": {
     "reviews_triaged": 8,
     "high_risk_reports": 0,
@@ -20,10 +20,10 @@
     "release_candidates_failed": 0,
     "ios_device_qa_blocked": 0,
     "os_updates_to_review": 1,
-    "os_impact_tasks": 0,
-    "store_policy_tasks": 20,
+    "os_impact_tasks": 7,
+    "store_policy_tasks": 23,
     "store_policy_mailboxes_connected": 2,
-    "store_submissions_blocked": 5,
+    "store_submissions_blocked": 4,
     "internal_test_uploads": 0,
     "internal_store_processing": 0,
     "internal_store_processed": 0,
@@ -43,6 +43,239 @@
     "android_aab_expired": 0
   },
   "requires_attention": [],
+  "refresh_status": {
+    "generated_at": "2026-09-20T00:00:56+00:00",
+    "checked_at": "2026-09-20T00:00:56+00:00",
+    "status": "complete",
+    "steps": [
+      {
+        "script": "check_store_versions.py",
+        "checked_at": "2026-09-20T00:00:28+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "sync_store_reviews.py",
+        "checked_at": "2026-09-20T00:00:30+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "collect_github_issues.py",
+        "checked_at": "2026-09-20T00:00:49+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "collect_os_updates.py",
+        "checked_at": "2026-09-20T00:00:51+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "collect_store_policy_updates.py",
+        "checked_at": "2026-09-20T00:00:53+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "collect_gmail_policy_alerts.py",
+        "checked_at": "2026-09-20T00:00:54+00:00",
+        "exit_code": 0,
+        "status": "ok",
+        "account": "developer"
+      },
+      {
+        "script": "collect_gmail_policy_alerts.py",
+        "checked_at": "2026-09-20T00:00:55+00:00",
+        "exit_code": 0,
+        "status": "ok",
+        "account": "official"
+      },
+      {
+        "script": "validate_crash_source_config.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "collect_sentry_crashes.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "collect_crashlytics_incidents.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "collect_codemagic_private_test_builds.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "not_applicable"
+      },
+      {
+        "script": "collect_internal_store_processing_status.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "triage_store_reviews.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "analyze_incidents.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "analyze_internal_test_feedback.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "generate_ai_coder_tasks.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "analyze_os_update_impact.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "analyze_store_policy_impact.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "evaluate_store_submission_readiness.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "generate_ai_manager_report.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      },
+      {
+        "script": "generate_chatgpt_monitor_snapshot.py",
+        "checked_at": "2026-09-20T00:00:56+00:00",
+        "exit_code": 0,
+        "status": "ok"
+      }
+    ],
+    "manual_ledgers": [
+      {
+        "path": "data/store_review_approvals.json",
+        "count": 1,
+        "sha256": "6b1d37e905bee3b5a7aae0bbd7f4fc0415602ee14cc0171b4263574bf928ce4a",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/store_submission_approvals.json",
+        "count": 1,
+        "sha256": "e7e70c9e85413f796cde7513d53fd28d865ccf517aa055f1e933e97c6e85e110",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/ai_doctor_findings.json",
+        "count": 1,
+        "sha256": "6c74fb4b4a8d68e2b91b25c337b2be4eae20e7ee1b779ec905374cc620a3f1bd",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/ai_coder_tasks.json",
+        "count": 1,
+        "sha256": "134b4baa4150b3fe96b02230fc4f1d0af7de22e469c29c46602742174cfe623a",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/internal_test_feedback.json",
+        "count": 1,
+        "sha256": "05d4ee492a7f94053da24dddda054a252df936207b1f3f5315c6394493a1f85d",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/internal_test_findings.json",
+        "count": 1,
+        "sha256": "97e3b6a5c327b2a56df4fb867fdd25c9d9e51604b90e8936d6dae266d1cc5b8c",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/internal_test_results.json",
+        "count": 1,
+        "sha256": "988a25109b853c44d22e607f2ae42ef32ba49fcfc356e1e047de758b7114da53",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/internal_test_readiness.json",
+        "count": 1,
+        "sha256": "71ac106b89741454c911c2b04ccebd36dcbcc09c853b5ce2ebcb07d1ac4f4150",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/internal_test_availability.json",
+        "count": 1,
+        "sha256": "7c26725c6f081bea3ac617348a0b93b0027dcf7da619b159ea599da3e4895955",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/internal_store_submissions.json",
+        "count": 1,
+        "sha256": "a05c64f6d488dd6aa417022838acfbaeff7d1f5c26fd8bd3eafdf2285977cb18",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/private_test_orchestrations.json",
+        "count": 1,
+        "sha256": "54b4729cea537b3117703b96e762244744b5169f542d3100570d5c2b9e5e5217",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/ios-device-qa-reports",
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/review_issue_publications.json",
+        "count": 1,
+        "sha256": "9e1e2439264af77ec5dc15e20009ae0b05a19ef42912d67420ee66b51ad1a12c",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/store_policy_assessments.json",
+        "count": 1,
+        "sha256": "bef9887ef05f8b41ad11dd54d6534cb0c7b2014654e87347fc5aeffab978a0f9",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/qa-reports",
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "status": "recorded_only"
+      },
+      {
+        "path": "data/release-candidate-reports",
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "status": "recorded_only"
+      }
+    ]
+  },
   "policy_alerts": [
     {
       "task_id": "policy-alert-f6061cafa1cdc8c7",
