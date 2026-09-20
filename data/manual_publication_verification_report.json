@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "checked_at": "2026-09-19T12:25:47+09:00",
+  "checked_at": "2026-09-20T12:42:33+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 78,
-    "already_done": 43,
+    "checked": 84,
+    "already_done": 49,
     "verified": 0,
     "pending": 35
   },
@@ -80,6 +80,18 @@
       "posted_url": "https://www.linkedin.com/in/onnel-lab-b5b9b0421/",
       "verification_method": "user_confirmed_manual_publish",
       "verification_confidence": "manual"
+    },
+    {
+      "manual_key": "TOPIC-0004::x::en::x",
+      "topic_id": "TOPIC-0004",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2101508947043811652",
+      "verification_method": "work_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink"
     },
     {
       "manual_key": "TOPIC-0004::bluesky::en::bluesky",
@@ -286,6 +298,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0031::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0031",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mvwbq5mlbc2z",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0001::devto::en::markdown",
       "topic_id": "TOPIC-0001",
       "platform": "devto",
@@ -332,6 +356,18 @@
       "posted_url": "https://dev.to/onnellab/txt-vs-epub-for-long-reading-meb",
       "verification_method": "",
       "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0003::hashnode::en::markdown",
+      "topic_id": "TOPIC-0003",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://onnellab.hashnode.dev/txt-vs-epub-for-long-reading",
+      "verification_method": "work_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink"
     },
     {
       "manual_key": "TOPIC-0004::devto::en::markdown",
@@ -514,6 +550,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0020::devto::en::markdown",
+      "topic_id": "TOPIC-0020",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-organize-downloads-with-a-small-durable-folder-system-2j4h",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0020::medium::en::markdown",
       "topic_id": "TOPIC-0020",
       "platform": "medium",
@@ -526,14 +574,26 @@
       "verification_confidence": "medium"
     },
     {
-      "manual_key": "TOPIC-0004::x::en::x",
-      "topic_id": "TOPIC-0004",
-      "platform": "x",
+      "manual_key": "TOPIC-0029::devto::en::markdown",
+      "topic_id": "TOPIC-0029",
+      "platform": "devto",
       "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
-      "posted_url": "",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-number-tracks-in-a-multi-disc-mp3-album-db2",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0031::devto::en::markdown",
+      "topic_id": "TOPIC-0031",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-inspect-a-large-log-file-without-altering-the-original-463c",
       "verification_method": "",
       "verification_confidence": ""
     },
@@ -652,7 +712,7 @@
       "language": "en",
       "template_id": "x",
       "status": "pending",
-      "reason": "No matching public post found",
+      "reason": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
       "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
@@ -718,11 +778,23 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0003::hashnode::en::markdown",
-      "topic_id": "TOPIC-0003",
-      "platform": "hashnode",
+      "manual_key": "TOPIC-0031::x::en::x",
+      "topic_id": "TOPIC-0031",
+      "platform": "x",
       "language": "en",
-      "template_id": "markdown",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0031::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0031",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
       "status": "pending",
       "reason": "No matching public post found",
       "posted_url": "",
@@ -886,33 +958,9 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0020::devto::en::markdown",
-      "topic_id": "TOPIC-0020",
-      "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "HTTP 429 from https://dev.to/api/articles: Retry later\n",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
       "manual_key": "TOPIC-0020::hashnode::en::markdown",
       "topic_id": "TOPIC-0020",
       "platform": "hashnode",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0029::devto::en::markdown",
-      "topic_id": "TOPIC-0029",
-      "platform": "devto",
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
@@ -936,6 +984,30 @@
     {
       "manual_key": "TOPIC-0029::medium::en::markdown",
       "topic_id": "TOPIC-0029",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0031::hashnode::en::markdown",
+      "topic_id": "TOPIC-0031",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0031::medium::en::markdown",
+      "topic_id": "TOPIC-0031",
       "platform": "medium",
       "language": "en",
       "template_id": "markdown",
