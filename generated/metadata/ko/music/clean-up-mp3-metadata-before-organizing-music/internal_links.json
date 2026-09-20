@@ -35,15 +35,15 @@
         "slug": "number-tracks-multi-disc-mp3-album",
         "category": "music",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/music/number-tracks-multi-disc-mp3-album.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/ko/number-tracks-multi-disc-mp3-album/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "music",
           "tagweaver"
         ],
-        "score": 16
+        "score": 17
       },
       {
         "topic_id": "TOPIC-0005",

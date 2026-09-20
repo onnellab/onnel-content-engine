@@ -186,5 +186,19 @@
     <description>트랙 위치와 디스크 위치를 분리하고 원본을 보존한 뒤 소량의 복사본으로 검증하며 다중 디스크 MP3 트랙 번호를 안전하게 정리하는 방법입니다.</description>
     <pubDate>Fri, 04 Sep 2026 00:00:00 GMT</pubDate>
   </item>
+  <item>
+    <title>How to Inspect a Large Log File Without Altering the Original</title>
+    <link>https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/</link>
+    <guid>https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/</guid>
+    <description>Learn how to inspect a large log file safely by preserving the original, reviewing a working copy, narrowing the time range, and recording observations.</description>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>원본을 바꾸지 않고 대용량 로그 파일을 검토하는 방법</title>
+    <link>https://onnellab.github.io/blog/ko/inspect-large-log-file-without-altering-original/</link>
+    <guid>https://onnellab.github.io/blog/ko/inspect-large-log-file-without-altering-original/</guid>
+    <description>원본을 따로 보존하고 작업 복사본에서 시간 범위와 문맥을 좁히며 관찰 내용을 기록해 대용량 로그 파일을 안전하게 검토하는 방법입니다.</description>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+  </item>
 </channel>
 </rss>

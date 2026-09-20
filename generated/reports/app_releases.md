@@ -1,11 +1,12 @@
 # App Release Status
 
-Generated: 2026-09-20T05:42:24+09:00
+Generated: 2026-09-20T12:41:33+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
+| Store | in_review | 2 |
 | Store | not_released | 2 |
 | Store | unchanged | 11 |
 | GitHub Release | archived | 1 |
@@ -20,6 +21,8 @@ Generated: 2026-09-20T05:42:24+09:00
 | ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
 | Melivra | android | com.onnellab.melivra | 1.0.0 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
 | Melivra | ios | 6783644955 | 1.0.0 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
+| Papira | android | com.onnellab.papira | - | unknown | in_review | - | onnellab/papira | Review status |
+| Papira | ios | - | - | unknown | in_review | - | onnellab/papira | Review status |
 | Quivra | android | 1.0.7 | 1.0.7 | same | unchanged | - | onnellab/quivra | No action |
 | Quivra | ios | 1.0.7 | 1.0.7 | same | unchanged | planned | onnellab/quivra | Add release artifact and checksum |
 | Segra | android | 1.0.5 | 1.0.5 | same | unchanged | planned | onnellab/segra | Add release artifact and checksum |

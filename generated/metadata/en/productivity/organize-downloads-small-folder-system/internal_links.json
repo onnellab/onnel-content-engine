@@ -63,9 +63,9 @@
         "slug": "turn-rough-notes-into-structured-first-draft",
         "category": "productivity",
         "language": "en",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/en/productivity/turn-rough-notes-into-structured-first-draft.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"
