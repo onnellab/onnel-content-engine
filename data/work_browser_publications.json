@@ -14,7 +14,8 @@
       "platform": "x",
       "posted_url": "https://x.com/onnellab/status/2101508947043811652",
       "published_at": "2026-09-20T03:10:00.033Z",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-09-20T03:10:18+00:00"
     }
   ]
 }
