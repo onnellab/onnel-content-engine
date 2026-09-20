@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import tempfile
 import unittest
 from pathlib import Path
@@ -14,7 +15,11 @@ from validate_app_pricing import AppPricingValidationError, validate_app_pricing
 
 class AppPricingValidationTest(unittest.TestCase):
     def test_validates_current_registry(self) -> None:
-        self.assertEqual(validate_app_pricing(ROOT / "data" / "app_pricing.csv"), 10)
+        self.assertEqual(validate_app_pricing(ROOT / "data" / "app_pricing.csv"), 11)
+        with (ROOT / "data" / "app_pricing.csv").open(encoding="utf-8", newline="") as handle:
+            papira = [row for row in csv.DictReader(handle) if row["app_slug"] == "papira"]
+        self.assertEqual(len(papira), 1)
+        self.assertEqual((papira[0]["product_type"], papira[0]["price"], papira[0]["currency"]), ("paid_download", "2.99", "USD"))
 
     def test_rejects_duplicate_product_rows(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
