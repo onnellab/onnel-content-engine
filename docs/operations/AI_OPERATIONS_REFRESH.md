@@ -22,7 +22,9 @@ interpreted as fresh provider evidence when collection was unavailable.
 OS and policy watchlists compare complete page hashes. A changed page requests
 review; it does not establish an API change, a violation, or app compatibility.
 Submission readiness describes this repository's automation/configuration and
-approvals, not the provider's live review verdict.
+approvals, not the provider's live review verdict. A same-or-newer confirmed public
+store version is recorded as `already_available`, with the public snapshot
+retained, rather than counting the historical candidate as a blocked submission.
 
 After the workflow completes, rebuild and validate the dashboard with
 `scripts/build_manual_publish_site.py --homepage-repo <homepage checkout>` and
