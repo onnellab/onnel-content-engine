@@ -16,7 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 APP_ID = 'com.onnellab.content-engine.youtube-connect'
 APP_NAME = 'ONNELLAB YouTube Connect.app'
 SCHEME = 'onnellab-content'
-URLS = (SCHEME+'://youtube/connect', SCHEME+'://youtube/status')
+YOUTUBE_URLS = (SCHEME+'://youtube/connect', SCHEME+'://youtube/status')
+SUNO_URLS = (SCHEME+'://suno/connect', SCHEME+'://suno/status')
+URLS = YOUTUBE_URLS + SUNO_URLS
 LSREGISTER = '/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister'
 
 
@@ -26,12 +28,18 @@ def launch_command(python, script):
 
 
 def applescript_source(python, script):
-    command=launch_command(python,script).replace('\\','\\\\').replace('"','\\"')
-    return ('on launchConsole()\n  do shell script "'+command+'"\nend launchConsole\n'
-            'on run\n  my launchConsole()\nend run\n'
+    youtube_command=launch_command(python,script).replace('\\','\\\\').replace('"','\\"')
+    suno_script=Path(script).with_name('suno_api_connect.py')
+    suno_command=launch_command(python,suno_script).replace('\\','\\\\').replace('"','\\"')
+    return ('on launchYouTube()\n  do shell script "'+youtube_command+'"\nend launchYouTube\n'
+            'on launchSuno()\n  do shell script "'+suno_command+'"\nend launchSuno\n'
+            'on run\n  my launchYouTube()\nend run\n'
             'on open location targetURL\n'
-            '  if targetURL is "'+URLS[0]+'" or targetURL is "'+URLS[1]+'" then\n'
-            '    my launchConsole()\n  end if\nend open location\n')
+            '  if targetURL is "'+YOUTUBE_URLS[0]+'" or targetURL is "'+YOUTUBE_URLS[1]+'" then\n'
+            '    my launchYouTube()\n'
+            '  else if targetURL is "'+SUNO_URLS[0]+'" or targetURL is "'+SUNO_URLS[1]+'" then\n'
+            '    my launchSuno()\n'
+            '  end if\nend open location\n')
 
 
 def install(*, applications=None, dry_run=False):
@@ -40,7 +48,8 @@ def install(*, applications=None, dry_run=False):
     target=applications/APP_NAME
     python=Path(sys.executable).resolve()
     script=ROOT/'scripts/short_video_connect.py'
-    if not script.is_file() or not python.is_file(): raise RuntimeError('launcher_source_missing')
+    suno_script=ROOT/'scripts/suno_api_connect.py'
+    if not script.is_file() or not suno_script.is_file() or not python.is_file(): raise RuntimeError('launcher_source_missing')
     if target.exists():
         try:
             if target.is_symlink(): raise ValueError()
@@ -60,9 +69,9 @@ def install(*, applications=None, dry_run=False):
         if compiled.returncode: raise RuntimeError('launcher_compile_failed')
         info=build/'Contents/Info.plist'
         with info.open('rb') as stream: config=plistlib.load(stream)
-        config.update(CFBundleIdentifier=APP_ID, CFBundleName='ONNELLAB YouTube Connect',
-            CFBundleDisplayName='ONNELLAB YouTube Connect',CFBundleShortVersionString='1.0',
-            CFBundleVersion='1',LSUIElement=True,
+        config.update(CFBundleIdentifier=APP_ID, CFBundleName='ONNELLAB Provider Connect',
+            CFBundleDisplayName='ONNELLAB Provider Connect',CFBundleShortVersionString='1.1',
+            CFBundleVersion='2',LSUIElement=True,
             CFBundleURLTypes=[{'CFBundleURLName':APP_ID,'CFBundleURLSchemes':[SCHEME]}])
         with info.open('wb') as stream: plistlib.dump(config,stream)
         signed=subprocess.run(['/usr/bin/codesign','--force','--sign','-',str(build)],
