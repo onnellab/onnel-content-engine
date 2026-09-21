@@ -76,8 +76,11 @@ jobs:
           python3 scripts/triage_store_reviews.py
           python3 scripts/generate_ai_review_drafts.py
 
-      - name: Build dashboard
-        run: python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+      - name: Verify provider setup and build dashboard
+        run: |
+          python3 -m unittest discover -s tests -p 'test_short_video_connect.py'
+          python3 -m unittest discover -s tests -p 'test_suno_api_connect.py'
+          python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
 
       - name: Commit review snapshot
         run: |
