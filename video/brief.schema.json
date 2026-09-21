@@ -87,12 +87,12 @@
     "hook": {
       "type": "string",
       "minLength": 1,
-      "maxLength": 72
+      "maxLength": 44
     },
     "cta": {
       "type": "string",
       "minLength": 1,
-      "maxLength": 72
+      "maxLength": 44
     },
     "title": {
       "type": "string",
@@ -128,11 +128,11 @@
           "text": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 89
+            "maxLength": 44
           }
         }
       }
     }
   },
-  "$comment": "scripts/short_video_pipeline.py is the authoritative semantic validator. JSON max 64 KiB, duplicate keys/nonfinite numbers rejected. Captions: 1-2 lines, max 44 width units per line (ASCII=1, non-ASCII=2); ordered nonoverlap, >=1 second, end <= duration. Runtime validates registry, timezone and asset confinement."
+  "$comment": "scripts/short_video_pipeline.py is the authoritative semantic validator. JSON max 64 KiB, duplicate keys/nonfinite numbers rejected. Captions: max 44 characters total, 1-2 lines, max 44 width units per line (ASCII=1, non-ASCII=2); ordered nonoverlap, >=1 second, end <= duration. Runtime validates registry, timezone and asset confinement."
 }

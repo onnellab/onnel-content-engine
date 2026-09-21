@@ -61,3 +61,16 @@ test('all installed Remotion packages have identical pinned version', async () =
   assert.ok(packages.length >= 3);
   for (const [key, pkg] of packages) assert.equal(pkg.version, '4.0.526', key);
 });
+
+test('large bilingual captions fit two lines without truncation', async () => {
+  const {layoutText} = await import('../src/text-layout.mjs');
+  const measure = (text, size) => [...text].length * size;
+  for (const text of ['W'.repeat(44), '가'.repeat(22) + '\n' + '나'.repeat(21)]) {
+    const layout = layoutText(text, 880, 58, measure);
+    assert.ok(layout.size >= 40);
+    assert.ok(layout.text.split('\n').length <= 2);
+    assert.ok(layout.text.split('\n').every(line => measure(line, layout.size) <= 880));
+    assert.equal(layout.text.replace(/\s/g, ''), text.replace(/\s/g, ''));
+  }
+  assert.throws(() => layoutText('W'.repeat(100), 880, 58, measure));
+});

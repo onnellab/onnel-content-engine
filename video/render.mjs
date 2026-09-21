@@ -16,7 +16,7 @@ export function validateProps(value) {
       || typeof p.test_only !== 'boolean' || !Array.isArray(p.captions) || p.captions.length < 1 || p.captions.length > 12) {
     throw new Error('Invalid rendering props');
   }
-  const text = (/** @type {unknown} */ v) => typeof v === 'string' && v.trim().length > 0 && v.length <= 88
+  const text = (/** @type {unknown} */ v) => typeof v === 'string' && v.trim().length > 0 && [...v].length <= 44
     && v.split('\n').length <= 2 && v.split('\n').every(line => line.trim() && [...line].reduce((n, c) => n + ((c.codePointAt(0) ?? 0) > 127 ? 2 : 1), 0) <= 44);
   if (!text(p.hook) || !text(p.cta)) throw new Error('Invalid caption text');
   let end = 0;

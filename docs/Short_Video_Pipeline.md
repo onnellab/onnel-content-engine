@@ -63,8 +63,9 @@ components, CSS, browser URLs or scripts are accepted.
   The optional CTA appears in the final three seconds.
 - `captions` contains 1–12 `{start, end, text}` records, in seconds. They must be
   ordered, nonoverlapping, at least one second long and fit within duration.
-  Gaps are allowed. Keep hook, caption and CTA to 1–2 short lines; each line is
-  limited to 44 width units (ASCII=1, other characters=2). Use `\n` deliberately.
+  Gaps are allowed. Keep hook, caption and CTA to 1–2 short lines and 44 characters total; each line is
+  limited to 44 width units (ASCII=1, other characters=2). Use `\n` deliberately. The renderer measures text, reflows to at most two
+  lines and fits it at 40px or larger; it fails rather than cropping oversized copy.
 - `due_at` is a seconds-precision ISO timestamp with Z or an explicit offset;
   `timezone` is an installed IANA name such as `UTC` or `Asia/Seoul`. The offset
   must agree at that instant, including DST. Future jobs queue normally, but
@@ -208,3 +209,26 @@ on each target host before producing educational production content.
 
 Remotion references: [server-side rendering](https://www.remotion.dev/docs/ssr)
 and [renderMedia](https://www.remotion.dev/docs/renderer/render-media).
+
+### Phase-1 verification recorded 2026-09-21
+
+On macOS with Node 26.7.0 / Python 3.14.7, typecheck, 5 Node tests,
+and 22 Python tests under the repository offline runner passed. `git diff --check`
+passed. npm peer resolution and the committed lockfile agree on Remotion 4.0.526.
+The placeholder example correctly failed validation; empty-queue dry-run created
+no state directory. No article publisher or generated dashboard was invoked.
+
+Final headless smoke tests used explicitly test-only color bars (not app screens)
+and, for the second template, a local test tone. Both passed the Python queue's
+real ffprobe gate and cached-repeat check without a second renderer invocation:
+
+| Template / locale | Encoded duration | Geometry / fps | MP4 size | Render wall time |
+| --- | --- | --- | --- | --- |
+| quick_demo / ko | 15.000 s | 1080×1920 / 30 | 7,286,702 bytes | 34.52 s |
+| problem_solution / en, AAC audio | 30.058667 s | 1080×1920 / 30 | 15,364,443 bytes | 64.91 s |
+
+MP4s, previews, queue state and machine-readable results remain ignored under
+`.runtime/video-smoke/`; they are not committed. This is local macOS fixture
+proof, not Linux execution, actual-product footage approval, upload validation,
+or release/publication proof. System-font availability may change typography
+between hosts; review both previews on the intended production worker.

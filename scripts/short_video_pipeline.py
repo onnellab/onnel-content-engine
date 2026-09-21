@@ -197,7 +197,7 @@ def brief_shape(brief):
 
 def caption_text(text):
     # Conservative Korean-width bound, explicit max two lines; CSS uses the same layout.
-    if not isinstance(text, str) or not text.strip() or len(text.split('\n')) > 2:
+    if not isinstance(text, str) or not text.strip() or len(text) > 44 or len(text.split('\n')) > 2:
         raise VideoError('Caption must contain 1-2 lines')
     for line in text.split('\n'):
         units = sum(2 if ord(c) > 127 else 1 for c in line)
