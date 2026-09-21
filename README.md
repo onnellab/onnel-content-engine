@@ -700,6 +700,8 @@ must not alter tracked reviews, publishing approvals, or generated dashboards.
 
 The approved short-video extension may adapt existing problem-first topics into
 local educational app demos. It does not authorize advertisements or change
-article publishing. Phase 1 validates caller-authored briefs and renders private
-MP4 drafts; upload remains a separate phase. See
+article publishing. The pipeline validates caller-authored briefs, renders local
+MP4 drafts, and supports separately authorized resumable YouTube uploads and
+verified publication status. Runtime does not invoke Codex. OAuth, approved footage
+and scheduling activation remain operator setup; no upload is enabled by installing it. See
 [Short Video Pipeline](docs/Short_Video_Pipeline.md).

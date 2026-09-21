@@ -1,0 +1,13 @@
+# Opt-in template only. Replace placeholders; do not install before readiness/setup.
+[Unit]
+Description=One-shot private short-video worker
+Wants=network-online.target
+After=network-online.target
+[Service]
+Type=oneshot
+EnvironmentFile=%h/.config/short-video/worker.env
+ExecStart=/bin/sh /ABSOLUTE/REPO/video/runners/run-once.sh
+UMask=0077
+TimeoutStartSec=30min
+TimeoutStopSec=20
+KillMode=control-group

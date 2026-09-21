@@ -1,4 +1,4 @@
-"""Private, local-only short-video queue. No publishing or AI runtime dependency."""
+"""Private local short-video queue and renderer; provider adapter is separate."""
 from __future__ import annotations
 
 from contextlib import contextmanager
@@ -24,10 +24,16 @@ MAX_BRIEF = 65536
 MAX_ASSET = 256 * 1024 * 1024
 MAX_STATE = 16 * 1024 * 1024
 STATES = {'queued', 'rendering', 'rendered', 'uploading', 'uploaded_private',
-          'scheduled', 'published', 'blocked', 'failed'}
-# Phase 2 must provide provider-confirmed evidence and a separate uploader.
-UPLOAD_TRANSITIONS = {'rendered': {'uploading'}, 'uploading': {'uploaded_private', 'failed'},
-                      'uploaded_private': {'scheduled', 'published'}, 'scheduled': {'published'}}
+          'scheduled', 'published', 'blocked', 'failed', 'accepted', 'processing',
+          'uploaded_unlisted', 'forced_private', 'reconcile_required', 'rejected'}
+# Provider states are observations; retries never return to a new insert.
+UPLOAD_TRANSITIONS = {
+    'rendered': {'uploading'},
+    'uploading': {'accepted', 'reconcile_required'},
+    'accepted': {'processing', 'uploaded_private', 'uploaded_unlisted', 'scheduled',
+                 'published', 'forced_private', 'rejected', 'reconcile_required'},
+}
+
 
 
 class VideoError(ValueError):
@@ -206,7 +212,7 @@ def caption_text(text):
 
 
 class Queue:
-    def __init__(self, root, asset_root, *, clock=None, browser=None):
+    def __init__(self, root, asset_root, *, clock=None, browser=None, registry_root=None):
         original = Path(root).absolute()
         self.root = original.resolve()
         # Only .runtime inside this repo; other private locations may be used by tests/operators.
@@ -218,6 +224,7 @@ class Queue:
         self.state_path = self.root / 'queue.json'
         self.clock = clock or (lambda: datetime.now(timezone.utc))
         self.browser = browser
+        self.registry = Path(registry_root) if registry_root else ROOT / "data"
 
     def asset(self, name, kind):
         if not isinstance(name, str) or len(name) > 240 or '\\' in name or ':' in name:
@@ -236,9 +243,9 @@ class Queue:
     def validate(self, brief):
         try:
             brief_shape(brief)
-            with (ROOT / 'data/apps_registry.csv').open(newline='', encoding='utf-8') as stream:
+            with (self.registry / 'apps_registry.csv').open(newline='', encoding='utf-8') as stream:
                 apps = {row['app_id']: row for row in csv.DictReader(stream)}
-            with (ROOT / 'data/topics.csv').open(newline='', encoding='utf-8') as stream:
+            with (self.registry / 'topics.csv').open(newline='', encoding='utf-8') as stream:
                 topics = {row['id']: row for row in csv.DictReader(stream)}
             app, topic = apps.get(brief['app_id']), topics.get(brief['topic_id'])
             if not app or app['content_eligible'] != 'true' or not topic:
@@ -318,7 +325,15 @@ class Queue:
                         raise VideoError('Rendered state lacks a valid result')
                     if set(result.get('sha256', {})) != {'video.mp4', 'preview.png'} or any(not re.fullmatch(r'[0-9a-f]{64}', h) for h in result['sha256'].values()):
                         raise VideoError('Invalid output manifest')
-                if job['brief']['test_only'] and job['status'] in {'uploading', 'uploaded_private', 'scheduled', 'published'}:
+                if 'upload' in job:
+                    upload = job['upload']
+                    if (not isinstance(upload, dict) or upload.get('phase') not in {'initiating', 'session_ready', 'sending', 'accepted'}
+                            or not re.fullmatch(r'UC[A-Za-z0-9_-]{22}', upload.get('channel_id', ''))
+                            or type(upload.get('size')) is not int or not 0 < upload['size'] <= MAX_ASSET
+                            or not re.fullmatch(r'[0-9a-f]{64}', upload.get('sha256', ''))
+                            or ('video_id' in upload and not re.fullmatch(r'[A-Za-z0-9_-]{11}', upload['video_id']))):
+                        raise VideoError('Invalid upload evidence; manual recovery required')
+                if job['brief']['test_only'] and job['status'] in {'uploading', 'accepted', 'processing', 'uploaded_private', 'uploaded_unlisted', 'forced_private', 'scheduled', 'published', 'rejected'}:
                     raise VideoError('Test fixture cannot enter upload states')
             return state
         except (TypeError, KeyError, ValueError) as exc:
@@ -389,8 +404,8 @@ class Queue:
             seconds = float(info.get('format', {}).get('duration', 0))
             streams = info.get('streams', [])
             media = [s for s in streams if s.get('codec_type') == ('video' if kind == 'recording' else 'audio')]
-            if not media or not math.isfinite(seconds) or seconds < duration or seconds > 120:
-                raise VideoError('Asset must contain expected stream and cover duration (max 120s)')
+            if not media or not math.isfinite(seconds) or seconds <= 0 or seconds > 120 or (kind == 'recording' and seconds < duration) or (kind == 'narration' and seconds > duration):
+                raise VideoError('Asset stream/duration invalid: recording must cover video; narration must not exceed it')
             if kind == 'recording' and (media[0].get('width', 0) < 240 or media[0].get('height', 0) < 240 or max(media[0]['width'], media[0]['height']) > 4096):
                 raise VideoError('Recording geometry outside 240..4096 pixels')
 
@@ -424,6 +439,8 @@ class Queue:
         (target / 'request.json').unlink()
 
     def _render(self, state, job, renderer):
+        if 'upload' in job or (self.root / 'jobs' / job['id'] / 'youtube-session.json').exists() or (self.root / 'jobs' / job['id'] / 'youtube-session.json').is_symlink():
+            raise VideoError('Upload evidence exists; reconcile first, never re-render')
         if due_time(job['brief']) > self.clock():
             raise VideoError('Job is not due yet')
         folder = self.root / 'jobs' / job['id']
@@ -477,8 +494,8 @@ class Queue:
 
     def _render_key(self, job):
         files = [ROOT / 'video/package-lock.json', ROOT / 'video/render.mjs', ROOT / 'video/tsconfig.json', Path(__file__)]
-        files += sorted((ROOT / 'video/src').glob('*'))
-        return digest({'payload': job['payload_hash'], 'renderer': {p.name: file_hash(p) for p in files if p.is_file()}})
+        files += sorted((ROOT / 'video/src').rglob('*'))
+        return digest({'payload': job['payload_hash'], 'renderer': {str(p.relative_to(ROOT)): file_hash(p) for p in files if p.is_file()}})
 
     def render(self, job_id, *, renderer=None):
         with self.lock():

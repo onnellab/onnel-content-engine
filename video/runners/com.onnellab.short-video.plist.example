@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>Label</key><string>com.onnellab.short-video</string>
+<key>ProgramArguments</key><array><string>/bin/sh</string><string>/ABSOLUTE/REPO/video/runners/run-once.sh</string></array>
+<key>EnvironmentVariables</key><dict>
+<key>VIDEO_REPO</key><string>/ABSOLUTE/REPO</string>
+<key>VIDEO_ASSETS</key><string>/PRIVATE/assets</string>
+<key>VIDEO_STATE</key><string>/PRIVATE/state</string>
+<key>VIDEO_BROWSER</key><string>/ABSOLUTE/chrome</string>
+<key>VIDEO_PYTHON</key><string>/ABSOLUTE/python3</string>
+</dict>
+<key>RunAtLoad</key><false/>
+<key>KeepAlive</key><false/>
+<key>ExitTimeOut</key><integer>20</integer>
+<key>Umask</key><integer>63</integer>
+</dict></plist>

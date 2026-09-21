@@ -292,8 +292,9 @@ Implementation follows documentation. Documentation does not follow implementati
 ## Approved educational demo-short scope exception
 
 The user-approved short-video pipeline may create problem-first educational
-app demo shorts from existing topic/app IDs. Phase 1 is limited to validated
-caller-authored JSON, a private local queue, and bounded local Remotion rendering.
-It must not change article publishing or generated dashboards. Upload requires
-its separate implementation and authorization. See `docs/Short_Video_Pipeline.md`;
+app demo shorts from existing topic/app IDs. It includes validated caller-authored
+JSON, a private local queue, bounded Remotion rendering, and the separately
+authorized YouTube resumable adapter. Runtime must not invoke Codex, activate
+timers, or publish without hash-bound approval. Preserve article publishing and
+generated dashboards. See `docs/Short_Video_Pipeline.md`;
 this extension does not rename or reorder the historical article phases.

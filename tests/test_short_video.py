@@ -22,7 +22,11 @@ class ShortVideoTests(unittest.TestCase):
         self.assets.mkdir()
         (self.assets / 'recording.mp4').write_bytes(b'local recording fixture')
         self.now = datetime(2026, 9, 21, tzinfo=timezone.utc)
-        self.q = Queue(self.root / 'state', self.assets, clock=lambda: self.now)
+        registry = self.root / 'registry'
+        registry.mkdir()
+        (registry / 'apps_registry.csv').write_text('app_id,app_name,content_eligible\nAPP-0003,Fixture,true\n')
+        (registry / 'topics.csv').write_text('id,status,related_apps\nTOPIC-0001,active,Fixture\n')
+        self.q = Queue(self.root / 'state', self.assets, clock=lambda: self.now, registry_root=registry)
         self.brief = dict(schema_version=1, app_id='APP-0003', topic_id='TOPIC-0001',
             locale='en', template='quick_demo', duration_seconds=15,
             due_at='2026-09-21T00:00:00+00:00', timezone='UTC',
