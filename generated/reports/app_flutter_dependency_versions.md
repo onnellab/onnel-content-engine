@@ -127,8 +127,8 @@ Generated from app repository mappings; GitHub default branches are used when ma
 | dependency | go_router | ^14.1.4 | 14.8.1 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | in_app_purchase | ^3.3.0 | 3.3.0 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | in_app_purchase_android | 0.5.0 | 0.5.0 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
-| dependency | intl | 0.20.2 | 0.20.2 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
-| dependency | onnel_text_engine | path:../packages/onnel_text_engine | 0.1.293 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
+| dependency | intl | 0.20.3 | 0.20.3 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
+| dependency | onnel_text_engine | path:../packages/onnel_text_engine | 0.1.294 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | path_provider | ^2.1.5 | 2.1.5 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | shared_preferences | ^2.2.3 | 2.5.4 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | url_launcher | ^6.3.2 | 6.3.2 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |

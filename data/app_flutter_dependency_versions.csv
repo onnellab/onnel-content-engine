@@ -90,8 +90,8 @@ APP-0003,vaultxt,dependency,flutter_riverpod,^2.5.1,2.6.1,,ok,github:onnellab/on
 APP-0003,vaultxt,dependency,go_router,^14.1.4,14.8.1,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,in_app_purchase,^3.3.0,3.3.0,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,in_app_purchase_android,0.5.0,0.5.0,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
-APP-0003,vaultxt,dependency,intl,0.20.2,0.20.2,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
-APP-0003,vaultxt,dependency,onnel_text_engine,path:../packages/onnel_text_engine,0.1.293,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
+APP-0003,vaultxt,dependency,intl,0.20.3,0.20.3,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
+APP-0003,vaultxt,dependency,onnel_text_engine,path:../packages/onnel_text_engine,0.1.294,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,path_provider,^2.1.5,2.1.5,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,shared_preferences,^2.2.3,2.5.4,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,url_launcher,^6.3.2,6.3.2,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
