@@ -55,7 +55,7 @@ def main():
         with graceful_signals():
             if args.command in {'validate', 'enqueue'}:
                 brief = load_json(args.brief)
-                result = queue.enqueue(brief) if args.command == 'enqueue' and not args.dry_run else {'valid': True, 'assets': queue.validate(brief)}
+                result = queue.enqueue(brief) if args.command == 'enqueue' and not args.dry_run else {'valid': True, **queue.validate(brief)}
             elif args.command == 'worker':
                 result = worker(queue, upload=args.upload, execute=execute, dry_run=args.dry_run, inbox=args.inbox)
             elif args.command == 'render':

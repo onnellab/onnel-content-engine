@@ -17,12 +17,14 @@ import subprocess
 import tempfile
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from validate_topics import LANGUAGES
-
 ROOT = Path(__file__).resolve().parents[1]
 MAX_BRIEF = 65536
 MAX_ASSET = 256 * 1024 * 1024
 MAX_STATE = 16 * 1024 * 1024
+QUEUE_SCHEMA = 2
+VIDEO_LOCALE = 'en'
+MAX_COPY_CHARS = 80
+ALLOWED_VIDEO_PLATFORMS = ('ios', 'android')
 STATES = {'queued', 'rendering', 'rendered', 'uploading', 'uploaded_private',
           'scheduled', 'published', 'blocked', 'failed', 'accepted', 'processing',
           'uploaded_unlisted', 'forced_private', 'reconcile_required', 'rejected'}
@@ -170,12 +172,12 @@ def brief_shape(brief):
         raise VideoError('Brief too large')
     if type(brief['schema_version']) is not int or brief['schema_version'] != 1:
         raise VideoError('Unsupported brief schema')
-    if brief['locale'] not in LANGUAGES or brief['template'] not in {'quick_demo', 'problem_solution'}:
-        raise VideoError('Unsupported locale or template')
+    if brief['locale'] != VIDEO_LOCALE or brief['template'] not in {'quick_demo', 'problem_solution'}:
+        raise VideoError('Short videos are English-only; unsupported locale or template')
     duration = brief['duration_seconds']
     if type(duration) is not int or not 15 <= duration <= 30 or type(brief['test_only']) is not bool:
         raise VideoError('Invalid duration or test_only flag')
-    for field, maximum in [('hook', 72), ('cta', 72), ('title', 120), ('description', 2000),
+    for field, maximum in [('hook', MAX_COPY_CHARS), ('cta', MAX_COPY_CHARS), ('title', 120), ('description', 2000),
                            ('idempotency_key', 128), ('app_id', 30), ('topic_id', 30), ('timezone', 80)]:
         text = brief[field]
         if not isinstance(text, str) or not text.strip() or len(text) > maximum or any(ord(c) < 32 and c != '\n' for c in text):
@@ -202,13 +204,42 @@ def brief_shape(brief):
 
 
 def caption_text(text):
-    # Conservative Korean-width bound, explicit max two lines; CSS uses the same layout.
-    if not isinstance(text, str) or not text.strip() or len(text) > 44 or len(text.split('\n')) > 2:
-        raise VideoError('Caption must contain 1-2 lines')
+    # Objective safety bounds only. The renderer measures actual typography and wraps to <=2 lines.
+    if not isinstance(text, str) or not text.strip() or len(text) > MAX_COPY_CHARS or len(text.split('\n')) > 2:
+        raise VideoError('Video copy must be 1-2 short lines and at most 80 characters')
     for line in text.split('\n'):
         units = sum(2 if ord(c) > 127 else 1 for c in line)
-        if units > 44 or not line.strip() or any(ord(c) < 32 for c in line):
-            raise VideoError('Caption line too long; use up to two short lines')
+        if units > MAX_COPY_CHARS or not line.strip() or any(ord(c) < 32 for c in line):
+            raise VideoError('Video copy line is unreadably long or contains control characters')
+
+
+def product_snapshot(app):
+    try:
+        if app['status'] != 'released' or app['content_eligible'] != 'true':
+            raise VideoError('Only released, content-eligible apps may be promoted')
+        name = app['app_name'].strip()
+        if not name or len(name) > 24 or any(ord(c) < 32 for c in name):
+            raise VideoError('Invalid app display name in registry')
+        raw_platforms = [item for item in app['platforms'].split('|') if item]
+        platforms = [item for item in ALLOWED_VIDEO_PLATFORMS if item in raw_platforms]
+        if not platforms or set(raw_platforms) != set(platforms):
+            raise VideoError('Unsupported app platform set in registry')
+        return {'app_name': name, 'platforms': platforms}
+    except KeyError as exc:
+        raise VideoError('Incomplete app registry row') from exc
+
+
+def validate_product_snapshot(product):
+    if not isinstance(product, dict) or set(product) != {'app_name', 'platforms'}:
+        raise VideoError('Invalid immutable product snapshot')
+    name = product.get('app_name')
+    platforms = product.get('platforms')
+    if (not isinstance(name, str) or not name.strip() or len(name) > 24
+            or any(ord(c) < 32 for c in name)
+            or not isinstance(platforms, list) or not platforms
+            or platforms != [item for item in ALLOWED_VIDEO_PLATFORMS if item in platforms]
+            or len(set(platforms)) != len(platforms)):
+        raise VideoError('Invalid immutable product snapshot')
 
 
 class Queue:
@@ -248,8 +279,9 @@ class Queue:
             with (self.registry / 'topics.csv').open(newline='', encoding='utf-8') as stream:
                 topics = {row['id']: row for row in csv.DictReader(stream)}
             app, topic = apps.get(brief['app_id']), topics.get(brief['topic_id'])
-            if not app or app['content_eligible'] != 'true' or not topic:
-                raise VideoError('Unknown/ineligible app or source topic')
+            if not app or not topic:
+                raise VideoError('Unknown app or source topic')
+            product = product_snapshot(app)
             if topic['status'] == 'archived' or app['app_name'] not in topic['related_apps'].split('|'):
                 raise VideoError('Source topic must be active and reference this app')
             assets = {}
@@ -257,7 +289,7 @@ class Queue:
                 if kind in brief:
                     path = self.asset(brief[kind], kind)
                     assets[kind] = {'sha256': file_hash(path), 'file': kind + path.suffix.lower()}
-            return assets
+            return {'assets': assets, 'product': product}
         except (TypeError, KeyError, OSError, ValueError) as exc:
             if isinstance(exc, VideoError):
                 raise
@@ -293,25 +325,27 @@ class Queue:
             # Assets without a state file can indicate interrupted creation or lost state.
             if (self.root / 'jobs').exists() and any((self.root / 'jobs').iterdir()):
                 raise VideoError('Missing queue state with existing jobs; manual recovery required')
-            return {'schema_version': 1, 'jobs': {}}
+            return {'schema_version': QUEUE_SCHEMA, 'jobs': {}}
         try:
             if self.state_path.is_symlink():
                 raise VideoError('Symlink state rejected')
             state = load_json(self.state_path, MAX_STATE)
-            if set(state) != {'schema_version', 'jobs'} or type(state['schema_version']) is not int or state['schema_version'] != 1 or not isinstance(state['jobs'], dict):
-                raise VideoError('Unsupported/corrupt queue state')
+            if set(state) != {'schema_version', 'jobs'} or type(state['schema_version']) is not int or state['schema_version'] != QUEUE_SCHEMA or not isinstance(state['jobs'], dict):
+                raise VideoError('Unsupported/corrupt queue state; English-only video queue requires schema 2')
             seen = set()
             for key, job in state['jobs'].items():
                 if not re.fullmatch(r'[0-9a-f]{32}', key) or job['id'] != key or job['status'] not in STATES:
                     raise VideoError('Invalid job state')
                 brief_shape(job['brief'])
                 assets = job['assets']
+                product = job['product']
+                validate_product_snapshot(product)
                 if set(assets) != ({'recording', 'narration'} if 'narration' in job['brief'] else {'recording'}):
                     raise VideoError('Invalid asset manifest')
                 for kind, item in assets.items():
                     if not re.fullmatch(r'[0-9a-f]{64}', item['sha256']) or not re.fullmatch(kind + r'\.(mp4|mov|webm|wav|mp3|m4a)', item['file']):
                         raise VideoError('Invalid asset manifest')
-                if job['payload_hash'] != digest({'brief': job['brief'], 'assets': assets}):
+                if job['payload_hash'] != digest({'brief': job['brief'], 'assets': assets, 'product': product}):
                     raise VideoError('Immutable payload changed')
                 idem = job['brief']['idempotency_key']
                 if key != hashlib.sha256(idem.encode()).hexdigest()[:32] or idem in seen:
@@ -348,8 +382,10 @@ class Queue:
         return state['jobs'][job_id]
 
     def enqueue(self, brief):
-        assets = self.validate(brief)
-        payload_hash = digest({'brief': brief, 'assets': assets})
+        validated = self.validate(brief)
+        assets = validated['assets']
+        product = validated['product']
+        payload_hash = digest({'brief': brief, 'assets': assets, 'product': product})
         job_id = hashlib.sha256(brief['idempotency_key'].encode()).hexdigest()[:32]
         with self.lock():
             state = self._read()
@@ -380,7 +416,7 @@ class Queue:
                 fsync_dir(staging)
                 os.rename(staging, destination)
                 fsync_dir(jobs)
-            job = dict(id=job_id, brief=brief, assets=assets, payload_hash=payload_hash,
+            job = dict(id=job_id, brief=brief, assets=assets, product=product, payload_hash=payload_hash,
                        status='queued', upload_eligible=not brief['test_only'],
                        created_at=self.clock().isoformat(), result=None, error=None)
             state['jobs'][job_id] = job
@@ -429,7 +465,8 @@ class Queue:
         if not self.browser or not Path(self.browser).is_file():
             raise VideoError('Configure an installed headless browser with --browser; runtime downloads disabled')
         folder = self.root / 'jobs' / job['id']
-        request = {'brief': job['brief'], 'assets': {kind: str(folder / item['file']) for kind, item in job['assets'].items()},
+        request = {'brief': job['brief'], 'product': job['product'],
+                   'assets': {kind: str(folder / item['file']) for kind, item in job['assets'].items()},
                    'output': str(target), 'browser': str(Path(self.browser).resolve())}
         atomic_json(target / 'request.json', request)
         # No credentials, model settings or arbitrary host env forwarded to Node/browser.
@@ -516,6 +553,7 @@ class Queue:
             return dict(schema_version=1, job_id=job_id, idempotency_key=brief['idempotency_key'],
                         render_key=job['result']['render_key'], test_only=False,
                         source={key: brief[key] for key in ['app_id', 'topic_id']},
+                        product=job['product'],
                         metadata={key: brief[key] for key in ['title', 'description', 'locale', 'due_at', 'timezone']},
                         artifacts={name: {'path': str(self.root / 'jobs' / job_id / name), 'sha256': value}
                                    for name, value in job['result']['sha256'].items()})

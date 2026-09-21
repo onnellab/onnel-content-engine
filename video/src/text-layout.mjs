@@ -1,6 +1,6 @@
 /**
  * Keep copy visible in at most two lines, with a 40px minimum. Prefer author's
- * breaks, then whitespace, then character boundaries for Korean/long words.
+ * breaks, then whitespace, then character boundaries for long unbroken text.
  * @param {string} text
  * @param {number} width
  * @param {number} preferredSize

@@ -10,13 +10,25 @@
   "idempotency_key": "REPLACE-WITH-UNIQUE-REVIEWED-BRIEF-ID",
   "test_only": false,
   "recording": "INVALID-PLACEHOLDER/REPLACE-WITH-REAL-RECORDING.mp4",
-  "hook": "Large text file hard to read?",
+  "hook": "Need to find one passage in a huge text file?",
   "title": "Find a passage in a large text file",
-  "description": "Open a local text file and find the passage you need. These steps should remain useful without installing a particular app.",
-  "cta": "Try these steps on your own file.",
+  "description": "A short, practical workflow for opening a local text file and finding the passage you need.",
+  "cta": "Try the same workflow on your own file.",
   "captions": [
-    {"start": 0, "end": 6, "text": "Open a local text file"},
-    {"start": 6, "end": 14, "text": "Find the passage you need"},
-    {"start": 14, "end": 20, "text": "Continue reading from that point"}
+    {
+      "start": 0,
+      "end": 6,
+      "text": "Open the local text file"
+    },
+    {
+      "start": 6,
+      "end": 14,
+      "text": "Search for the phrase you remember"
+    },
+    {
+      "start": 14,
+      "end": 20,
+      "text": "Jump back into the surrounding text"
+    }
   ]
 }

@@ -29,7 +29,7 @@
     "app_id": {
       "type": "string",
       "pattern": "^APP-[0-9]{4}$",
-      "description": "Existing content-eligible data/apps_registry.csv ID"
+      "description": "Existing released, content-eligible data/apps_registry.csv ID"
     },
     "topic_id": {
       "type": "string",
@@ -37,10 +37,8 @@
       "description": "Existing non-archived data/topics.csv ID referencing this app"
     },
     "locale": {
-      "enum": [
-        "en",
-        "ko"
-      ]
+      "const": "en",
+      "description": "Short-video publishing is English-only; app/article localization is unchanged."
     },
     "template": {
       "enum": [
@@ -87,12 +85,12 @@
     "hook": {
       "type": "string",
       "minLength": 1,
-      "maxLength": 44
+      "maxLength": 80
     },
     "cta": {
       "type": "string",
       "minLength": 1,
-      "maxLength": 44
+      "maxLength": 80
     },
     "title": {
       "type": "string",
@@ -128,11 +126,11 @@
           "text": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 44
+            "maxLength": 80
           }
         }
       }
     }
   },
-  "$comment": "scripts/short_video_pipeline.py is the authoritative semantic validator. JSON max 64 KiB, duplicate keys/nonfinite numbers rejected. Captions: max 44 characters total, 1-2 lines, max 44 width units per line (ASCII=1, non-ASCII=2); ordered nonoverlap, >=1 second, end <= duration. Runtime validates registry, timezone and asset confinement."
+  "$comment": "scripts/short_video_pipeline.py is the authoritative semantic validator. Video locale is fixed to en. JSON max 64 KiB, duplicate keys/nonfinite numbers rejected. Hook/CTA/captions: max 80 characters total, at most 2 authored lines; renderer measures actual font width and wraps to at most two readable lines. Timings are ordered/nonoverlapping, >=1 second, end <= duration. Runtime validates released app registry, immutable product snapshot, timezone and asset confinement."
 }

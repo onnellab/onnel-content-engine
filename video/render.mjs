@@ -11,13 +11,17 @@ const runtime = {bundle, openBrowser, selectComposition, renderMedia, renderStil
 /** @param {unknown} value @returns {asserts value is import('./src/model.js').VideoProps} */
 export function validateProps(value) {
   const p = /** @type {import('./src/model.js').VideoProps} */ (value);
-  if (!p || !['quick_demo', 'problem_solution'].includes(p.template) || !['en', 'ko'].includes(p.locale)
+  if (!p || !['quick_demo', 'problem_solution'].includes(p.template) || p.locale !== 'en'
       || !Number.isInteger(p.duration_seconds) || p.duration_seconds < 15 || p.duration_seconds > 30
-      || typeof p.test_only !== 'boolean' || !Array.isArray(p.captions) || p.captions.length < 1 || p.captions.length > 12) {
+      || typeof p.test_only !== 'boolean' || !Array.isArray(p.captions) || p.captions.length < 1 || p.captions.length > 12
+      || typeof p.app_name !== 'string' || !p.app_name.trim() || p.app_name.length > 24
+      || !Array.isArray(p.platforms) || p.platforms.length < 1 || p.platforms.length > 2
+      || p.platforms.some((platform) => !['ios', 'android'].includes(platform))
+      || new Set(p.platforms).size !== p.platforms.length) {
     throw new Error('Invalid rendering props');
   }
-  const text = (/** @type {unknown} */ v) => typeof v === 'string' && v.trim().length > 0 && [...v].length <= 44
-    && v.split('\n').length <= 2 && v.split('\n').every(line => line.trim() && [...line].reduce((n, c) => n + ((c.codePointAt(0) ?? 0) > 127 ? 2 : 1), 0) <= 44);
+  const text = (/** @type {unknown} */ v) => typeof v === 'string' && v.trim().length > 0 && [...v].length <= 80
+    && v.split('\n').length <= 2 && v.split('\n').every(line => line.trim() && [...line].reduce((n, c) => n + ((c.codePointAt(0) ?? 0) > 127 ? 2 : 1), 0) <= 80);
   if (!text(p.hook) || !text(p.cta)) throw new Error('Invalid caption text');
   let end = 0;
   for (const c of p.captions) {
@@ -28,11 +32,10 @@ export function validateProps(value) {
 
 /**
  * Internal CLI protocol. Public callers use Python validation/locking/ffprobe.
- * @param {{brief: import('./src/model.js').VideoProps, assets: {recording: string, narration?: string}, output: string, browser: string}} request
+ * @param {{brief: Omit<import('./src/model.js').VideoProps, 'app_name' | 'platforms' | 'recording' | 'narration'>, product: import('./src/model.js').ProductSnapshot, assets: {recording: string, narration?: string}, output: string, browser: string}} request
  * @param {typeof runtime} api
  */
 export async function renderRequest(request, api = runtime) {
-  validateProps(request.brief);
   if (!isAbsolute(request.output) || !isAbsolute(request.browser) || !(await stat(request.browser)).isFile()) throw new Error('Local output and installed browser required');
   const output = await realpath(request.output);
   const temp = await mkdtemp(join(output, '.remotion-'));
@@ -58,11 +61,13 @@ export async function renderRequest(request, api = runtime) {
       selected[kind] = kind + suffix;
       await copyFile(file, join(publicDir, selected[kind]));
     }
-    // Whitelist data props. Never interpolate caller text into JavaScript or HTML.
+    // Whitelist caller copy and trusted immutable product metadata. Never expose host paths/secrets.
     const b = request.brief;
+    const product = request.product;
     const inputProps = {template: b.template, locale: b.locale, duration_seconds: b.duration_seconds,
       hook: b.hook, cta: b.cta, captions: b.captions.map(c => ({start: c.start, end: c.end, text: c.text})),
-      test_only: b.test_only, ...selected};
+      test_only: b.test_only, app_name: product?.app_name, platforms: product?.platforms, ...selected};
+    validateProps(inputProps);
     const serveUrl = await api.bundle({entryPoint: join(here, 'src/index.tsx'), outDir: join(temp, 'bundle'),
       publicDir, enableCaching: false, gitSource: null, askAIEnabled: false, webpackOverride: config => ({...config, devtool: false, resolve: {...config.resolve, extensionAlias: {'.js': ['.ts', '.tsx', '.js']}}})});
     browser = await api.openBrowser('chrome', {browserExecutable: request.browser,
