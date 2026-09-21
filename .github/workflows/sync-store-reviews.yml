@@ -6,6 +6,11 @@ on:
     branches: [main]
     paths:
       - "scripts/sync_store_reviews.py"
+      - "scripts/youtube_dashboard_panel.py"
+      - "scripts/suno_api_connect.py"
+      - "scripts/suno_api_credentials.py"
+      - "scripts/install_youtube_connect.py"
+      - "templates/suno_api_connect.html"
       - ".github/workflows/sync-store-reviews.yml"
   schedule:
     - cron: "20 0 * * *"
