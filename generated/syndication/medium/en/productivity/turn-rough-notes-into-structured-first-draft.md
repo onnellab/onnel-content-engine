@@ -1,23 +1,6 @@
----
-title: "How to Turn Rough Notes Into a Structured First Draft"
-card_title: "How to Turn Rough Notes Into a Structured First Draft"
-slug: "turn-rough-notes-into-structured-first-draft"
-category: "productivity"
-language: "en"
-description: "Turn rough notes into a structured first draft while preserving source ideas, marking evidence gaps, and keeping drafting separate from revision."
-status: "published"
-topic_id: "TOPIC-0014"
-search_intent: "workflow"
-primary_keyword: "structure rough notes"
-secondary_keywords: "first draft workflow|outline from notes|writing revision|source audit"
-related_apps: ""
-tags: "structure rough notes|first draft workflow|outline from notes|source audit"
-canonical_url: "https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/"
-published_at: "2026-09-19T12:24:43+09:00"
-updated_at: "2026-09-19T12:24:43+09:00"
-image_specs: "Rough-notes-to-first-draft workflow|Source-to-section mapping example|Evidence and gap marker examples"
-related_articles: "How to Reuse Copied Text Snippets on iPhone => https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/|How to Rename Files Safely With a Preview Workflow => https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/|How to Organize Downloads With a Small, Durable Folder System => https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/|How to Verify Audio Clips Before Combining Them => https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/|How to Inspect a Large Log File Without Altering the Original => https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/"
----
+> ONNELLAB note: This version keeps the practical checklist and leaves the product details secondary.
+
+
 
 # How to Turn Rough Notes Into a Structured First Draft
 
@@ -68,7 +51,7 @@ The remedy is not more formatting. It is a sequence of distinct artifacts: raw n
 10. **Run a source audit.** Compare every substantive claim with the raw notes or an authoritative source. Confirm that paraphrases retain the original meaning and that contrary evidence has not been omitted.
 11. **Create a revision copy.** Only after the audit, revise structure, clarity, tone, and concision. Keep the source map until factual review is complete.
 
-![Workflow diagram](/blog-assets/en/turn-rough-notes-into-structured-first-draft/workflow-diagram.svg "Preserve rough notes, extract atomic ideas, map evidence, draft, audit, and revise")
+![Workflow diagram](https://onnellab.github.io/blog-assets/en/turn-rough-notes-into-structured-first-draft/workflow-diagram.svg "Preserve rough notes, extract atomic ideas, map evidence, draft, audit, and revise")
 
 ## A Small Source-to-Section Map
 
@@ -144,3 +127,7 @@ It can generate text, but the writer remains responsible for authorization, priv
 ### When is the first draft ready for revision?
 
 Begin revision after every major section answers its question, substantive claims point to evidence or carry a visible gap marker, and a source audit shows that the draft has not changed the meaning of the original notes.
+
+---
+
+Originally published at https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/

@@ -52,14 +52,14 @@
         "slug": "inspect-large-log-file-without-altering-original",
         "category": "reading",
         "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/reading/inspect-large-log-file-without-altering-original.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "reading"
         ],
-        "score": 14
+        "score": 15
       },
       {
         "topic_id": "TOPIC-0003",

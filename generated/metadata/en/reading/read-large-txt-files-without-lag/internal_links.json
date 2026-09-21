@@ -47,6 +47,21 @@
         "score": 22
       },
       {
+        "topic_id": "TOPIC-0031",
+        "title": "How to Inspect a Large Log File Without Altering the Original",
+        "slug": "inspect-large-log-file-without-altering-original",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 15
+      },
+      {
         "topic_id": "TOPIC-0003",
         "title": "TXT vs EPUB for Long Reading",
         "slug": "txt-vs-epub-for-long-reading",
@@ -56,21 +71,6 @@
         "url": "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/",
         "destination": "published_article",
         "relationship": "comparison",
-        "shared_clusters": [
-          "reading"
-        ],
-        "score": 14
-      },
-      {
-        "topic_id": "TOPIC-0031",
-        "title": "How to Inspect a Large Log File Without Altering the Original",
-        "slug": "inspect-large-log-file-without-altering-original",
-        "category": "reading",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/reading/inspect-large-log-file-without-altering-original.md",
-        "destination": "scheduled_article",
-        "relationship": "deeper",
         "shared_clusters": [
           "reading"
         ],

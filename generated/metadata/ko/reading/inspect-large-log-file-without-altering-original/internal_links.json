@@ -14,7 +14,7 @@
     "slug": "inspect-large-log-file-without-altering-original",
     "category": "reading",
     "language": "ko",
-    "status": "scheduled",
+    "status": "published",
     "topic_clusters": [
       "원본 로그 보존",
       "대용량 텍스트 로그",

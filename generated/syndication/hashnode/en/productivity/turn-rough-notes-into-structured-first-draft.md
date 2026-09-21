@@ -1,33 +1,17 @@
 ---
 title: "How to Turn Rough Notes Into a Structured First Draft"
-card_title: "How to Turn Rough Notes Into a Structured First Draft"
-slug: "turn-rough-notes-into-structured-first-draft"
-category: "productivity"
-language: "en"
-description: "Turn rough notes into a structured first draft while preserving source ideas, marking evidence gaps, and keeping drafting separate from revision."
-status: "published"
-topic_id: "TOPIC-0014"
-search_intent: "workflow"
-primary_keyword: "structure rough notes"
-secondary_keywords: "first draft workflow|outline from notes|writing revision|source audit"
-related_apps: ""
-tags: "structure rough notes|first draft workflow|outline from notes|source audit"
 canonical_url: "https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/"
-published_at: "2026-09-19T12:24:43+09:00"
-updated_at: "2026-09-19T12:24:43+09:00"
-image_specs: "Rough-notes-to-first-draft workflow|Source-to-section mapping example|Evidence and gap marker examples"
-related_articles: "How to Reuse Copied Text Snippets on iPhone => https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/|How to Rename Files Safely With a Preview Workflow => https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/|How to Organize Downloads With a Small, Durable Folder System => https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/|How to Verify Audio Clips Before Combining Them => https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/|How to Inspect a Large Log File Without Altering the Original => https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/"
+tags: "productivity,software-engineering,developer-tools"
+cover_image: "https://onnellab.github.io/blog-assets/en/turn-rough-notes-into-structured-first-draft/social-card.png"
+publication_id: ""
+content_profile: "hashnode-native-v3"
 ---
 
-# How to Turn Rough Notes Into a Structured First Draft
+
 
 Rough notes capture observations before they become a polished argument. The challenge is ordering them without changing their meaning. A dependable method preserves the raw notes, creates a traceable working layer, and delays polishing until the draft's logic is visible.
 
-## Question
-
-How can I turn rough notes into a structured first draft without losing the original ideas?
-
-## Short Answer
+## The constraint to solve
 
 Keep the original notes unchanged. In a working copy, split them into atomic ideas, label each idea as a claim, evidence, example, question, or action, and define the draft's purpose, audience, and central claim. Build an outline, map every useful note and source to a section, and mark unsupported statements instead of inventing transitions or evidence. Write the first draft for completeness and logic; revise wording only after the draft can be checked against the source notes.
 
@@ -45,7 +29,7 @@ Writers often perform capture, interpretation, outlining, drafting, and revision
 
 The remedy is not more formatting. It is a sequence of distinct artifacts: raw notes, an atomic idea inventory, a brief, an evidence-aware outline, a source map, a first draft, and a revision copy. Each artifact answers a different question.
 
-## What To Check First
+## Preflight checks
 
 - **Purpose:** What should this draft enable—a decision, explanation, proposal, record, or instruction?
 - **Audience:** What does the reader already know, need, and have authority to do?
@@ -54,7 +38,7 @@ The remedy is not more formatting. It is a sequence of distinct artifacts: raw n
 - **Evidence threshold:** Which statements require a primary source, calculation, quotation, or named owner?
 - **Constraints:** What is confidential, time-sensitive, regulated, or unsuitable for an external AI service?
 
-## Recommended Workflow
+## Implementation path
 
 1. **Freeze the capture.** Save the original notes as a read-only snapshot or version. Record when and where they came from. Continue in a separate working copy.
 2. **Assign stable IDs.** Give each paragraph, bullet, image, quotation, or voice-note transcription an identifier such as `N01`, `N02`, and `N03`. IDs are more reliable than copying changing text into comments.
@@ -68,7 +52,7 @@ The remedy is not more formatting. It is a sequence of distinct artifacts: raw n
 10. **Run a source audit.** Compare every substantive claim with the raw notes or an authoritative source. Confirm that paraphrases retain the original meaning and that contrary evidence has not been omitted.
 11. **Create a revision copy.** Only after the audit, revise structure, clarity, tone, and concision. Keep the source map until factual review is complete.
 
-![Workflow diagram](/blog-assets/en/turn-rough-notes-into-structured-first-draft/workflow-diagram.svg "Preserve rough notes, extract atomic ideas, map evidence, draft, audit, and revise")
+![Workflow diagram](https://onnellab.github.io/blog-assets/en/turn-rough-notes-into-structured-first-draft/workflow-diagram.svg "Preserve rough notes, extract atomic ideas, map evidence, draft, audit, and revise")
 
 ## A Small Source-to-Section Map
 
@@ -103,44 +87,15 @@ Fact-check AI-assisted text claim by claim. Require links or citations only as l
 
 Keep AI-generated bridge sentences under the same standard. A sentence such as “This delay was inevitable” may be a new conclusion even if every surrounding fact came from the notes. Mark, support, narrow, or remove it.
 
-## ONNELLAB Application
+## When a focused tool helps
 
 ONNELLAB currently has no application whose documented capabilities match this notes-to-draft workflow. Use the method with tools that meet your privacy, provenance, and review requirements; the workflow does not depend on a particular product.
-
-## Related Topics
-
-- How to distinguish an observation from an interpretation
-- How to maintain a claim-and-evidence register for research writing
-- How to revise a draft without erasing source qualifications
-- How to redact working notes before sharing them with an external service
 
 ## References
 
 - [NIST AI 600-1: Generative Artificial Intelligence Profile](https://doi.org/10.6028/NIST.AI.600-1) provides official guidance on content provenance, data origin, human oversight, privacy risk, and evaluating output against known ground truth.
 - [W3C PROV-O Recommendation](https://www.w3.org/TR/prov-o/) defines a provenance model centered on entities, activities, agents, and derivation relationships.
 
-## Conclusion
+## Takeaway
 
 The safest way to structure rough notes is to preserve before organizing and map before drafting. Freeze the original, extract atomic ideas, define the purpose and central claim, expose evidence gaps, and connect each section to its sources. Then write a complete first draft and audit it before polishing. The result is not only easier to revise; it is easier to explain, verify, and recover when a sentence drifts from the original thought.
-
-## FAQ
-
-### Should every rough note appear in the first draft?
-
-No. Every note should be accounted for, but some will be duplicate, irrelevant to the stated purpose, contradicted, or better saved for another document. Record the reason for excluding consequential material.
-
-### What if two notes contradict each other?
-
-Keep both, label the conflict, and identify what evidence or decision could resolve it. Do not silently choose the version that makes the draft easier to write.
-
-### How detailed should source IDs be?
-
-They only need to lead reliably back to the source. A short ID plus a source register is usually clearer than repeating full citations throughout the working notes.
-
-### Can AI write the complete first draft?
-
-It can generate text, but the writer remains responsible for authorization, privacy, provenance, factual checking, source fidelity, and the final claim. For sensitive or high-stakes material, those requirements may make external AI use inappropriate.
-
-### When is the first draft ready for revision?
-
-Begin revision after every major section answers its question, substantive claims point to evidence or carry a visible gap marker, and a source audit shows that the draft has not changed the meaning of the original notes.

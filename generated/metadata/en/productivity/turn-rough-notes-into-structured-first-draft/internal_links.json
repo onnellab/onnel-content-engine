@@ -99,17 +99,17 @@
         "score": 4
       },
       {
-        "topic_id": "TOPIC-0001",
-        "title": "How to Read Large TXT Files Without Lag",
-        "slug": "read-large-txt-files-without-lag",
+        "topic_id": "TOPIC-0031",
+        "title": "How to Inspect a Large Log File Without Altering the Original",
+        "slug": "inspect-large-log-file-without-altering-original",
         "category": "reading",
         "language": "en",
         "status": "published",
-        "url": "https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/",
+        "url": "https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 3
+        "score": 4
       }
     ],
     "related_apps": [],
