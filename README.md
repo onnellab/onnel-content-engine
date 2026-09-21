@@ -695,3 +695,11 @@ The `Offline Python Unit Tests` workflow runs the full suite on Ubuntu with
 Python 3.12/3.14 and macOS with Python 3.14. The manual-publication workflow also
 runs the offline publication tests before any live verification. Test output
 must not alter tracked reviews, publishing approvals, or generated dashboards.
+
+## Approved educational demo shorts
+
+The approved short-video extension may adapt existing problem-first topics into
+local educational app demos. It does not authorize advertisements or change
+article publishing. Phase 1 validates caller-authored briefs and renders private
+MP4 drafts; upload remains a separate phase. See
+[Short Video Pipeline](docs/Short_Video_Pipeline.md).

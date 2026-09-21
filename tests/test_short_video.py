@@ -134,6 +134,96 @@ class ShortVideoTests(unittest.TestCase):
             path.write_text(body)
             with self.assertRaises(VideoError): load_json(path)
 
+class ProbeAndRuntimeTests(unittest.TestCase):
+    setUp = ShortVideoTests.setUp
+    def test_ffprobe_rejects_short_or_missing_stream(self):
+        job = self.q.enqueue(self.brief)
+        for result in [{'format': {'duration': '2'}, 'streams': [{'codec_type': 'video', 'width': 360, 'height': 640}]},
+                       {'format': {'duration': '15'}, 'streams': []}]:
+            with patch('short_video_pipeline.probe', return_value=result), self.assertRaises(VideoError):
+                self.q._probe_inputs(job)
+
+    def test_output_geometry_failure_stays_failed(self):
+        job = self.q.enqueue(self.brief)
+        def renderer(_job, target):
+            (target / 'video.mp4').write_bytes(b'wrong geometry')
+            (target / 'preview.png').write_bytes(b'preview')
+        with patch.object(self.q, '_probe_inputs'), patch('short_video_pipeline.probe', return_value={
+                'format': {'duration': '15'}, 'streams': [{'codec_type': 'video', 'codec_name': 'h264',
+                    'width': 720, 'height': 1280, 'avg_frame_rate': '30/1'}]}):
+            with self.assertRaises(VideoError): self.q.render(job['id'], renderer=renderer)
+        self.assertEqual('failed', self.q.status(job['id'])['status'])
+
+    def test_symlink_private_jobs_rejected(self):
+        self.q.root.mkdir()
+        (self.q.root / 'jobs').symlink_to(self.assets)
+        with self.assertRaises(VideoError): self.q.enqueue(self.brief)
+        self.assertEqual(['recording.mp4'], sorted(p.name for p in self.assets.iterdir()))
+
+    def test_missing_result_cannot_claim_rendered(self):
+        job = self.q.enqueue(self.brief)
+        state = json.loads(self.q.state_path.read_text())
+        state['jobs'][job['id']]['status'] = 'rendered'
+        self.q.state_path.write_text(json.dumps(state))
+        with self.assertRaises(VideoError): self.q.status()
+
+    def test_test_only_cannot_enter_upload_state(self):
+        job = self.q.enqueue(self.brief)
+        state = json.loads(self.q.state_path.read_text())
+        state['jobs'][job['id']]['status'] = 'uploaded_private'
+        self.q.state_path.write_text(json.dumps(state))
+        with self.assertRaises(VideoError): self.q.status()
+
+    def test_template_and_optional_narration(self):
+        (self.assets / 'voice.wav').write_bytes(b'test audio')
+        job = self.q.enqueue(dict(self.brief, template='problem_solution', narration='voice.wav'))
+        with patch('short_video_pipeline.probe', side_effect=[
+            {'format': {'duration': '15'}, 'streams': [{'codec_type': 'video', 'width': 360, 'height': 640}]},
+            {'format': {'duration': '15'}, 'streams': [{'codec_type': 'audio'}]},
+        ]): self.q._probe_inputs(job)
+        self.assertEqual({'recording', 'narration'}, set(job['assets']))
+
+    def test_upload_handoff_rejects_test_and_unrendered_jobs(self):
+        job = self.q.enqueue(self.brief)
+        with self.assertRaises(VideoError): self.q.upload_candidate(job['id'])
+        def renderer(_job, target):
+            (target / 'video.mp4').write_bytes(b'video')
+            (target / 'preview.png').write_bytes(b'preview')
+        with patch.object(self.q, '_probe_inputs'), patch.object(self.q, '_verify_output'):
+            self.q.render(job['id'], renderer=renderer)
+            with self.assertRaises(VideoError): self.q.upload_candidate(job['id'])
+            prod = self.q.enqueue(dict(self.brief, test_only=False, idempotency_key='production'))
+            with self.assertRaises(VideoError): self.q.upload_candidate(prod['id'])
+            self.q.render(prod['id'], renderer=renderer)
+            before = self.q.state_path.read_bytes()
+            packet = self.q.upload_candidate(prod['id'])
+            self.assertFalse(packet['test_only'])
+            self.assertEqual(self.brief['topic_id'], packet['source']['topic_id'])
+            self.assertEqual({'video.mp4', 'preview.png'}, set(packet['artifacts']))
+            self.assertEqual(before, self.q.state_path.read_bytes())
+            self.assertEqual('rendered', self.q.status(prod['id'])['status'])
+
+    def test_renderer_change_during_render_fails_closed(self):
+        job = self.q.enqueue(self.brief)
+        def renderer(_job, target):
+            (target / 'video.mp4').write_bytes(b'video')
+            (target / 'preview.png').write_bytes(b'preview')
+        with patch.object(self.q, '_probe_inputs'), patch.object(self.q, '_verify_output'), patch.object(self.q, '_render_key', side_effect=['before', 'after']):
+            with self.assertRaises(VideoError): self.q.render(job['id'], renderer=renderer)
+        self.assertEqual('failed', self.q.status(job['id'])['status'])
+
+    def test_process_timeout_cleans_only_owned_group(self):
+        import subprocess
+        from short_video_pipeline import run_process
+        proc = unittest.mock.Mock(pid=12345)
+        proc.wait.side_effect = [subprocess.TimeoutExpired('bounded', 1), 0, 0]
+        with patch('short_video_pipeline.subprocess.Popen', return_value=proc) as spawn, patch('short_video_pipeline.os.killpg') as kill:
+            with self.assertRaises(VideoError): run_process(['local-command', 'literal;argument'], timeout=1)
+            self.assertEqual(['local-command', 'literal;argument'], spawn.call_args.args[0])
+            self.assertTrue(spawn.call_args.kwargs['start_new_session'])
+            self.assertNotIn('shell', spawn.call_args.kwargs)
+            self.assertTrue(all(call.args[0] == 12345 for call in kill.call_args_list))
+
 
 if __name__ == '__main__':
     unittest.main()

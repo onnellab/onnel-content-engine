@@ -133,6 +133,7 @@ def run_process(argv, timeout=60, env=None):
 def probe(path):
     try:
         return json.loads(run_process(['ffprobe', '-v', 'error', '-protocol_whitelist', 'file,pipe',
+            '-format_whitelist', 'mov,matroska,webm,wav,mp3',
             '-show_entries', 'format=duration:stream=codec_type,codec_name,width,height,avg_frame_rate,duration',
             '-of', 'json', str(path)]))
     except (OSError, ValueError) as exc:
@@ -255,10 +256,19 @@ class Queue:
                 raise
             raise VideoError('Malformed brief or asset') from exc
 
+    def _private_structure(self):
+        for path in [self.root / 'jobs', self.state_path, self.root / '.lock']:
+            if path.is_symlink():
+                raise VideoError('Symlinks in private state are forbidden')
+        jobs = self.root / 'jobs'
+        if jobs.exists() and (not jobs.is_dir() or any(p.is_symlink() for p in jobs.iterdir())):
+            raise VideoError('Invalid private job directory')
+
     @contextmanager
     def lock(self):
         self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
         os.chmod(self.root, 0o700)
+        self._private_structure()
         path = self.root / '.lock'
         fd = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
         try:
@@ -271,6 +281,7 @@ class Queue:
             os.close(fd)
 
     def _read(self):
+        self._private_structure()
         if not self.state_path.exists():
             # Assets without a state file can indicate interrupted creation or lost state.
             if (self.root / 'jobs').exists() and any((self.root / 'jobs').iterdir()):
@@ -299,8 +310,14 @@ class Queue:
                 if key != hashlib.sha256(idem.encode()).hexdigest()[:32] or idem in seen:
                     raise VideoError('Duplicate or corrupt job identity')
                 seen.add(idem)
-                if job['upload_eligible'] != (not job['brief']['test_only']):
+                if type(job['upload_eligible']) is not bool or job['upload_eligible'] != (not job['brief']['test_only']):
                     raise VideoError('Corrupt upload eligibility')
+                if job['status'] == 'rendered':
+                    result = job['result']
+                    if not isinstance(result, dict) or result.get('job_id') != key or result.get('test_only') != job['brief']['test_only'] or result.get('upload_eligible') != job['upload_eligible']:
+                        raise VideoError('Rendered state lacks a valid result')
+                    if set(result.get('sha256', {})) != {'video.mp4', 'preview.png'} or any(not re.fullmatch(r'[0-9a-f]{64}', h) for h in result['sha256'].values()):
+                        raise VideoError('Invalid output manifest')
                 if job['brief']['test_only'] and job['status'] in {'uploading', 'uploaded_private', 'scheduled', 'published'}:
                     raise VideoError('Test fixture cannot enter upload states')
             return state
@@ -357,6 +374,8 @@ class Queue:
 
     def _check_assets(self, job):
         folder = self.root / 'jobs' / job['id']
+        if folder.is_symlink() or (folder / 'brief.json').is_symlink() or digest(load_json(folder / 'brief.json')) != digest(job['brief']):
+            raise VideoError('Immutable brief snapshot changed/missing')
         for item in job['assets'].values():
             path = folder / item['file']
             if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_ASSET or file_hash(path) != item['sha256']:
@@ -377,7 +396,7 @@ class Queue:
 
     def _verify_output(self, job, folder):
         path = folder / 'video.mp4'
-        if not path.is_file() or path.stat().st_size > MAX_ASSET:
+        if path.is_symlink() or not path.is_file() or not 0 < path.stat().st_size <= MAX_ASSET:
             raise VideoError('Output missing or too large')
         info = probe(path)
         videos = [s for s in info.get('streams', []) if s.get('codec_type') == 'video']
@@ -388,7 +407,7 @@ class Queue:
         if (video.get('width'), video.get('height'), video.get('avg_frame_rate'), video.get('codec_name')) != (1080, 1920, '30/1', 'h264') or not math.isfinite(seconds) or abs(seconds - job['brief']['duration_seconds']) > 0.1:
             raise VideoError('Output geometry, codec, fps, or duration mismatch')
         preview = folder / 'preview.png'
-        if not preview.is_file() or not 0 < preview.stat().st_size < 20 * 1024 * 1024:
+        if preview.is_symlink() or not preview.is_file() or not 0 < preview.stat().st_size < 20 * 1024 * 1024:
             raise VideoError('Preview missing or too large')
 
     def _node_render(self, job, target):
@@ -426,6 +445,7 @@ class Queue:
             job.update(status='blocked', error='asset_integrity')
             atomic_json(self.state_path, state)
             raise
+        render_key = self._render_key(job)
         job.update(status='rendering', error=None, result=None)
         atomic_json(self.state_path, state)
         try:
@@ -434,8 +454,11 @@ class Queue:
                 target = Path(temp)
                 (renderer or self._node_render)(job, target)
                 self._verify_output(job, target)
+                self._check_assets(job)
+                if render_key != self._render_key(job):
+                    raise VideoError('Renderer inputs changed during render')
                 hashes = {name: file_hash(target / name) for name in ['video.mp4', 'preview.png']}
-                result = dict(schema_version=1, job_id=job['id'], render_key=self._render_key(job),
+                result = dict(schema_version=1, job_id=job['id'], render_key=render_key,
                               sha256=hashes, width=1080, height=1920, fps=30,
                               duration_seconds=job['brief']['duration_seconds'],
                               test_only=job['brief']['test_only'], upload_eligible=job['upload_eligible'])
@@ -453,7 +476,7 @@ class Queue:
             raise VideoError('Render failed; inspect local setup/media and retry this job') from exc
 
     def _render_key(self, job):
-        files = [ROOT / 'video/package-lock.json', ROOT / 'video/render.mjs']
+        files = [ROOT / 'video/package-lock.json', ROOT / 'video/render.mjs', ROOT / 'video/tsconfig.json', Path(__file__)]
         files += sorted((ROOT / 'video/src').glob('*'))
         return digest({'payload': job['payload_hash'], 'renderer': {p.name: file_hash(p) for p in files if p.is_file()}})
 
@@ -463,6 +486,22 @@ class Queue:
             if job_id not in state['jobs']:
                 raise VideoError('Unknown job id')
             return self._render(state, state['jobs'][job_id], renderer)
+
+    def upload_candidate(self, job_id):
+        """Phase-2 handoff only: verified metadata/artifacts, never a provider action."""
+        with self.lock():
+            state = self._read()
+            job = state['jobs'].get(job_id)
+            if not job or job['status'] != 'rendered' or job['brief']['test_only']:
+                raise VideoError('Only a verified production render can be an upload candidate')
+            self._render(state, job, None)  # Cached-only branch verifies result; cannot render here.
+            brief = job['brief']
+            return dict(schema_version=1, job_id=job_id, idempotency_key=brief['idempotency_key'],
+                        render_key=job['result']['render_key'], test_only=False,
+                        source={key: brief[key] for key in ['app_id', 'topic_id']},
+                        metadata={key: brief[key] for key in ['title', 'description', 'locale', 'due_at', 'timezone']},
+                        artifacts={name: {'path': str(self.root / 'jobs' / job_id / name), 'sha256': value}
+                                   for name, value in job['result']['sha256'].items()})
 
     def worker(self, *, dry_run=False, renderer=None):
         def candidate(state):
