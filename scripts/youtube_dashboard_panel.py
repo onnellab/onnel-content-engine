@@ -23,6 +23,15 @@ def youtube_settings_panel():
         <a id="youtube-check" class="yt-button yt-secondary" href="onnellab-content://youtube/status"><span class="yt-ko">연결 상태 · 테스트</span><span class="yt-en">Connection status · Test</span></a>
       </div>
       <p class="yt-note"><span class="yt-ko">연결 상태와 통계는 위 ONNELLAB Media Console 영역에 자동 표시돼요. OAuth 재연결이나 권한 변경이 필요할 때만 이 버튼으로 작업용 Mac의 로컬 연결 화면을 열어 주세요.</span><span class="yt-en">Connection status and metrics are auto-published in the ONNELLAB Media Console section above. Open the local console on the worker Mac only when OAuth reconnection or permission changes are needed.</span></p>
+      <hr style="border:0;border-top:1px solid #e6dfec;margin:20px 0">
+      <h2>Suno Platform API · Aether Inn</h2>
+      <div><span class="yt-tag">Official API</span><span class="yt-tag">macOS Keychain</span><span class="yt-tag"><span class="yt-ko">신곡 자동화</span><span class="yt-en">New-song automation</span></span></div>
+      <p><span class="yt-ko">Suno 공식 Platform API Key 등록은 이 대시보드에서 시작해요. 버튼을 누르면 작업용 Mac의 로컬 설정창이 열리고, Key는 macOS Keychain에만 저장돼요. 공개 /ops/ HTML이나 GitHub에는 비밀값을 넣지 않아요.</span><span class="yt-en">Start Suno Platform API setup from this dashboard. The button opens a local setup screen on the worker Mac, and the key is stored only in macOS Keychain. Secrets are never written to the public /ops/ HTML or GitHub.</span></p>
+      <div class="yt-links">
+        <a id="suno-connect" class="yt-button" href="onnellab-content://suno/connect"><span class="yt-ko">Suno API 등록 · 상태 확인</span><span class="yt-en">Configure Suno API · Status</span></a>
+        <a class="yt-button yt-secondary" href="https://platform.suno.com/" target="_blank" rel="noopener noreferrer"><span class="yt-ko">Suno Platform 열기</span><span class="yt-en">Open Suno Platform</span></a>
+      </div>
+      <p class="yt-note"><span class="yt-ko">현재 등록 단계에서는 Keychain 저장 여부만 확인해요. 실제 생성 API 호출 검증은 Aether Inn 신곡 생성 어댑터가 연결된 뒤 별도로 표시합니다.</span><span class="yt-en">This setup currently verifies Keychain storage only. Live generation API verification will be shown separately once the Aether Inn generation adapter is connected.</span></p>
       <details><summary><span class="yt-ko">처음 연결하거나 버튼이 열리지 않을 때</span><span class="yt-en">First-time setup or launcher not opening</span></summary>
         <p><span class="yt-ko">로컬 연결 도우미를 설치한 Mac에서는 위 버튼이 연결 화면을 열어요. 새 Mac에서는 저장소를 최신으로 받은 뒤 아래 명령으로 한 번만 설치해요.</span><span class="yt-en">The buttons open the installed local helper. On a new Mac, update the repository and install the launcher once:</span></p>
         <pre><code>cd ~/Projects/onnel-content-engine
