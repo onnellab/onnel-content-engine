@@ -47,3 +47,72 @@ refresh-token lifetime. Resolve those project settings before unattended product
 Sources: Google installed-app OAuth documentation at
 https://developers.google.com/identity/protocols/oauth2/native-app and YouTube
 channel verification at https://developers.google.com/youtube/v3/docs/channels/list.
+
+## Operator setup on the worker Mac
+
+The deployed dashboard has a **YouTube · Shorts** panel above search/filter controls.
+Choose **이 Mac에서 YouTube 연결** or **연결 상태 · 테스트** on the Mac that will run
+recording and uploading. These links open `ONNELLAB YouTube Connect.app` through the
+registered `onnellab-content` scheme. A phone/other computer cannot configure this Mac's
+Keychain through the public page; the helper belongs to the machine where it is opened.
+
+This Mac has the helper installed in `~/Applications/ONNELLAB YouTube Connect.app`.
+For a different Mac, update the repository and run once:
+
+```sh
+cd ~/Projects/onnel-content-engine
+python3 -B scripts/install_youtube_connect.py
+```
+
+The local screen includes the Google Cloud setup links. Enable YouTube Data API v3,
+configure the OAuth consent audience, create a Desktop OAuth client, and import its JSON
+**only into the local page**. Enter the independently obtained UC-prefixed ONNELLAB channel
+ID, not a channel name or @handle. Complete Google login/consent personally. Do not put the
+JSON or tokens into chat. The helper verifies the channel before storing the whole bundle;
+there is no refresh-token copy/paste step. Keep the original downloaded JSON private.
+
+The **연결 테스트** action refreshes credentials and reads the channel. It does not upload
+or prove that Google has lifted a project's private-upload restriction. Testing-mode grant
+expiry and YouTube API audit restrictions are separate activation issues. The helper closes
+after twenty minutes; the worker does not require its browser page or server to stay open.
+
+## Scheduled execution contract
+
+The existing ONNELLAB Shorts automation remains Monday/Wednesday/Friday around 09:00
+Asia/Seoul. Its prompt now calls the shared Keychain provider and performs a connection
+check before expensive recording/rendering. It never exports credentials, asks for a
+Keychain password, starts interactive OAuth, or silently switches accounts during a run.
+A missing/revoked/locked grant reports a safe blocked reason and points to local setup.
+It preserves the no-human-per-video-review policy and reconciles uncertain uploads before
+creating anything new. Remote Desktop access in a future scheduled run remains a runtime
+capability to check, not a completed verification claim.
+
+Use already configured persistent production asset/queue paths. For a new installation,
+the documented defaults are `~/Library/Application Support/ONNELLAB/content-engine/video-assets`
+and `~/Library/Application Support/ONNELLAB/content-engine/video-state`, with private access.
+Do not use the temporary rendering/proof queues from implementation tests for production.
+
+## Verification and remaining activation checks — 2026-09-21
+
+Native macOS Security.framework verification used a randomly named isolated test Keychain
+item, never the production account: create, read, atomic replacement, separate Python
+worker-process read, exact-item deletion and absence after cleanup all passed without
+printing a credential payload. The actual production credential existence check returned
+not configured. The signed launcher installed and opened the custom-scheme local console;
+its loopback health instance and 0600 private session file were verified.
+
+Real Chrome testing with an isolated in-memory store and fake Google transport exercised
+Desktop JSON selection, PKCE authorization navigation, the callback/redirect, channel status,
+read-only recheck and rejected reduced permissions. No request reached Google. Browser
+storage remained empty; viewport widths 390, 768 and 1280 had no horizontal overflow;
+desktop and mobile screenshots were reviewed. Fake-provider success is not a real account
+connection or a live YouTube upload.
+
+Known display-only limitation: after a failed check, changing the local console language
+can redraw a previous client-side success label. Reload the local page and press connection
+test again to read server state. The server clears its previous verified result on failure,
+and the worker does not trust browser labels. A follow-up UI state patch was blocked by the
+tool safety check and was not applied; no workaround was used to execute that request.
+
+No ONNELLAB OAuth grant, actual YouTube account verification, or live upload has been
+completed without the owner's Desktop client and consent. These are activation steps.

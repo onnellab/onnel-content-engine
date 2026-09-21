@@ -282,28 +282,28 @@ footage block publication automatically; they do not create a human review step.
 
 ### Account setup and credential boundary
 
-1. In your own Google Cloud project enable YouTube Data API v3 and configure the
-   OAuth consent screen. Create an appropriate OAuth desktop client. Complete
-   Google's normal account/consent flow once, selecting the intended channel
-   (including the correct Brand Account). Do not automate login or bypass 2FA.
-2. Use a trusted OAuth client supporting a localhost loopback redirect, random
-   `state`, PKCE S256 and offline access to obtain a refresh token. Request only
-   `https://www.googleapis.com/auth/youtube.upload` and
-   `https://www.googleapis.com/auth/youtube.readonly`. The engine deliberately
-   supplies no login browser or token acquisition server. Testing-mode consent
-   can cause refresh tokens to expire; use the applicable Google consent/project
-   configuration for your intended persistent account.
-3. Set `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`, and
-   **trusted** `YOUTUBE_CHANNEL_ID` in the worker's private environment. Obtain
-   the expected channel ID independently from your account settings. The brief
-   cannot choose it. Never put values in Git, task prompts, command arguments,
-   status files, plist examples or generated/public outputs. Use OS secret
-   management/private service environment provisioning; restrict any local
-   environment file to 0600 and its directory to 0700. Avoid shell tracing.
-4. Run `youtube-check` to list required/missing names without printing values.
-   Run `youtube-check --execute` only when network access is authorized. It
-   refreshes OAuth and verifies `channels.list(mine=true)` returns exactly one
-   channel, matching the trusted expected ID. Ambiguous contexts fail closed. Every upload/reconcile invocation repeats channel verification.
+The implemented setup path is described in `docs/YouTube_Connection.md`. On the worker
+Mac, the dashboard's YouTube panel launches the installed local connection helper.
+The public dashboard never imports OAuth credentials or directly calls localhost.
+
+1. Enable YouTube Data API v3 in a Google Cloud project and configure its OAuth audience.
+   Create a **Desktop app** OAuth client and keep its downloaded JSON private. Copy the
+   expected ONNELLAB channel ID independently from YouTube advanced account settings.
+2. On the Mac's local connection page, select that JSON and enter the expected channel ID.
+   Complete Google's system-browser sign-in and consent once. The local helper uses a
+   random loopback port, state, PKCE S256, offline access, and only youtube.upload plus
+   youtube.readonly. It verifies the exact channel before atomically storing a complete
+   credential bundle in macOS Keychain. Failed reconnects retain the previous bundle.
+3. The worker, uploader and youtube-check share `short_video_credentials.py`. Keychain is
+   the default. Missing, locked, denied or corrupt entries block without secret prompts,
+   exported environment values or automatic fallback to another credential source.
+4. `youtube-check` checks configuration without reading the token payload or using the
+   network. `youtube-check --execute` refreshes OAuth and checks the exact stored channel;
+   it does not upload a test video. Initial setup consent is separate from video approval.
+
+Use the same Mac, macOS user and Python installation for setup and scheduled execution.
+An explicit Linux/environment deployment is opt-in, never a workaround for a failed Mac
+Keychain lookup. Do not write credentials to task prompts, Git, reports or shell arguments.
 
 Unverified API projects created after 2020-07-28 can have uploads restricted to
 private. A Google project compliance audit may be required to lift this. The
