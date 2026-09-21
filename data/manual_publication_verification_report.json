@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-09-20T12:42:33+09:00",
+  "checked_at": "2026-09-21T12:37:46+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 84,
-    "already_done": 49,
+    "checked": 90,
+    "already_done": 51,
     "verified": 0,
-    "pending": 35
+    "pending": 39
   },
   "items": [
     {
@@ -234,6 +234,18 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mtkllvwfbr2n",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0014::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0014",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mvyrwjl3gn24",
       "verification_method": "",
       "verification_confidence": ""
     },
@@ -514,6 +526,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0014::devto::en::markdown",
+      "topic_id": "TOPIC-0014",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-turn-rough-notes-into-a-structured-first-draft-509i",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0015::devto::en::markdown",
       "topic_id": "TOPIC-0015",
       "platform": "devto",
@@ -648,6 +672,30 @@
     {
       "manual_key": "TOPIC-0012::linkedin::en::linkedin",
       "topic_id": "TOPIC-0012",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0014::x::en::x",
+      "topic_id": "TOPIC-0014",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0014::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0014",
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
@@ -876,6 +924,30 @@
     {
       "manual_key": "TOPIC-0012::medium::en::markdown",
       "topic_id": "TOPIC-0012",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0014::hashnode::en::markdown",
+      "topic_id": "TOPIC-0014",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0014::medium::en::markdown",
+      "topic_id": "TOPIC-0014",
       "platform": "medium",
       "language": "en",
       "template_id": "markdown",
