@@ -699,10 +699,11 @@ must not alter tracked reviews, publishing approvals, or generated dashboards.
 ## Approved educational demo shorts
 
 The approved short-video extension may adapt existing problem-first topics into
-English-only YouTube educational app demos. It does not authorize advertisements or change
-article publishing. The pipeline validates caller-authored briefs, renders local
-MP4 drafts, and supports separately authorized resumable YouTube uploads and
-verified publication status. Runtime does not invoke Codex. OAuth, approved footage
-and scheduling activation remain operator setup; no upload is enabled by installing it. See
+English-only YouTube educational app demos. It does not change article publishing.
+The pipeline validates briefs, renders local MP4s, applies a tracked fail-closed
+automatic-publication policy, creates a hash-bound attestation, uploads, and verifies
+provider status without per-video human review. Runtime does not invoke Codex. Missing
+OAuth credentials, production footage, factual support, or policy compatibility block
+publication instead of asking for approval. See
 [Short Video Pipeline](docs/Short_Video_Pipeline.md) and
 [English YouTube Shorts Strategy](docs/Short_Video_Strategy.md).

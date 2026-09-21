@@ -77,8 +77,8 @@ components, CSS, browser URLs or scripts are accepted.
   `timezone` is an installed IANA name such as `UTC` or `Asia/Seoul`. The offset
   must agree at that instant, including DST. Future jobs queue normally, but
   cannot render before due. This is render eligibility, not a promise to publish.
-- `recording` is required, even in test mode. Supply an actual reviewed app
-  recording for production, `.mp4`, `.mov` or `.webm`. Optional narration is
+- `recording` is required, even in test mode. Supply an actual production app
+  recording from the dedicated trusted asset source, `.mp4`, `.mov` or `.webm`. Optional narration is
   local `.wav`, `.mp3` or `.m4a`; recording audio is muted. No speech generation.
   Recording must cover the full requested duration; optional narration may be
   shorter but not longer than the video. Assets are at most 120 seconds and
@@ -89,8 +89,10 @@ components, CSS, browser URLs or scripts are accepted.
   accounts, filenames, permissions and rights to any included audio beforehand.
 - `test_only: true` enables clearly watermarked test footage, including synthetic
   color bars. It **never** becomes upload eligible, even after successful render.
-  Production footage authenticity is a human preparation requirement: ffprobe
-  verifies media structure, not whether the pixels actually depict your app.
+  Production footage provenance is an unattended input contract: the task may use
+  only the dedicated real-recording asset root. Test/fixture/synthetic/sample-style
+  filenames are blocked by the automatic publication policy. ffprobe verifies
+  media structure, not semantic authenticity, so uncertainty blocks publication.
 
 ## English video-copy guide
 
@@ -104,13 +106,14 @@ facts, then write the shortest natural English that fits the scene.
 - Tone: practical, calm, globally understandable; avoid slang, idioms, keyword stuffing,
   superlatives and translationese such as `It is possible to...` when a direct verb works.
 - Claims: never invent speed, quality, privacy, compatibility or safety claims. Use only
-  behavior supported by the source topic, app registry/release facts and reviewed footage.
-- Review: deterministic validation checks only objective shape/length/timing. It does not
-  pretend to judge whether English is natural; ChatGPT/human review owns language quality.
+  behavior supported by the source topic, app registry/release facts and actual footage.
+- Language quality: the scheduled ChatGPT authoring pass rewrites and self-checks the
+  English against those sources. No human review gate is required. If meaning or support
+  is uncertain, the task must not enqueue the brief; runtime objective violations block.
 
 If an English source topic exists, prefer it as the factual base. A Korean source may be
 used when needed, but the resulting script is a fresh English adaptation, not a literal
-translation. If meaning is uncertain, leave the job blocked for review.
+translation. If meaning is uncertain, leave the job blocked rather than asking a human to approve it.
 
 ## Commands
 
@@ -264,18 +267,18 @@ real ffprobe gate and cached-repeat check without a second renderer invocation:
 
 MP4s, previews, queue state and machine-readable results remain ignored under
 `.runtime/video-smoke/`; they are not committed. This is local macOS fixture
-proof, not Linux execution, actual-product footage approval, upload validation,
+proof, not Linux execution, production-footage provenance, upload validation,
 or release/publication proof. System-font availability may change typography
 between hosts; review both previews on the intended production worker.
 
 ## Phase 2: authorized local YouTube runtime
 
-Phase 2 extends the same queue; ChatGPT supplies briefs and can execute explicitly
-authorized approvals. **Codex is not a runtime dependency.** The engine does not
+Phase 2 extends the same queue; ChatGPT supplies briefs and the worker creates
+automatic fail-closed publication attestations from the repository policy. **Codex is not a runtime dependency.** The engine does not
 pull Git, log in, activate timers, generate speech, or invent footage. Use one
 persistent Mac/Linux host and one local state root, never simultaneous ephemeral
-Actions queues. CI is offline validation only. No credentials or approved real
-footage are configured by this milestone; upload readiness remains blocked.
+Actions queues. CI is offline validation only. Missing credentials or production
+footage block publication automatically; they do not create a human review step.
 
 ### Account setup and credential boundary
 
@@ -310,7 +313,7 @@ public success. The adapter uses Python stdlib urllib, disables redirects, uses
 `www.googleapis.com/upload/youtube/v3/videos` resumable path with an upload ID
 is accepted; unexpected provider URL changes fail closed.
 
-### Commands and approval
+### Commands and automatic publication policy
 
 All examples use this prefix (global options precede the command):
 
@@ -329,46 +332,54 @@ enqueue-dir                         # data/video_briefs, sorted JSON files
 enqueue-dir /PRIVATE/inbox --dry-run
 worker --once --inbox --dry-run
 worker --once --inbox                # import and render one due job
-approve JOB --made-for-kids false --synthetic-media false --execute
-upload JOB --execute
+upload JOB --execute                 # low-level recovery/diagnostic path
 reconcile JOB --execute
 worker --once --inbox --upload --execute
 status JOB
 list
 ```
 
-`approve`, `upload`, `reconcile` and upload-capable `worker` default to a
-non-mutating dry-run without `--execute`. `--dry-run` always overrides
-`--execute`: no secret loading, API calls, subprocesses, approvals, lock creation
-or queue writes. The safe credential check only inspects environment presence.
-`enqueue --dry-run` validates local inputs; `enqueue-dir --dry-run` inventories
-JSON files only. A normal enqueue imports assets and does not authorize upload.
+There is **no per-video human approval command in the normal workflow**. The tracked
+`data/video_publish_policy.json` is the one-time publication policy. For the current
+real-screen, no-narration format it fixes English-only YouTube Shorts, public privacy,
+`made_for_kids=false`, `synthetic_media=false`, and fail-closed automatic review.
+The worker uses the brief `due_at` only as its execution gate; once a due job passes
+all automatic checks it uploads as public immediately. If the Google project forces
+private uploads, the queue reports `forced_private` instead of claiming publication.
 
-Approval is a separate durable command **after render**, binding MP4 SHA-256,
-immutable payload and exact metadata/disclosures. A brief never authorizes
-publication. Choose both disclosure booleans explicitly; `madeForKids` is not
-inferred from the audience, and synthetic media is not inferred from narration.
-The title is capped at 100 Unicode characters, not 100 UTF-8 bytes; the
-description is capped at 5000 UTF-8 bytes. Educational videos use category ID 27. Angle brackets are rejected in upload metadata.
+After a production render the worker automatically binds a durable attestation to the
+exact MP4 SHA-256, immutable job payload, exact YouTube metadata, and publication-policy
+hash. The existing state key remains named `approval` for compatibility, but its `mode`
+is `automatic_fail_closed`; it is not evidence of a human review. A changed render,
+payload, metadata, or malformed policy cannot reuse that attestation.
 
-Private is the default. Public/unlisted need the separate `--approve-publish`
-policy choice, e.g. append `--privacy public --approve-publish` to `approve`.
-Scheduling requires `--privacy private --publish-at 2026-12-01T12:00:00Z
---approve-publish`. Use a genuinely future UTC time at approval **and execution**;
-past timestamps are blocked because Google may publish immediately. Scheduling
-is only submitted on a new, never-published insert, never via an update of an
-existing video. An authorized ChatGPT session may run these approval commands
-under the user's publication policy; there is no forced human check on every
-run. The engine never grants itself approval. Render, approve, then invoke the
-worker again when a newly rendered job is awaiting approval.
+The automatic gate refuses at least: test/ineligible jobs, non-English CJK copy,
+fixture/test/synthetic/sample-style recording names, narration under the current
+no-narration policy, excessive exclamation, and configured hype/absolute marketing
+claims such as `best`, `fastest`, `guaranteed`, `100%`, or `never fails`. These checks
+are intentionally conservative and objective; they do not pretend to prove prose
+quality. The scheduled ChatGPT authoring pass must ground copy in the source topic,
+registry/release facts, and real app footage. Uncertainty means **blocked, not review**.
+
+`upload`, `reconcile`, and upload-capable `worker` default to non-mutating dry-run
+without `--execute`. `--dry-run` always overrides `--execute`: no provider mutation,
+media upload, or queue write occurs. `enqueue --dry-run` validates local inputs;
+`enqueue-dir --dry-run` inventories JSON only.
+
+The current `synthetic_media=false` policy is valid only while unattended production
+uses real app screen recordings, deterministic layout graphics, and no narration. If a
+future template adds synthetic narration, generated people, altered realistic scenes,
+or another disclosure-sensitive format, change the policy/validation first; otherwise
+the worker must remain blocked. The title is capped at 100 Unicode characters and the
+description at 5000 UTF-8 bytes. Educational videos use YouTube category ID 27.
 
 ### Persistent state, status and recovery
 
-The same `flock` covers render, approval, upload and reconciliation. Resumable
+The same `flock` covers render, automatic attestation, upload and reconciliation. Resumable
 chunks are at most 1 MiB (256 KiB multiple). Media transfer has a 15-minute
 elapsed budget, checked before continuing chunks (an in-flight request retains
 its 30-second timeout). Budget exhaustion preserves the resumable session. Before each send the file hash/size
-are checked against the approved immutable render. Session URLs exist only in
+are checked against the automatically attested immutable render. Session URLs exist only in
 `jobs/JOB/youtube-session.json`, atomically written with mode 0600 before any
 media bytes. They are secrets: never paste/copy them into issues or reports.
 Queue status contains no token, session URL, absolute media path or raw API body.
@@ -377,7 +388,7 @@ or provider rejection, 130 means interrupted; exit 0 alone does not mean public
 publication. Inspect `status`, `error`, `upload.video_id`, and `upload.observed`.
 
 ```text
-rendered + bound approval -> uploading (intent durable before POST)
+rendered + automatic hash-bound attestation -> uploading (intent durable before POST)
  -> accepted (video ID durable) -> processing
  -> uploaded_private | scheduled | published | uploaded_unlisted | forced_private
  -> rejected (processing/upload rejected or failed)
@@ -418,7 +429,7 @@ group. Abrupt kill/power loss leaves durable intent for recovery. An interrupted
 render is blocked on the next worker invocation and can be explicitly retried.
 
 Back up the **entire** private queue directory, including session files, input
-snapshots, outputs, approval and queue JSON, while the worker is stopped. Encrypt
+snapshots, outputs, automatic attestation and queue JSON, while the worker is stopped. Encrypt
 and restrict backup access; do not restore only queue.json or run original and
 restored hosts concurrently. Local POSIX filesystems only; no NFS lock claims.
 
@@ -457,7 +468,7 @@ narrower PATH than terminals; provide full Python/browser paths and a PATH
 containing Node/ffprobe. Verify fonts on that host. Optional local narration may
 be shorter than the video, must be positive and no longer than it; no padded
 silence is required. Recording still covers the full duration. No paid AI/TTS/API
-service is enabled. Use only approved footage/audio with documented ownership
+service is enabled. Use only production footage/audio with documented ownership
 or license sources. Review Remotion's [license](https://www.remotion.dev/license)
 for your organization; Noto fonts use the SIL Open Font License and should be
 installed from their official distribution with its license retained.
@@ -465,25 +476,22 @@ installed from their official distribution with its license retained.
 ### Reusable ChatGPT task prompt
 
 > Read current repository instructions, app/topic registry, `data/video_briefs/`,
-> pipeline documentation and the persistent worker's machine-readable status.
-> Work only within my existing upload/publication authorization. Create an
-> English-only brief that teaches a real workflow using approved local app footage
-> and licensed assets. Prefer an English source topic; when facts come from Korean,
-> write fresh idiomatic English from the verified meaning rather than translating
-> sentence by sentence. Never invent screens, claims, footage availability or
-> disclosure answers. If the English meaning or factual support is uncertain, block
-> the brief for review rather than guessing. If assets, authorization or either disclosure choice are
-> missing, report the blocker. Commit the brief to the inbox using the authorized
-> GitHub workflow or enqueue it with the local CLI. A separately authorized
-> checkout update may be necessary; the engine does not pull. If this run has
-> Remote Desktop/CLI access to the persistent host, run readiness, enqueue,
-> render, approve the exact rendered hash under my policy, and run the one-shot
-> worker. Verify the durable YouTube ID and reconciled processing/privacy status.
-> Report pending processing, forced-private, missing credentials or uncertain
-> upload honestly. Never retry by creating a new job after an uncertain upload.
-> Do not assume Remote Desktop is available in every ChatGPT Tasks run. If no
-> supported action reaches the host, leave a durable brief and report execution
-> blocked. Do not activate schedules or use Codex as a runtime dependency.
+> `data/video_publish_policy.json`, pipeline documentation and the persistent worker
+> status. Work only within my standing automatic-publication policy. Create an
+> English-only brief that teaches a real workflow using production app footage and
+> licensed assets. Prefer an English source topic; when facts come from Korean, write
+> fresh idiomatic English from the verified meaning instead of translating sentence by
+> sentence. Never invent screens, claims, footage availability or disclosure facts.
+> Do not request per-video human review. If English meaning, factual support, assets,
+> credentials or policy compatibility are uncertain, leave the job blocked rather
+> than guessing. Commit/enqueue the brief, then—when Remote Desktop/CLI is available—
+> run readiness and the one-shot worker with `--upload --execute`. The worker renders,
+> creates the automatic hash-bound attestation from the policy, uploads, and reconciles
+> provider status without a human approval step. Verify the durable YouTube ID and
+> actual processing/privacy status. Report pending processing, forced-private, missing
+> credentials or uncertain upload honestly. Never create a replacement job after an
+> uncertain upload. If no supported action reaches the host, leave a durable brief and
+> report execution blocked. Do not use Codex as a runtime dependency.
 
 Official contracts: [videos.insert](https://developers.google.com/youtube/v3/docs/videos/insert),
 [resumable upload protocol](https://developers.google.com/youtube/v3/guides/using_resumable_upload_protocol),
@@ -499,7 +507,7 @@ The isolated `short-video.yml` workflow performs these checks on changed video
 paths or manual dispatch, using repository action-version conventions and no
 secrets, dispatch shell input, real uploads or service activation. Fake-transport
 tests are protocol/state evidence, **not** live OAuth, provider acceptance,
-Linux service execution or actual-footage approval. Phase-1 test footage remains
+Linux service execution or production-footage provenance. Phase-1 test footage remains
 non-uploadable. The separate dry-run metadata-path defect was fixed without weakening the
 article review gate or editing generated articles; the supervisor verified the
 full pre-upload suite (435 tests) after that fix.
@@ -532,7 +540,7 @@ all four YouTube credential variables were absent from the checked environment,
 and no production footage had been registered.
 Dry-run/readiness created no runtime state. Owned Codex/render processes exited;
 this work started no emulator, mirroring app, service, timer, or ChatGPT scheduled task.
-Live OAuth/YouTube acceptance, real-footage approval, Linux service execution,
+Live OAuth/YouTube acceptance, production-footage provenance, Linux service execution,
 and Remote Desktop availability inside a future ChatGPT scheduled run remain
 activation checks, not completed verification claims.
 

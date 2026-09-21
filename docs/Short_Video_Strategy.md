@@ -87,7 +87,7 @@ Do not turn this table into a permanent algorithm. Re-rank after real channel/st
 evidence exists.
 ## First 12-video test mix
 
-Use actual approved footage and the named source topic; do not invent features.
+Use actual production footage and the named source topic; do not invent features.
 
 1. TagWeaver — TOPIC-0008 — MP3 metadata cleanup — problem_solution.
 2. Aligna — TOPIC-0012 — preview a batch rename before applying it — problem_solution.
@@ -165,8 +165,10 @@ Author video copy directly in plain English:
 
 Deterministic validators enforce length, line count, timing and safe metadata only.
 They must not assign a fake language-quality score. Naturalness and factual fidelity
-remain review responsibilities.
-## Review cadence
+are handled by the scheduled ChatGPT authoring/self-check pass; there is no per-video
+human review. Uncertainty blocks publication.
+
+## Performance review cadence
 
 After the first 12 videos:
 1. compare apps on retention/completion and measurable store movement;
