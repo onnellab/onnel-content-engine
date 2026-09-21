@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Private local short-video queue, explicit YouTube approval and resumable uploads."""
+"""Private local short-video queue with fail-closed unattended YouTube publishing."""
 import argparse
 import json
 from pathlib import Path
@@ -25,17 +25,11 @@ def main():
     p = commands.add_parser('render')
     p.add_argument('job_id')
     p.add_argument('--dry-run', action='store_true')
-    for command in ['upload', 'reconcile', 'approve']:
+    for command in ['upload', 'reconcile']:
         p = commands.add_parser(command)
         p.add_argument('job_id')
         p.add_argument('--execute', action='store_true')
         p.add_argument('--dry-run', action='store_true')
-        if command == 'approve':
-            p.add_argument('--made-for-kids', choices=['true', 'false'], required=True)
-            p.add_argument('--synthetic-media', choices=['true', 'false'], required=True)
-            p.add_argument('--privacy', choices=['private', 'unlisted', 'public'], default='private')
-            p.add_argument('--publish-at', help='UTC YYYY-MM-DDTHH:MM:SSZ')
-            p.add_argument('--approve-publish', action='store_true')
     p = commands.add_parser('youtube-check')
     p.add_argument('--execute', action='store_true')
     p.add_argument('--dry-run', action='store_true')
@@ -66,10 +60,6 @@ def main():
                 result = readiness(queue)
             elif args.command == 'youtube-check':
                 result = YouTube().verify() if execute else check_config()
-            elif args.command == 'approve':
-                result = Uploader(queue).approve(args.job_id, {
-                    'made_for_kids': args.made_for_kids == 'true', 'synthetic_media': args.synthetic_media == 'true',
-                    'privacy': args.privacy, 'publish_at': args.publish_at, 'publish_approved': args.approve_publish}, execute=execute)
             elif args.command in {'upload', 'reconcile'}:
                 result = Uploader(queue).run(args.job_id, execute=execute, reconcile=args.command == 'reconcile')
             else:

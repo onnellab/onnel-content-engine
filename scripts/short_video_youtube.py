@@ -207,22 +207,31 @@ class Uploader:
             raise UploadError('render_integrity')
         return path
 
+    def bind_approval_locked(self, state, job, choices, *, mode='manual', policy_hash=None):
+        if job['status'] not in {'rendered', 'blocked'} or job.get('upload'):
+            raise UploadError('approval_requires_unuploaded_render')
+        self.artifact(job)
+        self.q._render(state, job, None)
+        body = metadata(job, choices, self.q.clock())
+        approval = {'render_hash': job['result']['sha256']['video.mp4'],
+                    'payload_hash': job['payload_hash'], 'choices': choices,
+                    'metadata_hash': digest(body), 'approved_at': self.q.clock().isoformat(),
+                    'mode': mode}
+        if policy_hash is not None:
+            if not re.fullmatch(r'[0-9a-f]{64}', policy_hash):
+                raise UploadError('invalid_automatic_policy_hash')
+            approval['policy_hash'] = policy_hash
+        job['approval'] = approval
+        job['error'] = None
+        atomic_json(self.q.state_path, state)
+        return job
+
     def approve(self, job_id, choices, *, execute=False):
         if not execute:
             return {'dry_run': True, 'action': 'approve', 'job_id': job_id}
         with self.q.lock():
             state = self.q._read()
-            job = self.job(state, job_id)
-            if job['status'] != 'rendered' or job.get('upload'):
-                raise UploadError('approval_requires_unuploaded_render')
-            self.artifact(job)
-            self.q._render(state, job, None)
-            body = metadata(job, choices, self.q.clock())
-            job['approval'] = {'render_hash': job['result']['sha256']['video.mp4'],
-                               'payload_hash': job['payload_hash'], 'choices': choices,
-                               'metadata_hash': digest(body), 'approved_at': self.q.clock().isoformat()}
-            atomic_json(self.q.state_path, state)
-            return job
+            return self.bind_approval_locked(state, self.job(state, job_id), choices)
 
     @staticmethod
     def job(state, job_id):
@@ -246,6 +255,10 @@ class Uploader:
             approval = job.get('approval', {})
             if approval.get('render_hash') != job['result']['sha256']['video.mp4'] or approval.get('payload_hash') != job['payload_hash']:
                 raise UploadError('upload_approval_required')
+            if approval.get('mode') not in {'manual', 'automatic_fail_closed'}:
+                raise UploadError('approval_mode_invalid')
+            if approval.get('mode') == 'automatic_fail_closed' and not re.fullmatch(r'[0-9a-f]{64}', approval.get('policy_hash', '')):
+                raise UploadError('automatic_policy_hash_missing')
             upload = job.get('upload')
             # After durable ID, only observe it. A past schedule must not prevent observation.
             body = metadata(job, approval['choices'], self.q.clock(), executing=not bool(upload))

@@ -6,6 +6,8 @@ from contextlib import contextmanager
 
 from short_video_pipeline import ROOT, VideoError, atomic_json, due_time, load_json
 from short_video_youtube import Uploader, YouTube, check_config, timestamp
+from short_video_policy import (PolicyError, automatic_choices, load_policy,
+                                policy_digest, policy_summary)
 
 INBOX = ROOT / 'data/video_briefs'
 
@@ -48,20 +50,25 @@ def readiness(queue):
         except (VideoError, OSError):
             problem = 'snapshot_missing_or_changed'
         asset_checks.append({'job_id': job['id'], 'error': problem, 'test_only': job['brief']['test_only']})
+    try:
+        automatic = policy_summary(load_policy())
+        policy_error = None
+    except (PolicyError, OSError):
+        automatic, policy_error = None, 'automatic_policy_invalid_or_missing'
     return {'assets': asset_checks, 'dependencies': deps, 'credentials': check_config(),
             'asset_root_exists': queue.assets.is_dir(), 'queued_jobs': len(jobs),
             'production_jobs': sum(not j['brief']['test_only'] for j in jobs),
-            'footage_approval_required': True, 'fonts_require_local_review': True,
+            'automatic_publication': automatic, 'automatic_policy_error': policy_error,
+            'human_review_required': False, 'semantic_uncertainty_action': 'blocked',
             'network_verified': False, 'timers_managed_by_engine': False,
             'external_scheduler_status': 'not_checked'}
 
 
-def worker(queue, *, upload=False, execute=False, dry_run=False, inbox=None, api_factory=YouTube, renderer=None):
+def worker(queue, *, upload=False, execute=False, dry_run=False, inbox=None,
+           api_factory=YouTube, renderer=None, policy=None):
     if dry_run or (upload and not execute):
         return {'dry_run': True, 'jobs': queue.status(),
                 'inbox': enqueue_dir(queue, inbox, dry_run=True) if inbox else None}
-    # Import uses the same queue lock for each atomic enqueue. No lock is held between
-    # import and selection; idempotency and the subsequent worker lock prevent duplicates.
     if inbox:
         enqueue_dir(queue, inbox)
     with queue.lock():
@@ -70,22 +77,39 @@ def worker(queue, *, upload=False, execute=False, dry_run=False, inbox=None, api
         if upload:
             try:
                 api = api_factory()
-                api.verify()  # Config/auth stops this invocation before render or upload.
+                api.verify()
             except Exception as exc:
                 from short_video_youtube import UploadError
-                return {'status': 'blocked', 'error': str(exc) if isinstance(exc, UploadError) else 'youtube_check_failed'}
+                return {'status': 'blocked',
+                        'error': str(exc) if isinstance(exc, UploadError) else 'youtube_check_failed'}
+
         for job in state['jobs'].values():
             if job['status'] == 'rendering':
                 job.update(status='blocked', error='interrupted_render_requires_retry')
                 atomic_json(queue.state_path, state)
+
         jobs = sorted(state['jobs'].values(), key=lambda j: (due_time(j['brief']), j['id']))
+        uploader = Uploader(queue, api_factory)
+
+        # Existing provider evidence is always reconciled before considering new publication.
         for job in jobs:
             if upload and (job.get('upload') or job['status'] in {'accepted', 'processing'}):
                 if job['status'] == 'scheduled' and timestamp(job['approval']['choices']['publish_at']) > queue.clock():
                     continue
-                if job['status'] in {'published', 'uploaded_private', 'uploaded_unlisted', 'forced_private', 'rejected'}:
+                if job['status'] in {'published', 'uploaded_private', 'uploaded_unlisted',
+                                     'forced_private', 'rejected'}:
                     continue
-                return Uploader(queue, api_factory).run_locked(state, job, reconcile=True, api=api)
+                return uploader.run_locked(state, job, reconcile=True, api=api)
+
+        if upload:
+            try:
+                policy = policy or load_policy()
+                choices_probe = policy_summary(policy)
+            except (PolicyError, OSError):
+                return {'status': 'blocked', 'error': 'automatic_policy_invalid_or_missing'}
+        else:
+            choices_probe = None
+
         for job in jobs:
             if due_time(job['brief']) > queue.clock():
                 continue
@@ -93,11 +117,17 @@ def worker(queue, *, upload=False, execute=False, dry_run=False, inbox=None, api
                 queue._render(state, job, renderer)
                 if not upload:
                     return job
-                if not job.get('approval'):
-                    return {'status': 'blocked', 'error': 'upload_approval_required', 'job_id': job['id']}
-            if upload and job['status'] in {'rendered', 'blocked'} and not job.get('upload') and job.get('approval'):
-                return Uploader(queue, api_factory).run_locked(state, job, api=api)
-        pending = [j for j in jobs if j['status'] == 'rendered' and not j.get('approval')]
-        if upload and pending:
-            return {'status': 'blocked', 'error': 'upload_approval_required', 'job_id': pending[0]['id']}
+            if upload and job['status'] in {'rendered', 'blocked'} and not job.get('upload'):
+                try:
+                    if not job.get('approval'):
+                        choices = automatic_choices(job, policy)
+                        uploader.bind_approval_locked(
+                            state, job, choices, mode='automatic_fail_closed',
+                            policy_hash=policy_digest(policy))
+                    return uploader.run_locked(state, job, api=api)
+                except PolicyError as exc:
+                    job.update(status='blocked', error=str(exc))
+                    atomic_json(queue.state_path, state)
+                    return {'status': 'blocked', 'error': str(exc), 'job_id': job['id'],
+                            'automatic_publication': choices_probe}
         return {'status': 'idle'}

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mode": "automatic_fail_closed",
+  "destination": "youtube_shorts",
+  "locale": "en",
+  "privacy": "public",
+  "publish_mode": "on_worker_due",
+  "made_for_kids": false,
+  "synthetic_media": false,
+  "allow_narration": false,
+  "require_released_app": true,
+  "require_real_recording": true,
+  "forbidden_marketing_terms": [
+    "#1",
+    "100%",
+    "best",
+    "fastest",
+    "guaranteed",
+    "perfect",
+    "never fails",
+    "unlimited",
+    "free forever"
+  ]
+}
