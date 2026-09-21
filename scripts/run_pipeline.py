@@ -232,7 +232,10 @@ def run_pipeline(
             generate_all_internal_links(topics_path, apps_path, metadata_root)
             evaluate_all_articles(topics_path, metadata_root, assets_root, review_root)
             schedule_ready_articles(topics_path, review_root, legacy_topics_path)
-            publish_due_articles(topics_path, review_root, legacy_topics_path, site_url=site_url)
+            publish_due_articles(
+                topics_path, review_root, legacy_topics_path, site_url=site_url,
+                metadata_root=metadata_root,
+            )
             build_site(topics_path, html_root, site_url)
             generate_social_posts(topics_path, social_root, site_url, include_prepublication=True)
             generate_syndication_drafts(

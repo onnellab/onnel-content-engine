@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 import sys
@@ -10,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from run_pipeline import run_pipeline
+from publish_due_articles import publish_due_articles
 
 
 class GitHubActionsTest(unittest.TestCase):
@@ -91,7 +93,13 @@ class GitHubActionsTest(unittest.TestCase):
         topics_before = topics_path.read_text(encoding="utf-8")
         legacy_before = legacy_path.read_text(encoding="utf-8")
 
-        run_pipeline(dry_run=True)
+        with patch("run_pipeline.publish_due_articles", wraps=publish_due_articles) as publish:
+            run_pipeline(dry_run=True)
+        publish.assert_called_once()
+        copied_topics = publish.call_args.args[0]
+        copied_metadata = publish.call_args.kwargs["metadata_root"]
+        self.assertEqual(copied_metadata, copied_topics.parent.parent / "generated" / "metadata")
+        self.assertNotEqual(copied_metadata, ROOT / "generated" / "metadata")
 
         self.assertEqual(topics_path.read_text(encoding="utf-8"), topics_before)
         self.assertEqual(legacy_path.read_text(encoding="utf-8"), legacy_before)
