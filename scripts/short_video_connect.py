@@ -227,7 +227,7 @@ def private_directory(path):
     return path
 
 
-def open_console(*, open_browser=True, ttl=1200, private_root=PRIVATE_ROOT, profile="onnellab"):
+def open_console(*, open_browser=True, ttl=7200, private_root=PRIVATE_ROOT, profile="onnellab"):
     profile = profile_id(profile)
     if sys.platform!='darwin': raise CredentialError('keychain_requires_macos')
     root=private_directory(Path(private_root) / ("youtube-"+profile))
