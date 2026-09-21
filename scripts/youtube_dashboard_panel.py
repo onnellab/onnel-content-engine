@@ -22,7 +22,7 @@ def youtube_settings_panel():
         <a id="youtube-connect" class="yt-button" href="onnellab-content://youtube/connect"><span class="yt-ko">이 Mac에서 YouTube 연결</span><span class="yt-en">Connect YouTube on this Mac</span></a>
         <a id="youtube-check" class="yt-button yt-secondary" href="onnellab-content://youtube/status"><span class="yt-ko">연결 상태 · 테스트</span><span class="yt-en">Connection status · Test</span></a>
       </div>
-      <p class="yt-note"><span class="yt-ko">연결 상태: 공개 페이지에서는 확인하지 않아요. 위 버튼으로 로컬 화면을 열면 실제 채널·권한·최근 확인 시각을 볼 수 있어요. 휴대폰이 아닌 작업용 Mac에서 눌러 주세요.</span><span class="yt-en">Status is not checked on this public page. Open the local console to see the verified channel, scopes and last check. Use the worker Mac, not a phone.</span></p>
+      <p class="yt-note"><span class="yt-ko">연결 상태와 통계는 위 ONNELLAB Media Console 영역에 자동 표시돼요. OAuth 재연결이나 권한 변경이 필요할 때만 이 버튼으로 작업용 Mac의 로컬 연결 화면을 열어 주세요.</span><span class="yt-en">Connection status and metrics are auto-published in the ONNELLAB Media Console section above. Open the local console on the worker Mac only when OAuth reconnection or permission changes are needed.</span></p>
       <details><summary><span class="yt-ko">처음 연결하거나 버튼이 열리지 않을 때</span><span class="yt-en">First-time setup or launcher not opening</span></summary>
         <p><span class="yt-ko">로컬 연결 도우미를 설치한 Mac에서는 위 버튼이 연결 화면을 열어요. 새 Mac에서는 저장소를 최신으로 받은 뒤 아래 명령으로 한 번만 설치해요.</span><span class="yt-en">The buttons open the installed local helper. On a new Mac, update the repository and install the launcher once:</span></p>
         <pre><code>cd ~/Projects/onnel-content-engine

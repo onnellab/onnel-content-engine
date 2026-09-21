@@ -1,8 +1,8 @@
 {
-  "name": "ONNELLAB Publish Status Dashboard",
-  "short_name": "ONNEL Dashboard",
-  "start_url": "/manual-publish/",
-  "scope": "/manual-publish/",
+  "name": "ONNELLAB Ops Dashboard",
+  "short_name": "ONNEL Ops",
+  "start_url": "/ops/",
+  "scope": "/ops/",
   "display": "standalone",
   "background_color": "#fffaf5",
   "theme_color": "#fffaf5",

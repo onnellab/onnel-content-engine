@@ -1121,12 +1121,12 @@ def html_document(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ONNELLAB 게시 상태 대시보드</title>
+  <title>ONNELLAB Ops Dashboard</title>
   <meta name="theme-color" content="#fffaf5">
-  <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="googlebot" content="noindex,nofollow,noarchive">
-  <meta name="naverbot" content="noindex,nofollow,noarchive">
-  <meta name="yeti" content="noindex,nofollow,noarchive">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+  <meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+  <meta name="naverbot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+  <meta name="yeti" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="ONNEL Dashboard">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -1365,7 +1365,7 @@ def html_document(
 <body>
   <header>
     <div class="bar">
-      <a class="brand" href="/" aria-label="ONNELLAB home"><img class="mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32"><div id="app-title">ONNELLAB 수동 게시</div></a>
+      <a class="brand" href="/" aria-label="ONNELLAB home"><img class="mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32"><div id="app-title">ONNELLAB Ops</div></a>
       <div class="header-right">
         <button id="lang-toggle" type="button" class="lang">English</button>
       </div>
@@ -4949,10 +4949,10 @@ def html_document(
 def pwa_manifest_document() -> str:
     return json.dumps(
         {
-            "name": "ONNELLAB Publish Status Dashboard",
-            "short_name": "ONNEL Dashboard",
-            "start_url": "/manual-publish/",
-            "scope": "/manual-publish/",
+            "name": "ONNELLAB Ops Dashboard",
+            "short_name": "ONNEL Ops",
+            "start_url": "/ops/",
+            "scope": "/ops/",
             "display": "standalone",
             "background_color": "#fffaf5",
             "theme_color": "#fffaf5",
@@ -4982,7 +4982,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v17';
+    return """const CACHE = 'onnellab-ops-v18';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './libsodium-sumo.js', './libsodium-wrappers.js'];
 
 self.addEventListener('install', (event) => {

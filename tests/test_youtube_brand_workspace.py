@@ -1,6 +1,7 @@
 """Brand isolation and offline workspace tests; no production tokens or network."""
 import copy
 import json
+import tempfile
 from pathlib import Path
 import sys
 import unittest
@@ -12,6 +13,8 @@ from short_video_credentials import resolve_credentials, credential_status, vali
 from short_video_oauth import Connection
 from youtube_profiles import profile_id, content_profile, require_content_profile, environment_names
 from youtube_workspace_panel import youtube_workspace_panel
+import youtube_workspace_panel as workspace_module
+from sync_youtube_ops_snapshot import public_profile
 from aether_planner import read_catalog, inspect_candidate, plan, timeline
 from test_short_video_credentials import BUNDLE, MemoryStore, FakeGoogle, CLIENT, CHANNEL, REDIRECT
 
@@ -137,6 +140,45 @@ class WorkspaceTests(unittest.TestCase):
         self.assertIn('textContent', html)
         self.assertIn('expires_at', html)
         self.assertIn('current!==generation', html)
+
+    def test_public_ops_snapshot_is_embedded_without_credentials(self):
+        snapshot = {
+            'schema_version': 1,
+            'kind': 'onnellab_youtube_ops_snapshot',
+            'generated_at': '2026-09-21T14:00:00+00:00',
+            'expires_at': '2026-09-28T14:00:00+00:00',
+            'profiles': {
+                'aether_inn': {
+                    'profile': 'aether_inn', 'state': 'available',
+                    'channel': {'id': CHANNEL, 'title': 'Aether Inn'},
+                    'statistics': {'subscriberCount': 6, 'hiddenSubscriberCount': False},
+                    'summary': {'views': 10, 'estimatedMinutesWatched': 20, 'subscribersGained': 1, 'subscribersLost': 0},
+                    'period': {'requested_start': '2026-09-01', 'requested_end': '2026-09-20', 'timezone': 'UTC', 'last_reported_day': '2026-09-20'},
+                    'videos': [], 'comments': [{'text': 'authorization is a normal word', 'likes': 1, 'reply_count': 0}],
+                    'comments_status': 'available', 'warnings': [],
+                }
+            },
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'snapshot.json'
+            path.write_text(json.dumps(snapshot), encoding='utf-8')
+            with patch.object(workspace_module, 'SNAPSHOT', path):
+                html = workspace_module.youtube_workspace_panel()
+        self.assertIn('id="ytw-public-snapshot"', html)
+        self.assertIn('authorization is a normal word', html)
+        self.assertIn('onnellab_youtube_ops_snapshot', html)
+        for secret in ['refresh_token', 'client_secret', 'access_token']:
+            self.assertNotIn(secret, html)
+
+    def test_public_profile_rejects_unexpected_fields(self):
+        source = {
+            'profile': 'onnellab', 'state': 'available', 'channel': {'id': CHANNEL, 'title': 'ONNELLAB'},
+            'statistics': {}, 'summary': {}, 'period': {}, 'videos': [], 'comments': [],
+            'comments_status': 'available', 'warnings': [],
+        }
+        self.assertEqual(CHANNEL, public_profile(source, 'onnellab')['channel']['id'])
+        with self.assertRaisesRegex(VideoError, 'public_field_rejected'):
+            public_profile({**source, 'refresh_token': 'secret'}, 'onnellab')
 
 if __name__ == '__main__':
     unittest.main()

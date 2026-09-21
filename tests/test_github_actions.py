@@ -160,7 +160,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("data/android_store_versions.csv", workflow)
         self.assertIn("data/store_versions.csv", workflow)
         self.assertIn("generated/reports/app_releases.md", workflow)
-        self.assertIn("public/manual-publish/", workflow)
+        self.assertIn("public/ops/", workflow)
         self.assertNotIn("publish_due_articles.py", workflow)
         self.assertNotIn("deploy_github_pages.py", workflow)
 
@@ -178,9 +178,9 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("data/melivra_ai_credit_policy.csv", workflow)
         self.assertIn("generated/manual-publish/index.html", workflow)
         self.assertIn("generated/manual-publish/sw.js", workflow)
-        self.assertIn("public/manual-publish/sw.js", workflow)
-        self.assertIn("public/manual-publish/libsodium-sumo.js", workflow)
-        self.assertIn("public/manual-publish/libsodium-wrappers.js", workflow)
+        self.assertIn("public/ops/sw.js", workflow)
+        self.assertIn("public/ops/libsodium-sumo.js", workflow)
+        self.assertIn("public/ops/libsodium-wrappers.js", workflow)
 
     def test_devto_update_workflow_deploys_rebuilt_dashboard(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "update-devto-article.yml").read_text(encoding="utf-8")
@@ -191,9 +191,9 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("data/ai_provider_pricing.csv", workflow)
         self.assertIn("data/melivra_ai_credit_policy.csv", workflow)
         self.assertIn("generated/manual-publish/sw.js", workflow)
-        self.assertIn("public/manual-publish/sw.js", workflow)
-        self.assertIn("public/manual-publish/libsodium-sumo.js", workflow)
-        self.assertIn("public/manual-publish/libsodium-wrappers.js", workflow)
+        self.assertIn("public/ops/sw.js", workflow)
+        self.assertIn("public/ops/libsodium-sumo.js", workflow)
+        self.assertIn("public/ops/libsodium-wrappers.js", workflow)
         self.assertIn("Refresh manual publish dashboard", workflow)
 
     def test_store_review_workflow_syncs_and_deploys_dashboard(self) -> None:
@@ -208,7 +208,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("scripts/sync_store_reviews.py", workflow)
         self.assertIn("scripts/build_manual_publish_site.py", workflow)
         self.assertIn("data/store_reviews.csv", workflow)
-        self.assertIn("public/manual-publish/", workflow)
+        self.assertIn("public/ops/", workflow)
 
     def test_work_browser_reconciliation_is_scheduled_and_deploys_dashboard(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "reconcile-work-browser-publications.yml").read_text(encoding="utf-8")
@@ -217,7 +217,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("data/work_browser_publications.json", workflow)
         self.assertIn("--store-review-triage /tmp/work-browser-triage.json", workflow)
         self.assertIn("group: onnellab-manual-dashboard-writer", workflow)
-        self.assertIn("public/manual-publish/", workflow)
+        self.assertIn("public/ops/", workflow)
 
     def test_store_review_reply_workflow_commits_failed_publication_audit(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "publish-store-review-reply.yml").read_text(encoding="utf-8")

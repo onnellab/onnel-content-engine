@@ -11,7 +11,7 @@
 <p class="muted" id="ytw-period"></p><p class="muted"><span class="ytw-ko">—는 0이 아니라 미수집·미연결 상태예요. 구독자 총계와 기간별 획득·이탈은 별도 지표예요.</span><span class="ytw-en">A dash means unavailable, not zero. Subscriber totals and period gains or losses are separate metrics.</span></p>
 <h3><span class="ytw-ko">영상별 성과</span><span class="ytw-en">Video performance</span></h3><div class="ytw-scroll"><table><thead><tr><th><span class="ytw-ko">영상</span><span class="ytw-en">Video</span></th><th><span class="ytw-ko">조회수</span><span class="ytw-en">Views</span></th><th><span class="ytw-ko">평균 시청 · 초</span><span class="ytw-en">Average view · seconds</span></th><th><span class="ytw-ko">평균 시청률</span><span class="ytw-en">Average viewed</span></th></tr></thead><tbody id="ytw-videos"></tbody></table></div>
 <h3 style="margin-top:20px"><span class="ytw-ko">최근 댓글 반응</span><span class="ytw-en">Recent viewer comments</span></h3><div class="ytw-feedback" id="ytw-comments"></div>
-<div class="ytw-note"><span class="ytw-ko">통계·댓글은 인증된 작업용 Mac에서 자동 수집해요. 위 채널 관리 화면에서 최신 보고를 확인해요. 공개 페이지에는 비공개 통계를 저장하지 않으며, 아래 파일 불러오기는 이 브라우저 탭에서만 읽어요.</span><span class="ytw-en">Statistics and comments are collected on the authorized worker Mac. Open the channel manager above to view current reports. Private analytics are not stored on this public page; importing a local report reads it only in this tab.</span></div>
+<div class="ytw-note"><span class="ytw-ko">통계·댓글은 인증된 작업용 Mac에서 자동 수집하고 이 운영 페이지에는 결과 스냅샷만 게시해요. OAuth 토큰·클라이언트 비밀값·Keychain 데이터는 게시하지 않아요. 아래 파일 불러오기는 수동 확인용이에요.</span><span class="ytw-en">Statistics and comments are collected on the authorized worker Mac and only the resulting operations snapshot is published here. OAuth tokens, client secrets and Keychain data are never published. Local file import remains a manual fallback.</span></div>
 <div class="ytw-actions"><label class="ytw-file"><span class="ytw-ko">로컬 통계 파일 불러오기</span><span class="ytw-en">Import local report</span><input id="ytw-report-file" type="file" accept=".json,application/json" aria-label="Import local YouTube report"></label><button type="button" id="ytw-clear"><span class="ytw-ko">불러온 데이터 지우기</span><span class="ytw-en">Clear imported data</span></button></div>
 <p id="ytw-import-status" class="muted" role="status"></p>
 <div id="ytw-library" hidden><details style="margin:20px 0;line-height:1.8"><summary><span class="ytw-ko">30분 모음 후보 · 메타데이터 기준</span><span class="ytw-en">30-minute compilation candidate · metadata only</span></summary><p class="muted">Roads Between Distant Kingdoms<br><span class="ytw-ko">2초 교차 페이드를 포함한 예상 길이 30:00. 실제 음원 측정·렌더링·업로드 결과가 아니에요.</span><span class="ytw-en">Estimated 30:00 including two-second crossfades. Not an audio measurement, render or upload result.</span></p>__MIX_CHAPTERS__</details><h3 style="margin-top:22px"><span class="ytw-ko">Aether Inn 곡 목록</span><span class="ytw-en">Aether Inn catalog</span> · __TRACK_COUNT__</h3><p class="muted"><span class="ytw-ko">제목·스타일·Suno 표시 길이만 등록돼 있어요. 원본 음원, 상업 이용 권한, 음악적 유사도 분석 결과는 포함되지 않아요.</span><span class="ytw-en">Titles, styles and displayed Suno durations only. This catalog does not contain audio masters, rights evidence or audio similarity results.</span></p><input type="search" id="ytw-song-search" aria-label="Search Aether Inn titles and styles" placeholder="Search titles / styles"><div class="ytw-catalog">__CATALOG_ROWS__</div></div>
@@ -19,7 +19,7 @@
 <script>
 (()=>{'use strict';
 const root=document.getElementById('youtube-brands'),el=id=>document.getElementById('ytw-'+id);
-let selected='onnellab',snapshot=null,importCode='',generation=0;
+let selected='onnellab',snapshot=null,importCode='',generation=0,snapshotSource='';
 const bilingual=(ko,en)=>document.documentElement.lang==='en'?en:ko;
 const safeNum=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=1e18?v:null;
 const num=v=>safeNum(v)===null?'—':new Intl.NumberFormat(document.documentElement.lang==='en'?'en-US':'ko-KR',{maximumFractionDigits:1}).format(v);
@@ -27,7 +27,7 @@ const put=(id,value)=>el(id).textContent=value;
 const textCell=(tr,value)=>{const td=document.createElement('td');td.textContent=value;tr.append(td);};
 const message=(container,value)=>{const p=document.createElement('p');p.className='ytw-empty';p.textContent=value;container.append(p);};
 function validate(data){
- if(!data||typeof data!=='object'||Array.isArray(data)||data.schema_version!==1||data.kind!=='onnellab_youtube_private_report')throw Error('invalid');
+ if(!data||typeof data!=='object'||Array.isArray(data)||data.schema_version!==1||!['onnellab_youtube_private_report','onnellab_youtube_ops_snapshot'].includes(data.kind))throw Error('invalid');
  const now=Date.now(),made=Date.parse(data.generated_at),expires=Date.parse(data.expires_at);
  if(!Number.isFinite(made)||!Number.isFinite(expires)||made>now+300000||now-made>30*86400000||expires<=now||expires>made+30*86400000)throw Error('expired');
  if(!data.profiles||typeof data.profiles!=='object'||Array.isArray(data.profiles)||Object.keys(data.profiles).some(k=>!['onnellab','aether_inn'].includes(k)))throw Error('invalid');
@@ -46,7 +46,8 @@ function draw(){
  if(snapshot&&Date.parse(snapshot.expires_at)<=Date.now()){snapshot=null;importCode='expired';}
  const p=snapshot?.profiles?.[selected],valid=p&&p.state!=='blocked';
  const stats=valid?p.statistics:null,summary=valid?p.summary:null;
- put('state',p?bilingual('로컬 보고 파일 · ','Local report · ')+(p.channel?.title||selected)+' · '+p.state:bilingual('연결 상태와 통계를 아직 불러오지 않았어요.','Connection status and metrics have not been imported.'));
+ const connected=p&&['available','partial'].includes(p.state);
+ put('state',p?bilingual('연결 상태: ','Connection: ')+(connected?bilingual('연결됨','Connected'):bilingual('확인 필요','Needs attention'))+' · '+(p.channel?.title||selected)+' · '+bilingual('갱신 ','updated ')+new Date(snapshot.generated_at).toLocaleString(document.documentElement.lang==='en'?'en-US':'ko-KR'):bilingual('연결 상태와 통계를 아직 동기화하지 않았어요.','Connection status and metrics have not been synced yet.'));
  put('subs',num(stats?.hiddenSubscriberCount?null:stats?.subscriberCount));put('views',num(summary?.views));
  put('watch',safeNum(summary?.estimatedMinutesWatched)===null?'—':num(summary.estimatedMinutesWatched/60));
  put('gained',summary?num(summary.subscribersGained)+' / '+num(summary.subscribersLost):'—');
@@ -56,16 +57,17 @@ function draw(){
  if(!valid||!p.videos?.length){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=4;td.textContent=bilingual('표시할 영상 통계가 없어요.','No video metrics are available.');tr.append(td);el('videos').append(tr);}
  for(const c of valid?p.comments||[]:[]){const card=document.createElement('div');card.className='ytw-comment';card.textContent=c.text;const small=document.createElement('small');small.textContent=bilingual('좋아요 ','Likes ')+num(c.likes)+' · '+bilingual('답글 ','Replies ')+num(c.reply_count);card.append(small);el('comments').append(card);}
  if(!valid||!p.comments?.length)message(el('comments'),bilingual('댓글이 없다고 확인된 것은 아니에요. 수집 결과를 불러오면 여기에서 확인할 수 있어요.','This does not confirm that there are no comments. Import a report to view collected feedback.'));
- const codes={loaded:bilingual('이 탭에서만 표시 중 · 자동 수집 또는 채널 인증 성공을 의미하지 않아요.','Displayed only in this tab · importing a report does not verify channel authorization or automatic collection.'),invalid:bilingual('보고 파일 형식이 맞지 않아요. 이전 데이터도 화면에서 지웠어요.','Invalid report format. Previously imported data was cleared.'),expired:bilingual('보고 파일이 만료됐거나 시각이 올바르지 않아요. 최신 파일을 사용해 주세요.','Report expired or timestamps are invalid. Use a current report.'),cleared:bilingual('불러온 데이터를 지웠어요.','Imported data cleared.')};
+ const codes={published:bilingual('Mac에서 자동 동기화된 공개 운영 스냅샷이에요. OAuth 비밀값은 포함하지 않아요.','Auto-synced public operations snapshot from the authorized Mac. OAuth secrets are not included.'),loaded:bilingual('이 탭에서만 표시 중 · 자동 수집 또는 채널 인증 성공을 의미하지 않아요.','Displayed only in this tab · importing a report does not verify channel authorization or automatic collection.'),invalid:bilingual('보고 파일 형식이 맞지 않아요. 이전 데이터도 화면에서 지웠어요.','Invalid report format. Previously imported data was cleared.'),expired:bilingual('보고 파일이 만료됐거나 시각이 올바르지 않아요. 최신 파일을 사용해 주세요.','Report expired or timestamps are invalid. Use a current report.'),cleared:bilingual('불러온 데이터를 지웠어요.','Imported data cleared.')};
  put('import-status',codes[importCode]||'');
 }
 function choose(brand){selected=brand;const legacy=document.getElementById('youtube-settings');if(legacy)legacy.hidden=brand!=='onnellab';for(const button of root.querySelectorAll('[role=tab]')){const active=button.dataset.brand===brand;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;document.getElementById(button.getAttribute('aria-controls')).hidden=!active;}el('library').hidden=brand!=='aether_inn';draw();}
 for(const button of root.querySelectorAll('[role=tab]')){button.onclick=()=>choose(button.dataset.brand);button.onkeydown=event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();const target=event.key==='Home'?'onnellab':event.key==='End'?'aether_inn':selected==='onnellab'?'aether_inn':'onnellab';choose(target);root.querySelector('[data-brand='+target+']').focus();};}
-el('report-file').onchange=async event=>{const current=++generation,file=event.target.files[0];snapshot=null;importCode='';draw();try{if(!file||file.size>1024*1024)throw Error('invalid');const parsed=validate(JSON.parse(await file.text()));if(current!==generation)return;snapshot=parsed;importCode='loaded';}catch(error){if(current!==generation)return;snapshot=null;importCode=error.message==='expired'?'expired':'invalid';}finally{if(current===generation){event.target.value='';draw();}}};
-el('clear').onclick=()=>{generation++;snapshot=null;importCode='cleared';el('report-file').value='';draw();};
+el('report-file').onchange=async event=>{const current=++generation,file=event.target.files[0];snapshot=null;importCode='';draw();try{if(!file||file.size>1024*1024)throw Error('invalid');const parsed=validate(JSON.parse(await file.text()));if(current!==generation)return;snapshot=parsed;snapshotSource='import';importCode='loaded';}catch(error){if(current!==generation)return;snapshot=null;importCode=error.message==='expired'?'expired':'invalid';}finally{if(current===generation){event.target.value='';draw();}}};
+el('clear').onclick=()=>{generation++;snapshot=null;snapshotSource='';importCode='cleared';el('report-file').value='';draw();};
 el('song-search').oninput=event=>{const query=event.target.value.toLocaleLowerCase();for(const song of root.querySelectorAll('.ytw-song'))song.hidden=!song.textContent.toLocaleLowerCase().includes(query);};
 new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 setInterval(()=>{if(snapshot&&Date.parse(snapshot.expires_at)<=Date.now())draw();},60000);
+try{const embedded=document.getElementById('ytw-public-snapshot');if(embedded&&embedded.textContent.trim()){snapshot=validate(JSON.parse(embedded.textContent));snapshotSource='published';importCode='published';}}catch{snapshot=null;snapshotSource='';importCode='invalid';}
 choose('onnellab');
 })();
 </script>

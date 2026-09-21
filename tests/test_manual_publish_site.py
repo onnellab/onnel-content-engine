@@ -293,7 +293,7 @@ Body
                 "Learn why large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnecessary lag.",
             )
             self.assertIn("ONNELLAB 게시 상태 대시보드", html)
-            self.assertIn("ONNELLAB Publish Status Dashboard", html)
+            self.assertIn("ONNELLAB Ops Dashboard", html)
             self.assertIn("동기화 연결", html)
             self.assertIn("공개 프로필 확인", html)
             self.assertIn("공개 확인", html)
@@ -445,7 +445,7 @@ Body
             self.assertIn("remoteState = JSON.parse(document.getElementById('manual-state-data').textContent)", html)
             self.assertIn("setAppBadge", html)
             self.assertIn("Enable badge", html)
-            self.assertIn('name="robots" content="noindex,nofollow,noarchive"', html)
+            self.assertIn('name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"', html)
             self.assertIn("Twitter", html)
             self.assertIn('"publishing_mode": "work_browser"', html)
             self.assertIn('"publishing_mode": "automatic"', html)
@@ -630,7 +630,7 @@ Body
             self.assertTrue((output.parent / "sw.js").exists())
             self.assertTrue((output.parent / "libsodium-sumo.js").exists())
             self.assertTrue((output.parent / "libsodium-wrappers.js").exists())
-            self.assertIn("onnellab-manual-publish-v17", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("onnellab-ops-v18", (output.parent / "sw.js").read_text(encoding="utf-8"))
             self.assertIn("./libsodium-sumo.js", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_prepublication_items_are_review_only(self) -> None:
