@@ -118,7 +118,10 @@ def validate_scenario(row):
         'android_avd', 'ios_simulator_name', 'dart_defines',
         'watch_paths', 'topics', 'production_eligible',
     }
-    if not isinstance(row, dict) or set(row) != required:
+    optional = {'project_subdir'}
+    if (not isinstance(row, dict)
+            or not required.issubset(row)
+            or not set(row).issubset(required | optional)):
         raise RecordingError('recording_scenario_fields_invalid')
     if not re.fullmatch(r'[a-z0-9][a-z0-9_-]{2,63}', row['scenario_id']):
         raise RecordingError('recording_scenario_id_invalid')
@@ -126,6 +129,8 @@ def validate_scenario(row):
         raise RecordingError('recording_scenario_app_invalid')
     _safe_rel(row['repository'], 'repository')
     _safe_rel(row['test_target'], 'test_target')
+    if 'project_subdir' in row:
+        _safe_rel(row['project_subdir'], 'project_subdir')
     if row['runner'] != 'flutter_integration_test':
         raise RecordingError('recording_runner_unsupported')
     for key in ('start_marker', 'end_marker'):
@@ -173,6 +178,23 @@ def resolve_repo(projects_root, scenario):
     return repo
 
 
+def resolve_project(repo, scenario):
+    repo = Path(repo).resolve()
+    project = repo
+    if scenario.get('project_subdir'):
+        project = (repo / scenario['project_subdir']).resolve()
+    if not project.is_relative_to(repo) or not (project / 'pubspec.yaml').is_file():
+        raise RecordingError('recording_project_missing')
+    return project
+
+
+def _repo_test_target(scenario):
+    target = Path(scenario['test_target'])
+    if scenario.get('project_subdir'):
+        target = Path(scenario['project_subdir']) / target
+    return str(target)
+
+
 def _git_output(repo, args):
     _, output = _run(['git', *args], cwd=repo, timeout=30)
     return output.strip()
@@ -180,7 +202,10 @@ def _git_output(repo, args):
 
 def _watch_paths(scenario, platform):
     watch = list(scenario['watch_paths'])
-    watch.append('ios' if platform == 'ios_simulator' else 'android')
+    platform_dir = 'ios' if platform == 'ios_simulator' else 'android'
+    if scenario.get('project_subdir'):
+        platform_dir = str(Path(scenario['project_subdir']) / platform_dir)
+    watch.append(platform_dir)
     return watch
 
 
@@ -200,7 +225,7 @@ def scenario_fingerprint(repo, scenario, platform, *, refresh):
     if not tracked:
         raise RecordingError('recording_watch_paths_untracked')
     code, _ = _run(
-        ['git', 'cat-file', '-e', f"{commit}:{scenario['test_target']}"],
+        ['git', 'cat-file', '-e', f"{commit}:{_repo_test_target(scenario)}"],
         cwd=repo,
         timeout=30,
         check=False,
@@ -840,7 +865,8 @@ def ensure_recording(
             repo, scenario, platform, refresh=True)
         with tempfile.TemporaryDirectory(prefix='onnellab-record-') as temp:
             with isolated_source_checkout(repo, commit, temp) as source:
-                resolved_lock_hash = resolve_flutter_dependencies(source)
+                project = resolve_project(source, scenario)
+                resolved_lock_hash = resolve_flutter_dependencies(project)
                 fingerprint = hashlib.sha256(canonical({
                     'base_fingerprint': base_fingerprint,
                     'resolved_lock_sha256': resolved_lock_hash,
@@ -855,11 +881,11 @@ def ensure_recording(
                 if platform == 'android_emulator':
                     with android_device(scenario, android_serial) as device:
                         raw, log = _run_and_capture(
-                            source, scenario, platform, device, temp)
+                            project, scenario, platform, device, temp)
                 else:
                     with ios_device(scenario, ios_udid) as device:
                         raw, log = _run_and_capture(
-                            source, scenario, platform, device, temp)
+                            project, scenario, platform, device, temp)
                 _normalize(raw, output)
         item = _write_index(
             root, scenario, platform, fingerprint, commit,

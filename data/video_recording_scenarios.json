@@ -2,6 +2,35 @@
   "schema_version": 1,
   "scenarios": [
     {
+      "scenario_id": "quivra-conversion-flow",
+      "app_id": "APP-0001",
+      "repository": "quivra",
+      "test_target": "integration_test/store_screenshot_test.dart",
+      "start_marker": "VIDEO_STEP:empty",
+      "end_marker": "VIDEO_STEP:saved",
+      "max_seconds": 90,
+      "platforms": [
+        "android_emulator",
+        "ios_simulator"
+      ],
+      "dart_defines": {
+        "QUIVRA_VIDEO_FLOW": "true"
+      },
+      "watch_paths": [
+        "lib",
+        "integration_test/store_screenshot_test.dart",
+        "pubspec.yaml",
+        "pubspec.lock"
+      ],
+      "topics": [
+        "TOPIC-0007"
+      ],
+      "runner": "flutter_integration_test",
+      "android_avd": "ONNELLAB_Video_API36",
+      "ios_simulator_name": "ONNELLAB Video iPhone 17 Pro",
+      "production_eligible": true
+    },
+    {
       "scenario_id": "tagweaver-core-edit-flow",
       "app_id": "APP-0002",
       "repository": "tagweaver",
@@ -30,6 +59,126 @@
       "topics": [
         "TOPIC-0008"
       ],
+      "production_eligible": true
+    },
+    {
+      "scenario_id": "vaultxt-log-inspection-flow",
+      "app_id": "APP-0003",
+      "repository": "onnellab-text",
+      "project_subdir": "vaultxt",
+      "test_target": "integration_test/store_promo_capture_test.dart",
+      "start_marker": "VIDEO_STEP:library",
+      "end_marker": "VIDEO_STEP:inspected_unchanged",
+      "max_seconds": 90,
+      "platforms": [
+        "android_emulator",
+        "ios_simulator"
+      ],
+      "dart_defines": {
+        "VAULTXT_VIDEO_FLOW": "true"
+      },
+      "watch_paths": [
+        "vaultxt/lib",
+        "vaultxt/integration_test/store_promo_capture_test.dart",
+        "vaultxt/pubspec.yaml",
+        "vaultxt/pubspec.lock",
+        "packages/onnel_text_engine"
+      ],
+      "topics": [
+        "TOPIC-0031"
+      ],
+      "runner": "flutter_integration_test",
+      "android_avd": "ONNELLAB_Video_API36",
+      "ios_simulator_name": "ONNELLAB Video iPhone 17 Pro",
+      "production_eligible": true
+    },
+    {
+      "scenario_id": "segra-trim-flow",
+      "app_id": "APP-0004",
+      "repository": "segra",
+      "test_target": "integration_test/segra_store_screenshot_capture_test.dart",
+      "start_marker": "VIDEO_STEP:trim_loaded",
+      "end_marker": "VIDEO_STEP:saved",
+      "max_seconds": 90,
+      "platforms": [
+        "android_emulator",
+        "ios_simulator"
+      ],
+      "dart_defines": {
+        "SEGRA_VIDEO_FLOW": "true"
+      },
+      "watch_paths": [
+        "lib",
+        "integration_test/segra_store_screenshot_capture_test.dart",
+        "pubspec.yaml",
+        "pubspec.lock"
+      ],
+      "topics": [
+        "TOPIC-0009"
+      ],
+      "runner": "flutter_integration_test",
+      "android_avd": "ONNELLAB_Video_API36",
+      "ios_simulator_name": "ONNELLAB Video iPhone 17 Pro",
+      "production_eligible": true
+    },
+    {
+      "scenario_id": "clipnest-saved-snippet-flow",
+      "app_id": "APP-0005",
+      "repository": "clipnest",
+      "test_target": "integration_test/clipnest_video_flow_test.dart",
+      "start_marker": "VIDEO_STEP:history_ready",
+      "end_marker": "VIDEO_STEP:pinned",
+      "max_seconds": 60,
+      "platforms": [
+        "ios_simulator"
+      ],
+      "dart_defines": {
+        "CLIPNEST_VIDEO_FLOW": "true"
+      },
+      "watch_paths": [
+        "lib",
+        "integration_test/clipnest_video_flow_test.dart",
+        "pubspec.yaml",
+        "pubspec.lock"
+      ],
+      "topics": [
+        "TOPIC-0010"
+      ],
+      "runner": "flutter_integration_test",
+      "android_avd": "ONNELLAB_Video_API36",
+      "ios_simulator_name": "ONNELLAB Video iPhone 17 Pro",
+      "production_eligible": true
+    },
+    {
+      "scenario_id": "aligna-preview-before-apply",
+      "app_id": "APP-0006",
+      "repository": "aligna",
+      "test_target": "integration_test/aligna_video_flow_test.dart",
+      "start_marker": "VIDEO_STEP:selected",
+      "end_marker": "VIDEO_STEP:preview_ready",
+      "max_seconds": 60,
+      "platforms": [
+        "android_emulator",
+        "ios_simulator"
+      ],
+      "dart_defines": {
+        "ALIGNA_VIDEO_FLOW": "true",
+        "ALIGNA_SCREENSHOT_MODE": "true",
+        "ALIGNA_SCREENSHOT_STAGE": "selected",
+        "ALIGNA_SCREENSHOT_LOCALE": "en"
+      },
+      "watch_paths": [
+        "lib",
+        "integration_test/aligna_video_flow_test.dart",
+        "pubspec.yaml",
+        "pubspec.lock"
+      ],
+      "topics": [
+        "TOPIC-0012"
+      ],
+      "runner": "flutter_integration_test",
+      "android_avd": "ONNELLAB_Video_API36",
+      "ios_simulator_name": "ONNELLAB Video iPhone 17 Pro",
       "production_eligible": true
     }
   ]

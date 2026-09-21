@@ -26,6 +26,7 @@ from short_video_recorder import (
     load_scenarios,
     managed_recording_attestation,
     recording_lock,
+    resolve_project,
     scenario_fingerprint,
     scenario_for_topic,
 )
@@ -39,10 +40,21 @@ class RecorderPolicyTests(unittest.TestCase):
         self.assertEqual(['TOPIC-0008'], scenario['topics'])
         self.assertTrue(scenario['production_eligible'])
     def test_topic_selects_exact_production_scenario(self):
-        row = scenario_for_topic('APP-0002', 'TOPIC-0008', 'android_emulator')
-        self.assertEqual('tagweaver-core-edit-flow', row['scenario_id'])
+        expected = {
+            ('APP-0001', 'TOPIC-0007', 'android_emulator'): 'quivra-conversion-flow',
+            ('APP-0002', 'TOPIC-0008', 'android_emulator'): 'tagweaver-core-edit-flow',
+            ('APP-0003', 'TOPIC-0031', 'android_emulator'): 'vaultxt-log-inspection-flow',
+            ('APP-0004', 'TOPIC-0009', 'android_emulator'): 'segra-trim-flow',
+            ('APP-0005', 'TOPIC-0010', 'ios_simulator'): 'clipnest-saved-snippet-flow',
+            ('APP-0006', 'TOPIC-0012', 'android_emulator'): 'aligna-preview-before-apply',
+        }
+        for key, scenario_id in expected.items():
+            with self.subTest(key=key):
+                self.assertEqual(scenario_id, scenario_for_topic(*key)['scenario_id'])
         with self.assertRaisesRegex(RecordingError, 'recording_scenario_not_found_for_topic'):
             scenario_for_topic('APP-0002', 'TOPIC-0029', 'android_emulator')
+        with self.assertRaisesRegex(RecordingError, 'recording_scenario_not_found_for_topic'):
+            scenario_for_topic('APP-0005', 'TOPIC-0010', 'android_emulator')
 
     def test_relative_path_and_physical_device_guards(self):
         for value in ['../escape', '/absolute', 'a/../../b']:
@@ -214,6 +226,18 @@ class RecorderSourceIsolationTests(unittest.TestCase):
         self.assertRegex(fingerprint, r'^[0-9a-f]{64}$')
         self.assertRegex(commit, r'^[0-9a-f]{40}$')
         self.assertEqual('uncommitted user work', (self.work / 'lib/app.dart').read_text())
+    def test_project_subdir_resolves_flutter_app_inside_monorepo(self):
+        project = self.work / 'vaultxt'
+        project.mkdir()
+        (project / 'pubspec.yaml').write_text('name: fixture')
+        resolved = resolve_project(
+            self.work,
+            {'project_subdir': 'vaultxt'},
+        )
+        self.assertEqual(project.resolve(), resolved)
+        with self.assertRaisesRegex(RecordingError, 'recording_project_missing'):
+            resolve_project(self.work, {'project_subdir': 'missing'})
+
     def test_isolated_checkout_can_change_without_touching_active_worktree(self):
         original = (self.work / 'lib/app.dart').read_text()
         commit = subprocess.run(
