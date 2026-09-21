@@ -33,4 +33,4 @@ python3 -B scripts/install_youtube_connect.py</code></pre>
         <p class="yt-note"><span class="yt-ko">Google 로그인과 최초 권한 동의는 한 번 필요해요. 인증 성공이 API 프로젝트의 공개 업로드 제한 해제를 뜻하지는 않아요.</span><span class="yt-en">Initial Google consent is required once. Authentication success does not lift an API project's private-upload restriction.</span></p>
       </details>
     </section>
-'''
+'''.strip()
