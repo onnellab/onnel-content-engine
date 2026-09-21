@@ -111,8 +111,10 @@ def publish_due_articles(
     site_url: str = DEFAULT_SITE_URL,
     now: datetime | None = None,
     limit: int = 1,
-    metadata_root: Path = DEFAULT_METADATA_ROOT,
+    metadata_root: Path | None = None,
 ) -> list[dict[str, str]]:
+    # Custom topics (including CI dry-runs) must not read production metadata.
+    metadata_root = metadata_root if metadata_root is not None else topics_path.resolve().parent.parent / "generated" / "metadata"
     rows = read_csv(topics_path, TOPIC_HEADER)
     now = now or datetime.now(KST)
     store = TopicStore(topics_path, mirror_path=legacy_topics_path)

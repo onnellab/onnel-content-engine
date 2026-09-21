@@ -718,7 +718,7 @@ VaultXT can support the workflow after the reader understands the process.
         with patch(
             "schedule_ready_articles.score_article",
             side_effect=lambda topic, *_: passing_review(topic["id"]),
-        ):
+        ) as evaluate:
             published = publish_due_articles(
                 self.topics_path,
                 self.review_root,
@@ -727,6 +727,8 @@ VaultXT can support the workflow after the reader understands the process.
                 now=datetime(2026, 7, 14, 9, tzinfo=KST),
             )
 
+        for call in evaluate.call_args_list:
+            self.assertEqual(call.args[3], self.root.resolve() / "generated" / "metadata")
         self.assertEqual(len(published), 2)
         rows = self.read_rows()
         self.assertEqual(rows[0]["status"], "published")
