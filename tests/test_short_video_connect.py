@@ -42,6 +42,7 @@ class LocalConsoleTests(unittest.TestCase):
         self.assertNotIn('__CSRF__',html);self.assertIn('csrf-token',html)
         for forbidden in ['localStorage','sessionStorage','indexedDB','.innerHTML','DO-NOT-PRINT']:
             self.assertNotIn(forbidden,html)
+        self.assertIn("latest={state:'blocked',error:code,last_check:null}",html)
     def test_public_dashboard_is_navigation_only(self):
         html=youtube_settings_panel()
         for url in URLS:self.assertIn(url,html)
