@@ -17,15 +17,15 @@ and generated dashboards are unaffected.
 
 Use Python 3.10+ with system IANA timezone data, Node 22+, npm, `ffmpeg` and
 `ffprobe`, and a locally installed headless-capable Chromium/Chrome executable.
-Install Noto Sans and Noto Sans KR locally for repeatable Korean typography;
-otherwise the system sans-serif fallback is used. ONNEL Sans is not used.
+Install Noto Sans locally for repeatable English typography; otherwise the system
+sans-serif fallback is used. ONNEL Sans is not used by this automation yet.
 No font or browser is downloaded by the worker. Prepare dependencies once:
 
 ```sh
 npm --prefix video ci
 npm --prefix video run typecheck
 npm --prefix video test
-python3 -B scripts/run_unit_tests.py --pattern test_short_video.py
+python3 -B scripts/run_unit_tests.py --pattern 'test_short_video*.py'
 ```
 
 The Python runner uses the repository's `requirements-test.txt`. If the default
@@ -52,11 +52,16 @@ Title and description are upload metadata, not executable code or HTML.
 Hook, captions and CTA are plain React text. No caller-authored expressions,
 components, CSS, browser URLs or scripts are accepted.
 
-- `app_id` must exist and be content eligible in `data/apps_registry.csv`.
+- `app_id` must be `released` and content eligible in `data/apps_registry.csv`.
   `topic_id` must exist, be non-archived and reference that app by the existing
-  topic registry convention. There is no new product/marketing registry.
-- `locale` is `en` or `ko`, from the existing topic validator. The source topic
-  may be adapted into either supported language. The caller reviews translation.
+  topic registry convention. App display name and platform availability are
+  snapshotted from that trusted row into the immutable queue payload; caller copy
+  cannot override them. There is no new product/marketing registry.
+- `locale` is fixed to `en`. This restriction applies only to short-video output;
+  app and article localization remain unchanged. A Korean source topic may supply
+  facts, but the video copy must be newly written as idiomatic English rather than
+  mechanically translated. If the source does not support a claim clearly, block
+  the brief instead of guessing or publishing awkward translation.
 - `template` is `quick_demo` or `problem_solution`. Both use 1080×1920 at 30 fps,
   15–30 integer seconds, a central uncropped recording, large short captions,
   restrained fades, ivory/white and lilac/peach/blue accents. Quick demo follows
@@ -64,9 +69,10 @@ components, CSS, browser URLs or scripts are accepted.
   The optional CTA appears in the final three seconds.
 - `captions` contains 1–12 `{start, end, text}` records, in seconds. They must be
   ordered, nonoverlapping, at least one second long and fit within duration.
-  Gaps are allowed. Keep hook, caption and CTA to 1–2 short lines and 44 characters total; each line is
-  limited to 44 width units (ASCII=1, other characters=2). Use `\n` deliberately. The renderer measures text, reflows to at most two
-  lines and fits it at 40px or larger; it fails rather than cropping oversized copy.
+  Gaps are allowed. Hook, caption and CTA are capped at 80 characters and at most
+  two authored lines. The renderer measures actual font width, prefers word-boundary
+  wrapping, reflows to at most two lines and fits at 40px or larger; it fails rather
+  than cropping oversized copy. Use `\n` only when a deliberate break improves reading.
 - `due_at` is a seconds-precision ISO timestamp with Z or an explicit offset;
   `timezone` is an installed IANA name such as `UTC` or `Asia/Seoul`. The offset
   must agree at that instant, including DST. Future jobs queue normally, but
@@ -85,6 +91,26 @@ components, CSS, browser URLs or scripts are accepted.
   color bars. It **never** becomes upload eligible, even after successful render.
   Production footage authenticity is a human preparation requirement: ffprobe
   verifies media structure, not whether the pixels actually depict your app.
+
+## English video-copy guide
+
+Video copy is authored directly in plain global English. Do not translate Korean
+line-by-line and then polish it. Preserve the source meaning and verified product
+facts, then write the shortest natural English that fits the scene.
+
+- Hook: name one concrete user problem or desired outcome; avoid generic hype.
+- Captions: use simple verbs and one action at a time (`Select`, `Preview`, `Save`).
+- CTA: optional and low-pressure. Prefer `Try it on your own files.` over sales copy.
+- Tone: practical, calm, globally understandable; avoid slang, idioms, keyword stuffing,
+  superlatives and translationese such as `It is possible to...` when a direct verb works.
+- Claims: never invent speed, quality, privacy, compatibility or safety claims. Use only
+  behavior supported by the source topic, app registry/release facts and reviewed footage.
+- Review: deterministic validation checks only objective shape/length/timing. It does not
+  pretend to judge whether English is natural; ChatGPT/human review owns language quality.
+
+If an English source topic exists, prefer it as the factual base. A Korean source may be
+used when needed, but the resulting script is a fresh English adaptation, not a literal
+translation. If meaning is uncertain, leave the job blocked for review.
 
 ## Commands
 
@@ -125,9 +151,11 @@ for a queue on the **same local filesystem and state root**. NFS/distributed
 workers are not supported. Different state roots are independent queues, not a
 way to distribute one queue. The operator must run one rendering worker per host.
 
-Queue schema version 1 is `queue.json: {schema_version: 1, jobs: {ID: job}}`.
-Each job records the immutable brief, selected asset SHA-256 hashes, a combined
-payload hash, idempotency-derived ID, status, eligibility, creation time, error
+Queue schema version 2 is `queue.json: {schema_version: 2, jobs: {ID: job}}`.
+Each job records the immutable English brief, selected asset SHA-256 hashes, a trusted
+product snapshot (`app_name` + ordered iOS/Android availability) resolved from the
+released app registry at enqueue time, a combined payload hash, idempotency-derived
+ID, status, eligibility, creation time, error
 code and verified result. Snapshots are copied into `jobs/ID/`, never served from
 the original root. Enqueue verifies the copied hash, fsyncs files/directories,
 and atomically replaces state. Identical keys and payloads are a no-op;
@@ -137,7 +165,9 @@ An OS advisory `flock` is held across each mutation and the entire render.
 Concurrent mutations/renderers fail immediately. Lock files remain intentionally;
 the kernel releases ownership on process exit. Do not delete lock files while
 any process may be running. Read-only status uses complete atomic snapshots.
-Corrupt/unsupported state never gets silently reset. An orphan asset directory
+Corrupt/unsupported state never gets silently reset. Schema-1 video queues fail closed
+after the English-only/product-snapshot migration; enqueue a new reviewed job rather
+than silently reinterpreting old state. An orphan asset directory
 or missing queue file with existing jobs requires operator inspection/recovery
 from a trusted backup; no automatic deletion or acceptance of unknown work.
 
@@ -212,7 +242,10 @@ on each target host before producing educational production content.
 Remotion references: [server-side rendering](https://www.remotion.dev/docs/ssr)
 and [renderMedia](https://www.remotion.dev/docs/renderer/render-media).
 
-### Phase-1 verification recorded 2026-09-21
+### Historical pre-English-only phase-1 verification recorded 2026-09-21
+
+These smoke results predate the English-only publishing policy and are retained
+only as renderer history; Korean is no longer accepted by current video briefs.
 
 On macOS with Node 26.7.0 / Python 3.14.7, typecheck, 5 Node tests,
 and 22 Python tests under the repository offline runner passed. `git diff --check`
@@ -434,9 +467,12 @@ installed from their official distribution with its license retained.
 > Read current repository instructions, app/topic registry, `data/video_briefs/`,
 > pipeline documentation and the persistent worker's machine-readable status.
 > Work only within my existing upload/publication authorization. Create an
-> accurate brief that teaches a real workflow using approved local app footage
-> and licensed assets; never invent screens, claims, footage availability or
-> disclosure answers. If assets, authorization or either disclosure choice are
+> English-only brief that teaches a real workflow using approved local app footage
+> and licensed assets. Prefer an English source topic; when facts come from Korean,
+> write fresh idiomatic English from the verified meaning rather than translating
+> sentence by sentence. Never invent screens, claims, footage availability or
+> disclosure answers. If the English meaning or factual support is uncertain, block
+> the brief for review rather than guessing. If assets, authorization or either disclosure choice are
 > missing, report the blocker. Commit the brief to the inbox using the authorized
 > GitHub workflow or enqueue it with the local CLI. A separately authorized
 > checkout update may be necessary; the engine does not pull. If this run has
@@ -479,14 +515,14 @@ Implementation reviewed through code commit `00f2c652` (video publishing: `ead61
 - GitHub workflow validation: success, run `35553666273` (`ead6191a`).
 - Both Python orchestration and direct publication CLI now use the correct isolated metadata root; review thresholds/fingerprint checks were not relaxed.
 
-Final independent real render: `problem_solution`, Korean, 1080x1920, 30fps,
+Historical independent render before the English-only policy: `problem_solution`, Korean, 1080x1920, 30fps,
 15 seconds, H.264, **7,311,399 bytes**. Preview visually reviewed; this is a synthetic
 TEST ONLY pattern, not app footage. Private job ID: `af1ff959a55715eb83405dfb0bd2a5b7`.
 MP4 SHA-256: `09ba73e298c05c1d4b19e70a91228e8f81da93a4797271ee7084c650e7295a35`.
 The earlier Korean quick-demo and English problem-solution/AAC smoke checks are
 recorded above. No test fixture was upload-eligible or sent to YouTube.
 
-Reviewer regressions reproduced and fixed: 100-character Korean titles, ambiguous
+Historical reviewer regressions reproduced and fixed: Unicode 100-character titles, ambiguous
 channel refusal before insert, normalized provider timestamps, scheduled-job
 reconciliation when due, and resumable transfer time budgets. Every regression
 uses an injected fake HTTP transport and runs with sockets blocked.
@@ -499,3 +535,37 @@ this work started no emulator, mirroring app, service, timer, or ChatGPT schedul
 Live OAuth/YouTube acceptance, real-footage approval, Linux service execution,
 and Remote Desktop availability inside a future ChatGPT scheduled run remain
 activation checks, not completed verification claims.
+
+## English-only creative verification — 2026-09-21
+
+The short-video contract now accepts only `locale=en`; app/article localization is
+unchanged. Queue schema 2 snapshots the released app display name and ordered
+iOS/Android availability into the immutable payload so a later registry edit cannot
+silently change an already queued render or closing slate. Schema-1 video queues fail
+closed rather than being reinterpreted.
+
+Two full Python → Node → Remotion TEST ONLY renders used synthetic color-bar footage
+with TagWeaver registry data and English copy. Neither was upload eligible:
+
+| Template | Duration | Geometry / fps / codec | MP4 bytes | SHA-256 |
+| --- | ---: | --- | ---: | --- |
+| quick_demo | 20.000 s | 1080×1920 / 30 / H.264 | 9,949,733 | `3bdd79797cb4e6226a43cc86e866cfa75f5581bdb7aa0b9570e0283b10efa7af` |
+| problem_solution | 20.000 s | 1080×1920 / 30 / H.264 | 9,925,783 | `10e5ce904d6911ee5a176fa5e4250d10fec94b2f4bb7409c913893d1428aa601` |
+
+The new design keeps the app recording dominant, changes problem/solution navigation
+from three simultaneous pills to one active stage chip, keeps a quiet ONNELLAB cue,
+and reserves the final three seconds for trusted app name + supported platforms +
+secondary CTA. English copy may use up to 80 characters, but rendered typography is
+measured and must fit at 40px or larger in no more than two lines.
+
+Verification after the English-only migration:
+- focused short-video Python tests: **77 passed**;
+- full offline Python suite: **490 passed**;
+- Remotion/Node tests: **5 passed** and TypeScript typecheck passed;
+- GitHub isolated short-video checks: success, run `35556098293`;
+- GitHub offline Python tests: success, run `35556098286`;
+- GitHub publishing pipeline: success, run `35556098361`.
+
+No production footage, YouTube upload, timer/service activation, emulator, or iPhone
+Mirroring was used. Codex implementation was unavailable due its usage limit; the
+change was implemented and verified directly. Runtime still has no Codex dependency.
