@@ -136,6 +136,14 @@ class Connection:
             'client_id': bundle['client_id'], 'client_secret': bundle['client_secret'],
             'refresh_token': bundle['refresh_token'], 'grant_type': 'refresh_token'})
         access = _secret(token.get('access_token'), 'invalid_access_token')
+        if str(token.get('token_type', '')).lower() != 'bearer':
+            raise OAuthError('oauth_token_type_invalid')
+        # Google may omit scope on refresh. An explicit narrower grant is never
+        # reported as if it still contained the original upload permission.
+        granted = token.get('scope')
+        if granted is not None and (not isinstance(granted, str)
+                or not set(SCOPES).issubset(granted.split())):
+            raise OAuthError('youtube_scopes_missing')
         title = verify_channel(self.send, access, bundle['channel_id'])
         return public_status({**bundle, 'channel_title': title,
                               'verified_at': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')})

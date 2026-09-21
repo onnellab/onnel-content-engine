@@ -113,6 +113,25 @@ class LocalConsoleTests(unittest.TestCase):
         self.assertIn('no-store',headers['Cache-Control']);self.assertEqual('no-referrer',headers['Referrer-Policy'])
         self.assertEqual('DENY',headers['X-Frame-Options']);self.assertNotIn('Access-Control-Allow-Origin',headers)
         self.assertIn("frame-ancestors 'none'",headers['Content-Security-Policy'])
+    def test_removed_credentials_clear_previous_verified_status(self):
+        self.server.last_result={'state':'connected','channel_title':'Old channel'}
+        h=self.handler('/api/status');h.do_GET()
+        result=h.reply.call_args.args[1]
+        self.assertEqual('not_connected',result['state'])
+        self.assertIsNone(result['last_check'])
+        self.assertEqual(0,self.store.loads)
+
+    def test_failed_connection_check_clears_stale_green_result(self):
+        self.store.value=fixtures.BUNDLE
+        h=self.handler('/api/check');h.do_POST()
+        self.assertTrue(self.server.last_result['channel_verified'])
+        self.google.scope=fixtures.SCOPES[1]
+        h=self.handler('/api/check');h.do_POST()
+        self.assertEqual(400,h.reply.call_args.args[0])
+        self.assertIsNone(self.server.last_result)
+        self.assertEqual('youtube_scopes_missing',self.server.last_error)
+        self.assertEqual(fixtures.BUNDLE,self.store.value)
+
     def test_launch_source_accepts_only_exact_fixed_urls(self):
         source=applescript_source('/a path/python','/a path/script.py')
         self.assertIn('on open location targetURL',source)

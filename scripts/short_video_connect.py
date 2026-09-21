@@ -98,9 +98,12 @@ class SetupHandler(BaseHTTPRequestHandler):
             with self.server.guard:
                 try:
                     configured=self.server.store.present()
+                    if not configured: self.server.last_result=None
                     state='configured_not_checked' if configured else 'not_connected'
                     result={'state':state, 'last_check':self.server.last_result, 'error':self.server.last_error}
-                except CredentialError as exc: result={'state':'blocked','error':str(exc)}
+                except CredentialError as exc:
+                    self.server.last_result=None
+                    result={'state':'blocked','error':str(exc)}
             return self.reply(200,result)
         if path.path == '/oauth/callback':
             with self.server.guard:
@@ -108,8 +111,10 @@ class SetupHandler(BaseHTTPRequestHandler):
                     self.server.last_result=self.server.flow.complete(path.query)
                     self.server.last_error=None
                 except CredentialError as exc:
+                    self.server.last_result=None
                     self.server.last_error=str(exc)
                 except Exception:
+                    self.server.last_result=None
                     self.server.last_error='oauth_callback_failed'
             # Remove the authorization code/query from the address bar; never echo it.
             return self.reply(303, location='/')
@@ -154,9 +159,11 @@ class SetupHandler(BaseHTTPRequestHandler):
             return self.reply(200,result)
         except CredentialError as exc:
             # Replace an old successful check with a failure, not a stale green badge.
+            self.server.last_result=None
             self.server.last_error=str(exc)
             return self.reply(400, {'error':str(exc)})
         except Exception:
+            self.server.last_result=None
             self.server.last_error='local_connection_operation_failed'
             return self.reply(400, {'error':'local_connection_operation_failed'})
 

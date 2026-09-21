@@ -170,6 +170,28 @@ class OAuthTests(unittest.TestCase):
     def test_check_does_not_replace_credentials_and_disconnect_removes_only_local(self):
         status=self.c.check(); self.assertTrue(status['channel_verified']); self.assertEqual(0,self.store.writes)
         result=self.c.disconnect(); self.assertFalse(self.store.present()); self.assertFalse(result['google_grant_revoked'])
+    def test_check_rejects_explicit_scope_loss_without_changing_store(self):
+        self.google.scope=SCOPES[1]
+        with self.assertRaisesRegex(OAuthError,'youtube_scopes_missing'): self.c.check()
+        self.assertEqual(0,self.store.writes)
+        self.assertEqual([TOKEN],[call[1] for call in self.google.calls])
+
+    def test_check_rejects_non_bearer_token_without_changing_store(self):
+        self.google.kind='MAC'
+        with self.assertRaisesRegex(OAuthError,'oauth_token_type_invalid'): self.c.check()
+        self.assertEqual(0,self.store.writes)
+
+    def test_check_accepts_refresh_omitting_scope(self):
+        original=self.google
+        def send(method,url,headers,body):
+            code,out_headers,raw=original(method,url,headers,body)
+            data=json.loads(raw)
+            if url==TOKEN: data.pop('scope',None)
+            return code,out_headers,json.dumps(data).encode()
+        self.c.send=send
+        self.assertTrue(self.c.check()['channel_verified'])
+        self.assertEqual(0,self.store.writes)
+
     def test_storage_failure_never_reports_connected(self):
         self.store.save=Mock(side_effect=CredentialError('keychain_locked_or_access_denied')); self.begin()
         with self.assertRaisesRegex(CredentialError,'keychain_locked'): self.callback()
