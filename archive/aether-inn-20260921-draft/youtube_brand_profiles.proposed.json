@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "onnellab": {
+      "label": "ONNELLAB",
+      "content_types": [
+        "app_promo"
+      ],
+      "worker": "scripts/short_video.py",
+      "connection": "existing_on_worker_mac",
+      "schedule": "Monday, Wednesday, Friday morning (Asia/Seoul)"
+    },
+    "aether_inn": {
+      "label": "Aether Inn",
+      "content_types": [
+        "aether_single",
+        "aether_compilation"
+      ],
+      "worker": "scripts/aether_inn.py",
+      "connection": "multi_profile_integration_pending",
+      "publication_enabled": false,
+      "blocked_reason": "multi_profile_credentials_not_integrated",
+      "schedule": "Singles: Tuesday, Thursday, Saturday morning. Compilation: alternate Sunday morning (Asia/Seoul)."
+    }
+  }
+}
