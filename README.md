@@ -705,5 +705,6 @@ automatic-publication policy, creates a hash-bound attestation, uploads, and ver
 provider status without per-video human review. Runtime does not invoke Codex. Missing
 OAuth credentials, production footage, factual support, or policy compatibility block
 publication instead of asking for approval. See
-[Short Video Pipeline](docs/Short_Video_Pipeline.md) and
+[Short Video Pipeline](docs/Short_Video_Pipeline.md),
+[Managed Screen Recording](docs/Short_Video_Recording.md), and
 [English YouTube Shorts Strategy](docs/Short_Video_Strategy.md).

@@ -294,8 +294,10 @@ Implementation follows documentation. Documentation does not follow implementati
 The user-approved short-video pipeline may create English-only, problem-first
 YouTube app demo shorts from existing topic/app IDs. It includes validated caller-authored
 JSON, a private local queue, bounded Remotion rendering, a tracked automatic-publication
-policy, and the YouTube resumable adapter. Per-video human review is not a gate. Runtime
-must not invoke Codex or activate timers; new uploads require the fail-closed automatic
-checks and a hash-bound policy attestation. Preserve article publishing and
+policy, managed emulator/simulator recordings, and the YouTube resumable adapter.
+Per-video human review is not a gate. Recording builds run only in temporary detached
+source checkouts and never rewrite an app's active working tree. Runtime must not invoke
+Codex or activate timers; new uploads require fail-closed automatic checks and a
+hash-bound policy attestation. Preserve article publishing and
 generated dashboards. See `docs/Short_Video_Pipeline.md`;
 this extension does not rename or reorder the historical article phases.

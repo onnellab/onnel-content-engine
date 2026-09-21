@@ -8,3 +8,6 @@ Reusing an idempotency key with different content fails. Retain processed briefs
 re-reading identical files is a no-op. Editing a brief requires a new key.
 
 The one-shot upload worker applies `data/video_publish_policy.json`, creates a hash-bound automatic attestation, and publishes only when all fail-closed gates pass. Uncertainty stays blocked.
+
+Production briefs must reference a path returned by `scripts/short_video_record.py ensure-topic`; arbitrary/manual MP4 files do not satisfy the unattended publication
+policy. Reusing a current managed recording is expected and does not rerecord per Short.

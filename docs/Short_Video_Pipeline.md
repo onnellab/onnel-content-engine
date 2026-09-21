@@ -475,23 +475,26 @@ installed from their official distribution with its license retained.
 
 ### Reusable ChatGPT task prompt
 
-> Read current repository instructions, app/topic registry, `data/video_briefs/`,
-> `data/video_publish_policy.json`, pipeline documentation and the persistent worker
-> status. Work only within my standing automatic-publication policy. Create an
-> English-only brief that teaches a real workflow using production app footage and
-> licensed assets. Prefer an English source topic; when facts come from Korean, write
-> fresh idiomatic English from the verified meaning instead of translating sentence by
-> sentence. Never invent screens, claims, footage availability or disclosure facts.
-> Do not request per-video human review. If English meaning, factual support, assets,
-> credentials or policy compatibility are uncertain, leave the job blocked rather
-> than guessing. Commit/enqueue the brief, then—when Remote Desktop/CLI is available—
-> run readiness and the one-shot worker with `--upload --execute`. The worker renders,
-> creates the automatic hash-bound attestation from the policy, uploads, and reconciles
-> provider status without a human approval step. Verify the durable YouTube ID and
-> actual processing/privacy status. Report pending processing, forced-private, missing
-> credentials or uncertain upload honestly. Never create a replacement job after an
-> uncertain upload. If no supported action reaches the host, leave a durable brief and
-> report execution blocked. Do not use Codex as a runtime dependency.
+> Read current repository instructions, app/topic registry,
+> `data/video_recording_scenarios.json`, `data/video_briefs/`,
+> `data/video_publish_policy.json`, the recording/pipeline documentation and the
+> persistent worker status. Work only within my standing automatic-publication policy.
+> Choose a released/content-eligible app and an English topic that is explicitly covered
+> by a managed recording scenario. Run `short_video_record.py ensure-topic APP_ID TOPIC_ID` first.
+> It must use
+> the isolated `origin/main` checkout and either reuse the matching managed recording or
+> create it on an emulator/simulator; never build from uncommitted app work, use a
+> physical Android device, iPhone Mirroring, or coordinate-click automation. Use the
+> returned relative recording path in the brief. Write fresh idiomatic English from the
+> verified topic/app facts and the actual flow; never invent screens or claims. Do not
+> request per-video human review. If no scenario covers the topic, source meaning is
+> uncertain, recording fails, assets/credentials are missing, or policy compatibility is
+> uncertain, leave the job blocked rather than guessing. Enqueue the brief, then—when
+> Remote Desktop/CLI is available—run readiness and the one-shot worker with `--upload
+> --execute`. Verify the durable YouTube ID and actual processing/privacy state. Report
+> pending processing, forced-private, missing credentials or uncertain upload honestly.
+> Never create a replacement job after an uncertain upload. If no supported action
+> reaches the host, report execution blocked. Do not use Codex as a runtime dependency.
 
 Official contracts: [videos.insert](https://developers.google.com/youtube/v3/docs/videos/insert),
 [resumable upload protocol](https://developers.google.com/youtube/v3/guides/using_resumable_upload_protocol),
