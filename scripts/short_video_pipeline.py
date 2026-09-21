@@ -24,6 +24,7 @@ MAX_STATE = 16 * 1024 * 1024
 QUEUE_SCHEMA = 2
 VIDEO_LOCALE = 'en'
 MAX_COPY_CHARS = 80
+MAX_RECORDING_TAIL_FREEZE_SECONDS = 10
 ALLOWED_VIDEO_PLATFORMS = ('ios', 'android')
 STATES = {'queued', 'rendering', 'rendered', 'uploading', 'uploaded_private',
           'scheduled', 'published', 'blocked', 'failed', 'accepted', 'processing',
@@ -440,8 +441,17 @@ class Queue:
             seconds = float(info.get('format', {}).get('duration', 0))
             streams = info.get('streams', [])
             media = [s for s in streams if s.get('codec_type') == ('video' if kind == 'recording' else 'audio')]
-            if not media or not math.isfinite(seconds) or seconds <= 0 or seconds > 120 or (kind == 'recording' and seconds < duration) or (kind == 'narration' and seconds > duration):
-                raise VideoError('Asset stream/duration invalid: recording must cover video; narration must not exceed it')
+            invalid_recording = (
+                kind == 'recording'
+                and (seconds < 3 or duration - seconds > MAX_RECORDING_TAIL_FREEZE_SECONDS)
+            )
+            if (not media or not math.isfinite(seconds) or seconds <= 0 or seconds > 120
+                    or invalid_recording
+                    or (kind == 'narration' and seconds > duration)):
+                raise VideoError(
+                    'Asset stream/duration invalid: recording may freeze its final '
+                    'real frame for at most 10 seconds; narration must not exceed video'
+                )
             if kind == 'recording' and (media[0].get('width', 0) < 240 or media[0].get('height', 0) < 240 or max(media[0]['width'], media[0]['height']) > 4096):
                 raise VideoError('Recording geometry outside 240..4096 pixels')
 
@@ -465,9 +475,21 @@ class Queue:
         if not self.browser or not Path(self.browser).is_file():
             raise VideoError('Configure an installed headless browser with --browser; runtime downloads disabled')
         folder = self.root / 'jobs' / job['id']
-        request = {'brief': job['brief'], 'product': job['product'],
-                   'assets': {kind: str(folder / item['file']) for kind, item in job['assets'].items()},
-                   'output': str(target), 'browser': str(Path(self.browser).resolve())}
+        recording_info = probe(folder / job['assets']['recording']['file'])
+        recording_seconds = float(
+            recording_info.get('format', {}).get('duration', 0)
+        )
+        request = {
+            'brief': job['brief'],
+            'product': job['product'],
+            'media': {'recording_duration_seconds': recording_seconds},
+            'assets': {
+                kind: str(folder / item['file'])
+                for kind, item in job['assets'].items()
+            },
+            'output': str(target),
+            'browser': str(Path(self.browser).resolve()),
+        }
         atomic_json(target / 'request.json', request)
         # No credentials, model settings or arbitrary host env forwarded to Node/browser.
         env = {'PATH': os.environ.get('PATH', '/usr/bin:/bin'), 'HOME': str(target),

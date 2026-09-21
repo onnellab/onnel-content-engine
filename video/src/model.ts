@@ -7,6 +7,7 @@ export type VideoProps = {
   template: 'quick_demo' | 'problem_solution';
   locale: 'en';
   duration_seconds: number;
+  recording_duration_seconds: number;
   hook: string;
   cta: string;
   captions: Caption[];
@@ -21,6 +22,7 @@ export const defaults: VideoProps = {
   template: 'quick_demo',
   locale: 'en',
   duration_seconds: 15,
+  recording_duration_seconds: 15,
   hook: 'Your problem comes first',
   cta: 'Try it on your own file.',
   captions: [{start: 0, end: 15, text: 'Use a real app screen recording.'}],

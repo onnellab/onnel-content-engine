@@ -6,6 +6,7 @@ import {fileURLToPath, pathToFileURL} from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const CACHE_BYTES = 64 * 1024 * 1024;
+export const MAX_TAIL_FREEZE_SECONDS = 10;
 const runtime = {bundle, openBrowser, selectComposition, renderMedia, renderStill, makeCancelSignal};
 
 /** @param {unknown} value @returns {asserts value is import('./src/model.js').VideoProps} */
@@ -13,6 +14,9 @@ export function validateProps(value) {
   const p = /** @type {import('./src/model.js').VideoProps} */ (value);
   if (!p || !['quick_demo', 'problem_solution'].includes(p.template) || p.locale !== 'en'
       || !Number.isInteger(p.duration_seconds) || p.duration_seconds < 15 || p.duration_seconds > 30
+      || !Number.isFinite(p.recording_duration_seconds)
+      || p.recording_duration_seconds < 3 || p.recording_duration_seconds > 120
+      || p.duration_seconds - p.recording_duration_seconds > MAX_TAIL_FREEZE_SECONDS
       || typeof p.test_only !== 'boolean' || !Array.isArray(p.captions) || p.captions.length < 1 || p.captions.length > 12
       || typeof p.app_name !== 'string' || !p.app_name.trim() || p.app_name.length > 24
       || !Array.isArray(p.platforms) || p.platforms.length < 1 || p.platforms.length > 2
@@ -32,7 +36,7 @@ export function validateProps(value) {
 
 /**
  * Internal CLI protocol. Public callers use Python validation/locking/ffprobe.
- * @param {{brief: Omit<import('./src/model.js').VideoProps, 'app_name' | 'platforms' | 'recording' | 'narration'>, product: import('./src/model.js').ProductSnapshot, assets: {recording: string, narration?: string}, output: string, browser: string}} request
+ * @param {{brief: Omit<import('./src/model.js').VideoProps, 'app_name' | 'platforms' | 'recording' | 'narration' | 'recording_duration_seconds'>, product: import('./src/model.js').ProductSnapshot, media: {recording_duration_seconds: number}, assets: {recording: string, narration?: string}, output: string, browser: string}} request
  * @param {typeof runtime} api
  */
 export async function renderRequest(request, api = runtime) {
@@ -65,6 +69,7 @@ export async function renderRequest(request, api = runtime) {
     const b = request.brief;
     const product = request.product;
     const inputProps = {template: b.template, locale: b.locale, duration_seconds: b.duration_seconds,
+      recording_duration_seconds: request.media?.recording_duration_seconds,
       hook: b.hook, cta: b.cta, captions: b.captions.map(c => ({start: c.start, end: c.end, text: c.text})),
       test_only: b.test_only, app_name: product?.app_name, platforms: product?.platforms, ...selected};
     validateProps(inputProps);

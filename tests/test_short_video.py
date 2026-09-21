@@ -147,6 +147,27 @@ class ProbeAndRuntimeTests(unittest.TestCase):
             with patch('short_video_pipeline.probe', return_value=result), self.assertRaises(VideoError):
                 self.q._probe_inputs(job)
 
+    def test_ffprobe_allows_bounded_final_frame_freeze(self):
+        job = self.q.enqueue(self.brief)
+        for seconds, allowed in [(5, True), (4.9, False), (14.5, True)]:
+            result = {
+                'format': {'duration': str(seconds)},
+                'streams': [{
+                    'codec_type': 'video',
+                    'width': 360,
+                    'height': 640,
+                }],
+            }
+            with self.subTest(seconds=seconds), patch(
+                'short_video_pipeline.probe',
+                return_value=result,
+            ):
+                if allowed:
+                    self.q._probe_inputs(job)
+                else:
+                    with self.assertRaises(VideoError):
+                        self.q._probe_inputs(job)
+
     def test_output_geometry_failure_stays_failed(self):
         job = self.q.enqueue(self.brief)
         def renderer(_job, target):

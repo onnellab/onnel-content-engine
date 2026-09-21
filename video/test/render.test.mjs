@@ -9,6 +9,7 @@ const brief = {
   template: 'quick_demo',
   locale: 'en',
   duration_seconds: 15,
+  recording_duration_seconds: 15,
   hook: 'Need to clean up a batch of files without guessing what will change?',
   cta: 'Try it on your own files.',
   captions: [{start: 0, end: 15, text: 'Preview the changes, then apply only the names you want.'}],
@@ -16,7 +17,7 @@ const brief = {
   app_name: 'Fixture App',
   platforms: ['ios', 'android'],
 };
-const {app_name: _ignoredApp, platforms: _ignoredPlatforms, ...callerBrief} = brief;
+const {app_name: _ignoredApp, platforms: _ignoredPlatforms, recording_duration_seconds: _ignoredDuration, ...callerBrief} = brief;
 
 test('English-only props reject other locales and unsafe bounds before execution', () => {
   validateProps(brief);
@@ -26,6 +27,8 @@ test('English-only props reject other locales and unsafe bounds before execution
     {locale: 'zh-Hans'},
     {template: 'javascript'},
     {duration_seconds: 31},
+    {recording_duration_seconds: 2},
+    {duration_seconds: 30, recording_duration_seconds: 7},
     {test_only: 'false'},
     {captions: [{start: 0, end: 16, text: 'too late'}]},
     {hook: 'x'.repeat(81)},    {platforms: ['web']},
@@ -65,6 +68,7 @@ for (const fail of [false, true]) {
           assert.equal(options.inputProps, selected.inputProps);
           assert.equal(options.inputProps.app_name, 'Fixture App');
           assert.deepEqual(options.inputProps.platforms, ['ios', 'android']);
+          assert.equal(options.inputProps.recording_duration_seconds, 7);
           assert.equal(options.concurrency, 1);
           assert.equal(options.disallowParallelEncoding, true);
           assert.equal(options.offthreadVideoCacheSizeInBytes, CACHE_BYTES);
@@ -79,6 +83,7 @@ for (const fail of [false, true]) {
       const request = {
         brief: {...callerBrief, app_name: 'Caller Cannot Override', platforms: ['web']},
         product: {app_name: 'Fixture App', platforms: ['ios', 'android']},
+        media: {recording_duration_seconds: 7},
         assets: {recording: asset},
         output: root,
         browser: browserPath,

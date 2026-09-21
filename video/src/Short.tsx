@@ -2,6 +2,7 @@ import React from 'react';
 import {
   AbsoluteFill,
   Audio,
+  Freeze,
   OffthreadVideo,
   interpolate,
   staticFile,
@@ -24,6 +25,15 @@ export const Short: React.FC<VideoProps> = (props) => {
   const caption = props.captions.find((item) => second >= item.start && second < item.end);
   const closingStart = durationInFrames - 3 * fps;
   const closing = frame >= closingStart;
+  const sourceFrames = Math.max(
+    1,
+    Math.floor(props.recording_duration_seconds * fps),
+  );
+  const freezeAtFrame = Math.min(
+    durationInFrames,
+    Math.max(1, sourceFrames - 1),
+  );
+  const freezeFrame = Math.max(0, freezeAtFrame - 1);
   const problem = props.template === 'problem_solution';
   const problemPhase = second < 4;
   const step = Math.max(0, props.captions.findIndex((item) => item === caption));
@@ -116,11 +126,16 @@ export const Short: React.FC<VideoProps> = (props) => {
             justifyContent: 'center',
           }}
         >
-          <OffthreadVideo
-            src={staticFile(props.recording)}
-            muted
-            style={{width: '100%', height: '100%', objectFit: 'contain'}}
-          />
+          <Freeze
+            frame={freezeFrame}
+            active={(currentFrame) => currentFrame >= freezeAtFrame}
+          >
+            <OffthreadVideo
+              src={staticFile(props.recording)}
+              muted
+              style={{width: '100%', height: '100%', objectFit: 'contain'}}
+            />
+          </Freeze>
         </div>
 
         <div

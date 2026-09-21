@@ -8,8 +8,8 @@ scenario/source/toolchain fingerprint changes or the private recording is missin
 corrupt.
 
 The recorder is unattended and fail-closed. It uses an emulator or simulator, never
-a physical Android device. Current production automation starts with the TagWeaver
-metadata-edit flow; other apps remain blocked until they receive an explicit scenario.
+a physical Android device. Every currently released/content-eligible app has one
+explicit English production scenario. Topics outside those mappings remain blocked.
 
 ## Source isolation
 
@@ -51,20 +51,31 @@ scenario still permits the same app/topic.
 Changing unrelated app source does not force a rerecord. Changing watched UI/business
 source, the recording scenario, Flutter toolchain, or resolved dependency lock does.
 
-## Current scenario
+## Current scenarios
 
-`tagweaver-core-edit-flow` is registered for `APP-0002` / `TOPIC-0008`.
+| App | Scenario | Topic | Verified capture | Deterministic flow |
+| --- | --- | --- | --- | --- |
+| Quivra | `quivra-conversion-flow` | `TOPIC-0007` | Android | empty → choose fixture files → convert → saved |
+| TagWeaver | `tagweaver-core-edit-flow` | `TOPIC-0008` | Android | library → select demo tracks → edit metadata → save |
+| VaultXT | `vaultxt-log-inspection-flow` | `TOPIC-0031` | Android | library → open large log → find error text → close unchanged |
+| Segra | `segra-trim-flow` | `TOPIC-0009` | Android | trim editor → select range → preview → save |
+| ClipNest | `clipnest-saved-snippet-flow` | `TOPIC-0010` | iOS Simulator | saved snippets → pin one snippet |
+| Aligna | `aligna-preview-before-apply` | `TOPIC-0012` | Android | seeded files → sequence preset → preview renamed files |
 
-It uses TagWeaver's existing
-`integration_test/tagweaver_screenshot_capture_test.dart` with the app's `video_flow`
-harness in English. The test drives real TagWeaver widgets with deterministic demo
-data. Recording begins at `VIDEO_STEP:library_empty` and the scenario confirms it
-reaches `VIDEO_STEP:saved`.
+The flows use semantic Flutter widget interactions and repository-owned deterministic
+fixtures. They do not use screen coordinates, fabricate production UI, or bypass the
+app's presentation layer. Quivra and Segra extend existing store-capture integration
+harnesses; VaultXT extends its store-promo harness; Aligna and ClipNest use narrow
+integration-test-only flows.
 
-The resulting master recording may be reused by multiple Shorts that accurately teach
-the registered metadata-cleanup topic. It must not be reused for an unrelated topic
-such as track numbering until that topic is explicitly added to an appropriate
-recording scenario.
+Each master recording may be reused by multiple Shorts only when the Short accurately
+teaches the scenario's registered topic. A scenario cannot silently stand in for an
+unregistered topic. TagWeaver track numbering, for example, remains blocked until a
+flow explicitly covers that topic.
+
+VaultXT lives in the `onnellab-text` monorepo. Its scenario uses
+`project_subdir=vaultxt`; source hashing covers both VaultXT and the shared
+`packages/onnel_text_engine` paths before the isolated project is built.
 
 ## Device ownership
 
@@ -85,8 +96,8 @@ the recorder blocks rather than taking control of another job's emulator.
 ### iOS
 
 Without an explicit UDID, the recorder boots the one shutdown dedicated simulator whose
-name matches the scenario (`ONNELLAB Video iPhone 17 Pro` for the current TagWeaver
-scenario), records with `xcrun simctl io ... recordVideo`, then shuts down only that simulator. An explicitly supplied, already-booted UDID is treated as
+name matches the scenario (`ONNELLAB Video iPhone 17 Pro` for the current portfolio),
+records with `xcrun simctl io ... recordVideo`, then shuts down only that simulator. An explicitly supplied, already-booted UDID is treated as
 externally owned and is not shut down.
 
 Ambiguous/missing simulators block the run. The recorder never uses iPhone Mirroring.
@@ -106,6 +117,11 @@ Use a private asset root outside Git. Example:
 
 The MP4 is normalized to H.264, yuv420p, 30 fps, no audio. The file and index remain
 private runtime assets and are never committed.
+
+A canonical flow may be shorter than a 15-second Short. The renderer may hold the
+recording's final verified frame only when the master is at least 3 seconds long and
+the resulting tail hold is at most 10 seconds. It never loops fake interaction. Longer
+Shorts must use a sufficiently long master rather than stretching the tail indefinitely.
 
 ## Commands
 
@@ -202,42 +218,41 @@ active working tree.
 
 ## Verification recorded 2026-09-21
 
-The final Android production path was exercised end-to-end on the Mac with the
-dedicated `ONNELLAB_Video_API36` AVD. The recorder fetched TagWeaver `origin/main`,
-built only in a temporary detached checkout, ran the existing English `video_flow`,
-recorded from `VIDEO_STEP:library_empty` through `VIDEO_STEP:saved`, normalized and
-indexed the MP4, then shut down only its owned emulator. TagWeaver's active working
-tree retained its pre-existing Xcode-only edits and gained no recorder/build edits.
+The portfolio flows were exercised through the actual managed recorder, not merely
+validated as JSON. All source builds came from fetched `origin/main` commits in
+temporary detached checkouts. No active app working tree was used as a build source.
 
-Final verified managed asset:
+| App | Platform | Source commit | Duration | Geometry | MP4 SHA-256 |
+| --- | --- | --- | ---: | --- | --- |
+| Quivra | Android emulator | `d4b77585753bf426c4a2695905e2f8a8db283fbd` | 6.733333 s | 720×1280 @ 30 | `8d055788946de8b82fc22dbcd2ac644ff117b971729ef076a932c2c048051b3b` |
+| VaultXT | Android emulator | `49be30d2102a3a436886dbfa9e732b7181b52471` | 9.100000 s | 720×1280 @ 30 | `26a50a4399fb209edcde0ce2119b64fa0f30f269b5f36bbec26a265b002ca04c` |
+| Segra | Android emulator | `9ac4c7be55ba48efb985c30120e9c2671988f2e0` | 11.500000 s | 720×1280 @ 30 | `2eba498064088cc14cf0e5ac2e8ac510febe330693ea131d52afd084f568f75a` |
+| ClipNest | iOS Simulator | `33c5391216d1514e7b01c03ac20a8baaf41a8623` | 6.533333 s | 1206×2622 @ 30 | `c6bd25e50b7d18dd909f477a65d892b3dc2889ce3f40fcf04d3038a0e291bb3e` |
+| Aligna | Android emulator | `b2584b762fbc268509f55ba7369e065a6fd278f6` | 6.266667 s | 720×1280 @ 30 | `c18bb621079089024c0c481e37eb366b2ba66d0758a0cffef9f21051198f78ec` |
 
-- scenario: `tagweaver-core-edit-flow`;
-- app/topic: `APP-0002` / `TOPIC-0008`;
-- source commit: `fb335f0c5e7669ac1fbfe0202665963c15ca0145`;
-- scenario hash: `1a4463c08f8776530c73e8303a3307df2baffa927b2e0157a16cf59da2d51a8d`;
-- fingerprint: `1fed02e838a5403cb6e28823ba51f34c85bbeb348dc906cc8e6dee513189dbc7`;
-- resolved lock SHA-256: `836bdbc60d4c59700afecb5a2837f9957f3e84aec219ea6eea465bd772c147bd`;
-- output: H.264, 720×1280, 30 fps, 59.533333 seconds, 790,376 bytes;
-- MP4 SHA-256: `0e8fc33a4d6852d954ac97fd2659643c7ff2b0fca1bf79ab5c1c7a745214b7ca`;
-- second `ensure-topic` returned `cached` without booting the dedicated AVD;
-- after completion ADB contained the pre-existing Melivra emulator only; the recorder's
-  dedicated AVD was gone and the physical Samsung device was never selected.
+The earlier TagWeaver proof remains valid for `tagweaver-core-edit-flow`
+(`APP-0002` / `TOPIC-0008`): H.264 720×1280 @ 30 fps, 59.533333 seconds,
+SHA-256 `0e8fc33a4d6852d954ac97fd2659643c7ff2b0fca1bf79ab5c1c7a745214b7ca`.
 
-The final managed recording was then used as a real input to the existing Remotion
-`problem_solution` pipeline. A 20-second production-eligible draft rendered successfully
-without upload; render SHA-256 was
-`32692e63a8f0a29ffbad5040624ea653b84ad177ed09fa93fe6a30246b7ab13e`. The same job
-passed `managed_recording_attestation` and produced the standing automatic YouTube
-choices: public, not made for kids, no synthetic-media disclosure, no scheduled
-`publishAt`. No YouTube network/upload action was called.
+After each new recording, a second `ensure-topic` returned `cached`. Those cache checks
+completed without booting the dedicated recorder devices. `ffprobe` verified every
+new managed asset as a single H.264 stream at 30 fps.
 
-Final local verification also passed **96 focused short-video Python tests**, the
-**509-test full offline Python suite**, Remotion/Node **5 tests**, TypeScript typecheck,
-and `git diff --check`.
+Important root-cause fixes discovered by real runs are preserved in the app repos:
+Quivra waits for and verifies its saved conversion state; Segra paces the real trim
+workflow; Aligna does not require release signing for debug integration builds and
+paces the preview; ClipNest's keyboard extension inherits Flutter build-version
+settings so the simulator can install it; VaultXT submits large-file search through
+the active `EditableText` client and closes the search sheet deterministically.
 
-This proves recorder → managed provenance → Remotion → automatic-publication-policy
-integration for the registered TagWeaver Android scenario. The common iOS simulator
-implementation has a dedicated `ONNELLAB Video iPhone 17 Pro` target but is not yet
-production-verified. Quivra, VaultXT, Segra, Aligna, and ClipNest remain fail-closed
-until an English deterministic video-flow scenario is registered for their target
-topic; existing screenshot-only harnesses are not silently treated as marketing flows.
+The physical Samsung Android device was never selected. After verification, the
+dedicated recorder devices were shut down and recorder-owned screen-recording
+processes were absent.
+
+The shortest portfolio master (Aligna, 6.266667 seconds) and the Quivra master were
+also exercised through a 15-second Remotion render using the bounded final-frame hold.
+The Quivra TEST ONLY proof produced a 1080×1920, 30 fps, 15-second Short without looping
+or fabricating additional app interaction.
+
+These recordings prove deterministic capture flows. They do not authorize unsupported
+marketing claims, and no YouTube upload was performed during this registration work.
