@@ -49,6 +49,18 @@ class Queries(unittest.TestCase):
         for value in [True,-1,float('nan'),'missing']:
             with self.assertRaises(VideoError):numeric(value)
         with self.assertRaises(VideoError):report_rows(table(('wrong',),[]),('views',))
+    def test_comment_scope_failure_is_explicit_reconnect_warning(self):
+        api=client()
+        api.request.side_effect=[
+            (200,{}, {'items':[{'id':CHANNEL,'snippet':{'title':'Example'},'statistics':{}}]}),
+            (200,{},table(('day',*METRICS),[])),
+            (200,{},table(('video',*VIDEO_METRICS),[])),
+            UploadError('insufficient_permissions'),
+        ]
+        result=collect(api,'aether_inn',CHANNEL,now=NOW)['profiles']['aether_inn']
+        self.assertEqual('scope_missing',result['comments_status'])
+        self.assertIn('comments_scope_missing_reconnect',result['warnings'])
+
     def test_authentication_failure_does_not_return_report(self):
         api=client();api.request.side_effect=UploadError('auth_required')
         with self.assertRaises(UploadError):collect(api,'aether_inn',CHANNEL,now=NOW)

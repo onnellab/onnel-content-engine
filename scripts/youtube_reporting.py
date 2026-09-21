@@ -96,8 +96,17 @@ def collect(api, profile, expected_channel, *, now=None):
         result['comments_status']='available'
         if data.get('nextPageToken'):result['warnings'].append('comments_limited_to_latest_100')
     except UploadError as error:
-        if str(error)=='auth_required':raise
-        result['comments_status']='unavailable';result['warnings'].append('comments_unavailable_or_disabled')
+        reason = str(error)
+        if reason == 'auth_required': raise
+        if reason == 'insufficient_permissions':
+            result['comments_status']='scope_missing'
+            result['warnings'].append('comments_scope_missing_reconnect')
+        elif reason == 'comments_disabled':
+            result['comments_status']='disabled'
+            result['warnings'].append('comments_disabled')
+        else:
+            result['comments_status']='unavailable'
+            result['warnings'].append('comments_unavailable')
     if result['warnings']:result['state']='partial'
     return {'schema_version':1,'kind':'onnellab_youtube_private_report','generated_at':now.isoformat(),
         'expires_at':(now+timedelta(days=1)).isoformat(),'profiles':{profile:result}}

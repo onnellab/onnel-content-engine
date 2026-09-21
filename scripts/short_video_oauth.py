@@ -7,7 +7,7 @@ import re
 import secrets
 import time
 from urllib.parse import urlencode, urlsplit, parse_qs
-from short_video_credentials import CredentialError, SCOPES, strict_json, channel_id, validate_bundle
+from short_video_credentials import CredentialError, SCOPES, COMMENT_SCOPE, strict_json, channel_id, validate_bundle
 from short_video_youtube import transport
 from youtube_profiles import profile_id, ANALYTICS_SCOPE
 
@@ -165,5 +165,5 @@ def public_status(bundle):
     return {'state': 'connected', 'channel_id': bundle['channel_id'], 'channel_title': bundle['channel_title'],
             'checked_at': bundle['verified_at'], 'channel_verified': True,
             'upload_scope': SCOPES[0] in bundle['scopes'], 'read_scope': SCOPES[1] in bundle['scopes'],
-            'analytics_scope': ANALYTICS_SCOPE in bundle['scopes'], 'profile': bundle.get('profile', 'onnellab'),
+            'analytics_scope': ANALYTICS_SCOPE in bundle['scopes'], 'comment_scope': COMMENT_SCOPE in bundle['scopes'], 'profile': bundle.get('profile', 'onnellab'),
             'public_upload_verified': False, 'source': 'macos_keychain'}

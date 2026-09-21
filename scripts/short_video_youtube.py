@@ -96,6 +96,18 @@ class YouTube:
                 self.pause(hs, 2 ** attempt)
                 continue
             if code >= 400:
+                detail = None
+                try:
+                    error_doc = json.loads(raw) if raw else {}
+                    errors = error_doc.get('error', {}).get('errors', []) if isinstance(error_doc, dict) else []
+                    if isinstance(errors, list) and errors and isinstance(errors[0], dict):
+                        detail = errors[0].get('reason')
+                except (ValueError, TypeError, AttributeError):
+                    detail = None
+                if detail == 'insufficientPermissions':
+                    raise UploadError('insufficient_permissions')
+                if detail == 'commentsDisabled':
+                    raise UploadError('comments_disabled')
                 reasons = {401: 'auth_required', 403: 'permission_or_quota_denied',
                            404: 'session_or_video_missing', 410: 'session_expired', 429: 'rate_limited'}
                 raise UploadError(reasons.get(code, 'provider_unavailable' if code >= 500 else 'provider_rejected'))

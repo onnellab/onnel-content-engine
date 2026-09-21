@@ -17,7 +17,8 @@ FIELDS = ('client_id', 'client_secret', 'refresh_token', 'channel_id')
 SERVICE = 'com.onnellab.content-engine.youtube'
 ACCOUNT = 'onnellab'
 SCOPES = ('https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube.readonly')
-SETUP_SCOPES = (*SCOPES, ANALYTICS_SCOPE)
+COMMENT_SCOPE = 'https://www.googleapis.com/auth/youtube.force-ssl'
+SETUP_SCOPES = (*SCOPES, ANALYTICS_SCOPE, COMMENT_SCOPE)
 MAX_BUNDLE = 32768
 _LOCK = threading.RLock()
 

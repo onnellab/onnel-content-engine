@@ -72,6 +72,7 @@ class ProfileIsolationTests(unittest.TestCase):
         self.assertEqual('aether_inn', store.value['profile'])
         self.assertEqual(2, store.value['schema_version'])
         self.assertTrue(result['analytics_scope'])
+        self.assertTrue(result['comment_scope'])
         self.assertEqual('aether_inn', result['profile'])
         self.assertNotIn('DO-NOT-PRINT', json.dumps(result))
 
