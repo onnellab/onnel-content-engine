@@ -467,3 +467,35 @@ Linux service execution or actual-footage approval. Phase-1 test footage remains
 non-uploadable. The separate dry-run metadata-path defect was fixed without weakening the
 article review gate or editing generated articles; the supervisor verified the
 full pre-upload suite (435 tests) after that fix.
+
+## Supervisor verification — 2026-09-21
+
+Implementation reviewed through code commit `00f2c652` (video publishing: `ead6191a`).
+- Full offline Python suite: **471 tests passed** on macOS/Python 3.14.7.
+- Focused video suite: **58 tests passed**; Node suite: **5 passed**; TypeScript check passed.
+- GitHub isolated short-video checks: success, run `35553666174` (`ead6191a`).
+- GitHub offline Python tests: success, run `35553965283` (`00f2c652`).
+- GitHub publishing pipeline validation/dry-run: success, run `35553965282` (`00f2c652`).
+- GitHub workflow validation: success, run `35553666273` (`ead6191a`).
+- Both Python orchestration and direct publication CLI now use the correct isolated metadata root; review thresholds/fingerprint checks were not relaxed.
+
+Final independent real render: `problem_solution`, Korean, 1080x1920, 30fps,
+15 seconds, H.264, **7,311,399 bytes**. Preview visually reviewed; this is a synthetic
+TEST ONLY pattern, not app footage. Private job ID: `af1ff959a55715eb83405dfb0bd2a5b7`.
+MP4 SHA-256: `09ba73e298c05c1d4b19e70a91228e8f81da93a4797271ee7084c650e7295a35`.
+The earlier Korean quick-demo and English problem-solution/AAC smoke checks are
+recorded above. No test fixture was upload-eligible or sent to YouTube.
+
+Reviewer regressions reproduced and fixed: 100-character Korean titles, ambiguous
+channel refusal before insert, normalized provider timestamps, scheduled-job
+reconciliation when due, and resumable transfer time budgets. Every regression
+uses an injected fake HTTP transport and runs with sockets blocked.
+
+Host readiness verified Node/npm/ffmpeg/ffprobe/Remotion/Chrome availability;
+all four YouTube credential variables were absent from the checked environment,
+and no production footage had been registered.
+Dry-run/readiness created no runtime state. Owned Codex/render processes exited;
+this work started no emulator, mirroring app, service, timer, or ChatGPT scheduled task.
+Live OAuth/YouTube acceptance, real-footage approval, Linux service execution,
+and Remote Desktop availability inside a future ChatGPT scheduled run remain
+activation checks, not completed verification claims.
