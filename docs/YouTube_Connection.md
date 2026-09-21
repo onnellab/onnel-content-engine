@@ -116,3 +116,15 @@ tool safety check and was not applied; no workaround was used to execute that re
 
 No ONNELLAB OAuth grant, actual YouTube account verification, or live upload has been
 completed without the owner's Desktop client and consent. These are activation steps.
+
+
+## Superseding dual-brand contract — 2026-09-21
+
+The channel manager now supports ONNELLAB and Aether Inn as independent local
+contexts. Use the existing dashboard launcher and select the intended brand at the
+top of the local page. Its connection flow now requests the additional Analytics
+read scope. Previous singleton/session-path and two-scope descriptions above are
+historical. See `YouTube_Brand_Workspace.md` for current session paths, reporting,
+cache expiry and isolation. Existing app-video upload grants remain usable without
+Analytics; reconnect to enable reports. The prior language-switch display issue
+was fixed in dd676396 and must not be represented as a current limitation.

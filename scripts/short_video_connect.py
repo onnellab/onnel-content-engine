@@ -16,8 +16,11 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit
 import webbrowser
 
-from short_video_credentials import CredentialError, MacKeychain, strict_json
+from short_video_credentials import CredentialError, MacKeychain, strict_json, SETUP_SCOPES
+from youtube_profiles import profile_id, PROFILES as LABELS
 from short_video_oauth import Connection, OAuthError, AUTH
+from short_video_pipeline import VideoError
+import youtube_report_store
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / 'templates/youtube_connect.html'
@@ -28,18 +31,45 @@ SERVICE = 'onnellab-youtube-connect-v1'
 class SetupServer(ThreadingHTTPServer):
     daemon_threads = True
     request_queue_size = 5
-    def __init__(self, store, *, address=('127.0.0.1', 0), connection=None):
+    def __init__(self, store, *, address=('127.0.0.1', 0), connection=None, profile='onnellab', reporting_root=youtube_report_store.ROOT):
         if address[0] != '127.0.0.1': raise ValueError('loopback_only')
         super().__init__(address, SetupHandler)
+        self.reporting_root = reporting_root
+        self.profile = profile_id(profile)
         self.csrf = secrets.token_urlsafe(32)
         self.nonce = secrets.token_urlsafe(24)
         self.instance = secrets.token_urlsafe(24)
         self.origin = f'http://127.0.0.1:{self.server_port}'
         self.store = store
-        self.flow = connection if connection is not None else Connection(store)
+        self.flow = connection if connection is not None else Connection(store, profile=self.profile, scopes=SETUP_SCOPES)
         self.guard = threading.Lock()
         self.last_result = None
         self.last_error = None
+        self.serving = threading.Event()
+        self.root_server = self
+        self.brand_servers = {self.profile:self}
+        self.brand_guard = threading.Lock()
+    def brand_console(self, profile):
+        profile = profile_id(profile)
+        with self.brand_guard:
+            if profile not in self.brand_servers:
+                child = SetupServer(MacKeychain(account=profile, interactive=True), profile=profile, reporting_root=self.reporting_root)
+                child.root_server = self.root_server
+                child.brand_servers = self.brand_servers
+                child.brand_guard = self.brand_guard
+                self.brand_servers[profile] = child
+                threading.Thread(target=child.serve_forever, daemon=True).start()
+                if not child.serving.wait(2): raise OAuthError("local_brand_start_failed")
+            return self.brand_servers[profile].origin
+    def serve_forever(self, poll_interval=0.25):
+        self.serving.set()
+        try: super().serve_forever(poll_interval)
+        finally: self.serving.clear()
+    def close_brands(self):
+        for server in list(self.brand_servers.values()):
+            server.flow.pending = None
+            if server.serving.is_set(): server.shutdown()
+            server.server_close()
     def handle_error(self, request, address):
         # Never print exception context containing callback queries or request bodies.
         pass
@@ -87,12 +117,14 @@ class SetupHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if not self.allowed_host(): return self.reply(403, {'error':'invalid_local_host'})
         path=urlsplit(self.path)
+        if path.path == '/favicon.ico' and not path.query:
+            return self.reply(204, html='')
         if path.path == '/health' and not path.query:
             return self.reply(200, {'service':SERVICE,'instance':self.server.instance})
         if path.path == '/' and not path.query:
             try: page=TEMPLATE.read_text(encoding='utf-8')
             except OSError: return self.reply(503, {'error':'setup_page_missing'})
-            return self.reply(200, html=page.replace('__NONCE__',self.server.nonce).replace('__CSRF__',self.server.csrf))
+            return self.reply(200, html=page.replace('__NONCE__',self.server.nonce).replace('__CSRF__',self.server.csrf).replace('__PROFILE_LABEL__',LABELS[getattr(self.server, 'profile', 'onnellab')]).replace('__PROFILE_ID__',getattr(self.server, 'profile', 'onnellab')))
         if path.path == '/api/status' and not path.query:
             if not self.authenticated(): return self.reply(403, {'error':'local_session_required'})
             with self.server.guard:
@@ -105,10 +137,20 @@ class SetupHandler(BaseHTTPRequestHandler):
                     self.server.last_result=None
                     result={'state':'blocked','error':str(exc)}
             return self.reply(200,result)
+        if path.path == '/api/report' and not path.query:
+            if not self.authenticated(): return self.reply(403, {'error':'local_session_required'})
+            try:
+                if not self.server.store.present():
+                    youtube_report_store.clear(self.server.profile, self.server.reporting_root)
+                    return self.reply(200, {'report':None})
+                return self.reply(200, {'report':youtube_report_store.read(self.server.profile, self.server.reporting_root)})
+            except (VideoError,OSError):
+                return self.reply(400, {'error':'private_report_unavailable'})
         if path.path == '/oauth/callback':
             with self.server.guard:
                 try:
                     self.server.last_result=self.server.flow.complete(path.query)
+                    if hasattr(self.server,'reporting_root'): youtube_report_store.clear(self.server.profile,self.server.reporting_root)
                     self.server.last_error=None
                 except CredentialError as exc:
                     self.server.last_result=None
@@ -142,6 +184,14 @@ class SetupHandler(BaseHTTPRequestHandler):
                     url=self.server.flow.begin(client,bundle['channel_id'],self.server.origin+'/oauth/callback')
                     self.server.last_error=None
                     result={'authorization_url':url}
+                elif self.path == '/api/brand':
+                    if set(data) != {'profile'} or data['profile'] not in ('onnellab','aether_inn'):
+                        raise OAuthError('invalid_brand_profile')
+                    result={'local_url':self.server.brand_console(data['profile'])}
+                elif self.path == '/api/report-sync':
+                    if data: raise OAuthError('connection_fields_invalid')
+                    try: result={'report':youtube_report_store.sync(self.server.profile, self.server.reporting_root)}
+                    except (VideoError,OSError): raise OAuthError('private_report_sync_failed') from None
                 elif self.path == '/api/check':
                     if data: raise OAuthError('connection_fields_invalid')
                     result=self.server.flow.check()
@@ -149,11 +199,12 @@ class SetupHandler(BaseHTTPRequestHandler):
                 elif self.path == '/api/disconnect':
                     if data!={'confirm':True}: raise OAuthError('disconnect_confirmation_required')
                     result=self.server.flow.disconnect()
+                    if hasattr(self.server, 'reporting_root'): youtube_report_store.clear(self.server.profile, self.server.reporting_root)
                     self.server.last_result=None; self.server.last_error=None
                 elif self.path == '/api/close':
                     if data: raise OAuthError('connection_fields_invalid')
                     result={'state':'closed'}
-                    threading.Thread(target=self.server.shutdown,daemon=True).start()
+                    threading.Thread(target=self.server.root_server.shutdown,daemon=True).start()
                 else:
                     return self.reply(404, {'error':'not_found'})
             return self.reply(200,result)
@@ -176,9 +227,10 @@ def private_directory(path):
     return path
 
 
-def open_console(*, open_browser=True, ttl=1200, private_root=PRIVATE_ROOT):
+def open_console(*, open_browser=True, ttl=1200, private_root=PRIVATE_ROOT, profile="onnellab"):
+    profile = profile_id(profile)
     if sys.platform!='darwin': raise CredentialError('keychain_requires_macos')
-    root=private_directory(private_root)
+    root=private_directory(Path(private_root) / ("youtube-"+profile))
     descriptor=os.open(root/'youtube-connect.lock',os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
     os.fchmod(descriptor,0o600)
     server=None; timer=None
@@ -201,7 +253,7 @@ def open_console(*, open_browser=True, ttl=1200, private_root=PRIVATE_ROOT):
             except Exception: raise CredentialError('local_setup_stale_retry') from None
             if open_browser: webbrowser.open(url+'/',new=2)
             return
-        server=SetupServer(MacKeychain(interactive=True))
+        server=SetupServer(MacKeychain(account=profile, interactive=True), profile=profile)
         session=root/'youtube-connect-session.json'
         fd=os.open(session,os.O_WRONLY|os.O_CREAT|os.O_TRUNC|os.O_NOFOLLOW,0o600)
         os.fchmod(fd,0o600)
@@ -213,7 +265,7 @@ def open_console(*, open_browser=True, ttl=1200, private_root=PRIVATE_ROOT):
     finally:
         if timer: timer.cancel()
         if server:
-            server.flow.pending=None; server.server_close()
+            server.close_brands()
             (root/'youtube-connect-session.json').unlink(missing_ok=True)
         os.close(descriptor)
 
@@ -222,11 +274,12 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command',choices=['open'])
     parser.add_argument('--no-browser',action='store_true')
+    parser.add_argument('--profile', choices=['onnellab','aether_inn'], default='onnellab')
     args=parser.parse_args()
     def stop(_signum,_frame): raise KeyboardInterrupt()
     signal.signal(signal.SIGTERM,stop)
     try:
-        open_console(open_browser=not args.no_browser)
+        open_console(open_browser=not args.no_browser, profile=args.profile)
         return 0
     except KeyboardInterrupt: return 0
     except CredentialError as exc:

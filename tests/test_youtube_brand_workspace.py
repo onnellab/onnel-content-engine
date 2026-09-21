@@ -124,7 +124,7 @@ class WorkspaceTests(unittest.TestCase):
     def test_brand_tabs_catalog_and_pending_not_fake_success(self):
         html = youtube_workspace_panel()
         self.assertEqual(65, html.count('class="ytw-song"'))
-        for expected in ['role="tablist"', 'data-brand="aether_inn"', 'ytw-report-file', 'ytw-song-search', '아직 미구현', '연결 화면 · 구현 대기']:
+        for expected in ['role="tablist"', 'data-brand="aether_inn"', 'ytw-report-file', 'ytw-song-search', '작업용 Mac에서 자동 수집', '채널 관리 열기 · Aether Inn 선택']:
             self.assertIn(expected, html)
         self.assertNotIn('__TRACK_COUNT__', html)
         self.assertNotIn('__CATALOG_ROWS__', html)

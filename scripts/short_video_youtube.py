@@ -10,6 +10,7 @@ from urllib.error import HTTPError, URLError
 
 from short_video_pipeline import VideoError, atomic_json, canonical, digest, file_hash, load_json, MAX_ASSET
 from short_video_credentials import CredentialError, resolve_credentials, credential_status
+from youtube_profiles import profile_id, require_content_profile, content_profile
 
 NAMES = ('YOUTUBE_CLIENT_ID', 'YOUTUBE_CLIENT_SECRET', 'YOUTUBE_REFRESH_TOKEN', 'YOUTUBE_CHANNEL_ID')
 API = 'https://www.googleapis.com/youtube/v3/'
@@ -64,10 +65,11 @@ def transport(method, url, headers, body):
 
 
 class YouTube:
-    def __init__(self, *, env=None, send=transport, sleep=time.sleep):
+    def __init__(self, *, env=None, send=transport, sleep=time.sleep, profile="onnellab"):
+        self.profile = profile_id(profile)
         if env is None:
             try:
-                env = resolve_credentials()
+                env = resolve_credentials(profile=self.profile)
             except CredentialError as exc:
                 raise UploadError(str(exc)) from None
         if check_config(env)['missing']:
@@ -193,7 +195,7 @@ def metadata(job, choices, now, *, executing=True):
     if publish:
         timestamp(publish)
         status['publishAt'] = publish
-    return {'snippet': {'title': title, 'description': description, 'defaultLanguage': brief['locale'], 'categoryId': '27'}, 'status': status}
+    return {'snippet': {'title': title, 'description': description, 'defaultLanguage': brief['locale'], 'categoryId': '10' if content_profile(brief)=='aether_inn' else '27'}, 'status': status}
 
 
 class Uploader:
@@ -273,6 +275,7 @@ class Uploader:
             if not upload and job['status'] not in {'rendered', 'blocked'}:
                 raise UploadError('complete_render_required')
             api = api or self.api_factory()
+            require_content_profile(job['brief'], getattr(api, 'profile', 'onnellab'))
             if not api.token:
                 api.verify()
             if upload and upload.get('channel_id') != api.channel:

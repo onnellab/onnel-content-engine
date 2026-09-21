@@ -137,6 +137,8 @@ class Connection:
 
     def check(self):
         bundle = validate_bundle(self.store.load(), profile=self.profile)
+        if not set(self.scopes).issubset(bundle['scopes']):
+            raise OAuthError('youtube_scopes_missing')
         token = _request(self.send, 'POST', TOKEN, body={
             'client_id': bundle['client_id'], 'client_secret': bundle['client_secret'],
             'refresh_token': bundle['refresh_token'], 'grant_type': 'refresh_token'})

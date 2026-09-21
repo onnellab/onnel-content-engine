@@ -321,3 +321,14 @@ OAuth tokens remain in profile-specific Keychain items; no cross-brand fallback.
 The public dashboard is an entrypoint, not a store for private YouTube analytics.
 Do not invent Suno endpoints, originality scores, credentials or publish success.
 Document and test each completed module; commit, push and deploy changed pages.
+
+
+### Existing-master music compilation worker
+
+The approved Aether extension may render and publish coherent 30-minute collections
+from registered, previously curated, rights-confirmed masters and theme-specific
+artwork. Use the separate Aether queue/profile and automatic provenance/render
+gates. Reuse the resumable transport, never the app-Shorts schema or ONNELLAB
+credentials. Test-only media cannot publish. New Suno/image generation and a
+calibrated musical-originality evaluator remain separate unfinished components.
+See `docs/Aether_Inn_Compilation.md` and `docs/YouTube_Brand_Workspace.md`.
