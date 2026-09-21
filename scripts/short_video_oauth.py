@@ -108,7 +108,7 @@ class Connection:
         except ValueError:
             raise OAuthError('oauth_callback_invalid') from None
         given = fields.get('state', [''])[0]
-        if not secrets.compare_digest(given, pending['state']):
+        if not given.isascii() or not secrets.compare_digest(given, pending['state']):
             raise OAuthError('oauth_state_mismatch')
         self.pending = None
         if self.clock() >= pending['expires']: raise OAuthError('oauth_session_expired')

@@ -1061,6 +1061,9 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
     return items
 
 
+from youtube_dashboard_panel import youtube_settings_panel
+
+
 def html_document(
     items: list[dict[str, object]],
     manual_state: dict[str, object] | None = None,
@@ -1388,6 +1391,7 @@ def html_document(
         <a id="verification-run-link" class="run-link" href="#" target="_blank" rel="noopener" hidden>실행 기록</a>
       </div>
     </section>
+    {youtube_settings_panel()}
     <details class="tool-panel" aria-label="Publish controls">
       <summary id="filter-panel-title" class="panel-summary">검색 및 필터</summary>
       <div class="quick-row">
@@ -4976,7 +4980,7 @@ def pwa_manifest_document() -> str:
 
 
 def service_worker_document() -> str:
-    return """const CACHE = 'onnellab-manual-publish-v16';
+    return """const CACHE = 'onnellab-manual-publish-v17';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './libsodium-sumo.js', './libsodium-wrappers.js'];
 
 self.addEventListener('install', (event) => {

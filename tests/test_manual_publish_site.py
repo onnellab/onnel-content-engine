@@ -630,7 +630,7 @@ Body
             self.assertTrue((output.parent / "sw.js").exists())
             self.assertTrue((output.parent / "libsodium-sumo.js").exists())
             self.assertTrue((output.parent / "libsodium-wrappers.js").exists())
-            self.assertIn("onnellab-manual-publish-v16", (output.parent / "sw.js").read_text(encoding="utf-8"))
+            self.assertIn("onnellab-manual-publish-v17", (output.parent / "sw.js").read_text(encoding="utf-8"))
             self.assertIn("./libsodium-sumo.js", (output.parent / "sw.js").read_text(encoding="utf-8"))
 
     def test_prepublication_items_are_review_only(self) -> None:

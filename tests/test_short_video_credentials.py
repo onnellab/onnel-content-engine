@@ -125,6 +125,10 @@ class OAuthTests(unittest.TestCase):
         self.begin()
         with self.assertRaisesRegex(OAuthError,'state_mismatch'): self.callback(state='wrong')
         self.assertEqual([],self.google.calls); self.assertEqual(0,self.store.writes)
+    def test_non_ascii_state_is_sanitized_without_network(self):
+        self.begin()
+        with self.assertRaisesRegex(OAuthError,'state_mismatch'): self.callback(state='잘못된값')
+        self.assertEqual([],self.google.calls); self.assertEqual(0,self.store.writes)
     def test_state_is_one_use(self):
         self.begin(); self.callback()
         with self.assertRaisesRegex(OAuthError,'missing_or_used'): self.callback()
