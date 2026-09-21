@@ -9,6 +9,7 @@ from urllib.request import Request, build_opener, HTTPRedirectHandler
 from urllib.error import HTTPError, URLError
 
 from short_video_pipeline import VideoError, atomic_json, canonical, digest, file_hash, load_json, MAX_ASSET
+from short_video_credentials import CredentialError, resolve_credentials, credential_status
 
 NAMES = ('YOUTUBE_CLIENT_ID', 'YOUTUBE_CLIENT_SECRET', 'YOUTUBE_REFRESH_TOKEN', 'YOUTUBE_CHANNEL_ID')
 API = 'https://www.googleapis.com/youtube/v3/'
@@ -21,7 +22,8 @@ class UploadError(VideoError):
 
 
 def check_config(env=None):
-    env = os.environ if env is None else env
+    if env is None:
+        return credential_status()
     return {'required': list(NAMES), 'missing': [n for n in NAMES if not env.get(n)]}
 
 
@@ -63,7 +65,11 @@ def transport(method, url, headers, body):
 
 class YouTube:
     def __init__(self, *, env=None, send=transport, sleep=time.sleep):
-        env = os.environ if env is None else env
+        if env is None:
+            try:
+                env = resolve_credentials()
+            except CredentialError as exc:
+                raise UploadError(str(exc)) from None
         if check_config(env)['missing']:
             raise UploadError('missing_youtube_credentials')
         self.channel = env['YOUTUBE_CHANNEL_ID']

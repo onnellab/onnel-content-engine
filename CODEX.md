@@ -301,3 +301,12 @@ Codex or activate timers; new uploads require fail-closed automatic checks and a
 hash-bound policy attestation. Preserve article publishing and
 generated dashboards. See `docs/Short_Video_Pipeline.md`;
 this extension does not rename or reorder the historical article phases.
+
+## Approved YouTube connection settings exception
+
+The user approved YouTube connection UI in the existing dashboard and a local,
+loopback-only OAuth companion. Keep Google tokens in macOS Keychain and reuse the
+same credential provider from setup, connection checks, and the scheduled worker.
+This is an exception only for YouTube settings; do not alter article workflows or
+other credential panels. See `docs/YouTube_Connection.md`. One-time Google consent
+is not a per-video human approval gate.

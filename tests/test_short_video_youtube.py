@@ -312,7 +312,7 @@ class UploadTests(unittest.TestCase):
     def test_worker_config_stop_and_lock(self):
         jid = self.prepare()
         with patch.dict(os.environ, {}, clear=True):
-            result = worker(self.q, upload=True, execute=True)
+            result = worker(self.q, upload=True, execute=True, api_factory=lambda: YouTube(env={}))
         self.assertEqual('missing_youtube_credentials', result['error'])
         self.assertEqual('rendered', self.q.status(jid)['status'])
         with self.q.lock(), self.assertRaises(VideoError):
