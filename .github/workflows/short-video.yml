@@ -2,9 +2,9 @@ name: Isolated short-video checks
 on:
   push:
     branches: [main]
-    paths: ['video/**', 'scripts/short_video*.py', 'tests/test_short_video*.py', 'data/video_briefs/**', '.github/workflows/short-video.yml']
+    paths: ['video/**', 'scripts/short_video*.py', 'tests/test_short_video*.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', '.github/workflows/short-video.yml']
   pull_request:
-    paths: ['video/**', 'scripts/short_video*.py', 'tests/test_short_video*.py', 'data/video_briefs/**', '.github/workflows/short-video.yml']
+    paths: ['video/**', 'scripts/short_video*.py', 'tests/test_short_video*.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', '.github/workflows/short-video.yml']
   workflow_dispatch:
 permissions:
   contents: read

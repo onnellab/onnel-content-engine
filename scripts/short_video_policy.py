@@ -4,7 +4,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from short_video_pipeline import ROOT, VideoError, canonical, digest, load_json
+from short_video_pipeline import ROOT, VideoError, digest, load_json
+from short_video_recorder import RecordingError, managed_recording_attestation
 
 DEFAULT_POLICY = ROOT / 'data/video_publish_policy.json'
 _REQUIRED = {
@@ -19,6 +20,7 @@ _REQUIRED = {
     'allow_narration',
     'require_released_app',
     'require_real_recording',
+    'require_managed_recording',
     'forbidden_marketing_terms',
 }
 _CJK = re.compile(r'[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]')
@@ -39,7 +41,8 @@ def validate_policy(policy: dict) -> dict:
     if policy['publish_mode'] != 'on_worker_due':
         raise PolicyError('automatic_policy_publish_mode_invalid')
     for key in ('made_for_kids', 'synthetic_media', 'allow_narration',
-                'require_released_app', 'require_real_recording'):
+                'require_released_app', 'require_real_recording',
+                'require_managed_recording'):
         if type(policy[key]) is not bool:
             raise PolicyError('automatic_policy_boolean_invalid')
     terms = policy['forbidden_marketing_terms']
@@ -62,7 +65,7 @@ def _copy(job: dict) -> str:
     parts = [brief['hook'], brief['title'], brief['description'], brief['cta']]
     parts.extend(item['text'] for item in brief['captions'])
     return '\n'.join(parts)
-def automatic_choices(job: dict, policy: dict) -> dict:
+def automatic_choices(job: dict, policy: dict, *, asset_root=None) -> dict:
     """Return upload choices only when unattended publication is objectively safe."""
     policy = validate_policy(policy)
     if job['brief'].get('locale') != policy['locale']:
@@ -85,6 +88,13 @@ def automatic_choices(job: dict, policy: dict) -> dict:
             raise PolicyError('automatic_review_forbidden_marketing_claim')
     if copy.count('!') > 1:
         raise PolicyError('automatic_review_excessive_exclamation')
+    if policy['require_managed_recording']:
+        if asset_root is None:
+            raise PolicyError('automatic_review_managed_recording_required')
+        try:
+            managed_recording_attestation(asset_root, job)
+        except RecordingError as exc:
+            raise PolicyError(str(exc)) from exc
     return {
         'made_for_kids': policy['made_for_kids'],
         'synthetic_media': policy['synthetic_media'],
@@ -104,5 +114,6 @@ def policy_summary(policy: dict) -> dict:
         'publish_mode': policy['publish_mode'],
         'human_review_required': False,
         'fail_closed': True,
+        'managed_recording_required': policy['require_managed_recording'],
         'policy_hash': policy_digest(policy),
     }

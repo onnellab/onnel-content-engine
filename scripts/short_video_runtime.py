@@ -1,5 +1,6 @@
 """One-host, one-shot orchestration; no background scheduling or repository updates."""
 from pathlib import Path
+import os
 import shutil
 import signal
 from contextlib import contextmanager
@@ -8,6 +9,7 @@ from short_video_pipeline import ROOT, VideoError, atomic_json, due_time, load_j
 from short_video_youtube import Uploader, YouTube, check_config, timestamp
 from short_video_policy import (PolicyError, automatic_choices, load_policy,
                                 policy_digest, policy_summary)
+from short_video_recorder import RecordingError, load_scenarios
 
 INBOX = ROOT / 'data/video_briefs'
 
@@ -55,10 +57,24 @@ def readiness(queue):
         policy_error = None
     except (PolicyError, OSError):
         automatic, policy_error = None, 'automatic_policy_invalid_or_missing'
+    try:
+        scenario_count = len(load_scenarios())
+        recording_error = None
+    except (RecordingError, OSError):
+        scenario_count, recording_error = 0, 'recording_scenarios_invalid_or_missing'
+    recording = {
+        'scenario_count': scenario_count,
+        'scenario_error': recording_error,
+        'flutter': bool(shutil.which('flutter')),
+        'adb': bool(shutil.which('adb')),
+        'xcrun': bool(shutil.which('xcrun')),
+        'projects_root': os.environ.get('ONNELLAB_PROJECTS_ROOT', str(Path.home() / 'Projects')),
+    }
     return {'assets': asset_checks, 'dependencies': deps, 'credentials': check_config(),
             'asset_root_exists': queue.assets.is_dir(), 'queued_jobs': len(jobs),
             'production_jobs': sum(not j['brief']['test_only'] for j in jobs),
             'automatic_publication': automatic, 'automatic_policy_error': policy_error,
+            'recording_automation': recording,
             'human_review_required': False, 'semantic_uncertainty_action': 'blocked',
             'network_verified': False, 'timers_managed_by_engine': False,
             'external_scheduler_status': 'not_checked'}
@@ -120,7 +136,7 @@ def worker(queue, *, upload=False, execute=False, dry_run=False, inbox=None,
             if upload and job['status'] in {'rendered', 'blocked'} and not job.get('upload'):
                 try:
                     if not job.get('approval'):
-                        choices = automatic_choices(job, policy)
+                        choices = automatic_choices(job, policy, asset_root=queue.assets)
                         uploader.bind_approval_locked(
                             state, job, choices, mode='automatic_fail_closed',
                             policy_hash=policy_digest(policy))

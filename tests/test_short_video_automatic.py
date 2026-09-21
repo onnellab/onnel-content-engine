@@ -30,7 +30,8 @@ class AutomaticPublicationTests(unittest.TestCase):
         return job, render
     def test_worker_renders_attests_and_publishes_without_human_approval(self):
         job, render = self.renderable_job()
-        with patch.object(self.q, '_probe_inputs'), patch.object(self.q, '_verify_output'):
+        with patch.object(self.q, '_probe_inputs'), patch.object(self.q, '_verify_output'), \
+                patch('short_video_policy.managed_recording_attestation', return_value={'scenario_id': 'fixture'}):
             result = worker(
                 self.q, upload=True, execute=True, api_factory=self.api, renderer=render)
         self.assertEqual('published', result['status'])
@@ -100,7 +101,8 @@ class AutomaticPublicationTests(unittest.TestCase):
 
     def test_policy_choices_are_fixed_for_current_real_screen_format(self):
         job, _render = self.renderable_job()
-        choices = automatic_choices(job, load_policy())
+        with patch('short_video_policy.managed_recording_attestation', return_value={'scenario_id': 'fixture'}):
+            choices = automatic_choices(job, load_policy(), asset_root=self.assets)
         self.assertEqual(
             {
                 'made_for_kids': False,

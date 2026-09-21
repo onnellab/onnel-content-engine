@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "scenarios": [
+    {
+      "scenario_id": "tagweaver-core-edit-flow",
+      "app_id": "APP-0002",
+      "repository": "tagweaver",
+      "runner": "flutter_integration_test",
+      "test_target": "integration_test/tagweaver_screenshot_capture_test.dart",
+      "start_marker": "VIDEO_STEP:library_empty",
+      "end_marker": "VIDEO_STEP:saved",
+      "max_seconds": 90,
+      "platforms": [
+        "android_emulator",
+        "ios_simulator"
+      ],
+      "android_avd": "ONNELLAB_Video_API36",
+      "ios_simulator_name": "ONNELLAB Video iPhone 17 Pro",
+      "dart_defines": {
+        "TAGWEAVER_SCREEN": "video_flow",
+        "TAGWEAVER_LOCALE": "en",
+        "TAGWEAVER_SKIP_SCREENSHOT": "true"
+      },
+      "watch_paths": [
+        "lib",
+        "integration_test/tagweaver_screenshot_capture_test.dart",
+        "pubspec.yaml",
+        "pubspec.lock"
+      ],
+      "topics": [
+        "TOPIC-0008"
+      ],
+      "production_eligible": true
+    }
+  ]
+}

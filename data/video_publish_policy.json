@@ -20,5 +20,6 @@
     "never fails",
     "unlimited",
     "free forever"
-  ]
+  ],
+  "require_managed_recording": true
 }
