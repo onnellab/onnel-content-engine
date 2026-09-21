@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:onnellab:short-video:brief:1",
+  "title": "Short video brief v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "app_id",
+    "topic_id",
+    "locale",
+    "template",
+    "duration_seconds",
+    "due_at",
+    "timezone",
+    "idempotency_key",
+    "test_only",
+    "recording",
+    "hook",
+    "cta",
+    "title",
+    "description",
+    "captions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "app_id": {
+      "type": "string",
+      "pattern": "^APP-[0-9]{4}$",
+      "description": "Existing content-eligible data/apps_registry.csv ID"
+    },
+    "topic_id": {
+      "type": "string",
+      "pattern": "^TOPIC-[0-9]{4}$",
+      "description": "Existing non-archived data/topics.csv ID referencing this app"
+    },
+    "locale": {
+      "enum": [
+        "en",
+        "ko"
+      ]
+    },
+    "template": {
+      "enum": [
+        "quick_demo",
+        "problem_solution"
+      ]
+    },
+    "duration_seconds": {
+      "type": "integer",
+      "minimum": 15,
+      "maximum": 30
+    },
+    "due_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d(Z|[+-]\\d\\d:\\d\\d)$"
+    },
+    "timezone": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "IANA name; offset must match due_at at that instant"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.:-]{1,128}$"
+    },
+    "test_only": {
+      "type": "boolean",
+      "description": "True fixtures are permanently ineligible for upload"
+    },
+    "recording": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "description": "Relative trusted local mp4/mov/webm path; no URLs or traversal"
+    },
+    "narration": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "description": "Optional relative local wav/mp3/m4a path"
+    },
+    "hook": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 72
+    },
+    "cta": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 72
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "captions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "start",
+          "end",
+          "text"
+        ],
+        "properties": {
+          "start": {
+            "type": "number",
+            "minimum": 0
+          },
+          "end": {
+            "type": "number",
+            "maximum": 30
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 89
+          }
+        }
+      }
+    }
+  },
+  "$comment": "scripts/short_video_pipeline.py is the authoritative semantic validator. JSON max 64 KiB, duplicate keys/nonfinite numbers rejected. Captions: 1-2 lines, max 44 width units per line (ASCII=1, non-ASCII=2); ordered nonoverlap, >=1 second, end <= duration. Runtime validates registry, timezone and asset confinement."
+}

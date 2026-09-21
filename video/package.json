@@ -1,0 +1,25 @@
+{
+  "name": "@onnellab/short-video",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.mjs",
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.526",
+    "@remotion/renderer": "4.0.526",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.526"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.15",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  }
+}
