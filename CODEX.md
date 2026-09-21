@@ -310,3 +310,14 @@ same credential provider from setup, connection checks, and the scheduled worker
 This is an exception only for YouTube settings; do not alter article workflows or
 other credential panels. See `docs/YouTube_Connection.md`. One-time Google consent
 is not a per-video human approval gate.
+
+
+## Approved dual-brand YouTube operations
+
+The user approved resuming implementation of separate ONNELLAB app-video and
+Aether Inn music profiles, private statistics/comments views, and guarded music
+automation on 2026-09-21. Preserve existing article phases and app-video behavior.
+OAuth tokens remain in profile-specific Keychain items; no cross-brand fallback.
+The public dashboard is an entrypoint, not a store for private YouTube analytics.
+Do not invent Suno endpoints, originality scores, credentials or publish success.
+Document and test each completed module; commit, push and deploy changed pages.

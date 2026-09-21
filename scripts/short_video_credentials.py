@@ -10,12 +10,14 @@ import sys
 import threading
 
 from short_video_pipeline import VideoError
+from youtube_profiles import profile_id, environment_names, ANALYTICS_SCOPE
 
 NAMES = ('YOUTUBE_CLIENT_ID', 'YOUTUBE_CLIENT_SECRET', 'YOUTUBE_REFRESH_TOKEN', 'YOUTUBE_CHANNEL_ID')
 FIELDS = ('client_id', 'client_secret', 'refresh_token', 'channel_id')
 SERVICE = 'com.onnellab.content-engine.youtube'
 ACCOUNT = 'onnellab'
 SCOPES = ('https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube.readonly')
+SETUP_SCOPES = (*SCOPES, ANALYTICS_SCOPE)
 MAX_BUNDLE = 32768
 _LOCK = threading.RLock()
 
@@ -49,10 +51,20 @@ def channel_id(value):
     return value
 
 
-def validate_bundle(bundle):
+def validate_bundle(bundle, *, profile=None):
     required = {'schema_version', *FIELDS, 'channel_title', 'scopes', 'verified_at'}
-    if not isinstance(bundle, dict) or set(bundle) != required or type(bundle['schema_version']) is not int or bundle['schema_version'] != 1:
+    if not isinstance(bundle, dict) or type(bundle.get('schema_version')) is not int:
         raise CredentialError('keychain_bundle_invalid')
+    version = bundle['schema_version']
+    if version == 2:
+        required.add('profile')
+        profile_id(bundle.get('profile'))
+    elif version != 1:
+        raise CredentialError('keychain_bundle_invalid')
+    if set(bundle) != required:
+        raise CredentialError('keychain_bundle_invalid')
+    if profile is not None and bundle.get('profile', 'onnellab') != profile_id(profile):
+        raise CredentialError('youtube_credential_profile_mismatch')
     for name in FIELDS:
         value = bundle[name]
         if not isinstance(value, str) or not value or len(value) > 8192 or any(ord(c) < 32 or ord(c) == 127 for c in value):
@@ -165,12 +177,12 @@ class MacKeychain:
             size = self.cf.CFDataGetLength(result)
             if not 0 < size <= MAX_BUNDLE: raise CredentialError('keychain_bundle_invalid')
             raw = C.string_at(self.cf.CFDataGetBytePtr(result), size)
-            return validate_bundle(strict_json(raw))
+            return validate_bundle(strict_json(raw), profile=self.account if self.account in ('onnellab', 'aether_inn') else None)
         finally:
             if result: self.cf.CFRelease(result)
 
     def save(self, bundle):
-        raw = json.dumps(validate_bundle(bundle), separators=(',', ':'), ensure_ascii=False).encode()
+        raw = json.dumps(validate_bundle(bundle, profile=self.account if self.account in ('onnellab', 'aether_inn') else None), separators=(',', ':'), ensure_ascii=False).encode()
         if len(raw) > MAX_BUNDLE: raise CredentialError('keychain_bundle_invalid')
         with self._interaction(), self._dict(self._base()) as query, self._dict({'kSecValueData': raw}) as values:
             code = self.sec.SecItemUpdate(query, values)
@@ -185,35 +197,41 @@ class MacKeychain:
         if code != -25300: self._check(code)
 
 
-def resolve_credentials(*, store=None, environ=None):
+def resolve_credentials(*, store=None, environ=None, profile="onnellab"):
     """Explicit environment mode never mixes values from different credential sources."""
     environ = os.environ if environ is None else environ
-    source = environ.get('ONNELLAB_YOUTUBE_CREDENTIAL_SOURCE', 'keychain')
+    profile = profile_id(profile)
+    names = environment_names(profile)
+    source_key = 'ONNELLAB_YOUTUBE_CREDENTIAL_SOURCE' if profile == 'onnellab' else 'AETHER_INN_YOUTUBE_CREDENTIAL_SOURCE'
+    source = environ.get(source_key, 'keychain')
     if source == 'environment':
-        values = {name: environ.get(name, '') for name in NAMES}
+        values = {name: environ.get(actual, '') for name, actual in zip(NAMES, names)}
         if not all(values.values()): raise CredentialError('missing_youtube_credentials')
         channel_id(values['YOUTUBE_CHANNEL_ID'])
         return values
     if source != 'keychain': raise CredentialError('youtube_credential_source_invalid')
-    bundle = (store if store is not None else MacKeychain()).load()
-    validate_bundle(bundle)
+    bundle = (store if store is not None else MacKeychain(account=profile)).load()
+    validate_bundle(bundle, profile=profile)
     return {name: bundle[field] for name, field in zip(NAMES, FIELDS)}
 
 
-def credential_status(*, store=None, environ=None):
+def credential_status(*, store=None, environ=None, profile="onnellab"):
     """No refresh, network, token loading, or secret-bearing values in readiness."""
     environ = os.environ if environ is None else environ
-    source = environ.get('ONNELLAB_YOUTUBE_CREDENTIAL_SOURCE', 'keychain')
-    result = {'source': source, 'required': list(NAMES), 'network_verified': False}
+    profile = profile_id(profile)
+    names = environment_names(profile)
+    source_key = 'ONNELLAB_YOUTUBE_CREDENTIAL_SOURCE' if profile == 'onnellab' else 'AETHER_INN_YOUTUBE_CREDENTIAL_SOURCE'
+    source = environ.get(source_key, 'keychain')
+    result = {'profile': profile, 'source': source, 'required': list(names), 'network_verified': False}
     try:
         if source == 'environment':
-            result['missing'] = [name for name in NAMES if not environ.get(name)]
+            result['missing'] = [name for name in names if not environ.get(name)]
             result['configured'] = not result['missing']
         elif source == 'keychain':
-            present = (store if store is not None else MacKeychain()).present()
-            result.update(configured=present, missing=[] if present else list(NAMES))
+            present = (store if store is not None else MacKeychain(account=profile)).present()
+            result.update(configured=present, missing=[] if present else list(names))
         else:
             raise CredentialError('youtube_credential_source_invalid')
     except CredentialError as exc:
-        result.update(configured=False, missing=list(NAMES), error=str(exc))
+        result.update(configured=False, missing=list(names), error=str(exc))
     return result

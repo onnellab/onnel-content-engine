@@ -1062,6 +1062,7 @@ def syndication_items(manifest_path: Path, topics: dict[str, dict[str, str]]) ->
 
 
 from youtube_dashboard_panel import youtube_settings_panel
+from youtube_workspace_panel import youtube_workspace_panel
 
 
 def html_document(
@@ -1391,6 +1392,7 @@ def html_document(
         <a id="verification-run-link" class="run-link" href="#" target="_blank" rel="noopener" hidden>실행 기록</a>
       </div>
     </section>
+    {youtube_workspace_panel()}
     {youtube_settings_panel()}
     <details class="tool-panel" aria-label="Publish controls">
       <summary id="filter-panel-title" class="panel-summary">검색 및 필터</summary>

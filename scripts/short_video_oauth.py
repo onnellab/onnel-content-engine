@@ -9,6 +9,7 @@ import time
 from urllib.parse import urlencode, urlsplit, parse_qs
 from short_video_credentials import CredentialError, SCOPES, strict_json, channel_id, validate_bundle
 from short_video_youtube import transport
+from youtube_profiles import profile_id, ANALYTICS_SCOPE
 
 AUTH = 'https://accounts.google.com/o/oauth2/v2/auth'
 TOKEN = 'https://oauth2.googleapis.com/token'
@@ -80,8 +81,10 @@ def verify_channel(send, access_token, expected):
 
 class Connection:
     """One user-started attempt, one callback, independent expected channel binding."""
-    def __init__(self, store, *, send=transport, clock=time.monotonic):
+    def __init__(self, store, *, send=transport, clock=time.monotonic, profile=None, scopes=SCOPES):
         self.store, self.send, self.clock = store, send, clock
+        self.profile = profile_id(profile) if profile is not None else None
+        self.scopes = tuple(scopes)
         self.pending = None
 
     def begin(self, raw_client, expected_channel, redirect):
@@ -94,7 +97,7 @@ class Connection:
         self.pending = dict(client=client, expected=expected, redirect=redirect, verifier=verifier,
                             state=state, expires=self.clock() + TTL)
         return AUTH + '?' + urlencode({'client_id': client['client_id'], 'redirect_uri': redirect,
-            'response_type': 'code', 'scope': ' '.join(SCOPES), 'state': state,
+            'response_type': 'code', 'scope': ' '.join(self.scopes), 'state': state,
             'code_challenge': challenge, 'code_challenge_method': 'S256',
             'access_type': 'offline', 'prompt': 'consent select_account'})
 
@@ -121,17 +124,19 @@ class Connection:
         refresh = _secret(token.get('refresh_token'), 'offline_access_missing_reconnect')
         if str(token.get('token_type', '')).lower() != 'bearer': raise OAuthError('oauth_token_type_invalid')
         granted = token.get('scope', '')
-        if not isinstance(granted, str) or not set(SCOPES).issubset(granted.split()):
+        if not isinstance(granted, str) or not set(self.scopes).issubset(granted.split()):
             raise OAuthError('youtube_scopes_missing')
         title = verify_channel(self.send, access, pending['expected'])
         bundle = dict(schema_version=1, **pending['client'], refresh_token=refresh,
             channel_id=pending['expected'], channel_title=title, scopes=sorted(set(granted.split())),
             verified_at=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))
-        self.store.save(validate_bundle(bundle))
+        if self.profile is not None:
+            bundle.update(schema_version=2, profile=self.profile)
+        self.store.save(validate_bundle(bundle, profile=self.profile))
         return public_status(bundle)
 
     def check(self):
-        bundle = validate_bundle(self.store.load())
+        bundle = validate_bundle(self.store.load(), profile=self.profile)
         token = _request(self.send, 'POST', TOKEN, body={
             'client_id': bundle['client_id'], 'client_secret': bundle['client_secret'],
             'refresh_token': bundle['refresh_token'], 'grant_type': 'refresh_token'})
@@ -142,7 +147,7 @@ class Connection:
         # reported as if it still contained the original upload permission.
         granted = token.get('scope')
         if granted is not None and (not isinstance(granted, str)
-                or not set(SCOPES).issubset(granted.split())):
+                or not set(self.scopes).issubset(granted.split())):
             raise OAuthError('youtube_scopes_missing')
         title = verify_channel(self.send, access, bundle['channel_id'])
         return public_status({**bundle, 'channel_title': title,
@@ -158,4 +163,5 @@ def public_status(bundle):
     return {'state': 'connected', 'channel_id': bundle['channel_id'], 'channel_title': bundle['channel_title'],
             'checked_at': bundle['verified_at'], 'channel_verified': True,
             'upload_scope': SCOPES[0] in bundle['scopes'], 'read_scope': SCOPES[1] in bundle['scopes'],
+            'analytics_scope': ANALYTICS_SCOPE in bundle['scopes'], 'profile': bundle.get('profile', 'onnellab'),
             'public_upload_verified': False, 'source': 'macos_keychain'}
