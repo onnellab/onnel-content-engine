@@ -8,4 +8,4 @@ Before changing tools:
 - Use a plain-text reader or editor instead of a word processor.
 
 Read the full article:
-https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/
+https://onnellab.com/blog/en/read-large-txt-files-without-lag/

@@ -48,7 +48,7 @@ Universal Clipboard solves a different problem. It lets nearby Apple devices sig
 7. **Handle sensitive text separately.** Do not preserve passwords, one-time codes, recovery keys, payment details, medical information, or private client data as ordinary snippets.
 8. **Review on a schedule.** Delete duplicates and expired links, update changed details, and unpin items that are no longer frequent.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/reuse-copied-text-snippets-iphone/workflow-diagram.svg "Capture, verify, organize, and reuse text snippets")
+![Workflow diagram](https://onnellab.com/blog-assets/en/reuse-copied-text-snippets-iphone/workflow-diagram.svg "Capture, verify, organize, and reuse text snippets")
 
 ## Storage Approach Comparison
 
@@ -70,7 +70,7 @@ Retention is a privacy decision. “Frequently used” does not mean “safe to 
 
 ## ONNELLAB Application
 
-[ClipNest](https://onnellab.github.io/apps/clipnest/) fits a deliberate iPhone clipboard workflow when you want selected copied text available from a keyboard-based snippet list. Its official App Store listing says that it checks the current clipboard once when the ClipNest keyboard opens, saves new text locally, supports pinning and duplicate handling, and does not constantly monitor the clipboard.
+[ClipNest](https://onnellab.com/apps/clipnest/) fits a deliberate iPhone clipboard workflow when you want selected copied text available from a keyboard-based snippet list. Its official App Store listing says that it checks the current clipboard once when the ClipNest keyboard opens, saves new text locally, supports pinning and duplicate handling, and does not constantly monitor the clipboard.
 
 That event-based behavior is important: open the keyboard when you intend to capture or reuse text, then verify what was saved. The app can reduce navigation between source notes and destination fields, but it does not decide whether a snippet is current, appropriate, or safe to retain.
 
@@ -116,4 +116,4 @@ Saved text can become outdated or land in the wrong context. A quick review catc
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/
+Originally published at https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/

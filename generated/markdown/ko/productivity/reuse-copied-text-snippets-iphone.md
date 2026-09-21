@@ -12,11 +12,11 @@ primary_keyword: "아이폰 텍스트 조각 관리"
 secondary_keywords: "저장한 텍스트 조각|아이폰 클립보드 워크플로|로컬 클립보드 도구|ClipNest"
 related_apps: "ClipNest"
 tags: "아이폰 텍스트 조각 관리|저장한 텍스트 조각|아이폰 클립보드 워크플로|로컬 클립보드 도구"
-canonical_url: "https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/"
+canonical_url: "https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/"
 published_at: "2026-07-24T08:24:05+09:00"
 updated_at: "2026-07-24T08:24:05+09:00"
 image_specs: "복사부터 재사용까지의 워크플로|임시 클립보드와 저장한 조각 비교|민감한 텍스트 점검"
-related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/"
+related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/"
 ---
 
 # 아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법

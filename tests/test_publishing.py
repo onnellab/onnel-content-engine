@@ -329,7 +329,7 @@ class PublishingTest(unittest.TestCase):
             build_site(self.topics_path, self.site_dir, "https://example.com/")
 
     def test_default_github_pages_target_is_main_homepage(self) -> None:
-        self.assertEqual(DEFAULT_SITE_URL, "https://onnellab.github.io/")
+        self.assertEqual(DEFAULT_SITE_URL, "https://onnellab.com/")
         self.assertEqual(DEFAULT_PAGES_REPOSITORY, "https://github.com/onnellab/onnellab.github.io.git")
         self.assertEqual(DEFAULT_PAGES_BRANCH, "main")
         self.assertEqual(str(DEFAULT_HOMEPAGE_REPOSITORY_PATH), "/mnt/c/dev/onnellab.github.io")
@@ -473,7 +473,7 @@ class PublishingTest(unittest.TestCase):
                 "slug": "txt-vs-epub-for-long-reading",
                 "related_apps": "VaultXT",
                 "canonical_path": "generated/markdown/en/reading/txt-vs-epub-for-long-reading.md",
-                "published_url": "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/",
+                "published_url": "https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/",
             }
         )
         korean_topic = topic_row(topic_id="TOPIC-0021", language="ko")
@@ -481,7 +481,7 @@ class PublishingTest(unittest.TestCase):
             {
                 "slug": "txt-vs-epub-for-long-reading",
                 "canonical_path": "generated/markdown/ko/reading/txt-vs-epub-for-long-reading.md",
-                "published_url": "https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/",
+                "published_url": "https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/",
             }
         )
         write_topics(self.topics_path, [english_topic, korean_topic])
@@ -515,7 +515,7 @@ class PublishingTest(unittest.TestCase):
         )
         social_dir = self.root / "generated" / "social"
 
-        generate_social_posts(self.topics_path, social_dir, "https://onnellab.github.io/")
+        generate_social_posts(self.topics_path, social_dir, "https://onnellab.com/")
 
         manifest = json.loads((social_dir / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(len(manifest["posts"]), 6)
@@ -1893,7 +1893,7 @@ content_profile: "hashnode-native-v2"
 
 What should I do?
 
-[Product](https://onnellab.github.io/apps/example/)
+[Product](https://onnellab.com/apps/example/)
 [Store](https://play.google.com/store/apps/details?id=example)
 
 Originally published at https://example.com/original/

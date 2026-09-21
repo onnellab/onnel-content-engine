@@ -26,7 +26,7 @@ jobs:
 
     env:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || github.event_name == 'push' && 'true' || 'false' }}
-      SITE_URL: https://onnellab.github.io/
+      SITE_URL: https://onnellab.com/
       HOMEPAGE_REPO_PATH: .homepage
 
     steps:

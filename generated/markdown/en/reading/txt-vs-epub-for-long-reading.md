@@ -12,11 +12,11 @@ primary_keyword: "TXT vs EPUB"
 secondary_keywords: "long reading|plain text|EPUB conversion|reading workflow"
 tags: "TXT vs EPUB|long reading|plain text|EPUB conversion|VaultXT"
 related_apps: "VaultXT"
-canonical_url: "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/"
+canonical_url: "https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/"
 published_at: "2026-08-11T09:00:00+09:00"
 updated_at: "2026-08-11T09:00:00+09:00"
 image_specs: "Workflow diagram for TXT vs EPUB|Comparison diagram for practical options|Screenshot requirements for related applications"
-related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/|How to Reuse Copied Text Snippets on iPhone => https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/"
+related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/|How to Reuse Copied Text Snippets on iPhone => https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/"
 ---
 
 # TXT vs EPUB for Long Reading

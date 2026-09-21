@@ -7,4 +7,4 @@ Before changing tools:
 - Capture intentionally. Copy one reusable item, open the place where you maintain snippets, and confirm the complete text was captured.
 
 Read the full article:
-https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/
+https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/

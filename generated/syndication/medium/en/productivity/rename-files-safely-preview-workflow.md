@@ -48,7 +48,7 @@ Names also participate in workflows outside the folder. A document may be linked
 7. **Apply to the test set.** Open several renamed files in the app that normally uses them. Confirm content, sort order, links, and sidecar relationships.
 8. **Run the full batch.** Keep the backup until the destination workflow has been checked. Record the rule or naming convention for the next batch.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/rename-files-safely-preview-workflow/workflow-diagram.svg "Plan rules, inspect a preview, test a subset, and apply a batch rename")
+![Workflow diagram](https://onnellab.com/blog-assets/en/rename-files-safely-preview-workflow/workflow-diagram.svg "Plan rules, inspect a preview, test a subset, and apply a batch rename")
 
 ## Renaming Approach Comparison
 
@@ -70,7 +70,7 @@ If another application owns the library, prefer its built-in rename or relink wo
 
 ## ONNELLAB Application
 
-[Aligna](https://onnellab.github.io/apps/aligna/) fits this workflow when you want rule-based filename changes with a preview-before-apply step. Use it after deciding the naming convention: select an explicit batch, build small rules, inspect the proposed destinations, and apply only when the mapping is understandable.
+[Aligna](https://onnellab.com/apps/aligna/) fits this workflow when you want rule-based filename changes with a preview-before-apply step. Use it after deciding the naming convention: select an explicit batch, build small rules, inspect the proposed destinations, and apply only when the mapping is understandable.
 
 On iOS, saving may produce a newly named copy rather than changing every source in place, depending on the storage provider and workflow. Confirm the destination and keep the original until the copy has been opened successfully. The app reduces repetitive editing, but backups, external references, and the meaning of filenames remain the user's responsibility.
 
@@ -116,4 +116,4 @@ The other app may store the previous path or filename. Use its relink feature, r
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/
+Originally published at https://onnellab.com/blog/en/rename-files-safely-preview-workflow/

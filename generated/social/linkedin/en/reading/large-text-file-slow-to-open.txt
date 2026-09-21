@@ -8,4 +8,4 @@ Before changing tools:
 - Open the duplicate read-only with plain-text features only. If fast, re-enable features one at a time.
 
 Read the full article:
-https://onnellab.github.io/blog/en/large-text-file-slow-to-open/
+https://onnellab.com/blog/en/large-text-file-slow-to-open/

@@ -7,4 +7,4 @@ Before changing tools:
 - Inspect the source. Record the container, video codec, audio codec, dimensions, frame rate, sample rate, channels, subtitle tracks, duration, metadata, transparency, and file size as relevant.
 
 Read the full article:
-https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/
+https://onnellab.com/blog/en/choose-media-output-format-before-conversion/

@@ -24,7 +24,7 @@ jobs:
       contents: read
     env:
       HOMEPAGE_REPO_PATH: .homepage
-      SITE_URL: https://onnellab.github.io/
+      SITE_URL: https://onnellab.com/
       PRIVACY_OUTPUT_PATH: /tmp/onnellab-app-privacy-pages
     steps:
       - name: Checkout content engine

@@ -2,4 +2,4 @@ Before you convert local media files without sending them to a server, separate 
 
 Learn how to convert local media files privately, w...
 
-https://onnellab.github.io/blog/en/convert-local-media-files-privately/
+https://onnellab.com/blog/en/convert-local-media-files-privately/

@@ -1,8 +1,8 @@
 ---
 title: "How to Rename Files Safely With a Preview Workflow"
-canonical_url: "https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/"
+canonical_url: "https://onnellab.com/blog/en/rename-files-safely-preview-workflow/"
 tags: "productivity,software-engineering,developer-tools"
-cover_image: "https://onnellab.github.io/blog-assets/en/rename-files-safely-preview-workflow/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/rename-files-safely-preview-workflow/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -49,7 +49,7 @@ Names also participate in workflows outside the folder. A document may be linked
 7. **Apply to the test set.** Open several renamed files in the app that normally uses them. Confirm content, sort order, links, and sidecar relationships.
 8. **Run the full batch.** Keep the backup until the destination workflow has been checked. Record the rule or naming convention for the next batch.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/rename-files-safely-preview-workflow/workflow-diagram.svg "Plan rules, inspect a preview, test a subset, and apply a batch rename")
+![Workflow diagram](https://onnellab.com/blog-assets/en/rename-files-safely-preview-workflow/workflow-diagram.svg "Plan rules, inspect a preview, test a subset, and apply a batch rename")
 
 ## Renaming Approach Comparison
 

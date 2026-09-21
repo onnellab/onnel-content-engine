@@ -1,7 +1,7 @@
 ---
 title: "How to Turn Rough Notes Into a Structured First Draft"
 published: true
-canonical_url: "https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/"
+canonical_url: "https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/"
 tags: "structure-rough-notes,first-draft-workflow,outline-from-notes,source-audit"
 ---
 
@@ -58,7 +58,7 @@ The remedy is not more formatting. It is a sequence of distinct artifacts: raw n
 10. **Run a source audit.** Compare every substantive claim with the raw notes or an authoritative source. Confirm that paraphrases retain the original meaning and that contrary evidence has not been omitted.
 11. **Create a revision copy.** Only after the audit, revise structure, clarity, tone, and concision. Keep the source map until factual review is complete.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/turn-rough-notes-into-structured-first-draft/workflow-diagram.png "Preserve rough notes, extract atomic ideas, map evidence, draft, audit, and revise")
+![Workflow diagram](https://onnellab.com/blog-assets/en/turn-rough-notes-into-structured-first-draft/workflow-diagram.png "Preserve rough notes, extract atomic ideas, map evidence, draft, audit, and revise")
 
 ## A Small Source-to-Section Map
 
@@ -137,4 +137,4 @@ Begin revision after every major section answers its question, substantive claim
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/
+Originally published at https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/

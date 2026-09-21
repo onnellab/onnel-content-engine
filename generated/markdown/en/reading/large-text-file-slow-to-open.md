@@ -12,11 +12,11 @@ primary_keyword: "large text file slow to open"
 secondary_keywords: "large file performance|line length|memory usage|virtual rendering"
 tags: "large text file|large file performance|long lines|memory usage|virtual rendering"
 related_apps: "VaultXT"
-canonical_url: "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/"
+canonical_url: "https://onnellab.com/blog/en/large-text-file-slow-to-open/"
 published_at: "2026-08-14T09:00:00+09:00"
 updated_at: "2026-08-14T09:00:00+09:00"
 image_specs: "Diagnostic workflow from protected original to representative copy|Comparison of read-only, streaming, windowed, virtualized, and full-editing access|Optional VaultXT screenshot showing large plain-text file viewing"
-related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|TXT vs EPUB for Long Reading => https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Reuse Copied Text Snippets on iPhone => https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/"
+related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/|How to Reuse Copied Text Snippets on iPhone => https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/"
 ---
 
 # What Makes Large Text Files Slow to Open

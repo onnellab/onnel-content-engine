@@ -1,7 +1,7 @@
 ---
 title: "How to Choose a Media Output Format Before Conversion"
 published: true
-canonical_url: "https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/"
+canonical_url: "https://onnellab.com/blog/en/choose-media-output-format-before-conversion/"
 tags: "media-output-format,media-container,audio-codec,video-compatibility"
 ---
 
@@ -90,11 +90,11 @@ Conversion can produce a file that looks correct in one quick preview while losi
 7. **Test the real destination.** Play or import the sample in the target app or device. Check the beginning, middle, and end; seeking; audio/video sync; channel playback; caption selection and timing; transparency; orientation; and color appearance.
 8. **Convert the full batch.** Keep settings consistent and retain originals until outputs and backups are checked.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/choose-media-output-format-before-conversion/workflow-diagram.png "Target-first media output format decision workflow")
+![Workflow diagram](https://onnellab.com/blog-assets/en/choose-media-output-format-before-conversion/workflow-diagram.png "Target-first media output format decision workflow")
 
 ## ONNELLAB Application
 
-After you have defined the destination and output requirements, [Quivra](https://onnellab.github.io/apps/quivra/) can fit a focused local file-format workflow. The repository describes it as a local media conversion utility for focused file-format tasks. That makes it relevant when you want to create and inspect a local output rather than begin with a remote upload.
+After you have defined the destination and output requirements, [Quivra](https://onnellab.com/apps/quivra/) can fit a focused local file-format workflow. The repository describes it as a local media conversion utility for focused file-format tasks. That makes it relevant when you want to create and inspect a local output rather than begin with a remote upload.
 
 Check the app's current interface for the exact input and output choices you need before committing to a batch. This article does not infer particular format, codec, subtitle, transparency, or metadata support from the general product description.
 
@@ -134,4 +134,4 @@ Not automatically. Support varies among containers, tools, and destinations. Lis
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/
+Originally published at https://onnellab.com/blog/en/choose-media-output-format-before-conversion/

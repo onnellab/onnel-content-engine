@@ -12,11 +12,11 @@ primary_keyword: "audio trimming app"
 secondary_keywords: "audio segments|recording cleanup|simple audio workflow|Segra"
 related_apps: "Segra"
 tags: "audio trimming app|audio segments|recording cleanup|audio merging|Segra"
-canonical_url: "https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/"
+canonical_url: "https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/"
 published_at: "2026-08-17T09:00:00+09:00"
 updated_at: "2026-08-17T09:00:00+09:00"
 image_specs: "Workflow diagram for audio trimming app|Comparison diagram for practical options|Screenshot requirements for related applications"
-related_articles: "How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|TXT vs EPUB for Long Reading => https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/"
+related_articles: "How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/"
 ---
 
 # How to Trim Audio Recordings Without a Full Editor

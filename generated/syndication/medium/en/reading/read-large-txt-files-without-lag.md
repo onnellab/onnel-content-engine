@@ -55,7 +55,7 @@ Encoding is the rule an app uses to turn bytes into readable characters. UTF-8 i
 
 > The safest workflow is to treat a huge TXT file as a reference document first and an editable document second.
 
-![Large TXT file reading workflow diagram](https://onnellab.github.io/blog-assets/en/read-large-txt-files-without-lag/workflow-diagram.svg "Workflow diagram: file check, encoding check, reading mode, search, bookmarks, optional app")
+![Large TXT file reading workflow diagram](https://onnellab.com/blog-assets/en/read-large-txt-files-without-lag/workflow-diagram.svg "Workflow diagram: file check, encoding check, reading mode, search, bookmarks, optional app")
 
 ## Loading the Whole File vs Rendering What You Need
 
@@ -75,7 +75,7 @@ If the file has a meaningful structure, such as chapters, logs by date, or expor
 
 ## Where ONNELLAB Fits
 
-This is the kind of workflow [VaultXT](https://onnellab.github.io/apps/vaultxt/) is built around: open the plain-text file first, then search, bookmark, or edit only when the task actually needs it.
+This is the kind of workflow [VaultXT](https://onnellab.com/apps/vaultxt/) is built around: open the plain-text file first, then search, bookmark, or edit only when the task actually needs it.
 
 It is not meant to make every document workflow more complex. It is most relevant when the recurring problem is opening and navigating large TXT files, not formatting rich documents.
 
@@ -114,4 +114,4 @@ Use VaultXT when the main task is opening, reading, searching, or lightly editin
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/
+Originally published at https://onnellab.com/blog/en/read-large-txt-files-without-lag/

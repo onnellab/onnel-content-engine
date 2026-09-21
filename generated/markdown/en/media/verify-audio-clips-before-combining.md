@@ -12,11 +12,11 @@ primary_keyword: "verify audio clips before merging"
 secondary_keywords: "audio merge order|clip boundaries|volume consistency|Segra"
 related_apps: "Segra"
 tags: "audio clip verification|audio merge order|clip boundaries|loudness consistency|Segra"
-canonical_url: "https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/"
+canonical_url: "https://onnellab.com/blog/en/verify-audio-clips-before-combining/"
 published_at: "2026-08-23T09:00:00+09:00"
 updated_at: "2026-08-23T09:00:00+09:00"
 image_specs: "Workflow diagram for verify audio clips before merging|Comparison diagram for practical options|Screenshot requirements for related applications"
-related_articles: "How to Trim Audio Recordings Without a Full Editor => https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
+related_articles: "How to Trim Audio Recordings Without a Full Editor => https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/"
 ---
 
 # How to Verify Audio Clips Before Combining Them

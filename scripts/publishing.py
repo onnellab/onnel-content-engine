@@ -34,7 +34,7 @@ from topic_management import DEFAULT_TOPICS_PATH, TOPIC_HEADER, TopicError, read
 UTC = timezone.utc
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SITE_DIR = ROOT / "generated" / "html"
-DEFAULT_SITE_URL = "https://onnellab.github.io/"
+DEFAULT_SITE_URL = "https://onnellab.com/"
 DEFAULT_PRIVACY_POLICIES_PATH = ROOT / "data" / "app_privacy_policies.json"
 DEFAULT_APPS_REGISTRY_PATH = ROOT / "data" / "apps_registry.csv"
 DEFAULT_SOCIAL_TEMPLATE_DIR = ROOT / "templates" / "social"

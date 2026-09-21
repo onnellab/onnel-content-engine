@@ -1,8 +1,8 @@
 ---
 title: "How to Clean Up MP3 Metadata Before Organizing Music"
-canonical_url: "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
+canonical_url: "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/"
 tags: "programming,audio,metadata"
-cover_image: "https://onnellab.github.io/blog-assets/en/clean-up-mp3-metadata-before-organizing-music/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/clean-up-mp3-metadata-before-organizing-music/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -48,7 +48,7 @@ The goal is not to make every field non-empty. The goal is to make the fields yo
 7. **Save and reopen the files.** Close the editor, reopen the test batch, and confirm that text, numbering, and artwork were actually written.
 8. **Test the destination library.** Import only the small batch. Inspect grouping, sort order, search results, non-Latin characters, and cover display before repeating the process.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/clean-up-mp3-metadata-before-organizing-music/workflow-diagram.svg "Backup-first MP3 metadata cleanup workflow")
+![Workflow diagram](https://onnellab.com/blog-assets/en/clean-up-mp3-metadata-before-organizing-music/workflow-diagram.svg "Backup-first MP3 metadata cleanup workflow")
 
 ## Field Priority Comparison
 

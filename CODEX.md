@@ -201,7 +201,7 @@ In WSL, use:
 
 Do not use a temporary `/tmp` clone for homepage work when this local clone is available.
 
-ONNELLAB publishing targets should treat `https://onnellab.github.io/` as the canonical website root unless a project document explicitly says otherwise.
+ONNELLAB publishing targets should treat `https://onnellab.com/` as the canonical website root unless a project document explicitly says otherwise.
 
 Instruction Markdown files include:
 

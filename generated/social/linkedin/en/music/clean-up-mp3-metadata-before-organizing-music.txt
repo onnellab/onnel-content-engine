@@ -7,4 +7,4 @@ Before changing tools:
 - Identify each recording. Listen briefly when the filename and current title disagree. Mark uncertain tracks instead of guessing.
 
 Read the full article:
-https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/
+https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/

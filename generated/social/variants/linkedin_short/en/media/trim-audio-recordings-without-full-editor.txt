@@ -6,4 +6,4 @@ Keep the original, work on a copy, set in and out points by listening as well as
 - Define the destination. Decide whether the clip is for archive, transcription, presentation, messaging, or another known use.
 
 Read the full article:
-https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/
+https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/

@@ -1,8 +1,8 @@
 ---
 title: "TXT vs EPUB for Long Reading"
-canonical_url: "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/"
+canonical_url: "https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/"
 tags: "programming,performance,text-processing"
-cover_image: "https://onnellab.github.io/blog-assets/en/txt-vs-epub-for-long-reading/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/txt-vs-epub-for-long-reading/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -79,7 +79,7 @@ Use this reversible TXT-to-EPUB process:
 7. **Test real readers.** Check type sizes, screen sizes, themes, chapter navigation, search, links, and progress. Include target assistive technology when required.
 8. **Keep source and recipe.** Retain the TXT source, conversion settings or script, supporting assets, and generated EPUB separately. Future corrections should be made in the source and regenerated so the process remains repeatable.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/txt-vs-epub-for-long-reading/workflow-diagram.svg "Preserve the TXT source, identify structure, generate and validate EPUB, test readers, and retain both source and output")
+![Workflow diagram](https://onnellab.com/blog-assets/en/txt-vs-epub-for-long-reading/workflow-diagram.svg "Preserve the TXT source, identify structure, generate and validate EPUB, test readers, and retain both source and output")
 
 ## Conversion Cautions
 

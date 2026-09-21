@@ -12,11 +12,11 @@ primary_keyword: "organize downloads"
 secondary_keywords: "download folder cleanup|simple file organization|durable folders|file naming"
 related_apps: ""
 tags: "organize downloads|download folder cleanup|simple file organization|durable folders|file naming"
-canonical_url: "https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/"
+canonical_url: "https://onnellab.com/blog/en/organize-downloads-small-folder-system/"
 published_at: "2026-09-01T09:00:00+09:00"
 updated_at: "2026-09-01T09:00:00+09:00"
 image_specs: "Workflow diagram for organize downloads folder|Comparison diagram for practical options|Screenshot requirements for related applications"
-related_articles: "How to Rename Files Safely With a Preview Workflow => https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/|How to Reuse Copied Text Snippets on iPhone => https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/"
+related_articles: "How to Rename Files Safely With a Preview Workflow => https://onnellab.com/blog/en/rename-files-safely-preview-workflow/|How to Reuse Copied Text Snippets on iPhone => https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/"
 ---
 
 # How to Organize Downloads With a Small, Durable Folder System

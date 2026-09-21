@@ -6,4 +6,4 @@ Use a local media converter when the file should stay on your device and the tas
 - Identify the target use: playback, upload, archive, editing, or sharing.
 
 Read the full article:
-https://onnellab.github.io/blog/en/convert-local-media-files-privately/
+https://onnellab.com/blog/en/convert-local-media-files-privately/

@@ -1,7 +1,7 @@
 ---
 title: "How to Number Tracks in a Multi-Disc MP3 Album"
 published: true
-canonical_url: "https://onnellab.github.io/blog/en/number-tracks-multi-disc-mp3-album/"
+canonical_url: "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/"
 tags: "multi-disc-mp3-album,mp3-track-number,disc-number-tags,id3-trck-tpos"
 ---
 
@@ -73,7 +73,7 @@ Group working copies by actual disc before applying shared values. A folder name
 8. **Expand in disc-sized batches.** Apply only the reviewed map, reopen each completed disc, and compare its first, last, and one middle track with the plan.
 9. **Retain the backup through a second check.** Keep it until the full album has been reopened and tested after the library's normal refresh or re-import procedure.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/number-tracks-multi-disc-mp3-album/workflow-diagram.png "Backup-first workflow for assigning and verifying track and disc positions")
+![Workflow diagram](https://onnellab.com/blog-assets/en/number-tracks-multi-disc-mp3-album/workflow-diagram.png "Backup-first workflow for assigning and verifying track and disc positions")
 
 ## Verify More Than the Visible Sort Order
 
@@ -94,7 +94,7 @@ Check the first and last track of every disc, transitions between discs, and any
 
 ## ONNELLAB Application
 
-[TagWeaver](https://onnellab.github.io/apps/tagweaver/) is a focused local MP3 metadata editor that can be used to apply a reviewed track-and-disc field map to selected files. Repository-maintained app facts describe single-track editing in the free experience and batch editing as part of the optional Pro one-time purchase. Its official store listings document track and disc values among the editable metadata; platform details should be checked in the listing for the device being used.
+[TagWeaver](https://onnellab.com/apps/tagweaver/) is a focused local MP3 metadata editor that can be used to apply a reviewed track-and-disc field map to selected files. Repository-maintained app facts describe single-track editing in the free experience and batch editing as part of the optional Pro one-time purchase. Its official store listings document track and disc values among the editable metadata; platform details should be checked in the listing for the device being used.
 
 The app does not determine the correct edition or invent trustworthy positions. Use it after the track list and conventions are settled, keep the backup outside the working selection, save explicitly, and verify a small result. On iOS, follow the app's documented copy-save behavior rather than assuming the original file is replaced in place.
 
@@ -134,4 +134,4 @@ Track and disc positions are metadata, not audio samples. The conceptual edit do
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/number-tracks-multi-disc-mp3-album/
+Originally published at https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/

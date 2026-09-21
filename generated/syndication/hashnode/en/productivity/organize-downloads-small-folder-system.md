@@ -1,8 +1,8 @@
 ---
 title: "How to Organize Downloads With a Small, Durable Folder System"
-canonical_url: "https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/"
+canonical_url: "https://onnellab.com/blog/en/organize-downloads-small-folder-system/"
 tags: "productivity,software-engineering,developer-tools"
-cover_image: "https://onnellab.github.io/blog-assets/en/organize-downloads-small-folder-system/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/organize-downloads-small-folder-system/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -87,7 +87,7 @@ Before a large cleanup, confirm that backup has completed and that you know how 
 7. Review every proposed deletion before moving it to trash.
 8. Let backup and sync complete, then schedule the next short review.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/organize-downloads-small-folder-system/workflow-diagram.svg "Process Downloads as an inbox into four durable lifecycle categories")
+![Workflow diagram](https://onnellab.com/blog-assets/en/organize-downloads-small-folder-system/workflow-diagram.svg "Process Downloads as an inbox into four durable lifecycle categories")
 
 ## When a focused tool helps
 

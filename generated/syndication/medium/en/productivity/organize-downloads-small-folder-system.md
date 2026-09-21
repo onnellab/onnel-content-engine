@@ -86,7 +86,7 @@ Before a large cleanup, confirm that backup has completed and that you know how 
 7. Review every proposed deletion before moving it to trash.
 8. Let backup and sync complete, then schedule the next short review.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/organize-downloads-small-folder-system/workflow-diagram.svg "Process Downloads as an inbox into four durable lifecycle categories")
+![Workflow diagram](https://onnellab.com/blog-assets/en/organize-downloads-small-folder-system/workflow-diagram.svg "Process Downloads as an inbox into four durable lifecycle categories")
 
 ## ONNELLAB Application
 
@@ -134,4 +134,4 @@ Only items covered by a narrow, tested, reversible rule. For uncertain files, au
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/
+Originally published at https://onnellab.com/blog/en/organize-downloads-small-folder-system/

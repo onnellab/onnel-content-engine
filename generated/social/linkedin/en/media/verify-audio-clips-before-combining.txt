@@ -8,4 +8,4 @@ Before changing tools:
 - Compare duration with the inventory: start with the sum of source durations, subtract trims and intentional overlaps, and account for any inserted gaps.
 
 Read the full article:
-https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/
+https://onnellab.com/blog/en/verify-audio-clips-before-combining/

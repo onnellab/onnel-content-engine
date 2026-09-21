@@ -13,10 +13,10 @@ secondary_keywords: "ID3 tags|music library organization|album artwork|TagWeaver
 related_apps: "TagWeaver"
 tags: "MP3 metadata editor|ID3 tags|music library organization|album artwork"
 image_specs: "Backup-first MP3 metadata cleanup workflow|Field consistency comparison|Manual save verification"
-canonical_url: "https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
+canonical_url: "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/"
 published_at: "2026-07-20T14:56:51+09:00"
 updated_at: "2026-07-20T14:56:51+09:00"
-related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/"
+related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/"
 ---
 
 # How to Clean Up MP3 Metadata Before Organizing Music

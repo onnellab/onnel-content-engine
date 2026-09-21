@@ -12,11 +12,11 @@ primary_keyword: "메모 구조화"
 secondary_keywords: "메모 기반 초안|개요 만들기|글 수정|출처 감사"
 related_apps: ""
 tags: "메모 구조화|메모 기반 초안|개요 만들기|출처 감사"
-canonical_url: "https://onnellab.github.io/blog/ko/turn-rough-notes-into-structured-first-draft/"
+canonical_url: "https://onnellab.com/blog/ko/turn-rough-notes-into-structured-first-draft/"
 published_at: "2026-09-19T12:24:43+09:00"
 updated_at: "2026-09-19T12:24:43+09:00"
 image_specs: "거친 메모에서 첫 초안까지의 워크플로|출처와 문단의 대응표 예시|근거와 빈틈 표시 예시"
-related_articles: "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/|미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/|작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법 => https://onnellab.github.io/blog/ko/organize-downloads-small-folder-system/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/"
+related_articles: "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/|미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/|작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법 => https://onnellab.com/blog/ko/organize-downloads-small-folder-system/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/"
 ---
 
 # 거친 메모를 구조화된 초안으로 바꾸는 방법

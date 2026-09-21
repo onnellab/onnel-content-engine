@@ -13,11 +13,11 @@ secondary_keywords: "MP3 트랙 번호|디스크 번호 태그|ID3 TRCK TPOS|Tag
 related_apps: "TagWeaver"
 tags: "다중 디스크 MP3 앨범|MP3 트랙 번호|디스크 번호 태그|ID3 TRCK TPOS"
 short_answer: "각 곡이 해당 디스크에서 몇 번째인지 트랙 필드에, 그 디스크가 전체 세트에서 몇 번째인지 디스크 필드에 기록하고, 확인된 경우에만 전체 수를 넣은 뒤 복사본과 목적지 음악 앱에서 소량 검증하세요."
-canonical_url: "https://onnellab.github.io/blog/ko/number-tracks-multi-disc-mp3-album/"
+canonical_url: "https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/"
 published_at: "2026-09-04T09:00:00+09:00"
 updated_at: "2026-09-04T09:00:00+09:00"
 image_specs: "원본 보존부터 검증까지 이어지는 다중 디스크 번호 지정 흐름|TRCK와 TPOS 필드 대응표|목적지 음악 보관함 시험"
-related_articles: "음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/|미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/"
+related_articles: "음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/|미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/"
 ---
 
 # 여러 장으로 된 MP3 앨범의 트랙 번호를 매기는 방법

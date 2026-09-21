@@ -281,7 +281,7 @@ def syndication_publish_fields(
     story_preview_subtitle = medium_story_preview_subtitle(description) if platform == "medium" else description
     language = topic.get("primary_language", "") if topic else ""
     slug = topic.get("slug", "") if topic else ""
-    site_root = canonical_url.split("/blog/", 1)[0].rstrip("/") if "/blog/" in canonical_url else "https://onnellab.github.io"
+    site_root = canonical_url.split("/blog/", 1)[0].rstrip("/") if "/blog/" in canonical_url else "https://onnellab.com"
     cover_image = f"{site_root}/blog-assets/{language}/{slug}/social-card.png" if language and slug else ""
     topics = [tag.strip() for tag in frontmatter_value(source_text, "tags").split("|") if tag.strip()]
     publish_tags = medium_topic_labels(topics) if platform == "medium" else topics[:5]
@@ -384,7 +384,7 @@ def public_release_notes_url(row: dict[str, str]) -> str:
     if not app_slug or not tag:
         return ""
     version_slug = tag.removeprefix("v")
-    return f"https://onnellab.github.io/release-notes/{app_slug}/{version_slug}/"
+    return f"https://onnellab.com/release-notes/{app_slug}/{version_slug}/"
 
 
 def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS) -> list[dict[str, str]]:

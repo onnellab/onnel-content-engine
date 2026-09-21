@@ -7,7 +7,7 @@
       "app_slug": "quivra",
       "app_name": "Quivra",
       "last_updated": "2026-07-30",
-      "legacy_urls": ["https://onnellab.github.io/quivra-privacy-policy/"],
+      "legacy_urls": ["https://onnellab.com/quivra-privacy-policy/"],
       "in_app_purchase": false,
       "local_data": {
         "en": ["Media files that the user explicitly selects", "Converted output files and app preferences stored on the device"],
@@ -22,7 +22,7 @@
       "app_slug": "tagweaver",
       "app_name": "TagWeaver",
       "last_updated": "2026-07-30",
-      "legacy_urls": ["https://onnellab.github.io/tagweaver-privacy-policy/"],
+      "legacy_urls": ["https://onnellab.com/tagweaver-privacy-policy/"],
       "in_app_purchase": true,
       "local_data": {
         "en": ["MP3 files and metadata that the user explicitly selects", "Artwork selected from the photo library or camera", "App preferences and purchase entitlement stored on the device"],
@@ -37,7 +37,7 @@
       "app_slug": "vaultxt",
       "app_name": "VaultXT",
       "last_updated": "2026-07-30",
-      "legacy_urls": ["https://onnellab.github.io/vaultxt-privacy-policy/"],
+      "legacy_urls": ["https://onnellab.com/vaultxt-privacy-policy/"],
       "in_app_purchase": true,
       "local_data": {
         "en": ["Plain-text files that the user explicitly opens or edits", "Recovery data, reading state, and app preferences stored on the device", "Purchase entitlement stored on the device"],
@@ -52,7 +52,7 @@
       "app_slug": "segra",
       "app_name": "Segra",
       "last_updated": "2026-07-30",
-      "legacy_urls": ["https://onnellab.github.io/segra-privacy-policy/"],
+      "legacy_urls": ["https://onnellab.com/segra-privacy-policy/"],
       "in_app_purchase": true,
       "local_data": {
         "en": ["Audio and image files that the user explicitly selects", "Generated audio or video files and app preferences stored on the device", "Purchase entitlement stored on the device"],
@@ -67,7 +67,7 @@
       "app_slug": "clipnest",
       "app_name": "ClipNest",
       "last_updated": "2026-07-30",
-      "legacy_urls": ["https://onnellab.github.io/clipnest-privacy-policy/"],
+      "legacy_urls": ["https://onnellab.com/clipnest-privacy-policy/"],
       "in_app_purchase": false,
       "local_data": {
         "en": ["Clipboard text accessed when the user activates the ClipNest keyboard and permits paste", "Saved text snippets, pins, and app preferences stored in the app's local database"],
@@ -82,7 +82,7 @@
       "app_slug": "aligna",
       "app_name": "Aligna",
       "last_updated": "2026-07-30",
-      "legacy_urls": ["https://onnellab.github.io/aligna-privacy-policy/"],
+      "legacy_urls": ["https://onnellab.com/aligna-privacy-policy/"],
       "in_app_purchase": true,
       "local_data": {
         "en": ["Files and file metadata that the user explicitly selects", "Rename rules, previews, app preferences, and purchase entitlement stored on the device"],
@@ -97,7 +97,7 @@
       "app_slug": "melivra",
       "app_name": "Melivra",
       "last_updated": "2026-07-30",
-      "legacy_urls": ["https://onnellab.github.io/melivra-privacy-policy/"],
+      "legacy_urls": ["https://onnellab.com/melivra-privacy-policy/"],
       "in_app_purchase": true,
       "local_data": {
         "en": ["Local audio files and their media metadata", "Library entries, playback history, bookmarks, playlists, search history, AI results, and app preferences stored on the device", "Purchase entitlement and AI credit balance information"],

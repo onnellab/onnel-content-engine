@@ -1,8 +1,8 @@
 ---
 title: "What Makes Large Text Files Slow to Open"
-canonical_url: "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/"
+canonical_url: "https://onnellab.com/blog/en/large-text-file-slow-to-open/"
 tags: "programming,performance,text-processing"
-cover_image: "https://onnellab.github.io/blog-assets/en/large-text-file-slow-to-open/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/large-text-file-slow-to-open/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -97,7 +97,7 @@ Streaming, windowing, and virtualization solve different problems. Streaming lim
 7. Prefer streaming or windowed inspection, an indexed or virtualized viewer for repeated navigation, and a full editor only for modifications.
 8. If editing is unavoidable, split a copy on verified boundaries or use a large-file editor. Save to a new file and verify size, encoding, and content.
 
-![Large text file diagnostic workflow](https://onnellab.github.io/blog-assets/en/large-text-file-slow-to-open/workflow-diagram.svg "Workflow diagram: preserve the original, isolate the slow stage, test a representative copy, and choose a bounded access strategy")
+![Large text file diagnostic workflow](https://onnellab.com/blog-assets/en/large-text-file-slow-to-open/workflow-diagram.svg "Workflow diagram: preserve the original, isolate the slow stage, test a representative copy, and choose a bounded access strategy")
 
 ## When a focused tool helps
 

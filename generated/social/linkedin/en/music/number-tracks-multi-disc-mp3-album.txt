@@ -7,4 +7,4 @@ Before changing tools:
 - Identify the exact edition. Compare titles, durations, bonus material, and printed disc boundaries with a trustworthy listing. Mark unmatched files instead of forcing them into the sequence.
 
 Read the full article:
-https://onnellab.github.io/blog/en/number-tracks-multi-disc-mp3-album/
+https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/

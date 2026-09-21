@@ -12,11 +12,11 @@ primary_keyword: "미디어 출력 형식"
 secondary_keywords: "미디어 컨테이너|오디오 코덱|영상 호환성|변환 워크플로"
 related_apps: "Quivra"
 tags: "미디어 출력 형식|미디어 컨테이너|오디오 코덱|영상 호환성|변환 워크플로"
-canonical_url: "https://onnellab.github.io/blog/ko/choose-media-output-format-before-conversion/"
+canonical_url: "https://onnellab.com/blog/ko/choose-media-output-format-before-conversion/"
 published_at: "2026-08-29T09:00:00+09:00"
 updated_at: "2026-08-29T09:00:00+09:00"
 image_specs: "Workflow diagram for 미디어 출력 형식 선택|Comparison diagram for practical options|Screenshot requirements for related applications"
-related_articles: "로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/|전문 편집기 없이 오디오 녹음을 자르는 방법 => https://onnellab.github.io/blog/ko/trim-audio-recordings-without-full-editor/|오디오 클립을 합치기 전에 확인하는 방법 => https://onnellab.github.io/blog/ko/verify-audio-clips-before-combining/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/"
+related_articles: "로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|전문 편집기 없이 오디오 녹음을 자르는 방법 => https://onnellab.com/blog/ko/trim-audio-recordings-without-full-editor/|오디오 클립을 합치기 전에 확인하는 방법 => https://onnellab.com/blog/ko/verify-audio-clips-before-combining/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/"
 ---
 
 # 미디어 변환 전에 출력 형식을 선택하는 방법

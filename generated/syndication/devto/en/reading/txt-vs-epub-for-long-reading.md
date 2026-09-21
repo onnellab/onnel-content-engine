@@ -1,7 +1,7 @@
 ---
 title: "TXT vs EPUB for Long Reading"
 published: true
-canonical_url: "https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/"
+canonical_url: "https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/"
 tags: "txt-vs-epub,long-reading,plain-text,epub-conversion"
 ---
 
@@ -85,7 +85,7 @@ Use this reversible TXT-to-EPUB process:
 7. **Test real readers.** Check type sizes, screen sizes, themes, chapter navigation, search, links, and progress. Include target assistive technology when required.
 8. **Keep source and recipe.** Retain the TXT source, conversion settings or script, supporting assets, and generated EPUB separately. Future corrections should be made in the source and regenerated so the process remains repeatable.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/txt-vs-epub-for-long-reading/workflow-diagram.png "Preserve the TXT source, identify structure, generate and validate EPUB, test readers, and retain both source and output")
+![Workflow diagram](https://onnellab.com/blog-assets/en/txt-vs-epub-for-long-reading/workflow-diagram.png "Preserve the TXT source, identify structure, generate and validate EPUB, test readers, and retain both source and output")
 
 ## Conversion Cautions
 
@@ -99,13 +99,13 @@ Avoid editing the TXT and EPUB independently after conversion. Once both become 
 
 ## ONNELLAB Application
 
-If the chosen master remains plain text, [VaultXT](https://onnellab.github.io/apps/vaultxt/) can support the TXT side of the workflow: opening, reading, searching, and lightly editing large plain-text files. It is most relevant before conversion or when TXT itself is the desired reading format.
+If the chosen master remains plain text, [VaultXT](https://onnellab.com/apps/vaultxt/) can support the TXT side of the workflow: opening, reading, searching, and lightly editing large plain-text files. It is most relevant before conversion or when TXT itself is the desired reading format.
 
 VaultXT does not author EPUB, supply missing semantics, or replace EPUB validation and reader testing. Use an EPUB tool for publication.
 
 ## Related Topics
 
-- [How to read large TXT files without lag](https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/)
+- [How to read large TXT files without lag](https://onnellab.com/blog/en/read-large-txt-files-without-lag/)
 - Character encoding and why TXT can display incorrectly
 - How to structure chapters before EPUB conversion
 - How to test an EPUB with different reading systems and assistive technologies
@@ -148,4 +148,4 @@ Both can work. TXT offers a simple stream of characters. A well-structured EPUB 
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/
+Originally published at https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/

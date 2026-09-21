@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import verify_manual_publications as v
 
 FEED = 'https://onnellab.hashnode.dev/rss.xml'
-CANONICAL = 'https://onnellab.github.io/blog/en/example/'
+CANONICAL = 'https://onnellab.com/blog/en/example/'
 ARTICLE = 'https://onnellab.hashnode.dev/example'
 
 
@@ -59,7 +59,7 @@ class RssIdentityTest(unittest.TestCase):
         self.assertEqual(match(rss(entry('https://onnellab.hashnode.dev/different', content))), '')
 
     def test_canonical_url_boundary_host_path_query_and_case_are_preserved(self):
-        for wrong in [CANONICAL + 'suffix', CANONICAL.replace('github.io', 'github.io.attacker.test'),
+        for wrong in [CANONICAL + 'suffix', CANONICAL.replace('onnellab.com', 'onnellab.com.attacker.test'),
                       CANONICAL.replace('/en/', '/ko/'), CANONICAL.replace('example', 'Example'),
                       CANONICAL + '?article=other']:
             with self.subTest(wrong=wrong):

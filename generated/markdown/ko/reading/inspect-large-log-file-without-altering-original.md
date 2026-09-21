@@ -13,11 +13,11 @@ secondary_keywords: "원본 로그 보존|대용량 텍스트 로그|오프라�
 related_apps: "VaultXT"
 tags: "대용량 로그 파일|원본 로그 보존|대용량 텍스트 로그|오프라인 로그 확인|VaultXT"
 short_answer: "원본 로그를 따로 두고 출처 메모와 함께 이름이 분명한 작업 복사본을 만든 뒤, 좁은 시간 범위에서 단계적으로 검색하고 관찰 내용은 별도 문서에 기록하며 모든 변환 결과는 파생 파일로 분리하세요."
-canonical_url: "https://onnellab.github.io/blog/ko/inspect-large-log-file-without-altering-original/"
+canonical_url: "https://onnellab.com/blog/ko/inspect-large-log-file-without-altering-original/"
 published_at: "2026-09-07T09:00:00+09:00"
 updated_at: "2026-09-07T09:00:00+09:00"
 image_specs: "원본에서 작업 복사본으로 이어지는 로그 검토 흐름|시간 범위와 문맥 확인 목록|변경되지 않은 원본 옆에 작성한 관찰 기록"
-related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/|대용량 텍스트 파일이 느리게 열리는 이유 => https://onnellab.github.io/blog/ko/large-text-file-slow-to-open/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/"
+related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/|대용량 텍스트 파일이 느리게 열리는 이유 => https://onnellab.com/blog/ko/large-text-file-slow-to-open/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/"
 ---
 
 # 원본을 바꾸지 않고 대용량 로그 파일을 검토하는 방법

@@ -37,7 +37,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             syndication = root / "syndication.json"
             state = root / "state.json"
             report = root / "report.json"
-            canonical_url = "https://onnellab.github.io/blog/en/retry-example/"
+            canonical_url = "https://onnellab.com/blog/en/retry-example/"
             self.write_json(
                 social,
                 {
@@ -311,7 +311,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             syndication = root / "generated" / "syndication" / "manifest.json"
             state = root / "data" / "manual_publish_state.json"
             report = root / "data" / "manual_publication_verification_report.json"
-            canonical_url = "https://onnellab.github.io/blog/en/example/"
+            canonical_url = "https://onnellab.com/blog/en/example/"
             draft_path = root / "missing.txt"
             self.write_json(
                 social,

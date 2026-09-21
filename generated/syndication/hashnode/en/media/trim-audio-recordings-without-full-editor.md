@@ -1,8 +1,8 @@
 ---
 title: "How to Trim Audio Recordings Without a Full Editor"
-canonical_url: "https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/"
+canonical_url: "https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/"
 tags: "programming,media-processing,privacy"
-cover_image: "https://onnellab.github.io/blog-assets/en/trim-audio-recordings-without-full-editor/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/trim-audio-recordings-without-full-editor/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -81,7 +81,7 @@ Metadata deserves a separate check. Titles, comments, artwork, dates, locations,
 9. **Verify the export.** Reopen the saved file in an independent player if possible. Check the beginning, end, duration, seeking, both channels, and audible quality.
 10. **Retain the original.** Keep it until the clip has reached its destination and passed any downstream check.
 
-![Audio trimming workflow](https://onnellab.github.io/blog-assets/en/trim-audio-recordings-without-full-editor/workflow-diagram.svg "Backup-first workflow for selecting, previewing, exporting, and verifying an audio clip")
+![Audio trimming workflow](https://onnellab.com/blog-assets/en/trim-audio-recordings-without-full-editor/workflow-diagram.svg "Backup-first workflow for selecting, previewing, exporting, and verifying an audio clip")
 
 ## When a focused tool helps
 

@@ -43,7 +43,7 @@ Privacy adds another constraint. If the file is sensitive, the workflow should n
 5. Open the converted file before deleting or moving the original.
 6. Repeat with a smaller file size only if the first output is too large.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/convert-local-media-files-privately/workflow-diagram.svg "Workflow diagram for private local media conversion")
+![Workflow diagram](https://onnellab.com/blog-assets/en/convert-local-media-files-privately/workflow-diagram.svg "Workflow diagram for private local media conversion")
 
 ## Local Conversion Options
 
@@ -95,4 +95,4 @@ Use Quivra when the task is a focused local media conversion and you want to kee
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/convert-local-media-files-privately/
+Originally published at https://onnellab.com/blog/en/convert-local-media-files-privately/

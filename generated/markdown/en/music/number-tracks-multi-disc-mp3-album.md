@@ -13,11 +13,11 @@ secondary_keywords: "MP3 track number|disc number tags|ID3 TRCK TPOS|TagWeaver"
 related_apps: "TagWeaver"
 tags: "multi-disc MP3 album|MP3 track number|disc number tags|ID3 TRCK TPOS"
 short_answer: "Keep each song's position on its own disc in the track field and the disc's position in the disc field, use totals only when verified, edit copies first, and test a representative set in the destination library."
-canonical_url: "https://onnellab.github.io/blog/en/number-tracks-multi-disc-mp3-album/"
+canonical_url: "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/"
 published_at: "2026-09-04T09:00:00+09:00"
 updated_at: "2026-09-04T09:00:00+09:00"
 image_specs: "Backup-first multi-disc numbering workflow|TRCK and TPOS field map|Destination library verification"
-related_articles: "How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/|TXT vs EPUB for Long Reading => https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/"
+related_articles: "How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/|TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/"
 ---
 
 # How to Number Tracks in a Multi-Disc MP3 Album

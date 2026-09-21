@@ -6,4 +6,4 @@ Before changing tools:
 - Define the target pattern. Write one example old name and its exact desired result. Use an unambiguous structure such as `2026-08_client_subject_001.ext`.
 
 Read the full article:
-https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/
+https://onnellab.com/blog/en/rename-files-safely-preview-workflow/

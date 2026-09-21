@@ -6,4 +6,4 @@ To inspect a large log file safely, set the source aside and review a clearly na
 - Set the source aside. Record basic provenance and create a working copy in a separate, clearly labeled location. Perform all navigation on the copy.
 
 Read the full article:
-https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/
+https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/

@@ -80,17 +80,17 @@ Metadata deserves a separate check. Titles, comments, artwork, dates, locations,
 9. **Verify the export.** Reopen the saved file in an independent player if possible. Check the beginning, end, duration, seeking, both channels, and audible quality.
 10. **Retain the original.** Keep it until the clip has reached its destination and passed any downstream check.
 
-![Audio trimming workflow](https://onnellab.github.io/blog-assets/en/trim-audio-recordings-without-full-editor/workflow-diagram.svg "Backup-first workflow for selecting, previewing, exporting, and verifying an audio clip")
+![Audio trimming workflow](https://onnellab.com/blog-assets/en/trim-audio-recordings-without-full-editor/workflow-diagram.svg "Backup-first workflow for selecting, previewing, exporting, and verifying an audio clip")
 
 ## ONNELLAB Application
 
-[Segra](https://onnellab.github.io/apps/segra/) is documented as an iOS and Android utility for trimming and merging audio files. It may fit a focused trim or merge, but it should not be treated as a full audio-production application.
+[Segra](https://onnellab.com/apps/segra/) is documented as an iOS and Android utility for trimming and merging audio files. It may fit a focused trim or merge, but it should not be treated as a full audio-production application.
 
 Segra does not replace the decisions in this guide. You still need to protect the source, choose boundaries by listening, select an appropriate output, and verify the saved clip. For processing, effects, multitrack mixing, or other production work, use a tool designed for that broader scope.
 
 ## Related Topics
 
-- [How to convert local media files privately](https://onnellab.github.io/blog/en/convert-local-media-files-privately/)
+- [How to convert local media files privately](https://onnellab.com/blog/en/convert-local-media-files-privately/)
 - Choosing an audio output format for archive and delivery
 - Verifying audio clips before combining them
 - Cleaning metadata before sharing a recording
@@ -136,4 +136,4 @@ It removes audible material outside the kept range when the export is correct, b
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/
+Originally published at https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/

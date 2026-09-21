@@ -1,8 +1,8 @@
 ---
 title: "How to Inspect a Large Log File Without Altering the Original"
-canonical_url: "https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/"
+canonical_url: "https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/"
 tags: "programming,performance,text-processing"
-cover_image: "https://onnellab.github.io/blog-assets/en/inspect-large-log-file-without-altering-original/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/inspect-large-log-file-without-altering-original/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -91,7 +91,7 @@ Keep quotations exact and label the interpretation beneath them. If two clocks d
 9. **Write a bounded conclusion.** State what the reviewed file shows, what it does not show, and which additional source would resolve the remaining uncertainty.
 10. **Retain the map.** Keep the review note, search journal, and derived-file descriptions with the source location reference so another reviewer can retrace the work.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/inspect-large-log-file-without-altering-original/workflow-diagram.svg "Workflow from preserved source through a working copy, bounded searches, contextual review, and documented findings")
+![Workflow diagram](https://onnellab.com/blog-assets/en/inspect-large-log-file-without-altering-original/workflow-diagram.svg "Workflow from preserved source through a working copy, bounded searches, contextual review, and documented findings")
 
 ## Handle Large-File Limits Deliberately
 

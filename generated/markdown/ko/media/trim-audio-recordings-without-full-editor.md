@@ -12,11 +12,11 @@ primary_keyword: "오디오 녹음 자르기 앱"
 secondary_keywords: "오디오 구간|녹음 정리|간단한 오디오 워크플로|Segra"
 related_apps: "Segra"
 tags: "오디오 녹음 자르기 앱|오디오 구간|녹음 정리|오디오 병합|Segra"
-canonical_url: "https://onnellab.github.io/blog/ko/trim-audio-recordings-without-full-editor/"
+canonical_url: "https://onnellab.com/blog/ko/trim-audio-recordings-without-full-editor/"
 published_at: "2026-08-17T09:00:00+09:00"
 updated_at: "2026-08-17T09:00:00+09:00"
 image_specs: "오디오 녹음 자르기 앱 워크플로 다이어그램|실용적인 방법 비교 다이어그램|관련 앱 화면 요구사항"
-related_articles: "로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/"
+related_articles: "로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/"
 ---
 
 # 전문 편집기 없이 오디오 녹음을 자르는 방법

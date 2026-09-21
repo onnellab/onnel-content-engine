@@ -8,4 +8,4 @@ Before changing tools:
 - Inspect the source. Note its format, codec, sample rate, channel count, duration, and relevant metadata.
 
 Read the full article:
-https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/
+https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/

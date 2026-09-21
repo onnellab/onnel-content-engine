@@ -1,8 +1,8 @@
 ---
 title: "How to Keep a Durable Research Reading Log"
-canonical_url: "https://onnellab.github.io/blog/en/keep-durable-research-reading-log/"
+canonical_url: "https://onnellab.com/blog/en/keep-durable-research-reading-log/"
 tags: "software-engineering,research,data"
-cover_image: "https://onnellab.github.io/blog-assets/en/keep-durable-research-reading-log/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/keep-durable-research-reading-log/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -71,7 +71,7 @@ Record limitations beside the evidence. Sample, geography, date range, method, u
 4. **Synthesize.** Link records to claims and explain whether sources converge, differ, or conflict.
 5. **Review.** Before publication or handoff, recheck identifiers, quote boundaries, locators, rights, personal data, and status. Use `reviewed` or `needs_review` honestly.
 
-![Research reading log workflow](https://onnellab.github.io/blog-assets/en/keep-durable-research-reading-log/workflow-diagram.svg "Capture, verify, summarize, synthesize, and review each source record")
+![Research reading log workflow](https://onnellab.com/blog-assets/en/keep-durable-research-reading-log/workflow-diagram.svg "Capture, verify, summarize, synthesize, and review each source record")
 
 Repeat capture or verification when synthesis exposes a gap or a new version appears. Status describes processing state, not source prestige.
 

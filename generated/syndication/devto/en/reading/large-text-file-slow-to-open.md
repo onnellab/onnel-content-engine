@@ -1,7 +1,7 @@
 ---
 title: "What Makes Large Text Files Slow to Open"
 published: true
-canonical_url: "https://onnellab.github.io/blog/en/large-text-file-slow-to-open/"
+canonical_url: "https://onnellab.com/blog/en/large-text-file-slow-to-open/"
 tags: "large-text-file,large-file-performance,long-lines,memory-usage"
 ---
 
@@ -103,15 +103,15 @@ Streaming, windowing, and virtualization solve different problems. Streaming lim
 7. Prefer streaming or windowed inspection, an indexed or virtualized viewer for repeated navigation, and a full editor only for modifications.
 8. If editing is unavoidable, split a copy on verified boundaries or use a large-file editor. Save to a new file and verify size, encoding, and content.
 
-![Large text file diagnostic workflow](https://onnellab.github.io/blog-assets/en/large-text-file-slow-to-open/workflow-diagram.png "Workflow diagram: preserve the original, isolate the slow stage, test a representative copy, and choose a bounded access strategy")
+![Large text file diagnostic workflow](https://onnellab.com/blog-assets/en/large-text-file-slow-to-open/workflow-diagram.png "Workflow diagram: preserve the original, isolate the slow stage, test a representative copy, and choose a bounded access strategy")
 
 ## ONNELLAB Application
 
-After the bottleneck and task are clear, [VaultXT](https://onnellab.github.io/apps/vaultxt/) is one option for reading or editing large plain-text files. Its relevant scope here is a text editor and viewer designed for that workflow. This article does not assume a particular file-size limit, indexing method, or virtualization implementation; verify current product behavior for your platform and file before relying on it for an irreplaceable original.
+After the bottleneck and task are clear, [VaultXT](https://onnellab.com/apps/vaultxt/) is one option for reading or editing large plain-text files. Its relevant scope here is a text editor and viewer designed for that workflow. This article does not assume a particular file-size limit, indexing method, or virtualization implementation; verify current product behavior for your platform and file before relying on it for an irreplaceable original.
 
 ## Related Topics
 
-- [How to Read Large TXT Files Without Lag](https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/)
+- [How to Read Large TXT Files Without Lag](https://onnellab.com/blog/en/read-large-txt-files-without-lag/)
 - Text encoding and unreadable characters
 - Literal search versus regular-expression search
 - TXT versus EPUB for long-form reading
@@ -160,4 +160,4 @@ VaultXT is relevant when the recurring task is viewing or editing large plain-te
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/large-text-file-slow-to-open/
+Originally published at https://onnellab.com/blog/en/large-text-file-slow-to-open/

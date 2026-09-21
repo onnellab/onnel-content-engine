@@ -11,12 +11,12 @@ search_intent: "solve"
 primary_keyword: "로컬 미디어 변환기"
 secondary_keywords: "비공개 파일 변환|오프라인 미디어 변환|파일 형식 워크플로|Quivra"
 related_apps: "Quivra"
-canonical_url: "https://onnellab.github.io/blog/ko/convert-local-media-files-privately/"
+canonical_url: "https://onnellab.com/blog/ko/convert-local-media-files-privately/"
 published_at: "2026-07-14T09:00:00+09:00"
 updated_at: "2026-07-14T09:00:00+09:00"
 tags: "로컬 미디어 변환기|비공개 파일 변환|오프라인 미디어 변환|Quivra"
 image_specs: "로컬 미디어 변환기 워크플로 다이어그램|비공개 변환 선택지 비교 다이어그램|Quivra 파일 형식 작업 화면 요구사항"
-related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/"
+related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/"
 ---
 
 # 로컬 미디어 파일을 비공개로 변환하는 방법

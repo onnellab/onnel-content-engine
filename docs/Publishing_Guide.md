@@ -91,7 +91,7 @@ https://github.com/onnellab/onnellab.github.io.git
 The canonical website root is:
 
 ```text
-https://onnellab.github.io/
+https://onnellab.com/
 ```
 
 The local clone for homepage publishing work is:

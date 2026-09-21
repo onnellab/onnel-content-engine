@@ -8,4 +8,4 @@ Before changing tools:
 - Choose the output format based on the target app or device, not only the file extension.
 
 Read the full article:
-https://onnellab.github.io/blog/en/convert-local-media-files-privately/
+https://onnellab.com/blog/en/convert-local-media-files-privately/

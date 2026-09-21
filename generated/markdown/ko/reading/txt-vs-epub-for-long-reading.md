@@ -12,11 +12,11 @@ primary_keyword: "긴 글 TXT EPUB 비교"
 secondary_keywords: "긴 글 읽기|일반 텍스트|EPUB 변환|읽기 워크플로"
 tags: "TXT EPUB 비교|긴 글 읽기|일반 텍스트|EPUB 변환|VaultXT"
 related_apps: "VaultXT"
-canonical_url: "https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/"
+canonical_url: "https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/"
 published_at: "2026-08-11T09:00:00+09:00"
 updated_at: "2026-08-11T09:00:00+09:00"
 image_specs: "Workflow diagram for 긴 글 TXT EPUB 비교|Comparison diagram for practical options|Screenshot requirements for related applications"
-related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/"
+related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/"
 ---
 
 # 긴 글 읽기를 위한 TXT와 EPUB 비교

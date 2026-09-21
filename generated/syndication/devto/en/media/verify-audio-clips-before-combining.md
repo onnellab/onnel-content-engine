@@ -1,7 +1,7 @@
 ---
 title: "How to Verify Audio Clips Before Combining Them"
 published: true
-canonical_url: "https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/"
+canonical_url: "https://onnellab.com/blog/en/verify-audio-clips-before-combining/"
 tags: "audio-clip-verification,audio-merge-order,clip-boundaries,loudness-consistency"
 ---
 
@@ -61,7 +61,7 @@ Silence is not automatically an error. Preserve natural pauses, speech onsets an
 
 Overlap is also contextual. Accidental overlap repeats material and should be corrected. Intentional overlap enables a crossfade, where one clip fades out while the next fades in. A crossfade can smooth a compatible transition, but it is not a universal repair: it shortens the resulting timeline by the overlap duration and can blur words, beats, or unrelated background sounds. Prefer a clean butt join when the source already has a natural boundary, a short fade when only an edge clicks, and a crossfade when two clips genuinely should overlap.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/verify-audio-clips-before-combining/workflow-diagram.png "Workflow for inventorying, checking, joining, and verifying audio clips")
+![Workflow diagram](https://onnellab.com/blog-assets/en/verify-audio-clips-before-combining/workflow-diagram.png "Workflow for inventorying, checking, joining, and verifying audio clips")
 
 ## Match Perceived Loudness Without Chasing Peaks
 
@@ -102,7 +102,7 @@ A checksum proves only that two copies contain the same bytes. Retain the source
 
 ## ONNELLAB Application
 
-After the verification method is clear, [Segra](https://onnellab.github.io/apps/segra/) may fit the preparation stage when the task is trimming and organizing audio segments. That is the documented scope relevant to this workflow. It should not be treated as a full audio-production application, and this article does not assume that it performs final concatenation, loudness conformance, or delivery verification. Use a tool whose documented capabilities cover those later steps when they are required.
+After the verification method is clear, [Segra](https://onnellab.com/apps/segra/) may fit the preparation stage when the task is trimming and organizing audio segments. That is the documented scope relevant to this workflow. It should not be treated as a full audio-production application, and this article does not assume that it performs final concatenation, loudness conformance, or delivery verification. Use a tool whose documented capabilities cover those later steps when they are required.
 
 ## References
 
@@ -134,4 +134,4 @@ It can confirm that a file did not change during copying. It cannot confirm edit
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/
+Originally published at https://onnellab.com/blog/en/verify-audio-clips-before-combining/

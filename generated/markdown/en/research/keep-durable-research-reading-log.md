@@ -12,11 +12,11 @@ primary_keyword: "research reading log"
 secondary_keywords: "source notes|citation trail|research synthesis|evergreen notes"
 related_apps: ""
 tags: "research reading log|source notes|citation trail|research synthesis|durable notes"
-canonical_url: "https://onnellab.github.io/blog/en/keep-durable-research-reading-log/"
+canonical_url: "https://onnellab.com/blog/en/keep-durable-research-reading-log/"
 published_at: "2026-08-26T09:00:00+09:00"
 updated_at: "2026-08-26T09:00:00+09:00"
 image_specs: "Capture-to-review research reading log workflow|Minimum durable log schema|Project-end handoff package"
-related_articles: "TXT vs EPUB for Long Reading => https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
+related_articles: "TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/"
 ---
 
 # How to Keep a Durable Research Reading Log

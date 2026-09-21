@@ -8,4 +8,4 @@ Before changing tools:
 - Mark structure explicitly. Identify title, author, language, chapters, scene breaks, quotations, notes, links, and images. Do not rely on silent guesses.
 
 Read the full article:
-https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/
+https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/

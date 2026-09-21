@@ -5,7 +5,7 @@ Use this checklist after the GitHub account and Pages site migration.
 Canonical website URL:
 
 ```text
-https://onnellab.github.io/
+https://onnellab.com/
 ```
 
 Support email:
@@ -16,7 +16,7 @@ onnellab.app@gmail.com
 
 ## Accounts
 
-Update each public profile website URL to `https://onnellab.github.io/`.
+Update each public profile website URL to `https://onnellab.com/`.
 
 ```text
 GitHub profile
@@ -32,10 +32,10 @@ Bluesky profile
 Use these URLs in the app settings:
 
 ```text
-Website URL: https://onnellab.github.io/
-Callback URI / Redirect URL: https://onnellab.github.io/oauth/x/callback/
-Terms of Service: https://onnellab.github.io/terms/
-Privacy Policy: https://onnellab.github.io/privacy/
+Website URL: https://onnellab.com/
+Callback URI / Redirect URL: https://onnellab.com/oauth/x/callback/
+Terms of Service: https://onnellab.com/terms/
+Privacy Policy: https://onnellab.com/privacy/
 ```
 
 ## Verification
@@ -43,11 +43,11 @@ Privacy Policy: https://onnellab.github.io/privacy/
 After updating external accounts, verify:
 
 ```text
-https://onnellab.github.io/
-https://onnellab.github.io/privacy/
-https://onnellab.github.io/terms/
-https://onnellab.github.io/oauth/x/callback/
-https://onnellab.github.io/favicon.svg?v=20260712-ol-transparent-v2
+https://onnellab.com/
+https://onnellab.com/privacy/
+https://onnellab.com/terms/
+https://onnellab.com/oauth/x/callback/
+https://onnellab.com/favicon.svg?v=20260712-ol-transparent-v2
 ```
 
 ## Google Search Console
@@ -59,15 +59,15 @@ https://onnelakin.github.io/
 https://onnelakin.github.io/privacy/
 ```
 
-Because Google's Change of Address tool requires 301 redirects from the old site to the new site, do not use the Change of Address tool unless `https://onnelakin.github.io/` starts returning a server-side 301 to `https://onnellab.github.io/`.
+Because Google's Change of Address tool requires 301 redirects from the old site to the new site, do not use the Change of Address tool unless `https://onnelakin.github.io/` starts returning a server-side 301 to `https://onnellab.com/`.
 
 Use this fallback process:
 
 ```text
-1. Add a new URL-prefix property for https://onnellab.github.io/ in Search Console.
-2. Submit https://onnellab.github.io/sitemap.xml.
+1. Add a new URL-prefix property for https://onnellab.com/ in Search Console.
+2. Submit https://onnellab.com/sitemap.xml.
 3. Inspect and request indexing for the homepage, privacy, terms, and important app landing pages.
-4. Keep canonical URLs, sitemap URLs, robots.txt, app landing pages, and external profiles on https://onnellab.github.io/.
+4. Keep canonical URLs, sitemap URLs, robots.txt, app landing pages, and external profiles on https://onnellab.com/.
 5. Re-check the old host occasionally; if a real 301 becomes available, then run the Change of Address workflow.
 ```
 

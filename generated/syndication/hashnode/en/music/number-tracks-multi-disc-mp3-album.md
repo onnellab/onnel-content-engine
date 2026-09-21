@@ -1,8 +1,8 @@
 ---
 title: "How to Number Tracks in a Multi-Disc MP3 Album"
-canonical_url: "https://onnellab.github.io/blog/en/number-tracks-multi-disc-mp3-album/"
+canonical_url: "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/"
 tags: "programming,audio,metadata"
-cover_image: "https://onnellab.github.io/blog-assets/en/number-tracks-multi-disc-mp3-album/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/number-tracks-multi-disc-mp3-album/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -67,7 +67,7 @@ Group working copies by actual disc before applying shared values. A folder name
 8. **Expand in disc-sized batches.** Apply only the reviewed map, reopen each completed disc, and compare its first, last, and one middle track with the plan.
 9. **Retain the backup through a second check.** Keep it until the full album has been reopened and tested after the library's normal refresh or re-import procedure.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/number-tracks-multi-disc-mp3-album/workflow-diagram.svg "Backup-first workflow for assigning and verifying track and disc positions")
+![Workflow diagram](https://onnellab.com/blog-assets/en/number-tracks-multi-disc-mp3-album/workflow-diagram.svg "Backup-first workflow for assigning and verifying track and disc positions")
 
 ## Verify More Than the Visible Sort Order
 

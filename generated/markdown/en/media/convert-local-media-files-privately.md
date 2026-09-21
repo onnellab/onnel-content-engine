@@ -11,12 +11,12 @@ search_intent: "solve"
 primary_keyword: "local media converter"
 secondary_keywords: "private file conversion|offline media conversion|file format workflow|Quivra"
 related_apps: "Quivra"
-canonical_url: "https://onnellab.github.io/blog/en/convert-local-media-files-privately/"
+canonical_url: "https://onnellab.com/blog/en/convert-local-media-files-privately/"
 published_at: "2026-07-14T09:00:00+09:00"
 updated_at: "2026-07-14T09:00:00+09:00"
 tags: "local media converter|private file conversion|offline media conversion|Quivra"
 image_specs: "Workflow diagram for local media converter|Comparison diagram for private conversion options|Quivra screenshot requirement for focused file-format tasks"
-related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/"
+related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/"
 ---
 
 # How to Convert Local Media Files Privately

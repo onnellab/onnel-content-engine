@@ -160,7 +160,7 @@ scripts/run_with_local_env.py --dry-run
 Use the homepage release notes URL as the public sharing URL for app updates:
 
 ```text
-https://onnellab.github.io/release-notes/{app_slug}/{version}/
+https://onnellab.com/release-notes/{app_slug}/{version}/
 ```
 
 Use GitHub Release URLs as release automation records and repository references. If the app repository is private or otherwise not readable without authentication, the GitHub Release URL may not be suitable for X, LinkedIn, blog, store support pages, or customer-facing documentation. In that case, share the homepage release notes URL instead.

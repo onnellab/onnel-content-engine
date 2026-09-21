@@ -1,8 +1,8 @@
 ---
 title: "How to Read Large TXT Files Without Lag"
-canonical_url: "https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/"
+canonical_url: "https://onnellab.com/blog/en/read-large-txt-files-without-lag/"
 tags: "programming,performance,text-processing"
-cover_image: "https://onnellab.github.io/blog-assets/en/read-large-txt-files-without-lag/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/read-large-txt-files-without-lag/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -56,7 +56,7 @@ Encoding is the rule an app uses to turn bytes into readable characters. UTF-8 i
 
 > The safest workflow is to treat a huge TXT file as a reference document first and an editable document second.
 
-![Large TXT file reading workflow diagram](https://onnellab.github.io/blog-assets/en/read-large-txt-files-without-lag/workflow-diagram.svg "Workflow diagram: file check, encoding check, reading mode, search, bookmarks, optional app")
+![Large TXT file reading workflow diagram](https://onnellab.com/blog-assets/en/read-large-txt-files-without-lag/workflow-diagram.svg "Workflow diagram: file check, encoding check, reading mode, search, bookmarks, optional app")
 
 ## Loading the Whole File vs Rendering What You Need
 

@@ -6,4 +6,4 @@ The useful test is simple: decide whether the file needs quick reading, search, 
 - Confirm the encoding if the text appears broken or unreadable.
 
 Read the full article:
-https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/
+https://onnellab.com/blog/en/read-large-txt-files-without-lag/

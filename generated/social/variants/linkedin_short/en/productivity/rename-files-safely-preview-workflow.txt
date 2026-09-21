@@ -6,4 +6,4 @@ Work on a copy when the files matter, define one small rule at a time, and inspe
 - Choose a representative test set. Include short and long names, duplicate-looking items, multiple extensions, non-Latin characters, and at least one file that should stay unchanged.
 
 Read the full article:
-https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/
+https://onnellab.com/blog/en/rename-files-safely-preview-workflow/

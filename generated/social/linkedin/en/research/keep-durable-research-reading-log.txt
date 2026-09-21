@@ -8,4 +8,4 @@ Before changing tools:
 - Summarize. Separately state the question, method, result, and limitations in your own words.
 
 Read the full article:
-https://onnellab.github.io/blog/en/keep-durable-research-reading-log/
+https://onnellab.com/blog/en/keep-durable-research-reading-log/

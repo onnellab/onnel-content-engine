@@ -6,4 +6,4 @@ A large text file is slow to open when the application does too much work before
 - Identify the job: quick viewing, repeated searching, extraction, conversion, or editing.
 
 Read the full article:
-https://onnellab.github.io/blog/en/large-text-file-slow-to-open/
+https://onnellab.com/blog/en/large-text-file-slow-to-open/

@@ -12,11 +12,11 @@ primary_keyword: "structure rough notes"
 secondary_keywords: "first draft workflow|outline from notes|writing revision|source audit"
 related_apps: ""
 tags: "structure rough notes|first draft workflow|outline from notes|source audit"
-canonical_url: "https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/"
+canonical_url: "https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/"
 published_at: "2026-09-19T12:24:43+09:00"
 updated_at: "2026-09-19T12:24:43+09:00"
 image_specs: "Rough-notes-to-first-draft workflow|Source-to-section mapping example|Evidence and gap marker examples"
-related_articles: "How to Reuse Copied Text Snippets on iPhone => https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/|How to Rename Files Safely With a Preview Workflow => https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/|How to Organize Downloads With a Small, Durable Folder System => https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/|How to Verify Audio Clips Before Combining Them => https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/|How to Inspect a Large Log File Without Altering the Original => https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/"
+related_articles: "How to Reuse Copied Text Snippets on iPhone => https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/|How to Rename Files Safely With a Preview Workflow => https://onnellab.com/blog/en/rename-files-safely-preview-workflow/|How to Organize Downloads With a Small, Durable Folder System => https://onnellab.com/blog/en/organize-downloads-small-folder-system/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/|How to Verify Audio Clips Before Combining Them => https://onnellab.com/blog/en/verify-audio-clips-before-combining/|How to Inspect a Large Log File Without Altering the Original => https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/"
 ---
 
 # How to Turn Rough Notes Into a Structured First Draft

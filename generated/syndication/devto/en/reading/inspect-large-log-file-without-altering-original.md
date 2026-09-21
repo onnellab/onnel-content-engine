@@ -1,7 +1,7 @@
 ---
 title: "How to Inspect a Large Log File Without Altering the Original"
 published: true
-canonical_url: "https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/"
+canonical_url: "https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/"
 tags: "large-log-file,preserve-original-log,large-text-log-review,offline-log-inspection"
 ---
 
@@ -97,7 +97,7 @@ Keep quotations exact and label the interpretation beneath them. If two clocks d
 9. **Write a bounded conclusion.** State what the reviewed file shows, what it does not show, and which additional source would resolve the remaining uncertainty.
 10. **Retain the map.** Keep the review note, search journal, and derived-file descriptions with the source location reference so another reviewer can retrace the work.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/inspect-large-log-file-without-altering-original/workflow-diagram.png "Workflow from preserved source through a working copy, bounded searches, contextual review, and documented findings")
+![Workflow diagram](https://onnellab.com/blog-assets/en/inspect-large-log-file-without-altering-original/workflow-diagram.png "Workflow from preserved source through a working copy, bounded searches, contextual review, and documented findings")
 
 ## Handle Large-File Limits Deliberately
 
@@ -107,7 +107,7 @@ When an extract is necessary, choose boundaries that preserve meaning: a complet
 
 ## ONNELLAB Application
 
-After the preservation and review plan is established, [VaultXT](https://onnellab.github.io/apps/vaultxt/) can be considered as a text editor and viewer designed for working with large plain-text files. That scope makes it relevant to navigating a large text log, but it does not determine which records matter or whether an interpretation is correct.
+After the preservation and review plan is established, [VaultXT](https://onnellab.com/apps/vaultxt/) can be considered as a text editor and viewer designed for working with large plain-text files. That scope makes it relevant to navigating a large text log, but it does not determine which records matter or whether an interpretation is correct.
 
 Use a working copy, verify the current behavior on the intended platform, and keep notes outside the log. Do not infer specialized investigation guarantees, automatic provenance tracking, or protection of the source from the product description. The operational safeguards in this workflow come from file separation, explicit naming, documented transformations, and reviewer discipline.
 
@@ -150,4 +150,4 @@ Share the smallest useful excerpt with surrounding context, redact unnecessary s
 
 ---
 
-Originally published at https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/
+Originally published at https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/

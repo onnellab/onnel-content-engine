@@ -13,11 +13,11 @@ secondary_keywords: "preserve original log|large text log review|offline log ins
 related_apps: "VaultXT"
 tags: "large log file|preserve original log|large text log review|offline log inspection|VaultXT"
 short_answer: "Set the source log aside, create a clearly named working copy with basic provenance notes, inspect that copy in small time-bounded passes, record exact line context outside the log, and make any transformations only in separate derived files."
-canonical_url: "https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/"
+canonical_url: "https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/"
 published_at: "2026-09-07T09:00:00+09:00"
 updated_at: "2026-09-07T09:00:00+09:00"
 image_specs: "Source-to-working-copy log review workflow|Time-window and context checklist|Observation record beside an unchanged source"
-related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|TXT vs EPUB for Long Reading => https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/|How to Rename Files Safely With a Preview Workflow => https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/|How to Verify Audio Clips Before Combining Them => https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/|How to Keep a Durable Research Reading Log => https://onnellab.github.io/blog/en/keep-durable-research-reading-log/"
+related_articles: "How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/|How to Rename Files Safely With a Preview Workflow => https://onnellab.com/blog/en/rename-files-safely-preview-workflow/|How to Verify Audio Clips Before Combining Them => https://onnellab.com/blog/en/verify-audio-clips-before-combining/|How to Keep a Durable Research Reading Log => https://onnellab.com/blog/en/keep-durable-research-reading-log/"
 ---
 
 # How to Inspect a Large Log File Without Altering the Original

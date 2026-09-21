@@ -12,11 +12,11 @@ primary_keyword: "clipboard snippet manager"
 secondary_keywords: "saved text snippets|iPhone clipboard workflow|local clipboard utility|ClipNest"
 related_apps: "ClipNest"
 tags: "clipboard snippet manager|saved text snippets|iPhone clipboard workflow|local clipboard utility"
-canonical_url: "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/"
+canonical_url: "https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/"
 published_at: "2026-07-24T08:24:05+09:00"
 updated_at: "2026-07-24T08:24:05+09:00"
 image_specs: "Capture-to-reuse clipboard workflow|Temporary clipboard and durable snippet comparison|Sensitive-text review"
-related_articles: "How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/"
+related_articles: "How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/"
 ---
 
 # How to Reuse Copied Text Snippets on iPhone

@@ -2,215 +2,215 @@
 <rss version="2.0">
 <channel>
   <title>ONNELLAB Content Engine</title>
-  <link>https://onnellab.github.io/</link>
+  <link>https://onnellab.com/</link>
   <description>Canonical ONNELLAB educational articles.</description>
   <item>
     <title>How to Read Large TXT Files Without Lag</title>
-    <link>https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/</link>
-    <guid>https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/</guid>
+    <link>https://onnellab.com/blog/en/read-large-txt-files-without-lag/</link>
+    <guid>https://onnellab.com/blog/en/read-large-txt-files-without-lag/</guid>
     <description>Learn why very large TXT files can feel slow, what to check first, and how to choose a plain-text reading workflow that avoids unnecessary lag.</description>
     <pubDate>Fri, 10 Jul 2026 15:00:00 GMT</pubDate>
   </item>
   <item>
     <title>대용량 TXT 파일을 지연 없이 읽는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/</link>
-    <guid>https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/</guid>
+    <link>https://onnellab.com/blog/ko/read-large-txt-files-without-lag/</link>
+    <guid>https://onnellab.com/blog/ko/read-large-txt-files-without-lag/</guid>
     <description>대용량 TXT 파일이 느리게 열리는 이유, 먼저 확인할 항목, 불필요한 지연을 줄이는 일반 텍스트 파일 읽기 흐름을 정리합니다.</description>
     <pubDate>Fri, 10 Jul 2026 15:00:00 GMT</pubDate>
   </item>
   <item>
     <title>TXT vs EPUB for Long Reading</title>
-    <link>https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/</link>
-    <guid>https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/</guid>
+    <link>https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/</link>
+    <guid>https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/</guid>
     <description>Compare TXT and EPUB for long reading, including reflow, typography, navigation, accessibility, editing, conversion, and a reversible workflow.</description>
     <pubDate>Tue, 11 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>What Makes Large Text Files Slow to Open</title>
-    <link>https://onnellab.github.io/blog/en/large-text-file-slow-to-open/</link>
-    <guid>https://onnellab.github.io/blog/en/large-text-file-slow-to-open/</guid>
+    <link>https://onnellab.com/blog/en/large-text-file-slow-to-open/</link>
+    <guid>https://onnellab.com/blog/en/large-text-file-slow-to-open/</guid>
     <description>Learn why large text files open slowly, how line structure, decoding, layout, search, and memory affect performance, and how to diagnose them safely.</description>
     <pubDate>Fri, 14 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>How to Convert Local Media Files Privately</title>
-    <link>https://onnellab.github.io/blog/en/convert-local-media-files-privately/</link>
-    <guid>https://onnellab.github.io/blog/en/convert-local-media-files-privately/</guid>
+    <link>https://onnellab.com/blog/en/convert-local-media-files-privately/</link>
+    <guid>https://onnellab.com/blog/en/convert-local-media-files-privately/</guid>
     <description>Learn how to convert local media files privately, what to check before changing formats, and when a focused local media converter is the right workflow.</description>
     <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>How to Clean Up MP3 Metadata Before Organizing Music</title>
-    <link>https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/</link>
-    <guid>https://onnellab.github.io/blog/en/clean-up-mp3-metadata-before-organizing-music/</guid>
+    <link>https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/</link>
+    <guid>https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/</guid>
     <description>Clean up MP3 metadata safely with a backup-first workflow for titles, artists, albums, track numbers, artwork, and library verification.</description>
     <pubDate>Mon, 20 Jul 2026 05:56:51 GMT</pubDate>
   </item>
   <item>
     <title>How to Trim Audio Recordings Without a Full Editor</title>
-    <link>https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/</link>
-    <guid>https://onnellab.github.io/blog/en/trim-audio-recordings-without-full-editor/</guid>
+    <link>https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/</link>
+    <guid>https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/</guid>
     <description>Trim an audio recording safely with precise in and out points, click-free boundaries, deliberate export settings, and a verified local copy.</description>
     <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>How to Reuse Copied Text Snippets on iPhone</title>
-    <link>https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/</link>
-    <guid>https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/</guid>
+    <link>https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/</link>
+    <guid>https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/</guid>
     <description>Build a deliberate iPhone clipboard workflow for saving, labeling, reviewing, and safely reusing recurring text snippets.</description>
     <pubDate>Thu, 23 Jul 2026 23:24:05 GMT</pubDate>
   </item>
   <item>
     <title>로컬 미디어 파일을 비공개로 변환하는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/convert-local-media-files-privately/</link>
-    <guid>https://onnellab.github.io/blog/ko/convert-local-media-files-privately/</guid>
+    <link>https://onnellab.com/blog/ko/convert-local-media-files-privately/</link>
+    <guid>https://onnellab.com/blog/ko/convert-local-media-files-privately/</guid>
     <description>로컬 미디어 파일을 서버로 보내지 않고 변환할 때 확인할 항목, 출력 형식 선택 기준, 로컬 미디어 변환기가 맞는 상황을 설명합니다.</description>
     <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>How to Rename Files Safely With a Preview Workflow</title>
-    <link>https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/</link>
-    <guid>https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/</guid>
+    <link>https://onnellab.com/blog/en/rename-files-safely-preview-workflow/</link>
+    <guid>https://onnellab.com/blog/en/rename-files-safely-preview-workflow/</guid>
     <description>Use a file renaming preview to test rules, catch collisions, and apply a reversible batch rename without losing file identity.</description>
     <pubDate>Thu, 20 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>음악 정리 전 MP3 메타데이터를 정돈하는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/</link>
-    <guid>https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/</guid>
+    <link>https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/</link>
+    <guid>https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/</guid>
     <description>제목, 아티스트, 앨범, 트랙 번호, 앨범 아트를 백업 우선 방식으로 점검하고 MP3 메타데이터를 안전하게 정돈하는 방법을 설명합니다.</description>
     <pubDate>Mon, 20 Jul 2026 05:56:51 GMT</pubDate>
   </item>
   <item>
     <title>How to Turn Rough Notes Into a Structured First Draft</title>
-    <link>https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/</link>
-    <guid>https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/</guid>
+    <link>https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/</link>
+    <guid>https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/</guid>
     <description>Turn rough notes into a structured first draft while preserving source ideas, marking evidence gaps, and keeping drafting separate from revision.</description>
     <pubDate>Sat, 19 Sep 2026 03:24:43 GMT</pubDate>
   </item>
   <item>
     <title>How to Verify Audio Clips Before Combining Them</title>
-    <link>https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/</link>
-    <guid>https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/</guid>
+    <link>https://onnellab.com/blog/en/verify-audio-clips-before-combining/</link>
+    <guid>https://onnellab.com/blog/en/verify-audio-clips-before-combining/</guid>
     <description>Verify audio clip order, format, boundaries, loudness, and export integrity before combining recordings into one dependable file.</description>
     <pubDate>Sun, 23 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>How to Keep a Durable Research Reading Log</title>
-    <link>https://onnellab.github.io/blog/en/keep-durable-research-reading-log/</link>
-    <guid>https://onnellab.github.io/blog/en/keep-durable-research-reading-log/</guid>
+    <link>https://onnellab.com/blog/en/keep-durable-research-reading-log/</link>
+    <guid>https://onnellab.com/blog/en/keep-durable-research-reading-log/</guid>
     <description>Build a durable research reading log that preserves source identity, claim-to-evidence links, context, and handoff-ready records beyond one project.</description>
     <pubDate>Wed, 26 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/</link>
-    <guid>https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/</guid>
+    <link>https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/</link>
+    <guid>https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/</guid>
     <description>아이폰에서 자주 쓰는 텍스트를 선별해 저장하고, 맥락을 붙여 정리하며, 안전하게 다시 사용하는 워크플로를 설명합니다.</description>
     <pubDate>Thu, 23 Jul 2026 23:24:05 GMT</pubDate>
   </item>
   <item>
     <title>How to Choose a Media Output Format Before Conversion</title>
-    <link>https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/</link>
-    <guid>https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/</guid>
+    <link>https://onnellab.com/blog/en/choose-media-output-format-before-conversion/</link>
+    <guid>https://onnellab.com/blog/en/choose-media-output-format-before-conversion/</guid>
     <description>Choose a media output format from its destination, codec compatibility, quality, size, editability, transparency, subtitles, and metadata needs.</description>
     <pubDate>Sat, 29 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/</link>
-    <guid>https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/</guid>
+    <link>https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/</link>
+    <guid>https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/</guid>
     <description>파일명 일괄 변경 전에 규칙과 충돌을 미리 확인하고, 복구 가능한 상태에서 안전하게 적용하는 과정을 설명합니다.</description>
     <pubDate>Thu, 20 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>How to Organize Downloads With a Small, Durable Folder System</title>
-    <link>https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/</link>
-    <guid>https://onnellab.github.io/blog/en/organize-downloads-small-folder-system/</guid>
+    <link>https://onnellab.com/blog/en/organize-downloads-small-folder-system/</link>
+    <guid>https://onnellab.com/blog/en/organize-downloads-small-folder-system/</guid>
     <description>Treat Downloads as an inbox, sort keepers into four durable categories, and use safe rules for names, duplicates, temporary files, and recurring review.</description>
     <pubDate>Tue, 01 Sep 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>긴 글 읽기를 위한 TXT와 EPUB 비교</title>
-    <link>https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/</link>
-    <guid>https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/</guid>
+    <link>https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/</link>
+    <guid>https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/</guid>
     <description>긴 글을 읽을 때 TXT와 EPUB의 리플로우, 서체, 탐색, 접근성, 편집, 변환 차이를 비교하고 가역적인 작업 흐름을 설명합니다.</description>
     <pubDate>Tue, 11 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>대용량 텍스트 파일이 느리게 열리는 이유</title>
-    <link>https://onnellab.github.io/blog/ko/large-text-file-slow-to-open/</link>
-    <guid>https://onnellab.github.io/blog/ko/large-text-file-slow-to-open/</guid>
+    <link>https://onnellab.com/blog/ko/large-text-file-slow-to-open/</link>
+    <guid>https://onnellab.com/blog/ko/large-text-file-slow-to-open/</guid>
     <description>대용량 텍스트 파일이 느리게 열리는 원인을 읽기, 디코딩, 줄 구조, 레이아웃, 검색, 메모리 단계로 나누고 안전하게 진단하는 방법을 설명합니다.</description>
     <pubDate>Fri, 14 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>전문 편집기 없이 오디오 녹음을 자르는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/trim-audio-recordings-without-full-editor/</link>
-    <guid>https://onnellab.github.io/blog/ko/trim-audio-recordings-without-full-editor/</guid>
+    <link>https://onnellab.com/blog/ko/trim-audio-recordings-without-full-editor/</link>
+    <guid>https://onnellab.com/blog/ko/trim-audio-recordings-without-full-editor/</guid>
     <description>정확한 시작점과 끝점, 클릭 없는 경계, 목적에 맞는 내보내기 설정, 로컬 사본 검증으로 오디오 녹음을 안전하게 자르는 방법을 설명합니다.</description>
     <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>거친 메모를 구조화된 초안으로 바꾸는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/turn-rough-notes-into-structured-first-draft/</link>
-    <guid>https://onnellab.github.io/blog/ko/turn-rough-notes-into-structured-first-draft/</guid>
+    <link>https://onnellab.com/blog/ko/turn-rough-notes-into-structured-first-draft/</link>
+    <guid>https://onnellab.com/blog/ko/turn-rough-notes-into-structured-first-draft/</guid>
     <description>원본 메모를 보존하면서 생각을 구조화하고, 근거의 빈틈을 표시하며, 작성과 퇴고를 분리해 첫 초안을 만드는 방법을 설명합니다.</description>
     <pubDate>Sat, 19 Sep 2026 03:24:43 GMT</pubDate>
   </item>
   <item>
     <title>오디오 클립을 합치기 전에 확인하는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/verify-audio-clips-before-combining/</link>
-    <guid>https://onnellab.github.io/blog/ko/verify-audio-clips-before-combining/</guid>
+    <link>https://onnellab.com/blog/ko/verify-audio-clips-before-combining/</link>
+    <guid>https://onnellab.com/blog/ko/verify-audio-clips-before-combining/</guid>
     <description>여러 오디오 클립을 하나의 파일로 합치기 전에 순서, 형식, 경계, 음량, 내보내기 무결성을 확인하는 방법을 설명합니다.</description>
     <pubDate>Sun, 23 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>오래 활용할 수 있는 연구 독서 기록을 만드는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/keep-durable-research-reading-log/</link>
-    <guid>https://onnellab.github.io/blog/ko/keep-durable-research-reading-log/</guid>
+    <link>https://onnellab.com/blog/ko/keep-durable-research-reading-log/</link>
+    <guid>https://onnellab.com/blog/ko/keep-durable-research-reading-log/</guid>
     <description>출처 식별 정보, 주장과 근거의 연결, 맥락을 보존해 프로젝트가 끝난 뒤에도 인계할 수 있는 연구 독서 기록을 만드는 방법을 설명합니다.</description>
     <pubDate>Wed, 26 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>미디어 변환 전에 출력 형식을 선택하는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/choose-media-output-format-before-conversion/</link>
-    <guid>https://onnellab.github.io/blog/ko/choose-media-output-format-before-conversion/</guid>
+    <link>https://onnellab.com/blog/ko/choose-media-output-format-before-conversion/</link>
+    <guid>https://onnellab.com/blog/ko/choose-media-output-format-before-conversion/</guid>
     <description>대상 기기와 앱의 호환성, 품질, 용량, 편집성, 투명도, 자막, 메타데이터를 기준으로 미디어 출력 형식을 선택하는 방법을 설명합니다.</description>
     <pubDate>Sat, 29 Aug 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/organize-downloads-small-folder-system/</link>
-    <guid>https://onnellab.github.io/blog/ko/organize-downloads-small-folder-system/</guid>
+    <link>https://onnellab.com/blog/ko/organize-downloads-small-folder-system/</link>
+    <guid>https://onnellab.com/blog/ko/organize-downloads-small-folder-system/</guid>
     <description>다운로드 폴더를 받은 편지함처럼 처리하고, 네 가지 지속 가능한 분류와 안전한 파일명·중복·임시 파일 검토 규칙으로 정리하는 방법입니다.</description>
     <pubDate>Tue, 01 Sep 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>How to Number Tracks in a Multi-Disc MP3 Album</title>
-    <link>https://onnellab.github.io/blog/en/number-tracks-multi-disc-mp3-album/</link>
-    <guid>https://onnellab.github.io/blog/en/number-tracks-multi-disc-mp3-album/</guid>
+    <link>https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/</link>
+    <guid>https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/</guid>
     <description>Number tracks in a multi-disc MP3 album safely by separating track position from disc position, preserving originals, and testing a small copy.</description>
     <pubDate>Fri, 04 Sep 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>여러 장으로 된 MP3 앨범의 트랙 번호를 매기는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/number-tracks-multi-disc-mp3-album/</link>
-    <guid>https://onnellab.github.io/blog/ko/number-tracks-multi-disc-mp3-album/</guid>
+    <link>https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/</link>
+    <guid>https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/</guid>
     <description>트랙 위치와 디스크 위치를 분리하고 원본을 보존한 뒤 소량의 복사본으로 검증하며 다중 디스크 MP3 트랙 번호를 안전하게 정리하는 방법입니다.</description>
     <pubDate>Fri, 04 Sep 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>How to Inspect a Large Log File Without Altering the Original</title>
-    <link>https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/</link>
-    <guid>https://onnellab.github.io/blog/en/inspect-large-log-file-without-altering-original/</guid>
+    <link>https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/</link>
+    <guid>https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/</guid>
     <description>Learn how to inspect a large log file safely by preserving the original, reviewing a working copy, narrowing the time range, and recording observations.</description>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
     <title>원본을 바꾸지 않고 대용량 로그 파일을 검토하는 방법</title>
-    <link>https://onnellab.github.io/blog/ko/inspect-large-log-file-without-altering-original/</link>
-    <guid>https://onnellab.github.io/blog/ko/inspect-large-log-file-without-altering-original/</guid>
+    <link>https://onnellab.com/blog/ko/inspect-large-log-file-without-altering-original/</link>
+    <guid>https://onnellab.com/blog/ko/inspect-large-log-file-without-altering-original/</guid>
     <description>원본을 따로 보존하고 작업 복사본에서 시간 범위와 문맥을 좁히며 관찰 내용을 기록해 대용량 로그 파일을 안전하게 검토하는 방법입니다.</description>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
   </item>

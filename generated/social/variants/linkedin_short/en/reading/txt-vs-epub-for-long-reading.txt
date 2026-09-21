@@ -6,4 +6,4 @@ Choose EPUB when the document is primarily a book to read. A well-made reflowabl
 - Identify the encoding. Decode correctly, then normalize a working copy to UTF-8 if permitted. Inspect non-Latin characters, quotation marks, dashes, and symbols.
 
 Read the full article:
-https://onnellab.github.io/blog/en/txt-vs-epub-for-long-reading/
+https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/

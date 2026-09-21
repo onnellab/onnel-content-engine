@@ -1,8 +1,8 @@
 ---
 title: "How to Choose a Media Output Format Before Conversion"
-canonical_url: "https://onnellab.github.io/blog/en/choose-media-output-format-before-conversion/"
+canonical_url: "https://onnellab.com/blog/en/choose-media-output-format-before-conversion/"
 tags: "programming,media-processing,privacy"
-cover_image: "https://onnellab.github.io/blog-assets/en/choose-media-output-format-before-conversion/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/choose-media-output-format-before-conversion/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -84,7 +84,7 @@ Conversion can produce a file that looks correct in one quick preview while losi
 7. **Test the real destination.** Play or import the sample in the target app or device. Check the beginning, middle, and end; seeking; audio/video sync; channel playback; caption selection and timing; transparency; orientation; and color appearance.
 8. **Convert the full batch.** Keep settings consistent and retain originals until outputs and backups are checked.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/choose-media-output-format-before-conversion/workflow-diagram.svg "Target-first media output format decision workflow")
+![Workflow diagram](https://onnellab.com/blog-assets/en/choose-media-output-format-before-conversion/workflow-diagram.svg "Target-first media output format decision workflow")
 
 ## When a focused tool helps
 

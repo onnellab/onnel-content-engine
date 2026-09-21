@@ -12,11 +12,11 @@ primary_keyword: "연구 독서 기록 관리 방법"
 secondary_keywords: "출처 메모|인용 추적|연구 종합|장기 메모"
 related_apps: ""
 tags: "연구 독서 기록|출처 메모|인용 추적|연구 종합|장기 기록"
-canonical_url: "https://onnellab.github.io/blog/ko/keep-durable-research-reading-log/"
+canonical_url: "https://onnellab.com/blog/ko/keep-durable-research-reading-log/"
 published_at: "2026-08-26T09:00:00+09:00"
 updated_at: "2026-08-26T09:00:00+09:00"
 image_specs: "수집부터 검토까지의 연구 독서 기록 워크플로|지속 가능한 최소 기록 스키마|프로젝트 종료 인계 패키지"
-related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/|미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.github.io/blog/ko/rename-files-safely-preview-workflow/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/"
+related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/|미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/"
 ---
 
 # 오래 활용할 수 있는 연구 독서 기록을 만드는 방법

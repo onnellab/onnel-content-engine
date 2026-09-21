@@ -6,4 +6,4 @@ Give every source a stable identity, locator, and access date; distinguish quota
 - Verify. Resolve the identifier; compare author, title, date, version, and container with an official record; then reopen the locator and check quotations. Resolution alone does not prove the version is correct.
 
 Read the full article:
-https://onnellab.github.io/blog/en/keep-durable-research-reading-log/
+https://onnellab.com/blog/en/keep-durable-research-reading-log/

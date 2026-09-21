@@ -1,8 +1,8 @@
 ---
 title: "How to Verify Audio Clips Before Combining Them"
-canonical_url: "https://onnellab.github.io/blog/en/verify-audio-clips-before-combining/"
+canonical_url: "https://onnellab.com/blog/en/verify-audio-clips-before-combining/"
 tags: "programming,media-processing,privacy"
-cover_image: "https://onnellab.github.io/blog-assets/en/verify-audio-clips-before-combining/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/verify-audio-clips-before-combining/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -55,7 +55,7 @@ Silence is not automatically an error. Preserve natural pauses, speech onsets an
 
 Overlap is also contextual. Accidental overlap repeats material and should be corrected. Intentional overlap enables a crossfade, where one clip fades out while the next fades in. A crossfade can smooth a compatible transition, but it is not a universal repair: it shortens the resulting timeline by the overlap duration and can blur words, beats, or unrelated background sounds. Prefer a clean butt join when the source already has a natural boundary, a short fade when only an edge clicks, and a crossfade when two clips genuinely should overlap.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/verify-audio-clips-before-combining/workflow-diagram.svg "Workflow for inventorying, checking, joining, and verifying audio clips")
+![Workflow diagram](https://onnellab.com/blog-assets/en/verify-audio-clips-before-combining/workflow-diagram.svg "Workflow for inventorying, checking, joining, and verifying audio clips")
 
 ## Match Perceived Loudness Without Chasing Peaks
 

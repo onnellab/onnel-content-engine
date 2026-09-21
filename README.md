@@ -503,8 +503,8 @@ privacy policies. The site build validates that every beta or released app has
 one policy and generates English and Korean pages at:
 
 ```text
-https://onnellab.github.io/privacy/{app_slug}/
-https://onnellab.github.io/privacy/{app_slug}/ko/
+https://onnellab.com/privacy/{app_slug}/
+https://onnellab.com/privacy/{app_slug}/ko/
 ```
 
 For compatibility with previously shared store URLs, the same build also

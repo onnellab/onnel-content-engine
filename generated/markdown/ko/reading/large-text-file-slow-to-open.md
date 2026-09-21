@@ -12,11 +12,11 @@ primary_keyword: "대용량 텍스트 파일 열기 지연"
 secondary_keywords: "대용량 파일 성능|긴 줄|메모리 사용량|가상 렌더링"
 tags: "대용량 텍스트 파일|대용량 파일 성능|긴 줄|메모리 사용량|가상 렌더링"
 related_apps: "VaultXT"
-canonical_url: "https://onnellab.github.io/blog/ko/large-text-file-slow-to-open/"
+canonical_url: "https://onnellab.com/blog/ko/large-text-file-slow-to-open/"
 published_at: "2026-08-14T09:00:00+09:00"
 updated_at: "2026-08-14T09:00:00+09:00"
 image_specs: "보호된 원본에서 대표 복사본으로 이어지는 진단 워크플로|읽기 전용, 스트리밍, 윈도잉, 가상화, 전체 편집 비교|대용량 일반 텍스트 파일을 보는 VaultXT 선택적 화면"
-related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.github.io/blog/ko/read-large-txt-files-without-lag/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.github.io/blog/ko/txt-vs-epub-for-long-reading/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.github.io/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.github.io/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.github.io/blog/ko/reuse-copied-text-snippets-iphone/"
+related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/"
 ---
 
 # 대용량 텍스트 파일이 느리게 열리는 이유

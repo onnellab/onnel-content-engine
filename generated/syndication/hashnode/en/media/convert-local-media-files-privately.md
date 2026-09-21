@@ -1,8 +1,8 @@
 ---
 title: "How to Convert Local Media Files Privately"
-canonical_url: "https://onnellab.github.io/blog/en/convert-local-media-files-privately/"
+canonical_url: "https://onnellab.com/blog/en/convert-local-media-files-privately/"
 tags: "programming,media-processing,privacy"
-cover_image: "https://onnellab.github.io/blog-assets/en/convert-local-media-files-privately/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/convert-local-media-files-privately/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -44,7 +44,7 @@ Privacy adds another constraint. If the file is sensitive, the workflow should n
 5. Open the converted file before deleting or moving the original.
 6. Repeat with a smaller file size only if the first output is too large.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/convert-local-media-files-privately/workflow-diagram.svg "Workflow diagram for private local media conversion")
+![Workflow diagram](https://onnellab.com/blog-assets/en/convert-local-media-files-privately/workflow-diagram.svg "Workflow diagram for private local media conversion")
 
 ## Local Conversion Options
 

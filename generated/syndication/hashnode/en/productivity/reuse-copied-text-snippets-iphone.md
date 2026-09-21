@@ -1,8 +1,8 @@
 ---
 title: "How to Reuse Copied Text Snippets on iPhone"
-canonical_url: "https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/"
+canonical_url: "https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/"
 tags: "productivity,software-engineering,developer-tools"
-cover_image: "https://onnellab.github.io/blog-assets/en/reuse-copied-text-snippets-iphone/social-card.png"
+cover_image: "https://onnellab.com/blog-assets/en/reuse-copied-text-snippets-iphone/social-card.png"
 publication_id: ""
 content_profile: "hashnode-native-v3"
 ---
@@ -49,7 +49,7 @@ Universal Clipboard solves a different problem. It lets nearby Apple devices sig
 7. **Handle sensitive text separately.** Do not preserve passwords, one-time codes, recovery keys, payment details, medical information, or private client data as ordinary snippets.
 8. **Review on a schedule.** Delete duplicates and expired links, update changed details, and unpin items that are no longer frequent.
 
-![Workflow diagram](https://onnellab.github.io/blog-assets/en/reuse-copied-text-snippets-iphone/workflow-diagram.svg "Capture, verify, organize, and reuse text snippets")
+![Workflow diagram](https://onnellab.com/blog-assets/en/reuse-copied-text-snippets-iphone/workflow-diagram.svg "Capture, verify, organize, and reuse text snippets")
 
 ## Storage Approach Comparison
 

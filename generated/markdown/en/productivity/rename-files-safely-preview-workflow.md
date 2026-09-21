@@ -12,11 +12,11 @@ primary_keyword: "file renaming preview"
 secondary_keywords: "batch rename|rename rules|preview before apply|Aligna"
 related_apps: "Aligna"
 tags: "file renaming preview|batch rename|rename rules|file organization"
-canonical_url: "https://onnellab.github.io/blog/en/rename-files-safely-preview-workflow/"
+canonical_url: "https://onnellab.com/blog/en/rename-files-safely-preview-workflow/"
 published_at: "2026-08-20T09:00:00+09:00"
 updated_at: "2026-08-20T09:00:00+09:00"
 image_specs: "Plan-to-preview-to-apply renaming workflow|Manual and rule-based rename comparison|Collision and extension checks"
-related_articles: "How to Reuse Copied Text Snippets on iPhone => https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/|How to Read Large TXT Files Without Lag => https://onnellab.github.io/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.github.io/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.github.io/blog/en/convert-local-media-files-privately/"
+related_articles: "How to Reuse Copied Text Snippets on iPhone => https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/"
 ---
 
 # How to Rename Files Safely With a Preview Workflow

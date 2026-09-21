@@ -2,4 +2,4 @@ Before you reuse copied text snippets on iPhone without losing track of them, se
 
 Build a deliberate iPhone clipboard workflow for savi...
 
-https://onnellab.github.io/blog/en/reuse-copied-text-snippets-iphone/
+https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/

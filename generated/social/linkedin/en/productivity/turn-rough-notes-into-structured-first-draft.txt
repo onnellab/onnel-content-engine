@@ -7,4 +7,4 @@ Before changing tools:
 - Assign stable IDs. Give each paragraph, bullet, image, quotation, or voice-note transcription an identifier such as `N01`, `N02`, and `N03`. IDs are more reliable than copying changing text into comments.
 
 Read the full article:
-https://onnellab.github.io/blog/en/turn-rough-notes-into-structured-first-draft/
+https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/
