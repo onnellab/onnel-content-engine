@@ -180,8 +180,8 @@ For each due video, the scheduled task should:
 7. report success, provider processing, or `blocked` without requesting human review.
 
 If no scenario covers the chosen topic, do not improvise UI automation or coordinates.
-Choose another supported topic or leave the job blocked until a reviewed scenario is
-added to the repository.
+Choose another supported topic or leave the job blocked until a repository-verified
+scenario is added.
 
 ## Adding another app
 
@@ -256,3 +256,28 @@ or fabricating additional app interaction.
 
 These recordings prove deterministic capture flows. They do not authorize unsupported
 marketing claims, and no YouTube upload was performed during this registration work.
+
+### Portfolio-to-Shorts proof after registration
+
+The five newly registered managed recordings were each enqueued as a real
+production-eligible English brief and rendered through Remotion at 1080×1920,
+30 fps, 15 seconds. Short canonical recordings used only the bounded final-frame
+hold described above; no interaction was looped or fabricated.
+
+| App | 15-second render SHA-256 | Automatic policy |
+| --- | --- | --- |
+| Quivra | `1c71d88f49a2ab2f4ec2ce91ec2373df496f64aabd81035ff074faa4a4f18a69` | pass |
+| VaultXT | `4049134579d433e37cbbd94f86621a22d0bb474c06459331136b30a0ea476039` | pass |
+| Segra | `f51d091704bb265f58ba2bfc2752dc0b7f5528c20cd5cad61c9cabd6efdd4db9` | pass |
+| ClipNest | `5deb03a55ef20f520bff01a270812c9ad3619f80671f547ed3d67a8b0eef3566` | pass |
+| Aligna | `313ee14ddfbcb00b40ec3401c014dc37152b6cc9568d55d3259ee0b0aa0bc72e` | pass |
+
+For every rendered job, `automatic_choices` accepted the managed provenance and
+returned the standing policy values: public, `made_for_kids=false`,
+`synthetic_media=false`, no `publishAt`, and `publish_approved=true`. This was a
+local policy verification only; no YouTube upload was issued.
+
+Final regression verification after the portfolio registration: **98** focused
+short-video Python tests passed, **511** full offline Python tests passed,
+Remotion/Node **5** tests passed, TypeScript typecheck passed, and `git diff --check`
+was clean.
