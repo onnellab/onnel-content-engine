@@ -6,3 +6,10 @@ docs/environment variables.md
 .env
 .env.*
 .tokens/
+
+# Private local short-video runtime; never publish or commit media/state.
+.runtime/
+video/node_modules/
+video/.cache/
+video/assets/*
+!video/assets/README.md
