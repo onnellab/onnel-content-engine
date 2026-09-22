@@ -108,7 +108,7 @@ Production invocation:
 The durable worker performs these stages in order:
 1. Verify the explicitly bound Aether Inn YouTube connection before paid generation.
 2. Call Lyria 3 Pro under the locally approved candidate count and music spend cap.
-3. Reject missing, malformed, exact-repeat, or out-of-range audio candidates and select a technically valid candidate deterministically.
+3. Reject missing, malformed, exact-repeat, or out-of-range audio candidates, then send each technically valid candidate to `gemini-2.5-flash` for fail-closed review of the actual audio. The reviewer checks Aether Inn fit, melody memorability, repeat-listening comfort, arrangement development, ending resolution and technical cleanliness, with explicit critical flags for unresolved endings, EDM/pop energy, trailer bombast and audible artifacts. Select the highest-scoring accepted candidate only.
 4. Generate one 16:9 landscape background with `gemini-2.5-flash-image` using the same Google Cloud ADC/project.
 5. Keep the generated background text-free, then apply deterministic upper-left matte-gold serif title and small Aether Inn branding through a local SVG overlay, without a black title panel.
 6. Render the single at 1920×1080, 30 fps, H.264, yuv420p, AAC 256 kbps.
@@ -119,4 +119,4 @@ The durable worker performs these stages in order:
 
 A failed later stage does not regenerate an already-paid Lyria candidate. The job keeps the music and cover hashes and resumes from the missing stage on the next run.
 
-The automatic candidate gate is a production/technical gate, not a copyright or melodic-originality certification. Exact hashes can reject identical files, but the system does not claim that a generated melody is legally or musically unique.
+The automatic candidate gate includes an actual-audio Gemini quality review plus deterministic technical checks. It is still not a copyright or melodic-originality certification. Exact hashes can reject identical files, but the system does not claim that a generated melody is legally or musically unique.
