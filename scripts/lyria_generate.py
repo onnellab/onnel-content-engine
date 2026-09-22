@@ -39,21 +39,31 @@ def clean_text(value: str, *, field: str, limit: int) -> str:
 def build_aether_prompt(title: str, style: str) -> str:
     title = clean_text(title, field="title", limit=160)
     style = clean_text(style, field="style", limit=1800)
-    return f"""Instrumental fantasy JRPG field theme for Aether Inn.
+    return f"""Instrumental fantasy JRPG / MMORPG journey soundtrack for Aether Inn.
 Title concept: {title}
 Style direction: {style}
 
+Follow the requested travel theme and energy level instead of defaulting every song to a calm field cue. Aether Inn may be quiet, heart-racing, processional, triumphant, airborne, maritime, subterranean or underwater as long as it still feels like melodic fantasy travel rather than combat music or a film trailer.
+
 Choose a tonal center and mode that fit the concept; major, minor, and modal colors are all allowed. Keep that tonal center coherent unless the concept explicitly calls for a modulation. The melody must be memorable but comfortable for repeated listening. Begin with real musical movement immediately; do not use an empty pad-only or atmospheric intro.
 
-[00:00 - 00:25] Begin immediately with warm electric or acoustic guitar carrying a gentle midrange melody. Add restrained piano harmony and soft strings. The feeling is the first steps of a long fantasy journey.
-[00:25 - 01:10] Develop the main melody naturally. Add subtle bass and light ensemble support without heavy drums.
-[01:10 - 02:05] Expand the emotional space with mellow strings, cello or flute while preserving the original melodic identity and relaxed JRPG field-music character.
-[02:05 - 02:40] Gradually lift the harmony and instrumentation. Feel nostalgic, hopeful and quietly exciting, like an old MMORPG journey opening into a wider landscape.
+Energy and orchestration must follow the style direction:
+- Quiet road, town, rain, night or rest themes may use warm guitar, midrange piano, mellow strings, cello, harp, flute or accordion with a gentle pulse.
+- Flight and skybound themes may use buoyant 6/8 or flowing 4/4 motion, rhythmic strings or guitar, rising melodic contours and light percussion that suggest lift and speed without cinematic bombast.
+- Sailing and open-sea themes may use a rolling pulse, warm strings, guitar, accordion, flute, bass movement and restrained nautical percussion; adventurous, never pirate-battle music.
+- Diving, underwater ruins and deepwater themes may use lower-register cello/bass, harp, piano, guitar or soft choir textures with fluid rhythmic motion; mysterious but clearly melodic, never pad-only ambience.
+- March, caravan, festival-procession and homecoming themes may use a clear walking pulse, light snare or frame drum, rhythmic guitar/bass, strings and optional warm horns or brass. Proud, exciting and uplifting without military aggression.
+- Frontier-surge or high-adventure travel themes may use stronger rhythmic guitar/bass and string ostinati, faster forward motion and a more heart-racing lift, but no EDM drop, battle groove or trailer percussion.
+
+[00:00 - 00:25] State a distinctive motif immediately with instrumentation appropriate to the concept. Establish the travel motion from the first bars.
+[00:25 - 01:10] Develop the main melody and rhythmic identity. Add bass and ensemble layers according to the requested energy rather than automatically becoming quieter.
+[01:10 - 02:05] Broaden the arrangement while preserving the main motif. Add one or two complementary colors such as strings, cello, flute, accordion, harp, choir texture or warm brass when appropriate.
+[02:05 - 02:40] Create the emotional lift of entering a wider world. Scale the intensity to the concept: calm tracks can bloom gently; flight, voyage, march, triumph or frontier tracks may become genuinely exhilarating, but never explode into combat music or cinematic trailer excess.
 [02:40 - 03:04] Resolve the journey clearly back to the established tonal center and mode. The final melody must arrive on the tonic/home note in a natural register, often the same or a higher octave, and the final harmony must land on the tonic/home chord appropriate to that mode. In ordinary major or minor tonality, prefer a clear authentic cadence such as V-I or V-i; for a genuinely modal piece, use an equally stable cadential motion back to the modal tonic. Let the final tonic/home harmony ring naturally for several seconds.
 
 The ending must sound complete and settled rather than suspended one step away from home. Do not end the melody on the leading tone or on a note one semitone below the tonic (for example, B instead of C in C major), on the dominant, or on another obviously unresolved tendency tone. Do not force every song into major. Do not introduce an abrupt major/minor/modal shift only at the ending unless the concept explicitly requires it. Avoid deceptive cadences, unresolved suspensions, or an ambiguous fade as the default ending.
 
-No vocals. No aggressive percussion. No EDM energy. No explosive cinematic trailer climax. No sharp high-register piano. No dark ambient opening. No excessive orchestral drama. Clean high-quality stereo production, warm midrange, restrained dynamics."""
+No vocals unless the style explicitly requests only a very soft wordless choir texture. No aggressive percussion. No EDM energy. No battle-music drive. No explosive cinematic trailer climax. No sharp high-register piano. No empty dark ambient opening. No excessive orchestral drama. Keep the mix warm, melodic, clear and non-fatiguing even when the track is energetic."""
     
 
 def estimate_cost(count: int) -> float:
