@@ -57,13 +57,36 @@ class CoverTests(unittest.TestCase):
         with self.assertRaises(Exception):
             aether_cover._wrap_title(" ".join(["longword"] * 20))
 
-    def test_svg_has_gold_serif_brand_without_panel(self):
-        svg = aether_cover._title_svg("Sails Above the Cloud Sea")
-        self.assertIn("#BFA56B", svg)
+    def test_svg_uses_larger_ivory_title_gold_brand_and_shadow(self):
+        svg = aether_cover._title_svg(
+            "Sails Above the Cloud Sea",
+            {"x":132,"first_y":150,"shadow_opacity":.38},
+        )
+        self.assertIn("#F2E8D5", svg)
+        self.assertIn("#C7AA6B", svg)
+        self.assertIn("font-size:72px", svg)
+        self.assertIn("opacity:0.38", svg)
         self.assertIn("Aether Inn", svg)
         self.assertIn("Baskerville", svg)
         self.assertIn('class="diamond"', svg)
         self.assertNotIn("<rect", svg)
+
+    def test_layout_moves_when_upper_left_has_low_contrast(self):
+        scores = {
+            (132,150):(-65,.88,.90), (132,360):(-55,.82,.85),
+            (1050,150):(60,.19,.22), (1050,360):(50,.25,.29),
+            (600,150):(-8,.55,.59), (132,600):(63,.19,.23),
+            (600,600):(65,.16,.20), (1050,600):(115,.06,.08),
+        }
+        def sample(_path,x,y,_lines):
+            score,bright,low=scores[(x,y)]
+            return {"mean_luma":150,"std_luma":35,"bright_fraction":bright,
+                    "warm_fraction":.10,"low_contrast_fraction":low,
+                    "mean_contrast":85,"score":score}
+        with patch.object(aether_cover, "_sample_text_region", side_effect=sample):
+            layout=aether_cover.choose_title_layout(Path("/tmp/fake.png"),"Sails Above the Cloud Sea")
+        self.assertEqual((1050,150),(layout["x"],layout["first_y"]))
+        self.assertEqual(.38,layout["shadow_opacity"])
 
     def test_letterbox_gate_rejects_dark_uniform_edge(self):
         with patch.object(aether_cover, "media_info", return_value={"streams":[{"codec_type":"video","width":1920,"height":1080}]}), \

@@ -130,30 +130,122 @@ def _wrap_title(title: str) -> str:
     return "\n".join(lines)
 
 
-def _title_svg(title: str) -> str:
+TITLE_COLOR = "#F2E8D5"
+BRAND_GOLD = "#C7AA6B"
+TITLE_FONT_SIZE = 72
+TITLE_LINE_HEIGHT = 80
+TITLE_REGION_WIDTH = 720
+TITLE_CANDIDATES = (
+    (132, 150, 0),
+    (132, 360, 0),
+    (1050, 150, 0),
+    (1050, 360, 0),
+    (600, 150, 0),
+    (132, 600, 1),
+    (600, 600, 1),
+    (1050, 600, 1),
+)
+
+
+def _sample_text_region(path: Path, x: int, first_y: int, line_count: int) -> dict:
+    top = max(0, first_y - TITLE_FONT_SIZE)
+    height = min(430, line_count * TITLE_LINE_HEIGHT + 118)
+    raw = run_process([
+        "ffmpeg", "-v", "error", "-nostdin", "-i", str(path),
+        "-vf",
+        (
+            "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,"
+            f"crop={TITLE_REGION_WIDTH}:{height}:{x}:{top},scale=48:16,format=rgb24"
+        ),
+        "-frames:v", "1", "-f", "rawvideo", "-"
+    ], timeout=60)
+    if len(raw) != 48 * 16 * 3:
+        raise VideoError("aether_cover_text_region_probe_failed")
+    lumas = []
+    warm_bright = 0
+    low_contrast = 0
+    title_luma = 0.2126 * 242 + 0.7152 * 232 + 0.0722 * 213
+    for index in range(0, len(raw), 3):
+        red, green, blue = raw[index:index + 3]
+        luma = 0.2126 * red + 0.7152 * green + 0.0722 * blue
+        lumas.append(luma)
+        if red >= 150 and green >= 105 and blue + 28 < min(red, green):
+            warm_bright += 1
+        if abs(title_luma - luma) < 58:
+            low_contrast += 1
+    count = len(lumas)
+    mean = statistics.fmean(lumas)
+    std = statistics.pstdev(lumas)
+    bright_fraction = sum(value >= 180 for value in lumas) / count
+    warm_fraction = warm_bright / count
+    low_contrast_fraction = low_contrast / count
+    mean_contrast = statistics.fmean(abs(title_luma - value) for value in lumas)
+    score = (
+        mean_contrast
+        - std * .22
+        - bright_fraction * 34
+        - warm_fraction * 18
+        - low_contrast_fraction * 46
+    )
+    return {
+        "mean_luma": round(mean, 2),
+        "std_luma": round(std, 2),
+        "bright_fraction": round(bright_fraction, 4),
+        "warm_fraction": round(warm_fraction, 4),
+        "low_contrast_fraction": round(low_contrast_fraction, 4),
+        "mean_contrast": round(mean_contrast, 2),
+        "score": round(score, 3),
+    }
+
+
+def choose_title_layout(background: Path, title: str) -> dict:
+    line_count = len(_wrap_title(title).splitlines())
+    choices = []
+    for order, (x, first_y, tier) in enumerate(TITLE_CANDIDATES):
+        stats = _sample_text_region(background, x, first_y, line_count)
+        choices.append({"x": x, "first_y": first_y, "tier": tier, "order": order, **stats})
+    preferred = [row for row in choices if row["tier"] == 0 and row["score"] >= 45]
+    pool = preferred or choices
+    selected = max(pool, key=lambda row: (row["score"] - row["tier"] * 12, -row["order"]))
+    shadow_opacity = .34
+    if selected["bright_fraction"] >= .30 or selected["low_contrast_fraction"] >= .28:
+        shadow_opacity = .42
+    elif selected["bright_fraction"] >= .16 or selected["low_contrast_fraction"] >= .16:
+        shadow_opacity = .38
+    return {
+        "x": selected["x"],
+        "first_y": selected["first_y"],
+        "shadow_opacity": shadow_opacity,
+        "selected_metrics": selected,
+        "candidate_metrics": choices,
+    }
+
+
+def _title_svg(title: str, layout: dict | None = None) -> str:
     lines = _wrap_title(title).splitlines()
-    x = 128
-    first_y = 132
-    line_height = 70
+    layout = layout or {"x": 132, "first_y": 150, "shadow_opacity": .34}
+    x = int(layout["x"])
+    first_y = int(layout["first_y"])
+    shadow_opacity = float(layout["shadow_opacity"])
     shadow = []
-    gold = []
+    ivory = []
     for index, line in enumerate(lines):
-        y = first_y + index * line_height
+        y = first_y + index * TITLE_LINE_HEIGHT
         value = xml_escape(line)
-        shadow.append(f'<text x="{x+1}" y="{y+1}" class="title shadow">{value}</text>')
-        gold.append(f'<text x="{x}" y="{y}" class="title">{value}</text>')
-    brand_y = first_y + len(lines) * line_height + 26
-    ornament_y = brand_y + 34
+        shadow.append(f'<text x="{x+2}" y="{y+2}" class="title shadow">{value}</text>')
+        ivory.append(f'<text x="{x}" y="{y}" class="title">{value}</text>')
+    brand_y = first_y + len(lines) * TITLE_LINE_HEIGHT + 25
+    ornament_y = brand_y + 35
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
 <style>
-.title {{ font-family: Baskerville, Georgia, serif; font-size:64px; font-weight:400; letter-spacing:.35px; fill:#BFA56B; }}
-.shadow {{ fill:#000; opacity:.24; }}
-.brand {{ font-family: Baskerville, Georgia, serif; font-size:23px; font-weight:400; letter-spacing:3.2px; fill:#BFA56B; }}
-.ornament {{ stroke:#BFA56B; stroke-width:1; opacity:.72; fill:none; }}
-.diamond {{ fill:#BFA56B; opacity:.82; }}
+.title {{ font-family: Baskerville, Georgia, serif; font-size:{TITLE_FONT_SIZE}px; font-weight:400; letter-spacing:.35px; fill:{TITLE_COLOR}; }}
+.shadow {{ fill:#211A17; opacity:{shadow_opacity:.2f}; }}
+.brand {{ font-family: Baskerville, Georgia, serif; font-size:24px; font-weight:400; letter-spacing:3.2px; fill:{BRAND_GOLD}; }}
+.ornament {{ stroke:{BRAND_GOLD}; stroke-width:1; opacity:.78; fill:none; }}
+.diamond {{ fill:{BRAND_GOLD}; opacity:.86; }}
 </style>
 {''.join(shadow)}
-{''.join(gold)}
+{''.join(ivory)}
 <text x="{x}" y="{brand_y}" class="brand">Aether Inn</text>
 <line x1="{x}" y1="{ornament_y}" x2="{x+86}" y2="{ornament_y}" class="ornament"/>
 <path d="M {x+98} {ornament_y-4} L {x+102} {ornament_y} L {x+98} {ornament_y+4} L {x+94} {ornament_y} Z" class="diamond"/>
@@ -202,13 +294,14 @@ def validate_full_bleed_background(path: Path) -> dict:
 
 def brand_background(background: Path, output: Path, title: str) -> dict:
     validate_full_bleed_background(background)
+    layout = choose_title_layout(background, title)
     output.parent.mkdir(parents=True, exist_ok=True)
     converter = shutil.which("rsvg-convert")
     if not converter:
         raise VideoError("aether_cover_svg_renderer_missing")
     svg = output.parent / "cover-overlay.svg"
     overlay = output.parent / "cover-overlay.png"
-    svg.write_text(_title_svg(title), encoding="utf-8")
+    svg.write_text(_title_svg(title, layout), encoding="utf-8")
     os.chmod(svg, 0o600)
     run_process([converter, "-w", "1920", "-h", "1080", "-o", str(overlay), str(svg)], timeout=60)
     run_process([
@@ -226,7 +319,8 @@ def brand_background(background: Path, output: Path, title: str) -> dict:
         "sha256": file_hash(output),
         "width": 1920,
         "height": 1080,
-        "layout": "upper_left_refined_matte_gold_baskerville",
+        "layout": "adaptive_contrast_ivory_baskerville",
+        "title_layout": layout,
     }
 
 
