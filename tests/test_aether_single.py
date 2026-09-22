@@ -130,16 +130,16 @@ class SingleTests(unittest.TestCase):
         self.assertEqual(1, api.inserts)
 
     def test_backlog_worker_imports_catalog_wav_without_lyria_generation(self):
-        with tempfile.TemporaryDirectory() as temporary, patch.object(aether_single, "audio_duration", return_value=123):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(aether_single, "audio_duration", return_value=138):
             root = Path(temporary).resolve()
-            source = root / "A Fantasy Still Breathing.wav"
+            source = root / "Beyond the Road of Falling Petals.wav"
             source.write_bytes(b"RIFF" + b"catalog-master" * 512)
             calls = []
             def paid_music(*args, **kwargs):
                 calls.append((args, kwargs))
                 raise AssertionError("backlog must not call Lyria")
             result = aether_single.backlog_worker(
-                root / "queue", slot="2026-09-26", title="A Fantasy Still Breathing",
+                root / "queue", slot="2026-09-26", title="Beyond the Road of Falling Petals",
                 execute=True, publish=False, source_wav=source, music_generator=paid_music,
                 cover_generator=self.fake_cover, renderer=self.fake_renderer,
             )
@@ -154,6 +154,34 @@ class SingleTests(unittest.TestCase):
             self.assertEqual(file_hash(source), file_hash(durable))
             self.assertEqual("not_run_existing_catalog_master", job["music"]["review"]["state"])
             self.assertEqual("canonical_wav_master", aether_single.policy_for(job)["music_provider"])
+
+    def test_backlog_worker_skips_title_already_public_before_wav_access(self):
+        class ExistingApi:
+            profile = "aether_inn"
+            channel = "UC_AETHER"
+
+            def verify(self):
+                return None
+
+        existing = {
+            "video_id": "7IgogI2u42I",
+            "title": "Beyond the Road of Falling Petals 🌿 Fantasy RPG Music",
+            "published_at": "2026-09-20T00:00:00Z",
+        }
+        with patch.object(aether_single, "find_existing_public_video", return_value=existing), \
+             patch.object(aether_single, "resolve_backlog_wav", side_effect=AssertionError("must not read WAV")):
+            result = aether_single.backlog_worker(
+                Path("/tmp/not-used"), slot="2026-09-26",
+                title="Beyond the Road of Falling Petals", execute=True, publish=True,
+                api_factory=lambda: ExistingApi(),
+            )
+        self.assertEqual("already_public", result["status"])
+        self.assertEqual("7IgogI2u42I", result["video_id"])
+        self.assertFalse(result["created_new_job"])
+
+    def test_confirmed_legacy_upload_is_no_longer_registered_as_backlog(self):
+        with self.assertRaisesRegex(Exception, "backlog_title_not_registered"):
+            aether_single.backlog_catalog_entry("A Fantasy Still Breathing")
 
     def test_backlog_resolver_handles_decomposed_mybox_names(self):
         import unicodedata

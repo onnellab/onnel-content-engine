@@ -74,6 +74,35 @@ class PlaylistTests(unittest.TestCase):
             jobs = aether_playlists._queue_jobs(root)
         self.assertEqual({"published123", "scheduled123"}, set(jobs))
 
+    def test_upload_inventory_backfills_public_video_missing_from_uploads_playlist(self):
+        class FakeApi:
+            channel = "UC_AETHER"
+
+            def headers(self, **kwargs):
+                return {}
+
+            def request(self, method, url, *args, **kwargs):
+                if "playlistItems?" in url:
+                    return None, None, {
+                        "items": [{"contentDetails": {"videoId": "upload00001"}}]
+                    }
+                if "channels?" in url:
+                    return None, None, {
+                        "items": [{"statistics": {"videoCount": "2"}}]
+                    }
+                if "search?" in url:
+                    return None, None, {
+                        "items": [
+                            {"id": {"videoId": "upload00001"}},
+                            {"id": {"videoId": "legacy00001"}},
+                        ]
+                    }
+                raise AssertionError(url)
+
+        with patch.object(aether_playlists, "_uploads_playlist", return_value="UPLOADS"):
+            ids = aether_playlists._uploaded_video_ids(FakeApi())
+        self.assertEqual(["upload00001", "legacy00001"], ids)
+
     def test_dry_run_has_no_provider_calls(self):
         with patch.object(aether_playlists, "YouTube", side_effect=AssertionError("network")):
             result = aether_playlists.sync(Path("/tmp/not-used"), execute=False)

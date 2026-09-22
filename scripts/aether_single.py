@@ -13,6 +13,7 @@ from pathlib import Path
 import re
 import shutil
 import unicodedata
+from urllib.parse import urlencode
 from zoneinfo import ZoneInfo
 
 from aether_compilation import thumbnail
@@ -24,7 +25,7 @@ from lyria_generate import generate as generate_music
 from lyria_config import connection_status as lyria_connection_status
 from short_video_credentials import credential_status
 from short_video_pipeline import VideoError, atomic_json, digest, file_hash, load_json, run_process
-from short_video_youtube import YouTube, Uploader, UploadError
+from short_video_youtube import API, YouTube, Uploader, UploadError
 from youtube_report_store import directory
 
 ROOT = Path.home() / "Library/Application Support/ONNELLAB/content-engine/aether-inn/singles"
@@ -41,7 +42,6 @@ POLICY = {
 }
 FINAL = {"published", "uploaded_private", "uploaded_unlisted", "forced_private", "rejected"}
 BACKLOG_LANES = {
-    "A Fantasy Still Breathing": "night_wonder",
     "Beyond the Road of Falling Petals": "quiet_road",
     "The First Lantern of Autumn": "quiet_road",
     "Beyond the Silent Stone Gate": "frontier_surge",
@@ -98,6 +98,50 @@ def backlog_catalog_entry(title: str) -> dict:
     if len(rows) != 1 or title not in BACKLOG_LANES:
         raise VideoError("aether_single_backlog_title_not_registered")
     return rows[0]
+
+
+def _normalized_title(value: str) -> str:
+    return " ".join(unicodedata.normalize("NFKC", value).casefold().split())
+
+
+def find_existing_public_video(api: YouTube, title: str) -> dict | None:
+    wanted = _normalized_title(_clean(title, "title", 60))
+    _, _, found = api.request(
+        "GET",
+        API + "search?" + urlencode({
+            "part": "id", "channelId": api.channel, "q": title,
+            "type": "video", "maxResults": "25",
+        }),
+        headers=api.headers(), retry=True,
+    )
+    ids = [
+        item.get("id", {}).get("videoId")
+        for item in found.get("items", [])
+        if item.get("id", {}).get("videoId")
+    ]
+    if not ids:
+        return None
+    _, _, videos = api.request(
+        "GET",
+        API + "videos?" + urlencode({
+            "part": "snippet,status", "id": ",".join(ids), "maxResults": "25",
+        }),
+        headers=api.headers(), retry=True,
+    )
+    for item in videos.get("items", []):
+        snippet = item.get("snippet", {})
+        actual = _normalized_title(str(snippet.get("title", "")))
+        if (
+            snippet.get("channelId") == api.channel
+            and item.get("status", {}).get("privacyStatus") == "public"
+            and re.match(rf"^{re.escape(wanted)}(?:$|\W)", actual)
+        ):
+            return {
+                "video_id": item.get("id"),
+                "title": snippet.get("title", ""),
+                "published_at": snippet.get("publishedAt", ""),
+            }
+    return None
 
 
 def import_backlog_master(source: Path, folder: Path, expected_duration: float) -> dict:
@@ -563,6 +607,23 @@ def backlog_worker(
         return {"dry_run": True, "profile": "aether_inn", "worker": "backlog_wav_single"}
     entry = backlog_catalog_entry(title)
     lane = BACKLOG_LANES[entry["title"]]
+    if publish:
+        api = (api_factory or partial(YouTube, profile="aether_inn"))()
+        if getattr(api, "profile", None) != "aether_inn":
+            raise UploadError("aether_profile_required")
+        api.verify()
+        existing = find_existing_public_video(api, entry["title"])
+        if existing:
+            return {
+                "profile": "aether_inn", "status": "already_public",
+                "created_new_job": False, "title": entry["title"],
+                "source_kind": "backlog_wav", "source_filename": None,
+                "video_id": existing["video_id"], "thumbnail_status": None,
+                "publish_at": None, "error": None, "publication_complete": False,
+                "existing_title": existing["title"],
+                "existing_published_at": existing["published_at"],
+            }
+        api_factory = lambda: api
     source = Path(source_wav) if source_wav is not None else resolve_backlog_wav(entry["title"])
     return worker(
         root, slot=slot, title=entry["title"], style=entry["style"], lane=lane,

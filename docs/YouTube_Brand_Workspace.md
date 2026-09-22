@@ -23,6 +23,13 @@ hours, subscriber gains/losses, top-100 video metrics, and up to 100 latest top-
 comments. Reply counts are shown, not full reply bodies. These are bounded reports,
 not exhaustive comment collection. No automated replies or moderation is enabled.
 
+Aether playlist inventory normally starts from the channel uploads playlist. Because
+legacy public videos can be absent from that playlist, the curator compares that
+inventory with the channel public video count and, only when the uploads inventory is
+shorter, backfills IDs from a verified channel-scoped public video search. If the
+combined inventory still cannot account for the public count, playlist sync fails
+closed rather than silently treating the missing videos as absent.
+
 ## Scheduled read-only collection
 
 Run once per profile on the same authorized worker Mac:

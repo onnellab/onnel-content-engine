@@ -162,6 +162,43 @@ def _uploads_playlist(api: YouTube) -> str:
     return items[0]["contentDetails"]["relatedPlaylists"]["uploads"]
 
 
+def _public_video_count(api: YouTube) -> int:
+    _, _, data = api.request(
+        "GET", API + "channels?" + urlencode({"part": "statistics", "id": api.channel}),
+        headers=api.headers(), retry=True,
+    )
+    items = data.get("items", [])
+    if len(items) != 1:
+        raise UploadError("aether_playlist_channel_missing")
+    raw = items[0].get("statistics", {}).get("videoCount")
+    if not isinstance(raw, str) or not raw.isdigit():
+        raise UploadError("aether_playlist_video_count_invalid")
+    return int(raw)
+
+
+def _search_public_video_ids(api: YouTube) -> list[str]:
+    page = ""
+    result, seen = [], set()
+    while True:
+        params = {
+            "part": "id", "channelId": api.channel, "type": "video",
+            "order": "date", "maxResults": "50",
+        }
+        if page:
+            params["pageToken"] = page
+        _, _, data = api.request(
+            "GET", API + "search?" + urlencode(params), headers=api.headers(), retry=True
+        )
+        for item in data.get("items", []):
+            video_id = item.get("id", {}).get("videoId")
+            if video_id and video_id not in seen:
+                seen.add(video_id)
+                result.append(video_id)
+        page = data.get("nextPageToken", "")
+        if not page:
+            return result
+
+
 def _uploaded_video_ids(api: YouTube) -> list[str]:
     playlist_id = _uploads_playlist(api)
     page = ""
@@ -180,7 +217,17 @@ def _uploaded_video_ids(api: YouTube) -> list[str]:
                 result.append(video_id)
         page = data.get("nextPageToken", "")
         if not page:
-            return result
+            break
+
+    public_count = _public_video_count(api)
+    if len(result) < public_count:
+        for video_id in _search_public_video_ids(api):
+            if video_id not in seen:
+                seen.add(video_id)
+                result.append(video_id)
+        if len(result) < public_count:
+            raise UploadError("aether_playlist_public_inventory_incomplete")
+    return result
 
 
 def _video_records(api: YouTube, root: Path) -> list[dict]:
