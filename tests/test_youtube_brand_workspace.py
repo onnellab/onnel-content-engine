@@ -132,6 +132,13 @@ class WorkspaceTests(unittest.TestCase):
             self.assertIn(expected, html)
         self.assertNotIn('__TRACK_COUNT__', html)
         self.assertNotIn('__CATALOG_ROWS__', html)
+        self.assertNotIn('Suno', html)
+        self.assertNotIn('suno', html)
+        self.assertGreaterEqual(html.count('class="ytw-section"'), 5)
+        self.assertIn('핵심 채널 통계', html)
+        self.assertIn('영상별 성과', html)
+        self.assertIn('최근 댓글 반응', html)
+        self.assertNotIn('class="ytw-section" open', html)
 
     def test_no_network_storage_or_untrusted_html_injection(self):
         html = youtube_workspace_panel()
