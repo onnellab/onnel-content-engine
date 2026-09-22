@@ -79,7 +79,7 @@ jobs:
       - name: Verify provider setup and build dashboard
         run: |
           python3 -m unittest discover -s tests -p 'test_short_video_connect.py'
-          python3 -m unittest discover -s tests -p 'test_suno_api_connect.py'
+          python3 -m unittest discover -s tests -p 'test_lyria.py'
           python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
 
       - name: Commit review snapshot
