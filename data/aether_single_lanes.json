@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "profile": "aether_inn",
+  "purpose": "new_single_concept_rotation",
+  "rules": {
+    "max_consecutive_calm": 2,
+    "rolling_window": 8,
+    "min_high_motion_in_window": 3,
+    "min_traversal_in_window": 2,
+    "note": "Energy labels are editorial planning metadata, not measured audio energy."
+  },
+  "lanes": [
+    {
+      "id": "quiet_road",
+      "energy": "calm",
+      "traversal": false,
+      "label": "Quiet Road / Restful Field",
+      "direction": "Warm road, meadow, inn, rain, dawn or village travel. Gentle but still melodic from the opening."
+    },
+    {
+      "id": "skybound_flight",
+      "energy": "high_motion",
+      "traversal": true,
+      "label": "Skybound Flight",
+      "direction": "Flight above cloud seas, floating islands, airship routes or mountain thermals. Buoyant forward motion, soaring but non-fatiguing melody, rhythmic strings/guitar, optional light percussion. No trailer bombast."
+    },
+    {
+      "id": "open_sea_voyage",
+      "energy": "high_motion",
+      "traversal": true,
+      "label": "Open-Sea Voyage",
+      "direction": "Sailing from harbor into open water, wind filling sails, distant islands. Rolling 6/8 or flowing pulse, warm strings/guitar/accordion or flute, restrained nautical percussion. Adventure, not pirate battle music."
+    },
+    {
+      "id": "deepwater_descent",
+      "energy": "medium",
+      "traversal": true,
+      "label": "Deepwater Descent",
+      "direction": "Diving beneath a fantasy sea, submerged ruins, glowing reefs or deep caverns. Fluid pulse, lower-register cello/bass, harp/piano/guitar motifs, mysterious but clearly melodic. Avoid pad-only ambience."
+    },
+    {
+      "id": "traveler_march",
+      "energy": "high_motion",
+      "traversal": false,
+      "label": "Traveler March",
+      "direction": "A caravan, guild, festival procession or kingdom road march. Clear walking pulse, light snare/frame drum, rhythmic guitar/bass, strings and optional warm horns. Proud and exciting without military aggression."
+    },
+    {
+      "id": "triumphal_return",
+      "energy": "high_motion",
+      "traversal": false,
+      "label": "Triumphal Return",
+      "direction": "Homecoming, reunion, gates opening, banners and celebration after a long journey. Broad uplifting melody, warm strings and optional brass, strong forward cadence. Celebratory rather than battle-victory or cinematic trailer music."
+    },
+    {
+      "id": "frontier_surge",
+      "energy": "high_motion",
+      "traversal": true,
+      "label": "Frontier Surge",
+      "direction": "Entering a vast new region, racing across plains, climbing toward a pass or chasing the horizon. Heart-racing pulse, rhythmic guitar/bass and string movement, melodic JRPG exploration energy without EDM or combat intensity."
+    },
+    {
+      "id": "night_wonder",
+      "energy": "calm",
+      "traversal": false,
+      "label": "Night Wonder / Reflective Fantasy",
+      "direction": "Starlight, aurora, moonlit city, reunion or farewell. Warm and dreamlike, but melody enters immediately and the arrangement still develops rather than remaining ambient."
+    }
+  ]
+}
