@@ -60,20 +60,27 @@ class LyriaConfigTests(unittest.TestCase):
 
 
 class LyriaGenerationTests(unittest.TestCase):
-    def test_aether_prompt_has_major_resolution_contract(self):
+    def test_aether_prompt_resolves_to_tonal_home_without_forcing_major(self):
         prompt = lyria_generate.build_aether_prompt(
             "Beyond the Silent Stone Gate",
             "Warm guitar, gentle piano, nostalgic JRPG frontier theme",
         )
         for required in [
-            "warm major key",
-            "dominant-to-tonic cadence",
-            "V-I",
-            "final melody note must resolve clearly to the tonic",
-            "Do not flatten the final melody note",
+            "major, minor, and modal colors are all allowed",
+            "final melody must arrive on the tonic/home note",
+            "V-I or V-i",
+            "B instead of C in C major",
+            "Do not force every song into major",
             "No vocals",
         ]:
             self.assertIn(required, prompt)
+        for forbidden in [
+            "Use a warm major key",
+            "Remain in the original major key",
+            "finish firmly on the tonic major chord",
+            "Do not switch to a minor tonic",
+        ]:
+            self.assertNotIn(forbidden, prompt)
 
     def test_cost_and_configured_candidate_cap(self):
         self.assertEqual(0.08, lyria_generate.estimate_cost(1))
