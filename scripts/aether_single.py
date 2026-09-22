@@ -11,6 +11,8 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
+import unicodedata
 from zoneinfo import ZoneInfo
 
 from aether_compilation import thumbnail
@@ -38,6 +40,16 @@ POLICY = {
     "publish_schedule": "09:00 Asia/Seoul",
 }
 FINAL = {"published", "uploaded_private", "uploaded_unlisted", "forced_private", "rejected"}
+BACKLOG_LANES = {
+    "A Fantasy Still Breathing": "night_wonder",
+    "Beyond the Road of Falling Petals": "quiet_road",
+    "The First Lantern of Autumn": "quiet_road",
+    "Beyond the Silent Stone Gate": "frontier_surge",
+    "The Meadow Where Skylarks Sing": "quiet_road",
+    "The Old Library of Everlight": "night_wonder",
+    "When the Northern Lights Returned": "night_wonder",
+}
+MYBOX_ROOT = Path.home() / "Library/CloudStorage/MYBOX-yungela1"
 
 
 def _clean(value: str, name: str, limit: int) -> str:
@@ -47,6 +59,101 @@ def _clean(value: str, name: str, limit: int) -> str:
     if not value or len(value) > limit or any(ord(c) < 32 for c in value):
         raise VideoError(f"aether_single_{name}_invalid")
     return value
+
+
+def _nfc_child(parent: Path, name: str, *, directory_only: bool = False) -> Path | None:
+    if not parent.is_dir():
+        return None
+    expected = unicodedata.normalize("NFC", name)
+    matches = []
+    for child in parent.iterdir():
+        if unicodedata.normalize("NFC", child.name) != expected:
+            continue
+        if directory_only and not child.is_dir():
+            continue
+        matches.append(child)
+    if len(matches) > 1:
+        raise VideoError("aether_single_backlog_path_ambiguous")
+    return matches[0] if matches else None
+
+
+def resolve_backlog_wav(title: str, *, root: Path = MYBOX_ROOT) -> Path:
+    title = _clean(title, "title", 60)
+    parent = Path(root)
+    for name in ("개인 폴더", "Aether Inn", "01_Audio_Master"):
+        child = _nfc_child(parent, name, directory_only=True)
+        if child is None:
+            raise VideoError("aether_single_backlog_wav_not_synced")
+        parent = child
+    source = _nfc_child(parent, f"{title}.wav")
+    if source is None or source.is_symlink() or not source.is_file():
+        raise VideoError("aether_single_backlog_wav_not_synced")
+    return source
+
+
+def backlog_catalog_entry(title: str) -> dict:
+    title = _clean(title, "title", 60)
+    wanted = unicodedata.normalize("NFC", title)
+    rows = [row for row in read_catalog() if unicodedata.normalize("NFC", row["title"]) == wanted]
+    if len(rows) != 1 or title not in BACKLOG_LANES:
+        raise VideoError("aether_single_backlog_title_not_registered")
+    return rows[0]
+
+
+def import_backlog_master(source: Path, folder: Path, expected_duration: float) -> dict:
+    source = Path(source)
+    if source.suffix.lower() != ".wav" or source.is_symlink() or not source.is_file():
+        raise VideoError("aether_single_backlog_wav_not_synced")
+    try:
+        source_hash = file_hash(source)
+        duration = audio_duration(source)
+    except (OSError, VideoError):
+        raise VideoError("aether_single_backlog_wav_unavailable") from None
+    if abs(float(duration) - float(expected_duration)) > 5:
+        raise VideoError("aether_single_backlog_duration_mismatch")
+    target_dir = directory(Path(folder) / "source")
+    target = target_dir / "master.wav"
+    if target.is_symlink():
+        raise VideoError("aether_single_backlog_source_unsafe")
+    if target.exists():
+        if not target.is_file() or file_hash(target) != source_hash:
+            raise VideoError("aether_single_backlog_source_integrity")
+    else:
+        partial = target_dir / "master.partial.wav"
+        partial.unlink(missing_ok=True)
+        try:
+            with source.open("rb") as src, partial.open("xb") as dst:
+                shutil.copyfileobj(src, dst, length=1024 * 1024)
+            os.chmod(partial, 0o600)
+            if file_hash(partial) != source_hash:
+                raise VideoError("aether_single_backlog_source_integrity")
+            partial.replace(target)
+        except OSError:
+            partial.unlink(missing_ok=True)
+            raise VideoError("aether_single_backlog_wav_unavailable") from None
+        except Exception:
+            partial.unlink(missing_ok=True)
+            raise
+    return {
+        "candidate_index": 0,
+        "path": str(target),
+        "duration_seconds": duration,
+        "sha256": source_hash,
+        "source_kind": "backlog_wav",
+        "source_filename": source.name,
+        "review": {"state": "not_run_existing_catalog_master"},
+    }
+
+
+def policy_for(job: dict) -> dict:
+    policy = dict(POLICY)
+    if job.get("source_kind") == "backlog_wav":
+        policy.update({
+            "version": 2,
+            "kind": "catalog_backlog_single",
+            "music_provider": "canonical_wav_master",
+        })
+    return policy
 
 
 def scheduled_publish_at(slot: str) -> str:
@@ -110,7 +217,7 @@ def brief_for(job: dict) -> dict:
         "Welcome to Aether Inn — a place where travelers rest before the next adventure.\n\n"
         "#fantasymusic #jrpg #rpgmusic #mmorpg #adventuremusic #aimusic"
     )
-    return {
+    brief = {
         "locale": "en",
         "content_kind": "aether_single",
         "youtube_profile": "aether_inn",
@@ -118,6 +225,13 @@ def brief_for(job: dict) -> dict:
         "title": youtube_title,
         "description": description,
     }
+    if job.get("source_kind") == "backlog_wav":
+        brief.update({
+            "source_kind": "backlog_wav",
+            "source_filename": job.get("source_filename"),
+            "source_expected_duration": job.get("source_expected_duration"),
+        })
+    return brief
 
 
 def _history_hashes(state: dict) -> set[str]:
@@ -284,11 +398,12 @@ def readiness(root=ROOT) -> dict:
         "lyria": lyria_connection_status(check_auth=True),
         "cover_model": "gemini-2.5-flash-image",
         "cover_generation": "implemented_one_request_per_single",
-        "cover_branding": "implemented_svg_matte_gold_serif",
+        "cover_branding": "implemented_adaptive_ivory_baskerville_gold_brand",
         "render": "implemented_1920x1080_30fps_h264_yuv420p_aac256",
         "upload": "implemented_durable_aether_only",
         "technical_candidate_gate": "implemented",
         "actual_audio_quality_review": "gemini-2.5-flash_fail_closed",
+        "backlog_wav_import": "implemented_catalog_bound_hash_and_duration_gate",
         "melodic_originality_certification": "not_claimed",
     }
 
@@ -296,7 +411,8 @@ def readiness(root=ROOT) -> dict:
 def worker(
     root=ROOT, *, slot=None, title=None, style=None, lane=None, publish=False, execute=False,
     api_factory=None, music_generator=generate_music, cover_generator=generate_cover,
-    renderer=render_single, existing_only=False,
+    renderer=render_single, existing_only=False, source_kind=None, source_wav=None,
+    source_expected_duration=None, source_filename=None,
 ):
     if not execute:
         return {"dry_run": True, **readiness(root)}
@@ -331,11 +447,21 @@ def worker(
             style = _clean(style, "style", 1200)
             lane = _clean(lane, "lane", 64)
             lane_direction(lane)
-            enforce_lane_rotation(state, lane)
-            metadata_gate = inspect_candidate(title, style, read_catalog())
-            if metadata_gate["metadata_gate"] == "rejected":
-                raise VideoError("aether_single_catalog_duplicate")
+            if source_kind == "backlog_wav":
+                if not source_filename or type(source_expected_duration) not in (int, float):
+                    raise VideoError("aether_single_backlog_source_invalid")
+            else:
+                enforce_lane_rotation(state, lane)
+                metadata_gate = inspect_candidate(title, style, read_catalog())
+                if metadata_gate["metadata_gate"] == "rejected":
+                    raise VideoError("aether_single_catalog_duplicate")
             seed = {"slot": slot, "title": title, "style": style, "lane": lane}
+            if source_kind == "backlog_wav":
+                seed.update({
+                    "source_kind": "backlog_wav",
+                    "source_filename": source_filename,
+                    "source_expected_duration": source_expected_duration,
+                })
             key = digest(seed)[:24]
             job = {
                 "id": key, **seed, "brief": None, "payload_hash": None,
@@ -352,13 +478,17 @@ def worker(
         folder = directory(q.root / "jobs" / job["id"])
         try:
             if not job.get("music"):
-                generated = recover_generated_result(folder)
-                if generated is None:
-                    generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
-                chosen = select_candidate(
-                    generated, _history_hashes(state),
-                    reviewer=lambda path: review_audio(path, job["title"], job["style"], job["lane"]),
-                )
+                if job.get("source_kind") == "backlog_wav":
+                    source = Path(source_wav) if source_wav is not None else resolve_backlog_wav(job["title"])
+                    chosen = import_backlog_master(source, folder, job["source_expected_duration"])
+                else:
+                    generated = recover_generated_result(folder)
+                    if generated is None:
+                        generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
+                    chosen = select_candidate(
+                        generated, _history_hashes(state),
+                        reviewer=lambda path: review_audio(path, job["title"], job["style"], job["lane"]),
+                    )
                 job["music"] = chosen
                 job["status"] = "music_ready"
                 atomic_json(q.state_path, state)
@@ -388,12 +518,13 @@ def worker(
                         "publish_at": publish_at,
                         "publish_approved": True,
                     }
+                    policy = policy_for(job)
                     uploader.bind_approval_locked(
                         state, job, choices,
                         mode="automatic_fail_closed",
-                        policy_hash=digest(POLICY),
+                        policy_hash=digest(policy),
                     )
-                if not job.get("upload") and job["approval"].get("policy_hash") != digest(POLICY):
+                if not job.get("upload") and job["approval"].get("policy_hash") != digest(policy_for(job)):
                     raise UploadError("aether_single_policy_changed")
                 q._render(state, job, None)
                 uploader.run_locked(state, job, reconcile=bool(job.get("upload")), api=api)
@@ -407,6 +538,8 @@ def worker(
             return {
                 "profile": "aether_inn", "status": job["status"], "job_id": job["id"],
                 "title": job["title"], "lane": job["lane"],
+                "source_kind": job.get("source_kind", "new_lyria"),
+                "source_filename": job.get("source_filename"),
                 "video_id": job.get("upload", {}).get("video_id"),
                 "thumbnail_status": job.get("thumbnail_status"),
                 "publish_at": (job.get("approval", {}).get("choices", {}) or {}).get("publish_at"),
@@ -422,6 +555,24 @@ def worker(
             raise
 
 
+def backlog_worker(
+    root=ROOT, *, slot=None, title=None, publish=False, execute=False, source_wav=None,
+    api_factory=None, cover_generator=generate_cover, renderer=render_single, music_generator=generate_music,
+):
+    if not execute:
+        return {"dry_run": True, "profile": "aether_inn", "worker": "backlog_wav_single"}
+    entry = backlog_catalog_entry(title)
+    lane = BACKLOG_LANES[entry["title"]]
+    source = Path(source_wav) if source_wav is not None else resolve_backlog_wav(entry["title"])
+    return worker(
+        root, slot=slot, title=entry["title"], style=entry["style"], lane=lane,
+        publish=publish, execute=True, api_factory=api_factory, music_generator=music_generator,
+        cover_generator=cover_generator, renderer=renderer, source_kind="backlog_wav",
+        source_wav=source, source_expected_duration=entry["duration_seconds"],
+        source_filename=source.name,
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
@@ -429,6 +580,11 @@ def main() -> int:
     sub.add_parser("readiness")
     r = sub.add_parser("reconcile")
     r.add_argument("--execute", action="store_true")
+    b = sub.add_parser("backlog-worker")
+    b.add_argument("--slot")
+    b.add_argument("--title")
+    b.add_argument("--execute", action="store_true")
+    b.add_argument("--publish", action="store_true")
     p = sub.add_parser("worker")
     p.add_argument("--slot")
     p.add_argument("--title")
@@ -442,6 +598,10 @@ def main() -> int:
             result = readiness(args.root)
         elif args.command == "reconcile":
             result = worker(args.root, publish=True, execute=args.execute, existing_only=True)
+        elif args.command == "backlog-worker":
+            result = backlog_worker(
+                args.root, slot=args.slot, title=args.title, publish=args.publish, execute=args.execute,
+            )
         else:
             result = worker(
                 args.root, slot=args.slot, title=args.title, style=args.style, lane=args.lane,

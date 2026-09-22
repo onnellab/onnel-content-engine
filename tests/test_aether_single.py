@@ -129,6 +129,54 @@ class SingleTests(unittest.TestCase):
         self.assertEqual(first["video_id"], second["video_id"])
         self.assertEqual(1, api.inserts)
 
+    def test_backlog_worker_imports_catalog_wav_without_lyria_generation(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(aether_single, "audio_duration", return_value=123):
+            root = Path(temporary).resolve()
+            source = root / "A Fantasy Still Breathing.wav"
+            source.write_bytes(b"RIFF" + b"catalog-master" * 512)
+            calls = []
+            def paid_music(*args, **kwargs):
+                calls.append((args, kwargs))
+                raise AssertionError("backlog must not call Lyria")
+            result = aether_single.backlog_worker(
+                root / "queue", slot="2026-09-26", title="A Fantasy Still Breathing",
+                execute=True, publish=False, source_wav=source, music_generator=paid_music,
+                cover_generator=self.fake_cover, renderer=self.fake_renderer,
+            )
+            state = json.loads((root / "queue" / "queue.json").read_text())
+            job = state["jobs"][result["job_id"]]
+            durable = Path(job["music"]["path"])
+            self.assertEqual("rendered", result["status"])
+            self.assertEqual("backlog_wav", result["source_kind"])
+            self.assertEqual([], calls)
+            self.assertTrue(durable.is_file())
+            self.assertNotEqual(source, durable)
+            self.assertEqual(file_hash(source), file_hash(durable))
+            self.assertEqual("not_run_existing_catalog_master", job["music"]["review"]["state"])
+            self.assertEqual("canonical_wav_master", aether_single.policy_for(job)["music_provider"])
+
+    def test_backlog_resolver_handles_decomposed_mybox_names(self):
+        import unicodedata
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / unicodedata.normalize("NFD", "개인 폴더")
+            parent = parent / "Aether Inn" / "01_Audio_Master"
+            parent.mkdir(parents=True)
+            source = parent / unicodedata.normalize("NFD", "When the Northern Lights Returned.wav")
+            source.write_bytes(b"fixture")
+            resolved = aether_single.resolve_backlog_wav("When the Northern Lights Returned", root=root)
+            self.assertEqual(source, resolved)
+
+    def test_backlog_unregistered_title_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            source = Path(temporary) / "Unknown Song.wav"
+            source.write_bytes(b"fixture")
+            with self.assertRaisesRegex(Exception, "backlog_title_not_registered"):
+                aether_single.backlog_worker(
+                    Path(temporary) / "queue", slot="2026-09-26", title="Unknown Song",
+                    execute=True, source_wav=source, cover_generator=self.fake_cover, renderer=self.fake_renderer,
+                )
+
     def test_lane_rotation_blocks_third_calm_track(self):
         state = {"jobs": {
             "a": {"id": "a", "slot": "2026-09-01", "lane": "quiet_road"},

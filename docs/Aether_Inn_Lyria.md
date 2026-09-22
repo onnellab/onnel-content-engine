@@ -118,12 +118,22 @@ Production invocation:
 
     python3 -B scripts/aether_single.py worker --slot YYYY-MM-DD --lane skybound_flight --title "Sails Above the Cloud Sea" --style "Buoyant nostalgic JRPG flight theme with warm guitar and strings" --execute --publish
 
+### Existing catalog WAV backlog
+
+Missing legacy catalog uploads use a separate no-Lyria path so a canonical master is never regenerated merely to publish it. `backlog-worker` accepts only the seven registered recovery titles currently listed in `scripts/aether_single.py`. It resolves the master from the Unicode-normalized MYBOX `개인 폴더/Aether Inn/01_Audio_Master/<TITLE>.wav` path, copies that WAV into the private durable single job, verifies its SHA-256 and measured duration against the catalog, and records `source_kind=backlog_wav`. A missing cloud item fails as `aether_single_backlog_wav_not_synced`; a visible but unreadable File Provider placeholder fails as `aether_single_backlog_wav_unavailable`. Neither condition may fall back to Lyria.
+
+On an eligible Tuesday/Saturday slot, publish one recovery item with:
+
+    python3 -B scripts/aether_single.py backlog-worker --slot YYYY-MM-DD --title "A Fantasy Still Breathing" --execute --publish
+
+Backlog jobs bypass new-concept duplicate and lane-rotation gates because the titles are already registered catalog masters, but they retain the same Aether-only YouTube binding, exact 09:00 Asia/Seoul schedule, durable upload/reconciliation, current cover generation/branding, render validation and thumbnail gates. Existing MP4 files are derivatives and are never source masters. The existing-master path does not run the new-Lyria audio review and must report that review as not run rather than inventing a quality score.
+
 The durable worker performs these stages in order:
 1. Verify the explicitly bound Aether Inn YouTube connection before paid generation.
 2. Call Lyria 3 Pro under the locally approved candidate count and music spend cap.
 3. Reject missing, malformed, exact-repeat, or out-of-range audio candidates, then send each technically valid candidate to `gemini-2.5-flash` for fail-closed review of the actual audio. The reviewer checks Aether Inn fit, melody memorability, repeat-listening comfort, arrangement development, ending resolution and technical cleanliness, with explicit critical flags for unresolved endings, EDM/pop energy, trailer bombast and audible artifacts. Select the highest-scoring accepted candidate only.
 4. Generate one 16:9 landscape background with `gemini-2.5-flash-image` using the same Google Cloud ADC/project.
-5. Keep the generated background text-free, then apply deterministic upper-left matte-gold serif title and small Aether Inn branding through a local SVG overlay, without a black title panel.
+5. Keep the generated background text-free, then apply the current contrast-adaptive 72 px champagne-ivory Baskerville/serif title plus small matte-gold Aether Inn branding and line/diamond ornament through a local SVG overlay, without a black title panel.
 6. Render the single at 1920×1080, 30 fps, H.264, yuv420p, AAC 256 kbps.
 7. Create a 1280×720 thumbnail from the same branded cover.
 8. Upload with the Aether Inn OAuth profile only, AI-generated disclosure enabled, Music category, durable resumable state, and fail-closed public approval policy.
