@@ -8,6 +8,8 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
+from xml.sax.saxutils import escape as xml_escape
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -104,13 +106,6 @@ def _request(project: str, prompt: str, token: str, *, send=None, timeout: int =
     return image, mime
 
 
-def _font() -> Path:
-    for path in FONT_CANDIDATES:
-        if path.is_file():
-            return path
-    raise VideoError("aether_cover_serif_font_missing")
-
-
 def _wrap_title(title: str) -> str:
     words = title.split()
     if not words or len(title) > 100:
@@ -130,36 +125,46 @@ def _wrap_title(title: str) -> str:
     return "\n".join(lines)
 
 
-def _filter_path(path: Path) -> str:
-    return str(path).replace("\\", "\\\\").replace(":", "\\:").replace("'", "\\'")
+def _title_svg(title: str) -> str:
+    lines = _wrap_title(title).splitlines()
+    shadow = []
+    gold = []
+    for index, line in enumerate(lines):
+        y = 142 + index * 82
+        value = xml_escape(line)
+        shadow.append(f'<text x="114" y="{y+2}" class="title shadow">{value}</text>')
+        gold.append(f'<text x="112" y="{y}" class="title">{value}</text>')
+    brand_y = 142 + len(lines) * 82 + 18
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<style>
+.title {{ font-family: Georgia, "Times New Roman", serif; font-size:72px; font-weight:600; fill:#C8AA6A; }}
+.shadow {{ fill:#000; opacity:.38; }}
+.brand {{ font-family: Georgia, "Times New Roman", serif; font-size:29px; letter-spacing:1.5px; fill:#C8AA6A; }}
+.line {{ stroke:#C8AA6A; stroke-width:1; opacity:.75; }}
+</style>
+{''.join(shadow)}
+{''.join(gold)}
+<line x1="112" y1="{brand_y-18}" x2="392" y2="{brand_y-18}" class="line"/>
+<text x="112" y="{brand_y+22}" class="brand">Aether Inn</text>
+<line x1="112" y1="{brand_y+48}" x2="392" y2="{brand_y+48}" class="line"/>
+</svg>"""
 
 
 def brand_background(background: Path, output: Path, title: str) -> dict:
     output.parent.mkdir(parents=True, exist_ok=True)
-    title_file = output.parent / "cover-title.txt"
-    brand_file = output.parent / "cover-brand.txt"
-    title_text = _wrap_title(title)
-    title_file.write_text(title_text, encoding="utf-8")
-    brand_file.write_text("Aether Inn", encoding="utf-8")
-    os.chmod(title_file, 0o600)
-    os.chmod(brand_file, 0o600)
-    line_count = title_text.count("\n") + 1
-    brand_y = 94 + line_count * 82 + 28
-    font = _filter_path(_font())
-    title_path = _filter_path(title_file)
-    brand_path = _filter_path(brand_file)
-    vf = (
-        "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,"
-        f"drawtext=fontfile='{font}':textfile='{title_path}':fontcolor=0xC8AA6A:"
-        "fontsize=72:line_spacing=8:x=112:y=86:shadowcolor=black@0.42:shadowx=2:shadowy=2,"
-        f"drawbox=x=112:y={brand_y-15}:w=280:h=1:color=0xC8AA6A@0.72:t=fill,"
-        f"drawtext=fontfile='{font}':textfile='{brand_path}':fontcolor=0xC8AA6A:"
-        f"fontsize=29:x=112:y={brand_y}:shadowcolor=black@0.34:shadowx=1:shadowy=1,"
-        f"drawbox=x=112:y={brand_y+48}:w=280:h=1:color=0xC8AA6A@0.72:t=fill"
-    )
+    converter = shutil.which("rsvg-convert")
+    if not converter:
+        raise VideoError("aether_cover_svg_renderer_missing")
+    svg = output.parent / "cover-overlay.svg"
+    overlay = output.parent / "cover-overlay.png"
+    svg.write_text(_title_svg(title), encoding="utf-8")
+    os.chmod(svg, 0o600)
+    run_process([converter, "-w", "1920", "-h", "1080", "-o", str(overlay), str(svg)], timeout=60)
     run_process([
-        "ffmpeg", "-v", "error", "-nostdin", "-y", "-i", str(background),
-        "-vf", vf, "-frames:v", "1", str(output),
+        "ffmpeg", "-v", "error", "-nostdin", "-y", "-i", str(background), "-i", str(overlay),
+        "-filter_complex",
+        "[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080[bg];[bg][1:v]overlay=0:0",
+        "-frames:v", "1", str(output),
     ], timeout=120)
     info = media_info(output)
     image = next((s for s in info.get("streams", []) if s.get("codec_type") == "video"), {})

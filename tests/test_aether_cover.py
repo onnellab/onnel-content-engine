@@ -39,9 +39,16 @@ class CoverTests(unittest.TestCase):
         self.assertEqual("image/png", mime)
 
     def test_title_wrap_is_bounded(self):
-        self.assertEqual("The Airship Above\nCloudrest Harbor", aether_cover._wrap_title("The Airship Above Cloudrest Harbor"))
+        self.assertEqual("The Airship Above Cloudrest\nHarbor", aether_cover._wrap_title("The Airship Above Cloudrest Harbor"))
         with self.assertRaises(Exception):
             aether_cover._wrap_title(" ".join(["longword"] * 20))
+
+    def test_svg_has_gold_serif_brand_without_panel(self):
+        svg = aether_cover._title_svg("Sails Above the Cloud Sea")
+        self.assertIn("#C8AA6A", svg)
+        self.assertIn("Aether Inn", svg)
+        self.assertIn("Georgia", svg)
+        self.assertNotIn("<rect", svg)
 
     def test_dry_run_does_not_request_or_write(self):
         settings = {"project_id": "aether-music-123"}
