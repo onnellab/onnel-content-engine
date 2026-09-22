@@ -15,7 +15,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from short_video_connect import SetupHandler, SetupServer, TEMPLATE
 from short_video_oauth import Connection
 from short_video_credentials import CredentialError
-from install_youtube_connect import applescript_source, URLS, YOUTUBE_URLS, SUNO_URLS
+from install_youtube_connect import applescript_source, URLS, YOUTUBE_URLS, LYRIA_URLS
 from youtube_dashboard_panel import youtube_settings_panel
 import test_short_video_credentials as fixtures
 
@@ -46,7 +46,7 @@ class LocalConsoleTests(unittest.TestCase):
     def test_public_dashboard_is_navigation_only(self):
         html=youtube_settings_panel()
         for url in YOUTUBE_URLS:self.assertIn(url,html)
-        self.assertIn(SUNO_URLS[0],html)
+        self.assertIn(LYRIA_URLS[0],html)
         for bad in ['YOUTUBE_REFRESH_TOKEN','<input','fetch(','localStorage','http://127.0.0.1']:
             self.assertNotIn(bad,html)
         self.assertIn('yt-ko',html);self.assertIn('yt-en',html)
@@ -138,8 +138,8 @@ class LocalConsoleTests(unittest.TestCase):
         source=applescript_source('/a path/python','/a path/script.py')
         self.assertIn('on open location targetURL',source)
         for url in URLS:self.assertIn('"'+url+'"',source)
-        self.assertIn('launchYouTube',source);self.assertIn('launchSuno',source)
-        self.assertIn('suno_api_connect.py',source)
+        self.assertIn('launchYouTube',source);self.assertIn('launchLyria',source)
+        self.assertIn('lyria_connect.py',source)
         self.assertNotIn('refresh_token',source);self.assertNotIn('client_secret',source)
     def test_non_loopback_server_is_not_created(self):
         with self.assertRaisesRegex(ValueError,'loopback_only'):
