@@ -16,6 +16,7 @@ from zoneinfo import ZoneInfo
 from aether_compilation import thumbnail
 from aether_compose import audio_duration, media_info, validate_output
 from aether_cover import generate_cover, lane_direction
+from aether_planner import inspect_candidate, read_catalog
 from lyria_generate import generate as generate_music
 from lyria_config import connection_status as lyria_connection_status
 from short_video_credentials import credential_status
@@ -45,6 +46,39 @@ def _clean(value: str, name: str, limit: int) -> str:
         raise VideoError(f"aether_single_{name}_invalid")
     return value
 
+
+
+def _lane_registry() -> dict:
+    path = Path(__file__).resolve().parents[1] / "data" / "aether_single_lanes.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    lanes = {row["id"]: row for row in data.get("lanes", []) if isinstance(row, dict) and isinstance(row.get("id"), str)}
+    if not lanes:
+        raise VideoError("aether_single_lane_registry_invalid")
+    return {"rules": data.get("rules", {}), "lanes": lanes}
+
+
+def enforce_lane_rotation(state: dict, lane: str) -> None:
+    registry = _lane_registry()
+    if lane not in registry["lanes"]:
+        raise VideoError("aether_single_lane_invalid")
+    history = sorted(
+        [job for job in state.get("jobs", {}).values() if job.get("lane") in registry["lanes"]],
+        key=lambda job: (str(job.get("slot", "")), str(job.get("id", ""))),
+    )
+    recent = history[-7:]
+    current = registry["lanes"][lane]
+    max_calm = int(registry["rules"].get("max_consecutive_calm", 2))
+    tail = history[-max_calm:] if max_calm > 0 else []
+    if len(tail) == max_calm and all(registry["lanes"][job["lane"]].get("energy") == "calm" for job in tail):
+        if current.get("energy") == "calm":
+            raise VideoError("aether_single_calm_streak_blocked")
+    if len(recent) == 7:
+        high = sum(registry["lanes"][job["lane"]].get("energy") == "high_motion" for job in recent)
+        traversal = sum(bool(registry["lanes"][job["lane"]].get("traversal")) for job in recent)
+        if high < int(registry["rules"].get("min_high_motion_in_window", 3)) and current.get("energy") != "high_motion":
+            raise VideoError("aether_single_high_motion_rotation_required")
+        if traversal < int(registry["rules"].get("min_traversal_in_window", 2)) and not current.get("traversal"):
+            raise VideoError("aether_single_traversal_rotation_required")
 
 def brief_for(job: dict) -> dict:
     title = job["title"]
@@ -241,6 +275,10 @@ def worker(
             style = _clean(style, "style", 1200)
             lane = _clean(lane, "lane", 64)
             lane_direction(lane)
+            enforce_lane_rotation(state, lane)
+            metadata_gate = inspect_candidate(title, style, read_catalog())
+            if metadata_gate["metadata_gate"] == "rejected":
+                raise VideoError("aether_single_catalog_duplicate")
             seed = {"slot": slot, "title": title, "style": style, "lane": lane}
             key = digest(seed)[:24]
             job = {

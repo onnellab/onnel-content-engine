@@ -104,6 +104,31 @@ class SingleTests(unittest.TestCase):
         self.assertEqual(first["video_id"], second["video_id"])
         self.assertEqual(1, api.inserts)
 
+    def test_lane_rotation_blocks_third_calm_track(self):
+        state = {"jobs": {
+            "a": {"id": "a", "slot": "2026-09-01", "lane": "quiet_road"},
+            "b": {"id": "b", "slot": "2026-09-02", "lane": "night_wonder"},
+        }}
+        with self.assertRaisesRegex(Exception, "calm_streak"):
+            aether_single.enforce_lane_rotation(state, "quiet_road")
+        aether_single.enforce_lane_rotation(state, "skybound_flight")
+
+    def test_catalog_exact_duplicate_is_rejected_before_paid_generation(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            called = False
+            def music(*args, **kwargs):
+                nonlocal called
+                called = True
+                raise AssertionError("paid generation must not run")
+            with self.assertRaisesRegex(Exception, "catalog_duplicate"):
+                aether_single.worker(
+                    root, slot="2026-09-22", title="Beyond the Silent Stone Gate",
+                    style="Fantasy Frontier Theme, Warm Guitar Arpeggios, Gentle Piano Harmony, Ancient Stone Gateway Leading Into Unknown Lands, Nostalgic JRPG World Exploration, Restrained Emotional Development, Hopeful Fantasy Ending",
+                    lane="frontier_surge", execute=True, publish=False, music_generator=music,
+                )
+            self.assertFalse(called)
+
     def test_wrong_youtube_profile_rejected_before_generation(self):
         class Wrong:
             profile = "onnellab"
