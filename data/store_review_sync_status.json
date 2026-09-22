@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-09-22T05:08:04+00:00",
+  "checked_at": "2026-09-22T06:53:40+00:00",
   "count_basis": "currently_retrievable_written_reviews_not_star_ratings",
   "stores": [
     {
@@ -8,7 +8,7 @@
       "app_slug": "quivra",
       "app_name": "Quivra",
       "platform": "ios",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 0,
       "source": "apple_complete_review_list"
@@ -18,7 +18,7 @@
       "app_slug": "quivra",
       "app_name": "Quivra",
       "platform": "android",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 0,
       "report_rows": 0,
@@ -31,7 +31,7 @@
       "app_slug": "tagweaver",
       "app_name": "TagWeaver",
       "platform": "ios",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 2,
       "source": "apple_complete_review_list"
@@ -41,7 +41,7 @@
       "app_slug": "tagweaver",
       "app_name": "TagWeaver",
       "platform": "android",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 5,
       "report_rows": 6,
@@ -54,7 +54,7 @@
       "app_slug": "vaultxt",
       "app_name": "VaultXT",
       "platform": "ios",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 0,
       "source": "apple_complete_review_list"
@@ -64,7 +64,7 @@
       "app_slug": "vaultxt",
       "app_name": "VaultXT",
       "platform": "android",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 2,
       "report_rows": 3,
@@ -77,7 +77,7 @@
       "app_slug": "segra",
       "app_name": "Segra",
       "platform": "ios",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 0,
       "source": "apple_complete_review_list"
@@ -87,7 +87,7 @@
       "app_slug": "segra",
       "app_name": "Segra",
       "platform": "android",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 0,
       "report_rows": 0,
@@ -100,7 +100,7 @@
       "app_slug": "clipnest",
       "app_name": "ClipNest",
       "platform": "ios",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 0,
       "source": "apple_complete_review_list"
@@ -110,7 +110,7 @@
       "app_slug": "aligna",
       "app_name": "Aligna",
       "platform": "ios",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 0,
       "source": "apple_complete_review_list"
@@ -120,7 +120,7 @@
       "app_slug": "aligna",
       "app_name": "Aligna",
       "platform": "android",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "verified",
       "current_reviews": 0,
       "report_rows": 0,
@@ -133,7 +133,7 @@
       "app_slug": "melivra",
       "app_name": "Melivra",
       "platform": "ios",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "not_released",
       "current_reviews": null
     },
@@ -142,7 +142,7 @@
       "app_slug": "melivra",
       "app_name": "Melivra",
       "platform": "android",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "not_released",
       "current_reviews": null
     },
@@ -151,7 +151,7 @@
       "app_slug": "papira",
       "app_name": "Papira",
       "platform": "ios",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "not_released",
       "current_reviews": null
     },
@@ -160,11 +160,11 @@
       "app_slug": "papira",
       "app_name": "Papira",
       "platform": "android",
-      "checked_at": "2026-09-22T05:08:04+00:00",
+      "checked_at": "2026-09-22T06:53:40+00:00",
       "state": "not_released",
       "current_reviews": null
     }
   ],
   "historical_records": 12,
-  "snapshot_sha256": "d0e0d6f0085ce191f8d5b2c4e40ca546feb51cfc428014e1664d7e369f3ca8c4"
+  "snapshot_sha256": "e73ab2ad91c0499325603ad3b52e15c1065345e9bdc7cb66843d1200596c3137"
 }

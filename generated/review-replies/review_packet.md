@@ -22,8 +22,8 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "developer_reply": "",
       "reply_updated_at": "",
       "status": "pending",
-      "synced_at": "2026-09-22T05:08:04+00:00",
-      "verified_at": "2026-09-22T05:08:04+00:00",
+      "synced_at": "2026-09-22T06:53:40+00:00",
+      "verified_at": "2026-09-22T06:53:40+00:00",
       "verification_source": "apple_complete_review_list"
     },
     "triage": {
