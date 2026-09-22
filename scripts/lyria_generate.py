@@ -43,15 +43,15 @@ def build_aether_prompt(title: str, style: str) -> str:
 Title concept: {title}
 Style direction: {style}
 
-Use a warm major key and keep the harmonic center stable. The melody must be memorable but comfortable for repeated listening. Begin with real musical movement immediately; do not use an empty pad-only or atmospheric intro.
+Choose a tonal center and mode that fit the concept; major, minor, and modal colors are all allowed. Keep that tonal center coherent unless the concept explicitly calls for a modulation. The melody must be memorable but comfortable for repeated listening. Begin with real musical movement immediately; do not use an empty pad-only or atmospheric intro.
 
 [00:00 - 00:25] Begin immediately with warm electric or acoustic guitar carrying a gentle midrange melody. Add restrained piano harmony and soft strings. The feeling is the first steps of a long fantasy journey.
 [00:25 - 01:10] Develop the main melody naturally. Add subtle bass and light ensemble support without heavy drums.
 [01:10 - 02:05] Expand the emotional space with mellow strings, cello or flute while preserving the original melodic identity and relaxed JRPG field-music character.
 [02:05 - 02:40] Gradually lift the harmony and instrumentation. Feel nostalgic, hopeful and quietly exciting, like an old MMORPG journey opening into a wider landscape.
-[02:40 - 03:04] Resolve the journey warmly. Remain in the original major key. Use a clear authentic dominant-to-tonic cadence, V-I, and finish firmly on the tonic major chord. The final melody note must resolve clearly to the tonic, then let the final tonic chord ring naturally for several seconds.
+[02:40 - 03:04] Resolve the journey clearly back to the established tonal center and mode. The final melody must arrive on the tonic/home note in a natural register, often the same or a higher octave, and the final harmony must land on the tonic/home chord appropriate to that mode. In ordinary major or minor tonality, prefer a clear authentic cadence such as V-I or V-i; for a genuinely modal piece, use an equally stable cadential motion back to the modal tonic. Let the final tonic/home harmony ring naturally for several seconds.
 
-The final cadence must sound complete, warm and satisfying. Do not flatten the final melody note. Do not switch to a minor tonic. In the ending, avoid borrowed-minor harmony, modal mixture, bVII endings, deceptive cadences, unresolved suspensions or an ambiguous fade.
+The ending must sound complete and settled rather than suspended one step away from home. Do not end the melody on the leading tone or on a note one semitone below the tonic (for example, B instead of C in C major), on the dominant, or on another obviously unresolved tendency tone. Do not force every song into major. Do not introduce an abrupt major/minor/modal shift only at the ending unless the concept explicitly requires it. Avoid deceptive cadences, unresolved suspensions, or an ambiguous fade as the default ending.
 
 No vocals. No aggressive percussion. No EDM energy. No explosive cinematic trailer climax. No sharp high-register piano. No dark ambient opening. No excessive orchestral drama. Clean high-quality stereo production, warm midrange, restrained dynamics."""
     
