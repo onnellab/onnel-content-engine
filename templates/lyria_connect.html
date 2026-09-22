@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ONNELLAB Lyria 3 Pro Setup</title>
+<style nonce="__NONCE__">
+:root{font-family:Inter,system-ui,sans-serif;color:#211c28;background:#faf8fc}body{margin:0}main{max-width:760px;margin:40px auto;padding:0 18px}.card{background:#fff;border:1px solid #e5ddec;border-radius:18px;padding:22px;box-shadow:0 14px 40px rgba(40,25,60,.07)}h1{font-size:26px;margin:0 0 8px}p{line-height:1.6;color:#675d70}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}label{font-size:13px;font-weight:700}input{min-height:42px;border:1px solid #d8cedf;border-radius:10px;padding:0 11px;font:inherit}input[type=checkbox]{min-height:0;width:auto}.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}button,a.button{border:0;border-radius:11px;padding:11px 15px;background:#6b4ca5;color:#fff;font:inherit;font-weight:700;text-decoration:none;cursor:pointer}.secondary{background:#ece6f5!important;color:#3d3150!important}.danger{background:#f4e8e8!important;color:#7e2b2b!important}.status{margin-top:16px;padding:14px;background:#f4f0f8;border-radius:12px;white-space:pre-wrap;line-height:1.55;font-size:13px}.note{font-size:12px;color:#7b7184}code{overflow-wrap:anywhere}.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.badge{padding:10px;background:#f7f4fa;border-radius:10px;font-size:12px}@media(max-width:650px){.grid,.checks{grid-template-columns:1fr}.field.full{grid-column:auto}}</style></head>
+<body><main><div class="card">
+<h1>Lyria 3 Pro · Aether Inn</h1>
+<p>Google Cloud 프로젝트와 생성 한도만 저장합니다. OAuth/ADC 토큰은 이 페이지나 GitHub에 저장하지 않습니다.</p>
+<div class="checks"><div class="badge" id="gcloud">gcloud · —</div><div class="badge" id="adc">Google ADC · —</div><div class="badge" id="ready">자동 생성 · —</div></div>
+<div class="grid">
+<div class="field full"><label for="project">Google Cloud Project ID</label><input id="project" autocomplete="off" spellcheck="false" placeholder="aether-inn-music"></div>
+<div class="field"><label for="count">후보 수 / 실행</label><input id="count" type="number" min="1" max="5" value="1"></div>
+<div class="field"><label for="cap">실행당 최대 예상비용 (USD)</label><input id="cap" type="number" min="0" max="5" step="0.01" value="0.08"></div>
+<div class="field full"><label><input id="enabled" type="checkbox"> 화·목·토 Lyria 자동 생성을 허용</label></div>
+</div>
+<div class="row"><button id="save">설정 저장</button><button id="check" class="secondary">인증 상태 확인</button><button id="reset" class="danger">설정 초기화</button><a class="button secondary" href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud 열기</a></div>
+<div id="status" class="status" role="status" aria-live="polite">상태 확인 중…</div>
+<p class="note">최초 1회 Mac 터미널에서 <code>gcloud auth application-default login</code> 후 <code>gcloud auth application-default set-quota-project PROJECT_ID</code>를 실행하세요. 모델은 <code>lyria-3-pro-preview</code>, 위치는 <code>global</code>로 고정됩니다.</p>
+</div></main>
+<script nonce="__NONCE__">
+(()=>{'use strict';const csrf='__CSRF__',q=id=>document.getElementById(id),headers={'Content-Type':'application/json','X-ONNELLAB-CSRF':csrf};
+const state=s=>{q('gcloud').textContent='gcloud · '+(s.gcloud_ready?'OK':'필요');q('adc').textContent='Google ADC · '+(s.auth_ready?'OK':'필요');q('ready').textContent='자동 생성 · '+(s.state==='ready'?'준비됨':'대기');if(s.project_id)q('project').value=s.project_id;if(Number.isInteger(s.candidate_count))q('count').value=s.candidate_count;if(typeof s.max_usd_per_run==='number')q('cap').value=s.max_usd_per_run;if(typeof s.enabled==='boolean')q('enabled').checked=s.enabled;q('status').textContent='상태: '+s.state+(s.auth_error?'\n인증: '+s.auth_error:'')+'\n모델: '+(s.model||'lyria-3-pro-preview')+' · 위치: '+(s.location||'global')+'\n실제 유료 생성 호출은 여기서 실행하지 않습니다.'};
+async function get(){const r=await fetch('/api/status',{headers:{'X-ONNELLAB-CSRF':csrf},cache:'no-store'});state(await r.json())}
+async function post(path,body){const r=await fetch(path,{method:'POST',headers,body:JSON.stringify(body),cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error||'request_failed');state(d)}
+q('save').onclick=()=>post('/api/save',{project_id:q('project').value,candidate_count:Number(q('count').value),max_usd_per_run:Number(q('cap').value),enabled:q('enabled').checked}).catch(e=>q('status').textContent='오류: '+e.message);
+q('check').onclick=()=>post('/api/check',{}).catch(e=>q('status').textContent='오류: '+e.message);
+q('reset').onclick=()=>post('/api/reset',{confirm:true}).catch(e=>q('status').textContent='오류: '+e.message);
+get().catch(()=>q('status').textContent='로컬 상태를 읽지 못했습니다.');
+})();
+</script></body></html>
