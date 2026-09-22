@@ -18,18 +18,27 @@ class Provider:
     def __init__(self):
         self.inserts = 0
         self.thumbnails = 0
+        self.body = None
     def verify(self):
         return {"channel_verified": True}
     def initiate(self, body, size):
         self.inserts += 1
+        self.body = body
         if body["snippet"]["categoryId"] != "10":
             raise AssertionError("wrong category")
         return "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&upload_id=single-fixture"
     def probe(self, url, size):
         return 201, {}, {"id": "abcdefghijk"}
     def video(self, video_id):
+        status = {"uploadStatus": "processed", "privacyStatus": "public"}
+        if self.body and self.body.get("status", {}).get("publishAt"):
+            status = {
+                "uploadStatus": "processed",
+                "privacyStatus": "private",
+                "publishAt": self.body["status"]["publishAt"],
+            }
         return {"id": video_id, "snippet": {"channelId": self.channel},
-                "status": {"uploadStatus": "processed", "privacyStatus": "public"},
+                "status": status,
                 "processingDetails": {"processingStatus": "succeeded"}}
     def headers(self, **extra):
         return extra
@@ -87,7 +96,7 @@ class SingleTests(unittest.TestCase):
                                           api_factory=lambda: (_ for _ in ()).throw(AssertionError("network")))
             self.assertEqual("idle", result["status"])
 
-    def test_full_worker_is_idempotent_and_publishes_same_video(self):
+    def test_full_worker_is_idempotent_and_schedules_same_video(self):
         api = Provider()
         with tempfile.TemporaryDirectory() as temporary, \
              patch.object(aether_single, "select_candidate", return_value={
@@ -101,19 +110,21 @@ class SingleTests(unittest.TestCase):
                 atomic_json(q.state_path, state)
             thumb.side_effect = thumbnail
             first = aether_single.worker(
-                Path(temporary).resolve(), slot="2026-09-22", title="Sails Above the Cloud Sea",
+                Path(temporary).resolve(), slot="2026-09-26", title="Sails Above the Cloud Sea",
                 style="Buoyant JRPG flight theme", lane="skybound_flight", publish=True, execute=True,
                 api_factory=lambda: api, music_generator=self.fake_music,
                 cover_generator=self.fake_cover, renderer=self.fake_renderer,
             )
             second = aether_single.worker(
-                Path(temporary).resolve(), slot="2026-09-22", title="Ignored New Title",
+                Path(temporary).resolve(), slot="2026-09-26", title="Ignored New Title",
                 style="Ignored", lane="quiet_road", publish=True, execute=True,
                 api_factory=lambda: api, music_generator=self.fake_music,
                 cover_generator=self.fake_cover, renderer=self.fake_renderer,
             )
-        self.assertEqual("published", first["status"])
-        self.assertTrue(first["publication_complete"])
+        self.assertEqual("scheduled", first["status"])
+        self.assertFalse(first["publication_complete"])
+        self.assertEqual("private", api.body["status"]["privacyStatus"])
+        self.assertEqual("2026-09-26T00:00:00Z", api.body["status"]["publishAt"])
         self.assertEqual(first["job_id"], second["job_id"])
         self.assertEqual(first["video_id"], second["video_id"])
         self.assertEqual(1, api.inserts)

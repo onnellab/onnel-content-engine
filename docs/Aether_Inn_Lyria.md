@@ -21,7 +21,7 @@ Do not copy OAuth tokens, ADC JSON contents, or access tokens into Git, /ops/, p
     gcloud auth application-default login
     gcloud auth application-default set-quota-project PROJECT_ID
 
-Then open https://onnellab.com/ops/ and choose **Lyria 3 Pro 연결 · 자동화 설정**. Configure only Project ID, candidate count (1–5), maximum estimated USD per run, and the Tuesday/Thursday/Saturday enable switch.
+Then open https://onnellab.com/ops/ and choose **Lyria 3 Pro 연결 · 자동화 설정**. Configure only Project ID, candidate count (1–5), maximum estimated USD per run, and the Tuesday/Saturday enable switch. Production work starts around 07:00–08:00 Asia/Seoul and uploads are scheduled private with YouTube `publishAt` for exactly 09:00 Asia/Seoul on each single day.
 
 The local console checks ADC readiness without making a paid music-generation call.
 

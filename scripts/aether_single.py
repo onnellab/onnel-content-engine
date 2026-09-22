@@ -34,7 +34,8 @@ POLICY = {
     "cover_provider": "gemini-2.5-flash-image",
     "synthetic_media": True,
     "made_for_kids": False,
-    "privacy": "public",
+    "privacy": "private",
+    "publish_schedule": "09:00 Asia/Seoul",
 }
 FINAL = {"published", "uploaded_private", "uploaded_unlisted", "forced_private", "rejected"}
 
@@ -46,6 +47,17 @@ def _clean(value: str, name: str, limit: int) -> str:
     if not value or len(value) > limit or any(ord(c) < 32 for c in value):
         raise VideoError(f"aether_single_{name}_invalid")
     return value
+
+
+def scheduled_publish_at(slot: str) -> str:
+    try:
+        local = datetime.strptime(slot, "%Y-%m-%d").replace(
+            hour=9, minute=0, second=0, microsecond=0,
+            tzinfo=ZoneInfo("Asia/Seoul"),
+        )
+    except (TypeError, ValueError):
+        raise VideoError("aether_single_slot_invalid") from None
+    return local.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 
@@ -368,9 +380,20 @@ def worker(
             if publish:
                 uploader = Uploader(q, partial(YouTube, profile="aether_inn"))
                 if not job.get("approval"):
-                    choices = {"made_for_kids": False, "synthetic_media": True, "privacy": "public", "publish_approved": True}
-                    uploader.bind_approval_locked(state, job, choices, mode="automatic_fail_closed", policy_hash=digest(POLICY))
-                if job["approval"].get("policy_hash") != digest(POLICY):
+                    publish_at = scheduled_publish_at(job["slot"])
+                    choices = {
+                        "made_for_kids": False,
+                        "synthetic_media": True,
+                        "privacy": "private",
+                        "publish_at": publish_at,
+                        "publish_approved": True,
+                    }
+                    uploader.bind_approval_locked(
+                        state, job, choices,
+                        mode="automatic_fail_closed",
+                        policy_hash=digest(POLICY),
+                    )
+                if not job.get("upload") and job["approval"].get("policy_hash") != digest(POLICY):
                     raise UploadError("aether_single_policy_changed")
                 q._render(state, job, None)
                 uploader.run_locked(state, job, reconcile=bool(job.get("upload")), api=api)
@@ -386,6 +409,7 @@ def worker(
                 "title": job["title"], "lane": job["lane"],
                 "video_id": job.get("upload", {}).get("video_id"),
                 "thumbnail_status": job.get("thumbnail_status"),
+                "publish_at": (job.get("approval", {}).get("choices", {}) or {}).get("publish_at"),
                 "error": job.get("error"),
                 "publication_complete": job["status"] == "published" and job.get("thumbnail_status") == "set",
             }
