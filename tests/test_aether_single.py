@@ -1,0 +1,119 @@
+from __future__ import annotations
+import json
+from pathlib import Path
+import sys
+import tempfile
+import unittest
+from unittest.mock import patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from short_video_pipeline import atomic_json, file_hash
+import aether_single
+
+
+class Provider:
+    profile = "aether_inn"
+    channel = "UC" + "x" * 22
+    token = True
+    def __init__(self):
+        self.inserts = 0
+        self.thumbnails = 0
+    def verify(self):
+        return {"channel_verified": True}
+    def initiate(self, body, size):
+        self.inserts += 1
+        if body["snippet"]["categoryId"] != "10":
+            raise AssertionError("wrong category")
+        return "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&upload_id=single-fixture"
+    def probe(self, url, size):
+        return 201, {}, {"id": "abcdefghijk"}
+    def video(self, video_id):
+        return {"id": video_id, "snippet": {"channelId": self.channel},
+                "status": {"uploadStatus": "processed", "privacyStatus": "public"},
+                "processingDetails": {"processingStatus": "succeeded"}}
+    def headers(self, **extra):
+        return extra
+    def request(self, method, url, *args, **kwargs):
+        self.thumbnails += 1
+        return 200, {}, {"items": [{}]}
+
+
+class SingleTests(unittest.TestCase):
+    def fake_music(self, title, style, *, execute, output_root):
+        output_root.mkdir(parents=True, exist_ok=True)
+        audio = output_root / "candidate.mp3"
+        audio.write_bytes(b"audio-fixture")
+        return {"candidates": [{"index": 1, "file": str(audio), "sha256": file_hash(audio)}]}
+
+    def fake_cover(self, title, style, lane, output_dir, *, execute):
+        output_dir.mkdir(parents=True, exist_ok=True)
+        cover = output_dir / "cover.png"
+        cover.write_bytes(b"cover-fixture")
+        return {"state": "generated", "path": str(cover), "sha256": file_hash(cover),
+                "model": "fixture", "layout": "upper_left_matte_gold_serif"}
+
+    def fake_renderer(self, audio, cover, output):
+        output.mkdir(parents=True, exist_ok=True)
+        for name in ("video.mp4", "thumbnail.jpg"):
+            (output / name).write_bytes(b"render-fixture")
+        return {"test_only": False, "upload_eligible": True, "duration_seconds": 184,
+                "sha256": {name: file_hash(output / name) for name in ("video.mp4", "thumbnail.jpg")}}
+
+    def test_brief_is_music_profile_and_under_limits(self):
+        job = {"title": "Sails Above the Cloud Sea", "style": "Buoyant JRPG flight theme", "lane": "skybound_flight"}
+        brief = aether_single.brief_for(job)
+        self.assertEqual("aether_inn", brief["youtube_profile"])
+        self.assertEqual("aether_single", brief["content_kind"])
+        self.assertLessEqual(len(brief["title"]), 100)
+        self.assertIn("Aether Inn", brief["description"])
+
+    def test_reconcile_idle_creates_nothing(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            result = aether_single.worker(Path(temporary).resolve(), publish=True, execute=True, existing_only=True,
+                                          api_factory=lambda: (_ for _ in ()).throw(AssertionError("network")))
+            self.assertEqual("idle", result["status"])
+
+    def test_full_worker_is_idempotent_and_publishes_same_video(self):
+        api = Provider()
+        with tempfile.TemporaryDirectory() as temporary, \
+             patch.object(aether_single, "select_candidate", return_value={
+                 "candidate_index": 1, "path": str(Path(temporary) / "chosen.mp3"),
+                 "duration_seconds": 184, "sha256": "a" * 64}), \
+             patch.object(aether_single.SingleQueue, "_render", return_value=None), \
+             patch.object(aether_single, "thumbnail") as thumb:
+            Path(temporary, "chosen.mp3").write_bytes(b"chosen")
+            def thumbnail(q, state, job, provider):
+                job["thumbnail_status"] = "set"
+                atomic_json(q.state_path, state)
+            thumb.side_effect = thumbnail
+            first = aether_single.worker(
+                Path(temporary).resolve(), slot="2026-09-22", title="Sails Above the Cloud Sea",
+                style="Buoyant JRPG flight theme", lane="skybound_flight", publish=True, execute=True,
+                api_factory=lambda: api, music_generator=self.fake_music,
+                cover_generator=self.fake_cover, renderer=self.fake_renderer,
+            )
+            second = aether_single.worker(
+                Path(temporary).resolve(), slot="2026-09-22", title="Ignored New Title",
+                style="Ignored", lane="quiet_road", publish=True, execute=True,
+                api_factory=lambda: api, music_generator=self.fake_music,
+                cover_generator=self.fake_cover, renderer=self.fake_renderer,
+            )
+        self.assertEqual("published", first["status"])
+        self.assertTrue(first["publication_complete"])
+        self.assertEqual(first["job_id"], second["job_id"])
+        self.assertEqual(first["video_id"], second["video_id"])
+        self.assertEqual(1, api.inserts)
+
+    def test_wrong_youtube_profile_rejected_before_generation(self):
+        class Wrong:
+            profile = "onnellab"
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaises(Exception):
+                aether_single.worker(
+                    Path(temporary).resolve(), slot="2026-09-22", title="Title", style="Style",
+                    lane="quiet_road", publish=True, execute=True, api_factory=lambda: Wrong(),
+                )
+
+
+if __name__ == "__main__":
+    unittest.main()
