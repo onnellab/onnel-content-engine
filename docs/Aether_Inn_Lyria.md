@@ -67,6 +67,24 @@ Every production prompt must:
 
 The important quality gate is “this feels finished and back home,” not “this must be major.”
 
+## Concept and energy rotation
+
+New singles must not collapse into only quiet meadow/road ambience. Use `data/aether_single_lanes.json` as the production concept pool and rotate across different travel energies.
+
+Required lanes include:
+- quiet road / town / rest themes;
+- skybound flight and floating-island travel;
+- open-sea sailing and harbor departure;
+- diving, underwater ruins and deepwater exploration;
+- traveler/caravan/festival marches;
+- triumphant homecoming and celebratory return;
+- faster frontier exploration with a heart-racing sense of discovery;
+- reflective night, aurora, farewell and reunion themes.
+
+In a rolling 8-single window, aim for at least 3 high-motion concepts and at least 2 traversal concepts (flight, sailing, diving or frontier movement). Do not schedule more than 2 calm concepts in a row. These are editorial rotation rules, not measured audio-energy claims.
+
+Energetic tracks may use a clear pulse, rhythmic guitar/bass, string ostinati, light snare or frame drum, and optional warm horns/brass. They must remain fantasy travel music: no battle groove, military aggression, EDM drop, or trailer-style percussion wall.
+
 ## Originality and quality
 
 The 65-track catalog in `data/aether_catalog.json` is metadata history, not proof of musical originality. Use it to reject repeated title/style concepts, especially overused structures such as “Beyond…”, “The Road…”, “Where…”, and “Morning…”. File hashes detect exact duplicates only; they do not establish melodic originality.
