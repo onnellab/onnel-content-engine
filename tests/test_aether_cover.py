@@ -26,7 +26,7 @@ class Response:
 class CoverTests(unittest.TestCase):
     def test_prompt_is_text_free_landscape_and_lane_specific(self):
         prompt = aether_cover.cover_prompt("Sails Above the Cloud Sea", "Buoyant flight theme", "skybound_flight")
-        for expected in ["16:9", "upper-left", "Do not render any letters", "floating islands"]:
+        for expected in ["full-bleed 16:9", "upper-left", "Do not render any letters", "floating islands", "No black bands", "no letterboxing", "edge-to-edge"]:
             self.assertIn(expected, prompt)
 
     def test_request_uses_text_and_image_modalities(self):
@@ -53,16 +53,27 @@ class CoverTests(unittest.TestCase):
         self.assertEqual("image/png", mime)
 
     def test_title_wrap_is_bounded(self):
-        self.assertEqual("The Airship Above Cloudrest\nHarbor", aether_cover._wrap_title("The Airship Above Cloudrest Harbor"))
+        self.assertEqual("The Airship Above\nCloudrest Harbor", aether_cover._wrap_title("The Airship Above Cloudrest Harbor"))
         with self.assertRaises(Exception):
             aether_cover._wrap_title(" ".join(["longword"] * 20))
 
     def test_svg_has_gold_serif_brand_without_panel(self):
         svg = aether_cover._title_svg("Sails Above the Cloud Sea")
-        self.assertIn("#C8AA6A", svg)
+        self.assertIn("#BFA56B", svg)
         self.assertIn("Aether Inn", svg)
-        self.assertIn("Georgia", svg)
+        self.assertIn("Baskerville", svg)
+        self.assertIn('class="diamond"', svg)
         self.assertNotIn("<rect", svg)
+
+    def test_letterbox_gate_rejects_dark_uniform_edge(self):
+        with patch.object(aether_cover, "media_info", return_value={"streams":[{"codec_type":"video","width":1920,"height":1080}]}), \
+             patch.object(aether_cover, "_luma_strip", side_effect=[
+                 {"mean":18.0,"std":3.0,"dark_fraction":.94},
+                 {"mean":170.0,"std":24.0,"dark_fraction":0.0},
+                 {"mean":175.0,"std":22.0,"dark_fraction":0.0},
+             ]):
+            with self.assertRaisesRegex(Exception, "letterbox_detected"):
+                aether_cover.validate_full_bleed_background(Path("/tmp/fake.png"))
 
     def test_dry_run_does_not_request_or_write(self):
         settings = {"project_id": "aether-music-123"}
@@ -70,7 +81,8 @@ class CoverTests(unittest.TestCase):
              patch.object(aether_cover, "_request", side_effect=AssertionError("network")):
             result = aether_cover.generate_cover("A", "B", "quiet_road", Path("/tmp/not-used"), execute=False)
         self.assertEqual("planned", result["state"])
-        self.assertEqual(1, result["generation_count"])
+        self.assertEqual(0, result["generation_count"])
+        self.assertEqual(3, result["max_generation_attempts"])
 
 
 if __name__ == "__main__":

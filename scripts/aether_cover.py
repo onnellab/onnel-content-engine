@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import statistics
 from xml.sax.saxutils import escape as xml_escape
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -41,15 +42,19 @@ def lane_direction(lane: str) -> str:
 def cover_prompt(title: str, style: str, lane: str) -> str:
     direction = lane_direction(lane)
     return (
-        "Create one landscape background illustration for Aether Inn, a nostalgic fantasy JRPG/MMORPG "
-        "soundtrack archive. 16:9 composition, environment-first, wide scenic view, painterly fantasy game "
-        "background, warm natural color palette, dreamy atmospheric light, rich depth, inviting sense of travel. "
+        "Create one full-bleed 16:9 fantasy landscape illustration for Aether Inn, a nostalgic JRPG/MMORPG "
+        "soundtrack archive. The environment must fill the entire frame edge-to-edge with visible scenic detail "
+        "at the top and bottom edges. No black bands, no letterboxing, no cinematic frame, no border, no empty "
+        "black sky or black sea strip, and no heavy vignette that becomes a dark bar. Environment-first, wide "
+        "scenic view, painterly fantasy game background, warm natural color palette, dreamy atmospheric light, "
+        "rich depth, and an inviting sense of travel. "
         f"Song concept: {title}. Music direction: {style}. Scene direction: {direction}. "
-        "Keep the upper-left area visually calm with usable negative space for later title typography. "
-        "Do not render any letters, words, logo, UI, watermark, border, frame, subtitle, black title cloud, "
-        "metallic game-logo effect, modern city, combat, weapons, battle scene, or action pose. "
-        "The scenery is the protagonist. Elegant, comfortable, nostalgic, adventurous, and believable as a "
-        "classic fantasy RPG location."
+        "Keep the upper-left area visually calm through composition, sky, mist, or lighting so later title "
+        "typography remains readable; never create a blank, black, smoky, or boxed title panel. "
+        "Do not render any letters, words, logo, UI, watermark, subtitle, metallic game-logo effect, modern city, "
+        "combat, weapons, battle scene, or action pose. Even for night or underwater scenes, preserve color, "
+        "texture, and environmental information all the way to every edge. The scenery is the protagonist. "
+        "Elegant, comfortable, nostalgic, adventurous, and believable as a classic fantasy RPG location."
     )
 
 
@@ -113,7 +118,7 @@ def _wrap_title(title: str) -> str:
     lines, current = [], []
     for word in words:
         candidate = " ".join(current + [word])
-        if current and len(candidate) > 27:
+        if current and len(candidate) > 26:
             lines.append(" ".join(current))
             current = [word]
         else:
@@ -127,30 +132,76 @@ def _wrap_title(title: str) -> str:
 
 def _title_svg(title: str) -> str:
     lines = _wrap_title(title).splitlines()
+    x = 128
+    first_y = 132
+    line_height = 70
     shadow = []
     gold = []
     for index, line in enumerate(lines):
-        y = 142 + index * 82
+        y = first_y + index * line_height
         value = xml_escape(line)
-        shadow.append(f'<text x="114" y="{y+2}" class="title shadow">{value}</text>')
-        gold.append(f'<text x="112" y="{y}" class="title">{value}</text>')
-    brand_y = 142 + len(lines) * 82 + 18
+        shadow.append(f'<text x="{x+1}" y="{y+1}" class="title shadow">{value}</text>')
+        gold.append(f'<text x="{x}" y="{y}" class="title">{value}</text>')
+    brand_y = first_y + len(lines) * line_height + 26
+    ornament_y = brand_y + 34
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
 <style>
-.title {{ font-family: Georgia, "Times New Roman", serif; font-size:72px; font-weight:600; fill:#C8AA6A; }}
-.shadow {{ fill:#000; opacity:.38; }}
-.brand {{ font-family: Georgia, "Times New Roman", serif; font-size:29px; letter-spacing:1.5px; fill:#C8AA6A; }}
-.line {{ stroke:#C8AA6A; stroke-width:1; opacity:.75; }}
+.title {{ font-family: Baskerville, Georgia, serif; font-size:64px; font-weight:400; letter-spacing:.35px; fill:#BFA56B; }}
+.shadow {{ fill:#000; opacity:.24; }}
+.brand {{ font-family: Baskerville, Georgia, serif; font-size:23px; font-weight:400; letter-spacing:3.2px; fill:#BFA56B; }}
+.ornament {{ stroke:#BFA56B; stroke-width:1; opacity:.72; fill:none; }}
+.diamond {{ fill:#BFA56B; opacity:.82; }}
 </style>
 {''.join(shadow)}
 {''.join(gold)}
-<line x1="112" y1="{brand_y-18}" x2="392" y2="{brand_y-18}" class="line"/>
-<text x="112" y="{brand_y+22}" class="brand">Aether Inn</text>
-<line x1="112" y1="{brand_y+48}" x2="392" y2="{brand_y+48}" class="line"/>
+<text x="{x}" y="{brand_y}" class="brand">Aether Inn</text>
+<line x1="{x}" y1="{ornament_y}" x2="{x+86}" y2="{ornament_y}" class="ornament"/>
+<path d="M {x+98} {ornament_y-4} L {x+102} {ornament_y} L {x+98} {ornament_y+4} L {x+94} {ornament_y} Z" class="diamond"/>
+<line x1="{x+110}" y1="{ornament_y}" x2="{x+196}" y2="{ornament_y}" class="ornament"/>
 </svg>"""
 
 
+def _luma_strip(path: Path, y: int, height: int) -> dict:
+    raw = run_process([
+        "ffmpeg", "-v", "error", "-nostdin", "-i", str(path),
+        "-vf", f"crop=iw:{height}:0:{y},scale=64:8,format=gray",
+        "-frames:v", "1", "-f", "rawvideo", "-"
+    ], timeout=60)
+    values = list(raw)
+    if len(values) != 512:
+        raise VideoError("aether_cover_luma_probe_failed")
+    return {
+        "mean": statistics.fmean(values),
+        "std": statistics.pstdev(values),
+        "dark_fraction": sum(value < 24 for value in values) / len(values),
+    }
+
+
+def validate_full_bleed_background(path: Path) -> dict:
+    path = Path(path)
+    info = media_info(path)
+    image = next((row for row in info.get("streams", []) if row.get("codec_type") == "video"), {})
+    width, height = int(image.get("width", 0)), int(image.get("height", 0))
+    if width < 1024 or height < 576:
+        raise VideoError("aether_cover_background_too_small")
+    edge_h = max(24, round(height * .06))
+    center_h = max(48, round(height * .20))
+    top = _luma_strip(path, 0, edge_h)
+    bottom = _luma_strip(path, height - edge_h, edge_h)
+    center = _luma_strip(path, (height - center_h) // 2, center_h)
+    def band(stats):
+        return (
+            stats["mean"] < 42
+            and stats["dark_fraction"] >= .80
+            and center["mean"] - stats["mean"] >= 45
+        )
+    if band(top) or band(bottom):
+        raise VideoError("aether_cover_letterbox_detected")
+    return {"top": top, "bottom": bottom, "center": center}
+
+
 def brand_background(background: Path, output: Path, title: str) -> dict:
+    validate_full_bleed_background(background)
     output.parent.mkdir(parents=True, exist_ok=True)
     converter = shutil.which("rsvg-convert")
     if not converter:
@@ -167,7 +218,7 @@ def brand_background(background: Path, output: Path, title: str) -> dict:
         "-frames:v", "1", str(output),
     ], timeout=120)
     info = media_info(output)
-    image = next((s for s in info.get("streams", []) if s.get("codec_type") == "video"), {})
+    image = next((row for row in info.get("streams", []) if row.get("codec_type") == "video"), {})
     if (image.get("width"), image.get("height")) != (1920, 1080) or not output.is_file():
         raise VideoError("aether_cover_branding_failed")
     return {
@@ -175,7 +226,7 @@ def brand_background(background: Path, output: Path, title: str) -> dict:
         "sha256": file_hash(output),
         "width": 1920,
         "height": 1080,
-        "layout": "upper_left_matte_gold_serif",
+        "layout": "upper_left_refined_matte_gold_baskerville",
     }
 
 
@@ -183,24 +234,44 @@ def generate_cover(title: str, style: str, lane: str, output_dir: Path, *, execu
     settings = load_settings()
     if not settings:
         raise CredentialError("lyria_not_configured")
+    base_prompt = cover_prompt(title, style, lane)
     plan = {
         "model": MODEL,
         "location": LOCATION,
         "project_id": settings["project_id"],
         "lane": lane,
-        "prompt_sha256": hashlib.sha256(cover_prompt(title, style, lane).encode()).hexdigest(),
-        "generation_count": 1,
+        "prompt_sha256": hashlib.sha256(base_prompt.encode()).hexdigest(),
+        "max_generation_attempts": 3,
     }
     if not execute:
-        return {**plan, "state": "planned"}
+        return {**plan, "state": "planned", "generation_count": 0}
     output_dir = Path(output_dir).expanduser()
     output_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
     os.chmod(output_dir, 0o700)
-    image, mime = _request(settings["project_id"], cover_prompt(title, style, lane), token or access_token(), send=send)
-    ext = { "image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp" }[mime]
-    background = output_dir / ("background" + ext)
-    fd = os.open(background, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-    with os.fdopen(fd, "wb") as stream:
-        stream.write(image)
-    result = brand_background(background, output_dir / "cover.png", title)
-    return {**plan, "state": "generated", "background_sha256": file_hash(background), **result}
+    existing = len(list(output_dir.glob("background-attempt-*.*")))
+    last_error = None
+    auth_token = token or access_token()
+    for offset in range(1, 4):
+        attempt = existing + offset
+        prompt = base_prompt
+        if offset > 1:
+            prompt += " Previous output was rejected for dark edge bands. Fill every pixel edge-to-edge with visible scenery."
+        image, mime = _request(settings["project_id"], prompt, auth_token, send=send)
+        ext = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp"}[mime]
+        background = output_dir / f"background-attempt-{attempt:02d}{ext}"
+        fd = os.open(background, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(image)
+        try:
+            bleed = validate_full_bleed_background(background)
+            result = brand_background(background, output_dir / "cover.png", title)
+            return {
+                **plan, "state": "generated", "generation_count": offset,
+                "background_attempt": attempt, "background_sha256": file_hash(background),
+                "full_bleed_validation": bleed, **result,
+            }
+        except VideoError as error:
+            if str(error) != "aether_cover_letterbox_detected":
+                raise
+            last_error = str(error)
+    raise VideoError("aether_cover_retry_exhausted") from None
