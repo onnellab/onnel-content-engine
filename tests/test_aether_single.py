@@ -59,6 +59,20 @@ class SingleTests(unittest.TestCase):
         return {"test_only": False, "upload_eligible": True, "duration_seconds": 184,
                 "sha256": {name: file_hash(output / name) for name in ("video.mp4", "thumbnail.jpg")}}
 
+    def test_candidate_review_prefers_best_accepted_audio(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(aether_single, "audio_duration", return_value=184):
+            root=Path(temporary)
+            rows=[]
+            for index,name in enumerate(("one.mp3","two.mp3"),1):
+                path=root/name;path.write_bytes((name*200).encode())
+                rows.append({"index":index,"file":str(path),"sha256":file_hash(path)})
+            scores={"one.mp3":7.2,"two.mp3":8.7}
+            def reviewer(path):
+                return {"accepted":True,"weighted_score":scores[path.name]}
+            chosen=aether_single.select_candidate({"candidates":rows},set(),reviewer=reviewer)
+            self.assertEqual(2,chosen["candidate_index"])
+            self.assertEqual(8.7,chosen["review"]["weighted_score"])
+
     def test_brief_is_music_profile_and_under_limits(self):
         job = {"title": "Sails Above the Cloud Sea", "style": "Buoyant JRPG flight theme", "lane": "skybound_flight"}
         brief = aether_single.brief_for(job)

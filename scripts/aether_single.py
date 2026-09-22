@@ -14,6 +14,7 @@ import re
 from zoneinfo import ZoneInfo
 
 from aether_compilation import thumbnail
+from aether_audio_review import review_audio
 from aether_compose import audio_duration, media_info, validate_output
 from aether_cover import generate_cover, lane_direction
 from aether_planner import inspect_candidate, read_catalog
@@ -115,9 +116,9 @@ def _history_hashes(state: dict) -> set[str]:
     }
 
 
-def select_candidate(result: dict, prior_hashes: set[str]) -> dict:
+def select_candidate(result: dict, prior_hashes: set[str], *, reviewer=None) -> dict:
     candidates = result.get("candidates") or []
-    ranked = []
+    technical = []
     for row in candidates:
         path = Path(row.get("file", ""))
         expected = row.get("sha256")
@@ -128,11 +129,19 @@ def select_candidate(result: dict, prior_hashes: set[str]) -> dict:
         duration = audio_duration(path)
         if not 160 <= duration <= 210:
             continue
-        ranked.append((abs(duration - 184), int(row.get("index", 999)), path, duration, expected))
-    if not ranked:
-        raise VideoError("aether_single_no_technical_candidate")
-    _, index, path, duration, sha = min(ranked)
-    return {"candidate_index": index, "path": str(path), "duration_seconds": duration, "sha256": sha}
+        item = {"candidate_index": int(row.get("index", 999)), "path": str(path),
+                "duration_seconds": duration, "sha256": expected}
+        if reviewer is not None:
+            review = reviewer(path)
+            item["review"] = review
+            if not review.get("accepted"):
+                continue
+        technical.append(item)
+    if not technical:
+        raise VideoError("aether_single_no_accepted_candidate" if reviewer else "aether_single_no_technical_candidate")
+    if reviewer is None:
+        return min(technical, key=lambda x: (abs(x["duration_seconds"]-184), x["candidate_index"]))
+    return max(technical, key=lambda x: (x["review"]["weighted_score"], -abs(x["duration_seconds"]-184), -x["candidate_index"]))
 
 
 def render_single(audio: Path, cover: Path, output: Path) -> dict:
@@ -233,6 +242,7 @@ def readiness(root=ROOT) -> dict:
         "render": "implemented_1920x1080_30fps_h264_yuv420p_aac256",
         "upload": "implemented_durable_aether_only",
         "technical_candidate_gate": "implemented",
+        "actual_audio_quality_review": "gemini-2.5-flash_fail_closed",
         "melodic_originality_certification": "not_claimed",
     }
 
@@ -297,7 +307,10 @@ def worker(
         try:
             if not job.get("music"):
                 generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
-                chosen = select_candidate(generated, _history_hashes(state))
+                chosen = select_candidate(
+                    generated, _history_hashes(state),
+                    reviewer=lambda path: review_audio(path, job["title"], job["style"], job["lane"]),
+                )
                 job["music"] = chosen
                 job["status"] = "music_ready"
                 atomic_json(q.state_path, state)
