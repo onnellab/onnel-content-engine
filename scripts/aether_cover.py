@@ -61,7 +61,7 @@ def _request(project: str, prompt: str, token: str, *, send=None, timeout: int =
     body = json.dumps({
         "contents": {"role": "USER", "parts": [{"text": prompt}]},
         "generationConfig": {
-            "responseModalities": ["IMAGE"],
+            "responseModalities": ["TEXT", "IMAGE"],
             "imageConfig": {"aspectRatio": "16:9"},
             "candidateCount": 1,
         },

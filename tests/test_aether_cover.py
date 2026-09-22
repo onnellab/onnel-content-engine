@@ -29,6 +29,20 @@ class CoverTests(unittest.TestCase):
         for expected in ["16:9", "upper-left", "Do not render any letters", "floating islands"]:
             self.assertIn(expected, prompt)
 
+    def test_request_uses_text_and_image_modalities(self):
+        captured = {}
+        raw = b"x" * 2048
+        payload = json.dumps({"candidates": [{"content": {"parts": [
+            {"text": "generated"},
+            {"inlineData": {"mimeType": "image/png", "data": base64.b64encode(raw).decode()}},
+        ]}}]}).encode()
+        def send(req):
+            captured["body"] = json.loads(req.data)
+            return Response(payload)
+        aether_cover._request("aether-music-123", "prompt", "token", send=send)
+        self.assertEqual(["TEXT", "IMAGE"], captured["body"]["generationConfig"]["responseModalities"])
+        self.assertEqual("16:9", captured["body"]["generationConfig"]["imageConfig"]["aspectRatio"])
+
     def test_request_parses_one_inline_image(self):
         raw = b"x" * 2048
         payload = json.dumps({"candidates": [{"content": {"parts": [{
