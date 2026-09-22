@@ -6,20 +6,20 @@
 <body><main><div class="card">
 <h1>Lyria 3 Pro · Aether Inn</h1>
 <p>Google Cloud 프로젝트와 생성 한도만 저장합니다. OAuth/ADC 토큰은 이 페이지나 GitHub에 저장하지 않습니다.</p>
-<div class="checks"><div class="badge" id="gcloud">gcloud · —</div><div class="badge" id="adc">Google ADC · —</div><div class="badge" id="ready">자동 생성 · —</div></div>
+<div class="checks"><div class="badge" id="gcloud">gcloud · —</div><div class="badge" id="adc">Google ADC · —</div><div class="badge" id="ready">전체 자동화 · —</div></div>
 <div class="grid">
 <div class="field full"><label for="project">Google Cloud Project ID</label><input id="project" autocomplete="off" spellcheck="false" placeholder="aether-inn-music"></div>
 <div class="field"><label for="count">후보 수 / 실행</label><input id="count" type="number" min="1" max="5" value="1"></div>
 <div class="field"><label for="cap">실행당 최대 예상비용 (USD)</label><input id="cap" type="number" min="0" max="5" step="0.01" value="0.08"></div>
-<div class="field full"><label><input id="enabled" type="checkbox"> 화·목·토 Lyria 자동 생성을 허용</label></div>
+<div class="field full"><label><input id="enabled" type="checkbox"> 화·목·토 곡 + 커버 + 영상 + YouTube 전체 자동화를 허용</label></div>
 </div>
 <div class="row"><button id="save">설정 저장</button><button id="check" class="secondary">인증 상태 확인</button><button id="reset" class="danger">설정 초기화</button><a class="button secondary" href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud 열기</a></div>
 <div id="status" class="status" role="status" aria-live="polite">상태 확인 중…</div>
-<p class="note">최초 1회 Mac 터미널에서 <code>gcloud auth application-default login</code> 후 <code>gcloud auth application-default set-quota-project PROJECT_ID</code>를 실행하세요. 모델은 <code>lyria-3-pro-preview</code>, 위치는 <code>global</code>로 고정됩니다.</p>
+<p class="note">최초 1회 Mac 터미널에서 <code>gcloud auth application-default login</code> 후 <code>gcloud auth application-default set-quota-project PROJECT_ID</code>를 실행하세요. 음악은 <code>lyria-3-pro-preview</code>, 커버 배경은 <code>gemini-2.5-flash-image</code>, 위치는 <code>global</code>을 사용합니다.</p>
 </div></main>
 <script nonce="__NONCE__">
 (()=>{'use strict';const csrf='__CSRF__',q=id=>document.getElementById(id),headers={'Content-Type':'application/json','X-ONNELLAB-CSRF':csrf};
-const state=s=>{q('gcloud').textContent='gcloud · '+(s.gcloud_ready?'OK':'필요');q('adc').textContent='Google ADC · '+(s.auth_ready?'OK':'필요');q('ready').textContent='자동 생성 · '+(s.state==='ready'?'준비됨':'대기');if(s.project_id)q('project').value=s.project_id;if(Number.isInteger(s.candidate_count))q('count').value=s.candidate_count;if(typeof s.max_usd_per_run==='number')q('cap').value=s.max_usd_per_run;if(typeof s.enabled==='boolean')q('enabled').checked=s.enabled;q('status').textContent='상태: '+s.state+(s.auth_error?'\n인증: '+s.auth_error:'')+'\n모델: '+(s.model||'lyria-3-pro-preview')+' · 위치: '+(s.location||'global')+'\n실제 유료 생성 호출은 여기서 실행하지 않습니다.'};
+const state=s=>{q('gcloud').textContent='gcloud · '+(s.gcloud_ready?'OK':'필요');q('adc').textContent='Google ADC · '+(s.auth_ready?'OK':'필요');q('ready').textContent='전체 자동화 · '+(s.state==='ready'?'준비됨':'대기');if(s.project_id)q('project').value=s.project_id;if(Number.isInteger(s.candidate_count))q('count').value=s.candidate_count;if(typeof s.max_usd_per_run==='number')q('cap').value=s.max_usd_per_run;if(typeof s.enabled==='boolean')q('enabled').checked=s.enabled;q('status').textContent='상태: '+s.state+(s.auth_error?'\n인증: '+s.auth_error:'')+'\n모델: '+(s.model||'lyria-3-pro-preview')+' · 위치: '+(s.location||'global')+'\n연결 확인은 유료 음악·이미지 생성을 실행하지 않습니다. 활성화 시 신곡마다 Lyria 후보와 Gemini 2.5 Flash Image 커버 1장을 생성할 수 있습니다.'};
 async function get(){const r=await fetch('/api/status',{headers:{'X-ONNELLAB-CSRF':csrf},cache:'no-store'});state(await r.json())}
 async function post(path,body){const r=await fetch(path,{method:'POST',headers,body:JSON.stringify(body),cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error||'request_failed');state(d)}
 q('save').onclick=()=>post('/api/save',{project_id:q('project').value,candidate_count:Number(q('count').value),max_usd_per_run:Number(q('cap').value),enabled:q('enabled').checked}).catch(e=>q('status').textContent='오류: '+e.message);

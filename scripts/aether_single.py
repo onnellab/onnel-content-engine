@@ -17,6 +17,7 @@ from aether_compilation import thumbnail
 from aether_compose import audio_duration, media_info, validate_output
 from aether_cover import generate_cover, lane_direction
 from lyria_generate import generate as generate_music
+from lyria_config import connection_status as lyria_connection_status
 from short_video_credentials import credential_status
 from short_video_pipeline import VideoError, atomic_json, digest, file_hash, load_json, run_process
 from short_video_youtube import YouTube, Uploader, UploadError
@@ -190,11 +191,13 @@ def readiness(root=ROOT) -> dict:
     return {
         "profile": "aether_inn",
         "worker": "generated_single",
-        "credentials": credential_status(profile="aether_inn"),
-        "lyria_and_google_adc": "configured_separately",
+        "youtube_credentials": credential_status(profile="aether_inn"),
+        "lyria": lyria_connection_status(check_auth=True),
         "cover_model": "gemini-2.5-flash-image",
-        "render": "implemented",
-        "upload": "implemented",
+        "cover_generation": "implemented_one_request_per_single",
+        "cover_branding": "implemented_svg_matte_gold_serif",
+        "render": "implemented_1920x1080_30fps_h264_yuv420p_aac256",
+        "upload": "implemented_durable_aether_only",
         "technical_candidate_gate": "implemented",
         "melodic_originality_certification": "not_claimed",
     }

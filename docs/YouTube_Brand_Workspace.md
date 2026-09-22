@@ -62,7 +62,7 @@ byte-for-byte. Pull and inspect both repositories before deployment.
 
 Profile-bound reporting and connection UI do not prove public upload eligibility.
 The existing-master compilation renderer and durable Aether-only uploader are now
-implemented in `aether_compilation.py`; see `Aether_Inn_Compilation.md`. New Suno
+implemented in `aether_compilation.py`; see `Aether_Inn_Compilation.md`. New Lyria
 generation, new AI artwork generation and calibrated audio-originality evaluation
 are still unimplemented and must not be substituted with metadata similarity. Never use
 app-Shorts job schemas or default ONNELLAB credentials for music. No Suno API schema

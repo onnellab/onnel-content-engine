@@ -74,7 +74,7 @@ def readiness(root=ROOT):
     return {'profile':'aether_inn','worker':'curated_compilation','credentials':credential_status(profile='aether_inn'),
         'asset_manifest_present':(root/'assets/manifest.json').is_file(),
         'requires':['rights-confirmed curated master audio','theme-specific landscape cover','Aether Inn OAuth'],
-        'new_suno_generation':'not_implemented','new_image_generation':'not_implemented','audio_originality_model':'not_implemented'}
+        'new_single_worker':'scripts/aether_single.py','generated_cover_worker':'scripts/aether_cover.py','audio_originality_model':'not_claimed'}
 
 
 def thumbnail(q,state,job,api):

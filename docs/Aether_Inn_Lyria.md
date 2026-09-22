@@ -92,3 +92,31 @@ The 65-track catalog in `data/aether_catalog.json` is metadata history, not proo
 ## Publication boundary
 
 A successful Lyria response is only the music-generation stage. Public upload still requires an accepted candidate, valid Aether cover, validated 1920×1080/30fps/H.264/yuv420p/AAC 256 kbps render, explicitly bound Aether Inn YouTube credentials, durable upload/reconciliation handling, and actual public-state verification. Never report `publication_complete` from Lyria generation alone.
+
+## End-to-end single worker
+
+The new-single production path is implemented in `scripts/aether_single.py`.
+
+Dry readiness check:
+
+    python3 -B scripts/aether_single.py readiness
+
+Production invocation:
+
+    python3 -B scripts/aether_single.py worker --slot YYYY-MM-DD --lane skybound_flight --title "Sails Above the Cloud Sea" --style "Buoyant nostalgic JRPG flight theme with warm guitar and strings" --execute --publish
+
+The durable worker performs these stages in order:
+1. Verify the explicitly bound Aether Inn YouTube connection before paid generation.
+2. Call Lyria 3 Pro under the locally approved candidate count and music spend cap.
+3. Reject missing, malformed, exact-repeat, or out-of-range audio candidates and select a technically valid candidate deterministically.
+4. Generate one 16:9 landscape background with `gemini-2.5-flash-image` using the same Google Cloud ADC/project.
+5. Keep the generated background text-free, then apply deterministic upper-left matte-gold serif title and small Aether Inn branding through a local SVG overlay, without a black title panel.
+6. Render the single at 1920×1080, 30 fps, H.264, yuv420p, AAC 256 kbps.
+7. Create a 1280×720 thumbnail from the same branded cover.
+8. Upload with the Aether Inn OAuth profile only, AI-generated disclosure enabled, Music category, durable resumable state, and fail-closed public approval policy.
+9. Reconcile the same upload/video ID after uncertain provider states and set the thumbnail on that same video.
+10. Report `publication_complete` only after the video is observed public and the thumbnail API confirms success.
+
+A failed later stage does not regenerate an already-paid Lyria candidate. The job keeps the music and cover hashes and resumes from the missing stage on the next run.
+
+The automatic candidate gate is a production/technical gate, not a copyright or melodic-originality certification. Exact hashes can reject identical files, but the system does not claim that a generated melody is legally or musically unique.

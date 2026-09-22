@@ -2,9 +2,10 @@
 
 ## Scope and actual readiness
 
-This worker combines already approved existing masters. It is NOT a Suno generator,
-a new-image generator, or a model that can certify musical originality. The metadata
-planner remains clearly distinguished from actual audio measurements. Registered
+This worker combines already approved existing masters. New-single generation is
+handled separately by aether_single.py; this compilation worker does not generate
+new music or covers and does not certify musical originality. The metadata planner
+remains clearly distinguished from actual audio measurements. Registered
 masters must have explicitly confirmed commercial-use permissions and previous
 quality acceptance. Neither of these flags may be inferred from a file name, a paid
 account's existence, the source model version, or a planned upload schedule.
@@ -92,7 +93,9 @@ A real 62-second technical fixture render passed 1080p/30fps/H.264/yuv420p/AAC c
 crossfade chapter starts and duplicate decoded-audio rejection. This was not the
 owner's music or a production 30-minute compilation. Fake-provider tests verify
 same-slot idempotence and exact profile binding; no live upload has occurred.
-No actual master/cover manifest or Aether OAuth grant was present at the readiness
-check. Those must be supplied before producing the first real collection. New Suno
-tracks, new AI cover generation and audio-originality assessment remain unfinished;
-connecting YouTube alone does not complete the single-production pipeline.
+A production compilation still requires an actual registered master/cover manifest.
+The Aether Inn YouTube credential profile is implemented and separately bound, but a
+live public production upload has not been used as a fixture. The separate Lyria/Gemini
+single worker now handles new music, generated branded covers, rendering and durable
+Aether-only publication. Neither worker claims melodic-originality or copyright
+certification.
