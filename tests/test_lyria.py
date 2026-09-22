@@ -82,6 +82,38 @@ class LyriaGenerationTests(unittest.TestCase):
         ]:
             self.assertNotIn(forbidden, prompt)
 
+    def test_aether_prompt_supports_high_motion_travel_without_battle_music(self):
+        prompt = lyria_generate.build_aether_prompt(
+            "Sails Above the Cloud Sea",
+            "Skybound flight, heart-racing fantasy travel, buoyant 6/8, warm strings and guitar",
+        )
+        for required in [
+            "instead of defaulting every song to a calm field cue",
+            "Flight and skybound themes",
+            "Sailing and open-sea themes",
+            "Diving, underwater ruins and deepwater themes",
+            "March, caravan, festival-procession and homecoming themes",
+            "genuinely exhilarating",
+            "No battle-music drive",
+        ]:
+            self.assertIn(required, prompt)
+
+    def test_single_lane_registry_contains_requested_variety(self):
+        path = Path(__file__).resolve().parents[1] / "data" / "aether_single_lanes.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        lanes = {row["id"]: row for row in data["lanes"]}
+        for required in [
+            "skybound_flight",
+            "open_sea_voyage",
+            "deepwater_descent",
+            "traveler_march",
+            "triumphal_return",
+            "frontier_surge",
+        ]:
+            self.assertIn(required, lanes)
+        self.assertEqual(2, data["rules"]["max_consecutive_calm"])
+        self.assertGreaterEqual(data["rules"]["min_high_motion_in_window"], 3)
+
     def test_cost_and_configured_candidate_cap(self):
         self.assertEqual(0.08, lyria_generate.estimate_cost(1))
         self.assertEqual(0.4, lyria_generate.estimate_cost(5))
