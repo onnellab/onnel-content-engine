@@ -92,5 +92,7 @@ class SnapshotIsolation(unittest.TestCase):
         after=replace_workspace(page)
         pattern=r'<script[^>]*id="[^"]+-data"[^>]*>.*?</script>'
         self.assertEqual(re.findall(pattern,page,re.S),re.findall(pattern,after,re.S))
+        self.assertEqual(1,after.count("const root=document.getElementById('youtube-brands')"))
+        self.assertEqual(after,replace_workspace(after))
 
 if __name__=='__main__':unittest.main()
