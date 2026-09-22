@@ -116,6 +116,40 @@ def _history_hashes(state: dict) -> set[str]:
     }
 
 
+
+def recover_generated_result(folder: Path) -> dict | None:
+    root = Path(folder) / "lyria"
+    if not root.is_dir():
+        return None
+    manifests = sorted(root.glob("*/manifest.json"))
+    if not manifests:
+        return None
+    candidates = []
+    seen = set()
+    for manifest in manifests:
+        try:
+            data = load_json(manifest, limit=2 * 1024 * 1024)
+        except Exception:
+            raise VideoError("aether_single_generation_manifest_invalid") from None
+        if data.get("state") != "generated" or not isinstance(data.get("candidates"), list):
+            raise VideoError("aether_single_generation_manifest_invalid")
+        for row in data["candidates"]:
+            if not isinstance(row, dict):
+                raise VideoError("aether_single_generation_manifest_invalid")
+            path = Path(row.get("file", ""))
+            sha = row.get("sha256")
+            if path.is_symlink() or not path.is_file() or not re.fullmatch(r"[0-9a-f]{64}", str(sha)):
+                raise VideoError("aether_single_generation_manifest_invalid")
+            if file_hash(path) != sha:
+                raise VideoError("aether_single_generation_manifest_invalid")
+            if sha in seen:
+                continue
+            seen.add(sha)
+            candidates.append(dict(row))
+    if not candidates:
+        return None
+    return {"state": "recovered", "candidates": candidates, "generation_manifest_count": len(manifests)}
+
 def select_candidate(result: dict, prior_hashes: set[str], *, reviewer=None) -> dict:
     candidates = result.get("candidates") or []
     technical = []
@@ -306,7 +340,9 @@ def worker(
         folder = directory(q.root / "jobs" / job["id"])
         try:
             if not job.get("music"):
-                generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
+                generated = recover_generated_result(folder)
+                if generated is None:
+                    generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
                 chosen = select_candidate(
                     generated, _history_hashes(state),
                     reviewer=lambda path: review_audio(path, job["title"], job["style"], job["lane"]),

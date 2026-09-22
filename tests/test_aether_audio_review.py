@@ -45,6 +45,13 @@ class ReviewTests(unittest.TestCase):
             self.assertEqual("audio/mpeg",parts[1]["inlineData"]["mimeType"])
             self.assertEqual("application/json",body_seen["generationConfig"]["responseMimeType"])
 
+    def test_prompt_forbids_accept_with_scores_below_local_thresholds(self):
+        text=review.prompt("Title","Style","skybound_flight")
+        self.assertIn('decision="accept" is allowed ONLY',text)
+        self.assertIn('aether_fit>=7',text)
+        self.assertIn('ending_resolution>=7',text)
+        self.assertIn('all 5s',text)
+
     def test_unknown_reason_rejected(self):
         doc=accepted_doc();doc["reason_codes"]=["made_up"]
         with self.assertRaises(Exception): review.validate(doc)

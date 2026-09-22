@@ -143,6 +143,21 @@ class SingleTests(unittest.TestCase):
                 )
             self.assertFalse(called)
 
+    def test_existing_paid_generation_is_recovered_without_new_generation(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve()
+            jobdir=root/"job"
+            gen=jobdir/"lyria"/"run1"
+            gen.mkdir(parents=True)
+            audio=gen/"candidate-01.mp3"
+            audio.write_bytes(b"x"*4096)
+            manifest={"state":"generated","candidates":[{"index":1,"file":str(audio),"sha256":file_hash(audio)}]}
+            (gen/"manifest.json").write_text(json.dumps(manifest))
+            recovered=aether_single.recover_generated_result(jobdir)
+            self.assertEqual("recovered",recovered["state"])
+            self.assertEqual(1,len(recovered["candidates"]))
+            self.assertEqual(file_hash(audio),recovered["candidates"][0]["sha256"])
+
     def test_wrong_youtube_profile_rejected_before_generation(self):
         class Wrong:
             profile = "onnellab"

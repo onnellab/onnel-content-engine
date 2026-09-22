@@ -34,6 +34,11 @@ Require prompt musical movement, a memorable but non-fatiguing melody, coherent 
 Reject combat aggression, EDM/pop drops, trailer bombast, piercing high piano, unwanted vocals, obvious artifacts or a pad-only intro.
 Listen especially to the final 10-15 seconds. Major, minor and modal endings are valid, but the ending must resolve to its tonal home.
 Reject a leading-tone, dominant, unresolved suspension or other clearly unfinished ending.
+Calibration rule: decision="accept" is allowed ONLY when aether_fit>=7, repeat_listening_comfort>=6,
+arrangement_development>=6, ending_resolution>=7, technical_cleanliness>=7, and none of
+unresolved_ending, technical_artifact, edm_or_pop_energy, or trailer_bombast is true.
+If any of those requirements fail, decision MUST be "reject" and reason_codes MUST explain the failure.
+Do not return decision="accept" with middling default scores such as all 5s.
 Return JSON only:
 {{"decision":"accept|reject","scores":{{"aether_fit":0,"melody_memorability":0,"repeat_listening_comfort":0,
 "arrangement_development":0,"ending_resolution":0,"technical_cleanliness":0}},
