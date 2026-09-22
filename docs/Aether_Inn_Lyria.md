@@ -51,15 +51,21 @@ Every new single must begin with musical movement immediately; prefer warm guita
 
 ### Ending contract
 
-The first Lyria test exposed an unwanted ending that flattened away from an otherwise major-key song. Every production prompt must therefore:
-- remain in the original major key;
-- use a clear authentic dominant-to-tonic cadence (V–I);
-- resolve the final melody note to the tonic;
-- finish on the tonic major chord and let it ring naturally;
-- not flatten the final melody note;
-- use no minor tonic, borrowed-minor/modal-mixture ending, ♭VII ending, deceptive cadence, or unresolved suspended ending.
+The first Lyria test exposed an unresolved ending: a C-major piece stopped on B, the leading tone, instead of resolving to C. The rule is therefore about tonal resolution, not about forcing every song into major.
 
-Do not weaken these rules merely to increase candidate variety.
+Every production prompt must:
+- allow major, minor, or modal writing when it fits the concept;
+- preserve a coherent tonal center and mode unless a modulation is intentionally part of the concept;
+- bring the final melody to the tonic/home note in a natural register, often the same or a higher octave;
+- land the final harmony on the tonic/home chord appropriate to the established mode;
+- in ordinary major/minor tonality, prefer a clear authentic cadence such as V–I or V–i;
+- for a genuinely modal piece, use an equally stable cadence back to the modal tonic;
+- let the final tonic/home harmony ring naturally;
+- not end on the leading tone, a note one semitone below the tonic, the dominant, or another obviously unresolved tendency tone;
+- not introduce an abrupt major/minor/modal shift only at the ending unless the concept explicitly requires it;
+- avoid deceptive cadences, unresolved suspensions, and ambiguous fades as the default ending.
+
+The important quality gate is “this feels finished and back home,” not “this must be major.”
 
 ## Originality and quality
 
