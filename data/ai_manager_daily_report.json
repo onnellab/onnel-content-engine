@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-23T20:20:23+00:00",
+  "generated_at": "2026-09-23T23:40:31+00:00",
   "summary": {
-    "reviews_triaged": 9,
+    "reviews_triaged": 10,
     "high_risk_reports": 0,
     "pricing_patterns": 0,
     "replies_queued": 0,
-    "replies_published": 0,
+    "replies_published": 1,
     "issues_created": 0,
     "open_app_github_issues": 0,
     "new_crash_incidents": 0,
