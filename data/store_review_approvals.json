@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T23:35:00+00:00",
+  "updated_at": "2026-09-23T23:35:47+00:00",
   "approvals": [
     {
       "approval_id": "review-report-6b652b2227b5da3cd8607adf",
@@ -30,7 +30,12 @@
       "approved_at": "2026-09-24T08:35:00+09:00",
       "approved_by": "owner_explicit_chat_approval",
       "note": "Owner requested a reply consistent with the prior TagWeaver paid-feature response tone.",
-      "status": "queued"
+      "status": "published",
+      "publication": {
+        "attempts": 1,
+        "published_at": "2026-09-23T23:35:47+00:00",
+        "external_response_id": "1790206546"
+      }
     }
   ]
 }
