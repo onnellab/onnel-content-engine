@@ -16,6 +16,13 @@
       "published_at": "2026-09-20T03:10:00.033Z",
       "status": "processed",
       "processed_at": "2026-09-20T03:10:18+00:00"
+    },
+    {
+      "manual_key": "TOPIC-0004::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7508316320212422656/",
+      "published_at": "2026-09-23T00:09:26.931Z",
+      "status": "new"
     }
   ]
 }
