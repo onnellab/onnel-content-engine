@@ -16,8 +16,30 @@ The workflow is:
 5. Verify the facts and tone, edit if needed, and copy the reply.
 6. Publish the reply in App Store Connect or Google Play Console.
 
-Reply publication is intentionally manual. A generated draft must never be
-posted without human review.
+Reply publication is manual by default. A generated draft must not be posted
+without either a specific human approval or an explicit owner-approved standing
+automation policy.
+
+### Owner-approved scheduled reply exception
+
+On 2026-09-24 the owner authorized the daily operations automation to reply
+automatically to newly synchronized text reviews. This standing approval applies
+only to concise public developer replies that follow the existing ONNELLAB reply
+tone and the fact-grounding rules in this guide. The automation must use the
+review language where practical, may consult prior developer replies for the same
+app and issue type as tone precedents, and must ground product or pricing claims
+in the current repository facts. It must not invent a fix, cause, release date,
+refund result, entitlement, price, or future feature.
+
+Rating-only records are never auto-replied. Security, privacy, billing-dispute,
+data-loss, or otherwise case-specific reviews may receive only a factual
+acknowledgement and safe support direction unless repository evidence supports
+more. The automation must never delete, hide, moderate, or alter the review.
+Each automatic reply still uses the durable approval/publisher audit path and
+must record that it was approved by the owner standing policy. After publication,
+reviews are synchronized again so the dashboard reflects the store-observed
+developer reply. Any uncertain publication result is retried only through the
+same durable record; never create a duplicate reply record to escape uncertainty.
 
 Selecting **Approve & queue** in the dashboard records the exact edited reply,
 review ID, platform, timestamp, and approval actor in
