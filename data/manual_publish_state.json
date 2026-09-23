@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-23T00:13:13+00:00",
+  "updated_at": "2026-09-23T00:13:48+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -281,6 +281,19 @@
       "verification_method": "work_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
       "published_at": "2026-09-23T00:12:46.246Z"
+    },
+    "TOPIC-0004::hashnode::en::markdown": {
+      "topic_id": "TOPIC-0004",
+      "platform": "hashnode",
+      "language": "en",
+      "template_id": "markdown",
+      "marked_at": "2026-09-23T00:13:48+00:00",
+      "marked_by": "chatgpt_work_browser",
+      "posted_url": "https://onnellab.hashnode.dev/what-makes-large-text-files-slow-to-open",
+      "verified_at": "2026-09-23T00:13:48+00:00",
+      "verification_method": "work_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "2026-09-23T00:13:30.348Z"
     }
   }
 }
