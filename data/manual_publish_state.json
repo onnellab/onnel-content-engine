@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-23T00:09:43+00:00",
+  "updated_at": "2026-09-23T00:13:13+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -268,6 +268,19 @@
       "verification_method": "work_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
       "published_at": "2026-09-23T00:09:26.931Z"
+    },
+    "TOPIC-0029::linkedin::en::linkedin": {
+      "topic_id": "TOPIC-0029",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "marked_at": "2026-09-23T00:13:13+00:00",
+      "marked_by": "chatgpt_work_browser",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7508317053649338368/",
+      "verified_at": "2026-09-23T00:13:13+00:00",
+      "verification_method": "work_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "2026-09-23T00:12:46.246Z"
     }
   }
 }
