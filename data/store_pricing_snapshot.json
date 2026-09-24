@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "kind": "onnellab_store_pricing_snapshot",
+  "checked_at": "2026-09-24T00:16:51+00:00",
+  "territory": "KR",
+  "products": [
+    {
+      "app_id": "APP-0006",
+      "app_slug": "aligna",
+      "app_name": "Aligna",
+      "platform": "ios",
+      "product_type": "in_app_purchase",
+      "product_id": "aligna_pro",
+      "base_plan_id": "",
+      "product_name": "Aligna pro",
+      "price": "3300",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "APPROVED",
+      "source": "app_store_connect_iap_price_schedule",
+      "checked_at": "2026-09-24T00:16:51+00:00"
+    },
+    {
+      "app_id": "APP-0005",
+      "app_slug": "clipnest",
+      "app_name": "ClipNest",
+      "platform": "ios",
+      "product_type": "in_app_purchase",
+      "product_id": "clipnest_pro",
+      "base_plan_id": "",
+      "product_name": "ClipNest Pro",
+      "price": "4400",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "APPROVED",
+      "source": "app_store_connect_iap_price_schedule",
+      "checked_at": "2026-09-24T00:16:51+00:00"
+    },
+    {
+      "app_id": "APP-0001",
+      "app_slug": "quivra",
+      "app_name": "Quivra",
+      "platform": "ios",
+      "product_type": "paid_download",
+      "product_id": "6759565093",
+      "base_plan_id": "",
+      "product_name": "Quivra – MP3 미디어 변환기",
+      "price": "3300",
+      "currency": "KRW",
+      "price_display": "￦3,300",
+      "territory": "KR",
+      "state": "available",
+      "source": "apple_itunes_lookup",
+      "checked_at": "2026-09-24T00:16:51+00:00"
+    },
+    {
+      "app_id": "APP-0001",
+      "app_slug": "quivra",
+      "app_name": "Quivra",
+      "platform": "android",
+      "product_type": "paid_download",
+      "product_id": "com.onnellab.quivra2",
+      "base_plan_id": "",
+      "product_name": "Quivra",
+      "price": "3300",
+      "currency": "KRW",
+      "price_display": "₩3,300",
+      "territory": "KR",
+      "state": "available",
+      "source": "google_play_public_page",
+      "checked_at": "2026-09-24T00:16:51+00:00"
+    },
+    {
+      "app_id": "APP-0004",
+      "app_slug": "segra",
+      "app_name": "Segra",
+      "platform": "ios",
+      "product_type": "in_app_purchase",
+      "product_id": "com.onnellab.segra",
+      "base_plan_id": "",
+      "product_name": "Segra Pro",
+      "price": "7700",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "APPROVED",
+      "source": "app_store_connect_iap_price_schedule",
+      "checked_at": "2026-09-24T00:16:51+00:00"
+    },
+    {
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "platform": "ios",
+      "product_type": "in_app_purchase",
+      "product_id": "com.onnellab.tagweaver",
+      "base_plan_id": "",
+      "product_name": "TagWeaver Pro",
+      "price": "5500",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "APPROVED",
+      "source": "app_store_connect_iap_price_schedule",
+      "checked_at": "2026-09-24T00:16:51+00:00"
+    },
+    {
+      "app_id": "APP-0003",
+      "app_slug": "vaultxt",
+      "app_name": "VaultXT",
+      "platform": "ios",
+      "product_type": "in_app_purchase",
+      "product_id": "vaultxt_pro",
+      "base_plan_id": "",
+      "product_name": "VaultXT Pro",
+      "price": "9900",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "APPROVED",
+      "source": "app_store_connect_iap_price_schedule",
+      "checked_at": "2026-09-24T00:16:51+00:00"
+    }
+  ],
+  "stores": [
+    {
+      "app_id": "APP-0001",
+      "app_slug": "quivra",
+      "platform": "ios",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "verified",
+      "error": ""
+    },
+    {
+      "app_id": "APP-0001",
+      "app_slug": "quivra",
+      "platform": "android",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "unavailable",
+      "error": "store_pricing_http_403"
+    },
+    {
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "platform": "ios",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "verified",
+      "error": ""
+    },
+    {
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "platform": "android",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "unavailable",
+      "error": "store_pricing_http_403"
+    },
+    {
+      "app_id": "APP-0003",
+      "app_slug": "vaultxt",
+      "platform": "ios",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "verified",
+      "error": ""
+    },
+    {
+      "app_id": "APP-0003",
+      "app_slug": "vaultxt",
+      "platform": "android",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "unavailable",
+      "error": "store_pricing_http_403"
+    },
+    {
+      "app_id": "APP-0004",
+      "app_slug": "segra",
+      "platform": "ios",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "verified",
+      "error": ""
+    },
+    {
+      "app_id": "APP-0004",
+      "app_slug": "segra",
+      "platform": "android",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "unavailable",
+      "error": "store_pricing_http_403"
+    },
+    {
+      "app_id": "APP-0005",
+      "app_slug": "clipnest",
+      "platform": "ios",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "verified",
+      "error": ""
+    },
+    {
+      "app_id": "APP-0006",
+      "app_slug": "aligna",
+      "platform": "ios",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "verified",
+      "error": ""
+    },
+    {
+      "app_id": "APP-0006",
+      "app_slug": "aligna",
+      "platform": "android",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "unavailable",
+      "error": "store_pricing_http_403"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "platform": "ios",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "not_released",
+      "error": ""
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "platform": "android",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "not_released",
+      "error": ""
+    },
+    {
+      "app_id": "APP-0008",
+      "app_slug": "papira",
+      "platform": "ios",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "in_review",
+      "error": ""
+    },
+    {
+      "app_id": "APP-0008",
+      "app_slug": "papira",
+      "platform": "android",
+      "checked_at": "2026-09-24T00:16:51+00:00",
+      "state": "in_review",
+      "error": ""
+    }
+  ]
+}
