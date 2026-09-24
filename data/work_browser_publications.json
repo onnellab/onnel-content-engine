@@ -54,7 +54,8 @@
       "platform": "x",
       "posted_url": "https://x.com/onnellab/status/2102912160812937219",
       "published_at": "2026-09-24T00:05:48.566Z",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-09-24T00:06:05+00:00"
     }
   ]
 }
