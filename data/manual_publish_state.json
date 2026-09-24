@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-24T00:06:05+00:00",
+  "updated_at": "2026-09-24T00:08:04+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -320,6 +320,19 @@
       "verification_method": "work_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
       "published_at": "2026-09-24T00:05:48.566Z"
+    },
+    "TOPIC-0029::x::en::x": {
+      "topic_id": "TOPIC-0029",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "marked_at": "2026-09-24T00:08:04+00:00",
+      "marked_by": "chatgpt_work_browser",
+      "posted_url": "https://x.com/onnellab/status/2102912664032956563",
+      "verified_at": "2026-09-24T00:08:04+00:00",
+      "verification_method": "work_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "2026-09-24T00:07:46.026Z"
     }
   }
 }
