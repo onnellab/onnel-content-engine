@@ -78,7 +78,8 @@
       "platform": "x",
       "posted_url": "https://x.com/onnellab/status/2102913400145875117",
       "published_at": "2026-09-24T00:10:30.317Z",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-09-24T00:10:47+00:00"
     }
   ]
 }
