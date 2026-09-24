@@ -716,6 +716,41 @@ def _store_pricing_products(path: Path = DEFAULT_STORE_PRICING_SNAPSHOT) -> list
     ]
 
 
+def _store_pricing_states(path: Path = DEFAULT_STORE_PRICING_SNAPSHOT) -> list[dict[str, object]]:
+    if not path.exists():
+        return []
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, json.JSONDecodeError):
+        return []
+    if payload.get("schema_version") != 1 or payload.get("kind") != "onnellab_store_pricing_snapshot":
+        return []
+    rows = payload.get("stores", [])
+    if not isinstance(rows, list):
+        return []
+    states: list[dict[str, object]] = []
+    for row in rows:
+        if not isinstance(row, dict) or not row.get("app_slug") or not row.get("platform"):
+            continue
+        state: dict[str, object] = {
+            str(key): str(value or "")
+            for key, value in row.items()
+            if key != "errors"
+        }
+        raw_errors = row.get("errors", [])
+        state["errors"] = [str(value) for value in raw_errors if value] if isinstance(raw_errors, list) else []
+        states.append(state)
+    return states
+
+
+def _store_pricing_error_for_product(state: dict[str, object], product_type: str) -> str:
+    raw_errors = state.get("errors", [])
+    errors = [str(value) for value in raw_errors if value] if isinstance(raw_errors, list) else []
+    if errors:
+        return errors[0] if product_type == "paid_download" else errors[-1]
+    return str(state.get("error", "") or "")
+
+
 def _normalized_price_name(value: str) -> str:
     return " ".join(re.findall(r"[a-z0-9]+", value.casefold()))
 
@@ -769,9 +804,14 @@ def product_pricing_items(
     provider_prices = provider_price_by_unit(ai_provider_pricing_path)
     melivra_policy = read_melivra_ai_credit_policy(melivra_ai_credit_policy_path)
     live_prices = _store_pricing_products(store_pricing_snapshot_path)
+    live_states = _store_pricing_states(store_pricing_snapshot_path)
     live_by_slug: dict[str, list[dict[str, str]]] = {}
     for live in live_prices:
         live_by_slug.setdefault(live.get("app_slug", ""), []).append(live)
+    live_state_by_key = {
+        (state.get("app_slug", ""), state.get("platform", "")): state
+        for state in live_states
+    }
     explicit_by_slug: dict[str, list[dict[str, str]]] = {}
     for row in explicit_rows:
         explicit_by_slug.setdefault(row.get("app_slug", ""), []).append(row)
@@ -802,41 +842,81 @@ def product_pricing_items(
             price_amount = parse_float(explicit.get("price", ""))
             currency = explicit.get("currency", "")
             live_matches = _select_live_price_rows(explicit, live_by_slug.get(slug, []))
-            if live_matches:
-                for live in live_matches:
-                    live_currency = live.get("currency", "")
-                    live_amount = live.get("price", "")
-                    item = {
-                        **base,
-                        "product_name": explicit.get("product_name", ""),
-                        "product_type": product_type,
-                        "price": live.get("price_display") or format_price_value(live_amount, live_currency),
-                        "price_amount": live_amount,
-                        "currency": live_currency,
-                        "platform": live.get("platform", ""),
-                        "store_product_id": live.get("product_id", ""),
-                        "store_base_plan_id": live.get("base_plan_id", ""),
-                        "price_source": live.get("source", ""),
-                        "price_verification": "live_store",
-                        "price_note": (
-                            "Live App Store price (Korea)"
-                            if live.get("platform") == "ios"
-                            else "Live Google Play price (Korea)"
-                        ),
-                        "checked_at": live.get("checked_at", "") or base["checked_at"],
-                    }
-                    if slug == "melivra" and product_type == "ai_credit":
-                        item.update(
-                            melivra_ai_credit_economics(
-                                parse_int_from_product_name(explicit.get("product_name", "")),
-                                parse_float(live_amount),
-                                live_currency,
-                                provider_prices,
-                                melivra_policy,
-                            )
+            matched_platforms: set[str] = set()
+            for live in live_matches:
+                live_currency = live.get("currency", "")
+                live_amount = live.get("price", "")
+                platform = live.get("platform", "")
+                matched_platforms.add(platform)
+                item = {
+                    **base,
+                    "product_name": explicit.get("product_name", ""),
+                    "product_type": product_type,
+                    "price": live.get("price_display") or format_price_value(live_amount, live_currency),
+                    "price_amount": live_amount,
+                    "currency": live_currency,
+                    "platform": platform,
+                    "store_product_id": live.get("product_id", ""),
+                    "store_base_plan_id": live.get("base_plan_id", ""),
+                    "price_source": live.get("source", ""),
+                    "price_verification": "live_store",
+                    "price_note": (
+                        "Live App Store price (Korea)"
+                        if platform == "ios"
+                        else "Live Google Play price (Korea)"
+                    ),
+                    "checked_at": live.get("checked_at", "") or base["checked_at"],
+                }
+                if slug == "melivra" and product_type == "ai_credit":
+                    item.update(
+                        melivra_ai_credit_economics(
+                            parse_int_from_product_name(explicit.get("product_name", "")),
+                            parse_float(live_amount),
+                            live_currency,
+                            provider_prices,
+                            melivra_policy,
                         )
-                    items.append(item)
+                    )
+                items.append(item)
+
+            expected_platforms: list[str] = []
+            if row.get("status") == "released":
+                if base["app_store_url"]:
+                    expected_platforms.append("ios")
+                if base["play_store_url"]:
+                    expected_platforms.append("android")
+            for platform in expected_platforms:
+                if platform in matched_platforms:
+                    continue
+                source_state = live_state_by_key.get((slug, platform), {})
+                item = {
+                    **base,
+                    "product_name": explicit.get("product_name", ""),
+                    "product_type": product_type,
+                    "price": format_price_value(explicit.get("price", ""), currency),
+                    "price_amount": explicit.get("price", ""),
+                    "currency": currency,
+                    "platform": platform,
+                    "price_source": "manual_registry",
+                    "price_verification": "manual_only",
+                    "price_note": explicit.get("price_note", "Manual price registry"),
+                    "price_error": _store_pricing_error_for_product(source_state, product_type),
+                    "checked_at": source_state.get("checked_at", "") or base["checked_at"],
+                }
+                if slug == "melivra" and product_type == "ai_credit":
+                    item.update(
+                        melivra_ai_credit_economics(
+                            parse_int_from_product_name(explicit.get("product_name", "")),
+                            price_amount,
+                            currency,
+                            provider_prices,
+                            melivra_policy,
+                        )
+                    )
+                items.append(item)
+            if live_matches or expected_platforms:
                 continue
+
             item = {
                 **base,
                 "product_name": explicit.get("product_name", ""),
@@ -1858,6 +1938,7 @@ def html_document(
         priceCheckNeeded: '스토어 확인 필요',
         liveStorePrice: '스토어 실가격 확인',
         manualPriceOnly: '수동 등록값 · 실가격 미확인',
+        priceSourceBlocker: '실가격 확인 오류',
         localPriceMetadata: '공개 랜딩 페이지 가격 메타데이터',
         liveAppStorePrice: 'App Store 한국 실가격',
         liveGooglePlayPrice: 'Google Play 한국 실가격',
@@ -2147,6 +2228,7 @@ def html_document(
         priceCheckNeeded: 'Check store',
         liveStorePrice: 'live store prices verified',
         manualPriceOnly: 'manual registry · live price unverified',
+        priceSourceBlocker: 'live price blocker',
         localPriceMetadata: 'Public landing page metadata',
         liveAppStorePrice: 'Live App Store Korea price',
         liveGooglePlayPrice: 'Live Google Play Korea price',
@@ -4114,8 +4196,7 @@ def html_document(
     function renderPricingStatusSummary() {{
       pricingStatusGrid.textContent = '';
       const appCount = new Set(pricingItems.map((item) => item.app_slug || item.app_name)).size;
-      const explicitPrices = pricingItems.filter((item) => item.price).length;
-      const needsStoreCheck = pricingItems.length - explicitPrices;
+      const needsStoreCheck = pricingItems.filter((item) => item.price_verification !== 'live_store').length;
       const livePrices = pricingItems.filter((item) => item.price_verification === 'live_store').length;
       const aiPricingNote = aiProviderPricingSummaryText();
       pricingStatusSummary.textContent = `${{pricingItems.length}} ${{t('paidProduct')}} / ${{appCount}} ${{t('appsWord')}} / ${{livePrices}} ${{t('liveStorePrice')}} / ${{needsStoreCheck}} ${{t('priceCheckNeeded')}}${{aiPricingNote ? ' / ' + aiPricingNote : ''}}`;
@@ -4132,7 +4213,7 @@ def html_document(
         const title = document.createElement('strong');
         title.appendChild(profileLink(group.app_name || t('none'), group.app_slug ? `/apps/${{group.app_slug}}/` : '/apps/'));
         const cardSummary = document.createElement('span');
-        const missingPrices = group.items.filter((item) => !item.price).length;
+        const missingPrices = group.items.filter((item) => item.price_verification !== 'live_store').length;
         cardSummary.textContent = `${{group.items.length}} ${{t('paidProduct')}} / ${{missingPrices}} ${{t('priceCheckNeeded')}}`;
         summary.append(title, cardSummary);
         card.appendChild(summary);
@@ -4158,6 +4239,11 @@ def html_document(
             const note = document.createElement('span');
             note.textContent = pricingNoteLabel(item.price_note);
             row.appendChild(note);
+          }}
+          if (item.price_error) {{
+            const blocker = document.createElement('span');
+            blocker.textContent = `${{t('priceSourceBlocker')}}: ${{item.price_error}}`;
+            row.appendChild(blocker);
           }}
           if (item.ai_provider_cost_usd) {{
             const economics = document.createElement('span');

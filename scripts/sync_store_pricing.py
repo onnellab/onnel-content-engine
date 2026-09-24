@@ -26,6 +26,7 @@ from sync_store_reviews import (
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STORES = ROOT / "data" / "store_versions.csv"
+DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
 DEFAULT_OUTPUT = ROOT / "data" / "store_pricing_snapshot.json"
 APPLE = "https://api.appstoreconnect.apple.com"
 GOOGLE = "https://androidpublisher.googleapis.com/androidpublisher/v3"
@@ -499,15 +500,37 @@ def google_iap_prices(store: dict[str, str], token: str, checked_at: str) -> lis
     return result
 
 
+def _catalog_required_slugs(path: Path = DEFAULT_APP_PRICING) -> set[str]:
+    return {
+        row.get("app_slug", "")
+        for row in read_csv_rows(path)
+        if row.get("app_slug") and row.get("product_type") not in {"", "paid_download"}
+    }
+
+
+def _source_error(platform: str, source: str, error: Exception) -> str:
+    provider = "apple" if platform == "ios" else "google"
+    if isinstance(error, urllib.error.HTTPError):
+        if error.code == 403:
+            return f"{provider}_{source}_permission_denied"
+        return f"{provider}_{source}_http_{error.code}"
+    reason = str(error)
+    if re.fullmatch(r"[a-z0-9_]{3,100}", reason):
+        return reason
+    return f"{provider}_{source}_failed"
+
+
 def sync_store_pricing(
     stores_path: Path = DEFAULT_STORES,
     output_path: Path = DEFAULT_OUTPUT,
     *,
+    pricing_path: Path = DEFAULT_APP_PRICING,
     apple_token: str = "",
     google_token: str = "",
 ) -> dict[str, object]:
     checked_at = now_iso()
     stores = read_csv_rows(stores_path)
+    catalog_required = _catalog_required_slugs(pricing_path)
     products: list[dict[str, str]] = []
     states: list[dict[str, str]] = []
     for store in stores:
@@ -525,30 +548,42 @@ def sync_store_pricing(
             state["state"] = status
             states.append(state)
             continue
+        if platform not in {"ios", "android"}:
+            state["state"] = "not_applicable"
+            states.append(state)
+            continue
+        needs_catalog = store.get("app_slug", "") in catalog_required
+        errors: list[str] = []
+        successful_sources = 0
         try:
             if platform == "ios":
                 products.extend(apple_public_download_price(store, checked_at))
-                if apple_token:
-                    products.extend(apple_iap_prices(store, apple_token, checked_at))
-                else:
-                    state["state"] = "partial"
-                    state["error"] = "apple_pricing_credentials_missing"
-            elif platform == "android":
-                products.extend(google_public_download_price(store, checked_at))
-                if google_token:
-                    products.extend(google_iap_prices(store, google_token, checked_at))
-                else:
-                    state["state"] = "partial"
-                    state["error"] = "google_pricing_credentials_missing"
             else:
-                state["state"] = "not_applicable"
-        except urllib.error.HTTPError as error:
-            state["state"] = "unavailable"
-            state["error"] = f"store_pricing_http_{error.code}"
-        except (StorePricingError, ValueError, OSError) as error:
-            state["state"] = "unavailable"
-            reason = str(error)
-            state["error"] = reason if re.fullmatch(r"[a-z0-9_]{3,100}", reason) else "store_pricing_sync_failed"
+                products.extend(google_public_download_price(store, checked_at))
+            successful_sources += 1
+        except (urllib.error.HTTPError, StorePricingError, ValueError, OSError) as error:
+            errors.append(_source_error(platform, "public_pricing", error))
+        if needs_catalog:
+            token = apple_token if platform == "ios" else google_token
+            if not token:
+                errors.append(
+                    "apple_catalog_pricing_credentials_missing"
+                    if platform == "ios"
+                    else "google_catalog_pricing_credentials_missing"
+                )
+            else:
+                try:
+                    if platform == "ios":
+                        products.extend(apple_iap_prices(store, token, checked_at))
+                    else:
+                        products.extend(google_iap_prices(store, token, checked_at))
+                    successful_sources += 1
+                except (urllib.error.HTTPError, StorePricingError, ValueError, OSError) as error:
+                    errors.append(_source_error(platform, "catalog_pricing", error))
+        if errors:
+            state["state"] = "partial" if successful_sources else "unavailable"
+            state["error"] = errors[0]
+            state["errors"] = errors
         states.append(state)
     payload = {
         "schema_version": 1,
@@ -572,12 +607,14 @@ def sync_store_pricing(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--stores", type=Path, default=DEFAULT_STORES)
+    parser.add_argument("--pricing", type=Path, default=DEFAULT_APP_PRICING)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
     apple, google = _decode_credentials()
     payload = sync_store_pricing(
         args.stores,
         args.output,
+        pricing_path=args.pricing,
         apple_token=apple,
         google_token=google,
     )

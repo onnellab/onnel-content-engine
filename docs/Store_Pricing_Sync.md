@@ -42,7 +42,16 @@ Live App Store and Google Play prices are rendered as platform-specific rows.
 
 A partial price refresh does not block unrelated review, status, YouTube, or
 dashboard refreshes. Its incomplete source state remains visible in the durable
-snapshot for the daily operations report.
+snapshot for the daily operations report. Paid-download-only apps do not call
+authenticated catalog APIs unnecessarily.
+
+If Google Play returns HTTP 403 for the authenticated product catalog, the
+collector records `google_catalog_pricing_permission_denied`. It does not use
+an undocumented endpoint or weaken account controls. The dashboard keeps the
+configured manual price for that Play Store product, labels it live-unverified,
+and shows the blocker alongside the last attempted check. A later run will
+replace that fallback automatically when the configured service account gains
+sufficient catalog access and the official API returns a matching live product.
 
 ## Scheduled operation
 
