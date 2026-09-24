@@ -42,6 +42,7 @@ DEFAULT_MANUAL_PUBLISH_SCHEDULE = ROOT / "data" / "manual_publish_schedule.json"
 DEFAULT_AI_MANAGER_REPORT = ROOT / "data" / "ai_manager_daily_report.json"
 DEFAULT_APPS_REGISTRY = ROOT / "data" / "apps_registry.csv"
 DEFAULT_APP_PRICING = ROOT / "data" / "app_pricing.csv"
+DEFAULT_STORE_PRICING_SNAPSHOT = ROOT / "data" / "store_pricing_snapshot.json"
 DEFAULT_AI_PROVIDER_PRICING = ROOT / "data" / "ai_provider_pricing.csv"
 DEFAULT_AI_PROVIDER_PRICING_STATUS = ROOT / "data" / "ai_provider_pricing_status.json"
 DEFAULT_MELIVRA_AI_CREDIT_POLICY = ROOT / "data" / "melivra_ai_credit_policy.csv"
@@ -696,10 +697,70 @@ def melivra_ai_credit_economics(
     }
 
 
+def _store_pricing_products(path: Path = DEFAULT_STORE_PRICING_SNAPSHOT) -> list[dict[str, str]]:
+    if not path.exists():
+        return []
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, json.JSONDecodeError):
+        return []
+    if payload.get("schema_version") != 1 or payload.get("kind") != "onnellab_store_pricing_snapshot":
+        return []
+    rows = payload.get("products", [])
+    if not isinstance(rows, list):
+        return []
+    return [
+        {str(key): str(value or "") for key, value in row.items()}
+        for row in rows
+        if isinstance(row, dict) and row.get("app_slug") and row.get("price")
+    ]
+
+
+def _normalized_price_name(value: str) -> str:
+    return " ".join(re.findall(r"[a-z0-9]+", value.casefold()))
+
+
+def _select_live_price_rows(explicit: dict[str, str], candidates: list[dict[str, str]]) -> list[dict[str, str]]:
+    product_type = explicit.get("product_type", "")
+    manual_name = _normalized_price_name(explicit.get("product_name", ""))
+    manual_numbers = set(re.findall(r"\d+", manual_name))
+    filtered: list[dict[str, str]] = []
+    for row in candidates:
+        live_type = row.get("product_type", "")
+        live_name = _normalized_price_name(
+            " ".join([row.get("product_name", ""), row.get("product_id", ""), row.get("base_plan_id", "")])
+        )
+        if product_type == "paid_download" and live_type == "paid_download":
+            filtered.append(row)
+        elif product_type == "pro" and live_type in {"in_app_purchase", "subscription"} and "pro" in live_name.split():
+            filtered.append(row)
+        elif product_type == "ai_credit" and live_type == "in_app_purchase":
+            live_numbers = set(re.findall(r"\d+", live_name))
+            if manual_numbers and manual_numbers & live_numbers and any(word in live_name for word in ("credit", "token")):
+                filtered.append(row)
+        elif product_type == "subscription" and live_type == "subscription":
+            if not manual_name or manual_name == live_name or manual_name in live_name or live_name in manual_name:
+                filtered.append(row)
+    selected: list[dict[str, str]] = []
+    for platform in ("ios", "android"):
+        platform_rows = [row for row in filtered if row.get("platform") == platform]
+        if len(platform_rows) == 1:
+            selected.append(platform_rows[0])
+            continue
+        exact = [
+            row for row in platform_rows
+            if _normalized_price_name(row.get("product_name", "")) == manual_name
+        ]
+        if len(exact) == 1:
+            selected.append(exact[0])
+    return selected
+
+
 def product_pricing_items(
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
     apps_registry_path: Path = DEFAULT_APPS_REGISTRY,
     app_pricing_path: Path = DEFAULT_APP_PRICING,
+    store_pricing_snapshot_path: Path = DEFAULT_STORE_PRICING_SNAPSHOT,
     ai_provider_pricing_path: Path = DEFAULT_AI_PROVIDER_PRICING,
     melivra_ai_credit_policy_path: Path = DEFAULT_MELIVRA_AI_CREDIT_POLICY,
 ) -> list[dict[str, str]]:
@@ -707,6 +768,10 @@ def product_pricing_items(
     explicit_rows = read_csv_rows(app_pricing_path)
     provider_prices = provider_price_by_unit(ai_provider_pricing_path)
     melivra_policy = read_melivra_ai_credit_policy(melivra_ai_credit_policy_path)
+    live_prices = _store_pricing_products(store_pricing_snapshot_path)
+    live_by_slug: dict[str, list[dict[str, str]]] = {}
+    for live in live_prices:
+        live_by_slug.setdefault(live.get("app_slug", ""), []).append(live)
     explicit_by_slug: dict[str, list[dict[str, str]]] = {}
     for row in explicit_rows:
         explicit_by_slug.setdefault(row.get("app_slug", ""), []).append(row)
@@ -736,6 +801,42 @@ def product_pricing_items(
             product_type = explicit.get("product_type", "")
             price_amount = parse_float(explicit.get("price", ""))
             currency = explicit.get("currency", "")
+            live_matches = _select_live_price_rows(explicit, live_by_slug.get(slug, []))
+            if live_matches:
+                for live in live_matches:
+                    live_currency = live.get("currency", "")
+                    live_amount = live.get("price", "")
+                    item = {
+                        **base,
+                        "product_name": explicit.get("product_name", ""),
+                        "product_type": product_type,
+                        "price": live.get("price_display") or format_price_value(live_amount, live_currency),
+                        "price_amount": live_amount,
+                        "currency": live_currency,
+                        "platform": live.get("platform", ""),
+                        "store_product_id": live.get("product_id", ""),
+                        "store_base_plan_id": live.get("base_plan_id", ""),
+                        "price_source": live.get("source", ""),
+                        "price_verification": "live_store",
+                        "price_note": (
+                            "Live App Store price (Korea)"
+                            if live.get("platform") == "ios"
+                            else "Live Google Play price (Korea)"
+                        ),
+                        "checked_at": live.get("checked_at", "") or base["checked_at"],
+                    }
+                    if slug == "melivra" and product_type == "ai_credit":
+                        item.update(
+                            melivra_ai_credit_economics(
+                                parse_int_from_product_name(explicit.get("product_name", "")),
+                                parse_float(live_amount),
+                                live_currency,
+                                provider_prices,
+                                melivra_policy,
+                            )
+                        )
+                    items.append(item)
+                continue
             item = {
                 **base,
                 "product_name": explicit.get("product_name", ""),
@@ -743,6 +844,8 @@ def product_pricing_items(
                 "price": format_price_value(explicit.get("price", ""), currency),
                 "price_amount": explicit.get("price", ""),
                 "currency": currency,
+                "price_source": "manual_registry",
+                "price_verification": "manual_only",
                 "price_note": explicit.get("price_note", "Manual price registry"),
             }
             if slug == "melivra" and product_type == "ai_credit":
@@ -1753,7 +1856,11 @@ def html_document(
         pricingModel: '가격 모델',
         priceLabel: '가격',
         priceCheckNeeded: '스토어 확인 필요',
+        liveStorePrice: '스토어 실가격 확인',
+        manualPriceOnly: '수동 등록값 · 실가격 미확인',
         localPriceMetadata: '공개 랜딩 페이지 가격 메타데이터',
+        liveAppStorePrice: 'App Store 한국 실가격',
+        liveGooglePlayPrice: 'Google Play 한국 실가격',
         iapPriceNotRecorded: '스토어 인앱 구매 가격이 로컬에 기록되어 있지 않음',
         aiCreditPriceNotRecorded: 'AI 크레딧 가격이 로컬에 기록되어 있지 않음',
         appsWord: '앱',
@@ -2038,7 +2145,11 @@ def html_document(
         pricingModel: 'pricing model',
         priceLabel: 'price',
         priceCheckNeeded: 'Check store',
+        liveStorePrice: 'live store prices verified',
+        manualPriceOnly: 'manual registry · live price unverified',
         localPriceMetadata: 'Public landing page metadata',
+        liveAppStorePrice: 'Live App Store Korea price',
+        liveGooglePlayPrice: 'Live Google Play Korea price',
         iapPriceNotRecorded: 'Store in-app purchase price not recorded locally',
         aiCreditPriceNotRecorded: 'AI credit price not recorded locally',
         appsWord: 'apps',
@@ -4005,8 +4116,9 @@ def html_document(
       const appCount = new Set(pricingItems.map((item) => item.app_slug || item.app_name)).size;
       const explicitPrices = pricingItems.filter((item) => item.price).length;
       const needsStoreCheck = pricingItems.length - explicitPrices;
+      const livePrices = pricingItems.filter((item) => item.price_verification === 'live_store').length;
       const aiPricingNote = aiProviderPricingSummaryText();
-      pricingStatusSummary.textContent = `${{pricingItems.length}} ${{t('paidProduct')}} / ${{appCount}} ${{t('appsWord')}} / ${{needsStoreCheck}} ${{t('priceCheckNeeded')}}${{aiPricingNote ? ' / ' + aiPricingNote : ''}}`;
+      pricingStatusSummary.textContent = `${{pricingItems.length}} ${{t('paidProduct')}} / ${{appCount}} ${{t('appsWord')}} / ${{livePrices}} ${{t('liveStorePrice')}} / ${{needsStoreCheck}} ${{t('priceCheckNeeded')}}${{aiPricingNote ? ' / ' + aiPricingNote : ''}}`;
       const groups = new Map();
       pricingItems.forEach((item) => {{
         const key = item.app_slug || item.app_name;
@@ -4101,13 +4213,18 @@ def html_document(
     }}
 
     function pricingProductLabel(item) {{
-      if (item.product_type === 'paid_download') return t('paidDownload');
-      if (item.product_type === 'ai_credit') return item.product_name || t('aiCredit');
-      return item.product_name || t('paidProduct');
+      let base = item.product_name || t('paidProduct');
+      if (item.product_type === 'paid_download') base = t('paidDownload');
+      if (item.product_type === 'ai_credit') base = item.product_name || t('aiCredit');
+      const platform = item.platform === 'ios' ? t('appStore') : item.platform === 'android' ? t('playStore') : '';
+      return platform ? `${{base}} · ${{platform}}` : base;
     }}
 
     function pricingNoteLabel(note) {{
       if (note === 'Public landing page metadata') return t('localPriceMetadata');
+      if (note === 'Live App Store price (Korea)') return t('liveAppStorePrice');
+      if (note === 'Live Google Play price (Korea)') return t('liveGooglePlayPrice');
+      if (note === 'Manual price registry') return t('manualPriceOnly');
       if (note === 'Store in-app purchase price not recorded locally') return t('iapPriceNotRecorded');
       if (note === 'AI credit price not recorded locally') return t('aiCreditPriceNotRecorded');
       return note;
