@@ -51,9 +51,14 @@ Reports stay under `~/Library/Application Support/ONNELLAB/content-engine/youtub
 with 0700 directories and 0600 files, one file per profile. Standard output contains
 status only, not comments or credentials. Reports expire after 24 hours; reading an
 expired report removes it. Failed refreshes and disconnection clear the affected
-profile only. Successful reconnection also clears its old report. The public static
-page does not automatically receive private analytics. Use the local manager on the
-Mac, or its existing in-tab file import; no public report or token is committed.
+profile only. Successful reconnection also clears its old report.
+
+Daily unattended Mac-side collection and Aether reconciliation are launched locally
+by `scripts/aether_daily_local.py`, not by a scheduled ChatGPT terminal dispatch.
+See `Aether_Inn_Local_Daily.md`. The wrapper still calls these profile-bound report
+commands and the canonical Aether workers; it does not replace their credential or
+publication gates. Only a public-safe snapshot is committed for `/ops/`; private
+OAuth material and private report files remain local.
 
 ## Deployment regression repair
 
