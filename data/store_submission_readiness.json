@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T01:41:14+00:00",
+  "generated_at": "2026-09-25T23:22:13+00:00",
   "records": [
     {
       "release_id": "REL-0009",
@@ -24,7 +24,7 @@
         "version": "1.0.7",
         "last_updated": "2026-07-24T19:59:58Z",
         "release_notes": "일부 정상적인 MP4 파일이 변환 도중 너무 일찍 중단될 수 있던 문제를 수정했어요. 변환이 실제로 진행 중인 동안에는 긴 파일도 안정적으로 완료할 수 있도록 개선했어요. 변환할 수 없는 파일에 불필요한 재시도를 줄여 실패 결과를 더 빠르게 확인할 수 있어요. 파일 선택 화면에서는 Quivra가 지원하는 WAV, M4A, MOV, MP4 파일만 선택할 수 있도록 정리했어요. 기존 변환 음질과 영상 품질은 그대로 유지하면서 변환 안정성을 높였어요.",
-        "checked_at": "2026-09-25T10:40:54+09:00",
+        "checked_at": "2026-09-26T08:21:56+09:00",
         "status": "unchanged",
         "notes": ""
       }
@@ -52,37 +52,9 @@
         "version": "1.0.5",
         "last_updated": "2026. 7. 24.",
         "release_notes": "",
-        "checked_at": "2026-09-25T10:40:54+09:00",
+        "checked_at": "2026-09-26T08:21:56+09:00",
         "status": "unchanged",
         "notes": "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/segra/pubspec.yaml version 1.0.5+75; confirm against Play Console if needed."
-      }
-    },
-    {
-      "release_id": "REL-0013",
-      "app_slug": "tagweaver",
-      "platform": "ios",
-      "store": "app_store",
-      "status": "already_available",
-      "reasons": [
-        "release artifact and public release readiness are not complete",
-        "human submission approval with QA PASS is missing",
-        "app_store connection is not enabled"
-      ],
-      "approval": {},
-      "public_store_snapshot": {
-        "app_id": "APP-0002",
-        "app_slug": "tagweaver",
-        "app_name": "TagWeaver",
-        "platform": "ios",
-        "store_url": "https://apps.apple.com/app/id6759609875",
-        "store_app_id": "6759609875",
-        "store_package": "",
-        "version": "2.5.0",
-        "last_updated": "2026-09-07T21:27:50Z",
-        "release_notes": "직접 추가한 파일을 상대 폴더, 로컬 검색, 경로 정렬, 빠른 색인과 수동 순서로 찾아보세요. 폴더를 접거나 펼치고, 저장 전에 변경 사항을 미리 보고 선택한 트랙 번호를 순서대로 적용할 수 있어요.",
-        "checked_at": "2026-09-25T10:40:54+09:00",
-        "status": "unchanged",
-        "notes": ""
       }
     },
     {
@@ -108,9 +80,37 @@
         "version": "2.0.0",
         "last_updated": "2026-09-15T07:51:32Z",
         "release_notes": "폴더와 하위 폴더를 만들고 폴더 색상으로 문서를 구분해요. 문서를 나누거나 하나로 합치는 기능을 추가했어요. 9개 언어를 지원하고, 작은 화면이나 큰 글씨에서도 설정을 쓰기 편하게 다듬었어요. 큰 파일에서 커서와 글자 입력에 생기던 일부 문제를 고치고, 문서를 바꿀 때 더 안정적으로 저장하도록 개선했어요. 무료로 문서함 문서와 열린 문서를 각각 10개, 문서별 스냅샷 10개, 최대 10조각 나누기와 문서 10개 합치기를 지원해요. iOS 15 이상에서 사용할 수 있어요.",
-        "checked_at": "2026-09-25T10:40:54+09:00",
+        "checked_at": "2026-09-26T08:21:56+09:00",
         "status": "unchanged",
         "notes": ""
+      }
+    },
+    {
+      "release_id": "REL-0015",
+      "app_slug": "tagweaver",
+      "platform": "android",
+      "store": "google_play",
+      "status": "already_available",
+      "reasons": [
+        "release artifact and public release readiness are not complete",
+        "human submission approval with QA PASS is missing",
+        "google_play connection is not enabled"
+      ],
+      "approval": {},
+      "public_store_snapshot": {
+        "app_id": "APP-0002",
+        "app_slug": "tagweaver",
+        "app_name": "TagWeaver",
+        "platform": "android",
+        "store_url": "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2",
+        "store_app_id": "",
+        "store_package": "com.onnellab.tagweaver2",
+        "version": "2.5.1",
+        "last_updated": "2026. 9. 25.",
+        "release_notes": "",
+        "checked_at": "2026-09-26T08:21:56+09:00",
+        "status": "unchanged",
+        "notes": "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/tagweaver/pubspec.yaml version 2.5.1+95; confirm against Play Console if needed."
       }
     }
   ]

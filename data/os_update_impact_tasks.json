@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T05:23:13+00:00",
+  "generated_at": "2026-09-25T23:22:13+00:00",
   "tasks": [
     {
       "task_id": "os-android-quivra",
@@ -8,8 +8,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "89f2af2b975ad3a29162b9171ec7a76179d03869786473c593e7bcb72e6bf708",
-        "checked_at": "2026-09-25T04:49:48+00:00"
+        "content_hash": "409e6d5c206f668d86aec90570a613d68d0362a3f970baf79cf268435d64225c",
+        "checked_at": "2026-09-25T23:22:10+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -26,8 +26,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "89f2af2b975ad3a29162b9171ec7a76179d03869786473c593e7bcb72e6bf708",
-        "checked_at": "2026-09-25T04:49:48+00:00"
+        "content_hash": "409e6d5c206f668d86aec90570a613d68d0362a3f970baf79cf268435d64225c",
+        "checked_at": "2026-09-25T23:22:10+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -44,8 +44,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "89f2af2b975ad3a29162b9171ec7a76179d03869786473c593e7bcb72e6bf708",
-        "checked_at": "2026-09-25T04:49:48+00:00"
+        "content_hash": "409e6d5c206f668d86aec90570a613d68d0362a3f970baf79cf268435d64225c",
+        "checked_at": "2026-09-25T23:22:10+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -62,8 +62,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "89f2af2b975ad3a29162b9171ec7a76179d03869786473c593e7bcb72e6bf708",
-        "checked_at": "2026-09-25T04:49:48+00:00"
+        "content_hash": "409e6d5c206f668d86aec90570a613d68d0362a3f970baf79cf268435d64225c",
+        "checked_at": "2026-09-25T23:22:10+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -80,8 +80,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "89f2af2b975ad3a29162b9171ec7a76179d03869786473c593e7bcb72e6bf708",
-        "checked_at": "2026-09-25T04:49:48+00:00"
+        "content_hash": "409e6d5c206f668d86aec90570a613d68d0362a3f970baf79cf268435d64225c",
+        "checked_at": "2026-09-25T23:22:10+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -98,8 +98,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "89f2af2b975ad3a29162b9171ec7a76179d03869786473c593e7bcb72e6bf708",
-        "checked_at": "2026-09-25T04:49:48+00:00"
+        "content_hash": "409e6d5c206f668d86aec90570a613d68d0362a3f970baf79cf268435d64225c",
+        "checked_at": "2026-09-25T23:22:10+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -116,8 +116,152 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "89f2af2b975ad3a29162b9171ec7a76179d03869786473c593e7bcb72e6bf708",
-        "checked_at": "2026-09-25T04:49:48+00:00"
+        "content_hash": "409e6d5c206f668d86aec90570a613d68d0362a3f970baf79cf268435d64225c",
+        "checked_at": "2026-09-25T23:22:10+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-ios-quivra",
+      "app_slug": "quivra",
+      "platform": "ios",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
+        "content_hash": "a8f1913d0961ede9548a54108ba114602d6ac913675dc78567499a55dd2cc8ae",
+        "checked_at": "2026-09-25T23:22:10+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-ios-tagweaver",
+      "app_slug": "tagweaver",
+      "platform": "ios",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
+        "content_hash": "a8f1913d0961ede9548a54108ba114602d6ac913675dc78567499a55dd2cc8ae",
+        "checked_at": "2026-09-25T23:22:10+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-ios-vaultxt",
+      "app_slug": "vaultxt",
+      "platform": "ios",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
+        "content_hash": "a8f1913d0961ede9548a54108ba114602d6ac913675dc78567499a55dd2cc8ae",
+        "checked_at": "2026-09-25T23:22:10+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-ios-segra",
+      "app_slug": "segra",
+      "platform": "ios",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
+        "content_hash": "a8f1913d0961ede9548a54108ba114602d6ac913675dc78567499a55dd2cc8ae",
+        "checked_at": "2026-09-25T23:22:10+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-ios-clipnest",
+      "app_slug": "clipnest",
+      "platform": "ios",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
+        "content_hash": "a8f1913d0961ede9548a54108ba114602d6ac913675dc78567499a55dd2cc8ae",
+        "checked_at": "2026-09-25T23:22:10+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-ios-aligna",
+      "app_slug": "aligna",
+      "platform": "ios",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
+        "content_hash": "a8f1913d0961ede9548a54108ba114602d6ac913675dc78567499a55dd2cc8ae",
+        "checked_at": "2026-09-25T23:22:10+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-ios-melivra",
+      "app_slug": "melivra",
+      "platform": "ios",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
+        "content_hash": "a8f1913d0961ede9548a54108ba114602d6ac913675dc78567499a55dd2cc8ae",
+        "checked_at": "2026-09-25T23:22:10+00:00"
+      },
+      "scope": [
+        "OS/API deprecation",
+        "permission and file-provider behavior",
+        "plugin compatibility",
+        "foreground/background lifecycle"
+      ],
+      "conclusion": "No compatibility claim made; inspect the official changed release note and app code before action."
+    },
+    {
+      "task_id": "os-ios-papira",
+      "app_slug": "papira",
+      "platform": "ios",
+      "status": "review_required",
+      "evidence": {
+        "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
+        "content_hash": "a8f1913d0961ede9548a54108ba114602d6ac913675dc78567499a55dd2cc8ae",
+        "checked_at": "2026-09-25T23:22:10+00:00"
       },
       "scope": [
         "OS/API deprecation",
