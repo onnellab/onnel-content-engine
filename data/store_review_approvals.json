@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T23:35:47+00:00",
+  "updated_at": "2026-09-25T01:38:10+00:00",
   "approvals": [
     {
       "approval_id": "review-report-6b652b2227b5da3cd8607adf",
@@ -35,6 +35,23 @@
         "attempts": 1,
         "published_at": "2026-09-23T23:35:47+00:00",
         "external_response_id": "1790206546"
+      }
+    },
+    {
+      "approval_id": "review-00000192-e776-1303-64a5-9ced00000000",
+      "review_id": "00000192-e776-1303-64a5-9ced00000000",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "platform": "ios",
+      "reply": "Thank you so much for the kind review! We're really glad TagWeaver feels simple, quick, and easy to use. We truly appreciate your recommendation and support.",
+      "approved_at": "2026-09-25T01:38:10+00:00",
+      "approved_by": "owner_standing_scheduled_policy_2026-09-24",
+      "note": "Daily Ops standing authorization dated 2026-09-24; positive TagWeaver review, concise English acknowledgement only.",
+      "status": "queued",
+      "publication": {
+        "attempts": 0,
+        "published_at": "",
+        "external_response_id": ""
       }
     }
   ]
