@@ -67,7 +67,7 @@ APP-0004,segra,dependency,share_plus,^10.1.2,10.1.4,,ok,github:onnellab/segra/pu
 APP-0004,segra,dependency,shared_preferences,^2.5.3,2.5.4,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,url_launcher,^6.3.2,6.3.2,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,flutter_sdk,flutter,>=3.38.4,,>=3.38.4,ok,github:onnellab/segra/pubspec.yaml
-APP-0002,tagweaver,app_version,tagweaver,2.5.0+90,2.5.0,,ok,github:onnellab/tagweaver/pubspec.yaml
+APP-0002,tagweaver,app_version,tagweaver,2.5.1+91,2.5.1,,ok,github:onnellab/tagweaver/pubspec.yaml
 APP-0002,tagweaver,dependency,cupertino_icons,^1.0.8,1.0.8,,ok,github:onnellab/tagweaver/pubspec.yaml
 APP-0002,tagweaver,dependency,file_picker,^8.0.0,8.3.7,,ok,github:onnellab/tagweaver/pubspec.yaml
 APP-0002,tagweaver,dependency,flutter,sdk:flutter,0.0.0,,ok,github:onnellab/tagweaver/pubspec.yaml
