@@ -11,7 +11,6 @@ import json
 import os
 from pathlib import Path
 import re
-import shutil
 import unicodedata
 from urllib.parse import urlencode
 from zoneinfo import ZoneInfo
@@ -154,36 +153,36 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
     source = Path(source)
     if source.suffix.lower() != ".wav" or source.is_symlink() or not source.is_file():
         raise VideoError("aether_single_backlog_wav_not_synced")
-    try:
-        source_hash = file_hash(source)
-        duration = audio_duration(source)
-    except (OSError, VideoError):
-        raise VideoError("aether_single_backlog_wav_unavailable") from None
-    if abs(float(duration) - float(expected_duration)) > 5:
-        raise VideoError("aether_single_backlog_duration_mismatch")
     target_dir = directory(Path(folder) / "source")
     target = target_dir / "master.wav"
-    if target.is_symlink():
+    partial = target_dir / "master.partial.wav"
+    if target.is_symlink() or partial.is_symlink():
         raise VideoError("aether_single_backlog_source_unsafe")
-    if target.exists():
-        if not target.is_file() or file_hash(target) != source_hash:
-            raise VideoError("aether_single_backlog_source_integrity")
-    else:
-        partial = target_dir / "master.partial.wav"
-        partial.unlink(missing_ok=True)
-        try:
-            with source.open("rb") as src, partial.open("xb") as dst:
-                shutil.copyfileobj(src, dst, length=1024 * 1024)
-            os.chmod(partial, 0o600)
-            if file_hash(partial) != source_hash:
+    partial.unlink(missing_ok=True)
+    try:
+        run_process(["/bin/cp", "-X", str(source), str(partial)], timeout=30)
+        os.chmod(partial, 0o600)
+        source_hash = file_hash(partial)
+        duration = audio_duration(partial)
+        if abs(float(duration) - float(expected_duration)) > 5:
+            raise VideoError("aether_single_backlog_duration_mismatch")
+        if target.exists():
+            if not target.is_file() or file_hash(target) != source_hash:
                 raise VideoError("aether_single_backlog_source_integrity")
+            partial.unlink(missing_ok=True)
+        else:
             partial.replace(target)
-        except OSError:
-            partial.unlink(missing_ok=True)
-            raise VideoError("aether_single_backlog_wav_unavailable") from None
-        except Exception:
-            partial.unlink(missing_ok=True)
+    except VideoError as error:
+        partial.unlink(missing_ok=True)
+        if str(error) in {
+            "aether_single_backlog_duration_mismatch",
+            "aether_single_backlog_source_integrity",
+        }:
             raise
+        raise VideoError("aether_single_backlog_wav_unavailable") from None
+    except OSError:
+        partial.unlink(missing_ok=True)
+        raise VideoError("aether_single_backlog_wav_unavailable") from None
     return {
         "candidate_index": 0,
         "path": str(target),

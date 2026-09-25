@@ -155,6 +155,19 @@ class SingleTests(unittest.TestCase):
             self.assertEqual("not_run_existing_catalog_master", job["music"]["review"]["state"])
             self.assertEqual("canonical_wav_master", aether_single.policy_for(job)["music_provider"])
 
+    def test_backlog_import_maps_file_provider_copy_timeout_to_unavailable(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            source = root / "Beyond the Road of Falling Petals.wav"
+            source.write_bytes(b"RIFFfixture")
+            job = root / "job"
+            job.mkdir(mode=0o700)
+            job.chmod(0o700)
+            with patch.object(aether_single, "run_process", side_effect=aether_single.VideoError("Local process timed out")):
+                with self.assertRaisesRegex(Exception, "backlog_wav_unavailable"):
+                    aether_single.import_backlog_master(source, job, 138)
+            self.assertFalse((job / "source" / "master.partial.wav").exists())
+
     def test_backlog_worker_skips_title_already_public_before_wav_access(self):
         class ExistingApi:
             profile = "aether_inn"
