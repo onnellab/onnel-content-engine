@@ -65,6 +65,12 @@ def _nfc_child(parent: Path, name: str, *, directory_only: bool = False) -> Path
     if not parent.is_dir():
         return None
     expected = unicodedata.normalize("NFC", name)
+    direct = parent / expected
+    try:
+        if direct.exists() and (not directory_only or direct.is_dir()):
+            return direct
+    except OSError:
+        pass
     matches = []
     for child in parent.iterdir():
         if unicodedata.normalize("NFC", child.name) != expected:

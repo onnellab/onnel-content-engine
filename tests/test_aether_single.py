@@ -183,6 +183,17 @@ class SingleTests(unittest.TestCase):
         with self.assertRaisesRegex(Exception, "backlog_title_not_registered"):
             aether_single.backlog_catalog_entry("A Fantasy Still Breathing")
 
+    def test_backlog_resolver_prefers_exact_nfc_path_without_directory_scan(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / "개인 폴더" / "Aether Inn" / "01_Audio_Master"
+            parent.mkdir(parents=True)
+            source = parent / "Beyond the Road of Falling Petals.wav"
+            source.write_bytes(b"fixture")
+            with patch.object(Path, "iterdir", side_effect=AssertionError("must not scan exact NFC path")):
+                resolved = aether_single.resolve_backlog_wav("Beyond the Road of Falling Petals", root=root)
+            self.assertEqual(source, resolved)
+
     def test_backlog_resolver_handles_decomposed_mybox_names(self):
         import unicodedata
         with tempfile.TemporaryDirectory() as temporary:
@@ -193,7 +204,7 @@ class SingleTests(unittest.TestCase):
             source = parent / unicodedata.normalize("NFD", "When the Northern Lights Returned.wav")
             source.write_bytes(b"fixture")
             resolved = aether_single.resolve_backlog_wav("When the Northern Lights Returned", root=root)
-            self.assertEqual(source, resolved)
+            self.assertTrue(source.samefile(resolved))
 
     def test_backlog_unregistered_title_is_rejected(self):
         with tempfile.TemporaryDirectory() as temporary:
