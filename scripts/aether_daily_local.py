@@ -222,6 +222,60 @@ def run_youtube_reports(report: dict) -> None:
         if code != 0:
             report["blockers"].append(f"youtube_report_{profile}_failed")
 
+
+def run_hosted_ops_workflows(report: dict) -> None:
+    repo = "onnellab/onnel-content-engine"
+    workflows = [
+        ("app_operational_status", "Sync app operational status"),
+        ("ai_operations", "Refresh AI Operations Sources"),
+        ("store_reviews", "Sync Store Reviews"),
+    ]
+    report["hosted_workflows"] = {}
+    for key, workflow in workflows:
+        code, stdout, _ = run_step(
+            report,
+            f"dispatch_{key}",
+            ["gh", "workflow", "run", workflow, "-R", repo, "--ref", "main"],
+            timeout=90,
+        )
+        url = next((line.strip() for line in reversed(stdout.splitlines()) if "/actions/runs/" in line), "")
+        run_id = url.rstrip("/").split("/")[-1] if url else ""
+        state = {"workflow": workflow, "run_id": run_id, "status": "dispatch_failed"}
+        report["hosted_workflows"][key] = state
+        if code != 0 or not run_id.isdigit():
+            report["blockers"].append(f"{key}_workflow_dispatch_failed")
+            continue
+        code, _, _ = run_step(
+            report,
+            f"watch_{key}",
+            ["gh", "run", "watch", run_id, "-R", repo, "--exit-status", "--interval", "3"],
+            timeout=1800,
+        )
+        state["status"] = "success" if code == 0 else "failed"
+        if code != 0:
+            report["blockers"].append(f"{key}_workflow_failed")
+
+    code, clean, _ = run_step(report, "hosted_ops_local_status", ["git", "status", "--porcelain"], timeout=30)
+    if code != 0 or clean.strip():
+        report["blockers"].append("hosted_ops_repo_not_clean")
+        return
+    run_step(report, "hosted_ops_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    code, counts, _ = run_step(
+        report, "hosted_ops_divergence",
+        ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
+    )
+    parts = counts.split()
+    if code != 0 or len(parts) != 2 or int(parts[0]) != 0:
+        report["blockers"].append("hosted_ops_divergence_invalid")
+        return
+    if int(parts[1]):
+        code, _, _ = run_step(
+            report, "hosted_ops_pull", ["git", "pull", "--ff-only", "origin", "main"], timeout=180,
+        )
+        if code != 0:
+            report["blockers"].append("hosted_ops_pull_failed")
+
+
 def run_reconcile(report: dict) -> dict:
     code, stdout, _ = run_step(
         report, "aether_single_reconcile",
@@ -552,6 +606,7 @@ def main() -> int:
             print(json.dumps({"state": report["state"], "blockers": report["blockers"]}))
             return 0 if not report["blockers"] else 2
         publish_local_ops_sources(report)
+        run_hosted_ops_workflows(report)
         code, status, _ = run_step(report, "post_ops_repo_status", ["git", "status", "--porcelain"], timeout=30)
         if code != 0 or status.strip():
             report["blockers"].append("repo_dirty_after_ops_snapshot")

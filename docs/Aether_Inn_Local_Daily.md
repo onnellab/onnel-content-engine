@@ -41,6 +41,10 @@ unknown code. The worker then:
 - refreshes ONNELLAB and Aether Inn private YouTube reports independently;
 - refreshes the public-safe YouTube ops snapshot and AI-provider pricing status;
 - commits and pushes only those expected local operational snapshots;
+- dispatches and waits for the canonical `Sync app operational status`,
+  `Refresh AI Operations Sources`, and `Sync Store Reviews` GitHub Actions in
+  that order, then fast-forwards local `main`; the final review workflow rebuilds
+  and deploys `/ops/` from the combined hosted and local snapshots;
 - reconciles existing durable Aether single and compilation jobs;
 - synchronizes the six canonical Aether playlists idempotently;
 - on Tuesday/Saturday before 09:00 KST, processes the first actually-missing
