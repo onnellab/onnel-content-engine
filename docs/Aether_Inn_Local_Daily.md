@@ -45,6 +45,10 @@ unknown code. The worker then:
   `Refresh AI Operations Sources`, and `Sync Store Reviews` GitHub Actions in
   that order, then fast-forwards local `main`; the final review workflow rebuilds
   and deploys `/ops/` from the combined hosted and local snapshots;
+- after the fresh review sync, queues eligible real-ID text reviews under the
+  2026-09-24 owner standing policy, publishes them one-at-a-time through the
+  existing GitHub publisher workflow, then re-syncs reviews and requires the
+  store-observed developer reply before considering each reply complete;
 - reconciles existing durable Aether single and compilation jobs;
 - synchronizes the six canonical Aether playlists idempotently;
 - on Tuesday/Saturday before 09:00 KST, processes the first actually-missing

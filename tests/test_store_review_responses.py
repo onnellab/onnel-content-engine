@@ -47,6 +47,20 @@ class StoreReviewResponsesTest(unittest.TestCase):
         self.assertEqual(classify_review(review), "billing")
         self.assertIn("order numbers", generate_reply(review)["suggested_reply"])
 
+    def test_prioritizes_security_and_data_loss_safety_templates(self) -> None:
+        security = generate_reply({
+            "app_name": "VaultXT", "rating": "1", "body": "Security breach concern",
+            "reviewer_language": "en",
+        })
+        data_loss = generate_reply({
+            "app_name": "VaultXT", "rating": "1", "body": "I lost my data after editing",
+            "reviewer_language": "en",
+        })
+        self.assertEqual(security["reply_category"], "security")
+        self.assertIn("security concern", security["suggested_reply"])
+        self.assertEqual(data_loss["reply_category"], "data_loss")
+        self.assertIn("data may have been affected", data_loss["suggested_reply"])
+
     def test_uses_positive_and_no_text_templates(self) -> None:
         positive = generate_reply(
             {

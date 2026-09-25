@@ -35,6 +35,28 @@ KEYWORDS = {
         "tracking",
         "collect data",
     ),
+    "security": (
+        "보안",
+        "해킹",
+        "비밀번호",
+        "무단 접근",
+        "security",
+        "hacked",
+        "password",
+        "unauthorized access",
+        "breach",
+    ),
+    "data_loss": (
+        "데이터 손실",
+        "데이터가 사라",
+        "파일이 사라",
+        "삭제됐",
+        "data loss",
+        "lost my data",
+        "file disappeared",
+        "files disappeared",
+        "deleted my file",
+    ),
     "bug": (
         "오류",
         "버그",
@@ -103,7 +125,7 @@ def classify_review(review: dict[str, str]) -> str:
         return "no_text"
     if any(keyword in text for keyword in PRICING_CONFUSION_KEYWORDS):
         return "pricing_confusion"
-    for category in ("billing", "privacy", "bug", "feature"):
+    for category in ("billing", "privacy", "security", "data_loss", "bug", "feature"):
         if any(keyword in text for keyword in KEYWORDS[category]):
             return category
     try:

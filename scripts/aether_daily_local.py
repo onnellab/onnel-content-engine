@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import fcntl
 import json
 import os
@@ -274,6 +275,136 @@ def run_hosted_ops_workflows(report: dict) -> None:
         )
         if code != 0:
             report["blockers"].append("hosted_ops_pull_failed")
+
+
+def run_store_review_auto_replies(report: dict) -> None:
+    code, stdout, _ = run_step(
+        report,
+        "queue_standing_store_review_replies",
+        [sys.executable, "-B", "scripts/queue_standing_store_review_replies.py"],
+        timeout=120,
+    )
+    payload = json_stdout(stdout)
+    report["store_review_auto_replies"] = payload
+    if code != 0:
+        report["blockers"].append("store_review_auto_reply_queue_failed")
+        return
+    queued = payload.get("queued", []) if isinstance(payload, dict) else []
+    if not isinstance(queued, list):
+        report["blockers"].append("store_review_auto_reply_queue_invalid")
+        return
+
+    if payload.get("changed"):
+        code, names, _ = run_step(
+            report, "review_approval_changed_paths", ["git", "diff", "--name-only"], timeout=30,
+        )
+        changed = {line.strip() for line in names.splitlines() if line.strip()}
+        if code != 0 or changed != {"data/store_review_approvals.json"}:
+            report["blockers"].append("review_approval_unexpected_changes")
+            return
+        code, _, _ = run_step(
+            report, "review_approval_stage", ["git", "add", "data/store_review_approvals.json"], timeout=30,
+        )
+        if code != 0:
+            report["blockers"].append("review_approval_stage_failed")
+            return
+        code, _, _ = run_step(
+            report, "review_approval_commit", ["git", "commit", "-m", "Queue standing store review replies"], timeout=120,
+        )
+        if code != 0:
+            report["blockers"].append("review_approval_commit_failed")
+            return
+        run_step(report, "review_approval_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+        code, counts, _ = run_step(
+            report, "review_approval_divergence",
+            ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
+        )
+        parts = counts.split()
+        if code != 0 or len(parts) != 2:
+            report["blockers"].append("review_approval_divergence_failed")
+            return
+        if int(parts[1]):
+            code, _, _ = run_step(report, "review_approval_rebase", ["git", "rebase", "origin/main"], timeout=180)
+            if code != 0:
+                report["blockers"].append("review_approval_rebase_failed")
+                return
+        code, _, _ = run_step(report, "review_approval_push", ["git", "push", "origin", "HEAD:main"], timeout=180)
+        if code != 0:
+            report["blockers"].append("review_approval_push_failed")
+            return
+
+    published_ids: list[str] = []
+    for row in queued:
+        if not isinstance(row, dict):
+            continue
+        approval_id = str(row.get("approval_id", ""))
+        review_id = str(row.get("review_id", ""))
+        if not approval_id or not review_id:
+            report["blockers"].append("store_review_auto_reply_record_invalid")
+            continue
+        code, dispatch_stdout, _ = run_step(
+            report,
+            f"dispatch_review_reply_{review_id}",
+            [
+                "gh", "workflow", "run", "Publish Approved Store Review Reply",
+                "-R", "onnellab/onnel-content-engine", "--ref", "main",
+                "-f", f"approval_id={approval_id}", "-f", "confirm_publish=PUBLISH",
+            ],
+            timeout=90,
+        )
+        url = next((line.strip() for line in reversed(dispatch_stdout.splitlines()) if "/actions/runs/" in line), "")
+        run_id = url.rstrip("/").split("/")[-1] if url else ""
+        if code != 0 or not run_id.isdigit():
+            report["blockers"].append(f"store_review_reply_dispatch_failed:{review_id}")
+            continue
+        code, _, _ = run_step(
+            report,
+            f"watch_review_reply_{review_id}",
+            ["gh", "run", "watch", run_id, "-R", "onnellab/onnel-content-engine", "--exit-status", "--interval", "3"],
+            timeout=1200,
+        )
+        if code != 0:
+            report["blockers"].append(f"store_review_reply_publish_failed:{review_id}")
+        published_ids.append(review_id)
+
+    if not published_ids:
+        return
+
+    code, dispatch_stdout, _ = run_step(
+        report,
+        "dispatch_review_verification_sync",
+        ["gh", "workflow", "run", "Sync Store Reviews", "-R", "onnellab/onnel-content-engine", "--ref", "main"],
+        timeout=90,
+    )
+    url = next((line.strip() for line in reversed(dispatch_stdout.splitlines()) if "/actions/runs/" in line), "")
+    run_id = url.rstrip("/").split("/")[-1] if url else ""
+    if code != 0 or not run_id.isdigit():
+        report["blockers"].append("store_review_verification_sync_dispatch_failed")
+        return
+    code, _, _ = run_step(
+        report,
+        "watch_review_verification_sync",
+        ["gh", "run", "watch", run_id, "-R", "onnellab/onnel-content-engine", "--exit-status", "--interval", "3"],
+        timeout=1800,
+    )
+    if code != 0:
+        report["blockers"].append("store_review_verification_sync_failed")
+        return
+    run_step(report, "review_verification_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    code, _, _ = run_step(report, "review_verification_pull", ["git", "pull", "--ff-only", "origin", "main"], timeout=180)
+    if code != 0:
+        report["blockers"].append("store_review_verification_pull_failed")
+        return
+    with (REPO / "data/store_reviews.csv").open(encoding="utf-8", newline="") as handle:
+        reviews = {row.get("review_id", ""): row for row in csv.DictReader(handle)}
+    verified = []
+    for review_id in published_ids:
+        row = reviews.get(review_id, {})
+        if row.get("developer_reply") and row.get("status") == "replied":
+            verified.append(review_id)
+        else:
+            report["blockers"].append(f"store_review_reply_not_observed:{review_id}")
+    report["store_review_auto_replies"]["store_observed"] = verified
 
 
 def run_reconcile(report: dict) -> dict:
@@ -607,6 +738,7 @@ def main() -> int:
             return 0 if not report["blockers"] else 2
         publish_local_ops_sources(report)
         run_hosted_ops_workflows(report)
+        run_store_review_auto_replies(report)
         code, status, _ = run_step(report, "post_ops_repo_status", ["git", "status", "--porcelain"], timeout=30)
         if code != 0 or status.strip():
             report["blockers"].append("repo_dirty_after_ops_snapshot")
