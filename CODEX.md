@@ -181,6 +181,14 @@ If the completed task changes generated pages, dashboards, website output, or ot
 
 After every 10 completed tasks, Codex must reread the instruction Markdown files before making further implementation decisions.
 
+### Remote Desktop pre-dispatch handling
+
+Remote Desktop terminal work must stay simple, direct, and repository-scoped. Prefer Desktop Commander file tools for reads and edits; use short direct `/bin/zsh` commands for Git, Python entrypoints, tests, rendering, and repository policy checks. Do not wrap routine work in giant inline shell programs, nested agent CLIs, encoded payloads, `eval`, heredocs, or safety-bypass flags.
+
+When device ping and file access succeed but a terminal or filesystem action is rejected before it appears in the device-side recent tool-call history, classify that event as a transient host/orchestration pre-dispatch failure rather than a repository, Keychain, or Desktop Commander policy failure. Retry once with the smallest equivalent direct action. If the retry reaches the Mac, continue the normal workflow; if it is rejected again, report the execution blocker. Never weaken `blockedCommands`, change credential sources, unlock Keychain, or discard work to bypass a pre-dispatch failure.
+
+For scheduled Shorts, run `readiness` and `youtube-check --execute` as separate direct commands before recording or rendering. A single pre-dispatch refusal must not disable the recurring task when the retry and those two checks succeed.
+
 The main GitHub Pages homepage repository is:
 
 ```text

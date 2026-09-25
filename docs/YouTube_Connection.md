@@ -85,7 +85,13 @@ Keychain password, starts interactive OAuth, or silently switches accounts durin
 A missing/revoked/locked grant reports a safe blocked reason and points to local setup.
 It preserves the no-human-per-video-review policy and reconciles uncertain uploads before
 creating anything new. Remote Desktop access in a future scheduled run remains a runtime
-capability to check, not a completed verification claim.
+capability to check, not a completed verification claim. If device ping and file access
+succeed but a short direct terminal/filesystem call is absent from the device-side recent
+history, treat that event as a transient pre-dispatch failure and retry the smallest
+equivalent direct action exactly once before declaring Remote Desktop blocked. Keep
+`readiness` and `youtube-check --execute` as separate direct commands. A single recovered
+pre-dispatch refusal must not disable the recurring Shorts task or trigger any Desktop
+Commander security/configuration change.
 
 Use already configured persistent production asset/queue paths. For a new installation,
 the documented defaults are `~/Library/Application Support/ONNELLAB/content-engine/video-assets`
