@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-09-26T20:27:08+09:00
+Generated: 2026-09-27T01:25:27+09:00
 
 ## Summary
 
@@ -8,8 +8,7 @@ Generated: 2026-09-26T20:27:08+09:00
 | --- | --- | --- |
 | Store | in_review | 2 |
 | Store | not_released | 2 |
-| Store | unchanged | 10 |
-| Store | updated | 1 |
+| Store | unchanged | 11 |
 | GitHub Release | archived | 1 |
 | GitHub Release | planned | 5 |
 
@@ -29,7 +28,7 @@ Generated: 2026-09-26T20:27:08+09:00
 | Segra | android | 1.0.5 | 1.0.5 | same | unchanged | planned | onnellab/segra | Add release artifact and checksum |
 | Segra | ios | 1.0.4 | 1.0.5 | local_ahead | unchanged | - | onnellab/segra | Add release artifact and checksum |
 | TagWeaver | android | 2.5.1 | 2.5.1 | same | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
-| TagWeaver | ios | 2.5.1 | 2.5.1 | same | updated | archived | onnellab/tagweaver | Create or verify release candidate |
+| TagWeaver | ios | 2.5.1 | 2.5.1 | same | unchanged | archived | onnellab/tagweaver | No action |
 | VaultXT | android | 2.0.0 | 2.0.0 | same | unchanged | - | onnellab/onnellab-text | No action |
 | VaultXT | ios | 2.0.0 | 2.0.0 | same | unchanged | planned | onnellab/onnellab-text | Add release artifact and checksum |
 
@@ -49,7 +48,6 @@ Generated: 2026-09-26T20:27:08+09:00
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
 | Quivra | android | unchanged | Covered by private test release row | Version/update date read from Google Play public page; Android snapshot version 1.0.8 is stale for public version 1.0.7 and was not merged. |
-| TagWeaver | ios | updated | Create or verify release candidate | - |
 | Segra | ios | unchanged | Add release artifact and checksum | - |
 | TagWeaver | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
 | VaultXT | ios | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
