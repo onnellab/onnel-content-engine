@@ -41,7 +41,7 @@ APP-0007,melivra,dependency,sqflite_common_ffi,^2.4.2+1,2.4.2+1,,ok,github:onnel
 APP-0007,melivra,dependency,sqlite3,^3.5.2,3.5.2,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,url_launcher,^6.3.2,6.3.2,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,flutter_sdk,flutter,>=3.44.0,,>=3.44.0,ok,github:onnellab/melivra/pubspec.yaml
-APP-0001,quivra,app_version,quivra,1.0.7+82,1.0.7,,ok,github:onnellab/quivra/pubspec.yaml
+APP-0001,quivra,app_version,quivra,1.0.8+83,1.0.8,,ok,github:onnellab/quivra/pubspec.yaml
 APP-0001,quivra,dependency,cupertino_icons,^1.0.8,1.0.8,,ok,github:onnellab/quivra/pubspec.yaml
 APP-0001,quivra,dependency,ffmpeg_kit_flutter_new_full,^2.0.0,2.0.0,,ok,github:onnellab/quivra/pubspec.yaml
 APP-0001,quivra,dependency,flutter,sdk:flutter,0.0.0,,ok,github:onnellab/quivra/pubspec.yaml

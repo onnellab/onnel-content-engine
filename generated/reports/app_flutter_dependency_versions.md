@@ -63,7 +63,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | quivra | 1.0.7+82 | 1.0.7 | - | ok | github:onnellab/quivra/pubspec.yaml |
+| app_version | quivra | 1.0.8+83 | 1.0.8 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | ffmpeg_kit_flutter_new_full | ^2.0.0 | 2.0.0 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/quivra/pubspec.yaml |
