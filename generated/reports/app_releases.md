@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-09-26T08:30:08+09:00
+Generated: 2026-09-26T14:00:01+09:00
 
 ## Summary
 
@@ -19,8 +19,8 @@ Generated: 2026-09-26T08:30:08+09:00
 | Aligna | android | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
 | Aligna | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/aligna | No action |
 | ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
-| Melivra | android | com.onnellab.melivra | 1.0.0 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
-| Melivra | ios | 6783644955 | 1.0.0 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
+| Melivra | android | com.onnellab.melivra | 1.0.1 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
+| Melivra | ios | 6783644955 | 1.0.1 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
 | Papira | android | com.onnellab.papira | - | unknown | in_review | - | onnellab/papira | Review status |
 | Papira | ios | - | - | unknown | in_review | - | onnellab/papira | Review status |
 | Quivra | android | 1.0.7 | 1.0.7 | same | unchanged | - | onnellab/quivra | No action |

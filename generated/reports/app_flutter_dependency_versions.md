@@ -39,7 +39,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | melivra | 1.0.0+136 | 1.0.0 | - | ok | github:onnellab/melivra/pubspec.yaml |
+| app_version | melivra | 1.0.1+137 | 1.0.1 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | crypto | ^3.0.7 | 3.0.7 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.9 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | dart_tags | ^0.4.1 | 0.4.1 | - | ok | github:onnellab/melivra/pubspec.yaml |
