@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import re
+import stat
 import unicodedata
 from urllib.parse import urlencode
 from zoneinfo import ZoneInfo
@@ -82,6 +83,14 @@ def _nfc_child(parent: Path, name: str, *, directory_only: bool = False) -> Path
     return matches[0] if matches else None
 
 
+def _is_dataless(path: Path) -> bool:
+    try:
+        flags = getattr(path.stat(), "st_flags", 0)
+    except OSError:
+        raise VideoError("aether_single_backlog_wav_unavailable") from None
+    return bool(flags & getattr(stat, "SF_DATALESS", 0))
+
+
 def resolve_backlog_wav(title: str, *, root: Path = MYBOX_ROOT) -> Path:
     title = _clean(title, "title", 60)
     parent = Path(root)
@@ -92,6 +101,8 @@ def resolve_backlog_wav(title: str, *, root: Path = MYBOX_ROOT) -> Path:
         parent = child
     source = _nfc_child(parent, f"{title}.wav")
     if source is None or source.is_symlink() or not source.is_file():
+        raise VideoError("aether_single_backlog_wav_not_synced")
+    if _is_dataless(source):
         raise VideoError("aether_single_backlog_wav_not_synced")
     return source
 
@@ -153,6 +164,8 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
     source = Path(source)
     if source.suffix.lower() != ".wav" or source.is_symlink() or not source.is_file():
         raise VideoError("aether_single_backlog_wav_not_synced")
+    if _is_dataless(source):
+        raise VideoError("aether_single_backlog_wav_not_synced")
     target_dir = directory(Path(folder) / "source")
     target = target_dir / "master.wav"
     partial = target_dir / "master.partial.wav"
@@ -205,15 +218,25 @@ def policy_for(job: dict) -> dict:
     return policy
 
 
-def scheduled_publish_at(slot: str) -> str:
+def _scheduled_local(slot: str) -> datetime:
     try:
-        local = datetime.strptime(slot, "%Y-%m-%d").replace(
+        return datetime.strptime(slot, "%Y-%m-%d").replace(
             hour=9, minute=0, second=0, microsecond=0,
             tzinfo=ZoneInfo("Asia/Seoul"),
         )
     except (TypeError, ValueError):
         raise VideoError("aether_single_slot_invalid") from None
-    return local.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def publish_slot_stale(slot: str, *, now: datetime | None = None) -> bool:
+    current = now or datetime.now(ZoneInfo("Asia/Seoul"))
+    if current.tzinfo is None:
+        current = current.replace(tzinfo=ZoneInfo("Asia/Seoul"))
+    return current.astimezone(ZoneInfo("Asia/Seoul")) >= _scheduled_local(slot)
+
+
+def scheduled_publish_at(slot: str) -> str:
+    return _scheduled_local(slot).astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 
@@ -485,6 +508,12 @@ def worker(
                 return {"profile": "aether_inn", "status": "idle", "created_new_job": False}
         else:
             job = (pending or same_slot or unfinished or [None])[0]
+        stale_slot = job["slot"] if job is not None else slot
+        if publish and not (job or {}).get("upload") and publish_slot_stale(stale_slot):
+            if job is not None:
+                job.update(status="rejected", error="aether_single_publish_time_stale")
+                atomic_json(q.state_path, state)
+            raise VideoError("aether_single_publish_time_stale")
         api = None
         if publish:
             api = (api_factory or partial(YouTube, profile="aether_inn"))()
@@ -612,6 +641,8 @@ def backlog_worker(
         return {"dry_run": True, "profile": "aether_inn", "worker": "backlog_wav_single"}
     entry = backlog_catalog_entry(title)
     lane = BACKLOG_LANES[entry["title"]]
+    if publish and publish_slot_stale(slot or datetime.now(ZoneInfo("Asia/Seoul")).date().isoformat()):
+        raise VideoError("aether_single_publish_time_stale")
     if publish:
         api = (api_factory or partial(YouTube, profile="aether_inn"))()
         if getattr(api, "profile", None) != "aether_inn":

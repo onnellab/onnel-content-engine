@@ -1,10 +1,12 @@
 from __future__ import annotations
 import json
+from datetime import datetime
 from pathlib import Path
 import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from short_video_pipeline import atomic_json, file_hash
@@ -99,6 +101,7 @@ class SingleTests(unittest.TestCase):
     def test_full_worker_is_idempotent_and_schedules_same_video(self):
         api = Provider()
         with tempfile.TemporaryDirectory() as temporary, \
+             patch.object(aether_single, "publish_slot_stale", return_value=False), \
              patch.object(aether_single, "select_candidate", return_value={
                  "candidate_index": 1, "path": str(Path(temporary) / "chosen.mp3"),
                  "duration_seconds": 184, "sha256": "a" * 64}), \
@@ -110,13 +113,13 @@ class SingleTests(unittest.TestCase):
                 atomic_json(q.state_path, state)
             thumb.side_effect = thumbnail
             first = aether_single.worker(
-                Path(temporary).resolve(), slot="2026-09-26", title="Sails Above the Cloud Sea",
+                Path(temporary).resolve(), slot="2099-09-26", title="Sails Above the Cloud Sea",
                 style="Buoyant JRPG flight theme", lane="skybound_flight", publish=True, execute=True,
                 api_factory=lambda: api, music_generator=self.fake_music,
                 cover_generator=self.fake_cover, renderer=self.fake_renderer,
             )
             second = aether_single.worker(
-                Path(temporary).resolve(), slot="2026-09-26", title="Ignored New Title",
+                Path(temporary).resolve(), slot="2099-09-26", title="Ignored New Title",
                 style="Ignored", lane="quiet_road", publish=True, execute=True,
                 api_factory=lambda: api, music_generator=self.fake_music,
                 cover_generator=self.fake_cover, renderer=self.fake_renderer,
@@ -124,7 +127,7 @@ class SingleTests(unittest.TestCase):
         self.assertEqual("scheduled", first["status"])
         self.assertFalse(first["publication_complete"])
         self.assertEqual("private", api.body["status"]["privacyStatus"])
-        self.assertEqual("2026-09-26T00:00:00Z", api.body["status"]["publishAt"])
+        self.assertEqual("2099-09-26T00:00:00Z", api.body["status"]["publishAt"])
         self.assertEqual(first["job_id"], second["job_id"])
         self.assertEqual(first["video_id"], second["video_id"])
         self.assertEqual(1, api.inserts)
@@ -168,6 +171,53 @@ class SingleTests(unittest.TestCase):
                     aether_single.import_backlog_master(source, job, 138)
             self.assertFalse((job / "source" / "master.partial.wav").exists())
 
+    def test_dataless_backlog_source_is_reported_not_synced_without_copy(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            source = root / "Beyond the Road of Falling Petals.wav"
+            source.write_bytes(b"placeholder")
+            job = root / "job"
+            job.mkdir(mode=0o700)
+            with patch.object(aether_single, "_is_dataless", return_value=True), \
+                 patch.object(aether_single, "run_process", side_effect=AssertionError("must not copy")):
+                with self.assertRaisesRegex(Exception, "backlog_wav_not_synced"):
+                    aether_single.import_backlog_master(source, job, 138)
+
+    def test_publish_slot_stale_at_nine_kst_boundary(self):
+        before = datetime(2026, 9, 26, 8, 59, tzinfo=ZoneInfo("Asia/Seoul"))
+        boundary = datetime(2026, 9, 26, 9, 0, tzinfo=ZoneInfo("Asia/Seoul"))
+        self.assertFalse(aether_single.publish_slot_stale("2026-09-26", now=before))
+        self.assertTrue(aether_single.publish_slot_stale("2026-09-26", now=boundary))
+
+    def test_reconcile_rejects_stale_unuploaded_job_and_preserves_record(self):
+        with tempfile.TemporaryDirectory() as temporary, \
+             patch.object(aether_single, "select_candidate", return_value={
+                 "candidate_index": 1, "path": str(Path(temporary) / "chosen.mp3"),
+                 "duration_seconds": 184, "sha256": "a" * 64}):
+            root = Path(temporary).resolve()
+            Path(temporary, "chosen.mp3").write_bytes(b"chosen")
+            created = aether_single.worker(
+                root, slot="2026-09-26", title="Fresh Road Theme",
+                style="Warm fantasy road theme", lane="skybound_flight",
+                publish=False, execute=True, music_generator=self.fake_music,
+                cover_generator=self.fake_cover, renderer=self.fake_renderer,
+            )
+            state = json.loads((root / "queue.json").read_text())
+            state["jobs"][created["job_id"]]["publish_requested"] = True
+            state["jobs"][created["job_id"]]["status"] = "blocked"
+            atomic_json(root / "queue.json", state)
+            with patch.object(aether_single, "publish_slot_stale", return_value=True):
+                with self.assertRaisesRegex(Exception, "publish_time_stale"):
+                    aether_single.worker(
+                        root, publish=True, execute=True, existing_only=True,
+                        api_factory=lambda: (_ for _ in ()).throw(AssertionError("network")),
+                    )
+            state = json.loads((root / "queue.json").read_text())
+            job = state["jobs"][created["job_id"]]
+            self.assertEqual("rejected", job["status"])
+            self.assertEqual("aether_single_publish_time_stale", job["error"])
+            self.assertNotIn("upload", job)
+
     def test_backlog_worker_skips_title_already_public_before_wav_access(self):
         class ExistingApi:
             profile = "aether_inn"
@@ -181,7 +231,8 @@ class SingleTests(unittest.TestCase):
             "title": "Beyond the Road of Falling Petals 🌿 Fantasy RPG Music",
             "published_at": "2026-09-20T00:00:00Z",
         }
-        with patch.object(aether_single, "find_existing_public_video", return_value=existing), \
+        with patch.object(aether_single, "publish_slot_stale", return_value=False), \
+             patch.object(aether_single, "find_existing_public_video", return_value=existing), \
              patch.object(aether_single, "resolve_backlog_wav", side_effect=AssertionError("must not read WAV")):
             result = aether_single.backlog_worker(
                 Path("/tmp/not-used"), slot="2026-09-26",
@@ -272,7 +323,8 @@ class SingleTests(unittest.TestCase):
     def test_wrong_youtube_profile_rejected_before_generation(self):
         class Wrong:
             profile = "onnellab"
-        with tempfile.TemporaryDirectory() as temporary:
+        with tempfile.TemporaryDirectory() as temporary, \
+             patch.object(aether_single, "publish_slot_stale", return_value=False):
             with self.assertRaises(Exception):
                 aether_single.worker(
                     Path(temporary).resolve(), slot="2026-09-22", title="Title", style="Style",
