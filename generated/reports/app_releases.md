@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-09-27T06:12:20+09:00
+Generated: 2026-09-27T06:20:49+09:00
 
 ## Summary
 
@@ -8,10 +8,9 @@ Generated: 2026-09-27T06:12:20+09:00
 | --- | --- | --- |
 | Store | in_review | 2 |
 | Store | not_released | 2 |
-| Store | unchanged | 10 |
-| Store | updated | 1 |
+| Store | unchanged | 11 |
 | GitHub Release | archived | 1 |
-| GitHub Release | planned | 5 |
+| GitHub Release | planned | 6 |
 
 ## Store Snapshots
 
@@ -24,8 +23,8 @@ Generated: 2026-09-27T06:12:20+09:00
 | Melivra | ios | 6783644955 | 1.0.1 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
 | Papira | android | com.onnellab.papira | - | unknown | in_review | - | onnellab/papira | Review status |
 | Papira | ios | - | - | unknown | in_review | - | onnellab/papira | Review status |
-| Quivra | android | 1.0.8 | 1.0.8 | same | updated | - | onnellab/quivra | Create or verify release candidate |
-| Quivra | ios | 1.0.7 | 1.0.8 | local_ahead | unchanged | planned | onnellab/quivra | Private test only; do not publish public GitHub Release |
+| Quivra | android | 1.0.8 | 1.0.8 | same | unchanged | planned | onnellab/quivra | Add release artifact and checksum |
+| Quivra | ios | 1.0.7 | 1.0.8 | local_ahead | unchanged | planned | onnellab/quivra | Add release artifact and checksum |
 | Segra | android | 1.0.5 | 1.0.5 | same | unchanged | planned | onnellab/segra | Add release artifact and checksum |
 | Segra | ios | 1.0.4 | 1.0.5 | local_ahead | unchanged | - | onnellab/segra | Add release artifact and checksum |
 | TagWeaver | android | 2.5.1 | 2.5.1 | same | unchanged | planned | onnellab/tagweaver | Add release artifact and checksum |
@@ -42,16 +41,18 @@ Generated: 2026-09-27T06:12:20+09:00
 | REL-0011 | Segra | android | public | v1.0.5 | planned | Public approved, waiting for artifact | - | - | - | Add release artifact and checksum |
 | REL-0013 | TagWeaver | ios | public | v2.5.0 | archived | Archived | - | - | 이제 iOS에서도 저장을 누르면 선택한 원본 파일에 편집 내용이 바로 반영돼요. 편집 후 별도 사본을 내보내거나 지울 필요가 없어요. 원본 위치에 저장할 수 없는 경우에만 복사본 저장 위치를 선택해요. | No action |
 | REL-0006 | ClipNest | ios | private_test | v1.0.4 | planned | Private test; public Release disabled | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Private test only; do not publish public GitHub Release |
-| REL-0016 | Quivra | ios | private_test | v1.0.8 | planned | Private test; public Release disabled | - | - | 일부 정상적인 MP4 파일이 변환 도중 너무 일찍 중단될 수 있던 문제를 수정했어요. 변환이 실제로 진행 중인 동안에는 긴 파일도 안정적으로 완료할 수 있도록 개선했어요. 변환할 수 없는 파일에 불필요한 재시도를 줄여 실패 결과를 더 빠르게 확인할 수 있어요. 파일 선택 화면에서는 Quivra가 지원하는 WAV, M4A, MOV, MP4 파일만 선택할 수 있도록 정리했어요. 기존 변환 음질과 영상 품질은 그대로 유지하면서 변환 안정성을 높였어요. | Private test only; do not publish public GitHub Release |
+| REL-0009 | Quivra | ios | public | v1.0.7 | planned | Public approved, waiting for artifact | - | - | 일부 정상적인 MP4 파일이 변환 도중 너무 일찍 중단될 수 있던 문제를 수정했어요. 변환이 실제로 진행 중인 동안에는 긴 파일도 안정적으로 완료할 수 있도록 개선했어요. 변환할 수 없는 파일에 불필요한 재시도를 줄여 실패 결과를 더 빠르게 확인할 수 있어요. 파일 선택 화면에서는 Quivra가 지원하는 WAV, M4A, MOV, MP4 파일만 선택할 수 있도록 정리했어요. 기존 변환 음질과 영상 품질은 그대로 유지하면서 변환 안정성을 높였어요. | Add release artifact and checksum |
+| REL-0016 | Quivra | android | public | v1.0.8 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
 
 ## Attention Queue
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| Quivra | android | updated | Create or verify release candidate | Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/quivra/pubspec.yaml version 1.0.8+83; confirm against Play Console if needed. |
+| Quivra | ios | unchanged | Add release artifact and checksum | - |
 | Segra | ios | unchanged | Add release artifact and checksum | - |
 | TagWeaver | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
 | VaultXT | ios | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
 | Segra | android | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
 | ClipNest | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.2. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |
-| Quivra | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.7. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
+| Quivra | ios | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
+| Quivra | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
