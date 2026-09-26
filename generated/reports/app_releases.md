@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-09-27T01:25:27+09:00
+Generated: 2026-09-27T06:12:20+09:00
 
 ## Summary
 
@@ -8,7 +8,8 @@ Generated: 2026-09-27T01:25:27+09:00
 | --- | --- | --- |
 | Store | in_review | 2 |
 | Store | not_released | 2 |
-| Store | unchanged | 11 |
+| Store | unchanged | 10 |
+| Store | updated | 1 |
 | GitHub Release | archived | 1 |
 | GitHub Release | planned | 5 |
 
@@ -23,7 +24,7 @@ Generated: 2026-09-27T01:25:27+09:00
 | Melivra | ios | 6783644955 | 1.0.1 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
 | Papira | android | com.onnellab.papira | - | unknown | in_review | - | onnellab/papira | Review status |
 | Papira | ios | - | - | unknown | in_review | - | onnellab/papira | Review status |
-| Quivra | android | 1.0.7 | 1.0.8 | local_ahead | unchanged | - | onnellab/quivra | Covered by private test release row |
+| Quivra | android | 1.0.8 | 1.0.8 | same | updated | - | onnellab/quivra | Create or verify release candidate |
 | Quivra | ios | 1.0.7 | 1.0.8 | local_ahead | unchanged | planned | onnellab/quivra | Private test only; do not publish public GitHub Release |
 | Segra | android | 1.0.5 | 1.0.5 | same | unchanged | planned | onnellab/segra | Add release artifact and checksum |
 | Segra | ios | 1.0.4 | 1.0.5 | local_ahead | unchanged | - | onnellab/segra | Add release artifact and checksum |
@@ -47,7 +48,7 @@ Generated: 2026-09-27T01:25:27+09:00
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| Quivra | android | unchanged | Covered by private test release row | Version/update date read from Google Play public page; Android snapshot version 1.0.8 is stale for public version 1.0.7 and was not merged. |
+| Quivra | android | updated | Create or verify release candidate | Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/quivra/pubspec.yaml version 1.0.8+83; confirm against Play Console if needed. |
 | Segra | ios | unchanged | Add release artifact and checksum | - |
 | TagWeaver | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
 | VaultXT | ios | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
