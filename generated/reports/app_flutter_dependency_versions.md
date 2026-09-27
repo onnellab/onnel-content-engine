@@ -79,7 +79,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 | app_version | segra | 1.0.5+75 | 1.0.5 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | app_settings | any | 7.0.0 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/segra/pubspec.yaml |
-| dependency | ffmpeg_kit_flutter_new | ^4.1.0 | 4.1.0 | - | ok | github:onnellab/segra/pubspec.yaml |
+| dependency | ffmpeg_kit_flutter_new | 4.5.3 | 4.5.3 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | file_selector | ^1.0.3 | 1.1.0 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | flutter_localizations | sdk:flutter | 0.0.0 | - | ok | github:onnellab/segra/pubspec.yaml |

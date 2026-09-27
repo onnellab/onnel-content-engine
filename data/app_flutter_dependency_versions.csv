@@ -52,7 +52,7 @@ APP-0001,quivra,flutter_sdk,flutter,>=3.38.4,,>=3.38.4,ok,github:onnellab/quivra
 APP-0004,segra,app_version,segra,1.0.5+75,1.0.5,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,app_settings,any,7.0.0,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,cupertino_icons,^1.0.8,1.0.8,,ok,github:onnellab/segra/pubspec.yaml
-APP-0004,segra,dependency,ffmpeg_kit_flutter_new,^4.1.0,4.1.0,,ok,github:onnellab/segra/pubspec.yaml
+APP-0004,segra,dependency,ffmpeg_kit_flutter_new,4.5.3,4.5.3,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,file_selector,^1.0.3,1.1.0,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,flutter,sdk:flutter,0.0.0,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,flutter_localizations,sdk:flutter,0.0.0,,ok,github:onnellab/segra/pubspec.yaml
