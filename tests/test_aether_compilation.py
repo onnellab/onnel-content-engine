@@ -11,7 +11,7 @@ from short_video_pipeline import VideoError,file_hash
 from short_video_youtube import metadata,UploadError
 from aether_compose import checked_asset,render
 from aether_compilation import worker,brief_for
-from aether_compilation_assets import approval_template,sync as sync_assets
+from aether_compilation_assets import approval_template,hash_private_source,source_title,sync as sync_assets
 from aether_planner import plan,read_catalog
 from datetime import datetime,timezone
 
@@ -59,6 +59,14 @@ class Compilation(unittest.TestCase):
             root=Path(temporary).resolve()
             with self.assertRaisesRegex(VideoError,'aether_asset_approval_missing'):
                 sync_assets(root/'assets',source_root=root/'source',execute=True)
+
+    def test_cloud_materialization_failure_is_explicit(self):
+        with patch('aether_compilation_assets.file_hash', side_effect=OSError('provider cancelled')):
+            with self.assertRaisesRegex(VideoError,'aether_asset_source_materialization_failed'):
+                hash_private_source(Path('/tmp/cloud-placeholder.wav'))
+
+    def test_catalog_style_suffix_is_not_part_of_source_filename(self):
+        self.assertEqual('The Last Light Over Seren Fields', source_title({'title':'The Last Light Over Seren Fields Style:'}))
 
     def test_asset_sync_never_infers_unapproved_tracks(self):
         from short_video_pipeline import atomic_json

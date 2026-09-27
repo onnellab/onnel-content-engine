@@ -54,6 +54,7 @@ class CoverTests(unittest.TestCase):
 
     def test_title_wrap_is_bounded(self):
         self.assertEqual("The Airship Above\nCloudrest Harbor", aether_cover._wrap_title("The Airship Above Cloudrest Harbor"))
+        self.assertEqual("Beyond the Road\nof Falling Petals", aether_cover._wrap_title("Beyond the Road of Falling Petals"))
         with self.assertRaises(Exception):
             aether_cover._wrap_title(" ".join(["longword"] * 20))
 

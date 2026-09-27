@@ -115,19 +115,43 @@ def _wrap_title(title: str) -> str:
     words = title.split()
     if not words or len(title) > 100:
         raise VideoError("aether_title_invalid")
-    lines, current = [], []
-    for word in words:
-        candidate = " ".join(current + [word])
-        if current and len(candidate) > 26:
-            lines.append(" ".join(current))
-            current = [word]
+    candidates = []
+    for line_count in range(1, 4):
+        if line_count > len(words):
+            break
+        if line_count == 1:
+            partitions = [(0, len(words))]
+        elif line_count == 2:
+            partitions = [(cut, ) for cut in range(1, len(words))]
         else:
-            current.append(word)
-    if current:
-        lines.append(" ".join(current))
-    if len(lines) > 3:
+            partitions = [
+                (first, second)
+                for first in range(1, len(words) - 1)
+                for second in range(first + 1, len(words))
+            ]
+        for cuts in partitions:
+            if line_count == 1:
+                lines = [" ".join(words)]
+            elif line_count == 2:
+                cut = cuts[0]
+                lines = [" ".join(words[:cut]), " ".join(words[cut:])]
+            else:
+                first, second = cuts
+                lines = [
+                    " ".join(words[:first]),
+                    " ".join(words[first:second]),
+                    " ".join(words[second:]),
+                ]
+            lengths = [len(line) for line in lines]
+            if max(lengths) > 26:
+                continue
+            imbalance = max(lengths) - min(lengths)
+            candidates.append((line_count, imbalance, max(lengths), lines))
+        if candidates:
+            break
+    if not candidates:
         raise VideoError("aether_title_too_long_for_cover")
-    return "\n".join(lines)
+    return "\n".join(min(candidates, key=lambda row: row[:3])[3])
 
 
 TITLE_COLOR = "#F2E8D5"

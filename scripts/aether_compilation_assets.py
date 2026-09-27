@@ -6,7 +6,6 @@ import argparse
 import os
 from pathlib import Path
 import re
-import stat
 import unicodedata
 
 from aether_planner import THEMES, read_catalog
@@ -55,13 +54,6 @@ def find_source_root(override: Path | None = None) -> Path:
     return parent.resolve()
 
 
-def _is_dataless(path: Path) -> bool:
-    try:
-        return bool(getattr(path.stat(), "st_flags", 0) & getattr(stat, "SF_DATALESS", 0))
-    except OSError:
-        raise VideoError("aether_asset_source_unavailable") from None
-
-
 def checked_private_source(root: Path, relative: str, suffixes: set[str]) -> Path:
     rel = Path(relative)
     if not relative or rel.is_absolute() or ".." in rel.parts:
@@ -72,9 +64,23 @@ def checked_private_source(root: Path, relative: str, suffixes: set[str]) -> Pat
         path = path / part
         if path.is_symlink():
             raise VideoError("aether_symlink_asset_rejected")
-    if not path.is_file() or path.suffix.lower() not in suffixes or _is_dataless(path):
+    if not path.is_file() or path.suffix.lower() not in suffixes:
         raise VideoError("aether_asset_source_unavailable")
     return path
+
+
+def source_title(row: dict) -> str:
+    title = row["title"]
+    return title[:-7] if title.endswith(" Style:") else title
+
+
+def hash_private_source(path: Path) -> str:
+    try:
+        return file_hash(path)
+    except OSError:
+        raise VideoError("aether_asset_source_materialization_failed") from None
+
+
 def approval_template() -> dict:
     return {
         "schema_version": 1,
@@ -141,11 +147,11 @@ def sync(
             continue
         if spec.get("title") != catalog[key]["title"]:
             raise VideoError("aether_asset_approval_title_mismatch")
-        relative = f"01_Audio_Master/{catalog[key]['title']}.wav"
+        relative = f"01_Audio_Master/{source_title(catalog[key])}.wav"
         path = checked_private_source(source, relative, {".wav"})
         approved_tracks[key] = {
             "path": relative,
-            "sha256": file_hash(path),
+            "sha256": hash_private_source(path),
             "commercial_use_confirmed": True,
             "quality_accepted": True,
         }
@@ -165,7 +171,7 @@ def sync(
         path = checked_private_source(source, relative, {".png", ".jpg", ".jpeg"})
         approved_covers[theme] = {
             "path": relative,
-            "sha256": file_hash(path),
+            "sha256": hash_private_source(path),
             "commercial_use_confirmed": True,
         }
     manifest = {
