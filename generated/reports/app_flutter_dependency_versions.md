@@ -76,7 +76,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | segra | 1.0.5+75 | 1.0.5 | - | ok | github:onnellab/segra/pubspec.yaml |
+| app_version | segra | 1.0.6+76 | 1.0.6 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | app_settings | any | 7.0.0 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | ffmpeg_kit_flutter_new | 4.5.3 | 4.5.3 | - | ok | github:onnellab/segra/pubspec.yaml |
