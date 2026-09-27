@@ -94,8 +94,11 @@ COMMON_STYLE = (
     "No combat music, military aggression, EDM, anime-pop, trailer bombast, or unresolved ending."
 )
 
+def now_kst() -> datetime:
+    return datetime.now(KST)
+
 def iso_now() -> str:
-    return datetime.now(KST).isoformat(timespec="seconds")
+    return now_kst().isoformat(timespec="seconds")
 
 def save(payload: dict) -> None:
     STATE.mkdir(parents=True, exist_ok=True)
@@ -148,7 +151,10 @@ def repo_sync(report: dict) -> bool:
     if code != 0:
         report["blockers"].append("repo_status_failed")
         return False
-    run_step(report, "repo_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    code, _, _ = run_step(report, "repo_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    if code != 0:
+        report["blockers"].append("repo_fetch_failed")
+        return False
     code, counts, _ = run_step(
         report, "repo_divergence",
         ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
@@ -272,7 +278,10 @@ def run_hosted_ops_workflows(report: dict) -> None:
     if code != 0 or clean.strip():
         report["blockers"].append("hosted_ops_repo_not_clean")
         return
-    run_step(report, "hosted_ops_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    code, _, _ = run_step(report, "hosted_ops_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    if code != 0:
+        report["blockers"].append("hosted_ops_fetch_failed")
+        return
     code, counts, _ = run_step(
         report, "hosted_ops_divergence",
         ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
@@ -326,7 +335,10 @@ def run_store_review_auto_replies(report: dict) -> None:
         if code != 0:
             report["blockers"].append("review_approval_commit_failed")
             return
-        run_step(report, "review_approval_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+        code, _, _ = run_step(report, "review_approval_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+        if code != 0:
+            report["blockers"].append("review_approval_fetch_failed")
+            return
         code, counts, _ = run_step(
             report, "review_approval_divergence",
             ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
@@ -402,7 +414,10 @@ def run_store_review_auto_replies(report: dict) -> None:
     if code != 0:
         report["blockers"].append("store_review_verification_sync_failed")
         return
-    run_step(report, "review_verification_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    code, _, _ = run_step(report, "review_verification_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    if code != 0:
+        report["blockers"].append("review_verification_fetch_failed")
+        return
     code, _, _ = run_step(report, "review_verification_pull", ["git", "pull", "--ff-only", "origin", "main"], timeout=180)
     if code != 0:
         report["blockers"].append("store_review_verification_pull_failed")
@@ -461,7 +476,8 @@ def sync_playlists_after_upload(report: dict) -> None:
     if code != 0 or payload.get("state") != "synced":
         report["blockers"].append(payload.get("error") or "aether_playlist_sync_after_upload_failed")
 
-def run_single_slot(report: dict, now: datetime, single_reconcile: dict) -> None:
+def run_single_slot(report: dict, single_reconcile: dict) -> None:
+    now = now_kst()
     if now.weekday() not in {1, 5}:
         report["single_slot"] = {"status": "not_scheduled_today"}
         return
@@ -480,6 +496,11 @@ def run_single_slot(report: dict, now: datetime, single_reconcile: dict) -> None
 
     slot = now.date().isoformat()
     for title in BACKLOG:
+        current = now_kst()
+        if current.date().isoformat() != slot or (current.hour, current.minute) >= (9, 0):
+            report["single_slot"] = {"status": "blocked", "error": "aether_single_publish_time_stale"}
+            report["blockers"].append("aether_single_publish_time_stale")
+            return
         code, stdout, _ = run_step(
             report,
             f"backlog_{title}",
@@ -605,7 +626,10 @@ def publish_local_ops_sources(report: dict) -> None:
     if code != 0 or clean.strip():
         report["blockers"].append("ops_snapshot_repo_not_clean")
         return
-    run_step(report, "ops_prewrite_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    code, _, _ = run_step(report, "ops_prewrite_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    if code != 0:
+        report["blockers"].append("ops_snapshot_fetch_failed")
+        return
     code, counts, _ = run_step(
         report, "ops_prewrite_divergence",
         ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
@@ -683,7 +707,10 @@ def publish_local_ops_sources(report: dict) -> None:
         return
     code, sha, _ = run_step(report, "ops_snapshot_commit_sha", ["git", "rev-parse", "HEAD"], timeout=30)
     report["ops_snapshot_commit"] = {"status": "committed", "sha": sha.strip() if code == 0 else ""}
-    run_step(report, "ops_snapshot_postcommit_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    code, _, _ = run_step(report, "ops_snapshot_postcommit_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    if code != 0:
+        report["blockers"].append("ops_snapshot_postcommit_fetch_failed")
+        return
     code, counts, _ = run_step(
         report, "ops_snapshot_postcommit_divergence",
         ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
@@ -730,7 +757,7 @@ def main() -> int:
         except BlockingIOError:
             print(json.dumps({"state": "already_running", "result": str(RESULT)}))
             return 3
-        now = datetime.now(KST)
+        now = now_kst()
         report = {
             "schema_version": 1,
             "kind": "onnellab_aether_local_daily_result",
@@ -778,8 +805,8 @@ def main() -> int:
             return 2
 
         single_reconcile = run_reconcile(report)
-        run_single_slot(report, now, single_reconcile)
-        run_compilation_slot(report, now)
+        run_single_slot(report, single_reconcile)
+        run_compilation_slot(report, now_kst())
         finalize(report)
         print(json.dumps({
             "state": report["state"],

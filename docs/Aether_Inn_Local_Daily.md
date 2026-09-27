@@ -51,8 +51,9 @@ authorization headers, Keychain payloads, service-account JSON, or private keys.
 ## Local responsibilities
 
 Every normal run uses current `main` only after a clean fast-forward check. A dirty,
-diverged, or locally-ahead content-engine checkout fails closed rather than using
-unknown code. The worker then:
+diverged, locally-ahead, or unrefreshable content-engine checkout fails closed rather
+than using unknown or cached remote state. A failed `git fetch` is a blocker and
+must not be followed by divergence decisions against a stale `origin/main`. The worker then:
 
 - refreshes ONNELLAB and Aether Inn private YouTube reports independently;
 - refreshes the public-safe YouTube ops snapshot and AI-provider pricing status;
@@ -69,7 +70,9 @@ unknown code. The worker then:
 - synchronizes the six canonical Aether playlists idempotently;
 - on Tuesday/Saturday before 09:00 KST, processes the first actually-missing
   canonical backlog WAV, or uses the canonical Lyria worker only after backlog
-  exhaustion and readiness checks;
+  exhaustion and readiness checks; the wrapper re-reads current KST immediately
+  before each publish-capable backlog attempt, so crossing 09:00 during earlier
+  reconciliation stops before another `--publish` invocation;
 - on every other Sunday beginning 2026-09-27, invokes at most one canonical
   existing-track compilation worker.
 
@@ -82,8 +85,9 @@ reimplement or weaken those contracts.
 
 The worker is single-instance. It records a blocker and stops or skips the affected
 stage when repository state, credentials, source WAVs, publication timing, worker
-readiness, or canonical worker results are unsafe. It never compensates for a stale
-09:00 single slot by publishing immediately, never creates a replacement upload to
+readiness, or canonical worker results are unsafe. Repository refresh failures block
+before cached remote refs are trusted. It never compensates for a stale 09:00 single
+slot by publishing immediately, never creates a replacement upload to
 escape an uncertain durable session, and never launches interactive authorization.
 
 Every step checkpoints `active_step` before launching its command and saves the
