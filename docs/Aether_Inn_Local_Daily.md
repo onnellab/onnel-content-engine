@@ -12,9 +12,11 @@ The root architecture therefore separates execution from reporting:
 1. macOS `launchd` starts `scripts/aether_daily_local.py` locally each morning.
 2. The local worker owns operations that require the Mac user session, Keychain,
    Google ADC, MYBOX, ffmpeg, or the durable Aether queues.
-3. The scheduled ChatGPT task reads the worker's durable result and handles
-   GitHub-hosted source refreshes, store-review policy, and final `/ops/`
-   reconciliation/deployment. It does not dispatch the local Aether shell path.
+3. The scheduled ChatGPT task is read-only: it verifies the durable daily result,
+   supporting report files, GitHub workflow/commit evidence, and the live `/ops/`
+   page. The local worker owns hosted source refreshes, review approvals and
+   publication, and `/ops/` reconciliation/deployment as well as local production.
+   ChatGPT must not dispatch, retry, compensate for, or duplicate any of them.
 
 This is an execution-boundary fix, not a relaxation of any safety gate.
 
@@ -27,6 +29,20 @@ time for the fail-closed 09:00 Tuesday/Saturday publication boundary.
 The durable local result is:
 
     ~/Library/Application Support/ONNELLAB/content-engine/daily-aether/result.json
+
+Scheduled verification first requires `kind=onnellab_aether_local_daily_result`,
+`mode=daily`, and `local_date` equal to the current Asia/Seoul date. A missing or
+stale daily result is `local_aether_launchagent_stale`, never permission to start
+another worker. If `state=running`, re-read during the same invocation when
+practical. For `partial` or `failed`, preserve all durable job/video/approval IDs
+and report the recorded blockers without a second production/publication attempt.
+
+Remote Desktop is limited to file reads for the durable result and supporting
+reports during scheduled verification. No terminal/process execution, shell,
+`gh`, Python worker, ffmpeg, OAuth/Keychain command, probe, or equivalent local
+command may run or compensate for Aether/YouTube/Ops work from that task. Connected
+GitHub reads and public-page reads are verification only; unavailable, stale,
+not_applicable, and manual-only sources must not be reported as live-verified.
 
 The result contains status, safe worker outputs, exact blockers, and timestamps.
 It must never contain OAuth tokens, client secrets, refresh/access tokens,
@@ -70,5 +86,13 @@ readiness, or canonical worker results are unsafe. It never compensates for a st
 09:00 single slot by publishing immediately, never creates a replacement upload to
 escape an uncertain durable session, and never launches interactive authorization.
 
-`--probe` performs a non-paid connectivity/readiness check. It may refresh read-only
-YouTube reports but never generates music, renders media, or publishes a video.
+Every step checkpoints `active_step` before launching its command and saves the
+completed step afterward. Exceptions retain the original start date, completed
+steps, warnings, blockers, and durable IDs; only the failure state, finish time,
+and safe exception-class blocker are added. Failure before owning a report leaves
+the existing result untouched. Timeout output is decoded before JSON serialization.
+
+Manual-only `--probe` performs a non-paid connectivity/readiness check and writes
+`probe-result.json`, never the authoritative daily `result.json`. It may refresh
+read-only YouTube reports but never generates music, renders media, or publishes
+a video. Scheduled ChatGPT verification must not invoke this probe.

@@ -99,17 +99,22 @@ def iso_now() -> str:
 
 def save(payload: dict) -> None:
     STATE.mkdir(parents=True, exist_ok=True)
-    tmp = RESULT.with_suffix(".tmp")
+    target = RESULT.with_name("probe-result.json") if payload.get("mode") == "probe" else RESULT
+    tmp = target.with_suffix(".tmp")
     tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     os.chmod(tmp, 0o600)
-    tmp.replace(RESULT)
+    tmp.replace(target)
 
-def trim(value: str, limit: int = 12000) -> str:
-    value = value.strip()
+def trim(value: str | bytes | None, limit: int = 12000) -> str:
+    if isinstance(value, bytes):
+        value = value.decode("utf-8", errors="replace")
+    value = (value or "").strip()
     return value if len(value) <= limit else value[-limit:]
 
 def run_step(report: dict, name: str, args: list[str], *, timeout: int = 1800) -> tuple[int, str, str]:
     started = iso_now()
+    report["active_step"] = {"name": name, "started_at": started}
+    save(report)
     try:
         completed = subprocess.run(
             args, cwd=REPO, text=True, capture_output=True, timeout=timeout, check=False,
@@ -119,17 +124,24 @@ def run_step(report: dict, name: str, args: list[str], *, timeout: int = 1800) -
         code = 124
         stdout = trim(error.stdout or "")
         stderr = "local_worker_timeout"
+    except OSError as error:
+        code, stdout = 127, ""
+        stderr = f"local_worker_start_failed:{type(error).__name__}"
     report["steps"].append({
         "name": name, "started_at": started, "finished_at": iso_now(),
         "exit_code": code, "stdout": stdout, "stderr": stderr,
     })
+    report.pop("active_step", None)
     save(report)
     return code, stdout, stderr
 def json_stdout(stdout: str) -> dict:
     try:
-        return json.loads(stdout)
+        payload = json.loads(stdout)
     except json.JSONDecodeError:
         return {}
+    if not isinstance(payload, dict):
+        raise ValueError("local_worker_json_object_required")
+    return payload
 
 def repo_sync(report: dict) -> bool:
     code, dirty, _ = run_step(report, "repo_status", ["git", "status", "--porcelain"], timeout=30)
@@ -710,6 +722,7 @@ def main() -> int:
     args = parser.parse_args()
     STATE.mkdir(parents=True, exist_ok=True)
     fd = os.open(LOCK, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+    report: dict | None = None
     try:
         os.fchmod(fd, 0o600)
         try:
@@ -777,20 +790,16 @@ def main() -> int:
         }, ensure_ascii=False))
         return 0 if not report["blockers"] else 2
     except Exception as error:
-        payload = {
-            "schema_version": 1,
-            "kind": "onnellab_aether_local_daily_result",
-            "mode": "probe" if args.probe else "daily",
-            "started_at": iso_now(),
-            "finished_at": iso_now(),
-            "local_date": datetime.now(KST).date().isoformat(),
-            "state": "failed",
-            "steps": [],
-            "blockers": [f"local_worker_exception:{type(error).__name__}"],
-            "warnings": [],
-        }
-        save(payload)
-        print(json.dumps({"state": "failed", "blockers": payload["blockers"]}))
+        blocker = f"local_worker_exception:{type(error).__name__}"
+        if report is not None:
+            # Keep original dates, completed steps and durable job/video/approval IDs.
+            report["state"] = "failed"
+            report["finished_at"] = iso_now()
+            report.setdefault("blockers", []).append(blocker)
+            save(report)
+        # Before this invocation owns a report, leave the existing result untouched.
+        blockers = report["blockers"] if report is not None else [blocker]
+        print(json.dumps({"state": "failed", "blockers": blockers}))
         return 2
     finally:
         os.close(fd)
