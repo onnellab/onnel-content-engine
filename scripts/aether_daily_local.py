@@ -557,7 +557,7 @@ def run_compilation_slot(report: dict, now: datetime) -> None:
         "aether_compilation_assets",
         [
             sys.executable, "-B", "scripts/aether_compilation_assets.py", "sync",
-            "--execute", "--theme", theme,
+            "--execute", "--theme", theme, "--slot", now.date().isoformat(),
         ],
         timeout=1800,
     )

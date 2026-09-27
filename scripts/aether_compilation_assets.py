@@ -6,11 +6,14 @@ import argparse
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import time
 import unicodedata
 
-from aether_planner import THEMES, plan, read_catalog
+from aether_compose import audio_duration
+from aether_compilation_cover import build as build_compilation_cover
+from aether_planner import THEMES, plan, read_catalog, tokens
 from short_video_pipeline import VideoError, atomic_json, file_hash, load_json
 from youtube_report_store import directory
 
@@ -42,7 +45,7 @@ def _nfc_child(parent: Path, name: str, *, directory_only: bool = False) -> Path
 def activate_mybox() -> None:
     try:
         completed = subprocess.run(
-            ["/usr/bin/open", "-a", "MYBOX"],
+            ["/usr/bin/open", "-gja", "MYBOX"],
             stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
             timeout=10, check=False,
         )
@@ -93,13 +96,57 @@ def source_title(row: dict) -> str:
 
 def hash_private_source(path: Path, *, wake_provider: bool = False) -> str:
     last_error = None
-    for _ in range(2):
-        if wake_provider:
-            activate_mybox()
+    for attempt in range(3):
         try:
             return file_hash(path)
         except OSError as error:
             last_error = error
+            if attempt < 2 and wake_provider:
+                activate_mybox()
+                time.sleep(2 * (attempt + 1))
+    raise VideoError("aether_asset_source_materialization_failed") from last_error
+
+
+def stage_private_source(source: Path, target: Path, *, wake_provider: bool = False) -> tuple[Path, str]:
+    try:
+        source_stat = source.stat()
+    except OSError:
+        raise VideoError("aether_asset_source_unavailable") from None
+    if source_stat.st_size <= 0:
+        raise VideoError("aether_asset_source_unavailable")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.is_symlink():
+        raise VideoError("aether_symlink_asset_rejected")
+    if target.is_file():
+        target_stat = target.stat()
+        if (
+            target_stat.st_size == source_stat.st_size
+            and target_stat.st_mtime_ns == source_stat.st_mtime_ns
+        ):
+            return target, file_hash(target)
+    if shutil.disk_usage(target.parent).free < source_stat.st_size + 1024**3:
+        raise VideoError("aether_insufficient_free_disk")
+    partial = target.with_suffix(target.suffix + ".partial")
+    if partial.is_symlink():
+        raise VideoError("aether_symlink_asset_rejected")
+    last_error = None
+    for attempt in range(3):
+        partial.unlink(missing_ok=True)
+        try:
+            shutil.copyfile(source, partial)
+            os.chmod(partial, 0o600)
+            os.utime(partial, ns=(source_stat.st_atime_ns, source_stat.st_mtime_ns))
+            if partial.stat().st_size != source_stat.st_size:
+                raise OSError("short staged copy")
+            digest = file_hash(partial)
+            partial.replace(target)
+            return target, digest
+        except OSError as error:
+            last_error = error
+            partial.unlink(missing_ok=True)
+            if attempt < 2 and wake_provider:
+                activate_mybox()
+                time.sleep(2 * (attempt + 1))
     raise VideoError("aether_asset_source_materialization_failed") from last_error
 
 
@@ -139,14 +186,14 @@ def init_approval(assets_root: Path = ASSETS_ROOT, *, execute: bool = False) -> 
 
 def asset_root_for_manifest(manifest: dict, fallback: Path) -> Path:
     source = manifest.get("asset_source")
-    if source is None:
+    if source in {None, "local_private_cache"}:
         return Path(fallback)
-    if source != "mybox_aether_inn":
-        raise VideoError("aether_asset_source_invalid")
-    return find_source_root()
+    if source == "mybox_aether_inn":
+        return find_source_root()
+    raise VideoError("aether_asset_source_invalid")
 
 
-def compilation_history(assets_root: Path) -> list[dict]:
+def compilation_history(assets_root: Path, *, exclude_slot: str | None = None) -> list[dict]:
     path = Path(assets_root).parent / "queue.json"
     if not path.is_file() or path.is_symlink():
         return []
@@ -158,7 +205,11 @@ def compilation_history(assets_root: Path) -> list[dict]:
     return [
         {"track_ids": job.get("selection", {}).get("track_ids", [])}
         for job in ordered
-        if job.get("upload") and isinstance(job.get("selection"), dict)
+        if (
+            job.get("upload")
+            and job.get("slot") != exclude_slot
+            and isinstance(job.get("selection"), dict)
+        )
     ]
 
 
@@ -168,6 +219,7 @@ def sync(
     source_root: Path | None = None,
     execute: bool = False,
     theme: str | None = None,
+    slot: str | None = None,
 ) -> dict:
     assets_root = directory(Path(assets_root))
     approval_path = assets_root / "approval.json"
@@ -181,34 +233,84 @@ def sync(
     for key, spec in (approval.get("tracks") or {}).items():
         if key not in catalog or not isinstance(spec, dict):
             raise VideoError("aether_asset_approval_invalid")
-        if spec.get("title") != catalog[key]["title"]:
+        if source_title({"title": str(spec.get("title", ""))}) != catalog[key]["title"]:
             raise VideoError("aether_asset_approval_title_mismatch")
         if spec.get("commercial_use_confirmed") is True and spec.get("quality_accepted") is True:
             eligible.append(catalog[key])
     if not eligible:
         raise VideoError("aether_asset_approval_incomplete")
-    if theme is not None:
-        if theme not in THEMES:
-            raise VideoError("aether_theme_invalid")
-        preselection = plan(eligible, theme, history=compilation_history(assets_root))
-        selected_ids = set(preselection["track_ids"])
-    else:
-        preselection = None
-        selected_ids = {row["id"] for row in eligible}
+    history = compilation_history(assets_root, exclude_slot=slot) if theme is not None else []
+    if theme is not None and theme not in THEMES:
+        raise VideoError("aether_theme_invalid")
 
     source = find_source_root(source_root)
     wake_provider = source_root is None
+    stage_key = theme or "all"
     approved_tracks = {}
-    for key in selected_ids:
-        spec = approval["tracks"][key]
-        relative = f"01_Audio_Master/{source_title(catalog[key])}.wav"
-        path = checked_private_source(source, relative, {".wav"})
-        approved_tracks[key] = {
-            "path": relative,
-            "sha256": hash_private_source(path, wake_provider=wake_provider),
-            "commercial_use_confirmed": True,
-            "quality_accepted": True,
+    preselection = None
+    measured_selection = None
+
+    if theme is not None:
+        keywords = THEMES[theme][1]
+        relevant = [
+            row for row in eligible
+            if tokens(row["title"] + " " + row["style"]) & keywords
+        ]
+        try:
+            preselection = plan(eligible, theme, history=history)
+        except VideoError as error:
+            if str(error) != "insufficient_coherent_tracks_for_target":
+                raise
+        preferred = list((preselection or {}).get("track_ids", []))
+        by_id = {row["id"]: row for row in relevant}
+        ordered = [by_id[key] for key in preferred if key in by_id]
+        ordered += sorted(
+            [row for row in relevant if row["id"] not in set(preferred)],
+            key=lambda row: row["id"],
+        )
+        measured = []
+        staged_specs = {}
+        for row in ordered:
+            relative = f"01_Audio_Master/{source_title(row)}.wav"
+            source_path = checked_private_source(source, relative, {".wav"})
+            target = assets_root / "staged" / stage_key / "masters" / f"{source_title(row)}.wav"
+            staged, digest = stage_private_source(
+                source_path, target, wake_provider=wake_provider,
+            )
+            staged_specs[row["id"]] = {
+                "path": staged.relative_to(assets_root).as_posix(),
+                "sha256": digest,
+                "commercial_use_confirmed": True,
+                "quality_accepted": True,
+            }
+            measured.append({**row, "duration_seconds": audio_duration(staged)})
+            if len(measured) < 3:
+                continue
+            try:
+                measured_selection = plan(measured, theme, history=history)
+                break
+            except VideoError as error:
+                if str(error) != "insufficient_coherent_tracks_for_target":
+                    raise
+        if measured_selection is None:
+            measured_selection = plan(measured, theme, history=history)
+        approved_tracks = {
+            key: staged_specs[key] for key in measured_selection["track_ids"]
         }
+    else:
+        for row in eligible:
+            relative = f"01_Audio_Master/{source_title(row)}.wav"
+            source_path = checked_private_source(source, relative, {".wav"})
+            target = assets_root / "staged" / stage_key / "masters" / f"{source_title(row)}.wav"
+            staged, digest = stage_private_source(
+                source_path, target, wake_provider=wake_provider,
+            )
+            approved_tracks[row["id"]] = {
+                "path": staged.relative_to(assets_root).as_posix(),
+                "sha256": digest,
+                "commercial_use_confirmed": True,
+                "quality_accepted": True,
+            }
 
     approved_covers = {}
     cover_specs = approval.get("covers") or {}
@@ -221,17 +323,28 @@ def sync(
         if not isinstance(filename, str) or not filename or "/" in filename or "\\" in filename:
             raise VideoError("aether_asset_approval_invalid")
         relative = f"02_Cover_Original/{filename}"
-        path = checked_private_source(source, relative, {".png", ".jpg", ".jpeg"})
+        source_path = checked_private_source(source, relative, {".png", ".jpg", ".jpeg"})
+        target = assets_root / "staged" / stage_key / "covers" / filename
+        staged, _ = stage_private_source(
+            source_path, target, wake_provider=wake_provider,
+        )
+        compilation_cover = (
+            assets_root / "staged" / stage_key / "covers"
+            / f"compilation-{cover_theme}.png"
+        )
+        branded = build_compilation_cover(
+            staged, compilation_cover, THEMES[cover_theme][0],
+        )
         approved_covers[cover_theme] = {
-            "path": relative,
-            "sha256": hash_private_source(path, wake_provider=wake_provider),
+            "path": compilation_cover.relative_to(assets_root).as_posix(),
+            "sha256": branded["sha256"],
             "commercial_use_confirmed": True,
         }
     manifest = {
         "schema_version": 1,
         "profile": "aether_inn",
         "test_only": False,
-        "asset_source": "mybox_aether_inn",
+        "asset_source": "local_private_cache",
         "tracks": approved_tracks,
         "covers": approved_covers,
     }
@@ -241,10 +354,11 @@ def sync(
         os.chmod(manifest_path, 0o600)
     return {
         "status": "ready" if execute else "dry_run",
-        "asset_source": "mybox_aether_inn",
+        "asset_source": "local_private_cache",
         "theme": theme,
         "approved_track_count": len(approved_tracks),
         "preselected_titles": [row["title"] for row in preselection["tracks"]] if preselection else [],
+        "measured_selected_titles": [row["title"] for row in measured_selection["tracks"]] if measured_selection else [],
         "cover_themes": sorted(approved_covers),
         "manifest_path": str(manifest_path),
     }
@@ -260,13 +374,15 @@ def main() -> int:
     p = sub.add_parser("sync")
     p.add_argument("--execute", action="store_true")
     p.add_argument("--theme", choices=THEMES)
+    p.add_argument("--slot")
     args = parser.parse_args()
     try:
         if args.command == "init-approval":
             result = init_approval(args.assets_root, execute=args.execute)
         else:
             result = sync(
-                args.assets_root, source_root=args.source_root, execute=args.execute, theme=args.theme,
+                args.assets_root, source_root=args.source_root, execute=args.execute,
+                theme=args.theme, slot=args.slot,
             )
         print(__import__("json").dumps(result, ensure_ascii=False, indent=2))
         return 0

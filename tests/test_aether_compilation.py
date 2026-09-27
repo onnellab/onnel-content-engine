@@ -70,11 +70,12 @@ class Compilation(unittest.TestCase):
         with patch('aether_compilation_assets.subprocess.run',return_value=completed) as run, \
              patch('aether_compilation_assets.time.sleep') as sleep:
             activate_mybox()
-        self.assertEqual(['/usr/bin/open','-a','MYBOX'],run.call_args.args[0])
+        self.assertEqual(['/usr/bin/open','-gja','MYBOX'],run.call_args.args[0])
         sleep.assert_called_once_with(3)
 
     def test_catalog_style_suffix_is_not_part_of_source_filename(self):
         self.assertEqual('The Last Light Over Seren Fields', source_title({'title':'The Last Light Over Seren Fields Style:'}))
+        self.assertTrue(any(row['title']=='The Last Light Over Seren Fields' for row in read_catalog()))
 
     def test_theme_sync_materializes_only_preselected_tracks_and_cover(self):
         from short_video_pipeline import atomic_json
@@ -92,12 +93,20 @@ class Compilation(unittest.TestCase):
             (source/'02_Cover_Original'/cover['filename']).write_bytes(b'cover')
             assets.mkdir();atomic_json(assets/'approval.json',approval)
             planned={'track_ids':[row['id'] for row in chosen],'tracks':chosen}
-            with patch('aether_compilation_assets.plan',return_value=planned):
+            def fake_cover(_source,output,_title):
+                output.parent.mkdir(parents=True,exist_ok=True);output.write_bytes(b'compiled-cover')
+                return {'sha256':file_hash(output)}
+            with patch('aether_compilation_assets.plan',return_value=planned), \
+                 patch('aether_compilation_assets.tokens',return_value={'road'}), \
+                 patch('aether_compilation_assets.audio_duration',return_value=600), \
+                 patch('aether_compilation_assets.build_compilation_cover',side_effect=fake_cover):
                 result=sync_assets(assets,source_root=source,execute=True,theme='open_roads')
             manifest=json.loads((assets/'manifest.json').read_text())
             self.assertEqual({row['id'] for row in chosen},set(manifest['tracks']))
             self.assertNotIn(unused['id'],manifest['tracks'])
             self.assertEqual({'open_roads'},set(manifest['covers']))
+            self.assertEqual('local_private_cache',manifest['asset_source'])
+            self.assertTrue(all(spec['path'].startswith('staged/open_roads/masters/') for spec in manifest['tracks'].values()))
             self.assertEqual(3,result['approved_track_count'])
 
     def test_asset_sync_never_infers_unapproved_tracks(self):
@@ -116,7 +125,11 @@ class Compilation(unittest.TestCase):
                 (source/'02_Cover_Original'/spec['filename']).write_bytes(b'cover')
             assets.mkdir()
             atomic_json(assets/'approval.json',approval)
-            result=sync_assets(assets,source_root=source,execute=True)
+            def fake_cover(_source,output,_title):
+                output.parent.mkdir(parents=True,exist_ok=True);output.write_bytes(b'compiled-cover')
+                return {'sha256':file_hash(output)}
+            with patch('aether_compilation_assets.build_compilation_cover',side_effect=fake_cover):
+                result=sync_assets(assets,source_root=source,execute=True)
             manifest=json.loads((assets/'manifest.json').read_text())
             self.assertEqual('ready',result['status'])
             self.assertEqual({approved['id']},set(manifest['tracks']))

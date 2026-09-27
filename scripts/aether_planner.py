@@ -42,7 +42,9 @@ def read_catalog(path=CATALOG):
         duration = row['duration_seconds']
         if type(duration) not in (int, float) or not math.isfinite(duration) or not 10 <= duration <= 900:
             raise VideoError('invalid_aether_catalog_duration')
-        out.append({**row, 'id': identifier(row['title'])})
+        raw_title = row['title']
+        clean_title = re.sub(r'\s+Style:$', '', raw_title).strip()
+        out.append({**row, 'title': clean_title, 'id': identifier(raw_title)})
     if len({x['id'] for x in out}) != len(out):
         raise VideoError('duplicate_catalog_title')
     return out
