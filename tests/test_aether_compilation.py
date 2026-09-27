@@ -11,7 +11,7 @@ from short_video_pipeline import VideoError,file_hash
 from short_video_youtube import metadata,UploadError
 from aether_compose import checked_asset,render
 from aether_compilation import worker,brief_for
-from aether_compilation_assets import approval_template,hash_private_source,source_title,sync as sync_assets
+from aether_compilation_assets import activate_mybox,approval_template,hash_private_source,source_title,sync as sync_assets
 from aether_planner import plan,read_catalog
 from datetime import datetime,timezone
 
@@ -65,8 +65,40 @@ class Compilation(unittest.TestCase):
             with self.assertRaisesRegex(VideoError,'aether_asset_source_materialization_failed'):
                 hash_private_source(Path('/tmp/cloud-placeholder.wav'))
 
+    def test_mybox_activation_is_bounded_and_checked(self):
+        completed=Mock(returncode=0)
+        with patch('aether_compilation_assets.subprocess.run',return_value=completed) as run, \
+             patch('aether_compilation_assets.time.sleep') as sleep:
+            activate_mybox()
+        self.assertEqual(['/usr/bin/open','-a','MYBOX'],run.call_args.args[0])
+        sleep.assert_called_once_with(3)
+
     def test_catalog_style_suffix_is_not_part_of_source_filename(self):
         self.assertEqual('The Last Light Over Seren Fields', source_title({'title':'The Last Light Over Seren Fields Style:'}))
+
+    def test_theme_sync_materializes_only_preselected_tracks_and_cover(self):
+        from short_video_pipeline import atomic_json
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve();source=root/'source';assets=root/'assets'
+            (source/'01_Audio_Master').mkdir(parents=True)
+            (source/'02_Cover_Original').mkdir()
+            catalog=read_catalog();chosen=catalog[:3];unused=catalog[3]
+            approval=approval_template()
+            for row in chosen+[unused]:
+                approval['tracks'][row['id']].update(commercial_use_confirmed=True,quality_accepted=True)
+                (source/'01_Audio_Master'/f"{source_title(row)}.wav").write_bytes(row['title'].encode())
+            cover=approval['covers']['open_roads']
+            cover['commercial_use_confirmed']=True
+            (source/'02_Cover_Original'/cover['filename']).write_bytes(b'cover')
+            assets.mkdir();atomic_json(assets/'approval.json',approval)
+            planned={'track_ids':[row['id'] for row in chosen],'tracks':chosen}
+            with patch('aether_compilation_assets.plan',return_value=planned):
+                result=sync_assets(assets,source_root=source,execute=True,theme='open_roads')
+            manifest=json.loads((assets/'manifest.json').read_text())
+            self.assertEqual({row['id'] for row in chosen},set(manifest['tracks']))
+            self.assertNotIn(unused['id'],manifest['tracks'])
+            self.assertEqual({'open_roads'},set(manifest['covers']))
+            self.assertEqual(3,result['approved_track_count'])
 
     def test_asset_sync_never_infers_unapproved_tracks(self):
         from short_video_pipeline import atomic_json

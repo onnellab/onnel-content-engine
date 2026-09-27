@@ -6,9 +6,11 @@ import argparse
 import os
 from pathlib import Path
 import re
+import subprocess
+import time
 import unicodedata
 
-from aether_planner import THEMES, read_catalog
+from aether_planner import THEMES, plan, read_catalog
 from short_video_pipeline import VideoError, atomic_json, file_hash, load_json
 from youtube_report_store import directory
 
@@ -37,12 +39,27 @@ def _nfc_child(parent: Path, name: str, *, directory_only: bool = False) -> Path
     return matches[0] if matches else None
 
 
+def activate_mybox() -> None:
+    try:
+        completed = subprocess.run(
+            ["/usr/bin/open", "-a", "MYBOX"],
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            timeout=10, check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        raise VideoError("aether_asset_source_provider_unavailable") from None
+    if completed.returncode != 0:
+        raise VideoError("aether_asset_source_provider_unavailable")
+    time.sleep(3)
+
+
 def find_source_root(override: Path | None = None) -> Path:
     if override is not None:
         root = Path(override)
         if root.is_symlink() or not root.is_dir():
             raise VideoError("aether_asset_source_missing")
         return root.resolve()
+    activate_mybox()
     parent = MYBOX_ROOT
     for name in ("개인 폴더", "Aether Inn"):
         child = _nfc_child(parent, name, directory_only=True)
@@ -74,11 +91,16 @@ def source_title(row: dict) -> str:
     return title[:-7] if title.endswith(" Style:") else title
 
 
-def hash_private_source(path: Path) -> str:
-    try:
-        return file_hash(path)
-    except OSError:
-        raise VideoError("aether_asset_source_materialization_failed") from None
+def hash_private_source(path: Path, *, wake_provider: bool = False) -> str:
+    last_error = None
+    for _ in range(2):
+        if wake_provider:
+            activate_mybox()
+        try:
+            return file_hash(path)
+        except OSError as error:
+            last_error = error
+    raise VideoError("aether_asset_source_materialization_failed") from last_error
 
 
 def approval_template() -> dict:
@@ -124,11 +146,28 @@ def asset_root_for_manifest(manifest: dict, fallback: Path) -> Path:
     return find_source_root()
 
 
+def compilation_history(assets_root: Path) -> list[dict]:
+    path = Path(assets_root).parent / "queue.json"
+    if not path.is_file() or path.is_symlink():
+        return []
+    state = load_json(path, limit=16 * 1024 * 1024)
+    jobs = state.get("jobs")
+    if state.get("schema_version") != 1 or not isinstance(jobs, dict):
+        raise VideoError("aether_queue_invalid")
+    ordered = sorted(jobs.values(), key=lambda job: (str(job.get("slot", "")), str(job.get("id", ""))))
+    return [
+        {"track_ids": job.get("selection", {}).get("track_ids", [])}
+        for job in ordered
+        if job.get("upload") and isinstance(job.get("selection"), dict)
+    ]
+
+
 def sync(
     assets_root: Path = ASSETS_ROOT,
     *,
     source_root: Path | None = None,
     execute: bool = False,
+    theme: str | None = None,
 ) -> dict:
     assets_root = directory(Path(assets_root))
     approval_path = assets_root / "approval.json"
@@ -138,30 +177,44 @@ def sync(
     if approval.get("schema_version") != 1 or approval.get("profile") != "aether_inn":
         raise VideoError("aether_asset_approval_invalid")
     catalog = {row["id"]: row for row in read_catalog()}
-    source = find_source_root(source_root)
-    approved_tracks = {}
+    eligible = []
     for key, spec in (approval.get("tracks") or {}).items():
         if key not in catalog or not isinstance(spec, dict):
             raise VideoError("aether_asset_approval_invalid")
-        if spec.get("commercial_use_confirmed") is not True or spec.get("quality_accepted") is not True:
-            continue
         if spec.get("title") != catalog[key]["title"]:
             raise VideoError("aether_asset_approval_title_mismatch")
+        if spec.get("commercial_use_confirmed") is True and spec.get("quality_accepted") is True:
+            eligible.append(catalog[key])
+    if not eligible:
+        raise VideoError("aether_asset_approval_incomplete")
+    if theme is not None:
+        if theme not in THEMES:
+            raise VideoError("aether_theme_invalid")
+        preselection = plan(eligible, theme, history=compilation_history(assets_root))
+        selected_ids = set(preselection["track_ids"])
+    else:
+        preselection = None
+        selected_ids = {row["id"] for row in eligible}
+
+    source = find_source_root(source_root)
+    wake_provider = source_root is None
+    approved_tracks = {}
+    for key in selected_ids:
+        spec = approval["tracks"][key]
         relative = f"01_Audio_Master/{source_title(catalog[key])}.wav"
         path = checked_private_source(source, relative, {".wav"})
         approved_tracks[key] = {
             "path": relative,
-            "sha256": hash_private_source(path),
+            "sha256": hash_private_source(path, wake_provider=wake_provider),
             "commercial_use_confirmed": True,
             "quality_accepted": True,
         }
-    if not approved_tracks:
-        raise VideoError("aether_asset_approval_incomplete")
 
     approved_covers = {}
     cover_specs = approval.get("covers") or {}
-    for theme in THEMES:
-        spec = cover_specs.get(theme)
+    cover_themes = (theme,) if theme is not None else tuple(THEMES)
+    for cover_theme in cover_themes:
+        spec = cover_specs.get(cover_theme)
         if not isinstance(spec, dict) or spec.get("commercial_use_confirmed") is not True:
             raise VideoError("aether_asset_approval_incomplete")
         filename = spec.get("filename")
@@ -169,9 +222,9 @@ def sync(
             raise VideoError("aether_asset_approval_invalid")
         relative = f"02_Cover_Original/{filename}"
         path = checked_private_source(source, relative, {".png", ".jpg", ".jpeg"})
-        approved_covers[theme] = {
+        approved_covers[cover_theme] = {
             "path": relative,
-            "sha256": hash_private_source(path),
+            "sha256": hash_private_source(path, wake_provider=wake_provider),
             "commercial_use_confirmed": True,
         }
     manifest = {
@@ -189,7 +242,9 @@ def sync(
     return {
         "status": "ready" if execute else "dry_run",
         "asset_source": "mybox_aether_inn",
+        "theme": theme,
         "approved_track_count": len(approved_tracks),
+        "preselected_titles": [row["title"] for row in preselection["tracks"]] if preselection else [],
         "cover_themes": sorted(approved_covers),
         "manifest_path": str(manifest_path),
     }
@@ -204,12 +259,15 @@ def main() -> int:
     p.add_argument("--execute", action="store_true")
     p = sub.add_parser("sync")
     p.add_argument("--execute", action="store_true")
+    p.add_argument("--theme", choices=THEMES)
     args = parser.parse_args()
     try:
         if args.command == "init-approval":
             result = init_approval(args.assets_root, execute=args.execute)
         else:
-            result = sync(args.assets_root, source_root=args.source_root, execute=args.execute)
+            result = sync(
+                args.assets_root, source_root=args.source_root, execute=args.execute, theme=args.theme,
+            )
         print(__import__("json").dumps(result, ensure_ascii=False, indent=2))
         return 0
     except (VideoError, OSError, ValueError, TypeError):

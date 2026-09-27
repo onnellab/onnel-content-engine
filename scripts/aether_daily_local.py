@@ -555,8 +555,11 @@ def run_compilation_slot(report: dict, now: datetime) -> None:
     code, stdout, _ = run_step(
         report,
         "aether_compilation_assets",
-        [sys.executable, "-B", "scripts/aether_compilation_assets.py", "sync", "--execute"],
-        timeout=300,
+        [
+            sys.executable, "-B", "scripts/aether_compilation_assets.py", "sync",
+            "--execute", "--theme", theme,
+        ],
+        timeout=1800,
     )
     assets = json_stdout(stdout) or {
         "status": "blocked", "error": "aether_asset_registration_output_invalid",

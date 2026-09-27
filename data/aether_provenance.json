@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-09-27",
+  "attestation_source": "owner",
+  "music": {
+    "catalog_default": {
+      "provider": "suno",
+      "plan": "paid"
+    },
+    "title_overrides": {
+      "Beyond the Road of Falling Petals": {
+        "provider": "google_lyria",
+        "model": "lyria-3-pro-preview"
+      }
+    },
+    "non_catalog_titles": {
+      "Airship Over the Cloud Sea": {
+        "provider": "google_lyria",
+        "model": "lyria-3-pro-preview"
+      }
+    }
+  },
+  "covers": {
+    "canonical_mybox_originals": {
+      "provider": "openai_chatgpt"
+    }
+  },
+  "notes": [
+    "The two most recent Aether Inn YouTube uploads as of 2026-09-27 are Lyria-generated: Airship Over the Cloud Sea and the 2026-09-29 scheduled Beyond the Road of Falling Petals.",
+    "A physical source_kind such as backlog_wav describes storage/import provenance and does not imply the generation provider."
+  ]
+}
