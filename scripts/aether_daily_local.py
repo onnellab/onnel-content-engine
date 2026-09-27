@@ -554,6 +554,21 @@ def run_compilation_slot(report: dict, now: datetime) -> None:
     theme = COMPILATION_THEMES[(delta // 14) % len(COMPILATION_THEMES)]
     code, stdout, _ = run_step(
         report,
+        "aether_compilation_assets",
+        [sys.executable, "-B", "scripts/aether_compilation_assets.py", "sync", "--execute"],
+        timeout=300,
+    )
+    assets = json_stdout(stdout) or {
+        "status": "blocked", "error": "aether_asset_registration_output_invalid",
+    }
+    report["aether_compilation_assets"] = assets
+    if code != 0:
+        error = assets.get("error") or "aether_asset_registration_failed"
+        report["compilation_slot"] = {"status": "blocked", "theme": theme, "error": error}
+        report["blockers"].append(error)
+        return
+    code, stdout, _ = run_step(
+        report,
         "aether_compilation_slot",
         [
             sys.executable, "-B", "scripts/aether_compilation.py", "worker",

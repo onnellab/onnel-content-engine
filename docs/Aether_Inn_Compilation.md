@@ -15,8 +15,21 @@ The default private root is:
 
 ## Private asset registration
 
-Place masters and prepared 16:9 theme covers under `assets/` and register them in
-`assets/manifest.json` with this schema. Values below are explanatory placeholders,
+Production media may stay in the canonical private MYBOX Aether Inn folder. The
+daily worker first runs `scripts/aether_compilation_assets.py sync --execute`, which
+builds the private `assets/manifest.json` from `assets/approval.json` without copying
+the master library. The approval file is owner-controlled private state and is never
+committed. Missing or false approval flags stay fail-closed; file presence, prior
+uploads, model metadata, or schedule authorization never imply rights or quality.
+
+Initialize the private approval template once with
+`python3 -B scripts/aether_compilation_assets.py init-approval --execute`. Only set a
+track's `commercial_use_confirmed` and `quality_accepted` flags to true after those
+facts are explicitly confirmed, and only set a cover's `commercial_use_confirmed`
+after its use is confirmed. The sync step hashes the exact current files and emits a
+manifest that points to the canonical private MYBOX source.
+
+The generated manifest has this schema. Values below are explanatory placeholders,
 not a working or approved production manifest:
 
 ```json
@@ -24,9 +37,10 @@ not a working or approved production manifest:
   "schema_version": 1,
   "profile": "aether_inn",
   "test_only": false,
+  "asset_source": "mybox_aether_inn",
   "tracks": {
     "<catalog track ID>": {
-      "path": "masters/<track>.wav",
+      "path": "01_Audio_Master/<track>.wav",
       "sha256": "<actual SHA-256>",
       "commercial_use_confirmed": true,
       "quality_accepted": true
@@ -34,7 +48,7 @@ not a working or approved production manifest:
   },
   "covers": {
     "open_roads": {
-      "path": "covers/open-roads.png",
+      "path": "02_Cover_Original/<approved-theme-cover>.png",
       "sha256": "<actual SHA-256>",
       "commercial_use_confirmed": true
     }
@@ -43,11 +57,11 @@ not a working or approved production manifest:
 ```
 
 Catalog IDs are produced by `python3 -B scripts/aether_planner.py catalog`.
-Keep paths relative to `assets`, use actual file hashes, and never commit this
-private manifest or media. The worker rejects missing/unconfirmed/hash-mismatched
-assets, symlinks, traversal and unsupported media. Historical displayed durations
-are replaced with ffprobe measurements before selection. Exact normalized decoded
-PCM repeats are rejected; this is not a melodic-plagiarism or copyright classifier.
+Keep manifest paths relative to the canonical private source root, use actual file
+hashes, and never commit the private approval, manifest, or media. The worker rejects
+missing/unconfirmed/hash-mismatched assets, symlinks, traversal and unsupported
+media. Historical displayed durations are replaced with ffprobe measurements before
+selection. Exact normalized decoded PCM repeats are rejected; this is not a melodic-plagiarism or copyright classifier.
 
 ## One-shot commands
 
@@ -93,7 +107,8 @@ A real 62-second technical fixture render passed 1080p/30fps/H.264/yuv420p/AAC c
 crossfade chapter starts and duplicate decoded-audio rejection. This was not the
 owner's music or a production 30-minute compilation. Fake-provider tests verify
 same-slot idempotence and exact profile binding; no live upload has occurred.
-A production compilation still requires an actual registered master/cover manifest.
+A production compilation still requires explicit private owner approvals and a
+successfully synchronized master/cover manifest.
 The Aether Inn YouTube credential profile is implemented and separately bound, but a
 live public production upload has not been used as a fixture. The separate Lyria/Gemini
 single worker now handles new music, generated branded covers, rendering and durable

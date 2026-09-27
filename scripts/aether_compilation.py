@@ -12,6 +12,7 @@ from pathlib import Path
 import re
 from zoneinfo import ZoneInfo
 from aether_compose import prepare, render, validate_output
+from aether_compilation_assets import asset_root_for_manifest
 from aether_planner import THEMES
 from short_video_pipeline import VideoError, atomic_json, digest, file_hash, load_json
 from short_video_youtube import YouTube, Uploader, UploadError
@@ -77,6 +78,13 @@ def readiness(root=ROOT):
         'new_single_worker':'scripts/aether_single.py','generated_cover_worker':'scripts/aether_cover.py','audio_originality_model':'not_claimed'}
 
 
+def manifest_and_root(q):
+    manifest_path=q.assets/'manifest.json'
+    if not manifest_path.is_file() or manifest_path.is_symlink():raise VideoError('aether_asset_manifest_missing')
+    manifest=load_json(manifest_path,limit=2*1024*1024)
+    return manifest,asset_root_for_manifest(manifest,q.assets)
+
+
 def thumbnail(q,state,job,api):
     upload=job.get('upload') or {};video=upload.get('video_id')
     if not video or job.get('thumbnail_status')=='set':return
@@ -113,11 +121,9 @@ def worker(root=ROOT,theme='open_roads',slot=None,*,publish=False,execute=False,
             if getattr(api,'profile',None)!='aether_inn':raise UploadError('aether_profile_required')
             api.verify()
         if job is None:
-            manifest_path=q.assets/'manifest.json'
-            if not manifest_path.is_file() or manifest_path.is_symlink():raise VideoError('aether_asset_manifest_missing')
-            manifest=load_json(manifest_path,limit=2*1024*1024)
+            manifest,asset_root=manifest_and_root(q)
             history=[{'track_ids':j['selection']['track_ids']} for j in state['jobs'].values() if j.get('upload')]
-            selection=prepare(manifest,q.assets,theme,history)
+            selection=prepare(manifest,asset_root,theme,history)
             if publish and selection['test_only']:raise UploadError('aether_test_assets_cannot_publish')
             key=digest({'slot':slot,'selection':selection})[:24];brief=brief_for(selection)
             job={'id':key,'slot':slot,'selection':selection,'brief':brief,'payload_hash':digest(brief),
@@ -127,7 +133,8 @@ def worker(root=ROOT,theme='open_roads',slot=None,*,publish=False,execute=False,
             job['publish_requested']=True;atomic_json(q.state_path,state)
         try:
             if not job.get('result'):
-                result=render(job['selection'],q.assets,q.root/'jobs'/job['id'])
+                if 'asset_root' not in locals():_,asset_root=manifest_and_root(q)
+                result=render(job['selection'],asset_root,q.root/'jobs'/job['id'])
                 result['job_id']=job['id'];job.update(result=result,status='rendered',upload_eligible=result['upload_eligible'],error=None)
                 atomic_json(q.state_path,state)
             if publish:

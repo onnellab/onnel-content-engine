@@ -1,5 +1,6 @@
 """Aether media boundary tests. No network, credentials or real publication."""
 import copy
+import json
 from pathlib import Path
 import sys
 import tempfile
@@ -10,6 +11,7 @@ from short_video_pipeline import VideoError,file_hash
 from short_video_youtube import metadata,UploadError
 from aether_compose import checked_asset,render
 from aether_compilation import worker,brief_for
+from aether_compilation_assets import approval_template,sync as sync_assets
 from aether_planner import plan,read_catalog
 from datetime import datetime,timezone
 
@@ -51,6 +53,34 @@ class Compilation(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             with self.assertRaisesRegex(VideoError,'measured_compilation_required'):
                 render(plan(read_catalog()),Path(temporary),Path(temporary))
+
+    def test_asset_sync_requires_explicit_owner_approval(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve()
+            with self.assertRaisesRegex(VideoError,'aether_asset_approval_missing'):
+                sync_assets(root/'assets',source_root=root/'source',execute=True)
+
+    def test_asset_sync_never_infers_unapproved_tracks(self):
+        from short_video_pipeline import atomic_json
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve();source=root/'source';assets=root/'assets'
+            (source/'01_Audio_Master').mkdir(parents=True)
+            (source/'02_Cover_Original').mkdir()
+            catalog=read_catalog();approved=catalog[0];unapproved=catalog[1]
+            for row in (approved,unapproved):
+                (source/'01_Audio_Master'/f"{row['title']}.wav").write_bytes(b'fixture')
+            approval=approval_template()
+            approval['tracks'][approved['id']].update(commercial_use_confirmed=True,quality_accepted=True)
+            for theme,spec in approval['covers'].items():
+                spec['commercial_use_confirmed']=True
+                (source/'02_Cover_Original'/spec['filename']).write_bytes(b'cover')
+            assets.mkdir()
+            atomic_json(assets/'approval.json',approval)
+            result=sync_assets(assets,source_root=source,execute=True)
+            manifest=json.loads((assets/'manifest.json').read_text())
+            self.assertEqual('ready',result['status'])
+            self.assertEqual({approved['id']},set(manifest['tracks']))
+            self.assertNotIn(unapproved['id'],manifest['tracks'])
 
 class DurablePublication(unittest.TestCase):
     def test_repeated_slot_reuses_video_and_does_not_insert_again(self):
