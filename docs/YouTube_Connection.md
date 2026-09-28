@@ -85,8 +85,10 @@ or connection setup details in the task text. Scheduled execution must treat the
 CLI as the connection boundary rather than reading connection payloads itself.
 
 Before expensive recording/rendering, run `readiness` and `youtube-check --execute` as
-separate short direct CLI commands. Preserve the no-human-per-video-review policy and
-reconcile uncertain uploads before creating anything new. Remote Desktop access remains a
+separate short direct CLI commands. Keep each operational step in its own terminal call;
+do not batch connection checks, queue mutation, rendering, reconciliation, or upload into
+one shell request. Preserve the no-human-per-video-review policy and reconcile uncertain
+uploads before creating anything new. Remote Desktop access remains a
 runtime capability to check, not an assumed fact. If device ping and file access succeed
 but a short direct terminal/filesystem call is absent from the device-side recent history,
 treat that event as a transient host/scheduler pre-dispatch failure and retry the smallest
