@@ -25,6 +25,9 @@ Google one-time products use the current Google Play Developer API
 `monetization.onetimeproducts` list surface (`oneTimeProducts`) and resolve the
 Korean regional price from active buy purchase options. Auto-renewing subscriptions
 use the monetization subscriptions resource and the Korean regional base-plan price.
+The collector derives required catalog families from `data/app_pricing.csv` and
+never queries the subscriptions endpoint for apps whose configured products are
+only one-time purchases; unused API families cannot turn a verified product partial.
 
 ## Safety and fallback
 

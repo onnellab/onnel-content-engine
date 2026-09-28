@@ -436,7 +436,14 @@ def _google_listing_name(product: dict[str, object], fallback: str) -> str:
     return fallback
 
 
-def google_iap_prices(store: dict[str, str], token: str, checked_at: str) -> list[dict[str, str]]:
+def google_iap_prices(
+    store: dict[str, str],
+    token: str,
+    checked_at: str,
+    *,
+    include_one_time: bool = True,
+    include_subscriptions: bool = True,
+) -> list[dict[str, str]]:
     package = google_store_package(store)
     if not package or not token:
         return []
@@ -447,7 +454,7 @@ def google_iap_prices(store: dict[str, str], token: str, checked_at: str) -> lis
         token,
         "oneTimeProducts",
         "pageToken",
-    )
+    ) if include_one_time else []
     for item in products:
         product_id = str(item.get("productId", "") or "")
         if not product_id:
@@ -494,7 +501,7 @@ def google_iap_prices(store: dict[str, str], token: str, checked_at: str) -> lis
         token,
         "subscriptions",
         "pageToken",
-    )
+    ) if include_subscriptions else []
     for item in subscriptions:
         product_id = str(item.get("productId", "") or "")
         if not product_id:
@@ -534,12 +541,18 @@ def google_iap_prices(store: dict[str, str], token: str, checked_at: str) -> lis
     return result
 
 
+def _catalog_product_types(path: Path = DEFAULT_APP_PRICING) -> dict[str, set[str]]:
+    result: dict[str, set[str]] = {}
+    for row in read_csv_rows(path):
+        slug = row.get("app_slug", "")
+        product_type = row.get("product_type", "")
+        if slug and product_type not in {"", "paid_download"}:
+            result.setdefault(slug, set()).add(product_type)
+    return result
+
+
 def _catalog_required_slugs(path: Path = DEFAULT_APP_PRICING) -> set[str]:
-    return {
-        row.get("app_slug", "")
-        for row in read_csv_rows(path)
-        if row.get("app_slug") and row.get("product_type") not in {"", "paid_download"}
-    }
+    return set(_catalog_product_types(path))
 
 
 def _source_error(platform: str, source: str, error: Exception) -> str:
@@ -564,7 +577,8 @@ def sync_store_pricing(
 ) -> dict[str, object]:
     checked_at = now_iso()
     stores = read_csv_rows(stores_path)
-    catalog_required = _catalog_required_slugs(pricing_path)
+    catalog_types = _catalog_product_types(pricing_path)
+    catalog_required = set(catalog_types)
     products: list[dict[str, str]] = []
     states: list[dict[str, str]] = []
     for store in stores:
@@ -610,7 +624,16 @@ def sync_store_pricing(
                     if platform == "ios":
                         products.extend(apple_iap_prices(store, token, checked_at))
                     else:
-                        products.extend(google_iap_prices(store, token, checked_at))
+                        declared_types = catalog_types.get(store.get("app_slug", ""), set())
+                        products.extend(google_iap_prices(
+                            store,
+                            token,
+                            checked_at,
+                            include_one_time=any(
+                                item != "subscription" for item in declared_types
+                            ),
+                            include_subscriptions="subscription" in declared_types,
+                        ))
                     successful_sources += 1
                 except (urllib.error.HTTPError, StorePricingError, ValueError, OSError) as error:
                     errors.append(_source_error(platform, "catalog_pricing", error))

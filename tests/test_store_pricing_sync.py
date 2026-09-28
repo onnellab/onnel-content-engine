@@ -157,6 +157,39 @@ class StorePricingSyncTest(unittest.TestCase):
         self.assertEqual("buy", rows[0]["base_plan_id"])
         self.assertEqual("google_play_monetization_onetimeproducts", rows[0]["source"])
 
+    def test_one_time_only_registry_skips_subscription_catalog(self):
+        store = {
+            "app_id": "APP-0002",
+            "app_slug": "tagweaver",
+            "app_name": "TagWeaver",
+            "store_package": "com.onnellab.tagweaver2",
+        }
+        products = [{
+            "productId": "tagweaver_pro",
+            "purchaseOptions": [{
+                "purchaseOptionId": "buy",
+                "state": "ACTIVE",
+                "buyOption": {},
+                "regionalPricingAndAvailabilityConfigs": [{
+                    "regionCode": "KR",
+                    "availability": "AVAILABLE",
+                    "price": {"currencyCode": "KRW", "units": "5500", "nanos": 0},
+                }],
+            }],
+        }]
+        with patch.object(pricing, "_google_paged", return_value=products) as paged:
+            rows = pricing.google_iap_prices(
+                store,
+                "token",
+                "2026-09-24T00:00:00+00:00",
+                include_one_time=True,
+                include_subscriptions=False,
+            )
+        self.assertEqual(1, paged.call_count)
+        self.assertIn("/oneTimeProducts", paged.call_args.args[0])
+        self.assertEqual([("in_app_purchase", "5500")],
+                         [(r["product_type"], r["price"]) for r in rows])
+
     def test_sync_retains_partial_state_without_catalog_credentials(self):
         with tempfile.TemporaryDirectory() as temp:
             stores = Path(temp) / "stores.csv"
