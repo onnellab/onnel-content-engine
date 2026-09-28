@@ -79,19 +79,20 @@ after twenty minutes; the worker does not require its browser page or server to 
 ## Scheduled execution contract
 
 The existing ONNELLAB Shorts automation remains Monday/Wednesday/Friday around 09:00
-Asia/Seoul. Its prompt now calls the shared Keychain provider and performs a connection
-check before expensive recording/rendering. It never exports credentials, asks for a
-Keychain password, starts interactive OAuth, or silently switches accounts during a run.
-A missing/revoked/locked grant reports a safe blocked reason and points to local setup.
-It preserves the no-human-per-video-review policy and reconciles uncertain uploads before
-creating anything new. Remote Desktop access in a future scheduled run remains a runtime
-capability to check, not a completed verification claim. If device ping and file access
-succeed but a short direct terminal/filesystem call is absent from the device-side recent
-history, treat that event as a transient pre-dispatch failure and retry the smallest
-equivalent direct action exactly once before declaring Remote Desktop blocked. Keep
-`readiness` and `youtube-check --execute` as separate direct commands. A single recovered
-pre-dispatch refusal must not disable the recurring Shorts task or trigger any Desktop
-Commander security/configuration change.
+Asia/Seoul. Keep the scheduled prompt capability-minimal: it should point to this document
+and the Short-video runbooks instead of repeating connection-field names, secret material,
+or connection setup details in the task text. Scheduled execution must treat the local
+CLI as the connection boundary rather than reading connection payloads itself.
+
+Before expensive recording/rendering, run `readiness` and `youtube-check --execute` as
+separate short direct CLI commands. Preserve the no-human-per-video-review policy and
+reconcile uncertain uploads before creating anything new. Remote Desktop access remains a
+runtime capability to check, not an assumed fact. If device ping and file access succeed
+but a short direct terminal/filesystem call is absent from the device-side recent history,
+treat that event as a transient host/scheduler pre-dispatch failure and retry the smallest
+equivalent direct action exactly once before declaring Remote Desktop blocked. A recovered
+pre-dispatch refusal must not disable the recurring Shorts task or trigger Desktop
+Commander security/configuration changes.
 
 Use already configured persistent production asset/queue paths. For a new installation,
 the documented defaults are `~/Library/Application Support/ONNELLAB/content-engine/video-assets`

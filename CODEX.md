@@ -183,7 +183,7 @@ After every 10 completed tasks, Codex must reread the instruction Markdown files
 
 ### Remote Desktop pre-dispatch handling
 
-Remote Desktop terminal work must stay simple, direct, and repository-scoped. Prefer Desktop Commander file tools for reads and edits; use short direct `/bin/zsh` commands for Git, Python entrypoints, tests, rendering, and repository policy checks. Do not wrap routine work in giant inline shell programs, nested agent CLIs, encoded payloads, `eval`, heredocs, or safety-bypass flags.
+Remote Desktop terminal work must stay simple, direct, and repository-scoped. Prefer Desktop Commander file tools for reads and edits; use short direct `/bin/zsh` commands for Git, Python entrypoints, tests, rendering, and repository policy checks. Do not wrap routine work in giant inline shell programs, nested agent CLIs, encoded payloads, `eval`, heredocs, or safety-bypass flags. Scheduled prompts should stay capability-minimal and point to repository runbooks rather than duplicating connection-field names or setup material that the local CLI already encapsulates.
 
 When device ping and file access succeed but a terminal or filesystem action is rejected before it appears in the device-side recent tool-call history, classify that event as a transient host/orchestration pre-dispatch failure rather than a repository, Keychain, or Desktop Commander policy failure. Retry once with the smallest equivalent direct action. If the retry reaches the Mac, continue the normal workflow; if it is rejected again, report the execution blocker. Never weaken `blockedCommands`, change credential sources, unlock Keychain, or discard work to bypass a pre-dispatch failure.
 
