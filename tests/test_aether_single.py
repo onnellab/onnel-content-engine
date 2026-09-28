@@ -166,7 +166,7 @@ class SingleTests(unittest.TestCase):
             job = root / "job"
             job.mkdir(mode=0o700)
             job.chmod(0o700)
-            with patch.object(aether_single, "run_process", side_effect=aether_single.VideoError("Local process timed out")):
+            with patch.object(aether_single.shutil, "copyfile", side_effect=OSError("copy failed")):
                 with self.assertRaisesRegex(Exception, "backlog_wav_unavailable"):
                     aether_single.import_backlog_master(source, job, 138)
             self.assertFalse((job / "source" / "master.partial.wav").exists())
@@ -179,7 +179,7 @@ class SingleTests(unittest.TestCase):
             job = root / "job"
             job.mkdir(mode=0o700)
             with patch.object(aether_single, "_is_dataless", return_value=True), \
-                 patch.object(aether_single, "run_process", side_effect=AssertionError("must not copy")):
+                 patch.object(aether_single.shutil, "copyfile", side_effect=AssertionError("must not copy")):
                 with self.assertRaisesRegex(Exception, "backlog_wav_not_synced"):
                     aether_single.import_backlog_master(source, job, 138)
 

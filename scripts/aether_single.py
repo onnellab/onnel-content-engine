@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import stat
 import unicodedata
 from urllib.parse import urlencode
@@ -173,7 +174,7 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
         raise VideoError("aether_single_backlog_source_unsafe")
     partial.unlink(missing_ok=True)
     try:
-        run_process(["/bin/cp", "-X", str(source), str(partial)], timeout=30)
+        shutil.copyfile(source, partial)
         os.chmod(partial, 0o600)
         source_hash = file_hash(partial)
         duration = audio_duration(partial)
