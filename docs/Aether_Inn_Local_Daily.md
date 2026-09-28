@@ -48,6 +48,11 @@ The result contains status, safe worker outputs, exact blockers, and timestamps.
 It must never contain OAuth tokens, client secrets, refresh/access tokens,
 authorization headers, Keychain payloads, service-account JSON, or private keys.
 
+Provider-pricing snapshots contain only current provider prices that the collector
+can actually verify. The `$25/1M characters` translation figure remains only in
+`data/melivra_ai_credit_policy.csv` as a conservative planning assumption; it is
+not reported as a current DeepL API price.
+
 ## Local responsibilities
 
 Every normal run uses current `main` only after a clean fast-forward check. A dirty,
@@ -61,12 +66,17 @@ must not be followed by divergence decisions against a stale `origin/main`. The 
 - dispatches and waits for the canonical `Sync app operational status`,
   `Refresh AI Operations Sources`, and `Sync Store Reviews` GitHub Actions in
   that order, then fast-forwards local `main`; the final review workflow rebuilds
-  and deploys `/ops/` from the combined hosted and local snapshots;
+  and deploys `/ops/` from the combined hosted and local snapshots, then verifies
+  custom-domain bytes, indexing directives, robots.txt, sitemap/navigation exclusion,
+  and legacy-route absence into `data/ops_live_verification.json`;
 - after the fresh review sync, queues eligible real-ID text reviews under the
   2026-09-24 owner standing policy, publishes them one-at-a-time through the
   existing GitHub publisher workflow, then re-syncs reviews and requires the
   store-observed developer reply before considering each reply complete;
-- reconciles existing durable Aether single and compilation jobs;
+- reconciles existing durable Aether single and compilation jobs; when the
+  single reconcile already returns a same-day durable job/video in scheduled,
+  processing, or published state, that exact job becomes the slot result and the
+  wrapper does not touch the backlog WAV or create another upload;
 - synchronizes the six canonical Aether playlists idempotently;
 - on Tuesday/Saturday before 09:00 KST, processes the first actually-missing
   canonical backlog WAV, or uses the canonical Lyria worker only after backlog

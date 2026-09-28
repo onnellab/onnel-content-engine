@@ -75,7 +75,9 @@ class Compilation(unittest.TestCase):
 
     def test_catalog_style_suffix_is_not_part_of_source_filename(self):
         self.assertEqual('The Last Light Over Seren Fields', source_title({'title':'The Last Light Over Seren Fields Style:'}))
-        self.assertTrue(any(row['title']=='The Last Light Over Seren Fields' for row in read_catalog()))
+        row = next(row for row in read_catalog() if row['title'].endswith(' Style:'))
+        self.assertEqual('The Last Light Over Seren Fields Style:', row['title'])
+        self.assertEqual('The Last Light Over Seren Fields', source_title(row))
 
     def test_theme_sync_materializes_only_preselected_tracks_and_cover(self):
         from short_video_pipeline import atomic_json

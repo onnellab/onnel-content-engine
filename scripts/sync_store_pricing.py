@@ -113,6 +113,21 @@ def _micros_price(value: object) -> tuple[str, str]:
     return _decimal_text(amount), currency
 
 
+def _money_price(value: object) -> tuple[str, str]:
+    if not isinstance(value, dict):
+        return "", ""
+    currency = str(value.get("currencyCode", "") or "").strip()
+    units = str(value.get("units", "0") or "0").strip()
+    nanos = value.get("nanos", 0)
+    try:
+        amount = Decimal(units) + (Decimal(str(nanos)) / Decimal(1_000_000_000))
+    except (InvalidOperation, ValueError, TypeError):
+        return "", ""
+    if not currency or amount <= 0:
+        return "", ""
+    return _decimal_text(amount), currency
+
+
 def _product(
     store: dict[str, str],
     *,
@@ -428,33 +443,52 @@ def google_iap_prices(store: dict[str, str], token: str, checked_at: str) -> lis
     encoded = urllib.parse.quote(package, safe="")
     result: list[dict[str, str]] = []
     products = _google_paged(
-        f"{GOOGLE}/applications/{encoded}/inappproducts",
+        f"{GOOGLE}/applications/{encoded}/oneTimeProducts?pageSize=1000",
         token,
-        "inappproduct",
-        "token",
+        "oneTimeProducts",
+        "pageToken",
     )
     for item in products:
-        sku = str(item.get("sku", "") or "")
-        purchase_type = str(item.get("purchaseType", "") or "")
-        if not sku or purchase_type.lower() == "subscription":
+        product_id = str(item.get("productId", "") or "")
+        if not product_id:
             continue
-        regional = item.get("prices", {})
-        price_obj = regional.get(TARGET_COUNTRY, {}) if isinstance(regional, dict) else {}
-        price, currency = _micros_price(price_obj)
-        if not price:
+        name = _google_listing_name(item, product_id)
+        options = item.get("purchaseOptions", [])
+        if not isinstance(options, list):
             continue
-        result.append(_product(
-            store,
-            product_type="in_app_purchase",
-            product_id=sku,
-            product_name=_google_listing_name(item, sku),
-            price=price,
-            currency=currency,
-            state=str(item.get("status", "") or ""),
-            source="google_play_developer_inappproducts",
-            checked_at=checked_at,
-            platform="android",
-        ))
+        for option in options:
+            if not isinstance(option, dict) or not isinstance(option.get("buyOption"), dict):
+                continue
+            regional = option.get("regionalPricingAndAvailabilityConfigs", [])
+            if not isinstance(regional, list):
+                continue
+            config = next(
+                (
+                    row for row in regional
+                    if isinstance(row, dict)
+                    and row.get("regionCode") == TARGET_COUNTRY
+                    and row.get("availability") != "NO_LONGER_AVAILABLE"
+                ),
+                None,
+            )
+            if not isinstance(config, dict):
+                continue
+            price, currency = _money_price(config.get("price", {}))
+            if not price:
+                continue
+            result.append(_product(
+                store,
+                product_type="in_app_purchase",
+                product_id=product_id,
+                product_name=name,
+                price=price,
+                currency=currency,
+                state=str(option.get("state", "") or ""),
+                source="google_play_monetization_onetimeproducts",
+                checked_at=checked_at,
+                platform="android",
+                base_plan_id=str(option.get("purchaseOptionId", "") or ""),
+            ))
     subscriptions = _google_paged(
         f"{GOOGLE}/applications/{encoded}/subscriptions?pageSize=1000",
         token,
@@ -584,6 +618,11 @@ def sync_store_pricing(
             state["state"] = "partial" if successful_sources else "unavailable"
             state["error"] = errors[0]
             state["errors"] = errors
+            if "google_catalog_pricing_permission_denied" in errors:
+                state["remediation"] = (
+                    "Grant the Google Play service-account user app access with "
+                    "Manage store presence (CAN_MANAGE_PUBLIC_LISTING), then rerun the canonical sync."
+                )
         states.append(state)
     payload = {
         "schema_version": 1,

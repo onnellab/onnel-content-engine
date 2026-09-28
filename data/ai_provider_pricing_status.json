@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-09-29T06:20:16+09:00",
-  "outcome": "warning",
+  "checked_at": "2026-09-29T08:38:24+09:00",
+  "outcome": "ok",
   "messages": [
-    "deepl:deepl-api-pro price requires manual confirmation; using manual verification from 2026-07-14"
+    "AI provider pricing matched local assumptions."
   ],
   "providers": [
     {
@@ -17,20 +17,6 @@
       "status": "ok",
       "message": "expected price pattern found in static source",
       "confirmation_method": "static"
-    },
-    {
-      "provider": "deepl",
-      "service": "deepl-api-pro",
-      "unit": "1m_characters",
-      "expected_price_usd": "25.00",
-      "source_url": "https://www.deepl.com/en/pro#developer",
-      "source_browser_url": "https://www.deepl.com/en/pro#developer",
-      "manual_verified_at": "2026-07-14",
-      "manual_verification_note": "DeepL public pricing can be JavaScript or region rendered; local assumption is manually verified when automatic page text cannot confirm it.",
-      "status": "manual_ok",
-      "message": "automatic price check could not confirm the page, but local assumption is manually verified",
-      "confirmation_method": "manual",
-      "browser_error": "browser check failed: Playwright is not installed in this environment"
     }
   ]
 }

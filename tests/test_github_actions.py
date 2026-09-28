@@ -207,6 +207,9 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("Missing required GitHub Actions secret", workflow)
         self.assertIn("scripts/sync_store_reviews.py", workflow)
         self.assertIn("scripts/build_manual_publish_site.py", workflow)
+        self.assertIn("scripts/verify_live_ops.py", workflow)
+        self.assertIn("data/ops_live_verification.json", workflow)
+        self.assertIn("steps.live_ops.outcome != 'success'", workflow)
         self.assertIn("data/store_reviews.csv", workflow)
         self.assertIn("public/ops/", workflow)
 

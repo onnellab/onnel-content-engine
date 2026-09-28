@@ -666,8 +666,12 @@ def melivra_ai_credit_economics(
     gross_usd = price_amount if currency == "USD" else price_amount / krw_per_usd
     net_usd = gross_usd * (1 - policy["store_fee_rate"])
     whisper_per_minute = provider_prices.get(("openai", "audio_minute"), 0.006)
-    deepl_per_million = provider_prices.get(("deepl", "1m_characters"), policy["translation_usd_per_million_characters"])
-    translation_cost_per_minute = policy["translation_characters_per_minute"] * deepl_per_million / 1_000_000
+    translation_assumption_per_million = policy["translation_usd_per_million_characters"]
+    translation_cost_per_minute = (
+        policy["translation_characters_per_minute"]
+        * translation_assumption_per_million
+        / 1_000_000
+    )
     script_credits = policy["script_credits_per_minute"]
     guarded_translation_credits = math.ceil(
         (
@@ -691,7 +695,8 @@ def melivra_ai_credit_economics(
         "ai_margin_percent": f"{margin_percent:.1f}",
         "ai_margin_status": status,
         "ai_cost_basis": (
-            f"OpenAI ${whisper_per_minute:.3f}/min + DeepL ${deepl_per_million:.2f}/1M chars, "
+            f"OpenAI ${whisper_per_minute:.3f}/min + translation planning assumption "
+            f"${translation_assumption_per_million:.2f}/1M chars, "
             f"{int(script_credits + translation_credits)} credits/min script+translation"
         ),
     }

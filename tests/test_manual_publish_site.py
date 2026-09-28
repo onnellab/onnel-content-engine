@@ -540,7 +540,10 @@ Body
             self.assertIn("AI 원가 대비 흑자", html)
             self.assertIn("Profit vs AI cost", html)
             self.assertIn("ai_provider_cost_usd", html)
-            self.assertIn("OpenAI $0.006/min + DeepL $25.00/1M chars", html)
+            self.assertIn(
+                "OpenAI $0.006/min + translation planning assumption $25.00/1M chars",
+                html,
+            )
             self.assertIn("ai-provider-pricing-status-data", html)
             self.assertIn("AI 요금 변경 확인 필요", html)
             self.assertIn("AI 요금 자동 확인 실패, 수동 확인 완료", html)

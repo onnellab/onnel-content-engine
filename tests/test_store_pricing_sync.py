@@ -121,11 +121,18 @@ class StorePricingSyncTest(unittest.TestCase):
             "store_package": "com.onnellab.tagweaver2",
         }
         products = [{
-            "sku": "tagweaver_pro",
-            "status": "active",
-            "purchaseType": "managedUser",
-            "prices": {"KR": {"priceMicros": "5500000000", "currency": "KRW"}},
-            "listings": {"ko-KR": {"title": "TagWeaver Pro"}},
+            "productId": "tagweaver_pro",
+            "listings": [{"languageCode": "ko-KR", "title": "TagWeaver Pro"}],
+            "purchaseOptions": [{
+                "purchaseOptionId": "buy",
+                "state": "ACTIVE",
+                "buyOption": {},
+                "regionalPricingAndAvailabilityConfigs": [{
+                    "regionCode": "KR",
+                    "availability": "AVAILABLE",
+                    "price": {"currencyCode": "KRW", "units": "5500", "nanos": 0},
+                }],
+            }],
         }]
         subscriptions = [{
             "productId": "tagweaver_plus",
@@ -139,12 +146,16 @@ class StorePricingSyncTest(unittest.TestCase):
                 }],
             }],
         }]
-        with patch.object(pricing, "_google_paged", side_effect=[products, subscriptions]):
+        with patch.object(pricing, "_google_paged", side_effect=[products, subscriptions]) as paged:
             rows = pricing.google_iap_prices(store, "token", "2026-09-24T00:00:00+00:00")
         self.assertEqual([(r["product_type"], r["price"]) for r in rows], [
             ("in_app_purchase", "5500"),
             ("subscription", "1200"),
         ])
+        self.assertIn("/oneTimeProducts", paged.call_args_list[0].args[0])
+        self.assertEqual("oneTimeProducts", paged.call_args_list[0].args[2])
+        self.assertEqual("buy", rows[0]["base_plan_id"])
+        self.assertEqual("google_play_monetization_onetimeproducts", rows[0]["source"])
 
     def test_sync_retains_partial_state_without_catalog_credentials(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -7,6 +7,7 @@ on:
     paths:
       - "scripts/sync_store_reviews.py"
       - "scripts/sync_store_pricing.py"
+      - "scripts/verify_live_ops.py"
       - "scripts/build_manual_publish_site.py"
       - "data/app_pricing.csv"
       - "scripts/youtube_dashboard_panel.py"
@@ -136,3 +137,32 @@ jobs:
             git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh store review dashboard"
             git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
           fi
+
+      - name: Verify live ops deployment
+        id: live_ops
+        continue-on-error: true
+        run: |
+          python3 scripts/verify_live_ops.py \
+            --expected generated/manual-publish/index.html \
+            --output data/ops_live_verification.json
+
+      - name: Commit live ops verification
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ ! -f data/ops_live_verification.json ]; then
+            echo "No live ops verification record was produced"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ops_live_verification.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record live ops verification"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Enforce live ops verification
+        if: steps.live_ops.outcome != 'success'
+        run: exit 1

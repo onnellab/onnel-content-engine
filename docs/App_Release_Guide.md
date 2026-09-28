@@ -334,6 +334,12 @@ CODEMAGIC_API_TOKEN
 
 The token is only required when `data/codemagic_artifacts.csv` contains a matching artifact URL that must be downloaded.
 
+Hourly private-test status collection follows the same demand rule. If there are
+no dispatched/running/succeeded Codemagic requests with build IDs, the collector
+records `state=not_applicable` and does not require `CODEMAGIC_API_TOKEN`.
+`token_missing` is reserved for a real active Codemagic status lookup that
+cannot run without the secret.
+
 Generate the release status report with:
 
 ```text

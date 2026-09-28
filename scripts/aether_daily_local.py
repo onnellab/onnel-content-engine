@@ -485,16 +485,35 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
         report["single_slot"] = {"status": "blocked", "error": "aether_single_publish_time_stale"}
         report["blockers"].append("aether_single_publish_time_stale")
         return
-    if single_reconcile.get("status") not in {"idle", "published", "scheduled", "processing"}:
+    slot = now.date().isoformat()
+    reconcile_status = single_reconcile.get("status")
+    if reconcile_status in {"scheduled", "processing", "published"} and single_reconcile.get("job_id"):
+        if (
+            single_reconcile.get("slot") == slot
+            and single_reconcile.get("video_id")
+        ):
+            report["single_slot"] = {**single_reconcile, "reused_existing_job": True}
+            return
+        if reconcile_status in {"scheduled", "processing"}:
+            report["single_slot"] = {
+                "status": "blocked",
+                "error": "aether_single_existing_job_unsettled",
+                "reconcile_status": reconcile_status,
+                "job_id": single_reconcile.get("job_id"),
+                "video_id": single_reconcile.get("video_id"),
+                "slot": single_reconcile.get("slot"),
+            }
+            report["blockers"].append("aether_single_existing_job_unsettled")
+            return
+    if reconcile_status not in {"idle", "published"}:
         report["single_slot"] = {
             "status": "blocked",
             "error": "aether_single_existing_job_unsettled",
-            "reconcile_status": single_reconcile.get("status"),
+            "reconcile_status": reconcile_status,
         }
         report["blockers"].append("aether_single_existing_job_unsettled")
         return
 
-    slot = now.date().isoformat()
     for title in BACKLOG:
         current = now_kst()
         if current.date().isoformat() != slot or (current.hour, current.minute) >= (9, 0):

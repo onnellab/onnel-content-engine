@@ -107,6 +107,46 @@ class SingleSlotBoundary(unittest.TestCase):
         self.assertEqual("2026-09-29", args[args.index("--slot") + 1])
         self.assertEqual("scheduled", report["single_slot"]["status"])
 
+    def test_same_day_scheduled_reconcile_is_reused_without_backlog_attempt(self):
+        report = self.report()
+        now = datetime(2026, 9, 29, 8, 30, tzinfo=KST)
+        reconciled = {
+            "profile": "aether_inn",
+            "status": "scheduled",
+            "slot": "2026-09-29",
+            "job_id": "durable-job",
+            "video_id": "durable-video",
+            "title": "Beyond the Road of Falling Petals",
+            "source_kind": "backlog_wav",
+        }
+        with patch.object(module, "now_kst", return_value=now), \
+             patch.object(module, "run_step") as run:
+            module.run_single_slot(report, reconciled)
+
+        run.assert_not_called()
+        self.assertEqual("durable-job", report["single_slot"]["job_id"])
+        self.assertEqual("durable-video", report["single_slot"]["video_id"])
+        self.assertTrue(report["single_slot"]["reused_existing_job"])
+        self.assertEqual([], report["blockers"])
+
+    def test_other_day_scheduled_reconcile_blocks_without_new_job(self):
+        report = self.report()
+        now = datetime(2026, 9, 29, 8, 30, tzinfo=KST)
+        reconciled = {
+            "status": "scheduled",
+            "slot": "2026-09-27",
+            "job_id": "old-job",
+            "video_id": "old-video",
+        }
+        with patch.object(module, "now_kst", return_value=now), \
+             patch.object(module, "run_step") as run:
+            module.run_single_slot(report, reconciled)
+
+        run.assert_not_called()
+        self.assertEqual("aether_single_existing_job_unsettled", report["single_slot"]["error"])
+        self.assertEqual("old-video", report["single_slot"]["video_id"])
+        self.assertEqual(["aether_single_existing_job_unsettled"], report["blockers"])
+
 
 if __name__ == "__main__":
     unittest.main()

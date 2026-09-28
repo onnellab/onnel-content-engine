@@ -28,6 +28,9 @@ def tokens(value):
 def identifier(title):
     return hashlib.sha256(title.encode()).hexdigest()[:16]
 
+def display_title(title):
+    return re.sub(r'\s+Style:$', '', title).strip()
+
 def read_catalog(path=CATALOG):
     data = load_json(path, limit=2 * 1024 * 1024)
     rows = data.get('songs')
@@ -43,8 +46,7 @@ def read_catalog(path=CATALOG):
         if type(duration) not in (int, float) or not math.isfinite(duration) or not 10 <= duration <= 900:
             raise VideoError('invalid_aether_catalog_duration')
         raw_title = row['title']
-        clean_title = re.sub(r'\s+Style:$', '', raw_title).strip()
-        out.append({**row, 'title': clean_title, 'id': identifier(raw_title)})
+        out.append({**row, 'id': identifier(raw_title)})
     if len({x['id'] for x in out}) != len(out):
         raise VideoError('duplicate_catalog_title')
     return out
@@ -56,9 +58,9 @@ def inspect_candidate(title, style, songs):
     ranked = []
     for row in songs:
         other = tokens(row['style'])
-        ranked.append({'id': row['id'], 'title': row['title'],
+        ranked.append({'id': row['id'], 'title': display_title(row['title']),
             'metadata_token_overlap': round(len(incoming & other) / max(1, len(incoming | other)), 4)})
-    exact_title = any(normalized(title) == normalized(row['title']) for row in songs)
+    exact_title = any(normalized(title) == normalized(display_title(row['title'])) for row in songs)
     exact_style = any(normalized(style) == normalized(row['style']) for row in songs)
     return {'title_duplicate': exact_title, 'style_duplicate': exact_style,
         'nearest_metadata': sorted(ranked, key=lambda x: (-x['metadata_token_overlap'], x['id']))[:3],
@@ -74,7 +76,7 @@ def timeline(rows, fade=2):
         duration = row['duration_seconds']
         if type(duration) not in (int,float) or not math.isfinite(duration) or duration < max(10, 2 * fade):
             raise VideoError('invalid_compilation_duration')
-        chapters.append({'id': row['id'], 'title': row['title'], 'start_seconds': round(cursor, 3),
+        chapters.append({'id': row['id'], 'title': display_title(row['title']), 'start_seconds': round(cursor, 3),
             'timestamp': f'{int(cursor)//60:02d}:{int(cursor)%60:02d}'})
         cursor += duration - (fade if index < len(rows)-1 else 0)
     return chapters, round(cursor, 3)
@@ -116,7 +118,7 @@ def plan(songs, theme='open_roads', *, history=(), target=1800, tolerance=60, fa
     rows = [by_id[key] for key in picked]
     # Title cues are only an editorial ordering heuristic, not measured energy.
     def order(row):
-        title_tokens = tokens(row['title'])
+        title_tokens = tokens(display_title(row['title']))
         return (2 if title_tokens & {'home','last','evening'} else 0 if title_tokens & {'morning','dawn','first','gate'} else 1, row['id'])
     rows.sort(key=order)
     chapters, duration = timeline(rows, fade)

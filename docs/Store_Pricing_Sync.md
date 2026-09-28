@@ -21,9 +21,10 @@ profile credentials already configured for store review operations. The worker
 lists the app's IAPs, reads each price schedule, and resolves the currently
 effective Korean customer price from manual and automatic schedule records.
 
-Google managed in-app products use the Google Play Developer API
-`inappproducts` resource. Auto-renewing subscriptions use the monetization
-subscriptions resource and the Korean regional base-plan price.
+Google one-time products use the current Google Play Developer API
+`monetization.onetimeproducts` list surface (`oneTimeProducts`) and resolve the
+Korean regional price from active buy purchase options. Auto-renewing subscriptions
+use the monetization subscriptions resource and the Korean regional base-plan price.
 
 ## Safety and fallback
 
@@ -49,9 +50,11 @@ If Google Play returns HTTP 403 for the authenticated product catalog, the
 collector records `google_catalog_pricing_permission_denied`. It does not use
 an undocumented endpoint or weaken account controls. The dashboard keeps the
 configured manual price for that Play Store product, labels it live-unverified,
-and shows the blocker alongside the last attempted check. A later run will
-replace that fallback automatically when the configured service account gains
-sufficient catalog access and the official API returns a matching live product.
+and shows the blocker alongside the last attempted check. The durable store state
+also records the least-privilege remediation: grant the service-account user app
+access with **Manage store presence** (`CAN_MANAGE_PUBLIC_LISTING`) for affected
+apps, then rerun the canonical sync. A later run replaces the fallback automatically
+when the official API returns a matching live product.
 
 ## Scheduled operation
 

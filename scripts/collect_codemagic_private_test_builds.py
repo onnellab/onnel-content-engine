@@ -44,9 +44,18 @@ def main() -> int:
     requests = payload.get("requests")
     if not isinstance(requests, list):
         raise SystemExit("private test build requests have invalid shape")
+    active = [
+        item for item in requests
+        if item.get("status") in {"dispatched", "running", "succeeded"}
+        and item.get("codemagic_build_id")
+    ]
+    if not active:
+        STATUS_PATH.write_text(json.dumps({"checked_at": now, "state": "not_applicable", "records": []}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print("no active Codemagic private-test builds require status collection")
+        return 0
     if not os.environ.get("CODEMAGIC_API_TOKEN"):
         STATUS_PATH.write_text(json.dumps({"checked_at": now, "state": "token_missing", "records": []}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        print("CODEMAGIC_API_TOKEN is not configured; no private-test build status collected")
+        print("CODEMAGIC_API_TOKEN is not configured; active private-test build status could not be collected")
         return 0
     records: list[dict[str, str]] = []
     succeeded = False

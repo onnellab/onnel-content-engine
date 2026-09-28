@@ -233,7 +233,7 @@ def sync(
     for key, spec in (approval.get("tracks") or {}).items():
         if key not in catalog or not isinstance(spec, dict):
             raise VideoError("aether_asset_approval_invalid")
-        if source_title({"title": str(spec.get("title", ""))}) != catalog[key]["title"]:
+        if source_title({"title": str(spec.get("title", ""))}) != source_title(catalog[key]):
             raise VideoError("aether_asset_approval_title_mismatch")
         if spec.get("commercial_use_confirmed") is True and spec.get("quality_accepted") is True:
             eligible.append(catalog[key])

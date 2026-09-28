@@ -615,7 +615,7 @@ def worker(
                         atomic_json(q.state_path, state)
             return {
                 "profile": "aether_inn", "status": job["status"], "job_id": job["id"],
-                "title": job["title"], "lane": job["lane"],
+                "slot": job["slot"], "title": job["title"], "lane": job["lane"],
                 "source_kind": job.get("source_kind", "new_lyria"),
                 "source_filename": job.get("source_filename"),
                 "video_id": job.get("upload", {}).get("video_id"),
