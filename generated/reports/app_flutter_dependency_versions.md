@@ -6,7 +6,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | aligna | 1.0.6+22 | 1.0.6 | - | ok | github:onnellab/aligna/pubspec.yaml |
+| app_version | aligna | 1.0.7+23 | 1.0.7 | - | ok | github:onnellab/aligna/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/aligna/pubspec.yaml |
 | dependency | file_picker | ^10.3.10 | 10.3.10 | - | ok | github:onnellab/aligna/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/aligna/pubspec.yaml |
@@ -63,7 +63,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | quivra | 1.0.8+83 | 1.0.8 | - | ok | github:onnellab/quivra/pubspec.yaml |
+| app_version | quivra | 1.0.9+84 | 1.0.9 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | ffmpeg_kit_flutter_new_full | ^2.0.0 | 2.0.0 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/quivra/pubspec.yaml |
@@ -99,7 +99,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | tagweaver | 2.5.1+95 | 2.5.1 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
+| app_version | tagweaver | 2.5.2+96 | 2.5.2 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | file_picker | ^8.0.0 | 8.3.7 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
@@ -116,7 +116,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | vaultxt | 2.0.0+65 | 2.0.0 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
+| app_version | vaultxt | 2.0.1+66 | 2.0.1 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | characters | 1.4.1 | 1.4.1 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | charset_converter | ^2.3.0 | 2.3.0 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
