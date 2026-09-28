@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-28T21:22:26+00:00",
+  "generated_at": "2026-09-28T21:23:39+00:00",
   "items": [
     {
       "review_id": "ad7c566c-d450-4973-b072-36b4c079dd1e",
@@ -34,7 +34,7 @@
       ],
       "requires_human_approval": true,
       "actions": {
-        "reply": "recommended",
+        "reply": "not_needed",
         "github_issue": "not_needed",
         "store_copy": "not_needed",
         "code_change": "not_needed"
