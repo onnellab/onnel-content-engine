@@ -245,16 +245,16 @@ def run_youtube_reports(report: dict) -> None:
 def run_hosted_ops_workflows(report: dict) -> None:
     repo = "onnellab/onnel-content-engine"
     workflows = [
-        ("app_operational_status", "Sync app operational status"),
-        ("ai_operations", "Refresh AI Operations Sources"),
-        ("store_reviews", "Sync Store Reviews"),
+        ("app_operational_status", "Sync app operational status", ["-f", "deploy_dashboard=false"]),
+        ("ai_operations", "Refresh AI Operations Sources", []),
+        ("store_reviews", "Sync Store Reviews", ["-f", "deploy_dashboard=false"]),
     ]
     report["hosted_workflows"] = {}
-    for key, workflow in workflows:
+    for key, workflow, extra_args in workflows:
         code, stdout, _ = run_step(
             report,
             f"dispatch_{key}",
-            ["gh", "workflow", "run", workflow, "-R", repo, "--ref", "main"],
+            ["gh", "workflow", "run", workflow, "-R", repo, "--ref", "main", *extra_args],
             timeout=90,
         )
         url = next((line.strip() for line in reversed(stdout.splitlines()) if "/actions/runs/" in line), "")
@@ -397,7 +397,11 @@ def run_store_review_auto_replies(report: dict) -> None:
     code, dispatch_stdout, _ = run_step(
         report,
         "dispatch_review_verification_sync",
-        ["gh", "workflow", "run", "Sync Store Reviews", "-R", "onnellab/onnel-content-engine", "--ref", "main"],
+        [
+            "gh", "workflow", "run", "Sync Store Reviews",
+            "-R", "onnellab/onnel-content-engine", "--ref", "main",
+            "-f", "deploy_dashboard=false",
+        ],
         timeout=90,
     )
     url = next((line.strip() for line in reversed(dispatch_stdout.splitlines()) if "/actions/runs/" in line), "")
@@ -433,6 +437,53 @@ def run_store_review_auto_replies(report: dict) -> None:
             report["blockers"].append(f"store_review_reply_not_observed:{review_id}")
     report["store_review_auto_replies"]["store_observed"] = verified
 
+
+
+
+
+def run_ops_dashboard_deploy(report: dict) -> None:
+    workflow = "Deploy Ops Dashboard"
+    code, stdout, _ = run_step(
+        report,
+        "dispatch_ops_dashboard",
+        ["gh", "workflow", "run", workflow, "-R", "onnellab/onnel-content-engine", "--ref", "main"],
+        timeout=90,
+    )
+    url = next((line.strip() for line in reversed(stdout.splitlines()) if "/actions/runs/" in line), "")
+    run_id = url.rstrip("/").split("/")[-1] if url else ""
+    state = {"workflow": workflow, "run_id": run_id, "status": "dispatch_failed"}
+    report.setdefault("hosted_workflows", {})["ops_dashboard"] = state
+    if code != 0 or not run_id.isdigit():
+        report["blockers"].append("ops_dashboard_workflow_dispatch_failed")
+        return
+    code, _, _ = run_step(
+        report,
+        "watch_ops_dashboard",
+        ["gh", "run", "watch", run_id, "-R", "onnellab/onnel-content-engine", "--exit-status", "--interval", "3"],
+        timeout=1800,
+    )
+    state["status"] = "success" if code == 0 else "failed"
+    if code != 0:
+        report["blockers"].append("ops_dashboard_workflow_failed")
+        return
+    code, _, _ = run_step(report, "ops_dashboard_fetch", ["git", "fetch", "origin", "main"], timeout=120)
+    if code != 0:
+        report["blockers"].append("ops_dashboard_fetch_failed")
+        return
+    code, counts, _ = run_step(
+        report, "ops_dashboard_divergence",
+        ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
+    )
+    parts = counts.split()
+    if code != 0 or len(parts) != 2 or int(parts[0]) != 0:
+        report["blockers"].append("ops_dashboard_divergence_invalid")
+        return
+    if int(parts[1]):
+        code, _, _ = run_step(
+            report, "ops_dashboard_pull", ["git", "pull", "--ff-only", "origin", "main"], timeout=180,
+        )
+        if code != 0:
+            report["blockers"].append("ops_dashboard_pull_failed")
 
 def run_reconcile(report: dict) -> dict:
     code, stdout, _ = run_step(
@@ -777,6 +828,23 @@ def main() -> int:
             print(json.dumps({"state": "already_running", "result": str(RESULT)}))
             return 3
         now = now_kst()
+        if not args.probe and RESULT.exists():
+            try:
+                existing = json.loads(RESULT.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                existing = {}
+            if (
+                existing.get("kind") == "onnellab_aether_local_daily_result"
+                and existing.get("mode") == "daily"
+                and existing.get("local_date") == now.date().isoformat()
+                and existing.get("state") == "complete"
+            ):
+                print(json.dumps({
+                    "state": "already_complete",
+                    "local_date": existing.get("local_date"),
+                    "finished_at": existing.get("finished_at"),
+                }))
+                return 0
         report = {
             "schema_version": 1,
             "kind": "onnellab_aether_local_daily_result",
@@ -816,6 +884,7 @@ def main() -> int:
         publish_local_ops_sources(report)
         run_hosted_ops_workflows(report)
         run_store_review_auto_replies(report)
+        run_ops_dashboard_deploy(report)
         code, status, _ = run_step(report, "post_ops_repo_status", ["git", "status", "--porcelain"], timeout=30)
         if code != 0 or status.strip():
             report["blockers"].append("repo_dirty_after_ops_snapshot")
