@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-09-29T14:45:59+09:00
+Generated: 2026-09-29T21:55:42+09:00
 
 ## Summary
 
@@ -8,8 +8,8 @@ Generated: 2026-09-29T14:45:59+09:00
 | --- | --- | --- |
 | Store | in_review | 2 |
 | Store | not_released | 2 |
-| Store | unchanged | 10 |
-| Store | updated | 1 |
+| Store | unchanged | 9 |
+| Store | updated | 2 |
 | GitHub Release | archived | 3 |
 | GitHub Release | planned | 6 |
 
@@ -17,8 +17,8 @@ Generated: 2026-09-29T14:45:59+09:00
 
 | App | Platform | Store version/package | Repository version | Comparison | Store | Release | Repository | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Aligna | android | 1.0.6 | 1.0.7 | local_ahead | unchanged | - | onnellab/aligna | Covered by private test release row |
-| Aligna | ios | 1.0.7 | 1.0.7 | same | updated | planned | onnellab/aligna | Private test only; do not publish public GitHub Release |
+| Aligna | android | 1.0.7 | 1.0.7 | same | updated | - | onnellab/aligna | Create or verify release candidate |
+| Aligna | ios | 1.0.6 | 1.0.7 | local_ahead | updated | planned | onnellab/aligna | Private test only; do not publish public GitHub Release |
 | ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
 | Melivra | android | com.onnellab.melivra | 1.0.3 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
 | Melivra | ios | 6783644955 | 1.0.3 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
@@ -45,13 +45,13 @@ Generated: 2026-09-29T14:45:59+09:00
 | REL-0009 | Quivra | ios | public | v1.0.7 | archived | Archived | - | - | Melivra에서 보낸 오디오 파일을 받아 변환하는 흐름을 개선했어요. | No action |
 | REL-0019 | Quivra | android | public | v1.0.9 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
 | REL-0020 | VaultXT | android | public | v2.0.1 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
-| REL-0021 | Aligna | ios | private_test | v1.0.7 | planned | Private test; public Release disabled | - | - | 파일명 미리보기와 적용 과정을 더 쉽게 확인할 수 있도록 스토어 안내와 화면 이미지를 새로 정리했어요. | Private test only; do not publish public GitHub Release |
+| REL-0021 | Aligna | ios | private_test | v1.0.7 | planned | Private test; public Release disabled | - | - | 사소한 버그를 수정하고 안정성을 개선했어요. | Private test only; do not publish public GitHub Release |
 
 ## Attention Queue
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| Aligna | android | unchanged | Covered by private test release row | Version/update date read from Google Play public page; Android snapshot version 1.0.7 is stale for public version 1.0.6 and was not merged. |
+| Aligna | android | updated | Create or verify release candidate | Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/aligna/pubspec.yaml version 1.0.7+23; confirm against Play Console if needed. |
 | TagWeaver | android | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
 | Segra | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
 | ClipNest | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.2. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |
