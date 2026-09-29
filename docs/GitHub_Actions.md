@@ -145,7 +145,7 @@ Local app repository mappings are stored in:
 data/local_repositories.csv
 ```
 
-App operational status is also refreshed independently from content publication by `.github/workflows/sync-app-operational-status.yml` every six hours and on manual dispatch. That workflow reads each app repository's default branch through `scripts/sync_flutter_plugin_versions.py`, refreshes public store snapshots, release candidates and GitHub Release status, rebuilds the manual dashboard, and deploys the dashboard even when a blog publication run is failing. The repository/main app version and public store version remain separate signals.
+App operational status is also refreshed independently from content publication by `.github/workflows/sync-app-operational-status.yml` every six hours and on manual dispatch. That workflow reads each app repository's default branch through `scripts/sync_flutter_plugin_versions.py`, refreshes public store snapshots, release candidates and GitHub Release status, and normally rebuilds/deploys the manual dashboard even when a blog publication run is failing. The local Aether daily worker dispatches it with `deploy_dashboard=false` so the daily pass does not deploy an intermediate dashboard; the dedicated `Deploy Ops Dashboard` workflow performs the single final combined deployment after app status, AI operations, store reviews, and any review-reply verification are complete. The repository/main app version and public store version remain separate signals.
 
 The validation stage dry-runs local metadata sync:
 
