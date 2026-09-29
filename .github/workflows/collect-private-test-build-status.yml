@@ -3,6 +3,9 @@ on:
   schedule: [{cron: '15 * * * *'}]
   workflow_dispatch:
 permissions: {contents: write}
+concurrency:
+  group: onnellab-manual-dashboard-writer
+  cancel-in-progress: false
 jobs:
   collect:
     runs-on: ubuntu-latest
@@ -17,4 +20,5 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add data/private_test_build_requests.json data/private_test_build_sync_status.json data/codemagic_artifacts.csv data/ai_manager_daily_report.json
           git diff --cached --quiet || git commit -m "Collect private test build status"
+          git pull --rebase --autostash origin main
           git push
