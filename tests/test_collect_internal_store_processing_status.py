@@ -202,10 +202,12 @@ class InternalStoreProcessingStatusTest(unittest.TestCase):
         self.assertEqual(len(records[0]["history"]), 1)
         self.assertEqual(records[0]["last_checked_at"], "2026-07-28T11:00:00+00:00")
 
-    def test_workflow_is_collection_only_and_scheduled(self) -> None:
+    def test_workflow_is_collection_only_and_dispatch_only(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "sync-internal-store-processing-status.yml").read_text()
 
-        self.assertIn('cron: "17 * * * *"', workflow)
+        self.assertIn("workflow_dispatch", workflow)
+        self.assertNotIn("schedule:", workflow)
+        self.assertNotIn("cron:", workflow)
         self.assertIn("collect_internal_store_processing_status.py", workflow)
         self.assertIn("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", workflow)
         self.assertIn("APP_STORE_CONNECT_PRIVATE_KEY", workflow)
