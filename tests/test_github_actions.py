@@ -145,10 +145,13 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("scripts/sync_ai_provider_pricing.py", workflow)
         self.assertIn("git pull --rebase --autostash origin main", workflow)
 
-    def test_app_operational_status_sync_is_independent_and_scheduled(self) -> None:
+    def test_app_operational_status_sync_is_independent_and_dispatch_only(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "sync-app-operational-status.yml").read_text(encoding="utf-8")
 
-        self.assertIn('cron: "17 */6 * * *"', workflow)
+        self.assertIn("workflow_dispatch", workflow)
+        self.assertIn("deploy_dashboard", workflow)
+        self.assertNotIn("schedule:", workflow)
+        self.assertNotIn("cron:", workflow)
         self.assertIn("scripts/sync_flutter_plugin_versions.py", workflow)
         self.assertIn("scripts/sync_android_versions_from_repos.py", workflow)
         self.assertIn("scripts/check_store_versions.py", workflow)
@@ -200,7 +203,9 @@ class GitHubActionsTest(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "sync-store-reviews.yml").read_text(encoding="utf-8")
 
         self.assertIn("workflow_dispatch", workflow)
-        self.assertIn('cron: "20 0 * * *"', workflow)
+        self.assertIn("deploy_dashboard", workflow)
+        self.assertNotIn("schedule:", workflow)
+        self.assertNotIn("cron:", workflow)
         self.assertIn("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", workflow)
         self.assertIn("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", workflow)
         self.assertIn("GOOGLE_PLAY_REPORTS_BUCKET", workflow)
