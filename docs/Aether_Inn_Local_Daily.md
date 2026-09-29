@@ -65,8 +65,10 @@ must not be followed by divergence decisions against a stale `origin/main`. The 
 - commits and pushes only those expected local operational snapshots;
 - dispatches and waits for the canonical `Sync app operational status`,
   `Refresh AI Operations Sources`, and `Sync Store Reviews` GitHub Actions in
-  that order, then fast-forwards local `main`; the final review workflow rebuilds
-  and deploys `/ops/` from the combined hosted and local snapshots, then verifies
+  that order, with dashboard deployment disabled on the app/review sync calls, then
+  runs the dedicated `Deploy Ops Dashboard` workflow exactly once after any
+  standing-policy review reply verification; that final workflow rebuilds and
+  deploys `/ops/` from the combined hosted and local snapshots and verifies
   custom-domain bytes, indexing directives, robots.txt, sitemap/navigation exclusion,
   and legacy-route absence into `data/ops_live_verification.json`;
 - after the fresh review sync, queues eligible real-ID text reviews under the
@@ -93,9 +95,11 @@ reimplement or weaken those contracts.
 
 ## Failure behavior
 
-The worker is single-instance. It records a blocker and stops or skips the affected
-stage when repository state, credentials, source WAVs, publication timing, worker
-readiness, or canonical worker results are unsafe. Repository refresh failures block
+The worker is single-instance. A second normal invocation on the same KST date
+returns `already_complete` without repeating work when the durable daily result is
+already `complete`. It records a blocker and stops or skips the affected stage when
+repository state, credentials, source WAVs, publication timing, worker readiness, or
+canonical worker results are unsafe. Repository refresh failures block
 before cached remote refs are trusted. It never compensates for a stale 09:00 single
 slot by publishing immediately, never creates a replacement upload to
 escape an uncertain durable session, and never launches interactive authorization.
