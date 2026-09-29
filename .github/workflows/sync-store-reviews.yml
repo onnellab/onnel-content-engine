@@ -21,8 +21,6 @@ on:
       - "scripts/suno_api_credentials.py"
       - "scripts/install_youtube_connect.py"
       - "templates/suno_api_connect.html"
-  schedule:
-    - cron: "20 0 * * *"
 
 concurrency:
   group: onnellab-manual-dashboard-writer

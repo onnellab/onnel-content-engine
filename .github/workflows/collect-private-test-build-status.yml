@@ -1,6 +1,5 @@
 name: Collect Private Test Build Status
 on:
-  schedule: [{cron: '15 * * * *'}]
   workflow_dispatch:
 permissions: {contents: write}
 concurrency:

@@ -7,7 +7,11 @@ turn successfully dispatching a Remote Desktop terminal command. Scheduled tool
 orchestration can reject a terminal call before it reaches the worker Mac even
 when Desktop Commander, the repository, Keychain, and the same command are healthy.
 
-The root architecture therefore separates execution from reporting:
+The root architecture therefore separates execution from reporting. The hosted
+operations component workflows used by this daily pass are `workflow_dispatch`-only;
+they do not own independent cron schedules. This keeps `launchd` as the single
+scheduled owner and prevents the same source refresh from running again later in
+the morning.
 
 1. macOS `launchd` starts `scripts/aether_daily_local.py` locally each morning.
 2. The local worker owns operations that require the Mac user session, Keychain,

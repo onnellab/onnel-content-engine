@@ -1,8 +1,6 @@
 name: Sync Internal Store Processing Status
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "17 * * * *"
 permissions: {contents: write}
 concurrency:
   group: onnellab-manual-dashboard-writer
