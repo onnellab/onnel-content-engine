@@ -89,7 +89,7 @@ class DashboardIntegrityTest(unittest.TestCase):
             self.assertIn('python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html', text, path.name)
             self.assertIn('python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/ops/index.html"', text, path.name)
             self.assertIn('git -C "$HOMEPAGE_REPO_PATH" diff --check', text, path.name)
-        self.assertEqual(len(found), 6)
+        self.assertEqual(len(found), 7)
 
 
 if __name__ == '__main__':
