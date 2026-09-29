@@ -6,6 +6,9 @@ on:
 permissions:
   contents: write
   issues: read
+concurrency:
+  group: onnellab-manual-dashboard-writer
+  cancel-in-progress: false
 jobs:
   collect:
     runs-on: ubuntu-latest
