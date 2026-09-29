@@ -2,6 +2,12 @@ name: Sync Store Reviews
 
 on:
   workflow_dispatch:
+    inputs:
+      deploy_dashboard:
+        description: "Build, deploy, and verify /ops/ after syncing reviews"
+        required: false
+        default: true
+        type: boolean
   push:
     branches: [main]
     paths:
@@ -30,6 +36,7 @@ jobs:
       contents: write
     env:
       HOMEPAGE_REPO_PATH: .homepage
+      DEPLOY_DASHBOARD: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_dashboard }}
 
     steps:
       - name: Checkout content engine
@@ -38,6 +45,7 @@ jobs:
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
 
       - name: Checkout homepage
+        if: env.DEPLOY_DASHBOARD == 'true'
         uses: actions/checkout@v4
         with:
           repository: onnellab/onnellab.github.io
@@ -82,36 +90,46 @@ jobs:
           python3 scripts/triage_store_reviews.py
           python3 scripts/generate_ai_review_drafts.py
 
-      - name: Verify provider setup and build dashboard
+      - name: Verify provider setup and optionally build dashboard
         run: |
           python3 -m unittest discover -s tests -p 'test_short_video_connect.py'
           python3 -m unittest discover -s tests -p 'test_lyria.py'
-          python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+          if [ "$DEPLOY_DASHBOARD" = "true" ]; then
+            python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+          fi
 
       - name: Commit review snapshot
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
-          python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
+          if [ "$DEPLOY_DASHBOARD" = "true" ]; then
+            python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+            python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
+          fi
           git diff --check
-          git add data/store_reviews.csv data/store_reviews_archive.json data/store_review_sync_status.json data/store_review_triage.json data/store_pricing_snapshot.json generated/review-replies/review_packet.json generated/review-replies/review_packet.md generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js
+          git add data/store_reviews.csv data/store_reviews_archive.json data/store_review_sync_status.json data/store_review_triage.json data/store_pricing_snapshot.json generated/review-replies/review_packet.json generated/review-replies/review_packet.md
+          if [ "$DEPLOY_DASHBOARD" = "true" ]; then
+            git add generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js
+          fi
           if git diff --cached --quiet; then
             echo "No store review changes to commit"
           else
             git commit -m "Sync store reviews"
             git pull --rebase origin main
-            python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
-            python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
-            git add data/store_review_triage.json generated/manual-publish/
-            if ! git diff --cached --quiet; then
-              git commit -m "Rebuild review dashboard after source synchronization"
+            if [ "$DEPLOY_DASHBOARD" = "true" ]; then
+              python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+              python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
+              git add data/store_review_triage.json generated/manual-publish/
+              if ! git diff --cached --quiet; then
+                git commit -m "Rebuild review dashboard after source synchronization"
+              fi
             fi
             git push origin HEAD:main
           fi
 
       - name: Deploy dashboard
+        if: env.DEPLOY_DASHBOARD == 'true'
         run: |
           set -euo pipefail
           git -C "$HOMEPAGE_REPO_PATH" pull --rebase origin main
@@ -139,6 +157,7 @@ jobs:
           fi
 
       - name: Verify live ops deployment
+        if: env.DEPLOY_DASHBOARD == 'true'
         id: live_ops
         continue-on-error: true
         run: |
@@ -147,7 +166,7 @@ jobs:
             --output data/ops_live_verification.json
 
       - name: Commit live ops verification
-        if: always()
+        if: env.DEPLOY_DASHBOARD == 'true' && always()
         run: |
           set -euo pipefail
           if [ ! -f data/ops_live_verification.json ]; then
@@ -164,5 +183,5 @@ jobs:
           fi
 
       - name: Enforce live ops verification
-        if: steps.live_ops.outcome != 'success'
+        if: env.DEPLOY_DASHBOARD == 'true' && steps.live_ops.outcome != 'success'
         run: exit 1
