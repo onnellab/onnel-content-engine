@@ -218,12 +218,12 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("data/store_reviews.csv", workflow)
         self.assertIn("public/ops/", workflow)
 
-    def test_work_browser_reconciliation_is_scheduled_and_deploys_dashboard(self) -> None:
-        workflow = (ROOT / ".github" / "workflows" / "reconcile-work-browser-publications.yml").read_text(encoding="utf-8")
+    def test_remote_browser_reconciliation_is_scheduled_and_deploys_dashboard(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "reconcile-remote-browser-publications.yml").read_text(encoding="utf-8")
         self.assertIn('cron: "17 * * * *"', workflow)
-        self.assertIn("scripts/reconcile_work_browser_publications.py", workflow)
-        self.assertIn("data/work_browser_publications.json", workflow)
-        self.assertIn("--store-review-triage /tmp/work-browser-triage.json", workflow)
+        self.assertIn("scripts/reconcile_remote_browser_publications.py", workflow)
+        self.assertIn("data/remote_browser_publications.json", workflow)
+        self.assertIn("--store-review-triage /tmp/remote-browser-triage.json", workflow)
         self.assertIn("group: onnellab-manual-dashboard-writer", workflow)
         self.assertIn("public/ops/", workflow)
 
