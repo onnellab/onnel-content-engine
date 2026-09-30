@@ -94,7 +94,8 @@
       "platform": "linkedin",
       "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7510873007247015937/",
       "published_at": "2026-09-30T01:28:12.802Z",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-09-30T01:28:32+00:00"
     }
   ]
 }
