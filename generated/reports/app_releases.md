@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-09-30T07:17:06+09:00
+Generated: 2026-10-01T06:20:59+09:00
 
 ## Summary
 
@@ -8,8 +8,7 @@ Generated: 2026-09-30T07:17:06+09:00
 | --- | --- | --- |
 | Store | in_review | 2 |
 | Store | not_released | 2 |
-| Store | unchanged | 10 |
-| Store | updated | 1 |
+| Store | unchanged | 11 |
 | GitHub Release | archived | 3 |
 | GitHub Release | planned | 6 |
 
@@ -18,10 +17,10 @@ Generated: 2026-09-30T07:17:06+09:00
 | App | Platform | Store version/package | Repository version | Comparison | Store | Release | Repository | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Aligna | android | 1.0.7 | 1.0.7 | same | unchanged | planned | onnellab/aligna | Add release artifact and checksum |
-| Aligna | ios | 1.0.7 | 1.0.7 | same | updated | - | onnellab/aligna | Create or verify release candidate |
+| Aligna | ios | 1.0.7 | 1.0.7 | same | unchanged | - | onnellab/aligna | No action |
 | ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
-| Melivra | android | com.onnellab.melivra | 1.0.3 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
-| Melivra | ios | 6783644955 | 1.0.3 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
+| Melivra | android | com.onnellab.melivra | 1.0.5 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
+| Melivra | ios | 6783644955 | 1.0.5 | unknown | not_released | - | onnellab/melivra | No public store rollout yet |
 | Papira | android | com.onnellab.papira | - | unknown | in_review | - | onnellab/papira | Review status |
 | Papira | ios | - | - | unknown | in_review | - | onnellab/papira | Review status |
 | Quivra | android | 1.0.9 | 1.0.9 | same | unchanged | planned | onnellab/quivra | Add release artifact and checksum |
@@ -51,7 +50,6 @@ Generated: 2026-09-30T07:17:06+09:00
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| Aligna | ios | updated | Create or verify release candidate | - |
 | TagWeaver | android | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
 | Segra | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
 | ClipNest | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.2. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |
