@@ -71,7 +71,8 @@ PLATFORM_LABELS = {
 SOCIAL_DUE_DELAYS_DAYS = {"x": 0, "linkedin": 1, "bluesky": 1}
 SYNDICATION_DUE_DELAYS_DAYS = {"devto": 2, "hashnode": 3, "medium": 4}
 AUTOMATED_PLATFORMS = {"bluesky", "devto"}
-REMOTE_BROWSER_PLATFORMS = {"x", "linkedin", "hashnode", "medium"}
+REMOTE_BROWSER_PLATFORMS = {"x", "linkedin", "medium"}
+DISABLED_PLATFORMS = {"hashnode"}
 HASHNODE_SEO_DESCRIPTION_LIMIT = 160
 
 
@@ -370,6 +371,8 @@ def item_key(topic_id: object, platform: str, language: object, template_id: obj
 
 
 def publishing_mode(platform: str) -> str:
+    if platform in DISABLED_PLATFORMS:
+        return "disabled"
     if platform in AUTOMATED_PLATFORMS:
         return "automatic"
     if platform in REMOTE_BROWSER_PLATFORMS:
@@ -1593,7 +1596,7 @@ def html_document(
         <input id="search" type="search" placeholder="토픽, 매체, 언어, 상태 검색">
         <select id="language"><option value="">모든 언어</option></select>
         <select id="status"><option value="">모든 상태</option></select>
-        <select id="mode"><option value="remote_browser">원격 Chrome</option><option value="automatic">API 자동</option><option value="manual">수동만</option><option value="">전체</option></select>
+        <select id="mode"><option value="remote_browser">원격 Chrome</option><option value="automatic">API 자동</option><option value="manual">수동만</option><option value="disabled">발행 중지</option><option value="">전체</option></select>
       </div>
       <div class="auth" id="sync-auth" hidden>
         <input id="token" type="password" autocomplete="off" placeholder="ONNELLAB_GITHUB_PAGES_TOKEN">
@@ -2020,6 +2023,7 @@ def html_document(
         manualMode: '수동 게시 필요',
         workBrowserMode: '원격 Chrome 게시',
         automaticMode: 'API 자동 게시',
+        disabledMode: '발행 중지',
         showVariants: '대안 보기',
         hideVariants: '대안 숨기기',
         variantsCount: '개 대안',
@@ -2310,6 +2314,7 @@ def html_document(
         manualMode: 'Manual publish',
         workBrowserMode: 'Remote Chrome publishing',
         automaticMode: 'API automation',
+        disabledMode: 'Publishing disabled',
         showVariants: 'Show alternatives',
         hideVariants: 'Hide alternatives',
         variantsCount: 'alternatives',
@@ -4065,7 +4070,7 @@ def html_document(
         const modeTag = document.createElement('span');
         const platformMode = rows[0]?.publishing_mode || 'manual';
         modeTag.className = 'tag ' + (platformMode === 'manual' ? 'mode-manual' : 'mode-automatic');
-        modeTag.textContent = (platformMode === 'remote_browser' || platformMode === 'work_browser') ? t('workBrowserMode') : platformMode === 'automatic' ? t('automaticMode') : t('manualMode');
+        modeTag.textContent = platformMode === 'disabled' ? t('disabledMode') : (platformMode === 'remote_browser' || platformMode === 'work_browser') ? t('workBrowserMode') : platformMode === 'automatic' ? t('automaticMode') : t('manualMode');
         title.append(titleText, modeTag);
         const status = document.createElement('span');
         status.textContent = `${{posted.length}} ${{t('postedWord')}} / ${{drafts.length}} ${{t('waitingWord')}} / ${{failed.length}} ${{t('failedWord')}}`;
@@ -4949,7 +4954,7 @@ def html_document(
       const meta = document.createElement('div');
       meta.className = 'meta';
       const statusParts = [
-        ['remote_browser', 'work_browser'].includes(item.publishing_mode) ? t('workBrowserMode') : item.publishing_mode === 'automatic' ? t('automaticMode') : t('manualMode'),
+        item.publishing_mode === 'disabled' ? t('disabledMode') : ['remote_browser', 'work_browser'].includes(item.publishing_mode) ? t('workBrowserMode') : item.publishing_mode === 'automatic' ? t('automaticMode') : t('manualMode'),
         item.language,
         isDone(item) ? t('doneTag') : item.status,
       ];
@@ -5033,6 +5038,7 @@ def html_document(
       doneButton.textContent = isDone(item) ? t('undoDone') : t('markDone');
       doneButton.onclick = () => isDone(item) ? undoDone(item, doneButton) : markDone(item, doneButton);
       if (isPrepublication(item)) actions.append(detailToggle);
+      else if (item.publishing_mode === 'disabled') actions.append(detailToggle);
       else if (['remote_browser', 'work_browser'].includes(item.publishing_mode)) actions.append(open, detailToggle);
       else actions.append(open, doneButton, detailToggle);
       if (item.kind === 'syndication' && !isPrepublication(item)) {{
