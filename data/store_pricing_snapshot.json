@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "onnellab_store_pricing_snapshot",
-  "checked_at": "2026-09-30T21:22:50+00:00",
+  "checked_at": "2026-09-30T23:19:24+00:00",
   "territory": "KR",
   "products": [
     {
@@ -19,7 +19,7 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0006",
@@ -36,7 +36,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0005",
@@ -53,7 +53,211 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "android",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_ai_credits_100",
+      "base_plan_id": "melivra-ai-credits-100",
+      "product_name": "Melivra AI Credits 100",
+      "price": "1500",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "ACTIVE",
+      "source": "google_play_monetization_onetimeproducts",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "android",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_ai_credits_1000",
+      "base_plan_id": "melivra-ai-credits-1000",
+      "product_name": "Melivra AI Credits 1000",
+      "price": "14000",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "ACTIVE",
+      "source": "google_play_monetization_onetimeproducts",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "android",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_ai_credits_5000",
+      "base_plan_id": "melivra-ai-credits-5000",
+      "product_name": "Melivra AI Credits 5000",
+      "price": "50000",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "ACTIVE",
+      "source": "google_play_monetization_onetimeproducts",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "ios",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_ai_tokens_100",
+      "base_plan_id": "",
+      "product_name": "Melivra AI Credits 100 (tokens)",
+      "price": "1100",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "READY_TO_SUBMIT",
+      "source": "app_store_connect_iap_price_schedule",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "android",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_ai_tokens_100",
+      "base_plan_id": "credits100",
+      "product_name": "AI 크레딧 100",
+      "price": "1300",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "ACTIVE",
+      "source": "google_play_monetization_onetimeproducts",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "ios",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_ai_tokens_1000",
+      "base_plan_id": "",
+      "product_name": "Melivra AI Credits 1000 (tokens)",
+      "price": "15000",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "READY_TO_SUBMIT",
+      "source": "app_store_connect_iap_price_schedule",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "android",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_ai_tokens_1000",
+      "base_plan_id": "credits1000",
+      "product_name": "AI 크레딧 1000",
+      "price": "12000",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "ACTIVE",
+      "source": "google_play_monetization_onetimeproducts",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "ios",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_ai_tokens_5000",
+      "base_plan_id": "",
+      "product_name": "Melivra AI Credits 5000 (tokens)",
+      "price": "55000",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "READY_TO_SUBMIT",
+      "source": "app_store_connect_iap_price_schedule",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "android",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_ai_tokens_5000",
+      "base_plan_id": "credits5000",
+      "product_name": "AI 크레딧 5000",
+      "price": "47000",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "ACTIVE",
+      "source": "google_play_monetization_onetimeproducts",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "ios",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_pro",
+      "base_plan_id": "",
+      "product_name": "Melivra pro",
+      "price": "11000",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "READY_TO_SUBMIT",
+      "source": "app_store_connect_iap_price_schedule",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0007",
+      "app_slug": "melivra",
+      "app_name": "Melivra",
+      "platform": "android",
+      "product_type": "in_app_purchase",
+      "product_id": "melivra_pro",
+      "base_plan_id": "melivrapro",
+      "product_name": "Melivra Pro",
+      "price": "10000",
+      "currency": "KRW",
+      "price_display": "",
+      "territory": "KR",
+      "state": "ACTIVE",
+      "source": "google_play_monetization_onetimeproducts",
+      "checked_at": "2026-09-30T23:19:24+00:00"
+    },
+    {
+      "app_id": "APP-0008",
+      "app_slug": "papira",
+      "app_name": "Papira",
+      "platform": "ios",
+      "product_type": "paid_download",
+      "product_id": "6803919552",
+      "base_plan_id": "",
+      "product_name": "Papira - TXT EPUB 변환기",
+      "price": "4400",
+      "currency": "KRW",
+      "price_display": "￦4,400",
+      "territory": "KR",
+      "state": "available",
+      "source": "apple_itunes_lookup",
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0001",
@@ -70,7 +274,7 @@
       "territory": "KR",
       "state": "available",
       "source": "apple_itunes_lookup",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0001",
@@ -87,7 +291,7 @@
       "territory": "KR",
       "state": "available",
       "source": "google_play_public_page",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0004",
@@ -104,7 +308,7 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0004",
@@ -121,7 +325,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0002",
@@ -138,7 +342,7 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0002",
@@ -155,7 +359,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0003",
@@ -172,7 +376,7 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     },
     {
       "app_id": "APP-0003",
@@ -189,7 +393,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-09-30T21:22:50+00:00"
+      "checked_at": "2026-09-30T23:19:24+00:00"
     }
   ],
   "stores": [
@@ -197,7 +401,7 @@
       "app_id": "APP-0001",
       "app_slug": "quivra",
       "platform": "ios",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -205,7 +409,7 @@
       "app_id": "APP-0001",
       "app_slug": "quivra",
       "platform": "android",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -213,7 +417,7 @@
       "app_id": "APP-0002",
       "app_slug": "tagweaver",
       "platform": "ios",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -221,7 +425,7 @@
       "app_id": "APP-0002",
       "app_slug": "tagweaver",
       "platform": "android",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -229,7 +433,7 @@
       "app_id": "APP-0003",
       "app_slug": "vaultxt",
       "platform": "ios",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -237,7 +441,7 @@
       "app_id": "APP-0003",
       "app_slug": "vaultxt",
       "platform": "android",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -245,7 +449,7 @@
       "app_id": "APP-0004",
       "app_slug": "segra",
       "platform": "ios",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -253,7 +457,7 @@
       "app_id": "APP-0004",
       "app_slug": "segra",
       "platform": "android",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -261,7 +465,7 @@
       "app_id": "APP-0005",
       "app_slug": "clipnest",
       "platform": "ios",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -269,7 +473,7 @@
       "app_id": "APP-0006",
       "app_slug": "aligna",
       "platform": "ios",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -277,7 +481,7 @@
       "app_id": "APP-0006",
       "app_slug": "aligna",
       "platform": "android",
-      "checked_at": "2026-09-30T21:22:50+00:00",
+      "checked_at": "2026-09-30T23:19:24+00:00",
       "state": "verified",
       "error": ""
     },
@@ -285,33 +489,39 @@
       "app_id": "APP-0007",
       "app_slug": "melivra",
       "platform": "ios",
-      "checked_at": "2026-09-30T21:22:50+00:00",
-      "state": "not_released",
-      "error": ""
+      "checked_at": "2026-09-30T23:19:24+00:00",
+      "state": "partial",
+      "error": "apple_public_price_missing",
+      "errors": [
+        "apple_public_price_missing"
+      ]
     },
     {
       "app_id": "APP-0007",
       "app_slug": "melivra",
       "platform": "android",
-      "checked_at": "2026-09-30T21:22:50+00:00",
-      "state": "not_released",
+      "checked_at": "2026-09-30T23:19:24+00:00",
+      "state": "verified",
       "error": ""
     },
     {
       "app_id": "APP-0008",
       "app_slug": "papira",
       "platform": "ios",
-      "checked_at": "2026-09-30T21:22:50+00:00",
-      "state": "in_review",
+      "checked_at": "2026-09-30T23:19:24+00:00",
+      "state": "verified",
       "error": ""
     },
     {
       "app_id": "APP-0008",
       "app_slug": "papira",
       "platform": "android",
-      "checked_at": "2026-09-30T21:22:50+00:00",
-      "state": "in_review",
-      "error": ""
+      "checked_at": "2026-09-30T23:19:24+00:00",
+      "state": "unavailable",
+      "error": "google_public_pricing_http_404",
+      "errors": [
+        "google_public_pricing_http_404"
+      ]
     }
   ]
 }
