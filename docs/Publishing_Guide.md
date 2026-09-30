@@ -838,14 +838,16 @@ never a force push. A true conflicting change is not automatically discarded:
 rebase or validation fails closed for operator resolution. The clean homepage
 is pulled before copying output, and any post-commit rebase is validated again.
 
-### ChatGPT Work browser publishing
+### Local remote Chrome publishing
 
-X, LinkedIn, and Medium use `publishing_mode=work_browser`. They are not human-manual queue items: a scheduled ChatGPT Work cloud-browser task owns the final web UI publication step. Bluesky and Dev.to remain API automation. Hashnode is excluded from Work publishing.
+X, LinkedIn, and Medium use `publishing_mode=remote_browser`. They are not human-manual queue items: the scheduled ONNELLAB remote publisher owns the final web UI step through the authorized Mac and its ordinary Google Chrome profile. Bluesky and Dev.to remain API automation. Hashnode uses `publishing_mode=disabled`; never create, publish, retry, reconcile, or mark a Hashnode draft complete.
 
-The Work publisher runs at 09:00 Asia/Seoul and processes every due `work_browser` item shown by the public dashboard. The frozen September backlog contributes at most its assigned one item per day; a newly generated Work item keeps its original `due_at` and may therefore share a day with one backlog item.
+The remote Chrome publisher runs at 09:00 Asia/Seoul and processes every due `remote_browser` item. The frozen September backlog contributes at most its assigned one item per day; a newly generated remote-browser item keeps its original `due_at` and may therefore share a day with one backlog item.
 
-Before creating a post, Work must check the destination account for the same canonical URL/title to avoid duplicates. If it is already public, use the existing post permalink instead of reposting. After a successful publication, Work appends a `status=new` record to `data/work_browser_publications.json` using the connected GitHub app. Each record must contain `manual_key`, `platform`, the specific public `posted_url`, and `published_at`. Profile pages, feeds, compose/editor URLs, or guessed URLs are forbidden.
+Before opening a destination composer, the publisher must fetch the latest `data/manual_publish_state.json` and `data/remote_browser_publications.json` from `main`. If either already records the same `manual_key` as done, new, or processed, skip it even when the hosted dashboard is stale. Then check the destination account for the same canonical URL/title. If it is already public, use the existing specific post permalink instead of reposting.
 
-`.github/workflows/reconcile-work-browser-publications.yml` validates the permalink and current manifest identity, records completion in `data/manual_publish_state.json`, rebuilds the dashboard, and deploys it. It also runs hourly as a fallback in case the inbox push does not start immediately. Invalid entries fail closed and do not alter completion state.
+After a successful publication, append a `status=new` record to `data/remote_browser_publications.json` through the connected GitHub app. Each record contains `manual_key`, `platform`, the specific public `posted_url`, and `published_at`. Profile pages, feeds, compose/editor URLs, and guessed URLs are forbidden.
 
-If a site requests sign-in, 2FA, CAPTCHA, or an approval that Work cannot complete, the item stays pending. Never mark an attempted-but-unpublished item complete. Browser sessions may expire, so account sign-in is an operational prerequisite rather than a completion signal.
+`.github/workflows/reconcile-remote-browser-publications.yml` validates the permalink and current manifest identity, records completion in `data/manual_publish_state.json`, rebuilds the dashboard, and deploys it. It also runs hourly as a fallback if the inbox push does not start immediately. Invalid entries fail closed and do not alter completion state.
+
+Reuse the existing authenticated Chrome sessions without reading passwords, cookies, passkeys, recovery information, or 2FA secrets. If a site requires reauthentication, CAPTCHA, passkey/device approval, or another human-only step, leave the item pending. Never mark an attempted-but-unpublished item complete.
