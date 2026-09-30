@@ -1297,7 +1297,7 @@ def html_document(
     manual = sum(
         1
         for item in items
-        if item["publishing_mode"] == "manual"
+        if item["publishing_mode"] in {"remote_browser", "work_browser", "manual"}
         and not item["is_variant"]
         and not item.get("publish_after_canonical", False)
         and not item_is_done(item)
