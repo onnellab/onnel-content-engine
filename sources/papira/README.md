@@ -4,5 +4,5 @@ Papira is an offline ebook maker that assembles finished TXT manuscripts into EP
 
 - Product source: Papira repository `docs/store_description.md` and `Papira.md`.
 - Monetization: paid download, without in-app purchases.
-- Operational status: user reported store launch review on 2026-09-20; public availability has not been confirmed.
-- Keep content eligibility disabled until public release is confirmed.
+- Operational status: App Store public release confirmed on 2026-10-01; Android public availability is still unconfirmed.
+- Content eligibility remains disabled until it is explicitly enabled in the canonical app registry.

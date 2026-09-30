@@ -22,8 +22,8 @@ Released and content-eligible in the registry:
 - ClipNest — iOS only — 1 active English source topic.
 
 Not currently eligible for automatic promotion:
-- Papira — registry status in_review and content_eligible=false.
-- Melivra — registry status development and content_eligible=false.
+- Papira — released on iOS, but content_eligible=false.
+- Melivra — released on Android, but content_eligible=false.
 - Summer Sound — not present in apps_registry.csv; do not infer release status.
 
 Registry gaps should be fixed in the registry before the video scheduler considers
