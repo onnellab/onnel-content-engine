@@ -80,6 +80,13 @@
       "published_at": "2026-09-24T00:10:30.317Z",
       "status": "processed",
       "processed_at": "2026-09-24T00:10:47+00:00"
+    },
+    {
+      "manual_key": "TOPIC-0014::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7510872627192905729/",
+      "published_at": "2026-09-30T01:26:48.108Z",
+      "status": "new"
     }
   ]
 }
