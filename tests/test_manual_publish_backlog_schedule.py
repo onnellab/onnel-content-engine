@@ -31,18 +31,19 @@ class ManualPublishBacklogScheduleTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'duplicate manual publish backlog key'):
                 apply_manual_publish_schedule([],p)
 
-    def test_repository_backlog_includes_reopened_404_items_at_one_daily_slot(self):
+    def test_repository_backlog_excludes_disabled_hashnode_items(self):
         payload=json.loads((ROOT/'data/manual_publish_schedule.json').read_text())
-        rows=payload['backlog']; self.assertEqual(len(rows),29)
-        self.assertEqual(len({r['manual_key'] for r in rows}),29)
-        start=datetime.fromisoformat('2026-09-19T09:00:00+09:00')
-        for index,row in enumerate(rows):
-            self.assertEqual(datetime.fromisoformat(row['publish_at']),start+timedelta(days=index))
-        self.assertEqual(rows[-1]['publish_at'],'2026-10-17T09:00:00+09:00')
+        rows=payload['backlog']; self.assertEqual(len(rows),21)
+        self.assertEqual(len({r['manual_key'] for r in rows}),21)
+        dates=[datetime.fromisoformat(r['publish_at']) for r in rows]
+        self.assertEqual(dates,sorted(dates))
+        self.assertEqual(rows[0]['publish_at'],'2026-09-20T09:00:00+09:00')
+        self.assertEqual(rows[-1]['publish_at'],'2026-10-16T09:00:00+09:00')
         keys={r['manual_key'] for r in rows}
         self.assertIn('TOPIC-0016::x::en::x',keys)
         self.assertIn('TOPIC-0018::medium::en::markdown',keys)
-        self.assertIn('TOPIC-0020::hashnode::en::markdown',keys)
+        self.assertNotIn('TOPIC-0020::hashnode::en::markdown',keys)
+        self.assertFalse(any(r.get('platform')=='hashnode' for r in rows))
         self.assertNotIn('TOPIC-0020::medium::en::markdown',keys)
         self.assertEqual(payload['policy']['future_manual_items'],'use_original_due_at')
 
@@ -51,12 +52,13 @@ class ManualPublishBacklogScheduleTest(unittest.TestCase):
         reopened={
             'TOPIC-0016::x::en::x','TOPIC-0016::linkedin::en::linkedin','TOPIC-0016::medium::en::markdown',
             'TOPIC-0018::x::en::x','TOPIC-0018::linkedin::en::linkedin','TOPIC-0018::medium::en::markdown',
-            'TOPIC-0020::x::en::x','TOPIC-0020::linkedin::en::linkedin','TOPIC-0020::hashnode::en::markdown',
+            'TOPIC-0020::x::en::x','TOPIC-0020::linkedin::en::linkedin',
         }
         self.assertTrue(reopened.isdisjoint(state))
         self.assertIn('TOPIC-0020::medium::en::markdown',state)
         audit=json.loads((ROOT/'data/manual_publication_requeues.json').read_text())
         self.assertEqual({x['manual_key'] for x in audit['requeued']},reopened)
+        self.assertEqual({x['manual_key'] for x in audit['withdrawn']},{'TOPIC-0020::hashnode::en::markdown'})
         self.assertEqual(audit['source_availability']['canonical_pages_http_status'],200)
         self.assertEqual(audit['source_availability']['social_cards_http_status'],200)
 

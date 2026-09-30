@@ -406,7 +406,7 @@ scripts/check_distribution_supply.py --minimum-score 9.5
 scripts/approve_due_distribution.py --approved-by github-actions
 ```
 
-The fail-closed supply gate requires every published English article to have distinct X, LinkedIn, Bluesky, Dev.to, Hashnode, and Medium drafts. It requires both channel averages and every individual primary draft to score at least 9.5 / 10, and rejects repeated social phrasing before any due channel is approved.
+The fail-closed supply gate requires every published English article to have distinct X, LinkedIn, Bluesky, Dev.to, and Medium drafts. Hashnode is not a distribution target and no Hashnode drafts are generated. The gate requires both channel averages and every individual primary draft to score at least 9.5 / 10, and rejects repeated social phrasing before any due channel is approved.
 
 Core automated cadence:
 
@@ -421,9 +421,7 @@ Only English primary drafts are automatically approved.
 
 LinkedIn remains manual.
 
-Hashnode remains export-only unless its paid API is enabled later.
-
-Hashnode export drafts are generated with the `hashnode-native-v2` profile. The distribution supply gate rejects repeated canonical templates, repeated brand notes, body-level canonical notices, more than one product link, excessive external links, or drafts without enough technical evidence signals before manual publication.
+Hashnode distribution is disabled. Do not generate, queue, approve, publish, retry, or schedule Hashnode drafts. Historical publication records may remain as audit evidence only.
 
 Medium remains disabled.
 

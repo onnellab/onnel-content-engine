@@ -23,7 +23,6 @@ GitHub profile
 X profile
 LinkedIn profile
 Dev.to profile
-Hashnode profile
 Bluesky profile
 ```
 

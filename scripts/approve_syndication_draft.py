@@ -40,6 +40,8 @@ def approve_syndication_draft(
 ) -> dict[str, object]:
     if not approved_by.strip():
         raise SyndicationApprovalError("approved_by is required")
+    if platform == "hashnode":
+        raise SyndicationApprovalError("Hashnode distribution is disabled")
     validate_syndication_drafts(manifest_path, project_root_for_manifest(manifest_path))
     if platform == "medium" and not allow_medium:
         raise SyndicationApprovalError("Medium is export-only; pass --allow-medium only for manual tracking")
@@ -88,7 +90,7 @@ def approve_syndication_draft(
 def main() -> int:
     parser = argparse.ArgumentParser(description="Approve a generated syndication draft")
     parser.add_argument("topic_id")
-    parser.add_argument("platform", choices=("devto", "hashnode", "medium"))
+    parser.add_argument("platform", choices=("devto", "medium"))
     parser.add_argument("language", choices=("en", "ko"))
     parser.add_argument("--approved-by", required=True)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST_PATH)

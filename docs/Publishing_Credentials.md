@@ -65,9 +65,7 @@ The adapter creates unpublished drafts only.
 
 ### Hashnode
 
-Hashnode is export-only by default.
-
-Do not configure `HASHNODE_TOKEN` or `HASHNODE_PUBLICATION_ID` unless the publication is upgraded to a paid plan with GraphQL API access. Without that plan, upload the generated Hashnode Markdown draft manually.
+Hashnode distribution is disabled. Do not configure Hashnode publishing credentials or generate, queue, approve, or publish Hashnode drafts. Historical Hashnode publication evidence is retained only for audit purposes.
 
 ### Medium
 

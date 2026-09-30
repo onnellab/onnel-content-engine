@@ -216,6 +216,8 @@ def post_syndication_drafts(
     verbose: bool = False,
     now: datetime | None = None,
 ) -> list[dict[str, object]]:
+    if platform == "hashnode" or adapter == "hashnode":
+        raise SyndicationPostingError("Hashnode distribution is disabled")
     project_root = project_root_for_manifest(manifest_path)
     validate_syndication_drafts(manifest_path, project_root)
     manifest = load_manifest(manifest_path)
@@ -292,8 +294,8 @@ def post_syndication_drafts(
 def main() -> int:
     parser = argparse.ArgumentParser(description="Post approved syndication drafts")
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST_PATH)
-    parser.add_argument("--platform", choices=("devto", "hashnode"))
-    parser.add_argument("--adapter", default="mock", choices=("mock", "devto", "hashnode", "medium"))
+    parser.add_argument("--platform", choices=("devto",))
+    parser.add_argument("--adapter", default="mock", choices=("mock", "devto", "medium"))
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--verbose", action="store_true", help="Print dry-run payload details")
     args = parser.parse_args()

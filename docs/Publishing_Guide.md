@@ -513,20 +513,7 @@ Inspect the Dev.to payload without posting:
 scripts/post_syndication_drafts.py --adapter devto --platform devto --dry-run --verbose
 ```
 
-Hashnode is export-only by default because GraphQL API access now requires a paid publication plan.
-
-Generated Hashnode drafts still include:
-
-* canonical URL as `originalArticleURL`
-* generated social card URL as `coverImageOptions.coverImageURL`
-* normalized tags
-* a `publication_id` placeholder for future paid API use
-
-Inspect the Hashnode payload without posting:
-
-```text
-scripts/post_syndication_drafts.py --adapter hashnode --platform hashnode --dry-run --verbose
-```
+Hashnode distribution is disabled. The canonical generator does not create Hashnode drafts, the supply gate does not require them, and Hashnode items must not be queued, approved, retried, or published. Existing public/permalink records may remain only as historical audit evidence.
 
 Validate syndication drafts with:
 
@@ -546,7 +533,7 @@ Approve individual syndication drafts with:
 scripts/approve_syndication_draft.py TOPIC-0001 devto en --approved-by editor
 ```
 
-Post approved Dev.to, Hashnode, or Medium drafts through the mock adapter with:
+Post approved Dev.to or Medium drafts through the mock adapter with:
 
 ```text
 scripts/post_syndication_drafts.py --adapter mock
@@ -555,7 +542,6 @@ scripts/post_syndication_drafts.py --adapter mock
 Current syndication draft targets:
 
 * Dev.to
-* Hashnode
 * Medium
 
 External distribution drafts are English-only. Korean articles remain on the ONNELLAB blog unless a specific post is manually selected for an external channel.
@@ -563,24 +549,6 @@ External distribution drafts are English-only. Korean articles remain on the ONN
 Syndication drafts must include a canonical link back to the ONNELLAB article.
 
 Dev.to drafts should remain unpublished by default and use normalized tags.
-
-Hashnode drafts should include a `cover_image` field pointing to the generated social card PNG and a blank `publication_id` placeholder until a publication is configured.
-
-Hashnode Markdown should be copied into the Hashnode editor manually unless the publication is upgraded to a paid plan with GraphQL API access.
-
-Hashnode drafts use the `hashnode-native-v3` content profile. The generator must adapt the canonical article instead of copying its distribution structure verbatim:
-
-* omit the repeated H1 because Hashnode stores the title separately
-* remove generic `Question`, `Related Topics`, and `FAQ` sections
-* rename repeated `Short Answer`, checklist, workflow, product, and conclusion headings for a native technical reading flow
-* set the canonical URL through Hashnode metadata instead of repeating an `Originally published at` link in the body
-* omit the repeated `ONNELLAB note` block
-* use stable developer-community tags instead of SEO keyword tags
-* remove product and store links from the body and allow no more than three external links
-* reject promotional calls to action such as download-now, pricing, or purchase copy
-* require at least two technical evidence signals, such as implementation steps, a comparison table, code or inline identifiers, or references
-
-`scripts/validate_syndication_drafts.py` fails closed when a Hashnode draft violates this AutoMod risk profile. A failed draft must be revised before it is approved or copied to Hashnode. Hashnode remains excluded from automated distribution approval, but an individual safe draft can be approved with the standard syndication command.
 
 Medium is export-only by default because its public API documentation is archived and no longer recommended for new integrations.
 
@@ -633,7 +601,7 @@ Article generation, image asset generation, and internal link recommendation may
 
 Publication itself must still follow the three-day schedule.
 
-Distribution drafts are approved automatically only for English primary drafts on the core automated channels. Variants, LinkedIn, Hashnode, and Medium remain manual/export-only unless explicitly approved.
+Distribution drafts are approved automatically only for English primary drafts on the core automated channels. Variants, LinkedIn, and Medium remain manual/export-only unless explicitly approved. Hashnode is disabled and must not be generated or published.
 
 The core automated posting command is:
 
@@ -872,7 +840,7 @@ is pulled before copying output, and any post-commit rebase is validated again.
 
 ### ChatGPT Work browser publishing
 
-X, LinkedIn, Hashnode, and Medium use `publishing_mode=work_browser`. They are not human-manual queue items: a scheduled ChatGPT Work cloud-browser task owns the final web UI publication step. Bluesky and Dev.to remain API automation.
+X, LinkedIn, and Medium use `publishing_mode=work_browser`. They are not human-manual queue items: a scheduled ChatGPT Work cloud-browser task owns the final web UI publication step. Bluesky and Dev.to remain API automation. Hashnode is excluded from Work publishing.
 
 The Work publisher runs at 09:00 Asia/Seoul and processes every due `work_browser` item shown by the public dashboard. The frozen September backlog contributes at most its assigned one item per day; a newly generated Work item keeps its original `due_at` and may therefore share a day with one backlog item.
 

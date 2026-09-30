@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOCIAL_MANIFEST = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.json"
 REQUIRED_SOCIAL_PLATFORMS = {"x", "linkedin", "bluesky"}
-REQUIRED_SYNDICATION_PLATFORMS = {"devto", "hashnode", "medium"}
+REQUIRED_SYNDICATION_PLATFORMS = {"devto", "medium"}
 
 
 class DistributionSupplyError(ValueError):

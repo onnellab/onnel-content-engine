@@ -1219,11 +1219,8 @@ class PublishingTest(unittest.TestCase):
         devto_draft = next(
             draft for draft in syndication_manifest["drafts"] if draft["platform"] == "devto" and draft["language"] == "en"
         )
-        hashnode_draft = next(
-            draft for draft in syndication_manifest["drafts"] if draft["platform"] == "hashnode" and draft["language"] == "en"
-        )
         self.assertEqual(devto_draft["status"], "approved")
-        self.assertEqual(hashnode_draft["status"], "draft")
+        self.assertFalse(any(draft["platform"] == "hashnode" for draft in syndication_manifest["drafts"]))
 
     def test_live_credential_preflight_uses_safe_auth_endpoints(self) -> None:
         calls: list[tuple[str, str, dict[str, object] | None, dict[str, str] | None]] = []
@@ -1449,12 +1446,12 @@ class PublishingTest(unittest.TestCase):
 
         drafts = generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
 
-        self.assertEqual(len(drafts), 3)
+        self.assertEqual(len(drafts), 2)
         devto_path = output_dir / "devto" / "en" / "reading" / "read-large-txt-files.md"
         hashnode_path = output_dir / "hashnode" / "en" / "reading" / "read-large-txt-files.md"
         medium_path = output_dir / "medium" / "en" / "reading" / "read-large-txt-files.md"
         self.assertTrue(devto_path.exists())
-        self.assertTrue(hashnode_path.exists())
+        self.assertFalse(hashnode_path.exists())
         self.assertTrue(medium_path.exists())
         content = devto_path.read_text(encoding="utf-8")
         self.assertIn("published: true", content)
@@ -1464,16 +1461,6 @@ class PublishingTest(unittest.TestCase):
         self.assertNotIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", content)
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", content)
         self.assertIn("# How to Read Very Large TXT Files", content)
-        hashnode_content = hashnode_path.read_text(encoding="utf-8")
-        self.assertIn('cover_image: "https://example.com/blog-assets/en/read-large-txt-files/social-card.png"', hashnode_content)
-        self.assertIn(f'content_profile: "{HASHNODE_CONTENT_PROFILE}"', hashnode_content)
-        self.assertIn('tags: "programming,performance,text-processing"', hashnode_content)
-        self.assertIn("## The constraint to solve", hashnode_content)
-        self.assertIn("## Implementation path", hashnode_content)
-        self.assertNotIn("ONNELLAB note:", hashnode_content)
-        self.assertNotIn("## Question", hashnode_content)
-        self.assertNotIn("Originally published at https://example.com/blog/en/read-large-txt-files/", hashnode_content)
-        self.assertEqual(hashnode_automod_risks(hashnode_content, "https://example.com/blog/en/read-large-txt-files/"), [])
         medium_content = medium_path.read_text(encoding="utf-8")
         self.assertTrue(medium_content.startswith("> ONNELLAB note:"))
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", medium_content)
@@ -1481,7 +1468,7 @@ class PublishingTest(unittest.TestCase):
         self.assertFalse(medium_content.startswith("---"))
         manifest = (output_dir / "manifest.json").read_text(encoding="utf-8")
         self.assertIn('"platform": "devto"', manifest)
-        self.assertIn('"platform": "hashnode"', manifest)
+        self.assertNotIn('"platform": "hashnode"', manifest)
         self.assertIn('"platform": "medium"', manifest)
         self.assertNotIn('"language": "ko"', manifest)
         self.assertIn('"last_attempt_at": ""', manifest)
@@ -1489,7 +1476,7 @@ class PublishingTest(unittest.TestCase):
         self.assertIn('"retry_count": 0', manifest)
         evaluation = evaluate_syndication_drafts(output_dir / "manifest.json", self.root)
         self.assertGreaterEqual(evaluation["average_score"], 9.0)
-        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 3)
+        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 2)
 
         approved = approve_syndication_draft(
             "TOPIC-0001",
@@ -1519,39 +1506,14 @@ class PublishingTest(unittest.TestCase):
                 output_dir / "manifest.json",
             )
 
-    def test_hashnode_generator_budgets_plain_and_autolink_research_urls_deterministically(self) -> None:
-        research_shape = MARKDOWN + """
-
-## References
-
-Store a stable identifier such as `https://doi.org/10.xxxx/xxxxx` and keep the
-resolver guidance at <https://doi.org/doi-handbook/> for later verification.
-
-- [DOI Handbook](https://www.doi.org/doi-handbook/html/) documents resolution.
-- [Crossref display guidelines](https://www.crossref.org/display-guidelines/) preserve DOI usefulness.
-- [Crossref metadata](https://www.crossref.org/documentation/retrieve-metadata/) supports verification.
-- [DataCite versions](https://support.datacite.org/docs/connecting-versions) distinguishes editions.
-"""
-        self.markdown_path.write_text(research_shape, encoding="utf-8")
+    def test_hashnode_is_not_generated_by_canonical_syndication(self) -> None:
         output_dir = self.root / "generated" / "syndication"
 
-        generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
-        hashnode_path = output_dir / "hashnode" / "en" / "reading" / "read-large-txt-files.md"
-        first = hashnode_path.read_text(encoding="utf-8")
+        drafts = generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
 
-        self.assertEqual(hashnode_automod_risks(first, "https://example.com/blog/en/read-large-txt-files/"), [])
-        self.assertIn("`doi.org/10.xxxx/xxxxx`", first)
-        self.assertIn("doi.org/doi-handbook/", first)
-        self.assertNotIn("<doi.org/doi-handbook/>", first)
-        self.assertIn("[DOI Handbook](https://www.doi.org/doi-handbook/html/)", first)
-        self.assertIn("[Crossref display guidelines](https://www.crossref.org/display-guidelines/)", first)
-        self.assertNotIn("https://www.crossref.org/documentation/retrieve-metadata/", first)
-        hashnode_body = first.split("\n---\n", 1)[1]
-        self.assertEqual(hashnode_body.count("http://") + hashnode_body.count("https://"), 3)
-        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 3)
-
-        generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
-        self.assertEqual(hashnode_path.read_text(encoding="utf-8"), first)
+        self.assertEqual({draft["platform"] for draft in drafts}, {"devto", "medium"})
+        self.assertFalse((output_dir / "hashnode").exists())
+        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 2)
 
     def test_syndication_drafts_default_to_published_sources_only(self) -> None:
         rows = [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")]
@@ -1582,15 +1544,15 @@ resolver guidance at <https://doi.org/doi-handbook/> for later verification.
                     include_prepublication=True,
                 )
 
-                self.assertEqual(len(drafts), 3)
-                self.assertEqual({draft["platform"] for draft in drafts}, {"devto", "hashnode", "medium"})
+                self.assertEqual(len(drafts), 2)
+                self.assertEqual({draft["platform"] for draft in drafts}, {"devto", "medium"})
                 self.assertEqual({draft["language"] for draft in drafts}, {"en"})
                 self.assertTrue(all(draft["source_status"] == source_status for draft in drafts))
                 self.assertTrue(all(draft["publish_after_canonical"] is True for draft in drafts))
                 manifest_path = output_dir / "manifest.json"
-                self.assertEqual(validate_syndication_drafts(manifest_path, self.root), 3)
+                self.assertEqual(validate_syndication_drafts(manifest_path, self.root), 2)
                 evaluation = evaluate_syndication_drafts(manifest_path, self.root)
-                self.assertEqual(len(evaluation["drafts"]), 3)
+                self.assertEqual(len(evaluation["drafts"]), 2)
                 self.assertGreaterEqual(evaluation["average_score"], 9.0)
 
                 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -1616,8 +1578,8 @@ resolver guidance at <https://doi.org/doi-handbook/> for later verification.
                 "approved_at": "2026-07-20T09:00:00+09:00",
             }
         )
-        hashnode = next(draft for draft in manifest["drafts"] if draft["platform"] == "hashnode")
-        hashnode.update(
+        medium = next(draft for draft in manifest["drafts"] if draft["platform"] == "medium")
+        medium.update(
             {
                 "status": "failed",
                 "approved_by": "editor",
@@ -1641,7 +1603,7 @@ resolver guidance at <https://doi.org/doi-handbook/> for later verification.
             include_prepublication=True,
         )
 
-        for platform in ("devto", "hashnode"):
+        for platform in ("devto", "medium"):
             with self.subTest(platform=platform):
                 draft = next(item for item in regenerated if item["platform"] == platform)
                 self.assertEqual(draft["status"], "draft")
@@ -1843,37 +1805,15 @@ resolver guidance at <https://doi.org/doi-handbook/> for later verification.
         self.assertIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.png", article["body_markdown"])
         self.assertNotIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", article["body_markdown"])
 
-    def test_hashnode_adapter_is_export_only_without_paid_api(self) -> None:
+    def test_hashnode_distribution_is_disabled(self) -> None:
         output_dir = self.root / "generated" / "syndication"
         generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
-        approve_syndication_draft("TOPIC-0001", "hashnode", "en", "editor", output_dir / "manifest.json")
+        manifest = output_dir / "manifest.json"
 
-        dry_run = post_syndication_drafts(output_dir / "manifest.json", platform="hashnode", adapter="hashnode", dry_run=True)
-
-        self.assertEqual(len(dry_run), 1)
-        payload = hashnode_payload(dry_run[0], self.root)
-        self.assertIn("mutation CreateDraft", payload["query"])
-        variables = payload["variables"]
-        input_payload = variables["input"]
-        self.assertEqual(input_payload["title"], "How to Read Very Large TXT Files")
-        self.assertEqual(input_payload["publicationId"], "")
-        self.assertEqual(input_payload["slug"], "read-large-txt-files")
-        self.assertEqual(input_payload["originalArticleURL"], "https://example.com/blog/en/read-large-txt-files/")
-        self.assertEqual(
-            input_payload["tags"],
-            [
-                {"slug": "programming", "name": "programming"},
-                {"slug": "performance", "name": "performance"},
-                {"slug": "text-processing", "name": "text-processing"},
-            ],
-        )
-        with self.assertRaises(SyndicationPostingError):
-            post_syndication_drafts(output_dir / "manifest.json", platform="hashnode", adapter="hashnode")
-        self.assertEqual(
-            input_payload["coverImageOptions"]["coverImageURL"],
-            "https://example.com/blog-assets/en/read-large-txt-files/social-card.png",
-        )
-        self.assertFalse(input_payload["settings"]["activateNewsletter"])
+        with self.assertRaisesRegex(SyndicationApprovalError, "Hashnode distribution is disabled"):
+            approve_syndication_draft("TOPIC-0001", "hashnode", "en", "editor", manifest)
+        with self.assertRaisesRegex(SyndicationPostingError, "Hashnode distribution is disabled"):
+            post_syndication_drafts(manifest, platform="hashnode", adapter="hashnode", dry_run=True)
 
     def test_hashnode_automod_gate_rejects_repetitive_promotional_copy(self) -> None:
         content = """---
@@ -1937,20 +1877,20 @@ Download now for the best app.
         self.assertIn("body contains more than three external links", risks)
         self.assertIn("body contains promotional call-to-action language", risks)
 
-    def test_hashnode_approval_uses_standard_syndication_approval(self) -> None:
+    def test_hashnode_cannot_be_approved_even_with_explicit_request(self) -> None:
         output_dir = self.root / "generated" / "syndication"
         generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
         manifest = output_dir / "manifest.json"
 
-        approved = approve_syndication_draft(
-            "TOPIC-0001",
-            "hashnode",
-            "en",
-            "editor",
-            manifest,
-            now=datetime.fromisoformat("2026-07-20T09:00:00+09:00"),
-        )
-        self.assertEqual(approved["status"], "approved")
+        with self.assertRaisesRegex(SyndicationApprovalError, "Hashnode distribution is disabled"):
+            approve_syndication_draft(
+                "TOPIC-0001",
+                "hashnode",
+                "en",
+                "editor",
+                manifest,
+                now=datetime.fromisoformat("2026-07-20T09:00:00+09:00"),
+            )
 
     def test_integrated_publishing_dry_run_report_lists_approved_payloads(self) -> None:
         social_dir = self.root / "generated" / "social"

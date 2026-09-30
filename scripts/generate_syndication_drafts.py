@@ -20,7 +20,7 @@ from topic_management import DEFAULT_TOPICS_PATH, TopicError
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TEMPLATE_DIR = ROOT / "templates" / "syndication"
 DEFAULT_OUTPUT_DIR = ROOT / "generated" / "syndication"
-PLATFORMS = ("devto", "hashnode", "medium")
+PLATFORMS = ("devto", "medium")
 PLACEHOLDER_RE = re.compile(r"\{\{([a-zA-Z0-9_]+)\}\}")
 
 
