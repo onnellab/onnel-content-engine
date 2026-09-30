@@ -135,6 +135,8 @@ class WorkspaceTests(unittest.TestCase):
         self.assertNotIn('Suno', html)
         self.assertNotIn('suno', html)
         self.assertGreaterEqual(html.count('class="ytw-section"'), 5)
+        self.assertIn('<details class="ytw-root">', html)
+        self.assertNotIn('<details class="ytw-root" open', html)
         self.assertIn('핵심 채널 통계', html)
         self.assertIn('영상별 성과', html)
         self.assertIn('최근 댓글 반응', html)
