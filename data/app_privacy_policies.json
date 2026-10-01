@@ -94,6 +94,22 @@
       }
     },
     {
+      "app_slug": "papira",
+      "app_name": "Papira",
+      "last_updated": "2026-08-21",
+      "legacy_urls": [],
+      "in_app_purchase": false,
+      "publish_static": false,
+      "local_data": {
+        "en": ["TXT manuscripts and cover images that the user explicitly selects", "Book projects, publishing metadata and defaults, app preferences, recent output history, previews and caches, and generated EPUB files stored on the device"],
+        "ko": ["사용자가 직접 선택한 TXT 원고와 표지 이미지", "기기에 저장되는 책 작업, 출판 정보와 기본값, 앱 설정, 최근 생성 기록, 미리보기와 캐시, 생성된 EPUB 파일"]
+      },
+      "local_processing": {
+        "en": ["TXT and cover processing, preview generation, project saving, and EPUB creation occur on the device.", "Papira accesses a file or photo only when the user chooses it through the operating-system picker.", "Selected manuscripts, cover images, projects, and generated EPUB files are not uploaded to an ONNELLAB server."],
+        "ko": ["TXT와 표지 처리, 미리보기 생성, 책 작업 저장 및 EPUB 생성은 기기 안에서 이루어집니다.", "Papira는 사용자가 운영체제의 파일 또는 사진 선택 화면에서 항목을 직접 고른 경우에만 해당 파일이나 사진에 접근합니다.", "선택한 원고, 표지 이미지, 책 작업 및 생성된 EPUB 파일은 ONNELLAB 서버로 업로드되지 않습니다."]
+      }
+    },
+    {
       "app_slug": "melivra",
       "app_name": "Melivra",
       "last_updated": "2026-07-30",
