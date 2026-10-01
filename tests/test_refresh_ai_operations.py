@@ -71,6 +71,65 @@ class RefreshAiOperationsTest(unittest.TestCase):
         self.assertEqual([item["status"] for item in gmail_steps], ["unavailable", "unavailable"])
         self.assertNotIn("collect_gmail_policy_alerts.py", calls)
 
+    def test_store_version_manual_check_is_preserved_as_manual_only(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            data = root / "data"
+            data.mkdir()
+            (data / "store_versions.csv").write_text(
+                "app_id,status\nAPP-0008,manual_check\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                refresh_ai_operations.semantic_status("check_store_versions.py", root),
+                "manual_only",
+            )
+            (data / "store_versions.csv").write_text(
+                "app_id,status\nAPP-0008,manual_check\nAPP-0007,failed\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                refresh_ai_operations.semantic_status("check_store_versions.py", root),
+                "failed",
+            )
+
+    def test_manual_only_source_keeps_partial_audit_without_failing_refresh(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            (root / "data").mkdir()
+            (root / "data/private_test_build_requests.json").write_text(
+                '{"requests": []}',
+                encoding="utf-8",
+            )
+
+            def runner(command, **kwargs):
+                return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+            with patch.dict(
+                os.environ,
+                {
+                    "GMAIL_POLICY_REFRESH_DEVELOPER": "developer-secret",
+                    "GMAIL_POLICY_REFRESH_OFFICIAL": "official-secret",
+                },
+                clear=False,
+            ), patch.object(
+                refresh_ai_operations,
+                "semantic_status",
+                side_effect=lambda script, root: "manual_only" if script == "check_store_versions.py" else "ok",
+            ):
+                result = refresh_ai_operations.run_refresh(root, runner)
+
+            payload = json.loads(
+                (root / "data/ai_operations_refresh_status.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(result, 0)
+        self.assertEqual(payload["status"], "partial")
+        store_step = next(
+            item for item in payload["steps"] if item["script"] == "check_store_versions.py"
+        )
+        self.assertEqual(store_step["status"], "manual_only")
+
     def test_semantic_ledgers_distinguish_not_released_and_failed_or_missing(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
