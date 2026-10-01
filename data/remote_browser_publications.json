@@ -158,7 +158,8 @@
       "platform": "medium",
       "posted_url": "https://medium.com/@onnellab.app/what-makes-large-text-files-slow-to-open-b727de94d9c7",
       "published_at": "2026-10-01T06:13:58Z",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-10-01T06:14:44+00:00"
     }
   ]
 }
