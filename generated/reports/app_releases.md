@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-10-01T08:18:27+09:00
+Generated: 2026-10-01T12:48:41+09:00
 
 ## Summary
 
@@ -8,7 +8,8 @@ Generated: 2026-10-01T08:18:27+09:00
 | --- | --- | --- |
 | Store | failed | 1 |
 | Store | manual_check | 1 |
-| Store | unchanged | 13 |
+| Store | unchanged | 12 |
+| Store | updated | 1 |
 | GitHub Release | archived | 3 |
 | GitHub Release | planned | 7 |
 
@@ -19,7 +20,7 @@ Generated: 2026-10-01T08:18:27+09:00
 | Aligna | android | 1.0.7 | 1.0.7 | same | unchanged | planned | onnellab/aligna | Add release artifact and checksum |
 | Aligna | ios | 1.0.7 | 1.0.7 | same | unchanged | - | onnellab/aligna | No action |
 | ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
-| Melivra | android | 1.0.4 | 1.0.5 | local_ahead | unchanged | planned | onnellab/melivra | Private test only; do not publish public GitHub Release |
+| Melivra | android | 1.0.5 | 1.0.5 | same | updated | planned | onnellab/melivra | Private test only; do not publish public GitHub Release |
 | Melivra | ios | 6783644955 | 1.0.5 | unknown | failed | - | onnellab/melivra | Fix store lookup error |
 | Papira | android | com.onnellab.papira | - | unknown | manual_check | - | onnellab/papira | Check Google Play update manually |
 | Papira | ios | 1.0 | - | unknown | unchanged | - | onnellab/papira | No action |
