@@ -167,6 +167,8 @@ Use GitHub Release URLs as release automation records and repository references.
 
 The manual dashboard should show the homepage release notes URL as the user-facing release link. The GitHub URL can still remain in release sync data for audit and automation checks.
 
+The `Sync app operational status` workflow also runs `scripts/sync_homepage_release_notes.py` after refreshing `data/store_versions.csv`. It merges newly verified public store versions into `onnellab.github.io/src/data/store-release-notes.json`, preserves earlier generated versions as history, and lets authored homepage release notes override generated entries for the same app/version. `failed`, `in_review`, `manual_check`, `not_released`, `unavailable`, and `unknown` store rows are never promoted into public release notes.
+
 When writing social or blog copy, describe only the public store-visible changes between the current public version and the previous public version. Exclude private TestFlight, Play Console internal test, local QA, and local build metadata changes.
 
 ## Store Version Snapshots

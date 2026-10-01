@@ -155,6 +155,8 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("scripts/sync_flutter_plugin_versions.py", workflow)
         self.assertIn("scripts/sync_android_versions_from_repos.py", workflow)
         self.assertIn("scripts/check_store_versions.py", workflow)
+        self.assertIn("scripts/sync_homepage_release_notes.py", workflow)
+        self.assertIn("src/data/store-release-notes.json", workflow)
         self.assertIn("scripts/prepare_app_release_rows.py", workflow)
         self.assertIn("scripts/sync_github_release_status.py --allow-missing-token", workflow)
         self.assertIn("scripts/generate_app_release_report.py", workflow)
