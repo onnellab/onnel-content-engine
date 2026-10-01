@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-01T05:49:59+00:00",
+  "updated_at": "2026-10-01T05:56:55+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -437,6 +437,19 @@
       "verification_method": "remote_chrome_permalink",
       "verification_confidence": "browser_permalink",
       "published_at": "2026-10-01T05:49:38Z"
+    },
+    "TOPIC-0031::medium::en::markdown": {
+      "topic_id": "TOPIC-0031",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "marked_at": "2026-10-01T05:56:55+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://medium.com/@onnellab.app/how-to-inspect-a-large-log-file-without-altering-the-original-983066927e9b",
+      "verified_at": "2026-10-01T05:56:55+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "2026-10-01T05:56:04Z"
     }
   }
 }

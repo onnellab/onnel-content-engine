@@ -134,7 +134,8 @@
       "platform": "medium",
       "posted_url": "https://medium.com/@onnellab.app/how-to-inspect-a-large-log-file-without-altering-the-original-983066927e9b",
       "published_at": "2026-10-01T05:56:04Z",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-10-01T05:56:55+00:00"
     }
   ]
 }
