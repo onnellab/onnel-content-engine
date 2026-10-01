@@ -142,7 +142,8 @@
       "platform": "medium",
       "posted_url": "https://medium.com/@onnellab.app/txt-vs-epub-for-long-reading-43692cfc55c9",
       "published_at": "2026-10-01T06:02:21Z",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-10-01T06:03:04+00:00"
     }
   ]
 }
