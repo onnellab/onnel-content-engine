@@ -227,6 +227,8 @@ scripts/import_android_store_versions.py path/to/play-console-export.csv
 
 Google Play public-page version/date metadata is used when it can be read reliably. The maintained Android snapshot is only fallback metadata; snapshot notes are merged only when its version matches the public version. If neither source yields a version, the row is recorded as `manual_check`.
 
+For mixed-platform launches, keep the app registry at `released` once any configured platform is public, and record the still-pending platform in `data/store_versions.csv` as `in_review`. For iOS, a public lookup with no result preserves an existing `in_review` row instead of becoming `failed`; unrelated lookup failures still fail closed. When the App Store lookup later returns a public version, the row leaves `in_review` and is recorded as `updated`. `manual_check` remains a manual-only source state in AI operations reporting and is not relabeled as a live verification failure.
+
 Use the snapshot as a signal. Create a GitHub Release row only when the new public release is confirmed and the change notes can be tied to that public version. If GitHub should host only the permanent patch-notes page, set `release_type=notes_only`.
 
 Release candidate rows can be prepared from updated store snapshots:
