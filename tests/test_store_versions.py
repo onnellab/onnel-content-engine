@@ -49,7 +49,7 @@ def write_apps(path: Path) -> None:
         writer.writerow(row)
 
 
-def write_existing(path: Path, version: str) -> None:
+def write_existing(path: Path, version: str, status: str = "unchanged") -> None:
     row = {field: "" for field in STORE_HEADER}
     row.update(
         {
@@ -61,7 +61,7 @@ def write_existing(path: Path, version: str) -> None:
             "store_app_id": "6759565093",
             "version": version,
             "checked_at": "2026-07-11T09:00:00+09:00",
-            "status": "unchanged",
+            "status": status,
         }
     )
     with path.open("w", encoding="utf-8", newline="") as handle:
@@ -162,6 +162,78 @@ class StoreVersionsTest(unittest.TestCase):
             self.assertEqual(rows[0]["release_notes"], "Improved launch speed. Fixed layout.")
             self.assertEqual(rows[1]["status"], "manual_check")
             self.assertEqual(rows[1]["store_package"], "com.onnellab.quivra2")
+
+    def test_released_app_preserves_known_ios_review_when_public_lookup_is_empty(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            apps = Path(temp) / "apps.csv"
+            output = Path(temp) / "store_versions.csv"
+            write_apps(apps)
+            write_existing(output, "", status="in_review")
+
+            with patch(
+                "check_store_versions.json_get",
+                return_value={"results": []},
+            ), patch("check_store_versions.html_get", side_effect=StoreVersionError("blocked")):
+                rows = check_store_versions(
+                    apps,
+                    output,
+                    Path(temp) / "missing_android_store_versions.csv",
+                    dry_run=True,
+                    now=datetime.fromisoformat("2026-10-02T07:00:00+09:00"),
+                )
+
+            self.assertEqual(rows[0]["status"], "in_review")
+            self.assertEqual(rows[0]["version"], "")
+            self.assertIn("preserving the known in_review state", rows[0]["notes"])
+
+    def test_released_app_leaves_ios_review_when_public_lookup_appears(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            apps = Path(temp) / "apps.csv"
+            output = Path(temp) / "store_versions.csv"
+            write_apps(apps)
+            write_existing(output, "", status="in_review")
+
+            with patch(
+                "check_store_versions.json_get",
+                return_value={
+                    "results": [{
+                        "version": "1.2.3",
+                        "currentVersionReleaseDate": "2026-10-02T01:00:00Z",
+                        "releaseNotes": "Now available.",
+                    }]
+                },
+            ), patch("check_store_versions.html_get", side_effect=StoreVersionError("blocked")):
+                rows = check_store_versions(
+                    apps,
+                    output,
+                    Path(temp) / "missing_android_store_versions.csv",
+                    dry_run=True,
+                    now=datetime.fromisoformat("2026-10-02T07:00:00+09:00"),
+                )
+
+            self.assertEqual(rows[0]["status"], "updated")
+            self.assertEqual(rows[0]["version"], "1.2.3")
+
+    def test_unknown_ios_lookup_absence_still_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            apps = Path(temp) / "apps.csv"
+            output = Path(temp) / "store_versions.csv"
+            write_apps(apps)
+
+            with patch(
+                "check_store_versions.json_get",
+                return_value={"results": []},
+            ), patch("check_store_versions.html_get", side_effect=StoreVersionError("blocked")):
+                rows = check_store_versions(
+                    apps,
+                    output,
+                    Path(temp) / "missing_android_store_versions.csv",
+                    dry_run=True,
+                    now=datetime.fromisoformat("2026-10-02T07:00:00+09:00"),
+                )
+
+            self.assertEqual(rows[0]["status"], "failed")
+            self.assertIn("App Store lookup returned no result", rows[0]["notes"])
 
     def test_marks_ios_snapshot_updated_when_version_changes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
