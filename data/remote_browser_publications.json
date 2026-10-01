@@ -126,7 +126,8 @@
       "platform": "medium",
       "posted_url": "https://medium.com/@onnellab.app/how-to-number-tracks-in-a-multi-disc-mp3-album-32c43ea700f7",
       "published_at": "2026-10-01T05:49:38Z",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-10-01T05:49:59+00:00"
     }
   ]
 }

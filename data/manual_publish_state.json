@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-30T07:17:45+00:00",
+  "updated_at": "2026-10-01T05:49:59+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -424,6 +424,19 @@
       "verification_method": "work_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
       "published_at": "2026-09-30T07:15:33.000Z"
+    },
+    "TOPIC-0029::medium::en::markdown": {
+      "topic_id": "TOPIC-0029",
+      "platform": "medium",
+      "language": "en",
+      "template_id": "markdown",
+      "marked_at": "2026-10-01T05:49:59+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://medium.com/@onnellab.app/how-to-number-tracks-in-a-multi-disc-mp3-album-32c43ea700f7",
+      "verified_at": "2026-10-01T05:49:59+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "2026-10-01T05:49:38Z"
     }
   }
 }
