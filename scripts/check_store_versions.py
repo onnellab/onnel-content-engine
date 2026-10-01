@@ -235,6 +235,13 @@ def google_play_lookup(store_url: str, app_id: str, android_versions: dict[str, 
         return current, "Google Play has no stable public version lookup in this automation."
 
 
+def is_expected_app_store_review_absence(error: Exception) -> bool:
+    """Return true only for the public lookup result expected while an iOS app is in review."""
+    return isinstance(error, StoreVersionError) and str(error).startswith(
+        "App Store lookup returned no result for "
+    )
+
+
 def snapshot_key(row: dict[str, str]) -> tuple[str, str]:
     return row["app_id"], row["platform"]
 
@@ -312,7 +319,10 @@ def store_rows_from_apps(
                     notes = ""
                 previous_version = previous.get("version", "")
                 status = "new" if not previous else "unchanged"
-                if current["version"] and previous_version and current["version"] != previous_version:
+                if current["version"] and (
+                    previous.get("status") == "in_review"
+                    or (previous_version and current["version"] != previous_version)
+                ):
                     status = "updated"
                 if platform == "android":
                     if current["version"]:
@@ -346,6 +356,11 @@ def store_rows_from_apps(
                 )
             except Exception as error:
                 row = dict(previous) if previous else {field: "" for field in STORE_HEADER}
+                preserve_review = (
+                    platform == "ios"
+                    and previous.get("status") == "in_review"
+                    and is_expected_app_store_review_absence(error)
+                )
                 row.update(
                     {
                         "app_id": app["app_id"],
@@ -354,8 +369,13 @@ def store_rows_from_apps(
                         "platform": platform,
                         "store_url": store_url,
                         "checked_at": now,
-                        "status": "failed",
-                        "notes": str(error),
+                        "status": "in_review" if preserve_review else "failed",
+                        "notes": (
+                            "App Store public lookup still returns no result; "
+                            "preserving the known in_review state."
+                            if preserve_review
+                            else str(error)
+                        ),
                     }
                 )
                 rows.append(row)
