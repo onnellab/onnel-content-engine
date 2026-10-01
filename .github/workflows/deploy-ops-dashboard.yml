@@ -61,6 +61,7 @@ jobs:
           fi
 
       - name: Deploy combined dashboard
+        id: homepage_sync
         run: |
           set -euo pipefail
           git -C "$HOMEPAGE_REPO_PATH" pull --rebase --autostash origin main
@@ -84,6 +85,33 @@ jobs:
             git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh combined operational dashboard"
             git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
           fi
+          echo "sha=$(git -C "$HOMEPAGE_REPO_PATH" rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for homepage Pages deployment
+        env:
+          GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+          HOMEPAGE_SHA: ${{ steps.homepage_sync.outputs.sha }}
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 60); do
+            state="$(
+              gh api "repos/onnellab/onnellab.github.io/commits/$HOMEPAGE_SHA/status" \
+                --jq '[.statuses[] | select(.context == "onnellab/pages-deploy")][0].state // ""'
+            )"
+            case "$state" in
+              success)
+                echo "Homepage Pages deployment succeeded for $HOMEPAGE_SHA"
+                exit 0
+                ;;
+              failure|error)
+                echo "::error title=homepage_pages_deploy_failed::Homepage Pages deployment failed for $HOMEPAGE_SHA"
+                exit 1
+                ;;
+            esac
+            sleep 5
+          done
+          echo "::error title=homepage_pages_deploy_stale::Homepage Pages deployment did not report success within the bounded verification window"
+          exit 1
 
       - name: Verify live ops deployment
         id: live_ops
