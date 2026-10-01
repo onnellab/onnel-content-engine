@@ -201,6 +201,19 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("public/ops/libsodium-wrappers.js", workflow)
         self.assertIn("Refresh manual publish dashboard", workflow)
 
+    def test_ops_dashboard_waits_for_homepage_pages_before_live_verification(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "deploy-ops-dashboard.yml").read_text(encoding="utf-8")
+
+        self.assertIn("id: homepage_sync", workflow)
+        self.assertIn("onnellab/pages-deploy", workflow)
+        self.assertIn("homepage_pages_deploy_failed", workflow)
+        self.assertIn("homepage_pages_deploy_stale", workflow)
+        self.assertLess(
+            workflow.index("Wait for homepage Pages deployment"),
+            workflow.index("Verify live ops deployment"),
+        )
+        self.assertIn("scripts/verify_live_ops.py", workflow)
+
     def test_store_review_workflow_syncs_and_deploys_dashboard(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "sync-store-reviews.yml").read_text(encoding="utf-8")
 
