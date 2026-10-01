@@ -90,7 +90,12 @@ def semantic_status(script: str, root: Path) -> str:
         try:
             import csv
             with (root / "data/store_versions.csv").open(encoding="utf-8", newline="") as handle:
-                return "failed" if any(row.get("status") in {"failed", "manual_check"} for row in csv.DictReader(handle)) else "ok"
+                statuses = {row.get("status", "") for row in csv.DictReader(handle)}
+            if "failed" in statuses:
+                return "failed"
+            if "manual_check" in statuses:
+                return "manual_only"
+            return "ok"
         except (FileNotFoundError, OSError, csv.Error):
             return "unavailable"
     if script == "collect_codemagic_private_test_builds.py":
@@ -120,6 +125,7 @@ def ledger(root: Path) -> list[dict[str, object]]:
 def run_refresh(root: Path = ROOT, runner: Callable = subprocess.run) -> int:
     steps: list[dict[str, object]] = []
     overall = "complete"
+    blocking_failure = False
     for index, script in enumerate(STEPS):
         if script == "generate_ai_manager_report.py":
             steps.append({"script": script, "checked_at": now(), "exit_code": None, "status": "pending"})
@@ -133,6 +139,7 @@ def run_refresh(root: Path = ROOT, runner: Callable = subprocess.run) -> int:
             if not token:
                 steps.append({"script": script, "account": account, "checked_at": now(), "exit_code": None, "status": "unavailable"})
                 overall = "partial"
+                blocking_failure = True
                 continue
             env["GMAIL_ACCOUNT_ALIAS"] = account
             env["GMAIL_REFRESH_TOKEN"] = token
@@ -149,6 +156,9 @@ def run_refresh(root: Path = ROOT, runner: Callable = subprocess.run) -> int:
         except (OSError, subprocess.TimeoutExpired):
             exit_code, status = 1, "failed"
         if status in {"failed", "unavailable"}:
+            overall = "partial"
+            blocking_failure = True
+        elif status == "manual_only":
             overall = "partial"
         entry: dict[str, object] = {"script": script, "checked_at": started, "exit_code": exit_code, "status": status}
         if account:
@@ -169,6 +179,7 @@ def run_refresh(root: Path = ROOT, runner: Callable = subprocess.run) -> int:
         manager["exit_code"], manager["status"] = 1, "failed"
     if manager["status"] == "failed":
         overall = "partial"
+        blocking_failure = True
     write_status()
     # Re-render once so the report embeds the finalized refresh status.
     try:
@@ -179,8 +190,9 @@ def run_refresh(root: Path = ROOT, runner: Callable = subprocess.run) -> int:
     if render_exit:
         manager["exit_code"], manager["status"] = render_exit, "failed"
         overall = "partial"
+        blocking_failure = True
         write_status()
-    return 1 if overall == "partial" else 0
+    return 1 if blocking_failure else 0
 
 
 if __name__ == "__main__":
