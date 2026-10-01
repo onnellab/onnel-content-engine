@@ -172,6 +172,60 @@ class PublishingTest(unittest.TestCase):
     def tearDown(self) -> None:
         self.tmp.cleanup()
 
+    def test_homepage_managed_privacy_policy_validates_without_static_output(self) -> None:
+        policies_path = self.topics_path.parent / "app_privacy_policies.json"
+        apps_path = self.topics_path.parent / "apps_registry.csv"
+        payload = json.loads(policies_path.read_text(encoding="utf-8"))
+        payload["policies"].append(
+            {
+                "app_slug": "papira",
+                "app_name": "Papira",
+                "last_updated": "2026-08-21",
+                "legacy_urls": [],
+                "in_app_purchase": False,
+                "publish_static": False,
+                "local_data": {
+                    "en": ["TXT manuscripts selected by the user"],
+                    "ko": ["사용자가 선택한 TXT 원고"],
+                },
+                "local_processing": {
+                    "en": ["EPUB creation occurs on the device."],
+                    "ko": ["EPUB 생성은 기기에서 이루어집니다."],
+                },
+            }
+        )
+        policies_path.write_text(json.dumps(payload), encoding="utf-8")
+        apps_path.write_text(
+            "slug,status,product_group\n"
+            "vaultxt,released,apps\n"
+            "papira,released,apps\n",
+            encoding="utf-8",
+        )
+        output = self.root / "privacy-only"
+        pages = publishing_module.write_privacy_pages(
+            output,
+            "https://example.com/",
+            policies_path,
+            apps_path,
+        )
+
+        self.assertEqual({page.app_slug for page in pages}, {"vaultxt"})
+        self.assertFalse((output / "privacy" / "papira" / "index.html").exists())
+        _, policies = publishing_module.load_privacy_policies(policies_path, apps_path)
+        self.assertEqual({policy["app_slug"] for policy in policies}, {"papira", "vaultxt"})
+
+    def test_privacy_policy_publish_static_requires_boolean(self) -> None:
+        policies_path = self.topics_path.parent / "app_privacy_policies.json"
+        payload = json.loads(policies_path.read_text(encoding="utf-8"))
+        payload["policies"][0]["publish_static"] = "false"
+        policies_path.write_text(json.dumps(payload), encoding="utf-8")
+
+        with self.assertRaisesRegex(PublishingError, "publish_static must be a boolean"):
+            publishing_module.load_privacy_policies(
+                policies_path,
+                self.topics_path.parent / "apps_registry.csv",
+            )
+
     def test_truncate_text_prefers_whole_words_without_changing_short_values(self) -> None:
         self.assertEqual(truncate_text("short", 8), "short")
         self.assertEqual(truncate_text("exact", 5), "exact")
