@@ -144,6 +144,13 @@
       "published_at": "2026-10-01T06:02:21Z",
       "status": "processed",
       "processed_at": "2026-10-01T06:03:04+00:00"
+    },
+    {
+      "manual_key": "TOPIC-0014::medium::en::markdown",
+      "platform": "medium",
+      "posted_url": "https://medium.com/@onnellab.app/how-to-turn-rough-notes-into-a-structured-first-draft-c70428e73262",
+      "published_at": "2026-10-01T06:07:24Z",
+      "status": "new"
     }
   ]
 }
