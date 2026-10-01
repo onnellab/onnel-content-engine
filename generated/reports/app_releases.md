@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-10-01T12:48:41+09:00
+Generated: 2026-10-02T06:20:52+09:00
 
 ## Summary
 
@@ -8,8 +8,7 @@ Generated: 2026-10-01T12:48:41+09:00
 | --- | --- | --- |
 | Store | failed | 1 |
 | Store | manual_check | 1 |
-| Store | unchanged | 12 |
-| Store | updated | 1 |
+| Store | unchanged | 13 |
 | GitHub Release | archived | 3 |
 | GitHub Release | planned | 7 |
 
@@ -20,7 +19,7 @@ Generated: 2026-10-01T12:48:41+09:00
 | Aligna | android | 1.0.7 | 1.0.7 | same | unchanged | planned | onnellab/aligna | Add release artifact and checksum |
 | Aligna | ios | 1.0.7 | 1.0.7 | same | unchanged | - | onnellab/aligna | No action |
 | ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
-| Melivra | android | 1.0.5 | 1.0.5 | same | updated | planned | onnellab/melivra | Private test only; do not publish public GitHub Release |
+| Melivra | android | 1.0.5 | 1.0.5 | same | unchanged | planned | onnellab/melivra | Add release artifact and checksum |
 | Melivra | ios | 6783644955 | 1.0.5 | unknown | failed | - | onnellab/melivra | Fix store lookup error |
 | Papira | android | com.onnellab.papira | - | unknown | manual_check | - | onnellab/papira | Check Google Play update manually |
 | Papira | ios | 1.0 | - | unknown | unchanged | - | onnellab/papira | No action |
@@ -46,7 +45,7 @@ Generated: 2026-10-01T12:48:41+09:00
 | REL-0019 | Quivra | android | public | v1.0.9 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
 | REL-0020 | VaultXT | android | public | v2.0.1 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
 | REL-0021 | Aligna | android | public | v1.0.7 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
-| REL-0022 | Melivra | android | private_test | v1.0.5 | planned | Private test; public Release disabled | - | - | - | Private test only; do not publish public GitHub Release |
+| REL-0022 | Melivra | android | public | v1.0.5 | planned | Waiting for artifact and public approval | - | - | - | Add release artifact and checksum |
 
 ## Attention Queue
 
@@ -60,4 +59,4 @@ Generated: 2026-10-01T12:48:41+09:00
 | Quivra | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
 | VaultXT | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
 | Aligna | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
-| Melivra | android | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.4. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
+| Melivra | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
