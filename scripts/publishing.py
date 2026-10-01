@@ -953,6 +953,8 @@ def load_privacy_policies(policies_path: Path, apps_registry_path: Path) -> tupl
             raise PublishingError(f"duplicate privacy policy app_slug: {slug}")
         if not policy.get("app_name") or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(policy.get("last_updated", ""))):
             raise PublishingError(f"{slug} privacy policy is missing app_name or a valid last_updated date")
+        if "publish_static" in policy and not isinstance(policy["publish_static"], bool):
+            raise PublishingError(f"{slug} privacy policy publish_static must be a boolean")
         by_slug[slug] = policy
     with apps_registry_path.open(encoding="utf-8", newline="") as handle:
         registry = list(csv.DictReader(handle))
@@ -979,6 +981,8 @@ def write_privacy_pages(
         raise PublishingError("privacy policy registry has an invalid contact_email")
     pages: list[PrivacyPage] = []
     for policy in policies:
+        if policy.get("publish_static", True) is False:
+            continue
         slug = str(policy["app_slug"])
         app_name = str(policy["app_name"])
         alternate_urls = {
