@@ -171,17 +171,19 @@ class SingleTests(unittest.TestCase):
                     aether_single.import_backlog_master(source, job, 138)
             self.assertFalse((job / "source" / "master.partial.wav").exists())
 
-    def test_dataless_backlog_source_is_reported_not_synced_without_copy(self):
-        with tempfile.TemporaryDirectory() as temporary:
+    def test_dataless_backlog_source_attempts_file_provider_copy(self):
+        with tempfile.TemporaryDirectory() as temporary, \
+             patch.object(aether_single, "audio_duration", return_value=138):
             root = Path(temporary).resolve()
             source = root / "Beyond the Road of Falling Petals.wav"
-            source.write_bytes(b"placeholder")
+            source.write_bytes(b"RIFF" + b"placeholder" * 512)
             job = root / "job"
             job.mkdir(mode=0o700)
-            with patch.object(aether_single, "_is_dataless", return_value=True), \
-                 patch.object(aether_single.shutil, "copyfile", side_effect=AssertionError("must not copy")):
-                with self.assertRaisesRegex(Exception, "backlog_wav_not_synced"):
-                    aether_single.import_backlog_master(source, job, 138)
+            with patch.object(aether_single, "_is_dataless", return_value=True):
+                imported = aether_single.import_backlog_master(source, job, 138)
+            self.assertTrue(imported["source_was_dataless"])
+            self.assertTrue(Path(imported["path"]).is_file())
+            self.assertEqual(file_hash(source), imported["sha256"])
 
     def test_publish_slot_stale_at_nine_kst_boundary(self):
         before = datetime(2026, 9, 26, 8, 59, tzinfo=ZoneInfo("Asia/Seoul"))

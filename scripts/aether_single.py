@@ -103,8 +103,6 @@ def resolve_backlog_wav(title: str, *, root: Path = MYBOX_ROOT) -> Path:
     source = _nfc_child(parent, f"{title}.wav")
     if source is None or source.is_symlink() or not source.is_file():
         raise VideoError("aether_single_backlog_wav_not_synced")
-    if _is_dataless(source):
-        raise VideoError("aether_single_backlog_wav_not_synced")
     return source
 
 
@@ -165,8 +163,7 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
     source = Path(source)
     if source.suffix.lower() != ".wav" or source.is_symlink() or not source.is_file():
         raise VideoError("aether_single_backlog_wav_not_synced")
-    if _is_dataless(source):
-        raise VideoError("aether_single_backlog_wav_not_synced")
+    source_was_dataless = _is_dataless(source)
     target_dir = directory(Path(folder) / "source")
     target = target_dir / "master.wav"
     partial = target_dir / "master.partial.wav"
@@ -204,6 +201,7 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
         "sha256": source_hash,
         "source_kind": "backlog_wav",
         "source_filename": source.name,
+        "source_was_dataless": source_was_dataless,
         "review": {"state": "not_run_existing_catalog_master"},
     }
 
