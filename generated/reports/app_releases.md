@@ -1,12 +1,12 @@
 # App Release Status
 
-Generated: 2026-10-02T06:20:52+09:00
+Generated: 2026-10-03T06:20:56+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
-| Store | failed | 1 |
+| Store | in_review | 1 |
 | Store | manual_check | 1 |
 | Store | unchanged | 13 |
 | GitHub Release | archived | 3 |
@@ -20,7 +20,7 @@ Generated: 2026-10-02T06:20:52+09:00
 | Aligna | ios | 1.0.7 | 1.0.7 | same | unchanged | - | onnellab/aligna | No action |
 | ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
 | Melivra | android | 1.0.5 | 1.0.5 | same | unchanged | planned | onnellab/melivra | Add release artifact and checksum |
-| Melivra | ios | 6783644955 | 1.0.5 | unknown | failed | - | onnellab/melivra | Fix store lookup error |
+| Melivra | ios | 6783644955 | 1.0.5 | unknown | in_review | - | onnellab/melivra | Review status |
 | Papira | android | com.onnellab.papira | - | unknown | manual_check | - | onnellab/papira | Check Google Play update manually |
 | Papira | ios | 1.0 | - | unknown | unchanged | - | onnellab/papira | No action |
 | Quivra | android | 1.0.9 | 1.0.9 | same | unchanged | planned | onnellab/quivra | Add release artifact and checksum |
@@ -51,7 +51,6 @@ Generated: 2026-10-02T06:20:52+09:00
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| Melivra | ios | failed | Fix store lookup error | App Store lookup returned no result for 6783644955 |
 | Papira | android | manual_check | Check Google Play update manually | Google Play has no stable public version lookup in this automation. |
 | TagWeaver | android | planned | Add release artifact and checksum | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
 | Segra | android | planned | Add release artifact and checksum | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
