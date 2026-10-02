@@ -536,7 +536,7 @@ Body
             self.assertIn("Aligna Pro", html)
             self.assertIn("3,300 KRW", html)
             self.assertIn("Melivra AI Credits 5000", html)
-            self.assertIn("34.99 USD", html)
+            self.assertIn("50,000 KRW", html)
             self.assertIn("AI 원가 대비 흑자", html)
             self.assertIn("Profit vs AI cost", html)
             self.assertIn("ai_provider_cost_usd", html)
