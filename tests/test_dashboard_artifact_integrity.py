@@ -61,7 +61,7 @@ class DashboardIntegrityTest(unittest.TestCase):
             'sync-store-reviews.yml',
             'update-devto-article.yml',
             'verify-manual-publications.yml',
-            'reconcile-work-browser-publications.yml',
+            'reconcile-remote-browser-publications.yml',
         ]
         for name in names:
             text = (root / '.github' / 'workflows' / name).read_text()
