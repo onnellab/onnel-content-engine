@@ -1877,6 +1877,8 @@ def export_privacy_pages_to_homepage(
     _, policies = load_privacy_policies(policies_path, apps_registry_path)
     exports: list[HomepageExport] = []
     for policy in policies:
+        if policy.get("publish_static", True) is False:
+            continue
         slug = str(policy["app_slug"])
         for language, suffix in (("en", ""), ("ko", "ko/")):
             source = site_dir / "apps" / slug / "privacy" / suffix / "index.html"
