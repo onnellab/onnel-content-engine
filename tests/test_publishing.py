@@ -211,6 +211,15 @@ class PublishingTest(unittest.TestCase):
 
         self.assertEqual({page.app_slug for page in pages}, {"vaultxt"})
         self.assertFalse((output / "privacy" / "papira" / "index.html").exists())
+        homepage = self.root / "homepage"
+        homepage.mkdir()
+        exports = publishing_module.export_privacy_pages_to_homepage(
+            output,
+            self.topics_path,
+            homepage,
+            dry_run=True,
+        )
+        self.assertEqual({item.topic_id for item in exports}, {"privacy-vaultxt-en", "privacy-vaultxt-ko"})
         _, policies = publishing_module.load_privacy_policies(policies_path, apps_path)
         self.assertEqual({policy["app_slug"] for policy in policies}, {"papira", "vaultxt"})
 
