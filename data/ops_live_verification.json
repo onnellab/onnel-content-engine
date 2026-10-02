@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "kind": "onnellab_ops_live_verification",
-  "checked_at": "2026-10-01T21:24:48+00:00",
+  "checked_at": "2026-10-02T00:03:35+00:00",
   "base_url": "https://onnellab.com",
-  "state": "failed",
-  "expected_sha256": "68f4da80d96aed9ed390aa4ad8c64cbfc3b5b2f41d8026dc3520f0b06ffd7663",
-  "live_sha256": "16f72dda51dcd41609db36a9d735d0bbb7629c22413f9a73c41737952d94f29a",
+  "state": "verified",
+  "expected_sha256": "ff71ea2e31b4e922862fdb8b7ea612c324c417c8202a7ff5e41c964def9304a2",
+  "live_sha256": "ff71ea2e31b4e922862fdb8b7ea612c324c417c8202a7ff5e41c964def9304a2",
   "checks": {
     "ops_http_200": true,
-    "ops_exact_deployed_bytes": false,
+    "ops_exact_deployed_bytes": true,
     "robots_meta": true,
     "googlebot_meta": true,
     "naverbot_meta": true,
@@ -30,5 +30,5 @@
     "homepage": 200,
     "legacy": 404
   },
-  "attempt": 12
+  "attempt": 5
 }
