@@ -7,7 +7,7 @@ import csv
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
 import select
 import shutil
@@ -69,7 +69,8 @@ def _safe_rel(value, label):
     if not isinstance(value, str) or not value or len(value) > 240:
         raise RecordingError(f'invalid_{label}')
     path = Path(value)
-    if path.is_absolute() or '..' in path.parts or any(part in ('', '.') for part in path.parts):
+    variants = (PurePosixPath(value), PureWindowsPath(value))
+    if any(p.anchor or '..' in p.parts for p in variants) or any(part in ('', '.') for part in path.parts):
         raise RecordingError(f'invalid_{label}')
     return path
 
@@ -118,7 +119,7 @@ def validate_scenario(row):
         'android_avd', 'ios_simulator_name', 'dart_defines',
         'watch_paths', 'topics', 'production_eligible',
     }
-    optional = {'project_subdir'}
+    optional = {'project_subdir', 'production_block_reason'}
     if (not isinstance(row, dict)
             or not required.issubset(row)
             or not set(row).issubset(required | optional)):
@@ -167,6 +168,11 @@ def validate_scenario(row):
         raise RecordingError('recording_topics_invalid')
     if type(row['production_eligible']) is not bool:
         raise RecordingError('recording_production_eligibility_invalid')
+    if 'production_block_reason' in row:
+        if (row['production_eligible'] is not False
+                or not isinstance(row['production_block_reason'], str)
+                or not re.fullmatch(r'[a-z0-9_]{1,120}', row['production_block_reason'])):
+            raise RecordingError('recording_production_block_reason_invalid')
     return row
 
 
@@ -192,7 +198,7 @@ def _repo_test_target(scenario):
     target = Path(scenario['test_target'])
     if scenario.get('project_subdir'):
         target = Path(scenario['project_subdir']) / target
-    return str(target)
+    return target.as_posix()
 
 
 def _git_output(repo, args):
@@ -204,7 +210,7 @@ def _watch_paths(scenario, platform):
     watch = list(scenario['watch_paths'])
     platform_dir = 'ios' if platform == 'ios_simulator' else 'android'
     if scenario.get('project_subdir'):
-        platform_dir = str(Path(scenario['project_subdir']) / platform_dir)
+        platform_dir = (Path(scenario['project_subdir']) / platform_dir).as_posix()
     watch.append(platform_dir)
     return watch
 
@@ -790,6 +796,8 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
 
 def require_promotable_app(scenario, platform):
     from video_product_eligibility import public_video_platforms
+    if scenario.get('production_eligible') is not True:
+        raise RecordingError('recording_scenario_production_disabled')
     path = ROOT / 'data/apps_registry.csv'
     try:
         with path.open(newline='', encoding='utf-8') as stream:

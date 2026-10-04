@@ -28,7 +28,8 @@
       "runner": "flutter_integration_test",
       "android_avd": "ONNELLAB_Video_API36",
       "ios_simulator_name": "ONNELLAB Video iPhone 17 Pro",
-      "production_eligible": true
+      "production_eligible": false,
+      "production_block_reason": "mock_transcoder_does_not_produce_verified_media"
     },
     {
       "scenario_id": "tagweaver-core-edit-flow",
@@ -59,7 +60,8 @@
       "topics": [
         "TOPIC-0008"
       ],
-      "production_eligible": true
+      "production_eligible": false,
+      "production_block_reason": "screenshot_tagcore_service_does_not_verify_real_tag_write"
     },
     {
       "scenario_id": "vaultxt-log-inspection-flow",
@@ -119,7 +121,8 @@
       "runner": "flutter_integration_test",
       "android_avd": "ONNELLAB_Video_API36",
       "ios_simulator_name": "ONNELLAB Video iPhone 17 Pro",
-      "production_eligible": true
+      "production_eligible": false,
+      "production_block_reason": "screenshot_trim_repository_does_not_produce_verified_audio"
     },
     {
       "scenario_id": "clipnest-saved-snippet-flow",

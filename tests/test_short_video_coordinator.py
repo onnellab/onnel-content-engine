@@ -172,6 +172,16 @@ class CoordinatorTest(unittest.TestCase):
         with self.assertRaisesRegex(CoordinationError, "reconcile_required"):
             self.coordinator.claim(SLOT, APPS[0], HASH)
 
+    def test_mock_backed_scenarios_are_excluded_with_explicit_coverage_reasons(self):
+        apps, coverage = eligible_apps()
+        self.assertNotIn('APP-0001', {row['app_id'] for row in apps})
+        self.assertNotIn('APP-0002', {row['app_id'] for row in apps})
+        self.assertNotIn('APP-0004', {row['app_id'] for row in apps})
+        for app_id in ('APP-0001', 'APP-0002', 'APP-0004'):
+            row = next(row for row in coverage if row['app_id'] == app_id)
+            self.assertIn('recording_scenario_production_disabled', row['blockers'])
+            self.assertNotIn('recording_scenario_missing', row['blockers'])
+
     def test_rotation_requires_positive_store_snapshot_and_reports_missing_coverage(self):
         registry = "app_id,app_name,status,content_eligible,platforms,app_store_url,play_store_url\nAPP-0001,Quivra,released,true,android,,https://play.google.com/store/apps/details?id=one\nAPP-0008,Papira,released,true,ios|android,https://apps.apple.com/app/id1,https://play.google.com/store/apps/details?id=eight\nAPP-0007,Melivra,released,true,android,,https://play.google.com/store/apps/details?id=seven\n"
         stores = "app_id,platform,store_url,status,version\nAPP-0001,android,https://play.google.com/store/apps/details?id=one,unchanged,1.0\nAPP-0008,ios,https://apps.apple.com/app/id1,updated,2.0\nAPP-0008,android,https://play.google.com/store/apps/details?id=eight,manual_check,\nAPP-0007,android,https://play.google.com/store/apps/details?id=seven,unchanged,1.0\n"

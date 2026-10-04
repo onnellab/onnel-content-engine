@@ -41,8 +41,11 @@ unrelated article publication workflows for every claim.
 
 ## Recording coverage
 
-Existing production scenarios cover Quivra, TagWeaver, VaultXT, Segra, ClipNest,
-and Aligna. ClipNest is iOS Simulator only. Papira is confirmed iOS-only; native
+Registered scenarios cover Quivra, TagWeaver, VaultXT, Segra, ClipNest,
+and Aligna. The follow-up source audit quarantined Quivra, TagWeaver and Segra
+because their capture targets simulate core processing. Only VaultXT file
+inspection and Aligna naming preview remain Android source candidates; actual
+capture is still unverified. See [source evidence](ANDROID_CAPTURE_SOURCE_AUDIT.md). ClipNest is iOS Simulator only. Papira is confirmed iOS-only; native
 Windows cannot execute xcrun/iOS Simulator. Melivra is confirmed Android-only.
 The inspected Melivra benchmark tests inject synthetic track repositories and
 have no production VIDEO_STEP capture markers; do not reuse those as authentic
@@ -133,3 +136,25 @@ It must not send a serial-based emulator kill that could affect another operator
 This evidence verifies code behavior with offline fixtures and preserved data.
 It does not verify a real recording, render, new upload, active Windows schedule,
 legacy-writer fencing or analytics attribution.
+
+Melivra now has a source-only prepared harness on `codex/melivra-android-capture`,
+commit `d5ad64330fa8cd91eefc8ea0cb970ef352d475e3`. It uses an owned generated WAV
+and actual scanner/repository/native playback. The app policy forbids Flutter/Dart
+commands on Windows/Linux, so compilation, device execution and capture remain
+NOT_RUN/NOT_CAPTURED. The backlog records this reference and stays ineligible.
+
+## Follow-up quarantine and portability verification
+
+- Final offline suite: 820 tests, 94.627 seconds, exit 0; three Windows-only skips.
+- Native Windows suite: 70 tests, 8.790 seconds, exit 0; five POSIX-only skips.
+- Actual-data offline dry-run passed with zero network calls. All 594 protected
+  files retained identical SHA-256 values; no missing files. Diff checks passed.
+- Independent review accepted trusted built-in Windows ACL owners, current-scenario
+  checks on reused recordings, and Windows-safe repository/path validation.
+- Main a5dac7defcc9d265e656515269110b26abe1b26d passed unit workflow 37180880030,
+  actionlint 37180880114 and publishing dry-run 37180880073. Its Windows video
+  workflow failed because the private fixture owner was Administrators. The
+  follow-up permission fix accepts that already-trusted principal without changing
+  ACLs, ownership or credentials; hosted CI must verify this follow-up separately.
+- No recording, emulator, render, authentication, upload or schedule activation
+  was performed during these checks.

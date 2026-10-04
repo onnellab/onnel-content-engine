@@ -15,16 +15,39 @@
       "status": "blocked",
       "production_eligible": false,
       "blockers": [
-        "No verified production capture harness or VIDEO_STEP markers in the inspected local integration_test tree.",
-        "The inspected app_flow_bench_test.dart and queue_sheet_harness_test.dart inject benchmark library/playback repositories and synthetic tracks; they are not production recording evidence.",
-        "Local checkout HEAD 75502e11 is dated 2026-08-11; inspect current authoritative source before designing or registering a capture target."
+        "The prepared harness is on a separate feature branch; Dart formatting, analysis and integration execution have not run.",
+        "Melivra APP_ANCHOR.md prohibits Flutter/Dart commands on Windows and Linux. An authorized compatible execution environment is required.",
+        "Native launcher compatibility, actual playback, managed recording and production provenance remain unverified.",
+        "No dedicated disposable Android installation has been provisioned or selected for this capture."
       ],
       "completion_requires": [
         "An actual tracked integration capture test using rights-cleared audio and real app behavior, with verified start/end markers.",
         "A successful managed Android emulator recording and production provenance checks before scenario eligibility."
       ],
       "topic_id": "TOPIC-0043",
-      "topic_status": "idea"
+      "topic_status": "idea",
+      "prior_inspection": [
+        "No verified production capture harness or VIDEO_STEP markers in the inspected local integration_test tree.",
+        "The inspected app_flow_bench_test.dart and queue_sheet_harness_test.dart inject benchmark library/playback repositories and synthetic tracks; they are not production recording evidence.",
+        "Local checkout HEAD 75502e11 is dated 2026-08-11; inspect current authoritative source before designing or registering a capture target."
+      ],
+      "prepared_harness": {
+        "repository": "onnellab/melivra",
+        "branch": "codex/melivra-android-capture",
+        "commit": "d5ad64330fa8cd91eefc8ea0cb970ef352d475e3",
+        "test_target": "integration_test/melivra_video_capture_test.dart",
+        "documentation": "docs/ANDROID_VIDEO_CAPTURE_PREPARATION.md",
+        "start_marker": "VIDEO_STEP:library_ready",
+        "end_marker": "VIDEO_STEP:complete",
+        "dart_defines": {
+          "MELIVRA_VIDEO_CAPTURE": "true",
+          "MELIVRA_NATIVE_AUDIO_IN_TEST": "true"
+        },
+        "validation": "source_review_only",
+        "dart_flutter_execution": "NOT_RUN",
+        "recording": "NOT_CAPTURED",
+        "capture_verified": false
+      }
     },
     {
       "app_id": "APP-0008",
@@ -47,6 +70,72 @@
       "completion_requires": [
         "Inspect the authoritative Papira source and implement or identify a real tracked capture harness with verified markers.",
         "An explicitly authorized iOS-capable execution environment and successful managed capture before scenario eligibility."
+      ]
+    },
+    {
+      "app_id": "APP-0001",
+      "app_name": "Quivra",
+      "public_platform": "android",
+      "recording_platform": "android_emulator",
+      "repository": "onnellab/quivra",
+      "scenario_id": "quivra-conversion-flow",
+      "source_audit_commit": "df6c594ccd23b84de809e61a97cfad4aca1dbae8",
+      "source_audit": "docs/operations/ANDROID_CAPTURE_SOURCE_AUDIT.md",
+      "status": "blocked",
+      "production_eligible": false,
+      "scope": "The shared registered test also serves iOS; production eligibility is disabled for both recording platforms.",
+      "blockers": [
+        "The registered screenshot test mocks the transcoder, writes four placeholder bytes and reports conversion success.",
+        "A real native-operation capture target and output verification must replace the simulated success before activation."
+      ],
+      "completion_requires": [
+        "Prepare an isolated harness using rights-cleared valid input and the actual processing service.",
+        "Compile and execute on an authorized dedicated device; verify the resulting file or tag data and managed recording provenance.",
+        "Only then reconsider production eligibility. Existing publication history must remain unchanged."
+      ]
+    },
+    {
+      "app_id": "APP-0002",
+      "app_name": "TagWeaver",
+      "public_platform": "android",
+      "recording_platform": "android_emulator",
+      "repository": "onnellab/tagweaver",
+      "scenario_id": "tagweaver-core-edit-flow",
+      "source_audit_commit": "0d6d6864a68918b4b77a571e617774bb6b1fa6c9",
+      "source_audit": "docs/operations/ANDROID_CAPTURE_SOURCE_AUDIT.md",
+      "status": "blocked",
+      "production_eligible": false,
+      "scope": "The shared registered test also serves iOS; production eligibility is disabled for both recording platforms.",
+      "blockers": [
+        "The registered screenshot test injects a screenshot tag service whose save methods return success without native tag writes.",
+        "A real native-operation capture target and output verification must replace the simulated success before activation."
+      ],
+      "completion_requires": [
+        "Prepare an isolated harness using rights-cleared valid input and the actual processing service.",
+        "Compile and execute on an authorized dedicated device; verify the resulting file or tag data and managed recording provenance.",
+        "Only then reconsider production eligibility. Existing publication history must remain unchanged."
+      ]
+    },
+    {
+      "app_id": "APP-0004",
+      "app_name": "Segra",
+      "public_platform": "android",
+      "recording_platform": "android_emulator",
+      "repository": "onnellab/segra",
+      "scenario_id": "segra-trim-flow",
+      "source_audit_commit": "735e7abda8f7362a755989166ef4eaa3bf0eb3d2",
+      "source_audit": "docs/operations/ANDROID_CAPTURE_SOURCE_AUDIT.md",
+      "status": "blocked",
+      "production_eligible": false,
+      "scope": "The shared registered test also serves iOS; production eligibility is disabled for both recording platforms.",
+      "blockers": [
+        "The registered screenshot test injects a screenshot trim repository with placeholder input and unconditional export success.",
+        "A real native-operation capture target and output verification must replace the simulated success before activation."
+      ],
+      "completion_requires": [
+        "Prepare an isolated harness using rights-cleared valid input and the actual processing service.",
+        "Compile and execute on an authorized dedicated device; verify the resulting file or tag data and managed recording provenance.",
+        "Only then reconsider production eligibility. Existing publication history must remain unchanged."
       ]
     }
   ]

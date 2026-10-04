@@ -12,12 +12,17 @@ _EXPOSING_ACCESS = 0xF0000000 | 0x000F01FF
 
 
 def private_dacl(owner, current_user, entries):
-    """Conservatively reject unknown ACE kinds and broad/foreign readable grants."""
-    if not owner or owner != current_user or entries is None:
+    """Reject foreign owners/grants, accepting the existing trusted principals."""
+    # TokenOwner may be Administrators instead of TokenUser on elevated Windows.
+    # These two built-ins already have full-access ACEs in our privacy model;
+    # allowing their implicit owner WRITE_DAC rights adds no trusted principal.
+    # https://learn.microsoft.com/en-us/windows/win32/secauthz/owner-of-a-new-object
+    trusted = {current_user, 'S-1-5-18', 'S-1-5-32-544'}
+    if not current_user or not owner or owner not in trusted or entries is None:
         return False
     # OWNER RIGHTS is the verified object's owner, not a broad group. Python
     # 3.13+ uses it in the private DACL created for mode=0o700 directories.
-    allowed = {owner, 'S-1-5-18', 'S-1-5-32-544', 'S-1-3-4'}
+    allowed = trusted | {'S-1-3-4'}
     for ace_type, mask, sid in entries:
         if ace_type == 1:  # ACCESS_DENIED_ACE cannot expose the file.
             continue

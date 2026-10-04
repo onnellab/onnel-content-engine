@@ -26,6 +26,7 @@ from short_video_recorder import (
     load_scenarios,
     managed_recording_attestation,
     recording_lock,
+    require_promotable_app,
     resolve_project,
     scenario_fingerprint,
     scenario_for_topic,
@@ -33,18 +34,24 @@ from short_video_recorder import (
 
 
 class RecorderPolicyTests(unittest.TestCase):
-    def test_repository_scenario_is_scoped_and_production_eligible(self):
+    def test_mock_backed_repository_scenarios_are_quarantined(self):
         scenarios = load_scenarios()
         scenario = scenarios['tagweaver-core-edit-flow']
         self.assertEqual('APP-0002', scenario['app_id'])
         self.assertEqual(['TOPIC-0008'], scenario['topics'])
-        self.assertTrue(scenario['production_eligible'])
+        self.assertFalse(scenario['production_eligible'])
+        self.assertIn('screenshot_tagcore', scenario['production_block_reason'])
+        self.assertFalse(scenarios['quivra-conversion-flow']['production_eligible'])
+        self.assertFalse(scenarios['segra-trim-flow']['production_eligible'])
+        for app, topic in [('APP-0001', 'TOPIC-0007'), ('APP-0002', 'TOPIC-0008'), ('APP-0004', 'TOPIC-0009')]:
+            with self.assertRaisesRegex(RecordingError, 'recording_scenario_not_found_for_topic'):
+                scenario_for_topic(app, topic, 'android_emulator')
+        for scenario_id in ('quivra-conversion-flow', 'tagweaver-core-edit-flow', 'segra-trim-flow'):
+            with self.assertRaisesRegex(RecordingError, 'recording_scenario_production_disabled'):
+                require_promotable_app(scenarios[scenario_id], 'android_emulator')
     def test_topic_selects_exact_production_scenario(self):
         expected = {
-            ('APP-0001', 'TOPIC-0007', 'android_emulator'): 'quivra-conversion-flow',
-            ('APP-0002', 'TOPIC-0008', 'android_emulator'): 'tagweaver-core-edit-flow',
             ('APP-0003', 'TOPIC-0031', 'android_emulator'): 'vaultxt-log-inspection-flow',
-            ('APP-0004', 'TOPIC-0009', 'android_emulator'): 'segra-trim-flow',
             ('APP-0005', 'TOPIC-0010', 'ios_simulator'): 'clipnest-saved-snippet-flow',
             ('APP-0006', 'TOPIC-0012', 'android_emulator'): 'aligna-preview-before-apply',
         }
@@ -57,7 +64,7 @@ class RecorderPolicyTests(unittest.TestCase):
             scenario_for_topic('APP-0005', 'TOPIC-0010', 'android_emulator')
 
     def test_relative_path_and_physical_device_guards(self):
-        for value in ['../escape', '/absolute', 'a/../../b']:
+        for value in ['../escape', '/absolute', 'a/../../b', r'\rooted', r'C:relative', r'C:\absolute', r'..\escape']:
             with self.subTest(value=value), self.assertRaises(RecordingError):
                 _safe_rel(value, 'fixture')
         scenario = load_scenarios()['tagweaver-core-edit-flow']
@@ -85,7 +92,7 @@ class RecorderPolicyTests(unittest.TestCase):
             'short_video_recorder._android_screenrecord_pids',
             side_effect=[[], [4321]],
         ), patch(
-            'short_video_recorder.subprocess.Popen',
+            'short_video_recorder.spawn_owned',
             return_value=proc,
         ) as popen, patch('short_video_recorder.time.sleep'):
             local, pid, remote = _start_android_recording(
@@ -129,17 +136,26 @@ class RecorderPolicyTests(unittest.TestCase):
         self.assertIn('emulator-5580', command)
         self.assertNotIn('shell', command)
     def test_managed_recording_attestation_binds_app_topic_and_hash(self):
-        scenario = load_scenarios()['tagweaver-core-edit-flow']
+        self.check_attestation_fixture('aligna-preview-before-apply', allowed=True)
+
+    def test_old_managed_recordings_cannot_bypass_current_scenario_quarantine(self):
+        for scenario_id in ('quivra-conversion-flow', 'tagweaver-core-edit-flow', 'segra-trim-flow'):
+            with self.subTest(scenario=scenario_id):
+                self.check_attestation_fixture(scenario_id, allowed=False)
+
+    def check_attestation_fixture(self, scenario_id, *, allowed):
+        scenario = load_scenarios()[scenario_id]
+        topic = scenario['topics'][0]
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            video = root / 'recordings/app-0002/tagweaver-core-edit-flow/a.mp4'
+            video = root / 'recordings' / scenario_id / 'a.mp4'
             video.parent.mkdir(parents=True)
             video.write_bytes(b'video-fixture')
             digest = file_hash(video)
             index = {
                 'schema_version': 1,
                 'recordings': {
-                    'tagweaver-core-edit-flow:android_emulator': {
+                    scenario_id + ':android_emulator': {
                         'scenario_id': scenario['scenario_id'],
                         'scenario_hash': hashlib.sha256(canonical(scenario)).hexdigest(),
                         'app_id': scenario['app_id'],
@@ -150,7 +166,7 @@ class RecorderPolicyTests(unittest.TestCase):
                         'sha256': digest,
                         'recorded_at': '2026-09-21T00:00:00+00:00',
                         'production_eligible': True,
-                        'topics': ['TOPIC-0008'],
+                        'topics': [topic],
                     }
                 },
             }
@@ -159,14 +175,19 @@ class RecorderPolicyTests(unittest.TestCase):
             job = {
                 'brief': {
                     'recording': str(video.relative_to(root)),
-                    'app_id': 'APP-0002',
-                    'topic_id': 'TOPIC-0008',
+                    'app_id': scenario['app_id'],
+                    'topic_id': topic,
                 },
                 'assets': {'recording': {'sha256': digest}},
             }
+            if not allowed:
+                with patch('short_video_recorder._verified_video', return_value=True), \
+                        self.assertRaisesRegex(RecordingError, 'managed_recording_scenario_changed'):
+                    managed_recording_attestation(root, job)
+                return
             with patch('short_video_recorder._verified_video', return_value=True):
                 attestation = managed_recording_attestation(root, job)
-            self.assertEqual('tagweaver-core-edit-flow', attestation['scenario_id'])
+            self.assertEqual(scenario_id, attestation['scenario_id'])
             self.assertEqual(digest, attestation['sha256'])
             wrong = json.loads(json.dumps(job))
             wrong['brief']['topic_id'] = 'TOPIC-0029'
@@ -220,7 +241,15 @@ class RecorderSourceIsolationTests(unittest.TestCase):
 
     def test_fingerprint_uses_origin_tree_not_dirty_worktree(self):
         (self.work / 'lib/app.dart').write_text('uncommitted user work')
-        with patch('short_video_recorder.shutil.which', return_value=str(self.flutter)):
+        # Real git tree queries remain exercised; only the Flutter version process
+        # is faked so this test needs neither a POSIX shell nor an installed SDK.
+        from short_video_recorder import _run
+        def run_without_flutter(argv, **kwargs):
+            if argv[0] == str(self.flutter):
+                return 0, '{"frameworkRevision":"fixture"}'
+            return _run(argv, **kwargs)
+        with patch('short_video_recorder.shutil.which', return_value=str(self.flutter)), \
+                patch('short_video_recorder._run', side_effect=run_without_flutter):
             fingerprint, commit = scenario_fingerprint(
                 self.work, self.scenario, 'android_emulator', refresh=False)
         self.assertRegex(fingerprint, r'^[0-9a-f]{64}$')

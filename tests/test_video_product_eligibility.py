@@ -20,11 +20,14 @@ class VideoProductEligibilityTests(unittest.TestCase):
     def test_recorder_blocks_unreleased_platform_before_device_work(self):
         for app_id, platform in [('APP-0007', 'ios_simulator'), ('APP-0008', 'android_emulator')]:
             with self.subTest(app=app_id), self.assertRaisesRegex(RecordingError, 'recording_platform_not_public'):
-                require_promotable_app({'app_id': app_id}, platform)
+                require_promotable_app({'app_id': app_id, 'production_eligible': True}, platform)
 
     def test_recorder_accepts_verified_platform(self):
         for app_id, platform in [('APP-0007', 'android_emulator'), ('APP-0008', 'ios_simulator')]:
-            self.assertEqual(app_id, require_promotable_app({'app_id': app_id}, platform)['app_id'])
+            # This is the public-store guard in isolation, not a registered capture
+            # scenario. Real registrations remain independently quarantined.
+            self.assertEqual(app_id, require_promotable_app(
+                {'app_id': app_id, 'production_eligible': True}, platform)['app_id'])
 
     def test_missing_or_nonmatching_store_evidence_fails_closed(self):
         app = {'app_id': 'APP-0001', 'app_name': 'Fixture', 'status': 'released',

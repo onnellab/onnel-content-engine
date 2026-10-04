@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import short_video_scheduled_worker as worker
 
 SLOT = '2026-10-05T09:00:00+09:00'
-APP = {'app_id': 'APP-0001', 'scenario_id': 'quivra-conversion-flow'}
+APP = {'app_id': 'APP-0003', 'scenario_id': 'vaultxt-log-inspection-flow'}
 CHANNEL = 'UC' + 'a' * 22
 
 

@@ -83,6 +83,25 @@ class PrivatePermissionTests(unittest.TestCase):
         self.assertFalse(private_dacl(user, 'different-user', [(0, 1, user)]))
         self.assertFalse(private_dacl(user, user, [(9, 1, user)]))
 
+    def test_builtin_owned_private_dacl_matches_hosted_windows_fixture(self):
+        user = 'S-1-5-21-1-2-3-1001'
+        # Hosted Python 3.14 mode0700: Admin owner, SYSTEM/Admin/OWNER RIGHTS.
+        entries = [(0, 0x1F01FF, sid) for sid in ('S-1-5-18', 'S-1-5-32-544', 'S-1-3-4')]
+        for owner in (user, 'S-1-5-18', 'S-1-5-32-544'):
+            with self.subTest(owner=owner):
+                self.assertTrue(private_dacl(owner, user, entries))
+                self.assertTrue(private_dacl(owner, user, entries + [(0, 0x1F01FF, user)]))
+                for current in (None, ''):
+                    self.assertFalse(private_dacl(owner, current, entries))
+                self.assertFalse(private_dacl(owner, user, None))
+                self.assertFalse(private_dacl(owner, user, entries + [(9, 0, user)]))
+                for foreign in ('S-1-1-0', 'S-1-5-11', 'S-1-5-32-545', 'S-1-5-21-9-8-7-1001'):
+                    for access in (1, 2, 0x10000, 0x40000, 0x80000):
+                        self.assertFalse(private_dacl(owner, user, entries + [(0, access, foreign)]))
+        for owner in (None, '', 'S-1-3-4', 'S-1-1-0', 'S-1-5-32-545', 'S-1-5-21-9-8-7-1001'):
+            with self.subTest(untrusted_owner=owner):
+                self.assertFalse(private_dacl(owner, user, entries))
+
     def test_existing_private_fixture_is_readable_without_acl_changes(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

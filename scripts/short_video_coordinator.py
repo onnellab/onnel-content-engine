@@ -264,12 +264,16 @@ def eligible_apps(root=ROOT, platform="android_emulator"):
             if app.get("status") != "released":
                 continue
             reasons = []
-            candidates = [s for s in scenarios if s.get("app_id") == app["app_id"] and s.get("production_eligible") is True]
+            registered = [s for s in scenarios if s.get("app_id") == app["app_id"]]
+            candidates = [s for s in registered if s.get("production_eligible") is True]
             supported = [s for s in candidates if platform in s.get("platforms", [])]
             released_platforms = public_video_platforms(app, root / "data/store_versions.csv")
             if app.get("content_eligible") != "true": reasons.append("not_content_eligible")
             if store_platform not in released_platforms: reasons.append("no_released_host_platform_store_evidence")
-            if not candidates: reasons.append("recording_scenario_missing")
+            if not registered: reasons.append("recording_scenario_missing")
+            elif not candidates:
+                reasons.append("recording_scenario_production_disabled")
+                reasons.extend(sorted({s.get("production_block_reason", "production_recording_not_verified") for s in registered}))
             elif not supported: reasons.append("recording_platform_unsupported")
             row = {"app_id": app["app_id"], "app_name": app["app_name"], "released_platforms": released_platforms, "blockers": reasons, "capture_verified": False}
             coverage.append(row)

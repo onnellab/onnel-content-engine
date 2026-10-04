@@ -120,16 +120,20 @@ Repository store evidence and scenario registrations currently indicate:
 
 | App | iOS store evidence | Managed iOS scenario |
 | --- | --- | --- |
-| Quivra | Present | `quivra-conversion-flow` |
-| TagWeaver | Present | `tagweaver-core-edit-flow` |
+| Quivra | Present | `quivra-conversion-flow` (quarantined: mocked core operation) |
+| TagWeaver | Present | `tagweaver-core-edit-flow` (quarantined: mocked core operation) |
 | VaultXT | Present | `vaultxt-log-inspection-flow` |
-| Segra | Present | `segra-trim-flow` |
+| Segra | Present | `segra-trim-flow` (quarantined: mocked core operation) |
 | ClipNest | Present; iOS-only | `clipnest-saved-snippet-flow` |
 | Aligna | Present | `aligna-preview-before-apply` |
 | Papira | Present; iOS-only | Missing: repository and authentic capture harness must be established. |
-| Melivra | None; Android-only | Not an iOS candidate. Android capture harness remains a separate gap. |
+| Melivra | None; Android-only | Not an iOS candidate. Android harness is source-prepared on a separate branch; execution and capture remain unverified. |
 
 These registrations are not proof that recording works on a connected Mac. Check
 the current store snapshot, source repository, owned simulator, and actual capture
 markers before rendering. Do not invent recordings, supported platforms, usage
 results, or popularity to fill rotation coverage.
+
+Melivra source preparation: [`d5ad6433`](https://github.com/onnellab/melivra/commit/d5ad64330fa8cd91eefc8ea0cb970ef352d475e3). Its APP_ANCHOR prohibits Flutter/Dart commands on Windows/Linux; use an authorized compatible host with an explicitly selected disposable Android device for the remaining checks. This does not authorize access to the current Mac.
+
+The follow-up [Android source audit](ANDROID_CAPTURE_SOURCE_AUDIT.md) found simulated processing in Quivra, TagWeaver and Segra capture targets. Their registered scenarios are disabled for both platforms. Source presence and UI screenshots do not prove actual conversion, tag writes or trimmed output. VaultXT real-file inspection and Aligna computed-name preview remain source candidates, not verified recordings.

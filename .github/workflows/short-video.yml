@@ -48,6 +48,7 @@ jobs:
           python-version: '3.14'
       - run: python -m pip install -r requirements-test.txt
       - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video_portability.py'
+      - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video_recorder.py'
       - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video_private_permissions.py'
       - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video_coordinator.py'
       - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video_scheduled_worker.py'
