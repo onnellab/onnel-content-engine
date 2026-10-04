@@ -1,0 +1,2 @@
+# WSL and Unix runners must remain executable after a Windows checkout.
+*.sh text eol=lf
