@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-10-04T06:20:56+09:00
+Generated: 2026-10-05T06:21:01+09:00
 
 ## Summary
 
@@ -22,7 +22,7 @@ Generated: 2026-10-04T06:20:56+09:00
 | Melivra | android | 1.0.5 | 1.0.5 | same | unchanged | planned | onnellab/melivra | Add release artifact and checksum |
 | Melivra | ios | 6783644955 | 1.0.5 | unknown | in_review | - | onnellab/melivra | Review status |
 | Papira | android | com.onnellab.papira | - | unknown | manual_check | - | onnellab/papira | Check Google Play update manually |
-| Papira | ios | 1.0 | - | unknown | unchanged | - | onnellab/papira | No action |
+| Papira | ios | 2.0.1 | - | unknown | unchanged | - | onnellab/papira | No action |
 | Quivra | android | 1.0.9 | 1.0.9 | same | unchanged | planned | onnellab/quivra | Add release artifact and checksum |
 | Quivra | ios | 1.0.9 | 1.0.9 | same | unchanged | archived | onnellab/quivra | No action |
 | Segra | android | 1.0.6 | 1.0.6 | same | unchanged | planned | onnellab/segra | Add release artifact and checksum |
