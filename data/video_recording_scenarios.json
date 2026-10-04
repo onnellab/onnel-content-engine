@@ -71,13 +71,15 @@
       "test_target": "integration_test/store_promo_capture_test.dart",
       "start_marker": "VIDEO_STEP:library",
       "end_marker": "VIDEO_STEP:inspected_unchanged",
+      "completion_marker": "VIDEO_STEP:complete",
       "max_seconds": 90,
       "platforms": [
         "android_emulator",
         "ios_simulator"
       ],
       "dart_defines": {
-        "VAULTXT_VIDEO_FLOW": "true"
+        "VAULTXT_VIDEO_FLOW": "true",
+        "VAULTXT_CAPTURE_DISPOSABLE": "true"
       },
       "watch_paths": [
         "vaultxt/lib",

@@ -119,7 +119,7 @@ def validate_scenario(row):
         'android_avd', 'ios_simulator_name', 'dart_defines',
         'watch_paths', 'topics', 'production_eligible',
     }
-    optional = {'project_subdir', 'production_block_reason'}
+    optional = {'project_subdir', 'production_block_reason', 'completion_marker'}
     if (not isinstance(row, dict)
             or not required.issubset(row)
             or not set(row).issubset(required | optional)):
@@ -138,6 +138,12 @@ def validate_scenario(row):
         value = row[key]
         if not isinstance(value, str) or not value or len(value) > 120 or '\n' in value:
             raise RecordingError('recording_marker_invalid')
+    if 'completion_marker' in row:
+        marker = row['completion_marker']
+        if (not isinstance(marker, str) or not marker or len(marker) > 120
+                or any(ord(char) < 32 for char in marker)
+                or marker in (row['start_marker'], row['end_marker'])):
+            raise RecordingError('recording_completion_marker_invalid')
     if type(row['max_seconds']) is not int or not 15 <= row['max_seconds'] <= 180:
         raise RecordingError('recording_duration_invalid')
     expected = ['android_emulator', 'ios_simulator']
@@ -730,6 +736,8 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
     raw = None
     seen_start = False
     seen_end = False
+    completion_marker = scenario.get('completion_marker')
+    seen_complete = completion_marker is None
     capture_deadline = None
     log = []
     deadline = time.monotonic() + scenario['max_seconds'] + 180
@@ -775,6 +783,10 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
                         raw = _finish_ios_recording(recorder, raw)
                     recorder = None
                     seen_end = True
+                if completion_marker and _marker_line(line, completion_marker):
+                    if not seen_end:
+                        raise RecordingError('recording_completion_before_visual_end')
+                    seen_complete = True
             code = test.poll()
             if code is not None:
                 # An exited Flutter child may leave a descendant holding the
@@ -788,6 +800,8 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
         recording_started = capture_deadline is not None
         if not seen_start or not seen_end or not recording_started:
             raise RecordingError('recording_markers_missing')
+        if not seen_complete:
+            raise RecordingError('recording_completion_marker_missing')
         return raw, ''.join(log)[-MAX_LOG_BYTES:]
     finally:
         try:
@@ -901,6 +915,7 @@ def ensure_recording(
         'log_markers': {
             'start': scenario['start_marker'],
             'end': scenario['end_marker'],
+            **({'complete': scenario['completion_marker']} if scenario.get('completion_marker') else {}),
         },
     }
 

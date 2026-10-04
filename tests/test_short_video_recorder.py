@@ -33,10 +33,20 @@ from short_video_recorder import (
     resolve_project,
     scenario_fingerprint,
     scenario_for_topic,
+    validate_scenario,
 )
 
 
 class RecorderPolicyTests(unittest.TestCase):
+    def test_vaultxt_contract_requires_disposable_capture_and_separate_completion(self):
+        scenario = load_scenarios()['vaultxt-log-inspection-flow']
+        self.assertEqual('true', scenario['dart_defines']['VAULTXT_VIDEO_FLOW'])
+        self.assertEqual('true', scenario['dart_defines']['VAULTXT_CAPTURE_DISPOSABLE'])
+        self.assertEqual('VIDEO_STEP:inspected_unchanged', scenario['end_marker'])
+        self.assertEqual('VIDEO_STEP:complete', scenario['completion_marker'])
+        for marker in ('', scenario['end_marker'], scenario['start_marker'], 'complete\nforged', None):
+            with self.subTest(marker=marker), self.assertRaisesRegex(RecordingError, 'completion_marker_invalid'):
+                validate_scenario(dict(scenario, completion_marker=marker))
     def test_mock_backed_repository_scenarios_are_quarantined(self):
         scenarios = load_scenarios()
         scenario = scenarios['tagweaver-core-edit-flow']
@@ -199,7 +209,7 @@ class RecorderPolicyTests(unittest.TestCase):
 
 
 class CaptureCompletionTests(unittest.TestCase):
-    def capture(self, events, *, platform='android_emulator', cleanup_error=False):
+    def capture(self, events, *, platform='android_emulator', cleanup_error=False, require_completion=False):
         clock = [0]
         test, recorder = Mock(), Mock()
         recorder.poll.return_value = None
@@ -237,8 +247,10 @@ class CaptureCompletionTests(unittest.TestCase):
             stopped = patched('_stop_group')
             run = patched('_run', side_effect=RecordingError('cleanup_failed') if cleanup_error else None)
             try:
-                result = _run_and_capture(Path('fake'), {'max_seconds': 60,
-                    'start_marker': 'VIDEO_STEP:start', 'end_marker': 'VIDEO_STEP:end'},
+                scenario = {'max_seconds': 60, 'start_marker': 'VIDEO_STEP:start', 'end_marker': 'VIDEO_STEP:end'}
+                if require_completion:
+                    scenario['completion_marker'] = 'VIDEO_STEP:complete'
+                result = _run_and_capture(Path('fake'), scenario,
                     platform, 'owned-device', Path('fake-temp'))
                 return result, finished
             finally:
@@ -290,6 +302,36 @@ class CaptureCompletionTests(unittest.TestCase):
         for line in ('expected VIDEO_STEP:end', 'VIDEO_STEP:end_extra', 'VIDEO_STEP:end failed',
                      'Exception: VIDEO_STEP:end', 'VIDEO_STEP:start VIDEO_STEP:end'):
             self.assertFalse(_marker_line(line, 'VIDEO_STEP:end'))
+
+    def test_completion_after_disposal_is_required_but_not_part_of_visual_clip(self):
+        result, finished = self.capture([(0, 'VIDEO_STEP:start\n', None, None),
+            (10, 'VIDEO_STEP:end\n', None, None), (70, 'flutter: VIDEO_STEP:complete\n', None, 0),
+            (71, '', 0, 0)], require_completion=True)
+        self.assertEqual([10], finished)
+        self.assertEqual(Path('owned-raw.mp4'), result[0])
+
+    def test_truncated_stdout_or_quoted_completion_cannot_complete_capture(self):
+        for tail in ('', 'Expected VIDEO_STEP:complete after disposal\n'):
+            with self.subTest(tail=tail), self.assertRaisesRegex(RecordingError, 'completion_marker_missing'):
+                self.capture([(0, 'VIDEO_STEP:start\n', None, None),
+                    (10, 'VIDEO_STEP:end\n', None, None), (11, tail, None, 0),
+                    (12, '', 0, 0)], require_completion=True)
+
+    def test_completion_before_visual_end_or_failed_test_is_rejected(self):
+        cases = [
+            ([(0, 'VIDEO_STEP:start\n', None, None), (1, 'VIDEO_STEP:complete\n', None, None)],
+             'completion_before_visual_end'),
+            ([(0, 'VIDEO_STEP:start\n', None, None), (10, 'VIDEO_STEP:end\n', None, None),
+              (11, 'VIDEO_STEP:complete\n', None, 0), (12, '', 1, 0)], 'scenario_test_failed')]
+        for events, error in cases:
+            with self.subTest(error=error), self.assertRaisesRegex(RecordingError, error):
+                self.capture(events, require_completion=True)
+
+    def test_completion_does_not_override_cleanup_failure(self):
+        with self.assertRaisesRegex(RecordingError, 'cleanup_failed'):
+            self.capture([(0, 'VIDEO_STEP:start\n', None, None),
+                (10, 'VIDEO_STEP:end\n', None, None), (11, 'VIDEO_STEP:complete\n', None, 0),
+                (12, '', 0, 0)], require_completion=True, cleanup_error=True)
 
 
 class RecorderSourceIsolationTests(unittest.TestCase):
