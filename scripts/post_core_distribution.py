@@ -16,7 +16,7 @@ from validate_syndication_drafts import SyndicationValidationError
 from validate_syndication_drafts import DEFAULT_MANIFEST_PATH as DEFAULT_SYNDICATION_MANIFEST
 
 
-CORE_SOCIAL = ("x", "bluesky")
+CORE_SOCIAL = ("bluesky",)
 CORE_SYNDICATION = ("devto",)
 
 

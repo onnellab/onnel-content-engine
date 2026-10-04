@@ -77,6 +77,14 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("ONNELLAB_GITHUB_PAGES_TOKEN", workflow)
         self.assertNotIn("Blogger", workflow)
 
+    def test_core_workflow_does_not_use_or_rotate_x_api_credentials(self) -> None:
+        workflow = (ROOT / ".github/workflows/publishing.yml").read_text(encoding="utf-8")
+        posting = workflow.split("- name: Post Due Core Distribution", 1)[1].split("- name: Verify Manual Publication Completion", 1)[0]
+        self.assertIn("BLUESKY_APP_PASSWORD", posting)
+        self.assertIn("DEVTO_API_KEY", posting)
+        for forbidden in ("X_CLIENT_ID", "X_CLIENT_SECRET", "X_REFRESH_TOKEN", "gh secret set"):
+            self.assertNotIn(forbidden, posting)
+
     def test_unit_workflow_runs_full_offline_suite_on_linux_and_macos(self) -> None:
         workflow = (ROOT / ".github/workflows/unit-tests.yml").read_text(encoding="utf-8")
         for expected in ("ubuntu-latest", "macos-latest", "requirements-test.txt", "python scripts/run_unit_tests.py", "git diff --exit-code", "contents: read"):

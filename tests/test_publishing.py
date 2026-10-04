@@ -122,6 +122,12 @@ class PublishingTest(unittest.TestCase):
         self.ko_markdown_path = self.root / "generated" / "markdown" / "ko" / "reading" / "read-large-txt-files.md"
         self.site_dir = self.root / "site"
         self.topics_path.parent.mkdir(parents=True)
+        (self.topics_path.parent / "store_versions.csv").write_text(
+            "app_id,platform,store_url,version,status\n"
+            "APP-0003,ios,https://apps.apple.com/app/id6760122045,1.0,unchanged\n"
+            "APP-0003,android,https://play.google.com/store/apps/details?id=com.onnellab.vaultxt,1.0,updated\n",
+            encoding="utf-8",
+        )
         self.markdown_path.parent.mkdir(parents=True)
         self.ko_markdown_path.parent.mkdir(parents=True)
         write_topics(self.topics_path, [topic_row(), topic_row(topic_id="TOPIC-0002", language="ko")])
@@ -727,6 +733,42 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(list(social_dir.parent.glob(f".{social_dir.name}.staging-*")), [])
         self.assertEqual(list(social_dir.parent.glob(f".{social_dir.name}.backup-*")), [])
 
+    def test_install_links_require_matching_public_store_evidence(self) -> None:
+        apps = self.topics_path.parent / "apps_registry.csv"
+        stores = apps.with_name("store_versions.csv")
+        apps.write_text(
+            "app_id,app_name,slug,app_store_url,play_store_url\n"
+            "APP-0007,Melivra,melivra,https://apps.apple.com/app/id7,https://play.google.com/store/apps/details?id=melivra\n"
+            "APP-0008,Papira,papira,https://apps.apple.com/app/id8,https://play.google.com/store/apps/details?id=papira\n",
+            encoding="utf-8",
+        )
+        stores.write_text(
+            "app_id,platform,store_url,version,status\n"
+            "APP-0007,ios,https://apps.apple.com/app/id7,,in_review\n"
+            "APP-0007,android,https://play.google.com/store/apps/details?id=melivra,1.0,unchanged\n"
+            "APP-0008,ios,https://apps.apple.com/app/id8,2.0,updated\n"
+            "APP-0008,android,https://play.google.com/store/apps/details?id=papira,,manual_check\n",
+            encoding="utf-8",
+        )
+        registry = publishing_module.app_registry_by_name(apps)
+        self.assertEqual(registry["melivra"]["app_store_url"], "")
+        self.assertTrue(registry["melivra"]["play_store_url"])
+        self.assertTrue(registry["papira"]["app_store_url"])
+        self.assertEqual(registry["papira"]["play_store_url"], "")
+        for evidence in (
+            "APP-0007,android,https://play.google.com/store/apps/details?id=melivra,,new\n",
+            "APP-0008,android,https://play.google.com/store/apps/details?id=melivra,1.0,new\n",
+            "APP-0007,ios,https://play.google.com/store/apps/details?id=melivra,1.0,new\n",
+            "APP-0007,android,https://play.google.com/store/apps/details?id=other,1.0,new\n",
+        ):
+            with self.subTest(evidence=evidence):
+                stores.write_text("app_id,platform,store_url,version,status\n" + evidence, encoding="utf-8")
+                registry = publishing_module.app_registry_by_name(apps)
+                self.assertEqual(registry["melivra"]["play_store_url"], "")
+        stores.unlink()
+        registry = publishing_module.app_registry_by_name(apps)
+        self.assertTrue(all(not row["app_store_url"] and not row["play_store_url"] for row in registry.values()))
+
     def test_product_social_posts_use_direct_store_install_links(self) -> None:
         (self.root / "data" / "apps_registry.csv").write_text(
             "app_id,app_name,slug,app_store_url,play_store_url\n"
@@ -1253,7 +1295,7 @@ class PublishingTest(unittest.TestCase):
             for post in social_manifest["posts"]
             if post["platform"] == "bluesky" and post["language"] == "en" and not post["is_variant"]
         )
-        self.assertEqual(x_post["status"], "approved")
+        self.assertEqual(x_post["status"], "draft")
         self.assertEqual(bluesky_post["status"], "draft")
 
         approve_due_distribution(
@@ -1339,7 +1381,7 @@ class PublishingTest(unittest.TestCase):
         self.assertIn(("https://api.x.com/2/users/me", "GET", None, {"Authorization": "Bearer x-access-token"}), calls)
         self.assertNotIn(("https://gql.hashnode.com", "POST", {"query": "query Viewer { me { id username } }"}, {"Authorization": "hashnode-token"}), calls)
 
-    def test_x_adapter_creates_post_payload(self) -> None:
+    def test_x_adapter_cannot_bypass_remote_browser_publication(self) -> None:
         social_dir = self.root / "generated" / "social"
         generate_social_posts(self.topics_path, social_dir, "https://example.com/")
         approve_social_post("TOPIC-0001", "x", "en", "editor", social_dir / "manifest.json")
@@ -1358,40 +1400,26 @@ class PublishingTest(unittest.TestCase):
         with patch.dict("os.environ", env):
             with patch("post_social_drafts.json_post", fake_json_post):
                 with patch("post_social_drafts.form_post", fake_form_post):
-                    posted = post_social_drafts(social_dir / "manifest.json", platform="x", adapter="x")
+                    with self.assertRaisesRegex(SocialPostingError, "remote_browser"):
+                        post_social_drafts(social_dir / "manifest.json", platform="x", adapter="x")
 
-        self.assertEqual(len(posted), 1)
-        self.assertEqual(posted[0]["status"], "posted")
-        self.assertEqual(posted[0]["post_id"], "1234567890")
-        self.assertEqual(posted[0]["posted_url"], "https://x.com/i/web/status/1234567890")
-        self.assertEqual(refresh_calls[0][0], "https://api.x.com/2/oauth2/token")
-        self.assertEqual(refresh_calls[0][1]["grant_type"], "refresh_token")
-        self.assertEqual(refresh_calls[0][1]["refresh_token"], "refresh-token")
-        self.assertEqual(refresh_calls[0][1]["client_id"], "client-id")
-        self.assertTrue(str(refresh_calls[0][2]["Authorization"]).startswith("Basic "))
-        self.assertEqual(calls[0][0], "https://api.x.com/2/tweets")
-        self.assertEqual(calls[0][2]["Authorization"], "Bearer x-access-token")
-        self.assertIn("A slow TXT file is often a workflow problem before it is a file problem.", calls[0][1]["text"])
-        self.assertIn("https://example.com/blog/en/read-large-txt-files/", calls[0][1]["text"])
+        self.assertEqual(calls, [])
+        self.assertEqual(refresh_calls, [])
 
     def test_social_posting_failure_records_error_type(self) -> None:
         social_dir = self.root / "generated" / "social"
         manifest_path = social_dir / "manifest.json"
         generate_social_posts(self.topics_path, social_dir, "https://example.com/")
-        approve_social_post("TOPIC-0001", "x", "en", "editor", manifest_path)
+        approve_social_post("TOPIC-0001", "bluesky", "en", "editor", manifest_path)
 
-        def fake_json_post(url: str, payload: dict[str, object], headers: dict[str, str] | None = None) -> dict[str, object]:
-            raise SocialPostingError("HTTP 429 from https://api.x.com/2/tweets: rate limit")
-
-        env = {"X_CLIENT_ID": "client-id", "X_CLIENT_SECRET": "client-secret", "X_REFRESH_TOKEN": "refresh-token"}
+        env = {"BLUESKY_HANDLE": "test.bsky.social", "BLUESKY_APP_PASSWORD": "test-password"}
         with patch.dict("os.environ", env):
-            with patch("post_social_drafts.json_post", fake_json_post):
-                with patch("post_social_drafts.form_post", return_value={"access_token": "x-access-token"}):
-                    with self.assertRaises(SocialPostingError):
-                        post_social_drafts(manifest_path, platform="x", adapter="x")
+            with patch("post_social_drafts.post_bluesky_text", side_effect=SocialPostingError("HTTP 429: rate limit")):
+                with self.assertRaises(SocialPostingError):
+                    post_social_drafts(manifest_path, platform="bluesky", adapter="bluesky")
 
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        failed = next(post for post in manifest["posts"] if post["platform"] == "x" and post["language"] == "en" and not post["is_variant"])
+        failed = next(post for post in manifest["posts"] if post["platform"] == "bluesky" and post["language"] == "en" and not post["is_variant"])
         self.assertEqual(failed["status"], "failed")
         self.assertEqual(failed["error_type"], "rate_limited")
         self.assertEqual(failed["retry_count"], 1)

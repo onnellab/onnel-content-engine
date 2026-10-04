@@ -34,4 +34,41 @@ class RemoteBrowserPublicationTest(unittest.TestCase):
             with self.assertRaises(RemotePublicationError): reconcile(inbox,state,social,synd)
             self.assertEqual(json.loads(state.read_text()),original)
 
+    def test_existing_permalink_conflict_cannot_overwrite_state(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            social, synd = self.manifests(root)
+            inbox = root / 'inbox.json'
+            state = root / 'state.json'
+            key = 'T1::x::en::x'
+            inbox.write_text(json.dumps({'schema_version': 1, 'records': [{'manual_key': key, 'platform': 'x', 'posted_url': 'https://x.com/onnellab/status/456', 'status': 'new'}]}))
+            state.write_text(json.dumps({'done': {key: {'posted_url': 'https://x.com/onnellab/status/123', 'marked_at': 'original'}}}))
+            original_state, original_inbox = state.read_bytes(), inbox.read_bytes()
+            with self.assertRaisesRegex(RemotePublicationError, 'conflicting'):
+                reconcile(inbox, state, social, synd)
+            self.assertEqual(state.read_bytes(), original_state)
+            self.assertEqual(inbox.read_bytes(), original_inbox)
+
+    def test_same_permalink_preserves_existing_evidence_and_legacy_profile_can_upgrade(self):
+        for existing in ('https://x.com/onnellab/status/123', 'https://x.com/onnellab'):
+            with self.subTest(existing=existing), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                social, synd = self.manifests(root)
+                inbox, state = root / 'inbox.json', root / 'state.json'
+                key = 'T1::x::en::x'
+                old = {'posted_url': existing, 'marked_at': 'original', 'marked_by': 'original_verifier'}
+                state.write_text(json.dumps({'done': {key: old}}))
+                inbox.write_text(json.dumps({'schema_version': 1, 'records': [{'manual_key': key, 'platform': 'x', 'posted_url': 'https://x.com/onnellab/status/123', 'status': 'new'}]}))
+                self.assertEqual(reconcile(inbox, state, social, synd), 1)
+                result = json.loads(state.read_text())['done'][key]
+                self.assertEqual(result['posted_url'], 'https://x.com/onnellab/status/123')
+                if '/status/' in existing:
+                    self.assertEqual(result, old)
+                self.assertEqual(reconcile(inbox, state, social, synd), 0)
+
+    def test_unrelated_linkedin_host_and_editor_urls_are_not_permalinks(self):
+        for platform, url in [('linkedin', 'https://evillinkedin.com/posts/fake'), ('medium', 'https://medium.com/p/abc123/edit')]:
+            with self.subTest(url=url), self.assertRaises(RemotePublicationError):
+                normalized_permalink(platform, url)
+
 if __name__=='__main__': unittest.main()

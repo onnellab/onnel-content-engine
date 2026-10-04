@@ -29,6 +29,7 @@ from urllib.parse import urljoin
 from xml.sax.saxutils import escape as xml_escape
 
 from topic_management import DEFAULT_TOPICS_PATH, TOPIC_HEADER, TopicError, read_csv
+from publication_history import publication_history, preserve_publication, require_history_items
 
 
 UTC = timezone.utc
@@ -1076,8 +1077,25 @@ def app_registry_by_name(path: Path) -> dict[str, dict[str, str]]:
         return {}
     with path.open(encoding="utf-8", newline="") as handle:
         rows = [dict(row) for row in csv.DictReader(handle)]
+    public_stores: set[tuple[str, str, str]] = set()
+    store_versions_path = path.with_name("store_versions.csv")
+    if store_versions_path.exists():
+        with store_versions_path.open(encoding="utf-8", newline="") as handle:
+            for store in csv.DictReader(handle):
+                if (store.get("status") in {"new", "updated", "unchanged"}
+                        and (store.get("version") or "").strip()):
+                    public_stores.add((
+                        (store.get("app_id") or "").strip(),
+                        (store.get("platform") or "").strip(),
+                        (store.get("store_url") or "").strip(),
+                    ))
     registry: dict[str, dict[str, str]] = {}
     for row in rows:
+        app_id = (row.get("app_id") or "").strip()
+        for platform, field in (("ios", "app_store_url"), ("android", "play_store_url")):
+            store_url = (row.get(field) or "").strip()
+            if not app_id or (app_id, platform, store_url) not in public_stores:
+                row[field] = ""
         for key in (row.get("app_name", ""), row.get("slug", "")):
             if key.strip():
                 registry[key.strip().casefold()] = row
@@ -1569,17 +1587,20 @@ SOCIAL_POSTED_HISTORY_FIELDS = (
 )
 
 
-def previous_social_state(output_dir: Path) -> dict[tuple[str, str, str, str], dict[str, object]]:
+def previous_social_state(output_dir: Path, project_root: Path | None = None) -> dict[tuple[str, str, str, str], dict[str, object]]:
+    project_root = project_root or output_dir.parents[1]
+    history = publication_history(project_root)
     path = output_dir / "manifest.json"
     if not path.exists():
+        require_history_items(history, set(), {"x", "linkedin"})
         return {}
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return {}
+    except json.JSONDecodeError as error:
+        raise PublishingError("cannot preserve malformed social publication manifest") from error
     posts = data.get("posts")
     if not isinstance(posts, list):
-        return {}
+        raise PublishingError("cannot preserve social manifest without posts")
     state: dict[tuple[str, str, str, str], dict[str, object]] = {}
     for post in posts:
         if not isinstance(post, dict):
@@ -1591,11 +1612,16 @@ def previous_social_state(output_dir: Path) -> dict[tuple[str, str, str, str], d
             str(post.get("template_id", "")),
         )
         if all(key):
-            draft_path = output_dir.parents[1] / str(post.get("draft_path", ""))
+            post = preserve_publication(post, history)
+            draft_path = project_root / str(post.get("draft_path", ""))
+            if post.get("status") == "posted" or post.get("_publication_recorded"):
+                if not draft_path.resolve().is_relative_to(output_dir.resolve()) or not draft_path.is_file():
+                    raise PublishingError(f"cannot preserve published social draft: {draft_path}")
             if draft_path.exists():
                 post = dict(post)
                 post["_draft_text"] = draft_path.read_text(encoding="utf-8")
             state[key] = post
+    require_history_items(history, {"::".join(key) for key in state}, {"x", "linkedin"})
     return state
 
 
@@ -1611,12 +1637,12 @@ def apply_previous_social_state(
     previous = state.get(key)
     if not previous:
         return None
-    if item.get("publish_after_canonical") is True and previous.get("status") != "posted":
+    if item.get("publish_after_canonical") is True and previous.get("status") != "posted" and not previous.get("_publication_recorded"):
         return None
     for field in SOCIAL_STATE_FIELDS:
         if field in previous:
             item[field] = previous[field]
-    if previous.get("status") == "posted":
+    if previous.get("status") == "posted" or previous.get("_publication_recorded"):
         for field in SOCIAL_POSTED_HISTORY_FIELDS:
             if field in previous:
                 item[field] = previous[field]
@@ -1689,7 +1715,7 @@ def _generate_social_posts_locked(
     include_prepublication: bool = False,
 ) -> list[SocialPost]:
     site_url = normalize_site_url(site_url)
-    state = previous_social_state(output_dir)
+    state = previous_social_state(output_dir, topics_path.parent.parent)
     output_dir.parent.mkdir(parents=True, exist_ok=True)
     staging_dir = Path(tempfile.mkdtemp(prefix=f".{output_dir.name}.staging-", dir=output_dir.parent))
     backup_dir: Path | None = None
@@ -1733,7 +1759,7 @@ def _generate_social_posts_locked(
                     article, template, final_destination, card_path, site_url, project_root, weighted_length
                 )
                 previous = apply_previous_social_state(item, state)
-                posted_history = bool(previous and previous.get("status") == "posted" and previous.get("_draft_text"))
+                posted_history = bool(previous and (previous.get("status") == "posted" or previous.get("_publication_recorded")) and "_draft_text" in previous)
                 if posted_history:
                     text = str(previous["_draft_text"])
                 staged_destination.write_text(text if posted_history else text + "\n", encoding="utf-8")

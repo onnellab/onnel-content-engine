@@ -17,6 +17,7 @@ from evaluate_article import REVIEW_VERSION, evaluate_article, has_clear_definit
 from build_manual_publish_site import compose_url
 from publish_due_articles import DuePublicationError, publish_due_articles
 from schedule_ready_articles import SchedulingError, schedule_ready_articles
+from check_content_supply import content_supply_report
 from topic_management import TOPIC_HEADER, write_topics
 import run_pipeline as pipeline_module
 
@@ -311,6 +312,28 @@ class PublicationAutomationTest(unittest.TestCase):
         path = self.review_root / language / "reading" / "read-large-txt-files" / "review.json"
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(report), encoding="utf-8")
+
+    def test_supply_requires_current_complete_reviews_even_for_scheduled_pairs(self) -> None:
+        for status in ("review", "scheduled"):
+            for invalid in ({"score": 9.9}, {**passing_review("TOPIC-0001"), "input_fingerprint": "old"}, []):
+                with self.subTest(status=status, invalid=invalid):
+                    write_topics(self.topics_path, [topic_row(status), topic_row(status, "TOPIC-0002", "ko")])
+                    self.write_review_report("en", invalid)
+                    self.write_review_report("ko", passing_review("TOPIC-0002"))
+                    with patch("schedule_ready_articles.score_article", side_effect=lambda topic, *_: passing_review(topic["id"])):
+                        report = content_supply_report(self.topics_path, self.review_root)
+                    self.assertEqual(report["qualified_pair_count"], 0)
+
+    def test_supply_accepts_current_pair_without_mutating_content(self) -> None:
+        for status in ("review", "scheduled"):
+            write_topics(self.topics_path, [topic_row(status), topic_row(status, "TOPIC-0002", "ko")])
+            for language, topic_id in (("en", "TOPIC-0001"), ("ko", "TOPIC-0002")):
+                self.write_review_report(language, passing_review(topic_id))
+            before = self.topics_path.read_bytes()
+            with patch("schedule_ready_articles.score_article", side_effect=lambda topic, *_: passing_review(topic["id"])):
+                report = content_supply_report(self.topics_path, self.review_root)
+            self.assertEqual(report["qualified_pair_count"], 1)
+            self.assertEqual(self.topics_path.read_bytes(), before)
 
     def test_evaluates_article_above_publication_threshold(self) -> None:
         write_topics(self.topics_path, [topic_row("review"), topic_row("review", "TOPIC-0002", "ko")])

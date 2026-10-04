@@ -9,20 +9,18 @@ import sys
 from pathlib import Path
 
 from evaluate_article import DEFAULT_REVIEW_ROOT, DEFAULT_THRESHOLD
-from schedule_ready_articles import REQUIRED_PUBLICATION_LANGUAGES, grouped_by_publication
+from schedule_ready_articles import REQUIRED_PUBLICATION_LANGUAGES, current_review_score, grouped_by_publication
 from topic_management import DEFAULT_TOPICS_PATH, TOPIC_HEADER, read_csv
 
 
 ACTIVE_STATUSES = {"approved", "research", "outline", "draft", "image_planning", "review", "scheduled"}
 
 
-def review_score(row: dict[str, str], review_root: Path) -> float | None:
-    path = review_root / row["primary_language"] / row["category"] / row["slug"] / "review.json"
-    if not path.exists():
-        return None
+def review_score(row: dict[str, str], topics_path: Path, review_root: Path, threshold: float) -> float | None:
+    """Use the same current-input, mandatory-check gate as publication."""
     try:
-        return float(json.loads(path.read_text(encoding="utf-8")).get("score", 0.0))
-    except (OSError, ValueError, json.JSONDecodeError, AttributeError):
+        return current_review_score(row, topics_path, review_root, threshold)
+    except (OSError, ValueError, TypeError):
         return None
 
 
@@ -41,11 +39,13 @@ def content_supply_report(
             continue
         pair = {row["primary_language"]: row for row in group if row["primary_language"] in REQUIRED_PUBLICATION_LANGUAGES}
         statuses = {row["status"] for row in pair.values()}
-        scores = {language: review_score(row, review_root) for language, row in pair.items()}
+        if not statuses & ACTIVE_STATUSES:
+            continue
+        scores = {language: review_score(row, topics_path, review_root, threshold) for language, row in pair.items()}
         if statuses & ACTIVE_STATUSES:
             active.append({"category": category, "slug": slug, "statuses": sorted(statuses), "scores": scores})
-        if statuses == {"scheduled"} or (
-            statuses == {"review"}
+        if (
+            statuses in ({"review"}, {"scheduled"})
             and all(score is not None and score > threshold for score in scores.values())
         ):
             qualified.append({"category": category, "slug": slug, "statuses": sorted(statuses), "scores": scores})

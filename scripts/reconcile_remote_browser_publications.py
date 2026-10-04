@@ -10,6 +10,7 @@ import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from publication_history import specific_permalink
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INBOX = ROOT / "data" / "remote_browser_publications.json"
@@ -66,17 +67,7 @@ def normalized_permalink(platform: str, value: str) -> str:
         raise RemotePublicationError(f"invalid published URL: {raw}") from error
     if parsed.scheme not in {"http", "https"} or not parsed.hostname:
         raise RemotePublicationError(f"published URL must be http(s): {raw}")
-    host = parsed.hostname.casefold().removeprefix("www.")
-    path = parsed.path.rstrip("/")
-    parts = [p for p in path.split("/") if p]
-    valid = False
-    if platform == "x":
-        valid = host in {"x.com", "twitter.com"} and "status" in parts and len(parts) >= 3
-    elif platform == "linkedin":
-        valid = host.endswith("linkedin.com") and (path.startswith("/feed/update/urn:li:") or path.startswith("/posts/"))
-    elif platform == "medium":
-        valid = host == "medium.com" and len(parts) >= 2 and not path.startswith("/feed/") and path != "/new-story"
-    if not valid:
+    if not specific_permalink(platform, raw):
         raise RemotePublicationError(f"not a specific {platform} public post permalink: {raw}")
     # fragments never identify a different post; preserve meaningful query strings.
     return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, parsed.path, parsed.query, ""))
@@ -115,6 +106,12 @@ def reconcile(inbox_path: Path = DEFAULT_INBOX, state_path: Path = DEFAULT_STATE
         if platform != item["platform"]:
             raise RemotePublicationError(f"platform mismatch for {manual_key}: {platform}")
         permalink = normalized_permalink(platform, str(record.get("posted_url", "")))
+        previous = state["done"].get(manual_key, {})
+        if not isinstance(previous, dict):
+            raise RemotePublicationError(f"malformed existing publication: {manual_key}")
+        previous_url = str(previous.get("posted_url", ""))
+        if specific_permalink(platform, previous_url) and normalized_permalink(platform, previous_url) != permalink:
+            raise RemotePublicationError(f"conflicting existing publication permalink: {manual_key}")
         updates.append((record, item, permalink))
     if not updates:
         return 0
@@ -122,12 +119,14 @@ def reconcile(inbox_path: Path = DEFAULT_INBOX, state_path: Path = DEFAULT_STATE
     for record, item, permalink in updates:
         manual_key = str(record["manual_key"])
         published_at = str(record.get("published_at", "")).strip() or processed_at
-        state["done"][manual_key] = {
-            "topic_id": item["topic_id"], "platform": item["platform"], "language": item["language"], "template_id": item["template_id"],
-            "marked_at": processed_at, "marked_by": "chatgpt_remote_browser", "posted_url": permalink,
-            "verified_at": processed_at, "verification_method": "remote_chrome_permalink", "verification_confidence": "browser_permalink",
-            "published_at": published_at,
-        }
+        previous = state["done"].get(manual_key, {})
+        if not specific_permalink(item["platform"], previous.get("posted_url", "")):
+            state["done"][manual_key] = {
+                "topic_id": item["topic_id"], "platform": item["platform"], "language": item["language"], "template_id": item["template_id"],
+                "marked_at": processed_at, "marked_by": "chatgpt_remote_browser", "posted_url": permalink,
+                "verified_at": processed_at, "verification_method": "remote_chrome_permalink", "verification_confidence": "browser_permalink",
+                "published_at": published_at,
+            }
         record["status"] = "processed"
         record["processed_at"] = processed_at
         record["posted_url"] = permalink

@@ -15,6 +15,7 @@ from hashnode_content import HASHNODE_CONTENT_PROFILE, hashnode_native_body, has
 from publishing import DEFAULT_SITE_URL, PublishingError, article_public_url, load_publishable_articles, normalize_site_url, parse_front_matter, syndication_body, syndication_intro, syndication_note
 from publishing import EXTERNAL_DISTRIBUTION_LANGUAGES
 from topic_management import DEFAULT_TOPICS_PATH, TopicError
+from publication_history import publication_history, preserve_publication, require_history_items
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -100,17 +101,19 @@ SYNDICATION_STATE_FIELDS = (
 )
 
 
-def previous_syndication_state(output_dir: Path) -> dict[tuple[str, str, str], dict[str, object]]:
+def previous_syndication_state(output_dir: Path, project_root: Path | None = None) -> dict[tuple[str, str, str], dict[str, object]]:
+    history = publication_history(project_root or output_dir.parents[1])
     path = output_dir / "manifest.json"
     if not path.exists():
+        require_history_items(history, set(), {"medium"})
         return {}
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return {}
+    except json.JSONDecodeError as error:
+        raise SyndicationError("cannot preserve malformed syndication publication manifest") from error
     drafts = data.get("drafts")
     if not isinstance(drafts, list):
-        return {}
+        raise SyndicationError("cannot preserve syndication manifest without drafts")
     state: dict[tuple[str, str, str], dict[str, object]] = {}
     for draft in drafts:
         if not isinstance(draft, dict):
@@ -121,7 +124,8 @@ def previous_syndication_state(output_dir: Path) -> dict[tuple[str, str, str], d
             str(draft.get("language", "")),
         )
         if all(key):
-            state[key] = draft
+            state[key] = preserve_publication(draft, history, "markdown")
+    require_history_items(history, {"::".join((*key, "markdown")) for key in state}, {"medium"})
     return state
 
 
@@ -133,7 +137,7 @@ def _previous_posted_draft_bodies(
     output_root = output_dir.resolve()
     bodies: dict[tuple[str, str, str], bytes] = {}
     for key, draft in state.items():
-        if draft.get("status") != "posted":
+        if draft.get("status") != "posted" and not draft.get("_publication_recorded"):
             continue
         draft_path = (project_root / str(draft.get("draft_path", ""))).resolve()
         if not draft_path.is_relative_to(output_root):
@@ -154,7 +158,7 @@ def apply_previous_syndication_state(item: dict[str, object], state: dict[tuple[
     previous = state.get(key)
     if not previous:
         return
-    if item.get("publish_after_canonical") is True and previous.get("status") != "posted":
+    if item.get("publish_after_canonical") is True and previous.get("status") != "posted" and not previous.get("_publication_recorded"):
         item.update(
             {
                 "status": "draft",
@@ -184,7 +188,7 @@ def generate_syndication_drafts(
 ) -> list[dict[str, object]]:
     site_url = normalize_site_url(site_url)
     project_root = topics_path.parent.parent
-    state = previous_syndication_state(output_dir)
+    state = previous_syndication_state(output_dir, project_root)
     posted_bodies = _previous_posted_draft_bodies(state, output_dir, project_root)
     statuses = (
         {"published", "draft", "image_planning", "review", "scheduled"}
@@ -265,7 +269,7 @@ def generate_syndication_drafts(
                 str(item["platform"]),
                 str(item["language"]),
             )
-            if item.get("status") == "posted" and key in posted_bodies:
+            if key in posted_bodies:
                 destination.write_bytes(posted_bodies[key])
             manifest.append(item)
     (output_dir / "manifest.json").write_text(json.dumps({"drafts": manifest}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

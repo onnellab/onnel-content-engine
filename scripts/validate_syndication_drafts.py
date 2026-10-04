@@ -11,6 +11,7 @@ from pathlib import Path
 
 from evaluate_syndication_drafts import DEFAULT_MANIFEST_PATH, frontmatter
 from hashnode_content import HASHNODE_CONTENT_PROFILE, hashnode_automod_risks
+from publication_history import specific_permalink
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,13 +57,16 @@ def validate_draft(draft: dict[str, object], project_root: Path = ROOT) -> None:
         raise SyndicationValidationError(f"{topic_id} has unsupported syndication status: {status}")
     if optional_int(draft, "retry_count") < 0:
         raise SyndicationValidationError(f"{topic_id} has negative retry_count")
-    if platform == "medium" and status != "draft":
-        raise SyndicationValidationError(f"{topic_id} Medium is export-only and must remain draft")
+    remote_posted = platform == "medium" and status == "posted" and specific_permalink("medium", draft.get("posted_url"))
+    if platform == "medium" and status != "draft" and not remote_posted:
+        raise SyndicationValidationError(f"{topic_id} Medium requires a remote_browser draft or posted history with a specific permalink")
     if not canonical_url.startswith(("http://", "https://")):
         raise SyndicationValidationError(f"{topic_id} has invalid canonical_url: {canonical_url}")
     if not draft_path.exists():
         raise SyndicationValidationError(f"{topic_id} draft does not exist: {draft_path}")
     content = draft_path.read_text(encoding="utf-8")
+    if remote_posted:
+        return  # Preserve already published remote copy; new-draft rules cannot rewrite history.
     metadata = frontmatter(content)
     if platform != "medium" and metadata.get("canonical_url") != canonical_url:
         raise SyndicationValidationError(f"{topic_id} canonical frontmatter mismatch: {draft_path}")

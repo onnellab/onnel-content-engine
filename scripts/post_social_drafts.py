@@ -21,6 +21,7 @@ from zoneinfo import ZoneInfo
 
 from approve_social_post import project_root_for_manifest, write_manifest
 from publishing_adapters import AdapterError, require_adapter_ready
+from publication_history import REMOTE_BROWSER_PLATFORMS, publication_history, publication_key
 from topic_management import TopicError, _require_current_published_topic
 from validate_social_posts import DEFAULT_MANIFEST_PATH, SocialValidationError, validate_social_posts
 
@@ -66,6 +67,7 @@ def approved_posts(manifest: dict[str, object], platform: str | None = None) -> 
         for post in posts
         if isinstance(post, dict)
         and post.get("status") == "approved"
+        and not post.get("posted_url")
         and (platform is None or post.get("platform") == platform)
     ]
     seen: set[tuple[object, object, object, object]] = set()
@@ -353,12 +355,15 @@ def post_social_drafts(
     verbose: bool = False,
     now: datetime | None = None,
 ) -> list[dict[str, object]]:
+    if not dry_run and adapter in REMOTE_BROWSER_PLATFORMS:
+        raise SocialPostingError(f"{adapter} uses remote_browser publication; API posting is disabled")
     project_root = project_root_for_manifest(manifest_path)
     validate_social_posts(manifest_path, project_root)
     manifest = load_manifest(manifest_path)
     if adapter != "mock" and platform is None and adapter in {"bluesky", "x", "linkedin"}:
         platform = adapter
-    posts = approved_posts(manifest, platform)
+    history = publication_history(project_root)
+    posts = [post for post in approved_posts(manifest, platform) if publication_key(post) not in history]
     for post in posts:
         try:
             _require_current_published_topic(project_root, post)

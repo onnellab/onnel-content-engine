@@ -58,6 +58,7 @@ def approved_drafts(manifest: dict[str, object], platform: str | None = None) ->
         for draft in drafts
         if isinstance(draft, dict)
         and draft.get("status") == "approved"
+        and not draft.get("posted_url")
         and draft.get("platform") != "medium"
         and (platform is None or draft.get("platform") == platform)
     ]

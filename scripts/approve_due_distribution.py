@@ -25,7 +25,7 @@ from validate_syndication_drafts import validate_syndication_drafts
 KST = ZoneInfo("Asia/Seoul")
 DEFAULT_APPROVED_BY = "automation"
 AUTOMATION_LANGUAGES = {"en"}
-SOCIAL_DELAYS_DAYS = {"x": 0, "bluesky": 1}
+SOCIAL_DELAYS_DAYS = {"bluesky": 1}
 SYNDICATION_DELAYS_DAYS = {"devto": 2}
 
 
@@ -105,7 +105,7 @@ def approve_due_social(
             continue
         if post.get("is_variant") is True or post.get("template_id") != platform:
             continue
-        if post.get("status") != "draft":
+        if post.get("status") != "draft" or post.get("posted_url"):
             continue
         if not is_due(topic, SOCIAL_DELAYS_DAYS[platform], now):
             continue
@@ -140,7 +140,7 @@ def approve_due_syndication(
             continue
         if draft.get("language") not in AUTOMATION_LANGUAGES:
             continue
-        if draft.get("status") != "draft":
+        if draft.get("status") != "draft" or draft.get("posted_url"):
             continue
         if not is_due(topic, SYNDICATION_DELAYS_DAYS[platform], now):
             continue

@@ -128,6 +128,40 @@ class MarkdownGenerationTest(unittest.TestCase):
                 legacy_topics_path=self.mirror_path,
             )
 
+    def test_generates_drafts_for_newly_released_registered_apps(self) -> None:
+        with (ROOT / "data" / "apps_registry.csv").open(encoding="utf-8", newline="") as handle:
+            apps = {row["app_name"]: row for row in csv.DictReader(handle)}
+        with self.apps_path.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=APP_HEADER, lineterminator="\n")
+            writer.writeheader()
+            writer.writerows(apps.values())
+        for name, category, description in (
+            ("Melivra", "music", "offline music player"),
+            ("Papira", "reading", "offline ebook maker"),
+        ):
+            with self.subTest(app=name):
+                app = apps[name]
+                self.assertEqual(app["primary_category"], category)
+                fields = topic_fields()
+                fields.update(related_apps=name, category=category, slug=f"workflow-{app['slug']}")
+                topic = self.store.add(fields)
+                self.store.approve(topic["id"])
+                path = generate_markdown(
+                    topic["id"], topics_path=self.topics_path, apps_path=self.apps_path,
+                    template_path=self.template_path, output_root=self.output_root,
+                    legacy_topics_path=self.mirror_path,
+                )
+                content = path.read_text(encoding="utf-8")
+                self.assertIn(f"[{name}]({app['official_site_path']})", content)
+                self.assertIn(description, content)
+                self.assertIn("Publication constraints:", content)
+                if name == "Melivra":
+                    self.assertIn("Public recommendation is Android only", content)
+                    self.assertIn("iOS remains in review", content)
+                else:
+                    self.assertIn("Public recommendation is iOS only", content)
+                    self.assertIn("Android public availability remains unconfirmed", content)
+
     def test_rejects_ineligible_related_app(self) -> None:
         APP_ROWS[0]["content_eligible"] = "false"
         try:

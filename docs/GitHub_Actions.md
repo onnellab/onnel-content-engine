@@ -411,19 +411,19 @@ The fail-closed supply gate requires every published English article to have dis
 Core automated cadence:
 
 ```text
-Day 0: canonical ONNELLAB article + X
+Day 0: canonical ONNELLAB article; X through the remote browser queue
 Day 1: Bluesky
 Day 2: Dev.to
-Day 3: next canonical ONNELLAB article + X
+Day 3: next canonical ONNELLAB article
 ```
 
 Only English primary drafts are automatically approved.
 
-LinkedIn remains manual.
+X, LinkedIn, and Medium use the remote browser queue and publication receipts, not the core API worker.
 
 Hashnode distribution is disabled. Do not generate, queue, approve, publish, retry, or schedule Hashnode drafts. Historical publication records may remain as audit evidence only.
 
-Medium remains disabled.
+Receipt presence prevents regeneration and reposting. Legacy completion records with only profile URLs remain blocked for reconciliation; they are not proof of a specific published post.
 
 ---
 
@@ -435,7 +435,9 @@ Idea and bilingual article preparation runs locally so it can use `codex login` 
 scripts/run_codex_content_supply.sh
 ```
 
-The runner pulls `main`, exits without invoking Codex when at least one qualified English/Korean pair and eight ideas already exist, and otherwise asks Codex to complete a qualified bilingual pair and replenish the idea backlog. It validates content, restricts changed paths, commits, and pushes. The GitHub publishing workflow then schedules/publishes the canonical pair and creates all downstream media drafts.
+The runner reads the installed checkout's origin and clones its latest `main` into an isolated temporary directory. It never pulls or edits the installed checkout, which may contain personal changes. It checks the 10 GiB free-space floor and records preflight failures in `/tmp/onnel-content-supply-runs`. It exits without invoking Codex when at least one currently qualified English/Korean pair and eight ideas already exist. Qualification uses the same fingerprint and mandatory-check validation as publication, including scheduled pairs.
+
+Otherwise, the runner requires a ChatGPT subscription login and asks Codex to complete a qualified bilingual pair and replenish the idea backlog. It rejects changes to existing published, scheduled, or archived records and assets, validates the pair and eight-idea backlog, restricts changed paths, then commits and pushes. A concurrent remote update fails safely instead of rebasing already-validated content. The GitHub publishing workflow separately schedules/publishes the canonical pair and creates downstream drafts. Installing or activating a scheduler and deploying runner changes are separate operational actions; editing this script does not repair an already-installed stale checkout.
 
 On Windows with WSL, install or refresh the durable scheduled task with:
 
@@ -498,9 +500,6 @@ scripts/post_core_distribution.py
 Required GitHub Actions secrets:
 
 ```text
-X_CLIENT_ID
-X_CLIENT_SECRET
-X_REFRESH_TOKEN
 BLUESKY_HANDLE
 BLUESKY_APP_PASSWORD
 DEVTO_API_KEY
@@ -513,7 +512,7 @@ generated/social/manifest.json
 generated/syndication/manifest.json
 ```
 
-The core distribution posting script attempts X, Bluesky, and Dev.to independently. If one platform fails, the remaining platforms are still attempted and the failed manifest item records its error state before the workflow fails.
+The core distribution posting script attempts Bluesky and Dev.to independently. X API posting and token rotation are not part of this workflow. If one platform fails, the remaining platforms are still attempted and the failed manifest item records its error state before the workflow fails.
 
 ---
 

@@ -88,6 +88,8 @@ def product_section(topic: dict[str, str], apps: dict[str, dict[str, str]]) -> s
         if app["status"] not in {"released", "beta"} or app["content_eligible"] != "true" or not app["official_site_path"]:
             raise MarkdownGenerationError(f"{app_name} is not eligible for public recommendation")
         lines.append(f"- [{app_name}]({app['official_site_path']}): {app['one_line_description']}")
+        if app.get("notes", "").strip():
+            lines.append(f"  Publication constraints: {app['notes'].strip()}")
     lines.append("Explain the specific task the application supports, and keep the educational answer useful without it.")
     return "\n".join(lines)
 
