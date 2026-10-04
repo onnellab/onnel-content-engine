@@ -11,6 +11,7 @@ from pathlib import Path
 import platform as host_platform
 import shutil
 import subprocess
+import sys
 import uuid
 from urllib.parse import urlencode
 from urllib.request import urlopen
@@ -83,6 +84,8 @@ def _existing_parent(path):
 def preflight(config, selected, *, assets, state, projects, browser, recording_platform):
     """Local read-only checks; no installs, render, emulator startup or OAuth."""
     blockers = []
+    if host_platform.system() == 'Windows' and sys.version_info < (3, 13):
+        blockers.append('windows_python_3_13_or_newer_required')
     try:
         ZoneInfo('Asia/Seoul')
     except ZoneInfoNotFoundError:

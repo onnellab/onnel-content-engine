@@ -79,6 +79,14 @@ or proof that a recurring task is healthy.
 
 ## Safe operator checks
 
+The native Windows worker requires Python **3.13 or newer**; local native
+verification uses **3.14**, which is also the portable-worker CI version.
+Python only started honoring Windows `mkdir(mode=0o700)` in 3.13, so older
+interpreters cannot supply the private-directory creation behavior this worker
+requires ([Python `os.mkdir` documentation](https://docs.python.org/3/library/os.html#os.mkdir)).
+Preflight blocks older Windows interpreters. The independent read-only ACL
+checks remain mandatory; upgrading Python does not repair existing permissions.
+
 Install the pinned runtime requirements into the worker's dedicated Python
 environment with `python -m pip install -r requirements-short-video.txt`.
 Windows requires the `tzdata` IANA database for `ZoneInfo("Asia/Seoul")` and

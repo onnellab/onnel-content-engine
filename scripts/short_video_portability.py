@@ -13,6 +13,7 @@ from pathlib import Path
 import queue
 import signal
 import subprocess
+import sys
 import threading
 
 if os.name == 'nt':
@@ -129,7 +130,9 @@ def sync_directory(path):
 def spawn_owned(argv, **kwargs):
     """Start a hidden Windows job or a POSIX session, with no shell."""
     if os.name != 'nt':
-        return subprocess.Popen(argv, start_new_session=True, **kwargs)
+        proc = subprocess.Popen(argv, start_new_session=True, **kwargs)
+        proc._short_video_pgid = proc.pid
+        return proc
     job = _create_job(None, None)
     if not job:
         raise ctypes.WinError(ctypes.get_last_error())
@@ -157,6 +160,46 @@ def spawn_owned(argv, **kwargs):
         raise
 
 
+def _darwin_group_finished(proc):
+    """Confirm Darwin's zombie-only-group EPERM without ignoring live failures.
+
+    XNU killpg1 skips zombies and can return EPERM when none remain signalable.
+    Inspect only the recorded group, after reaping our direct child; any unknown
+    output or live member leaves the original permission error intact.
+    """
+    if sys.platform != 'darwin' or getattr(proc, '_short_video_pgid', None) != proc.pid:
+        return False
+    if proc.poll() is None:
+        return False
+    try:
+        result = subprocess.run(
+            ['/bin/ps', '-x', '-o', 'pid=,pgid=,stat=', '-g', str(proc.pid)],
+            stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=2,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    if result.returncode not in (0, 1) or result.stderr.strip():
+        return False
+    for line in result.stdout.splitlines():
+        fields = line.split()
+        if (len(fields) != 3 or not fields[0].isdigit() or int(fields[0]) <= 0
+                or fields[1] != str(proc.pid) or not fields[2].startswith('Z')):
+            return False
+    return True
+
+
+def _signal_owned_group(proc, signum):
+    try:
+        os.killpg(proc.pid, signum)
+        return True
+    except ProcessLookupError:
+        return False
+    except PermissionError as exc:
+        if exc.errno == errno.EPERM and _darwin_group_finished(proc):
+            return False
+        raise
+
+
 def stop_owned(proc, *, interrupt=False, grace=5):
     """Clean only the invocation's job/session, even if its direct child exited."""
     if proc is None:
@@ -174,18 +217,15 @@ def stop_owned(proc, *, interrupt=False, grace=5):
         proc.wait(timeout=10)
         proc._short_video_stopped = True
         return
-    try:
-        os.killpg(proc.pid, signal.SIGINT if interrupt else signal.SIGTERM)
-    except ProcessLookupError:
-        pass
+    if not _signal_owned_group(proc, signal.SIGINT if interrupt else signal.SIGTERM):
+        proc.wait(timeout=grace)
+        proc._short_video_stopped = True
+        return
     try:
         proc.wait(timeout=grace)
     except subprocess.TimeoutExpired:
         pass
-    try:
-        os.killpg(proc.pid, signal.SIGKILL)
-    except ProcessLookupError:
-        pass
+    _signal_owned_group(proc, signal.SIGKILL)
     proc.wait()
     proc._short_video_stopped = True
 

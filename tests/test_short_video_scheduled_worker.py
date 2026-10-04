@@ -19,6 +19,19 @@ CHANNEL = 'UC' + 'a' * 22
 
 
 class ScheduledWorkerTests(unittest.TestCase):
+    def test_windows_preflight_requires_python_with_private_directory_creation(self):
+        for version, blocked in (((3, 12, 12), True), ((3, 13, 0), False), ((3, 14, 0), False)):
+            with self.subTest(version=version), \
+                    patch.object(worker.sys, 'version_info', version), \
+                    patch.object(worker.host_platform, 'system', return_value='Windows'), \
+                    patch.object(worker, 'check_config', return_value={'configured': False}), \
+                    patch.object(worker, 'private_path_permissions', return_value=True), \
+                    patch.object(worker.subprocess, 'run') as process:
+                blockers = worker.preflight({}, None, assets=Path('.'), state=Path('.'),
+                    projects=Path('.'), browser=None, recording_platform='android_emulator')
+            self.assertEqual(blocked, 'windows_python_3_13_or_newer_required' in blockers)
+            process.assert_not_called()
+
     def test_all_six_templates_make_valid_deterministic_briefs(self):
         scenarios = worker.load_scenarios()
         self.assertEqual(6, len(worker.templates()))

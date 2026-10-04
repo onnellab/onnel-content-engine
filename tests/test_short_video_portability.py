@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import json
+import errno
 import os
 from pathlib import Path
 import subprocess
+import signal
 import sys
 import tempfile
 import time
@@ -83,6 +85,78 @@ class ShortVideoPortabilityTests(unittest.TestCase):
         atomic_json(path, {'version': 2})
         self.assertEqual({'version': 2}, json.loads(path.read_text()))
         self.assertEqual([], list(self.root.glob('.write-*')))
+
+    @unittest.skipIf(os.name == 'nt', 'POSIX process-group cleanup')
+    def test_darwin_eperm_requires_owned_reaped_child_and_no_live_group_members(self):
+        for members in ('', '4322 4321 Z\n'):
+            with self.subTest(members=members):
+                proc = Mock(pid=4321, _short_video_pgid=4321, _short_video_stopped=False)
+                proc.poll.return_value = 0
+                status = subprocess.CompletedProcess([], 0, stdout=members, stderr='')
+                with patch('short_video_portability.sys.platform', 'darwin'), \
+                        patch('short_video_portability.os.killpg', side_effect=PermissionError(errno.EPERM, 'finished')) as kill, \
+                        patch('short_video_portability.subprocess.run', return_value=status) as inspect:
+                    stop_owned(proc)
+                    stop_owned(proc)
+                self.assertTrue(proc._short_video_stopped)
+                kill.assert_called_once_with(4321, signal.SIGTERM)
+                self.assertEqual(['/bin/ps', '-x', '-o', 'pid=,pgid=,stat=', '-g', '4321'], inspect.call_args.args[0])
+
+    @unittest.skipIf(os.name == 'nt', 'POSIX process-group cleanup')
+    def test_darwin_eperm_after_term_does_not_fail_successful_cleanup(self):
+        proc = Mock(pid=4321, _short_video_pgid=4321, _short_video_stopped=False)
+        proc.poll.return_value = 0
+        status = subprocess.CompletedProcess([], 0, stdout='4322 4321 Z\n', stderr='')
+        with patch('short_video_portability.sys.platform', 'darwin'), \
+                patch('short_video_portability.os.killpg', side_effect=[None, PermissionError(errno.EPERM, 'finished')]) as kill, \
+                patch('short_video_portability.subprocess.run', return_value=status):
+            stop_owned(proc)
+        self.assertEqual([(4321, signal.SIGTERM), (4321, signal.SIGKILL)], [call.args for call in kill.call_args_list])
+        self.assertTrue(proc._short_video_stopped)
+
+    @unittest.skipIf(os.name == 'nt', 'POSIX process-group cleanup')
+    def test_posix_permission_failures_stay_errors_for_live_or_unproven_groups(self):
+        cases = [
+            ('darwin', 4321, None, '', 0, errno.EPERM),
+            ('darwin', 9999, 0, '', 0, errno.EPERM),
+            ('darwin', 4321, 0, '4322 4321 S\n', 0, errno.EPERM),
+            ('darwin', 4321, 0, '4322 9999 Z\n', 0, errno.EPERM),
+            ('darwin', 4321, 0, 'malformed', 0, errno.EPERM),
+            ('darwin', 4321, 0, '', 2, errno.EPERM),
+            ('darwin', 4321, 0, '', 0, errno.EACCES),
+            ('linux', 4321, 0, '', 0, errno.EPERM),
+        ]
+        for platform, group, returncode, members, ps_code, error in cases:
+            with self.subTest(case=(platform, group, returncode, members, ps_code, error)):
+                proc = Mock(pid=4321, _short_video_pgid=group, _short_video_stopped=False)
+                proc.poll.return_value = returncode
+                status = subprocess.CompletedProcess([], ps_code, stdout=members, stderr='')
+                with patch('short_video_portability.sys.platform', platform), \
+                        patch('short_video_portability.os.killpg', side_effect=PermissionError(error, 'denied')) as kill, \
+                        patch('short_video_portability.subprocess.run', return_value=status):
+                    with self.assertRaises(PermissionError):
+                        stop_owned(proc)
+                self.assertFalse(proc._short_video_stopped)
+                kill.assert_called_once_with(4321, signal.SIGTERM)
+
+    @unittest.skipIf(os.name == 'nt', 'POSIX process-group cleanup')
+    def test_darwin_eperm_is_not_ignored_when_group_inspection_fails(self):
+        failures = (OSError('ps unavailable'), subprocess.TimeoutExpired('ps', 2),
+                    subprocess.CompletedProcess([], 1, stdout='', stderr='ps: cannot inspect group'))
+        for result in failures:
+            with self.subTest(failure=type(result).__name__):
+                proc = Mock(pid=4321, _short_video_pgid=4321, _short_video_stopped=False)
+                proc.poll.return_value = 0
+                with patch('short_video_portability.sys.platform', 'darwin'), \
+                        patch('short_video_portability.os.killpg', side_effect=PermissionError(errno.EPERM, 'denied')), \
+                        patch('short_video_portability.subprocess.run') as inspect:
+                    if isinstance(result, Exception):
+                        inspect.side_effect = result
+                    else:
+                        inspect.return_value = result
+                    with self.assertRaises(PermissionError):
+                        stop_owned(proc)
+                self.assertFalse(proc._short_video_stopped)
 
     def test_lock_file_symlinks_are_rejected(self):
         destination = self.root / 'real'
