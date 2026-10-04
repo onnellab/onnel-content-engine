@@ -1983,6 +1983,11 @@ def deploy_github_pages(
     run_homepage_command(["git", "pull", "--rebase", "origin", branch], homepage_repo)
     exports = export_markdown_to_homepage(topics_path, homepage_repo, dry_run=False)
     exports.extend(export_privacy_pages_to_homepage(site_dir, topics_path, homepage_repo, dry_run=False))
+    package_path = homepage_repo / "package.json"
+    if package_path.exists():
+        package = json.loads(package_path.read_text(encoding="utf-8"))
+        if package.get("scripts", {}).get("check:i18n-quality"):
+            run_homepage_command(["npm", "run", "check:i18n-quality"], homepage_repo)
     run_homepage_command(["npm", "run", "build"], homepage_repo)
     run_homepage_command(
         ["git", "add", "src/content/blog", "public/blog-assets", "public/apps", *[f"public/{name}" for name in FAVICON_ASSET_NAMES]],

@@ -157,3 +157,34 @@ actual-data offline dry-run passed without network attempts. All 494 protected
 generated/topic files had identical before/after SHA256 values. Supply gate
 confirms one qualified bilingual pair and eight ideas. Independent review found
 no blocking issues.
+
+
+## Verified publication and scheduler restoration
+
+- `1e200556` passed all three remote unit-test matrix jobs (Ubuntu Python 3.12 /
+  3.14, macOS Python 3.14) and workflow lint.
+- Existing Windows supply task is enabled/Ready, next run 2026-10-05 06:00 KST.
+  Its historical Task Scheduler result still refers to the old failed 06:00 run;
+  the repaired runner was manually verified separately. A second installed-runner
+  check exited 0 with healthy supply and no Codex usage.
+- Existing Mac automation is ACTIVE with the corrected prompt and unchanged
+  daily 09:00 recurrence. Browser posting remains blocked by unavailable
+  interactive tools/disabled Apple Events JavaScript; security settings unchanged.
+- Authorized content-only run `37171453259` succeeded. All five live app-release
+  steps were skipped. TOPIC-0033/0034 became published at
+  2026-10-04T11:34:40+09:00 (`0ad404ae`); status report commit is `83944bd5`.
+- Both public URLs returned HTTP 200 with the correct title, Papira body, and
+  official iOS link: `/blog/en/prepare-txt-manuscript-for-epub/` and
+  `/blog/ko/prepare-txt-manuscript-for-epub/` on https://onnellab.com.
+- This run posted zero Bluesky and zero Dev.to items; no new remote-browser
+  publications were verified. Manual state and remote receipt inbox are unchanged.
+  Every previously populated manifest posted_url is preserved.
+- Due browser backlog after receipt join: X TOPIC-0033; LinkedIn TOPIC-0015;
+  Medium TOPIC-0009 and TOPIC-0012. Eleven other remote-browser items remain future.
+  Existing X dates October 6/10/14 are preserved. Hashnode remains excluded.
+- The published pair consumes the current ready buffer; eight ideas remain and
+  the resumed daily supplier will replenish it. This is not a failed supply run.
+- Homepage deployment succeeded, but its separate localization check found an
+  old Korean article image_specs value overwritten by stale engine metadata.
+  The follow-up restores the prior Korean metadata and validates localization
+  before any future homepage push; article body and canonical URL are unchanged.
