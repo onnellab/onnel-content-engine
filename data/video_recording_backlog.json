@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "purpose": "Planning evidence only; entries are not executable recording scenarios or production-ready footage.",
+  "checked_on": "2026-10-04",
+  "candidates": [
+    {
+      "app_id": "APP-0007",
+      "app_name": "Melivra",
+      "public_platform": "android",
+      "recording_platform": "android_emulator",
+      "repository": "onnellab/melivra",
+      "intent": "Show browsing a local audio library and playing an owned audio file through the ordinary app UI.",
+      "product_evidence": "sources/melivra/README.md",
+      "release_evidence": "data/store_versions.csv",
+      "status": "blocked",
+      "production_eligible": false,
+      "blockers": [
+        "No verified production capture harness or VIDEO_STEP markers in the inspected local integration_test tree.",
+        "The inspected app_flow_bench_test.dart and queue_sheet_harness_test.dart inject benchmark library/playback repositories and synthetic tracks; they are not production recording evidence.",
+        "Local checkout HEAD 75502e11 is dated 2026-08-11; inspect current authoritative source before designing or registering a capture target."
+      ],
+      "completion_requires": [
+        "An actual tracked integration capture test using rights-cleared audio and real app behavior, with verified start/end markers.",
+        "A successful managed Android emulator recording and production provenance checks before scenario eligibility."
+      ],
+      "topic_id": "TOPIC-0043",
+      "topic_status": "idea"
+    },
+    {
+      "app_id": "APP-0008",
+      "app_name": "Papira",
+      "public_platform": "ios",
+      "recording_platform": "ios_simulator",
+      "repository": "onnellab/papira",
+      "topic_id": "TOPIC-0033",
+      "intent": "Show assembling a finished TXT manuscript with book metadata and a table of contents into an EPUB export.",
+      "product_evidence": "sources/papira/README.md",
+      "release_evidence": "data/store_versions.csv",
+      "status": "blocked",
+      "production_eligible": false,
+      "blockers": [
+        "No usable Papira checkout or integration capture target was found on N: C:/dev/projects/papira contains only NUL; local_repositories.csv has no Papira mapping.",
+        "The inspected Windows and WSL onnellab-text trees have no Papira subproject; do not invent a project_subdir or test target.",
+        "The recorder requires xcrun simctl for iOS, which is unavailable on N Windows/WSL. No Mac access is authorized for this recovery scope.",
+        "Android public availability is unconfirmed and cannot substitute for the verified iOS release."
+      ],
+      "completion_requires": [
+        "Inspect the authoritative Papira source and implement or identify a real tracked capture harness with verified markers.",
+        "An explicitly authorized iOS-capable execution environment and successful managed capture before scenario eligibility."
+      ]
+    }
+  ]
+}

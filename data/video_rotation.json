@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "enabled": false,
+  "repository": "onnellab/onnel-content-engine",
+  "branch": "shorts-coordination-state",
+  "path": "shorts/ledger.json",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "owner_id": "windows-n",
+  "platform": "android_emulator",
+  "legacy_writer_fencing": {
+    "confirmed": false,
+    "evidence": ""
+  }
+}

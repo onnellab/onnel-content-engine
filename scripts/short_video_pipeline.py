@@ -4,7 +4,6 @@ from __future__ import annotations
 from contextlib import contextmanager
 import csv
 from datetime import datetime, timezone
-import fcntl
 import hashlib
 import json
 import math
@@ -12,10 +11,11 @@ import os
 from pathlib import Path
 import re
 import shutil
-import signal
 import subprocess
 import tempfile
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+
+from short_video_portability import exclusive_file_lock, spawn_owned, stop_owned, sync_directory
 
 ROOT = Path(__file__).resolve().parents[1]
 MAX_BRIEF = 65536
@@ -99,18 +99,13 @@ def atomic_json(path, value):
 
 
 def fsync_dir(path):
-    fd = os.open(path, os.O_RDONLY)
-    try:
-        os.fsync(fd)
-    finally:
-        os.close(fd)
+    sync_directory(path)
 
 
 def run_process(argv, timeout=60, env=None):
     """No shell, limited output, owned process group cleanup including descendants."""
     with tempfile.TemporaryFile() as out, tempfile.TemporaryFile() as err:
-        proc = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=out, stderr=err,
-                                env=env, start_new_session=True)
+        proc = spawn_owned(argv, stdin=subprocess.DEVNULL, stdout=out, stderr=err, env=env)
         try:
             proc.wait(timeout=timeout)
             if proc.returncode:
@@ -123,20 +118,7 @@ def run_process(argv, timeout=60, env=None):
         except subprocess.TimeoutExpired as exc:
             raise VideoError('Local process timed out') from exc
         finally:
-            # Only this invocation's session; never global browser/ffmpeg cleanup.
-            try:
-                os.killpg(proc.pid, signal.SIGTERM)
-            except ProcessLookupError:
-                pass
-            try:
-                proc.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                pass
-            try:
-                os.killpg(proc.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
-            proc.wait()
+            stop_owned(proc)
 
 
 def probe(path):
@@ -214,7 +196,8 @@ def caption_text(text):
             raise VideoError('Video copy line is unreadably long or contains control characters')
 
 
-def product_snapshot(app):
+def product_snapshot(app, store_versions_path=None):
+    from video_product_eligibility import public_video_platforms
     try:
         if app['status'] != 'released' or app['content_eligible'] != 'true':
             raise VideoError('Only released, content-eligible apps may be promoted')
@@ -225,6 +208,9 @@ def product_snapshot(app):
         platforms = [item for item in ALLOWED_VIDEO_PLATFORMS if item in raw_platforms]
         if not platforms or set(raw_platforms) != set(platforms):
             raise VideoError('Unsupported app platform set in registry')
+        platforms = public_video_platforms(app, store_versions_path or ROOT / 'data/store_versions.csv')
+        if not platforms:
+            raise VideoError('No confirmed public store platform for video promotion')
         return {'app_name': name, 'platforms': platforms}
     except KeyError as exc:
         raise VideoError('Incomplete app registry row') from exc
@@ -282,7 +268,7 @@ class Queue:
             app, topic = apps.get(brief['app_id']), topics.get(brief['topic_id'])
             if not app or not topic:
                 raise VideoError('Unknown app or source topic')
-            product = product_snapshot(app)
+            product = product_snapshot(app, self.registry / 'store_versions.csv')
             if topic['status'] == 'archived' or app['app_name'] not in topic['related_apps'].split('|'):
                 raise VideoError('Source topic must be active and reference this app')
             assets = {}
@@ -310,15 +296,11 @@ class Queue:
         os.chmod(self.root, 0o700)
         self._private_structure()
         path = self.root / '.lock'
-        fd = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
         try:
-            try:
-                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except BlockingIOError as exc:
-                raise VideoError('Another queue operation/worker is active') from exc
-            yield
-        finally:
-            os.close(fd)
+            with exclusive_file_lock(path):
+                yield
+        except BlockingIOError as exc:
+            raise VideoError('Another queue operation/worker is active') from exc
 
     def _read(self):
         self._private_structure()
@@ -494,6 +476,10 @@ class Queue:
         # No credentials, model settings or arbitrary host env forwarded to Node/browser.
         env = {'PATH': os.environ.get('PATH', '/usr/bin:/bin'), 'HOME': str(target),
                'TMPDIR': str(target), 'LANG': 'en_US.UTF-8', 'NODE_ENV': 'production'}
+        if os.name == 'nt':
+            env.update(TEMP=str(target), TMP=str(target))
+            if os.environ.get('SystemRoot'):
+                env['SystemRoot'] = os.environ['SystemRoot']
         run_process(['node', str(ROOT / 'video/render.mjs'), str(target / 'request.json')], timeout=960, env=env)
         (target / 'request.json').unlink()
 
@@ -553,6 +539,7 @@ class Queue:
 
     def _render_key(self, job):
         files = [ROOT / 'video/package-lock.json', ROOT / 'video/render.mjs', ROOT / 'video/tsconfig.json', Path(__file__)]
+        files.append(Path(__file__).with_name('short_video_portability.py'))
         files += sorted((ROOT / 'video/src').rglob('*'))
         return digest({'payload': job['payload_hash'], 'renderer': {str(p.relative_to(ROOT)): file_hash(p) for p in files if p.is_file()}})
 

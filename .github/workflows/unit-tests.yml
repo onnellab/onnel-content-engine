@@ -11,6 +11,7 @@ on:
       - 'data/store_versions.csv'
       - 'data/topics.csv'
       - 'requirements-test.txt'
+      - 'requirements-short-video.txt'
       - '.github/workflows/**'
   pull_request:
     paths:
@@ -22,6 +23,7 @@ on:
       - 'data/store_versions.csv'
       - 'data/topics.csv'
       - 'requirements-test.txt'
+      - 'requirements-short-video.txt'
       - '.github/workflows/**'
   workflow_dispatch:
 permissions:

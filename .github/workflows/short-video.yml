@@ -2,9 +2,9 @@ name: Isolated short-video checks
 on:
   push:
     branches: [main]
-    paths: ['video/**', 'scripts/short_video*.py', 'tests/test_short_video*.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', '.github/workflows/short-video.yml']
+    paths: ['video/**', 'requirements-test.txt', 'requirements-short-video.txt', 'scripts/short_video*.py', 'scripts/video_product_eligibility.py', 'tests/test_short_video*.py', 'tests/test_video_product_eligibility.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', 'data/video_recording_backlog.json', 'data/video_rotation.json', 'data/video_script_templates.json', '.github/workflows/short-video.yml']
   pull_request:
-    paths: ['video/**', 'scripts/short_video*.py', 'tests/test_short_video*.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', '.github/workflows/short-video.yml']
+    paths: ['video/**', 'requirements-test.txt', 'requirements-short-video.txt', 'scripts/short_video*.py', 'scripts/video_product_eligibility.py', 'tests/test_short_video*.py', 'tests/test_video_product_eligibility.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', 'data/video_recording_backlog.json', 'data/video_rotation.json', 'data/video_script_templates.json', '.github/workflows/short-video.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -29,4 +29,27 @@ jobs:
       - run: npm --prefix video run typecheck
       - run: npm --prefix video test
       - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video*.py'
+      - run: git diff --exit-code
+
+  portable-worker:
+    name: Portable Shorts control (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-test.txt
+      - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video_portability.py'
+      - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video_private_permissions.py'
+      - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video_coordinator.py'
+      - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video_scheduled_worker.py'
+      - run: python -B scripts/run_unit_tests.py --pattern 'test_video_product_eligibility.py'
       - run: git diff --exit-code

@@ -10,6 +10,7 @@ from urllib.error import HTTPError, URLError
 
 from short_video_pipeline import VideoError, atomic_json, canonical, digest, file_hash, load_json, MAX_ASSET
 from short_video_credentials import CredentialError, resolve_credentials, credential_status
+from short_video_private_permissions import private_path_permissions
 from youtube_profiles import profile_id, require_content_profile, content_profile
 
 NAMES = ('YOUTUBE_CLIENT_ID', 'YOUTUBE_CLIENT_SECRET', 'YOUTUBE_REFRESH_TOKEN', 'YOUTUBE_CHANNEL_ID')
@@ -286,6 +287,9 @@ class Uploader:
                 raise UploadError('approval_metadata_changed')
             if not upload and job['status'] not in {'rendered', 'blocked'}:
                 raise UploadError('complete_render_required')
+            if not upload and not all(private_path_permissions(folder) for folder in
+                                      (self.q.root, session_path.parent)):
+                raise UploadError('unsafe_session_parent_permissions')
             api = api or self.api_factory()
             require_content_profile(job['brief'], getattr(api, 'profile', 'onnellab'))
             if not api.token:
@@ -308,7 +312,7 @@ class Uploader:
                 save()
             if session_path.is_symlink() or not session_path.is_file():
                 raise UploadError('manual_reconcile_required')
-            if session_path.stat().st_mode & 0o077:
+            if not private_path_permissions(session_path):
                 raise UploadError('unsafe_session_permissions')
             url = session_url(load_json(session_path)['url'])
             if path.stat().st_size != upload['size'] or file_hash(path) != upload['sha256']:

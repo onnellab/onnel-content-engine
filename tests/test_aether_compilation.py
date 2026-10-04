@@ -10,7 +10,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from short_video_pipeline import VideoError,file_hash
 from short_video_youtube import metadata,UploadError
 from aether_compose import checked_asset,render
-from aether_compilation import worker,brief_for
+from aether_compilation import worker,brief_for,private_job_directory
 from aether_compilation_assets import activate_mybox,approval_template,hash_private_source,source_title,sync as sync_assets
 from aether_planner import plan,read_catalog
 from datetime import datetime,timezone
@@ -138,6 +138,22 @@ class Compilation(unittest.TestCase):
             self.assertNotIn(unapproved['id'],manifest['tracks'])
 
 class DurablePublication(unittest.TestCase):
+    def test_queue_creates_private_job_directory_before_rendering(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);(root/'jobs').mkdir(mode=0o700)
+            folder=private_job_directory(root,'fixture')
+            self.assertTrue(folder.is_dir())
+            self.assertEqual(0,folder.stat().st_mode & 0o077)
+
+    def test_existing_nonprivate_job_directory_is_rejected_without_chmod(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);(root/'jobs').mkdir(mode=0o700)
+            folder=root/'jobs'/'fixture';folder.mkdir(mode=0o755)
+            before=folder.stat().st_mode
+            with self.assertRaisesRegex(VideoError,'aether_unsafe_job_permissions'):
+                private_job_directory(root,'fixture')
+            self.assertEqual(before,folder.stat().st_mode)
+
     def test_repeated_slot_reuses_video_and_does_not_insert_again(self):
         from short_video_pipeline import digest,atomic_json
         import aether_compilation as module
@@ -158,6 +174,8 @@ class DurablePublication(unittest.TestCase):
                 self.thumbnails+=1;return 200,{}, {'items':[{}]}
         api=Provider()
         def renderer(selected,assets,output):
+            self.assertTrue(output.is_dir())
+            self.assertEqual(0,output.stat().st_mode & 0o077)
             output.mkdir(parents=True,exist_ok=True)
             for name in ('video.mp4','thumbnail.jpg'):(output/name).write_bytes(b'unit-fixture-not-real-media')
             return {'test_only':False,'upload_eligible':True,'duration_seconds':1800,'selection_hash':digest(selected),

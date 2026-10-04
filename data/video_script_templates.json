@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "templates": {
+    "quivra-conversion-flow": {"title": "Convert a Media File with Quivra", "hook": "Check the output after conversion", "steps": ["Choose the source file", "Choose the output format", "Convert and inspect the saved file"]},
+    "tagweaver-core-edit-flow": {"title": "Edit Audio Tags with TagWeaver", "hook": "Keep audio metadata consistent", "steps": ["Open the audio file", "Review and edit its tags", "Save and check the result"]},
+    "vaultxt-log-inspection-flow": {"title": "Inspect a Log with VaultXT", "hook": "Read the log before changing the source", "steps": ["Open the text file", "Inspect the relevant lines", "Leave the original unchanged"]},
+    "segra-trim-flow": {"title": "Trim an Audio Recording with Segra", "hook": "Keep the section you need", "steps": ["Open the recording", "Choose the section to keep", "Save the trimmed audio"]},
+    "clipnest-saved-snippet-flow": {"title": "Pin Reusable Text with ClipNest", "hook": "Keep a reusable snippet close", "steps": ["Open saved text history", "Select a reusable snippet", "Pin it for later use"]},
+    "aligna-preview-before-apply": {"title": "Preview File Names with Aligna", "hook": "Check proposed names before applying", "steps": ["Select the files", "Set the naming rule", "Review the preview before applying"]}
+  }
+}

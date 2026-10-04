@@ -24,7 +24,11 @@ class ShortVideoTests(unittest.TestCase):
         self.now = datetime(2026, 9, 21, tzinfo=timezone.utc)
         registry = self.root / 'registry'
         registry.mkdir()
-        (registry / 'apps_registry.csv').write_text('app_id,app_name,status,platforms,content_eligible\nAPP-0003,Fixture,released,ios|android,true\n')
+        (registry / 'apps_registry.csv').write_text('app_id,app_name,status,platforms,content_eligible,app_store_url,play_store_url\nAPP-0003,Fixture,released,ios|android,true,https://apps.apple.com/app/id3,https://play.google.com/store/apps/details?id=fixture\n')
+        (registry / 'store_versions.csv').write_text(
+            'app_id,platform,store_url,version,status\n'
+            'APP-0003,ios,https://apps.apple.com/app/id3,1.0,new\n'
+            'APP-0003,android,https://play.google.com/store/apps/details?id=fixture,1.0,unchanged\n')
         (registry / 'topics.csv').write_text('id,status,related_apps\nTOPIC-0001,active,Fixture\n')
         self.q = Queue(self.root / 'state', self.assets, clock=lambda: self.now, registry_root=registry)
         self.brief = dict(schema_version=1, app_id='APP-0003', topic_id='TOPIC-0001',

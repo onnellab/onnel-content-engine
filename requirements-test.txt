@@ -1,2 +1,4 @@
-# Unit tests use the standard library except workflow-YAML validation.
+# Runtime timezone data is also needed by native Windows tests.
+-r requirements-short-video.txt
+# Workflow-YAML validation.
 PyYAML==6.0.3

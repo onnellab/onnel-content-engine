@@ -1,0 +1,2 @@
+# Windows does not ship the IANA database required by zoneinfo.ZoneInfo.
+tzdata==2026.5; platform_system == "Windows"

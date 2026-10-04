@@ -15,6 +15,7 @@ from aether_compose import prepare, render, validate_output
 from aether_compilation_assets import asset_root_for_manifest
 from aether_planner import THEMES
 from short_video_pipeline import VideoError, atomic_json, digest, file_hash, load_json
+from short_video_private_permissions import private_path_permissions
 from short_video_youtube import YouTube, Uploader, UploadError
 from short_video_credentials import credential_status
 from youtube_report_store import directory
@@ -23,6 +24,15 @@ ROOT=Path.home()/'Library/Application Support/ONNELLAB/content-engine/aether-inn
 POLICY={'version':1,'profile':'aether_inn','kind':'curated_compilation','minimum_seconds':1740,
     'maximum_seconds':1860,'rights_confirmed':True,'quality_previously_accepted':True,'no_new_song_generation':True}
 FINAL={'published','uploaded_private','uploaded_unlisted','forced_private','rejected'}
+
+
+def private_job_directory(root, job_id):
+    """The queue owns session-directory privacy, regardless of the renderer."""
+    folder = Path(root) / 'jobs' / job_id
+    folder.mkdir(mode=0o700, exist_ok=True)
+    if not private_path_permissions(folder):
+        raise VideoError('aether_unsafe_job_permissions')
+    return folder
 
 
 def brief_for(selection):
@@ -132,9 +142,10 @@ def worker(root=ROOT,theme='open_roads',slot=None,*,publish=False,execute=False,
         if publish and not job.get('publish_requested'):
             job['publish_requested']=True;atomic_json(q.state_path,state)
         try:
+            folder=private_job_directory(q.root,job['id'])
             if not job.get('result'):
                 if 'asset_root' not in locals():_,asset_root=manifest_and_root(q)
-                result=render(job['selection'],asset_root,q.root/'jobs'/job['id'])
+                result=render(job['selection'],asset_root,folder)
                 result['job_id']=job['id'];job.update(result=result,status='rendered',upload_eligible=result['upload_eligible'],error=None)
                 atomic_json(q.state_path,state)
             if publish:

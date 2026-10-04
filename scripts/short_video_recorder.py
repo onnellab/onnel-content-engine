@@ -4,7 +4,6 @@ from __future__ import annotations
 from contextlib import contextmanager
 from datetime import datetime, timezone
 import csv
-import fcntl
 import hashlib
 import json
 import os
@@ -12,10 +11,11 @@ from pathlib import Path
 import re
 import select
 import shutil
-import signal
 import subprocess
 import tempfile
 import time
+
+from short_video_portability import exclusive_file_lock, OutputLines, spawn_owned, stop_owned
 
 from short_video_pipeline import (
     ROOT,
@@ -42,20 +42,20 @@ def _run(argv, *, cwd=None, timeout=60, env=None, check=True):
     # a pipe open after the direct child exits, which can deadlock communicate().
     with tempfile.TemporaryFile() as output:
         try:
-            proc = subprocess.Popen(
+            proc = spawn_owned(
                 argv,
                 cwd=cwd,
                 env=env,
                 stdin=subprocess.DEVNULL,
                 stdout=output,
                 stderr=subprocess.STDOUT,
-                start_new_session=True,
             )
             try:
                 proc.wait(timeout=timeout)
             except subprocess.TimeoutExpired as exc:
-                _stop_group(proc, interrupt=False)
                 raise RecordingError('recording_command_timeout') from exc
+            finally:
+                _stop_group(proc, interrupt=False)
         except OSError as exc:
             raise RecordingError('recording_command_failed') from exc
         output.seek(0)
@@ -246,6 +246,7 @@ def scenario_fingerprint(repo, scenario, platform, *, refresh):
         'tracked': tracked,
         'flutter': flutter_version,
         'recorder_sha256': file_hash(Path(__file__)),
+        'process_driver_sha256': file_hash(Path(__file__).with_name('short_video_portability.py')),
     }
     return hashlib.sha256(canonical(material)).hexdigest(), commit
 
@@ -271,15 +272,11 @@ def recording_lock(asset_root):
     root.mkdir(parents=True, exist_ok=True, mode=0o700)
     path = root / 'recordings' / '.recording.lock'
     path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
-    fd = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
     try:
-        try:
-            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as exc:
-            raise RecordingError('another_recording_is_active') from exc
-        yield
-    finally:
-        os.close(fd)
+        with exclusive_file_lock(path):
+            yield
+    except BlockingIOError as exc:
+        raise RecordingError('another_recording_is_active') from exc
 
 
 def _index_path(asset_root):
@@ -413,6 +410,7 @@ def _wait_android_gone(serial, timeout=30):
 @contextmanager
 def android_device(scenario, explicit_serial=None):
     owned = False
+    booted = False
     emulator_proc = None
     serial = explicit_serial or os.environ.get('ONNELLAB_VIDEO_ANDROID_SERIAL')
     if serial:
@@ -437,38 +435,25 @@ def android_device(scenario, explicit_serial=None):
                 raise RecordingError('dedicated_android_emulator_already_running')
         port = _free_android_port()
         serial = f'emulator-{port}'
-        emulator_proc = subprocess.Popen(
+        emulator_proc = spawn_owned(
             [emulator, '-avd', avd, '-port', str(port), '-no-window',
              '-no-audio', '-no-boot-anim', '-no-snapshot-load', '-no-snapshot-save'],
             stdin=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
-            start_new_session=True,
         )
         owned = True
-        _wait_android(serial, proc=emulator_proc)
     try:
+        if owned:
+            _wait_android(serial, proc=emulator_proc)
+            booted = True
         yield serial
     finally:
-        if owned and serial:
-            _run(['adb', '-s', serial, 'emu', 'kill'], timeout=15, check=False)
+        # A port/serial can be reused by a different VM after a boot failure.
+        # Only the invocation's process job/session proves ownership.
         if owned and emulator_proc:
-            try:
-                emulator_proc.wait(timeout=20)
-            except subprocess.TimeoutExpired:
-                try:
-                    os.killpg(emulator_proc.pid, signal.SIGTERM)
-                except ProcessLookupError:
-                    pass
-                try:
-                    emulator_proc.wait(timeout=10)
-                except subprocess.TimeoutExpired:
-                    try:
-                        os.killpg(emulator_proc.pid, signal.SIGKILL)
-                    except ProcessLookupError:
-                        pass
-                    emulator_proc.wait()
-        if owned and serial:
+            _stop_group(emulator_proc, interrupt=False)
+        if owned and booted and serial:
             _wait_android_gone(serial)
 
 
@@ -488,6 +473,8 @@ def _simulator_rows():
 
 @contextmanager
 def ios_device(scenario, explicit_udid=None):
+    if os.name == 'nt':
+        raise RecordingError('ios_simulator_requires_macos')
     owned = False
     udid = explicit_udid or os.environ.get('ONNELLAB_VIDEO_IOS_UDID')
     rows = _simulator_rows()
@@ -517,27 +504,7 @@ def ios_device(scenario, explicit_udid=None):
 
 
 def _stop_group(proc, *, interrupt=True):
-    if not proc or proc.poll() is not None:
-        return
-    try:
-        os.killpg(proc.pid, signal.SIGINT if interrupt else signal.SIGTERM)
-    except ProcessLookupError:
-        return
-    try:
-        proc.wait(timeout=20)
-    except subprocess.TimeoutExpired:
-        try:
-            os.killpg(proc.pid, signal.SIGTERM)
-        except ProcessLookupError:
-            pass
-        try:
-            proc.wait(timeout=10)
-        except subprocess.TimeoutExpired:
-            try:
-                os.killpg(proc.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
-            proc.wait()
+    stop_owned(proc, interrupt=interrupt, grace=20)
 
 
 def _android_remote_alive(serial, remote_pid):
@@ -602,7 +569,7 @@ def _start_android_recording(serial, temp, seconds):
     if _android_screenrecord_pids(serial):
         raise RecordingError('unexpected_existing_screenrecord')
     remote = f'/data/local/tmp/onnellab-record-{os.getpid()}.mp4'
-    proc = subprocess.Popen(
+    proc = spawn_owned(
         [
             'adb', '-s', serial, 'shell', 'screenrecord',
             '--size', ANDROID_RECORD_SIZE,
@@ -614,7 +581,6 @@ def _start_android_recording(serial, temp, seconds):
         stdin=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
-        start_new_session=True,
     )
     deadline = time.monotonic() + 10
     remote_pid = None
@@ -643,6 +609,8 @@ def _finish_android_recording(serial, proc, remote_pid, remote, temp):
     try:
         proc.wait(timeout=20)
     except subprocess.TimeoutExpired:
+        pass
+    finally:
         _stop_group(proc, interrupt=False)
     time.sleep(0.5)
     raw = Path(temp) / 'raw-android.mp4'
@@ -661,13 +629,12 @@ def _finish_android_recording(serial, proc, remote_pid, remote, temp):
 
 def _start_ios_recording(udid, temp):
     raw = Path(temp) / 'raw-ios.mov'
-    proc = subprocess.Popen(
+    proc = spawn_owned(
         ['xcrun', 'simctl', 'io', udid, 'recordVideo', '--codec=h264', '--force', str(raw)],
         stdin=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.PIPE,
         text=True,
-        start_new_session=True,
     )
     deadline = time.monotonic() + 10
     while time.monotonic() < deadline:
@@ -732,7 +699,7 @@ def resolve_flutter_dependencies(repo):
 
 
 def _run_and_capture(repo, scenario, platform, device_id, temp):
-    test = subprocess.Popen(
+    test = spawn_owned(
         _test_command(repo, scenario, device_id),
         cwd=repo,
         stdin=subprocess.DEVNULL,
@@ -740,7 +707,6 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
         stderr=subprocess.STDOUT,
         text=True,
         bufsize=1,
-        start_new_session=True,
         env={**os.environ, 'CI': 'true'},
     )
     recorder = None
@@ -751,36 +717,35 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
     seen_end = False
     log = []
     deadline = time.monotonic() + scenario['max_seconds'] + 180
+    reader = None
     try:
+        if test.stdout is None:
+            raise RecordingError('recording_test_log_unavailable')
+        reader = OutputLines(test.stdout)
         while True:
             if time.monotonic() > deadline:
                 raise RecordingError('recording_scenario_timeout')
-            if test.stdout is None:
-                raise RecordingError('recording_test_log_unavailable')
-            ready, _, _ = select.select([test.stdout], [], [], 0.5)
-            if ready:
-                line = test.stdout.readline()
-                if line:
-                    log.append(line)
-                    if sum(len(x) for x in log) > MAX_LOG_BYTES:
-                        log = log[-1000:]
-                    if not seen_start and scenario['start_marker'] in line:
-                        seen_start = True
-                        if platform == 'android_emulator':
-                            recorder, android_remote_pid, remote = _start_android_recording(
-                                device_id, temp, scenario['max_seconds'])
-                        else:
-                            recorder, raw = _start_ios_recording(device_id, temp)
-                    if seen_start and scenario['end_marker'] in line:
-                        seen_end = True
+            line = reader.read(timeout=0.5)
+            if line:
+                log.append(line)
+                if sum(len(x) for x in log) > MAX_LOG_BYTES:
+                    log = log[-1000:]
+                if not seen_start and scenario['start_marker'] in line:
+                    seen_start = True
+                    if platform == 'android_emulator':
+                        recorder, android_remote_pid, remote = _start_android_recording(
+                            device_id, temp, scenario['max_seconds'])
+                    else:
+                        recorder, raw = _start_ios_recording(device_id, temp)
+                if seen_start and scenario['end_marker'] in line:
+                    seen_end = True
             code = test.poll()
             if code is not None:
-                if test.stdout:
-                    rest = test.stdout.read()
-                    if rest:
-                        log.append(rest)
-                        if scenario['end_marker'] in rest:
-                            seen_end = True
+                # An exited Flutter child may leave a descendant holding the
+                # pipe. Close only its owned group/job, then drain queued lines.
+                _stop_group(test, interrupt=False)
+                if not reader.eof:
+                    continue
                 if code != 0:
                     raise RecordingError('recording_scenario_test_failed')
                 break
@@ -801,19 +766,30 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
             recorder = None
         return raw, ''.join(log)[-MAX_LOG_BYTES:]
     finally:
-        if android_remote_pid is not None:
-            _stop_android_remote(device_id, android_remote_pid)
-        _stop_group(recorder, interrupt=False)
-        if platform == 'android_emulator' and remote:
-            _run(
-                ['adb', '-s', device_id, 'shell', 'rm', '-f', remote],
-                timeout=15,
-                check=False,
-            )
-        _stop_group(test, interrupt=False)
+        try:
+            if android_remote_pid is not None:
+                _stop_android_remote(device_id, android_remote_pid)
+        finally:
+            try:
+                _stop_group(recorder, interrupt=False)
+            finally:
+                try:
+                    if platform == 'android_emulator' and remote:
+                        _run(
+                            ['adb', '-s', device_id, 'shell', 'rm', '-f', remote],
+                            timeout=15,
+                            check=False,
+                        )
+                finally:
+                    try:
+                        _stop_group(test, interrupt=False)
+                    finally:
+                        if reader is not None:
+                            reader.close()
 
 
-def require_promotable_app(scenario):
+def require_promotable_app(scenario, platform):
+    from video_product_eligibility import public_video_platforms
     path = ROOT / 'data/apps_registry.csv'
     try:
         with path.open(newline='', encoding='utf-8') as stream:
@@ -824,6 +800,9 @@ def require_promotable_app(scenario):
     if (not app or app.get('status') != 'released'
             or app.get('content_eligible') != 'true'):
         raise RecordingError('recording_app_not_promotable')
+    requested = {'android_emulator': 'android', 'ios_simulator': 'ios'}.get(platform)
+    if requested not in public_video_platforms(app, ROOT / 'data/store_versions.csv'):
+        raise RecordingError('recording_platform_not_public')
     return app
 
 
@@ -843,7 +822,7 @@ def ensure_recording(
         raise RecordingError('unknown_recording_scenario')
     if platform not in scenario['platforms']:
         raise RecordingError('recording_platform_not_supported')
-    require_promotable_app(scenario)
+    require_promotable_app(scenario, platform)
     repo = resolve_repo(projects_root, scenario)
     if dry_run:
         base_fingerprint, commit = scenario_fingerprint(
