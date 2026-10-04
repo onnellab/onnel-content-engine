@@ -75,6 +75,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0033",
+        "title": "How to Prepare a TXT Manuscript for Reliable EPUB Conversion",
+        "slug": "prepare-txt-manuscript-for-epub",
+        "category": "reading",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/reading/prepare-txt-manuscript-for-epub.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 11
+      },
+      {
         "topic_id": "TOPIC-0016",
         "title": "How to Keep a Durable Research Reading Log",
         "slug": "keep-durable-research-reading-log",
@@ -99,19 +114,6 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0007",
-        "title": "How to Convert Local Media Files Privately",
-        "slug": "convert-local-media-files-privately",
-        "category": "media",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/convert-local-media-files-privately/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
       }
     ],
     "related_apps": [

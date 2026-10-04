@@ -3,12 +3,16 @@ title: "신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 �
 card_title: "신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 방법"
 slug: prepare-txt-manuscript-for-epub
 description: "원본을 보존하면서 완성된 TXT 원고를 EPUB으로 조립하고 검증하는 되돌릴 수 있는 준비 절차를 설명합니다."
-status: review
+status: "published"
 topic_id: TOPIC-0034
 search_intent: workflow
 primary_keyword: TXT 원고 EPUB 준비
 tags: TXT, EPUB, 원고 준비, 전자책 워크플로
 short_answer: "TXT 원본을 보존하고 복사본으로 작업한 뒤 인코딩과 장 구조를 확인하고, 메타데이터를 준비해 EPUB을 생성·검증·실제 리더에서 시험하세요."
+canonical_url: "https://onnellab.com/blog/ko/prepare-txt-manuscript-for-epub/"
+published_at: "2026-10-04T11:34:40+09:00"
+updated_at: "2026-10-04T11:34:40+09:00"
+related_articles: "긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|대용량 텍스트 파일이 느리게 열리는 이유 => https://onnellab.com/blog/ko/large-text-file-slow-to-open/|원본을 바꾸지 않고 대용량 로그 파일을 검토하는 방법 => https://onnellab.com/blog/ko/inspect-large-log-file-without-altering-original/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/"
 ---
 
 # 신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 방법

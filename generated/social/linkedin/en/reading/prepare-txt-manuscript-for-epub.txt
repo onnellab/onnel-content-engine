@@ -1,0 +1,9 @@
+A reliable plan for how to prepare a TXT manuscript for reliable EPUB conversion starts with the result and constraints.
+
+Keep the original TXT untouched, work from a copy, confirm the encoding, identify chapters and other structure, add accurate book metadata, generate a test EPUB, and inspect it in both a validator and a real reading system. A conversion is ready only when the contents, navigation, and important characters survive those checks.
+
+Before changing tools:
+- Preserve the source. Make a working copy and record the original filename, date, and checksum if the manuscript is part of a controlled project. Do not convert the only copy.
+
+Read the full article:
+https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/

@@ -214,5 +214,19 @@
     <description>원본을 따로 보존하고 작업 복사본에서 시간 범위와 문맥을 좁히며 관찰 내용을 기록해 대용량 로그 파일을 안전하게 검토하는 방법입니다.</description>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
   </item>
+  <item>
+    <title>How to Prepare a TXT Manuscript for Reliable EPUB Conversion</title>
+    <link>https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/</link>
+    <guid>https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/</guid>
+    <description>A practical, reversible workflow for turning a finished TXT manuscript into a testable EPUB without losing structure or the original file.</description>
+    <pubDate>Sun, 04 Oct 2026 02:34:40 GMT</pubDate>
+  </item>
+  <item>
+    <title>신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 방법</title>
+    <link>https://onnellab.com/blog/ko/prepare-txt-manuscript-for-epub/</link>
+    <guid>https://onnellab.com/blog/ko/prepare-txt-manuscript-for-epub/</guid>
+    <description>원본을 보존하면서 완성된 TXT 원고를 EPUB으로 조립하고 검증하는 되돌릴 수 있는 준비 절차를 설명합니다.</description>
+    <pubDate>Sun, 04 Oct 2026 02:34:40 GMT</pubDate>
+  </item>
 </channel>
 </rss>

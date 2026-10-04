@@ -141,6 +141,14 @@
         "category": "media",
         "cluster": "audio merge order",
         "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "What to Check Before Renaming Important Files",
+        "category": "productivity",
+        "cluster": "checks before renaming files",
+        "topic_id": "TOPIC-0036",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
   },

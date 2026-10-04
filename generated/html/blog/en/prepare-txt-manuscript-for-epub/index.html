@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Prepare a TXT Manuscript for Reliable EPUB Conversion</title>
+  <meta name="description" content="A practical, reversible workflow for turning a finished TXT manuscript into a testable EPUB without losing structure or the original file.">
+  <link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20260712-ol-transparent-v2" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260712-ol-transparent-v2">
+  <link rel="manifest" href="/site.webmanifest?v=20260712-ol-transparent-v2">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Prepare a TXT Manuscript for Reliable EPUB Conversion">
+  <meta property="og:description" content="A practical, reversible workflow for turning a finished TXT manuscript into a testable EPUB without losing structure or the original file.">
+  <meta property="og:url" content="https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Prepare a TXT Manuscript for Reliable EPUB Conversion">
+  <meta name="twitter:description" content="A practical, reversible workflow for turning a finished TXT manuscript into a testable EPUB without losing structure or the original file.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/en/prepare-txt-manuscript-for-epub/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/en/prepare-txt-manuscript-for-epub/social-card.png">
+</head>
+<body>
+  <main>
+<h1>How to Prepare a TXT Manuscript for Reliable EPUB Conversion</h1>
+<p>A finished TXT manuscript is a useful source file, but it does not automatically contain the structure an ebook needs. To prepare TXT manuscript for EPUB conversion, make the source explicit before exporting so the process is easier to inspect and repeat.</p>
+<h2>Question</h2>
+<p>How can you prepare a TXT manuscript for reliable EPUB conversion without damaging the original?</p>
+<h2>Short Answer</h2>
+<p>Keep the original TXT untouched, work from a copy, confirm the encoding, identify chapters and other structure, add accurate book metadata, generate a test EPUB, and inspect it in both a validator and a real reading system. A conversion is ready only when the contents, navigation, and important characters survive those checks.</p>
+<h2>Definitions</h2>
+<p><strong>Plain text</strong> is a character stream without a built-in document hierarchy for chapters, emphasis, images, or book metadata. <strong>Encoding</strong> is the rule used to map stored bytes to characters; a mismatch can make readable text appear corrupted. <strong>EPUB</strong> is a packaged digital publication that can contain structured content documents, styling, navigation, metadata, and related resources.</p>
+<h2>Why Preparation Matters</h2>
+<p>TXT can preserve the words of a manuscript transparently, but a converter cannot recover every author intention from a character stream. A line made of capital letters might be a heading, a scene break, or emphasis. A blank line might separate paragraphs or be accidental spacing. If those decisions are left to guessing, the resulting table of contents and reading order can be wrong even when the words are present.</p>
+<p>EPUB 3 defines publication structure, package metadata, navigation, and reading order. Those features are useful only when the source supplies enough information to build them. Preparation is therefore a small editorial pass, not merely a file-extension change.</p>
+<h2>Recommended Workflow</h2>
+<ol><li><strong>Preserve the source.</strong> Make a working copy and record the original filename, date, and checksum if the manuscript is part of a controlled project. Do not convert the only copy.</li><li><strong>Confirm the text interpretation.</strong> Open the copy with a tool that lets you check the encoding. Look at accented characters, Korean text, curly quotes, em dashes, and symbols near the beginning, middle, and end. Save a normalized copy only after the characters are correct.</li><li><strong>Mark the structure.</strong> Identify the title page information, chapter boundaries, scene breaks, block quotes, lists, notes, links, and image positions. Use a consistent marker or an import format your chosen converter documents; do not rely on visual guesses alone.</li><li><strong>Prepare metadata.</strong> Collect the exact title, author, language, identifier if one exists, publication details, and cover information. Keep metadata separate from prose so a later revision does not silently replace it.</li><li><strong>Generate a small test EPUB.</strong> Convert a representative sample containing a chapter start, a long paragraph, special characters, a list, and any planned link or image. A small test catches wrong assumptions sooner than a full export.</li><li><strong>Check the package and the reader view.</strong> Run EPUBCheck or the validator recommended for the target workflow, then open the EPUB in the reading systems your audience uses. Test the table of contents, reading order, links, text resizing, and the first, middle, and final chapters.</li><li><strong>Regenerate from one source of truth.</strong> Apply corrections to the TXT manuscript or its documented preparation layer, not separately to the EPUB. Keep the source, conversion settings, supporting assets, and validated output together.</li></ol>
+<figure><img src="/blog-assets/en/prepare-txt-manuscript-for-epub/workflow-diagram.svg" alt="Workflow diagram" title="How to Prepare a TXT Manuscript for Reliable EPUB Conversion Workflow"></figure>
+<h2>Comparison Table</h2>
+<table><thead><tr><th>Preparation choice</th><th>Useful when</th><th>Main caution</th></tr></thead><tbody><tr><td>Keep TXT as the editable source</td><td>The prose changes often or must remain easy to diff</td><td>TXT does not carry rich structure by itself</td></tr><tr><td>Add explicit chapter markers</td><td>The book needs a dependable table of contents</td><td>Automatic heading detection can misread decorative lines</td></tr><tr><td>Normalize to UTF-8 after checking</td><td>The manuscript includes multiple writing systems or symbols</td><td>Normalization cannot repair characters already misread during import</td></tr><tr><td>Use a generated EPUB for reading tests</td><td>You need adjustable layout, navigation, or book metadata</td><td>A valid package can still have poor wording, order, or presentation</td></tr><tr><td>Keep a separate cover and image record</td><td>The publication includes visual resources</td><td>Every image needs the right path, dimensions, and meaningful alternative text</td></tr></tbody></table>
+<h2>Practical Cautions</h2>
+<ul><li>Renaming `book.txt` to `book.epub` does not perform a conversion; EPUB is a structured package.</li><li>Do not let automatic chapter detection silently decide what a heading means. Compare the generated table of contents with the manuscript.</li><li>Do not edit the TXT and EPUB independently. That creates competing versions and makes later regeneration unreliable.</li><li>A validator checks package conformance, not every editorial or accessibility issue. Test actual navigation, reading order, text resizing, and meaningful image descriptions.</li><li>Preserve a copy before normalizing encoding or replacing characters. A successful preview is not proof that the source is recoverable.</li></ul>
+<h2>ONNELLAB Application</h2>
+<p>If the manuscript is already finished and the task is to assemble it as an ebook, <a href="/apps/papira/">Papira</a> is the relevant ONNELLAB option. Its documented role is an offline ebook maker that assembles finished TXT manuscripts into EPUB books with a cover, book details, and a table of contents. It is not a manuscript editor or ebook reader. The public recommendation is limited to iOS because the repository&#x27;s current store evidence confirms the iOS release while Android availability remains unconfirmed.</p>
+<h2>Related Topics</h2>
+<ul><li><a href="/blog/en/txt-vs-epub-for-long-reading/">Should you use TXT or EPUB for long reading?</a></li><li><a href="/blog/en/read-large-txt-files-without-lag/">How to read large TXT files without lag</a></li><li><a href="/blog/en/keep-durable-research-reading-log/">How to keep a durable research reading log</a></li></ul>
+<h2>References</h2>
+<ul><li><a href="https://www.w3.org/TR/epub-33/">W3C: EPUB 3.3</a> defines EPUB publication structure, package metadata, navigation, and reading order.</li><li><a href="https://www.w3.org/TR/epub-a11y-11/">W3C: EPUB Accessibility 1.1</a> describes accessibility characteristics and discovery metadata for EPUB publications.</li><li><a href="https://www.w3.org/publishing/epubcheck/">W3C: EPUBCheck</a> documents the official conformance checker for EPUB publications.</li><li><a href="https://encoding.spec.whatwg.org/">WHATWG: Encoding Standard</a> defines interoperable character encoding and decoding behavior.</li><li><a href="https://apps.apple.com/app/id6803919552">Papira on the App Store</a> is the official listing for the iOS app.</li></ul>
+<h2>Conclusion</h2>
+<p>Reliable EPUB conversion starts with a recoverable source and explicit structure. Preserve the TXT, confirm its encoding, identify the book&#x27;s hierarchy, add accurate metadata, test a representative export, validate the package, and inspect it in real reading systems. That process keeps the editable source clear while making the EPUB a reproducible reading output.</p>
+<h2>FAQ</h2>
+<h3>Can I convert a TXT file by changing its extension?</h3>
+<p>No. An EPUB is a package with content documents, metadata, navigation, and resources. Use a conversion or ebook-making tool and validate the result.</p>
+<h3>Should I edit the EPUB after conversion?</h3>
+<p>Minor inspection is useful, but recurring editorial changes should go back to the source. Regenerate the EPUB so the process remains repeatable.</p>
+<h3>Is UTF-8 always the right answer?</h3>
+<p>UTF-8 is a strong interoperability default, but first confirm that the source was decoded correctly. Re-saving text that was already misread can preserve the wrong characters.</p>
+<h3>Does EPUBCheck prove that the book is ready?</h3>
+<p>No. It can identify many package and specification problems, but it cannot judge every editorial choice, visual result, navigation expectation, or accessibility experience. Combine validation with reader testing.</p>
+<h3>Do I need a cover before preparing the text?</h3>
+<p>Not to inspect the manuscript structure. You can prepare and test the text first, then add the final cover and verify that the packaged resources and metadata still work together.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>TXT vs EPUB for Long Reading</h3><a class="related-article-link" href="https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/">Read article</a></article>
+<article class="related-article-card"><h3>How to Read Large TXT Files Without Lag</h3><a class="related-article-link" href="https://onnellab.com/blog/en/read-large-txt-files-without-lag/">Read article</a></article>
+<article class="related-article-card"><h3>What Makes Large Text Files Slow to Open</h3><a class="related-article-link" href="https://onnellab.com/blog/en/large-text-file-slow-to-open/">Read article</a></article>
+<article class="related-article-card"><h3>How to Inspect a Large Log File Without Altering the Original</h3><a class="related-article-link" href="https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/">Read article</a></article>
+<article class="related-article-card"><h3>How to Choose a Media Output Format Before Conversion</h3><a class="related-article-link" href="https://onnellab.com/blog/en/choose-media-output-format-before-conversion/">Read article</a></article>
+<article class="related-article-card"><h3>How to Convert Local Media Files Privately</h3><a class="related-article-link" href="https://onnellab.com/blog/en/convert-local-media-files-privately/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

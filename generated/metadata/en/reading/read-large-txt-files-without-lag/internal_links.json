@@ -77,6 +77,21 @@
         "score": 14
       },
       {
+        "topic_id": "TOPIC-0033",
+        "title": "How to Prepare a TXT Manuscript for Reliable EPUB Conversion",
+        "slug": "prepare-txt-manuscript-for-epub",
+        "category": "reading",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/reading/prepare-txt-manuscript-for-epub.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 10
+      },
+      {
         "topic_id": "TOPIC-0012",
         "title": "How to Rename Files Safely With a Preview Workflow",
         "slug": "rename-files-safely-preview-workflow",
@@ -97,19 +112,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/convert-local-media-files-privately/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0015",
-        "title": "How to Verify Audio Clips Before Combining Them",
-        "slug": "verify-audio-clips-before-combining",
-        "category": "media",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/verify-audio-clips-before-combining/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

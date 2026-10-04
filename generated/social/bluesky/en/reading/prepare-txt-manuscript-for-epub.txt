@@ -1,0 +1,4 @@
+A practical way to prepare a TXT manuscript for reliable EPUB conversion starts with the constraints, not the app.
+
+Install Papira:
+App Store: https://apps.apple.com/app/id6803919552

@@ -1,19 +1,13 @@
 ---
 title: "How to Prepare a TXT Manuscript for Reliable EPUB Conversion"
-card_title: "How to Prepare a TXT Manuscript for Reliable EPUB Conversion"
-slug: prepare-txt-manuscript-for-epub
-description: "A practical, reversible workflow for turning a finished TXT manuscript into a testable EPUB without losing structure or the original file."
-status: "published"
-topic_id: TOPIC-0033
-search_intent: workflow
-primary_keyword: prepare TXT manuscript for EPUB
-tags: TXT, EPUB, manuscript preparation, ebook workflow
-short_answer: "Preserve the TXT original, normalize its encoding, mark structure explicitly, verify metadata and navigation, then validate and test a generated EPUB before distribution."
+published: true
 canonical_url: "https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/"
-published_at: "2026-10-04T11:34:40+09:00"
-updated_at: "2026-10-04T11:34:40+09:00"
-related_articles: "TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|How to Inspect a Large Log File Without Altering the Original => https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/|How to Choose a Media Output Format Before Conversion => https://onnellab.com/blog/en/choose-media-output-format-before-conversion/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/"
+tags: "txt-epub-manuscript-preparatio"
 ---
+
+> ONNELLAB note: This is a field note for developers and power users who work with large text files.
+
+
 
 # How to Prepare a TXT Manuscript for Reliable EPUB Conversion
 
@@ -47,7 +41,7 @@ EPUB 3 defines publication structure, package metadata, navigation, and reading 
 6. **Check the package and the reader view.** Run EPUBCheck or the validator recommended for the target workflow, then open the EPUB in the reading systems your audience uses. Test the table of contents, reading order, links, text resizing, and the first, middle, and final chapters.
 7. **Regenerate from one source of truth.** Apply corrections to the TXT manuscript or its documented preparation layer, not separately to the EPUB. Keep the source, conversion settings, supporting assets, and validated output together.
 
-![Workflow diagram](/blog-assets/en/prepare-txt-manuscript-for-epub/workflow-diagram.svg "How to Prepare a TXT Manuscript for Reliable EPUB Conversion Workflow")
+![Workflow diagram](https://onnellab.com/blog-assets/en/prepare-txt-manuscript-for-epub/workflow-diagram.png "How to Prepare a TXT Manuscript for Reliable EPUB Conversion Workflow")
 
 ## Comparison Table
 
@@ -69,13 +63,13 @@ EPUB 3 defines publication structure, package metadata, navigation, and reading 
 
 ## ONNELLAB Application
 
-If the manuscript is already finished and the task is to assemble it as an ebook, [Papira](/apps/papira/) is the relevant ONNELLAB option. Its documented role is an offline ebook maker that assembles finished TXT manuscripts into EPUB books with a cover, book details, and a table of contents. It is not a manuscript editor or ebook reader. The public recommendation is limited to iOS because the repository's current store evidence confirms the iOS release while Android availability remains unconfirmed.
+If the manuscript is already finished and the task is to assemble it as an ebook, [Papira](https://onnellab.com/apps/papira/) is the relevant ONNELLAB option. Its documented role is an offline ebook maker that assembles finished TXT manuscripts into EPUB books with a cover, book details, and a table of contents. It is not a manuscript editor or ebook reader. The public recommendation is limited to iOS because the repository's current store evidence confirms the iOS release while Android availability remains unconfirmed.
 
 ## Related Topics
 
-- [Should you use TXT or EPUB for long reading?](/blog/en/txt-vs-epub-for-long-reading/)
-- [How to read large TXT files without lag](/blog/en/read-large-txt-files-without-lag/)
-- [How to keep a durable research reading log](/blog/en/keep-durable-research-reading-log/)
+- [Should you use TXT or EPUB for long reading?](https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/)
+- [How to read large TXT files without lag](https://onnellab.com/blog/en/read-large-txt-files-without-lag/)
+- [How to keep a durable research reading log](https://onnellab.com/blog/en/keep-durable-research-reading-log/)
 
 ## References
 
@@ -110,3 +104,7 @@ No. It can identify many package and specification problems, but it cannot judge
 ### Do I need a cover before preparing the text?
 
 Not to inspect the manuscript structure. You can prepare and test the text first, then add the final cover and verify that the packaged resources and metadata still work together.
+
+---
+
+Originally published at https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/

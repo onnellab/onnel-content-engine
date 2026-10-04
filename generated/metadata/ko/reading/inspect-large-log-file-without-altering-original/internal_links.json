@@ -75,6 +75,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0034",
+        "title": "신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 방법",
+        "slug": "prepare-txt-manuscript-for-epub",
+        "category": "reading",
+        "language": "ko",
+        "status": "review",
+        "url": "generated/markdown/ko/reading/prepare-txt-manuscript-for-epub.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0011",
         "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
         "slug": "convert-local-media-files-privately",
@@ -95,19 +110,6 @@
         "language": "ko",
         "status": "published",
         "url": "https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0017",
-        "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
-        "slug": "reuse-copied-text-snippets-iphone",
-        "category": "productivity",
-        "language": "ko",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

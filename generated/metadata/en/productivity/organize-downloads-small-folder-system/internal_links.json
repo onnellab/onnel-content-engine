@@ -63,14 +63,14 @@
         "slug": "turn-rough-notes-into-structured-first-draft",
         "category": "productivity",
         "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/productivity/turn-rough-notes-into-structured-first-draft.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"
         ],
-        "score": 9
+        "score": 10
       },
       {
         "topic_id": "TOPIC-0001",

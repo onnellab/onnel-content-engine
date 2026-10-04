@@ -14,7 +14,7 @@
     "slug": "turn-rough-notes-into-structured-first-draft",
     "category": "productivity",
     "language": "en",
-    "status": "scheduled",
+    "status": "published",
     "topic_clusters": [
       "first draft workflow",
       "outline from notes",
@@ -127,6 +127,14 @@
         "category": "productivity",
         "cluster": "first draft workflow",
         "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "How to Separate Source Notes From Research Conclusions",
+        "category": "research",
+        "cluster": "separate source notes from conclusions",
+        "topic_id": "TOPIC-0037",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
   },
