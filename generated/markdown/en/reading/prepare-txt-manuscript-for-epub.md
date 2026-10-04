@@ -79,7 +79,7 @@ If the manuscript is already finished and the task is to assemble it as an ebook
 - [W3C: EPUB Accessibility 1.1](https://www.w3.org/TR/epub-a11y-11/) describes accessibility characteristics and discovery metadata for EPUB publications.
 - [W3C: EPUBCheck](https://www.w3.org/publishing/epubcheck/) documents the official conformance checker for EPUB publications.
 - [WHATWG: Encoding Standard](https://encoding.spec.whatwg.org/) defines interoperable character encoding and decoding behavior.
-- [Papira source documentation](https://github.com/onnellab/onnellab-text/tree/main/papira) documents the app's TXT-to-EPUB scope.
+- [Papira on the App Store](https://apps.apple.com/app/id6803919552) is the official listing for the iOS app.
 
 ## Conclusion
 

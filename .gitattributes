@@ -1,2 +1,5 @@
 # WSL and Unix runners must remain executable after a Windows checkout.
 *.sh text eol=lf
+# Article review fingerprints hash these generated text inputs as bytes.
+generated/metadata/**/*.json text eol=lf
+generated/assets/blog/**/*.svg text eol=lf

@@ -806,6 +806,40 @@ class PublishingTest(unittest.TestCase):
                     self.assertNotIn("play.google.com", text)
         self.assertEqual(validate_social_posts(social_dir / "manifest.json", self.root), 6)
 
+    def test_social_link_validation_matches_verified_release_platforms(self) -> None:
+        apps = self.topics_path.parent / "apps_registry.csv"
+        stores = apps.with_name("store_versions.csv")
+        ios_url = "https://apps.apple.com/app/id6760122045"
+        android_url = "https://play.google.com/store/apps/details?id=com.onnellab.vaultxt"
+        apps.write_text(
+            "app_id,app_name,slug,app_store_url,play_store_url\n"
+            f"APP-0003,VaultXT,vaultxt,{ios_url},{android_url}\n",
+            encoding="utf-8",
+        )
+        social_dir = self.root / "generated" / "social"
+        manifest_path = social_dir / "manifest.json"
+        for platform, destination in (("ios", ios_url), ("android", android_url), ("none", "")):
+            with self.subTest(public_platform=platform):
+                if platform == "none":
+                    stores.unlink(missing_ok=True)
+                else:
+                    stores.write_text(
+                        "app_id,platform,store_url,version,status\n"
+                        f"APP-0003,{platform},{destination},1.0,unchanged\n",
+                        encoding="utf-8",
+                    )
+                generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+                self.assertEqual(validate_social_posts(manifest_path, self.root), 6)
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                post = next(item for item in manifest["posts"] if item["platform"] == "x")
+                self.assertEqual(post["destination_urls"], destination)
+                self.assertEqual(post["link_strategy"], "store_install" if destination else "canonical_article")
+                if destination:
+                    post["destination_urls"] = f"{ios_url}|{android_url}"
+                    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+                    with self.assertRaisesRegex(SocialValidationError, "incorrect destination URLs"):
+                        validate_social_posts(manifest_path, self.root)
+
     def test_social_posts_without_store_destinations_are_canonical_on_every_template(self) -> None:
         social_dir = self.root / "generated" / "social"
         generate_social_posts(self.topics_path, social_dir, "https://example.com/")

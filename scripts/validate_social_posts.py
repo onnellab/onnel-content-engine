@@ -10,7 +10,7 @@ import re
 import sys
 from pathlib import Path
 
-from publishing import DEFAULT_SOCIAL_OUTPUT_DIR, x_weighted_length
+from publishing import DEFAULT_SOCIAL_OUTPUT_DIR, app_registry_by_name, x_weighted_length
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -62,13 +62,9 @@ def expected_link_policy(
     if topic is None:
         raise SocialValidationError(f"{topic_id} is missing from topics registry")
 
-    registry: dict[str, dict[str, str]] = {}
-    if apps_path.exists():
-        with apps_path.open(encoding="utf-8", newline="") as handle:
-            for row in csv.DictReader(handle):
-                for key in (row.get("app_name", ""), row.get("slug", "")):
-                    if key.strip():
-                        registry[key.strip().casefold()] = row
+    # Match generation's public-store evidence policy; a registry URL alone is
+    # not proof that this platform is released and safe to recommend.
+    registry = app_registry_by_name(apps_path)
     app: dict[str, str] | None = None
     related_name = ""
     for name in (part.strip() for part in topic.get("related_apps", "").split("|")):

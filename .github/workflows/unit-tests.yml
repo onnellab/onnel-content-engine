@@ -6,6 +6,10 @@ on:
       - 'scripts/**'
       - 'tests/**'
       - 'templates/**'
+      - 'generated/markdown/**'
+      - 'data/apps_registry.csv'
+      - 'data/store_versions.csv'
+      - 'data/topics.csv'
       - 'requirements-test.txt'
       - '.github/workflows/**'
   pull_request:
@@ -13,6 +17,10 @@ on:
       - 'scripts/**'
       - 'tests/**'
       - 'templates/**'
+      - 'generated/markdown/**'
+      - 'data/apps_registry.csv'
+      - 'data/store_versions.csv'
+      - 'data/topics.csv'
       - 'requirements-test.txt'
       - '.github/workflows/**'
   workflow_dispatch:

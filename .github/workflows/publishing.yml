@@ -11,6 +11,11 @@ on:
         options:
           - "true"
           - "false"
+      content_only:
+        description: "Publish content without app store checks, app releases, or release issue updates"
+        required: false
+        default: false
+        type: boolean
   push:
     branches:
       - main
@@ -26,6 +31,7 @@ jobs:
 
     env:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || github.event_name == 'push' && 'true' || 'false' }}
+      CONTENT_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.content_only == true && 'true' || 'false' }}
       SITE_URL: https://onnellab.com/
       HOMEPAGE_REPO_PATH: .homepage
 
@@ -79,7 +85,7 @@ jobs:
           python3 scripts/validate_foundation.py
 
       - name: Check App Store Versions
-        if: env.DRY_RUN != 'true'
+        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
         run: |
           set -euo pipefail
           python3 scripts/check_store_versions.py
@@ -91,7 +97,7 @@ jobs:
           python3 scripts/check_store_versions.py --dry-run
 
       - name: Prepare App Release Candidates
-        if: env.DRY_RUN != 'true'
+        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
         env:
           CODEMAGIC_API_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
         run: |
@@ -114,7 +120,7 @@ jobs:
           python3 scripts/fill_ready_app_releases.py --dry-run
 
       - name: Create GitHub App Releases
-        if: env.DRY_RUN != 'true'
+        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
           ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN }}
@@ -129,7 +135,7 @@ jobs:
           python3 scripts/create_github_releases.py --dry-run
 
       - name: Generate App Release Report
-        if: env.DRY_RUN != 'true'
+        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
         run: |
           set -euo pipefail
           python3 scripts/generate_app_release_report.py
@@ -141,7 +147,7 @@ jobs:
           python3 scripts/generate_app_release_report.py --output /tmp/onnel-content-engine-app-releases.md
 
       - name: Sync App Release Attention Issue
-        if: env.DRY_RUN != 'true'
+        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
@@ -405,7 +411,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           mkdir -p generated/assets generated/metadata generated/reviews generated/html
-          git add data/topics.csv data/app_releases.csv data/app_release_config.csv data/store_versions.csv topics/topics.csv generated/markdown generated/images generated/assets generated/metadata generated/reports generated/reviews generated/html generated/social generated/syndication
+          git add data/topics.csv topics/topics.csv generated/markdown generated/images generated/assets generated/metadata generated/reports generated/reviews generated/html generated/social generated/syndication
+          if [ "$CONTENT_ONLY" != "true" ]; then
+            git add data/app_releases.csv data/app_release_config.csv data/store_versions.csv
+          fi
           if git diff --cached --quiet; then
             echo "No content engine changes to commit"
           else

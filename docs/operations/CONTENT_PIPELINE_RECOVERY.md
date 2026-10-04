@@ -2,11 +2,13 @@
 
 ## Scope
 
-This repair covers local code, regression tests, and a review branch. It does not
-activate a scheduler, execute the supply model, publish articles, rotate tokens,
-or deploy the dashboard. A passing dry-run is not evidence of public publication.
+The initial repair covered code and local verification. The user subsequently
+authorized pausing existing writers, main integration, installed runner and
+existing publisher-prompt updates, and verified supply/publication resumption.
+No new paid usage or authentication/security changes are authorized.
+A passing dry-run is not evidence of public publication.
 
-## Observed installation
+## Initial observed installation
 
 - Windows task `ONNELLAB Codex Content Supply` is enabled and Ready, scheduled for
   06:00 Asia/Seoul. Its last observed run was 2026-10-04 06:00:01 KST with result
@@ -53,7 +55,7 @@ or deploy the dashboard. A passing dry-run is not evidence of public publication
   conflicting specific URLs and retains existing evidence for identical URLs.
   Hashnode remains excluded; historical records are audit evidence only.
 
-## Operational follow-up, not executed by this repair
+## Original operational follow-up (subsequently authorized)
 
 1. Review and merge the repair branch only after the local test/review gate.
    Main-branch path triggers include dashboard reconciliation/deployment,
@@ -111,7 +113,47 @@ alternative is a separately reviewed fail-closed publish opt-in gate on every
 external-write path before integration. `[skip ci]` alone does not control
 scheduled or already-running writers and is insufficient.
 
-Required additional approval is for the temporary operational pause/cancellation
-and main integration, then separately for deploying the installed supply runner,
-updating the existing Mac publisher prompt, and resuming real supply/publication.
-No credential, OAuth, or OS-security changes are required by the code repair.
+The user subsequently approved that operational sequence. New paid usage,
+credential, OAuth, and browser/OS-security changes remain outside that approval.
+
+
+## Authorized operational execution
+
+- Existing four writer workflows and the Windows 06:00 / Mac 09:00 tasks were
+  paused before integrating `9cbc9ab9`, `10ff6925`, and `7e742bc6` into main.
+- The installed Windows checkout was fast-forwarded, preserving `.tools` and
+  personal files. Shell LF checkout policy fixes the reproduced WSL CRLF error;
+  the existing rsvg-convert 2.58.0 is reused without installing system packages.
+- The existing ChatGPT subscription supply runner completed successfully:
+  `/tmp/onnel-content-supply-runs/20261004-111112-ntJtbN.log`, exit 0.
+  Commit `825107c2` adds one English/Korean review pair (both 10.0) and eight ideas.
+  Its 78 focused tests and topic/foundation/supply validators passed. These are
+  supplied drafts, not evidence of public publication.
+- The existing Mac automation keeps its identity and daily 09:00 recurrence.
+  Its prompt now uses remote_browser, excludes Hashnode, joins latest receipts,
+  preserves legacy duplicate holds, and requires specific verified permalinks.
+- Mac file/terminal access works, but Chrome Apple Events JavaScript is disabled
+  and this session has no separate interactive browser tool. No browser/security
+  setting was changed. Overdue Medium TOPIC-0009 / TOPIC-0012 and LinkedIn
+  TOPIC-0015 remain unposted by this recovery until access is available.
+- Main `640a71b8` passes workflow lint. Its full unit run exposed a new-content
+  distribution validation mismatch: the generator filtered unreleased stores,
+  but the validator still required both registry URLs. Both now share verified
+  public-store evidence. Tests cover iOS-only, Android-only, and no evidence.
+- A broken source URL in both unpublished Papira drafts was replaced with the
+  verified official App Store listing. Narrow LF rules for fingerprinted SVG/JSON
+  inputs keep Windows and Linux review fingerprints equal; reviews remain 10.0.
+- Manual dispatch supports `content_only=true` (default false). Combined with
+  `dry_run=false`, it skips store checks, app-release preparation/publication,
+  release reports/issues, and app-state staging. Existing cron/dry-run defaults
+  are unchanged. CI now also covers new Markdown and its app/store/topic inputs.
+
+The installed LF policy also requires refreshing pre-existing Windows shell
+checkouts: the final local suite exposed an unchanged preflight script still
+using CRLF. LF normalization changes no committed shell content.
+
+Final pre-publication verification: 733 offline unit tests passed (90.451s);
+actual-data offline dry-run passed without network attempts. All 494 protected
+generated/topic files had identical before/after SHA256 values. Supply gate
+confirms one qualified bilingual pair and eight ideas. Independent review found
+no blocking issues.

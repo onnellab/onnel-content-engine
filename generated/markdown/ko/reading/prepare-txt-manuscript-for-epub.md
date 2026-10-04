@@ -79,7 +79,7 @@ EPUB 3은 출판물 구조, 패키지 메타데이터, 탐색과 읽기 순서�
 - [W3C: EPUB Accessibility 1.1](https://www.w3.org/TR/epub-a11y-11/)은 EPUB 출판물의 접근성 특성과 검색 가능한 메타데이터를 설명합니다.
 - [W3C: EPUBCheck](https://www.w3.org/publishing/epubcheck/)는 EPUB 출판물의 표준 적합성을 확인하는 공식 검사 도구입니다.
 - [WHATWG: 문자 인코딩 표준](https://encoding.spec.whatwg.org/)은 상호운용 가능한 문자 인코딩과 디코딩 동작을 정의합니다.
-- [Papira 소스 문서](https://github.com/onnellab/onnellab-text/tree/main/papira)는 앱의 TXT-EPUB 범위를 설명합니다.
+- [App Store의 Papira](https://apps.apple.com/app/id6803919552)는 iOS 앱의 공식 스토어 페이지입니다.
 
 ## 결론
 
