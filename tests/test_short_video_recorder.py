@@ -9,6 +9,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from contextlib import ExitStack
 from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -17,6 +18,8 @@ from short_video_pipeline import atomic_json, canonical, file_hash
 from short_video_recorder import (
     RecordingError,
     _safe_rel,
+    _marker_line,
+    _run_and_capture,
     _start_android_recording,
     _stop_android_remote,
     _test_command,
@@ -193,6 +196,100 @@ class RecorderPolicyTests(unittest.TestCase):
             wrong['brief']['topic_id'] = 'TOPIC-0029'
             with patch('short_video_recorder._verified_video', return_value=True),                     self.assertRaisesRegex(RecordingError, 'managed_recording_scope_mismatch'):
                 managed_recording_attestation(root, wrong)
+
+
+class CaptureCompletionTests(unittest.TestCase):
+    def capture(self, events, *, platform='android_emulator', cleanup_error=False):
+        clock = [0]
+        test, recorder = Mock(), Mock()
+        recorder.poll.return_value = None
+        test.stdout = Mock()
+        test.poll.return_value = None
+        class Reader:
+            def __init__(self, stream):
+                self.eof = False
+                self.events = iter(events)
+            def read(self, timeout):
+                elapsed, line, test_code, recorder_code = next(self.events)
+                clock[0] = elapsed
+                test.poll.return_value = test_code
+                recorder.poll.return_value = recorder_code
+                self.eof = line == ''
+                return line
+            def close(self):
+                pass
+        finished = []
+        def finish(*args):
+            finished.append(clock[0])
+            return Path('owned-raw.mp4')
+        with ExitStack() as stack:
+            def patched(name, **kwargs):
+                return stack.enter_context(patch('short_video_recorder.' + name, **kwargs))
+            patched('spawn_owned', return_value=test)
+            patched('_test_command', return_value=['fake-flutter'])
+            patched('OutputLines', side_effect=Reader)
+            patched('time.monotonic', side_effect=lambda: clock[0])
+            patched('_start_android_recording', return_value=(recorder, 42, 'owned-remote.mp4'))
+            patched('_start_ios_recording', return_value=(recorder, Path('owned-raw.mov')))
+            patched('_finish_android_recording', side_effect=finish)
+            patched('_finish_ios_recording', side_effect=finish)
+            patched('_stop_android_remote')
+            stopped = patched('_stop_group')
+            run = patched('_run', side_effect=RecordingError('cleanup_failed') if cleanup_error else None)
+            try:
+                result = _run_and_capture(Path('fake'), {'max_seconds': 60,
+                    'start_marker': 'VIDEO_STEP:start', 'end_marker': 'VIDEO_STEP:end'},
+                    platform, 'owned-device', Path('fake-temp'))
+                return result, finished
+            finally:
+                self.assertTrue(any(call.args[0] is test for call in stopped.call_args_list))
+                for call in run.call_args_list:
+                    self.assertTrue(call.kwargs['check'])
+
+    def test_end_marker_stops_capture_before_later_successful_flutter_teardown(self):
+        for platform in ('android_emulator', 'ios_simulator'):
+            with self.subTest(platform=platform):
+                result, finished = self.capture([(170, 'VIDEO_STEP:start\n', None, None),
+                    (200, 'VIDEO_STEP:end\n', None, None), (220, '', 0, 0)], platform=platform)
+                self.assertEqual(Path('owned-raw.mp4'), result[0])
+                self.assertEqual([200], finished)
+
+    def test_late_end_after_android_time_limit_cannot_accept_truncated_video(self):
+        with self.assertRaisesRegex(RecordingError, 'recording_capture_timeout'):
+            self.capture([(0, 'VIDEO_STEP:start\n', None, None),
+                          (100, 'VIDEO_STEP:end\n', 0, None)])
+
+    def test_recorder_exit_before_end_marker_is_not_success(self):
+        with self.assertRaisesRegex(RecordingError, 'recording_ended_before_end_marker'):
+            self.capture([(0, 'VIDEO_STEP:start\n', None, None),
+                          (10, 'VIDEO_STEP:end\n', 0, 0)])
+
+    def test_quoted_marker_diagnostics_are_not_capture_events(self):
+        with self.assertRaisesRegex(RecordingError, 'recording_markers_missing'):
+            self.capture([(0, 'Diagnostic: expecting VIDEO_STEP:start\n', None, None),
+                          (1, 'Diagnostic: expecting VIDEO_STEP:end\n', None, None),
+                          (2, '', 0, None)])
+
+    def test_missing_end_and_nonzero_test_exit_fail_closed(self):
+        for events, error in [
+            ([(0, 'VIDEO_STEP:start\n', None, None), (10, '', 0, None)], 'recording_markers_missing'),
+            ([(0, 'VIDEO_STEP:start\n', None, None), (10, 'VIDEO_STEP:end\n', None, None),
+              (11, '', 1, 0)], 'recording_scenario_test_failed')]:
+            with self.subTest(error=error), self.assertRaisesRegex(RecordingError, error):
+                self.capture(events)
+
+    def test_cleanup_failure_cannot_return_capture_success(self):
+        with self.assertRaisesRegex(RecordingError, 'cleanup_failed'):
+            self.capture([(0, 'VIDEO_STEP:start\n', None, None),
+                (10, 'VIDEO_STEP:end\n', None, None), (11, '', 0, 0)], cleanup_error=True)
+
+    def test_exact_marker_supports_only_documented_flutter_forwarding_prefixes(self):
+        for line in ('VIDEO_STEP:end\n', 'flutter: VIDEO_STEP:end\n',
+                     'I/flutter ( 123): VIDEO_STEP:end\n', '\x1b[32mVIDEO_STEP:end\x1b[0m\n'):
+            self.assertTrue(_marker_line(line, 'VIDEO_STEP:end'))
+        for line in ('expected VIDEO_STEP:end', 'VIDEO_STEP:end_extra', 'VIDEO_STEP:end failed',
+                     'Exception: VIDEO_STEP:end', 'VIDEO_STEP:start VIDEO_STEP:end'):
+            self.assertFalse(_marker_line(line, 'VIDEO_STEP:end'))
 
 
 class RecorderSourceIsolationTests(unittest.TestCase):

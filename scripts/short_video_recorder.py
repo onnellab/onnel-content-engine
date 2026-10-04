@@ -626,7 +626,7 @@ def _finish_android_recording(serial, proc, remote_pid, remote, temp):
         _run(
             ['adb', '-s', serial, 'shell', 'rm', '-f', remote],
             timeout=15,
-            check=False,
+            check=True,
         )
     if not raw.is_file() or raw.stat().st_size <= 0:
         raise RecordingError('android_recording_missing')
@@ -686,7 +686,7 @@ def _test_command(repo, scenario, device_id):
     if not flutter:
         raise RecordingError('flutter_missing')
     argv = [
-        flutter, 'test', scenario['test_target'], '-d', device_id, '--no-pub',
+        flutter, 'test', scenario['test_target'], '-d', device_id, '--no-pub', '--reporter', 'expanded',
     ]
     for key, value in sorted(scenario['dart_defines'].items()):
         argv.append(f'--dart-define={key}={value}')
@@ -702,6 +702,15 @@ def resolve_flutter_dependencies(repo):
     if not lock.is_file():
         raise RecordingError('resolved_flutter_lock_missing')
     return file_hash(lock)
+
+
+def _marker_line(line, marker):
+    # Expanded test output emits print lines directly. Flutter's device forwarding
+    # may prefix them with flutter: or Android logcat's I/flutter (pid):.
+    # Do not accept diagnostics quoting a marker, suffixes, or arbitrary prefixes.
+    line = re.sub(r'\x1b\[[0-9;]*m', '', line).strip()
+    line = re.sub(r'^(?:flutter:\s*|I/flutter\s*\(\s*\d+\s*\):\s*)', '', line)
+    return line == marker
 
 
 def _run_and_capture(repo, scenario, platform, device_id, temp):
@@ -721,6 +730,7 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
     raw = None
     seen_start = False
     seen_end = False
+    capture_deadline = None
     log = []
     deadline = time.monotonic() + scenario['max_seconds'] + 180
     reader = None
@@ -731,19 +741,39 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
         while True:
             if time.monotonic() > deadline:
                 raise RecordingError('recording_scenario_timeout')
+            if recorder is not None and not seen_end:
+                if time.monotonic() >= capture_deadline:
+                    raise RecordingError('recording_capture_timeout')
+                if recorder.poll() is not None:
+                    raise RecordingError('recording_ended_before_end_marker')
             line = reader.read(timeout=0.5)
+            # Reading a pipe can consume the remaining recording budget. Recheck
+            # before accepting an end marker buffered after recording has ended.
+            if recorder is not None and not seen_end:
+                if time.monotonic() >= capture_deadline:
+                    raise RecordingError('recording_capture_timeout')
+                if recorder.poll() is not None:
+                    raise RecordingError('recording_ended_before_end_marker')
             if line:
                 log.append(line)
                 if sum(len(x) for x in log) > MAX_LOG_BYTES:
                     log = log[-1000:]
-                if not seen_start and scenario['start_marker'] in line:
+                if not seen_start and _marker_line(line, scenario['start_marker']):
                     seen_start = True
                     if platform == 'android_emulator':
                         recorder, android_remote_pid, remote = _start_android_recording(
                             device_id, temp, scenario['max_seconds'])
                     else:
                         recorder, raw = _start_ios_recording(device_id, temp)
-                if seen_start and scenario['end_marker'] in line:
+                    capture_deadline = time.monotonic() + scenario['max_seconds']
+                if seen_start and not seen_end and _marker_line(line, scenario['end_marker']):
+                    if platform == 'android_emulator':
+                        raw = _finish_android_recording(
+                            device_id, recorder, android_remote_pid, remote, temp)
+                        android_remote_pid = None
+                    else:
+                        raw = _finish_ios_recording(recorder, raw)
+                    recorder = None
                     seen_end = True
             code = test.poll()
             if code is not None:
@@ -755,21 +785,9 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
                 if code != 0:
                     raise RecordingError('recording_scenario_test_failed')
                 break
-        recording_started = (
-            android_remote_pid is not None
-            if platform == 'android_emulator'
-            else recorder is not None
-        )
+        recording_started = capture_deadline is not None
         if not seen_start or not seen_end or not recording_started:
             raise RecordingError('recording_markers_missing')
-        if platform == 'android_emulator':
-            raw = _finish_android_recording(
-                device_id, recorder, android_remote_pid, remote, temp)
-            android_remote_pid = None
-            recorder = None
-        else:
-            raw = _finish_ios_recording(recorder, raw)
-            recorder = None
         return raw, ''.join(log)[-MAX_LOG_BYTES:]
     finally:
         try:
@@ -784,7 +802,7 @@ def _run_and_capture(repo, scenario, platform, device_id, temp):
                         _run(
                             ['adb', '-s', device_id, 'shell', 'rm', '-f', remote],
                             timeout=15,
-                            check=False,
+                            check=True,
                         )
                 finally:
                     try:
