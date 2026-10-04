@@ -82,14 +82,14 @@
         "slug": "prepare-txt-manuscript-for-epub",
         "category": "reading",
         "language": "ko",
-        "status": "review",
-        "url": "generated/markdown/ko/reading/prepare-txt-manuscript-for-epub.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/prepare-txt-manuscript-for-epub/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "reading"
         ],
-        "score": 10
+        "score": 11
       },
       {
         "topic_id": "TOPIC-0011",

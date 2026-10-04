@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0022",
   "title": "대용량 텍스트 파일이 느리게 열리는 이유",
-  "input_fingerprint": "b500f861a1dde32ee7dd0b32811669261e8f9dd74a319ed7feb6e2f691cd45d1",
+  "input_fingerprint": "ebc9e802f9bb22cfa3ecee85b17e3a971a3a359fcc9fff6bc8b95bbc69a3a8c0",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,
