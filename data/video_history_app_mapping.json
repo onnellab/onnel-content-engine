@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "mappings": {
+    "iCAzEHp1tLg": {"app_id": "APP-0004", "app_name": "Segra", "basis": "Existing Segra trim scenario and channel video title."},
+    "hlpzeGysnzQ": {"app_id": "APP-0003", "app_name": "VaultXT", "basis": "Existing VaultXT log inspection scenario and channel video title."},
+    "a8nbWjbLNAM": {"app_id": "APP-0006", "app_name": "Aligna", "basis": "Existing Aligna rename preview scenario and channel video title."},
+    "ScIaoTTLmc8": {"app_id": "APP-0005", "app_name": "ClipNest", "basis": "Existing ClipNest saved snippet scenario and channel video title."},
+    "_I1fVEmKt1I": {"app_id": "APP-0002", "app_name": "TagWeaver", "basis": "App name explicitly present in channel video title."},
+    "QhKBzXVGM6c": {"app_id": "APP-0002", "app_name": "TagWeaver", "basis": "App name explicitly present in channel video title."},
+    "LsLgt53gbJ4": {"app_id": "APP-0002", "app_name": "TagWeaver", "basis": "App name explicitly present in channel video title."},
+    "NUWFnhBGJn8": {"app_id": "APP-0002", "app_name": "TagWeaver", "basis": "App name explicitly present in channel video title."}
+  }
+}

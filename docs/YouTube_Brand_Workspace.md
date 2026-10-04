@@ -1,5 +1,15 @@
 # YouTube brand workspace — 2026-09-21
 
+## Current activation handoff — 2026-10-04
+
+See [YouTube activation handoff](operations/YOUTUBE_ACTIVATION_HANDOFF.md) before
+connecting or reconnecting a worker. The current `SETUP_SCOPES` includes
+`youtube.force-ssl` in addition to upload, channel read and Analytics read: the
+manager requests all **four**, not the three described in the historical rollout
+below. Existing two-scope upload grants remain accepted; Analytics and broader
+comment-management access require a separate permission decision. The connection
+helper is Mac-only; Windows N has no implemented interactive enrollment/store.
+
 ## Implemented
 
 The public dashboard separates ONNELLAB app demos and Aether Inn music. The

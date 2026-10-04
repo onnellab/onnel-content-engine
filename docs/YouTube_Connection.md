@@ -1,5 +1,16 @@
 # YouTube connection — ONNELLAB worker identity
 
+## Current activation handoff — 2026-10-04
+
+For Windows N, use [YouTube activation handoff](operations/YOUTUBE_ACTIVATION_HANDOFF.md).
+The installed connection helper remains Mac-only. Windows can consume an existing
+approved environment credential bundle but has no interactive enrollment/store.
+The worker still accepts the two upload/read scopes. The current setup manager
+requests **four** scopes: upload, read, Analytics read, and `youtube.force-ssl`.
+The older two/three-scope setup descriptions below are historical; reconnect is
+not an Analytics-only permission change. No login, reconnect or grant expansion
+was performed for this handoff.
+
 ## Approved scope
 
 The YouTube settings extension adds connection/setup UI to the existing dashboard.

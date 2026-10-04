@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "kind": "public_video_history_proposal",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "generated_at": "2026-10-04T05:32:53.775715+00:00",
+  "snapshot_generated_at": "2026-10-03T21:20:13.563281+00:00",
+  "snapshot_sha256": "3a7f907827c7aaa1d414af388c29bd9fb7d757a98a899f4302e0faf9fd51f257",
+  "snapshot_video_count": 8,
+  "scope": "Videos in the supplied analytics snapshot; not a complete channel inventory.",
+  "import_ready": false,
+  "claim_slots": [],
+  "videos": [
+    {
+      "video_id": "iCAzEHp1tLg",
+      "video_url": "https://www.youtube.com/watch?v=iCAzEHp1tLg",
+      "snapshot_title": "Trim an Audio Recording Without a Full Editor",
+      "proposed_app_mapping": {
+        "app_id": "APP-0004",
+        "app_name": "Segra",
+        "basis": "Existing Segra trim scenario and channel video title."
+      },
+      "public_oembed_observation": {
+        "status": "observed",
+        "checked_at": "2026-10-04T05:32:52.250390+00:00",
+        "source_url": "https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DiCAzEHp1tLg&format=json",
+        "http_status": 200,
+        "title": "Trim an Audio Recording Without a Full Editor",
+        "author_name": "ONNELLAB",
+        "author_url": "https://www.youtube.com/@ONNELLAB"
+      },
+      "snapshot_title_matches_public": true,
+      "published_at": null,
+      "published_at_evidence": null,
+      "provider_channel_identity_verified": false,
+      "provider_privacy_status": "unknown",
+      "upload_receipt_available": false
+    },
+    {
+      "video_id": "hlpzeGysnzQ",
+      "video_url": "https://www.youtube.com/watch?v=hlpzeGysnzQ",
+      "snapshot_title": "Inspect a Large Log Without Altering the Original",
+      "proposed_app_mapping": {
+        "app_id": "APP-0003",
+        "app_name": "VaultXT",
+        "basis": "Existing VaultXT log inspection scenario and channel video title."
+      },
+      "public_oembed_observation": {
+        "status": "observed",
+        "checked_at": "2026-10-04T05:32:52.455311+00:00",
+        "source_url": "https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DhlpzeGysnzQ&format=json",
+        "http_status": 200,
+        "title": "Inspect a Large Log Without Altering the Original",
+        "author_name": "ONNELLAB",
+        "author_url": "https://www.youtube.com/@ONNELLAB"
+      },
+      "snapshot_title_matches_public": true,
+      "published_at": null,
+      "published_at_evidence": null,
+      "provider_channel_identity_verified": false,
+      "provider_privacy_status": "unknown",
+      "upload_receipt_available": false
+    },
+    {
+      "video_id": "a8nbWjbLNAM",
+      "video_url": "https://www.youtube.com/watch?v=a8nbWjbLNAM",
+      "snapshot_title": "Preview Batch File Renames Before Applying Them",
+      "proposed_app_mapping": {
+        "app_id": "APP-0006",
+        "app_name": "Aligna",
+        "basis": "Existing Aligna rename preview scenario and channel video title."
+      },
+      "public_oembed_observation": {
+        "status": "observed",
+        "checked_at": "2026-10-04T05:32:52.646908+00:00",
+        "source_url": "https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Da8nbWjbLNAM&format=json",
+        "http_status": 200,
+        "title": "Preview Batch File Renames Before Applying Them",
+        "author_name": "ONNELLAB",
+        "author_url": "https://www.youtube.com/@ONNELLAB"
+      },
+      "snapshot_title_matches_public": true,
+      "published_at": null,
+      "published_at_evidence": null,
+      "provider_channel_identity_verified": false,
+      "provider_privacy_status": "unknown",
+      "upload_receipt_available": false
+    },
+    {
+      "video_id": "ScIaoTTLmc8",
+      "video_url": "https://www.youtube.com/watch?v=ScIaoTTLmc8",
+      "snapshot_title": "Pin Reusable Text Snippets on iPhone",
+      "proposed_app_mapping": {
+        "app_id": "APP-0005",
+        "app_name": "ClipNest",
+        "basis": "Existing ClipNest saved snippet scenario and channel video title."
+      },
+      "public_oembed_observation": {
+        "status": "observed",
+        "checked_at": "2026-10-04T05:32:52.855292+00:00",
+        "source_url": "https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DScIaoTTLmc8&format=json",
+        "http_status": 200,
+        "title": "Pin Reusable Text Snippets on iPhone",
+        "author_name": "ONNELLAB",
+        "author_url": "https://www.youtube.com/@ONNELLAB"
+      },
+      "snapshot_title_matches_public": true,
+      "published_at": null,
+      "published_at_evidence": null,
+      "provider_channel_identity_verified": false,
+      "provider_privacy_status": "unknown",
+      "upload_receipt_available": false
+    },
+    {
+      "video_id": "_I1fVEmKt1I",
+      "video_url": "https://www.youtube.com/watch?v=_I1fVEmKt1I",
+      "snapshot_title": "MP3 & FLAC Tag Editing with TagWeaver - Manual Offline Metadata Editor",
+      "proposed_app_mapping": {
+        "app_id": "APP-0002",
+        "app_name": "TagWeaver",
+        "basis": "App name explicitly present in channel video title."
+      },
+      "public_oembed_observation": {
+        "status": "observed",
+        "checked_at": "2026-10-04T05:32:53.041052+00:00",
+        "source_url": "https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D_I1fVEmKt1I&format=json",
+        "http_status": 200,
+        "title": "MP3 & FLAC Tag Editing with TagWeaver - Manual Offline Metadata Editor",
+        "author_name": "ONNELLAB",
+        "author_url": "https://www.youtube.com/@ONNELLAB"
+      },
+      "snapshot_title_matches_public": true,
+      "published_at": null,
+      "published_at_evidence": null,
+      "provider_channel_identity_verified": false,
+      "provider_privacy_status": "unknown",
+      "upload_receipt_available": false
+    },
+    {
+      "video_id": "QhKBzXVGM6c",
+      "video_url": "https://www.youtube.com/watch?v=QhKBzXVGM6c",
+      "snapshot_title": "Edit MP3/FLAC Tags Offline with TagWeaver",
+      "proposed_app_mapping": {
+        "app_id": "APP-0002",
+        "app_name": "TagWeaver",
+        "basis": "App name explicitly present in channel video title."
+      },
+      "public_oembed_observation": {
+        "status": "observed",
+        "checked_at": "2026-10-04T05:32:53.231773+00:00",
+        "source_url": "https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DQhKBzXVGM6c&format=json",
+        "http_status": 200,
+        "title": "Edit MP3/FLAC Tags Offline with TagWeaver",
+        "author_name": "ONNELLAB",
+        "author_url": "https://www.youtube.com/@ONNELLAB"
+      },
+      "snapshot_title_matches_public": true,
+      "published_at": null,
+      "published_at_evidence": null,
+      "provider_channel_identity_verified": false,
+      "provider_privacy_status": "unknown",
+      "upload_receipt_available": false
+    },
+    {
+      "video_id": "LsLgt53gbJ4",
+      "video_url": "https://www.youtube.com/watch?v=LsLgt53gbJ4",
+      "snapshot_title": "MP3/FLAC 태그 편집은 TagWeaver로 - 직접 저장하는 오프라인 편집기",
+      "proposed_app_mapping": {
+        "app_id": "APP-0002",
+        "app_name": "TagWeaver",
+        "basis": "App name explicitly present in channel video title."
+      },
+      "public_oembed_observation": {
+        "status": "observed",
+        "checked_at": "2026-10-04T05:32:53.421847+00:00",
+        "source_url": "https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DLsLgt53gbJ4&format=json",
+        "http_status": 200,
+        "title": "MP3/FLAC 태그 편집은 TagWeaver로 - 직접 저장하는 오프라인 편집기",
+        "author_name": "ONNELLAB",
+        "author_url": "https://www.youtube.com/@ONNELLAB"
+      },
+      "snapshot_title_matches_public": true,
+      "published_at": null,
+      "published_at_evidence": null,
+      "provider_channel_identity_verified": false,
+      "provider_privacy_status": "unknown",
+      "upload_receipt_available": false
+    },
+    {
+      "video_id": "NUWFnhBGJn8",
+      "video_url": "https://www.youtube.com/watch?v=NUWFnhBGJn8",
+      "snapshot_title": "TagWeaver로 MP3/FLAC 태그를 오프라인으로 편집해요",
+      "proposed_app_mapping": {
+        "app_id": "APP-0002",
+        "app_name": "TagWeaver",
+        "basis": "App name explicitly present in channel video title."
+      },
+      "public_oembed_observation": {
+        "status": "observed",
+        "checked_at": "2026-10-04T05:32:53.597784+00:00",
+        "source_url": "https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DNUWFnhBGJn8&format=json",
+        "http_status": 200,
+        "title": "TagWeaver로 MP3/FLAC 태그를 오프라인으로 편집해요",
+        "author_name": "ONNELLAB",
+        "author_url": "https://www.youtube.com/@ONNELLAB"
+      },
+      "snapshot_title_matches_public": true,
+      "published_at": null,
+      "published_at_evidence": null,
+      "provider_channel_identity_verified": false,
+      "provider_privacy_status": "unknown",
+      "upload_receipt_available": false
+    }
+  ],
+  "blockers": [
+    "published_at_evidence_missing",
+    "provider_identity_and_visibility_not_verified",
+    "full_channel_inventory_not_reconciled",
+    "history_import_schema_not_implemented"
+  ],
+  "constraints": [
+    "Never mark a coordination slot completed from this proposal.",
+    "Public oEmbed does not distinguish public from unlisted visibility.",
+    "Snapshot generation/report dates are not video publication dates.",
+    "Keep eventual verified history separate from upload/slot receipts."
+  ]
+}
