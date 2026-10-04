@@ -89,10 +89,21 @@
         "A real native-operation capture target and output verification must replace the simulated success before activation."
       ],
       "completion_requires": [
-        "Prepare an isolated harness using rights-cleared valid input and the actual processing service.",
+        "Source-only replacement harness prepared; resolve any remote publication authorization and complete runtime verification before registering it.",
         "Compile and execute on an authorized dedicated device; verify the resulting file or tag data and managed recording provenance.",
         "Only then reconsider production eligibility. Existing publication history must remain unchanged."
-      ]
+      ],
+      "prepared_harness": {
+        "repository": "onnellab/quivra",
+        "branch": "codex/quivra-native-capture",
+        "commit": "7c2a31643013846ba86d21bb9ac11fa4b53641eb",
+        "availability": "local_only_push_not_authorized",
+        "test_target": "integration_test/quivra_native_video_capture_test.dart",
+        "validation": "independent_source_review_only",
+        "build_device_execution": "NOT_RUN",
+        "recording": "NOT_CAPTURED",
+        "capture_verified": false
+      }
     },
     {
       "app_id": "APP-0002",
@@ -111,10 +122,21 @@
         "A real native-operation capture target and output verification must replace the simulated success before activation."
       ],
       "completion_requires": [
-        "Prepare an isolated harness using rights-cleared valid input and the actual processing service.",
+        "Source-only replacement harness prepared; resolve any remote publication authorization and complete runtime verification before registering it.",
         "Compile and execute on an authorized dedicated device; verify the resulting file or tag data and managed recording provenance.",
         "Only then reconsider production eligibility. Existing publication history must remain unchanged."
-      ]
+      ],
+      "prepared_harness": {
+        "repository": "onnellab/tagweaver",
+        "branch": "codex/tagweaver-native-capture",
+        "commit": "a5c2128f0c17e1ef427b2cda61bc38a6432ae7b7",
+        "availability": "local_only_push_not_authorized",
+        "test_target": "integration_test/tagweaver_native_video_capture_test.dart",
+        "validation": "independent_source_review_only",
+        "build_device_execution": "NOT_RUN",
+        "recording": "NOT_CAPTURED",
+        "capture_verified": false
+      }
     },
     {
       "app_id": "APP-0004",
@@ -133,10 +155,21 @@
         "A real native-operation capture target and output verification must replace the simulated success before activation."
       ],
       "completion_requires": [
-        "Prepare an isolated harness using rights-cleared valid input and the actual processing service.",
+        "Source-only replacement harness prepared; resolve any remote publication authorization and complete runtime verification before registering it.",
         "Compile and execute on an authorized dedicated device; verify the resulting file or tag data and managed recording provenance.",
         "Only then reconsider production eligibility. Existing publication history must remain unchanged."
-      ]
+      ],
+      "prepared_harness": {
+        "repository": "onnellab/segra",
+        "branch": "codex/segra-authentic-capture-prep",
+        "commit": "ab758c076b6a63d8fc682868df1592405d508ca3",
+        "availability": "remote_feature_branch",
+        "test_target": "integration_test/segra_real_trim_preview_capture_test.dart",
+        "validation": "independent_source_review_only",
+        "build_device_execution": "NOT_RUN",
+        "recording": "NOT_CAPTURED",
+        "capture_verified": false
+      }
     }
   ]
 }
