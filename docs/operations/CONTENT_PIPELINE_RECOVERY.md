@@ -188,3 +188,23 @@ no blocking issues.
   old Korean article image_specs value overwritten by stale engine metadata.
   The follow-up restores the prior Korean metadata and validates localization
   before any future homepage push; article body and canonical URL are unchanged.
+
+
+## Final outcome
+
+The final code change is `31f20116`. Its remote unit matrix passed; the additional
+homepage guard has 60 focused passing tests. Follow-up content-only deployment
+`37171941733` published zero new articles and zero API channel posts. The homepage
+localization preflight passed for 239 source files, deployment succeeded, and the
+separate nine-language regression workflow `37171984156` passed. Homepage content
+commit: `cfbeefe0c555df300ff032ca6b3108899299b7e9`.
+
+All four temporarily paused GitHub workflows are active again. Receipt/dashboard
+run `37172104024` succeeded (`007a3caa` dashboard snapshot). Both existing daily
+schedulers are restored; no extra schedule was created. Hashnode was neither
+regenerated nor posted. No paid API model, credential, OAuth, or security setting
+was changed. The remaining operational blocker is interactive browser access for
+the four due X/LinkedIn/Medium items listed above. Existing Mac Chrome JavaScript
+from Apple Events is disabled, and this session has no independent interactive
+browser tool; an authorized browser connection or explicit approval of that
+browser permission is needed before those posts can be executed and verified.
