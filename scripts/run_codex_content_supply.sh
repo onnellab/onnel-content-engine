@@ -44,6 +44,20 @@ if python3 scripts/check_content_supply.py --require-healthy --minimum-ideas 8; 
   echo "content supply already healthy; Codex usage not required"
   exit 0
 fi
+# An isolated clone excludes .tools. Reuse the installed renderer through this
+# process's PATH only, so generation and validation inherit the same dependency.
+if ! command -v rsvg-convert >/dev/null 2>&1; then
+  RENDERER_DIR="${CONTENT_ROOT}/.tools/librsvg2-bin/usr/bin"
+  if [[ ! -x "${RENDERER_DIR}/rsvg-convert" ]]; then
+    echo "content supply refused: rsvg-convert unavailable; provide it on PATH or in the installed .tools directory"
+    exit 1
+  fi
+  export PATH="${RENDERER_DIR}:${PATH}"
+fi
+if ! rsvg-convert --version; then
+  echo "content supply refused: rsvg-convert failed its preflight check"
+  exit 1
+fi
 LOGIN_STATUS="$(codex login status 2>&1)"
 if [[ "${LOGIN_STATUS}" != *"Logged in using ChatGPT"* ]]; then
   echo "content supply refused: ChatGPT subscription login required"

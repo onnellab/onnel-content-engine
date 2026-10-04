@@ -51,11 +51,13 @@ class ContentSupplyRunnerTests(unittest.TestCase):
 if [[ "$CASE" == low_disk ]]; then free=10; else free=99999999; fi
 echo "fixture 999999999 1 $free 1% /"
 ''')
+        self.command('rsvg-convert', 'echo "fixture renderer version"\n')
         self.command('codex', '''echo "codex $*" >> "$EVENTS"
 if [[ "$1" == login ]]; then
   if [[ "$CASE" == api_login ]]; then echo 'Logged in using API key'; else echo 'Logged in using ChatGPT'; fi
   exit 0
 fi
+rsvg-convert --version >> "$EVENTS"
 case "$CASE" in
  index_foreign)
    echo 'must not leak' > forbidden.txt; git add forbidden.txt; rm forbidden.txt
@@ -117,6 +119,7 @@ exit 0
         self.assertEqual(2, events.count('--require-healthy --minimum-ideas 8'))
 
     def test_healthy_queue_uses_no_codex(self):
+        self.hide_path_renderer()
         result = self.run_case('healthy')
         self.assertEqual(0, result.returncode, result.stdout)
         self.assertNotIn('codex ', (self.root / 'events').read_text())
@@ -159,6 +162,41 @@ exit 0
         self.assertNotEqual(0, result.returncode)
         self.assertIn('ChatGPT subscription login required', result.stdout)
         self.assertNotIn('exec --ephemeral', (self.root / 'events').read_text())
+
+    def hide_path_renderer(self):
+        # Make absence deterministic even on CI hosts with librsvg installed.
+        (self.bin / 'rsvg-convert').unlink()
+        bash_env = self.root / 'bash-env'
+        bash_env.write_text('command() { if [[ "$*" == "-v rsvg-convert" ]]; then return 1; fi; builtin command "$@"; }\n')
+        self.env['BASH_ENV'] = str(bash_env)
+
+    def test_installed_renderer_is_inherited_without_copying_tools(self):
+        self.hide_path_renderer()
+        renderer = self.repo / '.tools/librsvg2-bin/usr/bin/rsvg-convert'
+        renderer.parent.mkdir(parents=True)
+        renderer.write_text('#!/usr/bin/env bash\necho "installed renderer version"\n')
+        renderer.chmod(0o755)
+        result = self.run_case('success')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertIn('installed renderer version', result.stdout)
+        self.assertIn('exec --ephemeral', (self.root / 'events').read_text())
+        self.assertIn('installed renderer version', (self.root / 'events').read_text())
+        self.git('fetch', 'origin')
+        self.assertEqual('', self.git('ls-tree', '--name-only', 'origin/main', '--', '.tools'))
+
+    def test_missing_renderer_fails_before_login_or_model_use(self):
+        self.hide_path_renderer()
+        result = self.run_case('success')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('rsvg-convert unavailable', result.stdout)
+        self.assertNotIn('codex ', (self.root / 'events').read_text())
+
+    def test_broken_renderer_fails_before_login_or_model_use(self):
+        self.command('rsvg-convert', 'exit 1\n')
+        result = self.run_case('success')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('rsvg-convert failed its preflight check', result.stdout)
+        self.assertNotIn('codex ', (self.root / 'events').read_text())
 
     def test_insufficient_backlog_cannot_commit(self):
         result = self.run_case('shortage')
