@@ -1345,6 +1345,12 @@ def syndication_note(article: Article, platform: str) -> str:
 
 
 def syndication_intro(article: Article, platform: str) -> str:
+    if platform == "medium":
+        process = reuse_source_excerpt(
+            article.markdown_path.read_text(encoding="utf-8"), ("Process Notes", "과정 설명", "과정 기록")
+        )
+        if process:
+            return process
     haystack = f"{article.title} {article.topic['primary_question']} {article.description}".lower()
     if "txt" in haystack and ("large" in haystack or "huge" in haystack or "lag" in haystack):
         intros = {
@@ -1403,6 +1409,13 @@ def syndication_body(article: Article, body: str, platform: str) -> str:
     return body
 
 
+def reuse_source_excerpt(markdown: str, headings: tuple[str, ...]) -> str:
+    """Reuse optional reviewed source copy without inventing demo or outcome claims."""
+    source = section_text(markdown, headings)
+    points = list_items_from_text(source, limit=1)
+    return points[0] if points else first_paragraph_from_text(source)
+
+
 def social_template_context(
     article: Article,
     site_url: str,
@@ -1441,6 +1454,10 @@ def social_template_context(
     insight = first_sentences(short_answer, 2)
     summary = social_summary(article, description, platform)
     lead = linkedin_lead(article, insight, description)
+    if platform in {"x", "bluesky"}:
+        summary = reuse_source_excerpt(markdown, ("Demo Steps", "데모 단계")) or summary
+    if platform == "linkedin":
+        lead = reuse_source_excerpt(markdown, ("Workplace Use", "업무 활용")) or lead
     points_block = f"Before changing tools:\n{key_points_text}"
     short_points_block = f"Before changing tools:\n{short_points_text}"
     single_point_block = f"Before changing tools:\n{single_point_text}"

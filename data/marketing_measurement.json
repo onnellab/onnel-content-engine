@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "window_days": 28,
+  "baseline_weight": 1,
+  "channels": ["x", "linkedin", "bluesky", "medium", "devto", "youtube"],
+  "metric_samples": [],
+  "extra_publications": [],
+  "notes": [
+    {
+      "app_id": "APP-0002",
+      "kind": "user_reported_unverified",
+      "reported_purchase_count": 13,
+      "channel_attribution": null,
+      "settlement_confirmed": null,
+      "note": "User reported 13 TagWeaver purchases; not an independently verified conversion, channel outcome, or settled revenue."
+    }
+  ]
+}
