@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import shutil
 import sys
 from pathlib import Path
 from urllib.parse import urljoin
@@ -16,12 +15,13 @@ from publishing import DEFAULT_SITE_URL, PublishingError, article_public_url, lo
 from publishing import EXTERNAL_DISTRIBUTION_LANGUAGES
 from topic_management import DEFAULT_TOPICS_PATH, TopicError
 from publication_history import publication_history, preserve_publication, require_history_items
+from distribution_policy import USER_EXCLUDED_PLATFORMS
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TEMPLATE_DIR = ROOT / "templates" / "syndication"
 DEFAULT_OUTPUT_DIR = ROOT / "generated" / "syndication"
-PLATFORMS = ("devto", "medium")
+PLATFORMS = ("devto",)
 PLACEHOLDER_RE = re.compile(r"\{\{([a-zA-Z0-9_]+)\}\}")
 
 
@@ -186,6 +186,8 @@ def generate_syndication_drafts(
     platforms: tuple[str, ...] = PLATFORMS,
     include_prepublication: bool = False,
 ) -> list[dict[str, object]]:
+    if any(platform not in PLATFORMS for platform in platforms):
+        raise SyndicationError('user_excluded or unsupported syndication platform')
     site_url = normalize_site_url(site_url)
     project_root = topics_path.parent.parent
     state = previous_syndication_state(output_dir, project_root)
@@ -201,10 +203,25 @@ def generate_syndication_drafts(
         site_url,
         statuses=statuses,
     )
-    if output_dir.exists():
-        shutil.rmtree(output_dir)
-    output_dir.mkdir(parents=True)
-    manifest: list[dict[str, object]] = []
+    # Excluded channels are immutable archives, including unpublished drafts.
+    previous_manifest = output_dir / 'manifest.json'
+    archived = [row for row in json.loads(previous_manifest.read_text(encoding='utf-8')).get('drafts', [])
+                if isinstance(row, dict) and row.get('platform') in USER_EXCLUDED_PLATFORMS] if previous_manifest.exists() else []
+    protected_paths = {(project_root / str(row.get('draft_path', ''))).resolve() for row in archived}
+    if previous_manifest.resolve() in protected_paths:
+        raise SyndicationError('manifest output conflicts with an excluded historical draft')
+    for article in articles:
+        if article.topic['primary_language'] not in EXTERNAL_DISTRIBUTION_LANGUAGES:
+            continue
+        for platform in platforms:
+            candidate = output_dir / platform / article.topic['primary_language'] / article.topic['category'] / f"{article.topic['slug']}.md"
+            if candidate.resolve() in protected_paths:
+                raise SyndicationError('active output conflicts with an excluded historical draft')
+    # Regenerate only selected active files. Leaving unrelated files untouched
+    # also preserves archived drafts whose historical path is outside a normal
+    # platform subdirectory. The manifest defines the active inventory.
+    output_dir.mkdir(parents=True, exist_ok=True)
+    manifest: list[dict[str, object]] = archived
     for article in articles:
         if article.topic["primary_language"] not in EXTERNAL_DISTRIBUTION_LANGUAGES:
             continue

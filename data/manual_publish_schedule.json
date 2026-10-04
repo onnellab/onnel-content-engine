@@ -78,7 +78,10 @@
       "topic_id": "TOPIC-0009",
       "title": "How to Trim Audio Recordings Without a Full Editor",
       "original_due_at": "2026-08-21T09:00:00+09:00",
-      "publish_at": "2026-09-29T09:00:00+09:00"
+      "publish_at": "2026-09-29T09:00:00+09:00",
+      "status": "user_excluded",
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "sequence": 12,
@@ -105,7 +108,10 @@
       "topic_id": "TOPIC-0012",
       "title": "How to Rename Files Safely With a Preview Workflow",
       "original_due_at": "2026-08-24T09:00:00+09:00",
-      "publish_at": "2026-10-03T09:00:00+09:00"
+      "publish_at": "2026-10-03T09:00:00+09:00",
+      "status": "user_excluded",
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "sequence": 16,
@@ -132,7 +138,10 @@
       "topic_id": "TOPIC-0015",
       "title": "How to Verify Audio Clips Before Combining Them",
       "original_due_at": "2026-08-27T09:00:00+09:00",
-      "publish_at": "2026-10-07T09:00:00+09:00"
+      "publish_at": "2026-10-07T09:00:00+09:00",
+      "status": "user_excluded",
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "sequence": 20,
@@ -159,7 +168,10 @@
       "topic_id": "TOPIC-0016",
       "title": "How to Keep a Durable Research Reading Log",
       "original_due_at": "2026-08-30T09:00:00+09:00",
-      "publish_at": "2026-10-11T09:00:00+09:00"
+      "publish_at": "2026-10-11T09:00:00+09:00",
+      "status": "user_excluded",
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "sequence": 24,
@@ -186,7 +198,10 @@
       "topic_id": "TOPIC-0018",
       "title": "How to Choose a Media Output Format Before Conversion",
       "original_due_at": "2026-09-02T09:00:00+09:00",
-      "publish_at": "2026-10-15T09:00:00+09:00"
+      "publish_at": "2026-10-15T09:00:00+09:00",
+      "status": "user_excluded",
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "sequence": 28,

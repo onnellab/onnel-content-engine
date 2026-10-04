@@ -51,7 +51,7 @@ ADAPTERS: dict[str, AdapterSpec] = {
         "Export-only by default. Hashnode GraphQL API requires a paid publication plan.",
     ),
     "linkedin": AdapterSpec("linkedin", "social", (), False, "Unsupported until account and permission scope are defined."),
-    "medium": AdapterSpec("medium", "syndication", (), False, "Export-only. No supported real API adapter."),
+    "medium": AdapterSpec("medium", "syndication", (), False, "User excluded. Historical artifacts only; no generation or publication."),
 }
 
 

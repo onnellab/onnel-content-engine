@@ -8,6 +8,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from distribution_policy import channel_excluded
 
 from hashnode_content import HASHNODE_CONTENT_PROFILE, hashnode_automod_risks
 
@@ -95,8 +96,8 @@ def evaluate_syndication_drafts(manifest_path: Path = DEFAULT_MANIFEST_PATH, pro
     drafts = manifest.get("drafts")
     if not isinstance(drafts, list) or not drafts:
         raise SyndicationEvaluationError("syndication manifest has no drafts")
-    evaluations = [score_draft(draft, project_root) for draft in drafts if isinstance(draft, dict)]
-    average = round(sum(float(item["score"]) for item in evaluations) / len(evaluations), 2)
+    evaluations = [score_draft(draft, project_root) for draft in drafts if isinstance(draft, dict) and not channel_excluded(draft.get('platform'))]
+    average = round(sum(float(item["score"]) for item in evaluations) / len(evaluations), 2) if evaluations else 0.0
     return {"type": "syndication_evaluation", "average_score": average, "drafts": evaluations}
 
 

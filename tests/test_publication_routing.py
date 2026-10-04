@@ -81,10 +81,24 @@ class PublicationRoutingTest(unittest.TestCase):
             generate_social_posts(fixture.topics_path, social_dir, "https://example.com/")
         generate_syndication_drafts(fixture.topics_path, synd_dir, "https://example.com/")
         social = json.loads((social_dir / "manifest.json").read_text())["posts"]
-        synd = json.loads((synd_dir / "manifest.json").read_text())["drafts"]
+        synd_manifest = json.loads((synd_dir / "manifest.json").read_text())
+        self.assertEqual({item["platform"] for item in synd_manifest["drafts"]}, {"devto"})
+        # Seed a historical Medium item explicitly: new generation excludes Medium,
+        # but exclusion must not destroy an existing body or publication receipt.
+        medium_path = synd_dir / "medium/en/reading/read-large-txt-files.md"
+        medium_path.parent.mkdir(parents=True)
+        medium_path.write_bytes(b"Legacy Medium publication body.\r\n")
+        medium = dict(
+            synd_manifest["drafts"][0],
+            platform="medium",
+            status="draft",
+            draft_path=medium_path.relative_to(fixture.root).as_posix(),
+        )
+        synd_manifest["drafts"].append(medium)
+        (synd_dir / "manifest.json").write_text(json.dumps(synd_manifest), encoding="utf-8")
         originals = {}
         done = {}
-        for item in [next(p for p in social if p["platform"] == "x" and not p["is_variant"]), next(d for d in synd if d["platform"] == "medium")]:
+        for item in [next(p for p in social if p["platform"] == "x" and not p["is_variant"]), medium]:
             path = fixture.root / item["draft_path"]
             original = path.read_bytes()
             originals[item["platform"]] = (path, original)
@@ -104,7 +118,11 @@ class PublicationRoutingTest(unittest.TestCase):
         regenerated_social = json.loads((social_dir / "manifest.json").read_text())["posts"]
         regenerated_medium = next(d for d in json.loads((synd_dir / "manifest.json").read_text())["drafts"] if d["platform"] == "medium")
         self.assertEqual(next(p for p in regenerated_social if p["platform"] == "x" and not p["is_variant"])["status"], "draft")
-        self.assertEqual(regenerated_medium["status"], "posted")
+        self.assertEqual(regenerated_medium, medium)
+        preserved_medium = previous_syndication_state(synd_dir)[("TOPIC-0001", "medium", "en")]
+        self.assertEqual(preserved_medium["status"], "posted")
+        self.assertEqual(preserved_medium["posted_url"], "https://medium.com/@onnellab/story-abcdef123456")
+        self.assertEqual(approved_drafts({"drafts": [regenerated_medium]}, "medium"), [])
 
     def test_core_posts_only_api_owned_channels(self):
         with patch("post_core_distribution.post_social_drafts", return_value=[]) as social, patch("post_core_distribution.post_syndication_drafts", return_value=[]) as synd:

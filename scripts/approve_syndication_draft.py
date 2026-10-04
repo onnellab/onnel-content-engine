@@ -9,6 +9,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from distribution_policy import channel_excluded
 
 from evaluate_syndication_drafts import DEFAULT_MANIFEST_PATH
 from topic_management import TopicError, _require_current_published_topic
@@ -40,11 +41,9 @@ def approve_syndication_draft(
 ) -> dict[str, object]:
     if not approved_by.strip():
         raise SyndicationApprovalError("approved_by is required")
-    if platform == "hashnode":
-        raise SyndicationApprovalError("Hashnode distribution is disabled")
+    if channel_excluded(platform):
+        raise SyndicationApprovalError(f"{platform} distribution is user_excluded")
     validate_syndication_drafts(manifest_path, project_root_for_manifest(manifest_path))
-    if platform == "medium" and not allow_medium:
-        raise SyndicationApprovalError("Medium is export-only; pass --allow-medium only for manual tracking")
     manifest = load_manifest(manifest_path)
     drafts = manifest.get("drafts")
     if not isinstance(drafts, list):
@@ -90,11 +89,10 @@ def approve_syndication_draft(
 def main() -> int:
     parser = argparse.ArgumentParser(description="Approve a generated syndication draft")
     parser.add_argument("topic_id")
-    parser.add_argument("platform", choices=("devto", "medium"))
+    parser.add_argument("platform", choices=("devto",))
     parser.add_argument("language", choices=("en", "ko"))
     parser.add_argument("--approved-by", required=True)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST_PATH)
-    parser.add_argument("--allow-medium", action="store_true")
     args = parser.parse_args()
     try:
         draft = approve_syndication_draft(
@@ -103,7 +101,6 @@ def main() -> int:
             args.language,
             args.approved_by,
             args.manifest,
-            allow_medium=args.allow_medium,
         )
     except (SyndicationApprovalError, SyndicationValidationError, OSError, json.JSONDecodeError) as error:
         print(f"syndication approval failed: {error}", file=sys.stderr)

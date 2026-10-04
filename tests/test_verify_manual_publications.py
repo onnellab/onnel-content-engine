@@ -435,18 +435,18 @@ class VerifyManualPublicationsTest(unittest.TestCase):
                     visual_text=visual_text,
                 )
 
-            self.assertEqual(len(verified), 5)
+            self.assertEqual(len(verified), 4)
             data = json.loads(state.read_text(encoding="utf-8"))
             self.assertIn("TOPIC-0001::bluesky::en::bluesky", data["done"])
             self.assertEqual(data["done"]["TOPIC-0001::devto::en::markdown"]["posted_url"], "https://dev.to/onnellab/example")
-            self.assertEqual(data["done"]["TOPIC-0001::medium::en::markdown"]["posted_url"], "https://medium.com/@onnellab.app/example")
+            self.assertNotIn("TOPIC-0001::medium::en::markdown", data["done"])
             self.assertEqual(data["done"]["TOPIC-0001::x::en::x"]["posted_url"], "https://x.com/onnellab/status/123456789")
             self.assertEqual(data["done"]["TOPIC-0001::linkedin::en::linkedin"]["posted_url"], "https://www.linkedin.com/feed/update/urn:li:activity:123456789")
             self.assertEqual(data["done"]["TOPIC-0001::x::en::x"]["verification_method"], "x_public_page_visual")
             self.assertEqual(data["done"]["TOPIC-0001::linkedin::en::linkedin"]["verification_confidence"], "low")
             report_data = json.loads(report.read_text(encoding="utf-8"))
-            self.assertEqual(report_data["counts"]["checked"], 5)
-            self.assertEqual(report_data["counts"]["verified"], 5)
+            self.assertEqual(report_data["counts"]["checked"], 4)
+            self.assertEqual(report_data["counts"]["verified"], 4)
             self.assertEqual(report_data["counts"]["pending"], 0)
 
     def test_dry_run_does_not_write_state(self) -> None:
@@ -490,7 +490,7 @@ class VerifyManualPublicationsTest(unittest.TestCase):
             self.assertEqual(json.loads(state.read_text(encoding="utf-8"))["done"], {})
             self.assertFalse(report.exists())
 
-    def test_report_records_pending_reason(self) -> None:
+    def test_report_does_not_retry_user_excluded_channel(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             social = root / "social.json"
@@ -532,8 +532,8 @@ class VerifyManualPublicationsTest(unittest.TestCase):
 
             self.assertEqual(verified, [])
             report_data = json.loads(report.read_text(encoding="utf-8"))
-            self.assertEqual(report_data["counts"]["pending"], 1)
-            self.assertEqual(report_data["items"][0]["reason"], "No matching public post found")
+            self.assertEqual(report_data["counts"]["pending"], 0)
+            self.assertEqual(report_data["items"], [])
 
     def test_x_public_profile_defaults_to_onnellab(self) -> None:
         with unittest.mock.patch.dict("os.environ", {}, clear=True):

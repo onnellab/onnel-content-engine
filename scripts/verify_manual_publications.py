@@ -19,6 +19,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from distribution_policy import channel_excluded
 from html.parser import HTMLParser
 from typing import Any, Callable
 from zoneinfo import ZoneInfo
@@ -585,6 +586,8 @@ def verify_item(
     fetch_text = fetch_text if fetch_text is not None else fetch_text_url
     visual_text = visual_text if visual_text is not None else playwright_page_text
     platform = item.get("platform")
+    if channel_excluded(platform):
+        return None
     try:
         if platform == "bluesky":
             return verify_bluesky(item, fetch_json)
@@ -642,7 +645,7 @@ def verify_manual_publications(
     retry_delay_seconds: float = 0,
 ) -> list[Verification]:
     state = load_json(state_path) or {"version": 1, "updated_at": "", "done": {}}
-    items = [item for item in load_items(social_manifest, syndication_manifest) if is_published_source(item)]
+    items = [item for item in load_items(social_manifest, syndication_manifest) if is_published_source(item) and not channel_excluded(item.get('platform'))]
     verifications: list[Verification] = []
     already_done_items: list[dict[str, Any]] = []
     pending_items: list[dict[str, Any]] = []

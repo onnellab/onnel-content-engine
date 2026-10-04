@@ -190,7 +190,7 @@ no blocking issues.
   before any future homepage push; article body and canonical URL are unchanged.
 
 
-## Final outcome
+## Historical recovery outcome (before Medium exclusion)
 
 The final code change is `31f20116`. Its remote unit matrix passed; the additional
 homepage guard has 60 focused passing tests. Follow-up content-only deployment
@@ -208,3 +208,31 @@ the four due X/LinkedIn/Medium items listed above. Existing Mac Chrome JavaScrip
 from Apple Events is disabled, and this session has no independent interactive
 browser tool; an authorized browser connection or explicit approval of that
 browser permission is needed before those posts can be executed and verified.
+
+## Medium exclusion — 2026-10-04
+
+The user subsequently excluded Medium from active publication, future draft
+generation, scheduling, retries and unpublished backlog, like Hashnode. The
+earlier Medium backlog counts above describe the historical recovery snapshot;
+they are not current publication instructions. TOPIC-0009 and TOPIC-0012 and
+the other unposted Medium entries are now `user_excluded`. Historical schedule
+dates remain as evidence, not executable reservations. Existing drafts, public
+URLs, manual completion records and remote receipt records are preserved.
+
+X/LinkedIn dates and other channels' records are unchanged. Repository policy
+and the regenerated dashboard exclude Medium; this is not an external publishing
+action. No Mac was accessed and its installed checkout/saved automation prompt
+has not been updated by this change. An older Mac installation remains outside
+this applied scope and requires separate authorized synchronization before use.
+
+Medium follow-up verification: 830 offline tests passed (94.876 seconds; three
+Windows-only skips), actual-data dry-run passed with zero network calls, and
+independent source review found no remaining blocker. All 19 historical draft,
+completion, receipt and requeue files were preserved; non-Medium manifest rows,
+posted URLs and original schedule fields were unchanged. The dashboard contains
+16 disabled Medium records, including six explicitly excluded unpublished rows.
+
+This integration uses a commit-scoped push skip and explicitly dispatched tests
+and publishing dry-run to avoid automatic Dev.to updates or homepage writes from
+the code push. Existing workflow schedules remain enabled. A successful dry-run
+is not a new external publication or proof that an older Mac prompt was updated.

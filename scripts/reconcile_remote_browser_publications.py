@@ -11,13 +11,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from publication_history import specific_permalink
+from distribution_policy import channel_excluded
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INBOX = ROOT / "data" / "remote_browser_publications.json"
 DEFAULT_STATE = ROOT / "data" / "manual_publish_state.json"
 DEFAULT_SOCIAL = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION = ROOT / "generated" / "syndication" / "manifest.json"
-REMOTE_BROWSER_PLATFORMS = {"x", "linkedin", "medium"}
+REMOTE_BROWSER_PLATFORMS = {"x", "linkedin"}
 
 class RemotePublicationError(ValueError):
     pass
@@ -95,6 +96,8 @@ def reconcile(inbox_path: Path = DEFAULT_INBOX, state_path: Path = DEFAULT_STATE
     for record in inbox["records"]:
         if not isinstance(record, dict) or record.get("status") != "new":
             continue
+        if channel_excluded(record.get('platform')) or any(f'::{p}::' in str(record.get('manual_key', '')) for p in ('medium', 'hashnode')):
+            continue  # Preserve old/pending receipts without processing excluded channels.
         manual_key = str(record.get("manual_key", "")).strip()
         if not manual_key or manual_key in seen_new:
             raise RemotePublicationError(f"missing or duplicate new manual_key: {manual_key!r}")

@@ -7,6 +7,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from distribution_policy import channel_excluded
 
 from approve_social_post import project_root_for_manifest as social_root_for_manifest
 from check_publishing_credentials import credential_status
@@ -83,7 +84,7 @@ def publishing_dry_run_report(
     approved_syndication = [
         draft
         for draft in syndication_drafts
-        if draft.get("status") == "approved" and draft.get("platform") != "medium"
+        if draft.get("status") == "approved" and not channel_excluded(draft.get("platform"))
     ]
     adapters = sorted(
         {
@@ -134,7 +135,7 @@ def publishing_dry_run_report(
         f"{draft['topic_id']} {draft['platform']} {draft['language']} status={draft['status']}"
         + (f" error_type={draft['error_type']}" if draft.get("error_type") else "")
         for draft in syndication_drafts
-        if draft.get("status") in {"failed", "posted"} or draft.get("platform") == "medium"
+        if draft.get("status") in {"failed", "posted", "user_excluded"} or channel_excluded(draft.get("platform"))
     ]
     if not blocked:
         lines.append("- none")

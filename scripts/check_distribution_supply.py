@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOCIAL_MANIFEST = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION_MANIFEST = ROOT / "generated" / "syndication" / "manifest.json"
 REQUIRED_SOCIAL_PLATFORMS = {"x", "linkedin", "bluesky"}
-REQUIRED_SYNDICATION_PLATFORMS = {"devto", "medium"}
+REQUIRED_SYNDICATION_PLATFORMS = {"devto"}
 
 
 class DistributionSupplyError(ValueError):
@@ -71,7 +71,9 @@ def distribution_supply_report(
             missing.append({"topic_id": topic["id"], "channel": "syndication", "platform": platform})
 
     social_quality = evaluate_social_templates(social_manifest, project_root)
-    syndication_quality = evaluate_syndication_drafts(syndication_manifest, project_root)
+    # An empty active-channel inventory is a supply failure, not an evaluator
+    # exception that bypasses the structured missing-platform report.
+    syndication_quality = evaluate_syndication_drafts(syndication_manifest, project_root) if syndication else {'average_score': 0.0, 'drafts': []}
     social_score = float(social_quality["average_score"])
     syndication_score = float(syndication_quality["average_score"])
     repetition = social_quality.get("repetition_warnings") or []

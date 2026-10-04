@@ -406,7 +406,7 @@ scripts/check_distribution_supply.py --minimum-score 9.5
 scripts/approve_due_distribution.py --approved-by github-actions
 ```
 
-The fail-closed supply gate requires every published English article to have distinct X, LinkedIn, Bluesky, Dev.to, and Medium drafts. Hashnode is not a distribution target and no Hashnode drafts are generated. The gate requires both channel averages and every individual primary draft to score at least 9.5 / 10, and rejects repeated social phrasing before any due channel is approved.
+The fail-closed supply gate requires every published English article to have distinct X, LinkedIn, Bluesky, and Dev.to drafts. Medium and Hashnode are excluded by user instruction; neither channel's drafts are generated or required. The gate requires both channel averages and every individual primary draft to score at least 9.5 / 10, and rejects repeated social phrasing before any due channel is approved.
 
 Core automated cadence:
 
@@ -419,9 +419,9 @@ Day 3: next canonical ONNELLAB article
 
 Only English primary drafts are automatically approved.
 
-X, LinkedIn, and Medium use the remote browser queue and publication receipts, not the core API worker.
+X and LinkedIn use the remote browser queue and publication receipts, not the core API worker.
 
-Hashnode distribution is disabled. Do not generate, queue, approve, publish, retry, or schedule Hashnode drafts. Historical publication records may remain as audit evidence only.
+Medium and Hashnode distribution are disabled. Do not generate, queue, approve, publish, retry, or schedule their drafts. Existing drafts, public URLs and historical publication records are preserved as audit evidence. Unpublished Medium entries are explicitly `user_excluded`. Repository policy changes do not update an installed Mac publisher or saved prompt; no Mac access or configuration change is part of this change.
 
 Receipt presence prevents regeneration and reposting. Legacy completion records with only profile URLs remain blocked for reconciliation; they are not proof of a specific published post.
 

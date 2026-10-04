@@ -3,8 +3,9 @@
 This is an offline ledger, not a publisher or scheduler. It reads existing social
 and syndication manifests, joins exact publication identities with manual and
 remote-browser receipts, and reports a 28-day window. It does not change published
-copy, links, accounts, schedules, credentials, or analytics settings. Hashnode and
-unselected social variants are excluded. Existing YouTube publication records may
+copy, links, accounts, schedules, credentials, or analytics settings. Hashnode and unselected social variants are excluded. Medium is user-excluded
+from new distribution and unpublished demand; existing Medium publication
+receipts remain visible as historical measurements. Existing YouTube publication records may
 be supplied explicitly in `extra_publications`; the tool does not access a private
 video queue automatically.
 

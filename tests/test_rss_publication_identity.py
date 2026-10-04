@@ -141,11 +141,23 @@ class RssIdentityTest(unittest.TestCase):
         self.assertEqual(match(f'<rss><channel><description>Originally published at {CANONICAL}</description>{entry(ARTICLE + "-other")}</channel></rss>'), '')
 
     def test_defaults_resolve_runtime_adapters_without_live_network(self):
-        item = {'manual_key':'topic::hashnode::en::markdown', 'platform':'hashnode', 'slug':'example', 'canonical_url':CANONICAL}
-        with patch.object(v, 'fetch_text_url', return_value=rss(entry())) as fetch:
+        item = {'manual_key':'topic::devto::en::markdown', 'platform':'devto', 'slug':'example', 'canonical_url':CANONICAL}
+        article = 'https://dev.to/onnellab/example'
+        with patch.object(v, 'fetch_json_url', return_value=[{'url':article, 'canonical_url':CANONICAL}]) as fetch:
             result = v.verify_item(item)
-        self.assertEqual(result.posted_url, ARTICLE)
+        self.assertEqual(result.posted_url, article)
         fetch.assert_called_once()
+
+    def test_excluded_channels_do_not_resolve_public_evidence(self):
+        for platform in ('medium', 'hashnode'):
+            with self.subTest(platform=platform), patch.object(v, 'fetch_json_url') as fetch_json, \
+                    patch.object(v, 'fetch_text_url') as fetch_text, patch.object(v, 'playwright_page_text') as visual:
+                item = {'manual_key':f'topic::{platform}::en::markdown', 'platform':platform,
+                        'slug':'example', 'canonical_url':CANONICAL}
+                self.assertIsNone(v.verify_item(item, visual_public_pages=True))
+                fetch_json.assert_not_called()
+                fetch_text.assert_not_called()
+                visual.assert_not_called()
 
     def test_saved_automatic_rss_records_use_article_urls(self):
         state = json.loads(v.DEFAULT_STATE.read_text(encoding='utf-8'))
@@ -160,14 +172,42 @@ class RssIdentityTest(unittest.TestCase):
             root = Path(d)
             social, syndication, state, report = [root / name for name in ('social.json', 'syndication.json', 'state.json', 'report.json')]
             social.write_text('{"posts": []}')
-            syndication.write_text(json.dumps({'drafts':[{'topic_id':'topic', 'platform':'hashnode', 'language':'en', 'slug':'example', 'canonical_url':CANONICAL}]}))
-            original = '{"version":1,"done":{"human":{"marked_by":"human"}},"updated_at":"old"}'
+            syndication.write_text(json.dumps({'drafts':[{'topic_id':'topic', 'platform':'devto', 'language':'en', 'slug':'example', 'canonical_url':CANONICAL}]}))
+            original = json.dumps({'version':1, 'done':{
+                'human':{'marked_by':'human'},
+                'old::medium::en::markdown':{'platform':'medium', 'posted_url':'https://medium.com/@onnellab/old-abcdef123456'},
+                'old::hashnode::en::markdown':{'platform':'hashnode', 'posted_url':ARTICLE},
+            }, 'updated_at':'old'})
             state.write_text(original)
-            with patch.object(v, 'fetch_text_url', return_value=rss(entry(ARTICLE + '-other', 'example'))):
+            with patch.object(v, 'fetch_json_url', return_value=[{'url':'https://dev.to/onnellab/another', 'canonical_url':'https://other.test/'}]) as fetch:
                 result = v.verify_manual_publications(social, syndication, state, report)
+            fetch.assert_called_once()
             self.assertEqual(result, [])
             self.assertEqual(state.read_text(), original)
             self.assertEqual(json.loads(report.read_text())['counts']['pending'], 1)
+
+    def test_excluded_items_are_not_pending_and_preserve_done_state(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            social, syndication, state, report = [root / name for name in ('social.json', 'syndication.json', 'state.json', 'report.json')]
+            social.write_text('{"posts": []}')
+            syndication.write_text(json.dumps({'drafts':[
+                {'topic_id':'topic', 'platform':platform, 'language':'en', 'slug':'example', 'canonical_url':CANONICAL}
+                for platform in ('medium', 'hashnode')]}))
+            original = json.dumps({'version':1, 'done':{
+                'topic::medium::en::markdown':{'platform':'medium', 'posted_url':'https://medium.com/@onnellab/example-abcdef123456'},
+                'topic::hashnode::en::markdown':{'platform':'hashnode', 'posted_url':ARTICLE},
+            }, 'updated_at':'old'})
+            state.write_text(original)
+            with patch.object(v, 'fetch_json_url') as fetch_json, patch.object(v, 'fetch_text_url') as fetch_text, \
+                    patch.object(v, 'playwright_page_text') as visual:
+                result = v.verify_manual_publications(social, syndication, state, report, visual_public_pages=True)
+            self.assertEqual(result, [])
+            self.assertEqual(state.read_text(), original)
+            self.assertEqual(json.loads(report.read_text())['counts'], {'checked':0, 'already_done':0, 'verified':0, 'pending':0})
+            fetch_json.assert_not_called()
+            fetch_text.assert_not_called()
+            visual.assert_not_called()
 
 
 if __name__ == '__main__':

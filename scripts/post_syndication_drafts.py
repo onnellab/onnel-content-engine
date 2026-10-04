@@ -12,6 +12,7 @@ import urllib.request
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from distribution_policy import channel_excluded
 
 from approve_syndication_draft import write_manifest
 from evaluate_syndication_drafts import DEFAULT_MANIFEST_PATH, frontmatter
@@ -59,7 +60,7 @@ def approved_drafts(manifest: dict[str, object], platform: str | None = None) ->
         if isinstance(draft, dict)
         and draft.get("status") == "approved"
         and not draft.get("posted_url")
-        and draft.get("platform") != "medium"
+        and not channel_excluded(draft.get("platform"))
         and (platform is None or draft.get("platform") == platform)
     ]
     seen: set[tuple[object, object, object]] = set()
@@ -217,8 +218,8 @@ def post_syndication_drafts(
     verbose: bool = False,
     now: datetime | None = None,
 ) -> list[dict[str, object]]:
-    if platform == "hashnode" or adapter == "hashnode":
-        raise SyndicationPostingError("Hashnode distribution is disabled")
+    if channel_excluded(platform) or channel_excluded(adapter):
+        raise SyndicationPostingError("syndication channel is user_excluded")
     project_root = project_root_for_manifest(manifest_path)
     validate_syndication_drafts(manifest_path, project_root)
     manifest = load_manifest(manifest_path)
@@ -296,7 +297,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Post approved syndication drafts")
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST_PATH)
     parser.add_argument("--platform", choices=("devto",))
-    parser.add_argument("--adapter", default="mock", choices=("mock", "devto", "medium"))
+    parser.add_argument("--adapter", default="mock", choices=("mock", "devto"))
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--verbose", action="store_true", help="Print dry-run payload details")
     args = parser.parse_args()

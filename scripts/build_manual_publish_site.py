@@ -71,8 +71,8 @@ PLATFORM_LABELS = {
 SOCIAL_DUE_DELAYS_DAYS = {"x": 0, "linkedin": 1, "bluesky": 1}
 SYNDICATION_DUE_DELAYS_DAYS = {"devto": 2, "hashnode": 3, "medium": 4}
 AUTOMATED_PLATFORMS = {"bluesky", "devto"}
-REMOTE_BROWSER_PLATFORMS = {"x", "linkedin", "medium"}
-DISABLED_PLATFORMS = {"hashnode"}
+REMOTE_BROWSER_PLATFORMS = {"x", "linkedin"}
+DISABLED_PLATFORMS = {"hashnode", "medium"}
 HASHNODE_SEO_DESCRIPTION_LIMIT = 160
 
 
@@ -340,6 +340,8 @@ def apply_manual_publish_schedule(
         if not isinstance(entry, dict):
             raise ValueError("manual publish backlog entries must be objects")
         key = str(entry.get("manual_key", "")).strip()
+        if entry.get('status') == 'user_excluded' or any(f'::{platform}::' in key for platform in DISABLED_PLATFORMS):
+            continue
         due = str(entry.get("publish_at", "")).strip()
         if not key or not due:
             raise ValueError("manual publish backlog entries require manual_key and publish_at")
@@ -1115,6 +1117,8 @@ def asset_href(path_value: str) -> str:
 
 
 def compose_url(platform: str, text: str, canonical_url: str) -> str:
+    if platform in DISABLED_PLATFORMS:
+        return ''
     if platform == "x":
         return "https://twitter.com/intent/tweet?text=" + quote(text)
     if platform == "bluesky":
@@ -4057,12 +4061,12 @@ def html_document(
           ...rows.map((item) => item.last_attempt_at || item.approved_at),
         ]);
         const rowNextDueDates = rows
-          .filter((item) => !isDone(item) && !item.is_variant && !isPrepublication(item) && dueDate(item))
+          .filter((item) => item.publishing_mode !== 'disabled' && item.status !== 'user_excluded' && !isDone(item) && !item.is_variant && !isPrepublication(item) && dueDate(item))
           .map((item) => dueDate(item))
           .filter((date) => date && date.getTime() > Date.now())
           .sort((a, b) => a - b);
         const upcomingPlatformDates = rowNextDueDates.slice(0, 4);
-        const nextDue = upcomingPlatformDates[0] || nextScheduled;
+        const nextDue = rows[0]?.publishing_mode === 'disabled' ? null : (upcomingPlatformDates[0] || nextScheduled);
         const card = document.createElement('div');
         card.className = 'platform-card';
         const title = document.createElement('strong');

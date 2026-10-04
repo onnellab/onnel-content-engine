@@ -513,7 +513,7 @@ Inspect the Dev.to payload without posting:
 scripts/post_syndication_drafts.py --adapter devto --platform devto --dry-run --verbose
 ```
 
-Hashnode distribution is disabled. The canonical generator does not create Hashnode drafts, the supply gate does not require them, and Hashnode items must not be queued, approved, retried, or published. Existing public/permalink records may remain only as historical audit evidence.
+Medium and Hashnode distribution are disabled by user instruction. The canonical generator does not create drafts for either channel, the supply gate does not require them, and their items must not be queued, scheduled, approved, retried, or published. Existing drafts, public/permalink records and receipts remain historical audit evidence. Unpublished Medium backlog is marked `user_excluded`, not published or failed.
 
 Validate syndication drafts with:
 
@@ -533,7 +533,7 @@ Approve individual syndication drafts with:
 scripts/approve_syndication_draft.py TOPIC-0001 devto en --approved-by editor
 ```
 
-Post approved Dev.to or Medium drafts through the mock adapter with:
+Post approved Dev.to drafts through the mock adapter with:
 
 ```text
 scripts/post_syndication_drafts.py --adapter mock
@@ -542,7 +542,6 @@ scripts/post_syndication_drafts.py --adapter mock
 Current syndication draft targets:
 
 * Dev.to
-* Medium
 
 External distribution drafts are English-only. Korean articles remain on the ONNELLAB blog unless a specific post is manually selected for an external channel.
 
@@ -550,9 +549,7 @@ Syndication drafts must include a canonical link back to the ONNELLAB article.
 
 Dev.to drafts should remain unpublished by default and use normalized tags.
 
-Medium is export-only by default because its public API documentation is archived and no longer recommended for new integrations.
-
-Medium drafts must remain `status: draft` unless explicitly tracked as a manual action.
+Medium is excluded from future exports and publication. Preserved historical drafts do not authorize new work, even when a former schedule or approval is present.
 
 ---
 
@@ -840,7 +837,9 @@ is pulled before copying output, and any post-commit rebase is validated again.
 
 ### Local remote Chrome publishing
 
-X, LinkedIn, and Medium use `publishing_mode=remote_browser`. They are not human-manual queue items: the scheduled ONNELLAB remote publisher owns the final web UI step through the authorized Mac and its ordinary Google Chrome profile. Bluesky and Dev.to remain API automation. Hashnode uses `publishing_mode=disabled`; never create, publish, retry, reconcile, or mark a Hashnode draft complete.
+X and LinkedIn use `publishing_mode=remote_browser`. They are not human-manual queue items: the scheduled ONNELLAB remote publisher owns the final web UI step through its authorized browser. Bluesky and Dev.to remain API automation. Medium and Hashnode use `publishing_mode=disabled`; never create, publish, schedule, retry, or mark their drafts complete. Preserve existing receipts and specific public URLs.
+
+The 2026-10-04 Medium exclusion is enforced in this repository. This change does not access the Mac or update an installed Mac publisher or its saved automation prompt. An old checkout or prompt must not be treated as updated by a repository commit; deployment/automation synchronization requires a separate authorized action. X and LinkedIn's existing schedule dates are unchanged.
 
 The remote Chrome publisher runs at 09:00 Asia/Seoul and processes every due `remote_browser` item. The frozen September backlog contributes at most its assigned one item per day; a newly generated remote-browser item keeps its original `due_at` and may therefore share a day with one backlog item.
 

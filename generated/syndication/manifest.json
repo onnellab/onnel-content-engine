@@ -241,7 +241,7 @@
       "slug": "trim-audio-recordings-without-full-editor",
       "draft_path": "generated/syndication/medium/en/media/trim-audio-recordings-without-full-editor.md",
       "canonical_url": "https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/",
-      "status": "draft",
+      "status": "user_excluded",
       "approved_by": "",
       "approved_at": "",
       "post_id": "",
@@ -250,7 +250,9 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0
+      "retry_count": 0,
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "topic_id": "TOPIC-0010",
@@ -325,7 +327,7 @@
       "slug": "rename-files-safely-preview-workflow",
       "draft_path": "generated/syndication/medium/en/productivity/rename-files-safely-preview-workflow.md",
       "canonical_url": "https://onnellab.com/blog/en/rename-files-safely-preview-workflow/",
-      "status": "draft",
+      "status": "user_excluded",
       "approved_by": "",
       "approved_at": "",
       "post_id": "",
@@ -334,7 +336,9 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0
+      "retry_count": 0,
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "topic_id": "TOPIC-0014",
@@ -409,7 +413,7 @@
       "slug": "verify-audio-clips-before-combining",
       "draft_path": "generated/syndication/medium/en/media/verify-audio-clips-before-combining.md",
       "canonical_url": "https://onnellab.com/blog/en/verify-audio-clips-before-combining/",
-      "status": "draft",
+      "status": "user_excluded",
       "approved_by": "",
       "approved_at": "",
       "post_id": "",
@@ -418,7 +422,9 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0
+      "retry_count": 0,
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "topic_id": "TOPIC-0016",
@@ -451,7 +457,7 @@
       "slug": "keep-durable-research-reading-log",
       "draft_path": "generated/syndication/medium/en/research/keep-durable-research-reading-log.md",
       "canonical_url": "https://onnellab.com/blog/en/keep-durable-research-reading-log/",
-      "status": "draft",
+      "status": "user_excluded",
       "approved_by": "",
       "approved_at": "",
       "post_id": "",
@@ -460,7 +466,9 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0
+      "retry_count": 0,
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "topic_id": "TOPIC-0018",
@@ -493,7 +501,7 @@
       "slug": "choose-media-output-format-before-conversion",
       "draft_path": "generated/syndication/medium/en/media/choose-media-output-format-before-conversion.md",
       "canonical_url": "https://onnellab.com/blog/en/choose-media-output-format-before-conversion/",
-      "status": "draft",
+      "status": "user_excluded",
       "approved_by": "",
       "approved_at": "",
       "post_id": "",
@@ -502,7 +510,9 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0
+      "retry_count": 0,
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     },
     {
       "topic_id": "TOPIC-0020",
@@ -661,7 +671,7 @@
       "slug": "prepare-txt-manuscript-for-epub",
       "draft_path": "generated/syndication/medium/en/reading/prepare-txt-manuscript-for-epub.md",
       "canonical_url": "https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/",
-      "status": "draft",
+      "status": "user_excluded",
       "approved_by": "",
       "approved_at": "",
       "post_id": "",
@@ -670,7 +680,9 @@
       "last_attempt_at": "",
       "error": "",
       "error_type": "",
-      "retry_count": 0
+      "retry_count": 0,
+      "exclusion_reason": "User excluded Medium from generation, publication, scheduling, retries and unpublished backlog on 2026-10-04; preserve historical content and receipts.",
+      "excluded_at": "2026-10-04"
     }
   ]
 }

@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 from pathlib import Path
+from distribution_policy import channel_excluded
 import re
 import sys
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
@@ -251,6 +252,8 @@ def report(root, config, start, as_of):
         if event_at and start <= timestamp(event_at) < min(end, as_of):
             week = (timestamp(event_at) - start).days // 7 + 1
         recorded = bool(item.get('_publication_recorded') or item.get('status') == 'posted')
+        if channel_excluded(channel) and not recorded:
+            continue  # Excluded unpublished backlog is not future distribution demand.
         campaigns = {app_id: {'ios': [], 'android': []} for app_id in app_ids}
         for url in str(item.get('destination_urls') or item.get('target_url') or '').split('|'):
             parsed = urlsplit(url)

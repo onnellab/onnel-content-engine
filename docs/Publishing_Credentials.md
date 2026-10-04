@@ -69,9 +69,9 @@ Hashnode distribution is disabled. Do not configure Hashnode publishing credenti
 
 ### Medium
 
-Medium is export-only.
+Medium distribution is disabled by user instruction, like Hashnode. Do not generate, queue, schedule, approve, retry, or publish Medium drafts. Existing drafts, public URLs and publication receipts remain historical evidence.
 
-Do not add a real Medium API adapter unless the platform provides a supported publishing API again.
+Do not configure Medium publishing credentials or add a Medium API adapter. A supported API would not override the user's channel exclusion.
 
 ---
 

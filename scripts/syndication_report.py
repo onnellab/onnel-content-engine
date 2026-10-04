@@ -8,6 +8,7 @@ import json
 import sys
 from collections import Counter
 from pathlib import Path
+from distribution_policy import channel_excluded
 
 from evaluate_syndication_drafts import DEFAULT_MANIFEST_PATH
 from validate_syndication_drafts import SyndicationValidationError, project_root_for_manifest, validate_syndication_drafts
@@ -31,22 +32,22 @@ def syndication_report(manifest_path: Path = DEFAULT_MANIFEST_PATH) -> str:
     ]
     for draft in drafts:
         reasons: list[str] = []
-        if draft.get("platform") == "medium":
-            reasons.append("Medium export-only")
+        if channel_excluded(draft.get("platform")):
+            reasons.append("user_excluded; archive only")
         if draft.get("status") != "approved":
             reasons.append(f"status={draft.get('status')}")
         if draft.get("status") == "posted":
             reasons.append("already posted")
         if draft.get("platform") in {"devto", "hashnode"}:
             reasons.append("real API token required for non-mock adapter")
-        ready = draft.get("status") == "approved" and draft.get("platform") != "medium"
+        ready = draft.get("status") == "approved" and not channel_excluded(draft.get("platform"))
         lines.append(
             f"- {'ready for mock posting' if ready else 'not ready'}: "
             f"{draft['topic_id']} {draft['platform']} {draft['language']} "
             f"({'; '.join(reasons) if reasons else 'approved'})"
         )
     lines.extend(["", "Approved drafts:"])
-    approved = [draft for draft in drafts if draft.get("status") == "approved"]
+    approved = [draft for draft in drafts if draft.get("status") == "approved" and not channel_excluded(draft.get('platform'))]
     if not approved:
         lines.append("- none")
     for draft in approved:

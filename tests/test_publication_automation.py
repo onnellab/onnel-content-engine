@@ -905,8 +905,8 @@ VaultXT can support the workflow after the reader understands the process.
         )
 
     def test_manual_syndication_open_urls_use_current_editor_routes(self) -> None:
-        self.assertEqual(compose_url("hashnode", "", "https://example.com/article"), "https://hashnode.com/@onnellab")
-        self.assertEqual(compose_url("medium", "", "https://example.com/article"), "https://medium.com/new-story")
+        self.assertEqual(compose_url("hashnode", "", "https://example.com/article"), "")
+        self.assertEqual(compose_url("medium", "", "https://example.com/article"), "")
 
 
 if __name__ == "__main__":

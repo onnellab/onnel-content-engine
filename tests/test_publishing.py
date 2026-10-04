@@ -1571,13 +1571,13 @@ class PublishingTest(unittest.TestCase):
 
         drafts = generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
 
-        self.assertEqual(len(drafts), 2)
+        self.assertEqual(len(drafts), 1)
         devto_path = output_dir / "devto" / "en" / "reading" / "read-large-txt-files.md"
         hashnode_path = output_dir / "hashnode" / "en" / "reading" / "read-large-txt-files.md"
         medium_path = output_dir / "medium" / "en" / "reading" / "read-large-txt-files.md"
         self.assertTrue(devto_path.exists())
         self.assertFalse(hashnode_path.exists())
-        self.assertTrue(medium_path.exists())
+        self.assertFalse(medium_path.exists())
         content = devto_path.read_text(encoding="utf-8")
         self.assertIn("published: true", content)
         self.assertIn('canonical_url: "https://example.com/blog/en/read-large-txt-files/"', content)
@@ -1586,22 +1586,17 @@ class PublishingTest(unittest.TestCase):
         self.assertNotIn("https://example.com/blog-assets/en/read-large-txt-files/workflow-diagram.svg", content)
         self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", content)
         self.assertIn("# How to Read Very Large TXT Files", content)
-        medium_content = medium_path.read_text(encoding="utf-8")
-        self.assertTrue(medium_content.startswith("> ONNELLAB note:"))
-        self.assertIn("Originally published at https://example.com/blog/en/read-large-txt-files/", medium_content)
-        self.assertNotIn("canonical_url:", medium_content)
-        self.assertFalse(medium_content.startswith("---"))
         manifest = (output_dir / "manifest.json").read_text(encoding="utf-8")
         self.assertIn('"platform": "devto"', manifest)
         self.assertNotIn('"platform": "hashnode"', manifest)
-        self.assertIn('"platform": "medium"', manifest)
+        self.assertNotIn('"platform": "medium"', manifest)
         self.assertNotIn('"language": "ko"', manifest)
         self.assertIn('"last_attempt_at": ""', manifest)
         self.assertIn('"error_type": ""', manifest)
         self.assertIn('"retry_count": 0', manifest)
         evaluation = evaluate_syndication_drafts(output_dir / "manifest.json", self.root)
         self.assertGreaterEqual(evaluation["average_score"], 9.0)
-        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 2)
+        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 1)
 
         approved = approve_syndication_draft(
             "TOPIC-0001",
@@ -1631,14 +1626,15 @@ class PublishingTest(unittest.TestCase):
                 output_dir / "manifest.json",
             )
 
-    def test_hashnode_is_not_generated_by_canonical_syndication(self) -> None:
+    def test_excluded_channels_are_not_generated_by_canonical_syndication(self) -> None:
         output_dir = self.root / "generated" / "syndication"
 
         drafts = generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
 
-        self.assertEqual({draft["platform"] for draft in drafts}, {"devto", "medium"})
+        self.assertEqual({draft["platform"] for draft in drafts}, {"devto"})
         self.assertFalse((output_dir / "hashnode").exists())
-        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 2)
+        self.assertFalse((output_dir / "medium").exists())
+        self.assertEqual(validate_syndication_drafts(output_dir / "manifest.json", self.root), 1)
 
     def test_syndication_drafts_default_to_published_sources_only(self) -> None:
         rows = [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")]
@@ -1669,15 +1665,15 @@ class PublishingTest(unittest.TestCase):
                     include_prepublication=True,
                 )
 
-                self.assertEqual(len(drafts), 2)
-                self.assertEqual({draft["platform"] for draft in drafts}, {"devto", "medium"})
+                self.assertEqual(len(drafts), 1)
+                self.assertEqual({draft["platform"] for draft in drafts}, {"devto"})
                 self.assertEqual({draft["language"] for draft in drafts}, {"en"})
                 self.assertTrue(all(draft["source_status"] == source_status for draft in drafts))
                 self.assertTrue(all(draft["publish_after_canonical"] is True for draft in drafts))
                 manifest_path = output_dir / "manifest.json"
-                self.assertEqual(validate_syndication_drafts(manifest_path, self.root), 2)
+                self.assertEqual(validate_syndication_drafts(manifest_path, self.root), 1)
                 evaluation = evaluate_syndication_drafts(manifest_path, self.root)
-                self.assertEqual(len(evaluation["drafts"]), 2)
+                self.assertEqual(len(evaluation["drafts"]), 1)
                 self.assertGreaterEqual(evaluation["average_score"], 9.0)
 
                 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -1691,46 +1687,40 @@ class PublishingTest(unittest.TestCase):
                 self.assertEqual(manifest_path.read_text(encoding="utf-8"), manifest_before)
 
     def test_prepublication_syndication_regeneration_resets_unposted_state(self) -> None:
-        output_dir = self.root / "generated" / "syndication"
-        generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
-        manifest_path = output_dir / "manifest.json"
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        devto = next(draft for draft in manifest["drafts"] if draft["platform"] == "devto")
-        devto.update(
-            {
-                "status": "approved",
-                "approved_by": "editor",
-                "approved_at": "2026-07-20T09:00:00+09:00",
-            }
-        )
-        medium = next(draft for draft in manifest["drafts"] if draft["platform"] == "medium")
-        medium.update(
-            {
-                "status": "failed",
-                "approved_by": "editor",
-                "approved_at": "2026-07-20T09:00:00+09:00",
-                "last_attempt_at": "2026-07-21T09:00:00+09:00",
-                "error": "temporary failure",
-                "error_type": "transient",
-                "retry_count": 2,
-            }
-        )
-        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-        write_topics(
-            self.topics_path,
-            [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")],
-        )
+        for prior_status in ("approved", "failed"):
+            with self.subTest(prior_status=prior_status):
+                write_topics(self.topics_path, [topic_row(), topic_row(topic_id="TOPIC-0002", language="ko")])
+                output_dir = self.root / "generated" / "syndication"
+                generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
+                manifest_path = output_dir / "manifest.json"
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                devto = next(draft for draft in manifest["drafts"] if draft["platform"] == "devto")
+                devto.update(
+                    {
+                        "status": prior_status,
+                        "approved_by": "editor",
+                        "approved_at": "2026-07-20T09:00:00+09:00",
+                        "last_attempt_at": "2026-07-21T09:00:00+09:00",
+                        "error": "temporary failure",
+                        "error_type": "transient",
+                        "retry_count": 2,
+                    }
+                )
+                manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+                write_topics(
+                    self.topics_path,
+                    [topic_row(status="draft"), topic_row(status="draft", topic_id="TOPIC-0002", language="ko")],
+                )
 
-        regenerated = generate_syndication_drafts(
-            self.topics_path,
-            output_dir,
-            "https://example.com/",
-            include_prepublication=True,
-        )
+                regenerated = generate_syndication_drafts(
+                    self.topics_path,
+                    output_dir,
+                    "https://example.com/",
+                    include_prepublication=True,
+                )
 
-        for platform in ("devto", "medium"):
-            with self.subTest(platform=platform):
-                draft = next(item for item in regenerated if item["platform"] == platform)
+                self.assertEqual({item["platform"] for item in regenerated}, {"devto"})
+                draft = next(item for item in regenerated if item["platform"] == "devto")
                 self.assertEqual(draft["status"], "draft")
                 self.assertEqual(draft["approved_by"], "")
                 self.assertEqual(draft["approved_at"], "")
@@ -1889,7 +1879,7 @@ class PublishingTest(unittest.TestCase):
         self.assertEqual(report["published_source_count"], 1)
         manifest_path = syndication_dir / "manifest.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        manifest["drafts"] = [item for item in manifest["drafts"] if item["platform"] != "medium"]
+        manifest["drafts"] = [item for item in manifest["drafts"] if item["platform"] != "devto"]
         manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
         with self.assertRaises(DistributionSupplyError):
             require_distribution_supply(
@@ -1935,9 +1925,9 @@ class PublishingTest(unittest.TestCase):
         generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
         manifest = output_dir / "manifest.json"
 
-        with self.assertRaisesRegex(SyndicationApprovalError, "Hashnode distribution is disabled"):
+        with self.assertRaisesRegex(SyndicationApprovalError, "hashnode distribution is user_excluded"):
             approve_syndication_draft("TOPIC-0001", "hashnode", "en", "editor", manifest)
-        with self.assertRaisesRegex(SyndicationPostingError, "Hashnode distribution is disabled"):
+        with self.assertRaisesRegex(SyndicationPostingError, "syndication channel is user_excluded"):
             post_syndication_drafts(manifest, platform="hashnode", adapter="hashnode", dry_run=True)
 
     def test_hashnode_automod_gate_rejects_repetitive_promotional_copy(self) -> None:
@@ -2007,7 +1997,7 @@ Download now for the best app.
         generate_syndication_drafts(self.topics_path, output_dir, "https://example.com/")
         manifest = output_dir / "manifest.json"
 
-        with self.assertRaisesRegex(SyndicationApprovalError, "Hashnode distribution is disabled"):
+        with self.assertRaisesRegex(SyndicationApprovalError, "hashnode distribution is user_excluded"):
             approve_syndication_draft(
                 "TOPIC-0001",
                 "hashnode",
