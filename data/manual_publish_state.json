@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-01T06:14:44+00:00",
+  "updated_at": "2026-10-04T06:45:15+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -489,6 +489,52 @@
       "verification_method": "remote_chrome_permalink",
       "verification_confidence": "browser_permalink",
       "published_at": "2026-10-01T06:13:58Z"
+    },
+    "TOPIC-0033::x::en::x": {
+      "topic_id": "TOPIC-0033",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "marked_at": "2026-10-04T06:40:46+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://x.com/onnellab/status/2106633828253184173",
+      "verified_at": "2026-10-04T06:40:46+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-04T06:34:39Z",
+      "observed_at_precision": "second",
+      "observation_source": "Parent-delegated cloud browser worker: checked repository states and account activity for duplicates before posting unchanged source; verified profile count 12 to 13 and exact matching post detail at the observed_at time. Server publication timestamp remains unknown.",
+      "browser_ui_timestamp": "Oct 3, 11:33 PM",
+      "browser_ui_timezone": "not_recorded",
+      "draft_sha256": "add65e89e00dd9ef47236284d36e6a2b8e328a59c2e8ce5ea13dbdfcfd7123ef",
+      "posted_body_sha256": "c2a07edc1ce6a13c7adddb14fd4e86cccdc74c51e5226c288caa2d4679aabe1e",
+      "account": "@onnellab",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "UTF-8 with CRLF normalized to LF; terminal LF removed"
+    },
+    "TOPIC-0015::linkedin::en::linkedin": {
+      "topic_id": "TOPIC-0015",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "marked_at": "2026-10-04T06:45:15+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7512401505178689536/",
+      "verified_at": "2026-10-04T06:45:15+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-04T06:42:20Z",
+      "observed_at_precision": "second",
+      "observation_source": "Parent-delegated cloud browser worker: checked repository states and account activity for duplicates, posted unchanged source, observed publish-success notification and verified the matching post detail. LinkedIn shortened links to lnkd.in after publication; hashes identify submitted source, not platform-rewritten rendered text.",
+      "draft_sha256": "06da42c2352304044e352b98f69a0ee93b47e4b3691ad5203d1da3de687ad945",
+      "posted_body_sha256": "f77f6e156276c48627ef2eb809acd2dbf2c6baaa9cc951156c41158c2b81f234",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before LinkedIn URL shortening"
     }
   }
 }

@@ -11,6 +11,12 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 REMOTE_BROWSER_PLATFORMS = frozenset({"x", "linkedin", "medium"})
+RECEIPT_PROVENANCE_FIELDS = (
+    'published_at_precision', 'observed_at', 'observed_at_precision',
+    'observation_source', 'browser_ui_timestamp', 'browser_ui_timezone',
+    'draft_sha256', 'posted_body_sha256', 'account',
+    'draft_hash_normalization', 'posted_body_hash_normalization',
+)
 
 
 def specific_permalink(platform: str, value: object) -> bool:
@@ -89,7 +95,12 @@ def preserve_publication(item: dict[str, object], history: dict[str, dict[str, o
                 item["posted_url"] = evidence["posted_url"]
             if specific_permalink(str(item.get("platform", "")), item.get("posted_url")):
                 item["status"] = "posted"
-                if not item.get("posted_at"):
+                for field in RECEIPT_PROVENANCE_FIELDS:
+                    if field in evidence:
+                        item[field] = evidence[field]
+                if evidence.get('published_at_precision') == 'unknown':
+                    item['posted_at'] = ''
+                elif not item.get("posted_at"):
                     item["posted_at"] = evidence.get("published_at") or evidence.get("marked_at") or ""
     if specific_permalink(str(item.get("platform", "")), item.get("posted_url")):
         item["_publication_recorded"] = True

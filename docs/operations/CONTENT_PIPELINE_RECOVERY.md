@@ -236,3 +236,37 @@ This integration uses a commit-scoped push skip and explicitly dispatched tests
 and publishing dry-run to avoid automatic Dev.to updates or homepage writes from
 the code push. Existing workflow schedules remain enabled. A successful dry-run
 is not a new external publication or proof that an older Mac prompt was updated.
+
+## X TOPIC-0033 browser receipt
+
+The parent-delegated cloud browser worker confirmed
+https://x.com/onnellab/status/2106633828253184173 on @onnellab, matching the
+manuscript on both the profile and detail page, with profile post count 12 to 13.
+The engine did not publish the post. The observed click time was approximately
+2026-10-04T06:33:36Z; the UI displayed Oct 3, 11:33 PM in an unrecorded browser
+local timezone. Neither is represented as an exact server publication timestamp.
+The receipt explicitly retains unknown publication-time precision, separate
+observation fields, and both hashes verified against the existing LF-normalized
+manuscript (with terminal LF removed for the posted-body hash).
+
+Reconciliation adds only TOPIC-0033::x::en::x to completion state, preserving all
+previous completions. Generation, measurement and dashboard summaries preserve
+unknown publication time instead of replacing it with receipt processing time.
+Medium and Hashnode exclusions remain in force. The final X detail verification
+was observed at 2026-10-04T06:34:39Z; this is recorded separately from the earlier
+approximate click time.
+
+
+The same parent browser worker also completed LinkedIn TOPIC-0015:
+https://www.linkedin.com/feed/update/urn:li:activity:7512401505178689536/
+on ONNEL LAB (/in/onnel-lab-b5b9b0421/). The click was observed at approximately
+06:41 UTC, success notification at 06:41:55Z and matching detail at 06:42:20Z on
+2026-10-04. Exact server publication time remains unknown. Its 822-character
+submitted source hash and terminal-newline-stripped hash match the existing
+LF-normalized manuscript. LinkedIn subsequently shortened links to lnkd.in;
+the hashes describe submitted source, not rewritten platform text. Both receipts
+retain the preceding repository/account duplicate checks reported by the worker.
+
+The unknown-time propagation changes passed 834 offline tests (93.773 seconds,
+three Windows-only skips), a zero-network actual-data dry-run and independent
+review. These are receipt reconciliation checks, not new publication actions.

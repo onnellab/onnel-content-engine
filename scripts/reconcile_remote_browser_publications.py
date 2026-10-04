@@ -5,12 +5,13 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import tempfile
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
-from publication_history import specific_permalink
+from publication_history import specific_permalink, RECEIPT_PROVENANCE_FIELDS
 from distribution_policy import channel_excluded
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +20,7 @@ DEFAULT_STATE = ROOT / "data" / "manual_publish_state.json"
 DEFAULT_SOCIAL = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION = ROOT / "generated" / "syndication" / "manifest.json"
 REMOTE_BROWSER_PLATFORMS = {"x", "linkedin"}
+PROVENANCE_FIELDS = RECEIPT_PROVENANCE_FIELDS
 
 class RemotePublicationError(ValueError):
     pass
@@ -26,6 +28,22 @@ class RemotePublicationError(ValueError):
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def receipt_provenance(record: dict[str, Any]) -> dict[str, str]:
+    result = {}
+    for field in PROVENANCE_FIELDS:
+        if field not in record:
+            continue
+        value = record[field]
+        if not isinstance(value, str) or len(value) > 512 or any(ord(c) < 32 for c in value):
+            raise RemotePublicationError(f'invalid receipt provenance: {field}')
+        if field.endswith('_sha256') and not re.fullmatch(r'[0-9a-f]{64}', value):
+            raise RemotePublicationError(f'invalid receipt provenance: {field}')
+        result[field] = value
+    if result.get('published_at_precision') == 'unknown' and record.get('published_at') not in (None, ''):
+        raise RemotePublicationError('unknown publication time must not contain published_at')
+    return result
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -115,13 +133,15 @@ def reconcile(inbox_path: Path = DEFAULT_INBOX, state_path: Path = DEFAULT_STATE
         previous_url = str(previous.get("posted_url", ""))
         if specific_permalink(platform, previous_url) and normalized_permalink(platform, previous_url) != permalink:
             raise RemotePublicationError(f"conflicting existing publication permalink: {manual_key}")
+        receipt_provenance(record)  # Validate every record before changing either file.
         updates.append((record, item, permalink))
     if not updates:
         return 0
     processed_at = now_iso()
     for record, item, permalink in updates:
         manual_key = str(record["manual_key"])
-        published_at = str(record.get("published_at", "")).strip() or processed_at
+        provenance = receipt_provenance(record)
+        published_at = '' if provenance.get('published_at_precision') == 'unknown' else (str(record.get("published_at", "")).strip() or processed_at)
         previous = state["done"].get(manual_key, {})
         if not specific_permalink(item["platform"], previous.get("posted_url", "")):
             state["done"][manual_key] = {
@@ -129,6 +149,7 @@ def reconcile(inbox_path: Path = DEFAULT_INBOX, state_path: Path = DEFAULT_STATE
                 "marked_at": processed_at, "marked_by": "chatgpt_remote_browser", "posted_url": permalink,
                 "verified_at": processed_at, "verification_method": "remote_chrome_permalink", "verification_confidence": "browser_permalink",
                 "published_at": published_at,
+                **provenance,
             }
         record["status"] = "processed"
         record["processed_at"] = processed_at

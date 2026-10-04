@@ -160,6 +160,73 @@
       "published_at": "2026-10-01T06:13:58Z",
       "status": "processed",
       "processed_at": "2026-10-01T06:14:44+00:00"
+    },
+    {
+      "manual_key": "TOPIC-0033::x::en::x",
+      "platform": "x",
+      "posted_url": "https://x.com/onnellab/status/2106633828253184173",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-04T06:34:39Z",
+      "observed_at_precision": "second",
+      "observation_source": "Parent-delegated cloud browser worker: checked repository states and account activity for duplicates before posting unchanged source; verified profile count 12 to 13 and exact matching post detail at the observed_at time. Server publication timestamp remains unknown.",
+      "browser_ui_timestamp": "Oct 3, 11:33 PM",
+      "browser_ui_timezone": "not_recorded",
+      "draft_sha256": "add65e89e00dd9ef47236284d36e6a2b8e328a59c2e8ce5ea13dbdfcfd7123ef",
+      "posted_body_sha256": "c2a07edc1ce6a13c7adddb14fd4e86cccdc74c51e5226c288caa2d4679aabe1e",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "UTF-8 with CRLF normalized to LF; terminal LF removed",
+      "account": "@onnellab",
+      "status": "processed",
+      "processed_at": "2026-10-04T06:40:46+00:00",
+      "observations": [
+        {
+          "event": "publish_click",
+          "observed_at": "2026-10-04T06:33:00Z",
+          "precision": "minute"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-04T06:34:39Z",
+          "precision": "second"
+        }
+      ],
+      "submitted_source_characters": 182
+    },
+    {
+      "manual_key": "TOPIC-0015::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7512401505178689536/",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observation_source": "Parent-delegated cloud browser worker: checked repository states and account activity for duplicates, posted unchanged source, observed publish-success notification and verified the matching post detail. LinkedIn shortened links to lnkd.in after publication; hashes identify submitted source, not platform-rewritten rendered text.",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "status": "processed",
+      "observed_at": "2026-10-04T06:42:20Z",
+      "observed_at_precision": "second",
+      "observations": [
+        {
+          "event": "publish_click",
+          "observed_at": "2026-10-04T06:41:00Z",
+          "precision": "minute"
+        },
+        {
+          "event": "publish_success_notification",
+          "observed_at": "2026-10-04T06:41:55Z",
+          "precision": "second"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-04T06:42:20Z",
+          "precision": "second"
+        }
+      ],
+      "draft_sha256": "06da42c2352304044e352b98f69a0ee93b47e4b3691ad5203d1da3de687ad945",
+      "posted_body_sha256": "f77f6e156276c48627ef2eb809acd2dbf2c6baaa9cc951156c41158c2b81f234",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before LinkedIn URL shortening",
+      "submitted_source_characters": 822,
+      "processed_at": "2026-10-04T06:45:15+00:00"
     }
   ]
 }

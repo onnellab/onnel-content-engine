@@ -244,10 +244,13 @@ def report(root, config, start, as_of):
         topic = topics.get(str(item.get('topic_id')), {})
         app_ids = [app_names[name] for name in topic.get('related_apps', '').split('|') if name in app_names]
         published = item.get('posted_at') or history.get(key, {}).get('published_at') or history.get(key, {}).get('marked_at')
+        publication_time_unknown = item.get('published_at_precision') == 'unknown'
+        if publication_time_unknown:
+            published = None
         base = topic.get('published_at') or topic.get('scheduled_at')
         delay = {'x': 0, 'linkedin': 1, 'bluesky': 1, 'devto': 2, 'medium': 4, 'youtube': 0}[channel]
         due = schedule.get(key) or ((timestamp(base) + timedelta(days=delay)).isoformat() if base else None)
-        event_at = published or item.get('last_attempt_at') or due
+        event_at = None if publication_time_unknown else (published or item.get('last_attempt_at') or due)
         week = None
         if event_at and start <= timestamp(event_at) < min(end, as_of):
             week = (timestamp(event_at) - start).days // 7 + 1
@@ -266,6 +269,8 @@ def report(root, config, start, as_of):
                     if store_identity(apps_by_id[app_id].get(field), platform) == identity:
                         campaigns[app_id][platform].append(query[token])
         record = {'manual_key': key, 'material_id': item.get('topic_id'), 'material_kind': kind,
+                  'published_at_precision': item.get('published_at_precision'),
+                  'observed_at': item.get('observed_at'), 'observed_at_precision': item.get('observed_at_precision'),
                   'app_ids': app_ids, 'channel': channel, 'week': week, 'event_at': event_at,
                   'in_observed_window': week is not None, 'due_at': due,
                   'publication_recorded': recorded, 'posted_url': item.get('posted_url') or None,

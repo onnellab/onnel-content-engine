@@ -14,7 +14,7 @@ from hashnode_content import HASHNODE_CONTENT_PROFILE, hashnode_native_body, has
 from publishing import DEFAULT_SITE_URL, PublishingError, article_public_url, load_publishable_articles, normalize_site_url, parse_front_matter, syndication_body, syndication_intro, syndication_note
 from publishing import EXTERNAL_DISTRIBUTION_LANGUAGES
 from topic_management import DEFAULT_TOPICS_PATH, TopicError
-from publication_history import publication_history, preserve_publication, require_history_items
+from publication_history import publication_history, preserve_publication, require_history_items, RECEIPT_PROVENANCE_FIELDS
 from distribution_policy import USER_EXCLUDED_PLATFORMS
 
 
@@ -88,6 +88,7 @@ def absolutize_markdown_links(markdown: str, site_url: str, platform: str = "") 
 
 
 SYNDICATION_STATE_FIELDS = (
+    *RECEIPT_PROVENANCE_FIELDS,
     "status",
     "approved_by",
     "approved_at",

@@ -3528,6 +3528,7 @@ def html_document(
 
     function postedOrVerifiedAt(item) {{
       const record = doneRecord(item);
+      if (item.published_at_precision === 'unknown' || record?.published_at_precision === 'unknown') return '';
       return item.posted_at || record?.verified_at || record?.marked_at || '';
     }}
 

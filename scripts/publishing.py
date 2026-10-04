@@ -29,7 +29,7 @@ from urllib.parse import urljoin
 from xml.sax.saxutils import escape as xml_escape
 
 from topic_management import DEFAULT_TOPICS_PATH, TOPIC_HEADER, TopicError, read_csv
-from publication_history import publication_history, preserve_publication, require_history_items
+from publication_history import publication_history, preserve_publication, require_history_items, RECEIPT_PROVENANCE_FIELDS
 
 
 UTC = timezone.utc
@@ -1577,6 +1577,7 @@ def manifest_item(
 
 
 SOCIAL_STATE_FIELDS = (
+    *RECEIPT_PROVENANCE_FIELDS,
     "status",
     "approved_by",
     "approved_at",

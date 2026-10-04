@@ -75,6 +75,19 @@ class MarketingMeasurementTests(unittest.TestCase):
         with self.assertRaisesRegex(MeasurementError, 'Conflicting duplicate'):
             report(self.root, self.config, START, AS_OF)
 
+    def test_unknown_publication_time_is_not_bucketed_by_receipt_or_old_due_date(self):
+        self.write_json('data/manual_publish_state.json', {'done': {KEY: {
+            'posted_url': 'https://x.com/fixture/status/123', 'published_at': '',
+            'published_at_precision': 'unknown', 'marked_at': '2026-10-04T07:00:00Z',
+            'observed_at': '2026-10-04T06:33:36Z', 'observed_at_precision': 'approximate'}}})
+        item = report(self.root, self.config, START, AS_OF)['records'][0]
+        self.assertTrue(item['publication_recorded'])
+        self.assertIsNone(item['event_at'])
+        self.assertIsNone(item['week'])
+        self.assertFalse(item['in_observed_window'])
+        self.assertEqual('2026-10-04T06:33:36Z', item['observed_at'])
+        self.assertEqual('approximate', item['observed_at_precision'])
+
     def test_generic_profile_receipt_preserves_dedupe_without_claiming_permalink(self):
         self.write_json('data/manual_publish_state.json', {'done': {KEY: {'posted_url': 'https://x.com/fixture'}}})
         item = report(self.root, self.config, START, AS_OF)['records'][0]
