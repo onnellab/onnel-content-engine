@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/reading/prepare-txt-manuscript-for-epub.md",
+  "topic": {
+    "id": "TOPIC-0033",
+    "title": "How to Prepare a TXT Manuscript for Reliable EPUB Conversion",
+    "slug": "prepare-txt-manuscript-for-epub",
+    "category": "reading",
+    "language": "en",
+    "primary_keyword": "prepare TXT manuscript for EPUB",
+    "related_apps": [
+      "Papira"
+    ]
+  },
+  "article_sections_detected": [
+    "How to Prepare a TXT Manuscript for Reliable EPUB Conversion",
+    "Question",
+    "Short Answer",
+    "Definitions",
+    "Why Preparation Matters",
+    "Recommended Workflow",
+    "Comparison Table",
+    "Practical Cautions",
+    "ONNELLAB Application",
+    "Related Topics",
+    "References",
+    "Conclusion",
+    "FAQ",
+    "Can I convert a TXT file by changing its extension?",
+    "Should I edit the EPUB after conversion?",
+    "Is UTF-8 always the right answer?",
+    "Does EPUBCheck prove that the book is ready?",
+    "Do I need a cover before preparing the text?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "What is the recommended workflow for prepare TXT manuscript for EPUB?",
+      "source_sections": [
+        "Short Answer",
+        "Recommended Workflow"
+      ],
+      "structure": [
+        "Problem",
+        "Process",
+        "Result"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating prepare TXT manuscript for EPUB?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "TXT manuscript preparation",
+        "EPUB chapter structure",
+        "book metadata"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Papira"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "How to Prepare a TXT Manuscript for Reliable EPUB Conversion Workflow",
+      "steps": [
+        "Problem",
+        "Explanation",
+        "Options",
+        "Recommended workflow",
+        "Optional application"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "prepare TXT manuscript for EPUB Comparison",
+      "items": [
+        "TXT manuscript preparation",
+        "EPUB chapter structure",
+        "book metadata"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ]
+}
