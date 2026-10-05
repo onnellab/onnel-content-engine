@@ -179,8 +179,10 @@ class SingleTests(unittest.TestCase):
             source.write_bytes(b"RIFF" + b"placeholder" * 512)
             job = root / "job"
             job.mkdir(mode=0o700)
-            with patch.object(aether_single, "_is_dataless", return_value=True):
+            with patch.object(aether_single, "_is_dataless", return_value=True), \
+                 patch.object(aether_single, "_warm_mybox_provider", return_value=True) as warm:
                 imported = aether_single.import_backlog_master(source, job, 138)
+            warm.assert_called_once_with()
             self.assertTrue(imported["source_was_dataless"])
             self.assertTrue(Path(imported["path"]).is_file())
             self.assertEqual(file_hash(source), imported["sha256"])

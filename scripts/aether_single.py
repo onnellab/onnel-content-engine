@@ -13,6 +13,7 @@ from pathlib import Path
 import re
 import shutil
 import stat
+import time
 import unicodedata
 from urllib.parse import urlencode
 from zoneinfo import ZoneInfo
@@ -92,6 +93,18 @@ def _is_dataless(path: Path) -> bool:
     return bool(flags & getattr(stat, "SF_DATALESS", 0))
 
 
+def _warm_mybox_provider() -> bool:
+    app = Path("/Applications/MYBOX.app")
+    if not app.is_dir():
+        return False
+    try:
+        run_process(["/usr/bin/open", "-g", "-a", "MYBOX"], timeout=15)
+    except VideoError:
+        return False
+    time.sleep(1)
+    return True
+
+
 def resolve_backlog_wav(title: str, *, root: Path = MYBOX_ROOT) -> Path:
     title = _clean(title, "title", 60)
     parent = Path(root)
@@ -164,6 +177,8 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
     if source.suffix.lower() != ".wav" or source.is_symlink() or not source.is_file():
         raise VideoError("aether_single_backlog_wav_not_synced")
     source_was_dataless = _is_dataless(source)
+    if source_was_dataless:
+        _warm_mybox_provider()
     target_dir = directory(Path(folder) / "source")
     target = target_dir / "master.wav"
     partial = target_dir / "master.partial.wav"
