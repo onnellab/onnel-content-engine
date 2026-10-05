@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T21:21:45+00:00",
+  "generated_at": "2026-10-05T21:27:00+00:00",
   "records": [
     {
       "release_id": "REL-0017",
@@ -24,7 +24,7 @@
         "version": "1.0.6",
         "last_updated": "2026. 9. 27.",
         "release_notes": "",
-        "checked_at": "2026-10-05T06:21:21+09:00",
+        "checked_at": "2026-10-06T06:26:34+09:00",
         "status": "unchanged",
         "notes": "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/segra/pubspec.yaml version 1.0.6+76; confirm against Play Console if needed."
       }
@@ -52,7 +52,7 @@
         "version": "2.5.2",
         "last_updated": "2026. 9. 27.",
         "release_notes": "",
-        "checked_at": "2026-10-05T06:21:21+09:00",
+        "checked_at": "2026-10-06T06:26:34+09:00",
         "status": "unchanged",
         "notes": "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/tagweaver/pubspec.yaml version 2.5.2+96; confirm against Play Console if needed."
       }
@@ -80,7 +80,7 @@
         "version": "1.0.9",
         "last_updated": "2026. 9. 27.",
         "release_notes": "",
-        "checked_at": "2026-10-05T06:21:21+09:00",
+        "checked_at": "2026-10-06T06:26:34+09:00",
         "status": "unchanged",
         "notes": "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/quivra/pubspec.yaml version 1.0.9+84; confirm against Play Console if needed."
       }
@@ -108,7 +108,7 @@
         "version": "2.0.1",
         "last_updated": "2026. 9. 27.",
         "release_notes": "",
-        "checked_at": "2026-10-05T06:21:21+09:00",
+        "checked_at": "2026-10-06T06:26:34+09:00",
         "status": "unchanged",
         "notes": "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/onnellab-text/vaultxt/pubspec.yaml version 2.0.1+66; confirm against Play Console if needed."
       }
@@ -136,13 +136,13 @@
         "version": "1.0.7",
         "last_updated": "2026. 9. 28.",
         "release_notes": "",
-        "checked_at": "2026-10-05T06:21:21+09:00",
+        "checked_at": "2026-10-06T06:26:34+09:00",
         "status": "unchanged",
         "notes": "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/aligna/pubspec.yaml version 1.0.7+23; confirm against Play Console if needed."
       }
     },
     {
-      "release_id": "REL-0022",
+      "release_id": "REL-0023",
       "app_slug": "melivra",
       "platform": "android",
       "store": "google_play",
@@ -161,12 +161,12 @@
         "store_url": "https://play.google.com/store/apps/details?id=com.onnellab.melivra",
         "store_app_id": "",
         "store_package": "com.onnellab.melivra",
-        "version": "1.0.5",
-        "last_updated": "2026. 9. 30.",
+        "version": "1.0.6",
+        "last_updated": "2026. 10. 5.",
         "release_notes": "",
-        "checked_at": "2026-10-05T06:21:21+09:00",
+        "checked_at": "2026-10-06T06:26:34+09:00",
         "status": "unchanged",
-        "notes": "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/melivra/pubspec.yaml version 1.0.5+141; confirm against Play Console if needed."
+        "notes": "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/melivra/pubspec.yaml version 1.0.6+142; confirm against Play Console if needed."
       }
     }
   ]
