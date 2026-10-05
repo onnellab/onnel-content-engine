@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-04T11:46:20+09:00",
+  "checked_at": "2026-10-05T13:05:07+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 80,
-    "already_done": 63,
+    "checked": 64,
+    "already_done": 56,
     "verified": 0,
-    "pending": 17
+    "pending": 8
   },
   "items": [
     {
@@ -358,6 +358,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0015::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0015",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7512401505178689536/",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0016::bluesky::en::bluesky",
       "topic_id": "TOPIC-0016",
       "platform": "bluesky",
@@ -466,6 +478,30 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0033::x::en::x",
+      "topic_id": "TOPIC-0033",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2106633828253184173",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
+      "manual_key": "TOPIC-0033::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0033",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mx3zygb7gi24",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0001::devto::en::markdown",
       "topic_id": "TOPIC-0001",
       "platform": "devto",
@@ -476,18 +512,6 @@
       "posted_url": "https://dev.to/onnellab/how-to-read-large-txt-files-without-lag-92n",
       "verification_method": "",
       "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0001::medium::en::markdown",
-      "topic_id": "TOPIC-0001",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app/how-to-read-large-txt-files-without-lag-9468be7e802d?source=rss-ff84b0f2e139------2",
-      "verification_method": "medium_rss",
-      "verification_confidence": "medium"
     },
     {
       "manual_key": "TOPIC-0003::devto::en::markdown",
@@ -502,18 +526,6 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0003::medium::en::markdown",
-      "topic_id": "TOPIC-0003",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app/txt-vs-epub-for-long-reading-43692cfc55c9",
-      "verification_method": "remote_chrome_permalink",
-      "verification_confidence": "browser_permalink"
-    },
-    {
       "manual_key": "TOPIC-0004::devto::en::markdown",
       "topic_id": "TOPIC-0004",
       "platform": "devto",
@@ -524,18 +536,6 @@
       "posted_url": "https://dev.to/onnellab/what-makes-large-text-files-slow-to-open-3cg8",
       "verification_method": "",
       "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0004::medium::en::markdown",
-      "topic_id": "TOPIC-0004",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app/what-makes-large-text-files-slow-to-open-b727de94d9c7",
-      "verification_method": "remote_chrome_permalink",
-      "verification_confidence": "browser_permalink"
     },
     {
       "manual_key": "TOPIC-0007::devto::en::markdown",
@@ -550,18 +550,6 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0007::medium::en::markdown",
-      "topic_id": "TOPIC-0007",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app/how-to-convert-local-media-files-privately-7fb0b33e7db0?source=rss-ff84b0f2e139------2",
-      "verification_method": "medium_rss",
-      "verification_confidence": "medium"
-    },
-    {
       "manual_key": "TOPIC-0008::devto::en::markdown",
       "topic_id": "TOPIC-0008",
       "platform": "devto",
@@ -572,18 +560,6 @@
       "posted_url": "https://dev.to/onnellab/how-to-clean-up-mp3-metadata-before-organizing-music-364n",
       "verification_method": "",
       "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0008::medium::en::markdown",
-      "topic_id": "TOPIC-0008",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app/how-to-clean-up-mp3-metadata-before-organizing-music-25f7795e34bd?source=rss-ff84b0f2e139------2",
-      "verification_method": "medium_rss",
-      "verification_confidence": "medium"
     },
     {
       "manual_key": "TOPIC-0009::devto::en::markdown",
@@ -610,18 +586,6 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0010::medium::en::markdown",
-      "topic_id": "TOPIC-0010",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app",
-      "verification_method": "user_confirmed_manual_publish",
-      "verification_confidence": "manual"
-    },
-    {
       "manual_key": "TOPIC-0012::devto::en::markdown",
       "topic_id": "TOPIC-0012",
       "platform": "devto",
@@ -644,18 +608,6 @@
       "posted_url": "https://dev.to/onnellab/how-to-turn-rough-notes-into-a-structured-first-draft-509i",
       "verification_method": "",
       "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0014::medium::en::markdown",
-      "topic_id": "TOPIC-0014",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app/how-to-turn-rough-notes-into-a-structured-first-draft-c70428e73262",
-      "verification_method": "remote_chrome_permalink",
-      "verification_confidence": "browser_permalink"
     },
     {
       "manual_key": "TOPIC-0015::devto::en::markdown",
@@ -706,18 +658,6 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0020::medium::en::markdown",
-      "topic_id": "TOPIC-0020",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app/how-to-organize-downloads-with-a-small-durable-folder-system-b500e4a4ab89?source=rss-ff84b0f2e139------2",
-      "verification_method": "medium_rss",
-      "verification_confidence": "medium"
-    },
-    {
       "manual_key": "TOPIC-0029::devto::en::markdown",
       "topic_id": "TOPIC-0029",
       "platform": "devto",
@@ -730,18 +670,6 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0029::medium::en::markdown",
-      "topic_id": "TOPIC-0029",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app/how-to-number-tracks-in-a-multi-disc-mp3-album-32c43ea700f7",
-      "verification_method": "remote_chrome_permalink",
-      "verification_confidence": "browser_permalink"
-    },
-    {
       "manual_key": "TOPIC-0031::devto::en::markdown",
       "topic_id": "TOPIC-0031",
       "platform": "devto",
@@ -750,30 +678,6 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://dev.to/onnellab/how-to-inspect-a-large-log-file-without-altering-the-original-463c",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0031::medium::en::markdown",
-      "topic_id": "TOPIC-0031",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "already_done",
-      "reason": "",
-      "posted_url": "https://medium.com/@onnellab.app/how-to-inspect-a-large-log-file-without-altering-the-original-983066927e9b",
-      "verification_method": "remote_chrome_permalink",
-      "verification_confidence": "browser_permalink"
-    },
-    {
-      "manual_key": "TOPIC-0015::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0015",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
     },
@@ -850,30 +754,6 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0033::x::en::x",
-      "topic_id": "TOPIC-0033",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0033::bluesky::en::bluesky",
-      "topic_id": "TOPIC-0033",
-      "platform": "bluesky",
-      "language": "en",
-      "template_id": "bluesky",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
       "manual_key": "TOPIC-0033::linkedin::en::linkedin",
       "topic_id": "TOPIC-0033",
       "platform": "linkedin",
@@ -886,81 +766,9 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0009::medium::en::markdown",
-      "topic_id": "TOPIC-0009",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0012::medium::en::markdown",
-      "topic_id": "TOPIC-0012",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0015::medium::en::markdown",
-      "topic_id": "TOPIC-0015",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0016::medium::en::markdown",
-      "topic_id": "TOPIC-0016",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0018::medium::en::markdown",
-      "topic_id": "TOPIC-0018",
-      "platform": "medium",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
       "manual_key": "TOPIC-0033::devto::en::markdown",
       "topic_id": "TOPIC-0033",
       "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0033::medium::en::markdown",
-      "topic_id": "TOPIC-0033",
-      "platform": "medium",
       "language": "en",
       "template_id": "markdown",
       "status": "pending",
