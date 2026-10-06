@@ -214,13 +214,16 @@ class GitHubActionsTest(unittest.TestCase):
 
         self.assertIn("id: homepage_sync", workflow)
         self.assertIn("onnellab/pages-deploy", workflow)
+        self.assertIn("onnellab/ops-live-verify", workflow)
         self.assertIn("homepage_pages_deploy_failed", workflow)
-        self.assertIn("homepage_pages_deploy_stale", workflow)
+        self.assertIn("homepage_ops_live_verify_failed", workflow)
+        self.assertIn("homepage_deploy_verification_stale", workflow)
         self.assertLess(
-            workflow.index("Wait for homepage Pages deployment"),
+            workflow.index("Wait for homepage Pages and live ops verification"),
             workflow.index("Verify live ops deployment"),
         )
         self.assertIn("scripts/verify_live_ops.py", workflow)
+        self.assertIn("--deployment-sha", workflow)
 
     def test_store_review_workflow_syncs_and_deploys_dashboard(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "sync-store-reviews.yml").read_text(encoding="utf-8")

@@ -1,6 +1,9 @@
+import json
 from pathlib import Path
 import sys
+import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -62,6 +65,27 @@ class LiveOpsVerificationTests(unittest.TestCase):
         result = module.verify_once(expected, "https://onnellab.com", fetcher)
         self.assertEqual("failed", result["state"])
         self.assertFalse(result["checks"]["ops_exact_deployed_bytes"])
+
+    def test_run_records_deployment_sha_for_freshness_binding(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            expected = root / "expected.html"
+            output = root / "verification.json"
+            expected.write_bytes(b"ops")
+            verified = {
+                "state": "verified",
+                "expected_sha256": module.digest(b"ops"),
+                "live_sha256": module.digest(b"ops"),
+                "checks": {"ops_exact_deployed_bytes": True},
+                "http": {"ops": 200},
+            }
+            with patch.object(module, "verify_once", return_value=verified):
+                payload = module.run(
+                    expected, output, "https://onnellab.com", 1, 0,
+                    deployment_sha="abc123",
+                )
+            self.assertEqual("abc123", payload["deployment_sha"])
+            self.assertEqual("abc123", json.loads(output.read_text())["deployment_sha"])
 
 
 if __name__ == "__main__":

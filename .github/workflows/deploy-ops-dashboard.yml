@@ -87,7 +87,7 @@ jobs:
           fi
           echo "sha=$(git -C "$HOMEPAGE_REPO_PATH" rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Wait for homepage Pages deployment
+      - name: Wait for homepage Pages and live ops verification
         env:
           GH_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
           HOMEPAGE_SHA: ${{ steps.homepage_sync.outputs.sha }}
@@ -95,23 +95,29 @@ jobs:
           set -euo pipefail
           for attempt in $(seq 1 60); do
             echo "Checking homepage deployment ($attempt/60)"
-            state="$(
+            pages_state="$(
               gh api "repos/onnellab/onnellab.github.io/commits/$HOMEPAGE_SHA/status" \
                 --jq '[.statuses[] | select(.context == "onnellab/pages-deploy")][0].state // ""'
             )"
-            case "$state" in
-              success)
-                echo "Homepage Pages deployment succeeded for $HOMEPAGE_SHA"
-                exit 0
-                ;;
-              failure|error)
-                echo "::error title=homepage_pages_deploy_failed::Homepage Pages deployment failed for $HOMEPAGE_SHA"
-                exit 1
-                ;;
-            esac
+            ops_state="$(
+              gh api "repos/onnellab/onnellab.github.io/commits/$HOMEPAGE_SHA/status" \
+                --jq '[.statuses[] | select(.context == "onnellab/ops-live-verify")][0].state // ""'
+            )"
+            if [ "$pages_state" = "success" ] && [ "$ops_state" = "success" ]; then
+              echo "Homepage Pages deployment and live /ops/ verification succeeded for $HOMEPAGE_SHA"
+              exit 0
+            fi
+            if [ "$pages_state" = "failure" ] || [ "$pages_state" = "error" ]; then
+              echo "::error title=homepage_pages_deploy_failed::Homepage Pages deployment failed for $HOMEPAGE_SHA"
+              exit 1
+            fi
+            if [ "$ops_state" = "failure" ] || [ "$ops_state" = "error" ]; then
+              echo "::error title=homepage_ops_live_verify_failed::Homepage live /ops/ verification failed for $HOMEPAGE_SHA"
+              exit 1
+            fi
             sleep 5
           done
-          echo "::error title=homepage_pages_deploy_stale::Homepage Pages deployment did not report success within the bounded verification window"
+          echo "::error title=homepage_deploy_verification_stale::Homepage Pages deployment or live /ops/ verification did not report success within the bounded verification window"
           exit 1
 
       - name: Verify live ops deployment
@@ -120,7 +126,8 @@ jobs:
         run: |
           python3 scripts/verify_live_ops.py \
             --expected generated/manual-publish/index.html \
-            --output data/ops_live_verification.json
+            --output data/ops_live_verification.json \
+            --deployment-sha "${{ steps.homepage_sync.outputs.sha }}"
 
       - name: Commit live ops verification
         if: always()

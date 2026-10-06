@@ -125,7 +125,10 @@ def verify_once(expected: bytes, base_url: str, fetcher=fetch) -> dict[str, obje
     }
 
 
-def run(expected_path: Path, output: Path, base_url: str, attempts: int, interval: float) -> dict[str, object]:
+def run(
+    expected_path: Path, output: Path, base_url: str, attempts: int, interval: float,
+    deployment_sha: str = "",
+) -> dict[str, object]:
     expected = expected_path.read_bytes()
     result: dict[str, object] = {}
     for attempt in range(1, attempts + 1):
@@ -148,6 +151,7 @@ def run(expected_path: Path, output: Path, base_url: str, attempts: int, interva
         "kind": "onnellab_ops_live_verification",
         "checked_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "base_url": base_url.rstrip("/"),
+        "deployment_sha": deployment_sha.strip(),
         **result,
     }
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -162,10 +166,14 @@ def main() -> int:
     parser.add_argument("--base-url", default="https://onnellab.com")
     parser.add_argument("--attempts", type=int, default=12)
     parser.add_argument("--interval", type=float, default=10.0)
+    parser.add_argument("--deployment-sha", default="")
     args = parser.parse_args()
     if args.attempts < 1 or args.interval < 0:
         parser.error("attempts must be >= 1 and interval must be >= 0")
-    payload = run(args.expected, args.output, args.base_url, args.attempts, args.interval)
+    payload = run(
+        args.expected, args.output, args.base_url, args.attempts, args.interval,
+        deployment_sha=args.deployment_sha,
+    )
     print(json.dumps({
         "state": payload.get("state"),
         "attempt": payload.get("attempt"),
