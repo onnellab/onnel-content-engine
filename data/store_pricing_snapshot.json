@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "onnellab_store_pricing_snapshot",
-  "checked_at": "2026-10-05T21:32:40+00:00",
+  "checked_at": "2026-10-06T21:22:33+00:00",
   "territory": "KR",
   "products": [
     {
@@ -19,7 +19,7 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0006",
@@ -36,7 +36,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0005",
@@ -53,7 +53,7 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0007",
@@ -70,7 +70,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0007",
@@ -87,7 +87,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0007",
@@ -104,7 +104,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0007",
@@ -121,7 +121,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0007",
@@ -138,7 +138,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0007",
@@ -155,7 +155,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0007",
@@ -172,7 +172,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0008",
@@ -189,7 +189,24 @@
       "territory": "KR",
       "state": "available",
       "source": "apple_itunes_lookup",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
+    },
+    {
+      "app_id": "APP-0008",
+      "app_slug": "papira",
+      "app_name": "Papira",
+      "platform": "android",
+      "product_type": "paid_download",
+      "product_id": "com.onnellab.papira",
+      "base_plan_id": "",
+      "product_name": "Papira",
+      "price": "4100",
+      "currency": "KRW",
+      "price_display": "₩4,100",
+      "territory": "KR",
+      "state": "available",
+      "source": "google_play_public_page",
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0001",
@@ -206,7 +223,7 @@
       "territory": "KR",
       "state": "available",
       "source": "apple_itunes_lookup",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0001",
@@ -223,7 +240,7 @@
       "territory": "KR",
       "state": "available",
       "source": "google_play_public_page",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0004",
@@ -240,7 +257,7 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0004",
@@ -257,7 +274,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0002",
@@ -274,7 +291,7 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0002",
@@ -291,7 +308,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0003",
@@ -308,7 +325,7 @@
       "territory": "KR",
       "state": "APPROVED",
       "source": "app_store_connect_iap_price_schedule",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     },
     {
       "app_id": "APP-0003",
@@ -325,7 +342,7 @@
       "territory": "KR",
       "state": "ACTIVE",
       "source": "google_play_monetization_onetimeproducts",
-      "checked_at": "2026-10-05T21:32:40+00:00"
+      "checked_at": "2026-10-06T21:22:33+00:00"
     }
   ],
   "stores": [
@@ -333,7 +350,7 @@
       "app_id": "APP-0001",
       "app_slug": "quivra",
       "platform": "ios",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -341,7 +358,7 @@
       "app_id": "APP-0001",
       "app_slug": "quivra",
       "platform": "android",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -349,7 +366,7 @@
       "app_id": "APP-0002",
       "app_slug": "tagweaver",
       "platform": "ios",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -357,7 +374,7 @@
       "app_id": "APP-0002",
       "app_slug": "tagweaver",
       "platform": "android",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -365,7 +382,7 @@
       "app_id": "APP-0003",
       "app_slug": "vaultxt",
       "platform": "ios",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -373,7 +390,7 @@
       "app_id": "APP-0003",
       "app_slug": "vaultxt",
       "platform": "android",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -381,7 +398,7 @@
       "app_id": "APP-0004",
       "app_slug": "segra",
       "platform": "ios",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -389,7 +406,7 @@
       "app_id": "APP-0004",
       "app_slug": "segra",
       "platform": "android",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -397,7 +414,7 @@
       "app_id": "APP-0005",
       "app_slug": "clipnest",
       "platform": "ios",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -405,7 +422,7 @@
       "app_id": "APP-0006",
       "app_slug": "aligna",
       "platform": "ios",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -413,7 +430,7 @@
       "app_id": "APP-0006",
       "app_slug": "aligna",
       "platform": "android",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -421,7 +438,7 @@
       "app_id": "APP-0007",
       "app_slug": "melivra",
       "platform": "ios",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "in_review",
       "error": ""
     },
@@ -429,7 +446,7 @@
       "app_id": "APP-0007",
       "app_slug": "melivra",
       "platform": "android",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -437,7 +454,7 @@
       "app_id": "APP-0008",
       "app_slug": "papira",
       "platform": "ios",
-      "checked_at": "2026-10-05T21:32:40+00:00",
+      "checked_at": "2026-10-06T21:22:33+00:00",
       "state": "verified",
       "error": ""
     },
@@ -445,12 +462,9 @@
       "app_id": "APP-0008",
       "app_slug": "papira",
       "platform": "android",
-      "checked_at": "2026-10-05T21:32:40+00:00",
-      "state": "unavailable",
-      "error": "google_public_pricing_http_404",
-      "errors": [
-        "google_public_pricing_http_404"
-      ]
+      "checked_at": "2026-10-06T21:22:33+00:00",
+      "state": "verified",
+      "error": ""
     }
   ]
 }
