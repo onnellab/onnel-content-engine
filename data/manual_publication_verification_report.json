@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-05T13:05:07+09:00",
+  "checked_at": "2026-10-06T13:54:33+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 64,
-    "already_done": 56,
+    "already_done": 57,
     "verified": 0,
-    "pending": 8
+    "pending": 7
   },
   "items": [
     {
@@ -682,6 +682,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0033::devto::en::markdown",
+      "topic_id": "TOPIC-0033",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-prepare-a-txt-manuscript-for-reliable-epub-conversion-5e2d",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0016::x::en::x",
       "topic_id": "TOPIC-0016",
       "platform": "x",
@@ -759,18 +771,6 @@
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0033::devto::en::markdown",
-      "topic_id": "TOPIC-0033",
-      "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
       "status": "pending",
       "reason": "No matching public post found",
       "posted_url": "",
