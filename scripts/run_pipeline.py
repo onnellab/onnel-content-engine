@@ -23,6 +23,7 @@ from generate_syndication_drafts import generate_syndication_drafts
 from evaluate_social_templates import evaluate_social_templates
 from evaluate_syndication_drafts import evaluate_syndication_drafts
 from evaluate_all_articles import evaluate_all_articles
+from distribution_policy import channel_excluded
 from publishing import DEFAULT_HOMEPAGE_REPOSITORY_PATH, DEFAULT_SITE_URL, build_site, deploy_github_pages, generate_social_posts
 from publish_due_articles import publish_due_articles
 from schedule_ready_articles import schedule_ready_articles
@@ -108,6 +109,8 @@ def syndication_gate_manifest(manifest_path: Path, actionable_only: bool) -> Pat
         for draft in drafts
         if isinstance(draft, dict)
         and draft.get("source_status", "published") == "published"
+        and not channel_excluded(draft.get("platform"))
+        and draft.get("status") != "user_excluded"
         and (not actionable_only or draft.get("status") != "posted")
     ]
     with tempfile.NamedTemporaryFile(
@@ -127,7 +130,10 @@ def evaluate_actionable_syndication(manifest_path: Path, project_root: Path) -> 
     payload = json.loads(manifest_path.read_text(encoding="utf-8"))
     if not payload.get("drafts"):
         return {"average_score": 10.0, "drafts": []}
-    return evaluate_syndication_drafts(manifest_path, project_root)
+    result = evaluate_syndication_drafts(manifest_path, project_root)
+    if not result.get("drafts"):
+        return {"average_score": 10.0, "drafts": []}
+    return result
 
 
 def quality_gate(social_manifest: Path, syndication_manifest: Path, minimum_score: float = 9.5) -> None:

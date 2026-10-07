@@ -48,7 +48,7 @@ from syndication_report import syndication_report
 from topic_management import write_topics
 from validate_social_posts import SocialValidationError, validate_social_posts
 from validate_syndication_drafts import validate_syndication_drafts
-from run_pipeline import distribution_gate, quality_gate
+from run_pipeline import PipelineError, distribution_gate, evaluate_actionable_syndication, quality_gate
 
 
 def topic_row(status: str = "published", topic_id: str = "TOPIC-0001", language: str = "en") -> dict[str, str]:
@@ -1075,6 +1075,48 @@ class PublishingTest(unittest.TestCase):
 
         quality_gate(manifest_path, syndication_dir / "manifest.json")
         distribution_gate(self.topics_path, manifest_path, syndication_dir / "manifest.json")
+
+    def test_syndication_quality_gates_pass_when_only_excluded_drafts_are_actionable(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        syndication_dir = self.root / "generated" / "syndication"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        drafts = generate_syndication_drafts(self.topics_path, syndication_dir, "https://example.com/")
+        for draft in drafts:
+            draft["status"] = "posted"
+        manifest_path = syndication_dir / "manifest.json"
+        for platform in ("medium", "hashnode"):
+            with self.subTest(platform=platform):
+                # Excluded historical copy need not exist or meet today's quality bar.
+                excluded = dict(drafts[0], platform=platform, status="draft", draft_path="missing.md")
+                manifest_path.write_text(json.dumps({"drafts": [*drafts, excluded]}), encoding="utf-8")
+                quality_gate(social_dir / "manifest.json", manifest_path)
+                distribution_gate(self.topics_path, social_dir / "manifest.json", manifest_path)
+                result = evaluate_actionable_syndication(
+                    self._excluded_only_manifest(syndication_dir, excluded), self.root
+                )
+                self.assertEqual({"average_score": 10.0, "drafts": []}, result)
+
+    def _excluded_only_manifest(self, directory: Path, draft: dict[str, object]) -> Path:
+        path = directory / "excluded-only.json"
+        path.write_text(json.dumps({"drafts": [draft]}), encoding="utf-8")
+        return path
+
+    def test_excluded_syndication_drafts_do_not_bypass_actionable_devto_quality(self) -> None:
+        social_dir = self.root / "generated" / "social"
+        syndication_dir = self.root / "generated" / "syndication"
+        generate_social_posts(self.topics_path, social_dir, "https://example.com/")
+        drafts = generate_syndication_drafts(self.topics_path, syndication_dir, "https://example.com/")
+        manifest_path = syndication_dir / "manifest.json"
+        excluded = dict(drafts[0], platform="medium", status="draft", draft_path="missing.md")
+        manifest_path.write_text(json.dumps({"drafts": [*drafts, excluded]}), encoding="utf-8")
+        quality_gate(social_dir / "manifest.json", manifest_path)
+        distribution_gate(self.topics_path, social_dir / "manifest.json", manifest_path)
+
+        (self.root / drafts[0]["draft_path"]).write_text("Poor copy without required metadata", encoding="utf-8")
+        with self.assertRaisesRegex(PipelineError, "syndication score .* is below"):
+            quality_gate(social_dir / "manifest.json", manifest_path)
+        with self.assertRaisesRegex(PipelineError, "syndication distribution quality is below"):
+            distribution_gate(self.topics_path, social_dir / "manifest.json", manifest_path)
 
     def test_social_validator_rejects_unposted_ellipsis_and_link_policy_tampering(self) -> None:
         (self.root / "data" / "apps_registry.csv").write_text(

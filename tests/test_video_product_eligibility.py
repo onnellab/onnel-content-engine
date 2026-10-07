@@ -10,24 +10,53 @@ from short_video_recorder import RecordingError, require_promotable_app
 
 
 class VideoProductEligibilityTests(unittest.TestCase):
-    def test_real_registry_restricts_new_apps_to_public_platform(self):
+    def setUp(self):
         with (ROOT / 'data/apps_registry.csv').open(encoding='utf-8') as handle:
-            apps = {row['app_id']: row for row in csv.DictReader(handle)}
-        for app_id, platforms in [('APP-0007', ['android']), ('APP-0008', ['ios'])]:
+            self.apps = {row['app_id']: row for row in csv.DictReader(handle)}
+        with (ROOT / 'data/store_versions.csv').open(encoding='utf-8') as handle:
+            self.public_stores = {
+                (row['app_id'], row['platform'], row['store_url'])
+                for row in csv.DictReader(handle)
+                if row['version'].strip() and row['status'] in {'new', 'updated', 'unchanged'}
+            }
+
+    def expected_public_platforms(self, app_id):
+        app = self.apps[app_id]
+        return [
+            platform for platform, url_field in [('ios', 'app_store_url'), ('android', 'play_store_url')]
+            if platform in app['platforms'].split('|')
+            and (app_id, platform, app[url_field]) in self.public_stores
+        ]
+
+    def test_real_registry_restricts_new_apps_to_public_platform(self):
+        for app_id in ['APP-0007', 'APP-0008']:
             with self.subTest(app=app_id):
-                self.assertEqual(platforms, product_snapshot(apps[app_id])['platforms'])
+                platforms = self.expected_public_platforms(app_id)
+                self.assertTrue(platforms)
+                self.assertEqual(platforms, product_snapshot(self.apps[app_id])['platforms'])
 
     def test_recorder_blocks_unreleased_platform_before_device_work(self):
-        for app_id, platform in [('APP-0007', 'ios_simulator'), ('APP-0008', 'android_emulator')]:
-            with self.subTest(app=app_id), self.assertRaisesRegex(RecordingError, 'recording_platform_not_public'):
-                require_promotable_app({'app_id': app_id, 'production_eligible': True}, platform)
+        blocked = []
+        for app_id in ['APP-0007', 'APP-0008']:
+            for platform, recorder in [('ios', 'ios_simulator'), ('android', 'android_emulator')]:
+                if platform in self.expected_public_platforms(app_id):
+                    continue
+                blocked.append((app_id, platform))
+                with self.subTest(app=app_id, platform=platform), self.assertRaisesRegex(
+                    RecordingError, 'recording_platform_not_public'
+                ):
+                    require_promotable_app({'app_id': app_id, 'production_eligible': True}, recorder)
+        self.assertTrue(blocked, 'Current store data must exercise the non-public platform guard')
 
     def test_recorder_accepts_verified_platform(self):
-        for app_id, platform in [('APP-0007', 'android_emulator'), ('APP-0008', 'ios_simulator')]:
-            # This is the public-store guard in isolation, not a registered capture
-            # scenario. Real registrations remain independently quarantined.
-            self.assertEqual(app_id, require_promotable_app(
-                {'app_id': app_id, 'production_eligible': True}, platform)['app_id'])
+        for app_id in ['APP-0007', 'APP-0008']:
+            for platform in self.expected_public_platforms(app_id):
+                recorder = {'ios': 'ios_simulator', 'android': 'android_emulator'}[platform]
+                # This is the public-store guard in isolation, not a registered capture
+                # scenario. Real registrations remain independently quarantined.
+                with self.subTest(app=app_id, platform=platform):
+                    self.assertEqual(app_id, require_promotable_app(
+                        {'app_id': app_id, 'production_eligible': True}, recorder)['app_id'])
 
     def test_missing_or_nonmatching_store_evidence_fails_closed(self):
         app = {'app_id': 'APP-0001', 'app_name': 'Fixture', 'status': 'released',
