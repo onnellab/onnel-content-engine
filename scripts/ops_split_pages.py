@@ -510,6 +510,12 @@ def _funnel_source_message(
                         "Check permission to request App Store Connect analytics reports.",
                     )
                 if app_status == "error":
+                    message = str(app_payload.get("message") or "")
+                    if "403" in message:
+                        return (
+                            "현재 App Store Connect API 키에 분석 보고서 권한이 없어요. 최초 연결에는 Admin 역할 API 키가 필요해요.",
+                            "The current App Store Connect API key cannot access Analytics Reports. Initial setup requires an Admin-role API key.",
+                        )
                     return (
                         "App Store Connect 분석 동기화 중 오류가 발생했어요.",
                         "App Store Connect analytics sync reported an error.",

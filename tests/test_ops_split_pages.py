@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from build_manual_publish_site import html_document
-from ops_split_pages import build_split_ops_pages
+from ops_split_pages import _funnel_source_message, build_split_ops_pages
 from validate_manual_publish_site import validate_dashboard
 
 
@@ -137,6 +137,27 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertNotIn("Combined visitors", detail)
             self.assertNotIn("양 스토어 방문 합계", detail)
             self.assertIn("선택한 기간에 수집된 데이터가 아직 없어요.", detail)
+
+    def test_apple_analytics_403_has_actionable_bilingual_message(self):
+        ko, en = _funnel_source_message(
+            {
+                "source_status": {
+                    "apple": {
+                        "status": "error",
+                        "apps": {
+                            "tagweaver": {
+                                "status": "error",
+                                "message": "HTTP Error 403: Forbidden",
+                            }
+                        },
+                    }
+                }
+            },
+            "apple",
+            "tagweaver",
+        )
+        self.assertIn("Admin 역할 API 키", ko)
+        self.assertIn("Admin-role API key", en)
 
 
 if __name__ == "__main__":
