@@ -14,6 +14,7 @@ from xml.sax.saxutils import escape as xml_escape
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+from aether_cost_policy import require_paid_api_allowed
 from aether_compose import media_info
 from lyria_config import access_token, load_settings
 from short_video_credentials import CredentialError
@@ -59,6 +60,7 @@ def cover_prompt(title: str, style: str, lane: str) -> str:
 
 
 def _request(project: str, prompt: str, token: str, *, send=None, timeout: int = 180) -> tuple[bytes, str]:
+    require_paid_api_allowed()
     endpoint = (
         "https://aiplatform.googleapis.com/v1/projects/"
         f"{project}/locations/{LOCATION}/publishers/google/models/{MODEL}:generateContent"
@@ -349,6 +351,8 @@ def brand_background(background: Path, output: Path, title: str) -> dict:
 
 
 def generate_cover(title: str, style: str, lane: str, output_dir: Path, *, execute=False, send=None, token=None) -> dict:
+    if execute:
+        require_paid_api_allowed()
     settings = load_settings()
     if not settings:
         raise CredentialError("lyria_not_configured")

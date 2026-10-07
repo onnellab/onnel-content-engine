@@ -39,7 +39,9 @@ class CoverTests(unittest.TestCase):
         def send(req):
             captured["body"] = json.loads(req.data)
             return Response(payload)
-        aether_cover._request("aether-music-123", "prompt", "token", send=send)
+        # Protocol fixture only; production no-paid policy is tested separately.
+        with patch.object(aether_cover, "require_paid_api_allowed"):
+            aether_cover._request("aether-music-123", "prompt", "token", send=send)
         self.assertEqual(["TEXT", "IMAGE"], captured["body"]["generationConfig"]["responseModalities"])
         self.assertEqual("16:9", captured["body"]["generationConfig"]["imageConfig"]["aspectRatio"])
 
@@ -48,7 +50,8 @@ class CoverTests(unittest.TestCase):
         payload = json.dumps({"candidates": [{"content": {"parts": [{
             "inlineData": {"mimeType": "image/png", "data": base64.b64encode(raw).decode()}
         }]}}]}).encode()
-        image, mime = aether_cover._request("aether-music-123", "prompt", "token", send=lambda _: Response(payload))
+        with patch.object(aether_cover, "require_paid_api_allowed"):
+            image, mime = aether_cover._request("aether-music-123", "prompt", "token", send=lambda _: Response(payload))
         self.assertEqual(raw, image)
         self.assertEqual("image/png", mime)
 

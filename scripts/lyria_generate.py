@@ -13,6 +13,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from short_video_credentials import CredentialError
+from aether_cost_policy import require_paid_api_allowed
 from lyria_config import (
     CONFIG_PATH,
     MODEL,
@@ -102,6 +103,7 @@ def parse_audio_response(payload: bytes) -> tuple[bytes, str, dict]:
 
 
 def request_song(project_id: str, prompt: str, *, token: str | None = None, timeout: int = 240) -> tuple[bytes, str, dict]:
+    require_paid_api_allowed()
     token = token or access_token()
     body = json.dumps({"model": MODEL, "input": [{"type": "text", "text": prompt}]}, ensure_ascii=False).encode("utf-8")
     request = Request(
@@ -140,6 +142,8 @@ def slug(value: str) -> str:
 
 
 def generate(title: str, style: str, *, count: int | None = None, execute: bool = False, output_root: Path = PRIVATE_OUTPUT) -> dict:
+    if execute:
+        require_paid_api_allowed()
     settings = load_settings(CONFIG_PATH)
     if not settings:
         raise CredentialError("lyria_not_configured")

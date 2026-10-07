@@ -38,7 +38,7 @@ class ReviewTests(unittest.TestCase):
                 {"text":json.dumps(accepted_doc())}]}}]}).encode()
             def send(req):
                 body_seen.update(json.loads(req.data));return Response(payload)
-            with patch.object(review,"load_settings",return_value={"project_id":"aether-music-123"}):
+            with patch.object(review,"load_settings",return_value={"project_id":"aether-music-123"}), patch.object(review,"require_paid_api_allowed"):
                 result=review.review_audio(path,"Title","Style","skybound_flight",token="token",send=send)
             self.assertTrue(result["accepted"])
             parts=body_seen["contents"][0]["parts"]

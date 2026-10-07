@@ -21,7 +21,8 @@ from zoneinfo import ZoneInfo
 from aether_compilation import thumbnail
 from aether_audio_review import review_audio
 from aether_compose import audio_duration, media_info, validate_output
-from aether_cover import generate_cover, lane_direction
+from aether_cover import lane_direction
+from aether_existing_cover import import_existing_cover
 from aether_planner import inspect_candidate, read_catalog
 from lyria_generate import generate as generate_music
 from lyria_config import connection_status as lyria_connection_status
@@ -229,6 +230,8 @@ def policy_for(job: dict) -> dict:
             "kind": "catalog_backlog_single",
             "music_provider": "canonical_wav_master",
         })
+    if (job.get("cover") or {}).get("source_kind") == "existing_approved_cover":
+        policy.update({"version": 3, "cover_provider": "owner_approved_existing_cover"})
     return policy
 
 
@@ -481,14 +484,16 @@ def readiness(root=ROOT) -> dict:
         "profile": "aether_inn",
         "worker": "generated_single",
         "youtube_credentials": credential_status(profile="aether_inn"),
-        "lyria": lyria_connection_status(check_auth=True),
-        "cover_model": "gemini-2.5-flash-image",
-        "cover_generation": "implemented_one_request_per_single",
+        "lyria": lyria_connection_status(check_auth=False),
+        "paid_api_allowed": False,
+        "cover_model": "owner_approved_existing_cover",
+        "cover_generation": "disabled_no_paid_api",
+        "cover_import": "requires_per_title_sha_bound_rights_and_quality_approval",
         "cover_branding": "implemented_adaptive_ivory_baskerville_gold_brand",
         "render": "implemented_1920x1080_30fps_h264_yuv420p_aac256",
         "upload": "implemented_durable_aether_only",
         "technical_candidate_gate": "implemented",
-        "actual_audio_quality_review": "gemini-2.5-flash_fail_closed",
+        "actual_audio_quality_review": "disabled_no_paid_api",
         "backlog_wav_import": "implemented_catalog_bound_hash_and_duration_gate",
         "melodic_originality_certification": "not_claimed",
     }
@@ -496,7 +501,7 @@ def readiness(root=ROOT) -> dict:
 
 def worker(
     root=ROOT, *, slot=None, title=None, style=None, lane=None, publish=False, execute=False,
-    api_factory=None, music_generator=generate_music, cover_generator=generate_cover,
+    api_factory=None, music_generator=generate_music, cover_generator=import_existing_cover,
     renderer=render_single, existing_only=False, source_kind=None, source_wav=None,
     source_expected_duration=None, source_filename=None,
 ):
@@ -569,36 +574,44 @@ def worker(
             atomic_json(q.state_path, state)
         folder = directory(q.root / "jobs" / job["id"])
         try:
-            if not job.get("music"):
-                if job.get("source_kind") == "backlog_wav":
-                    source = Path(source_wav) if source_wav is not None else resolve_backlog_wav(job["title"])
-                    chosen = import_backlog_master(source, folder, job["source_expected_duration"])
-                else:
-                    generated = recover_generated_result(folder)
-                    if generated is None:
-                        generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
-                    chosen = select_candidate(
-                        generated, _history_hashes(state),
-                        reviewer=lambda path: review_audio(path, job["title"], job["style"], job["lane"]),
-                    )
-                job["music"] = chosen
-                job["status"] = "music_ready"
-                atomic_json(q.state_path, state)
-            if not job.get("cover"):
-                cover = cover_generator(job["title"], job["style"], job["lane"], folder / "cover", execute=True)
-                if cover.get("state") != "generated" or not Path(cover.get("path", "")).is_file():
-                    raise VideoError("aether_single_cover_generation_failed")
-                job["cover"] = {
-                    "path": cover["path"], "sha256": cover["sha256"],
-                    "model": cover.get("model"), "layout": cover.get("layout"),
-                }
-                job["status"] = "cover_ready"
-                atomic_json(q.state_path, state)
-            if not job.get("result"):
-                result = renderer(Path(job["music"]["path"]), Path(job["cover"]["path"]), folder)
-                result["job_id"] = job["id"]
-                job.update(result=result, status="rendered", upload_eligible=True, error=None)
-                atomic_json(q.state_path, state)
+            # Uploaded jobs reconcile their hash-bound production artifacts; never regenerate sources.
+            if not job.get("upload"):
+                if not job.get("music"):
+                    if job.get("source_kind") == "backlog_wav":
+                        source = Path(source_wav) if source_wav is not None else resolve_backlog_wav(job["title"])
+                        chosen = import_backlog_master(source, folder, job["source_expected_duration"])
+                    else:
+                        generated = recover_generated_result(folder)
+                        if generated is None:
+                            generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
+                        chosen = select_candidate(
+                            generated, _history_hashes(state),
+                            reviewer=lambda path: review_audio(path, job["title"], job["style"], job["lane"]),
+                        )
+                    job["music"] = chosen
+                    job["status"] = "music_ready"
+                    atomic_json(q.state_path, state)
+                if not job.get("cover"):
+                    cover = cover_generator(job["title"], job["style"], job["lane"], folder / "cover", execute=True)
+                    if cover.get("state") not in {"generated", "ready"} or not Path(cover.get("path", "")).is_file():
+                        raise VideoError("aether_single_cover_generation_failed")
+                    job["cover"] = {
+                        "path": cover["path"], "sha256": cover["sha256"],
+                        "model": cover.get("model"), "layout": cover.get("layout"),
+                        **{key: cover[key] for key in ("source_kind", "source_sha256", "approval_sha256", "approval_title") if key in cover},
+                    }
+                    job["status"] = "cover_ready"
+                    atomic_json(q.state_path, state)
+                if not job.get("result"):
+                    if job["cover"].get("source_kind") == "existing_approved_cover":
+                        cover_path = Path(job["cover"]["path"])
+                        if (cover_path.is_symlink() or not cover_path.is_file()
+                                or file_hash(cover_path) != job["cover"].get("sha256")):
+                            raise VideoError("aether_single_approved_cover_integrity")
+                    result = renderer(Path(job["music"]["path"]), Path(job["cover"]["path"]), folder)
+                    result["job_id"] = job["id"]
+                    job.update(result=result, status="rendered", upload_eligible=True, error=None)
+                    atomic_json(q.state_path, state)
             if publish:
                 uploader = Uploader(q, partial(YouTube, profile="aether_inn"))
                 if not job.get("approval"):
@@ -649,7 +662,7 @@ def worker(
 
 def backlog_worker(
     root=ROOT, *, slot=None, title=None, publish=False, execute=False, source_wav=None,
-    api_factory=None, cover_generator=generate_cover, renderer=render_single, music_generator=generate_music,
+    api_factory=None, cover_generator=import_existing_cover, renderer=render_single, music_generator=generate_music,
 ):
     if not execute:
         return {"dry_run": True, "profile": "aether_inn", "worker": "backlog_wav_single"}

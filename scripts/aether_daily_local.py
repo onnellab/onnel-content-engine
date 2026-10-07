@@ -595,58 +595,11 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
             sync_playlists_after_upload(report)
         return
 
-    code, stdout, _ = run_step(
-        report, "aether_single_readiness",
-        [sys.executable, "-B", "scripts/aether_single.py", "readiness"],
-        timeout=180,
-    )
-    readiness = json_stdout(stdout)
-    report["aether_single_readiness"] = readiness
-    if code != 0:
-        report["single_slot"] = {"status": "blocked", "error": "aether_single_readiness_failed"}
-        report["blockers"].append("aether_single_readiness_failed")
-        return
-    yt = readiness.get("youtube_credentials") or {}
-    lyria = readiness.get("lyria") or {}
-    if not (
-        yt.get("configured") is True
-        and lyria.get("state") == "ready"
-        and lyria.get("enabled") is True
-        and lyria.get("gcloud_ready") is True
-        and lyria.get("auth_ready") is True
-    ):
-        report["single_slot"] = {"status": "blocked", "error": "aether_single_readiness_not_ready"}
-        report["blockers"].append("aether_single_readiness_not_ready")
-        return
+    # Backlog exhaustion never authorizes a paid model, even if credentials and
+    # a historical per-run spending cap remain configured on the Mac.
+    report["single_slot"] = {"status": "blocked", "error": "aether_paid_api_disabled"}
+    report["blockers"].append("aether_paid_api_disabled")
 
-    try:
-        lane, title, style = choose_lyria_plan()
-    except (OSError, ValueError, RuntimeError) as error:
-        report["single_slot"] = {"status": "blocked", "error": str(error)}
-        report["blockers"].append(str(error))
-        return
-    code, stdout, _ = run_step(
-        report,
-        "new_lyria_single",
-        [
-            sys.executable, "-B", "scripts/aether_single.py", "worker",
-            "--slot", slot, "--lane", lane, "--title", title, "--style", style,
-            "--execute", "--publish",
-        ],
-        timeout=3600,
-    )
-    payload = json_stdout(stdout)
-    report["single_slot"] = payload or {
-        "status": "blocked", "title": title, "lane": lane,
-        "error": "aether_single_worker_output_invalid",
-    }
-    if code != 0:
-        report["blockers"].append(
-            report["single_slot"].get("error") or "aether_single_worker_failed"
-        )
-        return
-    if payload.get("video_id") and payload.get("status") in {"scheduled", "processing", "published"}:
-        sync_playlists_after_upload(report)
 
 def run_compilation_slot(report: dict, now: datetime) -> None:
     start = date(2026, 9, 27)

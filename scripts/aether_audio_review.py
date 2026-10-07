@@ -5,6 +5,7 @@ import base64, json
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+from aether_cost_policy import require_paid_api_allowed
 from lyria_config import access_token, load_settings
 from short_video_credentials import CredentialError
 from short_video_pipeline import VideoError
@@ -79,6 +80,7 @@ def validate(data):
             "flags":flags,"reason_codes":reasons,"weighted_score":weighted,"review_model":MODEL}
 
 def review_audio(path,title,style,lane,*,token=None,send=None,timeout=180):
+    require_paid_api_allowed()
     path=Path(path)
     if path.is_symlink() or not path.is_file() or path.suffix.lower() not in {".mp3",".wav"}:
         raise VideoError("aether_audio_review_input_invalid")

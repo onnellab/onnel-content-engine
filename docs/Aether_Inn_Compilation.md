@@ -121,7 +121,8 @@ same-slot idempotence and exact profile binding; no live upload has occurred.
 A production compilation still requires explicit private owner approvals and a
 successfully synchronized master/cover manifest.
 The Aether Inn YouTube credential profile is implemented and separately bound, but a
-live public production upload has not been used as a fixture. The separate Lyria/Gemini
-single worker now handles new music, generated branded covers, rendering and durable
-Aether-only publication. Neither worker claims melodic-originality or copyright
-certification.
+live public production upload has not been used as a fixture. The separate single
+worker preserves durable Aether-only publication, but new paid Lyria/Gemini calls
+are disabled by the current no-paid-API policy. Singles can use approved existing
+masters and per-title approved existing covers. Neither worker claims
+melodic-originality or copyright certification.

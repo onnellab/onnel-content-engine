@@ -85,8 +85,9 @@ must not be followed by divergence decisions against a stale `origin/main`. The 
   wrapper does not touch the backlog WAV or create another upload;
 - synchronizes the six canonical Aether playlists idempotently;
 - on Tuesday/Saturday before 09:00 KST, processes the first actually-missing
-  canonical backlog WAV, or uses the canonical Lyria worker only after backlog
-  exhaustion and readiness checks; the wrapper re-reads current KST immediately
+  canonical backlog WAV with an explicitly approved existing cover. Backlog
+  exhaustion stops with `aether_paid_api_disabled`; configured Lyria credentials
+  or a historical spending cap do not authorize paid generation. The wrapper re-reads current KST immediately
   before each publish-capable backlog attempt, so crossing 09:00 during earlier
   reconciliation stops before another `--publish` invocation;
 - on every other Sunday beginning 2026-09-27, invokes at most one canonical
@@ -96,6 +97,21 @@ All music generation, cover, render, upload, thumbnail, publishAt, public-invent
 cross-check, same-video reconciliation, rights gates, and playlist classification
 remain owned by the canonical repository workers. The daily wrapper does not
 reimplement or weaken those contracts.
+
+## No-paid-API production policy
+
+Paid Lyria generation, Gemini cover generation and Gemini audio review are blocked
+at their entrypoints before credential access or API requests. No environment or
+CLI switch overrides this policy. Existing music/cover/result records and uploaded
+video IDs are preserved. Reconciliation of an uploaded job verifies its original
+hash-bound video and thumbnail; it never regenerates missing source media.
+
+The no-cost single-cover path requires per-title, hash-bound commercial-use and
+quality approval. Missing approval or artwork stops the slot rather than falling
+back to a paid image request. See [Existing Single Covers](Aether_Inn_Existing_Covers.md).
+The compilation worker continues using its existing approved masters/artwork and
+local render path. Production runtime installation must be verified separately
+from a repository commit; source tests do not prove a live upload or Mac update.
 
 ## Failure behavior
 

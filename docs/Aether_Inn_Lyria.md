@@ -1,5 +1,15 @@
 # Aether Inn — Lyria 3 Pro Production
 
+## Current no-paid-API policy
+
+As of 2026-10-07, paid Lyria generation, Gemini cover generation and Gemini audio
+review are fail-closed, even if old local credentials and a spending cap remain
+configured. Provider execution stops before token access and API requests.
+Historical setup and generation descriptions below are not current spending
+authorization. Dry-run planning remains available. Existing approved masters and
+[existing single covers](Aether_Inn_Existing_Covers.md) may use local rendering;
+missing rights/quality evidence or assets blocks rather than generating replacements.
+
 ## Purpose
 
 Aether Inn uses Google Lyria 3 Pro for new instrumental singles. The public /ops/ page never stores Google credentials. The worker Mac authenticates with Google Cloud Application Default Credentials (ADC).
