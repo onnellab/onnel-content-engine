@@ -12,7 +12,7 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-from sync_store_reviews import app_store_connect_token, google_play_access_token, urlopen_with_retry
+from sync_store_reviews import app_store_connect_read_token_from_env, google_play_access_token, urlopen_with_retry
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_APPROVALS = ROOT / "data" / "store_review_approvals.json"
@@ -34,13 +34,7 @@ def json_request(url: str, token: str, method: str, body: dict[str, object]) -> 
 
 
 def credentials() -> tuple[str, str]:
-    apple = os.environ.get("APP_STORE_CONNECT_TOKEN", "").strip()
-    if not apple:
-        key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY", "").strip()
-        if not key and os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", "").strip():
-            key = base64.b64decode(os.environ["APP_STORE_CONNECT_PRIVATE_KEY_BASE64"], validate=True).decode()
-        if key:
-            apple = app_store_connect_token(os.environ.get("APP_STORE_CONNECT_KEY_ID", ""), os.environ.get("APP_STORE_CONNECT_ISSUER_ID", ""), key)
+    apple = app_store_connect_read_token_from_env()
     google = os.environ.get("GOOGLE_PLAY_ACCESS_TOKEN", "").strip()
     if not google and os.environ.get("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", "").strip():
         service_json = base64.b64decode(os.environ["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64"], validate=True).decode()

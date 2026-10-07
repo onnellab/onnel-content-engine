@@ -201,8 +201,9 @@ python3 scripts/triage_store_reviews.py
 python3 scripts/build_manual_publish_site.py
 ```
 
-The dashboard's **Store review connection** panel accepts a newly issued Apple
-Key ID, Issuer ID, and `.p8` private key plus a Google Play service account
+The dashboard's **Store review connection** panel accepts an Apple Individual
+API key (Key ID and `.p8` private key) or Team API key (also requiring Issuer ID),
+plus a Google Play service account
 JSON and the Play lifetime review reports URI (`gs://pubsite_prod_.../reviews/`), then
 prepares the local env and GitHub Actions secret-sync commands. The reports
 bucket is required because the reviews API only exposes the previous week. The
@@ -212,6 +213,14 @@ cleared from the form on refresh.
 The hosted form encrypts these values with the repository's GitHub Actions
 public key and can save them directly to Actions Secrets before dispatching the
 review sync workflow.
+
+Apple saves use only the dedicated `APP_STORE_CONNECT_READ_*` secrets. Individual
+is the default for new input; its JWT uses `sub=user` and ignores any stale issuer.
+Team JWTs use the required Issuer ID. Read jobs fall back to legacy Apple
+credentials only when the READ namespace is absent. Release/upload credentials
+remain separate: Individual keys cannot access Provisioning, Sales & Finance,
+or notaryTool. The internal processing-status collector still uses release
+credentials because it resolves builds through the Provisioning `/bundleIds` API.
 
 The dashboard shows synchronized reviews and creates Korean or English reply
 drafts from the repository-managed templates. It also creates a deterministic

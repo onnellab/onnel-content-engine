@@ -17,13 +17,7 @@ review_id_from_link = sync.google_review_id_from_link
 
 
 def credentials() -> tuple[str, str, str]:
-    apple = os.environ.get("APP_STORE_CONNECT_TOKEN", "").strip()
-    if not apple:
-        key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY", "").strip()
-        if not key and os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY_BASE64"):
-            key = base64.b64decode(os.environ["APP_STORE_CONNECT_PRIVATE_KEY_BASE64"], validate=True).decode()
-        if key:
-            apple = sync.app_store_connect_token(os.environ.get("APP_STORE_CONNECT_KEY_ID", ""), os.environ.get("APP_STORE_CONNECT_ISSUER_ID", ""), key)
+    apple = sync.app_store_connect_read_token_from_env()
     google = os.environ.get("GOOGLE_PLAY_ACCESS_TOKEN", "").strip()
     if not google and os.environ.get("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64"):
         google = sync.google_play_access_token(base64.b64decode(os.environ["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64"], validate=True).decode())

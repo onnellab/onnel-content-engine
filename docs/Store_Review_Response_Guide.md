@@ -81,17 +81,29 @@ either Korean translation.
 For Apple, provide a newly issued App Store Connect API key:
 
 ```text
-APP_STORE_CONNECT_KEY_ID
-APP_STORE_CONNECT_ISSUER_ID
-APP_STORE_CONNECT_PRIVATE_KEY_BASE64
+APP_STORE_CONNECT_READ_KEY_TYPE
+APP_STORE_CONNECT_READ_KEY_ID
+APP_STORE_CONNECT_READ_ISSUER_ID
+APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64
 GOOGLE_PLAY_REPORTS_BUCKET
 ```
 
 The dashboard converts the pasted PEM to single-line Base64 so the ignored env
 file and GitHub Actions can transport it safely. `sync_store_reviews.py` decodes
-it in memory and creates a 19-minute ES256 JWT at runtime. It also accepts
-`APP_STORE_CONNECT_PRIVATE_KEY` directly and `APP_STORE_CONNECT_TOKEN` as a
+it in memory and creates a 19-minute ES256 JWT at runtime. Set the key type to
+`individual` (the Ops default) or `team`. Individual requires Key ID and private
+key and uses `sub=user` without `iss`; any issuer is ignored. Team additionally
+requires Issuer ID and uses `iss` without `sub`.
+
+Ops uploads only `APP_STORE_CONNECT_READ_*` secrets, including Issuer ID only
+for Team. Read jobs fall back to legacy `APP_STORE_CONNECT_KEY_ID`,
+`APP_STORE_CONNECT_ISSUER_ID`, and `APP_STORE_CONNECT_PRIVATE_KEY_BASE64` or raw
+`APP_STORE_CONNECT_PRIVATE_KEY` only when READ configuration is absent. A partial
+READ configuration fails without borrowing legacy fields. Release/upload secrets
+remain separate. Individual keys cannot use Provisioning, Sales & Finance, or
+notaryTool; the internal processing-status collector retains release credentials
+because its build lookup uses `/bundleIds`. `APP_STORE_CONNECT_TOKEN` remains a
 temporary override. Do not commit tokens, API private keys, service-account
 JSON, review exports, or temporary authentication files.
 

@@ -318,6 +318,13 @@ Body
             self.assertIn("actions/workflows/publishing.yml/dispatches", html)
             self.assertIn("dry_run: 'false'", html)
             self.assertIn("스토어 리뷰 연결", html)
+            self.assertIn('id="app-store-key-type"', html)
+            self.assertIn('value="individual"', html)
+            self.assertIn('value="team"', html)
+            self.assertIn("개인 API 키 (Individual)", html)
+            self.assertIn("팀 API 키 (Team)", html)
+            self.assertIn("Individual API key", html)
+            self.assertIn("Team API key", html)
             self.assertIn('id="app-store-key-id"', html)
             self.assertIn('id="app-store-issuer-id"', html)
             self.assertIn('id="app-store-private-key"', html)
@@ -328,7 +335,7 @@ Body
                 'placeholder="gs://pubsite_prod_.../reviews/" required',
                 html,
             )
-            self.assertIn("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", html)
+            self.assertIn("APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64", html)
             self.assertIn("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", html)
             self.assertIn("GOOGLE_PLAY_REPORTS_BUCKET", html)
             self.assertIn("Play 전체 리뷰 보고서 버킷 (필수)", html)
@@ -663,10 +670,10 @@ Body
             self.assertIsNotNone(match, name)
             return match.group(1)
 
-        apple_names = {"APP_STORE_CONNECT_KEY_ID", "APP_STORE_CONNECT_ISSUER_ID", "APP_STORE_CONNECT_PRIVATE_KEY_BASE64"}
+        apple_names = {"APP_STORE_CONNECT_READ_KEY_TYPE", "APP_STORE_CONNECT_READ_KEY_ID", "APP_STORE_CONNECT_READ_ISSUER_ID", "APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64"}
         google_names = {"GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", "GOOGLE_PLAY_REPORTS_BUCKET"}
         for provider, expected, other, textarea, metadata in (
-            ("AppStore", apple_names, google_names, "privateKey", "keyId: values.keyId, issuerId: values.issuerId"),
+            ("AppStore", apple_names, google_names, "privateKey", "keyType: values.keyType, keyId: values.keyId, issuerId: values.keyType === 'team' ? values.issuerId : ''"),
             ("GooglePlay", google_names, apple_names, "googleServiceAccount", "googleReportsBucket: values.googleReportsBucket"),
         ):
             missing = function("missing" + provider + "CredentialNames")
@@ -717,7 +724,7 @@ Body
         self.assertIn("pendingStoreCredentialProviders.add(provider)", source)
         self.assertIn("name === 'googleServiceAccount' || name === 'googleReportsBucket' ? 'google' : 'apple'", source)
         self.assertIn("pendingStoreCredentialProviders.clear()", function("clearStoreCredentials"))
-        self.assertEqual(set(re.findall(r"(?:APP_STORE_CONNECT|GOOGLE_PLAY)_[A-Z0-9_]+", function("requireRemoteStoreSecrets"))), apple_names | google_names)
+        self.assertEqual(set(re.findall(r"(?:APP_STORE_CONNECT|GOOGLE_PLAY)_[A-Z0-9_]+", function("requireRemoteStoreSecrets"))), (apple_names - {"APP_STORE_CONNECT_READ_ISSUER_ID"}) | google_names)
         failure = function("storeSecretFailureMessage")
         self.assertIn("status === 401", failure)
         self.assertIn("storeSecretTokenInvalid", failure)

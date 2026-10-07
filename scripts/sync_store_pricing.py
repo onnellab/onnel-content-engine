@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 
 from sync_store_reviews import (
-    app_store_connect_token,
+    app_store_connect_read_token_from_env,
     apple_store_app_id,
     fetch_json,
     google_play_access_token,
@@ -71,18 +71,7 @@ def _html_get(url: str) -> str:
 
 
 def _decode_credentials() -> tuple[str, str]:
-    apple = os.environ.get("APP_STORE_CONNECT_TOKEN", "").strip()
-    if not apple:
-        key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY", "").strip()
-        encoded = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", "").strip()
-        if not key and encoded:
-            key = base64.b64decode(encoded, validate=True).decode("utf-8")
-        if key:
-            apple = app_store_connect_token(
-                os.environ.get("APP_STORE_CONNECT_KEY_ID", ""),
-                os.environ.get("APP_STORE_CONNECT_ISSUER_ID", ""),
-                key,
-            )
+    apple = app_store_connect_read_token_from_env()
     google = os.environ.get("GOOGLE_PLAY_ACCESS_TOKEN", "").strip()
     if not google:
         encoded = os.environ.get("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", "").strip()

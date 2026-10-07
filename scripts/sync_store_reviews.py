@@ -204,22 +204,78 @@ def app_store_connect_token(
     private_key: str,
     issued_at: int | None = None,
     signer=sign_es256,
+    key_type: str = "team",
 ) -> str:
-    if not key_id.strip() or not issuer_id.strip() or not private_key.strip():
-        raise ValueError("App Store Connect Key ID, Issuer ID, and private key are required")
+    key_type = key_type.strip().lower()
+    if key_type not in {"individual", "team"}:
+        raise ValueError("App Store Connect key type must be individual or team")
+    if not key_id.strip() or not private_key.strip():
+        raise ValueError("App Store Connect Key ID and private key are required")
+    if key_type == "team" and not issuer_id.strip():
+        raise ValueError("App Store Connect team key requires Issuer ID")
     now = int(time.time()) if issued_at is None else issued_at
     header = {"alg": "ES256", "kid": key_id.strip(), "typ": "JWT"}
     payload = {
-        "iss": issuer_id.strip(),
         "iat": now,
         "exp": now + 19 * 60,
         "aud": "appstoreconnect-v1",
     }
+    payload.update({"sub": "user"} if key_type == "individual" else {"iss": issuer_id.strip()})
     encoded_header = base64url(json.dumps(header, separators=(",", ":")).encode("utf-8"))
     encoded_payload = base64url(json.dumps(payload, separators=(",", ":")).encode("utf-8"))
     signing_input = f"{encoded_header}.{encoded_payload}".encode("ascii")
     signature = der_signature_to_raw(signer(signing_input, private_key))
     return f"{signing_input.decode('ascii')}.{base64url(signature)}"
+
+
+def resolve_app_store_connect_read_credentials(environ=None) -> dict[str, str] | None:
+    """Select one complete credential namespace; never mix READ and release keys."""
+    env = os.environ if environ is None else environ
+    read_prefix = "APP_STORE_CONNECT_READ_"
+    read_names = ("KEY_TYPE", "KEY_ID", "ISSUER_ID", "PRIVATE_KEY_BASE64")
+    use_read = any(env.get(read_prefix + name, "").strip() for name in read_names)
+    prefix = read_prefix if use_read else "APP_STORE_CONNECT_"
+    key_type = env.get(prefix + "KEY_TYPE", "").strip().lower() if use_read else "team"
+    key_id = env.get(prefix + "KEY_ID", "").strip()
+    issuer_id = env.get(prefix + "ISSUER_ID", "").strip()
+    encoded = env.get(prefix + "PRIVATE_KEY_BASE64", "").strip()
+    private_key = "" if use_read else env.get(prefix + "PRIVATE_KEY", "").strip()
+    if not use_read and not any((key_id, issuer_id, encoded, private_key)):
+        return None
+    if key_type not in {"individual", "team"}:
+        raise ValueError(prefix + "KEY_TYPE must be individual or team")
+    required = [("KEY_ID", key_id), ("PRIVATE_KEY_BASE64", encoded or private_key)]
+    if key_type == "team":
+        required.append(("ISSUER_ID", issuer_id))
+    missing = [prefix + name for name, value in required if not value]
+    if missing:
+        raise ValueError("Missing App Store Connect credentials: " + ", ".join(missing))
+    if not private_key:
+        try:
+            private_key = base64.b64decode(encoded, validate=True).decode("utf-8").strip()
+        except (ValueError, UnicodeDecodeError):
+            raise ValueError(prefix + "PRIVATE_KEY_BASE64 must be valid base64 containing UTF-8") from None
+        if not private_key:
+            raise ValueError(prefix + "PRIVATE_KEY_BASE64 decodes to an empty private key")
+    return {"key_id": key_id, "issuer_id": issuer_id if key_type == "team" else "",
+            "private_key": private_key, "key_type": key_type}
+
+
+def app_store_connect_read_token_from_env() -> str:
+    read_names = (
+        "APP_STORE_CONNECT_READ_KEY_TYPE",
+        "APP_STORE_CONNECT_READ_KEY_ID",
+        "APP_STORE_CONNECT_READ_ISSUER_ID",
+        "APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64",
+    )
+    if any(os.environ.get(name, "").strip() for name in read_names):
+        credentials = resolve_app_store_connect_read_credentials()
+        return app_store_connect_token(**credentials) if credentials else ""
+    token = os.environ.get("APP_STORE_CONNECT_TOKEN", "").strip()
+    if token:
+        return token
+    credentials = resolve_app_store_connect_read_credentials()
+    return app_store_connect_token(**credentials) if credentials else ""
 
 
 def google_service_account_assertion(
@@ -1102,16 +1158,7 @@ def main() -> int:
     except StoreReviewSyncError as error:
         print(f"store review sync failed: {error}", file=sys.stderr)
         return 1
-    apple_token = os.environ.get("APP_STORE_CONNECT_TOKEN", "").strip()
-    if not apple_token:
-        key_id = os.environ.get("APP_STORE_CONNECT_KEY_ID", "").strip()
-        issuer_id = os.environ.get("APP_STORE_CONNECT_ISSUER_ID", "").strip()
-        private_key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY", "").strip()
-        encoded_private_key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", "").strip()
-        if not private_key and encoded_private_key:
-            private_key = base64.b64decode(encoded_private_key, validate=True).decode("utf-8")
-        if key_id or issuer_id or private_key:
-            apple_token = app_store_connect_token(key_id, issuer_id, private_key)
+    apple_token = app_store_connect_read_token_from_env()
     google_token = os.environ.get("GOOGLE_PLAY_ACCESS_TOKEN", "").strip()
     google_principal = ""
     if not google_token:

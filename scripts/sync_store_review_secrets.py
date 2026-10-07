@@ -8,13 +8,15 @@ import os
 import subprocess
 import sys
 
+from sync_store_reviews import resolve_app_store_connect_read_credentials
+
 
 DEFAULT_REPOSITORY = "onnellab/onnel-content-engine"
 GOOGLE_REPORTS_BUCKET_PREFIX = "pubsite_prod_"
 SECRET_KEYS = (
-    "APP_STORE_CONNECT_KEY_ID",
-    "APP_STORE_CONNECT_ISSUER_ID",
-    "APP_STORE_CONNECT_PRIVATE_KEY_BASE64",
+    "APP_STORE_CONNECT_READ_KEY_TYPE",
+    "APP_STORE_CONNECT_READ_KEY_ID",
+    "APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64",
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64",
     "GOOGLE_PLAY_REPORTS_BUCKET",
 )
@@ -43,6 +45,13 @@ def sync_store_review_secrets(
     missing = [key for key in SECRET_KEYS if not os.environ.get(key, "").strip()]
     if missing:
         raise SecretSyncError("missing required environment variables: " + ", ".join(missing))
+    try:
+        credentials = resolve_app_store_connect_read_credentials()
+    except ValueError as error:
+        raise SecretSyncError(str(error)) from None
+    keys = SECRET_KEYS
+    if credentials["key_type"] == "team":
+        keys += ("APP_STORE_CONNECT_READ_ISSUER_ID",)
     reports_bucket = os.environ["GOOGLE_PLAY_REPORTS_BUCKET"].strip().removeprefix("gs://")
     reports_bucket = reports_bucket.strip("/").split("/", 1)[0]
     if not reports_bucket.startswith(GOOGLE_REPORTS_BUCKET_PREFIX):
@@ -51,8 +60,10 @@ def sync_store_review_secrets(
             f"{GOOGLE_REPORTS_BUCKET_PREFIX}"
         )
     synced: list[str] = []
-    for key in SECRET_KEYS:
+    for key in keys:
         value = reports_bucket if key == "GOOGLE_PLAY_REPORTS_BUCKET" else os.environ[key]
+        if key == "APP_STORE_CONNECT_READ_KEY_TYPE":
+            value = credentials["key_type"]
         sync_secret(repository, key, value, dry_run)
         synced.append(key)
     return synced

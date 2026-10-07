@@ -25,7 +25,7 @@ from pathlib import Path
 from typing import Iterable
 
 from sync_store_reviews import (
-    app_store_connect_token,
+    app_store_connect_read_token_from_env,
     fetch_bytes,
     fetch_json,
     google_play_access_token,
@@ -719,18 +719,7 @@ def build_summary(
 
 
 def apple_token_from_env() -> str:
-    token = os.environ.get("APP_STORE_CONNECT_TOKEN", "").strip()
-    if token:
-        return token
-    key_id = os.environ.get("APP_STORE_CONNECT_KEY_ID", "").strip()
-    issuer_id = os.environ.get("APP_STORE_CONNECT_ISSUER_ID", "").strip()
-    private_key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY", "").strip()
-    encoded = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", "").strip()
-    if not private_key and encoded:
-        private_key = base64.b64decode(encoded, validate=True).decode("utf-8")
-    if not any((key_id, issuer_id, private_key)):
-        return ""
-    return app_store_connect_token(key_id, issuer_id, private_key)
+    return app_store_connect_read_token_from_env()
 
 
 def google_token_from_env() -> tuple[str, str]:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import os
 import sys
 import unittest
@@ -17,18 +18,38 @@ class StoreReviewSecretSyncTest(unittest.TestCase):
     @staticmethod
     def complete_env() -> dict[str, str]:
         env = {key: f"value-{index}" for index, key in enumerate(SECRET_KEYS)}
+        env["APP_STORE_CONNECT_READ_KEY_TYPE"] = "individual"
+        env["APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64"] = base64.b64encode(b"test-key").decode()
         env["GOOGLE_PLAY_REPORTS_BUCKET"] = "pubsite_prod_123"
         return env
 
     def test_requires_all_apple_credentials(self) -> None:
         with patch.dict(os.environ, {}, clear=True):
-            with self.assertRaisesRegex(SecretSyncError, "APP_STORE_CONNECT_KEY_ID"):
+            with self.assertRaisesRegex(SecretSyncError, "APP_STORE_CONNECT_READ_KEY_ID"):
                 sync_store_review_secrets(dry_run=True)
 
     def test_dry_run_accepts_complete_credentials(self) -> None:
         env = self.complete_env()
         with patch.dict(os.environ, env, clear=True):
             self.assertEqual(sync_store_review_secrets(dry_run=True), list(SECRET_KEYS))
+
+    def test_individual_key_does_not_require_issuer(self) -> None:
+        env = self.complete_env()
+        env.pop("APP_STORE_CONNECT_READ_ISSUER_ID", None)
+        with patch.dict(os.environ, env, clear=True):
+            self.assertEqual(sync_store_review_secrets(dry_run=True), list(SECRET_KEYS))
+
+    def test_team_key_requires_and_syncs_issuer(self) -> None:
+        env = self.complete_env()
+        env["APP_STORE_CONNECT_READ_KEY_TYPE"] = "team"
+        with patch.dict(os.environ, env, clear=True):
+            with self.assertRaisesRegex(SecretSyncError, "APP_STORE_CONNECT_READ_ISSUER_ID"):
+                sync_store_review_secrets(dry_run=True)
+
+        env["APP_STORE_CONNECT_READ_ISSUER_ID"] = "issuer-123"
+        with patch.dict(os.environ, env, clear=True):
+            synced = sync_store_review_secrets(dry_run=True)
+        self.assertEqual(synced, list(SECRET_KEYS) + ["APP_STORE_CONNECT_READ_ISSUER_ID"])
 
     def test_requires_lifetime_reports_bucket(self) -> None:
         env = self.complete_env()

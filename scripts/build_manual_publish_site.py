@@ -1657,8 +1657,9 @@ def html_document(
         </div>
       </div>
       <div class="credential-grid">
+        <label><span id="app-store-key-type-label">키 유형</span><select id="app-store-key-type"><option value="individual" id="app-store-individual-option">개인 API 키 (Individual)</option><option value="team" id="app-store-team-option">팀 API 키 (Team)</option></select></label>
         <label><span id="app-store-key-id-label">Key ID</span><input id="app-store-key-id" type="text" autocomplete="off"></label>
-        <label><span id="app-store-issuer-id-label">Issuer ID</span><input id="app-store-issuer-id" type="text" autocomplete="off"></label>
+        <label id="app-store-issuer-field" hidden><span id="app-store-issuer-id-label">Issuer ID</span><input id="app-store-issuer-id" type="text" autocomplete="off"></label>
         <label><span id="google-play-reports-bucket-label">Play 보고서 버킷</span><input id="google-play-reports-bucket" type="text" autocomplete="off" placeholder="gs://pubsite_prod_.../reviews/" required></label>
       </div>
       <label><span id="app-store-private-key-label">새 Private Key (.p8 PEM)</span><textarea id="app-store-private-key" class="credential-output" autocomplete="off" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label>
@@ -1826,8 +1827,11 @@ def html_document(
         storeCredentialPanelTitle: '스토어 리뷰 연결',
         storeCredentialsTitle: 'App Store / Play Store 리뷰 연결',
         storeCredentialsCopy: 'Apple API 키, Google Play 서비스 계정 JSON, 전체 리뷰 보고서 버킷을 입력하면 누락 없는 리뷰 동기화를 연결할 수 있습니다.',
+        appStoreKeyType: '키 유형',
+        appStoreIndividual: '개인 API 키 (Individual)',
+        appStoreTeam: '팀 API 키 (Team)',
         appStoreKeyId: 'Key ID',
-        appStoreIssuerId: 'Issuer ID',
+        appStoreIssuerId: 'Issuer ID (Team API 키에서 필수)',
         appStorePrivateKey: '새 Private Key (.p8 PEM)',
         googlePlayServiceAccount: 'Google Play 서비스 계정 JSON',
         googlePlayReportsBucket: 'Play 전체 리뷰 보고서 버킷 (필수)',
@@ -2131,8 +2135,11 @@ def html_document(
         storeCredentialPanelTitle: 'Store review connection',
         storeCredentialsTitle: 'App Store / Play Store review connection',
         storeCredentialsCopy: 'Enter an Apple API key, Google Play service account JSON, and the lifetime review reports bucket to connect a complete review sync.',
+        appStoreKeyType: 'Key type',
+        appStoreIndividual: 'Individual API key',
+        appStoreTeam: 'Team API key',
         appStoreKeyId: 'Key ID',
-        appStoreIssuerId: 'Issuer ID',
+        appStoreIssuerId: 'Issuer ID (required for Team API keys)',
         appStorePrivateKey: 'New private key (.p8 PEM)',
         googlePlayServiceAccount: 'Google Play service account JSON',
         googlePlayReportsBucket: 'Play lifetime review reports bucket (required)',
@@ -2406,6 +2413,7 @@ def html_document(
     }};
     const credentialOutput = document.getElementById('credential-output');
     const storeCredentialInputs = {{
+      keyType: document.getElementById('app-store-key-type'),
       keyId: document.getElementById('app-store-key-id'),
       issuerId: document.getElementById('app-store-issuer-id'),
       privateKey: document.getElementById('app-store-private-key'),
@@ -2494,6 +2502,9 @@ def html_document(
       document.getElementById('store-credential-panel-title').textContent = t('storeCredentialPanelTitle');
       document.getElementById('store-credentials-title').textContent = t('storeCredentialsTitle');
       document.getElementById('store-credentials-copy').textContent = t('storeCredentialsCopy');
+      document.getElementById('app-store-key-type-label').textContent = t('appStoreKeyType');
+      document.getElementById('app-store-individual-option').textContent = t('appStoreIndividual');
+      document.getElementById('app-store-team-option').textContent = t('appStoreTeam');
       document.getElementById('app-store-key-id-label').textContent = t('appStoreKeyId');
       document.getElementById('app-store-issuer-id-label').textContent = t('appStoreIssuerId');
       document.getElementById('app-store-private-key-label').textContent = t('appStorePrivateKey');
@@ -2706,6 +2717,7 @@ def html_document(
 
     function storeCredentialValues() {{
       return {{
+        keyType: storeCredentialInputs.keyType.value,
         keyId: storeCredentialInputs.keyId.value.trim(),
         issuerId: storeCredentialInputs.issuerId.value.trim(),
         privateKey: storeCredentialInputs.privateKey.value.trim(),
@@ -2720,6 +2732,7 @@ def html_document(
     function loadStoreCredentials() {{
       try {{
         const saved = JSON.parse(localStorage.getItem(storeCredentialStorageKey) || '{{}}');
+        storeCredentialInputs.keyType.value = saved.keyType === 'team' ? 'team' : 'individual';
         storeCredentialInputs.keyId.value = saved.keyId || '';
         storeCredentialInputs.issuerId.value = saved.issuerId || '';
         storeCredentialInputs.googleReportsBucket.value = saved.googleReportsBucket || '';
@@ -2736,9 +2749,10 @@ def html_document(
 
     function missingAppStoreCredentialNames(values = storeCredentialValues()) {{
       return [
-        values.keyId ? '' : 'APP_STORE_CONNECT_KEY_ID',
-        values.issuerId ? '' : 'APP_STORE_CONNECT_ISSUER_ID',
-        values.privateKey ? '' : 'APP_STORE_CONNECT_PRIVATE_KEY_BASE64',
+        ['individual', 'team'].includes(values.keyType) ? '' : 'APP_STORE_CONNECT_READ_KEY_TYPE',
+        values.keyId ? '' : 'APP_STORE_CONNECT_READ_KEY_ID',
+        values.keyType !== 'team' || values.issuerId ? '' : 'APP_STORE_CONNECT_READ_ISSUER_ID',
+        values.privateKey ? '' : 'APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64',
       ].filter(Boolean);
     }}
 
@@ -2822,12 +2836,14 @@ def html_document(
       const missing = missingAppStoreCredentialNames(values);
       if (missing.length) throw new Error(`Apple: ${{t('missingCredentials')}}: ${{missing.join(', ')}}`);
       const publicKey = await preflightStoreSecretPermission();
-      await uploadGitHubSecrets({{
-        APP_STORE_CONNECT_KEY_ID: values.keyId,
-        APP_STORE_CONNECT_ISSUER_ID: values.issuerId,
-        APP_STORE_CONNECT_PRIVATE_KEY_BASE64: encodeBase64Unicode(values.privateKey),
-      }}, publicKey);
-      persistStoreCredentialMetadata({{ keyId: values.keyId, issuerId: values.issuerId }});
+      const secrets = {{
+        APP_STORE_CONNECT_READ_KEY_TYPE: values.keyType,
+        APP_STORE_CONNECT_READ_KEY_ID: values.keyId,
+        APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64: encodeBase64Unicode(values.privateKey),
+      }};
+      if (values.keyType === 'team') secrets.APP_STORE_CONNECT_READ_ISSUER_ID = values.issuerId;
+      await uploadGitHubSecrets(secrets, publicKey);
+      persistStoreCredentialMetadata({{ keyType: values.keyType, keyId: values.keyId, issuerId: values.keyType === 'team' ? values.issuerId : '' }});
       storeCredentialInputs.privateKey.value = '';
       pendingStoreCredentialProviders.delete('apple');
       storeCredentialOutput.value = t('appStoreSecretsStoredDetail');
@@ -2858,9 +2874,9 @@ def html_document(
 
     async function requireRemoteStoreSecrets() {{
       const required = [
-        'APP_STORE_CONNECT_KEY_ID',
-        'APP_STORE_CONNECT_ISSUER_ID',
-        'APP_STORE_CONNECT_PRIVATE_KEY_BASE64',
+        'APP_STORE_CONNECT_READ_KEY_TYPE',
+        'APP_STORE_CONNECT_READ_KEY_ID',
+        'APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64',
         'GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64',
         'GOOGLE_PLAY_REPORTS_BUCKET',
       ];
@@ -2921,6 +2937,7 @@ def html_document(
       localStorage.removeItem(storeCredentialStorageKey);
       pendingStoreCredentialProviders.clear();
       Object.values(storeCredentialInputs).forEach((input) => {{ input.value = ''; }});
+      storeCredentialInputs.keyType.value = 'individual';
       updateStoreCredentialOutput();
       flash(button, t('credentialsCleared'));
     }}
@@ -2933,9 +2950,10 @@ def html_document(
       const googleServiceAccountBase64 = btoa(Array.from(googleServiceAccountBytes, (byte) => String.fromCharCode(byte)).join(''));
       return [
         '# ONNELLAB store review credentials',
-        `export APP_STORE_CONNECT_KEY_ID=${{shellQuote(values.keyId)}}`,
-        `export APP_STORE_CONNECT_ISSUER_ID=${{shellQuote(values.issuerId)}}`,
-        `export APP_STORE_CONNECT_PRIVATE_KEY_BASE64=${{shellQuote(privateKeyBase64)}}`,
+        `export APP_STORE_CONNECT_READ_KEY_TYPE=${{shellQuote(values.keyType)}}`,
+        `export APP_STORE_CONNECT_READ_KEY_ID=${{shellQuote(values.keyId)}}`,
+        ...(values.keyType === 'team' ? [`export APP_STORE_CONNECT_READ_ISSUER_ID=${{shellQuote(values.issuerId)}}`] : []),
+        `export APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64=${{shellQuote(privateKeyBase64)}}`,
         `export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64=${{shellQuote(googleServiceAccountBase64)}}`,
         `export GOOGLE_PLAY_REPORTS_BUCKET=${{shellQuote(values.googleReportsBucket)}}`,
       ].join('\\n') + '\\n';
@@ -2991,6 +3009,10 @@ def html_document(
     }}
 
     function updateStoreCredentialOutput() {{
+      const isTeam = storeCredentialInputs.keyType.value === 'team';
+      document.getElementById('app-store-issuer-field').hidden = !isTeam;
+      storeCredentialInputs.issuerId.required = isTeam;
+      storeCredentialInputs.issuerId.disabled = !isTeam;
       const values = storeCredentialValues();
       const appleMissing = missingAppStoreCredentialNames(values);
       const googleMissing = missingGooglePlayCredentialNames(values);

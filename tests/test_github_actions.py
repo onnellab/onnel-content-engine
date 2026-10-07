@@ -232,7 +232,9 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("deploy_dashboard", workflow)
         self.assertNotIn("schedule:", workflow)
         self.assertNotIn("cron:", workflow)
-        self.assertIn("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", workflow)
+        self.assertIn("APP_STORE_CONNECT_READ_KEY_TYPE", workflow)
+        self.assertIn("APP_STORE_CONNECT_READ_KEY_ID", workflow)
+        self.assertIn("APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64", workflow)
         self.assertIn("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", workflow)
         self.assertIn("GOOGLE_PLAY_REPORTS_BUCKET", workflow)
         self.assertIn("Missing required GitHub Actions secret", workflow)
@@ -259,6 +261,17 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("continue-on-error: true", workflow)
         self.assertIn("if: always()", workflow)
         self.assertIn("steps.publish_reply.outcome == 'failure'", workflow)
+
+    def test_submission_workflows_do_not_use_read_credentials(self) -> None:
+        for name in (
+            "submit-internal-store-build.yml",
+            "check-internal-test-readiness.yml",
+            "check-store-submission-credentials.yml",
+            "sync-internal-store-processing-status.yml",
+        ):
+            with self.subTest(workflow=name):
+                workflow = (ROOT / ".github" / "workflows" / name).read_text(encoding="utf-8")
+                self.assertNotIn("APP_STORE_CONNECT_READ_", workflow)
 
 
 if __name__ == "__main__":

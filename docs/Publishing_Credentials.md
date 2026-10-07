@@ -87,13 +87,23 @@ The review dashboard accepts an App Store Connect API key and generates a
 short-lived JWT at runtime:
 
 ```text
-APP_STORE_CONNECT_KEY_ID
-APP_STORE_CONNECT_ISSUER_ID
-APP_STORE_CONNECT_PRIVATE_KEY_BASE64
+APP_STORE_CONNECT_READ_KEY_TYPE
+APP_STORE_CONNECT_READ_KEY_ID
+APP_STORE_CONNECT_READ_ISSUER_ID
+APP_STORE_CONNECT_READ_PRIVATE_KEY_BASE64
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64
 GOOGLE_PLAY_REPORTS_BUCKET
 ```
 
+Set `APP_STORE_CONNECT_READ_KEY_TYPE` to `individual` or `team`. Individual keys
+require only Key ID and private key; Issuer ID is ignored, and the JWT uses
+`sub=user` without `iss`. Team keys also require Issuer ID and use `iss` without
+`sub`. Ops saves only READ secrets and defaults new input to Individual.
+Read jobs use legacy `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`,
+and `APP_STORE_CONNECT_PRIVATE_KEY_BASE64` (or raw private key) only when READ
+credentials are absent; partial READ configuration fails instead of mixing keys.
+Release/upload credentials remain separate and are never overwritten by Ops.
+Individual keys cannot use Provisioning, Sales & Finance, or notaryTool.
 `APP_STORE_CONNECT_TOKEN` remains available as a temporary runtime override.
 The Google service account is exchanged for a one-hour token with the
 `androidpublisher` and `devstorage.read_only` scopes.
@@ -109,8 +119,10 @@ the private report bucket, and Google notes that permission changes may take up
 to 48 hours to propagate.
 `GOOGLE_PLAY_ACCESS_TOKEN` remains available as a temporary override.
 
-These values are read-only inputs for `scripts/sync_store_reviews.py`. Do not
-store them in the generated dashboard or commit them to the repository.
+These values are inputs for store review and analytics jobs, including approved
+review-reply publication. The READ namespace separates these jobs from release
+and provisioning; the key still needs the Apple permissions for each operation.
+Do not store credentials in the generated dashboard or commit them to the repository.
 
 The hosted dashboard may register these values through GitHub's Actions Secrets
 API. It encrypts each value locally with the repository public key before
