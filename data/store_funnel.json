@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-07T16:08:55+00:00",
+  "checked_at": "2026-10-07T16:21:39+00:00",
   "windows": [
     7,
     30,
@@ -18,39 +18,55 @@
   },
   "source_status": {
     "apple": {
-      "status": "error",
+      "status": "ok",
       "apps": {
         "quivra": {
-          "status": "error",
-          "message": "HTTP Error 401: Unauthorized"
+          "status": "ok",
+          "request_id": "350f50f5-d3be-475e-ae44-bbc2c3a78ffc",
+          "reports": [],
+          "errors": []
         },
         "tagweaver": {
-          "status": "error",
-          "message": "HTTP Error 401: Unauthorized"
+          "status": "ok",
+          "request_id": "f19b3cba-894c-4da5-9b5c-c9c79498cfd3",
+          "reports": [],
+          "errors": []
         },
         "vaultxt": {
-          "status": "error",
-          "message": "HTTP Error 401: Unauthorized"
+          "status": "ok",
+          "request_id": "571e9f18-5468-4230-9008-4c68fe985032",
+          "reports": [],
+          "errors": []
         },
         "segra": {
-          "status": "error",
-          "message": "HTTP Error 401: Unauthorized"
+          "status": "ok",
+          "request_id": "87add753-42b3-413b-b8f2-5d703562b9d5",
+          "reports": [],
+          "errors": []
         },
         "clipnest": {
-          "status": "error",
-          "message": "HTTP Error 401: Unauthorized"
+          "status": "ok",
+          "request_id": "f63b7963-b2c6-42b6-b7da-9a9fedacc9de",
+          "reports": [],
+          "errors": []
         },
         "aligna": {
-          "status": "error",
-          "message": "HTTP Error 401: Unauthorized"
+          "status": "ok",
+          "request_id": "b6cfbdfc-a4cb-49c5-895f-a65c9510d906",
+          "reports": [],
+          "errors": []
         },
         "melivra": {
-          "status": "error",
-          "message": "HTTP Error 401: Unauthorized"
+          "status": "ok",
+          "request_id": "a0024cdf-9915-4e8c-86bb-7586c38158e9",
+          "reports": [],
+          "errors": []
         },
         "papira": {
-          "status": "error",
-          "message": "HTTP Error 401: Unauthorized"
+          "status": "ok",
+          "request_id": "06ddc520-3ed0-499d-a10c-81c32120804b",
+          "reports": [],
+          "errors": []
         }
       }
     },
