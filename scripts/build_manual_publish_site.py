@@ -1654,6 +1654,7 @@ def html_document(
       <div class="credential-actions">
         <button id="save-app-store-credentials" type="button">Apple 키 저장</button>
         <button id="save-google-play-credentials" type="button">Google 키 저장</button>
+        <button id="check-store-secret-permission" type="button" class="secondary">Secrets 권한 확인</button>
         <button id="copy-store-env-block" type="button" class="secondary">스토어 env 블록 복사</button>
         <button id="copy-store-secret-sync-command" type="button" class="secondary">스토어 secrets 동기화 명령 복사</button>
         <button id="copy-store-sync-command" type="button" class="secondary">리뷰 동기화 명령 복사</button>
@@ -1816,6 +1817,7 @@ def html_document(
         googlePlayReportsBucket: 'Play 전체 리뷰 보고서 버킷 (필수)',
         saveAppStoreCredentials: 'Apple 키 저장',
         saveGooglePlayCredentials: 'Google 키 저장',
+        checkStoreSecretPermission: 'Secrets 권한 확인',
         clearStoreCredentials: '연결 정보 삭제',
         copyStoreEnvBlock: '스토어 env 블록 복사',
         copyStoreSecretSyncCommand: '스토어 secrets 동기화 명령 복사',
@@ -1832,7 +1834,12 @@ def html_document(
         googlePlaySecretsStoredDetail: 'Google 키를 GitHub Actions Secrets에 저장했습니다. 보안을 위해 Google Play JSON 입력칸을 비웠습니다.',
         invalidGoogleServiceAccount: 'Google Play 서비스 계정에 올바른 JSON을 입력하세요.',
         invalidGoogleReportsBucket: 'GOOGLE_PLAY_REPORTS_BUCKET은 pubsite_prod_로 시작해야 합니다.',
-        storeSecretPermissionError: 'GitHub 토큰에 Actions Secrets 쓰기 권한이 필요합니다.',
+        storeSecretPermissionReady: '현재 브라우저 GitHub 토큰으로 Actions Secrets에 접근할 수 있어요.',
+        checkingStoreSecretPermission: 'Secrets 권한 확인 중',
+        storeSecretTokenMissing: '저장을 실행하지 않았어요. 상단 GitHub 연결에 토큰을 입력하고 저장한 뒤 다시 시도해 주세요.',
+        storeSecretTokenInvalid: '브라우저에 저장된 GitHub 토큰이 만료되었거나 유효하지 않아요. 새 토큰을 연결한 뒤 다시 시도해 주세요.',
+        storeSecretPermissionDenied: '현재 GitHub 토큰에는 이 저장소의 Actions Secrets 읽기/쓰기 권한이 없어요. Fine-grained PAT은 onnellab/onnel-content-engine의 Secrets: Read and write 권한을, classic PAT은 repo scope를 포함해야 해요.',
+        storeSecretApiError: 'GitHub API 요청에 실패했어요.',
         storeCredentialNote: 'Google 리뷰 API는 최근 1주만 제공하므로 전체 보고서 버킷이 필수입니다. 민감 값은 브라우저 안에서 GitHub 공개키로 암호화된 뒤 Actions Secrets에 직접 저장됩니다.',
         credentialsSaved: '저장됨',
         credentialsCleared: '삭제됨',
@@ -2111,6 +2118,7 @@ def html_document(
         googlePlayReportsBucket: 'Play lifetime review reports bucket (required)',
         saveAppStoreCredentials: 'Save Apple credentials',
         saveGooglePlayCredentials: 'Save Google credentials',
+        checkStoreSecretPermission: 'Check Secrets permission',
         clearStoreCredentials: 'Clear connection details',
         copyStoreEnvBlock: 'Copy store env block',
         copyStoreSecretSyncCommand: 'Copy store secrets sync command',
@@ -2127,7 +2135,12 @@ def html_document(
         googlePlaySecretsStoredDetail: 'Google credentials saved to GitHub Actions Secrets. The Google Play JSON field was cleared for security.',
         invalidGoogleServiceAccount: 'Enter valid JSON for the Google Play service account.',
         invalidGoogleReportsBucket: 'GOOGLE_PLAY_REPORTS_BUCKET must start with pubsite_prod_',
-        storeSecretPermissionError: 'The GitHub token needs Actions Secrets write permission.',
+        storeSecretPermissionReady: 'This browser GitHub token can access Actions Secrets for the repository.',
+        checkingStoreSecretPermission: 'Checking Secrets permission',
+        storeSecretTokenMissing: 'Saving did not run. Enter and save a GitHub token in the connection panel, then try again.',
+        storeSecretTokenInvalid: 'The GitHub token saved in this browser is invalid or expired. Connect a new token and try again.',
+        storeSecretPermissionDenied: 'This GitHub token cannot read/write Actions Secrets for this repository. A fine-grained PAT needs Secrets: Read and write for onnellab/onnel-content-engine; a classic PAT needs repo scope.',
+        storeSecretApiError: 'The GitHub API request failed.',
         storeCredentialNote: 'The Google reviews API only exposes the previous week, so the lifetime reports bucket is required. Sensitive values are encrypted in this browser and saved directly to Actions Secrets.',
         credentialsSaved: 'Saved',
         credentialsCleared: 'Cleared',
@@ -2462,6 +2475,7 @@ def html_document(
       document.getElementById('google-play-reports-bucket-label').textContent = t('googlePlayReportsBucket');
       document.getElementById('save-app-store-credentials').textContent = t('saveAppStoreCredentials');
       document.getElementById('save-google-play-credentials').textContent = t('saveGooglePlayCredentials');
+      document.getElementById('check-store-secret-permission').textContent = t('checkStoreSecretPermission');
       document.getElementById('clear-store-credentials').textContent = t('clearStoreCredentials');
       document.getElementById('copy-store-env-block').textContent = t('copyStoreEnvBlock');
       document.getElementById('copy-store-secret-sync-command').textContent = t('copyStoreSecretSyncCommand');
@@ -2717,8 +2731,41 @@ def html_document(
       return sodium.to_base64(encrypted, sodium.base64_variants.ORIGINAL);
     }}
 
-    async function uploadGitHubSecrets(secrets) {{
-      const publicKey = await githubRequest(`/repos/${{stateRepo}}/actions/secrets/public-key`);
+    async function preflightStoreSecretPermission() {{
+      if (!githubToken()) {{
+        const error = new Error(t('storeSecretTokenMissing'));
+        error.code = 'missing_browser_token';
+        throw error;
+      }}
+      await githubRequest('/user');
+      return githubRequest(`/repos/${{stateRepo}}/actions/secrets/public-key`);
+    }}
+
+    function storeSecretFailureMessage(error) {{
+      if (error?.code === 'missing_browser_token' || !githubToken()) {{
+        return t('storeSecretTokenMissing');
+      }}
+      const status = Number(error?.status || 0);
+      const path = String(error?.path || '');
+      if (status === 401) return t('storeSecretTokenInvalid');
+      if (status === 403 && path.includes('/actions/secrets')) {{
+        return t('storeSecretPermissionDenied');
+      }}
+      if (status) {{
+        const message = String(error?.message || '').trim();
+        return `${{t('storeSecretApiError')}} HTTP ${{status}}${{message ? ' · ' + message : ''}}`;
+      }}
+      return String(error?.message || error || t('storeSecretApiError'));
+    }}
+
+    function surfaceStoreSecretFailure(error) {{
+      const message = storeSecretFailureMessage(error);
+      storeCredentialOutput.value = message;
+      if (error?.code === 'missing_browser_token' || !githubToken()) revealTokenInput();
+      return message;
+    }}
+
+    async function uploadGitHubSecrets(secrets, publicKey) {{
       for (const [name, value] of Object.entries(secrets)) {{
         const encryptedValue = await encryptGitHubSecret(value, publicKey.key);
         await githubRequest(`/repos/${{stateRepo}}/actions/secrets/${{encodeURIComponent(name)}}`, {{
@@ -2742,11 +2789,12 @@ def html_document(
     async function uploadAppStoreSecrets(values = storeCredentialValues()) {{
       const missing = missingAppStoreCredentialNames(values);
       if (missing.length) throw new Error(`Apple: ${{t('missingCredentials')}}: ${{missing.join(', ')}}`);
+      const publicKey = await preflightStoreSecretPermission();
       await uploadGitHubSecrets({{
         APP_STORE_CONNECT_KEY_ID: values.keyId,
         APP_STORE_CONNECT_ISSUER_ID: values.issuerId,
         APP_STORE_CONNECT_PRIVATE_KEY_BASE64: encodeBase64Unicode(values.privateKey),
-      }});
+      }}, publicKey);
       persistStoreCredentialMetadata({{ keyId: values.keyId, issuerId: values.issuerId }});
       storeCredentialInputs.privateKey.value = '';
       pendingStoreCredentialProviders.delete('apple');
@@ -2765,10 +2813,11 @@ def html_document(
       if (!values.googleReportsBucket.startsWith('pubsite_prod_')) {{
         throw new Error(t('invalidGoogleReportsBucket'));
       }}
+      const publicKey = await preflightStoreSecretPermission();
       await uploadGitHubSecrets({{
         GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64: encodeBase64Unicode(values.googleServiceAccount),
         GOOGLE_PLAY_REPORTS_BUCKET: values.googleReportsBucket,
-      }});
+      }}, publicKey);
       persistStoreCredentialMetadata({{ googleReportsBucket: values.googleReportsBucket }});
       storeCredentialInputs.googleServiceAccount.value = '';
       pendingStoreCredentialProviders.delete('google');
@@ -2791,7 +2840,10 @@ def html_document(
 
     async function saveProviderCredentials(button, upload, labelKey) {{
       if (!githubToken()) {{
-        revealTokenInput();
+        const error = new Error(t('storeSecretTokenMissing'));
+        error.code = 'missing_browser_token';
+        surfaceStoreSecretFailure(error);
+        flash(button, t('verificationFailed'), t(labelKey));
         return false;
       }}
       button.disabled = true;
@@ -2801,9 +2853,32 @@ def html_document(
         flash(button, t('storeSecretsSaved'), t(labelKey));
         return true;
       }} catch (error) {{
-        storeCredentialOutput.value = `${{t('storeSecretPermissionError')}}\\n${{error.message || error}}`;
+        surfaceStoreSecretFailure(error);
         flash(button, t('verificationFailed'), t(labelKey));
-        console.error(error);
+        return false;
+      }} finally {{
+        button.disabled = false;
+      }}
+    }}
+
+    async function checkStoreSecretPermission(button) {{
+      if (!githubToken()) {{
+        const error = new Error(t('storeSecretTokenMissing'));
+        error.code = 'missing_browser_token';
+        surfaceStoreSecretFailure(error);
+        flash(button, t('verificationFailed'), t('checkStoreSecretPermission'));
+        return false;
+      }}
+      button.disabled = true;
+      keepButtonLabel(button, t('checkingStoreSecretPermission'));
+      try {{
+        await preflightStoreSecretPermission();
+        storeCredentialOutput.value = t('storeSecretPermissionReady');
+        flash(button, t('storeSecretPermissionReady'), t('checkStoreSecretPermission'));
+        return true;
+      }} catch (error) {{
+        surfaceStoreSecretFailure(error);
+        flash(button, t('verificationFailed'), t('checkStoreSecretPermission'));
         return false;
       }} finally {{
         button.disabled = false;
@@ -3179,8 +3254,21 @@ def html_document(
           }},
         }});
         const text = await response.text();
-        const data = text ? JSON.parse(text) : {{}};
-        if (!response.ok) throw new Error(data.message || 'GitHub request failed');
+        let data = {{}};
+        if (text) {{
+          try {{
+            data = JSON.parse(text);
+          }} catch {{
+            data = {{}};
+          }}
+        }}
+        if (!response.ok) {{
+          const error = new Error(data.message || 'GitHub request failed');
+          error.name = 'GitHubApiError';
+          error.status = response.status;
+          error.path = path;
+          throw error;
+        }}
         return data;
       }} finally {{
         clearTimeout(timeoutId);
@@ -5142,6 +5230,7 @@ def html_document(
     Object.values(credentialInputs).forEach((input) => input.addEventListener('input', updateCredentialOutput));
     document.getElementById('save-app-store-credentials').onclick = (event) => saveProviderCredentials(event.currentTarget, uploadAppStoreSecrets, 'saveAppStoreCredentials');
     document.getElementById('save-google-play-credentials').onclick = (event) => saveProviderCredentials(event.currentTarget, uploadGooglePlaySecrets, 'saveGooglePlayCredentials');
+    document.getElementById('check-store-secret-permission').onclick = (event) => checkStoreSecretPermission(event.currentTarget);
     document.getElementById('clear-store-credentials').onclick = (event) => clearStoreCredentials(event.currentTarget);
     document.getElementById('copy-store-env-block').onclick = (event) => copyText(storeCredentialEnvBlock(), event.currentTarget);
     document.getElementById('copy-store-secret-sync-command').onclick = (event) => copyText(storeSecretSyncCommand(), event.currentTarget);
