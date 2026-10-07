@@ -59,7 +59,7 @@ a{color:inherit}
 .detail-hero img{width:64px;height:64px;border-radius:15px;box-shadow:0 0 0 1px var(--accent-border,#ddd5c8)}
 .detail-hero h1{margin:0 0 8px;font-size:30px;color:#3e3933}.detail-hero p{margin:8px 0 0;color:#5f5a50;line-height:1.6}
 .detail-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px}.detail-tabs a{min-height:36px;display:inline-flex;align-items:center;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#fff;text-decoration:none;font-size:12px;font-weight:750;color:#6a645b}
-.detail-section{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}.detail-section h2{margin:0 0 14px;font-size:19px}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.detail-section{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}.detail-section h2{margin:0 0 14px;font-size:19px}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.app-overview-metrics{margin:0 0 12px}.app-overview-note{margin:0 0 20px;color:#746f69;font-size:11px;line-height:1.5}
 .detail-stat{padding:14px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-stat span{display:block;color:#827d72;font-size:11px}.detail-stat b{display:block;margin-top:6px;font-size:18px;overflow-wrap:anywhere}
 .detail-list{display:grid;gap:8px}.detail-row{padding:12px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-row b{display:block;margin-bottom:5px;font-size:13px}.detail-row span{display:block;color:#6f695f;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
 .empty-note{padding:15px;border:1px dashed #d9d0c6;border-radius:9px;background:#fffdf9;color:#746f69;font-size:13px;line-height:1.6}
@@ -109,7 +109,7 @@ a{color:inherit}
   <div class="detail-grid">
     <div class="detail-stat"><span>App Store</span><b>2.0.1</b><span data-ko="변경 없음" data-en="unchanged">변경 없음</span></div>
     <div class="detail-stat"><span>Play Store</span><b>2.0.1</b><span data-ko="변경 없음" data-en="unchanged">변경 없음</span></div>
-    <div class="detail-stat"><span>GitHub main</span><b>—</b></div>
+    <div class="detail-stat"><span>GitHub main</span><b>—</b><span data-ko="빌드 —" data-en="Build —">빌드 —</span></div>
     <div class="detail-stat"><span data-ko="최근 릴리즈" data-en="Latest release">최근 릴리즈</span><b>—</b></div>
   </div>
 </section>
@@ -129,12 +129,13 @@ a{color:inherit}
 <section class="detail-section" id="store">
   <h2 data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</h2>
   <div class="subsection-head"><h3 data-ko="스토어 버전·상태" data-en="Store versions & status">스토어 버전·상태</h3></div>
-  <div class="detail-list"><div class="detail-row"><b>App Store</b><span data-ko="버전 2.0.1 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00" data-en="Version 2.0.1 · unchanged · checked 2026-10-07T06:21:30+09:00">버전 2.0.1 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00</span><span data-ko="공개 2026-10-03T02:49:21Z" data-en="published 2026-10-03T02:49:21Z">공개 2026-10-03T02:49:21Z</span><span><b data-ko="릴리즈 노트" data-en="Release notes">릴리즈 노트</b> · 긴 TXT 원고를 변환할 때 텍스트 처리 성능을 개선했습니다.</span></div><div class="detail-row"><b>Play Store</b><span data-ko="버전 2.0.1 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00" data-en="Version 2.0.1 · unchanged · checked 2026-10-07T06:21:30+09:00">버전 2.0.1 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00</span><span data-ko="공개 2026. 10. 6." data-en="published 2026. 10. 6.">공개 2026. 10. 6.</span></div></div>
+  <div class="detail-list"><div class="detail-row"><b>App Store</b><span data-ko="버전 2.0.1 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00" data-en="Version 2.0.1 · unchanged · checked 2026-10-07T06:21:30+09:00">버전 2.0.1 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00</span><span data-ko="공개 2026-10-03T02:49:21Z" data-en="published 2026-10-03T02:49:21Z">공개 2026-10-03T02:49:21Z</span><span><b data-ko="릴리즈 노트" data-en="Release notes">릴리즈 노트</b> · 긴 TXT 원고를 변환할 때 텍스트 처리 성능을 개선했습니다.</span><span><a href="https://apps.apple.com/app/id6803919552" target="_blank" rel="noopener noreferrer" data-ko="스토어에서 보기" data-en="View in store">스토어에서 보기</a></span></div><div class="detail-row"><b>Play Store</b><span data-ko="버전 2.0.1 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00" data-en="Version 2.0.1 · unchanged · checked 2026-10-07T06:21:30+09:00">버전 2.0.1 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00</span><span data-ko="공개 2026. 10. 6." data-en="published 2026. 10. 6.">공개 2026. 10. 6.</span><span><a href="https://play.google.com/store/apps/details?id=com.onnellab.papira" target="_blank" rel="noopener noreferrer" data-ko="스토어에서 보기" data-en="View in store">스토어에서 보기</a></span></div></div>
   <div class="subsection-head">
     <h3 data-ko="가격·수익 구조" data-en="Pricing & unit economics">가격·수익 구조</h3>
     <p data-ko="구매 건수는 유입·전환에서 따로 보고, 여기서는 가격과 단위 경제성만 봐요." data-en="Purchase counts stay in Acquisition; this section focuses on pricing and unit economics.">구매 건수는 유입·전환에서 따로 보고, 여기서는 가격과 단위 경제성만 봐요.</p>
   </div>
   <div class="pricing-list"><article class="pricing-card"><div class="pricing-head"><strong>Paid download</strong><span class="mini-badge good" data-ko="스토어 실가격 확인" data-en="Live store verified">스토어 실가격 확인</span></div><div class="pricing-meta"><span data-ko="App Store" data-en="App Store">App Store</span> · <span data-ko="유료 다운로드" data-en="Paid download">유료 다운로드</span></div><p><b data-ko="가격" data-en="Price">가격</b> · ￦4,400 KRW</p><p><b data-ko="과금 모델" data-en="Pricing model">과금 모델</b> · paid</p><p><b data-ko="가격 출처" data-en="Price source">가격 출처</b> · apple_itunes_lookup · <span data-ko="확인 2026-10-07T22:43:26+00:00" data-en="checked 2026-10-07T22:43:26+00:00">확인 2026-10-07T22:43:26+00:00</span></p><p>Live App Store price (Korea)</p></article><article class="pricing-card"><div class="pricing-head"><strong>Paid download</strong><span class="mini-badge good" data-ko="스토어 실가격 확인" data-en="Live store verified">스토어 실가격 확인</span></div><div class="pricing-meta"><span data-ko="Play Store" data-en="Play Store">Play Store</span> · <span data-ko="유료 다운로드" data-en="Paid download">유료 다운로드</span></div><p><b data-ko="가격" data-en="Price">가격</b> · ₩4,100 KRW</p><p><b data-ko="과금 모델" data-en="Pricing model">과금 모델</b> · paid</p><p><b data-ko="가격 출처" data-en="Price source">가격 출처</b> · google_play_public_page · <span data-ko="확인 2026-10-07T22:43:26+00:00" data-en="checked 2026-10-07T22:43:26+00:00">확인 2026-10-07T22:43:26+00:00</span></p><p>Live Google Play price (Korea)</p></article></div>
+
 </section>
 
 <section class="detail-section" id="reviews">
@@ -150,6 +151,8 @@ a{color:inherit}
     <div class="detail-stat"><span data-ko="별점만" data-en="Rating only">별점만</span><b>0</b></div>
     <div class="detail-stat"><span data-ko="동기화 범위" data-en="Sync scope">동기화 범위</span><b data-ko="전체 앱" data-en="All apps">전체 앱</b></div>
   </div>
+  <div class="subsection-head"><h3 data-ko="스토어별 리뷰 수집 검증" data-en="Review collection verification by store">스토어별 리뷰 수집 검증</h3></div>
+  <div class="detail-list"><div class="detail-row"><b data-ko="App Store 리뷰" data-en="App Store reviews">App Store 리뷰</b><span class="mini-badge good" data-ko="최신 목록 검증됨 · 현재 0건" data-en="Current list verified · 0 current reviews">최신 목록 검증됨 · 현재 0건</span></div><div class="detail-row"><b data-ko="Play Store 리뷰" data-en="Play Store reviews">Play Store 리뷰</b><span class="mini-badge good" data-ko="최신 목록 검증됨 · 현재 0건" data-en="Current list verified · 0 current reviews">최신 목록 검증됨 · 현재 0건</span></div><p class="ops-meta" data-ko="마지막 리뷰 수집 검증: 2026-10-07T22:43:11+00:00" data-en="Last review sync verification: 2026-10-07T22:43:11+00:00">마지막 리뷰 수집 검증: 2026-10-07T22:43:11+00:00</p></div>
   <div class="token-note" data-app-token-note hidden>
     <span data-ko="답변 승인·게시와 리뷰 동기화에는 GitHub 연결이 필요해요." data-en="Review approval, publishing, and sync require a GitHub connection.">답변 승인·게시와 리뷰 동기화에는 GitHub 연결이 필요해요.</span>
     <a href="/ops/settings/" data-ko="설정에서 연결" data-en="Connect in Settings">설정에서 연결</a>
@@ -165,7 +168,7 @@ a{color:inherit}
     <span><a href="/apps/papira/">onnellab.com/apps/papira</a></span>
   </div>
   <div class="subsection-head"><h3 data-ko="사이트·자산 최신성" data-en="Site & asset freshness">사이트·자산 최신성</h3></div>
-  <div class="site-freshness"><div class="detail-stat"><span data-ko="앱 페이지 갱신" data-en="App page updated">앱 페이지 갱신</span><b>2026-10-08T07:44:41.450412+09:00</b></div><div class="detail-stat"><span data-ko="스크린샷 갱신" data-en="Screenshots updated">스크린샷 갱신</span><b>2026-10-08T07:44:41.450412+09:00</b><span data-ko="45장" data-en="45 screenshots">45장</span></div><div class="detail-stat"><span data-ko="에셋 갱신" data-en="Assets updated">에셋 갱신</span><b>—</b></div></div>
+  <div class="site-freshness"><div class="detail-stat"><span data-ko="앱 페이지 갱신" data-en="App page updated">앱 페이지 갱신</span><b>2026-10-08T08:05:23.000988+09:00</b></div><div class="detail-stat"><span data-ko="스크린샷 갱신" data-en="Screenshots updated">스크린샷 갱신</span><b>2026-10-08T08:05:23.000988+09:00</b><span data-ko="45장" data-en="45 screenshots">45장</span></div><div class="detail-stat"><span data-ko="에셋 갱신" data-en="Assets updated">에셋 갱신</span><b>—</b></div></div>
   <div class="subsection-head"><h3 data-ko="정책·운영 경고" data-en="Policy & operations alerts">정책·운영 경고</h3></div>
   <div class="release-list"><div class="empty-note" data-ko="현재 앱별 정책·운영 경고가 없어요." data-en="There are no current app-specific policy or operations alerts.">현재 앱별 정책·운영 경고가 없어요.</div></div>
   <div class="subsection-head">
@@ -173,9 +176,15 @@ a{color:inherit}
     <p data-ko="자동 공개 대기 0건" data-en="0 awaiting automatic publication">자동 공개 대기 0건</p>
   </div>
   <div class="release-list"><div class="empty-note" data-ko="릴리즈 기록이 없어요." data-en="No release records.">릴리즈 기록이 없어요.</div></div>
+  <div class="subsection-head"><h3 data-ko="릴리즈 동기화 검증" data-en="Release synchronization verification">릴리즈 동기화 검증</h3></div>
+  <div class="detail-list"><div class="detail-row"><b data-ko="전역 릴리즈 동기화" data-en="Global release synchronization">전역 릴리즈 동기화</b><span class="mini-badge good" data-ko="GitHub 릴리즈 동기화 완료" data-en="GitHub releases synchronized">GitHub 릴리즈 동기화 완료</span></div><p class="ops-meta" data-ko="마지막 릴리즈 확인: 2026-10-07T23:05:51.575427Z" data-en="Last release check: 2026-10-07T23:05:51.575427Z">마지막 릴리즈 확인: 2026-10-07T23:05:51.575427Z</p></div>
   <div class="subsection-head">
     <h3 data-ko="Flutter·플러그인" data-en="Flutter & plugins">Flutter·플러그인</h3>
     <p data-ko="표시 0개" data-en="0 visible items">표시 0개</p>
+  </div>
+  <div class="detail-row">
+    <b data-ko="저장소 빌드 메타데이터" data-en="Repository build metadata">저장소 빌드 메타데이터</b>
+    <span data-ko="앱 — · 빌드 — · 출처 —" data-en="App — · build — · source —">앱 — · 빌드 — · 출처 —</span>
   </div>
   <div class="dependency-list"><div class="empty-note" data-ko="표시할 Flutter/플러그인 항목이 없어요." data-en="No Flutter/plugin rows to display.">표시할 Flutter/플러그인 항목이 없어요.</div></div>
 </section>

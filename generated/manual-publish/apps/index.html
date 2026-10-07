@@ -59,7 +59,7 @@ a{color:inherit}
 .detail-hero img{width:64px;height:64px;border-radius:15px;box-shadow:0 0 0 1px var(--accent-border,#ddd5c8)}
 .detail-hero h1{margin:0 0 8px;font-size:30px;color:#3e3933}.detail-hero p{margin:8px 0 0;color:#5f5a50;line-height:1.6}
 .detail-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px}.detail-tabs a{min-height:36px;display:inline-flex;align-items:center;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#fff;text-decoration:none;font-size:12px;font-weight:750;color:#6a645b}
-.detail-section{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}.detail-section h2{margin:0 0 14px;font-size:19px}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.detail-section{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}.detail-section h2{margin:0 0 14px;font-size:19px}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.app-overview-metrics{margin:0 0 12px}.app-overview-note{margin:0 0 20px;color:#746f69;font-size:11px;line-height:1.5}
 .detail-stat{padding:14px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-stat span{display:block;color:#827d72;font-size:11px}.detail-stat b{display:block;margin-top:6px;font-size:18px;overflow-wrap:anywhere}
 .detail-list{display:grid;gap:8px}.detail-row{padding:12px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-row b{display:block;margin-bottom:5px;font-size:13px}.detail-row span{display:block;color:#6f695f;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
 .empty-note{padding:15px;border:1px dashed #d9d0c6;border-radius:9px;background:#fffdf9;color:#746f69;font-size:13px;line-height:1.6}
@@ -89,6 +89,13 @@ a{color:inherit}
   <h1 data-ko="앱 관리" data-en="App management">앱 관리</h1>
   <p data-ko="앱별 상태를 한곳에서 비교하고, 세부 운영 정보는 각 앱 페이지에서 확인해요." data-en="Compare app status in one place and open each app for detailed operations.">앱별 상태를 한곳에서 비교하고, 세부 운영 정보는 각 앱 페이지에서 확인해요.</p>
 </header>
+<section class="detail-grid app-overview-metrics" aria-label="전체 앱 운영 요약">
+  <div class="detail-stat"><span data-ko="앱" data-en="Apps">앱</span><b>8</b></div>
+  <div class="detail-stat"><span data-ko="스토어 등록" data-en="Store listings">스토어 등록</span><b>15</b></div>
+  <div class="detail-stat"><span data-ko="릴리즈 기록" data-en="Release records">릴리즈 기록</span><b>7</b></div>
+  <div class="detail-stat"><span data-ko="Flutter·플러그인" data-en="Flutter & plugins">Flutter·플러그인</span><b>78</b></div>
+</section>
+<p class="app-overview-note" data-ko="답변 대기 리뷰 0건 · 마지막 스토어 상태 확인 2026-10-07T06:21:30+09:00" data-en="0 reviews awaiting reply · Last store status check 2026-10-07T06:21:30+09:00">답변 대기 리뷰 0건 · 마지막 스토어 상태 확인 2026-10-07T06:21:30+09:00</p>
 <label class="app-search"><span data-ko="앱 찾기" data-en="Find an app">앱 찾기</span><input type="search" placeholder="앱 이름을 검색해요" data-placeholder-ko="앱 이름을 검색해요" data-placeholder-en="Search app name" data-app-search></label>
 <p class="empty-note" data-app-empty hidden data-ko="일치하는 앱이 없어요." data-en="No matching apps.">일치하는 앱이 없어요.</p>
 <section class="app-grid" aria-label="앱 목록">
@@ -172,7 +179,7 @@ a{color:inherit}
   </div>
 </a>
 </section>
-<p class="ops-legacy-link"><span data-ko="리뷰·릴리즈 승인 등 앱별 운영은 각 앱 페이지에서 처리해요. 이전 화면과 비교할 때만" data-en="Manage reviews, release approvals, and other app operations in each app page. Open the">리뷰·릴리즈 승인 등 앱별 운영은 각 앱 페이지에서 처리해요. 이전 화면과 비교할 때만</span> <a href="/ops/legacy/" data-ko="기존 통합 콘솔" data-en="legacy console">기존 통합 콘솔</a><span data-ko="을 열면 돼요." data-en=" only to compare with the previous interface.">을 열면 돼요.</span></p>
+<p class="ops-legacy-link"><span data-ko="리뷰·자동 릴리즈 등 앱별 운영은 각 앱 페이지에서 확인해요. 이전 화면과 비교할 때만" data-en="Review replies and automatic releases now live in each app page. Open the">리뷰·자동 릴리즈 등 앱별 운영은 각 앱 페이지에서 확인해요. 이전 화면과 비교할 때만</span> <a href="/ops/legacy/" data-ko="기존 통합 콘솔" data-en="legacy console">기존 통합 콘솔</a><span data-ko="을 열면 돼요." data-en=" only to compare with the previous interface.">을 열면 돼요.</span></p>
 <script>
 (()=>{const input=document.querySelector('[data-app-search]');const rows=[...document.querySelectorAll('[data-app-row]')];if(!(input instanceof HTMLInputElement))return;input.addEventListener('input',()=>{const q=input.value.trim().toLowerCase();let visible=0;for(const row of rows){const hide=q&&!String(row.dataset.appTitle||'').includes(q);row.hidden=!!hide;if(!hide)visible++;}const empty=document.querySelector('[data-app-empty]');if(empty instanceof HTMLElement)empty.hidden=visible>0;});})();
 </script>
