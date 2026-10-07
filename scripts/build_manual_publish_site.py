@@ -1390,6 +1390,12 @@ def html_document(
     .credential-grid label {{ display: grid; gap: 5px; color: var(--muted); font-size: 12px; font-weight: 800; }}
     .credential-grid label[hidden] {{ display: none !important; }}
     .credential-actions {{ display: flex; gap: 8px; flex-wrap: wrap; }}
+    .credential-provider {{ min-width:0; margin:4px 0 9px; padding:12px; border:1px solid #e4dacf; border-radius:10px; background:#fffdf9; }}
+    .credential-provider legend {{ padding:0 7px; color:#514b44; font-size:14px; font-weight:800; }}
+    .credential-provider>.credential-actions {{ margin-top:11px; }}
+    .ops-advanced-settings {{ margin-top:10px; padding:10px 12px; border:1px solid #e4dacf; border-radius:9px; background:#fff; }}
+    .ops-advanced-settings>summary {{ min-height:37px; cursor:pointer; font-weight:750; font-size:13px; }}
+    .ops-advanced-settings .credential-actions {{ margin:9px 0; }}
     .credential-output {{ min-height: 78px; }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
     .auth {{ display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, auto); gap: 8px; margin-top: 12px; }}
@@ -1634,15 +1640,20 @@ def html_document(
       </div>
       <div class="credential-actions">
         <button id="save-credentials" type="button">입력값 저장</button>
-        <button id="copy-env-block" type="button" class="secondary">env 블록 복사</button>
-        <button id="copy-secret-sync-command" type="button" class="secondary">GitHub secrets 동기화 명령 복사</button>
-        <button id="copy-post-command" type="button" class="secondary">자동 포스팅 명령 복사</button>
         <button id="run-posting-now" type="button" class="secondary">지금 자동 포스팅 실행</button>
-        <button id="clear-credentials" type="button" class="secondary">입력값 삭제</button>
       </div>
-      <textarea id="credential-output" class="credential-output" readonly spellcheck="false"></textarea>
       <div id="posting-run-note" class="note">입력값 저장만으로는 자동 게시가 즉시 실행되지 않습니다. GitHub secrets 동기화 후 이 버튼으로 publishing workflow를 dry_run=false로 실행하세요.</div>
-      <div id="credential-note" class="note">복사한 env 블록을 docs/environment variables.md에 붙여넣으면 기존 자동 포스팅 스크립트가 해당 값을 읽습니다.</div>
+      <details class="ops-advanced-settings">
+        <summary id="credential-advanced-title">고급 설정·복사 명령</summary>
+        <div class="credential-actions">
+          <button id="copy-env-block" type="button" class="secondary">env 블록 복사</button>
+          <button id="copy-secret-sync-command" type="button" class="secondary">GitHub secrets 동기화 명령 복사</button>
+          <button id="copy-post-command" type="button" class="secondary">자동 포스팅 명령 복사</button>
+          <button id="clear-credentials" type="button" class="secondary">입력값 삭제</button>
+        </div>
+        <textarea id="credential-output" class="credential-output" readonly spellcheck="false"></textarea>
+        <div id="credential-note" class="note">복사한 env 블록을 docs/environment variables.md에 붙여넣으면 기존 자동 포스팅 스크립트가 해당 값을 읽습니다.</div>
+      </details>
     </details>
     <details class="credential-panel" aria-label="Store review credentials">
       <summary id="store-credential-panel-title" class="panel-summary">스토어 리뷰 연결</summary>
@@ -1652,26 +1663,39 @@ def html_document(
           <p id="store-credentials-copy">Apple API 키와 Google Play 서비스 계정 JSON을 입력하면 GitHub Actions secret 설정값과 리뷰 동기화 명령을 만들 수 있습니다.</p>
         </div>
       </div>
-      <div class="credential-grid">
-        <label><span id="app-store-key-type-label">키 유형</span><select id="app-store-key-type"><option value="individual" id="app-store-individual-option">개인 API 키 (Individual)</option><option value="team" id="app-store-team-option">팀 API 키 (Team)</option></select></label>
-        <label><span id="app-store-key-id-label">Key ID</span><input id="app-store-key-id" type="text" autocomplete="off"></label>
-        <label id="app-store-issuer-field" hidden><span id="app-store-issuer-id-label">Issuer ID</span><input id="app-store-issuer-id" type="text" autocomplete="off"></label>
-        <label><span id="google-play-reports-bucket-label">Play 보고서 버킷</span><input id="google-play-reports-bucket" type="text" autocomplete="off" placeholder="gs://pubsite_prod_.../reviews/" required></label>
-      </div>
-      <label><span id="app-store-private-key-label">새 Private Key (.p8 PEM)</span><textarea id="app-store-private-key" class="credential-output" autocomplete="off" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label>
-      <label><span id="google-play-service-account-label">Google Play 서비스 계정 JSON</span><textarea id="google-play-service-account" class="credential-output" autocomplete="off" spellcheck="false" placeholder='{{"type":"service_account", ...}}'></textarea></label>
+      <fieldset class="credential-provider">
+        <legend>App Store · Apple</legend>
+        <div class="credential-grid">
+          <label><span id="app-store-key-type-label">키 유형</span><select id="app-store-key-type"><option value="individual" id="app-store-individual-option">개인 API 키 (Individual)</option><option value="team" id="app-store-team-option">팀 API 키 (Team)</option></select></label>
+          <label><span id="app-store-key-id-label">Key ID</span><input id="app-store-key-id" type="text" autocomplete="off"></label>
+          <label id="app-store-issuer-field" hidden><span id="app-store-issuer-id-label">Issuer ID</span><input id="app-store-issuer-id" type="text" autocomplete="off"></label>
+        </div>
+        <label><span id="app-store-private-key-label">새 Private Key (.p8 PEM)</span><textarea id="app-store-private-key" class="credential-output" autocomplete="off" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label>
+        <div class="credential-actions"><button id="save-app-store-credentials" type="button">Apple 키 저장</button></div>
+      </fieldset>
+      <fieldset class="credential-provider">
+        <legend>Play Store · Google</legend>
+        <div class="credential-grid">
+          <label><span id="google-play-reports-bucket-label">Play 보고서 버킷</span><input id="google-play-reports-bucket" type="text" autocomplete="off" placeholder="gs://pubsite_prod_.../reviews/" required></label>
+        </div>
+        <label><span id="google-play-service-account-label">Google Play 서비스 계정 JSON</span><textarea id="google-play-service-account" class="credential-output" autocomplete="off" spellcheck="false" placeholder='{{"type":"service_account", ...}}'></textarea></label>
+        <div class="credential-actions"><button id="save-google-play-credentials" type="button">Google 키 저장</button></div>
+      </fieldset>
       <div class="credential-actions">
-        <button id="save-app-store-credentials" type="button">Apple 키 저장</button>
-        <button id="save-google-play-credentials" type="button">Google 키 저장</button>
         <button id="check-store-secret-permission" type="button" class="secondary">Secrets 권한 확인</button>
-        <button id="copy-store-env-block" type="button" class="secondary">스토어 env 블록 복사</button>
-        <button id="copy-store-secret-sync-command" type="button" class="secondary">스토어 secrets 동기화 명령 복사</button>
-        <button id="copy-store-sync-command" type="button" class="secondary">리뷰 동기화 명령 복사</button>
         <button id="run-store-sync-now" type="button" class="secondary">지금 리뷰 동기화</button>
-        <button id="clear-store-credentials" type="button" class="secondary">연결 정보 삭제</button>
       </div>
-      <textarea id="store-credential-output" class="credential-output" readonly spellcheck="false"></textarea>
       <div id="store-credential-note" class="note">민감 값은 브라우저 안에서 GitHub 공개키로 암호화된 뒤 Actions Secrets에 직접 저장됩니다. 평문은 workflow 입력·HTML·CSV·Git에 포함되지 않습니다.</div>
+      <details class="ops-advanced-settings">
+        <summary id="store-credential-advanced-title">고급 설정·복사 명령</summary>
+        <div class="credential-actions">
+          <button id="copy-store-env-block" type="button" class="secondary">스토어 env 블록 복사</button>
+          <button id="copy-store-secret-sync-command" type="button" class="secondary">스토어 secrets 동기화 명령 복사</button>
+          <button id="copy-store-sync-command" type="button" class="secondary">리뷰 동기화 명령 복사</button>
+          <button id="clear-store-credentials" type="button" class="secondary">연결 정보 삭제</button>
+        </div>
+        <textarea id="store-credential-output" class="credential-output" readonly spellcheck="false"></textarea>
+      </details>
     </details>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>현재 필터와 일치하는 초안이 없습니다.</div>
@@ -1806,6 +1830,7 @@ def html_document(
         saveGitHubToken: 'GitHub 토큰 저장',
         credentialsTitle: '자동 포스팅 연결',
         credentialPanelTitle: '자동 포스팅 연결',
+        advancedCredentialTools: '고급 설정·복사 명령',
         credentialsCopy: '저장은 이 브라우저에만 유지됩니다. 실제 자동 포스팅은 env 블록을 로컬 파일에 반영하거나 GitHub Actions secrets로 동기화해야 연결됩니다.',
         blueskyHandle: 'Bluesky handle',
         blueskyAppPassword: 'Bluesky 앱 패스워드',
@@ -2109,6 +2134,7 @@ def html_document(
         saveGitHubToken: 'Save GitHub token',
         credentialsTitle: 'Automated posting connection',
         credentialPanelTitle: 'Automated posting connection',
+        advancedCredentialTools: 'Advanced settings & copy commands',
         credentialsCopy: 'Saved inputs stay in this browser only. Automated posting is connected after you apply the env block locally or sync it to GitHub Actions secrets.',
         blueskyHandle: 'Bluesky handle',
         blueskyAppPassword: 'Bluesky app password',
@@ -2472,6 +2498,8 @@ def html_document(
       document.getElementById('github-token-note').textContent = t('githubTokenNote');
       document.getElementById('credentials-title').textContent = t('credentialsTitle');
       document.getElementById('credential-panel-title').textContent = t('credentialPanelTitle');
+      document.getElementById('credential-advanced-title').textContent = t('advancedCredentialTools');
+      document.getElementById('store-credential-advanced-title').textContent = t('advancedCredentialTools');
       document.getElementById('credentials-copy').textContent = t('credentialsCopy');
       document.getElementById('bluesky-handle-label').textContent = t('blueskyHandle');
       document.getElementById('bluesky-password-label').textContent = t('blueskyAppPassword');

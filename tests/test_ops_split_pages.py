@@ -355,6 +355,11 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertIn('aria-label="AI operation status"', home_html)
             self.assertTrue((output / "publishing" / "index.html").exists())
             self.assertTrue((output / "media" / "index.html").exists())
+            media_html = (output / "media" / "index.html").read_text(encoding="utf-8")
+            self.assertIn('<details class="ytw-root" open>', media_html)
+            self.assertIn('class="ops-media-connections"', media_html)
+            self.assertIn("채널 연결·자동화 설정 (필요할 때 열기)", media_html)
+            self.assertIn('class="ytw-section" open', media_html)
             self.assertTrue((output / "settings" / "index.html").exists())
             self.assertTrue((output / "legacy" / "index.html").exists())
 
@@ -364,6 +369,14 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertIn('id="github-connection-panel"', settings_html)
             self.assertIn('id="sync-auth"', settings_html)
             self.assertIn('body[data-ops-view="settings"] main>.tool-panel,', settings_html)
+            self.assertIn('class="credential-provider"', settings_html)
+            self.assertIn('class="ops-advanced-settings"', settings_html)
+            self.assertIn('id="credential-advanced-title"', settings_html)
+            self.assertIn('id="store-credential-advanced-title"', settings_html)
+            self.assertIn('id="save-app-store-credentials"', settings_html)
+            self.assertIn('id="save-google-play-credentials"', settings_html)
+            self.assertIn('body[data-ops-view="publishing"] .metric-card[data-view="manual"]', publishing_html)
+            self.assertIn('body[data-ops-view="publishing"] #verify-publications-primary', publishing_html)
             self.assertIn(
                 'body[data-ops-view="publishing"] main>.credential-panel:not(.github-connection-panel),',
                 publishing_html,

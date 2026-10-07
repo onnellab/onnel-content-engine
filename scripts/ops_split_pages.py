@@ -282,6 +282,27 @@ def _legacy_view(document: str, view: str, intro: str) -> str:
     if view != "legacy":
         document = document.replace("appTitle: 'ONNELLAB 게시 상태 대시보드'", "appTitle: 'ONNELLAB Ops'")
         document = document.replace("appTitle: 'ONNELLAB Publish Status Dashboard'", "appTitle: 'ONNELLAB Ops'")
+    if view == "media":
+        # Start with the channel dashboard and actual metrics, not OAuth setup.
+        document = document.replace('<details class="ytw-root">', '<details class="ytw-root" open>', 1)
+        document = document.replace(
+            '<details class="ytw-section"><summary><span><span class="ytw-ko">핵심 채널 통계',
+            '<details class="ytw-section" open><summary><span><span class="ytw-ko">핵심 채널 통계',
+            1,
+        )
+        document = document.replace(
+            '<section class="yt-settings" id="youtube-settings"',
+            '<details class="ops-media-connections"><summary>'
+            '<span class="yt-ko">채널 연결·자동화 설정 (필요할 때 열기)</span>'
+            '<span class="yt-en">Channel connection & automation settings</span>'
+            '</summary><section class="yt-settings" id="youtube-settings"',
+            1,
+        )
+        document = document.replace(
+            '</section>\n    <details class="tool-panel"',
+            '</section>\n</details>\n    <details class="tool-panel"',
+            1,
+        )
     view_css = r"""
 <style>
 main>.ops-nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}
@@ -298,6 +319,15 @@ main>.ops-route-grid>.ops-route-card b{display:block;font-size:20px;margin-botto
 main>.ops-route-grid>.ops-route-card span{display:block;color:#6f695f;font-size:14px;line-height:1.55}
 main>.ops-route-grid>.ops-route-card small{display:block;margin-top:18px;color:#817b72;font-size:12px;font-weight:700}
 main>.ops-legacy-link{margin:0 0 22px;color:#827d72;font-size:12px}main>.ops-legacy-link a{font-weight:750}
+body[data-ops-view="media"] .ops-media-connections{margin:14px 0;border:1px solid #ded6e9;border-radius:12px;background:#fff}
+body[data-ops-view="media"] .ops-media-connections>summary{cursor:pointer;padding:15px;font-size:14px;font-weight:760;min-height:48px}
+body[data-ops-view="media"] .ops-media-connections .yt-settings{margin:0;border:0;border-top:1px solid #eae3f2;border-radius:0;background:#fff}
+body[data-ops-view="media"] .ops-media-connections:has(#youtube-settings[hidden]){display:none}
+html:not([lang="en"]) body[data-ops-view="media"] .ops-media-connections>summary .yt-en{display:none}
+html[lang="en"] body[data-ops-view="media"] .ops-media-connections>summary .yt-ko{display:none}
+body[data-ops-view="publishing"] .metric-card[data-view="manual"]{background:#eef7ff;border-color:#b9cbe0}
+body[data-ops-view="publishing"] #verify-publications-primary{background:#e8f1fb;color:#315f91;border-color:#b9cbe0;font-size:15px;min-height:48px}
+body[data-ops-view="publishing"] main>.atm-action{box-shadow:none}
 @media(max-width:680px){main>.ops-route-grid{grid-template-columns:1fr}main>.ops-head h1{font-size:29px}}
 body[data-ops-view="home"] main>.overview,
 body[data-ops-view="home"] main>.atm-action,
