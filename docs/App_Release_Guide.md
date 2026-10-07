@@ -257,28 +257,15 @@ Default artifact location:
 generated/releases/{app_slug}/{version}/{platform}/*-release.*
 ```
 
-Publication approvals are recorded in:
+Public GitHub Releases are **automatically published** after a matching app version is independently confirmed in `data/store_versions.csv` (`new`, `updated`, or `unchanged`, with a successful public-page lookup). No dashboard release-approval button or manual approval CSV update is required. `data/app_release_publications.csv` is historical audit data only.
 
-```text
-data/app_release_publications.csv
-```
-
-Use `public_release=true` only after the build is meant to be public, not just available as a private test artifact.
-
-Example approval row:
-
-```csv
-release_id,public_release,approved_at,notes
-REL-0002,true,2026-07-12T09:00:00+09:00,Approved after App Store release became public.
-```
-
-Leave the release ID absent, use `public_release=false`, or set the release row to `release_channel=private_test` while the artifact is only for TestFlight, Play Console internal testing, local QA, or any other private test channel.
-
-When exactly one matching release artifact exists, this command fills `artifact_path` and calculates `checksum_sha256`. For `release_type=notes_only`, it does not require an artifact. It promotes the row to `status=ready` only when `data/app_release_publications.csv` approves that release ID:
+`scripts/fill_ready_app_releases.py` verifies the app, platform, version, and public-store status before moving public release rows to `ready`. When a verified binary artifact exists it retains the binary and checksum; when an app is already distributed by a public store and there is no separate release artifact, it publishes GitHub **release notes only** instead. It never publishes a draft, an unconfirmed store version, a `private_test` release, or a debug/internal artifact.
 
 ```text
 scripts/fill_ready_app_releases.py
 ```
+
+The daily `publishing.yml` workflow publishes confirmed ready rows; the release-only workflow also runs after a successful `Sync app operational status` workflow. Manual workflow dispatch remains available for recovery but no release approval input is needed.
 
 Local release artifacts can be collected into `generated/releases/` with:
 
@@ -286,7 +273,7 @@ Local release artifacts can be collected into `generated/releases/` with:
 scripts/collect_release_artifacts.py
 ```
 
-iOS release artifacts are produced by Codemagic for the current workflow, so iOS planned rows remain in `planned` until an `.ipa` is provided or copied into the configured artifact path.
+iOS binary artifacts can be supplied through Codemagic. A verified public App Store version can publish GitHub release notes without uploading a separate `.ipa`; an unconfirmed version remains `planned` regardless of whether a candidate artifact exists.
 
 Codemagic build IDs can be recorded in:
 

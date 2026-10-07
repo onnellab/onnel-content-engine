@@ -102,13 +102,9 @@ def release_action(row: dict[str, str]) -> str:
     if "Local Flutter build metadata version" in row.get("changes", ""):
         return "Replace placeholder with public patch notes"
     if status == "planned":
-        if row.get("release_type") == "notes_only":
-            return "Release ready; approve public notes-only release"
-        if row.get("artifact_path") and row.get("checksum_sha256"):
-            return "Release ready; approve public release or keep private"
-        return "Add release artifact and checksum"
+        return "Confirm matching public store version; auto-publish GitHub Release notes"
     if status == "ready":
-        return "GitHub Release can be created"
+        return "Automatically publish GitHub Release"
     if status == "released":
         return "No action"
     if status == "failed":
@@ -264,8 +260,14 @@ def matching_cross_platform_release(
     return candidates[0]
 
 
-def publication_index(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
-    return {row["release_id"]: row for row in rows}
+def store_public_version_index(rows: list[dict[str, str]]) -> dict[tuple[str, str], dict[str, str]]:
+    return {
+        (row["app_id"], row["platform"]): row
+        for row in rows
+        if row.get("status") in {"new", "updated", "unchanged"}
+        and row.get("version")
+        and "public page lookup failed" not in row.get("notes", "").lower()
+    }
 
 
 def store_notes_index(rows: list[dict[str, str]]) -> dict[tuple[str, str], str]:
@@ -276,29 +278,22 @@ def store_notes_index(rows: list[dict[str, str]]) -> dict[tuple[str, str], str]:
     }
 
 
-def publication_gate(row: dict[str, str], approvals: dict[str, dict[str, str]]) -> str:
+def publication_gate(
+    row: dict[str, str],
+    public_versions: dict[tuple[str, str], dict[str, str]],
+) -> str:
     if (row.get("release_channel") or "public") != "public":
-        return "Private test; public Release disabled"
+        return "Private test; public GitHub Release disabled"
     status = row["status"]
-    approved = approvals.get(row["release_id"], {}).get("public_release", "").lower() == "true"
-    has_artifact = bool(row["artifact_path"] and row["checksum_sha256"])
-    notes_only = row.get("release_type") == "notes_only"
     if status == "released":
-        return "Released"
+        return "Public GitHub Release published"
     if status == "ready":
-        return "Approved public release"
-    if status == "planned" and approved and notes_only:
-        return "Approved, notes-only ready fill pending"
-    if status == "planned" and notes_only:
-        return "Waiting for public notes approval"
-    if status == "planned" and approved and has_artifact:
-        return "Approved, ready fill pending"
-    if status == "planned" and approved:
-        return "Public approved, waiting for artifact"
-    if status == "planned" and has_artifact:
-        return "Private test or approval pending"
+        return "Automatically publishing"
     if status == "planned":
-        return "Waiting for artifact and public approval"
+        snapshot = public_versions.get((row["app_id"], row["platform"]))
+        if snapshot and snapshot["version"] == row["version"]:
+            return "Public store confirmed; preparing automatic release"
+        return "Waiting for matching public store version"
     if status == "failed":
         return "Fix release error"
     if status == "archived":
@@ -320,7 +315,6 @@ def report_markdown(
     local_repo_rows: list[dict[str, str]],
     local_metadata_rows: list[dict[str, str]],
     repository_version_rows: list[dict[str, str]],
-    publication_rows: list[dict[str, str]],
     generated_at: datetime,
 ) -> str:
     config = config_index(config_rows)
@@ -330,7 +324,7 @@ def report_markdown(
     for app_id, version in local_metadata_version_index(local_metadata_rows).items():
         local_versions.setdefault(app_id, version)
     releases = release_index(release_rows)
-    approvals = publication_index(publication_rows)
+    public_versions = store_public_version_index(store_rows)
     store_notes = store_notes_index(store_rows)
     store_counts = Counter(row["status"] for row in store_rows)
     release_counts = Counter(row["status"] for row in release_rows)
@@ -403,7 +397,7 @@ def report_markdown(
                 row.get("release_channel") or "public",
                 row["tag"],
                 row["status"],
-                publication_gate(row, approvals),
+                publication_gate(row, public_versions),
                 row["release_url"],
                 row["artifact_path"],
                 store_notes.get((row["app_id"], row["platform"]), ""),
@@ -413,7 +407,7 @@ def report_markdown(
         ]
         lines.extend(
             table(
-                ["ID", "App", "Platform", "Channel", "Tag", "Status", "Publication gate", "Release URL", "Artifact", "Store notes", "Next action"],
+                ["ID", "App", "Platform", "Channel", "Tag", "Status", "Automatic publication", "Release URL", "Artifact", "Store notes", "Next action"],
                 release_table,
             )
         )
@@ -487,7 +481,7 @@ def generate_app_release_report(
         else:
             flutter_versions_path = store_versions_path.parent / "app_flutter_dependency_versions.csv"
     repository_version_rows = read_optional_csv(flutter_versions_path, FLUTTER_DEPENDENCY_HEADER)
-    publication_rows = read_optional_csv(publications_path, PUBLICATION_HEADER)
+    # Historical approval CSV is not part of automatic publication decisions.
     text = report_markdown(
         store_rows,
         release_rows,
@@ -495,7 +489,6 @@ def generate_app_release_report(
         local_repo_rows,
         local_metadata_rows,
         repository_version_rows,
-        publication_rows,
         now or datetime.now(KST),
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)

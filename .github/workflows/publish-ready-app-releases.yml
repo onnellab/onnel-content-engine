@@ -2,11 +2,9 @@ name: ONNELLAB Publish Ready App Releases
 
 on:
   workflow_dispatch:
-    inputs:
-      confirm_release:
-        description: Type RELEASE to authorize public GitHub release publication
-        required: true
-        type: string
+  workflow_run:
+    workflows: ["Sync app operational status"]
+    types: [completed]
 
 concurrency:
   group: onnellab-manual-dashboard-writer
@@ -14,8 +12,8 @@ concurrency:
 
 jobs:
   publish-ready-app-releases:
-    if: inputs.confirm_release == 'RELEASE'
-    name: Publish ready app release notes
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    name: Publish public-store-confirmed release notes
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -42,6 +40,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+
+      - name: Prepare automatic release readiness from confirmed public store versions
+        run: |
+          set -euo pipefail
+          python3 scripts/fill_ready_app_releases.py
+          python3 scripts/validate_app_releases.py
 
       - name: Configure Node
         uses: actions/setup-node@v4

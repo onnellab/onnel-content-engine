@@ -107,7 +107,11 @@ def release_body(row: dict[str, str]) -> str:
         "",
         "## Checks",
         f"- Release channel: {row.get('release_channel') or 'public'}",
-        "- Release build verified",
+        (
+            "- Public store version confirmed; release notes only (binary distributed by the store)"
+            if row.get("release_type") == "notes_only"
+            else "- Release build verified"
+        ),
         "- Debug build excluded",
         f"- Version tag: {row['tag']}",
     ]

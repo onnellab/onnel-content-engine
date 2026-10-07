@@ -396,16 +396,14 @@ def public_release_notes_url(row: dict[str, str]) -> str:
 
 
 def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_path: Path = DEFAULT_APP_RELEASE_PUBLICATIONS) -> list[dict[str, str]]:
-    approvals = {
-        row.get("release_id", ""): row
-        for row in read_csv_rows(publications_path)
-        if row.get("release_id")
-    }
+    # publications_path is retained for older callers only. Manual approval
+    # records are historical and never gate public release publication.
     items: list[dict[str, str]] = []
     for row in latest_app_release_rows(read_csv_rows(releases_path)):
         release_id = row.get("release_id", "")
-        approval = approvals.get(release_id, {})
-        public_release = approval.get("public_release", "").lower() == "true"
+        channel = row.get("release_channel") or "public"
+        status = row.get("status", "")
+        public_release = channel == "public" and status == "released"
         items.append(
             {
                 "release_id": release_id,
@@ -423,7 +421,8 @@ def app_release_items(releases_path: Path = DEFAULT_APP_RELEASES, publications_p
                 "released_at": row.get("released_at", ""),
                 "release_date": row.get("release_date", ""),
                 "public_release": "true" if public_release else "false",
-                "approved_at": approval.get("approved_at", ""),
+                "publication_mode": "automatic" if channel == "public" else "private_test",
+                "approved_at": "",
             }
         )
     return items
@@ -1762,7 +1761,6 @@ def html_document(
     const statePath = 'data/manual_publish_state.json';
     const storeReviewApprovalsPath = 'data/store_review_approvals.json';
     const reportPath = 'data/manual_publication_verification_report.json';
-    const releasePublicationsPath = 'data/app_release_publications.csv';
     const stateBranch = 'main';
     const tokenKey = 'onnellab-manual-publish-token';
     const langKey = 'onnellab-manual-publish-lang';
@@ -1913,9 +1911,6 @@ def html_document(
         plannedDate: '예정일',
         githubReleasedAt: 'GitHub 공개일',
         githubRelease: 'GitHub Release',
-        approvePublicRelease: '공개 승인',
-        publicReleaseApproved: '공개 승인됨',
-        publicApprovalNote: 'Dashboard manual approval after public store release confirmation.',
         storeTitle: 'App Store / Play Store 현재 공개 버전',
         storeSummary: '현재 표시',
         storeReviewTitle: '스토어 리뷰 답변',
@@ -2014,8 +2009,6 @@ def html_document(
         screenshotCount: '스크린샷',
         latestPublished: '최근 게시',
         nextScheduled: '다음 게시 예정',
-        publicApproved: '공개 승인',
-        publicPending: '공개 미승인',
         completedAt: '게시 완료',
         copyMarkdown: '마크다운 복사',
         copyFormatted: '서식 본문 복사',
@@ -2221,9 +2214,6 @@ def html_document(
         plannedDate: 'planned date',
         githubReleasedAt: 'GitHub released',
         githubRelease: 'GitHub Release',
-        approvePublicRelease: 'Approve public',
-        publicReleaseApproved: 'public approved',
-        publicApprovalNote: 'Dashboard manual approval after public store release confirmation.',
         storeTitle: 'Current App Store / Play Store versions',
         storeSummary: 'currently shown',
         storeReviewTitle: 'Store review replies',
@@ -2322,8 +2312,6 @@ def html_document(
         screenshotCount: 'screenshots',
         latestPublished: 'latest published',
         nextScheduled: 'next scheduled',
-        publicApproved: 'public approved',
-        publicPending: 'public pending',
         completedAt: 'posted',
         copyMarkdown: 'Copy markdown',
         copyFormatted: 'Copy formatted body',
@@ -3513,118 +3501,6 @@ def html_document(
         remoteState.done ||= {{}};
         Object.assign(remoteState.done, localDone);
         await saveRemoteState(message + ' after sync refresh');
-      }}
-    }}
-
-    function parseCsv(text) {{
-      const rows = [];
-      let row = [];
-      let value = '';
-      let quoted = false;
-      for (let index = 0; index < text.length; index += 1) {{
-        const char = text[index];
-        if (quoted) {{
-          if (char === '"' && text[index + 1] === '"') {{
-            value += '"';
-            index += 1;
-          }} else if (char === '"') {{
-            quoted = false;
-          }} else {{
-            value += char;
-          }}
-        }} else if (char === '"') {{
-          quoted = true;
-        }} else if (char === ',') {{
-          row.push(value);
-          value = '';
-        }} else if (char === '\\n') {{
-          row.push(value);
-          rows.push(row);
-          row = [];
-          value = '';
-        }} else if (char !== '\\r') {{
-          value += char;
-        }}
-      }}
-      if (value || row.length) {{
-        row.push(value);
-        rows.push(row);
-      }}
-      return rows;
-    }}
-
-    function csvValue(value) {{
-      const text = String(value || '');
-      return /[",\\n\\r]/.test(text) ? `"${{text.replace(/"/g, '""')}}"` : text;
-    }}
-
-    function csvText(rows) {{
-      return rows.map((row) => row.map(csvValue).join(',')).join('\\n') + '\\n';
-    }}
-
-    async function savePublicReleaseApproval(item, approvedAt) {{
-      const data = await githubRequest(`/repos/${{stateRepo}}/contents/${{releasePublicationsPath}}?ref=${{stateBranch}}`);
-      const rows = parseCsv(decodeBase64Unicode(data.content));
-      const header = rows[0] && rows[0].length ? rows[0] : ['release_id', 'public_release', 'approved_at', 'notes'];
-      const releaseIdIndex = header.indexOf('release_id');
-      const publicIndex = header.indexOf('public_release');
-      const approvedIndex = header.indexOf('approved_at');
-      const notesIndex = header.indexOf('notes');
-      let found = false;
-      const nextRows = [header, ...rows.slice(1).filter((row) => row.some(Boolean)).map((row) => {{
-        const next = [...row];
-        while (next.length < header.length) next.push('');
-        if (next[releaseIdIndex] === item.release_id) {{
-          next[publicIndex] = 'true';
-          next[approvedIndex] = next[approvedIndex] || approvedAt;
-          next[notesIndex] = next[notesIndex] || t('publicApprovalNote');
-          found = true;
-        }}
-        return next;
-      }})];
-      if (!found) {{
-        const row = Array(header.length).fill('');
-        row[releaseIdIndex] = item.release_id;
-        row[publicIndex] = 'true';
-        row[approvedIndex] = approvedAt;
-        row[notesIndex] = t('publicApprovalNote');
-        nextRows.push(row);
-      }}
-      const payload = {{
-        message: `Approve public release ${{item.release_id}}`,
-        content: encodeBase64Unicode(csvText(nextRows)),
-        branch: stateBranch,
-        sha: data.sha,
-      }};
-      await githubRequest(`/repos/${{stateRepo}}/contents/${{releasePublicationsPath}}`, {{
-        method: 'PUT',
-        headers: {{ 'Content-Type': 'application/json' }},
-        body: JSON.stringify(payload),
-      }});
-    }}
-
-    async function approvePublicRelease(item, button) {{
-      if (!githubToken()) {{
-        setSync('viewOnly');
-        revealTokenInput();
-        return;
-      }}
-      const approvedAt = new Date().toISOString();
-      const previous = {{ public_release: item.public_release, approved_at: item.approved_at }};
-      item.public_release = 'true';
-      item.approved_at = approvedAt;
-      render();
-      try {{
-        flash(button, t('saving'));
-        await savePublicReleaseApproval(item, approvedAt);
-        setSync('synced');
-      }} catch (error) {{
-        item.public_release = previous.public_release;
-        item.approved_at = previous.approved_at;
-        flash(button, t('saveFailed'));
-        setSync('saveError');
-        console.error(error);
-        render();
       }}
     }}
 
@@ -4966,20 +4842,20 @@ def html_document(
               const label = document.createElement('b');
               label.textContent = `${{t('githubRelease')}} / ${{item.platform}}`;
               const status = document.createElement('span');
-              status.textContent = `${{item.tag}} / ${{item.status}} / ${{item.release_channel || 'public'}} / ${{item.public_release === 'true' ? t('publicApproved') : t('publicPending')}}`;
+              const publicationState = item.release_channel === 'private_test'
+                ? 'private test'
+                : item.status === 'released'
+                  ? 'automatically published'
+                  : item.status === 'ready'
+                    ? 'automatic publication queued'
+                    : 'awaiting public store confirmation';
+              status.textContent = `${{item.tag}} / ${{item.status}} / ${{item.release_channel || 'public'}} / ${{publicationState}}`;
               const planned = document.createElement('span');
               const releaseDateLabel = item.released_at ? t('githubReleasedAt') : t('plannedDate');
               planned.textContent = `${{releaseDateLabel}}: ${{item.released_at ? formatDate(item.released_at) : item.release_date || t('none')}}`;
               const repo = document.createElement('span');
               repo.textContent = item.repository;
               row.append(label, status, planned, repo);
-              if (item.release_channel === 'public' && item.public_release !== 'true') {{
-                const approve = document.createElement('button');
-                approve.className = 'secondary';
-                approve.textContent = t('approvePublicRelease');
-                approve.onclick = () => approvePublicRelease(item, approve);
-                row.appendChild(approve);
-              }}
               if (item.release_url) {{
                 const link = document.createElement('a');
                 link.href = item.release_url;

@@ -177,9 +177,13 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertNotIn("publish_due_articles.py", workflow)
         self.assertNotIn("deploy_github_pages.py", workflow)
 
-    def test_ready_app_release_workflow_is_release_only(self) -> None:
+    def test_ready_app_release_workflow_is_automatic_and_release_only(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "publish-ready-app-releases.yml").read_text(encoding="utf-8")
 
+        self.assertIn('workflows: ["Sync app operational status"]', workflow)
+        self.assertIn("github.event.workflow_run.conclusion == 'success'", workflow)
+        self.assertIn("scripts/fill_ready_app_releases.py", workflow)
+        self.assertNotIn("confirm_release", workflow)
         self.assertIn("scripts/create_github_releases.py --publish", workflow)
         self.assertIn("scripts/sync_github_release_status.py --allow-missing-token", workflow)
         self.assertIn("scripts/sync_ai_provider_pricing.py", workflow)

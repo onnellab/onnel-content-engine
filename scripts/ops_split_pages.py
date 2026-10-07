@@ -1139,29 +1139,26 @@ def _release_card_html(item: Mapping[str, object], index: int) -> str:
     status = str(item.get("status") or "—")
     channel = str(item.get("release_channel") or "public")
     release_id = str(item.get("release_id") or "")
-    public_release = str(item.get("public_release") or "").lower() == "true"
     date = str(item.get("released_at") or item.get("release_date") or "—")
     url = _safe_href(item.get("release_url"))
     notes = str(item.get("release_notes") or "")
-    approval_ko = "공개 승인 완료" if public_release else "공개 승인 대기"
-    approval_en = "Public approved" if public_release else "Awaiting public approval"
-    badge_class = "good" if public_release else "warn"
+    if channel != "public":
+        state_ko, state_en, badge_class = "내부 테스트", "Private test", "warn"
+    elif status == "released":
+        state_ko, state_en, badge_class = "자동 공개 완료", "Automatically published", "good"
+    elif status == "ready":
+        state_ko, state_en, badge_class = "자동 공개 준비됨", "Ready for automatic publication", "good"
+    else:
+        state_ko, state_en, badge_class = "자동 공개 대기", "Awaiting automatic publication", "warn"
     link_html = f'<p><a href="{_esc(url)}" target="_blank" rel="noopener noreferrer" data-ko="릴리즈 페이지 열기" data-en="Open release page">릴리즈 페이지 열기</a></p>' if url else ""
     notes_html = f'<p><b data-ko="릴리즈 노트" data-en="Release notes">릴리즈 노트</b> · {_esc(notes)}</p>' if notes else ""
-    approve_html = ""
-    if channel == "public" and not public_release and release_id:
-        approve_html = (
-            '<div class="ops-actions">'
-            f'<button class="ops-button primary" type="button" data-release-approve-index="{index}" data-ko="공개 승인" data-en="Approve public release">공개 승인</button>'
-            '</div><div class="ops-message" data-release-message></div>'
-        )
     return (
         f'<article class="release-card" data-release-index="{index}">'
         '<div class="release-head">'
-        f'<strong>{_esc(tag)}</strong><span class="mini-badge {badge_class}" data-ko="{_esc(approval_ko)}" data-en="{_esc(approval_en)}">{_esc(approval_ko)}</span>'
+        f'<strong>{_esc(tag)}</strong><span class="mini-badge {badge_class}" data-ko="{_esc(state_ko)}" data-en="{_esc(state_en)}">{_esc(state_ko)}</span>'
         '</div>'
-        f'<div class="release-meta">{_esc(status)} · {_esc(channel)} · {_esc(date)}</div>'
-        f'{notes_html}{link_html}{approve_html}</article>'
+        f'<div class="release-meta">{_esc(release_id)} · {_esc(status)} · {_esc(channel)} · {_esc(date)}</div>'
+        f'{notes_html}{link_html}</article>'
     )
 
 
@@ -1184,27 +1181,20 @@ def _dependency_card_html(item: Mapping[str, object]) -> str:
 
 def _app_controls_script(
     reviews: Sequence[Mapping[str, object]],
-    releases: Sequence[Mapping[str, object]],
 ) -> str:
     reviews_json = _json_script(list(reviews))
-    releases_json = _json_script(list(releases))
     return rf"""
 <script id="app-review-data" type="application/json">{reviews_json}</script>
-<script id="app-release-data" type="application/json">{releases_json}</script>
 <script>
 (() => {{
   const repo = 'onnellab/onnel-content-engine';
   const branch = 'main';
   const tokenKey = 'onnellab-manual-publish-token';
   const approvalsPath = 'data/store_review_approvals.json';
-  const releasePublicationsPath = 'data/app_release_publications.csv';
   const reviews = JSON.parse(document.getElementById('app-review-data').textContent || '[]');
-  const releases = JSON.parse(document.getElementById('app-release-data').textContent || '[]');
   const currentLang = () => localStorage.getItem('onnellab-ops-language') === 'en' ? 'en' : 'ko';
   const label = (ko, en) => currentLang() === 'en' ? en : ko;
   const token = () => (localStorage.getItem(tokenKey) || '').trim();
-  const LF = String.fromCharCode(10);
-  const CR = String.fromCharCode(13);
 
   const updateTokenNotes = () => {{
     document.querySelectorAll('[data-app-token-note]').forEach((node) => {{
@@ -1405,100 +1395,9 @@ def _app_controls_script(
     }});
   }}
 
-  function parseCsv(text) {{
-    const rows = [];
-    let row = [], value = '', quoted = false;
-    for (let i = 0; i < text.length; i += 1) {{
-      const char = text[i];
-      if (quoted) {{
-        if (char === '"' && text[i + 1] === '"') {{ value += '"'; i += 1; }}
-        else if (char === '"') quoted = false;
-        else value += char;
-      }} else if (char === '"') quoted = true;
-      else if (char === ',') {{ row.push(value); value = ''; }}
-      else if (char === '\n') {{ row.push(value); rows.push(row); row = []; value = ''; }}
-      else if (char !== '\r') value += char;
-    }}
-    if (value || row.length) {{ row.push(value); rows.push(row); }}
-    return rows;
-  }}
-
-  function csvValue(value) {{
-    const text = String(value || '');
-    return /[",\n\r]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
-  }}
-
-  function csvText(rows) {{
-    return rows.map((row) => row.map(csvValue).join(',')).join('\n') + '\n';
-  }}
-
-  async function approvePublicRelease(item) {{
-    const data = await githubRequest('/repos/' + repo + '/contents/' + releasePublicationsPath + '?ref=' + branch);
-    const rows = parseCsv(decodeBase64Unicode(data.content));
-    const header = rows[0] && rows[0].length ? rows[0] : ['release_id', 'public_release', 'approved_at', 'notes'];
-    const releaseIdIndex = header.indexOf('release_id');
-    const publicIndex = header.indexOf('public_release');
-    const approvedIndex = header.indexOf('approved_at');
-    const notesIndex = header.indexOf('notes');
-    const approvedAt = new Date().toISOString();
-    let found = false;
-    const nextRows = [header, ...rows.slice(1).filter((row) => row.some(Boolean)).map((row) => {{
-      const next = [...row];
-      while (next.length < header.length) next.push('');
-      if (next[releaseIdIndex] === item.release_id) {{
-        next[publicIndex] = 'true';
-        next[approvedIndex] = next[approvedIndex] || approvedAt;
-        next[notesIndex] = next[notesIndex] || 'Approved from per-app ONNELLAB Ops';
-        found = true;
-      }}
-      return next;
-    }})];
-    if (!found) {{
-      const row = Array(header.length).fill('');
-      row[releaseIdIndex] = item.release_id;
-      row[publicIndex] = 'true';
-      row[approvedIndex] = approvedAt;
-      row[notesIndex] = 'Approved from per-app ONNELLAB Ops';
-      nextRows.push(row);
-    }}
-    await githubRequest('/repos/' + repo + '/contents/' + releasePublicationsPath, {{
-      method: 'PUT',
-      headers: {{'Content-Type': 'application/json'}},
-      body: JSON.stringify({{
-        message: 'Approve public release ' + item.release_id,
-        content: encodeBase64Unicode(csvText(nextRows)),
-        branch,
-        sha: data.sha,
-      }}),
-    }});
-  }}
-
-  function bindReleaseCards() {{
-    document.querySelectorAll('[data-release-approve-index]').forEach((button) => {{
-      const index = Number(button.dataset.releaseApproveIndex);
-      const item = releases[index];
-      const card = button.closest('[data-release-index]');
-      const message = card?.querySelector('[data-release-message]');
-      if (!item) return;
-      button.addEventListener('click', async () => {{
-        try {{
-          button.disabled = true;
-          setMessage(message, label('공개 승인을 저장하는 중이에요…', 'Saving public release approval…'));
-          await approvePublicRelease(item);
-          button.textContent = label('공개 승인 완료', 'Public approved');
-          setMessage(message, label('공개 승인 정보를 저장했어요.', 'Public release approval saved.'));
-        }} catch (error) {{
-          setMessage(message, String(error.message || error), true);
-          button.disabled = false;
-        }}
-      }});
-    }});
-  }}
-
   const syncButton = document.querySelector('[data-review-sync]');
   if (syncButton) syncButton.addEventListener('click', () => dispatchReviewSync(syncButton));
   bindReviewCards();
-  bindReleaseCards();
   updateTokenNotes();
 }})();
 </script>
@@ -1578,7 +1477,7 @@ def _app_detail(
         1
         for item in app_releases
         if str(item.get("release_channel") or "public") == "public"
-        and str(item.get("public_release") or "").lower() != "true"
+        and str(item.get("status") or "") in {"planned", "ready"}
     )
     platform_badges = "".join(
         f"<span>{_esc('iOS' if value == 'ios' else 'Android' if value == 'android' else value)}</span>"
@@ -1744,13 +1643,9 @@ def _app_detail(
   {site_html}
   <div class="subsection-head"><h3 data-ko="정책·운영 경고" data-en="Policy & operations alerts">정책·운영 경고</h3></div>
   <div class="release-list">{alerts_html}</div>
-  <div class="token-note" data-app-token-note hidden>
-    <span data-ko="릴리즈 공개 승인에는 GitHub 연결이 필요해요." data-en="Public release approval requires a GitHub connection.">릴리즈 공개 승인에는 GitHub 연결이 필요해요.</span>
-    <a href="/ops/settings/" data-ko="설정에서 연결" data-en="Connect in Settings">설정에서 연결</a>
-  </div>
   <div class="subsection-head">
     <h3 data-ko="릴리즈 운영" data-en="Release operations">릴리즈 운영</h3>
-    <p data-ko="공개 승인 대기 {pending_releases}건" data-en="{pending_releases} awaiting public approval">공개 승인 대기 {pending_releases}건</p>
+    <p data-ko="자동 공개 대기 {pending_releases}건" data-en="{pending_releases} awaiting automatic publication">자동 공개 대기 {pending_releases}건</p>
   </div>
   <div class="release-list">{release_rows}</div>
   <div class="subsection-head">
@@ -1760,7 +1655,7 @@ def _app_detail(
   <div class="dependency-list">{dependency_rows}</div>
 </section>
 
-{_app_controls_script(app_reviews, app_releases)}
+{_app_controls_script(app_reviews)}
 """
     return _page(title, "apps", body)
 

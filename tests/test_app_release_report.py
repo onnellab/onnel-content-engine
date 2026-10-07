@@ -138,11 +138,11 @@ class AppReleaseReportTest(unittest.TestCase):
 
             self.assertIn("# App Release Status", text)
             self.assertIn("Check Google Play update manually", text)
-            self.assertIn("Add release artifact and checksum", text)
-            self.assertIn("Publication gate", text)
+            self.assertIn("Confirm matching public store version; auto-publish GitHub Release notes", text)
+            self.assertIn("Automatic publication", text)
             self.assertIn("Store notes", text)
             self.assertIn("Improved scrolling.", text)
-            self.assertIn("Waiting for artifact and public approval", text)
+            self.assertIn("Public store confirmed; preparing automatic release", text)
             self.assertIn("local_ahead", text)
             self.assertEqual(output.read_text(encoding="utf-8"), text)
 
@@ -223,8 +223,8 @@ class AppReleaseReportTest(unittest.TestCase):
                 now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
             )
 
-            self.assertIn("Private test or approval pending", text)
-            self.assertIn("Release ready; approve public release or keep private", text)
+            self.assertIn("Waiting for matching public store version", text)
+            self.assertIn("Confirm matching public store version; auto-publish GitHub Release notes", text)
 
     def test_report_marks_notes_only_release_as_waiting_for_notes_approval(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -273,8 +273,8 @@ class AppReleaseReportTest(unittest.TestCase):
                 now=datetime.fromisoformat("2026-07-12T09:00:00+09:00"),
             )
 
-            self.assertIn("Waiting for public notes approval", text)
-            self.assertIn("Release ready; approve public notes-only release", text)
+            self.assertIn("Waiting for matching public store version", text)
+            self.assertIn("Confirm matching public store version; auto-publish GitHub Release notes", text)
 
     def test_report_uses_android_local_metadata_when_local_repo_is_missing(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

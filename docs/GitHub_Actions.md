@@ -181,7 +181,7 @@ and runs:
 scripts/fill_ready_app_releases.py
 ```
 
-It fills artifact metadata only when exactly one matching `*-release.*` artifact exists. For `release_type=notes_only`, it skips artifact lookup and can promote the row after public approval. It promotes a planned row to `ready` only when the release ID is also approved in `data/app_release_publications.csv` with `public_release=true` and the row is `release_channel=public`, so private TestFlight or Play Console test builds do not become posts or GitHub Releases just because a file exists. Public GitHub Release notes must describe the user-visible changes between the current public release and the previous public release, not private-test-only or local build metadata differences.
+It fills artifact metadata only when exactly one matching `*-release.*` artifact exists. A public row is promoted to `ready` automatically **only after the same app, platform, and version is confirmed on the public App Store or Google Play**. For an already distributed store version without a separate binary artifact, the row becomes `notes_only` and publishes release notes without an extra binary upload. Private TestFlight, Play Console internal testing, locally ahead versions, and unverified store checks are never promoted to public publication. The legacy `data/app_release_publications.csv` approval file is historical and is no longer a gate. Automatic publication runs in the daily publishing pipeline and after successful operational status sync. Release notes must not invent unsupported changes.
 
 Before that, local artifacts are copied into `generated/releases/` when available:
 
