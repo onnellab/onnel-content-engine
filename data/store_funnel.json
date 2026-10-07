@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-07T12:56:23+00:00",
+  "windows": [
+    7,
+    30,
+    90
+  ],
+  "metric_semantics": {
+    "ios_impressions": "App Store Discovery and Engagement: Impression",
+    "ios_store_visitors": "App Store Discovery and Engagement: Product page / Page view",
+    "ios_installs": "App Store Downloads: First-time Download",
+    "ios_purchases": "App Store Purchases: Purchases (refunds may be negative)",
+    "android_store_visitors": "Google Play Store listing visitors (legacy Cloud Storage export)",
+    "android_installs": "Google Play Store listing acquisitions (legacy Cloud Storage export)",
+    "android_purchases": "Google Play estimated sales charged orders, net of full refund rows",
+    "combined_visitors": null
+  },
+  "source_status": {
+    "apple": {
+      "status": "not_configured"
+    },
+    "google": {
+      "status": "not_configured"
+    }
+  },
+  "apps": {
+    "quivra": {
+      "app_id": "APP-0001",
+      "app_name": "Quivra",
+      "platforms": {
+        "ios": {
+          "latest_date": "",
+          "windows": {}
+        },
+        "android": {
+          "latest_date": "",
+          "windows": {}
+        }
+      },
+      "combined": {
+        "7": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "30": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "90": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        }
+      }
+    },
+    "tagweaver": {
+      "app_id": "APP-0002",
+      "app_name": "TagWeaver",
+      "platforms": {
+        "ios": {
+          "latest_date": "",
+          "windows": {}
+        },
+        "android": {
+          "latest_date": "",
+          "windows": {}
+        }
+      },
+      "combined": {
+        "7": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "30": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "90": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        }
+      }
+    },
+    "vaultxt": {
+      "app_id": "APP-0003",
+      "app_name": "VaultXT",
+      "platforms": {
+        "ios": {
+          "latest_date": "",
+          "windows": {}
+        },
+        "android": {
+          "latest_date": "",
+          "windows": {}
+        }
+      },
+      "combined": {
+        "7": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "30": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "90": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        }
+      }
+    },
+    "segra": {
+      "app_id": "APP-0004",
+      "app_name": "Segra",
+      "platforms": {
+        "ios": {
+          "latest_date": "",
+          "windows": {}
+        },
+        "android": {
+          "latest_date": "",
+          "windows": {}
+        }
+      },
+      "combined": {
+        "7": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "30": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "90": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        }
+      }
+    },
+    "clipnest": {
+      "app_id": "APP-0005",
+      "app_name": "ClipNest",
+      "platforms": {
+        "ios": {
+          "latest_date": "",
+          "windows": {}
+        },
+        "android": {
+          "latest_date": "",
+          "windows": {}
+        }
+      },
+      "combined": {
+        "7": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "30": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "90": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        }
+      }
+    },
+    "aligna": {
+      "app_id": "APP-0006",
+      "app_name": "Aligna",
+      "platforms": {
+        "ios": {
+          "latest_date": "",
+          "windows": {}
+        },
+        "android": {
+          "latest_date": "",
+          "windows": {}
+        }
+      },
+      "combined": {
+        "7": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "30": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "90": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        }
+      }
+    },
+    "melivra": {
+      "app_id": "APP-0007",
+      "app_name": "Melivra",
+      "platforms": {
+        "ios": {
+          "latest_date": "",
+          "windows": {}
+        },
+        "android": {
+          "latest_date": "",
+          "windows": {}
+        }
+      },
+      "combined": {
+        "7": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "30": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "90": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        }
+      }
+    },
+    "papira": {
+      "app_id": "APP-0008",
+      "app_name": "Papira",
+      "platforms": {
+        "ios": {
+          "latest_date": "",
+          "windows": {}
+        },
+        "android": {
+          "latest_date": "",
+          "windows": {}
+        }
+      },
+      "combined": {
+        "7": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "30": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        },
+        "90": {
+          "store_visitors": null,
+          "impressions": null,
+          "installs": 0,
+          "purchases": 0
+        }
+      }
+    }
+  }
+}

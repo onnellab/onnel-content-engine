@@ -58,6 +58,7 @@ class DashboardIntegrityTest(unittest.TestCase):
         names = [
             'publish-ready-app-releases.yml',
             'sync-app-operational-status.yml',
+            'sync-store-funnel.yml',
             'sync-store-reviews.yml',
             'update-devto-article.yml',
             'verify-manual-publications.yml',
@@ -89,7 +90,19 @@ class DashboardIntegrityTest(unittest.TestCase):
             self.assertIn('python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html', text, path.name)
             self.assertIn('python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/ops/index.html"', text, path.name)
             self.assertIn('git -C "$HOMEPAGE_REPO_PATH" diff --check', text, path.name)
-        self.assertEqual(len(found), 7)
+        self.assertEqual(
+            set(found),
+            {
+                'deploy-ops-dashboard.yml',
+                'publish-ready-app-releases.yml',
+                'reconcile-remote-browser-publications.yml',
+                'sync-app-operational-status.yml',
+                'sync-store-funnel.yml',
+                'sync-store-reviews.yml',
+                'update-devto-article.yml',
+                'verify-manual-publications.yml',
+            },
+        )
 
 
 if __name__ == '__main__':

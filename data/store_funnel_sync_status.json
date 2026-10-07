@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-07T12:56:23+00:00",
+  "status": "waiting",
+  "sources": {
+    "apple": {
+      "status": "not_configured"
+    },
+    "google": {
+      "status": "not_configured"
+    }
+  },
+  "daily_rows": 0,
+  "apple_additions": 0,
+  "google_additions": 0
+}
