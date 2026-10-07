@@ -170,6 +170,28 @@ class OpsSplitPagesTest(unittest.TestCase):
         self.assertIn("Admin 역할 API 키", ko)
         self.assertIn("Admin-role API key", en)
 
+    def test_apple_snapshot_wait_message_mentions_historical_data(self):
+        ko, en = _funnel_source_message(
+            {
+                "source_status": {
+                    "apple": {
+                        "status": "waiting",
+                        "apps": {
+                            "tagweaver": {
+                                "status": "waiting_for_snapshot",
+                            }
+                        },
+                    }
+                }
+            },
+            "apple",
+            "tagweaver",
+        )
+        self.assertIn("과거 데이터 스냅샷", ko)
+        self.assertIn("지난달", ko)
+        self.assertIn("historical snapshot", en)
+        self.assertIn("last month", en)
+
 
 if __name__ == "__main__":
     unittest.main()

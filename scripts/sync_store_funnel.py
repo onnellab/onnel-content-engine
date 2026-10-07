@@ -91,12 +91,17 @@ def write_daily(path: Path, rows: Iterable[dict[str, object]]) -> None:
 
 def read_state(path: Path) -> dict[str, object]:
     if not path.exists():
-        return {"schema_version": 1, "apple_processed_instances": []}
+        return {
+            "schema_version": 1,
+            "apple_processed_instances": [],
+            "apple_snapshot_requests": {},
+        }
     payload = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise FunnelSyncError("store funnel state must be a JSON object")
     payload.setdefault("schema_version", 1)
     payload.setdefault("apple_processed_instances", [])
+    payload.setdefault("apple_snapshot_requests", {})
     return payload
 
 
@@ -169,6 +174,9 @@ def aggregate_apple_rows(
     rows: list[dict[str, str]],
     app: dict[str, str],
     checked_at: str,
+    *,
+    source_prefix: str = "apple",
+    processing_date: str = "",
 ) -> list[dict[str, object]]:
     totals: dict[tuple[str, str], int] = defaultdict(int)
     for row in rows:
@@ -189,51 +197,107 @@ def aggregate_apple_rows(
                 totals[(metric_date, "installs")] += safe_int(row.get("Counts", "0"))
         elif report_kind == "purchases":
             totals[(metric_date, "purchases")] += safe_int(row.get("Purchases", "0"))
-    return [
-        metric_row(app, "ios", metric_date, metric, value, f"apple_{report_kind}", checked_at)
-        for (metric_date, metric), value in totals.items()
-    ]
+    result: list[dict[str, object]] = []
+    for (metric_date, metric), value in totals.items():
+        item = metric_row(
+            app,
+            "ios",
+            metric_date,
+            metric,
+            value,
+            f"{source_prefix}_{report_kind}",
+            checked_at,
+        )
+        item["_processing_date"] = processing_date
+        result.append(item)
+    return result
 
 
-def apple_request_body(app_id: str) -> dict[str, object]:
+APPLE_ACCESS_TYPES = {"ONGOING", "ONE_TIME_SNAPSHOT"}
+
+
+def apple_request_body(app_id: str, access_type: str = "ONGOING") -> dict[str, object]:
+    if access_type not in APPLE_ACCESS_TYPES:
+        raise ValueError(f"unsupported Apple analytics access type: {access_type}")
     return {
         "data": {
             "type": "analyticsReportRequests",
-            "attributes": {"accessType": "ONGOING"},
+            "attributes": {"accessType": access_type},
             "relationships": {"app": {"data": {"type": "apps", "id": app_id}}},
         }
     }
 
 
-def apple_ongoing_request(app_id: str, token: str) -> tuple[str, str]:
+def _apple_existing_report_request(
+    app_id: str,
+    token: str,
+    access_type: str,
+) -> tuple[str, str]:
+    if access_type not in APPLE_ACCESS_TYPES:
+        raise ValueError(f"unsupported Apple analytics access type: {access_type}")
+    query = urllib.parse.urlencode(
+        {"filter[accessType]": access_type, "limit": "200"}
+    )
     url = (
-        f"https://api.appstoreconnect.apple.com/v1/apps/{urllib.parse.quote(app_id)}/analyticsReportRequests"
-        "?filter%5BaccessType%5D=ONGOING&limit=200"
+        f"https://api.appstoreconnect.apple.com/v1/apps/"
+        f"{urllib.parse.quote(app_id)}/analyticsReportRequests?{query}"
     )
     payload = json_request(url, token)
     requests = payload.get("data", [])
-    if isinstance(requests, list):
-        active = [
-            item for item in requests
-            if isinstance(item, dict)
-            and not bool((item.get("attributes") or {}).get("stoppedDueToInactivity"))
+    if not isinstance(requests, list):
+        return "", ""
+    candidates = [
+        item for item in requests
+        if isinstance(item, dict) and item.get("id")
+    ]
+    if access_type == "ONGOING":
+        candidates = [
+            item for item in candidates
+            if not bool((item.get("attributes") or {}).get("stoppedDueToInactivity"))
         ]
-        if active:
-            return str(active[0].get("id", "")), "active"
+    if not candidates:
+        return "", ""
+    return str(candidates[0].get("id", "")), (
+        "active" if access_type == "ONGOING" else "existing"
+    )
+
+
+def apple_report_request(
+    app_id: str,
+    token: str,
+    access_type: str = "ONGOING",
+) -> tuple[str, str]:
+    request_id, status = _apple_existing_report_request(app_id, token, access_type)
+    if request_id:
+        return request_id, status
     try:
         created = json_request(
             "https://api.appstoreconnect.apple.com/v1/analyticsReportRequests",
             token,
             method="POST",
-            body=apple_request_body(app_id),
+            body=apple_request_body(app_id, access_type),
         )
     except urllib.error.HTTPError as error:
+        if error.code == 409:
+            request_id, status = _apple_existing_report_request(
+                app_id, token, access_type
+            )
+            if request_id:
+                return request_id, status
         if error.code in {403, 409}:
             return "", f"setup_http_{error.code}"
         raise
     data = created.get("data", {})
     request_id = str(data.get("id", "") if isinstance(data, dict) else "")
     return request_id, "created" if request_id else "setup_required"
+
+
+def apple_ongoing_request(app_id: str, token: str) -> tuple[str, str]:
+    return apple_report_request(app_id, token, "ONGOING")
+
+
+def apple_snapshot_request(app_id: str, token: str) -> tuple[str, str]:
+    return apple_report_request(app_id, token, "ONE_TIME_SNAPSHOT")
 
 
 def apple_reports(request_id: str, token: str) -> dict[str, str]:
@@ -320,9 +384,21 @@ def sync_apple(
         str(value) for value in state.get("apple_processed_instances", [])
         if str(value)
     }
-    additions: list[dict[str, object]] = []
+    snapshot_requests = state.get("apple_snapshot_requests", {})
+    if not isinstance(snapshot_requests, dict):
+        snapshot_requests = {}
+    latest_additions: dict[
+        tuple[str, str, str, str], tuple[str, int, dict[str, object]]
+    ] = {}
     app_status: dict[str, object] = {}
     processed_now: set[str] = set()
+
+    def keep_latest(row: dict[str, object], priority: int) -> None:
+        key = daily_key(row)
+        processing_date = str(row.get("_processing_date", ""))
+        current = latest_additions.get(key)
+        if current is None or (processing_date, priority) >= (current[0], current[1]):
+            latest_additions[key] = (processing_date, priority, dict(row))
 
     for store in stores:
         if store.get("platform") != "ios" or not store.get("store_app_id"):
@@ -332,59 +408,151 @@ def sync_apple(
         if not app:
             continue
         app_id = store["store_app_id"]
-        try:
-            request_id, request_status = apple_ongoing_request(app_id, token)
-        except (urllib.error.HTTPError, FunnelSyncError, ValueError) as error:
-            app_status[slug] = {"status": "error", "message": str(error)}
-            continue
-        if not request_id:
-            app_status[slug] = {
-                "status": request_status,
-                "message": "Apple ongoing analytics report request is not ready.",
-            }
-            continue
-
-        try:
-            reports = apple_reports(request_id, token)
-        except (urllib.error.HTTPError, FunnelSyncError) as error:
-            app_status[slug] = {"status": "error", "message": str(error)}
-            continue
-        if not reports:
-            app_status[slug] = {
-                "status": "waiting_for_first_report",
-                "request_id": request_id,
-                "message": "Apple reports can take 24-48 hours after the initial request.",
-            }
-            continue
-
-        collected_kinds: list[str] = []
+        request_details: dict[str, object] = {}
         errors: list[str] = []
-        for kind, report_id in reports.items():
+        collected: set[str] = set()
+        has_reports = False
+
+        for label, access_type, priority in (
+            ("snapshot", "ONE_TIME_SNAPSHOT", 1),
+            ("ongoing", "ONGOING", 0),
+        ):
             try:
-                instances = apple_daily_instances(report_id, token)
-                if not instances:
-                    continue
-                unseen = [item for item in instances if str(item.get("id")) not in processed]
-                if not processed and len(unseen) > initial_backfill_instances:
-                    unseen = unseen[-initial_backfill_instances:]
-                for instance in unseen:
-                    instance_id = str(instance.get("id"))
-                    source_rows = apple_instance_rows(instance_id, token)
-                    additions.extend(aggregate_apple_rows(kind, source_rows, app, checked_at))
-                    processed_now.add(instance_id)
-                collected_kinds.append(kind)
+                request_id, request_status = apple_report_request(
+                    app_id, token, access_type
+                )
             except (urllib.error.HTTPError, FunnelSyncError, ValueError) as error:
-                errors.append(f"{kind}: {error}")
+                errors.append(f"{label}: {error}")
+                request_details[label] = {
+                    "status": "error",
+                    "message": str(error),
+                }
+                continue
+
+            if label == "snapshot" and request_id:
+                snapshot_requests[slug] = request_id
+
+            if not request_id:
+                request_details[label] = {
+                    "status": request_status,
+                    "message": (
+                        "Apple historical snapshot request is not ready."
+                        if label == "snapshot"
+                        else "Apple ongoing analytics report request is not ready."
+                    ),
+                }
+                if request_status.startswith("setup_http_"):
+                    errors.append(f"{label}: {request_status}")
+                continue
+
+            detail: dict[str, object] = {
+                "status": request_status,
+                "request_id": request_id,
+            }
+            request_details[label] = detail
+            try:
+                reports = apple_reports(request_id, token)
+            except (urllib.error.HTTPError, FunnelSyncError) as error:
+                detail["status"] = "error"
+                detail["message"] = str(error)
+                errors.append(f"{label}: {error}")
+                continue
+
+            if not reports:
+                detail["status"] = "waiting_for_report"
+                detail["message"] = (
+                    "Apple historical snapshot is still being generated."
+                    if label == "snapshot"
+                    else "Apple ongoing reports are still being generated."
+                )
+                continue
+
+            has_reports = True
+            request_kinds: list[str] = []
+            for kind, report_id in reports.items():
+                try:
+                    instances = apple_daily_instances(report_id, token)
+                    if not instances:
+                        continue
+                    unseen = [
+                        item for item in instances
+                        if str(item.get("id")) not in processed
+                    ]
+                    if (
+                        label == "ongoing"
+                        and not processed
+                        and len(unseen) > initial_backfill_instances
+                    ):
+                        unseen = unseen[-initial_backfill_instances:]
+                    for instance in unseen:
+                        instance_id = str(instance.get("id"))
+                        attributes = instance.get("attributes") or {}
+                        processing_date = (
+                            str(attributes.get("processingDate", ""))
+                            if isinstance(attributes, dict)
+                            else ""
+                        )
+                        source_rows = apple_instance_rows(instance_id, token)
+                        for row in aggregate_apple_rows(
+                            kind,
+                            source_rows,
+                            app,
+                            checked_at,
+                            source_prefix=f"apple_{label}",
+                            processing_date=processing_date,
+                        ):
+                            keep_latest(row, priority)
+                        processed_now.add(instance_id)
+                    request_kinds.append(kind)
+                    collected.add(f"{label}:{kind}")
+                except (urllib.error.HTTPError, FunnelSyncError, ValueError) as error:
+                    errors.append(f"{label}:{kind}: {error}")
+            detail["reports"] = sorted(request_kinds)
+
+        snapshot_detail = request_details.get("snapshot", {})
+        ongoing_detail = request_details.get("ongoing", {})
+        snapshot_waiting = (
+            isinstance(snapshot_detail, dict)
+            and snapshot_detail.get("status") == "waiting_for_report"
+        )
+        ongoing_waiting = (
+            isinstance(ongoing_detail, dict)
+            and ongoing_detail.get("status") == "waiting_for_report"
+        )
+        if errors and not has_reports:
+            status = "error"
+        elif errors:
+            status = "partial"
+        elif has_reports:
+            status = "ok"
+        elif snapshot_waiting:
+            status = "waiting_for_snapshot"
+        elif ongoing_waiting:
+            status = "waiting_for_first_report"
+        else:
+            status = "waiting_for_first_report"
+
         app_status[slug] = {
-            "status": "partial" if errors else "ok",
-            "request_id": request_id,
-            "reports": sorted(collected_kinds),
+            "status": status,
+            "request_id": (
+                ongoing_detail.get("request_id", "")
+                if isinstance(ongoing_detail, dict)
+                else ""
+            ),
+            "snapshot_request_id": (
+                snapshot_detail.get("request_id", "")
+                if isinstance(snapshot_detail, dict)
+                else ""
+            ),
+            "requests": request_details,
+            "reports": sorted(collected),
             "errors": errors,
         }
 
     state["apple_processed_instances"] = sorted(processed | processed_now)[-10000:]
+    state["apple_snapshot_requests"] = snapshot_requests
+    additions = [item[2] for item in latest_additions.values()]
     return additions, app_status
-
 
 def gcs_list_objects(bucket: str, prefix: str, token: str) -> list[dict[str, object]]:
     objects: list[dict[str, object]] = []
@@ -585,15 +753,14 @@ def merge_daily_metrics(
         daily_key(row): dict(row) for row in existing
     }
 
-    # Apple analytics instances are "new portions" of report content. Process each
-    # instance once and add its counts, so late-arriving data and negative
-    # correction rows remain meaningful without double-processing an instance.
+    # Apple says a newer processingDate overwrites the earlier instance for
+    # the same Date. The collector has already reduced each Apple metric/date
+    # to the newest unseen instance, so replace rather than add to avoid double
+    # counting corrections or ONE_TIME_SNAPSHOT backfill data.
     for row in apple_additions:
-        key = daily_key(row)
-        if key in merged:
-            row = dict(row)
-            row["value"] = safe_int(merged[key].get("value")) + safe_int(row.get("value"))
-        merged[key] = dict(row)
+        clean = dict(row)
+        clean.pop("_processing_date", None)
+        merged[daily_key(clean)] = clean
 
     google_months = recent_months(4)
     performance_ok = (
@@ -802,7 +969,13 @@ def sync_funnel(
         if apple_states and all(value == "error" for value in apple_states):
             apple_overall = "error"
         elif apple_states and all(
-            value in {"waiting_for_first_report", "setup_required", "setup_http_403", "setup_http_409"}
+            value in {
+                "waiting_for_snapshot",
+                "waiting_for_first_report",
+                "setup_required",
+                "setup_http_403",
+                "setup_http_409",
+            }
             for value in apple_states
         ):
             apple_overall = "waiting"

@@ -499,6 +499,11 @@ def _funnel_source_message(
             app_payload = apps_payload.get(slug, {})
             if isinstance(app_payload, Mapping):
                 app_status = str(app_payload.get("status") or "")
+                if app_status == "waiting_for_snapshot":
+                    return (
+                        "Apple 과거 데이터 스냅샷을 생성하는 중이에요. 지난달을 포함한 사용 가능한 과거 데이터가 준비되면 자동으로 채워져요.",
+                        "Apple is generating the historical snapshot. Available past data, including last month, will populate automatically when ready.",
+                    )
                 if app_status == "waiting_for_first_report":
                     return (
                         "Apple 첫 분석 보고서를 기다리는 중이에요. 최초 연결 후 보통 24~48시간이 걸려요.",

@@ -8,17 +8,21 @@ import unittest
 import zipfile
 from datetime import date
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from sync_store_funnel import (
     aggregate_apple_rows,
+    apple_report_request,
+    apple_request_body,
     build_summary,
     merge_daily_metrics,
     parse_google_sales_zip,
     parse_google_store_performance,
     recent_months,
+    sync_apple,
 )
 
 
@@ -55,6 +59,164 @@ class StoreFunnelSyncTest(unittest.TestCase):
         self.assertEqual(values["store_visitors"], 30)
         self.assertEqual(values["installs"], 8)
         self.assertEqual(values["purchases"], 2)
+
+    def test_apple_snapshot_request_body_uses_one_time_snapshot(self):
+        body = apple_request_body("123456789", "ONE_TIME_SNAPSHOT")
+        self.assertEqual(
+            body["data"]["attributes"]["accessType"],
+            "ONE_TIME_SNAPSHOT",
+        )
+
+    def test_apple_snapshot_request_is_created_when_missing(self):
+        with patch(
+            "sync_store_funnel.json_request",
+            side_effect=[
+                {"data": []},
+                {"data": {"id": "snapshot-request-id"}},
+            ],
+        ) as request:
+            request_id, status = apple_report_request(
+                "123456789", "token", "ONE_TIME_SNAPSHOT"
+            )
+        self.assertEqual(request_id, "snapshot-request-id")
+        self.assertEqual(status, "created")
+        self.assertEqual(
+            request.call_args_list[1].kwargs["body"]["data"]["attributes"]["accessType"],
+            "ONE_TIME_SNAPSHOT",
+        )
+
+    def test_apple_newer_instance_replaces_existing_metric_instead_of_adding(self):
+        existing = [
+            {
+                "date": "2026-09-15",
+                "app_slug": "tagweaver",
+                "platform": "ios",
+                "metric": "installs",
+                "value": "5",
+                "source": "apple_ongoing_downloads",
+            }
+        ]
+        additions = [
+            {
+                "date": "2026-09-15",
+                "app_slug": "tagweaver",
+                "platform": "ios",
+                "metric": "installs",
+                "value": 7,
+                "source": "apple_snapshot_downloads",
+                "checked_at": "now",
+                "_processing_date": "2026-10-08",
+            }
+        ]
+        merged = merge_daily_metrics(
+            existing,
+            additions,
+            [],
+            {"status": "not_configured"},
+            "now",
+        )
+        row = next(item for item in merged if item["platform"] == "ios")
+        self.assertEqual(int(row["value"]), 7)
+        self.assertNotIn("_processing_date", row)
+
+    def test_sync_apple_requests_snapshot_and_ongoing_when_reports_are_pending(self):
+        stores = [
+            {
+                "platform": "ios",
+                "store_app_id": "123456789",
+                "app_slug": "tagweaver",
+            }
+        ]
+        state = {"schema_version": 1, "apple_processed_instances": []}
+        with (
+            patch(
+                "sync_store_funnel.apple_report_request",
+                side_effect=[
+                    ("snapshot-id", "created"),
+                    ("ongoing-id", "active"),
+                ],
+            ) as request,
+            patch("sync_store_funnel.apple_reports", return_value={}),
+        ):
+            additions, status = sync_apple(
+                [APP], stores, "token", state, "now"
+            )
+        self.assertEqual(additions, [])
+        self.assertEqual(status["tagweaver"]["status"], "waiting_for_snapshot")
+        self.assertEqual(
+            status["tagweaver"]["snapshot_request_id"], "snapshot-id"
+        )
+        self.assertEqual(
+            [call.args[2] for call in request.call_args_list],
+            ["ONE_TIME_SNAPSHOT", "ONGOING"],
+        )
+        self.assertEqual(
+            state["apple_snapshot_requests"]["tagweaver"],
+            "snapshot-id",
+        )
+
+    def test_sync_apple_keeps_latest_processing_date_across_snapshot_and_ongoing(self):
+        stores = [
+            {
+                "platform": "ios",
+                "store_app_id": "123456789",
+                "app_slug": "tagweaver",
+            }
+        ]
+        state = {"schema_version": 1, "apple_processed_instances": []}
+
+        def reports(request_id: str, _token: str):
+            return {"downloads": f"{request_id}-downloads"}
+
+        def instances(report_id: str, _token: str):
+            if report_id.startswith("snapshot"):
+                return [
+                    {
+                        "id": "snapshot-instance",
+                        "attributes": {"processingDate": "2026-10-07"},
+                    }
+                ]
+            return [
+                {
+                    "id": "ongoing-instance",
+                    "attributes": {"processingDate": "2026-10-08"},
+                }
+            ]
+
+        def rows(instance_id: str, _token: str):
+            count = "5" if instance_id == "snapshot-instance" else "7"
+            return [
+                {
+                    "Date": "2026-09-15",
+                    "Download Type": "First-time Download",
+                    "Counts": count,
+                }
+            ]
+
+        with (
+            patch(
+                "sync_store_funnel.apple_report_request",
+                side_effect=[
+                    ("snapshot-id", "existing"),
+                    ("ongoing-id", "active"),
+                ],
+            ),
+            patch("sync_store_funnel.apple_reports", side_effect=reports),
+            patch("sync_store_funnel.apple_daily_instances", side_effect=instances),
+            patch("sync_store_funnel.apple_instance_rows", side_effect=rows),
+        ):
+            additions, status = sync_apple(
+                [APP], stores, "token", state, "now"
+            )
+
+        self.assertEqual(status["tagweaver"]["status"], "ok")
+        installs = [
+            row for row in additions
+            if row["date"] == "2026-09-15" and row["metric"] == "installs"
+        ]
+        self.assertEqual(len(installs), 1)
+        self.assertEqual(installs[0]["value"], 7)
+        self.assertEqual(installs[0]["source"], "apple_ongoing_downloads")
 
     def test_google_store_performance_country_rows_aggregate_without_double_dimensions(self):
         raw = (
