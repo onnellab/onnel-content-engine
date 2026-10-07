@@ -155,6 +155,39 @@ class StoreFunnelSyncTest(unittest.TestCase):
             "snapshot-id",
         )
 
+    def test_sync_apple_waits_when_report_definitions_have_no_instances(self):
+        stores = [
+            {
+                "platform": "ios",
+                "store_app_id": "123456789",
+                "app_slug": "tagweaver",
+            }
+        ]
+        state = {"schema_version": 1, "apple_processed_instances": []}
+        with (
+            patch(
+                "sync_store_funnel.apple_report_request",
+                side_effect=[
+                    ("snapshot-id", "existing"),
+                    ("ongoing-id", "active"),
+                ],
+            ),
+            patch(
+                "sync_store_funnel.apple_reports",
+                return_value={"downloads": "report-id"},
+            ),
+            patch("sync_store_funnel.apple_daily_instances", return_value=[]),
+        ):
+            additions, status = sync_apple(
+                [APP], stores, "token", state, "now"
+            )
+        self.assertEqual(additions, [])
+        self.assertEqual(status["tagweaver"]["status"], "waiting_for_snapshot")
+        self.assertEqual(
+            status["tagweaver"]["requests"]["snapshot"]["status"],
+            "waiting_for_report",
+        )
+
     def test_sync_apple_keeps_latest_processing_date_across_snapshot_and_ongoing(self):
         stores = [
             {

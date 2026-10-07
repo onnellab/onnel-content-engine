@@ -467,13 +467,13 @@ def sync_apple(
                 )
                 continue
 
-            has_reports = True
             request_kinds: list[str] = []
             for kind, report_id in reports.items():
                 try:
                     instances = apple_daily_instances(report_id, token)
                     if not instances:
                         continue
+                    has_reports = True
                     unseen = [
                         item for item in instances
                         if str(item.get("id")) not in processed
@@ -508,6 +508,13 @@ def sync_apple(
                 except (urllib.error.HTTPError, FunnelSyncError, ValueError) as error:
                     errors.append(f"{label}:{kind}: {error}")
             detail["reports"] = sorted(request_kinds)
+            if not request_kinds:
+                detail["status"] = "waiting_for_report"
+                detail["message"] = (
+                    "Apple historical snapshot is still being generated."
+                    if label == "snapshot"
+                    else "Apple ongoing reports are still being generated."
+                )
 
         snapshot_detail = request_details.get("snapshot", {})
         ongoing_detail = request_details.get("ongoing", {})
