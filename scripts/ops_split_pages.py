@@ -113,7 +113,9 @@ a{color:inherit}
 .funnel-window[hidden]{display:none}.funnel-platform-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.funnel-card{padding:15px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.funnel-card h3{margin:0 0 12px;font-size:15px}.funnel-chain{display:flex;align-items:stretch;gap:7px}.funnel-step{flex:1;min-width:0;padding:10px;border:1px solid #e8e0d7;border-radius:8px;background:#fff}.funnel-step span{display:block;color:#827d72;font-size:10px;line-height:1.35}.funnel-step b{display:block;margin-top:5px;font-size:20px;line-height:1}.funnel-arrow{display:flex;align-items:center;color:#aaa196;font-size:15px}.funnel-purchase{margin-top:10px;padding-top:10px;border-top:1px solid #ece4dc;color:#6f695f;font-size:12px}.funnel-purchase b{color:#3e3933;font-size:15px}.funnel-freshness{margin-top:8px;color:#8a8379;font-size:10px}.funnel-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.funnel-summary .detail-stat{background:var(--lilac-soft)}.funnel-note{margin-top:12px;color:#746f69;font-size:11px;line-height:1.55}
 .diagnosis-panel{margin-top:14px;padding:15px;border:1px solid #dfd7e9;border-radius:10px;background:linear-gradient(135deg,#fbf9ff,#fffdf9)}.diagnosis-panel h3{margin:0 0 10px;font-size:15px}.diagnosis-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.diagnosis-card{padding:12px;border:1px solid #e8e0d7;border-radius:9px;background:#fff}.diagnosis-card[data-kind="good"]{background:#f1f8f4;border-color:#cfe0d5}.diagnosis-card[data-kind="warn"]{background:#fff8ef;border-color:#ead7bd}.diagnosis-card[data-kind="low"]{background:#fff2f0;border-color:#ebc8c3}.diagnosis-card[data-kind="wait"]{background:#f7f5f1}.diagnosis-card h4{margin:0 0 6px;font-size:13px}.diagnosis-card p{margin:5px 0 0;color:#686159;font-size:12px;line-height:1.55}.rate-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.rate-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border:1px solid #e5ddd4;border-radius:999px;background:#fffdf9;color:#696158;font-size:10px}.diagnosis-note{margin-top:10px;color:#8b8379;font-size:10px;line-height:1.5}
 .subsection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:18px 0 10px}.subsection-head h3{margin:0;font-size:15px}.subsection-head p{margin:0;color:#827d72;font-size:11px}.ops-actions{display:flex;gap:7px;flex-wrap:wrap}.ops-button{min-height:34px;border:1px solid #cfc5b7;border-radius:8px;padding:7px 10px;background:#fff;color:#514b44;font:inherit;font-size:12px;font-weight:750;cursor:pointer}.ops-button.primary{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}.ops-button:disabled{opacity:.55;cursor:not-allowed}.ops-message{min-height:18px;margin-top:8px;color:#6f695f;font-size:11px;line-height:1.5}.ops-message.is-error{color:#9c3f36}.token-note{margin:10px 0;padding:10px 12px;border:1px solid #ded6ca;border-radius:8px;background:#fffaf2;color:#6f695f;font-size:11px;line-height:1.5}.token-note[hidden]{display:none}.token-note a{font-weight:750}
-.review-list,.release-list,.dependency-list,.pricing-list{display:grid;gap:10px}.review-card,.release-card,.dependency-card,.pricing-card{padding:14px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.review-head,.release-head,.pricing-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.review-head strong,.release-head strong,.pricing-head strong{font-size:14px}.review-rating,.mini-badge{display:inline-flex;align-items:center;min-height:24px;padding:3px 7px;border:1px solid #ddd4ca;border-radius:999px;background:#fff;color:#655e55;font-size:10px;font-weight:750}.mini-badge.good{border-color:#c7ddd0;background:#eef7f2;color:#49675a}.mini-badge.warn{border-color:#e4d1b7;background:#fff7eb;color:#795d37}.mini-badge.bad{border-color:#e4c4bf;background:#fff1ef;color:#844d47}.review-meta,.release-meta,.pricing-meta,.dependency-meta{margin-top:5px;color:#827d72;font-size:10px;line-height:1.5}.review-body{margin:10px 0 0;white-space:pre-wrap;font-size:13px;line-height:1.6}.review-translation{margin-top:10px;padding:10px;border:1px solid #e5ddd4;border-radius:8px;background:#fff}.review-translation b{display:block;margin-bottom:5px;font-size:11px}.review-translation p{margin:0;font-size:12px;line-height:1.55}.review-card label{display:grid;gap:5px;margin-top:10px;color:#716a61;font-size:11px;font-weight:700}.review-card textarea{width:100%;min-height:92px;border:1px solid #dcd3c8;border-radius:8px;padding:9px;background:#fff;color:#302c28;font:inherit;font-size:12px;line-height:1.5;resize:vertical}.review-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.review-card details{margin-top:10px}.review-card details summary{cursor:pointer;color:#655e55;font-size:11px;font-weight:750}.triage-box{margin-top:7px;padding:9px;border:1px solid #e4dced;border-radius:8px;background:#faf7ff;color:#675d70;font-size:11px;line-height:1.55;white-space:pre-wrap}.release-card p,.pricing-card p,.dependency-card p{margin:7px 0 0;color:#696158;font-size:11px;line-height:1.55}.release-card a,.pricing-card a{font-weight:700}.economics-callout{margin-top:9px;padding:9px;border:1px solid #c8dfd1;border-radius:8px;background:#eff8f3;color:#4d6758;font-size:11px;line-height:1.5}.economics-callout.loss{border-color:#e5c5c0;background:#fff1ef;color:#824e48}.site-freshness{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.review-list,.release-list,.dependency-list,.pricing-list{display:grid;gap:10px}.pricing-product-card{padding:14px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.pricing-product-card h4{margin:0 0 10px;font-size:15px}.pricing-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.pricing-option{display:grid;gap:5px;padding:11px;border:1px solid #e9e0d6;border-radius:8px;background:#fff}.pricing-option-head{display:flex;align-items:center;justify-content:space-between;gap:5px;flex-wrap:wrap}.pricing-option-head>b{font-size:13px}.pricing-option>strong{font-size:18px}.price-option-profit{color:#5f7465;font-size:12px}.price-evidence{margin-top:10px}.price-evidence>summary{cursor:pointer;color:#655f58;font-size:12px;padding:7px 0}.price-evidence>.pricing-list{margin-top:8px}.price-evidence .pricing-card{padding:10px}.price-evidence .pricing-card>p{font-size:12px}.review-card[hidden]{display:none!important}.review-filters{display:flex;flex-wrap:wrap;gap:7px;margin:13px 0}.review-filters button{min-height:40px;border:1px solid #dfd6ca;border-radius:999px;background:#fff;padding:8px 12px;color:#675f56;font:inherit;font-size:13px;font-weight:730;cursor:pointer}.review-filters button[aria-pressed="true"]{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}.review-filter-empty{padding:16px;border:1px dashed #d9d0c6;border-radius:9px;background:#fffdf9;font-size:13px;line-height:1.6}.review-filter-empty[hidden]{display:none!important}.review-filter-empty button{display:inline-block;min-height:38px;margin-top:10px;border:1px solid #b9cbe0;background:var(--blue-soft);border-radius:8px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer}.review-completed{padding:0!important}.review-completed-summary{display:grid;gap:7px;padding:12px 14px;cursor:pointer;list-style:none}.review-completed-summary::-webkit-details-marker{display:none}.review-completed-summary::after{content:"펼치기";color:#827d72;font-size:11px}.review-completed[open]>.review-completed-summary::after{content:"접기"}.review-completed-head{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.review-excerpt{color:#655f58;font-size:13px;line-height:1.5;overflow-wrap:anywhere}.review-expanded-content{padding:0 14px 14px;border-top:1px solid #e8e0d7}.review-card,.release-card,.dependency-card,.pricing-card{padding:14px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.review-head,.release-head,.pricing-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.review-head strong,.release-head strong,.pricing-head strong{font-size:14px}.review-rating,.mini-badge{display:inline-flex;align-items:center;min-height:24px;padding:3px 7px;border:1px solid #ddd4ca;border-radius:999px;background:#fff;color:#655e55;font-size:10px;font-weight:750}.mini-badge.good{border-color:#c7ddd0;background:#eef7f2;color:#49675a}.mini-badge.warn{border-color:#e4d1b7;background:#fff7eb;color:#795d37}.mini-badge.bad{border-color:#e4c4bf;background:#fff1ef;color:#844d47}.review-meta,.release-meta,.pricing-meta,.dependency-meta{margin-top:5px;color:#827d72;font-size:10px;line-height:1.5}.review-body{margin:10px 0 0;white-space:pre-wrap;font-size:13px;line-height:1.6}.review-translation{margin-top:10px;padding:10px;border:1px solid #e5ddd4;border-radius:8px;background:#fff}.review-translation b{display:block;margin-bottom:5px;font-size:11px}.review-translation p{margin:0;font-size:12px;line-height:1.55}.review-card label{display:grid;gap:5px;margin-top:10px;color:#716a61;font-size:11px;font-weight:700}.review-card textarea{width:100%;min-height:92px;border:1px solid #dcd3c8;border-radius:8px;padding:9px;background:#fff;color:#302c28;font:inherit;font-size:12px;line-height:1.5;resize:vertical}.review-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.review-card details{margin-top:10px}.review-card details summary{cursor:pointer;color:#655e55;font-size:11px;font-weight:750}.triage-box{margin-top:7px;padding:9px;border:1px solid #e4dced;border-radius:8px;background:#faf7ff;color:#675d70;font-size:11px;line-height:1.55;white-space:pre-wrap}.release-card p,.pricing-card p,.dependency-card p{margin:7px 0 0;color:#696158;font-size:11px;line-height:1.55}.release-card a,.pricing-card a{font-weight:700}.economics-callout{margin-top:9px;padding:9px;border:1px solid #c8dfd1;border-radius:8px;background:#eff8f3;color:#4d6758;font-size:11px;line-height:1.5}.economics-callout.loss{border-color:#e5c5c0;background:#fff1ef;color:#824e48}.site-freshness{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dependency-details{margin-top:10px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.dependency-details>summary{padding:12px 14px;color:#58544d;font-size:13px;font-weight:730;cursor:pointer}.dependency-details>.dependency-list{padding:0 10px 10px}.dependency-details .dependency-card{background:#fff}
+@media(max-width:440px){.pricing-options{grid-template-columns:1fr}.review-completed-summary{padding:12px}}
 @media(max-width:680px){.ops-wrap{padding:18px 15px 42px}.ops-route-grid,.app-grid{grid-template-columns:1fr}.app-grid{gap:10px}.app-card{grid-template-columns:46px minmax(0,1fr);gap:13px;min-height:0;padding:15px}.app-card>img{width:44px;height:44px;border-radius:11px}.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-hero{grid-template-columns:54px minmax(0,1fr);padding:17px}.detail-hero img{width:52px;height:52px;border-radius:12px}.ops-head h1{font-size:29px}.funnel-platform-grid,.diagnosis-grid,.site-freshness{grid-template-columns:1fr}.funnel-chain{gap:5px}.funnel-step{padding:8px}.funnel-step b{font-size:17px}.review-head,.release-head,.pricing-head{align-items:flex-start}.review-card,.release-card,.dependency-card,.pricing-card{padding:12px}}
 """
 
@@ -607,6 +609,58 @@ def _bilingual_price_row(item: Mapping[str, object]) -> str:
         "</article>"
     )
 
+
+
+def _price_product_group(items: Sequence[Mapping[str, object]]) -> str:
+    if not items:
+        return ""
+    name = str(items[0].get("product_name") or "Product")
+    kind = str(items[0].get("product_type") or "")
+    options: list[str] = []
+    for item in sorted(items, key=lambda row: 0 if row.get("platform") == "ios" else 1):
+        platform = "App Store" if item.get("platform") == "ios" else "Play Store" if item.get("platform") == "android" else "Shared"
+        price = str(item.get("price") or "—")
+        currency = str(item.get("currency") or "")
+        if currency and not price.upper().endswith(currency.upper()):
+            price += f" {currency}"
+        verified = item.get("price_verification") == "live_store"
+        badge_ko = "스토어 확인" if verified else "추가 확인"
+        badge_en = "Verified" if verified else "Check needed"
+        margin = ""
+        if item.get("ai_margin_status"):
+            profit = str(item.get("ai_profit_usd") if item.get("ai_profit_usd") not in (None, "") else "—")
+            margin = (
+                '<span class="price-option-profit" '
+                'data-ko="예상 이익 USD ' + _esc(profit) + '" '
+                'data-en="Estimated profit USD ' + _esc(profit) + '">'
+                '예상 이익 USD ' + _esc(profit) + "</span>"
+            )
+        options.append(
+            '<div class="pricing-option">'
+            f'<div class="pricing-option-head"><b>{_esc(platform)}</b>'
+            f'<span class="mini-badge {"good" if verified else "warn"}" '
+            f'data-ko="{badge_ko}" data-en="{badge_en}">{badge_ko}</span></div>'
+            f'<strong>{_esc(price)}</strong>{margin}</div>'
+        )
+    details = "".join(_bilingual_price_row(item) for item in items)
+    return (
+        '<article class="pricing-product-card">'
+        f'<h4>{_esc(name)}</h4>'
+        f'<div class="pricing-options">{"".join(options)}</div>'
+        '<details class="price-evidence">'
+        '<summary data-ko="가격 출처·원가 검증 상세" data-en="Price source & cost verification">'
+        '가격 출처·원가 검증 상세</summary>'
+        f'<div class="pricing-list">{details}</div>'
+        '</details></article>'
+    )
+
+
+def _grouped_price_html(items: Sequence[Mapping[str, object]]) -> str:
+    groups: dict[tuple[str, str], list[Mapping[str, object]]] = {}
+    for item in items:
+        key = (str(item.get("product_name") or "Product"), str(item.get("product_type") or ""))
+        groups.setdefault(key, []).append(item)
+    return "".join(_price_product_group(group) for group in groups.values())
 
 
 def _funnel_number(value: object) -> str:
@@ -1176,15 +1230,29 @@ def _review_card_html(item: Mapping[str, object], index: int) -> str:
         else f'<p class="review-body">{_esc(body or "—")}</p>'
     )
     title_html = f'<strong class="review-body">{_esc(title)}</strong>' if title else ""
-    return (
-        f'<article class="review-card" data-review-index="{index}">'
+    state = "replied" if is_replied else "rating_only" if is_rating_only else "pending"
+    attrs = f'data-review-index="{index}" data-review-state="{state}" data-review-rating="{_esc(rating)}"'
+    expanded = (
         '<div class="review-head">'
         f'<strong>{_esc(platform)}</strong><span class="review-rating">{_esc(rating)} / 5</span></div>'
         f'<div class="review-meta">{_esc(meta)} · '
         f'<span data-ko="{_esc(status_ko)}" data-en="{_esc(status_en)}">{_esc(status_ko)}</span></div>'
         f'{title_html}{body_html}{translation_html}{triage_html}{existing_reply_html}{actions_html}'
-        "</article>"
     )
+    if is_replied:
+        excerpt = " ".join((title or body or "Review").split())
+        if len(excerpt) > 82:
+            excerpt = excerpt[:79].rstrip() + "…"
+        return (
+            f'<details class="review-card review-completed" {attrs}>'
+            '<summary class="review-completed-summary">'
+            f'<span class="review-completed-head"><b>{_esc(platform)}</b>'
+            f'<span class="review-rating">{_esc(rating)} / 5</span>'
+            '<span class="mini-badge good" data-ko="답변 완료" data-en="Replied">답변 완료</span></span>'
+            f'<span class="review-excerpt">{_esc(excerpt)}</span></summary>'
+            f'<div class="review-expanded-content">{expanded}</div></details>'
+        )
+    return f'<article class="review-card" {attrs}>{expanded}</article>'
 
 
 def _release_card_html(item: Mapping[str, object], index: int) -> str:
@@ -1457,9 +1525,31 @@ def _app_controls_script(
     }});
   }}
 
+  function bindReviewFilters() {{
+    const filters = [...document.querySelectorAll('[data-review-filter]')];
+    const cards = [...document.querySelectorAll('[data-review-index]')];
+    const empty = document.querySelector('[data-review-empty]');
+    const showAll = document.querySelector('[data-review-open-all]');
+    function applyFilter(value) {{
+      let visible = 0;
+      for (const card of cards) {{
+        const matching = value === 'all'
+          || (value === 'pending' && card.dataset.reviewState === 'pending')
+          || (value === 'low' && Number(card.dataset.reviewRating) <= 2 && Number(card.dataset.reviewRating) >= 1);
+        card.hidden = !matching;
+        if (matching) visible += 1;
+      }}
+      filters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.reviewFilter === value)));
+      if (empty) empty.hidden = visible !== 0;
+    }}
+    filters.forEach(button => button.addEventListener('click', () => applyFilter(button.dataset.reviewFilter)));
+    if (showAll) showAll.addEventListener('click', () => applyFilter('all'));
+    applyFilter('pending');
+  }}
   const syncButton = document.querySelector('[data-review-sync]');
   if (syncButton) syncButton.addEventListener('click', () => dispatchReviewSync(syncButton));
   bindReviewCards();
+  bindReviewFilters();
   updateTokenNotes();
 }})();
 </script>
@@ -1740,7 +1830,7 @@ def _app_detail(
         '<div class="empty-note" data-ko="스토어 상태 기록이 없어요." '
         'data-en="No store status is available.">스토어 상태 기록이 없어요.</div>'
     )
-    price_rows = "".join(_bilingual_price_row(item) for item in app_prices) or (
+    price_rows = _grouped_price_html(app_prices) or (
         '<div class="empty-note" data-ko="등록된 유료 제품 가격이 없어요." '
         'data-en="No paid product price is registered.">등록된 유료 제품 가격이 없어요.</div>'
     )
@@ -1765,9 +1855,33 @@ def _app_detail(
             and str(item.get("declared_version") or "") == "sdk:flutter"
         )
     ]
-    dependency_rows = "".join(_dependency_card_html(item) for item in visible_deps) or (
-        '<div class="empty-note" data-ko="표시할 Flutter/플러그인 항목이 없어요." '
-        'data-en="No Flutter/plugin rows to display.">표시할 Flutter/플러그인 항목이 없어요.</div>'
+    problematic_deps = [
+        item for item in visible_deps
+        if str(item.get("status") or "unknown") != "ok"
+    ]
+    healthy_deps = [
+        item for item in visible_deps
+        if str(item.get("status") or "unknown") == "ok"
+    ]
+    warning_rows = "".join(_dependency_card_html(item) for item in problematic_deps)
+    if healthy_deps:
+        good_count = len(healthy_deps)
+        healthy_rows = "".join(_dependency_card_html(item) for item in healthy_deps)
+        healthy_details = (
+            '<details class="dependency-details"><summary '
+            f'data-ko="정상 항목 {good_count}개 펼쳐보기" '
+            f'data-en="Show {good_count} healthy dependencies">'
+            f'정상 항목 {good_count}개 펼쳐보기</summary>'
+            f'<div class="dependency-list">{healthy_rows}</div></details>'
+        )
+    else:
+        healthy_details = ""
+    dependency_rows = (
+        ('<div class="dependency-list">' + warning_rows + '</div>' if warning_rows else '')
+        + healthy_details
+    ) or (
+        '<div class="empty-note" data-ko="표시할 Flutter·플러그인 항목이 없어요." '
+        'data-en="No Flutter or plugin rows to display.">표시할 Flutter·플러그인 항목이 없어요.</div>'
     )
     if isinstance(app_site, Mapping) and app_site:
         site_html = (
@@ -1884,6 +1998,15 @@ def _app_detail(
     <a href="/ops/settings/" data-ko="설정에서 연결" data-en="Connect in Settings">설정에서 연결</a>
   </div>
   <div class="ops-message" data-review-sync-message></div>
+  <div class="review-filters" role="group" aria-label="리뷰 표시 필터">
+    <button type="button" data-review-filter="pending" aria-pressed="true" data-ko="답변 필요 ({pending_reviews})" data-en="Needs reply ({pending_reviews})">답변 필요 ({pending_reviews})</button>
+    <button type="button" data-review-filter="low" aria-pressed="false" data-ko="낮은 평점 ({sum(1 for item in app_reviews if str(item.get('rating') or '').isdigit() and int(str(item.get('rating') or '')) <= 2)})" data-en="Low ratings ({sum(1 for item in app_reviews if str(item.get('rating') or '').isdigit() and int(str(item.get('rating') or '')) <= 2)})">낮은 평점 ({sum(1 for item in app_reviews if str(item.get('rating') or '').isdigit() and int(str(item.get('rating') or '')) <= 2)})</button>
+    <button type="button" data-review-filter="all" aria-pressed="false" data-ko="전체 ({len(app_reviews)})" data-en="All ({len(app_reviews)})">전체 ({len(app_reviews)})</button>
+  </div>
+  <div class="review-filter-empty" data-review-empty hidden>
+    <span data-ko="이 조건에 맞는 리뷰가 없어요. 다른 필터에서 이전 리뷰를 확인할 수 있어요." data-en="No reviews match this filter. Choose another filter to browse previous reviews.">이 조건에 맞는 리뷰가 없어요. 다른 필터에서 이전 리뷰를 확인할 수 있어요.</span>
+    <button type="button" data-review-open-all data-ko="전체 리뷰 보기" data-en="Show all reviews">전체 리뷰 보기</button>
+  </div>
   <div class="review-list">{review_rows}</div>
 </section>
 

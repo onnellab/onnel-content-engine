@@ -14,6 +14,8 @@ from ops_split_pages import (
     _ai_provider_health,
     _bilingual_price_row,
     _bilingual_store_row,
+    _grouped_price_html,
+    _review_card_html,
     _diagnose_funnel,
     _funnel_source_message,
     _json_script,
@@ -71,6 +73,38 @@ class OpsSplitPagesTest(unittest.TestCase):
         })
         self.assertIn("스토어에서 보기", html)
         self.assertIn("https://play.google.com/", html)
+
+    def test_product_prices_group_platforms_without_hiding_verification(self):
+        rows = [
+            {"product_name": "TagWeaver Pro", "product_type": "pro", "platform": "ios",
+             "price": "5,500 KRW", "price_verification": "live_store"},
+            {"product_name": "TagWeaver Pro", "product_type": "pro", "platform": "android",
+             "price": "5,500 KRW", "price_verification": "manual_only"},
+        ]
+        result = _grouped_price_html(rows)
+        self.assertEqual(result.count('class="pricing-product-card"'), 1)
+        self.assertEqual(result.count('class="pricing-option"'), 2)
+        self.assertIn("가격 출처·원가 검증 상세", result)
+        self.assertIn('data-ko="추가 확인"', result)
+        self.assertIn('data-ko="스토어 확인"', result)
+
+    def test_answered_reviews_are_collapsed_but_pending_actions_remain_available(self):
+        answered = _review_card_html({
+            "platform": "android", "review_id": "abc", "review_kind": "review",
+            "rating": "1", "status": "replied", "body": "App crashed",
+            "developer_reply": "We are investigating.",
+        }, 0)
+        self.assertIn('details class="review-card review-completed"', answered)
+        self.assertIn('data-review-state="replied"', answered)
+        self.assertIn("App crashed", answered)
+        pending = _review_card_html({
+            "platform": "ios", "review_id": "xyz", "review_kind": "review",
+            "rating": "2", "status": "pending", "body": "Cannot save",
+            "suggested_reply": "Thanks for reporting this.",
+        }, 1)
+        self.assertIn('<article class="review-card"', pending)
+        self.assertIn('data-review-state="pending"', pending)
+        self.assertIn('data-review-action="approve"', pending)
 
     def test_price_display_does_not_repeat_currency(self):
         html = _bilingual_price_row({
