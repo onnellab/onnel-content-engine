@@ -79,6 +79,16 @@ class DashboardIntegrityTest(unittest.TestCase):
         devto = (root / '.github/workflows/update-devto-article.yml').read_text().split('    steps:', 1)[1]
         self.assertLess(devto.index('git pull --ff-only origin main'), devto.index('scripts/update_devto_article.py'))
 
+    def test_store_funnel_workflow_keeps_review_triage_out_of_sync_commit(self):
+        root = Path(__file__).resolve().parents[1]
+        text = (root / '.github/workflows/sync-store-funnel.yml').read_text()
+        self.assertEqual(
+            2,
+            text.count('--store-review-triage /tmp/store-review-triage.json'),
+        )
+        commit = text.split('- name: Commit funnel snapshot', 1)[1].split('- name: Deploy dashboard', 1)[0]
+        self.assertNotIn('data/store_review_triage.json', commit)
+
     def test_every_direct_deployer_validates_source_and_destination(self):
         root = Path(__file__).resolve().parents[1]
         found = []

@@ -805,7 +805,23 @@ def sync_funnel(
         source_status["apple"] = {"status": "credential_error", "message": str(error)}
     if apple_token:
         apple_additions, apple_status = sync_apple(apps, stores, apple_token, state, checked_at)
-        source_status["apple"] = {"status": "ok", "apps": apple_status}
+        apple_states = [
+            str(value.get("status") or "")
+            for value in apple_status.values()
+            if isinstance(value, dict)
+        ]
+        if apple_states and all(value == "error" for value in apple_states):
+            apple_overall = "error"
+        elif apple_states and all(
+            value in {"waiting_for_first_report", "setup_required", "setup_http_403", "setup_http_409"}
+            for value in apple_states
+        ):
+            apple_overall = "waiting"
+        elif any(value in {"error", "partial"} or value.startswith("setup_http_") for value in apple_states):
+            apple_overall = "partial"
+        else:
+            apple_overall = "ok"
+        source_status["apple"] = {"status": apple_overall, "apps": apple_status}
     else:
         source_status.setdefault("apple", {"status": "not_configured"})
 

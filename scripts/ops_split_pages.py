@@ -107,7 +107,9 @@ a{color:inherit}
 .detail-stat{padding:14px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-stat span{display:block;color:#827d72;font-size:11px}.detail-stat b{display:block;margin-top:6px;font-size:18px;overflow-wrap:anywhere}
 .detail-list{display:grid;gap:8px}.detail-row{padding:12px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-row b{display:block;margin-bottom:5px;font-size:13px}.detail-row span{display:block;color:#6f695f;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
 .empty-note{padding:15px;border:1px dashed #d9d0c6;border-radius:9px;background:#fffdf9;color:#746f69;font-size:13px;line-height:1.6}
-@media(max-width:680px){.ops-wrap{padding:18px 15px 42px}.ops-route-grid,.app-grid{grid-template-columns:1fr}.app-grid{gap:10px}.app-card{grid-template-columns:46px minmax(0,1fr);gap:13px;min-height:0;padding:15px}.app-card>img{width:44px;height:44px;border-radius:11px}.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-hero{grid-template-columns:54px minmax(0,1fr);padding:17px}.detail-hero img{width:52px;height:52px;border-radius:12px}.ops-head h1{font-size:29px}}
+.funnel-controls{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 14px}.funnel-controls button{min-height:34px;border:1px solid var(--line);border-radius:999px;padding:6px 11px;background:#fff;color:#625c54;font:inherit;font-size:12px;font-weight:750;cursor:pointer}.funnel-controls button.is-active{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}
+.funnel-window[hidden]{display:none}.funnel-platform-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.funnel-card{padding:15px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.funnel-card h3{margin:0 0 12px;font-size:15px}.funnel-chain{display:flex;align-items:stretch;gap:7px}.funnel-step{flex:1;min-width:0;padding:10px;border:1px solid #e8e0d7;border-radius:8px;background:#fff}.funnel-step span{display:block;color:#827d72;font-size:10px;line-height:1.35}.funnel-step b{display:block;margin-top:5px;font-size:20px;line-height:1}.funnel-arrow{display:flex;align-items:center;color:#aaa196;font-size:15px}.funnel-purchase{margin-top:10px;padding-top:10px;border-top:1px solid #ece4dc;color:#6f695f;font-size:12px}.funnel-purchase b{color:#3e3933;font-size:15px}.funnel-freshness{margin-top:8px;color:#8a8379;font-size:10px}.funnel-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.funnel-summary .detail-stat{background:var(--lilac-soft)}.funnel-note{margin-top:12px;color:#746f69;font-size:11px;line-height:1.55}
+@media(max-width:680px){.ops-wrap{padding:18px 15px 42px}.ops-route-grid,.app-grid{grid-template-columns:1fr}.app-grid{gap:10px}.app-card{grid-template-columns:46px minmax(0,1fr);gap:13px;min-height:0;padding:15px}.app-card>img{width:44px;height:44px;border-radius:11px}.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-hero{grid-template-columns:54px minmax(0,1fr);padding:17px}.detail-hero img{width:52px;height:52px;border-radius:12px}.ops-head h1{font-size:29px}.funnel-platform-grid{grid-template-columns:1fr}.funnel-chain{gap:5px}.funnel-step{padding:8px}.funnel-step b{font-size:17px}}
 """
 
 
@@ -470,7 +472,259 @@ def _bilingual_price_row(item: Mapping[str, object]) -> str:
     )
 
 
-def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Sequence[Mapping[str, object]], releases: Sequence[Mapping[str, object]], reviews: Sequence[Mapping[str, object]], dependencies: Sequence[Mapping[str, object]], pricing: Sequence[Mapping[str, object]]) -> str:
+def _funnel_number(value: object) -> str:
+    if value is None or value == "":
+        return "—"
+    try:
+        return f"{int(value):,}"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def _funnel_source_message(
+    funnel_summary: Mapping[str, object],
+    source: str,
+    slug: str,
+) -> tuple[str, str]:
+    source_status = funnel_summary.get("source_status", {})
+    if not isinstance(source_status, Mapping):
+        source_status = {}
+    source_payload = source_status.get(source, {})
+    if not isinstance(source_payload, Mapping):
+        source_payload = {}
+    status = str(source_payload.get("status") or "")
+    if source == "apple":
+        apps_payload = source_payload.get("apps", {})
+        if isinstance(apps_payload, Mapping):
+            app_payload = apps_payload.get(slug, {})
+            if isinstance(app_payload, Mapping):
+                app_status = str(app_payload.get("status") or "")
+                if app_status == "waiting_for_first_report":
+                    return (
+                        "Apple 첫 분석 보고서를 기다리는 중이에요. 최초 연결 후 보통 24~48시간이 걸려요.",
+                        "Waiting for Apple's first analytics report. Initial setup usually takes 24–48 hours.",
+                    )
+                if app_status.startswith("setup_http_") or app_status == "setup_required":
+                    return (
+                        "App Store Connect 분석 보고서 요청 권한을 확인해 주세요.",
+                        "Check permission to request App Store Connect analytics reports.",
+                    )
+                if app_status == "error":
+                    return (
+                        "App Store Connect 분석 동기화 중 오류가 발생했어요.",
+                        "App Store Connect analytics sync reported an error.",
+                    )
+        if status == "not_configured":
+            return (
+                "App Store Connect 분석 연결이 필요해요.",
+                "App Store Connect analytics is not configured.",
+            )
+    if source == "google":
+        if status == "not_configured":
+            return (
+                "Play Console 보고서 연결이 필요해요.",
+                "Google Play reporting is not configured.",
+            )
+        if status == "error":
+            return (
+                "Play Console 보고서 동기화 중 오류가 발생했어요.",
+                "Google Play report sync reported an error.",
+            )
+    return (
+        "선택한 기간에 수집된 데이터가 아직 없어요.",
+        "No data has been collected for this period yet.",
+    )
+
+
+def _funnel_step(label_ko: str, label_en: str, value: object) -> str:
+    display = _funnel_number(value)
+    return (
+        '<div class="funnel-step">'
+        f'<span data-ko="{_esc(label_ko)}" data-en="{_esc(label_en)}">{_esc(label_ko)}</span>'
+        f"<b>{_esc(display)}</b>"
+        "</div>"
+    )
+
+
+def _funnel_platform_card(
+    *,
+    title: str,
+    platform_payload: Mapping[str, object],
+    window: int,
+    source: str,
+    slug: str,
+    funnel_summary: Mapping[str, object],
+) -> tuple[str, Mapping[str, object] | None]:
+    windows = platform_payload.get("windows", {})
+    window_payload = windows.get(str(window), {}) if isinstance(windows, Mapping) else {}
+    has_data = (
+        isinstance(window_payload, Mapping)
+        and int(window_payload.get("days_with_data") or 0) > 0
+    )
+    latest_date = str(platform_payload.get("latest_date") or "")
+    if not has_data:
+        ko, en = _funnel_source_message(funnel_summary, source, slug)
+        return (
+            f'<article class="funnel-card"><h3>{_esc(title)}</h3>'
+            f'<div class="empty-note" data-ko="{_esc(ko)}" data-en="{_esc(en)}">{_esc(ko)}</div>'
+            "</article>",
+            None,
+        )
+
+    assert isinstance(window_payload, Mapping)
+    steps: list[str] = []
+    if source == "apple":
+        steps.extend(
+            [
+                _funnel_step("노출", "Impressions", window_payload.get("impressions")),
+                '<div class="funnel-arrow" aria-hidden="true">→</div>',
+                _funnel_step("제품 페이지 조회", "Product page views", window_payload.get("store_visitors")),
+                '<div class="funnel-arrow" aria-hidden="true">→</div>',
+                _funnel_step("최초 다운로드", "First-time downloads", window_payload.get("installs")),
+            ]
+        )
+        purchase_ko, purchase_en = "구매", "Purchases"
+    else:
+        steps.extend(
+            [
+                _funnel_step("스토어 방문", "Store listing visitors", window_payload.get("store_visitors")),
+                '<div class="funnel-arrow" aria-hidden="true">→</div>',
+                _funnel_step("신규 설치", "First-time installers", window_payload.get("installs")),
+            ]
+        )
+        purchase_ko, purchase_en = "구매", "Purchases"
+
+    purchases = _funnel_number(window_payload.get("purchases"))
+    days = int(window_payload.get("days_with_data") or 0)
+    freshness_ko = f"데이터 {days}일분" + (f" · 최근 {latest_date}" if latest_date else "")
+    freshness_en = f"{days} day(s) of data" + (f" · latest {latest_date}" if latest_date else "")
+    return (
+        f'<article class="funnel-card"><h3>{_esc(title)}</h3>'
+        f'<div class="funnel-chain">{"".join(steps)}</div>'
+        '<div class="funnel-purchase">'
+        f'<span data-ko="{purchase_ko}" data-en="{purchase_en}">{purchase_ko}</span> '
+        f"<b>{_esc(purchases)}</b></div>"
+        f'<div class="funnel-freshness" data-ko="{_esc(freshness_ko)}" data-en="{_esc(freshness_en)}">{_esc(freshness_ko)}</div>'
+        "</article>",
+        window_payload,
+    )
+
+
+def _combined_metric(
+    app_platforms: set[str],
+    ios_window: Mapping[str, object] | None,
+    android_window: Mapping[str, object] | None,
+    metric: str,
+) -> object:
+    payloads: list[Mapping[str, object]] = []
+    if "ios" in app_platforms:
+        if ios_window is None or ios_window.get(metric) is None:
+            return None
+        payloads.append(ios_window)
+    if "android" in app_platforms:
+        if android_window is None or android_window.get(metric) is None:
+            return None
+        payloads.append(android_window)
+    if not payloads:
+        return None
+    return sum(int(payload.get(metric) or 0) for payload in payloads)
+
+
+def _funnel_section(
+    app: Mapping[str, object],
+    funnel_summary: Mapping[str, object],
+) -> str:
+    slug = str(app.get("slug") or "")
+    apps_payload = funnel_summary.get("apps", {})
+    app_payload = apps_payload.get(slug, {}) if isinstance(apps_payload, Mapping) else {}
+    if not isinstance(app_payload, Mapping):
+        app_payload = {}
+    platforms = app_payload.get("platforms", {})
+    if not isinstance(platforms, Mapping):
+        platforms = {}
+    ios_payload = platforms.get("ios", {})
+    android_payload = platforms.get("android", {})
+    if not isinstance(ios_payload, Mapping):
+        ios_payload = {}
+    if not isinstance(android_payload, Mapping):
+        android_payload = {}
+    app_platforms = {
+        value.strip()
+        for value in str(app.get("platforms") or "").split("|")
+        if value.strip() in {"ios", "android"}
+    }
+
+    windows_html: list[str] = []
+    for window in (7, 30, 90):
+        apple_card, ios_window = _funnel_platform_card(
+            title="App Store",
+            platform_payload=ios_payload,
+            window=window,
+            source="apple",
+            slug=slug,
+            funnel_summary=funnel_summary,
+        )
+        google_card, android_window = _funnel_platform_card(
+            title="Play Store",
+            platform_payload=android_payload,
+            window=window,
+            source="google",
+            slug=slug,
+            funnel_summary=funnel_summary,
+        )
+        combined_installs = _combined_metric(app_platforms, ios_window, android_window, "installs")
+        combined_purchases = _combined_metric(app_platforms, ios_window, android_window, "purchases")
+        combined_available = combined_installs is not None or combined_purchases is not None
+        if combined_available:
+            combined_html = (
+                '<div class="funnel-summary">'
+                '<div class="detail-stat"><span data-ko="양 스토어 설치 합계" data-en="Combined installs">양 스토어 설치 합계</span>'
+                f"<b>{_esc(_funnel_number(combined_installs))}</b></div>"
+                '<div class="detail-stat"><span data-ko="양 스토어 구매 합계" data-en="Combined purchases">양 스토어 구매 합계</span>'
+                f"<b>{_esc(_funnel_number(combined_purchases))}</b></div>"
+                "</div>"
+            )
+        else:
+            combined_html = (
+                '<div class="funnel-note" data-ko="양 스토어 합계는 두 스토어의 해당 지표가 모두 수집된 경우에만 표시해요." '
+                'data-en="Combined totals appear only when the required metric is available for every supported store.">'
+                "양 스토어 합계는 두 스토어의 해당 지표가 모두 수집된 경우에만 표시해요.</div>"
+            )
+        hidden = "" if window == 30 else " hidden"
+        windows_html.append(
+            f'<div class="funnel-window" data-funnel-window="{window}"{hidden}>'
+            f'<div class="funnel-platform-grid">{apple_card}{google_card}</div>'
+            f"{combined_html}"
+            '<div class="funnel-note" data-ko="스토어 방문·제품 페이지 조회의 정의가 달라 방문 수는 합산하지 않아요. Android에는 App Store의 노출과 동등한 공개 지표를 만들지 않아요." '
+            'data-en="Store-visitor definitions differ, so visitor counts are not summed. Android does not invent an App-Store-equivalent impressions metric.">'
+            "스토어 방문·제품 페이지 조회의 정의가 달라 방문 수는 합산하지 않아요. Android에는 App Store의 노출과 동등한 공개 지표를 만들지 않아요.</div>"
+            "</div>"
+        )
+
+    return (
+        '<section class="detail-section" id="funnel">'
+        '<h2 data-ko="유입·전환" data-en="Acquisition & conversion">유입·전환</h2>'
+        '<div class="funnel-controls" role="group" aria-label="기간">'
+        '<button type="button" data-funnel-period="7" data-ko="7일" data-en="7 days">7일</button>'
+        '<button type="button" data-funnel-period="30" class="is-active" data-ko="30일" data-en="30 days">30일</button>'
+        '<button type="button" data-funnel-period="90" data-ko="90일" data-en="90 days">90일</button>'
+        "</div>"
+        + "".join(windows_html)
+        + """<script>
+(() => {
+  const buttons = [...document.querySelectorAll('[data-funnel-period]')];
+  const windows = [...document.querySelectorAll('[data-funnel-window]')];
+  buttons.forEach((button) => button.addEventListener('click', () => {
+    const period = button.dataset.funnelPeriod;
+    buttons.forEach((item) => item.classList.toggle('is-active', item === button));
+    windows.forEach((item) => { item.hidden = item.dataset.funnelWindow !== period; });
+  }));
+})();
+</script></section>"""
+    )
+
+
+def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Sequence[Mapping[str, object]], releases: Sequence[Mapping[str, object]], reviews: Sequence[Mapping[str, object]], dependencies: Sequence[Mapping[str, object]], pricing: Sequence[Mapping[str, object]], funnel_summary: Mapping[str, object]) -> str:
     slug = str(app.get("slug") or "")
     title = str(app.get("app_name") or slug)
     description_en = str(app.get("one_line_description") or "")
@@ -539,7 +793,7 @@ def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Seq
   <div class="detail-stat"><span>GitHub main</span><b>{_esc(repo_version)}</b></div>
   <div class="detail-stat"><span data-ko="최근 릴리즈" data-en="Latest release">최근 릴리즈</span><b>{_esc(latest_release)}</b></div>
 </div></section>
-<section class="detail-section" id="funnel"><h2 data-ko="유입·전환" data-en="Acquisition & conversion">유입·전환</h2><div class="empty-note" data-ko="스토어 분석 수집을 붙일 자리예요. 통합 기준은 양 스토어에서 비교 가능한 상세 페이지 유입 → 설치 → 결제로 두고, Apple 노출은 iOS 전용 상위 퍼널로 분리해요." data-en="Store analytics will appear here. The combined funnel uses comparable product-page traffic → installs → purchases, while Apple impressions remain an iOS-only upper-funnel metric.">스토어 분석 수집을 붙일 자리예요. 통합 기준은 양 스토어에서 비교 가능한 상세 페이지 유입 → 설치 → 결제로 두고, Apple 노출은 iOS 전용 상위 퍼널로 분리해요.</div></section>
+{_funnel_section(app, funnel_summary)}
 <section class="detail-section" id="store"><h2 data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</h2><div class="detail-list">{store_rows}{price_rows}</div></section>
 <section class="detail-section" id="reviews"><h2 data-ko="리뷰" data-en="Reviews">리뷰</h2><div class="detail-grid"><div class="detail-stat"><span data-ko="수집 리뷰" data-en="Collected reviews">수집 리뷰</span><b>{len(app_reviews)}</b></div><div class="detail-stat"><span data-ko="답변 대기" data-en="Awaiting reply">답변 대기</span><b>{pending_reviews}</b></div></div></section>
 <section class="detail-section" id="technical"><h2 data-ko="기술·운영" data-en="Technical & operations">기술·운영</h2><div class="detail-list">
@@ -563,8 +817,10 @@ def build_split_ops_pages(
     reviews: Sequence[Mapping[str, object]],
     dependencies: Sequence[Mapping[str, object]],
     pricing: Sequence[Mapping[str, object]],
+    funnel_summary: Mapping[str, object] | None = None,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
+    funnel_summary = funnel_summary or {}
     attention = sum(1 for item in publication_items if str(item.get("status") or "") in {"draft", "failed"})
     home_intro = _home_body(len(apps), attention)
     pages: list[Path] = []
@@ -593,6 +849,18 @@ def build_split_ops_pages(
         app_dir = apps_dir / slug
         app_dir.mkdir(parents=True, exist_ok=True)
         app_path = app_dir / "index.html"
-        app_path.write_text(_app_detail(app, homepage_repo, store_items, releases, reviews, dependencies, pricing), encoding="utf-8")
+        app_path.write_text(
+            _app_detail(
+                app,
+                homepage_repo,
+                store_items,
+                releases,
+                reviews,
+                dependencies,
+                pricing,
+                funnel_summary,
+            ),
+            encoding="utf-8",
+        )
         pages.append(app_path)
     return pages

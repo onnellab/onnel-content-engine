@@ -53,6 +53,45 @@ class OpsSplitPagesTest(unittest.TestCase):
                 reviews=[],
                 dependencies=dependencies,
                 pricing=[],
+                funnel_summary={
+                    "source_status": {
+                        "apple": {"status": "ok", "apps": {"tagweaver": {"status": "ok"}}},
+                        "google": {"status": "ok"},
+                    },
+                    "apps": {
+                        "tagweaver": {
+                            "platforms": {
+                                "ios": {
+                                    "latest_date": "2026-10-06",
+                                    "windows": {
+                                        "30": {
+                                            "impressions": 1234,
+                                            "store_visitors": 234,
+                                            "installs": 45,
+                                            "purchases": 2,
+                                            "days_with_data": 12,
+                                        }
+                                    },
+                                },
+                                "android": {
+                                    "latest_date": "2026-10-06",
+                                    "windows": {
+                                        "30": {
+                                            "impressions": None,
+                                            "store_visitors": 345,
+                                            "installs": 23,
+                                            "purchases": 1,
+                                            "days_with_data": 12,
+                                        }
+                                    },
+                                },
+                            },
+                            "combined": {
+                                "30": {"store_visitors": None, "impressions": None, "installs": 68, "purchases": 3}
+                            },
+                        }
+                    },
+                },
             )
 
             validate_dashboard(output / "index.html")
@@ -83,6 +122,21 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertIn('data-ko="앱 운영" data-en="App Operations"', detail)
             self.assertIn('data-ko="변경 없음" data-en="unchanged"', detail)
             self.assertIn("onnellab-ops-language", detail)
+            self.assertIn('data-funnel-period="7"', detail)
+            self.assertIn('data-funnel-period="30" class="is-active"', detail)
+            self.assertIn('data-funnel-period="90"', detail)
+            self.assertIn('data-funnel-window="30">', detail)
+            self.assertIn('data-funnel-window="7" hidden', detail)
+            self.assertIn(">1,234</b>", detail)
+            self.assertIn(">234</b>", detail)
+            self.assertIn(">345</b>", detail)
+            self.assertIn(">68</b>", detail)
+            self.assertIn(">3</b>", detail)
+            self.assertIn('data-ko="양 스토어 설치 합계" data-en="Combined installs"', detail)
+            self.assertIn('data-ko="양 스토어 구매 합계" data-en="Combined purchases"', detail)
+            self.assertNotIn("Combined visitors", detail)
+            self.assertNotIn("양 스토어 방문 합계", detail)
+            self.assertIn("선택한 기간에 수집된 데이터가 아직 없어요.", detail)
 
 
 if __name__ == "__main__":

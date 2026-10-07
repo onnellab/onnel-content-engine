@@ -38,6 +38,7 @@ DEFAULT_APP_RELEASE_SYNC_STATUS = ROOT / "data" / "app_release_sync_status.json"
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 DEFAULT_STORE_REVIEWS = ROOT / "data" / "store_reviews.csv"
 DEFAULT_STORE_REVIEW_TRIAGE = ROOT / "data" / "store_review_triage.json"
+DEFAULT_STORE_FUNNEL = ROOT / "data" / "store_funnel.json"
 DEFAULT_STORE_REVIEW_AI_DRAFTS = ROOT / "data" / "store_review_ai_drafts.json"
 DEFAULT_MANUAL_PUBLISH_SCHEDULE = ROOT / "data" / "manual_publish_schedule.json"
 DEFAULT_AI_MANAGER_REPORT = ROOT / "data" / "ai_manager_daily_report.json"
@@ -5256,6 +5257,7 @@ def build_manual_publish_site(
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPO,
     store_reviews_path: Path = DEFAULT_STORE_REVIEWS,
     store_review_triage_path: Path | _StoreReviewTriagePathOmitted = _STORE_REVIEW_TRIAGE_PATH_OMITTED,
+    store_funnel_path: Path = DEFAULT_STORE_FUNNEL,
 ) -> Path:
     topics = read_topics(topics_path)
     items = social_items(social_manifest, topics) + syndication_items(syndication_manifest, topics)
@@ -5265,6 +5267,7 @@ def build_manual_publish_site(
     blog_items = blog_status_items(topics_path)
     store_items = store_status_items(store_versions_path)
     store_reviews = store_review_items(store_reviews_path)
+    store_funnel = read_json(store_funnel_path) if store_funnel_path.exists() else {}
     ai_manager_report = json.loads(DEFAULT_AI_MANAGER_REPORT.read_text(encoding="utf-8")) if DEFAULT_AI_MANAGER_REPORT.exists() else {}
     # Persist the exact triage data shown in the dashboard so every proposed
     # action has an auditable, repository-managed snapshot.
@@ -5317,6 +5320,7 @@ def build_manual_publish_site(
         reviews=store_reviews,
         dependencies=flutter_dependency_items,
         pricing=read_csv_rows(DEFAULT_APP_PRICING),
+        funnel_summary=store_funnel,
     )
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")
