@@ -5,6 +5,8 @@ from contextlib import contextmanager
 import html as html_lib
 import json
 import re
+import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -923,15 +925,27 @@ Body
         self.assertLessEqual(len(fields["seo_description"]), HASHNODE_SEO_DESCRIPTION_LIMIT)
         self.assertNotIn("frontmatter", fields["seo_description"])
 
-    def test_latest_git_time_falls_back_to_file_mtime(self) -> None:
+    def test_latest_git_time_does_not_forge_content_updates_from_file_mtime(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             repo = Path(temp)
             page = repo / "page.md"
-            page.write_text("updated", encoding="utf-8")
-
-            value = latest_git_time(repo, [page])
-
-        self.assertRegex(value, r"^\d{4}-\d{2}-\d{2}T")
+            page.write_text("uncommitted", encoding="utf-8")
+            self.assertEqual(latest_git_time(repo, [page]), "")
+            subprocess.run(["git", "init", "-q", str(repo)], check=True)
+            subprocess.run(["git", "-C", str(repo), "add", "page.md"], check=True)
+            env = {
+                **os.environ,
+                "GIT_AUTHOR_DATE": "2026-07-10T09:00:00+09:00",
+                "GIT_COMMITTER_DATE": "2026-07-10T09:00:00+09:00",
+            }
+            subprocess.run(
+                ["git", "-C", str(repo), "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+                 "commit", "-qm", "Original content"],
+                check=True, env=env,
+            )
+            # This file timestamp is newer due to checkout/copy, not a content edit.
+            os.utime(page, (1893456000, 1893456000))
+            self.assertEqual(latest_git_time(repo, [page]), "2026-07-10T09:00:00+09:00")
 
     def test_store_review_items_include_safe_template_draft(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

@@ -6,6 +6,8 @@ from __future__ import annotations
 import html
 import json
 import re
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 from urllib.parse import urlsplit
@@ -122,6 +124,21 @@ a{color:inherit}
 
 def _esc(value: object) -> str:
     return html.escape(str(value or ""), quote=True)
+
+
+def _display_time(value: object) -> str:
+    raw = str(value or "").strip()
+    if not raw:
+        return "—"
+    try:
+        parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        if parsed.tzinfo is not None:
+            parsed = parsed.astimezone(ZoneInfo("Asia/Seoul"))
+        if len(raw) == 10:
+            return parsed.strftime("%Y.%m.%d")
+        return parsed.strftime("%Y.%m.%d %H:%M")
+    except (ValueError, OverflowError):
+        return raw
 
 
 def _safe_href(value: object) -> str:
@@ -468,7 +485,7 @@ def _apps_index(
   <div class="detail-stat"><span data-ko="릴리즈 기록" data-en="Release records">릴리즈 기록</span><b>{len(releases)}</b></div>
   <div class="detail-stat"><span data-ko="Flutter·플러그인" data-en="Flutter & plugins">Flutter·플러그인</span><b>{plugin_count}</b></div>
 </section>
-<p class="app-overview-note" data-ko="답변 대기 리뷰 {pending_reviews}건 · 마지막 스토어 상태 확인 {_esc(latest_checked)}" data-en="{pending_reviews} reviews awaiting reply · Last store status check {_esc(latest_checked)}">답변 대기 리뷰 {pending_reviews}건 · 마지막 스토어 상태 확인 {_esc(latest_checked)}</p>
+<p class="app-overview-note" data-ko="답변 대기 리뷰 {pending_reviews}건 · 마지막 스토어 상태 확인 {_esc(_display_time(latest_checked))}" data-en="{pending_reviews} reviews awaiting reply · Last store status check {_esc(_display_time(latest_checked))}">답변 대기 리뷰 {pending_reviews}건 · 마지막 스토어 상태 확인 {_esc(_display_time(latest_checked))}</p>
 <label class="app-search"><span data-ko="앱 찾기" data-en="Find an app">앱 찾기</span><input type="search" placeholder="앱 이름을 검색해요" data-placeholder-ko="앱 이름을 검색해요" data-placeholder-en="Search app name" data-app-search></label>
 <p class="empty-note" data-app-empty hidden data-ko="일치하는 앱이 없어요." data-en="No matching apps.">일치하는 앱이 없어요.</p>
 <section class="app-grid" aria-label="앱 목록">{cards}</section>
@@ -500,8 +517,8 @@ def _bilingual_store_row(item: Mapping[str, object]) -> str:
     version = str(item.get("version") or "—")
     status_en = str(item.get("status") or "—")
     status_ko = _store_status_ko(status_en)
-    checked = str(item.get("checked_at") or "—")
-    published = str(item.get("published_at") or item.get("release_date") or "")
+    checked = _display_time(item.get("checked_at"))
+    published = _display_time(item.get("published_at") or item.get("release_date")) if (item.get("published_at") or item.get("release_date")) else ""
     notes = str(item.get("release_notes") or "")
     store_url = _safe_href(item.get("store_url"))
     ko = f"버전 {version} · {status_ko} · 확인 {checked}"
@@ -540,7 +557,7 @@ def _bilingual_price_row(item: Mapping[str, object]) -> str:
     verification = str(item.get("price_verification") or "unknown")
     source = str(item.get("price_source") or "—")
     note = str(item.get("price_note") or "")
-    checked = str(item.get("checked_at") or "—")
+    checked = _display_time(item.get("checked_at"))
     error = str(item.get("price_error") or "")
     platform_label = "App Store" if platform == "ios" else "Play Store" if platform == "android" else "공통"
     platform_en = "App Store" if platform == "ios" else "Play Store" if platform == "android" else "Shared"
@@ -1144,7 +1161,7 @@ def _review_card_html(item: Mapping[str, object], index: int) -> str:
         str(item.get("reviewer_language") or ""),
         str(item.get("territory") or ""),
         f'v{item.get("app_version")}' if item.get("app_version") else "",
-        str(item.get("updated_at") or item.get("created_at") or ""),
+        _display_time(item.get("updated_at") or item.get("created_at")),
     ]
     meta = " · ".join(value for value in meta_parts if value)
     title = str(item.get("title") or "")
@@ -1263,7 +1280,7 @@ def _release_card_html(item: Mapping[str, object], index: int) -> str:
     repository = str(item.get("repository") or "")
     release_type = str(item.get("release_type") or "")
     release_id = str(item.get("release_id") or "")
-    date = str(item.get("released_at") or item.get("release_date") or "—")
+    date = _display_time(item.get("released_at") or item.get("release_date"))
     url = _safe_href(item.get("release_url"))
     notes = str(item.get("release_notes") or "")
     if channel != "public":
@@ -1574,7 +1591,7 @@ def _review_source_health(slug: str, status: Mapping[str, object]) -> str:
         if isinstance(entry, Mapping) and str(entry.get("app_slug") or "") == slug
     ] if isinstance(stores, list) else []
     verified_snapshot = status.get("snapshot_matches") is True
-    checked = str(status.get("checked_at") or "—")
+    checked = _display_time(status.get("checked_at"))
     if not rows:
         return _source_health_line(
             "리뷰 수집 검증", "Review source verification",
@@ -1622,7 +1639,7 @@ def _review_source_health(slug: str, status: Mapping[str, object]) -> str:
 
 def _ai_provider_health(status: Mapping[str, object]) -> str:
     outcome = str(status.get("outcome") or "unknown")
-    checked = str(status.get("checked_at") or "—")
+    checked = _display_time(status.get("checked_at"))
     providers = status.get("providers", [])
     statuses = [
         str(entry.get("status") or "unknown")
@@ -1648,7 +1665,7 @@ def _ai_provider_health(status: Mapping[str, object]) -> str:
 
 def _release_sync_health(status: Mapping[str, object]) -> str:
     outcome = str(status.get("outcome") or "unknown")
-    checked = str(status.get("checked_at") or "—")
+    checked = _display_time(status.get("checked_at"))
     ok = outcome in {"synced", "skipped", "not_found"}
     display_ko = {
         "synced": "GitHub 릴리즈 동기화 완료",
@@ -1887,12 +1904,12 @@ def _app_detail(
         site_html = (
             '<div class="site-freshness">'
             '<div class="detail-stat"><span data-ko="앱 페이지 갱신" data-en="App page updated">앱 페이지 갱신</span>'
-            f'<b>{_esc(app_site.get("landing_updated_at") or "—")}</b></div>'
+            f'<b>{_esc(_display_time(app_site.get("landing_updated_at")))}</b></div>'
             '<div class="detail-stat"><span data-ko="스크린샷 갱신" data-en="Screenshots updated">스크린샷 갱신</span>'
-            f'<b>{_esc(app_site.get("screenshots_updated_at") or "—")}</b>'
+            f'<b>{_esc(_display_time(app_site.get("screenshots_updated_at")))}</b>'
             f'<span data-ko="{_esc(app_site.get("screenshot_count") or 0)}장" data-en="{_esc(app_site.get("screenshot_count") or 0)} screenshots">{_esc(app_site.get("screenshot_count") or 0)}장</span></div>'
             '<div class="detail-stat"><span data-ko="에셋 갱신" data-en="Assets updated">에셋 갱신</span>'
-            f'<b>{_esc(app_site.get("assets_updated_at") or "—")}</b></div>'
+            f'<b>{_esc(_display_time(app_site.get("assets_updated_at")))}</b></div>'
             "</div>"
         )
     else:
@@ -1908,7 +1925,7 @@ def _app_detail(
         summary = str(alert.get("summary") or "Review the store-console warning.")
         note = str(alert.get("operational_note") or "")
         store = str(alert.get("store") or "store")
-        occurred = str(alert.get("occurred_at") or "")
+        occurred = _display_time(alert.get("occurred_at")) if alert.get("occurred_at") else ""
         reference = _safe_href(alert.get("reference_url"))
         detail = (
             f'<p>{_esc(summary)}</p>'
@@ -2017,6 +2034,7 @@ def _app_detail(
     <span><a href="/apps/{_esc(slug)}/">onnellab.com/apps/{_esc(slug)}</a></span>
   </div>
   <div class="subsection-head"><h3 data-ko="사이트·자산 최신성" data-en="Site & asset freshness">사이트·자산 최신성</h3></div>
+  <p class="ops-meta" data-ko="시각은 한국시간(KST)으로 표시해요. 콘텐츠 갱신은 실제 Git 커밋을 기준으로 하며, 스토어 수집시각과 구분해요." data-en="Times use KST. Content freshness is based on the latest Git commit, separately from store collection timestamps.">시각은 한국시간(KST)으로 표시해요. 콘텐츠 갱신은 실제 Git 커밋을 기준으로 하며, 스토어 수집시각과 구분해요.</p>
   {site_html}
   <div class="subsection-head"><h3 data-ko="정책·운영 경고" data-en="Policy & operations alerts">정책·운영 경고</h3></div>
   <div class="release-list">{alerts_html}</div>

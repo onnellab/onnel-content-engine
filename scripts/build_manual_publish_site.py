@@ -996,7 +996,8 @@ def latest_git_time(repo: Path, paths: list[Path]) -> str:
     existing = [path for path in paths if path.exists()]
     if not existing:
         return ""
-    file_value = latest_file_mtime(existing)
+    # File mtimes reflect checkout/deployment time, not content updates.
+    # Never claim a new content edit without a corresponding Git commit.
     try:
         relative = [path.relative_to(repo).as_posix() for path in existing]
         completed = subprocess.run(
@@ -1007,15 +1008,10 @@ def latest_git_time(repo: Path, paths: list[Path]) -> str:
             timeout=10,
         )
     except (OSError, subprocess.SubprocessError, ValueError):
-        return file_value
-    value = completed.stdout.strip()
-    if not value:
-        return file_value
-    git_time = parse_topic_datetime(value)
-    file_time = parse_topic_datetime(file_value)
-    if git_time and file_time:
-        return max(git_time, file_time).isoformat()
-    return value or file_value
+        return ""
+    if completed.returncode != 0:
+        return ""
+    return completed.stdout.strip()
 
 
 def current_verification_report(report: dict[str, object], items: list[dict[str, object]]) -> dict[str, object]:

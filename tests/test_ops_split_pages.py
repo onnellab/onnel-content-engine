@@ -17,6 +17,7 @@ from ops_split_pages import (
     _grouped_price_html,
     _review_card_html,
     _diagnose_funnel,
+    _display_time,
     _funnel_source_message,
     _json_script,
     _release_sync_health,
@@ -28,6 +29,13 @@ from validate_manual_publish_site import validate_dashboard
 
 
 class OpsSplitPagesTest(unittest.TestCase):
+    def test_readable_dates_are_kst_and_never_invent_missing_time(self):
+        self.assertEqual(_display_time("2026-10-08T00:05:22Z"), "2026.10.08 09:05")
+        self.assertEqual(_display_time("2026-10-08T08:05:00+09:00"), "2026.10.08 08:05")
+        self.assertEqual(_display_time("2026-10-07"), "2026.10.07")
+        self.assertEqual(_display_time(None), "—")
+        self.assertEqual(_display_time("not-an-iso-date"), "not-an-iso-date")
+
     def test_embedded_review_json_cannot_break_out_of_script(self):
         value = [{"title": "</script><img src=x onerror=alert(1)> & details"}]
         encoded = _json_script(value)
@@ -47,7 +55,7 @@ class OpsSplitPagesTest(unittest.TestCase):
         result = _review_source_health("tagweaver", status)
         self.assertIn("동기화 파일 일치 재확인 필요", result)
         self.assertNotIn("Play Store 리뷰", result)
-        self.assertIn("2026-10-08T06:50:00Z", result)
+        self.assertIn("2026.10.08 15:50", result)
 
     def test_ai_price_warning_and_release_sync_health_are_explicit(self):
         ai = _ai_provider_health({
@@ -56,13 +64,13 @@ class OpsSplitPagesTest(unittest.TestCase):
             "providers": [{"status": "warning"}],
         })
         self.assertIn("가격 확인 필요 (changed)", ai)
-        self.assertIn("2026-10-08T06:30:00Z", ai)
+        self.assertIn("2026.10.08 15:30", ai)
         release = _release_sync_health({
             "outcome": "error",
             "checked_at": "2026-10-08T06:15:00Z",
         })
         self.assertIn("동기화 확인 필요 (error)", release)
-        self.assertIn("2026-10-08T06:15:00Z", release)
+        self.assertIn("2026.10.08 15:15", release)
 
     def test_store_links_reject_unsafe_and_show_official_urls(self):
         self.assertNotIn("javascript:", _bilingual_store_row({
@@ -379,7 +387,7 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertIn(">1</b>", apps_html)
             self.assertIn(">2</b>", apps_html)
             self.assertIn("답변 대기 리뷰 2건", apps_html)
-            self.assertIn("마지막 스토어 상태 확인 2026-10-07", apps_html)
+            self.assertIn("마지막 스토어 상태 확인 2026.10.07", apps_html)
             self.assertIn("MP3/FLAC 태그를 오프라인으로 편집해요.", apps_html)
             self.assertIn("Offline MP3/FLAC Tag Editor", apps_html)
             self.assertIn('data-ko="출시됨" data-en="Released"', apps_html)
@@ -451,17 +459,17 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertIn("스토어 실가격 확인", detail)
             self.assertIn("google_play", detail)
             self.assertIn("사이트·자산 최신성", detail)
-            self.assertIn("2026-10-05T10:00:00+09:00", detail)
+            self.assertIn("2026.10.05 10:00", detail)
             self.assertIn("7장", detail)
             self.assertIn("정책·운영 경고", detail)
             self.assertIn("Check the current store warning.", detail)
             self.assertIn("Review before the next release.", detail)
             self.assertIn("스토어별 리뷰 수집 검증", detail)
             self.assertIn("최신 목록 검증됨", detail)
-            self.assertIn("2026-10-08T06:50:00+09:00", detail)
+            self.assertIn("2026.10.08 06:50", detail)
             self.assertIn("릴리즈 동기화 검증", detail)
             self.assertIn("GitHub 릴리즈 동기화 완료", detail)
-            self.assertIn("2026-10-08T06:51:00+09:00", detail)
+            self.assertIn("2026.10.08 06:51", detail)
             self.assertNotIn("기존 통합 콘솔에서 릴리즈 승인·리뷰 답변", detail)
             self.assertNotIn('href="/ops/legacy/"', detail)
 
