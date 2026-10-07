@@ -88,7 +88,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           git diff --check
-          git add data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing.csv data/ai_provider_pricing_status.json data/melivra_ai_credit_policy.csv generated/reports/app_releases.md generated/manual-publish/
+          git add data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing.csv data/ai_provider_pricing_status.json data/melivra_ai_credit_policy.csv data/store_review_triage.json generated/reports/app_releases.md generated/manual-publish/
+          if ! git diff --quiet; then
+            echo "Unexpected unstaged changes remain after staging release outputs:" >&2
+            git status --short >&2
+            exit 1
+          fi
           if git diff --cached --quiet; then
             echo "No content engine release state changes"
           else

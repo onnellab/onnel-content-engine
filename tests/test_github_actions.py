@@ -191,6 +191,8 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertNotIn("post_core_distribution.py", workflow)
         self.assertNotIn("verify_manual_publications.py --visual-public-pages", workflow)
         self.assertIn("data/app_releases.csv", workflow)
+        self.assertIn("data/store_review_triage.json", workflow)
+        self.assertIn("Unexpected unstaged changes remain", workflow)
         self.assertIn("data/ai_provider_pricing.csv", workflow)
         self.assertIn("data/melivra_ai_credit_policy.csv", workflow)
         self.assertIn("generated/manual-publish/index.html", workflow)
