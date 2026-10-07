@@ -1404,6 +1404,124 @@ def _app_controls_script(
 """
 
 
+def _source_health_line(title_ko: str, title_en: str, value_ko: str, value_en: str, severity: str = "") -> str:
+    color_class = " good" if severity == "ok" else " warn" if severity in {"warning", "error"} else ""
+    return (
+        '<div class="detail-row">'
+        f'<b data-ko="{_esc(title_ko)}" data-en="{_esc(title_en)}">{_esc(title_ko)}</b>'
+        f'<span class="mini-badge{color_class}" data-ko="{_esc(value_ko)}" data-en="{_esc(value_en)}">{_esc(value_ko)}</span>'
+        "</div>"
+    )
+
+
+def _review_source_health(slug: str, status: Mapping[str, object]) -> str:
+    stores = status.get("stores", [])
+    rows = [
+        entry
+        for entry in stores
+        if isinstance(entry, Mapping) and str(entry.get("app_slug") or "") == slug
+    ] if isinstance(stores, list) else []
+    verified_snapshot = status.get("snapshot_matches") is True
+    checked = str(status.get("checked_at") or "—")
+    if not rows:
+        return _source_health_line(
+            "리뷰 수집 검증", "Review source verification",
+            "검증 기록 없음", "No verification record", "warning",
+        )
+    fragments: list[str] = []
+    for provider in ("ios", "android"):
+        for entry in rows:
+            if str(entry.get("platform") or "") != provider:
+                continue
+            source = "App Store" if provider == "ios" else "Play Store"
+            state = str(entry.get("state") or "unknown")
+            count = entry.get("current_reviews")
+            count_ko = f" · 현재 {count}건" if count is not None else ""
+            count_en = f" · {count} current reviews" if count is not None else ""
+            if state == "not_released":
+                state_ko, state_en = "미출시", "Not released"
+                severity = ""
+            elif state == "verified" and verified_snapshot:
+                state_ko, state_en = "최신 목록 검증됨", "Current list verified"
+                severity = "ok"
+            elif state == "verified":
+                state_ko, state_en = "동기화 파일 일치 재확인 필요", "Snapshot mismatch; recheck needed"
+                severity = "warning"
+            else:
+                state_ko, state_en = f"미검증 ({state})", f"Unverified ({state})"
+                severity = "warning"
+            fragments.append(_source_health_line(
+                f"{source} 리뷰", f"{source} reviews",
+                f"{state_ko}{count_ko}", f"{state_en}{count_en}", severity,
+            ))
+    if not fragments:
+        return _source_health_line(
+            "리뷰 수집 검증", "Review source verification",
+            "검증 기록 없음", "No verification record", "warning",
+        )
+    fragments.append(
+        '<p class="ops-meta" '
+        f'data-ko="마지막 리뷰 수집 검증: {_esc(checked)}" '
+        f'data-en="Last review sync verification: {_esc(checked)}">'
+        f'마지막 리뷰 수집 검증: {_esc(checked)}</p>'
+    )
+    return '<div class="detail-list">' + "".join(fragments) + "</div>"
+
+
+def _ai_provider_health(status: Mapping[str, object]) -> str:
+    outcome = str(status.get("outcome") or "unknown")
+    checked = str(status.get("checked_at") or "—")
+    providers = status.get("providers", [])
+    statuses = [
+        str(entry.get("status") or "unknown")
+        for entry in providers
+        if isinstance(entry, Mapping)
+    ] if isinstance(providers, list) else []
+    healthy = outcome in {"ok", "unchanged"} and all(value in {"ok", "unchanged", "manual_ok"} for value in statuses)
+    ko = "공급자 가격 검증 정상" if healthy else f"가격 확인 필요 ({outcome})"
+    en = "Provider price verification OK" if healthy else f"Pricing check needed ({outcome})"
+    return (
+        '<div class="detail-list">'
+        + _source_health_line(
+            "AI 공급자 가격", "AI provider pricing",
+            ko, en, "ok" if healthy else "warning",
+        )
+        + '<p class="ops-meta" '
+        f'data-ko="마지막 AI 가격 확인: {_esc(checked)}" '
+        f'data-en="Last provider price check: {_esc(checked)}">'
+        f'마지막 AI 가격 확인: {_esc(checked)}</p>'
+        + "</div>"
+    )
+
+
+def _release_sync_health(status: Mapping[str, object]) -> str:
+    outcome = str(status.get("outcome") or "unknown")
+    checked = str(status.get("checked_at") or "—")
+    ok = outcome in {"synced", "skipped", "not_found"}
+    display_ko = {
+        "synced": "GitHub 릴리즈 동기화 완료",
+        "skipped": "동기화 건너뜀",
+        "not_found": "대상 릴리즈 없음",
+    }.get(outcome, f"동기화 확인 필요 ({outcome})")
+    display_en = {
+        "synced": "GitHub releases synchronized",
+        "skipped": "Sync skipped",
+        "not_found": "No matching release",
+    }.get(outcome, f"Release sync needs review ({outcome})")
+    return (
+        '<div class="detail-list">'
+        + _source_health_line(
+            "전역 릴리즈 동기화", "Global release synchronization",
+            display_ko, display_en, "ok" if ok else "warning",
+        )
+        + '<p class="ops-meta" '
+        f'data-ko="마지막 릴리즈 확인: {_esc(checked)}" '
+        f'data-en="Last release check: {_esc(checked)}">'
+        f'마지막 릴리즈 확인: {_esc(checked)}</p>'
+        + "</div>"
+    )
+
+
 def _app_detail(
     app: Mapping[str, object],
     homepage_repo: Path,
@@ -1415,6 +1533,9 @@ def _app_detail(
     funnel_summary: Mapping[str, object],
     site_items: Sequence[Mapping[str, object]] = (),
     ai_manager_report: Mapping[str, object] | None = None,
+    review_sync_status: Mapping[str, object] | None = None,
+    ai_provider_pricing_status: Mapping[str, object] | None = None,
+    release_sync_status: Mapping[str, object] | None = None,
 ) -> str:
     slug = str(app.get("slug") or "")
     title = str(app.get("app_name") or slug)
@@ -1428,6 +1549,13 @@ def _app_detail(
     app_reviews = [item for item in reviews if _match(item, app)]
     app_deps = [item for item in dependencies if _match(item, app)]
     app_prices = [item for item in pricing if str(item.get("app_slug") or "") == slug]
+    review_health_html = _review_source_health(slug, review_sync_status or {})
+    release_health_html = _release_sync_health(release_sync_status or {})
+    has_ai_products = any(
+        item.get("product_type") == "ai_credit" or item.get("ai_margin_status")
+        for item in app_prices
+    )
+    ai_health_html = _ai_provider_health(ai_provider_pricing_status or {}) if has_ai_products else ""
     app_site = next(
         (
             item
@@ -1610,6 +1738,7 @@ def _app_detail(
     <p data-ko="구매 건수는 유입·전환에서 따로 보고, 여기서는 가격과 단위 경제성만 봐요." data-en="Purchase counts stay in Acquisition; this section focuses on pricing and unit economics.">구매 건수는 유입·전환에서 따로 보고, 여기서는 가격과 단위 경제성만 봐요.</p>
   </div>
   <div class="pricing-list">{price_rows}</div>
+  {('<div class="subsection-head"><h3 data-ko="AI 공급자 가격 검증" data-en="AI provider pricing verification">AI 공급자 가격 검증</h3></div>' + ai_health_html) if has_ai_products else ""}
 </section>
 
 <section class="detail-section" id="reviews">
@@ -1625,6 +1754,8 @@ def _app_detail(
     <div class="detail-stat"><span data-ko="별점만" data-en="Rating only">별점만</span><b>{rating_only_reviews}</b></div>
     <div class="detail-stat"><span data-ko="동기화 범위" data-en="Sync scope">동기화 범위</span><b data-ko="전체 앱" data-en="All apps">전체 앱</b></div>
   </div>
+  <div class="subsection-head"><h3 data-ko="스토어별 리뷰 수집 검증" data-en="Review collection verification by store">스토어별 리뷰 수집 검증</h3></div>
+  {review_health_html}
   <div class="token-note" data-app-token-note hidden>
     <span data-ko="답변 승인·게시와 리뷰 동기화에는 GitHub 연결이 필요해요." data-en="Review approval, publishing, and sync require a GitHub connection.">답변 승인·게시와 리뷰 동기화에는 GitHub 연결이 필요해요.</span>
     <a href="/ops/settings/" data-ko="설정에서 연결" data-en="Connect in Settings">설정에서 연결</a>
@@ -1648,6 +1779,8 @@ def _app_detail(
     <p data-ko="자동 공개 대기 {pending_releases}건" data-en="{pending_releases} awaiting automatic publication">자동 공개 대기 {pending_releases}건</p>
   </div>
   <div class="release-list">{release_rows}</div>
+  <div class="subsection-head"><h3 data-ko="릴리즈 동기화 검증" data-en="Release synchronization verification">릴리즈 동기화 검증</h3></div>
+  {release_health_html}
   <div class="subsection-head">
     <h3 data-ko="Flutter·플러그인" data-en="Flutter & plugins">Flutter·플러그인</h3>
     <p data-ko="표시 {len(visible_deps)}개" data-en="{len(visible_deps)} visible items">표시 {len(visible_deps)}개</p>
@@ -1676,6 +1809,9 @@ def build_split_ops_pages(
     funnel_summary: Mapping[str, object] | None = None,
     site_items: Sequence[Mapping[str, object]] = (),
     ai_manager_report: Mapping[str, object] | None = None,
+    review_sync_status: Mapping[str, object] | None = None,
+    ai_provider_pricing_status: Mapping[str, object] | None = None,
+    release_sync_status: Mapping[str, object] | None = None,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     funnel_summary = funnel_summary or {}
@@ -1719,6 +1855,9 @@ def build_split_ops_pages(
                 funnel_summary,
                 site_items,
                 ai_manager_report,
+                review_sync_status,
+                ai_provider_pricing_status,
+                release_sync_status,
             ),
             encoding="utf-8",
         )

@@ -5394,6 +5394,9 @@ def build_manual_publish_site(
         funnel_summary=store_funnel,
         site_items=site_items,
         ai_manager_report=ai_manager_report,
+        review_sync_status=store_review_sync_status_item(store_reviews_path),
+        ai_provider_pricing_status=ai_provider_pricing_status,
+        release_sync_status=release_sync_status,
     )
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")

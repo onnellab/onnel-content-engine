@@ -10,7 +10,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from build_manual_publish_site import html_document
-from ops_split_pages import _diagnose_funnel, _funnel_source_message, _json_script, _safe_href, build_split_ops_pages
+from ops_split_pages import (
+    _ai_provider_health,
+    _diagnose_funnel,
+    _funnel_source_message,
+    _json_script,
+    _release_sync_health,
+    _review_source_health,
+    _safe_href,
+    build_split_ops_pages,
+)
 from validate_manual_publish_site import validate_dashboard
 
 
@@ -21,6 +30,35 @@ class OpsSplitPagesTest(unittest.TestCase):
         self.assertNotIn("</script>", encoded.lower())
         self.assertIn(r"\u003c", encoded)
         self.assertEqual(json.loads(encoded), value)
+
+    def test_review_source_health_flags_snapshot_mismatch(self):
+        status = {
+            "checked_at": "2026-10-08T06:50:00Z",
+            "snapshot_matches": False,
+            "stores": [
+                {"app_slug": "tagweaver", "platform": "ios", "state": "verified", "current_reviews": 2},
+                {"app_slug": "quivra", "platform": "android", "state": "verified", "current_reviews": 3},
+            ],
+        }
+        result = _review_source_health("tagweaver", status)
+        self.assertIn("동기화 파일 일치 재확인 필요", result)
+        self.assertNotIn("Play Store 리뷰", result)
+        self.assertIn("2026-10-08T06:50:00Z", result)
+
+    def test_ai_price_warning_and_release_sync_health_are_explicit(self):
+        ai = _ai_provider_health({
+            "outcome": "changed",
+            "checked_at": "2026-10-08T06:30:00Z",
+            "providers": [{"status": "warning"}],
+        })
+        self.assertIn("가격 확인 필요 (changed)", ai)
+        self.assertIn("2026-10-08T06:30:00Z", ai)
+        release = _release_sync_health({
+            "outcome": "error",
+            "checked_at": "2026-10-08T06:15:00Z",
+        })
+        self.assertIn("동기화 확인 필요 (error)", release)
+        self.assertIn("2026-10-08T06:15:00Z", release)
 
     def test_app_detail_links_disallow_unsafe_url_schemes(self):
         self.assertEqual(_safe_href("javascript:alert(1)"), "")
@@ -148,6 +186,18 @@ class OpsSplitPagesTest(unittest.TestCase):
                 reviews=reviews,
                 dependencies=dependencies,
                 pricing=pricing,
+                review_sync_status={
+                    "checked_at": "2026-10-08T06:50:00+09:00",
+                    "snapshot_matches": True,
+                    "stores": [
+                        {"app_slug": "tagweaver", "platform": "ios", "state": "verified", "current_reviews": 1},
+                        {"app_slug": "tagweaver", "platform": "android", "state": "verified", "current_reviews": 1},
+                    ],
+                },
+                release_sync_status={
+                    "checked_at": "2026-10-08T06:51:00+09:00",
+                    "outcome": "synced",
+                },
                 site_items=[
                     {
                         "kind": "app",
@@ -308,6 +358,12 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertIn("정책·운영 경고", detail)
             self.assertIn("Check the current store warning.", detail)
             self.assertIn("Review before the next release.", detail)
+            self.assertIn("스토어별 리뷰 수집 검증", detail)
+            self.assertIn("최신 목록 검증됨", detail)
+            self.assertIn("2026-10-08T06:50:00+09:00", detail)
+            self.assertIn("릴리즈 동기화 검증", detail)
+            self.assertIn("GitHub 릴리즈 동기화 완료", detail)
+            self.assertIn("2026-10-08T06:51:00+09:00", detail)
             self.assertNotIn("기존 통합 콘솔에서 릴리즈 승인·리뷰 답변", detail)
             self.assertNotIn('href="/ops/legacy/"', detail)
 
