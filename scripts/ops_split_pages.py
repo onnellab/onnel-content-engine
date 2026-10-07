@@ -104,7 +104,7 @@ a{color:inherit}
 .detail-hero{display:grid;grid-template-columns:68px minmax(0,1fr);gap:18px;align-items:start;padding:22px;border:1px solid var(--accent-border,#e0d8cb);border-radius:13px;background:linear-gradient(135deg,rgba(255,253,248,.96) 16%,var(--accent-bg,#fffdf8)),#fffdf8}
 .detail-hero img{width:64px;height:64px;border-radius:15px;box-shadow:0 0 0 1px var(--accent-border,#ddd5c8)}
 .detail-hero h1{margin:0 0 8px;font-size:30px;color:#3e3933}.detail-hero p{margin:8px 0 0;color:#5f5a50;line-height:1.6}
-.detail-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px}.detail-tabs a{min-height:36px;display:inline-flex;align-items:center;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#fff;text-decoration:none;font-size:12px;font-weight:750;color:#6a645b}
+.detail-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 16px;scroll-margin-top:78px}.detail-tabs a{min-height:40px;display:inline-flex;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;text-decoration:none;font-size:13px;font-weight:750;color:#6a645b}.detail-tabs a[aria-selected="true"]{background:var(--blue-soft);border-color:#b9cbe0;color:#315f91}.detail-tabs a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}.detail-section[hidden]{display:none!important}
 .detail-section{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}.detail-section h2{margin:0 0 14px;font-size:19px}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.app-overview-metrics{margin:0 0 12px}.app-overview-note{margin:0 0 20px;color:#746f69;font-size:11px;line-height:1.5}
 .detail-stat{padding:14px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-stat span{display:block;color:#827d72;font-size:11px}.detail-stat b{display:block;margin-top:6px;font-size:18px;overflow-wrap:anywhere}
 .detail-list{display:grid;gap:8px}.detail-row{padding:12px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-row b{display:block;margin-bottom:5px;font-size:13px}.detail-row span{display:block;color:#6f695f;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
@@ -1584,6 +1584,68 @@ def _release_sync_health(status: Mapping[str, object]) -> str:
     )
 
 
+def _app_tabs_script() -> str:
+    return r"""
+<script>
+(() => {
+  const nav = document.querySelector('.detail-tabs[role="tablist"]');
+  if (!nav) return;
+  const tabs = [...nav.querySelectorAll('[role="tab"][aria-controls]')];
+  const byId = new Map(tabs.map(tab => [tab.getAttribute('aria-controls'), tab]));
+  const headerHeight = () => document.querySelector('.ops-topbar')?.getBoundingClientRect().height || 0;
+  function activate(id, {updateUrl = false, focus = false, keepNavVisible = false} = {}) {
+    const chosen = byId.get(id);
+    if (!chosen) return false;
+    for (const tab of tabs) {
+      const active = tab === chosen;
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+      const panel = document.getElementById(tab.getAttribute('aria-controls'));
+      if (panel) panel.hidden = !active;
+    }
+    if (updateUrl && location.hash !== '#' + id) {
+      history.pushState(null, '', '#' + id);
+    }
+    if (focus) chosen.focus({preventScroll: true});
+    if (keepNavVisible && (nav.getBoundingClientRect().top < headerHeight() + 6 ||
+        nav.getBoundingClientRect().bottom > innerHeight - 24)) {
+      window.scrollTo({top: window.scrollY + nav.getBoundingClientRect().top - headerHeight() - 12, behavior: 'instant'});
+    }
+    return true;
+  }
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', event => {
+      event.preventDefault();
+      activate(tab.getAttribute('aria-controls'), {updateUrl: true, keepNavVisible: true});
+    });
+    tab.addEventListener('keydown', event => {
+      let next = null;
+      if (event.key === 'ArrowRight') next = (i + 1) % tabs.length;
+      if (event.key === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = tabs.length - 1;
+      if (next !== null) {
+        event.preventDefault();
+        activate(tabs[next].getAttribute('aria-controls'), {updateUrl: true, focus: true, keepNavVisible: true});
+      }
+      if (event.key === ' ') {
+        event.preventDefault();
+        activate(tab.getAttribute('aria-controls'), {updateUrl: true, focus: true, keepNavVisible: true});
+      }
+    });
+  });
+  function syncUrl() {
+    const requested = decodeURIComponent(location.hash.replace(/^#/, ''));
+    activate(byId.has(requested) ? requested : 'overview');
+  }
+  window.addEventListener('hashchange', syncUrl);
+  window.addEventListener('popstate', syncUrl);
+  syncUrl();
+})();
+</script>
+"""
+
+
 def _app_detail(
     app: Mapping[str, object],
     homepage_repo: Path,
@@ -1770,15 +1832,15 @@ def _app_detail(
     <div class="platform-badges">{platform_badges}</div>
   </div>
 </section>
-<nav class="detail-tabs" aria-label="앱 세부">
-  <a href="#overview" data-ko="개요" data-en="Overview">개요</a>
-  <a href="#funnel" data-ko="유입·전환" data-en="Acquisition">유입·전환</a>
-  <a href="#store" data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</a>
-  <a href="#reviews" data-ko="리뷰" data-en="Reviews">리뷰</a>
-  <a href="#technical" data-ko="기술·운영" data-en="Technical">기술·운영</a>
+<nav class="detail-tabs" role="tablist" aria-label="앱 세부">
+  <a id="tab-overview" role="tab" href="#overview" aria-controls="overview" aria-selected="true" tabindex="0" data-ko="개요" data-en="Overview">개요</a>
+  <a id="tab-funnel" role="tab" href="#funnel" aria-controls="funnel" aria-selected="false" tabindex="-1" data-ko="유입·전환" data-en="Acquisition">유입·전환</a>
+  <a id="tab-store" role="tab" href="#store" aria-controls="store" aria-selected="false" tabindex="-1" data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</a>
+  <a id="tab-reviews" role="tab" href="#reviews" aria-controls="reviews" aria-selected="false" tabindex="-1" data-ko="리뷰" data-en="Reviews">리뷰</a>
+  <a id="tab-technical" role="tab" href="#technical" aria-controls="technical" aria-selected="false" tabindex="-1" data-ko="기술·운영" data-en="Technical">기술·운영</a>
 </nav>
 
-<section class="detail-section" id="overview">
+<section class="detail-section" id="overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">
   <h2 data-ko="개요" data-en="Overview">개요</h2>
   <div class="detail-grid">
     <div class="detail-stat"><span>App Store</span><b>{_esc(ios_version)}</b><span data-ko="{_esc(ios_status_ko)}" data-en="{_esc(ios_status_en)}">{_esc(ios_status_ko)}</span></div>
@@ -1788,9 +1850,9 @@ def _app_detail(
   </div>
 </section>
 
-{_funnel_section(app, funnel_summary)}
+{_funnel_section(app, funnel_summary).replace('id="funnel"', 'id="funnel" role="tabpanel" aria-labelledby="tab-funnel" tabindex="0" hidden', 1)}
 
-<section class="detail-section" id="store">
+<section class="detail-section" id="store" role="tabpanel" aria-labelledby="tab-store" tabindex="0" hidden>
   <h2 data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</h2>
   <div class="subsection-head"><h3 data-ko="스토어 버전·상태" data-en="Store versions & status">스토어 버전·상태</h3></div>
   <div class="detail-list">{store_rows}</div>
@@ -1802,7 +1864,7 @@ def _app_detail(
 {('<div class="subsection-head"><h3 data-ko="AI 공급자 가격 검증" data-en="AI provider pricing verification">AI 공급자 가격 검증</h3></div>' + ai_health_html) if has_ai_products else ""}
 </section>
 
-<section class="detail-section" id="reviews">
+<section class="detail-section" id="reviews" role="tabpanel" aria-labelledby="tab-reviews" tabindex="0" hidden>
   <div class="subsection-head">
     <h2 data-ko="리뷰" data-en="Reviews">리뷰</h2>
     <div class="ops-actions">
@@ -1825,7 +1887,7 @@ def _app_detail(
   <div class="review-list">{review_rows}</div>
 </section>
 
-<section class="detail-section" id="technical">
+<section class="detail-section" id="technical" role="tabpanel" aria-labelledby="tab-technical" tabindex="0" hidden>
   <h2 data-ko="기술·운영" data-en="Technical & operations">기술·운영</h2>
   <div class="detail-row">
     <b data-ko="공개 제품 페이지" data-en="Public product page">공개 제품 페이지</b>
@@ -1853,6 +1915,7 @@ def _app_detail(
   <div class="dependency-list">{dependency_rows}</div>
 </section>
 
+{_app_tabs_script()}
 {_app_controls_script(app_reviews)}
 """
     return _page(title, "apps", body)
