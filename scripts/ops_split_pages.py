@@ -274,7 +274,7 @@ body[data-ops-view="home"] main>.platform-status,
 body[data-ops-view="home"] main>.status-section{display:none!important}
 body[data-ops-view="publishing"] main>.ytw,
 body[data-ops-view="publishing"] main>.yt-settings,
-body[data-ops-view="publishing"] main>.credential-panel,
+body[data-ops-view="publishing"] main>.credential-panel:not(.github-connection-panel),
 body[data-ops-view="publishing"] details[aria-label="App operation status"],
 body[data-ops-view="publishing"] details[aria-label="AI operation status"],
 body[data-ops-view="publishing"] details[aria-label="Store customer reviews"],

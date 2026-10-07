@@ -100,6 +100,17 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertTrue((output / "settings" / "index.html").exists())
             self.assertTrue((output / "legacy" / "index.html").exists())
 
+            settings_html = (output / "settings" / "index.html").read_text(encoding="utf-8")
+            publishing_html = (output / "publishing" / "index.html").read_text(encoding="utf-8")
+            self.assertIn('body data-ops-view="settings"', settings_html)
+            self.assertIn('id="github-connection-panel"', settings_html)
+            self.assertIn('id="sync-auth"', settings_html)
+            self.assertIn('body[data-ops-view="settings"] main>.tool-panel,', settings_html)
+            self.assertIn(
+                'body[data-ops-view="publishing"] main>.credential-panel:not(.github-connection-panel),',
+                publishing_html,
+            )
+
             apps_html = (output / "apps" / "index.html").read_text(encoding="utf-8")
             self.assertIn('class="app-card"', apps_html)
             self.assertIn('class="title-row"', apps_html)

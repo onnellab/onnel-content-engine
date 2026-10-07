@@ -1604,12 +1604,24 @@ def html_document(
         <select id="status"><option value="">모든 상태</option></select>
         <select id="mode"><option value="remote_browser">원격 Chrome</option><option value="automatic">API 자동</option><option value="manual">수동만</option><option value="disabled">발행 중지</option><option value="">전체</option></select>
       </div>
-      <div class="auth" id="sync-auth" hidden>
-        <input id="token" type="password" autocomplete="off" placeholder="ONNELLAB_GITHUB_PAGES_TOKEN">
-        <button id="save-token" type="button">동기화 연결</button>
+      <div class="auth">
         <button id="refresh-state" type="button" class="secondary">새로고침</button>
         <button id="enable-badge" type="button" class="secondary">뱃지 켜기</button>
       </div>
+    </details>
+    <details id="github-connection-panel" class="credential-panel github-connection-panel" aria-label="GitHub connection">
+      <summary id="github-connection-panel-title" class="panel-summary">GitHub 연결</summary>
+      <div class="credential-head">
+        <div>
+          <h2 id="github-connection-title">GitHub 연결</h2>
+          <p id="github-connection-copy">Ops 동기화와 GitHub Actions Secrets 저장에 사용할 브라우저 GitHub 토큰을 연결해요.</p>
+        </div>
+      </div>
+      <div class="auth" id="sync-auth">
+        <input id="token" type="password" autocomplete="off" placeholder="ONNELLAB_GITHUB_PAGES_TOKEN">
+        <button id="save-token" type="button">GitHub 토큰 저장</button>
+      </div>
+      <div id="github-token-note" class="note">Secrets 저장에는 저장소 Actions Secrets 읽기/쓰기 권한이 있는 토큰이 필요해요.</div>
     </details>
     <details class="credential-panel" aria-label="Automated posting credentials">
       <summary id="credential-panel-title" class="panel-summary">자동 포스팅 연결</summary>
@@ -1792,6 +1804,10 @@ def html_document(
         verificationRefreshIn: '자동 재확인',
         secondsShort: '초',
         tokenNeededNote: 'ONNELLAB_GITHUB_PAGES_TOKEN 입력 후 동기화와 공개 확인을 실행할 수 있습니다.',
+        githubConnectionTitle: 'GitHub 연결',
+        githubConnectionCopy: 'Ops 동기화와 GitHub Actions Secrets 저장에 사용할 브라우저 GitHub 토큰을 연결해요.',
+        githubTokenNote: 'Secrets 저장에는 onnellab/onnel-content-engine의 Actions Secrets 읽기/쓰기 권한이 있는 토큰이 필요해요.',
+        saveGitHubToken: 'GitHub 토큰 저장',
         credentialsTitle: '자동 포스팅 연결',
         credentialPanelTitle: '자동 포스팅 연결',
         credentialsCopy: '저장은 이 브라우저에만 유지됩니다. 실제 자동 포스팅은 env 블록을 로컬 파일에 반영하거나 GitHub Actions secrets로 동기화해야 연결됩니다.',
@@ -2093,6 +2109,10 @@ def html_document(
         verificationRefreshIn: 'auto refresh',
         secondsShort: 's',
         tokenNeededNote: 'Enter ONNELLAB_GITHUB_PAGES_TOKEN to run sync and public profile checks.',
+        githubConnectionTitle: 'GitHub connection',
+        githubConnectionCopy: 'Connect the browser GitHub token used for Ops synchronization and GitHub Actions Secrets.',
+        githubTokenNote: 'Saving Secrets requires a token with Actions Secrets read/write access to onnellab/onnel-content-engine.',
+        saveGitHubToken: 'Save GitHub token',
         credentialsTitle: 'Automated posting connection',
         credentialPanelTitle: 'Automated posting connection',
         credentialsCopy: 'Saved inputs stay in this browser only. Automated posting is connected after you apply the env block locally or sync it to GitHub Actions secrets.',
@@ -2394,6 +2414,8 @@ def html_document(
     }};
     const storeCredentialOutput = document.getElementById('store-credential-output');
     const syncAuthPanel = document.getElementById('sync-auth');
+    const githubConnectionPanel = document.getElementById('github-connection-panel');
+    const githubTokenNote = document.getElementById('github-token-note');
     const badgeButton = document.getElementById('enable-badge');
     const refreshButton = document.getElementById('refresh-state');
     const verifyButtonLarge = document.getElementById('verify-publications-large');
@@ -2448,9 +2470,13 @@ def html_document(
       document.getElementById('quality-status-title').textContent = t('qualityStatusTitle');
       document.getElementById('filter-panel-title').textContent = t('filterPanelTitle');
       tokenInput.placeholder = t('tokenPlaceholder');
-      document.getElementById('save-token').textContent = t('connectSync');
+      document.getElementById('save-token').textContent = t('saveGitHubToken');
       document.getElementById('refresh-state').textContent = t('refresh');
       document.getElementById('token-note').textContent = t('tokenNeededNote');
+      document.getElementById('github-connection-panel-title').textContent = t('githubConnectionTitle');
+      document.getElementById('github-connection-title').textContent = t('githubConnectionTitle');
+      document.getElementById('github-connection-copy').textContent = t('githubConnectionCopy');
+      document.getElementById('github-token-note').textContent = t('githubTokenNote');
       document.getElementById('credentials-title').textContent = t('credentialsTitle');
       document.getElementById('credential-panel-title').textContent = t('credentialPanelTitle');
       document.getElementById('credentials-copy').textContent = t('credentialsCopy');
@@ -2761,7 +2787,13 @@ def html_document(
     function surfaceStoreSecretFailure(error) {{
       const message = storeSecretFailureMessage(error);
       storeCredentialOutput.value = message;
-      if (error?.code === 'missing_browser_token' || !githubToken()) revealTokenInput();
+      const status = Number(error?.status || 0);
+      if (
+        error?.code === 'missing_browser_token'
+        || !githubToken()
+        || status === 401
+        || status === 403
+      ) revealTokenInput();
       return message;
     }}
 
@@ -3037,9 +3069,13 @@ def html_document(
       verifyButtonLarge.setAttribute('aria-disabled', 'false');
       verifyButtonPrimary.disabled = false;
       verifyButtonPrimary.setAttribute('aria-disabled', 'false');
-      document.getElementById('token-note').hidden = Boolean(githubToken());
-      if (githubToken()) syncAuthPanel.hidden = true;
-      if (!githubToken()) setVerifyState('verificationTokenRequired');
+      const hasToken = Boolean(githubToken());
+      const settingsView = document.body.dataset.opsView === 'settings';
+      document.getElementById('token-note').hidden = hasToken;
+      githubTokenNote.hidden = hasToken && !settingsView;
+      syncAuthPanel.hidden = hasToken && !settingsView;
+      if (settingsView) githubConnectionPanel.open = true;
+      if (!hasToken) setVerifyState('verificationTokenRequired');
     }}
 
     function setVerifyState(label, countdown = 0) {{
@@ -3216,7 +3252,10 @@ def html_document(
     }}
 
     function revealTokenInput() {{
+      githubConnectionPanel.hidden = false;
+      githubConnectionPanel.open = true;
       syncAuthPanel.hidden = false;
+      githubTokenNote.hidden = false;
       tokenInput.classList.add('needs-token');
       tokenInput.scrollIntoView({{ block: 'center', behavior: 'smooth' }});
       tokenInput.focus({{ preventScroll: true }});
