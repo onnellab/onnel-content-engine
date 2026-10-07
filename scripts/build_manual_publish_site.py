@@ -1393,6 +1393,7 @@ def html_document(
     .credential-head p {{ margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }}
     .credential-grid {{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }}
     .credential-grid label {{ display: grid; gap: 5px; color: var(--muted); font-size: 12px; font-weight: 800; }}
+    .credential-grid label[hidden] {{ display: none !important; }}
     .credential-actions {{ display: flex; gap: 8px; flex-wrap: wrap; }}
     .credential-output {{ min-height: 78px; }}
     .quick-row {{ display: grid; grid-template-columns: minmax(180px, .9fr) minmax(220px, 1.2fr) auto; gap: 10px; align-items: center; }}
@@ -2734,7 +2735,7 @@ def html_document(
         const saved = JSON.parse(localStorage.getItem(storeCredentialStorageKey) || '{{}}');
         storeCredentialInputs.keyType.value = saved.keyType === 'team' ? 'team' : 'individual';
         storeCredentialInputs.keyId.value = saved.keyId || '';
-        storeCredentialInputs.issuerId.value = saved.issuerId || '';
+        storeCredentialInputs.issuerId.value = saved.keyType === 'team' ? (saved.issuerId || '') : '';
         storeCredentialInputs.googleReportsBucket.value = saved.googleReportsBucket || '';
       }} catch (error) {{
         console.warn(error);
@@ -3010,6 +3011,7 @@ def html_document(
 
     function updateStoreCredentialOutput() {{
       const isTeam = storeCredentialInputs.keyType.value === 'team';
+      if (!isTeam) storeCredentialInputs.issuerId.value = '';
       document.getElementById('app-store-issuer-field').hidden = !isTeam;
       storeCredentialInputs.issuerId.required = isTeam;
       storeCredentialInputs.issuerId.disabled = !isTeam;
