@@ -466,6 +466,7 @@ def _bilingual_store_row(item: Mapping[str, object]) -> str:
     checked = str(item.get("checked_at") or "—")
     published = str(item.get("published_at") or item.get("release_date") or "")
     notes = str(item.get("release_notes") or "")
+    store_url = _safe_href(item.get("store_url"))
     ko = f"버전 {version} · {status_ko} · 확인 {checked}"
     en = f"Version {version} · {status_en} · checked {checked}"
     extra = ""
@@ -476,6 +477,11 @@ def _bilingual_store_row(item: Mapping[str, object]) -> str:
     if notes:
         extra += (
             f'<span><b data-ko="릴리즈 노트" data-en="Release notes">릴리즈 노트</b> · {_esc(notes)}</span>'
+        )
+    if store_url:
+        extra += (
+            f'<span><a href="{_esc(store_url)}" target="_blank" rel="noopener noreferrer" '
+            'data-ko="스토어에서 보기" data-en="View in store">스토어에서 보기</a></span>'
         )
     return (
         f'<div class="detail-row"><b>{platform}</b>'
@@ -524,12 +530,20 @@ def _bilingual_price_row(item: Mapping[str, object]) -> str:
         economics_class = " loss" if margin_status == "loss" else ""
         margin_ko = f" / 마진 {margin_percent}%" if margin_percent else ""
         margin_en = f" / margin {margin_percent}%" if margin_percent else ""
+        cost_basis = str(item.get("ai_cost_basis") or "").strip()
+        cost_basis_html = (
+            '<details class="review-translation"><summary '
+            'data-ko="AI 원가 계산 근거" data-en="AI cost calculation basis">AI 원가 계산 근거</summary>'
+            f'<p>{_esc(cost_basis)}</p></details>'
+            if cost_basis else ""
+        )
         economics = (
             f'<div class="economics-callout{economics_class}">'
             '<b data-ko="AI 크레딧 경제성" data-en="AI credit economics">AI 크레딧 경제성</b> · '
             f'<span data-ko="순수익 ${_esc(net)} / 공급자 비용 ${_esc(provider_cost)} / 이익 ${_esc(profit)}{_esc(margin_ko)}" '
             f'data-en="Net revenue ${_esc(net)} / provider cost ${_esc(provider_cost)} / profit ${_esc(profit)}{_esc(margin_en)}">'
             f'순수익 ${_esc(net)} / 공급자 비용 ${_esc(provider_cost)} / 이익 ${_esc(profit)}{_esc(margin_ko)}</span></div>'
+            + cost_basis_html
         )
 
     error_html = (
@@ -1138,6 +1152,9 @@ def _release_card_html(item: Mapping[str, object], index: int) -> str:
     tag = str(item.get("tag") or item.get("version") or item.get("release_id") or "Release")
     status = str(item.get("status") or "—")
     channel = str(item.get("release_channel") or "public")
+    platform = str(item.get("platform") or "")
+    repository = str(item.get("repository") or "")
+    release_type = str(item.get("release_type") or "")
     release_id = str(item.get("release_id") or "")
     date = str(item.get("released_at") or item.get("release_date") or "—")
     url = _safe_href(item.get("release_url"))
@@ -1157,7 +1174,8 @@ def _release_card_html(item: Mapping[str, object], index: int) -> str:
         '<div class="release-head">'
         f'<strong>{_esc(tag)}</strong><span class="mini-badge {badge_class}" data-ko="{_esc(state_ko)}" data-en="{_esc(state_en)}">{_esc(state_ko)}</span>'
         '</div>'
-        f'<div class="release-meta">{_esc(release_id)} · {_esc(status)} · {_esc(channel)} · {_esc(date)}</div>'
+        f'<div class="release-meta">{_esc(release_id)} · {_esc(platform)} · {_esc(status)} · {_esc(channel)} · {_esc(release_type)} · {_esc(date)}</div>'
+        f'<p><b data-ko="저장소" data-en="Repository">저장소</b> · {_esc(repository or "—")}</p>'
         f'{notes_html}{link_html}</article>'
     )
 
@@ -1168,10 +1186,15 @@ def _dependency_card_html(item: Mapping[str, object]) -> str:
     declared = str(item.get("declared_version") or item.get("flutter_constraint") or "—")
     resolved = str(item.get("resolved_version") or item.get("current_version") or "—")
     source = str(item.get("source") or "")
+    status = str(item.get("status") or "unknown")
+    status_ko = "정상" if status == "ok" else f"확인 필요 ({status})"
+    status_en = "OK" if status == "ok" else f"Needs review ({status})"
+    badge_class = "good" if status == "ok" else "warn"
     source_html = f' · <span data-ko="출처 {_esc(source)}" data-en="source {_esc(source)}">출처 {_esc(source)}</span>' if source else ""
     return (
         '<article class="dependency-card">'
-        f'<strong>{_esc(name)}</strong>'
+        f'<strong>{_esc(name)}</strong> '
+        f'<span class="mini-badge {badge_class}" data-ko="{_esc(status_ko)}" data-en="{_esc(status_en)}">{_esc(status_ko)}</span>'
         f'<div class="dependency-meta">{_esc(kind)}{source_html}</div>'
         f'<p><span data-ko="선언" data-en="Declared">선언</span> {_esc(declared)} · '
         f'<span data-ko="해결/현재" data-en="Resolved/current">해결/현재</span> {_esc(resolved)}</p>'
@@ -1579,14 +1602,13 @@ def _app_detail(
     android_status_ko = _store_status_ko(android_status)
     ios_status_en = "No data" if ios_status == "수집 기록 없음" else ios_status
     android_status_en = "No data" if android_status == "수집 기록 없음" else android_status
-    repo_version = next(
-        (
-            str(item.get("resolved_version") or item.get("declared_version") or "—")
-            for item in app_deps
-            if str(item.get("package_type") or "") == "app_version"
-        ),
-        "—",
+    app_build_record = next(
+        (item for item in app_deps if str(item.get("package_type") or "") == "app_version"),
+        {},
     )
+    repo_version = str(app_build_record.get("resolved_version") or app_build_record.get("declared_version") or "—")
+    repo_build = str(app_build_record.get("declared_version") or "—")
+    repo_build_source = str(app_build_record.get("source") or "—")
     latest_release = next(
         (str(item.get("tag") or item.get("version") or "—") for item in reversed(app_releases)),
         "—",
@@ -1722,7 +1744,7 @@ def _app_detail(
   <div class="detail-grid">
     <div class="detail-stat"><span>App Store</span><b>{_esc(ios_version)}</b><span data-ko="{_esc(ios_status_ko)}" data-en="{_esc(ios_status_en)}">{_esc(ios_status_ko)}</span></div>
     <div class="detail-stat"><span>Play Store</span><b>{_esc(android_version)}</b><span data-ko="{_esc(android_status_ko)}" data-en="{_esc(android_status_en)}">{_esc(android_status_ko)}</span></div>
-    <div class="detail-stat"><span>GitHub main</span><b>{_esc(repo_version)}</b></div>
+    <div class="detail-stat"><span>GitHub main</span><b>{_esc(repo_version)}</b><span data-ko="빌드 {_esc(repo_build)}" data-en="Build {_esc(repo_build)}">빌드 {_esc(repo_build)}</span></div>
     <div class="detail-stat"><span data-ko="최근 릴리즈" data-en="Latest release">최근 릴리즈</span><b>{_esc(latest_release)}</b></div>
   </div>
 </section>
@@ -1784,6 +1806,10 @@ def _app_detail(
   <div class="subsection-head">
     <h3 data-ko="Flutter·플러그인" data-en="Flutter & plugins">Flutter·플러그인</h3>
     <p data-ko="표시 {len(visible_deps)}개" data-en="{len(visible_deps)} visible items">표시 {len(visible_deps)}개</p>
+  </div>
+  <div class="detail-row">
+    <b data-ko="저장소 빌드 메타데이터" data-en="Repository build metadata">저장소 빌드 메타데이터</b>
+    <span data-ko="앱 {_esc(repo_version)} · 빌드 {_esc(repo_build)} · 출처 {_esc(repo_build_source)}" data-en="App {_esc(repo_version)} · build {_esc(repo_build)} · source {_esc(repo_build_source)}">앱 {_esc(repo_version)} · 빌드 {_esc(repo_build)} · 출처 {_esc(repo_build_source)}</span>
   </div>
   <div class="dependency-list">{dependency_rows}</div>
 </section>

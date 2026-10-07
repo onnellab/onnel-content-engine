@@ -12,6 +12,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from build_manual_publish_site import html_document
 from ops_split_pages import (
     _ai_provider_health,
+    _bilingual_price_row,
+    _bilingual_store_row,
     _diagnose_funnel,
     _funnel_source_message,
     _json_script,
@@ -60,6 +62,32 @@ class OpsSplitPagesTest(unittest.TestCase):
         self.assertIn("동기화 확인 필요 (error)", release)
         self.assertIn("2026-10-08T06:15:00Z", release)
 
+    def test_store_links_reject_unsafe_and_show_official_urls(self):
+        self.assertNotIn("javascript:", _bilingual_store_row({
+            "platform": "ios", "store_url": "javascript:alert(1)",
+        }))
+        html = _bilingual_store_row({
+            "platform": "android", "store_url": "https://play.google.com/store/apps/details?id=example",
+        })
+        self.assertIn("스토어에서 보기", html)
+        self.assertIn("https://play.google.com/", html)
+
+    def test_ai_credit_displays_provenance_for_cost_calculation(self):
+        html = _bilingual_price_row({
+            "product_name": "AI credits",
+            "product_type": "ai_credit",
+            "price": "3900",
+            "currency": "KRW",
+            "ai_margin_status": "loss",
+            "ai_net_revenue_usd": "2.50",
+            "ai_provider_cost_usd": "3.00",
+            "ai_profit_usd": "-0.50",
+            "ai_cost_basis": "Provider unit rate with 1.8x safety factor.",
+        })
+        self.assertIn("AI 원가 계산 근거", html)
+        self.assertIn("Provider unit rate with 1.8x safety factor.", html)
+        self.assertIn("economics-callout loss", html)
+
     def test_app_detail_links_disallow_unsafe_url_schemes(self):
         self.assertEqual(_safe_href("javascript:alert(1)"), "")
         self.assertEqual(_safe_href("//evil.example/path"), "")
@@ -87,13 +115,13 @@ class OpsSplitPagesTest(unittest.TestCase):
                 "one_line_description": "Offline MP3/FLAC Tag Editor",
             }
             store_items = [
-                {"app_id": "APP-0002", "app_slug": "tagweaver", "platform": "ios", "version": "2.5.2", "status": "unchanged", "checked_at": "2026-10-07"},
-                {"app_id": "APP-0002", "app_slug": "tagweaver", "platform": "android", "version": "2.5.2", "status": "unchanged", "checked_at": "2026-10-07"},
+                {"app_id": "APP-0002", "app_slug": "tagweaver", "platform": "ios", "version": "2.5.2", "status": "unchanged", "checked_at": "2026-10-07", "store_url": "https://apps.apple.com/app/id6759609875"},
+                {"app_id": "APP-0002", "app_slug": "tagweaver", "platform": "android", "version": "2.5.2", "status": "unchanged", "checked_at": "2026-10-07", "store_url": "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2"},
             ]
             dependencies = [
                 {"app_id": "APP-0002", "app_slug": "tagweaver", "package_type": "app_version", "package_name": "tagweaver", "declared_version": "2.5.2+96", "resolved_version": "2.5.2"},
-                {"app_id": "APP-0002", "app_slug": "tagweaver", "package_type": "dependency", "package_name": "file_picker", "declared_version": "^10.0.0", "resolved_version": "10.0.0", "source": "pubspec.lock"},
-                {"app_id": "APP-0002", "app_slug": "tagweaver", "package_type": "dependency", "package_name": "just_audio", "declared_version": "^0.10.5", "resolved_version": "0.10.5", "source": "pubspec.lock"},
+                {"app_id": "APP-0002", "app_slug": "tagweaver", "package_type": "dependency", "package_name": "file_picker", "declared_version": "^10.0.0", "resolved_version": "10.0.0", "source": "pubspec.lock", "status": "ok"},
+                {"app_id": "APP-0002", "app_slug": "tagweaver", "package_type": "dependency", "package_name": "just_audio", "declared_version": "^0.10.5", "resolved_version": "0.10.5", "source": "pubspec.lock", "status": "warning"},
             ]
             releases = [
                 {
@@ -104,6 +132,9 @@ class OpsSplitPagesTest(unittest.TestCase):
                     "version": "2.5.2",
                     "status": "ready",
                     "release_channel": "public",
+                    "platform": "android",
+                    "repository": "onnellab/tagweaver",
+                    "release_type": "notes_only",
                     "release_date": "2026-10-01",
                     "public_release": "false",
                     "release_url": "https://example.com/release/tagweaver",
@@ -349,6 +380,14 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertIn("Tag editing stability update", detail)
             self.assertIn("just_audio", detail)
             self.assertIn("pubspec.lock", detail)
+            self.assertIn("https://apps.apple.com/app/id6759609875", detail)
+            self.assertIn("https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2", detail)
+            self.assertIn("스토어에서 보기", detail)
+            self.assertIn("정상", detail)
+            self.assertIn("확인 필요 (warning)", detail)
+            self.assertIn("2.5.2+96", detail)
+            self.assertIn("onnellab/tagweaver", detail)
+            self.assertIn("notes_only", detail)
             self.assertIn("TagWeaver Pro", detail)
             self.assertIn("스토어 실가격 확인", detail)
             self.assertIn("google_play", detail)
