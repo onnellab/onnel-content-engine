@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-07T12:56:23+00:00",
+  "checked_at": "2026-10-07T13:32:00+00:00",
   "windows": [
     7,
     30,
@@ -18,10 +18,50 @@
   },
   "source_status": {
     "apple": {
-      "status": "not_configured"
+      "status": "error",
+      "apps": {
+        "quivra": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "tagweaver": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "vaultxt": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "segra": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "clipnest": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "aligna": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "melivra": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "papira": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        }
+      }
     },
     "google": {
-      "status": "not_configured"
+      "status": "ok",
+      "store_performance_objects": 24,
+      "financial": {
+        "status": "ok",
+        "objects": 4
+      },
+      "principal": "id-989@polar-outlet-171708.iam.gserviceaccount.com"
     }
   },
   "apps": {
@@ -34,8 +74,30 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-10-01",
+          "windows": {
+            "7": {
+              "impressions": null,
+              "store_visitors": null,
+              "installs": null,
+              "purchases": 1,
+              "days_with_data": 1
+            },
+            "30": {
+              "impressions": null,
+              "store_visitors": 26,
+              "installs": 0,
+              "purchases": 1,
+              "days_with_data": 15
+            },
+            "90": {
+              "impressions": null,
+              "store_visitors": 163,
+              "installs": 1,
+              "purchases": 4,
+              "days_with_data": 57
+            }
+          }
         }
       },
       "combined": {
@@ -43,19 +105,19 @@
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 0
+          "purchases": 1
         },
         "30": {
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 0
+          "purchases": 1
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
-          "purchases": 0
+          "installs": 1,
+          "purchases": 4
         }
       }
     },
@@ -68,8 +130,30 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-10-04",
+          "windows": {
+            "7": {
+              "impressions": null,
+              "store_visitors": null,
+              "installs": null,
+              "purchases": 3,
+              "days_with_data": 3
+            },
+            "30": {
+              "impressions": null,
+              "store_visitors": 725,
+              "installs": 243,
+              "purchases": 12,
+              "days_with_data": 21
+            },
+            "90": {
+              "impressions": null,
+              "store_visitors": 1411,
+              "installs": 464,
+              "purchases": 24,
+              "days_with_data": 81
+            }
+          }
         }
       },
       "combined": {
@@ -77,19 +161,19 @@
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 0
+          "purchases": 3
         },
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
-          "purchases": 0
+          "installs": 243,
+          "purchases": 12
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
-          "purchases": 0
+          "installs": 464,
+          "purchases": 24
         }
       }
     },
@@ -102,8 +186,30 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-09-24",
+          "windows": {
+            "7": {
+              "impressions": null,
+              "store_visitors": null,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 0
+            },
+            "30": {
+              "impressions": null,
+              "store_visitors": 91,
+              "installs": 29,
+              "purchases": null,
+              "days_with_data": 17
+            },
+            "90": {
+              "impressions": null,
+              "store_visitors": 238,
+              "installs": 77,
+              "purchases": 1,
+              "days_with_data": 76
+            }
+          }
         }
       },
       "combined": {
@@ -116,14 +222,14 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
+          "installs": 29,
           "purchases": 0
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
-          "purchases": 0
+          "installs": 77,
+          "purchases": 1
         }
       }
     },
@@ -136,8 +242,30 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-09-24",
+          "windows": {
+            "7": {
+              "impressions": null,
+              "store_visitors": null,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 0
+            },
+            "30": {
+              "impressions": null,
+              "store_visitors": 14,
+              "installs": 5,
+              "purchases": null,
+              "days_with_data": 10
+            },
+            "90": {
+              "impressions": null,
+              "store_visitors": 68,
+              "installs": 8,
+              "purchases": null,
+              "days_with_data": 47
+            }
+          }
         }
       },
       "combined": {
@@ -150,13 +278,13 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
+          "installs": 5,
           "purchases": 0
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
+          "installs": 8,
           "purchases": 0
         }
       }
@@ -204,8 +332,30 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-09-24",
+          "windows": {
+            "7": {
+              "impressions": null,
+              "store_visitors": null,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 0
+            },
+            "30": {
+              "impressions": null,
+              "store_visitors": 62,
+              "installs": 22,
+              "purchases": null,
+              "days_with_data": 17
+            },
+            "90": {
+              "impressions": null,
+              "store_visitors": 161,
+              "installs": 44,
+              "purchases": null,
+              "days_with_data": 69
+            }
+          }
         }
       },
       "combined": {
@@ -218,13 +368,13 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
+          "installs": 22,
           "purchases": 0
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
+          "installs": 44,
           "purchases": 0
         }
       }
@@ -238,8 +388,30 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-09-24",
+          "windows": {
+            "7": {
+              "impressions": null,
+              "store_visitors": null,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 0
+            },
+            "30": {
+              "impressions": null,
+              "store_visitors": 33,
+              "installs": 7,
+              "purchases": null,
+              "days_with_data": 3
+            },
+            "90": {
+              "impressions": null,
+              "store_visitors": 33,
+              "installs": 7,
+              "purchases": null,
+              "days_with_data": 3
+            }
+          }
         }
       },
       "combined": {
@@ -252,13 +424,13 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
+          "installs": 7,
           "purchases": 0
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 0,
+          "installs": 7,
           "purchases": 0
         }
       }
@@ -272,8 +444,30 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-09-17",
+          "windows": {
+            "7": {
+              "impressions": null,
+              "store_visitors": null,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 0
+            },
+            "30": {
+              "impressions": null,
+              "store_visitors": 38,
+              "installs": 0,
+              "purchases": null,
+              "days_with_data": 2
+            },
+            "90": {
+              "impressions": null,
+              "store_visitors": 38,
+              "installs": 0,
+              "purchases": null,
+              "days_with_data": 2
+            }
+          }
         }
       },
       "combined": {

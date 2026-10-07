@@ -1,16 +1,56 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-07T12:56:23+00:00",
-  "status": "waiting",
+  "checked_at": "2026-10-07T13:32:00+00:00",
+  "status": "ok",
   "sources": {
     "apple": {
-      "status": "not_configured"
+      "status": "error",
+      "apps": {
+        "quivra": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "tagweaver": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "vaultxt": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "segra": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "clipnest": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "aligna": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "melivra": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        },
+        "papira": {
+          "status": "error",
+          "message": "HTTP Error 403: Forbidden"
+        }
+      }
     },
     "google": {
-      "status": "not_configured"
+      "status": "ok",
+      "store_performance_objects": 24,
+      "financial": {
+        "status": "ok",
+        "objects": 4
+      },
+      "principal": "id-989@polar-outlet-171708.iam.gserviceaccount.com"
     }
   },
-  "daily_rows": 0,
+  "daily_rows": 744,
   "apple_additions": 0,
-  "google_additions": 0
+  "google_additions": 920
 }
