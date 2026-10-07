@@ -21,6 +21,10 @@ class OpsSplitPagesTest(unittest.TestCase):
             app_dir = homepage / "src" / "content" / "apps" / "tagweaver"
             app_dir.mkdir(parents=True)
             (app_dir / "app.md").write_text("title: TagWeaver\nicon: assets\\icon\\tagweaver.png\n", encoding="utf-8")
+            (app_dir / "description-ko.md").write_text(
+                "간단한 설명:\nMP3/FLAC 태그를 오프라인으로 편집해요.\n",
+                encoding="utf-8",
+            )
             output = root / "ops"
             app = {
                 "app_id": "APP-0002",
@@ -64,11 +68,21 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertIn('class="platform-badges"', apps_html)
             self.assertIn('/app-assets/tagweaver/assets/icon/tagweaver.png', apps_html)
             self.assertIn('/ops/apps/tagweaver/', apps_html)
+            self.assertIn('class="ops-topbar"', apps_html)
+            self.assertIn('href="/" aria-label="ONNELLAB home"', apps_html)
+            self.assertIn('id="ops-lang-toggle"', apps_html)
+            self.assertIn('data-ko="앱 관리" data-en="App management"', apps_html)
+            self.assertIn("MP3/FLAC 태그를 오프라인으로 편집해요.", apps_html)
+            self.assertIn("Offline MP3/FLAC Tag Editor", apps_html)
+            self.assertIn('data-ko="출시됨" data-en="Released"', apps_html)
 
             detail = (output / "apps" / "tagweaver" / "index.html").read_text(encoding="utf-8")
             self.assertIn('id="funnel"', detail)
             self.assertIn("2.5.2", detail)
             self.assertIn("file_picker", detail)
+            self.assertIn('data-ko="앱 운영" data-en="App Operations"', detail)
+            self.assertIn('data-ko="변경 없음" data-en="unchanged"', detail)
+            self.assertIn("onnellab-ops-language", detail)
 
 
 if __name__ == "__main__":

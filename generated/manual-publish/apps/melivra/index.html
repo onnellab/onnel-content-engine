@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Melivra · ONNELLAB Ops</title>
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
 <style>
 :root{
   --ink:#191714;--muted:#746f69;--line:#ded6ca;--surface:#fffaf5;--panel:#fff;
@@ -15,6 +15,12 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--surface);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;word-break:keep-all}
 a{color:inherit}
+.ops-topbar{position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(221,212,202,.85);background:rgba(255,250,245,.94);backdrop-filter:blur(14px)}
+.ops-bar{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ops-brand{display:flex;align-items:center;gap:10px;font-weight:800;color:inherit;text-decoration:none}
+.ops-mark{width:32px;height:32px;display:block;object-fit:contain}
+.ops-lang{min-height:31px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:6px 10px;border-radius:999px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.ops-lang:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 .ops-wrap{max-width:1180px;margin:0 auto;padding:22px 20px 56px}
 .ops-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:30px}
 .ops-nav a{display:inline-flex;align-items:center;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fffdf9;color:#5d574f;text-decoration:none;font-size:13px;font-weight:750}
@@ -61,26 +67,75 @@ a{color:inherit}
 </style>
 </head>
 <body>
+<header class="ops-topbar">
+  <div class="ops-bar">
+    <a class="ops-brand" href="/" aria-label="ONNELLAB home">
+      <img class="ops-mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32">
+      <span>ONNELLAB Ops</span>
+    </a>
+    <button class="ops-lang" id="ops-lang-toggle" type="button">English</button>
+  </div>
+</header>
 <main class="ops-wrap">
-<nav class="ops-nav" aria-label="ONNELLAB Ops"><a href="/ops/">홈</a><a href="/ops/apps/" aria-current="page">앱</a><a href="/ops/publishing/">게시</a><a href="/ops/media/">미디어</a><a href="/ops/settings/">설정</a></nav>
+<nav class="ops-nav" aria-label="ONNELLAB Ops"><a href="/ops/"><span data-ko="홈" data-en="Home">홈</span></a><a href="/ops/apps/" aria-current="page"><span data-ko="앱" data-en="Apps">앱</span></a><a href="/ops/publishing/"><span data-ko="게시" data-en="Publishing">게시</span></a><a href="/ops/media/"><span data-ko="미디어" data-en="Media">미디어</span></a><a href="/ops/settings/"><span data-ko="설정" data-en="Settings">설정</span></a></nav>
 
-<header class="ops-head"><p class="eyebrow">App Operations</p><a href="/ops/apps/" style="font-size:13px;color:#746f69;text-decoration:none">← 앱 목록</a></header>
+<header class="ops-head">
+  <p class="eyebrow" data-ko="앱 운영" data-en="App Operations">앱 운영</p>
+  <a href="/ops/apps/" style="font-size:13px;color:#746f69;text-decoration:none" data-ko="← 앱 목록" data-en="← Apps">← 앱 목록</a>
+</header>
 <section class="detail-hero" style="--accent-border:#c8d6cf;--accent-bg:#eef6f2;--accent-text:#4a6357;">
   <img src="/app-assets/melivra/assets/icon/melivra.png" alt="" width="64" height="64">
-  <div><div class="title-row"><h1>Melivra</h1><span class="status-badge" data-status-kind="released">Released</span></div><p>An offline music player for organizing and playing audio files in a local library.</p><div class="platform-badges"><span>iOS</span><span>Android</span></div></div>
+  <div>
+    <div class="title-row"><h1>Melivra</h1><span class="status-badge" data-status-kind="released" data-ko="출시됨" data-en="Released">출시됨</span></div>
+    <p data-ko="로컬 음악을 정리하고 재생하는 오프라인 음악 플레이어예요." data-en="An offline music player for organizing and playing audio files in a local library.">로컬 음악을 정리하고 재생하는 오프라인 음악 플레이어예요.</p>
+    <div class="platform-badges"><span>iOS</span><span>Android</span></div>
+  </div>
 </section>
-<nav class="detail-tabs" aria-label="앱 세부"><a href="#overview">개요</a><a href="#funnel">유입·전환</a><a href="#store">스토어·수익</a><a href="#reviews">리뷰</a><a href="#technical">기술·운영</a></nav>
-<section class="detail-section" id="overview"><h2>개요</h2><div class="detail-grid">
-  <div class="detail-stat"><span>App Store</span><b>—</b><span>in_review</span></div>
-  <div class="detail-stat"><span>Play Store</span><b>1.0.6</b><span>unchanged</span></div>
+<nav class="detail-tabs" aria-label="앱 세부">
+  <a href="#overview" data-ko="개요" data-en="Overview">개요</a>
+  <a href="#funnel" data-ko="유입·전환" data-en="Acquisition">유입·전환</a>
+  <a href="#store" data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</a>
+  <a href="#reviews" data-ko="리뷰" data-en="Reviews">리뷰</a>
+  <a href="#technical" data-ko="기술·운영" data-en="Technical">기술·운영</a>
+</nav>
+<section class="detail-section" id="overview"><h2 data-ko="개요" data-en="Overview">개요</h2><div class="detail-grid">
+  <div class="detail-stat"><span>App Store</span><b>—</b><span data-ko="심사 중" data-en="in_review">심사 중</span></div>
+  <div class="detail-stat"><span>Play Store</span><b>1.0.6</b><span data-ko="변경 없음" data-en="unchanged">변경 없음</span></div>
   <div class="detail-stat"><span>GitHub main</span><b>1.0.6</b></div>
-  <div class="detail-stat"><span>최근 릴리즈</span><b>v1.0.6</b></div>
+  <div class="detail-stat"><span data-ko="최근 릴리즈" data-en="Latest release">최근 릴리즈</span><b>v1.0.6</b></div>
 </div></section>
-<section class="detail-section" id="funnel"><h2>유입·전환</h2><div class="empty-note">스토어 분석 수집을 붙일 자리예요. 통합 기준은 양 스토어에서 비교 가능한 상세 페이지 유입 → 설치 → 결제로 두고, Apple 노출은 iOS 전용 상위 퍼널로 분리해요.</div></section>
-<section class="detail-section" id="store"><h2>스토어·수익</h2><div class="detail-list"><div class="detail-row"><b>App Store</b><span>버전 — · in_review · 확인 2026-10-07T06:21:30+09:00</span></div><div class="detail-row"><b>Play Store</b><span>버전 1.0.6 · unchanged · 확인 2026-10-07T06:21:30+09:00</span></div><div class="detail-row"><b>Melivra AI Credits 100</b><span>0.99 USD · ai_credit</span></div><div class="detail-row"><b>Melivra AI Credits 1000</b><span>8.99 USD · ai_credit</span></div><div class="detail-row"><b>Melivra AI Credits 5000</b><span>34.99 USD · ai_credit</span></div><div class="detail-row"><b>Melivra Pro</b><span>6.99 USD · pro</span></div></div></section>
-<section class="detail-section" id="reviews"><h2>리뷰</h2><div class="detail-grid"><div class="detail-stat"><span>수집 리뷰</span><b>0</b></div><div class="detail-stat"><span>답변 대기</span><b>0</b></div></div></section>
-<section class="detail-section" id="technical"><h2>기술·운영</h2><div class="detail-list"><div class="detail-row"><b>Flutter / 플러그인</b><span>16 rows · crypto, cupertino_icons, dart_tags, ffmpeg_kit_flutter_new_audio, file_picker, go_router, image, in_app_purchase…</span></div><div class="detail-row"><b>고급 운영</b><span><a href="/ops/legacy/">기존 통합 콘솔에서 릴리즈 승인·리뷰 답변 등 기존 조작을 계속 사용할 수 있어요.</a></span></div><div class="detail-row"><b>공개 제품 페이지</b><span><a href="/apps/melivra/">onnellab.com/apps/melivra</a></span></div></div></section>
+<section class="detail-section" id="funnel"><h2 data-ko="유입·전환" data-en="Acquisition & conversion">유입·전환</h2><div class="empty-note" data-ko="스토어 분석 수집을 붙일 자리예요. 통합 기준은 양 스토어에서 비교 가능한 상세 페이지 유입 → 설치 → 결제로 두고, Apple 노출은 iOS 전용 상위 퍼널로 분리해요." data-en="Store analytics will appear here. The combined funnel uses comparable product-page traffic → installs → purchases, while Apple impressions remain an iOS-only upper-funnel metric.">스토어 분석 수집을 붙일 자리예요. 통합 기준은 양 스토어에서 비교 가능한 상세 페이지 유입 → 설치 → 결제로 두고, Apple 노출은 iOS 전용 상위 퍼널로 분리해요.</div></section>
+<section class="detail-section" id="store"><h2 data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</h2><div class="detail-list"><div class="detail-row"><b>App Store</b><span data-ko="버전 — · 심사 중 · 확인 2026-10-07T06:21:30+09:00" data-en="Version — · in_review · checked 2026-10-07T06:21:30+09:00">버전 — · 심사 중 · 확인 2026-10-07T06:21:30+09:00</span></div><div class="detail-row"><b>Play Store</b><span data-ko="버전 1.0.6 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00" data-en="Version 1.0.6 · unchanged · checked 2026-10-07T06:21:30+09:00">버전 1.0.6 · 변경 없음 · 확인 2026-10-07T06:21:30+09:00</span></div><div class="detail-row"><b>Melivra AI Credits 100</b><span data-ko="0.99 USD · AI 크레딧" data-en="0.99 USD · ai_credit">0.99 USD · AI 크레딧</span></div><div class="detail-row"><b>Melivra AI Credits 1000</b><span data-ko="8.99 USD · AI 크레딧" data-en="8.99 USD · ai_credit">8.99 USD · AI 크레딧</span></div><div class="detail-row"><b>Melivra AI Credits 5000</b><span data-ko="34.99 USD · AI 크레딧" data-en="34.99 USD · ai_credit">34.99 USD · AI 크레딧</span></div><div class="detail-row"><b>Melivra Pro</b><span data-ko="6.99 USD · Pro" data-en="6.99 USD · pro">6.99 USD · Pro</span></div></div></section>
+<section class="detail-section" id="reviews"><h2 data-ko="리뷰" data-en="Reviews">리뷰</h2><div class="detail-grid"><div class="detail-stat"><span data-ko="수집 리뷰" data-en="Collected reviews">수집 리뷰</span><b>0</b></div><div class="detail-stat"><span data-ko="답변 대기" data-en="Awaiting reply">답변 대기</span><b>0</b></div></div></section>
+<section class="detail-section" id="technical"><h2 data-ko="기술·운영" data-en="Technical & operations">기술·운영</h2><div class="detail-list">
+  <div class="detail-row"><b>Flutter / <span data-ko="플러그인" data-en="plugins">플러그인</span></b><span data-ko="16개 · crypto, cupertino_icons, dart_tags, ffmpeg_kit_flutter_new_audio, file_picker, go_router, image, in_app_purchase…" data-en="16 items · crypto, cupertino_icons, dart_tags, ffmpeg_kit_flutter_new_audio, file_picker, go_router, image, in_app_purchase…">16개 · crypto, cupertino_icons, dart_tags, ffmpeg_kit_flutter_new_audio, file_picker, go_router, image, in_app_purchase…</span></div>
+  <div class="detail-row"><b data-ko="고급 운영" data-en="Advanced operations">고급 운영</b><span><a href="/ops/legacy/" data-ko="기존 통합 콘솔에서 릴리즈 승인·리뷰 답변 등 기존 조작을 계속 사용할 수 있어요." data-en="Use the legacy console for release approvals, review replies, and other existing controls.">기존 통합 콘솔에서 릴리즈 승인·리뷰 답변 등 기존 조작을 계속 사용할 수 있어요.</a></span></div>
+  <div class="detail-row"><b data-ko="공개 제품 페이지" data-en="Public product page">공개 제품 페이지</b><span><a href="/apps/melivra/">onnellab.com/apps/melivra</a></span></div>
+</div></section>
 
 </main>
+<script>
+(() => {
+  const storageKey = 'onnellab-ops-language';
+  let language = localStorage.getItem(storageKey) === 'en' ? 'en' : 'ko';
+  const button = document.getElementById('ops-lang-toggle');
+  const applyLanguage = () => {
+    document.documentElement.lang = language === 'en' ? 'en' : 'ko';
+    document.querySelectorAll('[data-ko][data-en]').forEach((element) => {
+      element.textContent = language === 'en' ? element.dataset.en : element.dataset.ko;
+    });
+    document.querySelectorAll('[data-placeholder-ko][data-placeholder-en]').forEach((element) => {
+      element.setAttribute('placeholder', language === 'en' ? element.dataset.placeholderEn : element.dataset.placeholderKo);
+    });
+    if (button) button.textContent = language === 'en' ? '한국어' : 'English';
+  };
+  if (button) button.addEventListener('click', () => {
+    language = language === 'en' ? 'ko' : 'en';
+    localStorage.setItem(storageKey, language);
+    applyLanguage();
+  });
+  applyLanguage();
+})();
+</script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>앱 · ONNELLAB Ops</title>
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
 <style>
 :root{
   --ink:#191714;--muted:#746f69;--line:#ded6ca;--surface:#fffaf5;--panel:#fff;
@@ -15,6 +15,12 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--surface);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;word-break:keep-all}
 a{color:inherit}
+.ops-topbar{position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(221,212,202,.85);background:rgba(255,250,245,.94);backdrop-filter:blur(14px)}
+.ops-bar{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ops-brand{display:flex;align-items:center;gap:10px;font-weight:800;color:inherit;text-decoration:none}
+.ops-mark{width:32px;height:32px;display:block;object-fit:contain}
+.ops-lang{min-height:31px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:6px 10px;border-radius:999px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.ops-lang:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 .ops-wrap{max-width:1180px;margin:0 auto;padding:22px 20px 56px}
 .ops-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:30px}
 .ops-nav a{display:inline-flex;align-items:center;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fffdf9;color:#5d574f;text-decoration:none;font-size:13px;font-weight:750}
@@ -61,102 +67,134 @@ a{color:inherit}
 </style>
 </head>
 <body>
+<header class="ops-topbar">
+  <div class="ops-bar">
+    <a class="ops-brand" href="/" aria-label="ONNELLAB home">
+      <img class="ops-mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32">
+      <span>ONNELLAB Ops</span>
+    </a>
+    <button class="ops-lang" id="ops-lang-toggle" type="button">English</button>
+  </div>
+</header>
 <main class="ops-wrap">
-<nav class="ops-nav" aria-label="ONNELLAB Ops"><a href="/ops/">홈</a><a href="/ops/apps/" aria-current="page">앱</a><a href="/ops/publishing/">게시</a><a href="/ops/media/">미디어</a><a href="/ops/settings/">설정</a></nav>
+<nav class="ops-nav" aria-label="ONNELLAB Ops"><a href="/ops/"><span data-ko="홈" data-en="Home">홈</span></a><a href="/ops/apps/" aria-current="page"><span data-ko="앱" data-en="Apps">앱</span></a><a href="/ops/publishing/"><span data-ko="게시" data-en="Publishing">게시</span></a><a href="/ops/media/"><span data-ko="미디어" data-en="Media">미디어</span></a><a href="/ops/settings/"><span data-ko="설정" data-en="Settings">설정</span></a></nav>
 
 <header class="ops-head">
-  <p class="eyebrow">Apps</p>
-  <h1>앱 관리</h1>
-  <p>앱별 상태를 한곳에서 비교하고, 세부 운영 정보는 각 앱 페이지에서 확인해요.</p>
+  <p class="eyebrow" data-ko="앱" data-en="Apps">앱</p>
+  <h1 data-ko="앱 관리" data-en="App management">앱 관리</h1>
+  <p data-ko="앱별 상태를 한곳에서 비교하고, 세부 운영 정보는 각 앱 페이지에서 확인해요." data-en="Compare app status in one place and open each app for detailed operations.">앱별 상태를 한곳에서 비교하고, 세부 운영 정보는 각 앱 페이지에서 확인해요.</p>
 </header>
-<label class="app-search"><span>앱 찾기</span><input type="search" placeholder="앱 이름을 검색해요" data-app-search></label>
-<p class="empty-note" data-app-empty hidden>일치하는 앱이 없어요.</p>
+<label class="app-search"><span data-ko="앱 찾기" data-en="Find an app">앱 찾기</span><input type="search" placeholder="앱 이름을 검색해요" data-placeholder-ko="앱 이름을 검색해요" data-placeholder-en="Search app name" data-app-search></label>
+<p class="empty-note" data-app-empty hidden data-ko="일치하는 앱이 없어요." data-en="No matching apps.">일치하는 앱이 없어요.</p>
 <section class="app-grid" aria-label="앱 목록">
 <a class="app-card" href="/ops/apps/aligna/" style="--accent-border:#d9cfc7;--accent-bg:#f7f1ec;--accent-text:#6a5548;" data-app-row data-app-title="aligna">
   <img src="/app-assets/aligna/assets/icon/aligna.png" alt="" width="64" height="64" loading="lazy">
   <div class="app-copy">
-    <div class="title-row"><h2>Aligna</h2><span class="status-badge" data-status-kind="released">Released</span></div>
-    <p>A rule-based file-renaming utility with preview-before-apply workflows.</p>
+    <div class="title-row"><h2>Aligna</h2><span class="status-badge" data-status-kind="released" data-ko="출시됨" data-en="Released">출시됨</span></div>
+    <p data-ko="파일 이름을 규칙대로 한 번에 정리해요." data-en="A rule-based file-renaming utility with preview-before-apply workflows.">파일 이름을 규칙대로 한 번에 정리해요.</p>
     <div class="platform-badges" aria-label="Platforms"><span>iOS</span><span>Android</span></div>
-    <div class="ops-meta">repo 1.0.7 · 2 stores · 1 releases · 8 plugins</div>
+    <div class="ops-meta" data-ko="저장소 1.0.7 · 스토어 2개 · 릴리즈 1개 · 플러그인 8개" data-en="repo 1.0.7 · 2 stores · 1 releases · 8 plugins">저장소 1.0.7 · 스토어 2개 · 릴리즈 1개 · 플러그인 8개</div>
   </div>
 </a>
 
 <a class="app-card" href="/ops/apps/clipnest/" style="--accent-border:#d6c9c9;--accent-bg:#f7efef;--accent-text:#6b4f4f;" data-app-row data-app-title="clipnest">
   <img src="/app-assets/clipnest/assets/icon/clipnest.png" alt="" width="64" height="64" loading="lazy">
   <div class="app-copy">
-    <div class="title-row"><h2>ClipNest</h2><span class="status-badge" data-status-kind="released">Released</span></div>
-    <p>A local iOS clipboard utility for saving and reusing copied text.</p>
+    <div class="title-row"><h2>ClipNest</h2><span class="status-badge" data-status-kind="released" data-ko="출시됨" data-en="Released">출시됨</span></div>
+    <p data-ko="클립보드·문구 저장 키보드" data-en="A local iOS clipboard utility for saving and reusing copied text.">클립보드·문구 저장 키보드</p>
     <div class="platform-badges" aria-label="Platforms"><span>iOS</span></div>
-    <div class="ops-meta">repo 1.0.4 · 1 stores · 1 releases · 9 plugins</div>
+    <div class="ops-meta" data-ko="저장소 1.0.4 · 스토어 1개 · 릴리즈 1개 · 플러그인 9개" data-en="repo 1.0.4 · 1 stores · 1 releases · 9 plugins">저장소 1.0.4 · 스토어 1개 · 릴리즈 1개 · 플러그인 9개</div>
   </div>
 </a>
 
 <a class="app-card" href="/ops/apps/melivra/" style="--accent-border:#c8d6cf;--accent-bg:#eef6f2;--accent-text:#4a6357;" data-app-row data-app-title="melivra">
   <img src="/app-assets/melivra/assets/icon/melivra.png" alt="" width="64" height="64" loading="lazy">
   <div class="app-copy">
-    <div class="title-row"><h2>Melivra</h2><span class="status-badge" data-status-kind="released">Released</span></div>
-    <p>An offline music player for organizing and playing audio files in a local library.</p>
+    <div class="title-row"><h2>Melivra</h2><span class="status-badge" data-status-kind="released" data-ko="출시됨" data-en="Released">출시됨</span></div>
+    <p data-ko="로컬 음악을 정리하고 재생하는 오프라인 음악 플레이어예요." data-en="An offline music player for organizing and playing audio files in a local library.">로컬 음악을 정리하고 재생하는 오프라인 음악 플레이어예요.</p>
     <div class="platform-badges" aria-label="Platforms"><span>iOS</span><span>Android</span></div>
-    <div class="ops-meta">repo 1.0.6 · 2 stores · 1 releases · 16 plugins</div>
+    <div class="ops-meta" data-ko="저장소 1.0.6 · 스토어 2개 · 릴리즈 1개 · 플러그인 16개" data-en="repo 1.0.6 · 2 stores · 1 releases · 16 plugins">저장소 1.0.6 · 스토어 2개 · 릴리즈 1개 · 플러그인 16개</div>
   </div>
 </a>
 
 <a class="app-card" href="/ops/apps/papira/" style="--accent-border:#c8d6cf;--accent-bg:#eef6f2;--accent-text:#4a6357;" data-app-row data-app-title="papira">
   <img src="/app-assets/papira/icon.png" alt="" width="64" height="64" loading="lazy">
   <div class="app-copy">
-    <div class="title-row"><h2>Papira</h2><span class="status-badge" data-status-kind="released">Released</span></div>
-    <p>An offline ebook maker that turns finished TXT manuscripts into EPUB books.</p>
+    <div class="title-row"><h2>Papira</h2><span class="status-badge" data-status-kind="released" data-ko="출시됨" data-en="Released">출시됨</span></div>
+    <p data-ko="완성된 TXT 원고를 EPUB 전자책으로 만드는 오프라인 제작 도구예요." data-en="An offline ebook maker that turns finished TXT manuscripts into EPUB books.">완성된 TXT 원고를 EPUB 전자책으로 만드는 오프라인 제작 도구예요.</p>
     <div class="platform-badges" aria-label="Platforms"><span>iOS</span><span>Android</span></div>
-    <div class="ops-meta">repo — · 2 stores · 0 releases · 0 plugins</div>
+    <div class="ops-meta" data-ko="저장소 — · 스토어 2개 · 릴리즈 0개 · 플러그인 0개" data-en="repo — · 2 stores · 0 releases · 0 plugins">저장소 — · 스토어 2개 · 릴리즈 0개 · 플러그인 0개</div>
   </div>
 </a>
 
 <a class="app-card" href="/ops/apps/quivra/" style="--accent-border:#d7cfdb;--accent-bg:#f4eff5;--accent-text:#614f68;" data-app-row data-app-title="quivra">
   <img src="/app-assets/quivra/assets/icon/quivra.png" alt="" width="64" height="64" loading="lazy">
   <div class="app-copy">
-    <div class="title-row"><h2>Quivra</h2><span class="status-badge" data-status-kind="released">Released</span></div>
-    <p>A local media conversion utility for focused file-format tasks.</p>
+    <div class="title-row"><h2>Quivra</h2><span class="status-badge" data-status-kind="released" data-ko="출시됨" data-en="Released">출시됨</span></div>
+    <p data-ko="광고·구독 없이 WAV·M4A·MP4·MOV 변환" data-en="A local media conversion utility for focused file-format tasks.">광고·구독 없이 WAV·M4A·MP4·MOV 변환</p>
     <div class="platform-badges" aria-label="Platforms"><span>iOS</span><span>Android</span></div>
-    <div class="ops-meta">repo 1.0.9 · 2 stores · 1 releases · 6 plugins</div>
+    <div class="ops-meta" data-ko="저장소 1.0.9 · 스토어 2개 · 릴리즈 1개 · 플러그인 6개" data-en="repo 1.0.9 · 2 stores · 1 releases · 6 plugins">저장소 1.0.9 · 스토어 2개 · 릴리즈 1개 · 플러그인 6개</div>
   </div>
 </a>
 
 <a class="app-card" href="/ops/apps/segra/" style="--accent-border:#cdd3dc;--accent-bg:#f0f3f7;--accent-text:#4b5b70;" data-app-row data-app-title="segra">
   <img src="/app-assets/segra/assets/icon/segra.png" alt="" width="64" height="64" loading="lazy">
   <div class="app-copy">
-    <div class="title-row"><h2>Segra</h2><span class="status-badge" data-status-kind="released">Released</span></div>
-    <p>A focused audio utility for trimming and organizing audio segments.</p>
+    <div class="title-row"><h2>Segra</h2><span class="status-badge" data-status-kind="released" data-ko="출시됨" data-en="Released">출시됨</span></div>
+    <p data-ko="MP3와 WAV 오디오를 자르고, 합치고, 영상으로 만들어요." data-en="A focused audio utility for trimming and organizing audio segments.">MP3와 WAV 오디오를 자르고, 합치고, 영상으로 만들어요.</p>
     <div class="platform-badges" aria-label="Platforms"><span>iOS</span><span>Android</span></div>
-    <div class="ops-meta">repo 1.0.6 · 2 stores · 1 releases · 15 plugins</div>
+    <div class="ops-meta" data-ko="저장소 1.0.6 · 스토어 2개 · 릴리즈 1개 · 플러그인 15개" data-en="repo 1.0.6 · 2 stores · 1 releases · 15 plugins">저장소 1.0.6 · 스토어 2개 · 릴리즈 1개 · 플러그인 15개</div>
   </div>
 </a>
 
 <a class="app-card" href="/ops/apps/tagweaver/" style="--accent-border:#ded2b5;--accent-bg:#fbf7ec;--accent-text:#6a5a2e;" data-app-row data-app-title="tagweaver">
   <img src="/app-assets/tagweaver/assets/icon/tagweaver.png" alt="" width="64" height="64" loading="lazy">
   <div class="app-copy">
-    <div class="title-row"><h2>TagWeaver</h2><span class="status-badge" data-status-kind="released">Released</span></div>
-    <p>A local MP3 metadata editor designed for focused tag management.</p>
+    <div class="title-row"><h2>TagWeaver</h2><span class="status-badge" data-status-kind="released" data-ko="출시됨" data-en="Released">출시됨</span></div>
+    <p data-ko="MP3/FLAC 태그·평점·앨범 아트·가사를 오프라인으로 편집해요." data-en="A local MP3 metadata editor designed for focused tag management.">MP3/FLAC 태그·평점·앨범 아트·가사를 오프라인으로 편집해요.</p>
     <div class="platform-badges" aria-label="Platforms"><span>iOS</span><span>Android</span></div>
-    <div class="ops-meta">repo 2.5.2 · 2 stores · 1 releases · 9 plugins</div>
+    <div class="ops-meta" data-ko="저장소 2.5.2 · 스토어 2개 · 릴리즈 1개 · 플러그인 9개" data-en="repo 2.5.2 · 2 stores · 1 releases · 9 plugins">저장소 2.5.2 · 스토어 2개 · 릴리즈 1개 · 플러그인 9개</div>
   </div>
 </a>
 
 <a class="app-card" href="/ops/apps/vaultxt/" style="--accent-border:#c8d6cf;--accent-bg:#eef6f2;--accent-text:#4a6357;" data-app-row data-app-title="vaultxt">
   <img src="/app-assets/vaultxt/assets/icon/vaultxt.png" alt="" width="64" height="64" loading="lazy">
   <div class="app-copy">
-    <div class="title-row"><h2>VaultXT</h2><span class="status-badge" data-status-kind="released">Released</span></div>
-    <p>A text editor and viewer designed for working with large plain-text files.</p>
+    <div class="title-row"><h2>VaultXT</h2><span class="status-badge" data-status-kind="released" data-ko="출시됨" data-en="Released">출시됨</span></div>
+    <p data-ko="대용량 텍스트를 로컬에서 편집하고 자동저장, 검색, 스냅샷으로 관리해요." data-en="A text editor and viewer designed for working with large plain-text files.">대용량 텍스트를 로컬에서 편집하고 자동저장, 검색, 스냅샷으로 관리해요.</p>
     <div class="platform-badges" aria-label="Platforms"><span>iOS</span><span>Android</span></div>
-    <div class="ops-meta">repo 2.0.1 · 2 stores · 1 releases · 15 plugins</div>
+    <div class="ops-meta" data-ko="저장소 2.0.1 · 스토어 2개 · 릴리즈 1개 · 플러그인 15개" data-en="repo 2.0.1 · 2 stores · 1 releases · 15 plugins">저장소 2.0.1 · 스토어 2개 · 릴리즈 1개 · 플러그인 15개</div>
   </div>
 </a>
 </section>
-<p class="ops-legacy-link">이전 상세 조작이 필요한 항목은 <a href="/ops/legacy/">기존 통합 콘솔</a>에서 계속 사용할 수 있어요.</p>
+<p class="ops-legacy-link"><span data-ko="이전 상세 조작이 필요한 항목은" data-en="For legacy controls, keep using the">이전 상세 조작이 필요한 항목은</span> <a href="/ops/legacy/" data-ko="기존 통합 콘솔" data-en="legacy console">기존 통합 콘솔</a><span data-ko="에서 계속 사용할 수 있어요." data-en=".">에서 계속 사용할 수 있어요.</span></p>
 <script>
 (()=>{const input=document.querySelector('[data-app-search]');const rows=[...document.querySelectorAll('[data-app-row]')];if(!(input instanceof HTMLInputElement))return;input.addEventListener('input',()=>{const q=input.value.trim().toLowerCase();let visible=0;for(const row of rows){const hide=q&&!String(row.dataset.appTitle||'').includes(q);row.hidden=!!hide;if(!hide)visible++;}const empty=document.querySelector('[data-app-empty]');if(empty instanceof HTMLElement)empty.hidden=visible>0;});})();
 </script>
 
 </main>
+<script>
+(() => {
+  const storageKey = 'onnellab-ops-language';
+  let language = localStorage.getItem(storageKey) === 'en' ? 'en' : 'ko';
+  const button = document.getElementById('ops-lang-toggle');
+  const applyLanguage = () => {
+    document.documentElement.lang = language === 'en' ? 'en' : 'ko';
+    document.querySelectorAll('[data-ko][data-en]').forEach((element) => {
+      element.textContent = language === 'en' ? element.dataset.en : element.dataset.ko;
+    });
+    document.querySelectorAll('[data-placeholder-ko][data-placeholder-en]').forEach((element) => {
+      element.setAttribute('placeholder', language === 'en' ? element.dataset.placeholderEn : element.dataset.placeholderKo);
+    });
+    if (button) button.textContent = language === 'en' ? '한국어' : 'English';
+  };
+  if (button) button.addEventListener('click', () => {
+    language = language === 'en' ? 'ko' : 'en';
+    localStorage.setItem(storageKey, language);
+    applyLanguage();
+  });
+  applyLanguage();
+})();
+</script>
 </body>
 </html>

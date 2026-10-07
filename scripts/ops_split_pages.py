@@ -30,6 +30,26 @@ ACCENT_OVERRIDES = {
     "clipnest": ("#d6c9c9", "#f7efef", "#6b4f4f"),
 }
 
+APP_DESCRIPTION_KO_FALLBACK = {
+    "aligna": "파일 이름을 규칙대로 한 번에 정리해요.",
+    "clipnest": "클립보드와 자주 쓰는 문구를 저장해 빠르게 다시 붙여넣어요.",
+    "melivra": "로컬 음악을 정리하고 재생하는 오프라인 음악 플레이어예요.",
+    "papira": "완성된 TXT 원고를 EPUB 전자책으로 만드는 오프라인 제작 도구예요.",
+    "quivra": "WAV·M4A·MP4·MOV 파일을 간단하게 변환해요.",
+    "segra": "MP3와 WAV 오디오를 자르고, 합치고, 영상으로 만들어요.",
+    "tagweaver": "MP3/FLAC 태그·평점·앨범 아트·가사를 오프라인으로 편집해요.",
+    "vaultxt": "대용량 텍스트를 로컬에서 편집하고 자동저장, 검색, 스냅샷으로 관리해요.",
+}
+
+STORE_STATUS_KO = {
+    "unchanged": "변경 없음",
+    "new": "신규",
+    "updated": "업데이트",
+    "in_review": "심사 중",
+    "not_found": "미확인",
+    "error": "오류",
+}
+
 OPS_BASE_CSS = r"""
 :root{
   --ink:#191714;--muted:#746f69;--line:#ded6ca;--surface:#fffaf5;--panel:#fff;
@@ -39,6 +59,12 @@ OPS_BASE_CSS = r"""
 *{box-sizing:border-box}
 body{margin:0;background:var(--surface);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;word-break:keep-all}
 a{color:inherit}
+.ops-topbar{position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(221,212,202,.85);background:rgba(255,250,245,.94);backdrop-filter:blur(14px)}
+.ops-bar{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ops-brand{display:flex;align-items:center;gap:10px;font-weight:800;color:inherit;text-decoration:none}
+.ops-mark{width:32px;height:32px;display:block;object-fit:contain}
+.ops-lang{min-height:31px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:6px 10px;border-radius:999px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.ops-lang:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 .ops-wrap{max-width:1180px;margin:0 auto;padding:22px 20px 56px}
 .ops-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:30px}
 .ops-nav a{display:inline-flex;align-items:center;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fffdf9;color:#5d574f;text-decoration:none;font-size:13px;font-weight:750}
@@ -107,16 +133,18 @@ def _accent_style(slug: str) -> str:
 
 def _nav(current: str) -> str:
     entries = (
-        ("home", "/ops/", "홈"),
-        ("apps", "/ops/apps/", "앱"),
-        ("publishing", "/ops/publishing/", "게시"),
-        ("media", "/ops/media/", "미디어"),
-        ("settings", "/ops/settings/", "설정"),
+        ("home", "/ops/", "홈", "Home"),
+        ("apps", "/ops/apps/", "앱", "Apps"),
+        ("publishing", "/ops/publishing/", "게시", "Publishing"),
+        ("media", "/ops/media/", "미디어", "Media"),
+        ("settings", "/ops/settings/", "설정", "Settings"),
     )
     links = []
-    for key, href, label in entries:
+    for key, href, ko_label, en_label in entries:
         current_attr = ' aria-current="page"' if key == current else ""
-        links.append(f'<a href="{href}"{current_attr}>{label}</a>')
+        links.append(
+            f'<a href="{href}"{current_attr}><span data-ko="{_esc(ko_label)}" data-en="{_esc(en_label)}">{_esc(ko_label)}</span></a>'
+        )
     return '<nav class="ops-nav" aria-label="ONNELLAB Ops">' + "".join(links) + "</nav>"
 
 
@@ -128,14 +156,46 @@ def _page(title: str, current: str, body: str) -> str:
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{_esc(title)} · ONNELLAB Ops</title>
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
 <style>{OPS_BASE_CSS}</style>
 </head>
 <body>
+<header class="ops-topbar">
+  <div class="ops-bar">
+    <a class="ops-brand" href="/" aria-label="ONNELLAB home">
+      <img class="ops-mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32">
+      <span>ONNELLAB Ops</span>
+    </a>
+    <button class="ops-lang" id="ops-lang-toggle" type="button">English</button>
+  </div>
+</header>
 <main class="ops-wrap">
 {_nav(current)}
 {body}
 </main>
+<script>
+(() => {{
+  const storageKey = 'onnellab-ops-language';
+  let language = localStorage.getItem(storageKey) === 'en' ? 'en' : 'ko';
+  const button = document.getElementById('ops-lang-toggle');
+  const applyLanguage = () => {{
+    document.documentElement.lang = language === 'en' ? 'en' : 'ko';
+    document.querySelectorAll('[data-ko][data-en]').forEach((element) => {{
+      element.textContent = language === 'en' ? element.dataset.en : element.dataset.ko;
+    }});
+    document.querySelectorAll('[data-placeholder-ko][data-placeholder-en]').forEach((element) => {{
+      element.setAttribute('placeholder', language === 'en' ? element.dataset.placeholderEn : element.dataset.placeholderKo);
+    }});
+    if (button) button.textContent = language === 'en' ? '한국어' : 'English';
+  }};
+  if (button) button.addEventListener('click', () => {{
+    language = language === 'en' ? 'ko' : 'en';
+    localStorage.setItem(storageKey, language);
+    applyLanguage();
+  }});
+  applyLanguage();
+}})();
+</script>
 </body>
 </html>
 """
@@ -239,6 +299,27 @@ body[data-ops-view="settings"] main>.status-section{display:none!important}
     return document.replace("</head>", view_css + "</head>", 1)
 
 
+def _ko_app_description(homepage_repo: Path, slug: str, fallback: str) -> str:
+    description_path = homepage_repo / "src" / "content" / "apps" / slug / "description-ko.md"
+    if description_path.exists():
+        lines = description_path.read_text(encoding="utf-8").splitlines()
+        for label in ("간단한 설명:", "랜딩 부제:", "부제:"):
+            try:
+                index = lines.index(label)
+            except ValueError:
+                continue
+            for candidate in lines[index + 1:]:
+                candidate = candidate.strip()
+                if candidate:
+                    return candidate
+    return APP_DESCRIPTION_KO_FALLBACK.get(slug, fallback)
+
+
+def _store_status_ko(value: object) -> str:
+    text = str(value or "—")
+    return STORE_STATUS_KO.get(text, text)
+
+
 def _app_icon_path(homepage_repo: Path, slug: str) -> str:
     if slug == "papira":
         return "/app-assets/papira/icon.png"
@@ -252,7 +333,13 @@ def _app_icon_path(homepage_repo: Path, slug: str) -> str:
     return f"/app-assets/{slug}/{relative}"
 
 
-def _app_summary(app: Mapping[str, object], store_items: Sequence[Mapping[str, object]], releases: Sequence[Mapping[str, object]], dependencies: Sequence[Mapping[str, object]]) -> str:
+def _app_summary(
+    app: Mapping[str, object],
+    store_items: Sequence[Mapping[str, object]],
+    releases: Sequence[Mapping[str, object]],
+    dependencies: Sequence[Mapping[str, object]],
+    language: str,
+) -> str:
     slug = str(app.get("slug") or "")
     stores = [item for item in store_items if str(item.get("app_slug") or "") == slug]
     app_releases = [item for item in releases if str(item.get("app_slug") or "") == slug]
@@ -274,7 +361,20 @@ def _app_summary(app: Mapping[str, object], store_items: Sequence[Mapping[str, o
             and str(item.get("declared_version") or "") == "sdk:flutter"
         )
     )
-    parts = [f"repo {version or '—'}", f"{len(stores)} stores", f"{len(app_releases)} releases", f"{plugin_count} plugins"]
+    if language == "ko":
+        parts = [
+            f"저장소 {version or '—'}",
+            f"스토어 {len(stores)}개",
+            f"릴리즈 {len(app_releases)}개",
+            f"플러그인 {plugin_count}개",
+        ]
+    else:
+        parts = [
+            f"repo {version or '—'}",
+            f"{len(stores)} stores",
+            f"{len(app_releases)} releases",
+            f"{plugin_count} plugins",
+        ]
     return " · ".join(parts)
 
 
@@ -283,18 +383,22 @@ def _app_card(app: Mapping[str, object], homepage_repo: Path, store_items: Seque
     title = str(app.get("app_name") or slug)
     status = str(app.get("status") or "")
     status_kind = "released" if status == "released" else "preparing"
-    status_label = "Released" if status_kind == "released" else "Preparing for release"
-    description = str(app.get("one_line_description") or "")
+    status_ko = "출시됨" if status_kind == "released" else "출시 준비 중"
+    status_en = "Released" if status_kind == "released" else "Preparing for release"
+    description_en = str(app.get("one_line_description") or "")
+    description_ko = _ko_app_description(homepage_repo, slug, description_en)
+    summary_ko = _app_summary(app, store_items, releases, dependencies, "ko")
+    summary_en = _app_summary(app, store_items, releases, dependencies, "en")
     platforms = [value.strip() for value in str(app.get("platforms") or "").split("|") if value.strip()]
     badges = "".join(f"<span>{_esc('iOS' if value == 'ios' else 'Android' if value == 'android' else value)}</span>" for value in platforms)
     return f"""
 <a class="app-card" href="/ops/apps/{_esc(slug)}/" style="{_accent_style(slug)}" data-app-row data-app-title="{_esc(title.lower())}">
   <img src="{_esc(_app_icon_path(homepage_repo, slug))}" alt="" width="64" height="64" loading="lazy">
   <div class="app-copy">
-    <div class="title-row"><h2>{_esc(title)}</h2><span class="status-badge" data-status-kind="{status_kind}">{status_label}</span></div>
-    <p>{_esc(description)}</p>
+    <div class="title-row"><h2>{_esc(title)}</h2><span class="status-badge" data-status-kind="{status_kind}" data-ko="{_esc(status_ko)}" data-en="{_esc(status_en)}">{_esc(status_ko)}</span></div>
+    <p data-ko="{_esc(description_ko)}" data-en="{_esc(description_en)}">{_esc(description_ko)}</p>
     <div class="platform-badges" aria-label="Platforms">{badges}</div>
-    <div class="ops-meta">{_esc(_app_summary(app, store_items, releases, dependencies))}</div>
+    <div class="ops-meta" data-ko="{_esc(summary_ko)}" data-en="{_esc(summary_en)}">{_esc(summary_ko)}</div>
   </div>
 </a>
 """
@@ -304,14 +408,14 @@ def _apps_index(apps: Sequence[Mapping[str, object]], homepage_repo: Path, store
     cards = "".join(_app_card(app, homepage_repo, store_items, releases, dependencies) for app in sorted(apps, key=lambda item: str(item.get("app_name") or "").lower()))
     body = f"""
 <header class="ops-head">
-  <p class="eyebrow">Apps</p>
-  <h1>앱 관리</h1>
-  <p>앱별 상태를 한곳에서 비교하고, 세부 운영 정보는 각 앱 페이지에서 확인해요.</p>
+  <p class="eyebrow" data-ko="앱" data-en="Apps">앱</p>
+  <h1 data-ko="앱 관리" data-en="App management">앱 관리</h1>
+  <p data-ko="앱별 상태를 한곳에서 비교하고, 세부 운영 정보는 각 앱 페이지에서 확인해요." data-en="Compare app status in one place and open each app for detailed operations.">앱별 상태를 한곳에서 비교하고, 세부 운영 정보는 각 앱 페이지에서 확인해요.</p>
 </header>
-<label class="app-search"><span>앱 찾기</span><input type="search" placeholder="앱 이름을 검색해요" data-app-search></label>
-<p class="empty-note" data-app-empty hidden>일치하는 앱이 없어요.</p>
+<label class="app-search"><span data-ko="앱 찾기" data-en="Find an app">앱 찾기</span><input type="search" placeholder="앱 이름을 검색해요" data-placeholder-ko="앱 이름을 검색해요" data-placeholder-en="Search app name" data-app-search></label>
+<p class="empty-note" data-app-empty hidden data-ko="일치하는 앱이 없어요." data-en="No matching apps.">일치하는 앱이 없어요.</p>
 <section class="app-grid" aria-label="앱 목록">{cards}</section>
-<p class="ops-legacy-link">이전 상세 조작이 필요한 항목은 <a href="/ops/legacy/">기존 통합 콘솔</a>에서 계속 사용할 수 있어요.</p>
+<p class="ops-legacy-link"><span data-ko="이전 상세 조작이 필요한 항목은" data-en="For legacy controls, keep using the">이전 상세 조작이 필요한 항목은</span> <a href="/ops/legacy/" data-ko="기존 통합 콘솔" data-en="legacy console">기존 통합 콘솔</a><span data-ko="에서 계속 사용할 수 있어요." data-en=".">에서 계속 사용할 수 있어요.</span></p>
 <script>
 (()=>{{const input=document.querySelector('[data-app-search]');const rows=[...document.querySelectorAll('[data-app-row]')];if(!(input instanceof HTMLInputElement))return;input.addEventListener('input',()=>{{const q=input.value.trim().toLowerCase();let visible=0;for(const row of rows){{const hide=q&&!String(row.dataset.appTitle||'').includes(q);row.hidden=!!hide;if(!hide)visible++;}}const empty=document.querySelector('[data-app-empty]');if(empty instanceof HTMLElement)empty.hidden=visible>0;}});}})();
 </script>
@@ -334,9 +438,46 @@ def _store_stat(store_items: Sequence[Mapping[str, object]], platform: str) -> t
     return (version, status)
 
 
+def _bilingual_store_row(item: Mapping[str, object]) -> str:
+    platform = "App Store" if str(item.get("platform") or "") == "ios" else "Play Store"
+    version = str(item.get("version") or "—")
+    status_en = str(item.get("status") or "—")
+    status_ko = _store_status_ko(status_en)
+    checked = str(item.get("checked_at") or "—")
+    ko = f"버전 {version} · {status_ko} · 확인 {checked}"
+    en = f"Version {version} · {status_en} · checked {checked}"
+    return (
+        f'<div class="detail-row"><b>{platform}</b>'
+        f'<span data-ko="{_esc(ko)}" data-en="{_esc(en)}">{_esc(ko)}</span></div>'
+    )
+
+
+def _bilingual_price_row(item: Mapping[str, object]) -> str:
+    product_name = str(item.get("product_name") or "Product")
+    price = str(item.get("price") or "—")
+    currency = str(item.get("currency") or "")
+    product_type = str(item.get("product_type") or "")
+    type_ko = {
+        "pro": "Pro",
+        "paid_download": "유료 다운로드",
+        "ai_credit": "AI 크레딧",
+    }.get(product_type, product_type)
+    ko = f"{price} {currency} · {type_ko}".strip()
+    en = f"{price} {currency} · {product_type}".strip()
+    return (
+        f'<div class="detail-row"><b>{_esc(product_name)}</b>'
+        f'<span data-ko="{_esc(ko)}" data-en="{_esc(en)}">{_esc(ko)}</span></div>'
+    )
+
+
 def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Sequence[Mapping[str, object]], releases: Sequence[Mapping[str, object]], reviews: Sequence[Mapping[str, object]], dependencies: Sequence[Mapping[str, object]], pricing: Sequence[Mapping[str, object]]) -> str:
     slug = str(app.get("slug") or "")
     title = str(app.get("app_name") or slug)
+    description_en = str(app.get("one_line_description") or "")
+    description_ko = _ko_app_description(homepage_repo, slug, description_en)
+    status_kind = "released" if str(app.get("status") or "") == "released" else "preparing"
+    status_ko = "출시됨" if status_kind == "released" else "출시 준비 중"
+    status_en = "Released" if status_kind == "released" else "Preparing for release"
     app_stores = [item for item in store_items if _match(item, app)]
     app_releases = [item for item in releases if _match(item, app)]
     app_reviews = [item for item in reviews if _match(item, app)]
@@ -344,18 +485,22 @@ def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Seq
     app_prices = [item for item in pricing if str(item.get("app_slug") or "") == slug]
     ios_version, ios_status = _store_stat(app_stores, "ios")
     android_version, android_status = _store_stat(app_stores, "android")
+    ios_status_ko = _store_status_ko(ios_status)
+    android_status_ko = _store_status_ko(android_status)
+    ios_status_en = "No data" if ios_status == "수집 기록 없음" else ios_status
+    android_status_en = "No data" if android_status == "수집 기록 없음" else android_status
     repo_version = next((str(item.get("resolved_version") or item.get("declared_version") or "—") for item in app_deps if str(item.get("package_type") or "") == "app_version"), "—")
     latest_release = next((str(item.get("tag") or item.get("version") or "—") for item in reversed(app_releases)), "—")
     pending_reviews = sum(1 for item in app_reviews if str(item.get("status") or "") != "replied" and not item.get("developer_reply"))
     platform_badges = "".join(f"<span>{_esc('iOS' if value == 'ios' else 'Android' if value == 'android' else value)}</span>" for value in str(app.get("platforms") or "").split("|") if value)
-    store_rows = "".join(
-        f'<div class="detail-row"><b>{"App Store" if str(item.get("platform") or "") == "ios" else "Play Store"}</b><span>버전 {_esc(item.get("version") or "—")} · {_esc(item.get("status") or "—")} · 확인 {_esc(item.get("checked_at") or "—")}</span></div>'
-        for item in app_stores
-    ) or '<div class="empty-note">스토어 상태 기록이 없어요.</div>'
-    price_rows = "".join(
-        f'<div class="detail-row"><b>{_esc(item.get("product_name") or "Product")}</b><span>{_esc(item.get("price") or "—")} {_esc(item.get("currency") or "")} · {_esc(item.get("product_type") or "")}</span></div>'
-        for item in app_prices
-    ) or '<div class="empty-note">등록된 유료 제품 가격이 없어요.</div>'
+    store_rows = "".join(_bilingual_store_row(item) for item in app_stores) or (
+        '<div class="empty-note" data-ko="스토어 상태 기록이 없어요." '
+        'data-en="No store status is available.">스토어 상태 기록이 없어요.</div>'
+    )
+    price_rows = "".join(_bilingual_price_row(item) for item in app_prices) or (
+        '<div class="empty-note" data-ko="등록된 유료 제품 가격이 없어요." '
+        'data-en="No paid product price is registered.">등록된 유료 제품 가격이 없어요.</div>'
+    )
     dependency_names = [
         str(item.get("package_name") or "")
         for item in app_deps
@@ -366,23 +511,42 @@ def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Seq
         )
     ]
     dependency_text = ", ".join(dependency_names[:8]) + ("…" if len(dependency_names) > 8 else "")
+    dependency_ko = f"{len(dependency_names)}개 · {dependency_text or '표시할 플러그인 없음'}"
+    dependency_en = f"{len(dependency_names)} items · {dependency_text or 'No plugins to display'}"
     body = f"""
-<header class="ops-head"><p class="eyebrow">App Operations</p><a href="/ops/apps/" style="font-size:13px;color:#746f69;text-decoration:none">← 앱 목록</a></header>
+<header class="ops-head">
+  <p class="eyebrow" data-ko="앱 운영" data-en="App Operations">앱 운영</p>
+  <a href="/ops/apps/" style="font-size:13px;color:#746f69;text-decoration:none" data-ko="← 앱 목록" data-en="← Apps">← 앱 목록</a>
+</header>
 <section class="detail-hero" style="{_accent_style(slug)}">
   <img src="{_esc(_app_icon_path(homepage_repo, slug))}" alt="" width="64" height="64">
-  <div><div class="title-row"><h1>{_esc(title)}</h1><span class="status-badge" data-status-kind="{'released' if str(app.get('status') or '') == 'released' else 'preparing'}">{'Released' if str(app.get('status') or '') == 'released' else 'Preparing for release'}</span></div><p>{_esc(app.get("one_line_description") or "")}</p><div class="platform-badges">{platform_badges}</div></div>
+  <div>
+    <div class="title-row"><h1>{_esc(title)}</h1><span class="status-badge" data-status-kind="{status_kind}" data-ko="{_esc(status_ko)}" data-en="{_esc(status_en)}">{_esc(status_ko)}</span></div>
+    <p data-ko="{_esc(description_ko)}" data-en="{_esc(description_en)}">{_esc(description_ko)}</p>
+    <div class="platform-badges">{platform_badges}</div>
+  </div>
 </section>
-<nav class="detail-tabs" aria-label="앱 세부"><a href="#overview">개요</a><a href="#funnel">유입·전환</a><a href="#store">스토어·수익</a><a href="#reviews">리뷰</a><a href="#technical">기술·운영</a></nav>
-<section class="detail-section" id="overview"><h2>개요</h2><div class="detail-grid">
-  <div class="detail-stat"><span>App Store</span><b>{_esc(ios_version)}</b><span>{_esc(ios_status)}</span></div>
-  <div class="detail-stat"><span>Play Store</span><b>{_esc(android_version)}</b><span>{_esc(android_status)}</span></div>
+<nav class="detail-tabs" aria-label="앱 세부">
+  <a href="#overview" data-ko="개요" data-en="Overview">개요</a>
+  <a href="#funnel" data-ko="유입·전환" data-en="Acquisition">유입·전환</a>
+  <a href="#store" data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</a>
+  <a href="#reviews" data-ko="리뷰" data-en="Reviews">리뷰</a>
+  <a href="#technical" data-ko="기술·운영" data-en="Technical">기술·운영</a>
+</nav>
+<section class="detail-section" id="overview"><h2 data-ko="개요" data-en="Overview">개요</h2><div class="detail-grid">
+  <div class="detail-stat"><span>App Store</span><b>{_esc(ios_version)}</b><span data-ko="{_esc(ios_status_ko)}" data-en="{_esc(ios_status_en)}">{_esc(ios_status_ko)}</span></div>
+  <div class="detail-stat"><span>Play Store</span><b>{_esc(android_version)}</b><span data-ko="{_esc(android_status_ko)}" data-en="{_esc(android_status_en)}">{_esc(android_status_ko)}</span></div>
   <div class="detail-stat"><span>GitHub main</span><b>{_esc(repo_version)}</b></div>
-  <div class="detail-stat"><span>최근 릴리즈</span><b>{_esc(latest_release)}</b></div>
+  <div class="detail-stat"><span data-ko="최근 릴리즈" data-en="Latest release">최근 릴리즈</span><b>{_esc(latest_release)}</b></div>
 </div></section>
-<section class="detail-section" id="funnel"><h2>유입·전환</h2><div class="empty-note">스토어 분석 수집을 붙일 자리예요. 통합 기준은 양 스토어에서 비교 가능한 상세 페이지 유입 → 설치 → 결제로 두고, Apple 노출은 iOS 전용 상위 퍼널로 분리해요.</div></section>
-<section class="detail-section" id="store"><h2>스토어·수익</h2><div class="detail-list">{store_rows}{price_rows}</div></section>
-<section class="detail-section" id="reviews"><h2>리뷰</h2><div class="detail-grid"><div class="detail-stat"><span>수집 리뷰</span><b>{len(app_reviews)}</b></div><div class="detail-stat"><span>답변 대기</span><b>{pending_reviews}</b></div></div></section>
-<section class="detail-section" id="technical"><h2>기술·운영</h2><div class="detail-list"><div class="detail-row"><b>Flutter / 플러그인</b><span>{len(dependency_names)} rows · {_esc(dependency_text or "표시할 플러그인 없음")}</span></div><div class="detail-row"><b>고급 운영</b><span><a href="/ops/legacy/">기존 통합 콘솔에서 릴리즈 승인·리뷰 답변 등 기존 조작을 계속 사용할 수 있어요.</a></span></div><div class="detail-row"><b>공개 제품 페이지</b><span><a href="/apps/{_esc(slug)}/">onnellab.com/apps/{_esc(slug)}</a></span></div></div></section>
+<section class="detail-section" id="funnel"><h2 data-ko="유입·전환" data-en="Acquisition & conversion">유입·전환</h2><div class="empty-note" data-ko="스토어 분석 수집을 붙일 자리예요. 통합 기준은 양 스토어에서 비교 가능한 상세 페이지 유입 → 설치 → 결제로 두고, Apple 노출은 iOS 전용 상위 퍼널로 분리해요." data-en="Store analytics will appear here. The combined funnel uses comparable product-page traffic → installs → purchases, while Apple impressions remain an iOS-only upper-funnel metric.">스토어 분석 수집을 붙일 자리예요. 통합 기준은 양 스토어에서 비교 가능한 상세 페이지 유입 → 설치 → 결제로 두고, Apple 노출은 iOS 전용 상위 퍼널로 분리해요.</div></section>
+<section class="detail-section" id="store"><h2 data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</h2><div class="detail-list">{store_rows}{price_rows}</div></section>
+<section class="detail-section" id="reviews"><h2 data-ko="리뷰" data-en="Reviews">리뷰</h2><div class="detail-grid"><div class="detail-stat"><span data-ko="수집 리뷰" data-en="Collected reviews">수집 리뷰</span><b>{len(app_reviews)}</b></div><div class="detail-stat"><span data-ko="답변 대기" data-en="Awaiting reply">답변 대기</span><b>{pending_reviews}</b></div></div></section>
+<section class="detail-section" id="technical"><h2 data-ko="기술·운영" data-en="Technical & operations">기술·운영</h2><div class="detail-list">
+  <div class="detail-row"><b>Flutter / <span data-ko="플러그인" data-en="plugins">플러그인</span></b><span data-ko="{_esc(dependency_ko)}" data-en="{_esc(dependency_en)}">{_esc(dependency_ko)}</span></div>
+  <div class="detail-row"><b data-ko="고급 운영" data-en="Advanced operations">고급 운영</b><span><a href="/ops/legacy/" data-ko="기존 통합 콘솔에서 릴리즈 승인·리뷰 답변 등 기존 조작을 계속 사용할 수 있어요." data-en="Use the legacy console for release approvals, review replies, and other existing controls.">기존 통합 콘솔에서 릴리즈 승인·리뷰 답변 등 기존 조작을 계속 사용할 수 있어요.</a></span></div>
+  <div class="detail-row"><b data-ko="공개 제품 페이지" data-en="Public product page">공개 제품 페이지</b><span><a href="/apps/{_esc(slug)}/">onnellab.com/apps/{_esc(slug)}</a></span></div>
+</div></section>
 """
     return _page(title, "apps", body)
 
