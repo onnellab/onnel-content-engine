@@ -333,7 +333,7 @@ Body
             self.assertIn("GOOGLE_PLAY_REPORTS_BUCKET", html)
             self.assertIn("Play 전체 리뷰 보고서 버킷 (필수)", html)
             self.assertIn("Google 리뷰 API는 최근 1주만 제공하므로", html)
-            self.assertIn("requireRemoteStoreSecrets(false)", html)
+            self.assertIn("await requireRemoteStoreSecrets();", html)
             self.assertIn(
                 "GOOGLE_PLAY_REPORTS_BUCKET must start with pubsite_prod_",
                 html,
@@ -365,12 +365,19 @@ Body
             self.assertIn("JSON.stringify(approvals, null, 2) + '\\n'", html)
             self.assertNotIn("JSON.stringify(approvals, null, 2) + '\n'", html)
             self.assertIn("track.scrollBy", html)
-            self.assertIn("GitHub Secrets에 암호화 저장", html)
-            self.assertIn("보안을 위해 Private Key와 Google Play JSON 입력칸을 비웠습니다.", html)
+            self.assertIn('id="save-app-store-credentials"', html)
+            self.assertIn('id="save-google-play-credentials"', html)
+            self.assertIn("Apple 키 저장", html)
+            self.assertIn("Google 키 저장", html)
+            self.assertIn("Save Apple credentials", html)
+            self.assertIn("Save Google credentials", html)
+            for obsolete in ("save-store-credentials", "saveStoreCredentials", "uploadStoreSecrets", "missingStoreCredentialNames", "storeSecretValues"):
+                self.assertNotIn(obsolete, html)
             self.assertIn("actions/secrets/public-key", html)
             self.assertIn("actions/secrets/${encodeURIComponent(name)}", html)
             self.assertIn("crypto_box_seal", html)
-            self.assertIn("flash(button, t('storeSecretsSaved'), t('saveStoreCredentials'))", html)
+            self.assertIn("t('appStoreSecretsStoredDetail')", html)
+            self.assertIn("t('googlePlaySecretsStoredDetail')", html)
             self.assertIn("평문은 workflow 입력·HTML·CSV·Git에 포함되지 않습니다.", html)
             self.assertIn('<script src="/ops/libsodium-sumo.js"></script>', html)
             self.assertIn('<script src="/ops/libsodium-wrappers.js"></script>', html)
@@ -638,6 +645,70 @@ Body
             self.assertTrue((output.parent / "libsodium-wrappers.js").exists())
             self.assertIn("onnellab-ops-v18", (output.parent / "sw.js").read_text(encoding="utf-8"))
             self.assertIn("./libsodium-sumo.js", (output.parent / "sw.js").read_text(encoding="utf-8"))
+
+    def test_store_credentials_provider_contracts(self) -> None:
+        source = (ROOT / "scripts/build_manual_publish_site.py").read_text(encoding="utf-8")
+
+        def function(name: str) -> str:
+            match = re.search(r"    (?:async )?function " + name + r"\([^\n]*\) \{\{\n(.*?)\n    \}\}", source, re.S)
+            self.assertIsNotNone(match, name)
+            return match.group(1)
+
+        apple_names = {"APP_STORE_CONNECT_KEY_ID", "APP_STORE_CONNECT_ISSUER_ID", "APP_STORE_CONNECT_PRIVATE_KEY_BASE64"}
+        google_names = {"GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64", "GOOGLE_PLAY_REPORTS_BUCKET"}
+        for provider, expected, other, textarea, metadata in (
+            ("AppStore", apple_names, google_names, "privateKey", "keyId: values.keyId, issuerId: values.issuerId"),
+            ("GooglePlay", google_names, apple_names, "googleServiceAccount", "googleReportsBucket: values.googleReportsBucket"),
+        ):
+            missing = function("missing" + provider + "CredentialNames")
+            upload = function("upload" + provider + "Secrets")
+            self.assertEqual(set(re.findall(r"(?:APP_STORE_CONNECT|GOOGLE_PLAY)_[A-Z0-9_]+", missing)), expected)
+            self.assertEqual(set(re.findall(r"(?:APP_STORE_CONNECT|GOOGLE_PLAY)_[A-Z0-9_]+", upload)), expected)
+            self.assertIn("missing" + provider + "CredentialNames(values)", upload)
+            self.assertIn("await uploadGitHubSecrets(", upload)
+            self.assertIn("persistStoreCredentialMetadata", upload)
+            self.assertIn(metadata, upload)
+            self.assertIn(f"storeCredentialInputs.{textarea}.value = '';", upload)
+            other_textarea = "googleServiceAccount" if textarea == "privateKey" else "privateKey"
+            self.assertNotIn(f"storeCredentialInputs.{other_textarea}", upload)
+            self.assertNotIn("actions/secrets", upload)
+            for name in other:
+                self.assertNotIn(name, upload)
+        google = function("uploadGooglePlaySecrets")
+        self.assertIn("JSON.parse(values.googleServiceAccount)", google)
+        self.assertIn("t('invalidGoogleServiceAccount')", google)
+        self.assertIn("startsWith('pubsite_prod_')", google)
+        shared = function("uploadGitHubSecrets")
+        self.assertIn("actions/secrets/public-key", shared)
+        self.assertIn("encryptGitHubSecret(value, publicKey.key)", shared)
+        self.assertIn("encrypted_value: encryptedValue", shared)
+        persist = function("persistStoreCredentialMetadata")
+        self.assertIn("...saved, ...metadata", persist)
+        sync = function("runStoreReviewSyncNow")
+        self.assertIn("values.privateKey || pendingStoreCredentialProviders.has('apple')", sync)
+        self.assertIn("values.googleServiceAccount || pendingStoreCredentialProviders.has('google')", sync)
+        self.assertIn("if (hasAppleInput)", sync)
+        self.assertIn("await uploadAppStoreSecrets(values);", sync)
+        self.assertIn("if (hasGoogleInput)", sync)
+        self.assertIn("await uploadGooglePlaySecrets(values);", sync)
+        self.assertEqual(sync.count("uploadErrors.push(error.message)"), 2)
+        self.assertIn("if (uploadErrors.length) throw new Error", sync)
+        self.assertIn("if (!hasAppleInput && !hasGoogleInput)", sync)
+        self.assertIn("await requireRemoteStoreSecrets();", sync)
+        status = function("updateStoreCredentialOutput")
+        self.assertIn("missingAppStoreCredentialNames(values)", status)
+        self.assertIn("missingGooglePlayCredentialNames(values)", status)
+        self.assertNotIn("storeCredentialEnvBlock()", status)
+        self.assertIn("pendingStoreCredentialProviders.add(provider)", source)
+        self.assertIn("name === 'googleServiceAccount' || name === 'googleReportsBucket' ? 'google' : 'apple'", source)
+        self.assertIn("pendingStoreCredentialProviders.clear()", function("clearStoreCredentials"))
+        self.assertEqual(set(re.findall(r"(?:APP_STORE_CONNECT|GOOGLE_PLAY)_[A-Z0-9_]+", function("requireRemoteStoreSecrets"))), apple_names | google_names)
+        for provider, label in (("AppStore", "app-store"), ("GooglePlay", "google-play")):
+            self.assertIn(
+                f"document.getElementById('save-{label}-credentials').onclick = (event) => "
+                f"saveProviderCredentials(event.currentTarget, upload{provider}Secrets, 'save{provider}Credentials');",
+                source,
+            )
 
     def test_prepublication_items_are_review_only(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
