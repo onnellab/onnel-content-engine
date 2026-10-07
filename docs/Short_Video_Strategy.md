@@ -148,6 +148,23 @@ Best use: search-led problems and workflows whose value needs one sentence of co
 Risk: the problem phase should be brief. Do not spend four seconds restating a title
 when the app action itself can start sooner.
 
+## Motion direction
+
+Shorts remain product demonstrations first. When motion graphics are added,
+prefer causal continuity: the tapped, dragged, selected, converted, or saved
+object should visually lead into the next verified state. A morph or shared
+object is useful only when it clarifies the workflow.
+
+Do not turn the channel into a motion-design showreel. Avoid particles, neon,
+repeated glow, 3D flips, constant camera movement, giant kinetic type, and
+beat-for-beat effects that compete with the recording. Marketing motion may be
+more expressive than app runtime UI, but it must never fabricate app behavior.
+
+Use [Motion & Product Film Guide](Motion_Design_Guide.md) for the canonical
+Prompt Motion reference set and interpretation rules. The current renderer is
+not required to implement every reference pattern; this section constrains
+future design and renderer evolution.
+
 ## English copy quality policy
 
 The system no longer produces localized video variants. That removes cross-language

@@ -103,3 +103,13 @@ public/favicon-32x32.png
 public/apple-touch-icon.png
 public/site.webmanifest
 ```
+
+## Motion and product film
+
+Motion is a continuity and product-understanding tool, not a decoration layer.
+Use real product states, keep the demonstrated workflow legible, and prefer
+causal object continuity over generic fades when it improves comprehension.
+
+The canonical marketing-motion rules and Prompt Motion research references live
+in [Motion & Product Film Guide](Motion_Design_Guide.md). App runtime motion is
+owned by `onnellab-flutter-template` and must not be inferred from a marketing film.

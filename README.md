@@ -107,6 +107,7 @@ docs/
     AEO_Guide.md
     GEO_Guide.md
     Image_Guide.md
+    Motion_Design_Guide.md
 
 topics/
     reading.csv
@@ -707,4 +708,5 @@ OAuth credentials, production footage, factual support, or policy compatibility 
 publication instead of asking for approval. See
 [Short Video Pipeline](docs/Short_Video_Pipeline.md),
 [Managed Screen Recording](docs/Short_Video_Recording.md), and
-[English YouTube Shorts Strategy](docs/Short_Video_Strategy.md).
+[English YouTube Shorts Strategy](docs/Short_Video_Strategy.md), and
+[Motion & Product Film Guide](docs/Motion_Design_Guide.md).
