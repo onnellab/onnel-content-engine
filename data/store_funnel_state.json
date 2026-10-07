@@ -1,4 +1,14 @@
 {
   "schema_version": 1,
-  "apple_processed_instances": []
+  "apple_processed_instances": [],
+  "apple_snapshot_requests": {
+    "quivra": "b3ad5125-71f1-42a9-b2b4-88207d30bbd4",
+    "tagweaver": "75e9da79-b54d-40ce-9a80-a635356a28f0",
+    "vaultxt": "aa7c1c4e-0f8b-4c12-bd03-ed504ce415ca",
+    "segra": "c92791c3-4ee3-44e8-9adc-d237bf78c938",
+    "clipnest": "c605ae1d-34f9-4040-9b96-41b851b13a4a",
+    "aligna": "ca2514bc-5f87-4788-ab66-cbde5c6f130e",
+    "melivra": "d096a6f3-7d85-457f-989f-2c848181ef14",
+    "papira": "5510684e-bf31-47c4-9a43-8bb8290d404f"
+  }
 }
