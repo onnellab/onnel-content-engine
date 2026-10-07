@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aligna · ONNELLAB Ops</title>
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --ink:#191714;--muted:#746f69;--line:#ded6ca;--surface:#fffaf5;--panel:#fff;
+  --blue:#2e6fbb;--blue-soft:#e8f1fb;--lilac:#d8cdf7;--lilac-soft:#f4f0ff;
+  --peach:#f4c3b4;--peach-soft:#fff0ea;--sky:#cfe6ff;--sky-soft:#eef7ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;word-break:keep-all}
+a{color:inherit}
+.ops-wrap{max-width:1180px;margin:0 auto;padding:22px 20px 56px}
+.ops-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:30px}
+.ops-nav a{display:inline-flex;align-items:center;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fffdf9;color:#5d574f;text-decoration:none;font-size:13px;font-weight:750}
+.ops-nav a[aria-current="page"]{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}
+.ops-nav a:hover{border-color:#b9cbe0;background:var(--blue-soft)}
+.ops-head{margin:10px 0 28px}
+.ops-head .eyebrow{margin:0 0 10px;color:#827d72;font-size:12px;font-weight:680;letter-spacing:.08em;text-transform:uppercase}
+.ops-head h1{margin:0;color:#36332f;font-size:34px;line-height:1.12}
+.ops-head p{max-width:760px;margin:14px 0 0;color:#5b574f;font-size:16px;line-height:1.65}
+.ops-route-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ops-route-card{display:block;min-height:140px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff;text-decoration:none;transition:transform 140ms ease,border-color 140ms ease,box-shadow 140ms ease}
+.ops-route-card:hover{transform:translateY(-2px);border-color:#cfc5b7;box-shadow:0 10px 22px rgba(58,49,38,.055)}
+.ops-route-card b{display:block;font-size:20px;margin-bottom:8px;color:#3e3933}
+.ops-route-card span{display:block;color:#6f695f;font-size:14px;line-height:1.55}
+.ops-route-card small{display:block;margin-top:18px;color:#817b72;font-size:12px;font-weight:700}
+.ops-legacy-link{margin-top:22px;font-size:12px;color:#827d72}
+.ops-legacy-link a{font-weight:750}
+.app-search{display:grid;gap:8px;max-width:360px;margin-bottom:28px;color:#6f695f;font-size:13px;font-weight:620}
+.app-search input{min-height:44px;border:1px solid #ded6ca;border-radius:8px;padding:9px 12px;background:rgba(255,253,248,.78);color:#3f3b35;font:inherit;font-weight:500}
+.app-search input:focus{border-color:#cfc5b7;outline:2px solid #827d72;outline-offset:3px}
+.app-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.app-card{position:relative;display:grid;grid-template-columns:54px minmax(0,1fr);align-items:start;gap:16px;min-height:128px;border:1px solid var(--accent-border,#e0d8cb);border-radius:11px;padding:18px;background:linear-gradient(135deg,rgba(255,253,248,.96) 16%,var(--accent-bg,#fffdf8)),#fffdf8;color:inherit;text-decoration:none;transition:transform 140ms ease,border-color 140ms ease,background 140ms ease,box-shadow 140ms ease}
+.app-card[hidden]{display:none}
+.app-card:hover,.app-card:focus-visible{border-color:var(--accent-border,#d8cec0);background:linear-gradient(135deg,#fffdf8 10%,var(--accent-bg,#fffdf8) 92%),#fffdf8;box-shadow:0 10px 22px rgba(58,49,38,.055);transform:translateY(-2px)}
+.app-card:focus-visible{outline:2px solid #827d72;outline-offset:3px}
+.app-card>img{width:52px;height:52px;border-radius:13px;box-shadow:0 0 0 1px var(--accent-border,#ddd5c8);object-fit:cover}
+.app-copy{min-width:0}.title-row{display:flex;align-items:center;flex-wrap:wrap;gap:7px 10px}.title-row h2{margin:0;color:#3e3933;font-size:19px;line-height:1.25}
+.status-badge{border:1px solid transparent;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:650;line-height:1.35;white-space:nowrap}
+.status-badge[data-status-kind="released"]{border-color:#c9d8d2;background:#edf5f2;color:#49645a}
+.status-badge[data-status-kind="preparing"]{border-color:#e1cfc5;background:#f9eee8;color:#765849}
+.app-copy>p{margin:8px 0 0;color:#5f5a50;font-size:14px;line-height:1.55}
+.platform-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.platform-badges span{border:1px solid var(--accent-border,#ddd5c8);border-radius:999px;padding:2px 7px;background:color-mix(in srgb,var(--accent-bg,#faf8f5) 80%,#fffdf8);color:var(--accent-text,#737067);font-size:11px;line-height:1.4}
+.ops-meta{margin-top:10px;color:#827d72;font-size:11px;line-height:1.45}
+.detail-hero{display:grid;grid-template-columns:68px minmax(0,1fr);gap:18px;align-items:start;padding:22px;border:1px solid var(--accent-border,#e0d8cb);border-radius:13px;background:linear-gradient(135deg,rgba(255,253,248,.96) 16%,var(--accent-bg,#fffdf8)),#fffdf8}
+.detail-hero img{width:64px;height:64px;border-radius:15px;box-shadow:0 0 0 1px var(--accent-border,#ddd5c8)}
+.detail-hero h1{margin:0 0 8px;font-size:30px;color:#3e3933}.detail-hero p{margin:8px 0 0;color:#5f5a50;line-height:1.6}
+.detail-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px}.detail-tabs a{min-height:36px;display:inline-flex;align-items:center;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#fff;text-decoration:none;font-size:12px;font-weight:750;color:#6a645b}
+.detail-section{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}.detail-section h2{margin:0 0 14px;font-size:19px}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.detail-stat{padding:14px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-stat span{display:block;color:#827d72;font-size:11px}.detail-stat b{display:block;margin-top:6px;font-size:18px;overflow-wrap:anywhere}
+.detail-list{display:grid;gap:8px}.detail-row{padding:12px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-row b{display:block;margin-bottom:5px;font-size:13px}.detail-row span{display:block;color:#6f695f;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
+.empty-note{padding:15px;border:1px dashed #d9d0c6;border-radius:9px;background:#fffdf9;color:#746f69;font-size:13px;line-height:1.6}
+@media(max-width:680px){.ops-wrap{padding:18px 15px 42px}.ops-route-grid,.app-grid{grid-template-columns:1fr}.app-grid{gap:10px}.app-card{grid-template-columns:46px minmax(0,1fr);gap:13px;min-height:0;padding:15px}.app-card>img{width:44px;height:44px;border-radius:11px}.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-hero{grid-template-columns:54px minmax(0,1fr);padding:17px}.detail-hero img{width:52px;height:52px;border-radius:12px}.ops-head h1{font-size:29px}}
+</style>
+</head>
+<body>
+<main class="ops-wrap">
+<nav class="ops-nav" aria-label="ONNELLAB Ops"><a href="/ops/">홈</a><a href="/ops/apps/" aria-current="page">앱</a><a href="/ops/publishing/">게시</a><a href="/ops/media/">미디어</a><a href="/ops/settings/">설정</a></nav>
+
+<header class="ops-head"><p class="eyebrow">App Operations</p><a href="/ops/apps/" style="font-size:13px;color:#746f69;text-decoration:none">← 앱 목록</a></header>
+<section class="detail-hero" style="--accent-border:#d9cfc7;--accent-bg:#f7f1ec;--accent-text:#6a5548;">
+  <img src="/app-assets/aligna/assets/icon/aligna.png" alt="" width="64" height="64">
+  <div><div class="title-row"><h1>Aligna</h1><span class="status-badge" data-status-kind="released">Released</span></div><p>A rule-based file-renaming utility with preview-before-apply workflows.</p><div class="platform-badges"><span>iOS</span><span>Android</span></div></div>
+</section>
+<nav class="detail-tabs" aria-label="앱 세부"><a href="#overview">개요</a><a href="#funnel">유입·전환</a><a href="#store">스토어·수익</a><a href="#reviews">리뷰</a><a href="#technical">기술·운영</a></nav>
+<section class="detail-section" id="overview"><h2>개요</h2><div class="detail-grid">
+  <div class="detail-stat"><span>App Store</span><b>1.0.7</b><span>unchanged</span></div>
+  <div class="detail-stat"><span>Play Store</span><b>1.0.7</b><span>unchanged</span></div>
+  <div class="detail-stat"><span>GitHub main</span><b>1.0.7</b></div>
+  <div class="detail-stat"><span>최근 릴리즈</span><b>v1.0.7</b></div>
+</div></section>
+<section class="detail-section" id="funnel"><h2>유입·전환</h2><div class="empty-note">스토어 분석 수집을 붙일 자리예요. 통합 기준은 양 스토어에서 비교 가능한 상세 페이지 유입 → 설치 → 결제로 두고, Apple 노출은 iOS 전용 상위 퍼널로 분리해요.</div></section>
+<section class="detail-section" id="store"><h2>스토어·수익</h2><div class="detail-list"><div class="detail-row"><b>App Store</b><span>버전 1.0.7 · unchanged · 확인 2026-10-07T06:21:30+09:00</span></div><div class="detail-row"><b>Play Store</b><span>버전 1.0.7 · unchanged · 확인 2026-10-07T06:21:30+09:00</span></div><div class="detail-row"><b>Aligna Pro</b><span>3300 KRW · pro</span></div></div></section>
+<section class="detail-section" id="reviews"><h2>리뷰</h2><div class="detail-grid"><div class="detail-stat"><span>수집 리뷰</span><b>0</b></div><div class="detail-stat"><span>답변 대기</span><b>0</b></div></div></section>
+<section class="detail-section" id="technical"><h2>기술·운영</h2><div class="detail-list"><div class="detail-row"><b>Flutter / 플러그인</b><span>8 rows · cupertino_icons, file_picker, get_it, in_app_purchase, in_app_review, shared_preferences, url_launcher, flutter</span></div><div class="detail-row"><b>고급 운영</b><span><a href="/ops/legacy/">기존 통합 콘솔에서 릴리즈 승인·리뷰 답변 등 기존 조작을 계속 사용할 수 있어요.</a></span></div><div class="detail-row"><b>공개 제품 페이지</b><span><a href="/apps/aligna/">onnellab.com/apps/aligna</a></span></div></div></section>
+
+</main>
+</body>
+</html>

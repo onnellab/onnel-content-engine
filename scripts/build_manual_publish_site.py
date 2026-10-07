@@ -21,6 +21,7 @@ from evaluate_social_templates import evaluate_social_templates
 from evaluate_syndication_drafts import evaluate_syndication_drafts
 from store_review_responses import generate_reply, requires_korean_approval_translation
 from triage_store_reviews import triage_reviews
+from ops_split_pages import build_split_ops_pages
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -5288,25 +5289,34 @@ def build_manual_publish_site(
     verification_report = verification_report_item(verification_report_path)
     quality_report = quality_report_item(social_manifest, syndication_manifest)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(
-        html_document(
-            items,
-            manual_state,
-            releases,
-            blog_items,
-            store_items,
-            store_reviews,
-            flutter_dependency_items,
-            site_items,
-            pricing_items,
-            ai_provider_pricing_status,
-            release_sync_status,
-            verification_report,
-            quality_report,
-            ai_manager_report,
-            store_review_sync_status_item(store_reviews_path),
-        ),
-        encoding="utf-8",
+    legacy_html = html_document(
+        items,
+        manual_state,
+        releases,
+        blog_items,
+        store_items,
+        store_reviews,
+        flutter_dependency_items,
+        site_items,
+        pricing_items,
+        ai_provider_pricing_status,
+        release_sync_status,
+        verification_report,
+        quality_report,
+        ai_manager_report,
+        store_review_sync_status_item(store_reviews_path),
+    )
+    build_split_ops_pages(
+        output.parent,
+        legacy_html=legacy_html,
+        homepage_repo=homepage_repo,
+        apps=read_csv_rows(DEFAULT_APPS_REGISTRY),
+        publication_items=items,
+        releases=releases,
+        store_items=store_items,
+        reviews=store_reviews,
+        dependencies=flutter_dependency_items,
+        pricing=read_csv_rows(DEFAULT_APP_PRICING),
     )
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")

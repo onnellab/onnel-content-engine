@@ -74,6 +74,10 @@ jobs:
           git -C "$HOMEPAGE_REPO_PATH" pull --rebase origin main
           mkdir -p "$HOMEPAGE_REPO_PATH/public/ops"
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/ops/index.html"
+          for section in apps publishing media settings legacy; do
+            mkdir -p "$HOMEPAGE_REPO_PATH/public/ops/$section"
+            cp -R "generated/manual-publish/$section/." "$HOMEPAGE_REPO_PATH/public/ops/$section/"
+          done
           cp generated/manual-publish/manifest.webmanifest "$HOMEPAGE_REPO_PATH/public/ops/manifest.webmanifest"
           cp generated/manual-publish/sw.js "$HOMEPAGE_REPO_PATH/public/ops/sw.js"
           cp generated/manual-publish/icon-180.png "$HOMEPAGE_REPO_PATH/public/ops/icon-180.png"

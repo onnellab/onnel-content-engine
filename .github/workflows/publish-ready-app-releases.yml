@@ -84,7 +84,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           git diff --check
-          git add data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing.csv data/ai_provider_pricing_status.json data/melivra_ai_credit_policy.csv generated/reports/app_releases.md generated/manual-publish/index.html generated/manual-publish/manifest.webmanifest generated/manual-publish/sw.js generated/manual-publish/icon-180.png generated/manual-publish/icon-192.png generated/manual-publish/icon-512.png
+          git add data/app_releases.csv data/app_release_sync_status.json data/ai_provider_pricing.csv data/ai_provider_pricing_status.json data/melivra_ai_credit_policy.csv generated/reports/app_releases.md generated/manual-publish/
           if git diff --cached --quiet; then
             echo "No content engine release state changes"
           else
@@ -99,6 +99,10 @@ jobs:
           mkdir -p "$HOMEPAGE_REPO_PATH/public/ops"
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/ops/index.html"
+          for section in apps publishing media settings legacy; do
+            mkdir -p "$HOMEPAGE_REPO_PATH/public/ops/$section"
+            cp -R "generated/manual-publish/$section/." "$HOMEPAGE_REPO_PATH/public/ops/$section/"
+          done
           cp generated/manual-publish/manifest.webmanifest "$HOMEPAGE_REPO_PATH/public/ops/manifest.webmanifest"
           cp generated/manual-publish/sw.js "$HOMEPAGE_REPO_PATH/public/ops/sw.js"
           cp generated/manual-publish/icon-180.png "$HOMEPAGE_REPO_PATH/public/ops/icon-180.png"
@@ -110,7 +114,7 @@ jobs:
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/ops/index.html"
           git -C "$HOMEPAGE_REPO_PATH" diff --check
-          git -C "$HOMEPAGE_REPO_PATH" add public/ops/index.html public/ops/manifest.webmanifest public/ops/sw.js public/ops/icon-180.png public/ops/icon-192.png public/ops/icon-512.png public/ops/libsodium-sumo.js public/ops/libsodium-wrappers.js
+          git -C "$HOMEPAGE_REPO_PATH" add public/ops/
           if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
             echo "No manual publish dashboard changes"
           else
