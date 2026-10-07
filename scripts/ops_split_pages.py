@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import html
+import json
 import re
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
+from urllib.parse import urlsplit
 
 
 ACCENT_PALETTE = (
@@ -109,12 +111,28 @@ a{color:inherit}
 .empty-note{padding:15px;border:1px dashed #d9d0c6;border-radius:9px;background:#fffdf9;color:#746f69;font-size:13px;line-height:1.6}
 .funnel-controls{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 14px}.funnel-controls button{min-height:34px;border:1px solid var(--line);border-radius:999px;padding:6px 11px;background:#fff;color:#625c54;font:inherit;font-size:12px;font-weight:750;cursor:pointer}.funnel-controls button.is-active{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}
 .funnel-window[hidden]{display:none}.funnel-platform-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.funnel-card{padding:15px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.funnel-card h3{margin:0 0 12px;font-size:15px}.funnel-chain{display:flex;align-items:stretch;gap:7px}.funnel-step{flex:1;min-width:0;padding:10px;border:1px solid #e8e0d7;border-radius:8px;background:#fff}.funnel-step span{display:block;color:#827d72;font-size:10px;line-height:1.35}.funnel-step b{display:block;margin-top:5px;font-size:20px;line-height:1}.funnel-arrow{display:flex;align-items:center;color:#aaa196;font-size:15px}.funnel-purchase{margin-top:10px;padding-top:10px;border-top:1px solid #ece4dc;color:#6f695f;font-size:12px}.funnel-purchase b{color:#3e3933;font-size:15px}.funnel-freshness{margin-top:8px;color:#8a8379;font-size:10px}.funnel-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.funnel-summary .detail-stat{background:var(--lilac-soft)}.funnel-note{margin-top:12px;color:#746f69;font-size:11px;line-height:1.55}
-@media(max-width:680px){.ops-wrap{padding:18px 15px 42px}.ops-route-grid,.app-grid{grid-template-columns:1fr}.app-grid{gap:10px}.app-card{grid-template-columns:46px minmax(0,1fr);gap:13px;min-height:0;padding:15px}.app-card>img{width:44px;height:44px;border-radius:11px}.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-hero{grid-template-columns:54px minmax(0,1fr);padding:17px}.detail-hero img{width:52px;height:52px;border-radius:12px}.ops-head h1{font-size:29px}.funnel-platform-grid{grid-template-columns:1fr}.funnel-chain{gap:5px}.funnel-step{padding:8px}.funnel-step b{font-size:17px}}
+.diagnosis-panel{margin-top:14px;padding:15px;border:1px solid #dfd7e9;border-radius:10px;background:linear-gradient(135deg,#fbf9ff,#fffdf9)}.diagnosis-panel h3{margin:0 0 10px;font-size:15px}.diagnosis-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.diagnosis-card{padding:12px;border:1px solid #e8e0d7;border-radius:9px;background:#fff}.diagnosis-card[data-kind="good"]{background:#f1f8f4;border-color:#cfe0d5}.diagnosis-card[data-kind="warn"]{background:#fff8ef;border-color:#ead7bd}.diagnosis-card[data-kind="low"]{background:#fff2f0;border-color:#ebc8c3}.diagnosis-card[data-kind="wait"]{background:#f7f5f1}.diagnosis-card h4{margin:0 0 6px;font-size:13px}.diagnosis-card p{margin:5px 0 0;color:#686159;font-size:12px;line-height:1.55}.rate-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.rate-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border:1px solid #e5ddd4;border-radius:999px;background:#fffdf9;color:#696158;font-size:10px}.diagnosis-note{margin-top:10px;color:#8b8379;font-size:10px;line-height:1.5}
+.subsection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:18px 0 10px}.subsection-head h3{margin:0;font-size:15px}.subsection-head p{margin:0;color:#827d72;font-size:11px}.ops-actions{display:flex;gap:7px;flex-wrap:wrap}.ops-button{min-height:34px;border:1px solid #cfc5b7;border-radius:8px;padding:7px 10px;background:#fff;color:#514b44;font:inherit;font-size:12px;font-weight:750;cursor:pointer}.ops-button.primary{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}.ops-button:disabled{opacity:.55;cursor:not-allowed}.ops-message{min-height:18px;margin-top:8px;color:#6f695f;font-size:11px;line-height:1.5}.ops-message.is-error{color:#9c3f36}.token-note{margin:10px 0;padding:10px 12px;border:1px solid #ded6ca;border-radius:8px;background:#fffaf2;color:#6f695f;font-size:11px;line-height:1.5}.token-note[hidden]{display:none}.token-note a{font-weight:750}
+.review-list,.release-list,.dependency-list,.pricing-list{display:grid;gap:10px}.review-card,.release-card,.dependency-card,.pricing-card{padding:14px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.review-head,.release-head,.pricing-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.review-head strong,.release-head strong,.pricing-head strong{font-size:14px}.review-rating,.mini-badge{display:inline-flex;align-items:center;min-height:24px;padding:3px 7px;border:1px solid #ddd4ca;border-radius:999px;background:#fff;color:#655e55;font-size:10px;font-weight:750}.mini-badge.good{border-color:#c7ddd0;background:#eef7f2;color:#49675a}.mini-badge.warn{border-color:#e4d1b7;background:#fff7eb;color:#795d37}.mini-badge.bad{border-color:#e4c4bf;background:#fff1ef;color:#844d47}.review-meta,.release-meta,.pricing-meta,.dependency-meta{margin-top:5px;color:#827d72;font-size:10px;line-height:1.5}.review-body{margin:10px 0 0;white-space:pre-wrap;font-size:13px;line-height:1.6}.review-translation{margin-top:10px;padding:10px;border:1px solid #e5ddd4;border-radius:8px;background:#fff}.review-translation b{display:block;margin-bottom:5px;font-size:11px}.review-translation p{margin:0;font-size:12px;line-height:1.55}.review-card label{display:grid;gap:5px;margin-top:10px;color:#716a61;font-size:11px;font-weight:700}.review-card textarea{width:100%;min-height:92px;border:1px solid #dcd3c8;border-radius:8px;padding:9px;background:#fff;color:#302c28;font:inherit;font-size:12px;line-height:1.5;resize:vertical}.review-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.review-card details{margin-top:10px}.review-card details summary{cursor:pointer;color:#655e55;font-size:11px;font-weight:750}.triage-box{margin-top:7px;padding:9px;border:1px solid #e4dced;border-radius:8px;background:#faf7ff;color:#675d70;font-size:11px;line-height:1.55;white-space:pre-wrap}.release-card p,.pricing-card p,.dependency-card p{margin:7px 0 0;color:#696158;font-size:11px;line-height:1.55}.release-card a,.pricing-card a{font-weight:700}.economics-callout{margin-top:9px;padding:9px;border:1px solid #c8dfd1;border-radius:8px;background:#eff8f3;color:#4d6758;font-size:11px;line-height:1.5}.economics-callout.loss{border-color:#e5c5c0;background:#fff1ef;color:#824e48}.site-freshness{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media(max-width:680px){.ops-wrap{padding:18px 15px 42px}.ops-route-grid,.app-grid{grid-template-columns:1fr}.app-grid{gap:10px}.app-card{grid-template-columns:46px minmax(0,1fr);gap:13px;min-height:0;padding:15px}.app-card>img{width:44px;height:44px;border-radius:11px}.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-hero{grid-template-columns:54px minmax(0,1fr);padding:17px}.detail-hero img{width:52px;height:52px;border-radius:12px}.ops-head h1{font-size:29px}.funnel-platform-grid,.diagnosis-grid,.site-freshness{grid-template-columns:1fr}.funnel-chain{gap:5px}.funnel-step{padding:8px}.funnel-step b{font-size:17px}.review-head,.release-head,.pricing-head{align-items:flex-start}.review-card,.release-card,.dependency-card,.pricing-card{padding:12px}}
 """
 
 
 def _esc(value: object) -> str:
     return html.escape(str(value or ""), quote=True)
+
+
+def _safe_href(value: object) -> str:
+    candidate = str(value or "").strip()
+    if candidate.startswith("/") and not candidate.startswith("//"):
+        return candidate
+    parsed = urlsplit(candidate)
+    return candidate if parsed.scheme in {"https", "http"} and parsed.netloc else ""
+
+
+def _json_script(value: object) -> str:
+    return (json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+            .replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"))
 
 
 def _hash_slug(value: str) -> int:
@@ -271,7 +289,7 @@ body[data-ops-view="home"] main>.credential-panel,
 body[data-ops-view="home"] main>#grid,
 body[data-ops-view="home"] main>#empty,
 body[data-ops-view="home"] main>.platform-status,
-body[data-ops-view="home"] main>.status-section{display:none!important}
+body[data-ops-view="home"] main>.status-section:not([aria-label="AI operation status"]){display:none!important}
 body[data-ops-view="publishing"] main>.ytw,
 body[data-ops-view="publishing"] main>.yt-settings,
 body[data-ops-view="publishing"] main>.credential-panel:not(.github-connection-panel),
@@ -417,7 +435,7 @@ def _apps_index(apps: Sequence[Mapping[str, object]], homepage_repo: Path, store
 <label class="app-search"><span data-ko="앱 찾기" data-en="Find an app">앱 찾기</span><input type="search" placeholder="앱 이름을 검색해요" data-placeholder-ko="앱 이름을 검색해요" data-placeholder-en="Search app name" data-app-search></label>
 <p class="empty-note" data-app-empty hidden data-ko="일치하는 앱이 없어요." data-en="No matching apps.">일치하는 앱이 없어요.</p>
 <section class="app-grid" aria-label="앱 목록">{cards}</section>
-<p class="ops-legacy-link"><span data-ko="이전 상세 조작이 필요한 항목은" data-en="For legacy controls, keep using the">이전 상세 조작이 필요한 항목은</span> <a href="/ops/legacy/" data-ko="기존 통합 콘솔" data-en="legacy console">기존 통합 콘솔</a><span data-ko="에서 계속 사용할 수 있어요." data-en=".">에서 계속 사용할 수 있어요.</span></p>
+<p class="ops-legacy-link"><span data-ko="리뷰·릴리즈 승인 등 앱별 운영은 각 앱 페이지에서 처리해요. 이전 화면과 비교할 때만" data-en="Manage reviews, release approvals, and other app operations in each app page. Open the">리뷰·릴리즈 승인 등 앱별 운영은 각 앱 페이지에서 처리해요. 이전 화면과 비교할 때만</span> <a href="/ops/legacy/" data-ko="기존 통합 콘솔" data-en="legacy console">기존 통합 콘솔</a><span data-ko="을 열면 돼요." data-en=" only to compare with the previous interface.">을 열면 돼요.</span></p>
 <script>
 (()=>{{const input=document.querySelector('[data-app-search]');const rows=[...document.querySelectorAll('[data-app-row]')];if(!(input instanceof HTMLInputElement))return;input.addEventListener('input',()=>{{const q=input.value.trim().toLowerCase();let visible=0;for(const row of rows){{const hide=q&&!String(row.dataset.appTitle||'').includes(q);row.hidden=!!hide;if(!hide)visible++;}}const empty=document.querySelector('[data-app-empty]');if(empty instanceof HTMLElement)empty.hidden=visible>0;}});}})();
 </script>
@@ -446,11 +464,22 @@ def _bilingual_store_row(item: Mapping[str, object]) -> str:
     status_en = str(item.get("status") or "—")
     status_ko = _store_status_ko(status_en)
     checked = str(item.get("checked_at") or "—")
+    published = str(item.get("published_at") or item.get("release_date") or "")
+    notes = str(item.get("release_notes") or "")
     ko = f"버전 {version} · {status_ko} · 확인 {checked}"
     en = f"Version {version} · {status_en} · checked {checked}"
+    extra = ""
+    if published:
+        extra += (
+            f'<span data-ko="공개 {_esc(published)}" data-en="published {_esc(published)}">공개 {_esc(published)}</span>'
+        )
+    if notes:
+        extra += (
+            f'<span><b data-ko="릴리즈 노트" data-en="Release notes">릴리즈 노트</b> · {_esc(notes)}</span>'
+        )
     return (
         f'<div class="detail-row"><b>{platform}</b>'
-        f'<span data-ko="{_esc(ko)}" data-en="{_esc(en)}">{_esc(ko)}</span></div>'
+        f'<span data-ko="{_esc(ko)}" data-en="{_esc(en)}">{_esc(ko)}</span>{extra}</div>'
     )
 
 
@@ -459,17 +488,72 @@ def _bilingual_price_row(item: Mapping[str, object]) -> str:
     price = str(item.get("price") or "—")
     currency = str(item.get("currency") or "")
     product_type = str(item.get("product_type") or "")
+    platform = str(item.get("platform") or "")
+    pricing_model = str(item.get("pricing") or item.get("pricing_model") or "—")
+    verification = str(item.get("price_verification") or "unknown")
+    source = str(item.get("price_source") or "—")
+    note = str(item.get("price_note") or "")
+    checked = str(item.get("checked_at") or "—")
+    error = str(item.get("price_error") or "")
+    platform_label = "App Store" if platform == "ios" else "Play Store" if platform == "android" else "공통"
+    platform_en = "App Store" if platform == "ios" else "Play Store" if platform == "android" else "Shared"
     type_ko = {
         "pro": "Pro",
         "paid_download": "유료 다운로드",
         "ai_credit": "AI 크레딧",
-    }.get(product_type, product_type)
-    ko = f"{price} {currency} · {type_ko}".strip()
-    en = f"{price} {currency} · {product_type}".strip()
-    return (
-        f'<div class="detail-row"><b>{_esc(product_name)}</b>'
-        f'<span data-ko="{_esc(ko)}" data-en="{_esc(en)}">{_esc(ko)}</span></div>'
+        "subscription": "구독",
+        "in_app_purchase": "인앱 구매",
+    }.get(product_type, product_type or "유료 제품")
+    type_en = {
+        "paid_download": "Paid download",
+        "ai_credit": "AI credit",
+        "subscription": "Subscription",
+        "in_app_purchase": "In-app purchase",
+    }.get(product_type, product_type or "Paid product")
+    verification_ko = "스토어 실가격 확인" if verification == "live_store" else "수동/추가 확인 필요"
+    verification_en = "Live store verified" if verification == "live_store" else "Manual / needs verification"
+    badge_class = "good" if verification == "live_store" else "warn"
+
+    economics = ""
+    if item.get("ai_margin_status"):
+        margin_status = str(item.get("ai_margin_status") or "")
+        net = str(item.get("ai_net_revenue_usd") or "—")
+        provider_cost = str(item.get("ai_provider_cost_usd") or "—")
+        profit = str(item.get("ai_profit_usd") or "—")
+        margin_percent = str(item.get("ai_margin_percent") or "")
+        economics_class = " loss" if margin_status == "loss" else ""
+        margin_ko = f" / 마진 {margin_percent}%" if margin_percent else ""
+        margin_en = f" / margin {margin_percent}%" if margin_percent else ""
+        economics = (
+            f'<div class="economics-callout{economics_class}">'
+            '<b data-ko="AI 크레딧 경제성" data-en="AI credit economics">AI 크레딧 경제성</b> · '
+            f'<span data-ko="순수익 ${_esc(net)} / 공급자 비용 ${_esc(provider_cost)} / 이익 ${_esc(profit)}{_esc(margin_ko)}" '
+            f'data-en="Net revenue ${_esc(net)} / provider cost ${_esc(provider_cost)} / profit ${_esc(profit)}{_esc(margin_en)}">'
+            f'순수익 ${_esc(net)} / 공급자 비용 ${_esc(provider_cost)} / 이익 ${_esc(profit)}{_esc(margin_ko)}</span></div>'
+        )
+
+    error_html = (
+        f'<p class="ops-message is-error"><b data-ko="가격 확인 오류" data-en="Price verification error">가격 확인 오류</b> · {_esc(error)}</p>'
+        if error
+        else ""
     )
+    note_html = f"<p>{_esc(note)}</p>" if note else ""
+    return (
+        '<article class="pricing-card">'
+        '<div class="pricing-head">'
+        f'<strong>{_esc(product_name)}</strong>'
+        f'<span class="mini-badge {badge_class}" data-ko="{_esc(verification_ko)}" data-en="{_esc(verification_en)}">{_esc(verification_ko)}</span>'
+        "</div>"
+        f'<div class="pricing-meta"><span data-ko="{_esc(platform_label)}" data-en="{_esc(platform_en)}">{_esc(platform_label)}</span> · '
+        f'<span data-ko="{_esc(type_ko)}" data-en="{_esc(type_en)}">{_esc(type_ko)}</span></div>'
+        f'<p><b data-ko="가격" data-en="Price">가격</b> · {_esc(price)} {_esc(currency)}</p>'
+        f'<p><b data-ko="과금 모델" data-en="Pricing model">과금 모델</b> · {_esc(pricing_model)}</p>'
+        f'<p><b data-ko="가격 출처" data-en="Price source">가격 출처</b> · {_esc(source)} · '
+        f'<span data-ko="확인 {_esc(checked)}" data-en="checked {_esc(checked)}">확인 {_esc(checked)}</span></p>'
+        f"{note_html}{error_html}{economics}"
+        "</article>"
+    )
+
 
 
 def _funnel_number(value: object) -> str:
@@ -641,6 +725,206 @@ def _combined_metric(
     return sum(int(payload.get(metric) or 0) for payload in payloads)
 
 
+def _metric_int(payload: Mapping[str, object] | None, key: str) -> int | None:
+    if not isinstance(payload, Mapping):
+        return None
+    value = payload.get(key)
+    if value is None or value == "":
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _rate_value(numerator: int | None, denominator: int | None) -> float | None:
+    if numerator is None or denominator is None or denominator <= 0:
+        return None
+    return numerator / denominator
+
+
+def _diagnose_funnel(
+    source: str,
+    payload: Mapping[str, object] | None,
+    window: int,
+) -> dict[str, object]:
+    days = _metric_int(payload, "days_with_data") or 0
+    visitors = _metric_int(payload, "store_visitors")
+    installs = _metric_int(payload, "installs")
+    purchases = _metric_int(payload, "purchases")
+    impressions = _metric_int(payload, "impressions") if source == "apple" else None
+    rates: list[tuple[str, str, float]] = []
+
+    page_rate = _rate_value(visitors, impressions)
+    install_rate = _rate_value(installs, visitors)
+    purchase_rate = _rate_value(purchases, installs)
+    if source == "apple" and page_rate is not None:
+        rates.append(("노출→제품 페이지", "Impression→product page", page_rate))
+    if install_rate is not None:
+        rates.append(
+            (
+                "제품 페이지→다운로드" if source == "apple" else "스토어 방문→설치",
+                "Product page→download" if source == "apple" else "Store visitor→install",
+                install_rate,
+            )
+        )
+    if purchase_rate is not None:
+        rates.append(("설치→구매", "Install→purchase", purchase_rate))
+
+    sample_floor = {7: 10, 30: 20, 90: 30}.get(window, 20)
+    volume_target = {7: 250, 30: 1000, 90: 2500}.get(window, 1000)
+    source_ko = "App Store" if source == "apple" else "Play Store"
+    source_en = source_ko
+
+    if not isinstance(payload, Mapping) or days <= 0 or visitors is None:
+        return {
+            "kind": "wait",
+            "title_ko": f"{source_ko} · 판단 대기",
+            "title_en": f"{source_en} · Waiting for data",
+            "assessment_ko": "아직 진단할 수 있는 퍼널 데이터가 없어요.",
+            "assessment_en": "There is not enough funnel data to diagnose yet.",
+            "action_ko": "수집이 시작된 뒤 다시 확인해요.",
+            "action_en": "Check again after collection starts.",
+            "rates": rates,
+        }
+
+    if days < 3 or visitors < sample_floor:
+        return {
+            "kind": "wait",
+            "title_ko": f"{source_ko} · 표본이 아직 작아요",
+            "title_en": f"{source_en} · Sample still small",
+            "assessment_ko": f"{days}일치 데이터와 방문 {visitors:,}건만 있어 강한 결론을 내리지 않아요.",
+            "assessment_en": f"Only {days} days and {visitors:,} visits are available, so the diagnostic stays conservative.",
+            "action_ko": "표본이 더 쌓일 때까지 추세만 관찰해요.",
+            "action_en": "Watch the trend until more data accumulates.",
+            "rates": rates,
+        }
+
+    if source == "apple" and impressions and page_rate is not None and page_rate < 0.08:
+        return {
+            "kind": "low",
+            "title_ko": "App Store · 제품 페이지 진입이 가장 먼저 새요",
+            "title_en": "App Store · Product-page entry is the first leak",
+            "assessment_ko": f"노출 {impressions:,}건 중 제품 페이지 조회 비율이 {_pct(page_rate)}예요.",
+            "assessment_en": f"Product-page views are {_pct(page_rate)} of {impressions:,} impressions.",
+            "action_ko": "검색 메타데이터·아이콘·스토어 노출 문맥부터 점검하는 우선순위가 높아요.",
+            "action_en": "Prioritize search metadata, icon, and store-discovery context.",
+            "rates": rates,
+        }
+
+    if install_rate is not None and install_rate < 0.10:
+        return {
+            "kind": "low",
+            "title_ko": f"{source_ko} · 스토어 전환이 약해요",
+            "title_en": f"{source_en} · Store conversion is weak",
+            "assessment_ko": f"방문→설치 전환이 {_pct(install_rate)}라 유입보다 스토어 설득 단계가 먼저 보여요.",
+            "assessment_en": f"Visit-to-install conversion is {_pct(install_rate)}, so the store-page persuasion step stands out before traffic volume.",
+            "action_ko": "첫 스크린샷·짧은 설명·가격/가치 제안을 우선 점검해요.",
+            "action_en": "Review the first screenshots, short description, and price/value proposition first.",
+            "rates": rates,
+        }
+
+    if (
+        installs is not None
+        and installs >= max(10, sample_floor // 2)
+        and purchases is not None
+        and purchases == 0
+    ):
+        return {
+            "kind": "warn",
+            "title_ko": f"{source_ko} · 설치 뒤 구매 전환을 관찰해야 해요",
+            "title_en": f"{source_en} · Watch post-install purchase conversion",
+            "assessment_ko": f"설치 {installs:,}건이 있지만 이 기간의 구매 집계는 0건이에요.",
+            "assessment_en": f"There are {installs:,} installs but zero recorded purchases in this window.",
+            "action_ko": "유료 기능 노출 시점·무료/Pro 경계·가격 전달을 확인해요.",
+            "action_en": "Check when paid value appears, the free/Pro boundary, and price communication.",
+            "rates": rates,
+        }
+
+    if install_rate is not None and install_rate >= 0.25 and visitors < volume_target:
+        return {
+            "kind": "good",
+            "title_ko": f"{source_ko} · 전환은 버티고 있고 다음 과제는 유입량이에요",
+            "title_en": f"{source_en} · Conversion is holding; traffic is the next priority",
+            "assessment_ko": f"방문→설치 전환이 {_pct(install_rate)}인데 방문량은 내부 운영 목표({volume_target:,})보다 작아요.",
+            "assessment_en": f"Visit-to-install conversion is {_pct(install_rate)}, while traffic is below the internal operating target ({volume_target:,}).",
+            "action_ko": "스토어 전환을 크게 흔들기보다 검색·콘텐츠·외부 노출을 늘리는 쪽을 우선해요.",
+            "action_en": "Prioritize search, content, and external discovery before materially changing the store conversion surface.",
+            "rates": rates,
+        }
+
+    if visitors < volume_target:
+        return {
+            "kind": "warn",
+            "title_ko": f"{source_ko} · 지금은 유입량 확대가 더 중요해요",
+            "title_en": f"{source_en} · Traffic volume is the bigger opportunity",
+            "assessment_ko": f"전환이 치명적으로 꺾이진 않았지만 방문량이 내부 운영 목표({volume_target:,})보다 작아요.",
+            "assessment_en": f"Conversion is not the clearest failure, but traffic remains below the internal operating target ({volume_target:,}).",
+            "action_ko": "ASO 키워드·콘텐츠 링크·스토어 노출 기회를 늘려요.",
+            "action_en": "Increase ASO keyword coverage, content links, and store-discovery opportunities.",
+            "rates": rates,
+        }
+
+    return {
+        "kind": "good",
+        "title_ko": f"{source_ko} · 뚜렷한 단일 병목은 없어요",
+        "title_en": f"{source_en} · No single obvious bottleneck",
+        "assessment_ko": "현재 내부 진단 규칙에서는 한 단계가 유독 크게 무너진 모습은 아니에요.",
+        "assessment_en": "Under the internal diagnostic rules, no single step is disproportionately weak.",
+        "action_ko": "기간별 추세를 계속 보면서 가장 먼저 악화되는 단계를 잡아요.",
+        "action_en": "Keep watching period trends and act on the first step that deteriorates.",
+        "rates": rates,
+    }
+
+
+def _pct(value: float) -> str:
+    return f"{value * 100:.1f}%"
+
+
+def _diagnosis_card(source: str, payload: Mapping[str, object] | None, window: int) -> str:
+    diagnosis = _diagnose_funnel(source, payload, window)
+    rates = "".join(
+        '<span class="rate-pill">'
+        f'<span data-ko="{_esc(ko)}" data-en="{_esc(en)}">{_esc(ko)}</span>'
+        f"<b>{_esc(_pct(value))}</b></span>"
+        for ko, en, value in diagnosis["rates"]  # type: ignore[index]
+    )
+    return (
+        f'<article class="diagnosis-card" data-kind="{_esc(diagnosis["kind"])}">'
+        f'<h4 data-ko="{_esc(diagnosis["title_ko"])}" data-en="{_esc(diagnosis["title_en"])}">{_esc(diagnosis["title_ko"])}</h4>'
+        f'<p data-ko="{_esc(diagnosis["assessment_ko"])}" data-en="{_esc(diagnosis["assessment_en"])}">{_esc(diagnosis["assessment_ko"])}</p>'
+        f'<p><b data-ko="다음 행동" data-en="Next action">다음 행동</b> · '
+        f'<span data-ko="{_esc(diagnosis["action_ko"])}" data-en="{_esc(diagnosis["action_en"])}">{_esc(diagnosis["action_ko"])}</span></p>'
+        f'<div class="rate-row">{rates}</div>'
+        "</article>"
+    )
+
+
+def _funnel_diagnosis_html(
+    app_platforms: set[str],
+    ios_window: Mapping[str, object] | None,
+    android_window: Mapping[str, object] | None,
+    window: int,
+) -> str:
+    cards: list[str] = []
+    if "ios" in app_platforms:
+        cards.append(_diagnosis_card("apple", ios_window, window))
+    if "android" in app_platforms:
+        cards.append(_diagnosis_card("google", android_window, window))
+    if not cards:
+        return ""
+    return (
+        '<div class="diagnosis-panel">'
+        '<h3 data-ko="진단·평가" data-en="Diagnosis & evaluation">진단·평가</h3>'
+        f'<div class="diagnosis-grid">{"".join(cards)}</div>'
+        '<div class="diagnosis-note" '
+        'data-ko="이 평가는 업계 평균이 아니라 ONNELLAB 운영용 내부 휴리스틱이에요. 표본이 작으면 결론을 보류하고, 실제 퍼널에서 먼저 새는 단계를 찾는 용도예요." '
+        'data-en="This is an internal ONNELLAB operating heuristic, not an industry benchmark. It stays conservative on small samples and is meant to identify the first leaking step in the observed funnel.">'
+        '이 평가는 업계 평균이 아니라 ONNELLAB 운영용 내부 휴리스틱이에요. 표본이 작으면 결론을 보류하고, 실제 퍼널에서 먼저 새는 단계를 찾는 용도예요.'
+        "</div></div>"
+    )
+
+
 def _funnel_section(
     app: Mapping[str, object],
     funnel_summary: Mapping[str, object],
@@ -701,6 +985,12 @@ def _funnel_section(
                 'data-en="Combined totals appear only when the required metric is available for every supported store.">'
                 "양 스토어 합계는 두 스토어의 해당 지표가 모두 수집된 경우에만 표시해요.</div>"
             )
+        diagnosis_html = _funnel_diagnosis_html(
+            app_platforms,
+            ios_window,
+            android_window,
+            window,
+        )
         hidden = "" if window == 30 else " hidden"
         windows_html.append(
             f'<div class="funnel-window" data-funnel-window="{window}"{hidden}>'
@@ -709,6 +999,7 @@ def _funnel_section(
             '<div class="funnel-note" data-ko="스토어 방문·제품 페이지 조회의 정의가 달라 방문 수는 합산하지 않아요. Android에는 App Store의 노출과 동등한 공개 지표를 만들지 않아요." '
             'data-en="Store-visitor definitions differ, so visitor counts are not summed. Android does not invent an App-Store-equivalent impressions metric.">'
             "스토어 방문·제품 페이지 조회의 정의가 달라 방문 수는 합산하지 않아요. Android에는 App Store의 노출과 동등한 공개 지표를 만들지 않아요.</div>"
+            f"{diagnosis_html}"
             "</div>"
         )
 
@@ -735,7 +1026,497 @@ def _funnel_section(
     )
 
 
-def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Sequence[Mapping[str, object]], releases: Sequence[Mapping[str, object]], reviews: Sequence[Mapping[str, object]], dependencies: Sequence[Mapping[str, object]], pricing: Sequence[Mapping[str, object]], funnel_summary: Mapping[str, object]) -> str:
+def _review_card_html(item: Mapping[str, object], index: int) -> str:
+    platform = "App Store" if str(item.get("platform") or "") == "ios" else "Play Store"
+    rating = str(item.get("rating") or "—")
+    is_rating_only = str(item.get("review_kind") or "") == "rating_only"
+    is_replied = str(item.get("status") or "") == "replied" or bool(str(item.get("developer_reply") or "").strip())
+    status_ko = "별점만" if is_rating_only else "답변 완료" if is_replied else "답변 대기"
+    status_en = "Rating only" if is_rating_only else "Replied" if is_replied else "Awaiting reply"
+    meta_parts = [
+        str(item.get("reviewer_language") or ""),
+        str(item.get("territory") or ""),
+        f'v{item.get("app_version")}' if item.get("app_version") else "",
+        str(item.get("updated_at") or item.get("created_at") or ""),
+    ]
+    meta = " · ".join(value for value in meta_parts if value)
+    title = str(item.get("title") or "")
+    body = str(item.get("body") or "")
+    suggested = str(item.get("suggested_reply") or "")
+    developer_reply = str(item.get("developer_reply") or "")
+    translation_required = bool(item.get("approval_translation_required"))
+    review_translation = str(item.get("review_translation_ko") or "")
+    reply_translation = str(item.get("reply_translation_ko") or "")
+    triage = item.get("triage") if isinstance(item.get("triage"), Mapping) else {}
+    triage = triage if isinstance(triage, Mapping) else {}
+    manual_play = str(item.get("platform") or "") == "android" and str(item.get("review_id") or "").startswith("report-")
+
+    translation_html = ""
+    if translation_required and not is_replied and not is_rating_only:
+        translation_html = (
+            '<div class="review-translation">'
+            '<b data-ko="리뷰 한국어 번역" data-en="Korean review translation">리뷰 한국어 번역</b>'
+            f'<p>{_esc(review_translation or "번역이 아직 없어요.")}</p></div>'
+            '<label><span data-ko="답변 한국어 번역 · 승인 확인용" data-en="Korean reply translation · approval check">답변 한국어 번역 · 승인 확인용</span>'
+            f'<textarea data-review-translation>{_esc(reply_translation)}</textarea></label>'
+        )
+
+    triage_html = ""
+    if triage:
+        category = str(triage.get("category") or "—")
+        similar = str(triage.get("similar_reviews") or "0")
+        manual = bool(triage.get("requires_human_approval"))
+        facts_raw = triage.get("facts")
+        facts = []
+        if isinstance(facts_raw, list):
+            for fact in facts_raw:
+                if isinstance(fact, Mapping):
+                    text = str(fact.get("text") or "")
+                    if text:
+                        facts.append(text)
+        issue = str(triage.get("issue_draft") or "")
+        triage_body = (
+            f'<div class="triage-box"><b>AI triage</b> · {_esc(category)} · '
+            f'<span data-ko="유사 리뷰 {_esc(similar)}개" data-en="{_esc(similar)} similar reviews">유사 리뷰 {_esc(similar)}개</span>'
+            + (' · <span data-ko="사람 승인 필요" data-en="Human approval required">사람 승인 필요</span>' if manual else "")
+        )
+        if facts:
+            triage_body += '<br><b data-ko="승인된 사실" data-en="Approved facts">승인된 사실</b> · ' + _esc(" ".join(facts))
+        triage_body += "</div>"
+        if issue:
+            triage_body += (
+                '<div class="triage-box"><b data-ko="GitHub 이슈 초안" data-en="GitHub issue draft">GitHub 이슈 초안</b><br>'
+                + _esc(issue)
+                + "</div>"
+            )
+        triage_html = (
+            '<details><summary data-ko="AI 분류·근거 보기" data-en="Show AI triage & evidence">AI 분류·근거 보기</summary>'
+            + triage_body
+            + "</details>"
+        )
+
+    existing_reply_html = ""
+    if developer_reply:
+        existing_reply_html = (
+            '<div class="review-translation"><b data-ko="현재 개발자 답변" data-en="Current developer reply">현재 개발자 답변</b>'
+            f'<p>{_esc(developer_reply)}</p></div>'
+        )
+
+    actions_html = ""
+    if not is_replied and not is_rating_only:
+        approve_ko = "Play Console에서 수동 답변" if manual_play else "승인하고 게시"
+        approve_en = "Manual reply in Play Console" if manual_play else "Approve & publish"
+        disabled = " disabled" if manual_play or (translation_required and (not review_translation or not reply_translation)) else ""
+        actions_html = (
+            '<label><span data-ko="답변 초안" data-en="Reply draft">답변 초안</span>'
+            f'<textarea data-review-reply>{_esc(suggested)}</textarea></label>'
+            '<div class="review-actions">'
+            '<button class="ops-button" type="button" data-review-action="draft" data-ko="추천 초안 복원" data-en="Reset suggested draft">추천 초안 복원</button>'
+            '<button class="ops-button" type="button" data-review-action="copy" data-ko="답변 복사" data-en="Copy reply">답변 복사</button>'
+            f'<button class="ops-button primary" type="button" data-review-action="approve"{disabled} data-ko="{_esc(approve_ko)}" data-en="{_esc(approve_en)}">{_esc(approve_ko)}</button>'
+            '</div><div class="ops-message" data-review-message></div>'
+        )
+
+    body_html = (
+        '<p class="review-body" data-ko="별점만 남긴 평가예요." data-en="This entry contains a rating only.">별점만 남긴 평가예요.</p>'
+        if is_rating_only
+        else f'<p class="review-body">{_esc(body or "—")}</p>'
+    )
+    title_html = f'<strong class="review-body">{_esc(title)}</strong>' if title else ""
+    return (
+        f'<article class="review-card" data-review-index="{index}">'
+        '<div class="review-head">'
+        f'<strong>{_esc(platform)}</strong><span class="review-rating">{_esc(rating)} / 5</span></div>'
+        f'<div class="review-meta">{_esc(meta)} · '
+        f'<span data-ko="{_esc(status_ko)}" data-en="{_esc(status_en)}">{_esc(status_ko)}</span></div>'
+        f'{title_html}{body_html}{translation_html}{triage_html}{existing_reply_html}{actions_html}'
+        "</article>"
+    )
+
+
+def _release_card_html(item: Mapping[str, object], index: int) -> str:
+    tag = str(item.get("tag") or item.get("version") or item.get("release_id") or "Release")
+    status = str(item.get("status") or "—")
+    channel = str(item.get("release_channel") or "public")
+    release_id = str(item.get("release_id") or "")
+    public_release = str(item.get("public_release") or "").lower() == "true"
+    date = str(item.get("released_at") or item.get("release_date") or "—")
+    url = _safe_href(item.get("release_url"))
+    notes = str(item.get("release_notes") or "")
+    approval_ko = "공개 승인 완료" if public_release else "공개 승인 대기"
+    approval_en = "Public approved" if public_release else "Awaiting public approval"
+    badge_class = "good" if public_release else "warn"
+    link_html = f'<p><a href="{_esc(url)}" target="_blank" rel="noopener noreferrer" data-ko="릴리즈 페이지 열기" data-en="Open release page">릴리즈 페이지 열기</a></p>' if url else ""
+    notes_html = f'<p><b data-ko="릴리즈 노트" data-en="Release notes">릴리즈 노트</b> · {_esc(notes)}</p>' if notes else ""
+    approve_html = ""
+    if channel == "public" and not public_release and release_id:
+        approve_html = (
+            '<div class="ops-actions">'
+            f'<button class="ops-button primary" type="button" data-release-approve-index="{index}" data-ko="공개 승인" data-en="Approve public release">공개 승인</button>'
+            '</div><div class="ops-message" data-release-message></div>'
+        )
+    return (
+        f'<article class="release-card" data-release-index="{index}">'
+        '<div class="release-head">'
+        f'<strong>{_esc(tag)}</strong><span class="mini-badge {badge_class}" data-ko="{_esc(approval_ko)}" data-en="{_esc(approval_en)}">{_esc(approval_ko)}</span>'
+        '</div>'
+        f'<div class="release-meta">{_esc(status)} · {_esc(channel)} · {_esc(date)}</div>'
+        f'{notes_html}{link_html}{approve_html}</article>'
+    )
+
+
+def _dependency_card_html(item: Mapping[str, object]) -> str:
+    name = str(item.get("package_name") or item.get("package") or "—")
+    kind = str(item.get("package_type") or "dependency")
+    declared = str(item.get("declared_version") or item.get("flutter_constraint") or "—")
+    resolved = str(item.get("resolved_version") or item.get("current_version") or "—")
+    source = str(item.get("source") or "")
+    source_html = f' · <span data-ko="출처 {_esc(source)}" data-en="source {_esc(source)}">출처 {_esc(source)}</span>' if source else ""
+    return (
+        '<article class="dependency-card">'
+        f'<strong>{_esc(name)}</strong>'
+        f'<div class="dependency-meta">{_esc(kind)}{source_html}</div>'
+        f'<p><span data-ko="선언" data-en="Declared">선언</span> {_esc(declared)} · '
+        f'<span data-ko="해결/현재" data-en="Resolved/current">해결/현재</span> {_esc(resolved)}</p>'
+        '</article>'
+    )
+
+
+def _app_controls_script(
+    reviews: Sequence[Mapping[str, object]],
+    releases: Sequence[Mapping[str, object]],
+) -> str:
+    reviews_json = _json_script(list(reviews))
+    releases_json = _json_script(list(releases))
+    return rf"""
+<script id="app-review-data" type="application/json">{reviews_json}</script>
+<script id="app-release-data" type="application/json">{releases_json}</script>
+<script>
+(() => {{
+  const repo = 'onnellab/onnel-content-engine';
+  const branch = 'main';
+  const tokenKey = 'onnellab-manual-publish-token';
+  const approvalsPath = 'data/store_review_approvals.json';
+  const releasePublicationsPath = 'data/app_release_publications.csv';
+  const reviews = JSON.parse(document.getElementById('app-review-data').textContent || '[]');
+  const releases = JSON.parse(document.getElementById('app-release-data').textContent || '[]');
+  const currentLang = () => localStorage.getItem('onnellab-ops-language') === 'en' ? 'en' : 'ko';
+  const label = (ko, en) => currentLang() === 'en' ? en : ko;
+  const token = () => (localStorage.getItem(tokenKey) || '').trim();
+  const LF = String.fromCharCode(10);
+  const CR = String.fromCharCode(13);
+
+  const updateTokenNotes = () => {{
+    document.querySelectorAll('[data-app-token-note]').forEach((node) => {{
+      node.hidden = Boolean(token());
+    }});
+  }};
+
+  async function githubRequest(path, options = {{}}) {{
+    if (!token()) throw new Error(label('GitHub 연결이 필요해요. 설정에서 토큰을 연결해 주세요.', 'GitHub connection is required. Connect a token in Settings.'));
+    const headers = {{
+      Accept: 'application/vnd.github+json',
+      Authorization: 'Bearer ' + token(),
+      'X-GitHub-Api-Version': '2022-11-28',
+      ...(options.headers || {{}}),
+    }};
+    const response = await fetch('https://api.github.com' + path, {{...options, headers}});
+    const text = await response.text();
+    let data = {{}};
+    if (text) {{
+      try {{ data = JSON.parse(text); }} catch {{ data = {{}}; }}
+    }}
+    if (!response.ok) {{
+      const safeMessage = String(data.message || 'GitHub request failed').slice(0, 240);
+      throw new Error('GitHub HTTP ' + response.status + ': ' + safeMessage);
+    }}
+    return data;
+  }}
+
+  function encodeBase64Unicode(value) {{
+    const bytes = new TextEncoder().encode(value);
+    let binary = '';
+    bytes.forEach((byte) => {{ binary += String.fromCharCode(byte); }});
+    return btoa(binary);
+  }}
+
+  function decodeBase64Unicode(value) {{
+    const binary = atob(String(value || '').replace(/\n/g, ''));
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }}
+
+  function flash(button, text) {{
+    if (!button) return;
+    const previous = button.textContent;
+    button.textContent = text;
+    window.setTimeout(() => {{ if (!button.disabled) button.textContent = previous; }}, 1800);
+  }}
+
+  function setMessage(node, text, isError = false) {{
+    if (!node) return;
+    node.textContent = text;
+    node.classList.toggle('is-error', isError);
+  }}
+
+  async function copyText(value, button) {{
+    await navigator.clipboard.writeText(String(value || ''));
+    flash(button, label('복사됨', 'Copied'));
+  }}
+
+  async function queueApprovedStoreReply(item, reply) {{
+    const cleanReply = String(reply || '').replace(/\\s+/g, ' ').trim();
+    if (!cleanReply) throw new Error(label('답변을 입력해 주세요.', 'A reply is required.'));
+    if (cleanReply.length > 1000) throw new Error(label('답변은 1000자 이하여야 해요.', 'Reply must be 1000 characters or fewer.'));
+    if (/(will be fixed|next update|guaranteed|refund approved|다음 업데이트|고쳐드리|환불해드리)/i.test(cleanReply)) {{
+      throw new Error(label('확정 약속 문구가 포함되어 승인할 수 없어요.', 'The reply contains a prohibited promise.'));
+    }}
+    const data = await githubRequest('/repos/' + repo + '/contents/' + approvalsPath + '?ref=' + branch);
+    const approvals = JSON.parse(decodeBase64Unicode(data.content));
+    approvals.approvals ||= [];
+    const existing = approvals.approvals.find(
+      (entry) => entry.review_id === item.review_id && ['queued', 'published'].includes(entry.status)
+    );
+    if (existing) {{
+      if (existing.status === 'queued' && existing.reply === cleanReply && existing.approval_id) {{
+        return existing.approval_id;
+      }}
+      throw new Error(label('이미 다른 답변으로 승인됐거나 게시된 리뷰예요.', 'This review already has a different active approval or has been published.'));
+    }}
+    const approvedAt = new Date().toISOString();
+    const approvalId = 'review-' + item.review_id;
+    approvals.approvals.push({{
+      approval_id: approvalId,
+      review_id: item.review_id,
+      app_id: item.app_id || '',
+      app_slug: item.app_slug || '',
+      platform: item.platform || '',
+      reply: cleanReply,
+      approved_at: approvedAt,
+      approved_by: 'dashboard_token_holder',
+      note: '',
+      status: 'queued',
+      publication: {{attempts: 0, published_at: '', external_response_id: ''}},
+    }});
+    approvals.updated_at = approvedAt;
+    await githubRequest('/repos/' + repo + '/contents/' + approvalsPath, {{
+      method: 'PUT',
+      headers: {{'Content-Type': 'application/json'}},
+      body: JSON.stringify({{
+        message: 'Queue approved reply for ' + item.review_id,
+        content: encodeBase64Unicode(JSON.stringify(approvals, null, 2) + '\n'),
+        branch,
+        sha: data.sha,
+      }}),
+    }});
+    return approvalId;
+  }}
+
+  async function dispatchApprovedStoreReply(approvalId) {{
+    await githubRequest('/repos/' + repo + '/actions/workflows/publish-store-review-reply.yml/dispatches', {{
+      method: 'POST',
+      headers: {{'Content-Type': 'application/json'}},
+      body: JSON.stringify({{
+        ref: branch,
+        inputs: {{approval_id: approvalId, confirm_publish: 'PUBLISH'}},
+      }}),
+    }});
+  }}
+
+  async function dispatchReviewSync(button) {{
+    const message = document.querySelector('[data-review-sync-message]');
+    try {{
+      button.disabled = true;
+      setMessage(message, label('전체 앱 리뷰 동기화를 요청하는 중이에요…', 'Requesting review sync for all apps…'));
+      await githubRequest('/repos/' + repo + '/actions/workflows/sync-store-reviews.yml/dispatches', {{
+        method: 'POST',
+        headers: {{'Content-Type': 'application/json'}},
+        body: JSON.stringify({{ref: branch, inputs: {{deploy_dashboard: 'true'}}}}),
+      }});
+      setMessage(message, label('리뷰 동기화를 요청했어요. 완료 후 대시보드가 자동 갱신돼요.', 'Review sync requested. The dashboard will refresh after completion.'));
+      button.textContent = label('동기화 요청됨', 'Sync requested');
+    }} catch (error) {{
+      setMessage(message, String(error.message || error), true);
+      button.disabled = false;
+    }}
+  }}
+
+  function bindReviewCards() {{
+    document.querySelectorAll('[data-review-index]').forEach((card) => {{
+      const item = reviews[Number(card.dataset.reviewIndex)];
+      if (!item) return;
+      const reply = card.querySelector('[data-review-reply]');
+      const replyTranslation = card.querySelector('[data-review-translation]');
+      const draft = card.querySelector('[data-review-action="draft"]');
+      const copy = card.querySelector('[data-review-action="copy"]');
+      const approve = card.querySelector('[data-review-action="approve"]');
+      const message = card.querySelector('[data-review-message]');
+      const manualPlay = item.platform === 'android' && String(item.review_id || '').startsWith('report-');
+      const translationRequired = Boolean(item.approval_translation_required);
+      const translationsReady = () => !translationRequired || (
+        /[가-힣]/.test(String(item.review_translation_ko || '')) &&
+        /[가-힣]/.test(String(replyTranslation?.value || ''))
+      );
+      const updateApproval = () => {{
+        if (approve) approve.disabled = manualPlay || !translationsReady();
+      }};
+      if (draft && reply) draft.addEventListener('click', () => {{
+        reply.value = item.suggested_reply || '';
+        if (replyTranslation) replyTranslation.value = item.reply_translation_ko || '';
+        updateApproval();
+        reply.focus();
+      }});
+      if (copy && reply) copy.addEventListener('click', () => copyText(reply.value || item.suggested_reply || '', copy));
+      if (replyTranslation) replyTranslation.addEventListener('input', updateApproval);
+      if (reply) reply.addEventListener('input', () => {{
+        if (replyTranslation && reply.value.trim() !== String(item.suggested_reply || '').trim()) {{
+          replyTranslation.value = '';
+        }}
+        updateApproval();
+      }});
+      let queuedApprovalId = '';
+      if (approve && !manualPlay) approve.addEventListener('click', async () => {{
+        if (!translationsReady()) {{
+          setMessage(message, label('한국어 번역 확인이 필요해요.', 'Korean translation confirmation is required.'), true);
+          return;
+        }}
+        try {{
+          approve.disabled = true;
+          if (!queuedApprovalId) {{
+            setMessage(message, label('승인을 저장하는 중이에요…', 'Saving approval…'));
+            queuedApprovalId = await queueApprovedStoreReply(item, reply?.value || item.suggested_reply || '');
+          }}
+          if (reply) reply.readOnly = true;
+          if (replyTranslation) replyTranslation.readOnly = true;
+          if (draft) draft.disabled = true;
+          setMessage(message, label('게시를 요청하는 중이에요…', 'Requesting publication…'));
+          await dispatchApprovedStoreReply(queuedApprovalId);
+          approve.textContent = label('게시 요청됨', 'Publish requested');
+          setMessage(message, label('승인 저장과 게시 요청이 완료됐어요.', 'Approval saved and publication requested.'));
+        }} catch (error) {{
+          const retryNote = queuedApprovalId
+            ? label('승인은 저장됐어요. 게시 요청만 실패해 다시 누르면 재시도해요. ', 'Approval is saved. Publication dispatch failed; press again to retry. ')
+            : '';
+          setMessage(message, retryNote + String(error.message || error), true);
+          approve.disabled = false;
+        }}
+      }});
+      updateApproval();
+    }});
+  }}
+
+  function parseCsv(text) {{
+    const rows = [];
+    let row = [], value = '', quoted = false;
+    for (let i = 0; i < text.length; i += 1) {{
+      const char = text[i];
+      if (quoted) {{
+        if (char === '"' && text[i + 1] === '"') {{ value += '"'; i += 1; }}
+        else if (char === '"') quoted = false;
+        else value += char;
+      }} else if (char === '"') quoted = true;
+      else if (char === ',') {{ row.push(value); value = ''; }}
+      else if (char === '\n') {{ row.push(value); rows.push(row); row = []; value = ''; }}
+      else if (char !== '\r') value += char;
+    }}
+    if (value || row.length) {{ row.push(value); rows.push(row); }}
+    return rows;
+  }}
+
+  function csvValue(value) {{
+    const text = String(value || '');
+    return /[",\n\r]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+  }}
+
+  function csvText(rows) {{
+    return rows.map((row) => row.map(csvValue).join(',')).join('\n') + '\n';
+  }}
+
+  async function approvePublicRelease(item) {{
+    const data = await githubRequest('/repos/' + repo + '/contents/' + releasePublicationsPath + '?ref=' + branch);
+    const rows = parseCsv(decodeBase64Unicode(data.content));
+    const header = rows[0] && rows[0].length ? rows[0] : ['release_id', 'public_release', 'approved_at', 'notes'];
+    const releaseIdIndex = header.indexOf('release_id');
+    const publicIndex = header.indexOf('public_release');
+    const approvedIndex = header.indexOf('approved_at');
+    const notesIndex = header.indexOf('notes');
+    const approvedAt = new Date().toISOString();
+    let found = false;
+    const nextRows = [header, ...rows.slice(1).filter((row) => row.some(Boolean)).map((row) => {{
+      const next = [...row];
+      while (next.length < header.length) next.push('');
+      if (next[releaseIdIndex] === item.release_id) {{
+        next[publicIndex] = 'true';
+        next[approvedIndex] = next[approvedIndex] || approvedAt;
+        next[notesIndex] = next[notesIndex] || 'Approved from per-app ONNELLAB Ops';
+        found = true;
+      }}
+      return next;
+    }})];
+    if (!found) {{
+      const row = Array(header.length).fill('');
+      row[releaseIdIndex] = item.release_id;
+      row[publicIndex] = 'true';
+      row[approvedIndex] = approvedAt;
+      row[notesIndex] = 'Approved from per-app ONNELLAB Ops';
+      nextRows.push(row);
+    }}
+    await githubRequest('/repos/' + repo + '/contents/' + releasePublicationsPath, {{
+      method: 'PUT',
+      headers: {{'Content-Type': 'application/json'}},
+      body: JSON.stringify({{
+        message: 'Approve public release ' + item.release_id,
+        content: encodeBase64Unicode(csvText(nextRows)),
+        branch,
+        sha: data.sha,
+      }}),
+    }});
+  }}
+
+  function bindReleaseCards() {{
+    document.querySelectorAll('[data-release-approve-index]').forEach((button) => {{
+      const index = Number(button.dataset.releaseApproveIndex);
+      const item = releases[index];
+      const card = button.closest('[data-release-index]');
+      const message = card?.querySelector('[data-release-message]');
+      if (!item) return;
+      button.addEventListener('click', async () => {{
+        try {{
+          button.disabled = true;
+          setMessage(message, label('공개 승인을 저장하는 중이에요…', 'Saving public release approval…'));
+          await approvePublicRelease(item);
+          button.textContent = label('공개 승인 완료', 'Public approved');
+          setMessage(message, label('공개 승인 정보를 저장했어요.', 'Public release approval saved.'));
+        }} catch (error) {{
+          setMessage(message, String(error.message || error), true);
+          button.disabled = false;
+        }}
+      }});
+    }});
+  }}
+
+  const syncButton = document.querySelector('[data-review-sync]');
+  if (syncButton) syncButton.addEventListener('click', () => dispatchReviewSync(syncButton));
+  bindReviewCards();
+  bindReleaseCards();
+  updateTokenNotes();
+}})();
+</script>
+"""
+
+
+def _app_detail(
+    app: Mapping[str, object],
+    homepage_repo: Path,
+    store_items: Sequence[Mapping[str, object]],
+    releases: Sequence[Mapping[str, object]],
+    reviews: Sequence[Mapping[str, object]],
+    dependencies: Sequence[Mapping[str, object]],
+    pricing: Sequence[Mapping[str, object]],
+    funnel_summary: Mapping[str, object],
+    site_items: Sequence[Mapping[str, object]] = (),
+    ai_manager_report: Mapping[str, object] | None = None,
+) -> str:
     slug = str(app.get("slug") or "")
     title = str(app.get("app_name") or slug)
     description_en = str(app.get("one_line_description") or "")
@@ -748,16 +1529,63 @@ def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Seq
     app_reviews = [item for item in reviews if _match(item, app)]
     app_deps = [item for item in dependencies if _match(item, app)]
     app_prices = [item for item in pricing if str(item.get("app_slug") or "") == slug]
+    app_site = next(
+        (
+            item
+            for item in site_items
+            if str(item.get("kind") or "") == "app"
+            and str(item.get("slug") or "") == slug
+        ),
+        {},
+    )
+    report = ai_manager_report if isinstance(ai_manager_report, Mapping) else {}
+    policy_alerts_raw = report.get("policy_alerts", []) if isinstance(report, Mapping) else []
+    app_policy_alerts = [
+        item
+        for item in policy_alerts_raw
+        if isinstance(item, Mapping) and str(item.get("app_slug") or "") == slug
+    ] if isinstance(policy_alerts_raw, list) else []
+
     ios_version, ios_status = _store_stat(app_stores, "ios")
     android_version, android_status = _store_stat(app_stores, "android")
     ios_status_ko = _store_status_ko(ios_status)
     android_status_ko = _store_status_ko(android_status)
     ios_status_en = "No data" if ios_status == "수집 기록 없음" else ios_status
     android_status_en = "No data" if android_status == "수집 기록 없음" else android_status
-    repo_version = next((str(item.get("resolved_version") or item.get("declared_version") or "—") for item in app_deps if str(item.get("package_type") or "") == "app_version"), "—")
-    latest_release = next((str(item.get("tag") or item.get("version") or "—") for item in reversed(app_releases)), "—")
-    pending_reviews = sum(1 for item in app_reviews if str(item.get("status") or "") != "replied" and not item.get("developer_reply"))
-    platform_badges = "".join(f"<span>{_esc('iOS' if value == 'ios' else 'Android' if value == 'android' else value)}</span>" for value in str(app.get("platforms") or "").split("|") if value)
+    repo_version = next(
+        (
+            str(item.get("resolved_version") or item.get("declared_version") or "—")
+            for item in app_deps
+            if str(item.get("package_type") or "") == "app_version"
+        ),
+        "—",
+    )
+    latest_release = next(
+        (str(item.get("tag") or item.get("version") or "—") for item in reversed(app_releases)),
+        "—",
+    )
+    pending_reviews = sum(
+        1
+        for item in app_reviews
+        if str(item.get("review_kind") or "") != "rating_only"
+        and str(item.get("status") or "") != "replied"
+        and not item.get("developer_reply")
+    )
+    rating_only_reviews = sum(
+        1 for item in app_reviews if str(item.get("review_kind") or "") == "rating_only"
+    )
+    pending_releases = sum(
+        1
+        for item in app_releases
+        if str(item.get("release_channel") or "public") == "public"
+        and str(item.get("public_release") or "").lower() != "true"
+    )
+    platform_badges = "".join(
+        f"<span>{_esc('iOS' if value == 'ios' else 'Android' if value == 'android' else value)}</span>"
+        for value in str(app.get("platforms") or "").split("|")
+        if value
+    )
+
     store_rows = "".join(_bilingual_store_row(item) for item in app_stores) or (
         '<div class="empty-note" data-ko="스토어 상태 기록이 없어요." '
         'data-en="No store status is available.">스토어 상태 기록이 없어요.</div>'
@@ -766,8 +1594,20 @@ def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Seq
         '<div class="empty-note" data-ko="등록된 유료 제품 가격이 없어요." '
         'data-en="No paid product price is registered.">등록된 유료 제품 가격이 없어요.</div>'
     )
-    dependency_names = [
-        str(item.get("package_name") or "")
+    review_rows = "".join(
+        _review_card_html(item, index) for index, item in enumerate(app_reviews)
+    ) or (
+        '<div class="empty-note" data-ko="수집된 리뷰가 없어요." '
+        'data-en="No collected reviews.">수집된 리뷰가 없어요.</div>'
+    )
+    release_rows = "".join(
+        _release_card_html(item, index) for index, item in enumerate(app_releases)
+    ) or (
+        '<div class="empty-note" data-ko="릴리즈 기록이 없어요." '
+        'data-en="No release records.">릴리즈 기록이 없어요.</div>'
+    )
+    visible_deps = [
+        item
         for item in app_deps
         if str(item.get("package_type") or "") != "app_version"
         and not (
@@ -775,9 +1615,60 @@ def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Seq
             and str(item.get("declared_version") or "") == "sdk:flutter"
         )
     ]
-    dependency_text = ", ".join(dependency_names[:8]) + ("…" if len(dependency_names) > 8 else "")
-    dependency_ko = f"{len(dependency_names)}개 · {dependency_text or '표시할 플러그인 없음'}"
-    dependency_en = f"{len(dependency_names)} items · {dependency_text or 'No plugins to display'}"
+    dependency_rows = "".join(_dependency_card_html(item) for item in visible_deps) or (
+        '<div class="empty-note" data-ko="표시할 Flutter/플러그인 항목이 없어요." '
+        'data-en="No Flutter/plugin rows to display.">표시할 Flutter/플러그인 항목이 없어요.</div>'
+    )
+    if isinstance(app_site, Mapping) and app_site:
+        site_html = (
+            '<div class="site-freshness">'
+            '<div class="detail-stat"><span data-ko="앱 페이지 갱신" data-en="App page updated">앱 페이지 갱신</span>'
+            f'<b>{_esc(app_site.get("landing_updated_at") or "—")}</b></div>'
+            '<div class="detail-stat"><span data-ko="스크린샷 갱신" data-en="Screenshots updated">스크린샷 갱신</span>'
+            f'<b>{_esc(app_site.get("screenshots_updated_at") or "—")}</b>'
+            f'<span data-ko="{_esc(app_site.get("screenshot_count") or 0)}장" data-en="{_esc(app_site.get("screenshot_count") or 0)} screenshots">{_esc(app_site.get("screenshot_count") or 0)}장</span></div>'
+            '<div class="detail-stat"><span data-ko="에셋 갱신" data-en="Assets updated">에셋 갱신</span>'
+            f'<b>{_esc(app_site.get("assets_updated_at") or "—")}</b></div>'
+            "</div>"
+        )
+    else:
+        site_html = (
+            '<div class="empty-note" data-ko="사이트·스크린샷 최신성 기록이 없어요." '
+            'data-en="No site/screenshot freshness record is available.">사이트·스크린샷 최신성 기록이 없어요.</div>'
+        )
+
+    alert_cards: list[str] = []
+    for alert in app_policy_alerts:
+        kind = str(alert.get("kind") or "policy alert")
+        status = str(alert.get("status") or "review_required")
+        summary = str(alert.get("summary") or "Review the store-console warning.")
+        note = str(alert.get("operational_note") or "")
+        store = str(alert.get("store") or "store")
+        occurred = str(alert.get("occurred_at") or "")
+        reference = _safe_href(alert.get("reference_url"))
+        detail = (
+            f'<p>{_esc(summary)}</p>'
+            + (f'<p><b data-ko="현재 조치" data-en="Current action">현재 조치</b> · {_esc(note)}</p>' if note else "")
+            + (f'<p><b data-ko="감지" data-en="Detected">감지</b> · {_esc(occurred)}</p>' if occurred else "")
+            + (
+                f'<p><a href="{_esc(reference)}" target="_blank" rel="noopener noreferrer" '
+                'data-ko="공식 참고 열기" data-en="Open official reference">공식 참고 열기</a></p>'
+                if reference
+                else ""
+            )
+        )
+        alert_cards.append(
+            '<article class="release-card">'
+            '<div class="release-head">'
+            f'<strong>{_esc(store)} · {_esc(kind)}</strong>'
+            f'<span class="mini-badge warn">{_esc(status)}</span>'
+            f'</div>{detail}</article>'
+        )
+    alerts_html = "".join(alert_cards) or (
+        '<div class="empty-note" data-ko="현재 앱별 정책·운영 경고가 없어요." '
+        'data-en="There are no current app-specific policy or operations alerts.">현재 앱별 정책·운영 경고가 없어요.</div>'
+    )
+
     body = f"""
 <header class="ops-head">
   <p class="eyebrow" data-ko="앱 운영" data-en="App Operations">앱 운영</p>
@@ -798,22 +1689,81 @@ def _app_detail(app: Mapping[str, object], homepage_repo: Path, store_items: Seq
   <a href="#reviews" data-ko="리뷰" data-en="Reviews">리뷰</a>
   <a href="#technical" data-ko="기술·운영" data-en="Technical">기술·운영</a>
 </nav>
-<section class="detail-section" id="overview"><h2 data-ko="개요" data-en="Overview">개요</h2><div class="detail-grid">
-  <div class="detail-stat"><span>App Store</span><b>{_esc(ios_version)}</b><span data-ko="{_esc(ios_status_ko)}" data-en="{_esc(ios_status_en)}">{_esc(ios_status_ko)}</span></div>
-  <div class="detail-stat"><span>Play Store</span><b>{_esc(android_version)}</b><span data-ko="{_esc(android_status_ko)}" data-en="{_esc(android_status_en)}">{_esc(android_status_ko)}</span></div>
-  <div class="detail-stat"><span>GitHub main</span><b>{_esc(repo_version)}</b></div>
-  <div class="detail-stat"><span data-ko="최근 릴리즈" data-en="Latest release">최근 릴리즈</span><b>{_esc(latest_release)}</b></div>
-</div></section>
+
+<section class="detail-section" id="overview">
+  <h2 data-ko="개요" data-en="Overview">개요</h2>
+  <div class="detail-grid">
+    <div class="detail-stat"><span>App Store</span><b>{_esc(ios_version)}</b><span data-ko="{_esc(ios_status_ko)}" data-en="{_esc(ios_status_en)}">{_esc(ios_status_ko)}</span></div>
+    <div class="detail-stat"><span>Play Store</span><b>{_esc(android_version)}</b><span data-ko="{_esc(android_status_ko)}" data-en="{_esc(android_status_en)}">{_esc(android_status_ko)}</span></div>
+    <div class="detail-stat"><span>GitHub main</span><b>{_esc(repo_version)}</b></div>
+    <div class="detail-stat"><span data-ko="최근 릴리즈" data-en="Latest release">최근 릴리즈</span><b>{_esc(latest_release)}</b></div>
+  </div>
+</section>
+
 {_funnel_section(app, funnel_summary)}
-<section class="detail-section" id="store"><h2 data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</h2><div class="detail-list">{store_rows}{price_rows}</div></section>
-<section class="detail-section" id="reviews"><h2 data-ko="리뷰" data-en="Reviews">리뷰</h2><div class="detail-grid"><div class="detail-stat"><span data-ko="수집 리뷰" data-en="Collected reviews">수집 리뷰</span><b>{len(app_reviews)}</b></div><div class="detail-stat"><span data-ko="답변 대기" data-en="Awaiting reply">답변 대기</span><b>{pending_reviews}</b></div></div></section>
-<section class="detail-section" id="technical"><h2 data-ko="기술·운영" data-en="Technical & operations">기술·운영</h2><div class="detail-list">
-  <div class="detail-row"><b>Flutter / <span data-ko="플러그인" data-en="plugins">플러그인</span></b><span data-ko="{_esc(dependency_ko)}" data-en="{_esc(dependency_en)}">{_esc(dependency_ko)}</span></div>
-  <div class="detail-row"><b data-ko="고급 운영" data-en="Advanced operations">고급 운영</b><span><a href="/ops/legacy/" data-ko="기존 통합 콘솔에서 릴리즈 승인·리뷰 답변 등 기존 조작을 계속 사용할 수 있어요." data-en="Use the legacy console for release approvals, review replies, and other existing controls.">기존 통합 콘솔에서 릴리즈 승인·리뷰 답변 등 기존 조작을 계속 사용할 수 있어요.</a></span></div>
-  <div class="detail-row"><b data-ko="공개 제품 페이지" data-en="Public product page">공개 제품 페이지</b><span><a href="/apps/{_esc(slug)}/">onnellab.com/apps/{_esc(slug)}</a></span></div>
-</div></section>
+
+<section class="detail-section" id="store">
+  <h2 data-ko="스토어·수익" data-en="Store & revenue">스토어·수익</h2>
+  <div class="subsection-head"><h3 data-ko="스토어 버전·상태" data-en="Store versions & status">스토어 버전·상태</h3></div>
+  <div class="detail-list">{store_rows}</div>
+  <div class="subsection-head">
+    <h3 data-ko="가격·수익 구조" data-en="Pricing & unit economics">가격·수익 구조</h3>
+    <p data-ko="구매 건수는 유입·전환에서 따로 보고, 여기서는 가격과 단위 경제성만 봐요." data-en="Purchase counts stay in Acquisition; this section focuses on pricing and unit economics.">구매 건수는 유입·전환에서 따로 보고, 여기서는 가격과 단위 경제성만 봐요.</p>
+  </div>
+  <div class="pricing-list">{price_rows}</div>
+</section>
+
+<section class="detail-section" id="reviews">
+  <div class="subsection-head">
+    <h2 data-ko="리뷰" data-en="Reviews">리뷰</h2>
+    <div class="ops-actions">
+      <button class="ops-button primary" type="button" data-review-sync data-ko="리뷰 동기화" data-en="Sync reviews">리뷰 동기화</button>
+    </div>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-stat"><span data-ko="수집 리뷰" data-en="Collected reviews">수집 리뷰</span><b>{len(app_reviews)}</b></div>
+    <div class="detail-stat"><span data-ko="답변 대기" data-en="Awaiting reply">답변 대기</span><b>{pending_reviews}</b></div>
+    <div class="detail-stat"><span data-ko="별점만" data-en="Rating only">별점만</span><b>{rating_only_reviews}</b></div>
+    <div class="detail-stat"><span data-ko="동기화 범위" data-en="Sync scope">동기화 범위</span><b data-ko="전체 앱" data-en="All apps">전체 앱</b></div>
+  </div>
+  <div class="token-note" data-app-token-note hidden>
+    <span data-ko="답변 승인·게시와 리뷰 동기화에는 GitHub 연결이 필요해요." data-en="Review approval, publishing, and sync require a GitHub connection.">답변 승인·게시와 리뷰 동기화에는 GitHub 연결이 필요해요.</span>
+    <a href="/ops/settings/" data-ko="설정에서 연결" data-en="Connect in Settings">설정에서 연결</a>
+  </div>
+  <div class="ops-message" data-review-sync-message></div>
+  <div class="review-list">{review_rows}</div>
+</section>
+
+<section class="detail-section" id="technical">
+  <h2 data-ko="기술·운영" data-en="Technical & operations">기술·운영</h2>
+  <div class="detail-row">
+    <b data-ko="공개 제품 페이지" data-en="Public product page">공개 제품 페이지</b>
+    <span><a href="/apps/{_esc(slug)}/">onnellab.com/apps/{_esc(slug)}</a></span>
+  </div>
+  <div class="subsection-head"><h3 data-ko="사이트·자산 최신성" data-en="Site & asset freshness">사이트·자산 최신성</h3></div>
+  {site_html}
+  <div class="subsection-head"><h3 data-ko="정책·운영 경고" data-en="Policy & operations alerts">정책·운영 경고</h3></div>
+  <div class="release-list">{alerts_html}</div>
+  <div class="token-note" data-app-token-note hidden>
+    <span data-ko="릴리즈 공개 승인에는 GitHub 연결이 필요해요." data-en="Public release approval requires a GitHub connection.">릴리즈 공개 승인에는 GitHub 연결이 필요해요.</span>
+    <a href="/ops/settings/" data-ko="설정에서 연결" data-en="Connect in Settings">설정에서 연결</a>
+  </div>
+  <div class="subsection-head">
+    <h3 data-ko="릴리즈 운영" data-en="Release operations">릴리즈 운영</h3>
+    <p data-ko="공개 승인 대기 {pending_releases}건" data-en="{pending_releases} awaiting public approval">공개 승인 대기 {pending_releases}건</p>
+  </div>
+  <div class="release-list">{release_rows}</div>
+  <div class="subsection-head">
+    <h3 data-ko="Flutter·플러그인" data-en="Flutter & plugins">Flutter·플러그인</h3>
+    <p data-ko="표시 {len(visible_deps)}개" data-en="{len(visible_deps)} visible items">표시 {len(visible_deps)}개</p>
+  </div>
+  <div class="dependency-list">{dependency_rows}</div>
+</section>
+
+{_app_controls_script(app_reviews, app_releases)}
 """
     return _page(title, "apps", body)
+
 
 
 def build_split_ops_pages(
@@ -829,6 +1779,8 @@ def build_split_ops_pages(
     dependencies: Sequence[Mapping[str, object]],
     pricing: Sequence[Mapping[str, object]],
     funnel_summary: Mapping[str, object] | None = None,
+    site_items: Sequence[Mapping[str, object]] = (),
+    ai_manager_report: Mapping[str, object] | None = None,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     funnel_summary = funnel_summary or {}
@@ -870,6 +1822,8 @@ def build_split_ops_pages(
                 dependencies,
                 pricing,
                 funnel_summary,
+                site_items,
+                ai_manager_report,
             ),
             encoding="utf-8",
         )

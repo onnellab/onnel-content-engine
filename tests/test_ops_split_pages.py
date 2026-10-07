@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 import unittest
@@ -9,11 +10,24 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from build_manual_publish_site import html_document
-from ops_split_pages import _funnel_source_message, build_split_ops_pages
+from ops_split_pages import _diagnose_funnel, _funnel_source_message, _json_script, _safe_href, build_split_ops_pages
 from validate_manual_publish_site import validate_dashboard
 
 
 class OpsSplitPagesTest(unittest.TestCase):
+    def test_embedded_review_json_cannot_break_out_of_script(self):
+        value = [{"title": "</script><img src=x onerror=alert(1)> & details"}]
+        encoded = _json_script(value)
+        self.assertNotIn("</script>", encoded.lower())
+        self.assertIn(r"\u003c", encoded)
+        self.assertEqual(json.loads(encoded), value)
+
+    def test_app_detail_links_disallow_unsafe_url_schemes(self):
+        self.assertEqual(_safe_href("javascript:alert(1)"), "")
+        self.assertEqual(_safe_href("//evil.example/path"), "")
+        self.assertEqual(_safe_href("https://developer.apple.com/docs"), "https://developer.apple.com/docs")
+        self.assertEqual(_safe_href("/release-notes/example/"), "/release-notes/example/")
+
     def test_split_pages_keep_legacy_payload_and_use_apps_card_design(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -40,7 +54,88 @@ class OpsSplitPagesTest(unittest.TestCase):
             ]
             dependencies = [
                 {"app_id": "APP-0002", "app_slug": "tagweaver", "package_type": "app_version", "package_name": "tagweaver", "declared_version": "2.5.2+96", "resolved_version": "2.5.2"},
-                {"app_id": "APP-0002", "app_slug": "tagweaver", "package_type": "dependency", "package_name": "file_picker", "declared_version": "^10.0.0", "resolved_version": "10.0.0"},
+                {"app_id": "APP-0002", "app_slug": "tagweaver", "package_type": "dependency", "package_name": "file_picker", "declared_version": "^10.0.0", "resolved_version": "10.0.0", "source": "pubspec.lock"},
+                {"app_id": "APP-0002", "app_slug": "tagweaver", "package_type": "dependency", "package_name": "just_audio", "declared_version": "^0.10.5", "resolved_version": "0.10.5", "source": "pubspec.lock"},
+            ]
+            releases = [
+                {
+                    "app_id": "APP-0002",
+                    "app_slug": "tagweaver",
+                    "release_id": "REL-0099",
+                    "tag": "v2.5.2",
+                    "version": "2.5.2",
+                    "status": "ready",
+                    "release_channel": "public",
+                    "release_date": "2026-10-01",
+                    "public_release": "false",
+                    "release_url": "https://example.com/release/tagweaver",
+                    "release_notes": "Tag editing stability update",
+                }
+            ]
+            reviews = [
+                {
+                    "app_id": "APP-0002",
+                    "app_slug": "tagweaver",
+                    "review_id": "review-ios-1",
+                    "platform": "ios",
+                    "rating": "2",
+                    "title": "Could not save",
+                    "body": "Save failed once.",
+                    "reviewer_language": "en",
+                    "territory": "US",
+                    "app_version": "2.5.2",
+                    "updated_at": "2026-10-06T10:00:00Z",
+                    "status": "pending",
+                    "review_kind": "review",
+                    "suggested_reply": "Thanks for the report. Please try the latest version.",
+                    "reply_category": "bug",
+                    "reply_language": "en",
+                    "approval_translation_required": True,
+                    "review_translation_ko": "저장이 한 번 실패했어요.",
+                    "reply_translation_ko": "제보 감사합니다. 최신 버전을 이용해 주세요.",
+                    "triage": {
+                        "category": "bug",
+                        "similar_reviews": 2,
+                        "requires_human_approval": True,
+                        "facts": [{"text": "TagWeaver edits tags offline."}],
+                        "issue_draft": "Investigate intermittent save failure.",
+                    },
+                },
+                {
+                    "app_id": "APP-0002",
+                    "app_slug": "tagweaver",
+                    "review_id": "report-google-1",
+                    "platform": "android",
+                    "rating": "4",
+                    "body": "Works well.",
+                    "reviewer_language": "en",
+                    "territory": "KR",
+                    "app_version": "2.5.2",
+                    "updated_at": "2026-10-06T11:00:00Z",
+                    "status": "pending",
+                    "review_kind": "review",
+                    "suggested_reply": "Thank you for using TagWeaver.",
+                    "reply_category": "praise",
+                    "reply_language": "en",
+                    "approval_translation_required": False,
+                    "triage": {},
+                },
+            ]
+            pricing = [
+                {
+                    "app_slug": "tagweaver",
+                    "app_name": "TagWeaver",
+                    "product_name": "TagWeaver Pro",
+                    "product_type": "pro",
+                    "platform": "android",
+                    "price": "5500",
+                    "currency": "KRW",
+                    "pricing": "free download with optional pro purchase",
+                    "price_verification": "live_store",
+                    "price_source": "google_play",
+                    "price_note": "Live Google Play price (Korea)",
+                    "checked_at": "2026-10-07T12:00:00Z",
+                }
             ]
             build_split_ops_pages(
                 output,
@@ -48,11 +143,36 @@ class OpsSplitPagesTest(unittest.TestCase):
                 homepage_repo=homepage,
                 apps=[app],
                 publication_items=[],
-                releases=[],
+                releases=releases,
                 store_items=store_items,
-                reviews=[],
+                reviews=reviews,
                 dependencies=dependencies,
-                pricing=[],
+                pricing=pricing,
+                site_items=[
+                    {
+                        "kind": "app",
+                        "slug": "tagweaver",
+                        "name": "TagWeaver",
+                        "landing_updated_at": "2026-10-05T10:00:00+09:00",
+                        "screenshots_updated_at": "2026-10-04T10:00:00+09:00",
+                        "assets_updated_at": "2026-10-03T10:00:00+09:00",
+                        "screenshot_count": 7,
+                    }
+                ],
+                ai_manager_report={
+                    "policy_alerts": [
+                        {
+                            "app_slug": "tagweaver",
+                            "store": "App Store",
+                            "kind": "metadata",
+                            "status": "review_required",
+                            "summary": "Check the current store warning.",
+                            "operational_note": "Review before the next release.",
+                            "occurred_at": "2026-10-07T09:00:00Z",
+                            "reference_url": "https://developer.apple.com/",
+                        }
+                    ]
+                },
                 funnel_summary={
                     "source_status": {
                         "apple": {"status": "ok", "apps": {"tagweaver": {"status": "ok"}}},
@@ -95,6 +215,12 @@ class OpsSplitPagesTest(unittest.TestCase):
             )
 
             validate_dashboard(output / "index.html")
+            home_html = (output / "index.html").read_text(encoding="utf-8")
+            self.assertIn(
+                'body[data-ops-view="home"] main>.status-section:not([aria-label="AI operation status"])',
+                home_html,
+            )
+            self.assertIn('aria-label="AI operation status"', home_html)
             self.assertTrue((output / "publishing" / "index.html").exists())
             self.assertTrue((output / "media" / "index.html").exists())
             self.assertTrue((output / "settings" / "index.html").exists())
@@ -148,6 +274,92 @@ class OpsSplitPagesTest(unittest.TestCase):
             self.assertNotIn("Combined visitors", detail)
             self.assertNotIn("양 스토어 방문 합계", detail)
             self.assertIn("선택한 기간에 수집된 데이터가 아직 없어요.", detail)
+            self.assertIn('data-en="Diagnosis & evaluation"', detail)
+            self.assertIn("internal ONNELLAB operating heuristic", detail)
+            self.assertIn('data-review-sync', detail)
+            self.assertIn('data-review-action="approve"', detail)
+            self.assertIn("data/store_review_approvals.json", detail)
+            self.assertIn("publish-store-review-reply.yml", detail)
+            self.assertIn("confirm_publish: 'PUBLISH'", detail)
+            self.assertIn("if (!queuedApprovalId)", detail)
+            self.assertIn("return existing.approval_id;", detail)
+            self.assertIn("Publication dispatch failed; press again to retry.", detail)
+            self.assertIn("String(item.review_id || '').startsWith('report-')", detail)
+            self.assertIn("/[가-힣]/.test", detail)
+            self.assertIn("sync-store-reviews.yml", detail)
+            self.assertIn("deploy_dashboard: 'true'", detail)
+            self.assertIn("Could not save", detail)
+            self.assertIn("저장이 한 번 실패했어요.", detail)
+            self.assertIn("Investigate intermittent save failure.", detail)
+            self.assertIn('data-release-approve-index="0"', detail)
+            self.assertIn("data/app_release_publications.csv", detail)
+            self.assertIn("REL-0099", detail)
+            self.assertIn("Tag editing stability update", detail)
+            self.assertIn("just_audio", detail)
+            self.assertIn("pubspec.lock", detail)
+            self.assertIn("TagWeaver Pro", detail)
+            self.assertIn("스토어 실가격 확인", detail)
+            self.assertIn("google_play", detail)
+            self.assertIn("사이트·자산 최신성", detail)
+            self.assertIn("2026-10-05T10:00:00+09:00", detail)
+            self.assertIn("7장", detail)
+            self.assertIn("정책·운영 경고", detail)
+            self.assertIn("Check the current store warning.", detail)
+            self.assertIn("Review before the next release.", detail)
+            self.assertNotIn("기존 통합 콘솔에서 릴리즈 승인·리뷰 답변", detail)
+            self.assertNotIn('href="/ops/legacy/"', detail)
+
+    def test_funnel_diagnosis_is_conservative_and_actionable(self):
+        no_data = _diagnose_funnel("google", None, 30)
+        self.assertEqual(no_data["kind"], "wait")
+        self.assertIn("판단 대기", no_data["title_ko"])
+
+        small = _diagnose_funnel(
+            "google",
+            {"store_visitors": 8, "installs": 4, "purchases": 1, "days_with_data": 2},
+            30,
+        )
+        self.assertEqual(small["kind"], "wait")
+        self.assertIn("표본", small["title_ko"])
+
+        traffic_leak = _diagnose_funnel(
+            "apple",
+            {
+                "impressions": 1000,
+                "store_visitors": 50,
+                "installs": 20,
+                "purchases": 2,
+                "days_with_data": 10,
+            },
+            30,
+        )
+        self.assertEqual(traffic_leak["kind"], "low")
+        self.assertIn("제품 페이지 진입", traffic_leak["title_ko"])
+
+        conversion_leak = _diagnose_funnel(
+            "google",
+            {"store_visitors": 200, "installs": 10, "purchases": 1, "days_with_data": 10},
+            30,
+        )
+        self.assertEqual(conversion_leak["kind"], "low")
+        self.assertIn("스토어 전환", conversion_leak["title_ko"])
+
+        monetization = _diagnose_funnel(
+            "google",
+            {"store_visitors": 200, "installs": 40, "purchases": 0, "days_with_data": 10},
+            30,
+        )
+        self.assertEqual(monetization["kind"], "warn")
+        self.assertIn("구매 전환", monetization["title_ko"])
+
+        traffic_priority = _diagnose_funnel(
+            "google",
+            {"store_visitors": 725, "installs": 243, "purchases": 12, "days_with_data": 21},
+            30,
+        )
+        self.assertEqual(traffic_priority["kind"], "good")
+        self.assertIn("유입량", traffic_priority["title_ko"])
+        self.assertIn("traffic", traffic_priority["title_en"].lower())
 
     def test_apple_analytics_403_has_actionable_bilingual_message(self):
         ko, en = _funnel_source_message(

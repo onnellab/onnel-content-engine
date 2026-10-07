@@ -5514,8 +5514,10 @@ def build_manual_publish_site(
         store_items=store_items,
         reviews=store_reviews,
         dependencies=flutter_dependency_items,
-        pricing=read_csv_rows(DEFAULT_APP_PRICING),
+        pricing=pricing_items,
         funnel_summary=store_funnel,
+        site_items=site_items,
+        ai_manager_report=ai_manager_report,
     )
     (output.parent / "manifest.webmanifest").write_text(pwa_manifest_document(), encoding="utf-8")
     (output.parent / "sw.js").write_text(service_worker_document(), encoding="utf-8")
