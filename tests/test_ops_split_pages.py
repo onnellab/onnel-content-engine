@@ -72,6 +72,15 @@ class OpsSplitPagesTest(unittest.TestCase):
         self.assertIn("스토어에서 보기", html)
         self.assertIn("https://play.google.com/", html)
 
+    def test_price_display_does_not_repeat_currency(self):
+        html = _bilingual_price_row({
+            "product_name": "TagWeaver Pro",
+            "price": "5,500 KRW",
+            "currency": "KRW",
+        })
+        self.assertIn("5,500 KRW", html)
+        self.assertNotIn("KRW KRW", html)
+
     def test_ai_credit_displays_provenance_for_cost_calculation(self):
         html = _bilingual_price_row({
             "product_name": "AI credits",
@@ -343,6 +352,7 @@ class OpsSplitPagesTest(unittest.TestCase):
 
             detail = (output / "apps" / "tagweaver" / "index.html").read_text(encoding="utf-8")
             self.assertIn('id="funnel"', detail)
+            self.assertNotIn("\n  \n", detail)
             self.assertIn("2.5.2", detail)
             self.assertIn("file_picker", detail)
             self.assertIn('data-ko="앱 운영" data-en="App Operations"', detail)

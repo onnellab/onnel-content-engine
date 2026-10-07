@@ -528,6 +528,10 @@ def _bilingual_price_row(item: Mapping[str, object]) -> str:
     product_name = str(item.get("product_name") or "Product")
     price = str(item.get("price") or "—")
     currency = str(item.get("currency") or "")
+    display_price = (
+        price if not currency or price.upper().endswith(currency.upper())
+        else f"{price} {currency}"
+    )
     product_type = str(item.get("product_type") or "")
     platform = str(item.get("platform") or "")
     pricing_model = str(item.get("pricing") or item.get("pricing_model") or "—")
@@ -595,7 +599,7 @@ def _bilingual_price_row(item: Mapping[str, object]) -> str:
         "</div>"
         f'<div class="pricing-meta"><span data-ko="{_esc(platform_label)}" data-en="{_esc(platform_en)}">{_esc(platform_label)}</span> · '
         f'<span data-ko="{_esc(type_ko)}" data-en="{_esc(type_en)}">{_esc(type_ko)}</span></div>'
-        f'<p><b data-ko="가격" data-en="Price">가격</b> · {_esc(price)} {_esc(currency)}</p>'
+        f'<p><b data-ko="가격" data-en="Price">가격</b> · {_esc(display_price)}</p>'
         f'<p><b data-ko="과금 모델" data-en="Pricing model">과금 모델</b> · {_esc(pricing_model)}</p>'
         f'<p><b data-ko="가격 출처" data-en="Price source">가격 출처</b> · {_esc(source)} · '
         f'<span data-ko="확인 {_esc(checked)}" data-en="checked {_esc(checked)}">확인 {_esc(checked)}</span></p>'
@@ -1795,7 +1799,7 @@ def _app_detail(
     <p data-ko="구매 건수는 유입·전환에서 따로 보고, 여기서는 가격과 단위 경제성만 봐요." data-en="Purchase counts stay in Acquisition; this section focuses on pricing and unit economics.">구매 건수는 유입·전환에서 따로 보고, 여기서는 가격과 단위 경제성만 봐요.</p>
   </div>
   <div class="pricing-list">{price_rows}</div>
-  {('<div class="subsection-head"><h3 data-ko="AI 공급자 가격 검증" data-en="AI provider pricing verification">AI 공급자 가격 검증</h3></div>' + ai_health_html) if has_ai_products else ""}
+{('<div class="subsection-head"><h3 data-ko="AI 공급자 가격 검증" data-en="AI provider pricing verification">AI 공급자 가격 검증</h3></div>' + ai_health_html) if has_ai_products else ""}
 </section>
 
 <section class="detail-section" id="reviews">
