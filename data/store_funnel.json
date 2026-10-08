@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-07T16:46:32+00:00",
+  "checked_at": "2026-10-08T06:34:38+00:00",
   "windows": [
     7,
     30,
@@ -216,22 +216,22 @@
               "impressions": null,
               "store_visitors": null,
               "installs": null,
-              "purchases": 1,
-              "days_with_data": 1
+              "purchases": null,
+              "days_with_data": 0
             },
             "30": {
               "impressions": null,
-              "store_visitors": 26,
+              "store_visitors": 22,
               "installs": 0,
               "purchases": 1,
-              "days_with_data": 15
+              "days_with_data": 14
             },
             "90": {
               "impressions": null,
-              "store_visitors": 163,
+              "store_visitors": 161,
               "installs": 1,
               "purchases": 4,
-              "days_with_data": 57
+              "days_with_data": 56
             }
           }
         }
@@ -241,7 +241,7 @@
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 1
+          "purchases": 0
         },
         "30": {
           "store_visitors": null,
@@ -266,7 +266,7 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "2026-10-04",
+          "latest_date": "2026-10-07",
           "windows": {
             "7": {
               "impressions": null,
@@ -277,16 +277,16 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 725,
-              "installs": 243,
-              "purchases": 12,
+              "store_visitors": 697,
+              "installs": 233,
+              "purchases": 13,
               "days_with_data": 21
             },
             "90": {
               "impressions": null,
               "store_visitors": 1411,
               "installs": 464,
-              "purchases": 24,
+              "purchases": 25,
               "days_with_data": 81
             }
           }
@@ -302,14 +302,14 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 243,
-          "purchases": 12
+          "installs": 233,
+          "purchases": 13
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
           "installs": 464,
-          "purchases": 24
+          "purchases": 25
         }
       }
     },
@@ -333,17 +333,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 91,
-              "installs": 29,
+              "store_visitors": 82,
+              "installs": 26,
               "purchases": null,
-              "days_with_data": 17
+              "days_with_data": 16
             },
             "90": {
               "impressions": null,
               "store_visitors": 238,
               "installs": 77,
               "purchases": 1,
-              "days_with_data": 76
+              "days_with_data": 75
             }
           }
         }
@@ -358,7 +358,7 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 29,
+          "installs": 26,
           "purchases": 0
         },
         "90": {
@@ -389,17 +389,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 14,
-              "installs": 5,
+              "store_visitors": 12,
+              "installs": 4,
               "purchases": null,
-              "days_with_data": 10
+              "days_with_data": 9
             },
             "90": {
               "impressions": null,
-              "store_visitors": 68,
+              "store_visitors": 67,
               "installs": 8,
               "purchases": null,
-              "days_with_data": 47
+              "days_with_data": 46
             }
           }
         }
@@ -414,7 +414,7 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 5,
+          "installs": 4,
           "purchases": 0
         },
         "90": {
@@ -479,10 +479,10 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 62,
-              "installs": 22,
+              "store_visitors": 58,
+              "installs": 20,
               "purchases": null,
-              "days_with_data": 17
+              "days_with_data": 16
             },
             "90": {
               "impressions": null,
@@ -504,7 +504,7 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 22,
+          "installs": 20,
           "purchases": 0
         },
         "90": {
@@ -580,28 +580,28 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "2026-09-17",
+          "latest_date": "2026-10-07",
           "windows": {
             "7": {
               "impressions": null,
               "store_visitors": null,
               "installs": null,
-              "purchases": null,
-              "days_with_data": 0
+              "purchases": 1,
+              "days_with_data": 1
             },
             "30": {
               "impressions": null,
               "store_visitors": 38,
               "installs": 0,
-              "purchases": null,
-              "days_with_data": 2
+              "purchases": 1,
+              "days_with_data": 3
             },
             "90": {
               "impressions": null,
               "store_visitors": 38,
               "installs": 0,
-              "purchases": null,
-              "days_with_data": 2
+              "purchases": 1,
+              "days_with_data": 3
             }
           }
         }
@@ -611,19 +611,19 @@
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 0
+          "purchases": 1
         },
         "30": {
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 0
+          "purchases": 1
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 0
+          "purchases": 1
         }
       }
     }
