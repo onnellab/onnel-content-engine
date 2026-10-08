@@ -9,6 +9,9 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
+from publication_transaction import guarded_publication, topic_csv_bytes, atomic_replace_files
+from publication_locales import public_locale_segment
 from urllib.parse import urlparse
 
 from evaluate_article import DEFAULT_REVIEW_ROOT, DEFAULT_THRESHOLD
@@ -34,7 +37,7 @@ def parse_datetime(value: str) -> datetime:
 
 def public_url(site_url: str, topic: dict[str, str]) -> str:
     root = site_url if site_url.endswith("/") else site_url + "/"
-    return f"{root}blog/{topic['primary_language']}/{topic['slug']}/"
+    return f"{root}blog/{public_locale_segment(topic['primary_language'])}/{topic['slug']}/"
 
 
 def markdown_path(topic: dict[str, str], topics_path: Path) -> Path:
@@ -88,6 +91,11 @@ def update_markdown_publication_metadata(
     published_at: str,
     metadata_root: Path = DEFAULT_METADATA_ROOT,
 ) -> None:
+    content = publication_markdown(path, topic, site_url, published_at, metadata_root)
+    path.write_text(content, encoding="utf-8")
+
+
+def publication_markdown(path, topic, site_url, published_at, metadata_root):
     content = path.read_text(encoding="utf-8")
     values = {
         "status": "published",
@@ -100,9 +108,10 @@ def update_markdown_publication_metadata(
         values["related_articles"] = related_articles
     for key, value in values.items():
         content = replace_frontmatter_value(content, key, value)
-    path.write_text(content, encoding="utf-8")
+    return content
 
 
+@guarded_publication
 def publish_due_articles(
     topics_path: Path = DEFAULT_TOPICS_PATH,
     review_root: Path = DEFAULT_REVIEW_ROOT,
@@ -119,6 +128,7 @@ def publish_due_articles(
     now = now or datetime.now(KST)
     store = TopicStore(topics_path, mirror_path=legacy_topics_path)
     published: list[dict[str, str]] = []
+    published_groups = 0
     due_groups = []
     for group in grouped_by_publication(rows).values():
         scheduled = [row for row in group if row["status"] == "scheduled"]
@@ -129,14 +139,17 @@ def publish_due_articles(
     due_groups.sort(key=lambda group: (min(row["scheduled_at"] for row in group if row["status"] == "scheduled"), min(row["id"] for row in group)))
 
     for group in due_groups:
-        if len(published) >= limit:
+        if published_groups >= limit:
             break
         try:
             pair = require_language_pair(group)
         except ValueError as error:
             raise DuePublicationError(str(error)) from error
         if any(row["status"] != "scheduled" for row in pair.values()):
-            raise DuePublicationError("both English and Korean articles must be scheduled before publishing")
+            raise DuePublicationError("all nine language articles must be scheduled before publishing")
+        slots = {parse_datetime(row["scheduled_at"]).astimezone(KST) for row in pair.values()}
+        if len(slots) != 1:
+            raise DuePublicationError("all nine language articles must share one scheduled publication instant")
         if any(parse_datetime(row["scheduled_at"]).astimezone(KST) > now.astimezone(KST) for row in pair.values()):
             continue
         for topic in pair.values():
@@ -150,12 +163,12 @@ def publish_due_articles(
                 )
             except SchedulingError as error:
                 raise DuePublicationError(str(error)) from error
+        updates = {}
         for topic in pair.values():
             published_at = topic["scheduled_at"]
             path = markdown_path(topic, topics_path)
-            update_markdown_publication_metadata(path, topic, site_url, published_at, metadata_root)
-            row = store.edit(
-                topic["id"],
+            updates[path] = publication_markdown(path, topic, site_url, published_at, metadata_root).encode("utf-8")
+            topic.update(
                 {
                     "status": "published",
                     "published_url": public_url(site_url, topic),
@@ -163,7 +176,13 @@ def publish_due_articles(
                     "updated_at": published_at,
                 },
             )
-            published.append(row)
+            published.append(topic)
+        csv_bytes = topic_csv_bytes(store, rows)
+        updates[topics_path] = csv_bytes
+        if legacy_topics_path is not None:
+            updates[legacy_topics_path] = csv_bytes
+        atomic_replace_files(topics_path.parent.parent, updates)
+        published_groups += 1
     return published
 
 
@@ -196,3 +215,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

@@ -29,6 +29,8 @@ from urllib.parse import urljoin
 from xml.sax.saxutils import escape as xml_escape
 
 from topic_management import DEFAULT_TOPICS_PATH, TOPIC_HEADER, TopicError, read_csv
+from article_localization import CATEGORY_LABELS, wrap_display_text
+from publication_locales import REQUIRED_PUBLICATION_LANGUAGES as ALL_PUBLICATION_LANGUAGES, public_locale_segment
 from publication_history import publication_history, preserve_publication, require_history_items, RECEIPT_PROVENANCE_FIELDS
 
 
@@ -444,6 +446,9 @@ def svg_tspans(lines: list[str], x: int, y: int, line_height: int) -> str:
 
 
 def social_card_font_defs(language: str) -> tuple[str, str]:
+    if language in {"ja", "zh-Hans", "zh-Hant"}:
+        family = {"ja": "Noto Sans CJK JP", "zh-Hans": "Noto Sans CJK SC", "zh-Hant": "Noto Sans CJK TC"}[language]
+        return "", f"{family}, system-ui, sans-serif"
     if language != "ko":
         return "", "Inter, system-ui, sans-serif"
     font_path = Path("/mnt/c/Windows/Fonts/NotoSansKR-VF.ttf")
@@ -466,6 +471,25 @@ def social_card_svg(article: Article) -> str:
     title_lines = wrap_text(article.title, 34 if language == "en" else 24, 3)
     description_lines = wrap_text(article.description, 72 if language == "en" else 36, 2)
     category = article.topic["category"].upper()
+    title_font, title_height, description_font, description_y, description_height = 54, 64, 24, 442, 34
+    if language in CATEGORY_LABELS:
+        category = CATEGORY_LABELS[language][article.topic["category"]]
+        label = f"{category} · {language.upper()}"
+        for candidate_font in (54, 48, 44, 40, 36, 32):
+            candidate = wrap_display_text(article.title, 1016, candidate_font)
+            if len(candidate) <= 3:
+                title_lines, title_font, title_height = candidate, candidate_font, candidate_font + 10
+                break
+        else:
+            raise PublishingError("Localized social card title cannot fit without truncation")
+        description_y = max(410, 218 + (len(title_lines) - 1) * title_height + 44)
+        for candidate_font in (24, 22, 20):
+            candidate = wrap_display_text(article.description, 1016, candidate_font)
+            if description_y + (len(candidate) - 1) * (candidate_font + 10) <= 490:
+                description_lines, description_font, description_height = candidate, candidate_font, candidate_font + 10
+                break
+        else:
+            raise PublishingError("Localized social card description cannot fit without truncation")
     category_colors = {
         "reading": ("#e7f2fb", "#b9d7ea", "#24465c"),
         "music": ("#f3e9fb", "#d8c3ec", "#4e3568"),
@@ -485,8 +509,8 @@ def social_card_svg(article: Article) -> str:
   <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
   <rect x="92" y="92" width="210" height="44" rx="22" fill="{badge_fill}" stroke="{badge_stroke}" stroke-width="1.4"/>
   <text x="118" y="121" fill="{badge_text}" font-family="{font_stack}" font-size="18" font-weight="700">{html.escape(category)}</text>
-  <text x="92" y="218" fill="#282723" font-family="{font_stack}" font-size="54" font-weight="760">{svg_tspans(title_lines, 92, 218, 64)}</text>
-  <text fill="#5f5b54" font-family="{font_stack}" font-size="24">{svg_tspans(description_lines, 92, 442, 34)}</text>
+  <text x="92" y="218" fill="#282723" font-family="{font_stack}" font-size="{title_font}" font-weight="760">{svg_tspans(title_lines, 92, 218, title_height)}</text>
+  <text fill="#5f5b54" font-family="{font_stack}" font-size="{description_font}">{svg_tspans(description_lines, 92, description_y, description_height)}</text>
   <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
   <text x="92" y="552" fill="#817c73" font-family="{font_stack}" font-size="19">{html.escape(label)}</text>
   <text x="1048" y="552" fill="#30302c" font-family="{font_stack}" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
@@ -656,7 +680,7 @@ def social_card_svg_asset_path(topic: dict[str, str]) -> str:
 
 
 def article_url_path(topic: dict[str, str]) -> str:
-    return f"blog/{topic['primary_language']}/{topic['slug']}/"
+    return f"blog/{public_locale_segment(topic['primary_language'])}/{topic['slug']}/"
 
 
 def validate_publishable_language_pairs(rows: list[dict[str, str]]) -> None:
@@ -1846,7 +1870,7 @@ def validate_homepage_repository(homepage_repo: Path) -> None:
 
 def homepage_destination_for(topic: dict[str, str], homepage_repo: Path) -> Path:
     language = topic["primary_language"]
-    if language not in {"en", "ko"}:
+    if language not in ALL_PUBLICATION_LANGUAGES:
         raise PublishingError(f"{topic['id']} has unsupported homepage language: {language}")
     return homepage_repo / "src" / "content" / "blog" / language / f"{topic['slug']}.md"
 
@@ -2066,3 +2090,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

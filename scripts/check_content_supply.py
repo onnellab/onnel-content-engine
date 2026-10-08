@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report whether the bilingual publication queue has a qualified article pair."""
+"""Report whether the nine-language publication queue has a qualified article pair."""
 
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ def content_supply_report(
     active: list[dict[str, object]] = []
     for (category, slug), group in groups.items():
         languages = {row["primary_language"] for row in group}
-        if not REQUIRED_PUBLICATION_LANGUAGES <= languages:
+        if languages != REQUIRED_PUBLICATION_LANGUAGES or len(group) != len(REQUIRED_PUBLICATION_LANGUAGES):
             continue
         pair = {row["primary_language"]: row for row in group if row["primary_language"] in REQUIRED_PUBLICATION_LANGUAGES}
         statuses = {row["status"] for row in pair.values()}
@@ -50,6 +50,16 @@ def content_supply_report(
         ):
             qualified.append({"category": category, "slug": slug, "statuses": sorted(statuses), "scores": scores})
     return {
+        "required_languages": sorted(REQUIRED_PUBLICATION_LANGUAGES),
+        "qualified_bundle_count": len(qualified),
+        "incomplete_bundles": [
+            {"category": category, "slug": slug,
+             "missing_languages": sorted(REQUIRED_PUBLICATION_LANGUAGES - {row["primary_language"] for row in group})}
+            for (category, slug), group in groups.items()
+            if any(row["status"] in ACTIVE_STATUSES | {"idea"} for row in group)
+            and not REQUIRED_PUBLICATION_LANGUAGES <= {row["primary_language"] for row in group}
+        ],
+        # Compatibility keys now count complete nine-locale bundles, not pairs.
         "qualified_pair_count": len(qualified),
         "qualified_pairs": qualified,
         "active_pair_count": len(active),
@@ -70,7 +80,7 @@ def content_supply_report(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Check the bilingual content supply queue")
+    parser = argparse.ArgumentParser(description="Check the nine-language content supply queue")
     parser.add_argument("--topics", type=Path, default=DEFAULT_TOPICS_PATH)
     parser.add_argument("--review-root", type=Path, default=DEFAULT_REVIEW_ROOT)
     parser.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD)
@@ -81,7 +91,7 @@ def main() -> int:
     report = content_supply_report(args.topics, args.review_root, args.threshold)
     print(json.dumps(report, ensure_ascii=False, indent=2))
     if args.require_qualified_pair and int(report["qualified_pair_count"]) < 1:
-        print("content supply check failed: no qualified English/Korean review or scheduled pair", file=sys.stderr)
+        print("content supply check failed: no qualified complete nine-language review or scheduled bundle", file=sys.stderr)
         return 1
     if args.require_healthy and (
         int(report["qualified_pair_count"]) < 1 or int(report["idea_count"]) < args.minimum_ideas
@@ -98,3 +108,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

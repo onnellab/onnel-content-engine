@@ -5,9 +5,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
+
+from article_localization import WORKFLOW_LABELS, LOCALIZED_SECTIONS, wrap_display_text, localized_section_aliases
 
 from publishing import rsvg_convert_command
 from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEADER, TopicError, TopicStore, read_csv
@@ -64,6 +67,9 @@ def svg_tspans(lines: list[str], x: int, y: int, line_height: int) -> str:
 
 
 def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str, str]:
+    if language in WORKFLOW_LABELS:
+        subtitle, message, steps, description = WORKFLOW_LABELS[language]
+        return subtitle, message, list(steps), "ONNELLAB Blog · " + description, description
     if language == "ko":
         return (
             "실용 워크플로",
@@ -166,30 +172,52 @@ def encoding_workflow_svg(title: str, keyword: str, language: str) -> str:
 
 
 def workflow_svg(title: str, keyword: str, language: str) -> str:
+    font_stack = {"ja": "Noto Sans CJK JP, system-ui, sans-serif", "zh-Hans": "Noto Sans CJK SC, system-ui, sans-serif", "zh-Hant": "Noto Sans CJK TC, system-ui, sans-serif"}.get(language, SVG_FONT_STACK)
     keyword_lower = keyword.lower()
     title_lower = title.lower()
     if any(term in keyword_lower or term in title_lower for term in ["encoding", "unreadable", "utf-8", "깨짐", "인코딩"]):
-        return encoding_workflow_svg(title, keyword, language)
+        if language in {"en", "ko"}:
+            return encoding_workflow_svg(title, keyword, language)
     title_lines = wrap_words(title, 38)
+    title_font = 38
+    title_y, title_line_height, subtitle_y, card_y = 112, 44, 184, 220
     raw_keyword = keyword
     subtitle, bottom_message, steps, footer, description_label = localized_steps(language)
     subtitle_lines = wrap_words(f"{subtitle} · {raw_keyword}", 80 if language == "en" else 42)
+    if language in WORKFLOW_LABELS:
+        subtitle_lines = wrap_display_text(f"{subtitle} · {raw_keyword}", 1016, 19)
+        if len(subtitle_lines) > 2:
+            raise ImageAssetError("Localized image subtitle exceeds its two-line layout; edit the title/keyword")
+        for candidate_font in (38, 34, 30, 26, 24):
+            candidate_lines = wrap_display_text(title, 1016, candidate_font)
+            candidate_height = candidate_font + 7
+            candidate_subtitle_y = 100 + (len(candidate_lines) - 1) * candidate_height + 34
+            candidate_card_y = candidate_subtitle_y + (len(subtitle_lines) - 1) * 23 + 28
+            if candidate_card_y + 150 <= 440:
+                title_lines, title_font = candidate_lines, candidate_font
+                title_y, title_line_height = 100, candidate_height
+                subtitle_y, card_y = candidate_subtitle_y, candidate_card_y
+                break
+        else:
+            raise ImageAssetError("Localized image title cannot fit without clipping; shorten its wording")
     cards = []
     card_width = 190
     card_gap = 84
     x = 72
     for heading, detail in steps:
-        detail_lines = wrap_words(detail, 14)
+        detail_lines = wrap_display_text(detail, 142, 15) if language in WORKFLOW_LABELS else wrap_words(detail, 14)
+        if language in WORKFLOW_LABELS and len(detail_lines) > 3:
+            raise ImageAssetError("Localized card detail exceeds three lines")
         cards.append(
-            f'<g transform="translate({x} 220)">'
+            f'<g transform="translate({x} {card_y})">'
             f'<rect width="{card_width}" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/>'
-            f'<text x="24" y="48" fill="#30302c" font-family="{SVG_FONT_STACK}" font-size="20" font-weight="650">{html_escape(heading)}</text>'
-            f'<text fill="#5f5b54" font-family="{SVG_FONT_STACK}" font-size="15">{svg_tspans(detail_lines, 24, 84, 21)}</text>'
+            f'<text x="24" y="48" fill="#30302c" font-family="{font_stack}" font-size="20" font-weight="650">{html_escape(heading)}</text>'
+            f'<text fill="#5f5b54" font-family="{font_stack}" font-size="15">{svg_tspans(detail_lines, 24, 84, 21)}</text>'
             "</g>"
         )
         x += card_width + card_gap
     arrows = "".join(
-        f'<path d="M{72 + card_width + i * (card_width + card_gap) + 18} 295H{72 + (i + 1) * (card_width + card_gap) - 18}m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
+        f'<path d="M{72 + card_width + i * (card_width + card_gap) + 18} {card_y + 75}H{72 + (i + 1) * (card_width + card_gap) - 18}m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
         for i in range(3)
     )
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
@@ -197,13 +225,13 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
   <desc id="desc">{html_escape(f'{raw_keyword}을 위한 ONNELLAB {description_label}입니다.' if language == 'ko' else f'ONNELLAB {description_label} for {raw_keyword}.')}</desc>
   <rect width="1200" height="675" fill="#fbf7ef"/>
   <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
-  <text fill="#30302c" font-family="{SVG_FONT_STACK}" font-size="38" font-weight="680">{svg_tspans(title_lines, 92, 112, 44)}</text>
-  <text fill="#69645c" font-family="{SVG_FONT_STACK}" font-size="19">{svg_tspans(subtitle_lines, 92, 184, 23)}</text>
+  <text fill="#30302c" font-family="{font_stack}" font-size="{title_font}" font-weight="680">{svg_tspans(title_lines, 92, title_y, title_line_height)}</text>
+  <text fill="#69645c" font-family="{font_stack}" font-size="19">{svg_tspans(subtitle_lines, 92, subtitle_y, 23)}</text>
   {''.join(cards)}
   {arrows}
   <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.6"/>
-  <text x="124" y="506" fill="#30302c" font-family="{SVG_FONT_STACK}" font-size="20" font-weight="650">{html_escape(bottom_message)}</text>
-  <text x="92" y="588" fill="#817c73" font-family="{SVG_FONT_STACK}" font-size="14">{html_escape(footer)}</text>
+  <text x="124" y="506" fill="#30302c" font-family="{font_stack}" font-size="20" font-weight="650">{html_escape(bottom_message)}</text>
+  <text x="92" y="588" fill="#817c73" font-family="{font_stack}" font-size="14">{html_escape(footer)}</text>
 </svg>
 '''
 
@@ -216,7 +244,7 @@ def spec_parts(spec_path: Path, images_root: Path) -> tuple[str, str, str]:
 
 
 def markdown_image_line(language: str, slug: str, title: str) -> str:
-    alt = "워크플로 다이어그램" if language == "ko" else "Workflow diagram"
+    alt = WORKFLOW_LABELS[language][3] if language in WORKFLOW_LABELS else "워크플로 다이어그램" if language == "ko" else "Workflow diagram"
     return f'![{alt}](/blog-assets/{language}/{slug}/workflow-diagram.svg "{title}")'
 
 
@@ -230,15 +258,32 @@ def ensure_markdown_references_asset(markdown_path: Path, language: str, slug: s
         return
     if localized_asset in content:
         return
-    marker = "## 권장 워크플로" if language == "ko" else "## Recommended Workflow"
-    marker_index = content.find(marker)
+    aliases = localized_section_aliases(language)["recommended_workflow"] if language in LOCALIZED_SECTIONS else {"권장 워크플로"} if language == "ko" else {"recommended workflow"}
+    headings = []
+    offset = 0
+    fence = None
+    for line in content.splitlines(keepends=True):
+        stripped = line.lstrip()
+        fence_match = re.match(r"(`{3,}|~{3,})", stripped)
+        if fence_match:
+            token = fence_match.group(1)
+            if fence is None:
+                fence = token
+            elif token[0] == fence[0] and len(token) >= len(fence):
+                fence = None
+        elif fence is None:
+            heading = re.match(r"^##[ \t]+(.+?)\s*$", line)
+            if heading:
+                headings.append((heading.group(1).strip().lower(), offset))
+        offset += len(line)
+    marker_index = next((position for heading, position in headings if heading in aliases), -1)
     if marker_index == -1:
         raise ImageAssetError(f"cannot place workflow image in {markdown_path}")
-    next_section = content.find("\n## ", marker_index + len(marker))
+    next_section = next((position for _, position in headings if position > marker_index), -1)
     if next_section == -1:
         updated = content.rstrip() + "\n\n" + markdown_image_line(language, slug, title) + "\n"
     else:
-        updated = content[:next_section].rstrip() + "\n\n" + markdown_image_line(language, slug, title) + "\n" + content[next_section:]
+        updated = content[:next_section].rstrip() + "\n\n" + markdown_image_line(language, slug, title) + "\n\n" + content[next_section:]
     markdown_path.write_text(updated, encoding="utf-8")
 
 
@@ -299,3 +344,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

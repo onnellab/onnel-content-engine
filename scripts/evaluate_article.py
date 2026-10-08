@@ -10,6 +10,8 @@ import re
 import sys
 from pathlib import Path
 
+from article_localization import LOCALIZED_SECTIONS, SECTION_KEYS, DEFINITION_PATTERNS, WORKFLOW_LABELS, localized_section_aliases
+
 from topic_management import DEFAULT_TOPICS_PATH, TOPIC_HEADER, read_csv
 
 
@@ -18,7 +20,7 @@ DEFAULT_METADATA_ROOT = ROOT / "generated" / "metadata"
 DEFAULT_ASSETS_ROOT = ROOT / "generated" / "assets" / "blog"
 DEFAULT_REVIEW_ROOT = ROOT / "generated" / "reviews"
 DEFAULT_THRESHOLD = 9.0
-REVIEW_VERSION = 3
+REVIEW_VERSION = 4
 FORBIDDEN_LOCAL_BRAND = "\uc628\ub128\ub7a9"
 FINGERPRINT_TOPIC_FIELDS = (
     "id",
@@ -164,13 +166,20 @@ SECTION_ALIASES = {
 }
 
 
+for _language in LOCALIZED_SECTIONS:
+    for _key, _aliases in localized_section_aliases(_language).items():
+        SECTION_ALIASES[_key].update(_aliases)
+
+
 def has_required_sections(found_sections: set[str]) -> bool:
     required = (aliases for key, aliases in SECTION_ALIASES.items() if key != "onnellab_application")
     return all(aliases & found_sections for aliases in required)
 
 
-def has_clear_definitions(body: str) -> bool:
+def has_clear_definitions(body: str, language: str = "en") -> bool:
     prose = human_readable_prose(body)
+    if language in DEFINITION_PATTERNS:
+        return bool(re.search(DEFINITION_PATTERNS[language], prose))
     return bool(
         re.search(
             r"(?:^|[.!?]\s+|\n)(?!No\b)(?!(?:This|It)\s+(?:is|are|means|refers to)\b)"
@@ -194,13 +203,8 @@ def has_short_answer(metadata: dict[str, str], found_sections: set[str], body: s
         return True
     if not (SECTION_ALIASES["short_answer"] & found_sections):
         return False
-    return bool(
-        re.search(
-            r"^##\s+(?:Short Answer|짧은 답변|요약 답변|핵심 답변|요약)\s*\n\n\S",
-            body,
-            flags=re.MULTILINE,
-        )
-    )
+    heading_pattern = "|".join(re.escape(label) for label in SECTION_ALIASES["short_answer"])
+    return bool(re.search(rf"^##\s+(?:{heading_pattern})\s*\n\n\S", body, flags=re.MULTILINE | re.IGNORECASE))
 
 
 def find_product_section(body: str) -> int:
@@ -295,7 +299,7 @@ def _contains_term(prose: str, term: str) -> bool:
 
 
 def find_counterpart(topic: dict[str, str], topics_path: Path) -> dict[str, str] | None:
-    counterpart_language = "en" if topic["primary_language"] == "ko" else "ko"
+    counterpart_language = "ko" if topic["primary_language"] == "en" else "en"
     for row in read_csv(topics_path, TOPIC_HEADER):
         if (
             row["primary_language"] == counterpart_language
@@ -325,6 +329,15 @@ def translation_quality_passes(
     missing_sections = section_keys(counterpart_sections) - section_keys(found_sections)
     if missing_sections:
         return False, f"Translated article is missing counterpart section(s): {', '.join(sorted(missing_sections))}."
+    language = topic["primary_language"]
+    if language in LOCALIZED_SECTIONS:
+        required = [aliases for key, aliases in localized_section_aliases(language).items() if key != "onnellab_application"]
+        if not all(aliases & found_sections for aliases in required):
+            return False, "Translated article must use its localized section headings."
+        if human_readable_prose(body).strip() == human_readable_prose(counterpart_body).strip():
+            return False, "Translated article must not duplicate the English source."
+        if metadata.get("language") != language:
+            return False, "Translated article frontmatter must identify its exact locale."
     if topic["primary_language"] == "ko":
         if FORBIDDEN_LOCAL_BRAND in body:
             return False, "Korean articles must keep the brand spelling as ONNELLAB."
@@ -366,7 +379,7 @@ def svg_arrows_avoid_cards(svg: str) -> bool:
     ]
     arrow_matches = [
         (int(match.group(1)), int(match.group(2)))
-        for match in re.finditer(r'<path d="M(\d+) 295H(\d+)', svg)
+        for match in re.finditer(r'<path d="M(\d+) \d+H(\d+)', svg)
     ]
     if len(card_matches) < 2 or len(arrow_matches) != len(card_matches) - 1:
         return False
@@ -399,6 +412,10 @@ def image_quality_passes(topic: dict[str, str], assets: list[str], assets_root: 
             return False, "SVG text must wrap on spaces instead of truncating with an ellipsis."
         if not svg_arrows_avoid_cards(svg):
             return False, "SVG arrows must remain in the gaps between workflow cards."
+        if topic["primary_language"] in WORKFLOW_LABELS:
+            label = WORKFLOW_LABELS[topic["primary_language"]][3]
+            if label not in svg or "ONNELLAB Blog" not in svg:
+                return False, "Translated SVG must contain its localized diagram label and ONNELLAB brand."
         if topic["primary_language"] == "ko":
             forbidden_svg_terms = ["Problem", "Workflow", "Result", "Generated workflow asset"]
             found = [term for term in forbidden_svg_terms if term in svg]
@@ -439,7 +456,7 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
     add("short_answer_ready", has_short_answer(metadata, found_sections, body), 0.6, "Article exposes a direct short answer for readers, answer engines, and llms.txt summaries.")
 
     add("structured_answer", bool(re.search(r"^\d+\.\s+", body, flags=re.MULTILINE)) and "|" in body, 1.0, "Article includes steps and a comparison table.")
-    add("clear_definitions", has_clear_definitions(body), 0.8, "Article defines important technical terms.")
+    add("clear_definitions", has_clear_definitions(body, topic["primary_language"]), 0.8, "Article defines important technical terms.")
     add("primary_keyword", topic["primary_keyword"].lower() in (metadata.get("title", "") + " " + body).lower(), 0.8, "Primary keyword appears naturally.")
     add("external_reference", "https://" in body and has_reference_section(found_sections), 0.8, "Article cites an official or recognized external reference.")
 
@@ -485,7 +502,15 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
         }
     )
 
-    word_count = len(re.findall(r"\b[\w'-]+\b", body))
+    if topic["primary_language"] in {"ja", "zh-Hans", "zh-Hant"}:
+        prose = human_readable_prose(body)
+        # CJK text has no space-delimited words; count characters in pairs and
+        # count other lexical tokens normally. Keep the same depth bounds.
+        cjk = re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", prose)
+        other = re.sub(r"[\u3040-\u30ff\u3400-\u9fff]", " ", prose)
+        word_count = len(cjk) // 2 + len(re.findall(r"\b[\w'-]+\b", other))
+    else:
+        word_count = len(re.findall(r"\b[\w'-]+\b", body))
     add("readability_depth", 200 <= word_count <= 1800, 1.0, "Article length supports a complete but focused answer.")
 
     translation_ok, translation_note = translation_quality_passes(topic, metadata, body, found_sections, topics_path)
@@ -495,12 +520,17 @@ def score_article(topic: dict[str, str], markdown: str, topics_path: Path, metad
     max_points = sum(float(check["max_points"]) for check in checks)
     score = round(points / max_points * 10, 2) if max_points else 0.0
     all_checks_passed = all(check.get("passed") is True for check in checks)
+    input_fingerprint = _article_input_fingerprint(topic, markdown, metadata_root, assets_root)
+    counterpart = find_counterpart(topic, topics_path)
+    if counterpart:
+        source_bytes = markdown_path_for(counterpart, topics_path).read_bytes()
+        input_fingerprint = hashlib.sha256(input_fingerprint.encode() + source_bytes).hexdigest()
     return {
         "version": REVIEW_VERSION,
         "type": "article_review",
         "topic_id": topic["id"],
         "title": topic["working_title"],
-        "input_fingerprint": _article_input_fingerprint(topic, markdown, metadata_root, assets_root),
+        "input_fingerprint": input_fingerprint,
         "score": score,
         "threshold": DEFAULT_THRESHOLD,
         "passed": score > DEFAULT_THRESHOLD and all_checks_passed,
@@ -543,3 +573,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

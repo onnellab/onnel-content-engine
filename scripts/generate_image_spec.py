@@ -13,6 +13,8 @@ import re
 import sys
 from pathlib import Path
 
+from article_localization import LOCALIZED_SECTIONS, WORKFLOW_LABELS
+
 from topic_management import (
     DEFAULT_APPS_PATH,
     DEFAULT_TOPICS_PATH,
@@ -197,6 +199,20 @@ def build_spec(markdown_path: Path, markdown: str, topic: dict[str, str]) -> dic
         }
     ]
 
+    language = topic["primary_language"]
+    if language in LOCALIZED_SECTIONS:
+        # Reader-facing image text must not silently fall back to English.
+        labels = LOCALIZED_SECTIONS[language]
+        diagram_label = WORKFLOW_LABELS[language][3]
+        workflow_diagrams[0]["title"] = f"{topic['working_title']} · {diagram_label}"
+        workflow_diagrams[0]["steps"] = [step[0] for step in WORKFLOW_LABELS[language][2]]
+        comparison_label = {"ja": "比較", "zh-Hans": "比较", "zh-Hant": "比較",
+                            "pt-BR": "Comparação", "de": "Vergleich", "fr": "Comparaison", "es": "Comparación"}[language]
+        comparison_diagrams[0]["title"] = f"{topic['primary_keyword']} · {comparison_label}"
+        required_infographics[0]["question_answered"] = topic["primary_question"]
+        required_infographics[0]["source_sections"] = [labels[1], labels[2]]
+        required_infographics[0]["structure"] = [step[0] for step in WORKFLOW_LABELS[language][2]]
+
     return {
         "version": 1,
         "type": "image_spec",
@@ -296,3 +312,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

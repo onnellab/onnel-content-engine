@@ -16,6 +16,7 @@ from evaluate_article import (
     has_clear_definitions,
     human_readable_prose,
     score_article,
+    REVIEW_VERSION,
     sections,
     translation_quality_passes,
 )
@@ -55,11 +56,20 @@ class EvaluatorSecurityTest(unittest.TestCase):
                 "updated_at": "2026-08-10T09:00:00+09:00",
             }
             markdown = "Input fingerprint prose.\n\n![Diagram](/blog-assets/en/fingerprint/diagram.bin)\n"
+            topics_path = root / "data" / "topics.csv"
+            row = dict.fromkeys(TOPIC_HEADER, "")
+            row.update(topic)
+            counterpart = dict(row, id="TOPIC-COUNTERPART", primary_language="ko",
+                               canonical_path="generated/markdown/ko/research/fingerprint.md")
+            write_topics(topics_path, [row, counterpart])
+            counterpart_path = root / counterpart["canonical_path"]
+            counterpart_path.parent.mkdir(parents=True)
+            counterpart_path.write_text("Counterpart source v1", encoding="utf-8")
 
             def fingerprint(current_topic: dict[str, str] = topic, current_markdown: str = markdown) -> str:
                 with patch("evaluate_article.translation_quality_passes", return_value=(True, "valid")):
-                    review = score_article(current_topic, current_markdown, root / "topics.csv", metadata_root, assets_root)
-                self.assertEqual(review["version"], 3)
+                    review = score_article(current_topic, current_markdown, topics_path, metadata_root, assets_root)
+                self.assertEqual(review["version"], REVIEW_VERSION)
                 return str(review["input_fingerprint"])
 
             baseline = fingerprint()
@@ -87,8 +97,11 @@ class EvaluatorSecurityTest(unittest.TestCase):
             links_path.write_bytes(b'{"recommendations":{"related_articles":[]}}')
             asset_path.write_bytes(b"asset-v2")
             changed_asset = fingerprint()
+            asset_path.write_bytes(b"asset-v1")
+            counterpart_path.write_text("Counterpart source v2", encoding="utf-8")
+            changed_counterpart = fingerprint()
 
-            for changed in [changed_prose, changed_topic_fingerprint, changed_links, changed_asset]:
+            for changed in [changed_prose, changed_topic_fingerprint, changed_links, changed_asset, changed_counterpart]:
                 self.assertNotEqual(changed, baseline)
 
     def translation_result(self, source_body: str, target_body: str) -> tuple[bool, str]:

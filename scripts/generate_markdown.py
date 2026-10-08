@@ -279,6 +279,8 @@ def generate_markdown(
     if topic["status"] != "approved":
         raise MarkdownGenerationError(f"{topic_id} must be approved before Markdown generation")
 
+    if topic["primary_language"] not in {"en", "ko"}:
+        raise MarkdownGenerationError("Localized manuscripts must be authored and reviewed in their target language; English scaffold fallback is forbidden")
     apps = load_apps(apps_path)
     for app_name in split_pipe(topic["related_apps"]):
         if app_name not in apps:
@@ -311,3 +313,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

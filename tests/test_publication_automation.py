@@ -20,6 +20,9 @@ from schedule_ready_articles import SchedulingError, schedule_ready_articles
 from check_content_supply import content_supply_report
 from topic_management import TOPIC_HEADER, write_topics
 import run_pipeline as pipeline_module
+from publication_locales import PUBLICATION_LOCALES
+from article_localization import LOCALIZED_SECTIONS, WORKFLOW_LABELS
+from generate_image_assets import workflow_svg
 
 
 KST = timezone(timedelta(hours=9))
@@ -181,12 +184,19 @@ def passing_review(
         "passed": True,
         "checks": [
             {
-                "name": "required_sections",
+                "name": name,
                 "passed": True,
                 "points": 1.0,
                 "max_points": 1.0,
                 "note": "Current article passed the required check.",
             }
+            for name in (
+                "metadata_complete", "card_title_consistent", "brand_spelling",
+                "required_sections", "short_answer_ready", "structured_answer",
+                "clear_definitions", "primary_keyword", "external_reference",
+                "product_after_education", "publish_ready_image", "social_card_source",
+                "image_quality", "internal_links", "readability_depth", "translation_quality",
+            )
         ],
     }
 
@@ -313,26 +323,76 @@ class PublicationAutomationTest(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(report), encoding="utf-8")
 
-    def test_supply_requires_current_complete_reviews_even_for_scheduled_pairs(self) -> None:
+    def prepare_bundle(self, status: str, score: float = 9.4, history=()) -> list[dict[str, str]]:
+        """Synthetic structural fixtures only, not publishable editorial copy.
+
+        EN/KO retain the original language regression fixtures; the remaining
+        locales use the localized structure also exercised by the contract suite.
+        Every locale has its own topic, article, image, metadata and review.
+        """
+        definitions = {
+            "ja": "文字コードとは文字を表す規則です。",
+            "zh-Hans": "文本编码是指字符与字节之间的对应规则。",
+            "zh-Hant": "文字編碼是指字元與位元組之間的對應規則。",
+            "pt-BR": "Codificação é uma regra para representar caracteres.",
+            "de": "Zeichenkodierung ist eine Regel zur Darstellung von Zeichen.",
+            "fr": "Un encodage est une règle de représentation des caractères.",
+            "es": "La codificación es una regla para representar caracteres.",
+        }
+        rows = [topic_row(status, f"TOPIC-{i:04d}", language)
+                for i, language in enumerate(PUBLICATION_LOCALES, 1)]
+        for row in rows:
+            language = row["primary_language"]
+            if status == "scheduled":
+                row["scheduled_at"] = "2026-07-14T09:00:00+09:00"
+            if language == "en":
+                markdown = MARKDOWN
+            elif language == "ko":
+                markdown = korean_markdown()
+            else:
+                row["primary_keyword"] = "TXT"
+                body = "\n\n".join(f"## {h}\n\nTXT {definitions[language]}" for h in LOCALIZED_SECTIONS[language])
+                body += "\n\n" + (definitions[language] + " ") * 65
+                body += "\n\n1. TXT\n2. TXT\n\n| A | B |\n| --- | --- |\n| TXT | TXT |\n\nhttps://www.w3.org/\n"
+                body += f'\n![{WORKFLOW_LABELS[language][3]}](/blog-assets/{language}/{row["slug"]}/workflow-diagram.svg)\n'
+                metadata = {"title": "TXT", "card_title": "TXT", "slug": row["slug"],
+                            "description": "TXT", "status": status, "language": language,
+                            "topic_id": row["id"], "search_intent": "solve", "primary_keyword": "TXT", "tags": "TXT"}
+                markdown = "---\n" + "\n".join(f'{k}: "{v}"' for k, v in metadata.items()) + "\n---\n" + body
+            path = self.root / row["canonical_path"]
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(markdown, encoding="utf-8")
+            asset = self.root / "generated/assets/blog" / language / row["slug"] / "workflow-diagram.svg"
+            asset.parent.mkdir(parents=True, exist_ok=True)
+            asset.write_text(workflow_svg("TXT", "TXT", language), encoding="utf-8")
+            links = self.root / "generated/metadata" / language / "reading" / row["slug"] / "internal_links.json"
+            links.parent.mkdir(parents=True, exist_ok=True)
+            links.write_text(json.dumps({"recommendations": {"related_articles": []}}), encoding="utf-8")
+            self.write_review_report(language, passing_review(row["id"], score))
+        write_topics(self.topics_path, [*history, *rows])
+        write_topics(self.legacy_path, [*history, *rows])
+        return rows
+
+    def test_supply_requires_current_complete_reviews_even_for_scheduled_bundles(self) -> None:
         for status in ("review", "scheduled"):
             for invalid in ({"score": 9.9}, {**passing_review("TOPIC-0001"), "input_fingerprint": "old"}, []):
                 with self.subTest(status=status, invalid=invalid):
-                    write_topics(self.topics_path, [topic_row(status), topic_row(status, "TOPIC-0002", "ko")])
+                    self.prepare_bundle(status)
                     self.write_review_report("en", invalid)
                     self.write_review_report("ko", passing_review("TOPIC-0002"))
                     with patch("schedule_ready_articles.score_article", side_effect=lambda topic, *_: passing_review(topic["id"])):
                         report = content_supply_report(self.topics_path, self.review_root)
                     self.assertEqual(report["qualified_pair_count"], 0)
 
-    def test_supply_accepts_current_pair_without_mutating_content(self) -> None:
+    def test_supply_accepts_current_bundle_without_mutating_content(self) -> None:
         for status in ("review", "scheduled"):
-            write_topics(self.topics_path, [topic_row(status), topic_row(status, "TOPIC-0002", "ko")])
-            for language, topic_id in (("en", "TOPIC-0001"), ("ko", "TOPIC-0002")):
-                self.write_review_report(language, passing_review(topic_id))
+            self.prepare_bundle(status)
             before = self.topics_path.read_bytes()
             with patch("schedule_ready_articles.score_article", side_effect=lambda topic, *_: passing_review(topic["id"])):
                 report = content_supply_report(self.topics_path, self.review_root)
             self.assertEqual(report["qualified_pair_count"], 1)
+            self.assertEqual(report["qualified_bundle_count"], 1)
+            self.assertEqual(set(report["qualified_pairs"][0]["scores"]), set(PUBLICATION_LOCALES))
             self.assertEqual(self.topics_path.read_bytes(), before)
 
     def test_evaluates_article_above_publication_threshold(self) -> None:
@@ -537,19 +597,12 @@ VaultXT can support the workflow after the reader understands the process.
         self.assertIn("encoding", note)
 
     def test_schedules_only_reviewed_articles_above_threshold_every_three_days(self) -> None:
-        published = topic_row("published", "TOPIC-0002")
+        published = topic_row("published", "TOPIC-1000")
         published["slug"] = "already-published"
         published["canonical_path"] = "generated/markdown/en/reading/already-published.md"
         published["published_url"] = "https://example.com/blog/en/already-published/"
         published["published_at"] = "2026-07-11T09:00:00+09:00"
-        review_en = topic_row("review", "TOPIC-0001", "en")
-        review_ko = topic_row("review", "TOPIC-0003", "ko")
-        write_topics(self.topics_path, [published, review_en, review_ko])
-        write_topics(self.legacy_path, [published, review_en, review_ko])
-        for language, topic_id in [("en", "TOPIC-0001"), ("ko", "TOPIC-0003")]:
-            review_path = self.review_root / language / "reading" / "read-large-txt-files" / "review.json"
-            review_path.parent.mkdir(parents=True)
-            review_path.write_text(json.dumps(passing_review(topic_id, 9.2)), encoding="utf-8")
+        self.prepare_bundle("review", score=9.2, history=[published])
 
         with patch(
             "schedule_ready_articles.score_article",
@@ -562,25 +615,18 @@ VaultXT can support the workflow after the reader understands the process.
                 now=datetime(2026, 7, 12, 9, tzinfo=KST),
             )
 
-        self.assertEqual(len(scheduled), 2)
+        self.assertEqual(len(scheduled), 9)
         self.assertEqual(scheduled[0]["status"], "scheduled")
         self.assertEqual(scheduled[0]["scheduled_at"], "2026-07-14T09:00:00+09:00")
-        self.assertEqual(scheduled[1]["scheduled_at"], "2026-07-14T09:00:00+09:00")
+        self.assertEqual({row["scheduled_at"] for row in scheduled}, {"2026-07-14T09:00:00+09:00"})
 
     def test_scheduling_catches_up_an_overdue_slot_immediately(self) -> None:
-        published = topic_row("published", "TOPIC-0002")
+        published = topic_row("published", "TOPIC-1000")
         published["slug"] = "already-published"
         published["canonical_path"] = "generated/markdown/en/reading/already-published.md"
         published["published_url"] = "https://example.com/blog/en/already-published/"
         published["published_at"] = "2026-07-14T09:00:00+09:00"
-        review_en = topic_row("review", "TOPIC-0001", "en")
-        review_ko = topic_row("review", "TOPIC-0003", "ko")
-        write_topics(self.topics_path, [published, review_en, review_ko])
-        write_topics(self.legacy_path, [published, review_en, review_ko])
-        for language, topic_id in [("en", "TOPIC-0001"), ("ko", "TOPIC-0003")]:
-            review_path = self.review_root / language / "reading" / "read-large-txt-files" / "review.json"
-            review_path.parent.mkdir(parents=True)
-            review_path.write_text(json.dumps(passing_review(topic_id, 9.2)), encoding="utf-8")
+        self.prepare_bundle("review", score=9.2, history=[published])
 
         with patch(
             "schedule_ready_articles.score_article",
@@ -593,30 +639,12 @@ VaultXT can support the workflow after the reader understands the process.
                 now=datetime(2026, 7, 20, 10, tzinfo=KST),
             )
 
-        self.assertEqual(len(scheduled), 2)
+        self.assertEqual(len(scheduled), 9)
         self.assertEqual(scheduled[0]["scheduled_at"], "2026-07-20T10:00:00+09:00")
-        self.assertEqual(scheduled[1]["scheduled_at"], "2026-07-20T10:00:00+09:00")
+        self.assertEqual({row["scheduled_at"] for row in scheduled}, {"2026-07-20T10:00:00+09:00"})
 
     def test_real_evaluation_schedule_and_publish_lifecycle_preserves_review_fingerprint(self) -> None:
-        en = topic_row("review", "TOPIC-0001", "en")
-        ko = topic_row("review", "TOPIC-0002", "ko")
-        write_topics(self.topics_path, [en, ko])
-        write_topics(self.legacy_path, [en, ko])
-        self.ko_markdown_path.write_text(korean_markdown(), encoding="utf-8")
-        ko_metadata_path = (
-            self.root
-            / "generated"
-            / "metadata"
-            / "ko"
-            / "reading"
-            / "read-large-txt-files"
-            / "internal_links.json"
-        )
-        ko_metadata_path.parent.mkdir(parents=True, exist_ok=True)
-        ko_metadata_path.write_text(
-            json.dumps({"recommendations": {"related_articles": []}}),
-            encoding="utf-8",
-        )
+        bundle = self.prepare_bundle("review")
         metadata_root = self.root / "generated" / "metadata"
         assets_root = self.root / "generated" / "assets" / "blog"
 
@@ -628,12 +656,14 @@ VaultXT can support the workflow after the reader understands the process.
                 assets_root=assets_root,
                 review_root=self.review_root,
             )
-            for topic in (en, ko)
+            for topic in bundle
         ]
+        fingerprints = {}
         for review_path in review_paths:
             review = json.loads(review_path.read_text(encoding="utf-8"))
             self.assertEqual(review["version"], REVIEW_VERSION)
             self.assertTrue(review["input_fingerprint"])
+            fingerprints[review["topic_id"]] = review["input_fingerprint"]
             self.assertTrue(review["passed"])
             self.assertTrue(all(check["passed"] for check in review["checks"]))
 
@@ -644,9 +674,13 @@ VaultXT can support the workflow after the reader understands the process.
             now=datetime(2026, 7, 14, 8, tzinfo=KST),
         )
 
-        self.assertEqual(len(scheduled), 2)
+        self.assertEqual(len(scheduled), 9)
         self.assertEqual({row["status"] for row in scheduled}, {"scheduled"})
         self.assertEqual({row["scheduled_at"] for row in scheduled}, {"2026-07-17T09:00:00+09:00"})
+
+        for row in self.read_rows():
+            current = score_article(row, (self.root / row["canonical_path"]).read_text(encoding="utf-8"), self.topics_path, metadata_root, assets_root)
+            self.assertEqual(current["input_fingerprint"], fingerprints[row["id"]])
 
         published = publish_due_articles(
             self.topics_path,
@@ -657,7 +691,7 @@ VaultXT can support the workflow after the reader understands the process.
             metadata_root=metadata_root,
         )
 
-        self.assertEqual(len(published), 2)
+        self.assertEqual(len(published), 9)
         self.assertEqual({row["status"] for row in published}, {"published"})
         self.assertEqual(
             {row["published_at"] for row in published},
@@ -677,6 +711,8 @@ VaultXT can support the workflow after the reader understands the process.
             "topic_mismatch": ({**valid, "topic_id": "TOPIC-9999"}, valid),
             "report_failed": ({**valid, "passed": False}, valid),
             "check_failed": ({**valid, "checks": [{**valid["checks"][0], "passed": False}]}, valid),
+            "at_threshold": ({**valid, "score": 9.0}, {**valid, "score": 9.0}),
+            "empty_checks": ({**valid, "checks": []}, valid),
             "stale_score": ({**valid, "score": 9.3}, valid),
             "input_changed_same_score": (
                 valid,
@@ -687,10 +723,9 @@ VaultXT can support the workflow after the reader understands the process.
 
         for name, (persisted_en, current_en) in cases.items():
             with self.subTest(name=name):
-                en = topic_row("review", "TOPIC-0001", "en")
-                ko = topic_row("review", "TOPIC-0002", "ko")
-                write_topics(self.topics_path, [en, ko])
-                write_topics(self.legacy_path, [en, ko])
+                bundle = self.prepare_bundle("review")
+                before = {self.root / row["canonical_path"]: (self.root / row["canonical_path"]).read_bytes() for row in bundle}
+                csv_before = {path: path.read_bytes() for path in (self.topics_path, self.legacy_path)}
                 self.write_review_report("en", persisted_en)
                 self.write_review_report("ko", passing_review("TOPIC-0002"))
 
@@ -706,7 +741,9 @@ VaultXT can support the workflow after the reader understands the process.
                     )
 
                 self.assertEqual(scheduled, [])
-                self.assertEqual([row["status"] for row in self.read_rows()], ["review", "review"])
+                self.assertEqual([row["status"] for row in self.read_rows()], ["review"] * 9)
+                self.assertEqual({path: path.read_bytes() for path in before}, before)
+                self.assertEqual({path: path.read_bytes() for path in csv_before}, csv_before)
                 evaluator.assert_called()
 
     def test_due_cadence_fails_when_ideas_exist_but_no_review_pair_is_ready(self) -> None:
@@ -727,16 +764,7 @@ VaultXT can support the workflow after the reader understands the process.
             )
 
     def test_publishes_due_article_only_when_review_score_exceeds_threshold(self) -> None:
-        en = topic_row("scheduled", "TOPIC-0001", "en")
-        ko = topic_row("scheduled", "TOPIC-0002", "ko")
-        en["scheduled_at"] = "2026-07-14T09:00:00+09:00"
-        ko["scheduled_at"] = "2026-07-14T09:00:00+09:00"
-        write_topics(self.topics_path, [en, ko])
-        write_topics(self.legacy_path, [en, ko])
-        for language, topic_id in [("en", "TOPIC-0001"), ("ko", "TOPIC-0002")]:
-            review_path = self.review_root / language / "reading" / "read-large-txt-files" / "review.json"
-            review_path.parent.mkdir(parents=True)
-            review_path.write_text(json.dumps(passing_review(topic_id)), encoding="utf-8")
+        bundle = self.prepare_bundle("scheduled")
 
         with patch(
             "schedule_ready_articles.score_article",
@@ -752,8 +780,13 @@ VaultXT can support the workflow after the reader understands the process.
 
         for call in evaluate.call_args_list:
             self.assertEqual(call.args[3], self.root.resolve() / "generated" / "metadata")
-        self.assertEqual(len(published), 2)
+        self.assertEqual(len(published), 9)
+        self.assertEqual(len(evaluate.call_args_list), 9)
         rows = self.read_rows()
+        for row in rows:
+            self.assertEqual(row["status"], "published")
+            self.assertEqual(row["published_url"], f'https://example.com/blog/{row["primary_language"].lower()}/read-large-txt-files/')
+            self.assertIn('status: "published"', (self.root / row["canonical_path"]).read_text(encoding="utf-8"))
         self.assertEqual(rows[0]["status"], "published")
         self.assertEqual(rows[0]["published_url"], "https://example.com/blog/en/read-large-txt-files/")
         self.assertEqual(rows[1]["status"], "published")
@@ -777,6 +810,8 @@ VaultXT can support the workflow after the reader understands the process.
             "topic_mismatch": ({**valid, "topic_id": "TOPIC-9999"}, valid),
             "report_failed": ({**valid, "passed": False}, valid),
             "check_failed": ({**valid, "checks": [{**valid["checks"][0], "passed": False}]}, valid),
+            "at_threshold": ({**valid, "score": 9.0}, {**valid, "score": 9.0}),
+            "empty_checks": ({**valid, "checks": []}, valid),
             "stale_score": ({**valid, "score": 9.3}, valid),
             "input_changed_same_score": (
                 valid,
@@ -784,19 +819,12 @@ VaultXT can support the workflow after the reader understands the process.
             ),
             "article_changed": (valid, failed_current),
         }
-        original_en = self.markdown_path.read_text(encoding="utf-8")
-        original_ko = self.ko_markdown_path.read_text(encoding="utf-8")
 
         for name, (persisted_en, current_en) in cases.items():
             with self.subTest(name=name):
-                en = topic_row("scheduled", "TOPIC-0001", "en")
-                ko = topic_row("scheduled", "TOPIC-0002", "ko")
-                en["scheduled_at"] = "2026-07-14T09:00:00+09:00"
-                ko["scheduled_at"] = "2026-07-14T09:00:00+09:00"
-                write_topics(self.topics_path, [en, ko])
-                write_topics(self.legacy_path, [en, ko])
-                self.markdown_path.write_text(original_en, encoding="utf-8")
-                self.ko_markdown_path.write_text(original_ko, encoding="utf-8")
+                bundle = self.prepare_bundle("scheduled")
+                before = {self.root / row["canonical_path"]: (self.root / row["canonical_path"]).read_bytes() for row in bundle}
+                csv_before = {path: path.read_bytes() for path in (self.topics_path, self.legacy_path)}
                 self.write_review_report("en", persisted_en)
                 self.write_review_report("ko", passing_review("TOPIC-0002"))
 
@@ -813,24 +841,16 @@ VaultXT can support the workflow after the reader understands the process.
                             now=datetime(2026, 7, 14, 9, tzinfo=KST),
                         )
 
-                self.assertEqual([row["status"] for row in self.read_rows()], ["scheduled", "scheduled"])
-                self.assertEqual(self.markdown_path.read_text(encoding="utf-8"), original_en)
-                self.assertEqual(self.ko_markdown_path.read_text(encoding="utf-8"), original_ko)
+                self.assertEqual([row["status"] for row in self.read_rows()], ["scheduled"] * 9)
+                self.assertEqual({path: path.read_bytes() for path in before}, before)
+                self.assertEqual({path: path.read_bytes() for path in csv_before}, csv_before)
                 evaluator.assert_called()
 
     def test_publish_injects_public_same_language_related_articles_into_frontmatter(self) -> None:
-        en = topic_row("scheduled", "TOPIC-0001", "en")
-        ko = topic_row("scheduled", "TOPIC-0002", "ko")
-        en["scheduled_at"] = "2026-07-14T09:00:00+09:00"
-        ko["scheduled_at"] = "2026-07-14T09:00:00+09:00"
-        write_topics(self.topics_path, [en, ko])
-        write_topics(self.legacy_path, [en, ko])
-        for language, topic_id in [("en", "TOPIC-0001"), ("ko", "TOPIC-0002")]:
-            review_path = self.review_root / language / "reading" / "read-large-txt-files" / "review.json"
-            review_path.parent.mkdir(parents=True)
-            review_path.write_text(json.dumps(passing_review(topic_id)), encoding="utf-8")
+        bundle = self.prepare_bundle("scheduled")
+
         ko_metadata_path = self.root / "generated" / "metadata" / "ko" / "reading" / "read-large-txt-files" / "internal_links.json"
-        ko_metadata_path.parent.mkdir(parents=True)
+        ko_metadata_path.parent.mkdir(parents=True, exist_ok=True)
         self.metadata_path.write_text(
             json.dumps(
                 {
@@ -904,6 +924,32 @@ VaultXT can support the workflow after the reader understands the process.
             ko_content,
         )
 
+    def test_each_locale_at_threshold_blocks_schedule_and_publication_without_mutation(self) -> None:
+        for status in ("review", "scheduled"):
+            for blocked_language in PUBLICATION_LOCALES:
+                with self.subTest(status=status, language=blocked_language):
+                    bundle = self.prepare_bundle(status)
+                    blocked = next(row for row in bundle if row["primary_language"] == blocked_language)
+                    self.write_review_report(blocked_language, passing_review(blocked["id"], 9.0))
+                    paths = [self.topics_path, self.legacy_path, *(self.root / row["canonical_path"] for row in bundle)]
+                    before = {path: path.read_bytes() for path in paths}
+
+                    def current_report(topic, *_):
+                        return passing_review(topic["id"], 9.0 if topic["primary_language"] == blocked_language else 9.4)
+
+                    with patch("schedule_ready_articles.score_article", side_effect=current_report) as evaluator:
+                        if status == "review":
+                            self.assertEqual(schedule_ready_articles(
+                                self.topics_path, self.review_root, self.legacy_path,
+                                now=datetime(2026, 7, 12, 9, tzinfo=KST)), [])
+                        else:
+                            with self.assertRaises(DuePublicationError):
+                                publish_due_articles(
+                                    self.topics_path, self.review_root, self.legacy_path,
+                                    now=datetime(2026, 7, 14, 9, tzinfo=KST))
+                    self.assertIn(blocked["id"], [call.args[0]["id"] for call in evaluator.call_args_list])
+                    self.assertEqual({path: path.read_bytes() for path in paths}, before)
+
     def test_manual_syndication_open_urls_use_current_editor_routes(self) -> None:
         self.assertEqual(compose_url("hashnode", "", "https://example.com/article"), "")
         self.assertEqual(compose_url("medium", "", "https://example.com/article"), "")
@@ -911,3 +957,4 @@ VaultXT can support the workflow after the reader understands the process.
 
 if __name__ == "__main__":
     unittest.main()
+

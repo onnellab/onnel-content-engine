@@ -11,6 +11,8 @@ import csv
 import re
 from pathlib import Path
 
+from publication_locales import REQUIRED_PUBLICATION_LANGUAGES
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TOPICS_PATH = ROOT / "data" / "topics.csv"
@@ -75,7 +77,7 @@ TOPIC_STATUSES = {
     "failed",
 }
 TOPIC_CATEGORIES = {"reading", "music", "productivity", "media", "craft", "games", "research"}
-LANGUAGES = {"en", "ko"}
+LANGUAGES = REQUIRED_PUBLICATION_LANGUAGES
 PRIORITIES = {"critical", "high", "normal", "low"}
 SEARCH_INTENTS = {"learn", "solve", "compare", "workflow", "discover", "troubleshoot"}
 SOURCE_TYPES = {
@@ -237,7 +239,7 @@ def validate_row(row: dict[str, str], app_names: set[str]) -> None:
         raise TopicError(f"{topic_id} has invalid evergreen: {row['evergreen']}")
     if row["review_required"] not in BOOLEAN:
         raise TopicError(f"{topic_id} has invalid review_required: {row['review_required']}")
-    if not row["primary_question"].strip().endswith("?"):
+    if not row["primary_question"].strip().endswith(("?", "？")):
         raise TopicError(f"{topic_id} primary_question must be a complete question")
     if row["primary_question"].split(maxsplit=1)[0] in app_names:
         raise TopicError(f"{topic_id} primary_question must not begin with an ONNELLAB product name")
@@ -327,3 +329,4 @@ class TopicStore:
 
     def archive(self, topic_id: str) -> dict[str, str]:
         return self.edit(topic_id, {"status": "archived"})
+

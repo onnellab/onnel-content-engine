@@ -9,6 +9,9 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from publication_transaction import guarded_publication, topic_csv_bytes, atomic_replace_files
+from publication_locales import REQUIRED_PUBLICATION_LANGUAGES, require_publication_bundle
+
 from evaluate_article import DEFAULT_REVIEW_ROOT, DEFAULT_THRESHOLD, REVIEW_VERSION, markdown_path_for, score_article
 from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEADER, TopicError, TopicStore, read_csv
 
@@ -16,7 +19,6 @@ from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEAD
 KST = timezone(timedelta(hours=9))
 DEFAULT_PUBLICATION_TIME = "09:00"
 DEFAULT_INTERVAL_DAYS = 3
-REQUIRED_PUBLICATION_LANGUAGES = {"en", "ko"}
 
 
 class SchedulingError(ValueError):
@@ -110,12 +112,11 @@ def grouped_by_publication(rows: list[dict[str, str]]) -> dict[tuple[str, str], 
 
 
 def require_language_pair(group: list[dict[str, str]]) -> dict[str, dict[str, str]]:
-    by_language = {row["primary_language"]: row for row in group}
-    missing = REQUIRED_PUBLICATION_LANGUAGES - set(by_language)
-    if missing:
-        ids = ", ".join(row["id"] for row in group)
-        raise SchedulingError(f"publication group {ids} is missing language counterpart(s): {', '.join(sorted(missing))}")
-    return {language: by_language[language] for language in sorted(REQUIRED_PUBLICATION_LANGUAGES)}
+    # Compatibility name retained for callers; the contract is now nine locales.
+    try:
+        return require_publication_bundle(group)
+    except ValueError as error:
+        raise SchedulingError(str(error)) from error
 
 
 def publication_clock(value: str) -> tuple[int, int]:
@@ -177,12 +178,13 @@ def queue_shortage_message(rows: list[dict[str, str]], threshold: float) -> str:
         if all(row["status"] == "idea" for row in group)
     )
     return (
-        "publication cadence is overdue but no English/Korean review pair passed "
+        "publication cadence is overdue but no complete nine-language review bundle passed "
         f"the {threshold:.1f} threshold; ideas={idea_count}, paired_ideas={paired_ideas}. "
-        "Prepare and review a bilingual idea pair before the next scheduled run."
+        "Prepare and review all nine language versions before the next scheduled run."
     )
 
 
+@guarded_publication
 def schedule_ready_articles(
     topics_path: Path = DEFAULT_TOPICS_PATH,
     review_root: Path = DEFAULT_REVIEW_ROOT,
@@ -199,6 +201,7 @@ def schedule_ready_articles(
     anchor = latest_publication_anchor(rows, now)
     store = TopicStore(topics_path, mirror_path=legacy_topics_path)
     scheduled: list[dict[str, str]] = []
+    scheduled_groups = 0
 
     groups = grouped_by_publication(rows)
     candidates = [group for group in groups.values() if any(row["status"] == "review" for row in group)]
@@ -209,11 +212,11 @@ def schedule_ready_articles(
         )
     )
     for group in candidates:
-        if len(scheduled) >= limit:
+        if scheduled_groups >= limit:
             break
         pair = require_language_pair(group)
         if any(row["status"] != "review" for row in pair.values()):
-            raise SchedulingError("both English and Korean articles must be in review before scheduling")
+            raise SchedulingError("all nine language articles must be in review before scheduling")
         try:
             scores = [current_review_score(row, topics_path, review_root, threshold) for row in pair.values()]
         except SchedulingError:
@@ -222,8 +225,14 @@ def schedule_ready_articles(
             continue
         anchor = next_slot(anchor, interval_days, publication_time, now)
         for topic in pair.values():
-            row = store.edit(topic["id"], {"status": "scheduled", "scheduled_at": anchor.isoformat()})
-            scheduled.append(row)
+            topic.update({"status": "scheduled", "scheduled_at": anchor.isoformat()})
+            scheduled.append(topic)
+        csv_bytes = topic_csv_bytes(store, rows)
+        updates = {topics_path: csv_bytes}
+        if legacy_topics_path is not None:
+            updates[legacy_topics_path] = csv_bytes
+        atomic_replace_files(topics_path.parent.parent, updates)
+        scheduled_groups += 1
     if require_ready_when_due and not scheduled and publication_is_due(rows, now, interval_days, publication_time):
         raise SchedulingError(queue_shortage_message(rows, threshold))
     return scheduled
@@ -266,3 +275,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
