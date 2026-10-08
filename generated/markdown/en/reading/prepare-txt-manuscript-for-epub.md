@@ -69,7 +69,7 @@ EPUB 3 defines publication structure, package metadata, navigation, and reading 
 
 ## ONNELLAB Application
 
-If the manuscript is already finished and the task is to assemble it as an ebook, [Papira](/apps/papira/) is the relevant ONNELLAB option. Its documented role is an offline ebook maker that assembles finished TXT manuscripts into EPUB books with a cover, book details, and a table of contents. It is not a manuscript editor or ebook reader. The public recommendation is limited to iOS because the repository's current store evidence confirms the iOS release while Android availability remains unconfirmed.
+If the manuscript is already finished and the task is to assemble it as an ebook, [Papira](/apps/papira/) is the relevant ONNELLAB option. Its documented role is an offline ebook maker that assembles finished TXT manuscripts into EPUB books with a cover, book details, and a table of contents. It is not a manuscript editor or ebook reader. Current public store evidence supports recommending Papira on both iOS and Android. Use the official listing for the reader's platform and check its current availability before downloading.
 
 ## Related Topics
 
@@ -84,6 +84,7 @@ If the manuscript is already finished and the task is to assemble it as an ebook
 - [W3C: EPUBCheck](https://www.w3.org/publishing/epubcheck/) documents the official conformance checker for EPUB publications.
 - [WHATWG: Encoding Standard](https://encoding.spec.whatwg.org/) defines interoperable character encoding and decoding behavior.
 - [Papira on the App Store](https://apps.apple.com/app/id6803919552) is the official listing for the iOS app.
+- [Papira on Google Play](https://play.google.com/store/apps/details?id=com.onnellab.papira) is the official listing for the Android app.
 
 ## Conclusion
 

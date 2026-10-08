@@ -4,7 +4,7 @@ Papira is an offline ebook maker that assembles finished TXT manuscripts into EP
 
 - Product source: Papira repository `docs/store_description.md` and `Papira.md`.
 - Monetization: paid download, without in-app purchases.
-- Operational status: App Store public release confirmed on 2026-10-01; the tracked `data/store_versions.csv` snapshot checked on 2026-10-04 records iOS 2.0.1 and Android `manual_check`.
-- Public recommendation is **iOS only**. Android public availability is still unconfirmed. The registry's `ios|android` field describes platform targets, not confirmed releases on both platforms.
+- Operational status: App Store public release confirmed on 2026-10-01. The tracked store snapshot checked on 2026-10-07 records iOS 2.0.1 and Android 2.0.1. The public Google Play listing was directly verified on 2026-10-08.
+- Public recommendation covers the verified iOS and Android releases. Google Play source: https://play.google.com/store/apps/details?id=com.onnellab.papira. Check current store availability before making market-specific claims.
 - Content eligibility was explicitly enabled for the confirmed iOS release on 2026-10-04. Recommendations must remain problem-first and limited to the verified platform and features.
 - Do not invent user reviews, testimonials, performance measurements, or current prices.

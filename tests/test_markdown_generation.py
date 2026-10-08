@@ -159,8 +159,9 @@ class MarkdownGenerationTest(unittest.TestCase):
                     self.assertIn("Public recommendation is Android only", content)
                     self.assertIn("iOS remains in review", content)
                 else:
-                    self.assertIn("Public recommendation is iOS only", content)
-                    self.assertIn("Android public availability remains unconfirmed", content)
+                    self.assertIn("Public iOS and Android releases verified", content)
+                    self.assertIn("Google Play listing checked 2026-10-08", content)
+                    self.assertNotIn("Android public availability remains unconfirmed", content)
 
     def test_rejects_ineligible_related_app(self) -> None:
         APP_ROWS[0]["content_eligible"] = "false"

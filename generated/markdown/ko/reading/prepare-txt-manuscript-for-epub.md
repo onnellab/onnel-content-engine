@@ -69,7 +69,7 @@ EPUB 3은 출판물 구조, 패키지 메타데이터, 탐색과 읽기 순서�
 
 ## ONNELLAB 앱
 
-원고가 이미 완성되었고 TXT를 전자책으로 조립하는 것이 목적이라면 [Papira](/apps/papira/)가 관련된 ONNELLAB 선택지입니다. 공식 문서에 설명된 역할은 완성된 TXT 원고를 표지, 책 정보와 목차가 있는 EPUB 책으로 조립하는 오프라인 전자책 제작 도구입니다. 원고 편집기나 전자책 리더는 아닙니다. 현재 저장소의 스토어 근거는 iOS 출시를 확인하고 Android 공개 여부는 확인하지 못했으므로 공개 추천은 iOS 범위로 한정합니다.
+원고가 이미 완성되었고 TXT를 전자책으로 조립하는 것이 목적이라면 [Papira](/apps/papira/)가 관련된 ONNELLAB 선택지입니다. 공식 문서에 설명된 역할은 완성된 TXT 원고를 표지, 책 정보와 목차가 있는 EPUB 책으로 조립하는 오프라인 전자책 제작 도구입니다. 원고 편집기나 전자책 리더는 아닙니다. 현재 공개 스토어 근거에 따라 iOS와 Android에서 Papira를 추천할 수 있습니다. 사용하는 기기에 맞는 공식 스토어 페이지에서 현재 제공 여부를 확인하세요.
 
 ## 관련 주제
 
@@ -84,6 +84,7 @@ EPUB 3은 출판물 구조, 패키지 메타데이터, 탐색과 읽기 순서�
 - [W3C: EPUBCheck](https://www.w3.org/publishing/epubcheck/)는 EPUB 출판물의 표준 적합성을 확인하는 공식 검사 도구입니다.
 - [WHATWG: 문자 인코딩 표준](https://encoding.spec.whatwg.org/)은 상호운용 가능한 문자 인코딩과 디코딩 동작을 정의합니다.
 - [App Store의 Papira](https://apps.apple.com/app/id6803919552)는 iOS 앱의 공식 스토어 페이지입니다.
+- [Google Play의 Papira](https://play.google.com/store/apps/details?id=com.onnellab.papira)는 Android 앱의 공식 스토어 페이지입니다.
 
 ## 결론
 

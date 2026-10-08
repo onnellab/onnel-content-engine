@@ -145,11 +145,13 @@ the relevant checks and the intended deployment is verified.
 The implementation is fail-closed. Source changes, test success, a prepared
 queue and a completed public deployment are distinct outcomes.
 
-Local verification on 2026-10-08 passed the full 979-test offline suite (three
+Local verification on 2026-10-08 passed the full 980-test offline suite (three
 pre-existing platform-specific skips), including the actual-data dry-run.
 The local renderer used the installed librsvg/Cairo libraries through an
-isolated compatibility command. GitHub CI must separately verify the official
-rsvg-convert environment. Linux workflows install the CJK fonts needed by the
+isolated compatibility command. Official CI on commit 0f4434b4 also passed all
+three jobs with the supported renderer: Ubuntu Python 3.12/3.14 (three skips
+each) and macOS Python 3.14 (17 platform-specific skips). The publishing
+push dry-run succeeded; live publication and deployment steps were skipped. Linux workflows install the CJK fonts needed by the
 new localized assets; do not claim font rendering from text inspection alone.
 
 The nine-locale tests include a real evaluate/schedule/publish lifecycle using
