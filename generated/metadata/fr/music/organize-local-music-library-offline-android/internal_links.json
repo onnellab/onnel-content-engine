@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "topic_id": "TOPIC-0051",
+  "recommendations": {
+    "related_articles": [
+      {
+        "title": "nettoyer les métadonnées MP3 avant d’organiser sa musique",
+        "url": "https://onnellab.com/blog/fr/clean-up-mp3-metadata-before-organizing-music/",
+        "language": "fr",
+        "status": "published"
+      },
+      {
+        "title": "numérotation des pistes entre disques (en anglais)",
+        "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
+        "language": "en",
+        "status": "published"
+      }
+    ]
+  }
+}

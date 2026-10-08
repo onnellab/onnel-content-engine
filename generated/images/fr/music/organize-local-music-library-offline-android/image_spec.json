@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/fr/music/organize-local-music-library-offline-android.md",
+  "topic": {
+    "id": "TOPIC-0051",
+    "title": "Organiser sa musique sur Android pour une écoute hors ligne",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "fr",
+    "primary_keyword": "organiser sa musique sur Android",
+    "related_apps": [
+      "Melivra"
+    ]
+  },
+  "article_sections_detected": [
+    "Organiser sa musique sur Android pour une écoute hors ligne",
+    "Question",
+    "Réponse courte",
+    "Ce que signifient local et hors ligne",
+    "Choisir ce que l’on veut organiser",
+    "Méthode recommandée",
+    "Si un morceau manque ou ne se lit pas",
+    "La place d’ONNELLAB",
+    "Pour aller plus loin",
+    "Références",
+    "Conclusion",
+    "Questions fréquentes",
+    "Voir un fichier dans Téléchargements prouve-t-il qu’il se lit hors ligne ?",
+    "Puis-je utiliser les téléchargements d’un abonnement de streaming ?",
+    "Renommer un dossier corrige-t-il le titre de l’album ?",
+    "Une liste de lecture exportée est-elle une sauvegarde de ma musique ?",
+    "Puis-je supprimer les fichiers source après les avoir ajoutés à la bibliothèque ?",
+    "Faut-il tester toute la collection avant de l’utiliser ?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Organiser sa musique sur Android pour une écoute hors ligne",
+      "source_sections": [
+        "Réponse courte",
+        "Méthode recommandée"
+      ],
+      "structure": [
+        "1. Problème",
+        "2. Vérification",
+        "3. Méthode",
+        "4. Résultat"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating organiser sa musique sur Android?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "lecteur de musique hors ligne",
+        "fichiers audio locaux",
+        "dossiers et listes de lecture"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Melivra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Organiser sa musique sur Android pour une écoute hors ligne",
+      "steps": [
+        "1. Problème",
+        "2. Vérification",
+        "3. Méthode",
+        "4. Résultat"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "organiser sa musique sur Android · Comparaison",
+      "items": [
+        "lecteur de musique hors ligne",
+        "fichiers audio locaux",
+        "dossiers et listes de lecture"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Musique hors ligne",
+    "message": "Gardez les originaux et vérifiez chaque petit lot.",
+    "description": "Gardez les originaux, ajoutez un petit échantillon local, testez la lecture hors ligne puis élargissez la collection par petits lots vérifiés.",
+    "steps": [
+      [
+        "1. Garder",
+        "Copie séparée"
+      ],
+      [
+        "2. Ajouter",
+        "Petit lot local"
+      ],
+      [
+        "3. Tester",
+        "Lecture hors ligne"
+      ],
+      [
+        "4. Élargir",
+        "Par lots vérifiés"
+      ]
+    ]
+  }
+}

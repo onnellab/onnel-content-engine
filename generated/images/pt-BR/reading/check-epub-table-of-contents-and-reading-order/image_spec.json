@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/pt-BR/reading/check-epub-table-of-contents-and-reading-order.md",
+  "topic": {
+    "id": "TOPIC-0058",
+    "title": "Como conferir o sumário e a ordem dos capítulos de um EPUB",
+    "slug": "check-epub-table-of-contents-and-reading-order",
+    "category": "reading",
+    "language": "pt-BR",
+    "primary_keyword": "conferir o sumário do EPUB",
+    "related_apps": [
+      "Papira"
+    ]
+  },
+  "article_sections_detected": [
+    "Como conferir o sumário e a ordem dos capítulos de um EPUB",
+    "Pergunta",
+    "Resposta curta",
+    "Separe os três elementos da verificação",
+    "Prepare a lista de capítulos esperados",
+    "Registre observações em uma ficha",
+    "Passo a passo recomendado",
+    "Diagnostique antes de alterar o original",
+    "Combine validação e leitura",
+    "Onde entra a ONNELLAB",
+    "Guia relacionado",
+    "Referências",
+    "Conclusão",
+    "Perguntas frequentes",
+    "Um título visível comprova que o link está correto?",
+    "Um capítulo fora do sumário também está ausente do livro?",
+    "Por que os links funcionam, mas os capítulos aparecem fora de ordem?",
+    "Passar no EPUBCheck basta para distribuir?",
+    "Devo corrigir diretamente o EPUB exportado?",
+    "Posso fazer estes testes de leitura no Papira?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Como conferir o sumário e a ordem dos capítulos de um EPUB",
+      "source_sections": [
+        "Resposta curta",
+        "Fluxo de trabalho recomendado"
+      ],
+      "structure": [
+        "1. Problema",
+        "2. Verificação",
+        "3. Processo",
+        "4. Resultado"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating conferir o sumário do EPUB?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "ordem dos capítulos no EPUB",
+        "links do sumário EPUB",
+        "capítulos ausentes no EPUB"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Papira"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Como conferir o sumário e a ordem dos capítulos de um EPUB",
+      "steps": [
+        "1. Problema",
+        "2. Verificação",
+        "3. Processo",
+        "4. Resultado"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "conferir o sumário do EPUB · Comparação",
+      "items": [
+        "ordem dos capítulos no EPUB",
+        "links do sumário EPUB",
+        "capítulos ausentes no EPUB"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Verificação do EPUB",
+    "message": "Confira o novo EPUB após alterar o original.",
+    "description": "Liste os capítulos esperados, teste todos os links do sumário e a ordem de leitura, depois gere um novo EPUB e confira novamente.",
+    "steps": [
+      [
+        "1. Liste",
+        "Capítulos esperados"
+      ],
+      [
+        "2. Links",
+        "Confira cada destino"
+      ],
+      [
+        "3. Ordem",
+        "Leitura contínua"
+      ],
+      [
+        "4. Refaça",
+        "Exporte e confira"
+      ]
+    ]
+  }
+}

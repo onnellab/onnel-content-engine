@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "topic_id": "TOPIC-0054",
+  "recommendations": {
+    "related_articles": [
+      {
+        "title": "EPUB 변환을 위한 TXT 원고 준비하기",
+        "url": "https://onnellab.com/blog/ko/prepare-txt-manuscript-for-epub/",
+        "language": "ko",
+        "status": "published"
+      }
+    ]
+  }
+}

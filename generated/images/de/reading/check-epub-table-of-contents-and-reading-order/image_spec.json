@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/de/reading/check-epub-table-of-contents-and-reading-order.md",
+  "topic": {
+    "id": "TOPIC-0059",
+    "title": "Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen",
+    "slug": "check-epub-table-of-contents-and-reading-order",
+    "category": "reading",
+    "language": "de",
+    "primary_keyword": "Inhaltsverzeichnis einer EPUB prüfen",
+    "related_apps": [
+      "Papira"
+    ]
+  },
+  "article_sections_detected": [
+    "Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen",
+    "Frage",
+    "Kurzantwort",
+    "Drei Prüfpunkte unterscheiden",
+    "Die erwartete Kapitelliste anlegen",
+    "Beobachtungen in einer Tabelle erfassen",
+    "Empfohlener Ablauf",
+    "Abweichungen vor Änderungen eingrenzen",
+    "Validierung und Leseprüfung verbinden",
+    "Wo ONNELLAB dazu passt",
+    "Weiterführender Leitfaden",
+    "Quellen",
+    "Fazit",
+    "Häufige Fragen",
+    "Beweist eine sichtbare Kapitelüberschrift, dass der Link stimmt?",
+    "Fehlt ein Kapitel auch im Buch, wenn es nicht im Menü steht?",
+    "Warum können Links stimmen und Kapitel trotzdem falsch angeordnet sein?",
+    "Ist das Buch nach bestandenem EPUBCheck vertriebsbereit?",
+    "Sollte ich die exportierte EPUB direkt korrigieren?",
+    "Kann ich diese Leseprüfungen in Papira durchführen?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen",
+      "source_sections": [
+        "Kurzantwort",
+        "Empfohlener Arbeitsablauf"
+      ],
+      "structure": [
+        "1. Problem",
+        "2. Prüfung",
+        "3. Ablauf",
+        "4. Ergebnis"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating Inhaltsverzeichnis einer EPUB prüfen?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "EPUB Kapitelreihenfolge",
+        "EPUB Navigation prüfen",
+        "fehlende EPUB-Kapitel"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Papira"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen",
+      "steps": [
+        "1. Problem",
+        "2. Prüfung",
+        "3. Ablauf",
+        "4. Ergebnis"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "Inhaltsverzeichnis einer EPUB prüfen · Vergleich",
+      "items": [
+        "EPUB Kapitelreihenfolge",
+        "EPUB Navigation prüfen",
+        "fehlende EPUB-Kapitel"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "EPUB-Ausgabe prüfen",
+    "message": "Nach Änderungen die neue EPUB erneut prüfen.",
+    "description": "Erwartete Kapitel auflisten, jedes Inhaltsverzeichnis-Ziel und die fortlaufende Lesereihenfolge prüfen, dann neu exportieren und erneut kontrollieren.",
+    "steps": [
+      [
+        "1. Liste",
+        "Erwartete Kapitel"
+      ],
+      [
+        "2. Links",
+        "Jedes Ziel prüfen"
+      ],
+      [
+        "3. Lesen",
+        "Fortlaufend lesen"
+      ],
+      [
+        "4. Export",
+        "Neu exportieren; prüfen"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/de/music/organize-local-music-library-offline-android.md",
+  "topic": {
+    "id": "TOPIC-0050",
+    "title": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "de",
+    "primary_keyword": "Musikdateien auf Android ordnen",
+    "related_apps": [
+      "Melivra"
+    ]
+  },
+  "article_sections_detected": [
+    "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
+    "Frage",
+    "Kurzantwort",
+    "Was lokal und offline bedeuten",
+    "Entscheide, was du ordnen möchtest",
+    "Empfohlener Ablauf",
+    "Wenn ein Titel fehlt oder nicht abgespielt wird",
+    "Wo ONNELLAB dazu passt",
+    "Verwandte Themen",
+    "Quellen",
+    "Fazit",
+    "Häufige Fragen",
+    "Beweist eine sichtbare Datei im Downloads-Ordner, dass sie offline abgespielt werden kann?",
+    "Kann ich Downloads aus einem Streamingabo verwenden?",
+    "Korrigiert das Umbenennen eines Ordners auch den Albumtitel?",
+    "Ist eine exportierte Wiedergabeliste eine Sicherung meiner Musik?",
+    "Darf ich die Quelldateien löschen, nachdem ich sie zur Bibliothek hinzugefügt habe?",
+    "Muss ich vor der Nutzung die gesamte Sammlung testen?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
+      "source_sections": [
+        "Kurzantwort",
+        "Empfohlener Arbeitsablauf"
+      ],
+      "structure": [
+        "1. Problem",
+        "2. Prüfung",
+        "3. Ablauf",
+        "4. Ergebnis"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating Musikdateien auf Android ordnen?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "Offline-Musikplayer",
+        "lokale Audiodateien",
+        "Musikordner und Wiedergabelisten"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Melivra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
+      "steps": [
+        "1. Problem",
+        "2. Prüfung",
+        "3. Ablauf",
+        "4. Ergebnis"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "Musikdateien auf Android ordnen · Vergleich",
+      "items": [
+        "Offline-Musikplayer",
+        "lokale Audiodateien",
+        "Musikordner und Wiedergabelisten"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Musik offline prüfen",
+    "message": "Originale behalten und jede kleine Gruppe erneut prüfen.",
+    "description": "Originale sichern, eine kleine lokale Auswahl hinzufügen, offline abspielen und die Sammlung schrittweise mit erneuter Prüfung erweitern.",
+    "steps": [
+      [
+        "1. Sichern",
+        "Separates Backup"
+      ],
+      [
+        "2. Auswahl",
+        "Wenige lokale Dateien"
+      ],
+      [
+        "3. Testen",
+        "Offline abspielen"
+      ],
+      [
+        "4. Ergänzen",
+        "Nach und nach; erneut prüfen"
+      ]
+    ]
+  }
+}

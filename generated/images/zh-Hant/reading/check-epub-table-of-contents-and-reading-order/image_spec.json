@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/reading/check-epub-table-of-contents-and-reading-order.md",
+  "topic": {
+    "id": "TOPIC-0057",
+    "title": "檢查 EPUB 的目錄連結與章節順序",
+    "slug": "check-epub-table-of-contents-and-reading-order",
+    "category": "reading",
+    "language": "zh-Hant",
+    "primary_keyword": "EPUB 目錄檢查",
+    "related_apps": [
+      "Papira"
+    ]
+  },
+  "article_sections_detected": [
+    "檢查 EPUB 的目錄連結與章節順序",
+    "問題",
+    "簡短回答",
+    "區分三個檢查對象",
+    "從原稿列出預期章節",
+    "用小型檢查表記錄觀察",
+    "建議步驟",
+    "先找出差異，再修改原稿",
+    "格式驗證與閱讀檢查配合使用",
+    "ONNELLAB 應用程式的適用範圍",
+    "延伸閱讀",
+    "參考資料",
+    "總結",
+    "常見問題",
+    "目錄有章節標題，就能證明連結正確嗎？",
+    "目錄中沒有某章，就代表正文也遺漏嗎？",
+    "為什麼連結正確，章節順序卻不對？",
+    "通過 EPUBCheck 就能發行嗎？",
+    "應直接修改匯出的 EPUB 嗎？",
+    "能在 Papira 內完成這些閱讀檢查嗎？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "檢查 EPUB 的目錄連結與章節順序",
+      "source_sections": [
+        "簡短回答",
+        "建議流程"
+      ],
+      "structure": [
+        "1. 問題",
+        "2. 檢查",
+        "3. 流程",
+        "4. 結果"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating EPUB 目錄檢查?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "EPUB 章節順序",
+        "EPUB 目錄連結錯誤",
+        "EPUB 章節遺漏"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Papira"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "檢查 EPUB 的目錄連結與章節順序",
+      "steps": [
+        "1. 問題",
+        "2. 檢查",
+        "3. 流程",
+        "4. 結果"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "EPUB 目錄檢查 · 比較",
+      "items": [
+        "EPUB 章節順序",
+        "EPUB 目錄連結錯誤",
+        "EPUB 章節遺漏"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "EPUB 輸出檢查",
+    "message": "修改原稿後，重新檢查新產生的 EPUB。",
+    "description": "列出預期章節，檢查全部目錄連結與連續閱讀順序，再產生 EPUB 並重新檢查。",
+    "steps": [
+      [
+        "1. 預期",
+        "列出章節清單"
+      ],
+      [
+        "2. 連結",
+        "核對全部目標"
+      ],
+      [
+        "3. 順序",
+        "連續跨章閱讀"
+      ],
+      [
+        "4. 再產生",
+        "匯出後重新檢查"
+      ]
+    ]
+  }
+}

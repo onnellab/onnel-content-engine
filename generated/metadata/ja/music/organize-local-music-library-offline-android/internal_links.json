@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "topic_id": "TOPIC-0046",
+  "recommendations": {
+    "related_articles": [
+      {
+        "title": "MP3メタデータの整理",
+        "url": "https://onnellab.com/blog/ja/clean-up-mp3-metadata-before-organizing-music/",
+        "language": "ja",
+        "status": "published"
+      },
+      {
+        "title": "ディスクをまたぐトラック番号の整理（英語）",
+        "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
+        "language": "en",
+        "status": "published"
+      }
+    ]
+  }
+}

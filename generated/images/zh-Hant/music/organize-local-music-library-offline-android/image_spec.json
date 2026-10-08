@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/music/organize-local-music-library-offline-android.md",
+  "topic": {
+    "id": "TOPIC-0048",
+    "title": "在 Android 整理音樂檔案，準備離線播放",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "zh-Hant",
+    "primary_keyword": "整理本機音樂",
+    "related_apps": [
+      "Melivra"
+    ]
+  },
+  "article_sections_detected": [
+    "在 Android 整理音樂檔案，準備離線播放",
+    "問題",
+    "簡短回答",
+    "本機檔案與離線播放的意思",
+    "先決定要整理什麼",
+    "建議步驟",
+    "找不到曲目或無法播放時",
+    "ONNELLAB 應用程式的適用範圍",
+    "相關主題",
+    "參考資料",
+    "結語",
+    "常見問題",
+    "在「下載」資料夾看到檔案，就代表能離線播放嗎？",
+    "可以使用串流訂閱下載的音樂嗎？",
+    "修改資料夾名稱能修正專輯標題嗎？",
+    "匯出的播放清單可以當作音樂備份嗎？",
+    "加入音樂庫後，可以刪除來源檔案嗎？",
+    "開始使用前，必須檢查整個收藏嗎？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "在 Android 整理音樂檔案，準備離線播放",
+      "source_sections": [
+        "簡短回答",
+        "建議流程"
+      ],
+      "structure": [
+        "1. 問題",
+        "2. 檢查",
+        "3. 流程",
+        "4. 結果"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating 整理本機音樂?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "Android 離線音樂播放器",
+        "本機音訊檔案",
+        "音樂資料夾與播放清單"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Melivra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "在 Android 整理音樂檔案，準備離線播放",
+      "steps": [
+        "1. 問題",
+        "2. 檢查",
+        "3. 流程",
+        "4. 結果"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "整理本機音樂 · 比較",
+      "items": [
+        "Android 離線音樂播放器",
+        "本機音訊檔案",
+        "音樂資料夾與播放清單"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "離線音樂檢查",
+    "message": "保留原件，分小批加入並重新檢查。",
+    "description": "保存原件，加入少量本機檔案，檢查離線播放，再逐步擴充並重新檢查。",
+    "steps": [
+      [
+        "1. 保存",
+        "另外備份原件"
+      ],
+      [
+        "2. 加入",
+        "少量本機檔案"
+      ],
+      [
+        "3. 檢查",
+        "離線播放"
+      ],
+      [
+        "4. 擴充",
+        "分批加入並複查"
+      ]
+    ]
+  }
+}

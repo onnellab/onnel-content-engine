@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Organiser sa musique sur Android pour une écoute hors ligne</title>
+  <desc id="desc">Organisez une petite collection de fichiers locaux et vérifiez leur lecture sans connexion avant d’en avoir besoin loin d’un réseau.</desc>
+  <rect width="1200" height="630" fill="#f8f4ec"/>
+  <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
+  <rect x="92" y="92" width="210" height="44" rx="22" fill="#f3e9fb" stroke="#d8c3ec" stroke-width="1.4"/>
+  <text x="118" y="121" fill="#4e3568" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700">Musique</text>
+  <text x="92" y="218" fill="#282723" font-family="Inter, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">Organiser sa musique sur</tspan><tspan x="92" y="282">Android pour une écoute</tspan><tspan x="92" y="346">hors ligne</tspan></text>
+  <text fill="#5f5b54" font-family="Inter, system-ui, sans-serif" font-size="24"><tspan x="92" y="410">Organisez une petite collection de fichiers locaux et</tspan><tspan x="92" y="444">vérifiez leur lecture sans connexion avant d’en avoir</tspan><tspan x="92" y="478">besoin loin d’un réseau.</tspan></text>
+  <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
+  <text x="92" y="552" fill="#817c73" font-family="Inter, system-ui, sans-serif" font-size="19">Musique · FR</text>
+  <text x="1048" y="552" fill="#30302c" font-family="Inter, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
+</svg>

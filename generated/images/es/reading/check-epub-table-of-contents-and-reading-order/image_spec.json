@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/reading/check-epub-table-of-contents-and-reading-order.md",
+  "topic": {
+    "id": "TOPIC-0061",
+    "title": "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
+    "slug": "check-epub-table-of-contents-and-reading-order",
+    "category": "reading",
+    "language": "es",
+    "primary_keyword": "comprobar el índice de un EPUB",
+    "related_apps": [
+      "Papira"
+    ]
+  },
+  "article_sections_detected": [
+    "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
+    "Pregunta",
+    "Respuesta breve",
+    "Distingue tres elementos",
+    "Prepara la lista de capítulos previstos",
+    "Lleva una ficha de comprobación",
+    "Procedimiento recomendado",
+    "Diagnostica antes de cambiar el original",
+    "Combina validación y lectura",
+    "Dónde encaja ONNELLAB",
+    "Guía relacionada",
+    "Referencias",
+    "Conclusión",
+    "Preguntas frecuentes",
+    "¿Un título visible demuestra que su enlace es correcto?",
+    "¿Un capítulo fuera del índice también falta en el libro?",
+    "¿Por qué funcionan los enlaces si el orden es incorrecto?",
+    "¿Superar EPUBCheck basta para distribuir el libro?",
+    "¿Debo corregir directamente el EPUB exportado?",
+    "¿Puedo realizar estas pruebas de lectura dentro de Papira?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
+      "source_sections": [
+        "Respuesta breve",
+        "Flujo de trabajo recomendado"
+      ],
+      "structure": [
+        "1. Problema",
+        "2. Revisión",
+        "3. Proceso",
+        "4. Resultado"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating comprobar el índice de un EPUB?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "orden de capítulos EPUB",
+        "enlaces del índice EPUB",
+        "capítulos ausentes EPUB"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Papira"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
+      "steps": [
+        "1. Problema",
+        "2. Revisión",
+        "3. Proceso",
+        "4. Resultado"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "comprobar el índice de un EPUB · Comparación",
+      "items": [
+        "orden de capítulos EPUB",
+        "enlaces del índice EPUB",
+        "capítulos ausentes EPUB"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Comprobar el EPUB",
+    "message": "Tras cambiar el original, revisa el nuevo EPUB.",
+    "description": "Enumera los capítulos esperados, revisa cada enlace y el orden de lectura continua, regenera el EPUB y vuelve a comprobarlo.",
+    "steps": [
+      [
+        "1. Lista",
+        "Capítulos previstos"
+      ],
+      [
+        "2. Enlaces",
+        "Revisar cada destino"
+      ],
+      [
+        "3. Orden",
+        "Lectura continua"
+      ],
+      [
+        "4. Regenera",
+        "Exporta y comprueba"
+      ]
+    ]
+  }
+}

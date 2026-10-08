@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/music/organize-local-music-library-offline-android.md",
+  "topic": {
+    "id": "TOPIC-0044",
+    "title": "Organize a Local Music Library for Offline Listening on Android",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "en",
+    "primary_keyword": "organize a local music library",
+    "related_apps": [
+      "Melivra"
+    ]
+  },
+  "article_sections_detected": [
+    "Organize a Local Music Library for Offline Listening on Android",
+    "Question",
+    "Short Answer",
+    "What Local and Offline Mean",
+    "Choose What You Want to Organize",
+    "Recommended Workflow",
+    "If a Track Is Missing or Will Not Play",
+    "Where ONNELLAB Fits",
+    "Related Topics",
+    "References",
+    "Conclusion",
+    "FAQ",
+    "Does seeing a file in Downloads prove it will play offline?",
+    "Can I use downloads from a streaming subscription?",
+    "Does changing a folder name fix the album title?",
+    "Is an exported playlist a backup of my music?",
+    "Can I delete the source files after adding them to a library?",
+    "Must I test the entire collection before using it?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "What is the recommended workflow for organize a local music library?",
+      "source_sections": [
+        "Short Answer",
+        "Recommended Workflow"
+      ],
+      "structure": [
+        "Problem",
+        "Process",
+        "Result"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating organize a local music library?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "offline music player Android",
+        "local audio files",
+        "music folders and playlists"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Melivra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Organize a Local Music Library for Offline Listening on Android",
+      "steps": [
+        "Problem",
+        "Explanation",
+        "Options",
+        "Recommended workflow",
+        "Optional application"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "organize a local music library Comparison",
+      "items": [
+        "offline music player Android",
+        "local audio files",
+        "music folders and playlists"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Offline music workflow",
+    "message": "Keep originals and recheck each small batch.",
+    "description": "Preserve originals, add a small local sample, test offline playback, then expand gradually and recheck.",
+    "steps": [
+      [
+        "1. Keep",
+        "Separate backup"
+      ],
+      [
+        "2. Add",
+        "Small local sample"
+      ],
+      [
+        "3. Test",
+        "Offline playback"
+      ],
+      [
+        "4. Grow",
+        "Add slowly; recheck"
+      ]
+    ]
+  }
+}

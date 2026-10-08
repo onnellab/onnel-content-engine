@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/music/organize-local-music-library-offline-android.md",
+  "topic": {
+    "id": "TOPIC-0052",
+    "title": "Cómo organizar música en Android para escucharla sin conexión",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "es",
+    "primary_keyword": "organizar música en Android",
+    "related_apps": [
+      "Melivra"
+    ]
+  },
+  "article_sections_detected": [
+    "Cómo organizar música en Android para escucharla sin conexión",
+    "Pregunta",
+    "Respuesta breve",
+    "Qué significan local y sin conexión",
+    "Decide qué quieres organizar",
+    "Procedimiento recomendado",
+    "Si una pista no aparece o no se reproduce",
+    "Dónde encaja ONNELLAB",
+    "Temas relacionados",
+    "Referencias",
+    "Conclusión",
+    "Preguntas frecuentes",
+    "¿Ver un archivo en Descargas demuestra que se reproducirá sin conexión?",
+    "¿Puedo usar las descargas de una suscripción de streaming?",
+    "¿Cambiar el nombre de una carpeta corrige el título del álbum?",
+    "¿Una lista exportada es una copia de seguridad de mi música?",
+    "¿Puedo borrar los archivos de origen después de añadirlos a la biblioteca?",
+    "¿Tengo que probar toda la colección antes de usarla?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Cómo organizar música en Android para escucharla sin conexión",
+      "source_sections": [
+        "Respuesta breve",
+        "Flujo de trabajo recomendado"
+      ],
+      "structure": [
+        "1. Problema",
+        "2. Revisión",
+        "3. Proceso",
+        "4. Resultado"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating organizar música en Android?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "reproductor de música sin conexión",
+        "archivos de audio locales",
+        "carpetas y listas de reproducción"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Melivra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Cómo organizar música en Android para escucharla sin conexión",
+      "steps": [
+        "1. Problema",
+        "2. Revisión",
+        "3. Proceso",
+        "4. Resultado"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "organizar música en Android · Comparación",
+      "items": [
+        "reproductor de música sin conexión",
+        "archivos de audio locales",
+        "carpetas y listas de reproducción"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Música sin conexión",
+    "message": "Conserva los originales y comprueba cada pequeño lote.",
+    "description": "Conserva los originales, añade una pequeña muestra local, comprueba la reproducción sin conexión y amplía la colección por lotes verificados.",
+    "steps": [
+      [
+        "1. Guardar",
+        "Copia separada"
+      ],
+      [
+        "2. Añadir",
+        "Muestra local"
+      ],
+      [
+        "3. Probar",
+        "Sin conexión"
+      ],
+      [
+        "4. Ampliar",
+        "Por lotes revisados"
+      ]
+    ]
+  }
+}

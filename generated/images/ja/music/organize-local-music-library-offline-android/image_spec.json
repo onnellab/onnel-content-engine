@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/music/organize-local-music-library-offline-android.md",
+  "topic": {
+    "id": "TOPIC-0046",
+    "title": "Androidの音楽ファイルをオフライン再生用に整理する方法",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "ja",
+    "primary_keyword": "Androidの音楽ファイルを整理",
+    "related_apps": [
+      "Melivra"
+    ]
+  },
+  "article_sections_detected": [
+    "Androidの音楽ファイルをオフライン再生用に整理する方法",
+    "質問",
+    "短い答え",
+    "ローカルファイルとオフライン再生の意味",
+    "何を整理したいのかを決める",
+    "おすすめの手順",
+    "曲が見つからないときや再生できないとき",
+    "ONNELLABのアプリを使う場合",
+    "関連記事",
+    "参考資料",
+    "まとめ",
+    "よくある質問",
+    "ダウンロードフォルダーに見えればオフラインで再生できますか？",
+    "配信サービスでダウンロードした曲は使えますか？",
+    "フォルダー名でアルバム名も直りますか？",
+    "プレイリストの書き出しは音楽のバックアップですか？",
+    "追加後に元のファイルを削除できますか？",
+    "使う前に全曲の確認が必要ですか？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Androidの音楽ファイルをオフライン再生用に整理する方法",
+      "source_sections": [
+        "短い回答",
+        "推奨ワークフロー"
+      ],
+      "structure": [
+        "1. 問題",
+        "2. 確認",
+        "3. 手順",
+        "4. 結果"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating Androidの音楽ファイルを整理?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "オフライン音楽プレーヤー",
+        "ローカル音声ファイル",
+        "音楽フォルダーとプレイリスト"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Melivra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Androidの音楽ファイルをオフライン再生用に整理する方法",
+      "steps": [
+        "1. 問題",
+        "2. 確認",
+        "3. 手順",
+        "4. 結果"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "Androidの音楽ファイルを整理 · 比較",
+      "items": [
+        "オフライン音楽プレーヤー",
+        "ローカル音声ファイル",
+        "音楽フォルダーとプレイリスト"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "オフライン音楽の確認",
+    "message": "原本を残し、少数ずつ追加して再確認しましょう。",
+    "description": "原本を保管し、少数のローカルファイルを追加してオフライン再生を確認し、段階的に増やして再確認します。",
+    "steps": [
+      [
+        "1. 保管",
+        "原本を別に保存"
+      ],
+      [
+        "2. 追加",
+        "少数のローカル曲"
+      ],
+      [
+        "3. 確認",
+        "オフライン再生"
+      ],
+      [
+        "4. 拡大",
+        "少しずつ再確認"
+      ]
+    ]
+  }
+}

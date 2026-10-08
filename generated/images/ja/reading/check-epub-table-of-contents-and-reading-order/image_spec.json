@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/reading/check-epub-table-of-contents-and-reading-order.md",
+  "topic": {
+    "id": "TOPIC-0055",
+    "title": "EPUBの目次リンクと章の順序を確認する方法",
+    "slug": "check-epub-table-of-contents-and-reading-order",
+    "category": "reading",
+    "language": "ja",
+    "primary_keyword": "EPUBの目次確認",
+    "related_apps": [
+      "Papira"
+    ]
+  },
+  "article_sections_detected": [
+    "EPUBの目次リンクと章の順序を確認する方法",
+    "質問",
+    "短い回答",
+    "確認する三つの対象",
+    "原稿から章一覧を作る",
+    "小さな確認表",
+    "おすすめの手順",
+    "不一致を切り分けて直す",
+    "形式検証と読書確認",
+    "ONNELLABのアプリを使う場合",
+    "関連ガイド",
+    "参考資料",
+    "まとめ",
+    "よくある質問",
+    "目次に章名があればリンクも正しい？",
+    "目次にない章は本文にもない？",
+    "リンクは正しいのに章順が違うのは？",
+    "EPUBCheckに合格すれば配布できる？",
+    "出力済みEPUBを直接直すべき？",
+    "Papira内で読書確認できる？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "EPUBの目次リンクと章の順序を確認する方法",
+      "source_sections": [
+        "短い回答",
+        "推奨ワークフロー"
+      ],
+      "structure": [
+        "1. 問題",
+        "2. 確認",
+        "3. 手順",
+        "4. 結果"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating EPUBの目次確認?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "EPUB 章の順序",
+        "EPUB 目次リンク",
+        "EPUB 章の抜け"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Papira"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "EPUBの目次リンクと章の順序を確認する方法",
+      "steps": [
+        "1. 問題",
+        "2. 確認",
+        "3. 手順",
+        "4. 結果"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "EPUBの目次確認 · 比較",
+      "items": [
+        "EPUB 章の順序",
+        "EPUB 目次リンク",
+        "EPUB 章の抜け"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "EPUB出力の確認",
+    "message": "原稿を変更したら、新しいEPUBを再確認しましょう。",
+    "description": "予定の章一覧を作り、すべての目次リンクと読み進める順序を確認し、再生成したEPUBを再確認します。",
+    "steps": [
+      [
+        "1. 基準",
+        "予定の章一覧"
+      ],
+      [
+        "2. リンク",
+        "全リンク先を確認"
+      ],
+      [
+        "3. 順序",
+        "章をまたいで読む"
+      ],
+      [
+        "4. 再生成",
+        "出力後に再確認"
+      ]
+    ]
+  }
+}

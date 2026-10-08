@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">EPUBの目次リンクと章の順序を確認する方法</title>
+  <desc id="desc">書き出したEPUBを原稿の章一覧と照合し、目次リンクと読書順を別々に点検。不一致を記録し、原稿や設定の修正後に再確認します。</desc>
+  <rect width="1200" height="630" fill="#f8f4ec"/>
+  <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
+  <rect x="92" y="92" width="210" height="44" rx="22" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.4"/>
+  <text x="118" y="121" fill="#24465c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="18" font-weight="700">読書</text>
+  <text x="92" y="218" fill="#282723" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">EPUBの目次リンクと章の順序を確認</tspan><tspan x="92" y="282">する方法</tspan></text>
+  <text fill="#5f5b54" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="24"><tspan x="92" y="410">書き出したEPUBを原稿の章一覧と照合し、目次リンクと読書順を別々に点検。不一</tspan><tspan x="92" y="444">致を記録し、原稿や設定の修正後に再確認します。</tspan></text>
+  <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
+  <text x="92" y="552" fill="#817c73" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="19">読書 · JA</text>
+  <text x="1048" y="552" fill="#30302c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
+</svg>

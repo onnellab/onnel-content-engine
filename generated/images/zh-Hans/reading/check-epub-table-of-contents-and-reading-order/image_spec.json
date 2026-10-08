@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hans/reading/check-epub-table-of-contents-and-reading-order.md",
+  "topic": {
+    "id": "TOPIC-0056",
+    "title": "检查 EPUB 的目录链接和章节顺序",
+    "slug": "check-epub-table-of-contents-and-reading-order",
+    "category": "reading",
+    "language": "zh-Hans",
+    "primary_keyword": "EPUB 目录检查",
+    "related_apps": [
+      "Papira"
+    ]
+  },
+  "article_sections_detected": [
+    "检查 EPUB 的目录链接和章节顺序",
+    "问题",
+    "简短回答",
+    "区分三个检查对象",
+    "从原稿列出预期章节",
+    "用小型检查表记录观察",
+    "推荐步骤",
+    "先定位差异，再修改原稿",
+    "格式验证与阅读检查配合使用",
+    "ONNELLAB 应用的适用范围",
+    "相关阅读",
+    "参考资料",
+    "总结",
+    "常见问题",
+    "目录有章节标题，就能证明链接正确吗？",
+    "目录中没有某章，就代表正文也缺失吗？",
+    "为什么链接正确，章节顺序却不对？",
+    "通过 EPUBCheck 就能发行吗？",
+    "应直接修改导出的 EPUB 吗？",
+    "能在 Papira 内完成这些阅读检查吗？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "检查 EPUB 的目录链接和章节顺序",
+      "source_sections": [
+        "简短回答",
+        "推荐流程"
+      ],
+      "structure": [
+        "1. 问题",
+        "2. 检查",
+        "3. 流程",
+        "4. 结果"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating EPUB 目录检查?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "EPUB 章节顺序",
+        "EPUB 目录链接错误",
+        "EPUB 章节缺失"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Papira"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "检查 EPUB 的目录链接和章节顺序",
+      "steps": [
+        "1. 问题",
+        "2. 检查",
+        "3. 流程",
+        "4. 结果"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "EPUB 目录检查 · 比较",
+      "items": [
+        "EPUB 章节顺序",
+        "EPUB 目录链接错误",
+        "EPUB 章节缺失"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "EPUB 输出检查",
+    "message": "修改原稿后，重新检查新生成的 EPUB。",
+    "description": "列出预期章节，检查全部目录链接和连续阅读顺序，再生成 EPUB 并重新检查。",
+    "steps": [
+      [
+        "1. 预期",
+        "列出章节清单"
+      ],
+      [
+        "2. 链接",
+        "核对全部目标"
+      ],
+      [
+        "3. 顺序",
+        "连续跨章阅读"
+      ],
+      [
+        "4. 再生成",
+        "导出后重新检查"
+      ]
+    ]
+  }
+}

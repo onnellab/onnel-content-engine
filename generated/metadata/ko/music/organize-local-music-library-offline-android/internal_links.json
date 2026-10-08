@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "topic_id": "TOPIC-0045",
+  "recommendations": {
+    "related_articles": [
+      {
+        "title": "음악 정리 전 MP3 메타데이터 정리 방법",
+        "url": "https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/",
+        "language": "ko",
+        "status": "published"
+      },
+      {
+        "title": "멀티 디스크 앨범의 트랙 번호 정리 방법",
+        "url": "https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/",
+        "language": "ko",
+        "status": "published"
+      }
+    ]
+  }
+}

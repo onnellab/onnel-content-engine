@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/pt-BR/music/organize-local-music-library-offline-android.md",
+  "topic": {
+    "id": "TOPIC-0049",
+    "title": "Como organizar músicas no Android para ouvir offline",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "pt-BR",
+    "primary_keyword": "organizar músicas no Android",
+    "related_apps": [
+      "Melivra"
+    ]
+  },
+  "article_sections_detected": [
+    "Como organizar músicas no Android para ouvir offline",
+    "Pergunta",
+    "Resposta curta",
+    "O que significam local e offline",
+    "Escolha o que você quer organizar",
+    "Passo a passo recomendado",
+    "Se uma faixa não aparecer ou não tocar",
+    "Onde entra a ONNELLAB",
+    "Assuntos relacionados",
+    "Referências",
+    "Conclusão",
+    "Perguntas frequentes",
+    "Ver um arquivo em Downloads comprova que ele toca offline?",
+    "Posso usar downloads de uma assinatura de streaming?",
+    "Mudar o nome da pasta corrige o título do álbum?",
+    "Uma playlist exportada é um backup das minhas músicas?",
+    "Posso apagar os arquivos de origem depois de adicioná-los à biblioteca?",
+    "Preciso testar toda a coleção antes de usá-la?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Como organizar músicas no Android para ouvir offline",
+      "source_sections": [
+        "Resposta curta",
+        "Fluxo de trabalho recomendado"
+      ],
+      "structure": [
+        "1. Problema",
+        "2. Verificação",
+        "3. Processo",
+        "4. Resultado"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating organizar músicas no Android?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "player de música offline",
+        "arquivos de áudio locais",
+        "pastas e playlists"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Melivra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Como organizar músicas no Android para ouvir offline",
+      "steps": [
+        "1. Problema",
+        "2. Verificação",
+        "3. Processo",
+        "4. Resultado"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "organizar músicas no Android · Comparação",
+      "items": [
+        "player de música offline",
+        "arquivos de áudio locais",
+        "pastas e playlists"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Música offline",
+    "message": "Preserve os originais e confira cada pequeno lote.",
+    "description": "Preserve os originais, adicione uma pequena amostra local, teste a reprodução offline e amplie aos poucos, conferindo cada lote.",
+    "steps": [
+      [
+        "1. Guarde",
+        "Backup separado"
+      ],
+      [
+        "2. Adicione",
+        "Amostra local"
+      ],
+      [
+        "3. Teste",
+        "Reprodução offline"
+      ],
+      [
+        "4. Amplie",
+        "Aos poucos; confira"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/fr/reading/check-epub-table-of-contents-and-reading-order.md",
+  "topic": {
+    "id": "TOPIC-0060",
+    "title": "Vérifier la table des matières et l’ordre des chapitres d’un EPUB",
+    "slug": "check-epub-table-of-contents-and-reading-order",
+    "category": "reading",
+    "language": "fr",
+    "primary_keyword": "vérifier la table des matières d’un EPUB",
+    "related_apps": [
+      "Papira"
+    ]
+  },
+  "article_sections_detected": [
+    "Vérifier la table des matières et l’ordre des chapitres d’un EPUB",
+    "Question",
+    "Réponse courte",
+    "Distinguer trois éléments",
+    "Préparer la liste attendue",
+    "Tenir une fiche de contrôle",
+    "Méthode recommandée",
+    "Diagnostiquer avant de corriger",
+    "Associer validation et lecture",
+    "La place d’ONNELLAB",
+    "Guide associé",
+    "Références",
+    "Conclusion",
+    "Questions fréquentes",
+    "Un titre visible prouve-t-il que son lien est correct ?",
+    "Un chapitre absent du menu manque-t-il aussi dans le livre ?",
+    "Pourquoi les liens fonctionnent-ils malgré un ordre incorrect ?",
+    "Réussir EPUBCheck suffit-il pour diffuser le livre ?",
+    "Faut-il corriger directement l’EPUB exporté ?",
+    "Peut-on faire ces contrôles de lecture dans Papira ?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Vérifier la table des matières et l’ordre des chapitres d’un EPUB",
+      "source_sections": [
+        "Réponse courte",
+        "Méthode recommandée"
+      ],
+      "structure": [
+        "1. Problème",
+        "2. Vérification",
+        "3. Méthode",
+        "4. Résultat"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating vérifier la table des matières d’un EPUB?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "ordre des chapitres EPUB",
+        "liens de navigation EPUB",
+        "chapitres manquants EPUB"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": true,
+    "reason": "Related ONNELLAB applications are referenced, so screenshots may be useful only if they demonstrate a real feature.",
+    "applications": [
+      "Papira"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Vérifier la table des matières et l’ordre des chapitres d’un EPUB",
+      "steps": [
+        "1. Problème",
+        "2. Vérification",
+        "3. Méthode",
+        "4. Résultat"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "vérifier la table des matières d’un EPUB · Comparaison",
+      "items": [
+        "ordre des chapitres EPUB",
+        "liens de navigation EPUB",
+        "chapitres manquants EPUB"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Vérifier l’EPUB",
+    "message": "Après une modification, revérifiez le nouvel EPUB.",
+    "description": "Listez les chapitres attendus, vérifiez tous les liens et la lecture continue, puis générez un nouvel EPUB et vérifiez-le.",
+    "steps": [
+      [
+        "1. Lister",
+        "Chapitres attendus"
+      ],
+      [
+        "2. Liens",
+        "Vérifier chaque cible"
+      ],
+      [
+        "3. Ordre",
+        "Lecture continue"
+      ],
+      [
+        "4. Refaire",
+        "Exporter et vérifier"
+      ]
+    ]
+  }
+}
