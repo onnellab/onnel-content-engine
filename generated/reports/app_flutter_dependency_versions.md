@@ -63,7 +63,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | quivra | 1.0.9+84 | 1.0.9 | - | ok | github:onnellab/quivra/pubspec.yaml |
+| app_version | quivra | 1.0.10+85 | 1.0.10 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | ffmpeg_kit_flutter_new_full | ^2.0.0 | 2.0.0 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/quivra/pubspec.yaml |
@@ -99,7 +99,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | tagweaver | 2.5.2+96 | 2.5.2 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
+| app_version | tagweaver | 2.5.3+97 | 2.5.3 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | file_picker | ^8.0.0 | 8.3.7 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
