@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_upload_receipt",
+  "guide_id": "quivra-file-list-20261009",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "status": "upload_intent",
+  "video_id": null,
+  "target_publish_at": "2026-10-09T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "manifest_sha256": "c7fbd880840dba471fff6a009b97a7958f8def68345fa80ef6c356984b51029d",
+  "video_sha256": "98e3a76f615310fb31ba0b34f234d668043615a54264fc704b275a0d9e9d8044",
+  "publisher": "dot-cloud-browser",
+  "intent_at": "2026-10-08T06:36:30Z",
+  "recovery_rule": "Reconcile this intent in Studio before any new upload; never blindly upload again.",
+  "legacy_chatgpt_schedule_id": "6ab0e555efc88191a4f8f1b1767fe767",
+  "legacy_chatgpt_schedule_observed": "paused",
+  "local_independent_services": "not_inspected",
+  "observed_prior_shorts_count": 6,
+  "observed_matching_existing_title": false
+}

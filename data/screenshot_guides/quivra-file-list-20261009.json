@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "quivra-file-list-20261009",
+  "app_id": "APP-0001",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/quivra",
+    "commit": "d3b7ad5e5dcd0412daae55caee657431c6237f5b",
+    "source_version": "1.0.10+85",
+    "public_version_observed": "1.0.10",
+    "capture_type": "real_app_ui_with_demonstration_files",
+    "runtime_conversion_verified": false,
+    "asset_last_change_commit": "4ef570e14cf7bfceba2e179b03401bfb1c0093c0",
+    "capture_version_note": "Source revision version is not asserted to be the exact screenshot-capture build. Only visible Library/file-list controls are described; no unreleased feature or conversion success is claimed.",
+    "source_test": "integration_test/store_screenshot_test.dart",
+    "reviewed_at": "2026-10-08T06:30:00Z",
+    "public_version_source": "https://apps.apple.com/us/app/quivra-mp3-media-converter/id6759565093",
+    "public_version_checked_at": "2026-10-08T06:33:50Z"
+  },
+  "assets": [
+    {
+      "local_name": "01.png",
+      "source_path": "assets/store_promo/raw/en/01.png",
+      "sha256": "73b9d33f4f5b02ad42cb20a8b0ea2df6f4c89e0e798f7c125791a34171642e4b"
+    },
+    {
+      "local_name": "02.png",
+      "source_path": "assets/store_promo/raw/en/02.png",
+      "sha256": "7555f68068c274842b2a079fb80c79cedf42d1bba956ca1bf1f96b78fb363699"
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Choose files for conversion",
+      "caption": "Start at the Library screen.",
+      "asset": "01.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Review your file list",
+      "caption": "Check the names before you continue.",
+      "asset": "02.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Find the Convert button",
+      "caption": "Quivra · local media converter",
+      "asset": "02.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "How to Choose Files in Quivra | Media Converter Screenshot Guide",
+    "description": "To prepare files in Quivra, choose your media files from the Library screen, then review their names before using Convert. This short guide shows where to begin and what to check in the file list.\n\nStatic screenshots with demonstration filenames; no live conversion, completed output, or speed demonstration is shown.\n\nQuivra is a local media conversion utility. Explore the app:\nApp Store: https://apps.apple.com/app/id6759565093\nGoogle Play: https://play.google.com/store/apps/details?id=com.onnellab.quivra2\n\n#Quivra #MediaConverter #Shorts",
+    "format_disclosure": "Still screenshots · no conversion shown",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "target_publish_at": "2026-10-09T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned app UI and repository-owned demonstration data",
+    "scope": "English screenshot-based app guide on ONNELLAB YouTube; no simulated interaction; existing recording gate unchanged"
+  }
+}
