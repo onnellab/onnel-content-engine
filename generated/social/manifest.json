@@ -2068,20 +2068,49 @@
       "cta_text": "Read the full article:",
       "card_asset_path": "generated/assets/blog/en/keep-durable-research-reading-log/social-card.png",
       "weighted_length": 164,
-      "status": "failed",
+      "status": "posted",
       "approved_by": "github-actions",
       "approved_at": "2026-08-26T10:17:08+09:00",
-      "post_id": "",
-      "posted_url": "",
+      "post_id": "2108080782656876864",
+      "posted_url": "https://x.com/onnellab/status/2108080782656876864",
       "posted_at": "",
       "last_attempt_at": "2026-09-19T12:25:33+09:00",
-      "error": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
-      "error_type": "transient",
-      "retry_count": 1,
+      "error": "",
+      "error_type": "",
+      "retry_count": 0,
       "impressions": 0,
       "clicks": 0,
       "engagements": 0,
-      "last_metrics_at": ""
+      "last_metrics_at": "",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-08T06:25:40Z",
+      "observed_at_precision": "second",
+      "observation_source": "dot cloud browser UI: checked repository manual state, remote browser receipts, and account timeline before posting the unchanged queued source. Verified account, published body, destination article card and actual post permalink. Observation timestamps are tool-result observation times, not platform server publication times.",
+      "account": "@onnellab",
+      "draft_sha256": "af0b21e2a319dbfc6cfe88951d8ae89cef4337d6aee2f819744e2e416add4590",
+      "posted_body_sha256": "b59b13d951d4056dd1c8684b880e16fca39f5f673551515afc443e6e020e9109",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform URL shortening",
+      "submitted_source_characters": 204,
+      "observations": [
+        {
+          "event": "publish_click_call_started",
+          "observed_at": "2026-10-08T06:23:00Z",
+          "precision": "second"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-08T06:25:40Z",
+          "precision": "second"
+        }
+      ],
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "browser_ui_timestamp": "11:23 PM · Oct 7, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "profile_post_count_before": 13,
+      "profile_post_count_after": 14
     },
     {
       "topic_id": "TOPIC-0016",
@@ -2204,11 +2233,11 @@
       "cta_text": "Read the full article:",
       "card_asset_path": "generated/assets/blog/en/keep-durable-research-reading-log/social-card.png",
       "weighted_length": 892,
-      "status": "draft",
+      "status": "posted",
       "approved_by": "",
       "approved_at": "",
-      "post_id": "",
-      "posted_url": "",
+      "post_id": "urn:li:activity:7513847492547919872",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7513847492547919872/",
       "posted_at": "",
       "last_attempt_at": "",
       "error": "",
@@ -2217,7 +2246,32 @@
       "impressions": 0,
       "clicks": 0,
       "engagements": 0,
-      "last_metrics_at": ""
+      "last_metrics_at": "",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-08T06:27:44Z",
+      "observed_at_precision": "second",
+      "observation_source": "dot cloud browser UI: checked repository manual state, remote browser receipts, and account timeline before posting the unchanged queued source. Verified account, published body, destination article card and actual post permalink. Observation timestamps are tool-result observation times, not platform server publication times.",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_sha256": "ebcbab435983931e9d3b772e4196e4e98c9ddf483a971014bde5d5c9d8b754b8",
+      "posted_body_sha256": "5b222b284450401c186edaedb62115b32b755fc95ddcfb88f2a0b72bf58a6fec",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform URL shortening",
+      "submitted_source_characters": 892,
+      "observations": [
+        {
+          "event": "publish_click_call_started",
+          "observed_at": "2026-10-08T06:27:01Z",
+          "precision": "second"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-08T06:27:44Z",
+          "precision": "second"
+        }
+      ],
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink"
     },
     {
       "topic_id": "TOPIC-0016",
@@ -3235,11 +3289,11 @@
       "cta_text": "Read the full article:",
       "card_asset_path": "generated/assets/blog/en/prepare-txt-manuscript-for-epub/social-card.png",
       "weighted_length": 737,
-      "status": "draft",
+      "status": "posted",
       "approved_by": "",
       "approved_at": "",
-      "post_id": "",
-      "posted_url": "",
+      "post_id": "urn:li:activity:7513847187164897281",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7513847187164897281/",
       "posted_at": "",
       "last_attempt_at": "",
       "error": "",
@@ -3248,7 +3302,32 @@
       "impressions": 0,
       "clicks": 0,
       "engagements": 0,
-      "last_metrics_at": ""
+      "last_metrics_at": "",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-08T06:26:31Z",
+      "observed_at_precision": "second",
+      "observation_source": "dot cloud browser UI: checked repository manual state, remote browser receipts, and account timeline before posting the unchanged queued source. Verified account, published body, destination article card and actual post permalink. Observation timestamps are tool-result observation times, not platform server publication times.",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_sha256": "a7b8eea7000dcede86af7c732cace701aa72f58e22324c4fe31000d4d318175c",
+      "posted_body_sha256": "4c1b5558c2a00fb414954d44c201e450127eee3d9ee8eaafb50ba14b7ec12f47",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform URL shortening",
+      "submitted_source_characters": 737,
+      "observations": [
+        {
+          "event": "publish_click_call_started",
+          "observed_at": "2026-10-08T06:25:55Z",
+          "precision": "second"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-08T06:26:31Z",
+          "precision": "second"
+        }
+      ],
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink"
     },
     {
       "topic_id": "TOPIC-0033",
