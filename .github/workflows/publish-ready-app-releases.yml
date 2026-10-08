@@ -108,7 +108,7 @@ jobs:
           mkdir -p "$HOMEPAGE_REPO_PATH/public/ops"
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
           cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/ops/index.html"
-          for section in apps publishing media settings legacy; do
+          for section in apps publishing media monitoring settings legacy; do
             mkdir -p "$HOMEPAGE_REPO_PATH/public/ops/$section"
             cp -R "generated/manual-publish/$section/." "$HOMEPAGE_REPO_PATH/public/ops/$section/"
           done

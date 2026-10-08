@@ -107,6 +107,23 @@ class AiOpsMonitoringTest(unittest.TestCase):
         self.assertIn("2026.10.08 09:21 KST", page)
         self.assertIn('data-ko="분석한 리뷰" data-en="Reviews triaged"', page)
 
+    def test_ops_deploy_workflows_always_copy_monitoring_page(self):
+        workflow_dir = Path(__file__).resolve().parents[1] / ".github" / "workflows"
+        copying = 0
+        for path in workflow_dir.glob("*.yml"):
+            body = path.read_text(encoding="utf-8")
+            if "for section in apps publishing media " not in body:
+                continue
+            copying += 1
+            self.assertNotIn(
+                "for section in apps publishing media settings legacy; do", body, path.name
+            )
+            self.assertIn(
+                "for section in apps publishing media monitoring settings legacy; do",
+                body, path.name,
+            )
+        self.assertGreaterEqual(copying, 8)
+
 
 if __name__ == "__main__":
     unittest.main()
