@@ -119,11 +119,14 @@ def validate(manifest, asset_root):
             'runtime_recording_attestation': False, 'upload_authorized_by_cli': False}
 
 def render(manifest, asset_root, output):
-    from PIL import Image, ImageDraw, ImageFont
     evidence = validate(manifest, asset_root)
     output = Path(output)
     if output.exists():
         raise GuideError('output_exists_preserve_prior_artifact')
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        raise GuideError('pillow_render_dependency_missing') from None
     output.mkdir(parents=True)
     font_root = Path('/usr/share/fonts/truetype/dejavu')
     regular = lambda size: ImageFont.truetype(str(font_root / 'DejaVuSans.ttf'), size)

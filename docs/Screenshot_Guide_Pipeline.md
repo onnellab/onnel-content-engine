@@ -62,6 +62,32 @@ image, copy, or geometry requires a new reviewed manifest and validator coverage
 do not replay this video under new dates to fill the cadence. Format-level owner
 approval does not remove the factual/provenance checks for each new guide.
 
+## Portfolio selection, including newer apps
+
+Read the current `data/apps_registry.csv` every run; do not freeze the six-app
+list from the old recording strategy. As of 2026-10-08, all eight released,
+content-eligible products are candidates: Quivra, TagWeaver, VaultXT, Segra,
+ClipNest, Aligna, Melivra and Papira. New eligible registry rows enter the same
+candidate review rather than requiring a manually maintained legacy list.
+`data/screenshot_guides/catalog-review-20261008.json` records this review.
+
+Candidate inclusion is not publication readiness. Check live platform/store
+availability, current actual screenshot/version provenance, rights and visible
+feature support separately. A disabled runtime recording scenario does not
+exclude an independently verified screenshot guide. Conversely, a public store
+listing alone does not prove that a source screenshot depicts the released app.
+Melivra is currently public on Android; do not recommend its unconfirmed iOS
+release. Papira is public on both iOS and Android; the older iOS-only notes are
+superseded by the public Google Play check on 2026-10-08 and October 7 store data.
+
+Prefer a useful distinct question with verified assets, then balance verified
+recent channel exposure across apps. Melivra/Papira have no public app-guide
+Shorts in the inventory checked on 2026-10-08 and should be reviewed early, ahead
+of repeating the just-scheduled Quivra guide. Do not manufacture exact engagement
+scores, promote an unverified platform, or fill a slot with a near-duplicate.
+If no candidate passes, record the specific blocker without relabeling the whole
+catalog as ineligible. The parent-owned schedule coordinates one publisher only.
+
 ## Single-publisher browser scheduling
 
 The parent owns the one dot production schedule. The old ChatGPT automation

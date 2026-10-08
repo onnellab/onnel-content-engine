@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_candidate_review",
+  "reviewed_on": "2026-10-08",
+  "candidate_source": "data/apps_registry.csv: status=released and content_eligible=true; reread on every run",
+  "selection_order": [
+    "Verified current released platform and real screenshot provenance",
+    "Useful distinct search question supported by visible app features",
+    "Least recent verified app-guide exposure, including newer apps",
+    "ASO/SEO/AEO-aligned clear English answer and verified store destination"
+  ],
+  "recording_eligibility_is_independent": true,
+  "rows": [
+    {"app_id":"APP-0001","app_name":"Quivra","candidate":true,"public_platforms":["ios","android"],"screenshot_state":"first_guide_verified_and_scheduled","video_id":"sG-RwU-Z65s","next_action":"Do not repeat the first file-list guide; review another app."},
+    {"app_id":"APP-0002","app_name":"TagWeaver","candidate":true,"public_platforms":["ios","android"],"screenshot_state":"asset_review_required","claim_guard":"Explain iOS copy-save accurately; do not infer real writes from mocked recording harness."},
+    {"app_id":"APP-0003","app_name":"VaultXT","candidate":true,"public_platforms":["ios","android"],"screenshot_state":"asset_review_required","claim_guard":"No unverified performance claims."},
+    {"app_id":"APP-0004","app_name":"Segra","candidate":true,"public_platforms":["ios","android"],"screenshot_state":"asset_review_required","claim_guard":"Do not imply a full production editor or prove exported audio using static screenshots."},
+    {"app_id":"APP-0005","app_name":"ClipNest","candidate":true,"public_platforms":["ios"],"screenshot_state":"asset_review_required","claim_guard":"No continuous background clipboard-monitoring claim."},
+    {"app_id":"APP-0006","app_name":"Aligna","candidate":true,"public_platforms":["ios","android"],"screenshot_state":"asset_review_required","claim_guard":"Describe iOS output as a newly named copy when relevant."},
+    {"app_id":"APP-0007","app_name":"Melivra","candidate":true,"public_platforms":["android"],"screenshot_state":"priority_asset_review_required","public_app_guide_shorts_observed":0,"claim_guard":"Do not recommend iOS while in review; no streaming/cloud-library claim; any AI/server-processing feature needs precise disclosure."},
+    {"app_id":"APP-0008","app_name":"Papira","candidate":true,"public_platforms":["ios","android"],"screenshot_state":"priority_asset_review_required","public_app_guide_shorts_observed":0,"platform_evidence":["https://play.google.com/store/apps/details?id=com.onnellab.papira","data/store_versions.csv: 2026-10-07 Android 2.0.1 unchanged"],"claim_guard":"TXT-to-EPUB book creation, not manuscript editing or ebook reading; verify actual screenshot version."}
+  ],
+  "limitations": [
+    "This review is not a per-asset publication attestation.",
+    "Only the initial Quivra guide has completed screenshot pixel/hash and render verification.",
+    "All future store/platform and source asset observations must be refreshed before publication."
+  ]
+}
