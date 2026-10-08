@@ -18,7 +18,7 @@ from article_localization import localized_section_aliases
 from evaluate_article import evaluate_article
 import json
 import os
-from publication_transaction import publication_guard
+from publication_transaction import publication_guard, atomic_replace_files
 from generate_image_spec import build_spec
 from publishing import Article, social_card_svg
 from xml.etree import ElementTree
@@ -44,6 +44,27 @@ class NineLanguageContract(unittest.TestCase):
 
     def test_registry_matches_verified_homepage(self):
         self.assertEqual(set(PUBLICATION_LOCALES), {"en", "ko", "ja", "zh-Hans", "zh-Hant", "pt-BR", "de", "fr", "es"})
+
+    def test_transaction_supports_aliased_repository_root(self):
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            root = parent / "real"
+            root.mkdir()
+            alias = parent / "alias"
+            alias.symlink_to(root, target_is_directory=True)
+            destination = alias / "data/topics.csv"
+            with publication_guard(alias):
+                atomic_replace_files(alias, {destination: b"new\n"})
+            self.assertEqual((root / "data/topics.csv").read_bytes(), b"new\n")
+            with publication_guard(alias):
+                with self.assertRaisesRegex(ValueError, "duplicate canonical"):
+                    atomic_replace_files(alias, {destination: b"one", root / "data/topics.csv": b"two"})
+            linked_file = root / "data/linked.csv"
+            linked_file.symlink_to(root / "data/topics.csv")
+            with publication_guard(alias):
+                with self.assertRaisesRegex(ValueError, "stay within"):
+                    atomic_replace_files(alias, {linked_file: b"unsafe"})
+            self.assertEqual(destination.read_bytes(), b"new\n")
 
     def test_requires_all_nine_exactly_once(self):
         self.assertEqual(len(require_publication_bundle(self.rows())), 9)

@@ -106,6 +106,11 @@ def atomic_replace_files(root, updates):
         path = Path(path).absolute()
         if path.is_symlink() or not path.resolve().is_relative_to(root):
             raise ValueError("publication destination must stay within the repository")
+        # macOS exposes temporary roots through /var -> /private/var. Use the
+        # same canonical root for manifest paths and destination replacements.
+        path = path.resolve()
+        if path in normalized:
+            raise ValueError("duplicate canonical publication destination")
         normalized[path] = content
     journal = root / "data/.publication-transaction"
     journal.mkdir()
