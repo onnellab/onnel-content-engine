@@ -252,6 +252,7 @@ jobs:
         if: env.DRY_RUN != 'true'
         run: |
           set -euo pipefail
+          python3 scripts/check_nine_language_publication.py
           python3 scripts/schedule_ready_articles.py --threshold 9.0 --interval-days 3 --publication-time 09:00 --require-ready-when-due
 
       - name: Schedule Ready Articles Dry Run
@@ -270,6 +271,7 @@ jobs:
         if: env.DRY_RUN != 'true'
         run: |
           set -euo pipefail
+          python3 scripts/check_nine_language_publication.py
           python3 scripts/publish_due_articles.py --threshold 9.0 --site-url "$SITE_URL" --limit 1
 
       - name: Publish Due Articles Dry Run
@@ -473,3 +475,4 @@ jobs:
           set -euo pipefail
           echo "Core distribution posting failed; manifest status was committed when possible" >&2
           exit 1
+
