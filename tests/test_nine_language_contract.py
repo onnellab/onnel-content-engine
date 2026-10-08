@@ -185,6 +185,12 @@ class NineLanguageContract(unittest.TestCase):
             self.assertTrue(has_clear_definitions(body, language), language)
             self.assertFalse(has_clear_definitions("No definition here.", language), language)
 
+    def test_reviewed_chinese_definition_form_does_not_accept_incidental_indicates(self):
+        for language, body in [('zh-Hans', '来源的可追溯性，指位置改变后仍能识别资料。'), ('zh-Hant', '來源的可追溯性，指位置改變後仍能辨識資料。')]:
+            self.assertTrue(has_clear_definitions(body, language))
+            self.assertFalse(has_clear_definitions('如果无法解释这些证据，表示记录尚未准备好。', language))
+            self.assertFalse(has_clear_definitions('这个链接，指向出版社首页。', language))
+
     def test_localized_image_specs_do_not_invent_english_titles(self):
         for row in self.rows():
             if row["primary_language"] not in LOCALIZED_SECTIONS:

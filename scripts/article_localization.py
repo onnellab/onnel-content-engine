@@ -33,6 +33,18 @@ REVIEWED_SECTION_ALIASES = {
 }
 
 
+# Natural headings from independently reviewed research and local-audio drafts.
+EDITORIAL_SECTION_ALIASES = {
+    "ja": {"recommended_workflow": {"おすすめの手順"}, "onnellab_application": {"ONNELLABのアプリについて", "ONNELLABのアプリを使う場合"}},
+    "zh-Hans": {"recommended_workflow": {"推荐工作流程", "推荐步骤"}, "onnellab_application": {"ONNELLAB 应用说明", "ONNELLAB 应用的适用范围"}},
+    "zh-Hant": {"recommended_workflow": {"建議工作流程", "建議步驟"}, "onnellab_application": {"ONNELLAB 應用程式說明", "ONNELLAB 應用程式的適用範圍"}, "conclusion": {"總結"}},
+    "pt-BR": {"recommended_workflow": {"Passo a passo recomendado"}, "onnellab_application": {"Aplicação na ONNELLAB", "Onde entra a ONNELLAB"}},
+    "de": {"onnellab_application": {"Anwendung bei ONNELLAB", "Wo ONNELLAB dazu passt"}},
+    "fr": {"onnellab_application": {"Application chez ONNELLAB", "La place d’ONNELLAB"}},
+    "es": {"onnellab_application": {"Aplicación en ONNELLAB", "Dónde encaja ONNELLAB"}},
+}
+
+
 def localized_section_aliases(language):
     result = {key: {label.lower()} for key, label in zip(SECTION_KEYS, LOCALIZED_SECTIONS[language])}
     result["faq"].add("faq")
@@ -40,12 +52,14 @@ def localized_section_aliases(language):
         result[key].update(alias.lower() for alias in aliases)
     for key, aliases in REVIEWED_SECTION_ALIASES.get(language, {}).items():
         result[key].update(alias.lower() for alias in aliases)
+    for key, aliases in EDITORIAL_SECTION_ALIASES.get(language, {}).items():
+        result[key].update(alias.lower() for alias in aliases)
     return result
 
 DEFINITION_PATTERNS = {
     "ja": r"[^。\n]{2,60}(?:とは|は)[^。\n]{2,160}(?:です|意味します|指します)",
-    "zh-Hans": r"[^。\n]{2,60}(?:是指|指的是|意味着|是一种)[^。\n]{2,160}",
-    "zh-Hant": r"[^。\n]{2,60}(?:是指|指的是|意味著|是一種)[^。\n]{2,160}",
+    "zh-Hans": r"[^。\n]{2,60}(?:是指|指的是|意味着|是一种|，\s*指(?!向))[^。\n]{2,160}",
+    "zh-Hant": r"[^。\n]{2,60}(?:是指|指的是|意味著|是一種|，\s*指(?!向))[^。\n]{2,160}",
     "pt-BR": r"[^.\n]{2,60}\s+(?:é|são|significa|refere-se a)\s+\S+",
     "de": r"[^.\n]{2,60}\s+(?:ist|sind|bedeutet|bezeichnet)\s+\S+",
     "fr": r"[^.\n]{2,60}\s+(?:est|sont|signifie|désigne)\s+\S+",

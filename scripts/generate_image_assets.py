@@ -171,11 +171,11 @@ def encoding_workflow_svg(title: str, keyword: str, language: str) -> str:
 '''
 
 
-def workflow_svg(title: str, keyword: str, language: str) -> str:
+def workflow_svg(title: str, keyword: str, language: str, editorial: dict | None = None) -> str:
     font_stack = {"ja": "Noto Sans CJK JP, system-ui, sans-serif", "zh-Hans": "Noto Sans CJK SC, system-ui, sans-serif", "zh-Hant": "Noto Sans CJK TC, system-ui, sans-serif"}.get(language, SVG_FONT_STACK)
     keyword_lower = keyword.lower()
     title_lower = title.lower()
-    if any(term in keyword_lower or term in title_lower for term in ["encoding", "unreadable", "utf-8", "깨짐", "인코딩"]):
+    if editorial is None and any(term in keyword_lower or term in title_lower for term in ["encoding", "unreadable", "utf-8", "깨짐", "인코딩"]):
         if language in {"en", "ko"}:
             return encoding_workflow_svg(title, keyword, language)
     title_lines = wrap_words(title, 38)
@@ -183,8 +183,23 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
     title_y, title_line_height, subtitle_y, card_y = 112, 44, 184, 220
     raw_keyword = keyword
     subtitle, bottom_message, steps, footer, description_label = localized_steps(language)
+    editorial_description = None
+    if editorial is not None:
+        if not isinstance(editorial, dict) or set(editorial) != {"subtitle", "message", "description", "steps"}:
+            raise ImageAssetError("Editorial workflow must contain subtitle, message, description and steps")
+        if any(not isinstance(editorial[key], str) or not editorial[key].strip() for key in ("subtitle", "message", "description")):
+            raise ImageAssetError("Editorial workflow text must be non-empty")
+        steps = editorial["steps"]
+        if not isinstance(steps, list) or len(steps) != 4 or any(not isinstance(step, (list, tuple)) or len(step) != 2 or any(not isinstance(value, str) or not value.strip() for value in step) for step in steps):
+            raise ImageAssetError("Editorial workflow requires four heading/detail pairs")
+        if any(len(wrap_display_text(step[0], 142, 20)) > 2 for step in steps):
+            raise ImageAssetError("Editorial workflow card heading exceeds its layout")
+        subtitle, bottom_message, editorial_description = editorial["subtitle"], editorial["message"], editorial["description"]
+        if len(wrap_display_text(bottom_message, 952, 20)) != 1:
+            raise ImageAssetError("Editorial workflow message exceeds its layout")
+    adaptive_layout = language in WORKFLOW_LABELS or editorial is not None
     subtitle_lines = wrap_words(f"{subtitle} · {raw_keyword}", 80 if language == "en" else 42)
-    if language in WORKFLOW_LABELS:
+    if adaptive_layout:
         subtitle_lines = wrap_display_text(f"{subtitle} · {raw_keyword}", 1016, 19)
         if len(subtitle_lines) > 2:
             raise ImageAssetError("Localized image subtitle exceeds its two-line layout; edit the title/keyword")
@@ -205,13 +220,17 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
     card_gap = 84
     x = 72
     for heading, detail in steps:
-        detail_lines = wrap_display_text(detail, 142, 15) if language in WORKFLOW_LABELS else wrap_words(detail, 14)
-        if language in WORKFLOW_LABELS and len(detail_lines) > 3:
+        detail_lines = wrap_display_text(detail, 142, 15) if adaptive_layout else wrap_words(detail, 14)
+        if adaptive_layout and len(detail_lines) > 3:
             raise ImageAssetError("Localized card detail exceeds three lines")
+        heading_markup = html_escape(heading)
+        if editorial is not None:
+            heading_lines = wrap_display_text(heading, 142, 20)
+            heading_markup = svg_tspans(heading_lines, 24, 35 if len(heading_lines) == 2 else 48, 24)
         cards.append(
             f'<g transform="translate({x} {card_y})">'
             f'<rect width="{card_width}" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/>'
-            f'<text x="24" y="48" fill="#30302c" font-family="{font_stack}" font-size="20" font-weight="650">{html_escape(heading)}</text>'
+            f'<text x="24" y="48" fill="#30302c" font-family="{font_stack}" font-size="20" font-weight="650">{heading_markup}</text>'
             f'<text fill="#5f5b54" font-family="{font_stack}" font-size="15">{svg_tspans(detail_lines, 24, 84, 21)}</text>'
             "</g>"
         )
@@ -222,7 +241,7 @@ def workflow_svg(title: str, keyword: str, language: str) -> str:
     )
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
   <title id="title">{html_escape(" ".join(title_lines))}</title>
-  <desc id="desc">{html_escape(f'{raw_keyword}을 위한 ONNELLAB {description_label}입니다.' if language == 'ko' else f'ONNELLAB {description_label} for {raw_keyword}.')}</desc>
+  <desc id="desc">{html_escape(editorial_description or (f'{raw_keyword}을 위한 ONNELLAB {description_label}입니다.' if language == 'ko' else f'ONNELLAB {description_label} for {raw_keyword}.'))}</desc>
   <rect width="1200" height="675" fill="#fbf7ef"/>
   <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
   <text fill="#30302c" font-family="{font_stack}" font-size="{title_font}" font-weight="680">{svg_tspans(title_lines, 92, title_y, title_line_height)}</text>
@@ -307,7 +326,7 @@ def generate_image_asset(
     keyword = topic["primary_keyword"]
     output_path = assets_root / language / slug / "workflow-diagram.svg"
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(workflow_svg(title, keyword, language), encoding="utf-8")
+    output_path.write_text(workflow_svg(title, keyword, language, spec.get("editorial_workflow")), encoding="utf-8")
     png_path = output_path.with_suffix(".png")
     subprocess.run(rsvg_convert_command() + ["-w", "1200", "-h", "675", str(output_path), "-o", str(png_path)], check=True)
     markdown_path = topics_path.parent.parent / topic["canonical_path"]

@@ -291,6 +291,20 @@ def generate_image_spec(
     output_path = spec_path_for(topic, output_root)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     spec = build_spec(markdown_path, markdown, topic)
+    if output_path.exists():
+        previous = json.loads(output_path.read_text(encoding="utf-8"))
+        if "editorial_workflow" in previous:
+            identity = previous.get("topic", {})
+            if any(identity.get(key) != spec["topic"][key] for key in ("id", "slug", "category", "language")):
+                raise ImageSpecError("Cannot carry editorial workflow across different topic identities")
+            # Preserve authored content, but validate its render contract again.
+            # A regenerated spec still needs the normal fresh publication reviews.
+            from generate_image_assets import workflow_svg, ImageAssetError
+            try:
+                workflow_svg(str(spec["workflow_diagrams"][0]["title"]), topic["primary_keyword"], topic["primary_language"], previous["editorial_workflow"])
+            except ImageAssetError as error:
+                raise ImageSpecError(str(error)) from error
+            spec["editorial_workflow"] = previous["editorial_workflow"]
     output_path.write_text(json.dumps(spec, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     store.edit(topic_id, {"status": "image_planning"})

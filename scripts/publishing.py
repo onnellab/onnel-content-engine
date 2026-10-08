@@ -1901,37 +1901,75 @@ def referenced_blog_assets(markdown: str) -> list[str]:
     return assets
 
 
-def export_blog_assets_to_homepage(markdown: str, homepage_repo: Path, dry_run: bool, project_root: Path = ROOT) -> None:
+def homepage_approved_blog_mark(homepage_repo: Path) -> str | None:
+    from blog_branding import approved_blog_mark, BlogBrandError
+    try:
+        return approved_blog_mark(homepage_repo)
+    except BlogBrandError as error:
+        raise PublishingError(str(error)) from error
+
+
+def branded_export_bytes(content: bytes, kind: str, mark: str | None) -> bytes:
+    if not mark:
+        return content
+    from blog_branding import branded_blog_svg, BlogBrandError
+    try:
+        return branded_blog_svg(content.decode("utf-8"), kind, mark).encode("utf-8")
+    except (BlogBrandError, UnicodeDecodeError) as error:
+        raise PublishingError(str(error)) from error
+
+
+def prepare_blog_asset_updates(markdown: str, homepage_repo: Path, project_root: Path) -> dict[Path, bytes]:
+    mark = homepage_approved_blog_mark(homepage_repo)
+    updates = {}
     for asset_path in referenced_blog_assets(markdown):
         source = blog_asset_source_for(asset_path, project_root)
-        if not source.exists():
-            try:
-                display_path = source.relative_to(project_root)
-            except ValueError:
-                display_path = source
-            raise PublishingError(f"referenced blog asset does not exist: {display_path}")
-        if dry_run:
-            continue
-        destination = blog_asset_destination_for(asset_path, homepage_repo)
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, destination)
+        if not source.is_file():
+            raise PublishingError(f"referenced blog asset does not exist: {source}")
+        content = source.read_bytes()
+        if source.name == "workflow-diagram.svg":
+            content = branded_export_bytes(content, "workflow", mark)
+        updates[blog_asset_destination_for(asset_path, homepage_repo)] = content
+    return updates
 
 
-def export_site_icons_to_homepage(homepage_repo: Path, dry_run: bool, project_root: Path = ROOT) -> None:
+def commit_homepage_updates(homepage_repo: Path, updates: dict[Path, bytes]) -> None:
+    from publication_transaction import publication_guard, atomic_replace_files
+    if updates:
+        with publication_guard(homepage_repo):
+            atomic_replace_files(homepage_repo, updates)
+
+
+def export_blog_assets_to_homepage(markdown: str, homepage_repo: Path, dry_run: bool, project_root: Path = ROOT) -> None:
+    updates = prepare_blog_asset_updates(markdown, homepage_repo, project_root)
+    if not dry_run:
+        commit_homepage_updates(homepage_repo, updates)
+
+
+def prepare_site_icon_updates(homepage_repo: Path, dry_run: bool, project_root: Path) -> dict[Path, bytes]:
+    if homepage_approved_blog_mark(homepage_repo):
+        missing = [name for name in FAVICON_ASSET_NAMES if not (homepage_repo / "public" / name).is_file()]
+        if missing:
+            raise PublishingError(f"Homepage-owned brand icon(s) missing: {', '.join(missing)}")
+        return {}
     icon_source_dir = project_root / "generated" / "html"
     if not dry_run:
         write_site_icons(icon_source_dir)
+    updates = {}
     for name in FAVICON_ASSET_NAMES:
         source = icon_source_dir / name
         if dry_run and not source.exists():
             continue
-        if not source.exists():
+        if not source.is_file():
             raise PublishingError(f"site icon does not exist: {source}")
-        if dry_run:
-            continue
-        destination = homepage_repo / "public" / name
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, destination)
+        updates[homepage_repo / "public" / name] = source.read_bytes()
+    return updates
+
+
+def export_site_icons_to_homepage(homepage_repo: Path, dry_run: bool, project_root: Path = ROOT) -> None:
+    updates = prepare_site_icon_updates(homepage_repo, dry_run, project_root)
+    if not dry_run:
+        commit_homepage_updates(homepage_repo, updates)
 
 
 def export_privacy_pages_to_homepage(
@@ -1943,7 +1981,11 @@ def export_privacy_pages_to_homepage(
     policies_path = topics_path.parent / "app_privacy_policies.json"
     apps_registry_path = topics_path.parent / "apps_registry.csv"
     _, policies = load_privacy_policies(policies_path, apps_registry_path)
+    from sync_app_privacy_pages import owned_policies, assert_no_canonical_shadows
+    assert_no_canonical_shadows(homepage_repo)
+    owned = owned_policies(homepage_repo)
     exports: list[HomepageExport] = []
+    updates: dict[Path, bytes] = {}
     for policy in policies:
         if policy.get("publish_static", True) is False:
             continue
@@ -1953,14 +1995,23 @@ def export_privacy_pages_to_homepage(
             destination = homepage_repo / "public" / "apps" / slug / "privacy" / suffix / "index.html"
             if not source.exists():
                 raise PublishingError(f"generated privacy page does not exist: {source}")
+            if slug in owned:
+                documents = homepage_repo / "src/content/privacy-policies"
+                document = documents / language / f"{slug}.json"
+                if any(documents.glob(f"*/{slug}.json")) and (not document.is_file() or document.is_symlink()):
+                    raise PublishingError(f"Missing homepage-owned privacy language source: {slug}/{language}")
+                if not destination.is_file() or destination.is_symlink() or not destination.resolve().is_relative_to(homepage_repo.resolve()):
+                    raise PublishingError(f"Missing or unsafe homepage-owned privacy alias: {slug}/{language}")
+                exports.append(HomepageExport(f"privacy-{slug}-{language}", source, destination, "unchanged"))
+                continue
             action = "create"
             if destination.exists():
                 action = "unchanged" if destination.read_bytes() == source.read_bytes() else "overwrite"
             exports.append(HomepageExport(f"privacy-{slug}-{language}", source, destination, action))
-            if dry_run or action == "unchanged":
-                continue
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, destination)
+            if action != "unchanged":
+                updates[destination] = source.read_bytes()
+    if not dry_run:
+        commit_homepage_updates(homepage_repo, updates)
     return exports
 
 
@@ -1971,10 +2022,12 @@ def export_markdown_to_homepage(
 ) -> list[HomepageExport]:
     validate_homepage_repository(homepage_repo)
     project_root = topics_path.parent.parent
-    export_site_icons_to_homepage(homepage_repo, dry_run, project_root)
+    updates = prepare_site_icon_updates(homepage_repo, dry_run, project_root)
     articles = load_publishable_articles(topics_path, ROOT / ".homepage-export-check", DEFAULT_SITE_URL)
     exports: list[HomepageExport] = []
-
+    mark = homepage_approved_blog_mark(homepage_repo)
+    # Preflight every article and render to isolated temporary files. No homepage
+    # destination is replaced until all source/branding/render checks succeed.
     for article in articles:
         markdown = article.markdown_path.read_text(encoding="utf-8")
         social_card_source = write_social_card(article, project_root)
@@ -1983,18 +2036,29 @@ def export_markdown_to_homepage(
         if destination.exists():
             action = "unchanged" if destination.read_text(encoding="utf-8") == markdown else "overwrite"
         exports.append(HomepageExport(article.topic["id"], article.markdown_path, destination, action))
-        export_blog_assets_to_homepage(markdown, homepage_repo, dry_run, project_root)
+        article_updates = prepare_blog_asset_updates(markdown, homepage_repo, project_root)
         if not dry_run:
-            social_card_destination = blog_asset_destination_for(article.social_image_path, homepage_repo)
-            social_card_destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(social_card_source, social_card_destination)
-            social_card_svg_source = social_card_source_for(social_card_svg_asset_path(article.topic), project_root)
-            social_card_svg_destination = blog_asset_destination_for(social_card_svg_asset_path(article.topic), homepage_repo)
-            shutil.copy2(social_card_svg_source, social_card_svg_destination)
-        if dry_run or action == "unchanged":
-            continue
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(article.markdown_path, destination)
+            social_destination = blog_asset_destination_for(article.social_image_path, homepage_repo)
+            social_svg_source = social_card_source_for(social_card_svg_asset_path(article.topic), project_root)
+            social_svg_destination = blog_asset_destination_for(social_card_svg_asset_path(article.topic), homepage_repo)
+            article_updates[social_svg_destination] = branded_export_bytes(social_svg_source.read_bytes(), "social", mark)
+            article_updates[social_destination] = social_card_source.read_bytes()
+            if mark:
+                workflow = next((blog_asset_destination_for(asset, homepage_repo)
+                                 for asset in referenced_blog_assets(markdown)
+                                 if asset.endswith("/workflow-diagram.svg")), None)
+                # Match the homepage preview source and its 1200x675 contract.
+                preview_bytes = article_updates[workflow or social_svg_destination]
+                with tempfile.TemporaryDirectory(prefix="blog-preview-") as directory:
+                    preview = Path(directory) / "preview.svg"
+                    raster = Path(directory) / "preview.png"
+                    preview.write_bytes(preview_bytes)
+                    subprocess.run(rsvg_convert_command() + ["-w", "1200", "-h", "675", str(preview), "-o", str(raster)], check=True)
+                    article_updates[social_destination] = raster.read_bytes()
+            article_updates[destination] = markdown.encode("utf-8")
+            updates.update(article_updates)
+    if not dry_run:
+        commit_homepage_updates(homepage_repo, updates)
 
     return exports
 
