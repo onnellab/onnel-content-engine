@@ -105,5 +105,43 @@ class StorePolicyAutomationTest(unittest.TestCase):
         )
 
 
+    def test_resolved_alert_removes_old_deferred_task(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            data = root / "data"
+            data.mkdir()
+            (data / "store_policy_watchlist.json").write_text(
+                json.dumps({"sources": []}), encoding="utf-8"
+            )
+            (data / "store_policy_alerts.json").write_text(
+                json.dumps({"alerts": [{
+                    "alert_id": "billing8", "app_slug": "melivra",
+                    "store": "google_play", "kind": "billing",
+                    "summary": "Billing 8 required",
+                    "occurred_at": "2026-07-30T00:00:00+00:00",
+                    "status": "resolved",
+                    "status_source": "repository_release_evidence",
+                }]}),
+                encoding="utf-8",
+            )
+            (data / "store_policy_impact_tasks.json").write_text(
+                json.dumps({"tasks": [{
+                    "task_id": "policy-alert-billing8",
+                    "app_slug": "melivra", "store": "google_play",
+                    "status": "deferred", "evidence": {"alert_id": "billing8"},
+                }]}),
+                encoding="utf-8",
+            )
+            (data / "apps_registry.csv").write_text(
+                "slug,platforms\nmelivra,ios|android\n", encoding="utf-8"
+            )
+            with patch.object(analyze_store_policy_impact, "ROOT", root):
+                self.assertEqual(analyze_store_policy_impact.main(), 0)
+            tasks = json.loads(
+                (data / "store_policy_impact_tasks.json").read_text(encoding="utf-8")
+            )["tasks"]
+        self.assertEqual(tasks, [])
+
+
 if __name__ == "__main__":
     unittest.main()

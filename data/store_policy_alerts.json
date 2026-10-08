@@ -27,14 +27,22 @@
       "reference_url": "https://developer.android.com/google/play/billing/migrate-gpblv8",
       "occurred_at": "2026-07-30T00:00:00+00:00",
       "imported_at": "2026-07-30T02:35:20+00:00",
-      "status": "deferred",
-      "operational_note": "사용자 지시에 따라 미출시 개발 앱의 출시 전 확인 항목으로 보류합니다. Billing Library 요구사항 해결 완료를 의미하지 않으며 출시 준비 시 재확인해야 합니다.",
-      "status_updated_at": "2026-09-19T23:38:30+00:00",
+      "status": "resolved",
+      "operational_note": "해결 근거: Melivra Android 1.0.6+142의 출시 소스(5e471865)에서 Google Play Billing Library billing-ktx 8.0.0 선언을 확인했고, 2026-10-06 스토어 업로드 기록에서 Google Play 프로덕션 versionCode 142 게시 완료를 확인했습니다. 원래 미출시 전제의 보류 사유는 더 이상 적용되지 않습니다. Google Play Console의 최신 SDK 경고 화면은 별도 직접 조회하지 않았습니다.",
+      "status_updated_at": "2026-10-08T00:49:16+00:00",
       "event_key": "google-play-billing-8-deadline-2026-08-31",
       "source_accounts": [
         "developer"
       ],
-      "status_source": "user_instruction"
+      "status_source": "repository_release_evidence",
+      "resolution_evidence": {
+        "billing_dependency": "com.android.billingclient:billing-ktx:8.0.0",
+        "source_commit": "onnellab/melivra@5e471865",
+        "release_version": "1.0.6+142",
+        "provider_delivery_record": "onnellab/melivra@2fa7dfee docs/release_signing_handoff.md",
+        "provider_record_status": "production versionCode 142 completed",
+        "console_sdk_warning_live_verified": false
+      }
     },
     {
       "alert_id": "a2acc7751c07280c",
