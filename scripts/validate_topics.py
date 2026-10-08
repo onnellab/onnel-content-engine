@@ -9,6 +9,8 @@ import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
+from publication_locales import PUBLICATION_LOCALES
+
 
 ROOT = Path(__file__).resolve().parents[1]
 TOPICS_PATH = ROOT / "data" / "topics.csv"
@@ -59,7 +61,7 @@ APP_HEADER = [
 
 STATUSES = {"idea", "approved", "research", "outline", "draft", "image_planning", "review", "scheduled", "published", "update_required", "archived", "failed"}
 CATEGORIES = {"reading", "music", "productivity", "media", "craft", "games", "research"}
-LANGUAGES = {"en", "ko"}
+LANGUAGES = set(PUBLICATION_LOCALES)
 PRIORITIES = {"critical", "high", "normal", "low"}
 SEARCH_INTENTS = {"learn", "solve", "compare", "workflow", "discover", "troubleshoot"}
 SOURCE_TYPES = {"user_question", "faq", "product_documentation", "support_issue", "feature_request", "search_research", "community_discussion", "editorial", "release_note"}
@@ -135,7 +137,7 @@ def validate_topics() -> None:
             raise ValueError(f"{topic_id} has invalid evergreen: {row['evergreen']}")
         if row["review_required"] not in BOOLEAN:
             raise ValueError(f"{topic_id} has invalid review_required: {row['review_required']}")
-        if not row["primary_question"].strip().endswith("?"):
+        if not row["primary_question"].strip().endswith(("?", "？")):
             raise ValueError(f"{topic_id} primary_question must be a complete question")
         if row["primary_question"].split(maxsplit=1)[0] in apps:
             raise ValueError(f"{topic_id} primary_question must not begin with an ONNELLAB product name")
@@ -183,3 +185,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

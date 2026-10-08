@@ -9,6 +9,8 @@ import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
+from publication_locales import PUBLICATION_LOCALES
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -152,7 +154,8 @@ TOPIC_STATUSES = {
     "failed",
 }
 TOPIC_CATEGORIES = {"reading", "music", "productivity", "media", "craft", "games", "research"}
-LANGUAGES = {"en", "ko"}
+LANGUAGES = {"en", "ko"}  # App registry source languages remain unchanged.
+TOPIC_LANGUAGES = set(PUBLICATION_LOCALES)
 PRIORITIES = {"critical", "high", "normal", "low"}
 SEARCH_INTENTS = {"learn", "solve", "compare", "workflow", "discover", "troubleshoot"}
 SOURCE_TYPES = {
@@ -289,7 +292,7 @@ def validate_topic_file(path: Path, apps: dict[str, dict[str, str]]) -> list[dic
             raise ValueError(f"{topic_id} has unsupported status: {row['status']}")
         if row["category"] not in TOPIC_CATEGORIES:
             raise ValueError(f"{topic_id} has unsupported category: {row['category']}")
-        if row["primary_language"] not in LANGUAGES:
+        if row["primary_language"] not in TOPIC_LANGUAGES:
             raise ValueError(f"{topic_id} has unsupported primary_language: {row['primary_language']}")
         if row["priority"] not in PRIORITIES:
             raise ValueError(f"{topic_id} has unsupported priority: {row['priority']}")
