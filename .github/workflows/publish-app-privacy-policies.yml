@@ -10,6 +10,7 @@ on:
       - data/apps_registry.csv
       - scripts/publishing.py
       - scripts/build_app_privacy_pages.py
+      - scripts/sync_app_privacy_pages.py
       - scripts/validate_app_privacy_policies.py
       - .github/workflows/publish-app-privacy-policies.yml
 
@@ -48,21 +49,25 @@ jobs:
 
       - name: Copy privacy pages to homepage
         run: |
-          mkdir -p "$HOMEPAGE_REPO_PATH/public"
-          cp -R "$PRIVACY_OUTPUT_PATH/." "$HOMEPAGE_REPO_PATH/public/"
+          python3 scripts/sync_app_privacy_pages.py \
+            --site-dir "$PRIVACY_OUTPUT_PATH" \
+            --homepage-repo "$HOMEPAGE_REPO_PATH" \
+            --staging-manifest "$PRIVACY_OUTPUT_PATH/staging-paths.json"
 
       - name: Commit homepage privacy pages
         working-directory: ${{ env.HOMEPAGE_REPO_PATH }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          while IFS= read -r directory; do
-            git add "public/$directory"
-          done < <(find "$PRIVACY_OUTPUT_PATH" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
+          python3 "$GITHUB_WORKSPACE/scripts/sync_app_privacy_pages.py" \
+            --homepage-repo . \
+            --stage-manifest "$PRIVACY_OUTPUT_PATH/staging-paths.json"
           if git diff --cached --quiet; then
             echo "No app privacy policy changes to publish"
           else
             git commit -m "Publish centralized app privacy policies"
             git pull --rebase origin main
+            python3 "$GITHUB_WORKSPACE/scripts/sync_app_privacy_pages.py" \
+              --homepage-repo . --check-ownership
             git push origin main
           fi
