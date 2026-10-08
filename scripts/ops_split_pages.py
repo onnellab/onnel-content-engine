@@ -70,8 +70,8 @@ a{color:inherit}
 .ops-lang{min-height:31px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:6px 10px;border-radius:999px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
 .ops-lang:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 .ops-wrap{max-width:1180px;margin:0 auto;padding:22px 20px 56px}
-.ops-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:30px}
-.ops-nav a{display:inline-flex;align-items:center;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fffdf9;color:#5d574f;text-decoration:none;font-size:13px;font-weight:750}
+.ops-nav{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;margin-bottom:24px}.ops-nav::-webkit-scrollbar{display:none}
+.ops-nav a{display:inline-flex;flex:0 0 auto;align-items:center;min-height:42px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fffdf9;color:#5d574f;text-decoration:none;font-size:13px;font-weight:750}
 .ops-nav a[aria-current="page"]{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}
 .ops-nav a:hover{border-color:#b9cbe0;background:var(--blue-soft)}
 .ops-head{margin:10px 0 28px}
@@ -106,7 +106,7 @@ a{color:inherit}
 .detail-hero{display:grid;grid-template-columns:68px minmax(0,1fr);gap:18px;align-items:start;padding:22px;border:1px solid var(--accent-border,#e0d8cb);border-radius:13px;background:linear-gradient(135deg,rgba(255,253,248,.96) 16%,var(--accent-bg,#fffdf8)),#fffdf8}
 .detail-hero img{width:64px;height:64px;border-radius:15px;box-shadow:0 0 0 1px var(--accent-border,#ddd5c8)}
 .detail-hero h1{margin:0 0 8px;font-size:30px;color:#3e3933}.detail-hero p{margin:8px 0 0;color:#5f5a50;line-height:1.6}
-.detail-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 16px;scroll-margin-top:78px}.detail-tabs a{min-height:40px;display:inline-flex;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;text-decoration:none;font-size:13px;font-weight:750;color:#6a645b}.detail-tabs a[aria-selected="true"]{background:var(--blue-soft);border-color:#b9cbe0;color:#315f91}.detail-tabs a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}.detail-section[hidden]{display:none!important}
+.detail-tabs{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;margin:18px 0 16px;scroll-margin-top:78px}.detail-tabs::-webkit-scrollbar{display:none}.detail-tabs a{min-height:44px;display:inline-flex;flex:0 0 auto;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;text-decoration:none;font-size:13px;font-weight:750;color:#6a645b}.detail-tabs a[aria-selected="true"]{background:var(--blue-soft);border-color:#b9cbe0;color:#315f91}.detail-tabs a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}.detail-section[hidden]{display:none!important}
 .detail-section{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}.detail-section h2{margin:0 0 14px;font-size:19px}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.app-overview-metrics{margin:0 0 12px}.app-overview-note{margin:0 0 20px;color:#746f69;font-size:11px;line-height:1.5}
 .detail-stat{padding:14px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-stat span{display:block;color:#827d72;font-size:11px}.detail-stat b{display:block;margin-top:6px;font-size:18px;overflow-wrap:anywhere}
 .detail-list{display:grid;gap:8px}.detail-row{padding:12px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.detail-row b{display:block;margin-bottom:5px;font-size:13px}.detail-row span{display:block;color:#6f695f;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
@@ -117,6 +117,7 @@ a{color:inherit}
 .subsection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:18px 0 10px}.subsection-head h3{margin:0;font-size:15px}.subsection-head p{margin:0;color:#827d72;font-size:11px}.ops-actions{display:flex;gap:7px;flex-wrap:wrap}.ops-button{min-height:34px;border:1px solid #cfc5b7;border-radius:8px;padding:7px 10px;background:#fff;color:#514b44;font:inherit;font-size:12px;font-weight:750;cursor:pointer}.ops-button.primary{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}.ops-button:disabled{opacity:.55;cursor:not-allowed}.ops-message{min-height:18px;margin-top:8px;color:#6f695f;font-size:11px;line-height:1.5}.ops-message.is-error{color:#9c3f36}.token-note{margin:10px 0;padding:10px 12px;border:1px solid #ded6ca;border-radius:8px;background:#fffaf2;color:#6f695f;font-size:11px;line-height:1.5}.token-note[hidden]{display:none}.token-note a{font-weight:750}
 .review-list,.release-list,.dependency-list,.pricing-list{display:grid;gap:10px}.pricing-product-card{padding:14px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.pricing-product-card h4{margin:0 0 10px;font-size:15px}.pricing-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.pricing-option{display:grid;gap:5px;padding:11px;border:1px solid #e9e0d6;border-radius:8px;background:#fff}.pricing-option-head{display:flex;align-items:center;justify-content:space-between;gap:5px;flex-wrap:wrap}.pricing-option-head>b{font-size:13px}.pricing-option>strong{font-size:18px}.price-option-profit{color:#5f7465;font-size:12px}.price-evidence{margin-top:10px}.price-evidence>summary{cursor:pointer;color:#655f58;font-size:12px;padding:7px 0}.price-evidence>.pricing-list{margin-top:8px}.price-evidence .pricing-card{padding:10px}.price-evidence .pricing-card>p{font-size:12px}.review-card[hidden]{display:none!important}.review-filters{display:flex;flex-wrap:wrap;gap:7px;margin:13px 0}.review-filters button{min-height:40px;border:1px solid #dfd6ca;border-radius:999px;background:#fff;padding:8px 12px;color:#675f56;font:inherit;font-size:13px;font-weight:730;cursor:pointer}.review-filters button[aria-pressed="true"]{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}.review-filter-empty{padding:16px;border:1px dashed #d9d0c6;border-radius:9px;background:#fffdf9;font-size:13px;line-height:1.6}.review-filter-empty[hidden]{display:none!important}.review-filter-empty button{display:inline-block;min-height:38px;margin-top:10px;border:1px solid #b9cbe0;background:var(--blue-soft);border-radius:8px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer}.review-completed{padding:0!important}.review-completed-summary{display:grid;gap:7px;padding:12px 14px;cursor:pointer;list-style:none}.review-completed-summary::-webkit-details-marker{display:none}.review-completed-summary::after{content:"펼치기";color:#827d72;font-size:11px}.review-completed[open]>.review-completed-summary::after{content:"접기"}.review-completed-head{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.review-excerpt{color:#655f58;font-size:13px;line-height:1.5;overflow-wrap:anywhere}.review-expanded-content{padding:0 14px 14px;border-top:1px solid #e8e0d7}.review-card,.release-card,.dependency-card,.pricing-card{padding:14px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.review-head,.release-head,.pricing-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.review-head strong,.release-head strong,.pricing-head strong{font-size:14px}.review-rating,.mini-badge{display:inline-flex;align-items:center;min-height:24px;padding:3px 7px;border:1px solid #ddd4ca;border-radius:999px;background:#fff;color:#655e55;font-size:10px;font-weight:750}.mini-badge.good{border-color:#c7ddd0;background:#eef7f2;color:#49675a}.mini-badge.warn{border-color:#e4d1b7;background:#fff7eb;color:#795d37}.mini-badge.bad{border-color:#e4c4bf;background:#fff1ef;color:#844d47}.review-meta,.release-meta,.pricing-meta,.dependency-meta{margin-top:5px;color:#827d72;font-size:10px;line-height:1.5}.review-body{margin:10px 0 0;white-space:pre-wrap;font-size:13px;line-height:1.6}.review-translation{margin-top:10px;padding:10px;border:1px solid #e5ddd4;border-radius:8px;background:#fff}.review-translation b{display:block;margin-bottom:5px;font-size:11px}.review-translation p{margin:0;font-size:12px;line-height:1.55}.review-card label{display:grid;gap:5px;margin-top:10px;color:#716a61;font-size:11px;font-weight:700}.review-card textarea{width:100%;min-height:92px;border:1px solid #dcd3c8;border-radius:8px;padding:9px;background:#fff;color:#302c28;font:inherit;font-size:12px;line-height:1.5;resize:vertical}.review-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.review-card details{margin-top:10px}.review-card details summary{cursor:pointer;color:#655e55;font-size:11px;font-weight:750}.triage-box{margin-top:7px;padding:9px;border:1px solid #e4dced;border-radius:8px;background:#faf7ff;color:#675d70;font-size:11px;line-height:1.55;white-space:pre-wrap}.release-card p,.pricing-card p,.dependency-card p{margin:7px 0 0;color:#696158;font-size:11px;line-height:1.55}.release-card a,.pricing-card a{font-weight:700}.economics-callout{margin-top:9px;padding:9px;border:1px solid #c8dfd1;border-radius:8px;background:#eff8f3;color:#4d6758;font-size:11px;line-height:1.5}.economics-callout.loss{border-color:#e5c5c0;background:#fff1ef;color:#824e48}.site-freshness{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .dependency-details{margin-top:10px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.dependency-details>summary{padding:12px 14px;color:#58544d;font-size:13px;font-weight:730;cursor:pointer}.dependency-details>.dependency-list{padding:0 10px 10px}.dependency-details .dependency-card{background:#fff}
+.ops-meta,.ops-legacy-link,.app-overview-note{font-size:12px}.platform-badges span,.status-badge,.detail-stat span,.funnel-step span,.funnel-freshness,.funnel-note,.diagnosis-note,.rate-pill,.review-meta,.release-meta,.pricing-meta,.dependency-meta,.mini-badge,.review-translation b{font-size:12px}.ops-lang{min-height:36px}.ops-nav a{min-height:42px}.detail-tabs a{min-height:44px}
 @media(max-width:440px){.pricing-options{grid-template-columns:1fr}.review-completed-summary{padding:12px}}
 @media(max-width:680px){.ops-wrap{padding:18px 15px 42px}.ops-route-grid,.app-grid{grid-template-columns:1fr}.app-grid{gap:10px}.app-card{grid-template-columns:46px minmax(0,1fr);gap:13px;min-height:0;padding:15px}.app-card>img{width:44px;height:44px;border-radius:11px}.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-hero{grid-template-columns:54px minmax(0,1fr);padding:17px}.detail-hero img{width:52px;height:52px;border-radius:12px}.ops-head h1{font-size:29px}.funnel-platform-grid,.diagnosis-grid,.site-freshness{grid-template-columns:1fr}.funnel-chain{gap:5px}.funnel-step{padding:8px}.funnel-step b{font-size:17px}.review-head,.release-head,.pricing-head{align-items:flex-start}.review-card,.release-card,.dependency-card,.pricing-card{padding:12px}}
 """
@@ -243,15 +244,15 @@ def _page(title: str, current: str, body: str) -> str:
 def _home_body(app_count: int, publication_attention: int) -> str:
     return f"""
 <header class="ops-head">
-  <p class="eyebrow">Operations</p>
+  <p class="eyebrow" data-ko="운영 현황" data-en="Operations">운영 현황</p>
   <h1>ONNELLAB Ops</h1>
-  <p>홈에서는 상황만 빠르게 보고, 실제 관리는 앱·게시·미디어·설정 페이지에서 나눠서 해요.</p>
+  <p data-ko="운영 상태를 한눈에 보고, 실제 관리는 앱·게시·미디어·설정에서 나눠서 해요." data-en="Get a quick overview, then manage apps, publishing, media, and connections separately.">운영 상태를 한눈에 보고, 실제 관리는 앱·게시·미디어·설정에서 나눠서 해요.</p>
 </header>
 <section class="ops-route-grid" aria-label="운영 메뉴">
-  <a class="ops-route-card" href="/ops/apps/"><b>앱</b><span>스토어 상태, 릴리즈, 리뷰, 가격과 앞으로의 유입 퍼널을 앱별로 모아봐요.</span><small>{app_count} apps</small></a>
-  <a class="ops-route-card" href="/ops/publishing/"><b>게시</b><span>블로그·소셜 발행 대기와 공개 확인, 사이트 갱신 및 발행 품질을 관리해요.</span><small>{publication_attention} items need attention</small></a>
-  <a class="ops-route-card" href="/ops/media/"><b>미디어</b><span>ONNELLAB Shorts와 Aether Inn 채널, YouTube·Lyria 연결 상태를 따로 봐요.</span><small>2 brands</small></a>
-  <a class="ops-route-card" href="/ops/settings/"><b>설정</b><span>자동 포스팅과 App Store / Play Store 연결 정보를 관리해요.</span><small>Connections</small></a>
+  <a class="ops-route-card" href="/ops/apps/"><b data-ko="앱" data-en="Apps">앱</b><span data-ko="스토어·리뷰·가격·전환을 앱별로 관리해요." data-en="Manage store status, reviews, pricing, and conversion by app.">스토어·리뷰·가격·전환을 앱별로 관리해요.</span><small data-ko="{app_count}개 앱" data-en="{app_count} apps">{app_count}개 앱</small></a>
+  <a class="ops-route-card" href="/ops/publishing/"><b data-ko="게시" data-en="Publishing">게시</b><span data-ko="게시 대기와 공개 확인 결과를 관리해요." data-en="Review the posting queue and public publication results.">게시 대기와 공개 확인 결과를 관리해요.</span><small data-ko="검토할 항목 {publication_attention}건" data-en="{publication_attention} items to review">검토할 항목 {publication_attention}건</small></a>
+  <a class="ops-route-card" href="/ops/media/"><b data-ko="미디어" data-en="Media">미디어</b><span data-ko="ONNELLAB Shorts·Aether Inn 채널 현황과 통계를 봐요." data-en="See channel health and metrics for ONNELLAB Shorts and Aether Inn.">ONNELLAB Shorts·Aether Inn 채널 현황과 통계를 봐요.</span><small data-ko="2개 채널" data-en="2 channels">2개 채널</small></a>
+  <a class="ops-route-card" href="/ops/settings/"><b data-ko="설정" data-en="Settings">설정</b><span data-ko="GitHub와 스토어 자격증명을 관리해요." data-en="Manage GitHub and store credentials.">GitHub와 스토어 자격증명을 관리해요.</span><small data-ko="연결 설정" data-en="Connections">연결 설정</small></a>
 </section>
 <p class="ops-legacy-link">이전 전체 화면이 필요한 동안에는 <a href="/ops/legacy/">기존 통합 콘솔</a>도 남겨둬요.</p>
 """
@@ -305,8 +306,12 @@ def _legacy_view(document: str, view: str, intro: str) -> str:
         )
     view_css = r"""
 <style>
-main>.ops-nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}
-main>.ops-nav a{display:inline-flex;align-items:center;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fffdf9;color:#5d574f;text-decoration:none;font-size:13px;font-weight:750}
+body[data-ops-view]:not([data-ops-view="legacy"])>header .bar{display:flex!important;align-items:center!important;flex-direction:row!important;justify-content:space-between!important;gap:12px;min-height:60px}
+body[data-ops-view]:not([data-ops-view="legacy"])>header .brand{min-width:0;white-space:nowrap;font-size:16px}
+body[data-ops-view]:not([data-ops-view="legacy"])>header .header-right{width:auto!important;min-width:0;flex:0 0 auto;justify-content:flex-end!important}
+body[data-ops-view]:not([data-ops-view="legacy"])>header .lang{min-height:36px}
+main>.ops-nav{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;margin:0 0 22px}main>.ops-nav::-webkit-scrollbar{display:none}
+main>.ops-nav a{display:inline-flex;flex:0 0 auto;align-items:center;min-height:42px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fffdf9;color:#5d574f;text-decoration:none;font-size:13px;font-weight:750}
 main>.ops-nav a[aria-current="page"]{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}
 .ops-view-intro{margin:6px 0 22px;padding:18px 20px;border:1px solid var(--line);border-radius:10px;background:#fff}
 .ops-view-intro h1{margin:0 0 7px;font-size:26px}.ops-view-intro p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
@@ -328,7 +333,7 @@ html[lang="en"] body[data-ops-view="media"] .ops-media-connections>summary .yt-k
 body[data-ops-view="publishing"] .metric-card[data-view="manual"]{background:#eef7ff;border-color:#b9cbe0}
 body[data-ops-view="publishing"] #verify-publications-primary{background:#e8f1fb;color:#315f91;border-color:#b9cbe0;font-size:15px;min-height:48px}
 body[data-ops-view="publishing"] main>.atm-action{box-shadow:none}
-@media(max-width:680px){main>.ops-route-grid{grid-template-columns:1fr}main>.ops-head h1{font-size:29px}}
+@media(max-width:680px){main>.ops-route-grid{grid-template-columns:1fr}main>.ops-head h1{font-size:29px}body[data-ops-view]:not([data-ops-view="legacy"])>header .bar{padding:12px 15px!important}body[data-ops-view]:not([data-ops-view="legacy"])>header #app-title{font-size:15px}}
 body[data-ops-view="home"] main>.overview,
 body[data-ops-view="home"] main>.atm-action,
 body[data-ops-view="home"] main>.ytw,
@@ -365,7 +370,28 @@ body[data-ops-view="settings"] main>.platform-status,
 body[data-ops-view="settings"] main>.status-section{display:none!important}
 </style>
 """
-    return document.replace("</head>", view_css + "</head>", 1)
+    document = document.replace("</head>", view_css + "</head>", 1)
+    if view != "legacy":
+        # The legacy publisher translates known IDs only. Also localize the
+        # split-route navigation and summaries when its language toggle fires.
+        route_i18n = r"""
+<script>
+(() => {
+  const localizeRoute = () => {
+    const lang = document.documentElement.lang === 'en' ? 'en' : 'ko';
+    document.querySelectorAll('main [data-ko][data-en]').forEach(el => {
+      el.textContent = lang === 'en' ? el.dataset.en : el.dataset.ko;
+    });
+  };
+  new MutationObserver(localizeRoute).observe(document.documentElement, {
+    attributes: true, attributeFilter: ['lang']
+  });
+  localizeRoute();
+})();
+</script>
+"""
+        document = document.replace("</body>", route_i18n + "</body>", 1)
+    return document
 
 
 def _ko_app_description(homepage_repo: Path, slug: str, fallback: str) -> str:
@@ -2119,9 +2145,9 @@ def build_split_ops_pages(
     pages: list[Path] = []
     views = {
         "home": (output_dir / "index.html", home_intro),
-        "publishing": (output_dir / "publishing" / "index.html", '<section class="ops-view-intro"><h1>게시</h1><p>발행 대기, 공개 확인, 사이트 갱신과 발행 품질만 모아봐요.</p></section>'),
-        "media": (output_dir / "media" / "index.html", '<section class="ops-view-intro"><h1>미디어</h1><p>ONNELLAB Shorts와 Aether Inn 운영을 게시 대시보드에서 분리했어요.</p></section>'),
-        "settings": (output_dir / "settings" / "index.html", '<section class="ops-view-intro"><h1>설정</h1><p>자동 포스팅과 스토어 연결 정보를 여기에서 관리해요.</p></section>'),
+        "publishing": (output_dir / "publishing" / "index.html", '<section class="ops-view-intro"><h1 data-ko="게시" data-en="Publishing">게시</h1><p data-ko="게시 대기·공개 확인·발행 품질을 관리해요." data-en="Manage the publishing queue, public checks, and content quality.">게시 대기·공개 확인·발행 품질을 관리해요.</p></section>'),
+        "media": (output_dir / "media" / "index.html", '<section class="ops-view-intro"><h1 data-ko="미디어" data-en="Media">미디어</h1><p data-ko="ONNELLAB Shorts와 Aether Inn의 채널 현황·성과를 확인해요." data-en="Review channel health and performance for ONNELLAB Shorts and Aether Inn.">ONNELLAB Shorts와 Aether Inn의 채널 현황·성과를 확인해요.</p></section>'),
+        "settings": (output_dir / "settings" / "index.html", '<section class="ops-view-intro"><h1 data-ko="설정" data-en="Settings">설정</h1><p data-ko="GitHub·자동 포스팅·스토어 연결을 구분해서 관리해요." data-en="Manage GitHub, automated posting, and store connections separately.">GitHub·자동 포스팅·스토어 연결을 구분해서 관리해요.</p></section>'),
         "legacy": (output_dir / "legacy" / "index.html", '<section class="ops-view-intro"><h1>기존 통합 콘솔</h1><p>분리 이전의 전체 기능을 그대로 보존한 화면이에요. 새 구조 이관이 끝날 때까지 안전망으로 유지해요.</p></section>'),
     }
     for view, (path, intro) in views.items():
