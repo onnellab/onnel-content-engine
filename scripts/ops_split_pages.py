@@ -12,6 +12,8 @@ from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 from urllib.parse import urlsplit
 
+from ops_ai_monitor import render_home as render_ai_home, render_monitoring
+
 
 ACCENT_PALETTE = (
     ("#cfd8cc", "#f3f6ef", "#4d6248"),
@@ -118,6 +120,59 @@ a{color:inherit}
 .review-list,.release-list,.dependency-list,.pricing-list{display:grid;gap:10px}.pricing-product-card{padding:14px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.pricing-product-card h4{margin:0 0 10px;font-size:15px}.pricing-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.pricing-option{display:grid;gap:5px;padding:11px;border:1px solid #e9e0d6;border-radius:8px;background:#fff}.pricing-option-head{display:flex;align-items:center;justify-content:space-between;gap:5px;flex-wrap:wrap}.pricing-option-head>b{font-size:13px}.pricing-option>strong{font-size:18px}.price-option-profit{color:#5f7465;font-size:12px}.price-evidence{margin-top:10px}.price-evidence>summary{cursor:pointer;color:#655f58;font-size:12px;padding:7px 0}.price-evidence>.pricing-list{margin-top:8px}.price-evidence .pricing-card{padding:10px}.price-evidence .pricing-card>p{font-size:12px}.review-card[hidden]{display:none!important}.review-filters{display:flex;flex-wrap:wrap;gap:7px;margin:13px 0}.review-filters button{min-height:40px;border:1px solid #dfd6ca;border-radius:999px;background:#fff;padding:8px 12px;color:#675f56;font:inherit;font-size:13px;font-weight:730;cursor:pointer}.review-filters button[aria-pressed="true"]{border-color:#b9cbe0;background:var(--blue-soft);color:#315f91}.review-filter-empty{padding:16px;border:1px dashed #d9d0c6;border-radius:9px;background:#fffdf9;font-size:13px;line-height:1.6}.review-filter-empty[hidden]{display:none!important}.review-filter-empty button{display:inline-block;min-height:38px;margin-top:10px;border:1px solid #b9cbe0;background:var(--blue-soft);border-radius:8px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer}.review-completed{padding:0!important}.review-completed-summary{display:grid;gap:7px;padding:12px 14px;cursor:pointer;list-style:none}.review-completed-summary::-webkit-details-marker{display:none}.review-completed-summary::after{content:"펼치기";color:#827d72;font-size:11px}.review-completed[open]>.review-completed-summary::after{content:"접기"}.review-completed-head{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.review-excerpt{color:#655f58;font-size:13px;line-height:1.5;overflow-wrap:anywhere}.review-expanded-content{padding:0 14px 14px;border-top:1px solid #e8e0d7}.review-card,.release-card,.dependency-card,.pricing-card{padding:14px;border:1px solid #e8e0d7;border-radius:10px;background:#fffdf9}.review-head,.release-head,.pricing-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.review-head strong,.release-head strong,.pricing-head strong{font-size:14px}.review-rating,.mini-badge{display:inline-flex;align-items:center;min-height:24px;padding:3px 7px;border:1px solid #ddd4ca;border-radius:999px;background:#fff;color:#655e55;font-size:10px;font-weight:750}.mini-badge.good{border-color:#c7ddd0;background:#eef7f2;color:#49675a}.mini-badge.warn{border-color:#e4d1b7;background:#fff7eb;color:#795d37}.mini-badge.bad{border-color:#e4c4bf;background:#fff1ef;color:#844d47}.review-meta,.release-meta,.pricing-meta,.dependency-meta{margin-top:5px;color:#827d72;font-size:10px;line-height:1.5}.review-body{margin:10px 0 0;white-space:pre-wrap;font-size:13px;line-height:1.6}.review-translation{margin-top:10px;padding:10px;border:1px solid #e5ddd4;border-radius:8px;background:#fff}.review-translation b{display:block;margin-bottom:5px;font-size:11px}.review-translation p{margin:0;font-size:12px;line-height:1.55}.review-card label{display:grid;gap:5px;margin-top:10px;color:#716a61;font-size:11px;font-weight:700}.review-card textarea{width:100%;min-height:92px;border:1px solid #dcd3c8;border-radius:8px;padding:9px;background:#fff;color:#302c28;font:inherit;font-size:12px;line-height:1.5;resize:vertical}.review-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.review-card details{margin-top:10px}.review-card details summary{cursor:pointer;color:#655e55;font-size:11px;font-weight:750}.triage-box{margin-top:7px;padding:9px;border:1px solid #e4dced;border-radius:8px;background:#faf7ff;color:#675d70;font-size:11px;line-height:1.55;white-space:pre-wrap}.release-card p,.pricing-card p,.dependency-card p{margin:7px 0 0;color:#696158;font-size:11px;line-height:1.55}.release-card a,.pricing-card a{font-weight:700}.economics-callout{margin-top:9px;padding:9px;border:1px solid #c8dfd1;border-radius:8px;background:#eff8f3;color:#4d6758;font-size:11px;line-height:1.5}.economics-callout.loss{border-color:#e5c5c0;background:#fff1ef;color:#824e48}.site-freshness{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .dependency-details{margin-top:10px;border:1px solid #e8e0d7;border-radius:9px;background:#fffdf9}.dependency-details>summary{padding:12px 14px;color:#58544d;font-size:13px;font-weight:730;cursor:pointer}.dependency-details>.dependency-list{padding:0 10px 10px}.dependency-details .dependency-card{background:#fff}
 .ops-meta,.ops-legacy-link,.app-overview-note{font-size:12px}.platform-badges span,.status-badge,.detail-stat span,.funnel-step span,.funnel-freshness,.funnel-note,.diagnosis-note,.rate-pill,.review-meta,.release-meta,.pricing-meta,.dependency-meta,.mini-badge,.review-translation b{font-size:12px}.ops-lang{min-height:36px}.ops-nav a{min-height:42px}.detail-tabs a{min-height:44px}
+.ai-home-preview{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:18px 0 20px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.ai-home-preview h2{margin:0 0 7px;font-size:20px}
+.ai-home-preview p{margin:0 0 6px;color:#514d48;font-size:14px;line-height:1.55}
+.ai-home-preview small{color:#756f67;font-size:12px}
+.ai-home-preview>a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 14px;border:1px solid #c5b8dc;border-radius:9px;background:#f4f0ff;color:#4c3d68;font-size:13px;font-weight:750;text-decoration:none;white-space:nowrap}
+.ai-home-preview>a:hover,.ai-home-preview>a:focus-visible{border-color:#ad9aca;background:#ece5ff}
+.ai-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 22px}
+.ai-kpi{padding:18px;border:1px solid var(--line);border-radius:11px;background:#fff;min-width:0}
+.ai-kpi>span{display:block;color:#655f59;font-size:13px;line-height:1.5}
+.ai-kpi strong{display:block;margin-top:8px;font-size:32px;font-weight:750;line-height:1.1}
+.ai-source-line{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.ai-source-state{display:inline-flex;min-height:30px;align-items:center;padding:5px 10px;border-radius:999px;border:1px solid #d4cadf;background:#f8f5fc;color:#514164;font-size:12px;font-weight:700}
+.ai-source-state[data-collection="complete"]{border-color:#cedbd1;background:#f2f7f3;color:#426350}
+.ai-source-state[data-collection="partial"],.ai-source-state[data-collection="stale"],.ai-source-state[data-collection="missing"]{border-color:#e3c9b5;background:#fff7ef;color:#805736}
+.ai-updated{margin:0;color:#716b63;font-size:12px}
+.ai-health-note{margin:14px 0;padding:12px 14px;border:1px solid #e3d8c7;border-radius:9px;background:#fffdf8;color:#675b49;font-size:13px;line-height:1.6}
+.ai-monitor-section{margin:23px 0 0}
+.ai-monitor-section h2{margin:0 0 12px;font-size:18px;font-weight:750}
+.ai-alert-list{display:grid;gap:10px}
+.ai-alert-row{padding:15px 17px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow-wrap:anywhere}
+.ai-alert-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ai-alert-row strong{font-size:14px;line-height:1.5}
+.ai-state-label{flex:0 0 auto;border:1px solid #e8d1c2;border-radius:999px;background:#fff8f2;padding:4px 8px;color:#785d4b;font-size:11px;line-height:1.3}
+.ai-alert-row[data-alert-priority="deferred"] .ai-state-label{border-color:#d4cde0;background:#f9f6fd;color:#685676}
+.ai-alert-row p{margin:10px 0 0;color:#4e4942;font-size:13px;line-height:1.65}
+.ai-alert-row .ai-note{color:#666056}
+.ai-alert-more{margin-top:10px;padding-top:7px;border-top:1px solid #eee8e2}
+.ai-alert-more>summary{cursor:pointer;display:list-item;min-height:36px;padding:8px 0;color:#5f5274;font-size:12px;font-weight:730}
+.ai-alert-more>summary:focus-visible{outline:2px solid #9280bb;outline-offset:2px}
+.ai-alert-more p{margin:8px 0;color:#655f59}
+.ai-alert-row small{display:block;margin-top:10px;color:#777068;font-size:12px}
+.ai-link{display:inline-flex;align-items:center;min-height:40px;margin-top:6px;color:#51456d;font-size:13px;font-weight:700}
+.ai-row-list{border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
+.ai-count-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;font-size:13px;line-height:1.5}
+.ai-count-row+.ai-count-row{border-top:1px solid #f0ebe5}
+.ai-count-row>strong{font-size:15px;white-space:nowrap}
+.ai-count-row code{overflow-wrap:anywhere;font-size:12px}
+.ai-meta{margin:9px 0 0;color:#777068;font-size:12px;line-height:1.5}
+.ai-groups{display:grid;gap:10px}
+.ai-details{border:1px solid var(--line);border-radius:10px;background:#fff}
+.ai-details>summary{list-style:none;cursor:pointer;padding:15px 16px;font-size:14px;font-weight:750;min-height:48px}
+.ai-details>summary::-webkit-details-marker{display:none}
+.ai-details>summary:focus-visible,.ai-zero-items>summary:focus-visible{outline:2px solid #9280bb;outline-offset:2px}
+.ai-chevron{float:right;color:#897a95;font-size:18px}
+.ai-details[open] .ai-chevron{transform:rotate(180deg)}
+.ai-details-body{padding:0 12px 12px}
+.ai-details-body>.ai-row-list{background:#fffdfb}
+.ai-zero-items{margin-top:10px}
+.ai-zero-items>summary{cursor:pointer;min-height:38px;padding:8px 10px;color:#777068;font-size:12px}
+.ai-zero-items>.ai-row-list{margin-top:5px}
+.ai-empty{margin:0;padding:15px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#6a645c;font-size:13px;line-height:1.6}
+@media(max-width:680px){.ai-home-preview{align-items:stretch;flex-direction:column;padding:16px}.ai-home-preview>a{width:100%}.ai-kpis{gap:8px}.ai-kpi{padding:12px}.ai-kpi>span{font-size:11px;min-height:34px}.ai-kpi strong{font-size:26px}.ai-alert-row{padding:13px}.ai-count-row{padding:11px 12px}.ai-updated{width:100%}}
+@media(max-width:370px){.ai-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ai-kpi:last-child{grid-column:span 2}}
 @media(max-width:440px){.pricing-options{grid-template-columns:1fr}.review-completed-summary{padding:12px}}
 @media(max-width:680px){.ops-wrap{padding:18px 15px 42px}.ops-route-grid,.app-grid{grid-template-columns:1fr}.app-grid{gap:10px}.app-card{grid-template-columns:46px minmax(0,1fr);gap:13px;min-height:0;padding:15px}.app-card>img{width:44px;height:44px;border-radius:11px}.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-hero{grid-template-columns:54px minmax(0,1fr);padding:17px}.detail-hero img{width:52px;height:52px;border-radius:12px}.ops-head h1{font-size:29px}.funnel-platform-grid,.diagnosis-grid,.site-freshness{grid-template-columns:1fr}.funnel-chain{gap:5px}.funnel-step{padding:8px}.funnel-step b{font-size:17px}.review-head,.release-head,.pricing-head{align-items:flex-start}.review-card,.release-card,.dependency-card,.pricing-card{padding:12px}}
 """
@@ -177,6 +232,7 @@ def _nav(current: str) -> str:
         ("apps", "/ops/apps/", "앱", "Apps"),
         ("publishing", "/ops/publishing/", "게시", "Publishing"),
         ("media", "/ops/media/", "미디어", "Media"),
+        ("monitoring", "/ops/monitoring/", "운영 점검", "Monitoring"),
         ("settings", "/ops/settings/", "설정", "Settings"),
     )
     links = []
@@ -241,12 +297,13 @@ def _page(title: str, current: str, body: str) -> str:
 """
 
 
-def _home_body(app_count: int, publication_attention: int) -> str:
+def _home_body(app_count: int, publication_attention: int, ai_manager_report: Mapping[str, object] | None) -> str:
+    ai_preview = render_ai_home(ai_manager_report)
     return f"""
 <header class="ops-head">
   <p class="eyebrow" data-ko="운영 현황" data-en="Operations">운영 현황</p>
   <h1>ONNELLAB Ops</h1>
-  <p data-ko="운영 상태를 한눈에 보고, 실제 관리는 앱·게시·미디어·설정에서 나눠서 해요." data-en="Get a quick overview, then manage apps, publishing, media, and connections separately.">운영 상태를 한눈에 보고, 실제 관리는 앱·게시·미디어·설정에서 나눠서 해요.</p>
+  <p data-ko="운영 상태를 한눈에 보고, 앱·게시·미디어·운영 점검에서 자세히 관리해요." data-en="Get the overview, then manage apps, publishing, media, and monitoring separately.">운영 상태를 한눈에 보고, 앱·게시·미디어·운영 점검에서 자세히 관리해요.</p>
 </header>
 <section class="ops-route-grid" aria-label="운영 메뉴">
   <a class="ops-route-card" href="/ops/apps/"><b data-ko="앱" data-en="Apps">앱</b><span data-ko="스토어·리뷰·가격·전환을 앱별로 관리해요." data-en="Manage store status, reviews, pricing, and conversion by app.">스토어·리뷰·가격·전환을 앱별로 관리해요.</span><small data-ko="{app_count}개 앱" data-en="{app_count} apps">{app_count}개 앱</small></a>
@@ -254,6 +311,7 @@ def _home_body(app_count: int, publication_attention: int) -> str:
   <a class="ops-route-card" href="/ops/media/"><b data-ko="미디어" data-en="Media">미디어</b><span data-ko="ONNELLAB Shorts·Aether Inn 채널 현황과 통계를 봐요." data-en="See channel health and metrics for ONNELLAB Shorts and Aether Inn.">ONNELLAB Shorts·Aether Inn 채널 현황과 통계를 봐요.</span><small data-ko="2개 채널" data-en="2 channels">2개 채널</small></a>
   <a class="ops-route-card" href="/ops/settings/"><b data-ko="설정" data-en="Settings">설정</b><span data-ko="GitHub와 스토어 자격증명을 관리해요." data-en="Manage GitHub and store credentials.">GitHub와 스토어 자격증명을 관리해요.</span><small data-ko="연결 설정" data-en="Connections">연결 설정</small></a>
 </section>
+{ai_preview}
 <p class="ops-legacy-link">이전 전체 화면이 필요한 동안에는 <a href="/ops/legacy/">기존 통합 콘솔</a>도 남겨둬요.</p>
 """
 
@@ -324,6 +382,13 @@ main>.ops-route-grid>.ops-route-card b{display:block;font-size:20px;margin-botto
 main>.ops-route-grid>.ops-route-card span{display:block;color:#6f695f;font-size:14px;line-height:1.55}
 main>.ops-route-grid>.ops-route-card small{display:block;margin-top:18px;color:#817b72;font-size:12px;font-weight:700}
 main>.ops-legacy-link{margin:0 0 22px;color:#827d72;font-size:12px}main>.ops-legacy-link a{font-weight:750}
+.ai-home-preview{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:18px 0 20px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.ai-home-preview h2{margin:0 0 7px;font-size:20px}
+.ai-home-preview p{margin:0 0 6px;color:#514d48;font-size:14px;line-height:1.55}
+.ai-home-preview small{color:#756f67;font-size:12px}
+.ai-home-preview>a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 14px;border:1px solid #c5b8dc;border-radius:9px;background:#f4f0ff;color:#4c3d68;font-size:13px;font-weight:750;text-decoration:none;white-space:nowrap}
+.ai-home-preview>a:hover,.ai-home-preview>a:focus-visible{border-color:#ad9aca;background:#ece5ff}
+.ai-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 22px}
 body[data-ops-view="media"] .ops-media-connections{margin:14px 0;border:1px solid #ded6e9;border-radius:12px;background:#fff}
 body[data-ops-view="media"] .ops-media-connections>summary{cursor:pointer;padding:15px;font-size:14px;font-weight:760;min-height:48px}
 body[data-ops-view="media"] .ops-media-connections .yt-settings{margin:0;border:0;border-top:1px solid #eae3f2;border-radius:0;background:#fff}
@@ -333,7 +398,7 @@ html[lang="en"] body[data-ops-view="media"] .ops-media-connections>summary .yt-k
 body[data-ops-view="publishing"] .metric-card[data-view="manual"]{background:#eef7ff;border-color:#b9cbe0}
 body[data-ops-view="publishing"] #verify-publications-primary{background:#e8f1fb;color:#315f91;border-color:#b9cbe0;font-size:15px;min-height:48px}
 body[data-ops-view="publishing"] main>.atm-action{box-shadow:none}
-@media(max-width:680px){main>.ops-route-grid{grid-template-columns:1fr}main>.ops-head h1{font-size:29px}body[data-ops-view]:not([data-ops-view="legacy"])>header .bar{padding:12px 15px!important}body[data-ops-view]:not([data-ops-view="legacy"])>header #app-title{font-size:15px}}
+@media(max-width:680px){main>.ai-home-preview{flex-direction:column;align-items:stretch;padding:16px}main>.ai-home-preview>a{width:100%}main>.ops-route-grid{grid-template-columns:1fr}main>.ops-head h1{font-size:29px}body[data-ops-view]:not([data-ops-view="legacy"])>header .bar{padding:12px 15px!important}body[data-ops-view]:not([data-ops-view="legacy"])>header #app-title{font-size:15px}}
 body[data-ops-view="home"] main>.overview,
 body[data-ops-view="home"] main>.atm-action,
 body[data-ops-view="home"] main>.ytw,
@@ -343,7 +408,7 @@ body[data-ops-view="home"] main>.credential-panel,
 body[data-ops-view="home"] main>#grid,
 body[data-ops-view="home"] main>#empty,
 body[data-ops-view="home"] main>.platform-status,
-body[data-ops-view="home"] main>.status-section:not([aria-label="AI operation status"]){display:none!important}
+body[data-ops-view="home"] main>.status-section{display:none!important}
 body[data-ops-view="publishing"] main>.ytw,
 body[data-ops-view="publishing"] main>.yt-settings,
 body[data-ops-view="publishing"] main>.credential-panel:not(.github-connection-panel),
@@ -2141,7 +2206,7 @@ def build_split_ops_pages(
     output_dir.mkdir(parents=True, exist_ok=True)
     funnel_summary = funnel_summary or {}
     attention = sum(1 for item in publication_items if str(item.get("status") or "") in {"draft", "failed"})
-    home_intro = _home_body(len(apps), attention)
+    home_intro = _home_body(len(apps), attention, ai_manager_report)
     pages: list[Path] = []
     views = {
         "home": (output_dir / "index.html", home_intro),
@@ -2154,6 +2219,14 @@ def build_split_ops_pages(
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(_legacy_view(legacy_html, view, intro), encoding="utf-8")
         pages.append(path)
+
+    monitor_path = output_dir / "monitoring" / "index.html"
+    monitor_path.parent.mkdir(parents=True, exist_ok=True)
+    monitor_path.write_text(
+        _page("AI 운영 점검", "monitoring", render_monitoring(ai_manager_report)),
+        encoding="utf-8",
+    )
+    pages.append(monitor_path)
 
     apps_dir = output_dir / "apps"
     apps_dir.mkdir(parents=True, exist_ok=True)

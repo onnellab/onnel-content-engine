@@ -58,6 +58,10 @@ class AiOpsMonitoringTest(unittest.TestCase):
         self.assertIn("0건 항목", page)
         self.assertIn("스토어 정책 분석 작업", page)
         self.assertIn("23</strong>", page)
+        self.assertIn("Melivra · Google Play", page)
+        self.assertIn('class="ai-alert-more"', page)
+        self.assertIn('data-ai-generated-at=', page)
+        self.assertIn('Snapshot is outdated', page)
 
     def test_repeated_policy_attention_counts_one_action(self):
         policy = {**report()["policy_alerts"][0], "status": "review_required"}

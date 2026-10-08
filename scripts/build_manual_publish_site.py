@@ -4193,6 +4193,9 @@ def html_document(
     }}
 
     function renderAiManagerSummary() {{
+      // Split views show a dedicated, concise monitoring page. Keep the old
+      // full metrics renderer only for the preserved legacy console.
+      if (document.body.dataset.opsView && document.body.dataset.opsView !== 'legacy') return;
       aiManagerGrid.textContent = '';
       const summary = aiManagerReport.summary || {{}};
       const attention = aiManagerReport.requires_attention || [];

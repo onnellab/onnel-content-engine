@@ -8,6 +8,7 @@ promotes a zero count to a successful verification or a deferral to a fix.
 from __future__ import annotations
 
 import html
+import re
 from datetime import datetime, timedelta, timezone
 from typing import Mapping
 from urllib.parse import urlsplit
@@ -171,6 +172,27 @@ def analyze(report: Mapping[str, object] | None, now: datetime | None = None) ->
     }
 
 
+FRESHNESS_SCRIPT = r"""
+<script>
+(() => {
+  const thresholdMs = 48 * 60 * 60 * 1000;
+  document.querySelectorAll('[data-ai-generated-at]').forEach((section) => {
+    const value = Date.parse(section.getAttribute('data-ai-generated-at') || '');
+    const sourceState = section.dataset.aiCollection || section.querySelector('[data-collection]')?.dataset.collection;
+    if (sourceState === 'partial') return; // Do not mask a recorded collection failure.
+    if (!Number.isFinite(value) || Date.now() - value <= thresholdMs) return;
+    const status = section.querySelector('.ai-collection-label');
+    if (!status) return;
+    status.dataset.ko = '자료 갱신 지연';
+    status.dataset.en = 'Snapshot is outdated';
+    status.textContent = document.documentElement.lang === 'en' ? status.dataset.en : status.dataset.ko;
+    const state = section.querySelector('[data-collection]');
+    if (state) state.dataset.collection = 'stale';
+  });
+})();
+</script>
+"""
+
 def _collection_label(collection: str) -> tuple[str, str]:
     return {
         "complete": ("자료 갱신 완료", "Sources refreshed"),
@@ -191,27 +213,28 @@ def render_home(report: Mapping[str, object] | None) -> str:
         summary = _loc("AI 점검 자료가 아직 없어요.", "AI operations data is not available.")
         count_text = _loc("확인 불가", "Unavailable")
     else:
-        summary = _loc(*_collection_label(str(state["collection"])))
+        summary = _loc(*_collection_label(str(state["collection"])), css="ai-collection-label")
         count_text = _loc(f'즉시 확인 {len(state["immediate"])}건 · 보류 {len(state["deferred"])}건',
                           f'{len(state["immediate"])} actionable · {len(state["deferred"])} deferred')
     return (
-        '<section class="ai-home-preview" aria-label="AI operations summary">'
+        '<section class="ai-home-preview" aria-label="AI operations summary" data-ai-generated-at="'
+        + _esc((report or {}).get("generated_at") if isinstance(report, Mapping) else "") + '" data-ai-collection="' + _esc(state["collection"]) + '">'
         '<div><h2>' + _loc("AI 운영 점검", "AI operations", "span") + '</h2>'
         '<p>' + summary + ' · ' + count_text + '</p>'
         '<small>' + _loc("보고서 갱신", "Report updated") + ' · ' + _esc(state["generated"]) + '</small></div>'
         '<a href="/ops/monitoring/">' + _loc("점검 상세 보기", "View monitoring details") + ' →</a>'
-        '</section>'
+        '</section>' + FRESHNESS_SCRIPT
     )
 
 
 def _attention_card(item: Mapping[str, object], *, deferred: bool = False, policy: bool = False) -> str:
     category = str(item.get("category") or "")
-    kind = str(item.get("kind") or "policy")
     labels = ATTENTION_TYPES.get(category, ("조치 내용 확인", "Action needs review"))
     if policy:
         app = str(item.get("app_slug") or "—")
         store = str(item.get("store") or "—")
-        title = _esc(app + " · " + store)
+        store_name = {"google_play": "Google Play", "android": "Google Play", "ios": "App Store", "app_store": "App Store"}.get(store, store)
+        title = _esc(app[:1].upper() + app[1:] + " · " + store_name)
         labels = ("스토어 정책 보류", "Store policy deferred") if deferred else ("스토어 정책 확인", "Store policy review")
         detail = str(item.get("summary") or "")
         note = str(item.get("operational_note") or "")
@@ -219,19 +242,27 @@ def _attention_card(item: Mapping[str, object], *, deferred: bool = False, polic
         title = _loc(*labels, "span")
         detail = str(item.get("actions") or item.get("evidence") or "")
         note = ""
-    body = '<p>' + _esc(detail or "—") + '</p>'
-    if note:
-        body += '<p class="ai-note">' + _loc("현재 조치", "Current action") + ' · ' + _esc(note) + '</p>'
+    parts = re.split(r"(?<=[.!?])\s+", detail.strip()) if detail else []
+    brief = " ".join(parts[:2]) if policy else detail
+    body = '<p>' + _esc(brief or "—") + '</p>'
+    if policy and (len(parts) > 2 or note):
+        body += '<details class="ai-alert-more"><summary>' + _loc("요구사항·조치 내용 전체 보기", "Full requirements & action notes") + '</summary>'
+        if len(parts) > 2:
+            body += '<p>' + _esc(detail) + '</p>'
+        if note:
+            body += '<p class="ai-note">' + _loc("현재 조치", "Current action") + ' · ' + _esc(note) + '</p>'
+        body += '</details>'
     date = item.get("occurred_at")
     if date:
         body += '<small>' + _loc("최초 감지", "Detected") + ' · ' + _esc(_time(date)) + '</small>'
     ref = _safe_url(item.get("reference_url"))
     if ref:
         body += '<a class="ai-link" href="' + _esc(ref) + '" target="_blank" rel="noopener noreferrer">' + _loc("공식 참고 문서 ↗", "Official reference ↗") + '</a>'
+    badge = labels if policy else ("즉시 확인", "Needs action")
     return (
         '<article class="ai-alert-row" data-alert-priority="' + ("deferred" if deferred else "actionable") + '">'
         '<div class="ai-alert-head"><strong>' + title + '</strong><span class="ai-state-label">'
-        + _loc(*labels, "span") + '</span></div>' + body + '</article>'
+        + _loc(*badge, "span") + '</span></div>' + body + '</article>'
     )
 
 def render_monitoring(report: Mapping[str, object] | None) -> str:
@@ -268,8 +299,8 @@ def render_monitoring(report: Mapping[str, object] | None) -> str:
         '<h1>' + _loc("AI 운영 점검", "AI operations") + '</h1>'
         '<p>' + _loc("먼저 확인할 항목을 보고, 나머지는 분야별로 펼쳐볼 수 있어요.",
                      "See what needs attention first, then expand details by area.") + '</p>'
-        '</header><div class="ai-source-line"><span class="ai-source-state" data-collection="' + _esc(collection) + '">'
-        + _loc(status_ko, status_en) + '</span>' + headline + '</div>'
+        '</header><div class="ai-source-line" data-ai-generated-at="' + _esc((report or {}).get('generated_at') if isinstance(report, Mapping) else '') + '"><span class="ai-source-state" data-collection="' + _esc(collection) + '">'
+        + _loc(status_ko, status_en, css='ai-collection-label') + '</span>' + headline + '</div>'
     )
     freshness_notice = ''
     if collection != "complete":
@@ -342,4 +373,5 @@ def render_monitoring(report: Mapping[str, object] | None) -> str:
         '</h2>' + qa_notice + '<div class="ai-groups">' + ''.join(groups) + extras + '</div></section>'
         + '<p class="ai-meta">' + _loc("표시값은 마지막 보고서 스냅샷 기준이에요. 수집 결과와 품질 판정을 구분해요.",
                                      "Values reflect the last report snapshot. Collection and quality verification are separate.") + '</p>'
+        + FRESHNESS_SCRIPT
     )

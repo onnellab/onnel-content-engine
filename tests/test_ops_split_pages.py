@@ -349,10 +349,20 @@ class OpsSplitPagesTest(unittest.TestCase):
             validate_dashboard(output / "index.html")
             home_html = (output / "index.html").read_text(encoding="utf-8")
             self.assertIn(
-                'body[data-ops-view="home"] main>.status-section:not([aria-label="AI operation status"])',
+                'body[data-ops-view="home"] main>.status-section{display:none!important}',
                 home_html,
             )
             self.assertIn('aria-label="AI operation status"', home_html)
+            self.assertIn('class="ai-home-preview"', home_html)
+            self.assertIn('href="/ops/monitoring/"', home_html)
+            self.assertTrue((output / "monitoring" / "index.html").exists())
+            monitoring_html = (output / "monitoring" / "index.html").read_text(encoding="utf-8")
+            self.assertIn('data-ko="AI 운영 점검" data-en="AI operations"', monitoring_html)
+            self.assertIn('data-ko="자료 없음" data-en="No report available"', monitoring_html)
+            self.assertIn('class="ai-kpis"', monitoring_html)
+            self.assertIn('class="ops-topbar"', monitoring_html)
+            self.assertIn('href="/ops/monitoring/" aria-current="page"', monitoring_html)
+            self.assertIn("onnellab-ops-language", monitoring_html)
             self.assertIn('new MutationObserver(localizeRoute)', home_html)
             self.assertIn('data-ko="운영 현황" data-en="Operations"', home_html)
             self.assertIn('data-ko="검토할 항목 ', home_html)
