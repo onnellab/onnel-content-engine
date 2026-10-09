@@ -232,15 +232,21 @@ def google_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) -
         "status": "ok", "sales_files": 0, "earnings_files": 0,
         "sales_months": [], "earnings_months": [],
     }
+    statuses["earnings_objects_listed"] = 0
+    statuses["earnings_unrecognized_files"] = 0
     for prefix, matcher, fn, label in (
         ("sales/", r"salesreport_(\d{6})\.zip$", parse_google_sales_zip, "sales_files"),
-        ("earnings/", r"earnings_(\d{6})\.zip$", parse_google_earnings_zip, "earnings_files"),
+        ("earnings/", r"^earnings/earnings_(\d{6})(?:_[A-Za-z0-9_-]+)?\.zip$", parse_google_earnings_zip, "earnings_files"),
     ):
         objects = gcs_list_objects(bucket, prefix, token)
+        if prefix == "earnings/":
+            statuses["earnings_objects_listed"] = len(objects)
         for obj in objects:
             filename = str(obj.get("name", ""))
             match = re.search(matcher, filename)
             if not match:
+                if prefix == "earnings/" and filename.lower().endswith(".zip"):
+                    statuses["earnings_unrecognized_files"] += 1
                 continue
             yyyy_mm = match.group(1)
             month = date(int(yyyy_mm[:4]), int(yyyy_mm[4:]), 1)

@@ -26,8 +26,11 @@ Public dashboard HTML contains no raw finance values.
 Google Play:
 - `sales/salesreport_YYYYMM.zip` estimated sales, charged amount in buyer
   sale currency; month current-to-date if source has posted it
-- `earnings/earnings_YYYYMM.zip` actual Google fee, usually posted after the
-  reporting month; fee refunds must reverse fee expense
+- `earnings/earnings_YYYYMM.zip` and
+  `earnings/earnings_YYYYMM_<account-identifier>.zip` actual Google fee,
+  usually posted after the reporting month; fee refunds must reverse expense.
+  The collector reports unmatched ZIP filenames as counts, without exposing
+  account identifiers.
 - Distinct currencies **never** sum together.
 
 Apple:

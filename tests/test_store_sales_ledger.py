@@ -73,6 +73,39 @@ class LedgerTests(unittest.TestCase):
                          [("2026-10-08","JP","JPY","-22.50"),
                           ("2026-10-07","JP","JPY","82.50")])
 
+    def test_earnings_files_accept_merchant_suffix_and_adjustments(self):
+        from store_sales_ledger import google_ledger
+        sample = archive(
+            "Package ID,Transaction Type,Transaction Date,Buyer Country,Merchant Currency,"
+            "Amount (Merchant Currency)\n"
+            "com.onnellab.tagweaver2,Google fee,\"Sep 12, 2026\",US,USD,-0.75\n"
+        )
+        objects = {
+            "sales/": [],
+            "earnings/": [
+                {"name": "earnings/earnings_202609_abc-123.zip"},
+                {"name": "earnings/earnings_202608.zip"},
+                {"name": "earnings/unrecognized_202609.zip"},
+            ],
+        }
+        def listed(bucket, prefix, token):
+            return objects[prefix]
+        app = {**GOOGLE["com.onnellab.tagweaver2"],
+               "platform": "android", "store_package": "com.onnellab.tagweaver2"}
+        with patch("store_sales_ledger.normalize_google_reports_bucket",
+                   return_value="safe-bucket"), patch(
+                   "store_sales_ledger.google_token_from_env",
+                   return_value=("token","")), patch(
+                   "store_sales_ledger.gcs_list_objects",
+                   side_effect=listed), patch(
+                   "store_sales_ledger.gcs_download", return_value=sample):
+            rows, status = google_ledger([app], date(2026, 10, 9))
+        self.assertEqual(status["earnings_files"], 2)
+        self.assertEqual(status["earnings_objects_listed"], 3)
+        self.assertEqual(status["earnings_unrecognized_files"], 1)
+        self.assertEqual(status["earnings_months"], ["2026-08", "2026-09"])
+        self.assertEqual(len(rows), 2)
+
     def test_apple_daily_report_no_fee_inferred(self):
         fields = [
             "Apple Identifier", "Country Code", "Customer Currency", "Currency of Proceeds",
