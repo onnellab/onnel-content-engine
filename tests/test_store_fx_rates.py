@@ -57,6 +57,7 @@ class FxReferenceTests(unittest.TestCase):
         result=enrich_ledger(ledger,history=parse_ecb_xml(XML))
         self.assertNotIn("net_sales_krw",result["rows"][0])
         self.assertEqual(result["fx_status"]["missing_sales_rows"],1)
+        self.assertEqual(result["fx_status"]["missing_currency_counts"],{"XYZ":1})
 
     def test_cached_previous_reference_rate_when_ecb_down(self):
         record={"rows":[{"date":"2026-10-08","currency":"USD","gross":"1",

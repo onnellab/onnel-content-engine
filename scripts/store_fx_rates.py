@@ -114,6 +114,7 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
     previous_rates = (previous or {}).get("fx_rates", {})
     saved_rates = {}
     missing_sales = 0
+    missing_currencies: dict[str,int] = {}
     missing_fees = 0
     missing_settlement = 0
 
@@ -148,6 +149,7 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
             row.pop("fx_sales_rate", None)
             row.pop("fx_sales_date", None)
             missing_sales += 1
+            missing_currencies[currency or "UNKNOWN"] = missing_currencies.get(currency or "UNKNOWN", 0) + 1
         if row.get("fee_confirmed") is True:
             if fx:
                 row["fee_krw"] = won(row.get("fee", "0"), fx["rate"])
@@ -195,6 +197,7 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
         "checked_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "status": state,
         "missing_sales_rows": missing_sales,
+        "missing_currency_counts": dict(sorted(missing_currencies.items())),
         "missing_fee_rows": missing_fees,
         "missing_settlement_rows": missing_settlement,
         "errors": errors,
