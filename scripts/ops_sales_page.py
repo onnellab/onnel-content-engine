@@ -3,9 +3,39 @@ from __future__ import annotations
 import html
 import json
 from collections.abc import Mapping
+from decimal import Decimal, InvalidOperation
 
 def safe_json(value):
     return json.dumps(value, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c").replace("&", "\\u0026")
+
+def confirmed_foreign_fees(rows: list[dict]) -> list[dict]:
+    """Only official Google fee entries with a known foreign buyer country."""
+    verified = []
+    for row in rows:
+        country = str(row.get("country") or "").upper()
+        if (row.get("platform") != "android"
+            or row.get("fee_confirmed") is not True
+            or "google_earnings_actual" not in row.get("sources", [])
+            or len(country) != 2 or not country.isalpha() or country in {"KR","ZZ"}):
+            continue
+        try:
+            fee = Decimal(str(row.get("fee") or "0"))
+        except InvalidOperation:
+            continue
+        if not fee.is_finite() or fee == 0:
+            continue
+        verified.append({
+            "date":str(row.get("date") or ""),
+            "app_name":str(row.get("app_name") or ""),
+            "app_slug":str(row.get("app_slug") or ""),
+            "country":country,
+            "fee":str(fee),
+            "currency":str(row.get("currency") or "").upper(),
+            "source":"Google Play Earnings (Google fee)",
+            "kind":"refund_adjustment" if fee < 0 else "platform_commission",
+        })
+    return verified
+
 
 def sales_page_body(ledger: Mapping | None) -> str:
     ledger = ledger or {}
@@ -19,6 +49,9 @@ def sales_page_body(ledger: Mapping | None) -> str:
                "units", "gross", "refund", "net_sales", "fee", "fee_confirmed",
                "proceeds", "proceeds_currency", "sources"}
     data = [{k: v for k, v in row.items() if k in allowed} for row in rows if isinstance(row, dict)]
+    monthly = ledger.get("settlements", [])
+    monthly = monthly if isinstance(monthly, list) else []
+    verified = confirmed_foreign_fees(data)
     checked = html.escape(str(ledger.get("checked_at", "수집 전"))[:16].replace("T", " "))
     state = []
     labels = {
@@ -28,11 +61,16 @@ def sales_page_body(ledger: Mapping | None) -> str:
         "credentials_unavailable":"API 키 점검 필요",
         "no_reports":"판매 보고서 미수신 · 판매 0건 확정 아님",
     }
-    for platform,name in (("google","Google Play"),("apple","App Store")):
+    for platform,name in (("google","Google Play"),("apple","App Store"),("apple_finance","Apple 월별 정산")):
         source = statuses.get(platform,{})
         code = str(source.get("status","not_collected")) if isinstance(source,dict) else "not_collected"
         state.append('<div class="sales-state-item"><b>'+name+'</b> <span>'+html.escape(labels.get(code,code))+'</span></div>')
-    return HTML.replace("__LEDGER__",safe_json(data)).replace("__STATUSES__",safe_json(statuses)).replace(
+    google_status = statuses.get("google", {})
+    if isinstance(google_status,dict) and google_status.get("missing_earnings_months"):
+        missing = ", ".join(google_status["missing_earnings_months"])
+        state.append('<div class="sales-state-item"><b>Google 확정 수수료</b><span>미수신 월: '+
+                     html.escape(missing)+'</span></div>')
+    return HTML.replace("__LEDGER__",safe_json(data)).replace("__SETTLEMENTS__",safe_json(monthly)).replace("__GRANT__",safe_json(verified)).replace("__STATUSES__",safe_json(statuses)).replace(
         "__STATE__", "".join(state)).replace("__CHECKED__", checked)
 
 HTML = r"""
@@ -63,6 +101,7 @@ HTML = r"""
 .sales-empty{padding:30px 16px;text-align:center;color:#746d66;background:#fff}
 .sales-caption{font-size:13px;color:#686159}
 .sales-amount{font-weight:740;color:#333039}
+.sales-secondary{margin-top:28px}.sales-secondary h2{font-size:19px;color:#36323b;margin:0 0 9px}
 @media(max-width:800px){.sales-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.sales-controls{gap:9px;padding:12px}.sales-table th,.sales-table td{padding:10px 9px}}
 </style>
@@ -89,6 +128,22 @@ HTML = r"""
 <tbody id="sales-body"></tbody>
 </table>
 </div>
+<section class="sales-secondary">
+ <h2 data-ko="월별 확정 정산" data-en="Monthly finalized settlements">월별 확정 정산</h2>
+ <p class="sales-note">Apple 회계월 기준 확정 재무 보고서예요. 실수령액에는 세금과 수수료가 반영되어 있으며, 수수료 자체를 뜻하지 않아요.</p>
+ <div class="sales-table-wrap"><table class="sales-table" aria-label="확정 재무 보고서">
+ <thead><tr><th>회계월</th><th>앱</th><th>국가</th><th>판매량</th><th>고객 결제액</th><th>확정 수익금</th><th>수수료 증빙</th></tr></thead>
+ <tbody id="settlement-body"></tbody></table></div>
+</section>
+<section class="sales-secondary">
+ <h2 data-ko="지원금 신청용 해외 플랫폼 수수료" data-en="Documented foreign platform fees">지원금 신청용 해외 플랫폼 수수료</h2>
+ <p class="sales-note">국가가 확인된 해외 Google Play 판매의 확정 수수료만 표시해요. 환불 수수료 조정은 음수로 표시해요. Apple은 별도 수수료 세금계산서 등 공식 증빙을 확보하기 전까지 제외해요.</p>
+ <div class="sales-actions"><span id="grant-fee-count" class="sales-caption"></span>
+ <button type="button" id="grant-fees-export">증빙 내역 CSV 저장</button></div>
+ <div class="sales-table-wrap"><table class="sales-table" aria-label="해외 수수료 명세">
+ <thead><tr><th>발생일자</th><th>세부내용</th><th>금액</th><th>통화</th><th>근거 자료</th></tr></thead>
+ <tbody id="grant-fees-body"></tbody></table></div>
+</section>
 <p class="sales-note">
  • Google Play 판매금액은 현지 통화의 예상 판매 보고서, 수수료는 확정 수익 보고서의 Google fee 거래예요.<br>
  • Apple 판매액에는 세금이 포함될 수 있으므로 소비자 가격과 개발자 수익의 차이를 수수료로 표시하지 않아요.<br>
@@ -96,10 +151,14 @@ HTML = r"""
  마지막 갱신: __CHECKED__ (UTC)
 </p>
 <script id="sales-ledger" type="application/json">__LEDGER__</script>
+<script id="sales-settlements" type="application/json">__SETTLEMENTS__</script>
+<script id="sales-verified-fees" type="application/json">__GRANT__</script>
 <script id="sales-source-status" type="application/json">__STATUSES__</script>
 <script>
 (() => {
  const rows = JSON.parse(document.getElementById('sales-ledger').textContent || '[]');
+ const settlements = JSON.parse(document.getElementById('sales-settlements').textContent || '[]');
+ const confirmedFees = JSON.parse(document.getElementById('sales-verified-fees').textContent || '[]');
  const month = document.getElementById('sales-month');
  const platform = document.getElementById('sales-platform');
  const app = document.getElementById('sales-app');
@@ -151,6 +210,51 @@ HTML = r"""
    }
    caption.textContent=month.value+' · '+visible.length+'개 내역 (1일~'+(month.value===currentMonth?today:'말일')+')';
    exportButton.disabled=!visible.length;
+   drawExtras();
+ };
+ const filteredFees = () => confirmedFees.filter(r => r.date.startsWith(month.value)
+     && (!platform.value || platform.value==='android') &&
+     (!app.value || r.app_slug===app.value) &&
+     (!country.value || r.country===country.value));
+ const drawExtras = () => {
+   const settlementBody=document.getElementById('settlement-body');
+   settlementBody.replaceChildren();
+   const financeRows=settlements.filter(r=>r.fiscal_month===month.value
+      && (!platform.value || platform.value==='ios')
+      && (!app.value || r.app_slug===app.value)
+      && (!country.value || r.country===country.value));
+   for(const item of financeRows){
+     const tr=document.createElement('tr');
+     for(const field of [item.fiscal_month,item.app_name,item.country,item.units,
+       (item.gross||'0')+' '+(item.customer_currency||''),
+       (item.proceeds||'0')+' '+item.proceeds_currency,'별도 증빙 필요']){
+       cell(tr,field);
+     }
+     settlementBody.append(tr);
+   }
+   if(!financeRows.length){
+     const tr=document.createElement('tr'),td=document.createElement('td');
+     td.colSpan=7;td.className='sales-empty';td.textContent='이 회계월에 확인된 확정 정산 보고서가 없어요.';
+     tr.append(td);settlementBody.append(tr);
+   }
+   const grantBody=document.getElementById('grant-fees-body');
+   grantBody.replaceChildren();
+   const fees=filteredFees();
+   for(const item of fees){
+     const tr=document.createElement('tr');
+     const kind=item.kind==='refund_adjustment'?'환불 수수료 조정':'해외 판매 플랫폼 정산 수수료';
+     const detail='Google Play · '+item.app_name+' · '+item.country+' · '+kind;
+     for(const part of [item.date,detail,item.fee,item.currency,item.source])cell(tr,part);
+     grantBody.append(tr);
+   }
+   if(!fees.length){
+     const tr=document.createElement('tr'),td=document.createElement('td');
+     td.colSpan=5;td.className='sales-empty';
+     td.textContent='확정된 해외 플랫폼 수수료 자료가 없어요. Google Earnings 수신 후 자동 표시돼요.';
+     tr.append(td);grantBody.append(tr);
+   }
+   document.getElementById('grant-fee-count').textContent=month.value+' · 확인된 '+fees.length+'개 내역';
+   document.getElementById('grant-fees-export').disabled=!fees.length;
  };
  [month,platform,app,country].forEach(node=>node.addEventListener('change',draw));
  exportButton.addEventListener('click',()=>{
@@ -159,6 +263,19 @@ HTML = r"""
    const csv=[fields.join(','),...filtered().map(r=>fields.map(k=>escapeCsv(k==='fee'&&!r.fee_confirmed?'':r[k])).join(','))].join('\r\n');
    const url=URL.createObjectURL(new Blob(['\ufeff',csv],{type:'text/csv;charset=utf-8'}));
    const anchor=document.createElement('a');anchor.href=url;anchor.download='ONNELLAB-sales-'+month.value+'.csv';anchor.click();
+   setTimeout(()=>URL.revokeObjectURL(url),2000);
+ });
+ document.getElementById('grant-fees-export').addEventListener('click',()=>{
+   const fields=['발생일자','세부내용','금액','통화','근거자료'];
+   const csvQuote=v=>'"'+String(v??'').replaceAll('"','""')+'"';
+   const entries=filteredFees().map(r=>[
+     r.date,'Google Play / '+r.app_name+' / '+r.country+' / '+
+       (r.kind==='refund_adjustment'?'환불 수수료 조정':'플랫폼 정산 수수료'),
+     r.fee,r.currency,r.source]);
+   const csv=[fields,...entries].map(row=>row.map(csvQuote).join(',')).join('\\r\\n');
+   const url=URL.createObjectURL(new Blob(['\\ufeff',csv],{type:'text/csv;charset=utf-8'}));
+   const a=document.createElement('a');
+   a.href=url;a.download='ONNELLAB-overseas-fees-'+month.value+'.csv';a.click();
    setTimeout(()=>URL.revokeObjectURL(url),2000);
  });
  draw();

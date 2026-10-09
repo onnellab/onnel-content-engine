@@ -28,6 +28,31 @@ class SalesPageTests(unittest.TestCase):
         self.assertIn("let year=2026", result)
         self.assertIn("k==='fee'&&!r.fee_confirmed?''", result)
 
+    def test_supports_apple_monthly_settlements_without_inventing_fees(self):
+        result = sales_page_body({"settlements": [{
+            "fiscal_month": "2026-09", "app_slug": "tagweaver",
+            "app_name": "TagWeaver", "country": "JP", "customer_currency": "JPY",
+            "proceeds_currency": "JPY", "gross": "1000.00", "proceeds": "700.00",
+            "fee": None, "fee_status": "commission_invoice_required",
+        }], "source_status": {"apple_finance": {"status": "ok"}}})
+        self.assertIn("2026-09", result)
+        self.assertIn('id="settlement-body"', result)
+        self.assertIn("별도 증빙 필요", result)
+        self.assertIn('id="sales-settlements"', result)
+
+    def test_grant_export_only_includes_verified_foreign_google_fees(self):
+        from ops_sales_page import confirmed_foreign_fees
+        base = {"date":"2026-09-17", "app_name":"TagWeaver", "app_slug":"tagweaver",
+                "platform":"android", "fee_confirmed":True, "fee":"125.00",
+                "currency":"KRW", "country":"JP", "sources":["google_earnings_actual"]}
+        rows = [base, {**base,"country":"KR"},
+                {**base,"country":"ZZ"}, {**base,"fee_confirmed":False},
+                {**base,"platform":"ios"}]
+        fees = confirmed_foreign_fees(rows)
+        self.assertEqual(len(fees), 1)
+        self.assertEqual(fees[0]["fee"],"125.00")
+        self.assertIn('id="grant-fees-export"', sales_page_body({"rows":[base]}))
+
     def test_no_html_injection_in_sales_data(self):
         result = sales_page_body({"rows": [{
             "date":"2026-10-01", "app_name": "</script><script>alert(1)</script>"
