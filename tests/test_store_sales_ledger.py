@@ -119,6 +119,39 @@ class LedgerTests(unittest.TestCase):
         self.assertEqual(status["days_missing"], 2)
         self.assertEqual(status["days_checked"], 0)
 
+    def test_apple_initial_backfill_starts_at_first_launch(self):
+        from store_sales_ledger import apple_ledger
+        requests = []
+        missing = HTTPError("https://example.com", 404, "Missing", {}, None)
+        def fetch(req, timeout=40):
+            requests.append(req.full_url)
+            raise missing
+        with patch.dict(os.environ, {"APP_STORE_VENDOR_NUMBER": "12345678"}), (
+            patch("store_sales_ledger.apple_sales_token", return_value="mock-token")
+        ), patch("store_sales_ledger.urllib.request.urlopen", side_effect=fetch):
+            _, state = apple_ledger([], date(2026, 3, 4), date(2026, 1, 1))
+        self.assertEqual(len(requests), 3)
+        self.assertTrue(all("2026-03-" in url for url in requests))
+        self.assertEqual(state["days_missing"], 3)
+
+    def test_apple_old_dates_not_redownloaded_after_backfill(self):
+        from store_sales_ledger import apple_ledger
+        previous = {"completed_days": ["2026-03-01"], "missing_days": ["2026-03-02"]}
+        missing = HTTPError("https://example.com", 404, "Missing", {}, None)
+        calls = []
+        def fetch(req, timeout=40):
+            calls.append(req.full_url)
+            raise missing
+        with patch.dict(os.environ, {"APP_STORE_VENDOR_NUMBER": "12345678"}), (
+            patch("store_sales_ledger.apple_sales_token", return_value="mock-token")
+        ), patch("store_sales_ledger.urllib.request.urlopen", side_effect=fetch):
+            _, state = apple_ledger([], date(2026, 3, 20), date(2026, 3, 1),
+                                     previous_status=previous)
+        self.assertTrue(all("2026-03-01" not in url for url in calls))
+        self.assertTrue(all("2026-03-02" not in url for url in calls))
+        self.assertIn("2026-03-01", state["completed_days"])
+        self.assertIn("2026-03-02", state["missing_days"])
+
     def test_finance_team_key_isolated_from_release_key(self):
         from store_sales_ledger import apple_sales_token
         credentials = {

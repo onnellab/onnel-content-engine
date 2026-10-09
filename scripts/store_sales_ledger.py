@@ -29,6 +29,8 @@ from sync_store_reviews import app_store_connect_read_token_from_env, app_store_
 ROOT = Path(__file__).resolve().parents[1]
 STORES = ROOT / "data" / "store_versions.csv"
 FIRST_DAY = date(2026, 1, 1)
+APPLE_FIRST_DAY = date(2026, 3, 1)
+APPLE_REFRESH_DAYS = 14
 MONEY = Decimal("0.01")
 
 
@@ -276,7 +278,7 @@ def apple_sales_token() -> str:
     return app_store_connect_read_token_from_env()
 
 
-def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) -> tuple[list[dict], dict]:
+def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY, *, previous_status: dict | None = None) -> tuple[list[dict], dict]:
     vendor = os.getenv("APP_STORE_VENDOR_NUMBER", "").strip()
     if not vendor:
         return [], {"status": "vendor_number_required"}
@@ -286,13 +288,22 @@ def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) ->
         return [], {"status": "credentials_unavailable"}
     apps = {s["store_app_id"]: s for s in stores if s.get("platform") == "ios" and s.get("store_app_id")}
     # Apple daily sales data becomes available the next day; never infer today's sales as zero.
-    cursor = max(earliest, as_of - timedelta(days=40))
+    cursor = max(earliest, APPLE_FIRST_DAY, as_of - timedelta(days=364))
+    prior = previous_status if isinstance(previous_status, dict) else {}
+    checked_days = set(prior.get("completed_days", []))
+    missing_days = set(prior.get("missing_days", []))
+    checked_days = {value for value in checked_days if cursor.isoformat() <= value < as_of.isoformat()}
+    missing_days = {value for value in missing_days if cursor.isoformat() <= value < as_of.isoformat()}
     events: list[dict] = []
-    checked = 0
-    missing = 0
+    new_checked = 0
+    refreshed_days: list[str] = []
     errors: list[str] = []
     while cursor < as_of:
         day = cursor.isoformat()
+        recent = cursor >= as_of - timedelta(days=APPLE_REFRESH_DAYS)
+        if not recent and (day in checked_days or day in missing_days):
+            cursor += timedelta(days=1)
+            continue
         params = urllib.parse.urlencode({
             "filter[frequency]": "DAILY",
             "filter[reportDate]": day,
@@ -307,26 +318,31 @@ def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) ->
         try:
             with urllib.request.urlopen(req, timeout=40) as response:
                 events.extend(parse_apple_sales(response.read(), apps, day))
-            checked += 1
-        except urllib.error.HTTPError as e:
-            if e.code == 404:
-                missing += 1
+            checked_days.add(day)
+            missing_days.discard(day)
+            refreshed_days.append(day)
+            new_checked += 1
+        except urllib.error.HTTPError as error:
+            if error.code == 404:
+                missing_days.add(day)
+                checked_days.discard(day)
             else:
-                errors.append(f"{day}: HTTP {e.code}")
-                if e.code in {401, 403}:
+                errors.append(f"{day}: HTTP {error.code}")
+                if error.code in {401, 403, 429}:
                     break
         cursor += timedelta(days=1)
-    # Distinguish accepted reports, no published reports, and an API/permission error.
-    # In particular 40 days of HTTP 404 must never be reported as success.
-    status = "partial" if errors else "no_reports" if checked == 0 else "ok"
+    status = "partial" if errors else "no_reports" if not checked_days else "ok"
     return events, {
-        "status": status, "days_checked": checked, "days_missing": missing,
-        "errors": errors[:8],
+        "status": status, "days_checked": len(checked_days),
+        "days_missing": len(missing_days), "new_reports": new_checked,
+        "completed_days": sorted(checked_days), "missing_days": sorted(missing_days),
+        "refreshed_days": refreshed_days, "errors": errors[:8],
     }
 
 
+
 def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
-                 google: bool = True) -> dict:
+                 google: bool = True, previous: dict | None = None) -> dict:
     if earliest > as_of:
         raise LedgerError("start date exceeds as-of date")
     stores = read_csv_rows(STORES)
@@ -337,7 +353,8 @@ def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
         events += rows
         status["google"] = state
     if apple:
-        rows, state = apple_ledger(stores, as_of, earliest)
+        old_status = (previous or {}).get("source_status", {}).get("apple", {})
+        rows, state = apple_ledger(stores, as_of, earliest, previous_status=old_status)
         events += rows
         status["apple"] = state
     return {
@@ -366,16 +383,22 @@ def main() -> int:
     parser.add_argument("--no-google", action="store_true")
     parser.add_argument("--no-apple", action="store_true")
     args = parser.parse_args()
+    previous = json.loads(args.previous.read_text(encoding="utf-8")) if (
+        args.previous and args.previous.exists()
+    ) else None
     ledger = build_ledger(args.as_of, earliest=args.earliest, google=not args.no_google,
-                          apple=not args.no_apple)
-    if args.previous and args.previous.exists():
-        # Keep previous dates when Apple only refreshes a bounded sliding window.
-        previous = json.loads(args.previous.read_text(encoding="utf-8"))
+                          apple=not args.no_apple, previous=previous)
+    if previous:
+        # On a refreshed report date remove historical rows first, then replace
+        # with the latest Apple daily source, avoiding stale/duplicated sales.
         def identity(row):
             return tuple(str(row.get(k, "")) for k in
                          ("date", "platform", "app_slug", "country", "currency"))
+        refreshed = set(ledger["source_status"].get("apple", {}).get("refreshed_days", []))
         combined = {identity(row): row for row in previous.get("rows", [])
-                    if isinstance(row, dict) and row.get("date", "") <= args.as_of.isoformat()}
+                    if isinstance(row, dict)
+                    and row.get("date", "") <= args.as_of.isoformat()
+                    and not (row.get("platform") == "ios" and row.get("date") in refreshed)}
         combined.update({identity(row): row for row in ledger["rows"]})
         ledger["rows"] = sorted(combined.values(), key=identity, reverse=True)
     args.output.parent.mkdir(parents=True, exist_ok=True)
