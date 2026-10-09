@@ -13,3 +13,8 @@ video/node_modules/
 video/.cache/
 video/assets/*
 !video/assets/README.md
+
+# Public dashboard source may contain private sale data while CI builds it.
+# Only sealed HTML is allowed to leave ephemeral CI; never track plaintext.
+generated/manual-publish/
+.private-store-sales/

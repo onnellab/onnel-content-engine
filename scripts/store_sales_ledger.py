@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import csv
 import gzip
 import io
@@ -23,7 +24,7 @@ from sync_store_funnel import (
     gcs_download, gcs_list_objects, google_token_from_env,
     normalize_google_reports_bucket, read_daily,
 )
-from sync_store_reviews import app_store_connect_read_token_from_env, read_csv_rows
+from sync_store_reviews import app_store_connect_read_token_from_env, app_store_connect_token, read_csv_rows
 
 ROOT = Path(__file__).resolve().parents[1]
 STORES = ROOT / "data" / "store_versions.csv"
@@ -47,7 +48,7 @@ def amount(value: object) -> Decimal:
 
 def iso_day(value: object) -> str:
     raw = str(value or "").strip()
-    for fmt in ("%Y-%m-%d", "%b %d, %Y", "%m/%d/%Y", "%Y/%m/%d"):
+    for fmt in ("%Y-%m-%d", "%b %d, %Y", "%d %b %Y", "%m/%d/%Y", "%Y/%m/%d"):
         try:
             return datetime.strptime(raw, fmt).date().isoformat()
         except ValueError:
@@ -101,9 +102,9 @@ def parse_google_sales_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> list[
             if package not in apps:
                 continue
             state = lookup(row, "Financial status").casefold()
-            if state not in {"charged", "refund"}:
+            if state not in {"charged", "refund", "partial refund"}:
                 continue
-            day = iso_day(lookup(row, "Order refunded date" if state == "refund" else "Order charged date"))
+            day = iso_day(lookup(row, "Order refunded date" if state in {"refund", "partial refund"} else "Order charged date"))
             if not day:
                 day = iso_day(lookup(row, "Order charged date"))
             if not day:
@@ -116,9 +117,9 @@ def parse_google_sales_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> list[
             value = abs(value)
             country = lookup(row, "Country of Buyer")
             events.append(make_event(day, "android", apps[package], country, currency,
-                                     "google_sales_estimate", units=1 if state == "charged" else -1,
+                                     "google_sales_estimate", units=1 if state == "charged" else -1 if state == "refund" else 0,
                                      gross=value if state == "charged" else 0,
-                                     refund=-value if state == "refund" else 0))
+                                     refund=-value if state in {"refund", "partial refund"} else 0))
     return events
 
 
@@ -130,16 +131,24 @@ def parse_google_earnings_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> li
             if package not in apps:
                 continue
             kind = lookup(row, "Transaction Type").casefold()
-            if kind not in {"google fee", "google fee refund", "google fee rebill"}:
+            if kind not in {"google fee", "google fee refund", "google fee partial refund", "google fee rebill"}:
                 continue
             day = iso_day(lookup(row, "Transaction Date"))
-            currency = lookup(row, "Merchant Currency")
-            if not day or not currency:
+            # Earnings CSV has two published layouts; one gives buyer-country and
+            # merchant-currency amount, another gives sale-country and sale-currency due.
+            merchant_value = lookup(row, "Amount (Merchant Currency)")
+            sale_value = lookup(row, "Amount Due (Sale Currency)")
+            if merchant_value:
+                currency = lookup(row, "Merchant Currency")
+                value = amount(merchant_value)
+            else:
+                currency = lookup(row, "Sale Currency")
+                value = amount(sale_value)
+            if not day or not currency or not (merchant_value or sale_value):
                 continue
-            value = amount(lookup(row, "Amount (Merchant Currency)"))
-            # Fee is represented as a positive expense; fee refunds reverse expense.
-            signed_fee = -abs(value) if kind == "google fee refund" else abs(value)
-            country = lookup(row, "Buyer Country", "Buyer Country Code", "Country")
+            # Fees are expenses; fee-refund rows reverse that expense.
+            signed_fee = -abs(value) if "refund" in kind else abs(value)
+            country = lookup(row, "Buyer Country", "Sale Country", "Country")
             events.append(make_event(day, "android", apps[package], country, currency,
                                      "google_earnings_actual", fee=signed_fee))
     return events
@@ -237,7 +246,15 @@ def google_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) -
 
 
 def apple_sales_token() -> str:
-    # Team key required for sales and finance endpoints.
+    # Financial endpoints require an account-wide Team key, not an Individual key.
+    team_key = os.getenv("APP_STORE_CONNECT_KEY_ID", "").strip()
+    issuer_id = os.getenv("APP_STORE_CONNECT_ISSUER_ID", "").strip()
+    encoded = os.getenv("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", "").strip()
+    if team_key and issuer_id and encoded:
+        private_key = base64.b64decode(encoded, validate=True).decode("utf-8")
+        return app_store_connect_token(team_key, issuer_id, private_key, key_type="team")
+    if os.getenv("APP_STORE_CONNECT_READ_KEY_TYPE", "").lower().strip() == "individual":
+        raise LedgerError("finance reports require a team API key")
     return app_store_connect_read_token_from_env()
 
 
@@ -318,11 +335,22 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--as-of", type=date.fromisoformat, default=date.today())
     parser.add_argument("--earliest", type=date.fromisoformat, default=FIRST_DAY)
+    parser.add_argument("--previous", type=Path, help="Decrypted prior private ledger")
     parser.add_argument("--no-google", action="store_true")
     parser.add_argument("--no-apple", action="store_true")
     args = parser.parse_args()
     ledger = build_ledger(args.as_of, earliest=args.earliest, google=not args.no_google,
                           apple=not args.no_apple)
+    if args.previous and args.previous.exists():
+        # Keep previous dates when Apple only refreshes a bounded sliding window.
+        previous = json.loads(args.previous.read_text(encoding="utf-8"))
+        def identity(row):
+            return tuple(str(row.get(k, "")) for k in
+                         ("date", "platform", "app_slug", "country", "currency"))
+        combined = {identity(row): row for row in previous.get("rows", [])
+                    if isinstance(row, dict) and row.get("date", "") <= args.as_of.isoformat()}
+        combined.update({identity(row): row for row in ledger["rows"]})
+        ledger["rows"] = sorted(combined.values(), key=identity, reverse=True)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     os.chmod(args.output, 0o600)

@@ -61,12 +61,34 @@ def validate_dashboard(path: Path) -> None:
             raise DashboardArtifactError(f'Dashboard payload {identifier} is invalid JSON') from error
 
 
+def validate_sealed_dashboard(path: Path) -> None:
+    text = path.read_text(encoding="utf-8")
+    if "ops-sealed-data" not in text or "PBKDF2" not in text:
+        raise DashboardArtifactError("Sealed dashboard is missing its encrypted login shell")
+    if any(secret_marker in text for secret_marker in (
+        'id="manual-data"', 'id="store-review-data"', 'id="sales-ledger"',
+        '<nav class="ops-nav"', 'data-ops-view="home"'
+    )):
+        raise DashboardArtifactError("Plain dashboard payload leaked into sealed deployment")
+    match = re.search(r'<script type="application/json" id="ops-sealed-data">(.*?)</script>', text, re.S)
+    if not match:
+        raise DashboardArtifactError("Sealed dashboard is missing the ciphertext payload")
+    try:
+        record = json.loads(match.group(1))
+    except json.JSONDecodeError as error:
+        raise DashboardArtifactError("Invalid ciphertext wrapper JSON") from error
+    if (record.get("v") != 1 or record.get("it", 0) < 300000
+            or not all(record.get(key) for key in ("salt", "iv", "tag", "data", "path"))):
+        raise DashboardArtifactError("Incomplete or weak encrypted payload")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('path', type=Path)
+    parser.add_argument('--sealed', action='store_true')
     args = parser.parse_args()
     try:
-        validate_dashboard(args.path)
+        (validate_sealed_dashboard if args.sealed else validate_dashboard)(args.path)
     except (OSError, UnicodeError, DashboardArtifactError) as error:
         print(f'Dashboard validation failed: {error}', file=sys.stderr)
         return 1

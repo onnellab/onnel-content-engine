@@ -58,6 +58,18 @@ class LedgerTests(unittest.TestCase):
                          [("2026-09-14", "-825.00"), ("2026-09-12", "825.00")])
         self.assertTrue(rows[0]["fee_confirmed"])
 
+    def test_google_earnings_sale_currency_layout_partial_refund(self):
+        raw = archive(
+            "Package ID,Transaction Type,Transaction Date,Sale Country,Sale Currency,"
+            "Amount Due (Sale Currency)\n"
+            "com.onnellab.tagweaver2,Google fee,\"Oct 07, 2026\",JP,JPY,82.50\n"
+            "com.onnellab.tagweaver2,Google fee partial refund,\"Oct 08, 2026\",JP,JPY,-22.50\n"
+        )
+        rows = aggregate(parse_google_earnings_zip(raw, GOOGLE))
+        self.assertEqual([(r["date"],r["country"],r["currency"],r["fee"]) for r in rows],
+                         [("2026-10-08","JP","JPY","-22.50"),
+                          ("2026-10-07","JP","JPY","82.50")])
+
     def test_apple_daily_report_no_fee_inferred(self):
         fields = [
             "Apple Identifier", "Country Code", "Customer Currency", "Currency of Proceeds",

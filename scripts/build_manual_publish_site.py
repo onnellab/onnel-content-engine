@@ -12,6 +12,7 @@ import os
 import re
 import shutil
 import subprocess
+from tempfile import TemporaryDirectory
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import quote
@@ -5370,6 +5371,18 @@ def build_manual_publish_site(
     # repository-managed data/ and never place plaintext revenue reports in public git.
     sales_path_env = os.environ.get("ONNEL_PRIVATE_LEDGER_PATH", "").strip()
     store_sales = read_json(Path(sales_path_env)) if sales_path_env and Path(sales_path_env).is_file() else {}
+    sealed_ledger = ROOT / "data" / "private_store_sales.enc.json"
+    if not sales_path_env and sealed_ledger.is_file() and os.getenv("ONNELLAB_OPS_PASSWORD"):
+        with TemporaryDirectory(prefix="onnellab-private-ledger-") as temp_dir:
+            clear_path = Path(temp_dir) / "sales.json"
+            subprocess.run(
+                ["node", str(ROOT / "scripts" / "private_ops_publish.mjs"),
+                 "unseal-data", str(sealed_ledger), str(clear_path)],
+                check=True, capture_output=True, text=True,
+            )
+            store_sales = read_json(clear_path)
+    elif sealed_ledger.is_file() and not sales_path_env and os.getenv("CI"):
+        raise RuntimeError("Encrypted store finance snapshot cannot be opened: Ops password is missing")
 
     ai_manager_report = json.loads(DEFAULT_AI_MANAGER_REPORT.read_text(encoding="utf-8")) if DEFAULT_AI_MANAGER_REPORT.exists() else {}
     # Persist the exact triage data shown in the dashboard so every proposed

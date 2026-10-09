@@ -16,6 +16,9 @@ concurrency:
   group: onnellab-manual-dashboard-writer
   cancel-in-progress: false
 
+env:
+  ONNELLAB_OPS_PASSWORD: ${{ secrets.ONNELLAB_OPS_PASSWORD }}
+
 jobs:
   verify:
     name: Verify manual publication completion
@@ -160,27 +163,12 @@ jobs:
           set -euo pipefail
           mkdir -p "$HOMEPAGE_REPO_PATH/public/ops"
           python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html
-          cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/ops/index.html"
-          for section in apps publishing media monitoring settings legacy; do
-            mkdir -p "$HOMEPAGE_REPO_PATH/public/ops/$section"
-            cp -R "generated/manual-publish/$section/." "$HOMEPAGE_REPO_PATH/public/ops/$section/"
-          done
-          cp generated/manual-publish/manifest.webmanifest "$HOMEPAGE_REPO_PATH/public/ops/manifest.webmanifest"
-          cp generated/manual-publish/sw.js "$HOMEPAGE_REPO_PATH/public/ops/sw.js"
-          cp generated/manual-publish/icon-180.png "$HOMEPAGE_REPO_PATH/public/ops/icon-180.png"
-          cp generated/manual-publish/icon-192.png "$HOMEPAGE_REPO_PATH/public/ops/icon-192.png"
-          cp generated/manual-publish/icon-512.png "$HOMEPAGE_REPO_PATH/public/ops/icon-512.png"
-          cp generated/manual-publish/libsodium-sumo.js "$HOMEPAGE_REPO_PATH/public/ops/libsodium-sumo.js"
-          cp generated/manual-publish/libsodium-wrappers.js "$HOMEPAGE_REPO_PATH/public/ops/libsodium-wrappers.js"
+          node scripts/private_ops_publish.mjs seal-site generated/manual-publish "$HOMEPAGE_REPO_PATH/public/ops"
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git -C "$HOMEPAGE_REPO_PATH" pull --rebase --autostash origin main
-          cp generated/manual-publish/index.html "$HOMEPAGE_REPO_PATH/public/ops/index.html"
-          for section in apps publishing media monitoring settings legacy; do
-            mkdir -p "$HOMEPAGE_REPO_PATH/public/ops/$section"
-            cp -R "generated/manual-publish/$section/." "$HOMEPAGE_REPO_PATH/public/ops/$section/"
-          done
-          python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/ops/index.html"
+          node scripts/private_ops_publish.mjs seal-site generated/manual-publish "$HOMEPAGE_REPO_PATH/public/ops"
+          python3 scripts/validate_manual_publish_site.py --sealed "$HOMEPAGE_REPO_PATH/public/ops/index.html"
           git -C "$HOMEPAGE_REPO_PATH" diff --check
           git -C "$HOMEPAGE_REPO_PATH" add public/ops/
           if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then

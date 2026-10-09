@@ -49,7 +49,7 @@ class DashboardIntegrityTest(unittest.TestCase):
         self.assertIn('git pull --rebase origin main', commit)
         self.assertNotIn('--force', commit)
         deploy = text.split('- name: Deploy manual publish dashboard', 1)[1]
-        self.assertLess(deploy.index('pull --rebase origin main'), deploy.index('cp generated/manual-publish/index.html'))
+        self.assertLess(deploy.index('pull --rebase origin main'), deploy.index('node scripts/private_ops_publish.mjs seal-site'))
         self.assertGreater(deploy.rindex('scripts/validate_manual_publish_site.py'), deploy.rindex('pull --rebase origin main'))
 
 
@@ -94,16 +94,19 @@ class DashboardIntegrityTest(unittest.TestCase):
         found = []
         for path in (root / '.github/workflows').glob('*.yml'):
             text = path.read_text()
-            if 'cp generated/manual-publish/index.html' not in text:
+            if 'node scripts/private_ops_publish.mjs seal-site' not in text:
                 continue
             found.append(path.name)
             self.assertIn('python3 scripts/validate_manual_publish_site.py generated/manual-publish/index.html', text, path.name)
-            self.assertIn('python3 scripts/validate_manual_publish_site.py "$HOMEPAGE_REPO_PATH/public/ops/index.html"', text, path.name)
+            self.assertIn('python3 scripts/validate_manual_publish_site.py --sealed "$HOMEPAGE_REPO_PATH/public/ops/index.html"', text, path.name)
+            self.assertIn('ONNELLAB_OPS_PASSWORD:', text, path.name)
+            self.assertNotIn('cp generated/manual-publish/index.html', text, path.name)
             self.assertIn('git -C "$HOMEPAGE_REPO_PATH" diff --check', text, path.name)
         self.assertEqual(
             set(found),
             {
                 'deploy-ops-dashboard.yml',
+                'sync-store-sales.yml',
                 'publish-ready-app-releases.yml',
                 'reconcile-remote-browser-publications.yml',
                 'sync-app-operational-status.yml',
