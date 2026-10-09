@@ -82,13 +82,13 @@ def report_months(earliest, as_of):
                      1 if month.month == 12 else month.month + 1, 1)
     return result
 
-def fetch_finance(token, vendor, apps, earliest, as_of, previous=None, opener=None):
+def fetch_finance(token, vendor, apps, earliest, as_of, previous=None, opener=None, sku_reconciled=True):
     opener = opener or urllib.request.urlopen
     prior = previous if isinstance(previous,dict) else {}
     months = report_months(earliest, as_of)
     done = set(prior.get("completed_months",[])) & set(months)
     missing = set(prior.get("missing_months",[])) & set(months)
-    rolling = set(months[-2:]) if "rows_with_quantity" in prior else set(months)
+    rolling = set(months[-2:]) if prior.get("sku_reconciliation_version") == 1 else set(months)
     stats = {"rows_with_quantity":0, "matched_app_rows":0, "unmatched_app_rows":0}
     changed = []
     rows = []
@@ -124,6 +124,7 @@ def fetch_finance(token, vendor, apps, earliest, as_of, previous=None, opener=No
                   "completed_months":sorted(done), "missing_months":sorted(missing),
                   "refreshed_months":changed, "reports_available":len(done),
                   "reports_missing":len(missing), "new_reports":len(changed),
+                  "sku_reconciliation_version":1 if sku_reconciled and not errors else 0,
                   "errors":errors[:8], "fee_status":"requires_independent_invoice",
                   **stats}
 

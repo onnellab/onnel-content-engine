@@ -386,6 +386,7 @@ def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
             fresh, finance_state = fetch_finance(
                 token, vendor, finance_apps, max(earliest, APPLE_FIRST_DAY), as_of,
                 previous=prior_finance,
+                sku_reconciled=sku_status.get('status') == 'ok',
             )
             finance_state["app_sku_status"] = sku_status
             status["apple_finance"] = finance_state

@@ -82,6 +82,18 @@ class FinanceTest(unittest.TestCase):
         self.assertEqual(len(requests),9)
         self.assertEqual(newstate["reports_missing"],7)
 
+    def test_sku_reconciliation_revisits_old_monthly_financial_reports(self):
+        prior={"completed_months":["2026-03","2026-04","2026-05"],
+               "sku_reconciliation_version":0}
+        requests=[]
+        def failed(req,timeout=50):
+            requests.append(req.full_url)
+            raise HTTPError(req.full_url,404,"Missing",{},None)
+        _,status=fetch_finance("mock","vendor",APPS,date(2026,3,1),
+                               date(2026,7,1),previous=prior,opener=failed)
+        self.assertEqual(len(requests),4)
+        self.assertEqual(status["sku_reconciliation_version"],1)
+
     def test_merge_replaces_refreshed_month_only(self):
         old=[{"fiscal_month":"2026-08","app_slug":"tagweaver","country":"KR","customer_currency":"KRW","proceeds_currency":"KRW","proceeds":"10"},
              {"fiscal_month":"2026-09","app_slug":"tagweaver","country":"KR","customer_currency":"KRW","proceeds_currency":"KRW","proceeds":"20"}]
