@@ -1,0 +1,66 @@
+name: Export Evidence Ledger (Encrypted)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      ONNELLAB_OPS_PASSWORD: ${{ secrets.ONNELLAB_OPS_PASSWORD }}
+      REPORT_EXPORT_CERT: ${{ vars.ONNELLAB_REPORT_EXPORT_CERT_B64 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate encrypted audit report
+        run: |
+          set -euo pipefail
+          test -n "$ONNELLAB_OPS_PASSWORD"
+          test -n "$REPORT_EXPORT_CERT"
+          umask 077
+          printf '%s' "$REPORT_EXPORT_CERT" | base64 -d > "$RUNNER_TEMP/recipient.crt"
+          node scripts/private_ops_publish.mjs unseal-data data/private_store_sales.enc.json "$RUNNER_TEMP/private-ledger.json"
+          python3 - <<'PY'
+          import json,os,sys
+          from pathlib import Path
+          sys.path.insert(0,"scripts")
+          from ops_sales_page import confirmed_foreign_fees
+          runner=Path(os.environ["RUNNER_TEMP"])
+          record=json.loads((runner/"private-ledger.json").read_text())
+          fees=[r for r in confirmed_foreign_fees(record.get("rows",[]))
+                if "2026-01-01"<=r["date"]<="2026-10-31"]
+          settlements=[r for r in record.get("settlements",[])
+                       if str(r.get("country","")).upper() not in {"KR","ZZ",""}
+                       and str(r.get("fiscal_month",""))>="2026-01"]
+          report={
+            "schema_version":1,
+            "origin":"ONNELLAB encrypted verified finance ledger",
+            "checked_at":record.get("checked_at"),
+            "fees":fees,
+            "apple_foreign_settlements":settlements,
+            "source_status":{
+              k: {x:v for x,v in record.get("source_status",{}).get(k,{}).items()
+                  if x in ("status","earnings_files","sales_files","fee_source_status",
+                           "reports_available","reports_missing")}
+              for k in ("google","apple","apple_finance")
+            }
+          }
+          (runner/"evidence.json").write_text(json.dumps(report,ensure_ascii=False))
+          print("Prepared evidence ledger for authenticated encrypted export.")
+          PY
+          openssl cms -encrypt -binary -aes256 -in "$RUNNER_TEMP/evidence.json" -out "$RUNNER_TEMP/evidence.cms" -outform DER "$RUNNER_TEMP/recipient.crt"
+          test -s "$RUNNER_TEMP/evidence.cms"
+          rm -f "$RUNNER_TEMP/evidence.json" "$RUNNER_TEMP/private-ledger.json"
+      - name: Upload ciphertext artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: private-overseas-fee-evidence
+          path: ${{ runner.temp }}/evidence.cms
+          retention-days: 1
+          if-no-files-found: error
