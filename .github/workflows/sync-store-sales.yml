@@ -68,7 +68,9 @@ jobs:
           fi
           node scripts/private_ops_publish.mjs seal-data "$RUNNER_TEMP/onnel-sales.json" data/private_store_sales.enc.json
           python3 -m json.tool data/private_store_sales.enc.json > /dev/null
-          ! grep -q '"rows"' data/private_store_sales.enc.json
+          if grep -q '"rows"' data/private_store_sales.enc.json; then
+            echo "::error::Plaintext sales rows detected in encrypted output"; exit 1
+          fi
           # Report collection health without printing money, purchasers or keys.
           python3 - <<'PY'
           import json
