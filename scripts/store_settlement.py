@@ -135,3 +135,35 @@ def merge_monthly(old, new, changed):
     for row in new:
         result[tuple(str(row.get(f,'')) for f in fields)] = row
     return sorted(result.values(),key=lambda row:tuple(str(row.get(f,'')) for f in fields),reverse=True)
+
+def add_app_sku_aliases(token, known, opener=None):
+    """Map Apple Finance vendor SKUs to known registered app IDs, never by fuzzy title."""
+    import json
+    opener = opener or urllib.request.urlopen
+    aliases = dict(known)
+    seen = set()
+    url = "https://api.appstoreconnect.apple.com/v1/apps?limit=200"
+    pages = 0
+    while url and pages < 20:
+        if url in seen: raise ValueError("Repeated Apple Apps API page")
+        seen.add(url)
+        req = urllib.request.Request(url,headers={"Authorization":"Bearer "+token})
+        try:
+            with opener(req, timeout=30) as response:
+                payload=json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as error:
+            return aliases, {"status":"http_"+str(error.code),
+                             "sku_aliases":len(aliases)-len(known)}
+        for entry in payload.get("data",[]):
+            app_id=str(entry.get("id",""))
+            attributes=entry.get("attributes",{})
+            sku=str(attributes.get("sku","")).strip() if isinstance(attributes,dict) else ""
+            if app_id in known and sku:
+                if sku in aliases and aliases[sku]["app_slug"] != known[app_id]["app_slug"]:
+                    raise ValueError("Apple SKU collision across apps")
+                aliases[sku]=known[app_id]
+        next_url=(payload.get("links") or {}).get("next")
+        url=next_url if isinstance(next_url,str) and next_url.startswith(
+            "https://api.appstoreconnect.apple.com/") else ""
+        pages += 1
+    return aliases, {"status":"ok","sku_aliases":len(aliases)-len(known)}

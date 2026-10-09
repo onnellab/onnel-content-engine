@@ -25,7 +25,7 @@ from sync_store_funnel import (
     normalize_google_reports_bucket, read_daily,
 )
 from sync_store_reviews import app_store_connect_read_token_from_env, app_store_connect_token, read_csv_rows
-from store_settlement import fetch_finance, merge_monthly
+from store_settlement import fetch_finance, merge_monthly, add_app_sku_aliases
 
 ROOT = Path(__file__).resolve().parents[1]
 STORES = ROOT / "data" / "store_versions.csv"
@@ -381,11 +381,13 @@ def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
                 store["store_app_id"]:store for store in stores
                 if store.get("platform") == "ios" and store.get("store_app_id")
             }
+            finance_apps, sku_status = add_app_sku_aliases(token, finance_apps)
             prior_finance = (previous or {}).get("source_status", {}).get("apple_finance", {})
             fresh, finance_state = fetch_finance(
                 token, vendor, finance_apps, max(earliest, APPLE_FIRST_DAY), as_of,
                 previous=prior_finance,
             )
+            finance_state["app_sku_status"] = sku_status
             status["apple_finance"] = finance_state
             settlements = merge_monthly(
                 (previous or {}).get("settlements", []), fresh,

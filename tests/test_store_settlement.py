@@ -1,6 +1,6 @@
 """Apple Finance monthly consolidated parser and incremental refresh tests."""
 from __future__ import annotations
-import gzip, io, sys, unittest
+import gzip, io, sys, unittest, json
 from datetime import date
 from pathlib import Path
 from unittest.mock import patch
@@ -45,6 +45,19 @@ class FinanceTest(unittest.TestCase):
         self.assertEqual(parse_finance(sample, "2026-09", APPS, stats), [])
         self.assertEqual(stats["rows_with_quantity"], 1)
         self.assertEqual(stats["unmatched_app_rows"], 1)
+
+    def test_sku_alias_resolves_vendor_product(self):
+        from store_settlement import add_app_sku_aliases
+        payload = {"data":[{"id":"6759609875","attributes":{"sku":"ONNELLAB-TAG-WEAVER"}}],
+                   "links":{"next":None}}
+        def fake(request,timeout=30):
+            return Response(json.dumps(payload).encode())
+        aliases, result = add_app_sku_aliases("mock",APPS,opener=fake)
+        self.assertEqual(result["sku_aliases"],1)
+        self.assertEqual(aliases["ONNELLAB-TAG-WEAVER"]["app_slug"],"tagweaver")
+        report=(HEAD.rstrip("\n")+"\tVendor Identifier\n"+
+                "unknown\tJP\t1\t400\tJPY\t550\tJPY\tS\tONNELLAB-TAG-WEAVER\n")
+        self.assertEqual(len(parse_finance(report.encode(),"2026-09",aliases)),1)
 
     def test_invalid_financial_headers_fail(self):
         with self.assertRaises(ValueError):
