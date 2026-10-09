@@ -83,6 +83,24 @@ jobs:
               count = sum(1 for row in record["rows"] if row["platform"] == prefix)
               print("FINANCE_REPORT_HEALTH_" + platform.upper() + "=" + json.dumps(selected, sort_keys=True))
               print("FINANCE_REPORT_ROW_GROUPS_" + platform.upper() + "=" + str(count))
+          apple = record["source_status"].get("apple", {})
+          if any("HTTP 401" in error for error in apple.get("errors", [])):
+              # Probe a harmless metadata endpoint with the same TEAM token.
+              # Print only the HTTP status; do not disclose tokens or app metadata.
+              import sys
+              import urllib.error
+              import urllib.request
+              sys.path.insert(0, "scripts")
+              from store_sales_ledger import apple_sales_token
+              probe = urllib.request.Request(
+                  "https://api.appstoreconnect.apple.com/v1/apps?limit=1",
+                  headers={"Authorization": "Bearer " + apple_sales_token()},
+              )
+              try:
+                  with urllib.request.urlopen(probe, timeout=15) as response:
+                      print("APPLE_TEAM_TOKEN_APPS_PROBE_HTTP=" + str(response.status))
+              except urllib.error.HTTPError as error:
+                  print("APPLE_TEAM_TOKEN_APPS_PROBE_HTTP=" + str(error.code))
           PY
 
       - name: Commit ciphertext only
