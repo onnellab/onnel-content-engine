@@ -205,7 +205,7 @@
     if(unavailable) notes.push("외화 환율을 확인할 수 없는 매출 "+unavailable+"개 행은 원화 합계에서 제외했어요.");
     if(missingFee) notes.push("확정 수수료 "+missingFee+"개 행은 환율 미확인으로 제외했어요.");
     if(fxState.status==="unavailable") notes.push("ECB 연결이 불안정해 보관된 과거 환율만 사용했어요.");
-    notes.push("ECB 과거 기준환율·거래일 또는 직전 발표일 기준, 반올림한 원화 추정액이에요. 실제 은행 입금액은 달라요.");
+    notes.push("ECB 기준환율을 우선 적용하고, 없는 통화는 NBU 공식 환율로 보완했어요. 금액은 원화 추정액이며 실제 입금액과 달라요.");
     notes.push("Apple 회계월 확정 정산액은 위의 판매액에 중복 합산하지 않아요.");
     byId("sales-fx-status").textContent=notes.join(" ");
   }
@@ -219,7 +219,7 @@
         row.units,money(row.gross),money(row.refund),
         row.fee_confirmed?money(row.fee):"미확정",row.currency,
         hasAmount(row,"net_sales_krw")?krw(row.net_sales_krw):"미환산",
-        row.currency==="KRW"?"원화 원본":(row.fx_sales_date||"—")]){
+        row.currency==="KRW"?"원화 원본":(row.fx_sales_date ? row.fx_sales_date+" ("+(row.fx_sales_source||"ECB")+")" : "—")]){
         td(tr,text);
       }
       body.append(tr);
@@ -309,11 +309,11 @@
     const fields=["date","app_name","platform","country","units","gross",
                   "refund","net_sales","fee","fee_confirmed","currency",
                   "gross_krw","refund_krw","net_sales_krw","fee_krw",
-                  "fx_sales_rate","fx_sales_date"];
+                  "fx_sales_rate","fx_sales_date","fx_sales_source"];
     const header=["판매일","앱","스토어","국가","건수","판매액","환불",
                   "환불 반영 판매액","확정 수수료","수수료 확정","원통화",
                   "판매액 원화 추정","환불 원화 추정","순판매 원화 추정",
-                  "확정 수수료 원화 추정","1통화당 원화 기준환율","환율 기준일"];
+                  "확정 수수료 원화 추정","1통화당 원화 기준환율","환율 기준일","환율 출처"];
     const records=filteredSales(range).map(r=>fields.map(key=>
       key==="fee"&&!r.fee_confirmed ? "" :
       key==="fee_krw"&&!r.fee_confirmed ? "" : r[key]??""
@@ -324,11 +324,11 @@
   byId("grant-fees-export").addEventListener("click",()=>{
     const range=selectedRange();
     if(!range.valid)return;
-    const header=["발생일자","세부내용","금액","통화","원화 금액","환율 기준일","근거자료"];
+    const header=["발생일자","세부내용","금액","통화","원화 금액","환율 기준일","환율 출처","근거자료"];
     const records=filteredFees(range).map(r=>[
       r.date,"Google Play / "+r.app_name+" / "+r.country+" / "+
         (r.kind==="refund_adjustment"?"환불 수수료 조정":"플랫폼 정산 수수료"),
-      r.fee,r.currency,r.fee_krw??"",r.fx_sales_date??"",r.source
+      r.fee,r.currency,r.fee_krw??"",r.fx_sales_date??"",r.fx_sales_source??"",r.source
     ]);
     downloadCsv(header,records,"ONNELLAB-overseas-fees-"+range.start+"-"+range.end+".csv",
                 new Set([2,4]));

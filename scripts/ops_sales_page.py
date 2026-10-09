@@ -38,6 +38,7 @@ def confirmed_foreign_fees(rows: list[dict]) -> list[dict]:
             "kind":"refund_adjustment" if fee < 0 else "platform_commission",
             "fee_krw":row.get("fee_krw"),
             "fx_sales_date":row.get("fx_sales_date"),
+            "fx_sales_source":row.get("fx_sales_source"),
         })
     return verified
 
@@ -54,7 +55,7 @@ def sales_page_body(ledger: Mapping | None) -> str:
                "units", "gross", "refund", "net_sales", "fee", "fee_confirmed",
                "proceeds", "proceeds_currency", "sources",
                "gross_krw", "refund_krw", "net_sales_krw", "fee_krw",
-               "fx_sales_rate", "fx_sales_date"}
+               "fx_sales_rate", "fx_sales_date", "fx_sales_source"}
     data = [{k: v for k, v in row.items() if k in allowed} for row in rows if isinstance(row, dict)]
     monthly = ledger.get("settlements", [])
     monthly = monthly if isinstance(monthly, list) else []
@@ -198,7 +199,7 @@ HTML = r"""
 <p class="sales-note">
  • Google Play 판매금액은 현지 통화의 예상 판매 보고서, 수수료는 확정 수익 보고서의 Google fee 거래예요.<br>
  • Apple 판매액에는 세금이 포함될 수 있으므로 소비자 가격과 개발자 수익의 차이를 수수료로 표시하지 않아요.<br>
- • 외화 매출은 ECB 판매일 또는 직전 발표일 기준환율로 환산해 원화 추정 합계를 보여줘요. 원화 금액은 환산하지 않아요. 환율을 확인할 수 없는 금액은 합계에서 제외하고 표시해요.<br>
+ • 외화는 ECB 과거 기준환율을 우선 적용하고, 미제공 통화는 NBU 공식 과거 기준환율로 보완해 원화 추정 합계를 보여줘요. 환율이 없으면 미환산으로 구분해요.<br>
  • 집계일 이후 거래와 보고서 미수집은 0원으로 취급하지 않아요.<br>
  마지막 갱신: __CHECKED__ (UTC)
 </p>
