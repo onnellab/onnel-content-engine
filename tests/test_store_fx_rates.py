@@ -27,6 +27,32 @@ class FxReferenceTests(unittest.TestCase):
         self.assertIsNone(quote("2026-10-20","USD",history))
         self.assertIsNone(quote("2026-10-08","GBP",history))
 
+    def test_nbu_cross_reference_covers_sar_and_uah_without_guessing(self):
+        calls=[]
+        def nbu(day):
+            calls.append(day)
+            return {
+                "UAH":Decimal("1"),"KRW":Decimal("0.033488"),
+                "SAR":Decimal("11.9499"),
+            },day
+        original=[
+            {"date":"2026-10-08","currency":"SAR","gross":"10",
+             "refund":"0","net_sales":"10","fee_confirmed":False},
+            {"date":"2026-10-08","currency":"UAH","gross":"100",
+             "refund":"0","net_sales":"100","fee_confirmed":False},
+        ]
+        result=enrich_ledger({"rows":original,"settlements":[]},
+                             history=parse_ecb_xml(XML),nbu_loader=nbu)
+        self.assertEqual(calls,["2026-10-08"])
+        self.assertEqual(result["fx_status"]["missing_sales_rows"],0)
+        self.assertEqual(result["fx_status"]["nbu_fallback_date_count"],1)
+        self.assertEqual(result["rows"][0]["fx_sales_source"],"NBU")
+        self.assertEqual(result["rows"][1]["fx_sales_source"],"NBU")
+        self.assertEqual(result["rows"][0]["net_sales_krw"],
+                         won("10",Decimal("11.9499")/Decimal("0.033488")))
+        self.assertEqual(result["rows"][1]["net_sales_krw"],
+                         won("100",Decimal("1")/Decimal("0.033488")))
+
     def test_sales_refunds_confirmed_fees_apple_proceeds_are_independent(self):
         src={
             "date":"2026-10-08","currency":"USD",
@@ -40,7 +66,8 @@ class FxReferenceTests(unittest.TestCase):
             "customer_currency":"USD","gross":"4.99",
         }
         ledger={"rows":[src],"settlements":[settlement]}
-        enriched=enrich_ledger(deepcopy(ledger),history=parse_ecb_xml(XML))
+        enriched=enrich_ledger(deepcopy(ledger),history=parse_ecb_xml(XML),
+                               nbu_loader=lambda day: ({"KRW":Decimal("1")}, day))
         row=enriched["rows"][0]
         self.assertEqual(row["gross_krw"],"4485")
         self.assertEqual(row["refund_krw"],"-1485")
@@ -54,7 +81,8 @@ class FxReferenceTests(unittest.TestCase):
         row={"date":"2026-10-08","currency":"XYZ","gross":"10.00",
              "refund":"0","net_sales":"10.00","fee_confirmed":False}
         ledger={"rows":[row],"settlements":[]}
-        result=enrich_ledger(ledger,history=parse_ecb_xml(XML))
+        result=enrich_ledger(ledger,history=parse_ecb_xml(XML),
+                             nbu_loader=lambda day: ({"KRW":Decimal("1")}, day))
         self.assertNotIn("net_sales_krw",result["rows"][0])
         self.assertEqual(result["fx_status"]["missing_sales_rows"],1)
         self.assertEqual(result["fx_status"]["missing_currency_counts"],{"XYZ":1})

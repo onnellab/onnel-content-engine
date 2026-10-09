@@ -16,6 +16,8 @@ from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
 
 ECB_HISTORY = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"
+NBU_HISTORY = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange"
+NBU_MAX_DAYS = 30
 WON = Decimal("1")
 SOURCE = "European Central Bank (ECB) euro foreign exchange reference rates"
 
@@ -60,7 +62,7 @@ def fetch_history() -> dict[str, dict[str, Decimal]]:
 def quote(day: str, currency: str, history: dict) -> dict | None:
     currency = (currency or "").strip().upper()
     if currency == "KRW":
-        return {"rate":"1", "as_of":day}
+        return {"rate":"1", "as_of":day, "source":"original"}
     if not currency or not day:
         return None
     days = sorted(history)
@@ -76,7 +78,54 @@ def quote(day: str, currency: str, history: dict) -> dict | None:
     ratio = rates["KRW"] / rates[currency]
     if not ratio.is_finite() or ratio <= 0:
         return None
-    return {"rate":format(ratio, "f"), "as_of":closest}
+    return {"rate":format(ratio, "f"), "as_of":closest, "source":"ECB"}
+
+
+def fetch_nbu_quotes(day: str) -> tuple[dict[str, Decimal], str]:
+    """NBU official UAH-per-unit rates, including SAR, UAH and KRW."""
+    requested = date.fromisoformat(day)
+    query = NBU_HISTORY + "?date=" + requested.strftime("%Y%m%d") + "&json"
+    request = urllib.request.Request(query,headers={"User-Agent":"ONNELLAB-Ops-FX/1.0"})
+    with urllib.request.urlopen(request,timeout=20) as response:
+        content = response.read(256001)
+    if len(content) > 256000:
+        raise ValueError("NBU daily rates exceed expected size")
+    payload = json.loads(content)
+    if not isinstance(payload,list):
+        raise ValueError("NBU rate response is not a list")
+    rates = {"UAH": Decimal("1")}
+    rate_date = day
+    for entry in payload:
+        if not isinstance(entry,dict):
+            continue
+        code = str(entry.get("cc","")).upper()
+        if len(code)!=3 or not code.isalpha():
+            continue
+        try:
+            quote_rate = Decimal(str(entry["rate"]))
+        except (InvalidOperation, KeyError):
+            continue
+        if quote_rate.is_finite() and quote_rate>0:
+            rates[code]=quote_rate
+        effective = str(entry.get("exchangedate",""))
+        try:
+            parsed = datetime.strptime(effective,"%d.%m.%Y").date()
+            if 0 <= (requested-parsed).days <= 7:
+                rate_date=parsed.isoformat()
+        except ValueError:
+            pass
+    if "KRW" not in rates:
+        raise ValueError("NBU daily rate sheet omits KRW")
+    return rates,rate_date
+
+
+def nbu_cross_quote(day: str, currency: str, rates: dict, rate_date: str) -> dict | None:
+    if currency not in rates or "KRW" not in rates:
+        return None
+    conversion = rates[currency] / rates["KRW"]
+    if not conversion.is_finite() or conversion<=0:
+        return None
+    return {"rate":format(conversion,"f"),"as_of":rate_date,"source":"NBU"}
 
 
 def won(value: object, rate: object) -> str:
@@ -88,7 +137,7 @@ def won(value: object, rate: object) -> str:
 
 
 def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | None = None,
-                  fetcher=fetch_history) -> dict:
+                  fetcher=fetch_history, nbu_loader=fetch_nbu_quotes) -> dict:
     """Attach independently auditable KRW estimates without mutating original values."""
     rows = ledger.get("rows", [])
     settlements = ledger.get("settlements", [])
@@ -113,6 +162,8 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
     history = history or {}
     previous_rates = (previous or {}).get("fx_rates", {})
     saved_rates = {}
+    nbu_cache = {}
+    nbu_used_dates = set()
     missing_sales = 0
     missing_currencies: dict[str,int] = {}
     missing_fees = 0
@@ -125,6 +176,17 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
             cached = previous_rates.get(key)
             if isinstance(cached, dict) and cached.get("rate") and cached.get("as_of"):
                 current = cached
+        if current is None and currency and currency != "KRW":
+            if day not in nbu_cache and len(nbu_cache) < NBU_MAX_DAYS:
+                try:
+                    nbu_cache[day] = nbu_loader(day)
+                except (OSError, ValueError) as error:
+                    nbu_cache[day] = None
+            reference = nbu_cache.get(day)
+            if reference:
+                current = nbu_cross_quote(day, currency, reference[0], reference[1])
+                if current:
+                    nbu_used_dates.add(day)
         if current:
             saved_rates[key] = current
         return current
@@ -136,6 +198,7 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
         if fx:
             row["fx_sales_rate"] = fx["rate"]
             row["fx_sales_date"] = fx["as_of"]
+            row["fx_sales_source"] = fx.get("source", "ECB")
             for field in ("gross", "refund"):
                 row[field + "_krw"] = won(row.get(field, "0"), fx["rate"])
             # The displayed net must equal displayed gross + refund even when
@@ -148,6 +211,7 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
                 row.pop(field + "_krw", None)
             row.pop("fx_sales_rate", None)
             row.pop("fx_sales_date", None)
+            row.pop("fx_sales_source", None)
             missing_sales += 1
             missing_currencies[currency or "UNKNOWN"] = missing_currencies.get(currency or "UNKNOWN", 0) + 1
         if row.get("fee_confirmed") is True:
@@ -179,9 +243,11 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
         if proceeds_fx:
             row["proceeds_krw"] = won(row.get("proceeds", "0"), proceeds_fx["rate"])
             row["fx_proceeds_date"] = proceeds_fx["as_of"]
+            row["fx_proceeds_source"] = proceeds_fx.get("source", "ECB")
         else:
             row.pop("proceeds_krw", None)
             row.pop("fx_proceeds_date", None)
+            row.pop("fx_proceeds_source", None)
             missing_settlement += 1
         if row.get("customer_currency"):
             customer_fx = get_rate(day, str(row.get("customer_currency", "")).upper())
@@ -192,8 +258,10 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
 
     ledger["fx_rates"] = saved_rates
     ledger["fx_status"] = {
-        "source": SOURCE,
+        "source": SOURCE + "; National Bank of Ukraine (NBU) fallback",
         "url": ECB_HISTORY,
+        "fallback_url": NBU_HISTORY,
+        "nbu_fallback_date_count": len(nbu_used_dates),
         "checked_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "status": state,
         "missing_sales_rows": missing_sales,

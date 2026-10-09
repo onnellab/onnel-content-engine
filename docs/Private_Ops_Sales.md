@@ -76,12 +76,22 @@ profit. Google fee expense is displayed separately and never double-subtracted.
 Apple fiscal-month settlements are displayed separately and never added again
 to daily sales totals.
 
-`store_fx_rates.py` fetches the ECB published historical EUR reference-rate
-series from `https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml`.
-Conversion to KRW uses the transaction date's ECB cross rate or the most
-recent preceding rate within 7 calendar days, with no interpolation. The code
-rounds each report-row gross and refund to won and computes the net as their
-sum. Google confirmed fees convert only when confirmed by the Earnings source.
+`store_fx_rates.py` uses the official ECB historic reference series
+`https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml` as its
+primary conversion source. If a currency is not quoted by the ECB (e.g.
+SAR or UAH), it retrieves that date's official rates from the
+National Bank of Ukraine (NBU) open-data endpoint
+`https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange`.
+NBU rates are hryvnia-per-unit, so KRW-per-unit is derived as
+`UAH per source currency / UAH per KRW`. The NBU fallback is bounded
+to 30 distinct dates per sync and cached by day, never guesses a rate.
+ECB conversions use the transaction date or most recent preceding rate within
+7 calendar days; NBU uses the official dated observation.
+
+The code rounds each report-row gross and refund to won and computes the
+net as their sum. Google confirmed fees convert only when confirmed by the
+Earnings source. Original foreign-currency figures and each FX source/date
+remain attached to the output.
 For Apple fiscal-month proceeds, the month-end reference rate is a clearly
 labeled estimate, NOT Apple's actual bank settlement exchange rate.
 
