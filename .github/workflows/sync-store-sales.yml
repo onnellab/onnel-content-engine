@@ -85,7 +85,8 @@ jobs:
                   for field in ("status", "days_checked", "days_missing", "new_reports",
                                 "sales_files", "earnings_files", "earnings_objects_listed",
                                 "earnings_unrecognized_files", "missing_earnings_months",
-                                "fee_source_status", "errors")
+                                "fee_source_status", "app_mapping_version",
+                                "sku_mapping", "sku_aliases", "rechecked_history", "errors")
                   if field in status
               }
               count = sum(1 for row in record["rows"] if row["platform"] == prefix)

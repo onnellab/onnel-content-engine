@@ -125,6 +125,72 @@ class LedgerTests(unittest.TestCase):
         self.assertEqual(rows[0]["fee"], "0.00")
         self.assertFalse(rows[0]["fee_confirmed"])
 
+    def test_ios_iap_product_id_resolves_using_parent_app_sku(self):
+        # Real Apple reports identify an in-app purchase by its product Apple ID,
+        # distinct from the public App Store application ID.
+        headers = [
+            "Apple Identifier", "Parent Identifier", "SKU", "Country Code",
+            "Units", "Customer Price", "Customer Currency",
+            "Currency of Proceeds", "Developer Proceeds",
+        ]
+        data = [
+            headers,
+            ["6761288417", "", "com.onnellab.tagweaver", "ES",
+             "3", "3.99", "EUR", "EUR", "2.80"],
+            ["6759609875", "", "", "US", "1", "2.99", "USD", "USD", "2.10"],
+            ["999999999", "", "com.unknown.app", "JP", "2", "550", "JPY", "JPY", "400"],
+        ]
+        raw = gzip.compress(
+            ("\n".join("\t".join(row) for row in data) + "\n").encode()
+        )
+        aliases = {**APPLE, "com.onnellab.tagweaver": APPLE["6759609875"]}
+        stats = {}
+        events = parse_apple_sales(raw, aliases, "2026-04-22", stats)
+        self.assertEqual(len(events), 2)
+        self.assertEqual(sum(row["units"] for row in events), 4)
+        self.assertEqual(stats["matched_rows"], 2)
+        self.assertEqual(stats["unmatched_rows"], 1)
+        self.assertEqual(stats["paid_rows"], 2)
+        self.assertEqual(stats["paid_units"], 4)
+        self.assertEqual(sum(row["units"] for row in parse_apple_sales(
+            raw, APPLE, "2026-04-22"
+        )), 1)  # Previously the IAP SKU was dropped.
+
+    def test_full_ledger_maps_ios_iap_sku_to_owner_app(self):
+        from store_sales_ledger import build_ledger, APPLE_MAPPING_VERSION
+        app = {**APPLE["6759609875"], "platform":"ios",
+               "store_app_id":"6759609875"}
+        daily = (
+            "Apple Identifier\tSKU\tCountry Code\tUnits\tCustomer Price\t"
+            "Customer Currency\tCurrency of Proceeds\tDeveloper Proceeds\n"
+            "6761288417\tcom.onnellab.tagweaver\tES\t2\t3.99\tEUR\tEUR\t2.80\n"
+        )
+        aliases = {
+            "6759609875":app, "com.onnellab.tagweaver":app
+        }
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self,*args): return False
+            def read(self): return gzip.compress(daily.encode())
+        with patch.dict(os.environ, {"APP_STORE_VENDOR_NUMBER":"12345678"}), (
+            patch("store_sales_ledger.read_csv_rows", return_value=[app])
+        ), patch("store_sales_ledger.apple_sales_token", return_value="token"), (
+            patch("store_sales_ledger.add_app_sku_aliases",
+                  return_value=(aliases, {"status":"ok","sku_aliases":1}))
+        ), patch("store_sales_ledger.fetch_finance",
+                 return_value=([],{"status":"ok","refreshed_months":[]})), (
+            patch("store_sales_ledger.urllib.request.urlopen",return_value=Response())
+        ):
+            result = build_ledger(date(2026,4,23), earliest=date(2026,4,22),
+                                  google=False)
+        self.assertEqual(len(result["rows"]), 1)
+        self.assertEqual(result["rows"][0]["app_slug"], "tagweaver")
+        self.assertEqual(result["rows"][0]["units"], 2)
+        self.assertEqual(result["rows"][0]["gross"], "7.98")
+        self.assertEqual(result["source_status"]["apple"]["app_mapping_version"],
+                         APPLE_MAPPING_VERSION)
+        self.assertEqual(result["source_status"]["apple"]["parser_rows"]["paid_units"], 2)
+
     def test_group_by_country_currency_no_cross_currency_total(self):
         raw = archive(
             "Package ID,Financial status,Order charged date,Currency of Sale,Charged Amount,Country of Buyer\n"
@@ -167,9 +233,39 @@ class LedgerTests(unittest.TestCase):
         self.assertTrue(all("2026-03-" in url for url in requests))
         self.assertEqual(state["days_missing"], 3)
 
+    def test_new_ios_id_mapping_rechecks_previously_completed_months(self):
+        from store_sales_ledger import apple_ledger, APPLE_MAPPING_VERSION
+        previous = {
+            "completed_days": ["2026-03-01"],
+            "missing_days": ["2026-03-02"],
+            # Old parser did not recognize in-app product IDs via parent SKU.
+        }
+        calls = []
+        missing = HTTPError("https://example.com", 404, "Missing", {}, None)
+        def fetch(req, timeout=40):
+            calls.append(req.full_url)
+            raise missing
+        apple_app = {**APPLE["6759609875"], "store_app_id":"6759609875", "platform":"ios"}
+        with patch.dict(os.environ, {"APP_STORE_VENDOR_NUMBER":"12345678"}), (
+            patch("store_sales_ledger.apple_sales_token", return_value="test-token")
+        ), patch("store_sales_ledger.urllib.request.urlopen", side_effect=fetch):
+            events, state = apple_ledger(
+                [apple_app], date(2026,3,20), date(2026,3,1),
+                previous_status=previous, app_aliases={
+                    "com.onnellab.tagweaver":apple_app
+                }, sku_status={"status":"ok"},
+            )
+        self.assertEqual(events, [])
+        self.assertEqual(len(calls), 19)
+        self.assertTrue(state["rechecked_history"])
+        self.assertEqual(state["sku_aliases"], 1)
+        self.assertEqual(state["app_mapping_version"], APPLE_MAPPING_VERSION)
+        self.assertEqual(state["days_missing"], 19)
+
     def test_apple_old_dates_not_redownloaded_after_backfill(self):
         from store_sales_ledger import apple_ledger
-        previous = {"completed_days": ["2026-03-01"], "missing_days": ["2026-03-02"]}
+        previous = {"completed_days": ["2026-03-01"], "missing_days": ["2026-03-02"],
+                    "app_mapping_version": 2}
         missing = HTTPError("https://example.com", 404, "Missing", {}, None)
         calls = []
         def fetch(req, timeout=40):

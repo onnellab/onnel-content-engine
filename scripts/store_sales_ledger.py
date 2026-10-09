@@ -32,6 +32,7 @@ STORES = ROOT / "data" / "store_versions.csv"
 FIRST_DAY = date(2026, 1, 1)
 APPLE_FIRST_DAY = date(2026, 3, 1)
 APPLE_REFRESH_DAYS = 14
+APPLE_MAPPING_VERSION = 2  # Reconcile IAP/SKU identifiers against Store Connect app metadata.
 MONEY = Decimal("0.01")
 
 
@@ -157,24 +158,40 @@ def parse_google_earnings_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> li
     return events
 
 
-def parse_apple_sales(raw: bytes, apps: dict[str, dict[str, str]], day: str) -> list[dict]:
+def parse_apple_sales(raw: bytes, apps: dict[str, dict[str, str]], day: str,
+                      stats: dict | None = None) -> list[dict]:
     events = []
     for row in read_table(raw, delimiter="\t"):
+        if stats is not None:
+            stats["report_rows"] = stats.get("report_rows", 0) + 1
         appid = lookup(row, "Apple Identifier")
         parent = lookup(row, "Parent Identifier")
         sku = lookup(row, "SKU")
+        # IAP Apple Identifiers are PRODUCT IDs, not App Store application IDs.
+        # The SKU and Parent Identifier may refer to the parent app instead.
         app = apps.get(appid) or apps.get(parent) or apps.get(sku)
         if not app:
+            if stats is not None:
+                stats["unmatched_rows"] = stats.get("unmatched_rows", 0) + 1
             continue
+        if stats is not None:
+            stats["matched_rows"] = stats.get("matched_rows", 0) + 1
         count = amount(lookup(row, "Units"))
         price = amount(lookup(row, "Customer Price"))
         if count == 0 or price == 0:
+            if stats is not None:
+                stats["zero_price_or_units_rows"] = stats.get("zero_price_or_units_rows", 0) + 1
             continue
         units = int(count)
         customer_currency = lookup(row, "Customer Currency")
         proceeds_currency = lookup(row, "Currency of Proceeds")
         if not customer_currency:
+            if stats is not None:
+                stats["missing_currency_rows"] = stats.get("missing_currency_rows", 0) + 1
             continue
+        if stats is not None:
+            stats["paid_rows"] = stats.get("paid_rows", 0) + 1
+            stats["paid_units"] = stats.get("paid_units", 0) + units
         refund = units < 0 or price < 0
         total = abs(count * price)
         partner_price = amount(lookup(row, "Developer Proceeds"))
@@ -300,7 +317,9 @@ def apple_sales_token() -> str:
     return app_store_connect_read_token_from_env()
 
 
-def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY, *, previous_status: dict | None = None) -> tuple[list[dict], dict]:
+def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY, *,
+                 previous_status: dict | None = None, app_aliases: dict | None = None,
+                 sku_status: dict | None = None) -> tuple[list[dict], dict]:
     vendor = os.getenv("APP_STORE_VENDOR_NUMBER", "").strip()
     if not vendor:
         return [], {"status": "vendor_number_required"}
@@ -309,9 +328,21 @@ def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY, *,
     except Exception:
         return [], {"status": "credentials_unavailable"}
     apps = {s["store_app_id"]: s for s in stores if s.get("platform") == "ios" and s.get("store_app_id")}
+    # Include verified App Store Connect parent-app SKUs. An in-app product's
+    # Apple Identifier can be unrelated to the app's public App Store ID.
+    for alias, store in (app_aliases or {}).items():
+        if store.get("store_app_id") in apps:
+            if alias in apps and apps[alias]["app_slug"] != store["app_slug"]:
+                raise LedgerError("Apple app alias collision")
+            apps[alias] = store
     # Apple daily sales data becomes available the next day; never infer today's sales as zero.
     cursor = max(earliest, APPLE_FIRST_DAY, as_of - timedelta(days=364))
     prior = previous_status if isinstance(previous_status, dict) else {}
+    sku_status = sku_status or {"status":"ok"}
+    mapping_verified = sku_status.get("status") == "ok"
+    # Backfilled historical "success" must not survive a parser/ID mapping
+    # upgrade: those reports may contain IAP transactions silently discarded.
+    remap_history = prior.get("app_mapping_version") != APPLE_MAPPING_VERSION
     checked_days = set(prior.get("completed_days", []))
     missing_days = set(prior.get("missing_days", []))
     checked_days = {value for value in checked_days if cursor.isoformat() <= value < as_of.isoformat()}
@@ -320,10 +351,11 @@ def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY, *,
     new_checked = 0
     refreshed_days: list[str] = []
     errors: list[str] = []
+    parser_stats: dict[str, int] = {}
     while cursor < as_of:
         day = cursor.isoformat()
         recent = cursor >= as_of - timedelta(days=APPLE_REFRESH_DAYS)
-        if not recent and (day in checked_days or day in missing_days):
+        if not recent and not remap_history and (day in checked_days or day in missing_days):
             cursor += timedelta(days=1)
             continue
         params = urllib.parse.urlencode({
@@ -339,7 +371,7 @@ def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY, *,
         )
         try:
             with urllib.request.urlopen(req, timeout=40) as response:
-                events.extend(parse_apple_sales(response.read(), apps, day))
+                events.extend(parse_apple_sales(response.read(), apps, day, parser_stats))
             checked_days.add(day)
             missing_days.discard(day)
             refreshed_days.append(day)
@@ -353,12 +385,23 @@ def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY, *,
                 if error.code in {401, 403, 429}:
                     break
         cursor += timedelta(days=1)
-    status = "partial" if errors else "no_reports" if not checked_days else "ok"
+    unresolved = (not mapping_verified or parser_stats.get("unmatched_rows", 0) > 0)
+    status = (
+        "partial" if errors or (checked_days and unresolved)
+        else "no_reports" if not checked_days
+        else "ok"
+    )
     return events, {
         "status": status, "days_checked": len(checked_days),
         "days_missing": len(missing_days), "new_reports": new_checked,
         "completed_days": sorted(checked_days), "missing_days": sorted(missing_days),
         "refreshed_days": refreshed_days, "errors": errors[:8],
+        "app_mapping_version": APPLE_MAPPING_VERSION if mapping_verified and not errors else 0,
+        "sku_mapping": sku_status.get("status", "unknown"),
+        "sku_aliases": len(apps) - len({
+            s["store_app_id"] for s in stores if s.get("platform") == "ios" and s.get("store_app_id")
+        }),
+        "rechecked_history": remap_history, "parser_rows": parser_stats,
     }
 
 
@@ -376,18 +419,28 @@ def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
         status["google"] = state
     settlements: list[dict] = []
     if apple:
+        vendor = os.getenv("APP_STORE_VENDOR_NUMBER", "").strip()
+        finance_apps = {
+            store["store_app_id"]: store for store in stores
+            if store.get("platform") == "ios" and store.get("store_app_id")
+        }
+        token = ""
+        sku_status = {"status": "unavailable"}
+        if vendor:
+            try:
+                token = apple_sales_token()
+                finance_apps, sku_status = add_app_sku_aliases(token, finance_apps)
+            except (OSError, ValueError, urllib.error.URLError) as exc:
+                # Do not mark old Apple days reconciled after incomplete metadata.
+                sku_status = {"status": "unavailable", "error_type": type(exc).__name__}
         old_status = (previous or {}).get("source_status", {}).get("apple", {})
-        rows, state = apple_ledger(stores, as_of, earliest, previous_status=old_status)
+        rows, state = apple_ledger(
+            stores, as_of, earliest, previous_status=old_status,
+            app_aliases=finance_apps, sku_status=sku_status,
+        )
         events += rows
         status["apple"] = state
-        vendor = os.getenv("APP_STORE_VENDOR_NUMBER", "").strip()
-        if vendor and state["status"] != "credentials_unavailable":
-            token = apple_sales_token()
-            finance_apps = {
-                store["store_app_id"]:store for store in stores
-                if store.get("platform") == "ios" and store.get("store_app_id")
-            }
-            finance_apps, sku_status = add_app_sku_aliases(token, finance_apps)
+        if vendor and state["status"] != "credentials_unavailable" and token:
             prior_finance = (previous or {}).get("source_status", {}).get("apple_finance", {})
             fresh, finance_state = fetch_finance(
                 token, vendor, finance_apps, max(earliest, APPLE_FIRST_DAY), as_of,

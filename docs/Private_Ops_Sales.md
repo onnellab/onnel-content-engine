@@ -48,8 +48,14 @@ Apple:
 - Sales reports show customer prices and proceeds. Their difference cannot
   be claimed as platform fees because of tax/currency variations.
 - Daily Apple sales are backfilled from 2026-03-01 (subject to Apple's
-  one-year availability). Fetched and unavailable day checkpoints are encrypted;
-  the last 14 days are refreshed daily, older checked dates are not retried.
+  one-year availability). Apple IAP product identifiers can differ from the
+  public app ID; the collector maps via exact App Store Connect app SKU,
+  parent identifier, or public app identifier. The daily parser mapping has
+  its own versioned checkpoint: after a mapping upgrade, previously checked
+  historical dates are fully re-read once, and their prior rows are replaced
+  rather than added. Fetched and unavailable day checkpoints are encrypted;
+  after reconciliation the last 14 days are refreshed daily.
+  Unknown seller/product IDs stay unmatched, never guessed by product name.
 - `GET /v1/financeReports` with `reportType=FINANCIAL`,
   `regionCode=ZZ`, fiscal-month `YYYY-MM` reads consolidated settled
   proceeds. Older confirmed fiscal months are checkpointed; the last two
