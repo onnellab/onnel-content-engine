@@ -1,0 +1,335 @@
+#!/usr/bin/env python3
+"""Private, evidence-based store sales ledger. Never commit its JSON output."""
+from __future__ import annotations
+
+import argparse
+import csv
+import gzip
+import io
+import json
+import os
+import re
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+import zipfile
+from collections import defaultdict
+from datetime import date, datetime, timedelta, timezone
+from decimal import Decimal, InvalidOperation
+from pathlib import Path
+
+from sync_store_funnel import (
+    gcs_download, gcs_list_objects, google_token_from_env,
+    normalize_google_reports_bucket, read_daily,
+)
+from sync_store_reviews import app_store_connect_read_token_from_env, read_csv_rows
+
+ROOT = Path(__file__).resolve().parents[1]
+STORES = ROOT / "data" / "store_versions.csv"
+FIRST_DAY = date(2026, 1, 1)
+MONEY = Decimal("0.01")
+
+
+class LedgerError(ValueError):
+    pass
+
+
+def amount(value: object) -> Decimal:
+    raw = str(value or "").replace(",", "").replace("(", "-").replace(")", "").strip()
+    if not raw:
+        return Decimal(0)
+    try:
+        return Decimal(raw)
+    except InvalidOperation as exc:
+        raise LedgerError("invalid decimal money field") from exc
+
+
+def iso_day(value: object) -> str:
+    raw = str(value or "").strip()
+    for fmt in ("%Y-%m-%d", "%b %d, %Y", "%m/%d/%Y", "%Y/%m/%d"):
+        try:
+            return datetime.strptime(raw, fmt).date().isoformat()
+        except ValueError:
+            pass
+    return ""
+
+
+def lookup(row: dict[str, str], *keys: str) -> str:
+    fields = {re.sub(r"[^a-z0-9]", "", k.casefold()): v for k, v in row.items()}
+    for key in keys:
+        field = fields.get(re.sub(r"[^a-z0-9]", "", key.casefold()))
+        if field is not None:
+            return str(field).strip()
+    return ""
+
+
+def read_table(source: bytes, delimiter: str = ",") -> list[dict[str, str]]:
+    if source.startswith(b"\x1f\x8b"):
+        source = gzip.decompress(source)
+    encoding = "utf-16" if source.startswith((b"\xff\xfe", b"\xfe\xff")) else "utf-8-sig"
+    result = source.decode(encoding)
+    if result.startswith("#"):
+        result = "\n".join(line for line in result.splitlines() if not line.startswith("#"))
+    return list(csv.DictReader(io.StringIO(result), delimiter=delimiter))
+
+
+def csv_from_zip(raw: bytes):
+    with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+        for name in sorted(archive.namelist()):
+            if name.lower().endswith(".csv") and not name.endswith("/"):
+                yield name, read_table(archive.read(name))
+
+
+def make_event(day: str, platform: str, app: dict[str, str], country: str, currency: str,
+               source: str, *, units: int = 0, gross=0, refund=0, fee=0,
+               proceeds=0, proceeds_currency: str = "") -> dict:
+    return {
+        "date": day, "platform": platform, "app_slug": app["app_slug"],
+        "app_name": app["app_name"], "country": (country or "ZZ").upper(),
+        "currency": currency.upper(), "source": source, "units": units,
+        "gross": str(gross), "refund": str(refund), "fee": str(fee),
+        "proceeds": str(proceeds), "proceeds_currency": proceeds_currency.upper(),
+    }
+
+
+def parse_google_sales_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> list[dict]:
+    events = []
+    for _, rows in csv_from_zip(raw):
+        for row in rows:
+            package = lookup(row, "Package ID", "Package Id")
+            if package not in apps:
+                continue
+            state = lookup(row, "Financial status").casefold()
+            if state not in {"charged", "refund"}:
+                continue
+            day = iso_day(lookup(row, "Order refunded date" if state == "refund" else "Order charged date"))
+            if not day:
+                day = iso_day(lookup(row, "Order charged date"))
+            if not day:
+                continue
+            currency = lookup(row, "Currency of Sale")
+            if not currency:
+                # Never mix buyer-currency and merchant-currency monetary fields.
+                continue
+            value = amount(lookup(row, "Charged Amount"))
+            value = abs(value)
+            country = lookup(row, "Country of Buyer")
+            events.append(make_event(day, "android", apps[package], country, currency,
+                                     "google_sales_estimate", units=1 if state == "charged" else -1,
+                                     gross=value if state == "charged" else 0,
+                                     refund=-value if state == "refund" else 0))
+    return events
+
+
+def parse_google_earnings_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> list[dict]:
+    events = []
+    for _, rows in csv_from_zip(raw):
+        for row in rows:
+            package = lookup(row, "Package ID")
+            if package not in apps:
+                continue
+            kind = lookup(row, "Transaction Type").casefold()
+            if kind not in {"google fee", "google fee refund", "google fee rebill"}:
+                continue
+            day = iso_day(lookup(row, "Transaction Date"))
+            currency = lookup(row, "Merchant Currency")
+            if not day or not currency:
+                continue
+            value = amount(lookup(row, "Amount (Merchant Currency)"))
+            # Fee is represented as a positive expense; fee refunds reverse expense.
+            signed_fee = -abs(value) if kind == "google fee refund" else abs(value)
+            country = lookup(row, "Buyer Country", "Buyer Country Code", "Country")
+            events.append(make_event(day, "android", apps[package], country, currency,
+                                     "google_earnings_actual", fee=signed_fee))
+    return events
+
+
+def parse_apple_sales(raw: bytes, apps: dict[str, dict[str, str]], day: str) -> list[dict]:
+    events = []
+    for row in read_table(raw, delimiter="\t"):
+        appid = lookup(row, "Apple Identifier")
+        parent = lookup(row, "Parent Identifier")
+        sku = lookup(row, "SKU")
+        app = apps.get(appid) or apps.get(parent) or apps.get(sku)
+        if not app:
+            continue
+        count = amount(lookup(row, "Units"))
+        price = amount(lookup(row, "Customer Price"))
+        if count == 0 or price == 0:
+            continue
+        units = int(count)
+        customer_currency = lookup(row, "Customer Currency")
+        proceeds_currency = lookup(row, "Currency of Proceeds")
+        if not customer_currency:
+            continue
+        refund = units < 0 or price < 0
+        total = abs(count * price)
+        partner_price = amount(lookup(row, "Developer Proceeds"))
+        proceeds = (Decimal(-1) if refund else Decimal(1)) * abs(partner_price * count)
+        country = lookup(row, "Country Code")
+        events.append(make_event(day, "ios", app, country, customer_currency,
+                                 "apple_sales_estimate", units=-abs(units) if refund else abs(units),
+                                 gross=0 if refund else total,
+                                 refund=-total if refund else 0,
+                                 proceeds=proceeds, proceeds_currency=proceeds_currency))
+    return events
+
+
+def aggregate(events: list[dict]) -> list[dict]:
+    grouped: dict[tuple, dict] = {}
+    for event in events:
+        key = tuple(event[k] for k in ("date", "platform", "app_slug", "country", "currency"))
+        item = grouped.setdefault(key, {
+            "date": event["date"], "platform": event["platform"], "app_slug": event["app_slug"],
+            "app_name": event["app_name"], "country": event["country"], "currency": event["currency"],
+            "units": 0, "gross": Decimal(0), "refund": Decimal(0), "fee": Decimal(0),
+            "proceeds": Decimal(0), "proceeds_currency": "", "fee_confirmed": False,
+            "sources": set(),
+        })
+        item["units"] += event["units"]
+        for field in ("gross", "refund", "fee"):
+            item[field] += amount(event[field])
+        if event["source"] == "google_earnings_actual":
+            item["fee_confirmed"] = True
+        if event["proceeds_currency"]:
+            if not item["proceeds_currency"] or item["proceeds_currency"] == event["proceeds_currency"]:
+                item["proceeds_currency"] = event["proceeds_currency"]
+                item["proceeds"] += amount(event["proceeds"])
+            else:
+                raise LedgerError("multiple proceeds currencies in one group")
+        item["sources"].add(event["source"])
+    result = []
+    for item in sorted(grouped.values(), key=lambda x: (x["date"], x["platform"], x["app_slug"], x["country"], x["currency"]), reverse=True):
+        for name in ("gross", "refund", "fee", "proceeds"):
+            item[name] = str(item[name].quantize(MONEY))
+        item["net_sales"] = str((amount(item["gross"]) + amount(item["refund"])).quantize(MONEY))
+        item["sources"] = sorted(item["sources"])
+        result.append(item)
+    return result
+
+
+def google_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) -> tuple[list[dict], dict]:
+    bucket = normalize_google_reports_bucket(os.getenv("GOOGLE_PLAY_REPORTS_BUCKET", ""))
+    token, _ = google_token_from_env()
+    if not bucket or not token:
+        return [], {"status": "not_configured"}
+    apps = {s["store_package"]: s for s in stores if s.get("platform") == "android" and s.get("store_package")}
+    events: list[dict] = []
+    statuses: dict[str, object] = {"status": "ok", "sales_files": 0, "earnings_files": 0}
+    for prefix, matcher, fn, label in (
+        ("sales/", r"salesreport_(\d{6})\.zip$", parse_google_sales_zip, "sales_files"),
+        ("earnings/", r"earnings_(\d{6})\.zip$", parse_google_earnings_zip, "earnings_files"),
+    ):
+        objects = gcs_list_objects(bucket, prefix, token)
+        for obj in objects:
+            filename = str(obj.get("name", ""))
+            match = re.search(matcher, filename)
+            if not match:
+                continue
+            yyyy_mm = match.group(1)
+            month = date(int(yyyy_mm[:4]), int(yyyy_mm[4:]), 1)
+            if not (earliest.replace(day=1) <= month <= as_of.replace(day=1)):
+                continue
+            events.extend(fn(gcs_download(bucket, filename, token), apps))
+            statuses[label] += 1
+    return events, statuses
+
+
+def apple_sales_token() -> str:
+    # Team key required for sales and finance endpoints.
+    return app_store_connect_read_token_from_env()
+
+
+def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) -> tuple[list[dict], dict]:
+    vendor = os.getenv("APP_STORE_VENDOR_NUMBER", "").strip()
+    if not vendor:
+        return [], {"status": "vendor_number_required"}
+    try:
+        token = apple_sales_token()
+    except Exception:
+        return [], {"status": "credentials_unavailable"}
+    apps = {s["store_app_id"]: s for s in stores if s.get("platform") == "ios" and s.get("store_app_id")}
+    # Apple daily sales data becomes available the next day; never infer today's sales as zero.
+    cursor = max(earliest, as_of - timedelta(days=40))
+    events: list[dict] = []
+    checked = 0
+    errors: list[str] = []
+    while cursor < as_of:
+        day = cursor.isoformat()
+        params = urllib.parse.urlencode({
+            "filter[frequency]": "DAILY",
+            "filter[reportDate]": day,
+            "filter[reportType]": "SALES",
+            "filter[reportSubType]": "SUMMARY",
+            "filter[vendorNumber]": vendor,
+        })
+        req = urllib.request.Request(
+            "https://api.appstoreconnect.apple.com/v1/salesReports?" + params,
+            headers={"Authorization": "Bearer " + token, "Accept": "application/a-gzip"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=40) as response:
+                events.extend(parse_apple_sales(response.read(), apps, day))
+            checked += 1
+        except urllib.error.HTTPError as e:
+            if e.code not in {404}:
+                errors.append(f"{day}: HTTP {e.code}")
+                if e.code in {401, 403}:
+                    break
+        cursor += timedelta(days=1)
+    return events, {"status": "partial" if errors else "ok", "days_checked": checked, "errors": errors[:8]}
+
+
+def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
+                 google: bool = True) -> dict:
+    if earliest > as_of:
+        raise LedgerError("start date exceeds as-of date")
+    stores = read_csv_rows(STORES)
+    events: list[dict] = []
+    status = {}
+    if google:
+        rows, state = google_ledger(stores, as_of, earliest)
+        events += rows
+        status["google"] = state
+    if apple:
+        rows, state = apple_ledger(stores, as_of, earliest)
+        events += rows
+        status["apple"] = state
+    return {
+        "schema_version": 1,
+        "checked_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+        "earliest": earliest.isoformat(),
+        "as_of": as_of.isoformat(),
+        "source_status": status,
+        "rows": aggregate(events),
+        "notices": [
+            "Apple daily sales and Google salesreport data are estimates, not final settlement.",
+            "Google fee is actual only where earnings report contains Google fee transactions.",
+            "Apple customer price includes tax; it is not valid to treat customer price less proceeds as platform fee.",
+            "Keep amounts in original currencies; never add figures across currencies.",
+            "No transactions in an unavailable report is NOT evidence of zero sales.",
+        ],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Build private store finance ledger")
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--as-of", type=date.fromisoformat, default=date.today())
+    parser.add_argument("--earliest", type=date.fromisoformat, default=FIRST_DAY)
+    parser.add_argument("--no-google", action="store_true")
+    parser.add_argument("--no-apple", action="store_true")
+    args = parser.parse_args()
+    ledger = build_ledger(args.as_of, earliest=args.earliest, google=not args.no_google,
+                          apple=not args.no_apple)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    os.chmod(args.output, 0o600)
+    # Do not print customer rows, currency amounts or authentication details into CI logs.
+    print("Private ledger created (not suitable for public git or logs).")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
