@@ -116,14 +116,26 @@ Brand assets and favicon rules are defined in:
 docs/Brand_Guide.md
 ```
 
-Each public post must be published in both supported languages:
+Each new canonical article must be published as one complete nine-language bundle:
 
-* English
-* Korean
+* English (`en`)
+* Korean (`ko`)
+* Japanese (`ja`)
+* Simplified Chinese (`zh-Hans`)
+* Traditional Chinese (`zh-Hant`)
+* Brazilian Portuguese (`pt-BR`)
+* German (`de`)
+* French (`fr`)
+* Spanish (`es`)
 
-Publishing only one language is incomplete.
+All nine versions must share the same category, slug and publication instant.
+A missing language holds the entire new bundle. Preserve existing public URLs
+and original publication dates when adding translations to historical articles.
 
-The English and Korean versions should share the same slug when they represent the same article.
+The current contract is defined in `docs/Nine_Language_Publishing.md` and
+`scripts/publication_locales.py`, matching the homepage locale registry.
+Supplied bundles remain in review; the existing canonical GitHub publisher owns
+assignment of publication slots and published status.
 
 ---
 
@@ -714,11 +726,11 @@ Images should always support understanding.
 Before publishing, confirm:
 
 * Markdown is valid.
-* English and Korean article counterparts both exist.
+* All nine article language counterparts exist as one complete bundle.
 * Article title and blog card title are consistent.
 * ONNELLAB brand spelling is preserved in every language.
 * Images exist.
-* Text-containing images exist separately for English and Korean.
+* Every language has its own localized text-containing image assets.
 * Image quality checks pass.
 * A workflow diagram source exists for social card generation when the article uses generated blog imagery.
 * Metadata is complete.
@@ -726,7 +738,7 @@ Before publishing, confirm:
 * External links are valid.
 * Category is correct.
 * Related applications are accurate.
-* Translation quality checks pass.
+* Translation quality checks and independent language, meaning and factual review pass. Mechanical scores alone do not establish translation quality.
 * The article review score is greater than `9.0 / 10`.
 
 Publishing should fail if validation fails.
@@ -784,8 +796,10 @@ The content engine must not delete or replace the homepage repository root with 
 Approved Markdown is exported into:
 
 ```text
-src/content/blog/{en,ko}/{slug}.md
+src/content/blog/{en,ko,ja,zh-Hans,zh-Hant,pt-BR,de,fr,es}/{slug}.md
 ```
+
+Locale folder identifiers retain the registry's exact case; public route segments are lowercase.
 
 The homepage repository owns HTML, RSS, sitemap, and GitHub Pages output generation through its Astro build.
 
