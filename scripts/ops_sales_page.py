@@ -26,6 +26,7 @@ def sales_page_body(ledger: Mapping | None) -> str:
         "not_collected":"수집 전", "not_configured":"연결 정보 없음",
         "vendor_number_required":"Apple Vendor Number 등록 필요",
         "credentials_unavailable":"API 키 점검 필요",
+        "no_reports":"판매 보고서 미수신 · 판매 0건 확정 아님",
     }
     for platform,name in (("google","Google Play"),("apple","App Store")):
         source = statuses.get(platform,{})

@@ -7,6 +7,9 @@ import os
 import sys
 import unittest
 import zipfile
+from datetime import date
+from unittest.mock import patch
+from urllib.error import HTTPError
 from decimal import Decimal
 from pathlib import Path
 
@@ -99,6 +102,22 @@ class LedgerTests(unittest.TestCase):
         self.assertEqual(len(rows), 2)
         self.assertEqual({row["currency"] for row in rows}, {"KRW", "JPY"})
         self.assertEqual(sum(int(x["units"]) for x in rows), 2)
+
+    def test_apple_all_404_reports_are_not_reported_as_success(self):
+        from store_sales_ledger import apple_ledger
+        unavailable = HTTPError("https://example.com", 404, "Not Found", {}, None)
+        with patch.dict(os.environ, {"APP_STORE_VENDOR_NUMBER": "12345678"}), (
+            patch("store_sales_ledger.apple_sales_token", return_value="mock-token")
+        ), patch("store_sales_ledger.urllib.request.urlopen", side_effect=unavailable):
+            rows, status = apple_ledger(
+                [{"platform": "ios", "store_app_id": "123", "app_slug": "test",
+                  "app_name": "Test"}],
+                date(2026, 10, 9), date(2026, 10, 7),
+            )
+        self.assertEqual(rows, [])
+        self.assertEqual(status["status"], "no_reports")
+        self.assertEqual(status["days_missing"], 2)
+        self.assertEqual(status["days_checked"], 0)
 
     def test_invalid_decimal_fails_not_silent(self):
         with self.assertRaises(ValueError):

@@ -66,6 +66,24 @@ jobs:
           node scripts/private_ops_publish.mjs seal-data "$RUNNER_TEMP/onnel-sales.json" data/private_store_sales.enc.json
           python3 -m json.tool data/private_store_sales.enc.json > /dev/null
           ! grep -q '"rows"' data/private_store_sales.enc.json
+          # Report collection health without printing money, purchasers or keys.
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          record = json.loads((Path(os.environ["RUNNER_TEMP"]) / "onnel-sales.json").read_text())
+          for platform, prefix in (("apple", "ios"), ("google", "android")):
+              status = record["source_status"].get(platform, {})
+              selected = {
+                  field: status.get(field)
+                  for field in ("status", "days_checked", "days_missing",
+                                "sales_files", "earnings_files", "errors")
+                  if field in status
+              }
+              count = sum(1 for row in record["rows"] if row["platform"] == prefix)
+              print("FINANCE_REPORT_HEALTH_" + platform.upper() + "=" + json.dumps(selected, sort_keys=True))
+              print("FINANCE_REPORT_ROW_GROUPS_" + platform.upper() + "=" + str(count))
+          PY
 
       - name: Commit ciphertext only
         run: |

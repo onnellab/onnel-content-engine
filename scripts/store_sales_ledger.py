@@ -271,6 +271,7 @@ def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) ->
     cursor = max(earliest, as_of - timedelta(days=40))
     events: list[dict] = []
     checked = 0
+    missing = 0
     errors: list[str] = []
     while cursor < as_of:
         day = cursor.isoformat()
@@ -290,12 +291,20 @@ def apple_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) ->
                 events.extend(parse_apple_sales(response.read(), apps, day))
             checked += 1
         except urllib.error.HTTPError as e:
-            if e.code not in {404}:
+            if e.code == 404:
+                missing += 1
+            else:
                 errors.append(f"{day}: HTTP {e.code}")
                 if e.code in {401, 403}:
                     break
         cursor += timedelta(days=1)
-    return events, {"status": "partial" if errors else "ok", "days_checked": checked, "errors": errors[:8]}
+    # Distinguish accepted reports, no published reports, and an API/permission error.
+    # In particular 40 days of HTTP 404 must never be reported as success.
+    status = "partial" if errors else "no_reports" if checked == 0 else "ok"
+    return events, {
+        "status": status, "days_checked": checked, "days_missing": missing,
+        "errors": errors[:8],
+    }
 
 
 def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
