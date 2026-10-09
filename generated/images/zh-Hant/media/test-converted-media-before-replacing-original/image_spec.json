@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/media/test-converted-media-before-replacing-original.md",
+  "topic": {
+    "id": "TOPIC-0065",
+    "title": "取代原始檔案前，如何檢查轉檔後的媒體檔案",
+    "slug": "test-converted-media-before-replacing-original",
+    "category": "media",
+    "language": "zh-Hant",
+    "primary_keyword": "檢查轉檔後的媒體檔案",
+    "related_apps": [
+      "Quivra"
+    ]
+  },
+  "article_sections_detected": [
+    "取代原始檔案前，如何檢查轉檔後的媒體檔案",
+    "問題",
+    "簡短回答",
+    "先訂出合格結果必須保留的內容",
+    "三種檢查各自回答不同問題",
+    "建議流程",
+    "用簡單的檢查紀錄找出問題",
+    "檢查碼能證明什麼，又不能證明什麼",
+    "ONNELLAB 的用途",
+    "相關指南",
+    "參考資料",
+    "結論",
+    "常見問題",
+    "檔案能開啟就夠了嗎？",
+    "時長必須完全相同嗎？",
+    "檔案比較小，就代表轉檔品質比較差嗎？",
+    "抽樣檢查通過後，可以刪除原始檔嗎？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "取代原始檔案之前，應該如何檢查轉檔後的媒體檔案？",
+      "source_sections": [
+        "簡短回答",
+        "建議流程"
+      ],
+      "structure": [
+        "1. 保留",
+        "2. 檢查",
+        "3. 播放",
+        "4. 備份"
+      ],
+      "notes": "保留原始檔、檢查輸出檔，在實際使用環境中播放，再記錄結果並留存備份。"
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "Quivra"
+    ],
+    "reason": "This is a product-neutral verification method. No app UI or device-test evidence is claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "取代原始檔案前，如何檢查轉檔後的媒體檔案",
+      "steps": [
+        "1. 保留 — 留下原始檔",
+        "2. 檢查 — 確認檔案變化",
+        "3. 播放 — 在使用環境播放",
+        "4. 備份 — 記錄並保存"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "轉檔完成後",
+    "message": "副本能播放，也不能取代唯一的原始檔。",
+    "description": "保留原始檔、檢查輸出檔，在實際使用環境中播放，再記錄結果並留存備份。",
+    "steps": [
+      [
+        "1. 保留",
+        "留下原始檔"
+      ],
+      [
+        "2. 檢查",
+        "確認檔案變化"
+      ],
+      [
+        "3. 播放",
+        "在使用環境播放"
+      ],
+      [
+        "4. 備份",
+        "記錄並保存"
+      ]
+    ]
+  }
+}

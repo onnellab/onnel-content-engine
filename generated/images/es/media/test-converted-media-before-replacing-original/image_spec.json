@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/media/test-converted-media-before-replacing-original.md",
+  "topic": {
+    "id": "TOPIC-0069",
+    "title": "Cómo probar un archivo multimedia convertido antes de sustituir el original",
+    "slug": "test-converted-media-before-replacing-original",
+    "category": "media",
+    "language": "es",
+    "primary_keyword": "probar un archivo multimedia convertido",
+    "related_apps": [
+      "Quivra"
+    ]
+  },
+  "article_sections_detected": [
+    "Cómo probar un archivo multimedia convertido antes de sustituir el original",
+    "Pregunta",
+    "Respuesta breve",
+    "Define qué debe conservar un buen resultado",
+    "Tres comprobaciones responden a preguntas distintas",
+    "Flujo de trabajo recomendado",
+    "Una pequeña hoja de control facilita la investigación de los fallos",
+    "Qué demuestra una suma de comprobación y qué no",
+    "Cómo usar ONNELLAB",
+    "Guía relacionada",
+    "Referencias",
+    "Conclusión",
+    "Preguntas frecuentes",
+    "¿Basta con abrir el archivo?",
+    "¿La duración tiene que ser exactamente igual?",
+    "¿Un archivo más pequeño significa una conversión peor?",
+    "¿Puedo borrar el original después de una prueba por muestreo satisfactoria?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "¿Cómo debo probar un archivo multimedia convertido antes de sustituir el original?",
+      "source_sections": [
+        "Respuesta breve",
+        "Flujo de trabajo recomendado"
+      ],
+      "structure": [
+        "1. Conservar",
+        "2. Revisar",
+        "3. Probar",
+        "4. Guardar"
+      ],
+      "notes": "Conserva el original, inspecciona el resultado, prueba la reproducción en el destino y registra el resultado manteniendo una copia de seguridad."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "Quivra"
+    ],
+    "reason": "This is a product-neutral verification method. No app UI or device-test evidence is claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Cómo probar un archivo multimedia convertido antes de sustituir el original",
+      "steps": [
+        "1. Conservar — Guarda el original",
+        "2. Revisar — Comprueba los cambios",
+        "3. Probar — Reproduce en el destino",
+        "4. Guardar — Anota y haz una copia de seguridad"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Después de convertir",
+    "message": "Una copia que se reproduce no sustituye al único original.",
+    "description": "Conserva el original, inspecciona el resultado, prueba la reproducción en el destino y registra el resultado manteniendo una copia de seguridad.",
+    "steps": [
+      [
+        "1. Conservar",
+        "Guarda el original"
+      ],
+      [
+        "2. Revisar",
+        "Comprueba los cambios"
+      ],
+      [
+        "3. Probar",
+        "Reproduce en el destino"
+      ],
+      [
+        "4. Guardar",
+        "Anota y haz una copia de seguridad"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">取代原始檔案前，如何檢查轉檔後的媒體檔案</title>
+  <desc id="desc">檢查轉檔後的音訊與影片是否完整、播放是否正常，以及是否保留必要的中繼資料。在實際使用的應用程式或裝置中測試，並保留已驗證的原始檔案備份。</desc>
+  <rect width="1200" height="630" fill="#f8f4ec"/>
+  <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
+  <rect x="92" y="92" width="210" height="44" rx="22" fill="#fff0df" stroke="#edcda6" stroke-width="1.4"/>
+  <text x="118" y="121" fill="#684621" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="18" font-weight="700">媒體</text>
+  <text x="92" y="218" fill="#282723" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">取代原始檔案前，如何檢查轉檔後的媒</tspan><tspan x="92" y="282">體檔案</tspan></text>
+  <text fill="#5f5b54" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="24"><tspan x="92" y="410">檢查轉檔後的音訊與影片是否完整、播放是否正常，以及是否保留必要的中繼資料。在實</tspan><tspan x="92" y="444">際使用的應用程式或裝置中測試，並保留已驗證的原始檔案備份。</tspan></text>
+  <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
+  <text x="92" y="552" fill="#817c73" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="19">媒體 · ZH-HANT</text>
+  <text x="1048" y="552" fill="#30302c" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
+</svg>

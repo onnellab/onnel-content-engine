@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/pt-BR/media/test-converted-media-before-replacing-original.md",
+  "topic": {
+    "id": "TOPIC-0066",
+    "title": "Como testar um arquivo de mídia convertido antes de substituir o original",
+    "slug": "test-converted-media-before-replacing-original",
+    "category": "media",
+    "language": "pt-BR",
+    "primary_keyword": "testar um arquivo de mídia convertido",
+    "related_apps": [
+      "Quivra"
+    ]
+  },
+  "article_sections_detected": [
+    "Como testar um arquivo de mídia convertido antes de substituir o original",
+    "Pergunta",
+    "Resposta curta",
+    "Defina o que um bom resultado precisa preservar",
+    "Três verificações respondem a perguntas diferentes",
+    "Fluxo de trabalho recomendado",
+    "Um pequeno registro ajuda a investigar as falhas",
+    "O que uma soma de verificação comprova e o que não comprova",
+    "Como usar ONNELLAB",
+    "Guia relacionado",
+    "Referências",
+    "Conclusão",
+    "Perguntas frequentes",
+    "Basta abrir o arquivo?",
+    "A duração precisa ser exatamente igual?",
+    "Um arquivo menor significa uma conversão pior?",
+    "Posso apagar o original depois de um teste por amostragem bem-sucedido?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Como testar um arquivo de mídia convertido antes de substituir o original?",
+      "source_sections": [
+        "Resposta curta",
+        "Fluxo de trabalho recomendado"
+      ],
+      "structure": [
+        "1. Guardar",
+        "2. Conferir",
+        "3. Testar",
+        "4. Salvar"
+      ],
+      "notes": "Mantenha o original, inspecione o arquivo convertido, teste a reprodução no destino e registre o resultado com um backup preservado."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "Quivra"
+    ],
+    "reason": "This is a product-neutral verification method. No app UI or device-test evidence is claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Como testar um arquivo de mídia convertido antes de substituir o original",
+      "steps": [
+        "1. Guardar — Mantenha o original",
+        "2. Conferir — Veja o que mudou",
+        "3. Testar — Reproduza no destino",
+        "4. Salvar — Registre e faça backup"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Depois da conversão",
+    "message": "Uma cópia que pode ser reproduzida não substitui o único original.",
+    "description": "Mantenha o original, inspecione o arquivo convertido, teste a reprodução no destino e registre o resultado com um backup preservado.",
+    "steps": [
+      [
+        "1. Guardar",
+        "Mantenha o original"
+      ],
+      [
+        "2. Conferir",
+        "Veja o que mudou"
+      ],
+      [
+        "3. Testar",
+        "Reproduza no destino"
+      ],
+      [
+        "4. Salvar",
+        "Registre e faça backup"
+      ]
+    ]
+  }
+}

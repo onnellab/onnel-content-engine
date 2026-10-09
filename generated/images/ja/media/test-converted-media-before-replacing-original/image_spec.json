@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/media/test-converted-media-before-replacing-original.md",
+  "topic": {
+    "id": "TOPIC-0063",
+    "title": "元ファイルを置き換える前に変換後のメディアを確認する方法",
+    "slug": "test-converted-media-before-replacing-original",
+    "category": "media",
+    "language": "ja",
+    "primary_keyword": "変換後のメディアファイルを確認",
+    "related_apps": [
+      "Quivra"
+    ]
+  },
+  "article_sections_detected": [
+    "元ファイルを置き換える前に変換後のメディアを確認する方法",
+    "質問",
+    "短い回答",
+    "良い結果に必要な条件を決める",
+    "三つの点検で分かることは異なる",
+    "推奨ワークフロー",
+    "簡単な確認表で問題を具体化する",
+    "チェックサムが証明できることの範囲",
+    "ONNELLAB の活用",
+    "関連ガイド",
+    "参考資料",
+    "結論",
+    "よくある質問",
+    "ファイルを開くだけで十分ですか？",
+    "長さは完全に一致する必要がありますか？",
+    "容量が小さいと変換品質も悪いのですか？",
+    "抜き取り確認に合格したら元ファイルを削除できますか？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "元ファイルを置き換える前に、変換後のメディアファイルをどう確認すればよいですか？",
+      "source_sections": [
+        "短い回答",
+        "推奨ワークフロー"
+      ],
+      "structure": [
+        "1. 保存",
+        "2. 確認",
+        "3. 再生",
+        "4. 記録"
+      ],
+      "notes": "元ファイルを残し、出力の情報を調べ、使用先で再生して、結果とバックアップを保存します。"
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "Quivra"
+    ],
+    "reason": "This is a product-neutral verification method. No app UI or device-test evidence is claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "元ファイルを置き換える前に変換後のメディアを確認する方法",
+      "steps": [
+        "1. 保存 — 元ファイルを残す",
+        "2. 確認 — 変更点を調べる",
+        "3. 再生 — 使用先で試す",
+        "4. 記録 — 記録と予備コピー"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "変換後の点検",
+    "message": "再生できるコピーがあっても、唯一の元ファイルは残します。",
+    "description": "元ファイルを残し、出力の情報を調べ、使用先で再生して、結果とバックアップを保存します。",
+    "steps": [
+      [
+        "1. 保存",
+        "元ファイルを残す"
+      ],
+      [
+        "2. 確認",
+        "変更点を調べる"
+      ],
+      [
+        "3. 再生",
+        "使用先で試す"
+      ],
+      [
+        "4. 記録",
+        "記録と予備コピー"
+      ]
+    ]
+  }
+}

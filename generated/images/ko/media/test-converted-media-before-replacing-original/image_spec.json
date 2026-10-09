@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/media/test-converted-media-before-replacing-original.md",
+  "topic": {
+    "id": "TOPIC-0062",
+    "title": "원본을 교체하기 전에 변환한 미디어 파일 확인하기",
+    "slug": "test-converted-media-before-replacing-original",
+    "category": "media",
+    "language": "ko",
+    "primary_keyword": "변환한 미디어 파일 확인",
+    "related_apps": [
+      "Quivra"
+    ]
+  },
+  "article_sections_detected": [
+    "원본을 교체하기 전에 변환한 미디어 파일 확인하기",
+    "질문",
+    "요약 답변",
+    "무엇이 남아 있어야 하는지 먼저 정하세요",
+    "세 가지 점검은 서로 다른 질문에 답합니다",
+    "권장 워크플로",
+    "간단한 점검표로 문제를 구체화하세요",
+    "체크섬이 알려 주는 것과 알려 주지 않는 것",
+    "ONNELLAB 앱",
+    "관련 글",
+    "참고 자료",
+    "결론",
+    "자주 묻는 질문",
+    "파일이 열리면 충분한가요?",
+    "재생 길이가 정확히 같아야 하나요?",
+    "파일이 작아졌다면 변환 품질이 나쁜가요?",
+    "일부 구간을 확인한 뒤 원본을 삭제해도 되나요?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "원본을 교체하기 전에 변환한 미디어 파일을 어떻게 확인해야 하나요?",
+      "source_sections": [
+        "요약 답변",
+        "권장 워크플로"
+      ],
+      "structure": [
+        "1. 보관",
+        "2. 확인",
+        "3. 재생",
+        "4. 기록"
+      ],
+      "notes": "원본 보관, 출력 정보 확인, 실제 사용 환경에서 재생, 결과 기록과 백업 순서로 점검합니다."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "Quivra"
+    ],
+    "reason": "This is a product-neutral verification method. No app UI or device-test evidence is claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "원본을 교체하기 전에 변환한 미디어 파일 확인하기",
+      "steps": [
+        "1. 보관 — 원본 따로 보관",
+        "2. 확인 — 달라진 정보 확인",
+        "3. 재생 — 실제 앱에서 점검",
+        "4. 기록 — 결과 기록과 백업"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+    "이 단계에서는 스크린샷을 만들지 않습니다.",
+    "이 단계에서는 에셋을 게시하지 않습니다.",
+    "설명 목적이 없는 장식용 이미지는 사용하지 않습니다."
+  ],
+  "editorial_workflow": {
+    "subtitle": "변환 후 점검",
+    "message": "재생되는 복사본이 있어도 유일한 원본은 보관하세요.",
+    "description": "원본 보관, 출력 정보 확인, 실제 사용 환경에서 재생, 결과 기록과 백업 순서로 점검합니다.",
+    "steps": [
+      [
+        "1. 보관",
+        "원본 따로 보관"
+      ],
+      [
+        "2. 확인",
+        "달라진 정보 확인"
+      ],
+      [
+        "3. 재생",
+        "실제 앱에서 점검"
+      ],
+      [
+        "4. 기록",
+        "결과 기록과 백업"
+      ]
+    ]
+  }
+}

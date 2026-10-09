@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/media/test-converted-media-before-replacing-original.md",
+  "topic": {
+    "id": "TOPIC-0038",
+    "title": "How to Test a Converted Media File Before Replacing the Original",
+    "slug": "test-converted-media-before-replacing-original",
+    "category": "media",
+    "language": "en",
+    "primary_keyword": "test a converted media file",
+    "related_apps": [
+      "Quivra"
+    ]
+  },
+  "article_sections_detected": [
+    "How to Test a Converted Media File Before Replacing the Original",
+    "Question",
+    "Short Answer",
+    "Define What a Good Result Must Preserve",
+    "Three Checks Answer Different Questions",
+    "Recommended Workflow",
+    "A Small Check Sheet Makes Failures Actionable",
+    "What a Checksum Does and Does Not Prove",
+    "Where ONNELLAB Fits",
+    "Related Guide",
+    "References",
+    "Conclusion",
+    "FAQ",
+    "Is opening the file enough?",
+    "Must the duration be exactly identical?",
+    "Does a smaller file mean a worse conversion?",
+    "Can I delete the original after a sample passes?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "How should I test a converted media file before replacing the original?",
+      "source_sections": [
+        "Short Answer",
+        "Recommended Workflow"
+      ],
+      "structure": [
+        "1. Preserve",
+        "2. Inspect",
+        "3. Play",
+        "4. Retain"
+      ],
+      "notes": "Keep the original, inspect the output, test destination playback, then record the result and retain a backup."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "Quivra"
+    ],
+    "reason": "This is a product-neutral verification method. No app UI or device-test evidence is claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "How to Test a Converted Media File Before Replacing the Original",
+      "steps": [
+        "1. Preserve — Keep the original",
+        "2. Inspect — Check what changed",
+        "3. Play — Test the destination",
+        "4. Retain — Record and back up"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "After conversion",
+    "message": "A playable copy is not a replacement for the only original.",
+    "description": "Keep the original, inspect the output, test destination playback, then record the result and retain a backup.",
+    "steps": [
+      [
+        "1. Preserve",
+        "Keep the original"
+      ],
+      [
+        "2. Inspect",
+        "Check what changed"
+      ],
+      [
+        "3. Play",
+        "Test the destination"
+      ],
+      [
+        "4. Retain",
+        "Record and back up"
+      ]
+    ]
+  }
+}

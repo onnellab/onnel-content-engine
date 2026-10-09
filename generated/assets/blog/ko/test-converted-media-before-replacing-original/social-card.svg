@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">원본을 교체하기 전에 변환한 미디어 파일 확인하기</title>
+  <desc id="desc">변환한 오디오와 동영상의 내용, 재생, 메타데이터를 실제 사용할 앱에서 확인하고 원본 백업을 보관하세요.</desc>
+  <rect width="1200" height="630" fill="#f8f4ec"/>
+  <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
+  <rect x="92" y="92" width="210" height="44" rx="22" fill="#fff0df" stroke="#edcda6" stroke-width="1.4"/>
+  <text x="118" y="121" fill="#684621" font-family="ONNELLAB Korean, Noto Sans KR, Malgun Gothic, system-ui, sans-serif" font-size="18" font-weight="700">미디어</text>
+  <text x="92" y="218" fill="#282723" font-family="ONNELLAB Korean, Noto Sans KR, Malgun Gothic, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">원본을 교체하기 전에 변환한 미디어 파일</tspan><tspan x="92" y="282">확인하기</tspan></text>
+  <text fill="#5f5b54" font-family="ONNELLAB Korean, Noto Sans KR, Malgun Gothic, system-ui, sans-serif" font-size="24"><tspan x="92" y="442">변환한 오디오와 동영상의 내용, 재생, 메타데이터를 실제 사용할</tspan><tspan x="92" y="476">앱에서 확인하고 원본 백업을 보관하세요.</tspan></text>
+  <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
+  <text x="92" y="552" fill="#817c73" font-family="ONNELLAB Korean, Noto Sans KR, Malgun Gothic, system-ui, sans-serif" font-size="19">미디어 · KO</text>
+  <text x="1048" y="552" fill="#30302c" font-family="ONNELLAB Korean, Noto Sans KR, Malgun Gothic, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
+</svg>

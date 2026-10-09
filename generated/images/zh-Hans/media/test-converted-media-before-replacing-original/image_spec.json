@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hans/media/test-converted-media-before-replacing-original.md",
+  "topic": {
+    "id": "TOPIC-0064",
+    "title": "替换原文件前，如何检查转换后的媒体文件",
+    "slug": "test-converted-media-before-replacing-original",
+    "category": "media",
+    "language": "zh-Hans",
+    "primary_keyword": "检查转换后的媒体文件",
+    "related_apps": [
+      "Quivra"
+    ]
+  },
+  "article_sections_detected": [
+    "替换原文件前，如何检查转换后的媒体文件",
+    "问题",
+    "简短回答",
+    "先明确合格结果必须保留什么",
+    "三种检查回答不同的问题",
+    "推荐流程",
+    "用简单的检查记录定位问题",
+    "校验和能证明什么，不能证明什么",
+    "ONNELLAB 的用途",
+    "相关指南",
+    "参考资料",
+    "结论",
+    "常见问题",
+    "文件能打开就够了吗？",
+    "时长必须完全相同吗？",
+    "文件更小就意味着转换更差吗？",
+    "抽查通过后，可以删除原文件吗？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "替换原文件之前，应该怎样检查转换后的媒体文件？",
+      "source_sections": [
+        "简短回答",
+        "推荐流程"
+      ],
+      "structure": [
+        "1. 保留",
+        "2. 检查",
+        "3. 播放",
+        "4. 备份"
+      ],
+      "notes": "保留原文件，检查输出文件，在实际使用环境中播放，再记录结果并保留备份。"
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "Quivra"
+    ],
+    "reason": "This is a product-neutral verification method. No app UI or device-test evidence is claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "替换原文件前，如何检查转换后的媒体文件",
+      "steps": [
+        "1. 保留 — 留好原文件",
+        "2. 检查 — 核对文件变化",
+        "3. 播放 — 在使用环境播放",
+        "4. 备份 — 记录并留存"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "转换完成后",
+    "message": "副本能播放，也不能替代唯一的原文件。",
+    "description": "保留原文件，检查输出文件，在实际使用环境中播放，再记录结果并保留备份。",
+    "steps": [
+      [
+        "1. 保留",
+        "留好原文件"
+      ],
+      [
+        "2. 检查",
+        "核对文件变化"
+      ],
+      [
+        "3. 播放",
+        "在使用环境播放"
+      ],
+      [
+        "4. 备份",
+        "记录并留存"
+      ]
+    ]
+  }
+}
