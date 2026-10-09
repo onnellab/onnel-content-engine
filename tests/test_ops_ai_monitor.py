@@ -107,22 +107,22 @@ class AiOpsMonitoringTest(unittest.TestCase):
         self.assertIn("2026.10.08 09:21 KST", page)
         self.assertIn('data-ko="분석한 리뷰" data-en="Reviews triaged"', page)
 
-    def test_ops_deploy_workflows_always_copy_monitoring_page(self):
+    def test_ops_deploy_workflows_always_seal_monitoring_and_sales(self):
         workflow_dir = Path(__file__).resolve().parents[1] / ".github" / "workflows"
-        copying = 0
+        protecting = 0
         for path in workflow_dir.glob("*.yml"):
             body = path.read_text(encoding="utf-8")
-            if "for section in apps publishing media " not in body:
+            if "node scripts/private_ops_publish.mjs seal-site" not in body:
                 continue
-            copying += 1
-            self.assertNotIn(
-                "for section in apps publishing media settings legacy; do", body, path.name
-            )
-            self.assertIn(
-                "for section in apps publishing media monitoring settings legacy; do",
-                body, path.name,
-            )
-        self.assertGreaterEqual(copying, 8)
+            protecting += 1
+            self.assertNotIn("cp generated/manual-publish/index.html", body)
+            self.assertIn("ONNELLAB_OPS_PASSWORD", body)
+        self.assertGreaterEqual(protecting, 9)
+        import inspect
+        from ops_split_pages import build_split_ops_pages
+        builder = inspect.getsource(build_split_ops_pages)
+        self.assertIn('output_dir / "monitoring" / "index.html"', builder)
+        self.assertIn('output_dir / "sales" / "index.html"', builder)
 
 
 if __name__ == "__main__":

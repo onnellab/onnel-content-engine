@@ -88,7 +88,8 @@ class SnapshotIsolation(unittest.TestCase):
     def test_workspace_refresh_preserves_other_data(self):
         import re
         from refresh_youtube_workspace import replace_workspace
-        page=(Path(__file__).resolve().parents[1]/'generated/manual-publish/index.html').read_text()
+        from build_manual_publish_site import html_document
+        page=html_document([])
         after=replace_workspace(page)
         pattern=r'<script[^>]*id="[^"]+-data"[^>]*>.*?</script>'
         self.assertEqual(re.findall(pattern,page,re.S),re.findall(pattern,after,re.S))
