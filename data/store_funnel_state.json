@@ -1,6 +1,27 @@
 {
   "schema_version": 1,
-  "apple_processed_instances": [],
+  "apple_processed_instances": [
+    "0a02d5c1-7d02-4909-856d-302b5b7a4726",
+    "0b40d43a-2141-44fc-b5a1-c5a943410976",
+    "1e35194e-5d67-4917-a0ea-2e4465190ca0",
+    "28fe920f-a27a-4464-b33e-96b9bbacd60b",
+    "5c01ebb9-714e-4f5c-aca7-700db27762f3",
+    "650a49a7-cca3-4f49-8fd5-ba3245e5942b",
+    "738a74ea-b2ad-4f29-8630-1f6f808ff05a",
+    "75c7c1e5-1866-43bf-bd68-ddb811215e46",
+    "89e56059-c399-4a0a-ab5c-5eefbebab347",
+    "8adc78f7-fe7e-4558-80bd-dabd3be1ce73",
+    "abcf3afe-8e48-43ac-846b-e18bdd3418c2",
+    "ae74b320-c23c-4169-be3b-e41f15ece9c9",
+    "b1b7e4ed-d0ad-4e39-b084-328dcade07d8",
+    "b2c48d1c-bd8e-493c-8d65-45977fb638cb",
+    "c79d1293-0f5d-4f45-91b2-d92fb84e1c34",
+    "cdcffe5e-8882-40cb-9a6e-eddd9f849400",
+    "d20dce94-86f1-44b5-b5c2-b5f3d8abc1e5",
+    "def1e338-2c5e-42bf-829b-3eda3aafc72d",
+    "eafc6d3e-6a6a-4156-ba9e-5ff5f75744ed",
+    "f8499893-5cd1-45e7-b520-fbf26fa132a8"
+  ],
   "apple_snapshot_requests": {
     "quivra": "b3ad5125-71f1-42a9-b2b4-88207d30bbd4",
     "tagweaver": "75e9da79-b54d-40ce-9a80-a635356a28f0",

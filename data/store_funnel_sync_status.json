@@ -1,135 +1,175 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-08T06:34:38+00:00",
+  "checked_at": "2026-10-09T02:20:53+00:00",
   "status": "ok",
   "sources": {
     "apple": {
-      "status": "waiting",
+      "status": "ok",
       "apps": {
         "quivra": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "350f50f5-d3be-475e-ae44-bbc2c3a78ffc",
           "snapshot_request_id": "b3ad5125-71f1-42a9-b2b4-88207d30bbd4",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "b3ad5125-71f1-42a9-b2b4-88207d30bbd4",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "350f50f5-d3be-475e-ae44-bbc2c3a78ffc",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "tagweaver": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "f19b3cba-894c-4da5-9b5c-c9c79498cfd3",
           "snapshot_request_id": "75e9da79-b54d-40ce-9a80-a635356a28f0",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "75e9da79-b54d-40ce-9a80-a635356a28f0",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "f19b3cba-894c-4da5-9b5c-c9c79498cfd3",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "vaultxt": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "571e9f18-5468-4230-9008-4c68fe985032",
           "snapshot_request_id": "aa7c1c4e-0f8b-4c12-bd03-ed504ce415ca",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "aa7c1c4e-0f8b-4c12-bd03-ed504ce415ca",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "571e9f18-5468-4230-9008-4c68fe985032",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "segra": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "87add753-42b3-413b-b8f2-5d703562b9d5",
           "snapshot_request_id": "c92791c3-4ee3-44e8-9adc-d237bf78c938",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "c92791c3-4ee3-44e8-9adc-d237bf78c938",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "87add753-42b3-413b-b8f2-5d703562b9d5",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "clipnest": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "f63b7963-b2c6-42b6-b7da-9a9fedacc9de",
           "snapshot_request_id": "c605ae1d-34f9-4040-9b96-41b851b13a4a",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "c605ae1d-34f9-4040-9b96-41b851b13a4a",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "f63b7963-b2c6-42b6-b7da-9a9fedacc9de",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery"
+          ],
           "errors": []
         },
         "aligna": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "b6cfbdfc-a4cb-49c5-895f-a65c9510d906",
           "snapshot_request_id": "ca2514bc-5f87-4788-ab66-cbde5c6f130e",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "ca2514bc-5f87-4788-ab66-cbde5c6f130e",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "b6cfbdfc-a4cb-49c5-895f-a65c9510d906",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "melivra": {
@@ -154,24 +194,31 @@
           "errors": []
         },
         "papira": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "06ddc520-3ed0-499d-a10c-81c32120804b",
           "snapshot_request_id": "5510684e-bf31-47c4-9a43-8bb8290d404f",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "5510684e-bf31-47c4-9a43-8bb8290d404f",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "06ddc520-3ed0-499d-a10c-81c32120804b",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         }
       }
@@ -186,7 +233,7 @@
       "principal": "id-989@polar-outlet-171708.iam.gserviceaccount.com"
     }
   },
-  "daily_rows": 746,
-  "apple_additions": 0,
-  "google_additions": 922
+  "daily_rows": 2190,
+  "apple_additions": 1408,
+  "google_additions": 958
 }

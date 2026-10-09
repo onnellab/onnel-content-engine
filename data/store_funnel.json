@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-08T06:34:38+00:00",
+  "checked_at": "2026-10-09T02:20:53+00:00",
   "windows": [
     7,
     30,
@@ -18,132 +18,172 @@
   },
   "source_status": {
     "apple": {
-      "status": "waiting",
+      "status": "ok",
       "apps": {
         "quivra": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "350f50f5-d3be-475e-ae44-bbc2c3a78ffc",
           "snapshot_request_id": "b3ad5125-71f1-42a9-b2b4-88207d30bbd4",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "b3ad5125-71f1-42a9-b2b4-88207d30bbd4",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "350f50f5-d3be-475e-ae44-bbc2c3a78ffc",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "tagweaver": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "f19b3cba-894c-4da5-9b5c-c9c79498cfd3",
           "snapshot_request_id": "75e9da79-b54d-40ce-9a80-a635356a28f0",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "75e9da79-b54d-40ce-9a80-a635356a28f0",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "f19b3cba-894c-4da5-9b5c-c9c79498cfd3",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "vaultxt": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "571e9f18-5468-4230-9008-4c68fe985032",
           "snapshot_request_id": "aa7c1c4e-0f8b-4c12-bd03-ed504ce415ca",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "aa7c1c4e-0f8b-4c12-bd03-ed504ce415ca",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "571e9f18-5468-4230-9008-4c68fe985032",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "segra": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "87add753-42b3-413b-b8f2-5d703562b9d5",
           "snapshot_request_id": "c92791c3-4ee3-44e8-9adc-d237bf78c938",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "c92791c3-4ee3-44e8-9adc-d237bf78c938",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "87add753-42b3-413b-b8f2-5d703562b9d5",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "clipnest": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "f63b7963-b2c6-42b6-b7da-9a9fedacc9de",
           "snapshot_request_id": "c605ae1d-34f9-4040-9b96-41b851b13a4a",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "c605ae1d-34f9-4040-9b96-41b851b13a4a",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "f63b7963-b2c6-42b6-b7da-9a9fedacc9de",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery"
+          ],
           "errors": []
         },
         "aligna": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "b6cfbdfc-a4cb-49c5-895f-a65c9510d906",
           "snapshot_request_id": "ca2514bc-5f87-4788-ab66-cbde5c6f130e",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "ca2514bc-5f87-4788-ab66-cbde5c6f130e",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "b6cfbdfc-a4cb-49c5-895f-a65c9510d906",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         },
         "melivra": {
@@ -168,24 +208,31 @@
           "errors": []
         },
         "papira": {
-          "status": "waiting_for_snapshot",
+          "status": "ok",
           "request_id": "06ddc520-3ed0-499d-a10c-81c32120804b",
           "snapshot_request_id": "5510684e-bf31-47c4-9a43-8bb8290d404f",
           "requests": {
             "snapshot": {
-              "status": "waiting_for_report",
+              "status": "existing",
               "request_id": "5510684e-bf31-47c4-9a43-8bb8290d404f",
-              "reports": [],
-              "message": "Apple historical snapshot is still being generated."
+              "reports": [
+                "discovery",
+                "purchases"
+              ]
             },
             "ongoing": {
-              "status": "waiting_for_report",
+              "status": "active",
               "request_id": "06ddc520-3ed0-499d-a10c-81c32120804b",
-              "reports": [],
-              "message": "Apple ongoing reports are still being generated."
+              "reports": [
+                "discovery"
+              ]
             }
           },
-          "reports": [],
+          "reports": [
+            "ongoing:discovery",
+            "snapshot:discovery",
+            "snapshot:purchases"
+          ],
           "errors": []
         }
       }
@@ -206,8 +253,30 @@
       "app_name": "Quivra",
       "platforms": {
         "ios": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-10-07",
+          "windows": {
+            "7": {
+              "impressions": 124,
+              "store_visitors": 1,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 5
+            },
+            "30": {
+              "impressions": 439,
+              "store_visitors": 12,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 28
+            },
+            "90": {
+              "impressions": 851,
+              "store_visitors": 25,
+              "installs": null,
+              "purchases": 1,
+              "days_with_data": 81
+            }
+          }
         },
         "android": {
           "latest_date": "2026-10-01",
@@ -221,17 +290,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 22,
+              "store_visitors": 27,
               "installs": 0,
               "purchases": 1,
-              "days_with_data": 14
+              "days_with_data": 15
             },
             "90": {
               "impressions": null,
-              "store_visitors": 161,
+              "store_visitors": 167,
               "installs": 1,
               "purchases": 4,
-              "days_with_data": 56
+              "days_with_data": 57
             }
           }
         }
@@ -253,7 +322,7 @@
           "store_visitors": null,
           "impressions": null,
           "installs": 1,
-          "purchases": 4
+          "purchases": 5
         }
       }
     },
@@ -262,8 +331,30 @@
       "app_name": "TagWeaver",
       "platforms": {
         "ios": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-10-07",
+          "windows": {
+            "7": {
+              "impressions": 694,
+              "store_visitors": 72,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 5
+            },
+            "30": {
+              "impressions": 3414,
+              "store_visitors": 386,
+              "installs": null,
+              "purchases": 6,
+              "days_with_data": 28
+            },
+            "90": {
+              "impressions": 8288,
+              "store_visitors": 829,
+              "installs": null,
+              "purchases": 12,
+              "days_with_data": 88
+            }
+          }
         },
         "android": {
           "latest_date": "2026-10-07",
@@ -277,17 +368,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 697,
-              "installs": 233,
+              "store_visitors": 791,
+              "installs": 254,
               "purchases": 13,
-              "days_with_data": 21
+              "days_with_data": 23
             },
             "90": {
               "impressions": null,
-              "store_visitors": 1411,
-              "installs": 464,
+              "store_visitors": 1533,
+              "installs": 497,
               "purchases": 25,
-              "days_with_data": 81
+              "days_with_data": 83
             }
           }
         }
@@ -302,14 +393,14 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 233,
-          "purchases": 13
+          "installs": 254,
+          "purchases": 19
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 464,
-          "purchases": 25
+          "installs": 497,
+          "purchases": 37
         }
       }
     },
@@ -318,11 +409,33 @@
       "app_name": "VaultXT",
       "platforms": {
         "ios": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-10-07",
+          "windows": {
+            "7": {
+              "impressions": 566,
+              "store_visitors": 44,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 5
+            },
+            "30": {
+              "impressions": 2235,
+              "store_visitors": 183,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 28
+            },
+            "90": {
+              "impressions": 3673,
+              "store_visitors": 298,
+              "installs": null,
+              "purchases": 1,
+              "days_with_data": 88
+            }
+          }
         },
         "android": {
-          "latest_date": "2026-09-24",
+          "latest_date": "2026-09-28",
           "windows": {
             "7": {
               "impressions": null,
@@ -333,17 +446,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 82,
-              "installs": 26,
+              "store_visitors": 88,
+              "installs": 31,
               "purchases": null,
-              "days_with_data": 16
+              "days_with_data": 18
             },
             "90": {
               "impressions": null,
-              "store_visitors": 238,
-              "installs": 77,
+              "store_visitors": 251,
+              "installs": 84,
               "purchases": 1,
-              "days_with_data": 75
+              "days_with_data": 77
             }
           }
         }
@@ -358,14 +471,14 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 26,
+          "installs": 31,
           "purchases": 0
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 77,
-          "purchases": 1
+          "installs": 84,
+          "purchases": 2
         }
       }
     },
@@ -374,11 +487,33 @@
       "app_name": "Segra",
       "platforms": {
         "ios": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-10-07",
+          "windows": {
+            "7": {
+              "impressions": 573,
+              "store_visitors": 23,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 5
+            },
+            "30": {
+              "impressions": 2827,
+              "store_visitors": 116,
+              "installs": null,
+              "purchases": 1,
+              "days_with_data": 28
+            },
+            "90": {
+              "impressions": 7158,
+              "store_visitors": 225,
+              "installs": null,
+              "purchases": 1,
+              "days_with_data": 88
+            }
+          }
         },
         "android": {
-          "latest_date": "2026-09-24",
+          "latest_date": "2026-09-28",
           "windows": {
             "7": {
               "impressions": null,
@@ -389,17 +524,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 12,
+              "store_visitors": 18,
               "installs": 4,
               "purchases": null,
-              "days_with_data": 9
+              "days_with_data": 12
             },
             "90": {
               "impressions": null,
-              "store_visitors": 67,
+              "store_visitors": 72,
               "installs": 8,
               "purchases": null,
-              "days_with_data": 46
+              "days_with_data": 48
             }
           }
         }
@@ -415,13 +550,13 @@
           "store_visitors": null,
           "impressions": null,
           "installs": 4,
-          "purchases": 0
+          "purchases": 1
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
           "installs": 8,
-          "purchases": 0
+          "purchases": 1
         }
       }
     },
@@ -430,8 +565,30 @@
       "app_name": "ClipNest",
       "platforms": {
         "ios": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-10-07",
+          "windows": {
+            "7": {
+              "impressions": 238,
+              "store_visitors": 12,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 5
+            },
+            "30": {
+              "impressions": 1271,
+              "store_visitors": 52,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 28
+            },
+            "90": {
+              "impressions": 3019,
+              "store_visitors": 148,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 88
+            }
+          }
         },
         "android": {
           "latest_date": "",
@@ -464,11 +621,33 @@
       "app_name": "Aligna",
       "platforms": {
         "ios": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-10-07",
+          "windows": {
+            "7": {
+              "impressions": 156,
+              "store_visitors": 26,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 5
+            },
+            "30": {
+              "impressions": 910,
+              "store_visitors": 111,
+              "installs": null,
+              "purchases": 1,
+              "days_with_data": 28
+            },
+            "90": {
+              "impressions": 2370,
+              "store_visitors": 280,
+              "installs": null,
+              "purchases": 2,
+              "days_with_data": 88
+            }
+          }
         },
         "android": {
-          "latest_date": "2026-09-24",
+          "latest_date": "2026-09-28",
           "windows": {
             "7": {
               "impressions": null,
@@ -479,17 +658,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 58,
-              "installs": 20,
+              "store_visitors": 67,
+              "installs": 26,
               "purchases": null,
-              "days_with_data": 16
+              "days_with_data": 18
             },
             "90": {
               "impressions": null,
-              "store_visitors": 161,
-              "installs": 44,
+              "store_visitors": 170,
+              "installs": 51,
               "purchases": null,
-              "days_with_data": 69
+              "days_with_data": 71
             }
           }
         }
@@ -504,14 +683,14 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 20,
-          "purchases": 0
+          "installs": 26,
+          "purchases": 1
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 44,
-          "purchases": 0
+          "installs": 51,
+          "purchases": 2
         }
       }
     },
@@ -524,7 +703,7 @@
           "windows": {}
         },
         "android": {
-          "latest_date": "2026-09-24",
+          "latest_date": "2026-09-28",
           "windows": {
             "7": {
               "impressions": null,
@@ -535,17 +714,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 33,
-              "installs": 7,
+              "store_visitors": 71,
+              "installs": 12,
               "purchases": null,
-              "days_with_data": 3
+              "days_with_data": 6
             },
             "90": {
               "impressions": null,
-              "store_visitors": 33,
-              "installs": 7,
+              "store_visitors": 71,
+              "installs": 12,
               "purchases": null,
-              "days_with_data": 3
+              "days_with_data": 6
             }
           }
         }
@@ -560,13 +739,13 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 7,
+          "installs": 12,
           "purchases": 0
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 7,
+          "installs": 12,
           "purchases": 0
         }
       }
@@ -576,8 +755,30 @@
       "app_name": "Papira",
       "platforms": {
         "ios": {
-          "latest_date": "",
-          "windows": {}
+          "latest_date": "2026-10-07",
+          "windows": {
+            "7": {
+              "impressions": 149,
+              "store_visitors": 9,
+              "installs": null,
+              "purchases": null,
+              "days_with_data": 5
+            },
+            "30": {
+              "impressions": 403,
+              "store_visitors": 24,
+              "installs": null,
+              "purchases": 1,
+              "days_with_data": 14
+            },
+            "90": {
+              "impressions": 403,
+              "store_visitors": 24,
+              "installs": null,
+              "purchases": 1,
+              "days_with_data": 14
+            }
+          }
         },
         "android": {
           "latest_date": "2026-10-07",
@@ -617,13 +818,13 @@
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 1
+          "purchases": 2
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 1
+          "purchases": 2
         }
       }
     }
