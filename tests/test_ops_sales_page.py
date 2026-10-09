@@ -25,6 +25,8 @@ class SalesPageTests(unittest.TestCase):
         self.assertIn("Vendor Number", result)
         self.assertIn("r.date<=today", result)
         self.assertIn('id="sales-export"', result)
+        self.assertIn("let year=2026", result)
+        self.assertIn("k==='fee'&&!r.fee_confirmed?''", result)
 
     def test_no_html_injection_in_sales_data(self):
         result = sales_page_body({"rows": [{

@@ -196,10 +196,10 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("data/ai_provider_pricing.csv", workflow)
         self.assertIn("data/melivra_ai_credit_policy.csv", workflow)
         self.assertIn("generated/manual-publish/index.html", workflow)
-        self.assertIn("generated/manual-publish/sw.js", workflow)
-        self.assertIn("public/ops/sw.js", workflow)
-        self.assertIn("public/ops/libsodium-sumo.js", workflow)
-        self.assertIn("public/ops/libsodium-wrappers.js", workflow)
+        self.assertIn("node scripts/private_ops_publish.mjs seal-site", workflow)
+        self.assertIn("ONNELLAB_OPS_PASSWORD", workflow)
+        self.assertIn("--sealed", workflow)
+        self.assertNotIn("cp generated/manual-publish/sw.js", workflow)
 
     def test_devto_update_workflow_deploys_rebuilt_dashboard(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "update-devto-article.yml").read_text(encoding="utf-8")
@@ -209,10 +209,10 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertIn("scripts/build_manual_publish_site.py --homepage-repo", workflow)
         self.assertIn("data/ai_provider_pricing.csv", workflow)
         self.assertIn("data/melivra_ai_credit_policy.csv", workflow)
-        self.assertIn("generated/manual-publish/sw.js", workflow)
-        self.assertIn("public/ops/sw.js", workflow)
-        self.assertIn("public/ops/libsodium-sumo.js", workflow)
-        self.assertIn("public/ops/libsodium-wrappers.js", workflow)
+        self.assertIn("node scripts/private_ops_publish.mjs seal-site", workflow)
+        self.assertIn("ONNELLAB_OPS_PASSWORD", workflow)
+        self.assertIn("--sealed", workflow)
+        self.assertNotIn("cp generated/manual-publish/sw.js", workflow)
         self.assertIn("Refresh manual publish dashboard", workflow)
 
     def test_ops_dashboard_waits_for_homepage_pages_before_live_verification(self) -> None:

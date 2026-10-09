@@ -111,7 +111,14 @@ HTML = r"""
  const part = kind => nowParts.find(x => x.type === kind)?.value || '';
  const today = part('year') + '-' + part('month') + '-' + part('day');
  const currentMonth = today.slice(0,7);
- const months = new Set([currentMonth,...rows.map(r=>String(r.date||'').slice(0,7)).filter(x=>/^\d{4}-\d{2}$/.test(x))]);
+ const months = new Set(rows.map(r=>String(r.date||'').slice(0,7)).filter(x=>/^\d{4}-\d{2}$/.test(x)));
+ for(let year=2026;year<=Number(part('year'));year++){
+   for(let m=1;m<=12;m++){
+     const value=year+'-'+String(m).padStart(2,'0');
+     if(value<=currentMonth)months.add(value);
+   }
+ }
+ months.add(currentMonth);
  for(const value of [...months].sort().reverse()){
    const opt=document.createElement('option');opt.value=value;opt.textContent=value;month.append(opt);
  }
@@ -148,7 +155,7 @@ HTML = r"""
  exportButton.addEventListener('click',()=>{
    const fields=['date','app_name','platform','country','units','gross','refund','fee','fee_confirmed','currency'];
    const escapeCsv=v=>'"'+String(v??'').replaceAll('"','""')+'"';
-   const csv=[fields.join(','),...filtered().map(r=>fields.map(k=>escapeCsv(r[k])).join(','))].join('\r\n');
+   const csv=[fields.join(','),...filtered().map(r=>fields.map(k=>escapeCsv(k==='fee'&&!r.fee_confirmed?'':r[k])).join(','))].join('\r\n');
    const url=URL.createObjectURL(new Blob(['\ufeff',csv],{type:'text/csv;charset=utf-8'}));
    const anchor=document.createElement('a');anchor.href=url;anchor.download='ONNELLAB-sales-'+month.value+'.csv';anchor.click();
    setTimeout(()=>URL.revokeObjectURL(url),2000);
