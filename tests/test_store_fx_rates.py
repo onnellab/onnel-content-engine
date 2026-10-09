@@ -1,0 +1,82 @@
+"""Historical ECB exchange-rate integration with private store finance snapshots."""
+import sys
+import unittest
+from copy import deepcopy
+from pathlib import Path
+from decimal import Decimal
+sys.path.insert(0,str(Path(__file__).resolve().parents[1] / "scripts"))
+from store_fx_rates import parse_ecb_xml, quote, won, enrich_ledger
+
+XML = b"""<Envelope><Cube><Cube time="2026-10-08">
+<Cube currency="USD" rate="1.2"/><Cube currency="KRW" rate="1800"/>
+<Cube currency="JPY" rate="180"/></Cube>
+<Cube time="2026-10-09"><Cube currency="USD" rate="1.25"/>
+<Cube currency="KRW" rate="1750"/></Cube></Cube></Envelope>"""
+
+
+class FxReferenceTests(unittest.TestCase):
+    def test_ecb_cross_conversion_and_weekend_uses_prior_date(self):
+        history = parse_ecb_xml(XML)
+        result = quote("2026-10-10","USD",history)
+        self.assertEqual(result["rate"],"1400")
+        self.assertEqual(result["as_of"],"2026-10-09")
+        self.assertEqual(won("2.99",result["rate"]),"4186")
+
+    def test_older_rate_not_silently_used_for_uncovered_date(self):
+        history=parse_ecb_xml(XML)
+        self.assertIsNone(quote("2026-10-20","USD",history))
+        self.assertIsNone(quote("2026-10-08","GBP",history))
+
+    def test_sales_refunds_confirmed_fees_apple_proceeds_are_independent(self):
+        src={
+            "date":"2026-10-08","currency":"USD",
+            "gross":"2.99","refund":"-0.99","net_sales":"2.00",
+            "fee":"0.45","fee_confirmed":True,
+            "proceeds":"1.3","proceeds_currency":"EUR"
+        }
+        settlement={
+            "fiscal_month":"2026-09","currency":"",
+            "proceeds_currency":"KRW","proceeds":"4000",
+            "customer_currency":"USD","gross":"4.99",
+        }
+        ledger={"rows":[src],"settlements":[settlement]}
+        enriched=enrich_ledger(deepcopy(ledger),history=parse_ecb_xml(XML))
+        row=enriched["rows"][0]
+        self.assertEqual(row["gross_krw"],"4485")
+        self.assertEqual(row["refund_krw"],"-1485")
+        self.assertEqual(row["net_sales_krw"],"3000")
+        self.assertEqual(row["fee_krw"],"675")
+        self.assertEqual(row["proceeds_krw"],"2340")
+        self.assertEqual(enriched["fx_status"]["missing_sales_rows"],0)
+        self.assertEqual(enriched["settlements"][0]["proceeds_krw"],"4000")
+
+    def test_missing_rate_marked_missing_not_fabricated_zero(self):
+        row={"date":"2026-10-08","currency":"XYZ","gross":"10.00",
+             "refund":"0","net_sales":"10.00","fee_confirmed":False}
+        ledger={"rows":[row],"settlements":[]}
+        result=enrich_ledger(ledger,history=parse_ecb_xml(XML))
+        self.assertNotIn("net_sales_krw",result["rows"][0])
+        self.assertEqual(result["fx_status"]["missing_sales_rows"],1)
+
+    def test_cached_previous_reference_rate_when_ecb_down(self):
+        record={"rows":[{"date":"2026-10-08","currency":"USD","gross":"1",
+                         "refund":"0","net_sales":"1"}],"settlements":[]}
+        prior={"fx_rates":{"2026-10-08|USD":{"rate":"1500","as_of":"2026-10-08"}}}
+        def down():
+            raise OSError("network not available")
+        result=enrich_ledger(record, previous=prior, fetcher=down)
+        self.assertEqual(result["rows"][0]["net_sales_krw"],"1500")
+        self.assertEqual(result["fx_status"]["status"],"unavailable")
+        self.assertEqual(result["fx_status"]["missing_sales_rows"],0)
+
+    def test_unconfirmed_fee_never_convert_as_confirmed(self):
+        record={"rows":[{"date":"2026-10-09","currency":"KRW","gross":"5500",
+                         "refund":"0","net_sales":"5500","fee":"999",
+                         "fee_confirmed":False}],"settlements":[]}
+        result=enrich_ledger(record,history={})
+        self.assertNotIn("fee_krw",result["rows"][0])
+        self.assertEqual(result["rows"][0]["net_sales_krw"],"5500")
+
+
+if __name__=="__main__":
+    unittest.main()
