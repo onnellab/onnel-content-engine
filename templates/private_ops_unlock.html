@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="naverbot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="yeti" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="referrer" content="no-referrer"><meta http-equiv="Cache-Control" content="no-store">
+<title>ONNELLAB Ops · 비공개</title>
+<style>
+:root{color-scheme:light;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;min-height:100dvh;display:grid;place-items:center;background:#faf8f5;color:#302f35;padding:20px}
+section{width:min(440px,100%);background:#fff;border:1px solid #ddd6e6;border-radius:20px;padding:36px;box-shadow:0 12px 32px #4739580c}
+.mark{display:inline-block;padding:7px 12px;border-radius:30px;background:#f1eafb;color:#654e85;font-size:12px;font-weight:700}
+h1{font-size:26px;margin:22px 0 9px}p{color:#726c79;font-size:14px;line-height:1.65;margin:0 0 22px}
+label{display:block;font-size:13px;font-weight:720;margin-bottom:8px}
+input{width:100%;border:1px solid #cfc5d7;border-radius:10px;padding:14px 13px;font:inherit;font-size:16px}
+input:focus-visible{outline:2px solid #c1a3e5;outline-offset:2px}
+button{width:100%;border:0;border-radius:10px;background:#c6b2e5;color:#21192e;margin-top:14px;padding:15px;font-weight:750;font-size:15px;cursor:pointer;min-height:48px}
+button:disabled{opacity:.5}#message{min-height:23px;margin-top:14px;color:#a53535;font-size:13px}
+small{display:block;color:#8f8992;font-size:12px;line-height:1.6;margin-top:20px}
+@media(max-width:500px){section{padding:27px 20px}}
+</style></head>
+<body><section>
+<span class="mark">ONNELLAB / Private Ops</span>
+<h1>운영 대시보드 잠금</h1>
+<p>운영 데이터는 암호화되어 있어요. 비밀번호를 입력하면 이 브라우저 탭에서 열 수 있어요.</p>
+<form id="unlock">
+<label for="password">비밀번호</label>
+<input type="password" autocomplete="current-password" id="password" required autofocus>
+<button id="submit" type="submit">대시보드 열기</button>
+<div id="message" role="alert"></div>
+</form>
+<small>암호화된 정적 페이지예요. 비밀번호는 서버로 전송되지 않지만 웹서버에서 접근 자체를 차단하는 방식은 아니에요.</small>
+</section>
+<script type="application/json" id="ops-sealed-data">__OPS_ENCRYPTED_PAYLOAD__</script>
+<script>
+(async()=>{
+ const record=JSON.parse(document.getElementById('ops-sealed-data').textContent);
+ const storageKey='onnellab-ops-session-'+record.salt;
+ const input=document.getElementById('password');
+ const button=document.getElementById('submit');
+ const message=document.getElementById('message');
+ const bytes=b64=>Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+ const b64=buf=>btoa(String.fromCharCode(...new Uint8Array(buf)));
+ async function decode(raw) {
+   const key=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
+   const combined=new Uint8Array(bytes(record.data).length+16);
+   combined.set(bytes(record.data));combined.set(bytes(record.tag),combined.length-16);
+   const plaintext=await crypto.subtle.decrypt({
+     name:'AES-GCM',iv:bytes(record.iv),
+     additionalData:new TextEncoder().encode(record.path)
+   },key,combined);
+   const zipped=new Blob([plaintext]).stream().pipeThrough(new DecompressionStream('gzip'));
+   return await new Response(zipped).text();
+ }
+ async function unlock(raw,remember) {
+   const body=await decode(raw);
+   if(remember)sessionStorage.setItem(storageKey,b64(raw));
+   // Prevent older, pre-encryption service workers from continuing to serve old dashboard HTML.
+   try{
+     if('serviceWorker' in navigator){
+       const regs=await navigator.serviceWorker.getRegistrations();
+       await Promise.all(regs.filter(r=>r.scope.includes('/ops/')).map(r=>r.unregister()));
+     }
+     if('caches' in window){
+       const keys=await caches.keys();
+       await Promise.all(keys.filter(k=>k.includes('ops')||k.includes('onnel')).map(k=>caches.delete(k)));
+     }
+   }catch{}
+   document.open();document.write(body);document.close();
+ }
+ try{
+   const cached=sessionStorage.getItem(storageKey);
+   if(cached){try{await unlock(bytes(cached),false);return;}catch{sessionStorage.removeItem(storageKey);}}
+ }catch{}
+ document.getElementById('unlock').addEventListener('submit',async event=>{
+   event.preventDefault();button.disabled=true;message.textContent='';
+   try{
+     const master=await crypto.subtle.importKey('raw',new TextEncoder().encode(input.value),'PBKDF2',false,['deriveBits']);
+     const key=await crypto.subtle.deriveBits(
+       {name:'PBKDF2',salt:bytes(record.salt),iterations:record.it,hash:'SHA-256'},master,256);
+     await unlock(new Uint8Array(key),true);
+   }catch{
+     input.value='';
+     message.textContent='비밀번호가 올바르지 않거나 데이터를 열 수 없어요.';
+   }finally{button.disabled=false;}
+ });
+})();
+</script></body></html>
