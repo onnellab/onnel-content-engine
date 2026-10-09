@@ -35,6 +35,9 @@ Google Play:
   checks both Sales and Earnings reports are present and all previously
   seen months remain available. If coverage is incomplete, the last verified
   Google snapshot remains and the dashboard explicitly warns it may be stale.
+  Sales and Earnings report schemas and money-bearing fee rows are checked
+  before import. Unrecognized column layouts fail the sync rather than turning
+  missing money into zero or removing previously verified transactions.
 - Original foreign currencies are not directly summed. Dated ECB KRW reference estimates are shown separately, alongside original-currency breakdowns.
 
 Apple:

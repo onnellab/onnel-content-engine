@@ -106,6 +106,48 @@ class LedgerTests(unittest.TestCase):
         self.assertEqual(status["earnings_months"], ["2026-08", "2026-09"])
         self.assertEqual(len(rows), 2)
 
+    def test_changed_report_columns_fail_instead_of_becoming_zero_sales(self):
+        from store_sales_ledger import LedgerError
+        cases = [
+            ("google_sales", archive(
+                "Package ID,Financial status,Charged Amount,Country of Buyer\n"
+                "com.onnellab.tagweaver2,Charged,5500,KR\n"
+            ), parse_google_sales_zip, GOOGLE),
+            ("google_earnings", archive(
+                "Package ID,Transaction Type,Transaction Date,Country\n"
+                "com.onnellab.tagweaver2,Google fee,2026-09-12,US\n"
+            ), parse_google_earnings_zip, GOOGLE),
+        ]
+        for name,raw,parser,apps in cases:
+            with self.subTest(name=name), self.assertRaises(LedgerError):
+                parser(raw, apps)
+        source = gzip.compress(
+            b"Apple Identifier\tCountry Code\tCustomer Price\tUnits\n"
+            b"6759609875\tUS\t2.99\t1\n"
+        )
+        with self.assertRaises(LedgerError):
+            parse_apple_sales(source, APPLE, "2026-09-12")
+
+    def test_google_fee_missing_transaction_money_fails_closed(self):
+        from store_sales_ledger import LedgerError
+        source = archive(
+            "Package ID,Transaction Type,Transaction Date,Buyer Country,"
+            "Merchant Currency,Amount (Merchant Currency)\n"
+            "com.onnellab.tagweaver2,Google fee,2026-09-12,US,USD,\n"
+        )
+        with self.assertRaises(LedgerError):
+            parse_google_earnings_zip(source, GOOGLE)
+
+    def test_apple_fractional_quantity_fails_closed(self):
+        from store_sales_ledger import LedgerError
+        source = gzip.compress(
+            ("Apple Identifier\tCountry Code\tCustomer Currency\t"
+             "Currency of Proceeds\tCustomer Price\tDeveloper Proceeds\tUnits\n"
+             "6759609875\tUS\tUSD\tUSD\t2.99\t2.10\t1.5\n").encode()
+        )
+        with self.assertRaises(LedgerError):
+            parse_apple_sales(source, APPLE, "2026-09-12")
+
     def test_google_corrected_reports_replace_stale_fees_and_sales(self):
         from store_sales_ledger import merge_sales_history
         previous = {

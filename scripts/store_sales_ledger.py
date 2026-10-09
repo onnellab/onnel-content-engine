@@ -79,6 +79,22 @@ def read_table(source: bytes, delimiter: str = ",") -> list[dict[str, str]]:
     return list(csv.DictReader(io.StringIO(result), delimiter=delimiter))
 
 
+def require_report_headers(rows: list[dict], name: str, *required: tuple[str, ...]) -> None:
+    """Fail closed when a vendor changes a financial CSV schema.
+
+    A valid header-only report contains no transactions; an unfamiliar report
+    containing rows must never be interpreted as 0 won or 0 fees.
+    """
+    if not rows:
+        return
+    actual = {re.sub(r"[^a-z0-9]", "", str(key).casefold())
+              for key in rows[0].keys() if key is not None}
+    for alternatives in required:
+        if not any(re.sub(r"[^a-z0-9]", "", x.casefold()) in actual
+                   for x in alternatives):
+            raise LedgerError("Unsupported " + name + " report fields")
+
+
 def csv_from_zip(raw: bytes):
     with zipfile.ZipFile(io.BytesIO(raw)) as archive:
         for name in sorted(archive.namelist()):
@@ -101,6 +117,10 @@ def make_event(day: str, platform: str, app: dict[str, str], country: str, curre
 def parse_google_sales_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> list[dict]:
     events = []
     for _, rows in csv_from_zip(raw):
+        require_report_headers(rows, "Google Sales",
+                               ("Package ID",), ("Financial status",),
+                               ("Currency of Sale",), ("Charged Amount",),
+                               ("Order charged date",), ("Country of Buyer",))
         for row in rows:
             package = lookup(row, "Package ID", "Package Id")
             if package not in apps:
@@ -117,8 +137,10 @@ def parse_google_sales_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> list[
             if not currency:
                 # Never mix buyer-currency and merchant-currency monetary fields.
                 continue
-            value = amount(lookup(row, "Charged Amount"))
-            value = abs(value)
+            charged = lookup(row, "Charged Amount")
+            if not charged:
+                raise LedgerError("Google Sales charged amount missing")
+            value = abs(amount(charged))
             country = lookup(row, "Country of Buyer")
             events.append(make_event(day, "android", apps[package], country, currency,
                                      "google_sales_estimate", units=1 if state == "charged" else -1 if state == "refund" else 0,
@@ -130,6 +152,10 @@ def parse_google_sales_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> list[
 def parse_google_earnings_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> list[dict]:
     events = []
     for _, rows in csv_from_zip(raw):
+        require_report_headers(rows, "Google Earnings",
+                               ("Package ID",), ("Transaction Type",),
+                               ("Transaction Date",),
+                               ("Amount (Merchant Currency)", "Amount Due (Sale Currency)"))
         for row in rows:
             package = lookup(row, "Package ID")
             if package not in apps:
@@ -149,7 +175,7 @@ def parse_google_earnings_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> li
                 currency = lookup(row, "Sale Currency")
                 value = amount(sale_value)
             if not day or not currency or not (merchant_value or sale_value):
-                continue
+                raise LedgerError("Google Earnings fee row has missing date or money")
             # Fees are expenses; fee-refund rows reverse that expense.
             signed_fee = -abs(value) if "refund" in kind else abs(value)
             country = lookup(row, "Buyer Country", "Sale Country", "Country")
@@ -161,7 +187,13 @@ def parse_google_earnings_zip(raw: bytes, apps: dict[str, dict[str, str]]) -> li
 def parse_apple_sales(raw: bytes, apps: dict[str, dict[str, str]], day: str,
                       stats: dict | None = None) -> list[dict]:
     events = []
-    for row in read_table(raw, delimiter="\t"):
+    report_rows = read_table(raw, delimiter="\t")
+    require_report_headers(report_rows, "Apple Sales",
+                           ("Apple Identifier",), ("Units",),
+                           ("Country Code",), ("Customer Price",),
+                           ("Customer Currency",), ("Developer Proceeds",),
+                           ("Currency of Proceeds",))
+    for row in report_rows:
         if stats is not None:
             stats["report_rows"] = stats.get("report_rows", 0) + 1
         appid = lookup(row, "Apple Identifier")
@@ -182,13 +214,15 @@ def parse_apple_sales(raw: bytes, apps: dict[str, dict[str, str]], day: str,
             if stats is not None:
                 stats["zero_price_or_units_rows"] = stats.get("zero_price_or_units_rows", 0) + 1
             continue
+        if count != count.to_integral_value():
+            raise LedgerError("Invalid Apple units quantity")
         units = int(count)
         customer_currency = lookup(row, "Customer Currency")
         proceeds_currency = lookup(row, "Currency of Proceeds")
-        if not customer_currency:
+        if not customer_currency or not proceeds_currency:
             if stats is not None:
                 stats["missing_currency_rows"] = stats.get("missing_currency_rows", 0) + 1
-            continue
+            raise LedgerError("Apple paid sale missing currency")
         if stats is not None:
             stats["paid_rows"] = stats.get("paid_rows", 0) + 1
             stats["paid_units"] = stats.get("paid_units", 0) + units
