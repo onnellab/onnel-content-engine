@@ -135,7 +135,9 @@
   const filteredSales = range => selectedRows(rows,"date",range);
   const filteredFees = range => selectedRows(confirmedFees,"date",range,"android");
   const filteredSettlements = range => {
-    if(!range.valid) return [];
+    // Custom dates are calendar days; Apple's fiscal month can start/end
+    // mid-calendar-month. Displaying an entire fiscal month would mislead.
+    if(!range.valid || mode.value==="custom") return [];
     // Finance reports are Apple fiscal-month aggregates. The displayed fiscal
     // months can overlap calendar months and are NEVER added to daily totals.
     const first=range.start.slice(0,7);
@@ -149,8 +151,9 @@
 
   function renderSummary(visible,range) {
     const grouped=new Map();
-    let gross=0, refunds=0, net=0, fees=0;
+    let gross=0, refunds=0, net=0, fees=0, appleProceeds=0;
     let converted=0, feeRows=0, unavailable=0, missingFee=0;
+    let appleProceedsRows=0, missingAppleProceeds=0;
     for(const r of visible){
       const currency=String(r.currency||"미상");
       if(!grouped.has(currency))
@@ -160,6 +163,12 @@
       group.refunds+=number(r.refund);
       group.net+=number(r.net_sales);
       group.units+=number(r.units);
+      if(r.platform==="ios") {
+        if(hasAmount(r,"proceeds_krw")) {
+          appleProceeds+=number(r.proceeds_krw);
+          appleProceedsRows++;
+        } else if(number(r.proceeds)!==0) missingAppleProceeds++;
+      }
       if(r.fee_confirmed){
         group.fee+=number(r.fee);
         group.feesSeen++;
@@ -182,6 +191,7 @@
     summary("sales-total-gross",gross, !visible.length || converted===0);
     summary("sales-total-refunds",refunds,!visible.length || converted===0);
     summary("sales-total-fee",fees,!feeRows);
+    summary("sales-total-ios-proceeds",appleProceeds,!appleProceedsRows);
     byId("sales-total-units").textContent=visible.length?
       money(visible.reduce((sum,r)=>sum+number(r.units),0))+"건":"—";
     const originalBody=byId("sales-currency-body");
@@ -204,6 +214,7 @@
     const notes=[];
     if(unavailable) notes.push("외화 환율을 확인할 수 없는 매출 "+unavailable+"개 행은 원화 합계에서 제외했어요.");
     if(missingFee) notes.push("확정 수수료 "+missingFee+"개 행은 환율 미확인으로 제외했어요.");
+    if(missingAppleProceeds) notes.push("Apple 예상 개발자 수익금 "+missingAppleProceeds+"개 행은 환율 미확인으로 제외했어요.");
     if(fxState.status==="unavailable") notes.push("ECB 연결이 불안정해 보관된 과거 환율만 사용했어요.");
     notes.push("ECB 기준환율을 우선 적용하고 미제공 통화는 NBU·NBP 공식 기준환율로 보완했어요. 금액은 원화 추정액이며 실제 입금액과 달라요.");
     notes.push("Apple 회계월 확정 정산액은 위의 판매액에 중복 합산하지 않아요.");
@@ -219,6 +230,7 @@
         row.units,money(row.gross),money(row.refund),
         row.fee_confirmed?money(row.fee):"미확정",row.currency,
         hasAmount(row,"net_sales_krw")?krw(row.net_sales_krw):"미환산",
+        row.platform==="ios" ? (hasAmount(row,"proceeds_krw")?krw(row.proceeds_krw):"미환산") : "해당 없음",
         row.currency==="KRW"?"원화 원본":(row.fx_sales_date ? row.fx_sales_date+" ("+(row.fx_sales_source||"ECB")+")" : "—")]){
         td(tr,text);
       }
@@ -226,7 +238,7 @@
     }
     if(!visible.length){
       const tr=document.createElement("tr"),cell=document.createElement("td");
-      cell.colSpan=11;cell.className="sales-empty";
+      cell.colSpan=12;cell.className="sales-empty";
       cell.textContent="이 조건에서 확인된 판매 자료가 없어요. 보고서 미제공은 판매 0건을 뜻하지 않아요.";
       tr.append(cell);body.append(tr);
     }
@@ -255,10 +267,12 @@
     if(!financeRows.length){
       const tr=document.createElement("tr"),cell=document.createElement("td");
       cell.colSpan=8;cell.className="sales-empty";
-      cell.textContent="선택한 기간에 해당하는 Apple 회계월 정산자료가 없어요.";
+      cell.textContent=mode.value==="custom"
+        ? "일자 직접 지정 시 Apple 회계월 정산액은 표시하지 않아요. 월별·연도별 조회에서 확인해 주세요."
+        : "선택한 기간에 해당하는 Apple 회계월 정산자료가 없어요.";
       tr.append(cell);settlementBody.append(tr);
     }
-    byId("sales-settlement-sum").textContent=!financeRows.length?"—":
+    byId("sales-settlement-sum").textContent=!financeRows.length || !settledConverted?"—":
       krw(settledKrw)+(settledMissing?" (미환산 "+settledMissing+"행 제외)":"");
     const grantBody=byId("grant-fees-body");
     grantBody.replaceChildren();
@@ -309,11 +323,13 @@
     const fields=["date","app_name","platform","country","units","gross",
                   "refund","net_sales","fee","fee_confirmed","currency",
                   "gross_krw","refund_krw","net_sales_krw","fee_krw",
-                  "fx_sales_rate","fx_sales_date","fx_sales_source"];
+                  "fx_sales_rate","fx_sales_date","fx_sales_source",
+                  "proceeds","proceeds_currency","proceeds_krw"];
     const header=["판매일","앱","스토어","국가","건수","판매액","환불",
                   "환불 반영 판매액","확정 수수료","수수료 확정","원통화",
                   "판매액 원화 추정","환불 원화 추정","순판매 원화 추정",
-                  "확정 수수료 원화 추정","1통화당 원화 기준환율","환율 기준일","환율 출처"];
+                  "확정 수수료 원화 추정","1통화당 원화 기준환율","환율 기준일","환율 출처",
+                  "Apple 개발자 수익금 원통화","Apple 수익금 통화","Apple 수익금 원화 추정"];
     const records=filteredSales(range).map(r=>fields.map(key=>
       key==="fee"&&!r.fee_confirmed ? "" :
       key==="fee_krw"&&!r.fee_confirmed ? "" : r[key]??""

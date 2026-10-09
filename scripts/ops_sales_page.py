@@ -53,7 +53,7 @@ def sales_page_body(ledger: Mapping | None) -> str:
         statuses = {}
     allowed = {"date", "platform", "app_slug", "app_name", "country", "currency",
                "units", "gross", "refund", "net_sales", "fee", "fee_confirmed",
-               "proceeds", "proceeds_currency", "sources",
+               "proceeds", "proceeds_currency", "proceeds_krw", "sources",
                "gross_krw", "refund_krw", "net_sales_krw", "fee_krw",
                "fx_sales_rate", "fx_sales_date", "fx_sales_source"}
     data = [{k: v for k, v in row.items() if k in allowed} for row in rows if isinstance(row, dict)]
@@ -73,6 +73,12 @@ def sales_page_body(ledger: Mapping | None) -> str:
         source = statuses.get(platform,{})
         code = str(source.get("status","not_collected")) if isinstance(source,dict) else "not_collected"
         state.append('<div class="sales-state-item"><b>'+name+'</b> <span>'+html.escape(labels.get(code,code))+'</span></div>')
+    apple_status = statuses.get("apple", {})
+    apple_stats = apple_status.get("parser_rows", {}) if isinstance(apple_status, dict) else {}
+    if isinstance(apple_stats,dict) and apple_stats.get("unmatched_rows",0):
+        state.append('<div class="sales-state-item"><b>Apple 상품 매칭</b><span>'
+                     + html.escape(str(apple_stats["unmatched_rows"]))
+                     + '개 보고서 행 미연결 · 앱 SKU 점검 필요</span></div>')
     google_status = statuses.get("google", {})
     if isinstance(google_status, dict) and google_status.get("previous_snapshot_retained"):
         state.append('<div class="sales-state-item"><b>Google 정산</b><span>'
@@ -155,11 +161,12 @@ HTML = r"""
  <label><span data-ko="국가" data-en="Country">국가</span><select id="sales-country"><option value="">모든 국가</option></select></label>
 </section>
 <section class="sales-summary" aria-label="선택한 기간의 원화 매출 요약">
- <div class="sales-summary-item"><small>환불 반영 매출 · 원화 추정</small><strong id="sales-total-net">—</strong></div>
+ <div class="sales-summary-item"><small>고객 결제 기준 매출 · 환불 반영</small><strong id="sales-total-net">—</strong></div>
  <div class="sales-summary-item"><small>고객 결제액 · 원화 추정</small><strong id="sales-total-gross">—</strong></div>
  <div class="sales-summary-item"><small>환불 · 원화 추정</small><strong id="sales-total-refunds">—</strong></div>
  <div class="sales-summary-item"><small>확정 수수료 · 원화 환산</small><strong id="sales-total-fee">—</strong></div>
- <div class="sales-summary-item"><small>환불 반영 판매 건수</small><strong id="sales-total-units">—</strong></div>
+ <div class="sales-summary-item"><small>App Store 예상 개발자 수익금</small><strong id="sales-total-ios-proceeds">—</strong></div>
+ <div class="sales-summary-item"><small>순판매 수량 · 환불 차감 후</small><strong id="sales-total-units">—</strong></div>
 </section>
 <p id="sales-fx-status" class="sales-period-note" role="status" aria-live="polite">과거 기준환율을 확인하고 있어요.</p>
 <section class="sales-original">
@@ -179,13 +186,13 @@ HTML = r"""
 <th data-ko="스토어" data-en="Store">스토어</th><th data-ko="국가" data-en="Country">국가</th>
 <th data-ko="건수" data-en="Units">건수</th><th data-ko="판매금액" data-en="Gross sales">판매금액</th>
 <th data-ko="환불" data-en="Refunds">환불</th><th data-ko="수수료" data-en="Fee">수수료</th>
-<th data-ko="통화" data-en="Currency">통화</th><th>환불 반영 매출(원화 추정)</th><th>환율 기준일</th></tr></thead>
+<th data-ko="통화" data-en="Currency">통화</th><th>환불 반영 매출(원화 추정)</th><th>App Store 예상 수익금(원화)</th><th>환율 기준일</th></tr></thead>
 <tbody id="sales-body"></tbody>
 </table>
 </div>
 <section class="sales-secondary">
  <h2 data-ko="월별 확정 정산" data-en="Monthly finalized settlements">월별 확정 정산</h2>
- <p class="sales-note">Apple 회계월 기준 확정 재무 보고서예요. 회계월은 달력 날짜와 다를 수 있어요. 원화 환산액은 회계월 말일 기준환율의 추정액이며 실제 입금액과 다를 수 있어요. 위의 판매액 총계에 더하지 않아요.</p>
+ <p class="sales-note">Apple 회계월 기준 확정 재무 보고서예요. 회계월은 달력 날짜와 다를 수 있어요. 직접 지정한 일자별 조회에서는 회계월 정산액을 조회하지 않아요. 원화 환산액은 회계월 말일 기준환율의 추정액이며 실제 입금액과 다를 수 있어요. 위의 판매액 총계에 더하지 않아요.</p>
  <p class="sales-caption">선택된 Apple 회계월 정산금 · 원화 환산 추정: <strong id="sales-settlement-sum">—</strong></p>
  <div class="sales-table-wrap"><table class="sales-table" aria-label="확정 재무 보고서">
  <thead><tr><th>회계월</th><th>앱</th><th>국가</th><th>판매량</th><th>고객 결제액</th><th>확정 수익금</th><th>정산금 원화 추정</th><th>수수료 증빙</th></tr></thead>
@@ -201,6 +208,7 @@ HTML = r"""
  <tbody id="grant-fees-body"></tbody></table></div>
 </section>
 <p class="sales-note">
+ • 고객 결제 기준 매출은 수수료·세금 차감 전이고, 실제 입금액 또는 사업 순이익이 아니에요. App Store 예상 수익금과 확정 회계월 정산액도 구분해서 확인해요.<br>
  • Google Play 판매금액은 현지 통화의 예상 판매 보고서, 수수료는 확정 수익 보고서의 Google fee 거래예요.<br>
  • Apple 판매액에는 세금이 포함될 수 있으므로 소비자 가격과 개발자 수익의 차이를 수수료로 표시하지 않아요.<br>
  • 외화는 ECB 과거 기준환율을 우선 적용하고, 미제공 통화는 NBU·NBP 공식 과거 기준환율로 보완해 원화 추정 합계를 보여줘요. 환율이 없으면 미환산으로 구분해요.<br>

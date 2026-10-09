@@ -87,6 +87,26 @@ class SalesPageTests(unittest.TestCase):
         self.assertIn('"app_name":"__SALES_JS__ __STATE__"', html)
         self.assertEqual(html.count("function selectedRange()"), 1)
 
+    def test_daily_apple_proceeds_and_incomplete_mapping_are_visible(self):
+        content = sales_page_body({
+            "rows":[{
+                "platform":"ios","date":"2026-09-23","app_slug":"tagweaver",
+                "app_name":"TagWeaver","country":"CL","currency":"CLP",
+                "units":1,"gross":"2990","refund":"0","net_sales":"2990",
+                "proceeds":"1759","proceeds_currency":"CLP",
+                "proceeds_krw":"2437","net_sales_krw":"4143",
+                "fx_sales_source":"NBP","fx_sales_date":"2026-09-23"
+            }],
+            "source_status":{"apple":{"status":"partial",
+                "parser_rows":{"unmatched_rows":2}}}
+        })
+        self.assertIn('"proceeds_krw":"2437"',content)
+        self.assertIn("App Store 예상 개발자 수익금",content)
+        self.assertIn('id="sales-total-ios-proceeds"',content)
+        self.assertIn("2개 보고서 행 미연결",content)
+        self.assertIn('mode.value==="custom"',content)
+        self.assertIn("일자 직접 지정 시 Apple 회계월",content)
+
     def test_no_html_injection_in_sales_data(self):
         result = sales_page_body({"rows": [{
             "date":"2026-10-01", "app_name": "</script><script>alert(1)</script>"

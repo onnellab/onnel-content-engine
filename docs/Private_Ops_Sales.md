@@ -80,7 +80,11 @@ Apple:
 The sealed `/ops/sales/` page supports month, year, custom inclusive dates,
 and all-time sales from 2026-01-01 through today's KST calendar date. All
 store/country/app filters apply to each selection, the original-currency
-breakdown, and CSV exports. The primary net sales figure is
+breakdown, and CSV exports. Apple daily `Developer Proceeds` is displayed
+separately as an estimated developer take-home (converted where sourced).
+For custom day/date ranges, fiscal-month Apple Finance reports are hidden:
+their fiscal calendar does not match a day-level reporting window. Switch to
+month/year/all for those separate finalized reports. The primary net sales figure is
 `customer gross + refunds`; it is NOT a bank settlement amount or business
 profit. Google fee expense is displayed separately and never double-subtracted.
 Apple fiscal-month settlements are displayed separately and never added again
