@@ -25,6 +25,7 @@ from sync_store_funnel import (
     normalize_google_reports_bucket, read_daily,
 )
 from sync_store_reviews import app_store_connect_read_token_from_env, app_store_connect_token, read_csv_rows
+from store_settlement import fetch_finance, merge_monthly
 
 ROOT = Path(__file__).resolve().parents[1]
 STORES = ROOT / "data" / "store_versions.csv"
@@ -227,7 +228,10 @@ def google_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) -
         return [], {"status": "not_configured"}
     apps = {s["store_package"]: s for s in stores if s.get("platform") == "android" and s.get("store_package")}
     events: list[dict] = []
-    statuses: dict[str, object] = {"status": "ok", "sales_files": 0, "earnings_files": 0}
+    statuses: dict[str, object] = {
+        "status": "ok", "sales_files": 0, "earnings_files": 0,
+        "sales_months": [], "earnings_months": [],
+    }
     for prefix, matcher, fn, label in (
         ("sales/", r"salesreport_(\d{6})\.zip$", parse_google_sales_zip, "sales_files"),
         ("earnings/", r"earnings_(\d{6})\.zip$", parse_google_earnings_zip, "earnings_files"),
@@ -244,6 +248,18 @@ def google_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) -
                 continue
             events.extend(fn(gcs_download(bucket, filename, token), apps))
             statuses[label] += 1
+            month_key = "sales_months" if label == "sales_files" else "earnings_months"
+            statuses[month_key].append(yyyy_mm[:4] + "-" + yyyy_mm[4:])
+    statuses["sales_months"] = sorted(set(statuses["sales_months"]))
+    statuses["earnings_months"] = sorted(set(statuses["earnings_months"]))
+    previous_month = (as_of.replace(day=1) - timedelta(days=1)).strftime("%Y-%m")
+    statuses["missing_earnings_months"] = [
+        month for month in statuses["sales_months"]
+        if month <= previous_month and month not in statuses["earnings_months"]
+    ]
+    statuses["fee_source_status"] = (
+        "available" if statuses["earnings_files"] else "awaiting_earnings_report"
+    )
     return events, statuses
 
 
@@ -352,11 +368,34 @@ def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
         rows, state = google_ledger(stores, as_of, earliest)
         events += rows
         status["google"] = state
+    settlements: list[dict] = []
     if apple:
         old_status = (previous or {}).get("source_status", {}).get("apple", {})
         rows, state = apple_ledger(stores, as_of, earliest, previous_status=old_status)
         events += rows
         status["apple"] = state
+        vendor = os.getenv("APP_STORE_VENDOR_NUMBER", "").strip()
+        if vendor and state["status"] != "credentials_unavailable":
+            token = apple_sales_token()
+            finance_apps = {
+                store["store_app_id"]:store for store in stores
+                if store.get("platform") == "ios" and store.get("store_app_id")
+            }
+            prior_finance = (previous or {}).get("source_status", {}).get("apple_finance", {})
+            fresh, finance_state = fetch_finance(
+                token, vendor, finance_apps, max(earliest, APPLE_FIRST_DAY), as_of,
+                previous=prior_finance,
+            )
+            status["apple_finance"] = finance_state
+            settlements = merge_monthly(
+                (previous or {}).get("settlements", []), fresh,
+                finance_state.get("refreshed_months", []),
+            )
+        else:
+            status["apple_finance"] = {
+                "status":"vendor_number_required" if not vendor else "credentials_unavailable",
+                "errors":[],
+            }
     return {
         "schema_version": 1,
         "checked_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -364,6 +403,7 @@ def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
         "as_of": as_of.isoformat(),
         "source_status": status,
         "rows": aggregate(events),
+        "settlements": settlements,
         "notices": [
             "Apple daily sales and Google salesreport data are estimates, not final settlement.",
             "Google fee is actual only where earnings report contains Google fee transactions.",

@@ -1,0 +1,124 @@
+"""Apple settled fiscal-month proceeds. Commission is NOT recoverable from net/gross."""
+from __future__ import annotations
+import csv, gzip, io, re, urllib.parse, urllib.request, urllib.error
+from collections import defaultdict
+from datetime import date
+from decimal import Decimal
+
+def value(row, name):
+    names = {re.sub(r"[^a-z0-9]", "", str(k).casefold()): str(v or "").strip()
+             for k,v in row.items() if k is not None}
+    return names.get(re.sub(r"[^a-z0-9]", "", name.casefold()), "")
+
+def parse_finance(raw, month, apps):
+    if raw.startswith(b"\x1f\x8b"):
+        raw = gzip.decompress(raw)
+    reader = csv.DictReader(io.StringIO(raw.decode("utf-8-sig")), delimiter="\t")
+    headers = {re.sub(r"[^a-z0-9]", "", h.casefold()) for h in (reader.fieldnames or [])}
+    needed = ["Apple Identifier", "Country of Sale", "Quantity", "Extended Partner Share",
+              "Partner Share Currency"]
+    if any(re.sub(r"[^a-z0-9]", "", h.casefold()) not in headers for h in needed):
+        raise ValueError("Unsupported Apple Finance report field structure")
+    grouped = {}
+    for source in reader:
+        app = apps.get(value(source, "Apple Identifier")) or apps.get(value(source, "Vendor Identifier"))
+        if not app or not value(source,"Quantity"):
+            continue
+        count = Decimal(value(source,"Quantity"))
+        if count != count.to_integral_value():
+            raise ValueError("Invalid Apple financial unit count")
+        units = int(count)
+        if value(source, "Sale or Return").upper() == "R":
+            units = -abs(units)
+        country = value(source,"Country of Sale").upper() or "ZZ"
+        customer_currency = value(source,"Customer Currency").upper()
+        proceeds_currency = value(source,"Partner Share Currency").upper()
+        if not proceeds_currency:
+            raise ValueError("Apple Finance row missing proceeds currency")
+        proceeds = Decimal(value(source, "Extended Partner Share"))
+        proceeds = -abs(proceeds) if units < 0 else proceeds
+        customer_price = value(source,"Customer Price")
+        customer_amount = (abs(Decimal(customer_price) * units)
+                           if customer_currency and customer_price else Decimal(0))
+        key = month, app["app_slug"], country, customer_currency, proceeds_currency
+        item = grouped.setdefault(key, {
+            "fiscal_month":month, "app_slug":app["app_slug"],"app_name":app["app_name"],
+            "country":country,"customer_currency":customer_currency,
+            "proceeds_currency":proceeds_currency,"units":0,
+            "gross":Decimal(0),"refund":Decimal(0),"proceeds":Decimal(0),
+            "fee":None,"fee_status":"commission_invoice_required",
+            "source":"apple_finance_consolidated",
+        })
+        item["units"] += units
+        if units < 0: item["refund"] -= customer_amount
+        else: item["gross"] += customer_amount
+        item["proceeds"] += proceeds
+    result = []
+    for item in grouped.values():
+        for field in ("gross","refund","proceeds"):
+            item[field] = str(item[field].quantize(Decimal(".01")))
+        result.append(item)
+    return sorted(result,key=lambda item:tuple(str(item[k]) for k in
+                  ("fiscal_month","app_slug","country","customer_currency","proceeds_currency")))
+
+def report_months(earliest, as_of):
+    month = date(earliest.year, earliest.month, 1)
+    end = date(as_of.year, as_of.month, 1)
+    result = []
+    while month < end:
+        result.append(month.isoformat()[:7])
+        month = date(month.year + (month.month == 12),
+                     1 if month.month == 12 else month.month + 1, 1)
+    return result
+
+def fetch_finance(token, vendor, apps, earliest, as_of, previous=None, opener=None):
+    opener = opener or urllib.request.urlopen
+    prior = previous if isinstance(previous,dict) else {}
+    months = report_months(earliest, as_of)
+    done = set(prior.get("completed_months",[])) & set(months)
+    missing = set(prior.get("missing_months",[])) & set(months)
+    rolling = set(months[-2:])
+    changed = []
+    rows = []
+    errors = []
+    for month in months:
+        if month not in rolling and month in done | missing:
+            continue
+        query = urllib.parse.urlencode({
+            "filter[regionCode]":"ZZ", "filter[reportDate]":month,
+            "filter[reportType]":"FINANCIAL", "filter[vendorNumber]":vendor})
+        request = urllib.request.Request(
+            "https://api.appstoreconnect.apple.com/v1/financeReports?"+query,
+            headers={"Authorization":"Bearer "+token, "Accept":"application/a-gzip"})
+        try:
+            with opener(request, timeout=50) as response:
+                parsed = parse_finance(response.read(),month,apps)
+            done.add(month)
+            missing.discard(month)
+            changed.append(month)
+            rows.extend(parsed)
+        except urllib.error.HTTPError as error:
+            if error.code == 404:
+                missing.add(month)
+                done.discard(month)
+            else:
+                errors.append(month+": HTTP "+str(error.code))
+                if error.code in {400,401,403,429}:
+                    break
+        except (ValueError,OSError) as error:
+            errors.append(month+": invalid report ("+type(error).__name__+")")
+            break
+    return rows, {"status":"partial" if errors else "no_reports" if not done else "ok",
+                  "completed_months":sorted(done), "missing_months":sorted(missing),
+                  "refreshed_months":changed, "reports_available":len(done),
+                  "reports_missing":len(missing), "new_reports":len(changed),
+                  "errors":errors[:8], "fee_status":"requires_independent_invoice"}
+
+def merge_monthly(old, new, changed):
+    refreshed = set(changed)
+    fields = ('fiscal_month','app_slug','country','customer_currency','proceeds_currency')
+    result = {tuple(str(row.get(f,'')) for f in fields):row for row in old
+              if isinstance(row,dict) and row.get('fiscal_month') not in refreshed}
+    for row in new:
+        result[tuple(str(row.get(f,'')) for f in fields)] = row
+    return sorted(result.values(),key=lambda row:tuple(str(row.get(f,'')) for f in fields),reverse=True)
