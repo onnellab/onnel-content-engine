@@ -34,6 +34,14 @@ Apple:
 - `GET /v1/salesReports`, Team API key and `APP_STORE_VENDOR_NUMBER`
   Actions secret required; set Vendor Number from App Store Connect
   Payments and Financial Reports.
+- Finance reporting uses dedicated `APP_STORE_FINANCE_KEY_ID`,
+  `APP_STORE_FINANCE_ISSUER_ID`, and
+  `APP_STORE_FINANCE_PRIVATE_KEY_BASE64` Actions secrets (base64 of the
+  downloaded .p8 private key). Create a Team key with **Finance** role under
+  App Store Connect > Users and Access > Integrations > Team Keys.
+  Do not overwrite `APP_STORE_CONNECT_*` secrets used by app release.
+  If a Team key returns HTTP 401 even on `GET /v1/apps?limit=1`, check
+  that Key ID, Issuer ID, and .p8 belong to the same active Team key.
 - Sales reports show customer prices and proceeds. Their difference cannot
   be claimed as platform fees because of tax/currency variations.
 - Initially the Apple API collection only backfills a bounded lookback.

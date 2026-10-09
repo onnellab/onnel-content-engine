@@ -46,6 +46,9 @@ jobs:
       - name: Collect and encrypt private finance data
         env:
           APP_STORE_VENDOR_NUMBER: ${{ secrets.APP_STORE_VENDOR_NUMBER }}
+          APP_STORE_FINANCE_KEY_ID: ${{ secrets.APP_STORE_FINANCE_KEY_ID }}
+          APP_STORE_FINANCE_ISSUER_ID: ${{ secrets.APP_STORE_FINANCE_ISSUER_ID }}
+          APP_STORE_FINANCE_PRIVATE_KEY_BASE64: ${{ secrets.APP_STORE_FINANCE_PRIVATE_KEY_BASE64 }}
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_PRIVATE_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY_BASE64 }}

@@ -246,7 +246,25 @@ def google_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) -
 
 
 def apple_sales_token() -> str:
-    # Financial endpoints require an account-wide Team key, not an Individual key.
+    # Finance API keys are intentionally separate from store release and review
+    # keys. Never overwrite a working upload/review credential to enable finance.
+    dedicated = {
+        "key_id": os.getenv("APP_STORE_FINANCE_KEY_ID", "").strip(),
+        "issuer_id": os.getenv("APP_STORE_FINANCE_ISSUER_ID", "").strip(),
+        "encoded": os.getenv("APP_STORE_FINANCE_PRIVATE_KEY_BASE64", "").strip(),
+    }
+    if any(dedicated.values()):
+        if not all(dedicated.values()):
+            raise LedgerError("incomplete dedicated Apple Finance API credentials")
+        private_key = base64.b64decode(
+            dedicated["encoded"], validate=True
+        ).decode("utf-8")
+        return app_store_connect_token(
+            dedicated["key_id"], dedicated["issuer_id"], private_key,
+            key_type="team",
+        )
+
+    # Backward-compatible fallback for teams with a valid existing Team key.
     team_key = os.getenv("APP_STORE_CONNECT_KEY_ID", "").strip()
     issuer_id = os.getenv("APP_STORE_CONNECT_ISSUER_ID", "").strip()
     encoded = os.getenv("APP_STORE_CONNECT_PRIVATE_KEY_BASE64", "").strip()

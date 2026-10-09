@@ -119,6 +119,32 @@ class LedgerTests(unittest.TestCase):
         self.assertEqual(status["days_missing"], 2)
         self.assertEqual(status["days_checked"], 0)
 
+    def test_finance_team_key_isolated_from_release_key(self):
+        from store_sales_ledger import apple_sales_token
+        credentials = {
+            "APP_STORE_FINANCE_KEY_ID": "finance-key",
+            "APP_STORE_FINANCE_ISSUER_ID": "finance-issuer",
+            "APP_STORE_FINANCE_PRIVATE_KEY_BASE64": "cHJpdmF0ZSBrZXk=",
+            "APP_STORE_CONNECT_KEY_ID": "release-key",
+            "APP_STORE_CONNECT_ISSUER_ID": "release-issuer",
+            "APP_STORE_CONNECT_PRIVATE_KEY_BASE64": "cHJpdmF0ZSBrZXk=",
+        }
+        with patch.dict(os.environ, credentials, clear=True), patch(
+            "store_sales_ledger.app_store_connect_token", return_value="valid-token"
+        ) as create:
+            self.assertEqual(apple_sales_token(), "valid-token")
+        create.assert_called_once_with(
+            "finance-key", "finance-issuer", "private key", key_type="team"
+        )
+
+    def test_incomplete_finance_credentials_never_fall_back_silently(self):
+        from store_sales_ledger import LedgerError, apple_sales_token
+        with patch.dict(os.environ, {
+            "APP_STORE_FINANCE_KEY_ID": "only-key-id",
+        }, clear=True):
+            with self.assertRaises(LedgerError):
+                apple_sales_token()
+
     def test_invalid_decimal_fails_not_silent(self):
         with self.assertRaises(ValueError):
             amount("not money")
