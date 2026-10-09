@@ -5,7 +5,7 @@ slug: "organize-local-music-library-offline-android"
 category: "music"
 language: "zh-Hant"
 description: "先用少量本機音訊建立清楚的整理方式，再中斷網路檢查播放。了解資料夾、中繼資料與播放清單的用途，避免外出後才發現檔案無法使用。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0048"
 search_intent: "workflow"
 primary_keyword: "整理本機音樂"
@@ -15,6 +15,8 @@ tags: "Android|離線播放|本機音訊檔案|音樂庫|播放清單"
 short_answer: "先為有權使用的音訊另外保留副本，再決定清楚的存放與查找方式。大量加入前，用少量檔案在關閉 Wi-Fi 與行動數據的狀態下檢查播放。"
 canonical_url: "https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/"
 image_specs: "本機檔案|小型音樂庫|離線播放檢查|加入其餘曲目"
+published_at: "2026-10-09T13:36:03+09:00"
+updated_at: "2026-10-09T13:36:03+09:00"
 ---
 
 # 在 Android 整理音樂檔案，準備離線播放

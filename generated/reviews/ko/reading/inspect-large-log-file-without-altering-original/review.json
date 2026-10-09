@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0032",
   "title": "원본을 바꾸지 않고 대용량 로그 파일을 검토하는 방법",
-  "input_fingerprint": "9e2ec89ea52b4c2e2e4dcf23b0572baa4e20c6c3343fb89781e3e4e4199f79fd",
+  "input_fingerprint": "b7126b63c2fd8d88d18840ef9c8fd0266e7ba259fc4324a74c8c753eee52c884",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

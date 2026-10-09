@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0014",
   "title": "How to Turn Rough Notes Into a Structured First Draft",
-  "input_fingerprint": "0377475beeb111d5d024b022beed30823dadd6a9cf9f37dca4e780904f14caf2",
+  "input_fingerprint": "7349130d46ec023b648c98ea3ea868ca84c48cd476e9d5316a9cdc7301abbd2d",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

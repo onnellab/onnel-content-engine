@@ -1,20 +1,167 @@
 {
   "version": 1,
-  "topic_id": "TOPIC-0044",
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0044",
+    "title": "Organize a Local Music Library for Offline Listening on Android",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "en",
+    "status": "review",
+    "topic_clusters": [
+      "offline music player Android",
+      "local audio files",
+      "music folders and playlists",
+      "Melivra",
+      "organize a local music library",
+      "music"
+    ],
+    "related_app_names": [
+      "Melivra"
+    ]
+  },
   "recommendations": {
     "related_articles": [
       {
-        "title": "cleaning up MP3 metadata before organizing music",
-        "url": "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/",
+        "topic_id": "TOPIC-0008",
+        "title": "How to Clean Up MP3 Metadata Before Organizing Music",
+        "slug": "clean-up-mp3-metadata-before-organizing-music",
+        "category": "music",
         "language": "en",
-        "status": "published"
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 12
       },
       {
-        "title": "numbering tracks across discs",
-        "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
+        "topic_id": "TOPIC-0029",
+        "title": "How to Number Tracks in a Multi-Disc MP3 Album",
+        "slug": "number-tracks-multi-disc-mp3-album",
+        "category": "music",
         "language": "en",
-        "status": "published"
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0007",
+        "title": "How to Convert Local Media Files Privately",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0020",
+        "title": "How to Organize Downloads With a Small, Durable Folder System",
+        "slug": "organize-downloads-small-folder-system",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/organize-downloads-small-folder-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0001",
+        "title": "How to Read Large TXT Files Without Lag",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
+        "topic_id": "TOPIC-0004",
+        "title": "What Makes Large Text Files Slow to Open",
+        "slug": "large-text-file-slow-to-open",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/large-text-file-slow-to-open/",
+        "destination": "published_article",
+        "relationship": "prerequisite",
+        "shared_clusters": [],
+        "score": 4
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0007",
+        "app_name": "Melivra",
+        "slug": "melivra",
+        "category": "music",
+        "url": "/apps/melivra/",
+        "description": "An offline music player for organizing and playing audio files in a local library.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Music guide",
+        "category": "music",
+        "cluster": "music",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "offline music player Android cluster",
+        "category": "music",
+        "cluster": "offline music player Android",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "How to Convert Local Media Files Privately",
+        "category": "media",
+        "cluster": "local media converter",
+        "topic_id": "TOPIC-0007",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
-  }
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
 }

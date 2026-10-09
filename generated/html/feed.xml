@@ -228,5 +228,68 @@
     <description>원본을 보존하면서 완성된 TXT 원고를 EPUB으로 조립하고 검증하는 되돌릴 수 있는 준비 절차를 설명합니다.</description>
     <pubDate>Sun, 04 Oct 2026 02:34:40 GMT</pubDate>
   </item>
+  <item>
+    <title>Organize a Local Music Library for Offline Listening on Android</title>
+    <link>https://onnellab.com/blog/en/organize-local-music-library-offline-android/</link>
+    <guid>https://onnellab.com/blog/en/organize-local-music-library-offline-android/</guid>
+    <description>Build a small, understandable local audio library and check playback before relying on it away from a connection.</description>
+    <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>Android에서 오프라인 감상을 위한 음악 파일 정리하기</title>
+    <link>https://onnellab.com/blog/ko/organize-local-music-library-offline-android/</link>
+    <guid>https://onnellab.com/blog/ko/organize-local-music-library-offline-android/</guid>
+    <description>기기에 저장한 음악을 작은 묶음부터 정리하고, 인터넷 연결 없이 재생되는지 확인하는 방법을 안내합니다.</description>
+    <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>Androidの音楽ファイルをオフライン再生用に整理する方法</title>
+    <link>https://onnellab.com/blog/ja/organize-local-music-library-offline-android/</link>
+    <guid>https://onnellab.com/blog/ja/organize-local-music-library-offline-android/</guid>
+    <description>端末内の音楽を少量ずつ整理し、ネット接続を切って再生を確認する手順を紹介します。フォルダー、メタデータ、プレイリストの役割も整理します。</description>
+    <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>在 Android 上整理音乐文件，准备离线播放</title>
+    <link>https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/</link>
+    <guid>https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/</guid>
+    <description>先用少量本地音频建立清晰的整理方式，再断开网络检查播放。分清文件夹、元数据和播放列表的作用，避免外出后才发现文件不可用。</description>
+    <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>在 Android 整理音樂檔案，準備離線播放</title>
+    <link>https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/</link>
+    <guid>https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/</guid>
+    <description>先用少量本機音訊建立清楚的整理方式，再中斷網路檢查播放。了解資料夾、中繼資料與播放清單的用途，避免外出後才發現檔案無法使用。</description>
+    <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>Como organizar músicas no Android para ouvir offline</title>
+    <link>https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/</link>
+    <guid>https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/</guid>
+    <description>Organize uma pequena coleção de arquivos locais e confira a reprodução sem conexão antes de depender dela longe da internet.</description>
+    <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>Musikdateien auf Android für die Offline-Wiedergabe ordnen</title>
+    <link>https://onnellab.com/blog/de/organize-local-music-library-offline-android/</link>
+    <guid>https://onnellab.com/blog/de/organize-local-music-library-offline-android/</guid>
+    <description>Baue eine übersichtliche lokale Musiksammlung auf und prüfe die Wiedergabe ohne Internet, bevor du unterwegs darauf angewiesen bist.</description>
+    <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>Organiser sa musique sur Android pour une écoute hors ligne</title>
+    <link>https://onnellab.com/blog/fr/organize-local-music-library-offline-android/</link>
+    <guid>https://onnellab.com/blog/fr/organize-local-music-library-offline-android/</guid>
+    <description>Organisez une petite collection de fichiers locaux et vérifiez leur lecture sans connexion avant d’en avoir besoin loin d’un réseau.</description>
+    <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>Cómo organizar música en Android para escucharla sin conexión</title>
+    <link>https://onnellab.com/blog/es/organize-local-music-library-offline-android/</link>
+    <guid>https://onnellab.com/blog/es/organize-local-music-library-offline-android/</guid>
+    <description>Organiza una pequeña colección de archivos locales y comprueba su reproducción sin conexión antes de necesitarla lejos de una red.</description>
+    <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
+  </item>
 </channel>
 </rss>

@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0026",
   "title": "오래 활용할 수 있는 연구 독서 기록을 만드는 방법",
-  "input_fingerprint": "a49c15a6f71227d1a569dc4c664c222ab1925e75b8920a68f83dd965a060c767",
+  "input_fingerprint": "c283651f72df6c11e1046005dab905fb11ce0b1406a89916036f51e1204763ca",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

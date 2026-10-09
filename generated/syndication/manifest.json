@@ -683,6 +683,27 @@
       "error": "",
       "error_type": "",
       "retry_count": 0
+    },
+    {
+      "topic_id": "TOPIC-0044",
+      "source_status": "published",
+      "publish_after_canonical": false,
+      "platform": "devto",
+      "language": "en",
+      "category": "music",
+      "slug": "organize-local-music-library-offline-android",
+      "draft_path": "generated/syndication/devto/en/music/organize-local-music-library-offline-android.md",
+      "canonical_url": "https://onnellab.com/blog/en/organize-local-music-library-offline-android/",
+      "status": "draft",
+      "approved_by": "",
+      "approved_at": "",
+      "post_id": "",
+      "posted_url": "",
+      "posted_at": "",
+      "last_attempt_at": "",
+      "error": "",
+      "error_type": "",
+      "retry_count": 0
     }
   ]
 }

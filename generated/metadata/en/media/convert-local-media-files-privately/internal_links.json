@@ -140,6 +140,14 @@
         "category": "media",
         "cluster": "private file conversion",
         "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Organize a Local Music Library for Offline Listening on Android",
+        "category": "music",
+        "cluster": "organize a local music library",
+        "topic_id": "TOPIC-0044",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
   },

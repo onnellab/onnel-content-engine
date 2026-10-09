@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0009",
   "title": "How to Trim Audio Recordings Without a Full Editor",
-  "input_fingerprint": "532c8277d3454b7fa1e27703c3f737dc2aac454b4ec4b79b2ceb80c0a721be0e",
+  "input_fingerprint": "0a50d4e72b38927dead54dd262383da6f9df42d3a3109a364dffeace334f31bb",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0033",
   "title": "How to Prepare a TXT Manuscript for Reliable EPUB Conversion",
-  "input_fingerprint": "5ebca585de0e2b0f2a880190539ee3ffbc25adede4b44fac170c674f2eaed7ee",
+  "input_fingerprint": "1c7e8724baac9c93453231add6e88cadea988e28712dd9f8b0db5a826f0d1966",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

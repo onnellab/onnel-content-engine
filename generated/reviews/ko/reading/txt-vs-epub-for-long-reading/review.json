@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0021",
   "title": "긴 글 읽기를 위한 TXT와 EPUB 비교",
-  "input_fingerprint": "9a6ff3d122f81b56680e722af8bf841dc3164156e17776c5d09471127213ec5c",
+  "input_fingerprint": "e5b54b25bb5b22658013f81588c8c845da7322406c2aa3445c9db20ae03dd7dd",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

@@ -1,20 +1,90 @@
 {
   "version": 1,
-  "topic_id": "TOPIC-0048",
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0048",
+    "title": "在 Android 整理音樂檔案，準備離線播放",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "zh-Hant",
+    "status": "review",
+    "topic_clusters": [
+      "Android 離線音樂播放器",
+      "本機音訊檔案",
+      "音樂資料夾與播放清單",
+      "Melivra",
+      "整理本機音樂",
+      "music"
+    ],
+    "related_app_names": [
+      "Melivra"
+    ]
+  },
   "recommendations": {
     "related_articles": [
       {
-        "title": "整理音樂前如何清理 MP3 中繼資料",
-        "url": "https://onnellab.com/blog/zh-hant/clean-up-mp3-metadata-before-organizing-music/",
+        "topic_id": "TOPIC-0057",
+        "title": "檢查 EPUB 的目錄連結與章節順序",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
         "language": "zh-Hant",
-        "status": "published"
+        "status": "review",
+        "url": "generated/markdown/zh-Hant/reading/check-epub-table-of-contents-and-reading-order.md",
+        "destination": "draft_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 2
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0007",
+        "app_name": "Melivra",
+        "slug": "melivra",
+        "category": "music",
+        "url": "/apps/melivra/",
+        "description": "An offline music player for organizing and playing audio files in a local library.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Music guide",
+        "category": "music",
+        "cluster": "music",
+        "reason": "Provides the broader domain context required by the knowledge graph."
       },
       {
-        "title": "跨碟整理音軌編號的方法（英文）",
-        "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
-        "language": "en",
-        "status": "published"
+        "type": "topic_cluster",
+        "title": "Android 離線音樂播放器 cluster",
+        "category": "music",
+        "cluster": "Android 離線音樂播放器",
+        "reason": "Connects the article to its nearest conceptual cluster."
       }
     ]
-  }
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
 }

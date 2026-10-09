@@ -1,14 +1,165 @@
 {
   "version": 1,
-  "topic_id": "TOPIC-0054",
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0054",
+    "title": "EPUB 목차 링크와 장 순서 확인하기",
+    "slug": "check-epub-table-of-contents-and-reading-order",
+    "category": "reading",
+    "language": "ko",
+    "status": "review",
+    "topic_clusters": [
+      "EPUB 장 순서",
+      "EPUB 목차 링크 오류",
+      "EPUB 장 누락 확인",
+      "Papira",
+      "EPUB 목차 확인",
+      "reading"
+    ],
+    "related_app_names": [
+      "Papira"
+    ]
+  },
   "recommendations": {
     "related_articles": [
       {
-        "title": "EPUB 변환을 위한 TXT 원고 준비하기",
-        "url": "https://onnellab.com/blog/ko/prepare-txt-manuscript-for-epub/",
+        "topic_id": "TOPIC-0034",
+        "title": "신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 방법",
+        "slug": "prepare-txt-manuscript-for-epub",
+        "category": "reading",
         "language": "ko",
-        "status": "published"
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/prepare-txt-manuscript-for-epub/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 14
+      },
+      {
+        "topic_id": "TOPIC-0021",
+        "title": "긴 글 읽기를 위한 TXT와 EPUB 비교",
+        "slug": "txt-vs-epub-for-long-reading",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/",
+        "destination": "published_article",
+        "relationship": "comparison",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 11
+      },
+      {
+        "topic_id": "TOPIC-0005",
+        "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0022",
+        "title": "대용량 텍스트 파일이 느리게 열리는 이유",
+        "slug": "large-text-file-slow-to-open",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/large-text-file-slow-to-open/",
+        "destination": "published_article",
+        "relationship": "prerequisite",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0032",
+        "title": "원본을 바꾸지 않고 대용량 로그 파일을 검토하는 방법",
+        "slug": "inspect-large-log-file-without-altering-original",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/inspect-large-log-file-without-altering-original/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0011",
+        "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0008",
+        "app_name": "Papira",
+        "slug": "papira",
+        "category": "reading",
+        "url": "/apps/papira/",
+        "description": "An offline ebook maker that turns finished TXT manuscripts into EPUB books.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Reading guide",
+        "category": "reading",
+        "cluster": "reading",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "EPUB 장 순서 cluster",
+        "category": "reading",
+        "cluster": "EPUB 장 순서",
+        "reason": "Connects the article to its nearest conceptual cluster."
       }
     ]
-  }
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
 }

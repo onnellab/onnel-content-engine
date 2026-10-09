@@ -1,20 +1,98 @@
 {
   "version": 1,
-  "topic_id": "TOPIC-0046",
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0046",
+    "title": "Androidの音楽ファイルをオフライン再生用に整理する方法",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "ja",
+    "status": "review",
+    "topic_clusters": [
+      "オフライン音楽プレーヤー",
+      "ローカル音声ファイル",
+      "音楽フォルダーとプレイリスト",
+      "Melivra",
+      "Androidの音楽ファイルを整理",
+      "music"
+    ],
+    "related_app_names": [
+      "Melivra"
+    ]
+  },
   "recommendations": {
     "related_articles": [
       {
-        "title": "MP3メタデータの整理",
-        "url": "https://onnellab.com/blog/ja/clean-up-mp3-metadata-before-organizing-music/",
+        "topic_id": "TOPIC-0055",
+        "title": "EPUBの目次リンクと章の順序を確認する方法",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
         "language": "ja",
-        "status": "published"
+        "status": "review",
+        "url": "generated/markdown/ja/reading/check-epub-table-of-contents-and-reading-order.md",
+        "destination": "draft_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 2
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0007",
+        "app_name": "Melivra",
+        "slug": "melivra",
+        "category": "music",
+        "url": "/apps/melivra/",
+        "description": "An offline music player for organizing and playing audio files in a local library.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Music guide",
+        "category": "music",
+        "cluster": "music",
+        "reason": "Provides the broader domain context required by the knowledge graph."
       },
       {
-        "title": "ディスクをまたぐトラック番号の整理（英語）",
-        "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
-        "language": "en",
-        "status": "published"
+        "type": "topic_cluster",
+        "title": "オフライン音楽プレーヤー cluster",
+        "category": "music",
+        "cluster": "オフライン音楽プレーヤー",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Browse and Play Local Audio Files Offline on Android",
+        "category": "media",
+        "cluster": "play local audio files offline Android",
+        "topic_id": "TOPIC-0043",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
-  }
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
 }

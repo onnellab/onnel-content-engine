@@ -5,7 +5,7 @@ slug: "organize-local-music-library-offline-android"
 category: "music"
 language: "ja"
 description: "端末内の音楽を少量ずつ整理し、ネット接続を切って再生を確認する手順を紹介します。フォルダー、メタデータ、プレイリストの役割も整理します。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0046"
 search_intent: "workflow"
 primary_keyword: "Androidの音楽ファイルを整理"
@@ -15,6 +15,8 @@ tags: "Android|オフライン再生|ローカル音声ファイル|音楽ライ
 short_answer: "利用する権利のある音声のコピーを別に保管し、保存先と探し方を決めます。全体を追加する前に、少数のファイルでWi-Fiとモバイルデータ通信を切った状態の再生を確認しましょう。"
 canonical_url: "https://onnellab.com/blog/ja/organize-local-music-library-offline-android/"
 image_specs: "ローカルファイル|小さなライブラリ|オフライン再生の確認|残りの曲を追加"
+published_at: "2026-10-09T13:36:03+09:00"
+updated_at: "2026-10-09T13:36:03+09:00"
 ---
 
 # Androidの音楽ファイルをオフライン再生用に整理する方法

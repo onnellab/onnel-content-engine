@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0020",
   "title": "How to Organize Downloads With a Small, Durable Folder System",
-  "input_fingerprint": "2c94e81e972655ef816df1516a63ec9514fabb68ad8a0f87776ec1eee1ad0170",
+  "input_fingerprint": "8d8927b2f60ae652f83ab667518150b99981769934472fbde70691b034b9f54f",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

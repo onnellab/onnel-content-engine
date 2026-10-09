@@ -1,14 +1,90 @@
 {
   "version": 1,
-  "topic_id": "TOPIC-0056",
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0056",
+    "title": "检查 EPUB 的目录链接和章节顺序",
+    "slug": "check-epub-table-of-contents-and-reading-order",
+    "category": "reading",
+    "language": "zh-Hans",
+    "status": "review",
+    "topic_clusters": [
+      "EPUB 章节顺序",
+      "EPUB 目录链接错误",
+      "EPUB 章节缺失",
+      "Papira",
+      "EPUB 目录检查",
+      "reading"
+    ],
+    "related_app_names": [
+      "Papira"
+    ]
+  },
   "recommendations": {
     "related_articles": [
       {
-        "title": "如何准备适合 EPUB 转换的 TXT 原稿",
-        "url": "https://onnellab.com/blog/zh-hans/prepare-txt-manuscript-for-epub/",
+        "topic_id": "TOPIC-0047",
+        "title": "在 Android 上整理音乐文件，准备离线播放",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
         "language": "zh-Hans",
-        "status": "published"
+        "status": "review",
+        "url": "generated/markdown/zh-Hans/music/organize-local-music-library-offline-android.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0008",
+        "app_name": "Papira",
+        "slug": "papira",
+        "category": "reading",
+        "url": "/apps/papira/",
+        "description": "An offline ebook maker that turns finished TXT manuscripts into EPUB books.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Reading guide",
+        "category": "reading",
+        "cluster": "reading",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "EPUB 章节顺序 cluster",
+        "category": "reading",
+        "cluster": "EPUB 章节顺序",
+        "reason": "Connects the article to its nearest conceptual cluster."
       }
     ]
-  }
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
 }

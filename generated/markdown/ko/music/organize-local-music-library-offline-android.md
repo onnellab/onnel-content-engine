@@ -5,7 +5,7 @@ slug: "organize-local-music-library-offline-android"
 category: "music"
 language: "ko"
 description: "기기에 저장한 음악을 작은 묶음부터 정리하고, 인터넷 연결 없이 재생되는지 확인하는 방법을 안내합니다."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0045"
 search_intent: "workflow"
 primary_keyword: "Android 음악 파일 정리"
@@ -15,6 +15,9 @@ tags: "Android|오프라인 감상|로컬 오디오 파일|음악 라이브러�
 short_answer: "사용할 권리가 있는 오디오의 별도 복사본을 보관하고, 폴더와 탐색 기준을 정하세요. 전체 파일을 추가하기 전에 소량의 파일로 Wi-Fi와 모바일 데이터를 끈 상태의 재생을 확인합니다."
 canonical_url: "https://onnellab.com/blog/ko/organize-local-music-library-offline-android/"
 image_specs: "로컬 파일|작은 라이브러리|오프라인 재생 점검|전체 파일 추가"
+published_at: "2026-10-09T13:36:03+09:00"
+updated_at: "2026-10-09T13:36:03+09:00"
+related_articles: "음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|여러 장으로 된 MP3 앨범의 트랙 번호를 매기는 방법 => https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/|미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/"
 ---
 
 # Android에서 오프라인 감상을 위한 음악 파일 정리하기

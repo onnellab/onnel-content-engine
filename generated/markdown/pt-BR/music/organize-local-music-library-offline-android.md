@@ -5,7 +5,7 @@ slug: "organize-local-music-library-offline-android"
 category: "music"
 language: "pt-BR"
 description: "Organize uma pequena coleção de arquivos locais e confira a reprodução sem conexão antes de depender dela longe da internet."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0049"
 search_intent: "workflow"
 primary_keyword: "organizar músicas no Android"
@@ -15,6 +15,8 @@ tags: "Android|música offline|arquivos de áudio locais|biblioteca de música|p
 short_answer: "Guarde uma cópia separada dos áudios que você tem direito de usar e escolha uma estrutura simples de pastas e navegação. Antes de adicionar tudo, confira uma pequena coleção com o Wi-Fi e os dados móveis desligados."
 canonical_url: "https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/"
 image_specs: "Arquivos locais|Pequena biblioteca|Teste de reprodução offline|Ampliar a coleção"
+published_at: "2026-10-09T13:36:03+09:00"
+updated_at: "2026-10-09T13:36:03+09:00"
 ---
 
 # Como organizar músicas no Android para ouvir offline

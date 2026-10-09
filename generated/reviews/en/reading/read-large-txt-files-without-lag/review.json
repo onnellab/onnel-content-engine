@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0001",
   "title": "How to Read Large TXT Files Without Lag",
-  "input_fingerprint": "d45bce4f9ebe2eddcd6cc515139136bf964d85bf56a673afc819f59181040610",
+  "input_fingerprint": "906f05993075c1df985465d924c85135c3dc466519d409f74569c7412004afaa",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

@@ -46,6 +46,21 @@
         "score": 17
       },
       {
+        "topic_id": "TOPIC-0044",
+        "title": "Organize a Local Music Library for Offline Listening on Android",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/music/organize-local-music-library-offline-android.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0003",
         "title": "TXT vs EPUB for Long Reading",
         "slug": "txt-vs-epub-for-long-reading",
@@ -92,19 +107,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/convert-local-media-files-privately/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0009",
-        "title": "How to Trim Audio Recordings Without a Full Editor",
-        "slug": "trim-audio-recordings-without-full-editor",
-        "category": "media",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

@@ -5,7 +5,7 @@ slug: "organize-local-music-library-offline-android"
 category: "music"
 language: "zh-Hans"
 description: "先用少量本地音频建立清晰的整理方式，再断开网络检查播放。分清文件夹、元数据和播放列表的作用，避免外出后才发现文件不可用。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0047"
 search_intent: "workflow"
 primary_keyword: "整理本地音乐"
@@ -15,6 +15,8 @@ tags: "Android|离线播放|本地音频文件|音乐库|播放列表"
 short_answer: "先为有权使用的音频保留一份独立副本，再选定清晰的存放和查找方式。批量添加前，用少量文件在关闭 Wi-Fi 和移动数据的状态下检查播放。"
 canonical_url: "https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/"
 image_specs: "本地文件|小型音乐库|离线播放检查|添加其余曲目"
+published_at: "2026-10-09T13:36:03+09:00"
+updated_at: "2026-10-09T13:36:03+09:00"
 ---
 
 # 在 Android 上整理音乐文件，准备离线播放

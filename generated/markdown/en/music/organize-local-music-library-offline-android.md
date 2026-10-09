@@ -5,7 +5,7 @@ slug: "organize-local-music-library-offline-android"
 category: "music"
 language: "en"
 description: "Build a small, understandable local audio library and check playback before relying on it away from a connection."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0044"
 search_intent: "workflow"
 primary_keyword: "organize a local music library"
@@ -15,6 +15,9 @@ tags: "Android|offline listening|local audio files|music library|playlists"
 short_answer: "Preserve a separate copy of audio you have the right to use, choose a clear folder and browsing structure, and check a small library with Wi-Fi and mobile data disconnected before adding the rest."
 canonical_url: "https://onnellab.com/blog/en/organize-local-music-library-offline-android/"
 image_specs: "Local files|Small library|Offline playback check|Expand collection"
+published_at: "2026-10-09T13:36:03+09:00"
+updated_at: "2026-10-09T13:36:03+09:00"
+related_articles: "How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/|How to Number Tracks in a Multi-Disc MP3 Album => https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/|How to Organize Downloads With a Small, Durable Folder System => https://onnellab.com/blog/en/organize-downloads-small-folder-system/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/"
 ---
 
 # Organize a Local Music Library for Offline Listening on Android

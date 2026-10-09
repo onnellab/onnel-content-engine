@@ -90,6 +90,21 @@
         "score": 12
       },
       {
+        "topic_id": "TOPIC-0053",
+        "title": "Check an EPUB’s Table of Contents and Chapter Order",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/reading/check-epub-table-of-contents-and-reading-order.md",
+        "destination": "draft_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 10
+      },
+      {
         "topic_id": "TOPIC-0016",
         "title": "How to Keep a Durable Research Reading Log",
         "slug": "keep-durable-research-reading-log",
@@ -97,19 +112,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/keep-durable-research-reading-log/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0029",
-        "title": "How to Number Tracks in a Multi-Disc MP3 Album",
-        "slug": "number-tracks-multi-disc-mp3-album",
-        "category": "music",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

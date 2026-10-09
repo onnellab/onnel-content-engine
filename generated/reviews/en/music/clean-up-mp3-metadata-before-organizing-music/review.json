@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0008",
   "title": "How to Clean Up MP3 Metadata Before Organizing Music",
-  "input_fingerprint": "6bcf2769e5216a515ddd021c569d8d40c816210b093e7c91aa89de0b6805326b",
+  "input_fingerprint": "e8336d5b65c16440b36d50839acc07ef4f01c123daf99ec241de463044bf0fe7",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

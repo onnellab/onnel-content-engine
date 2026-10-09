@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0003",
   "title": "TXT vs EPUB for Long Reading",
-  "input_fingerprint": "b703059d707538a056480ac41b6502a83d2a311a8ec4d196c7001be45b5e8bfa",
+  "input_fingerprint": "8775e19e9fc723b161ac590f7a9ed5505a0272b5fb3e1beb9843b184b599aeec",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

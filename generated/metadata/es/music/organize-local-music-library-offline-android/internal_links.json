@@ -1,20 +1,98 @@
 {
   "version": 1,
-  "topic_id": "TOPIC-0052",
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0052",
+    "title": "Cómo organizar música en Android para escucharla sin conexión",
+    "slug": "organize-local-music-library-offline-android",
+    "category": "music",
+    "language": "es",
+    "status": "review",
+    "topic_clusters": [
+      "reproductor de música sin conexión",
+      "archivos de audio locales",
+      "carpetas y listas de reproducción",
+      "Melivra",
+      "organizar música en Android",
+      "music"
+    ],
+    "related_app_names": [
+      "Melivra"
+    ]
+  },
   "recommendations": {
     "related_articles": [
       {
-        "title": "cómo limpiar los metadatos MP3 antes de organizar tu música",
-        "url": "https://onnellab.com/blog/es/clean-up-mp3-metadata-before-organizing-music/",
+        "topic_id": "TOPIC-0061",
+        "title": "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
         "language": "es",
-        "status": "published"
+        "status": "review",
+        "url": "generated/markdown/es/reading/check-epub-table-of-contents-and-reading-order.md",
+        "destination": "draft_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 6
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0007",
+        "app_name": "Melivra",
+        "slug": "melivra",
+        "category": "music",
+        "url": "/apps/melivra/",
+        "description": "An offline music player for organizing and playing audio files in a local library.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Music guide",
+        "category": "music",
+        "cluster": "music",
+        "reason": "Provides the broader domain context required by the knowledge graph."
       },
       {
-        "title": "cómo numerar pistas entre discos (en inglés)",
-        "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
-        "language": "en",
-        "status": "published"
+        "type": "topic_cluster",
+        "title": "reproductor de música sin conexión cluster",
+        "category": "music",
+        "cluster": "reproductor de música sin conexión",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Browse and Play Local Audio Files Offline on Android",
+        "category": "media",
+        "cluster": "play local audio files offline Android",
+        "topic_id": "TOPIC-0043",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
-  }
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
 }

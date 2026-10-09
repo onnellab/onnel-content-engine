@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0029",
   "title": "How to Number Tracks in a Multi-Disc MP3 Album",
-  "input_fingerprint": "5b2e52ccea9a67eb04de158995326b3fe287b2b72cec849c08596df34094ed27",
+  "input_fingerprint": "ee6a8ef419da56c0fb3699de757bba078a54fa08170d50f27874ea9efb191ff9",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

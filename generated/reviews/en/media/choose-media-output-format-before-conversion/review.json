@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0018",
   "title": "How to Choose a Media Output Format Before Conversion",
-  "input_fingerprint": "5d07330d152296aef9b8b4e322a8247926c87b01a2d8489f056ddda7fbe5b293",
+  "input_fingerprint": "0d12518ea590271e1357a17d7737d851f58707f99c75dc7c4231623f3c3407dc",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

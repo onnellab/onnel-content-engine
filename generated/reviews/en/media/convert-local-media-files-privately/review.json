@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0007",
   "title": "How to Convert Local Media Files Privately",
-  "input_fingerprint": "35bd19d3633dd2f0b1b476612641bbfcea67f1b1a7b8a7fac632124aa6d0b883",
+  "input_fingerprint": "87095d7096a32ebb89ed5c751472b0d4670b1e46ef2ca15e420cad04f6f2910c",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "type": "article_review",
   "topic_id": "TOPIC-0034",
   "title": "신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 방법",
-  "input_fingerprint": "1f269ea56b95765e3b029411450bf1131920e52a3bad5b13d3ca9c518b8f2ea0",
+  "input_fingerprint": "b10fa8980c8dab27a9aef2391091b50dc48a8318998b3e75c2c4ac6a8984f1c4",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,
