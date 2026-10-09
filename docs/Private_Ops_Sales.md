@@ -44,7 +44,22 @@ Apple:
   that Key ID, Issuer ID, and .p8 belong to the same active Team key.
 - Sales reports show customer prices and proceeds. Their difference cannot
   be claimed as platform fees because of tax/currency variations.
-- Initially the Apple API collection only backfills a bounded lookback.
+- Daily Apple sales are backfilled from 2026-03-01 (subject to Apple's
+  one-year availability). Fetched and unavailable day checkpoints are encrypted;
+  the last 14 days are refreshed daily, older checked dates are not retried.
+- `GET /v1/financeReports` with `reportType=FINANCIAL`,
+  `regionCode=ZZ`, fiscal-month `YYYY-MM` reads consolidated settled
+  proceeds. Older confirmed fiscal months are checkpointed; the last two
+  fiscal months are rechecked for corrections.
+- **Do not infer Apple's commission** from customer price and proceeds:
+  applicable taxes are included in that difference. Verified Korean Apple
+  commission e-Tax Invoices/Cash Receipts are currently downloaded manually
+  under App Store Connect > Reports > Create Reports > Tax Statements;
+  no documented Tax Statements download endpoint is connected.
+- The grant-specific CSV exports only Google earnings fee transactions with
+  confirmed non-KR buyer countries. Negative fee refunds stay negative and
+  currencies are not converted. It is an extracted statement, not a replacement
+  for the original official source or the grant agency's acceptance review.
 
 The source status explicitly shows missing credentials/financial reports and
 never silently treats missing reports as zero sales.

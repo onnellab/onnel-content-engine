@@ -79,13 +79,20 @@ jobs:
               status = record["source_status"].get(platform, {})
               selected = {
                   field: status.get(field)
-                  for field in ("status", "days_checked", "days_missing",
-                                "sales_files", "earnings_files", "errors")
+                  for field in ("status", "days_checked", "days_missing", "new_reports",
+                                "sales_files", "earnings_files", "missing_earnings_months",
+                                "fee_source_status", "errors")
                   if field in status
               }
               count = sum(1 for row in record["rows"] if row["platform"] == prefix)
               print("FINANCE_REPORT_HEALTH_" + platform.upper() + "=" + json.dumps(selected, sort_keys=True))
               print("FINANCE_REPORT_ROW_GROUPS_" + platform.upper() + "=" + str(count))
+          finance = record["source_status"].get("apple_finance", {})
+          permitted = ("status", "reports_available", "reports_missing", "new_reports", "errors")
+          print("APPLE_MONTHLY_FINANCE_HEALTH=" + json.dumps({
+              key:finance.get(key) for key in permitted if key in finance
+          }, sort_keys=True))
+          print("APPLE_MONTHLY_SETTLEMENT_ROWS=" + str(len(record.get("settlements", []))))
           apple = record["source_status"].get("apple", {})
           if any("HTTP 401" in error for error in apple.get("errors", [])):
               # Probe a harmless metadata endpoint with the same TEAM token.
