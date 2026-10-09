@@ -41,7 +41,7 @@ jobs:
           python-version: "3.x"
 
       - name: Verify sales collector
-        run: python3 -m unittest tests.test_store_sales_ledger tests.test_private_ops_publish tests.test_ops_sales_page
+        run: python3 -m unittest tests.test_store_sales_ledger tests.test_store_fx_rates tests.test_private_ops_publish tests.test_ops_sales_page
 
       - name: Collect and encrypt private finance data
         env:
@@ -66,6 +66,7 @@ jobs:
           else
             python3 scripts/store_sales_ledger.py --output "$RUNNER_TEMP/onnel-sales.json" --earliest 2026-01-01
           fi
+          python3 scripts/store_fx_rates.py --ledger "$RUNNER_TEMP/onnel-sales.json" --previous "$RUNNER_TEMP/onnel-previous.json"
           node scripts/private_ops_publish.mjs seal-data "$RUNNER_TEMP/onnel-sales.json" data/private_store_sales.enc.json
           python3 -m json.tool data/private_store_sales.enc.json > /dev/null
           if grep -q '"rows"' data/private_store_sales.enc.json; then

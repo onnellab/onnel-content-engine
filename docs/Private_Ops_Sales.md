@@ -31,7 +31,7 @@ Google Play:
   usually posted after the reporting month; fee refunds must reverse expense.
   The collector reports unmatched ZIP filenames as counts, without exposing
   account identifiers.
-- Distinct currencies **never** sum together.
+- Original foreign currencies are not directly summed. Dated ECB KRW reference estimates are shown separately, alongside original-currency breakdowns.
 
 Apple:
 - `GET /v1/salesReports`, Team API key and `APP_STORE_VENDOR_NUMBER`
@@ -60,9 +60,37 @@ Apple:
   under App Store Connect > Reports > Create Reports > Tax Statements;
   no documented Tax Statements download endpoint is connected.
 - The grant-specific CSV exports only Google earnings fee transactions with
-  confirmed non-KR buyer countries. Negative fee refunds stay negative and
-  currencies are not converted. It is an extracted statement, not a replacement
-  for the original official source or the grant agency's acceptance review.
+  confirmed non-KR buyer countries. Fee refunds remain negative. Original
+  currencies and estimated KRW equivalents are exported in different columns;
+  the report is not a substitute for official vendor invoices or acceptance
+  by the grant administrator.
+
+## Date ranges and KRW reference totals
+
+The sealed `/ops/sales/` page supports month, year, custom inclusive dates,
+and all-time sales from 2026-01-01 through today's KST calendar date. All
+store/country/app filters apply to each selection, the original-currency
+breakdown, and CSV exports. The primary net sales figure is
+`customer gross + refunds`; it is NOT a bank settlement amount or business
+profit. Google fee expense is displayed separately and never double-subtracted.
+Apple fiscal-month settlements are displayed separately and never added again
+to daily sales totals.
+
+`store_fx_rates.py` fetches the ECB published historical EUR reference-rate
+series from `https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml`.
+Conversion to KRW uses the transaction date's ECB cross rate or the most
+recent preceding rate within 7 calendar days, with no interpolation. The code
+rounds each report-row gross and refund to won and computes the net as their
+sum. Google confirmed fees convert only when confirmed by the Earnings source.
+For Apple fiscal-month proceeds, the month-end reference rate is a clearly
+labeled estimate, NOT Apple's actual bank settlement exchange rate.
+
+All source amounts/currencies, conversion rates and quote dates are retained.
+The full FX-enriched ledger remains encrypted, not publicly committed in
+plaintext. Unconvertible currencies are labeled `미환산` and **excluded from
+partial KRW sums**, which explicitly disclose missing rows. Temporary ECB
+outages may use exact-date prior encrypted rate cache; they must not fabricate
+or silently assume FX quotes.
 
 The source status explicitly shows missing credentials/financial reports and
 never silently treats missing reports as zero sales.

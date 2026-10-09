@@ -135,8 +135,13 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
         if fx:
             row["fx_sales_rate"] = fx["rate"]
             row["fx_sales_date"] = fx["as_of"]
-            for field in ("gross", "refund", "net_sales"):
+            for field in ("gross", "refund"):
                 row[field + "_krw"] = won(row.get(field, "0"), fx["rate"])
+            # The displayed net must equal displayed gross + refund even when
+            # independently rounded original values differ by one won.
+            row["net_sales_krw"] = str(
+                Decimal(row["gross_krw"]) + Decimal(row["refund_krw"])
+            )
         else:
             for field in ("gross", "refund", "net_sales"):
                 row.pop(field + "_krw", None)
