@@ -88,7 +88,8 @@ jobs:
               print("FINANCE_REPORT_HEALTH_" + platform.upper() + "=" + json.dumps(selected, sort_keys=True))
               print("FINANCE_REPORT_ROW_GROUPS_" + platform.upper() + "=" + str(count))
           finance = record["source_status"].get("apple_finance", {})
-          permitted = ("status", "reports_available", "reports_missing", "new_reports", "errors")
+          permitted = ("status", "reports_available", "reports_missing", "new_reports",
+                       "rows_with_quantity", "matched_app_rows", "unmatched_app_rows", "errors")
           print("APPLE_MONTHLY_FINANCE_HEALTH=" + json.dumps({
               key:finance.get(key) for key in permitted if key in finance
           }, sort_keys=True))

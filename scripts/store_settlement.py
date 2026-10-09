@@ -10,7 +10,7 @@ def value(row, name):
              for k,v in row.items() if k is not None}
     return names.get(re.sub(r"[^a-z0-9]", "", name.casefold()), "")
 
-def parse_finance(raw, month, apps):
+def parse_finance(raw, month, apps, stats=None):
     if raw.startswith(b"\x1f\x8b"):
         raw = gzip.decompress(raw)
     reader = csv.DictReader(io.StringIO(raw.decode("utf-8-sig")), delimiter="\t")
@@ -21,8 +21,19 @@ def parse_finance(raw, month, apps):
         raise ValueError("Unsupported Apple Finance report field structure")
     grouped = {}
     for source in reader:
-        app = apps.get(value(source, "Apple Identifier")) or apps.get(value(source, "Vendor Identifier"))
-        if not app or not value(source,"Quantity"):
+        quantity = value(source,"Quantity")
+        if not quantity:
+            continue
+        identifier = value(source,"Apple Identifier")
+        vendor_sku = value(source,"Vendor Identifier")
+        app = apps.get(identifier) or apps.get(vendor_sku)
+        if stats is not None:
+            stats["rows_with_quantity"] = stats.get("rows_with_quantity",0) + 1
+            if not app:
+                stats["unmatched_app_rows"] = stats.get("unmatched_app_rows",0) + 1
+            else:
+                stats["matched_app_rows"] = stats.get("matched_app_rows",0) + 1
+        if not app:
             continue
         count = Decimal(value(source,"Quantity"))
         if count != count.to_integral_value():
@@ -77,7 +88,8 @@ def fetch_finance(token, vendor, apps, earliest, as_of, previous=None, opener=No
     months = report_months(earliest, as_of)
     done = set(prior.get("completed_months",[])) & set(months)
     missing = set(prior.get("missing_months",[])) & set(months)
-    rolling = set(months[-2:])
+    rolling = set(months[-2:]) if "rows_with_quantity" in prior else set(months)
+    stats = {"rows_with_quantity":0, "matched_app_rows":0, "unmatched_app_rows":0}
     changed = []
     rows = []
     errors = []
@@ -92,7 +104,7 @@ def fetch_finance(token, vendor, apps, earliest, as_of, previous=None, opener=No
             headers={"Authorization":"Bearer "+token, "Accept":"application/a-gzip"})
         try:
             with opener(request, timeout=50) as response:
-                parsed = parse_finance(response.read(),month,apps)
+                parsed = parse_finance(response.read(),month,apps,stats)
             done.add(month)
             missing.discard(month)
             changed.append(month)
@@ -112,7 +124,8 @@ def fetch_finance(token, vendor, apps, earliest, as_of, previous=None, opener=No
                   "completed_months":sorted(done), "missing_months":sorted(missing),
                   "refreshed_months":changed, "reports_available":len(done),
                   "reports_missing":len(missing), "new_reports":len(changed),
-                  "errors":errors[:8], "fee_status":"requires_independent_invoice"}
+                  "errors":errors[:8], "fee_status":"requires_independent_invoice",
+                  **stats}
 
 def merge_monthly(old, new, changed):
     refreshed = set(changed)

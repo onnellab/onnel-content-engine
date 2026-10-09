@@ -39,6 +39,13 @@ class FinanceTest(unittest.TestCase):
         self.assertEqual(len(result),2)
         self.assertEqual({r["proceeds_currency"] for r in result},{"USD","KRW"})
 
+    def test_unknown_finance_app_reports_unmatched_rows_without_data_leaks(self):
+        sample = (HEAD + "987654321\tJP\t1\t400\tJPY\t550\tJPY\tS\n").encode()
+        stats = {}
+        self.assertEqual(parse_finance(sample, "2026-09", APPS, stats), [])
+        self.assertEqual(stats["rows_with_quantity"], 1)
+        self.assertEqual(stats["unmatched_app_rows"], 1)
+
     def test_invalid_financial_headers_fail(self):
         with self.assertRaises(ValueError):
             parse_finance(b"unknown\tfoo\n1\t2\n","2026-09",APPS)
