@@ -5366,6 +5366,11 @@ def build_manual_publish_site(
     store_items = store_status_items(store_versions_path)
     store_reviews = store_review_items(store_reviews_path)
     store_funnel = read_json(store_funnel_path) if store_funnel_path.exists() else {}
+    # Sensitive finance data is passed via a private, temporary path. Never read it from
+    # repository-managed data/ and never place plaintext revenue reports in public git.
+    sales_path_env = os.environ.get("ONNEL_PRIVATE_LEDGER_PATH", "").strip()
+    store_sales = read_json(Path(sales_path_env)) if sales_path_env and Path(sales_path_env).is_file() else {}
+
     ai_manager_report = json.loads(DEFAULT_AI_MANAGER_REPORT.read_text(encoding="utf-8")) if DEFAULT_AI_MANAGER_REPORT.exists() else {}
     # Persist the exact triage data shown in the dashboard so every proposed
     # action has an auditable, repository-managed snapshot.
@@ -5419,6 +5424,7 @@ def build_manual_publish_site(
         dependencies=flutter_dependency_items,
         pricing=pricing_items,
         funnel_summary=store_funnel,
+        store_sales=store_sales,
         site_items=site_items,
         ai_manager_report=ai_manager_report,
         review_sync_status=store_review_sync_status_item(store_reviews_path),

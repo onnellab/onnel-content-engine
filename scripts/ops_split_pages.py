@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 from urllib.parse import urlsplit
 
+from ops_sales_page import sales_page_body
 from ops_ai_monitor import render_home as render_ai_home, render_monitoring
 
 
@@ -230,6 +231,7 @@ def _nav(current: str) -> str:
     entries = (
         ("home", "/ops/", "홈", "Home"),
         ("apps", "/ops/apps/", "앱", "Apps"),
+        ("sales", "/ops/sales/", "매출", "Sales"),
         ("publishing", "/ops/publishing/", "게시", "Publishing"),
         ("media", "/ops/media/", "미디어", "Media"),
         ("monitoring", "/ops/monitoring/", "운영 점검", "Monitoring"),
@@ -307,6 +309,7 @@ def _home_body(app_count: int, publication_attention: int, ai_manager_report: Ma
 </header>
 <section class="ops-route-grid" aria-label="운영 메뉴">
   <a class="ops-route-card" href="/ops/apps/"><b data-ko="앱" data-en="Apps">앱</b><span data-ko="스토어·리뷰·가격·전환을 앱별로 관리해요." data-en="Manage store status, reviews, pricing, and conversion by app.">스토어·리뷰·가격·전환을 앱별로 관리해요.</span><small data-ko="{app_count}개 앱" data-en="{app_count} apps">{app_count}개 앱</small></a>
+  <a class="ops-route-card" href="/ops/sales/"><b data-ko="매출" data-en="Sales">매출</b><span data-ko="앱별·국가별 판매금액과 수수료를 확인해요." data-en="Review sales and fees by app and country.">앱별·국가별 판매금액과 수수료를 확인해요.</span><small data-ko="월별 상세" data-en="Monthly detail">월별 상세</small></a>
   <a class="ops-route-card" href="/ops/publishing/"><b data-ko="게시" data-en="Publishing">게시</b><span data-ko="게시 대기와 공개 확인 결과를 관리해요." data-en="Review the posting queue and public publication results.">게시 대기와 공개 확인 결과를 관리해요.</span><small data-ko="검토할 항목 {publication_attention}건" data-en="{publication_attention} items to review">검토할 항목 {publication_attention}건</small></a>
   <a class="ops-route-card" href="/ops/media/"><b data-ko="미디어" data-en="Media">미디어</b><span data-ko="ONNELLAB Shorts·Aether Inn 채널 현황과 통계를 봐요." data-en="See channel health and metrics for ONNELLAB Shorts and Aether Inn.">ONNELLAB Shorts·Aether Inn 채널 현황과 통계를 봐요.</span><small data-ko="2개 채널" data-en="2 channels">2개 채널</small></a>
   <a class="ops-route-card" href="/ops/settings/"><b data-ko="설정" data-en="Settings">설정</b><span data-ko="GitHub와 스토어 자격증명을 관리해요." data-en="Manage GitHub and store credentials.">GitHub와 스토어 자격증명을 관리해요.</span><small data-ko="연결 설정" data-en="Connections">연결 설정</small></a>
@@ -2202,6 +2205,7 @@ def build_split_ops_pages(
     review_sync_status: Mapping[str, object] | None = None,
     ai_provider_pricing_status: Mapping[str, object] | None = None,
     release_sync_status: Mapping[str, object] | None = None,
+    store_sales: Mapping[str, object] | None = None,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     funnel_summary = funnel_summary or {}
@@ -2219,6 +2223,14 @@ def build_split_ops_pages(
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(_legacy_view(legacy_html, view, intro), encoding="utf-8")
         pages.append(path)
+
+    sales_path = output_dir / "sales" / "index.html"
+    sales_path.parent.mkdir(parents=True, exist_ok=True)
+    sales_path.write_text(
+        _page("매출 상세", "sales", sales_page_body(store_sales)),
+        encoding="utf-8",
+    )
+    pages.append(sales_path)
 
     monitor_path = output_dir / "monitoring" / "index.html"
     monitor_path.parent.mkdir(parents=True, exist_ok=True)
