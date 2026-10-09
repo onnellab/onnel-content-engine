@@ -18,6 +18,9 @@ from pathlib import Path
 ECB_HISTORY = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"
 NBU_HISTORY = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange"
 NBU_MAX_DAYS = 30
+NBP_HISTORY = "https://api.nbp.pl/api/exchangerates/tables/a"
+NBP_CURRENCIES = frozenset({"CLP"})  # Official NBP table A quotes CLP and KRW together.
+NBP_MAX_DAYS = 30
 WON = Decimal("1")
 SOURCE = "European Central Bank (ECB) euro foreign exchange reference rates"
 
@@ -128,6 +131,53 @@ def nbu_cross_quote(day: str, currency: str, rates: dict, rate_date: str) -> dic
     return {"rate":format(conversion,"f"),"as_of":rate_date,"source":"NBU"}
 
 
+def fetch_nbp_quotes(day: str) -> tuple[dict[str, Decimal], str]:
+    """NBP published PLN-per-one-unit historical reference quotes for CLP/KRW."""
+    wanted = date.fromisoformat(day)
+    start = date.fromordinal(wanted.toordinal() - 7).isoformat()
+    url = NBP_HISTORY + "/" + start + "/" + day + "/?format=json"
+    request = urllib.request.Request(url, headers={
+        "User-Agent":"ONNELLAB-Ops-FX/1.0", "Accept":"application/json"
+    })
+    with urllib.request.urlopen(request, timeout=20) as response:
+        raw = response.read(300001)
+    if len(raw)>300000:
+        raise ValueError("NBP historical rate response exceeds size limit")
+    payload = json.loads(raw)
+    if not isinstance(payload,list):
+        raise ValueError("NBP historical rate response invalid")
+    for table in sorted(payload, key=lambda x: x.get("effectiveDate", ""), reverse=True):
+        observed = date.fromisoformat(table["effectiveDate"])
+        if observed > wanted or (wanted-observed).days>7:
+            continue
+        rates = {}
+        for entry in table.get("rates", []):
+            if not isinstance(entry,dict):
+                continue
+            code = entry.get("code")
+            if not isinstance(code,str):
+                continue
+            try:
+                price = Decimal(str(entry["mid"]))
+            except (InvalidOperation,KeyError):
+                continue
+            if price.is_finite() and price>0:
+                rates[code.upper()] = price
+        if "KRW" in rates and "CLP" in rates:
+            return rates, observed.isoformat()
+    raise ValueError("NBP historical quotes missing CLP or KRW")
+
+
+def nbp_cross_quote(day: str, currency: str, rates: dict, rate_date: str) -> dict | None:
+    """One CLP costs PLN[CLP]/PLN[KRW] Korean won."""
+    if currency not in rates or "KRW" not in rates:
+        return None
+    price = rates[currency] / rates["KRW"]
+    if not price.is_finite() or price <= 0:
+        return None
+    return {"rate":format(price,"f"), "as_of":rate_date, "source":"NBP"}
+
+
 def won(value: object, rate: object) -> str:
     money = Decimal(str(value or "0"))
     conversion = Decimal(str(rate))
@@ -137,7 +187,8 @@ def won(value: object, rate: object) -> str:
 
 
 def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | None = None,
-                  fetcher=fetch_history, nbu_loader=fetch_nbu_quotes) -> dict:
+                  fetcher=fetch_history, nbu_loader=fetch_nbu_quotes,
+                  nbp_loader=fetch_nbp_quotes) -> dict:
     """Attach independently auditable KRW estimates without mutating original values."""
     rows = ledger.get("rows", [])
     settlements = ledger.get("settlements", [])
@@ -164,6 +215,8 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
     saved_rates = {}
     nbu_cache = {}
     nbu_used_dates = set()
+    nbp_cache = {}
+    nbp_used_dates = set()
     missing_sales = 0
     missing_currencies: dict[str,int] = {}
     missing_fees = 0
@@ -187,6 +240,19 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
                 current = nbu_cross_quote(day, currency, reference[0], reference[1])
                 if current:
                     nbu_used_dates.add(day)
+        # ECB and NBU omit Chilean pesos, but the National Bank of Poland
+        # publishes dated CLP and KRW quotes in the same table.
+        if current is None and currency in NBP_CURRENCIES:
+            if day not in nbp_cache and len(nbp_cache) < NBP_MAX_DAYS:
+                try:
+                    nbp_cache[day] = nbp_loader(day)
+                except (OSError, ValueError, urllib.error.HTTPError) as error:
+                    nbp_cache[day] = None
+            reference = nbp_cache.get(day)
+            if reference:
+                current = nbp_cross_quote(day, currency, reference[0], reference[1])
+                if current:
+                    nbp_used_dates.add(day)
         if current:
             saved_rates[key] = current
         return current
@@ -258,10 +324,12 @@ def enrich_ledger(ledger: dict, previous: dict | None = None, history: dict | No
 
     ledger["fx_rates"] = saved_rates
     ledger["fx_status"] = {
-        "source": SOURCE + "; National Bank of Ukraine (NBU) fallback",
+        "source": SOURCE + "; National Bank of Ukraine (NBU) fallback; National Bank of Poland (NBP) fallback",
         "url": ECB_HISTORY,
         "fallback_url": NBU_HISTORY,
+        "nbp_fallback_url": NBP_HISTORY,
         "nbu_fallback_date_count": len(nbu_used_dates),
+        "nbp_fallback_date_count": len(nbp_used_dates),
         "checked_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "status": state,
         "missing_sales_rows": missing_sales,

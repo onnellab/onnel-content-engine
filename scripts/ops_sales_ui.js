@@ -205,7 +205,7 @@
     if(unavailable) notes.push("외화 환율을 확인할 수 없는 매출 "+unavailable+"개 행은 원화 합계에서 제외했어요.");
     if(missingFee) notes.push("확정 수수료 "+missingFee+"개 행은 환율 미확인으로 제외했어요.");
     if(fxState.status==="unavailable") notes.push("ECB 연결이 불안정해 보관된 과거 환율만 사용했어요.");
-    notes.push("ECB 기준환율을 우선 적용하고, 없는 통화는 NBU 공식 환율로 보완했어요. 금액은 원화 추정액이며 실제 입금액과 달라요.");
+    notes.push("ECB 기준환율을 우선 적용하고 미제공 통화는 NBU·NBP 공식 기준환율로 보완했어요. 금액은 원화 추정액이며 실제 입금액과 달라요.");
     notes.push("Apple 회계월 확정 정산액은 위의 판매액에 중복 합산하지 않아요.");
     byId("sales-fx-status").textContent=notes.join(" ");
   }

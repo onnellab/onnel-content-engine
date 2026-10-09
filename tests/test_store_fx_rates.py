@@ -5,7 +5,7 @@ from copy import deepcopy
 from pathlib import Path
 from decimal import Decimal
 sys.path.insert(0,str(Path(__file__).resolve().parents[1] / "scripts"))
-from store_fx_rates import parse_ecb_xml, quote, won, enrich_ledger
+from store_fx_rates import parse_ecb_xml, quote, won, enrich_ledger, fetch_nbp_quotes, nbp_cross_quote
 
 XML = b"""<Envelope><Cube><Cube time="2026-10-08">
 <Cube currency="USD" rate="1.2"/><Cube currency="KRW" rate="1800"/>
@@ -52,6 +52,51 @@ class FxReferenceTests(unittest.TestCase):
                          won("10",Decimal("11.9499")/Decimal("0.033488")))
         self.assertEqual(result["rows"][1]["net_sales_krw"],
                          won("100",Decimal("1")/Decimal("0.033488")))
+
+    def test_clp_nbp_fallback_restores_net_apple_proceeds(self):
+        calls = []
+        def nbu(day):
+            return {"KRW":Decimal("0.033"), "UAH":Decimal("1")}, day
+        def nbp(day):
+            calls.append(day)
+            return {"CLP":Decimal("0.00395"), "KRW":Decimal("0.00285")}, day
+        rows = [
+            {"date":"2026-09-23","currency":"CLP","gross":"2990",
+             "refund":"0","net_sales":"2990","units":1,
+             "proceeds":"1759","proceeds_currency":"CLP"},
+            {"date":"2026-09-23","currency":"CLP","gross":"0",
+             "refund":"-2990","net_sales":"-2990","units":-1,
+             "proceeds":"-1759","proceeds_currency":"CLP"},
+        ]
+        ledger={"rows":rows,"settlements":[]}
+        result=enrich_ledger(ledger,history=parse_ecb_xml(XML),
+                             nbu_loader=nbu,nbp_loader=nbp)
+        self.assertEqual(calls,["2026-09-23"])
+        self.assertEqual(result["fx_status"]["missing_sales_rows"],0)
+        self.assertEqual(result["fx_status"]["nbp_fallback_date_count"],1)
+        self.assertEqual(result["rows"][0]["fx_sales_source"],"NBP")
+        self.assertEqual(result["rows"][0]["net_sales_krw"],
+                         str(int(result["rows"][0]["gross_krw"])))
+        self.assertEqual(Decimal(result["rows"][0]["net_sales_krw"]) +
+                         Decimal(result["rows"][1]["net_sales_krw"]),Decimal(0))
+
+    def test_nbp_rates_use_one_published_date_for_both_currencies(self):
+        import json
+        from unittest.mock import patch
+        from io import BytesIO
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self,*args): return False
+            def read(self,*args):
+                return json.dumps([{"effectiveDate":"2026-09-23",
+                    "rates":[{"code":"CLP","mid":0.00395},
+                             {"code":"KRW","mid":0.00285}]}]).encode()
+        with patch("store_fx_rates.urllib.request.urlopen",return_value=Response()):
+            rates,as_of=fetch_nbp_quotes("2026-09-24")
+        q=nbp_cross_quote("2026-09-24","CLP",rates,as_of)
+        self.assertEqual(q["as_of"],"2026-09-23")
+        self.assertEqual(q["source"],"NBP")
+        self.assertEqual(Decimal(q["rate"]),Decimal("0.00395")/Decimal("0.00285"))
 
     def test_sales_refunds_confirmed_fees_apple_proceeds_are_independent(self):
         src={

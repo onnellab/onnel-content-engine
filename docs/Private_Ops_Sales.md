@@ -89,8 +89,13 @@ SAR or UAH), it retrieves that date's official rates from the
 National Bank of Ukraine (NBU) open-data endpoint
 `https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange`.
 NBU rates are hryvnia-per-unit, so KRW-per-unit is derived as
-`UAH per source currency / UAH per KRW`. The NBU fallback is bounded
-to 30 distinct dates per sync and cached by day, never guesses a rate.
+`UAH per source currency / UAH per KRW`. NBU does not publish CLP;
+the National Bank of Poland (NBP) official table A publishes both CLP
+and KRW in PLN-per-unit, enabling `PLN per CLP / PLN per KRW` with a
+common published reference date (at most 7 calendar days old):
+`https://api.nbp.pl/api/exchangerates/tables/a/`.
+NBU/NBP fallbacks are each bounded to 30 distinct dates per sync and
+cached by day. Every money field retains FX source and effective date.
 ECB conversions use the transaction date or most recent preceding rate within
 7 calendar days; NBU uses the official dated observation.
 
