@@ -38,12 +38,21 @@ jobs:
           settlements=[r for r in record.get("settlements",[])
                        if str(r.get("country","")).upper() not in {"KR","ZZ",""}
                        and str(r.get("fiscal_month",""))>="2026-01"]
+          apple_fields=("date","app_name","app_slug","country","currency","units",
+                        "gross","refund","net_sales","proceeds","proceeds_currency",
+                        "gross_krw","refund_krw","net_sales_krw","proceeds_krw",
+                        "fx_sales_rate","fx_sales_date","fx_sales_source")
+          apple_daily=[
+            {key:row.get(key) for key in apple_fields}
+            for row in record.get("rows",[]) if row.get("platform")=="ios"
+          ]
           report={
             "schema_version":1,
             "origin":"ONNELLAB encrypted verified finance ledger",
             "checked_at":record.get("checked_at"),
             "fees":fees,
             "apple_foreign_settlements":settlements,
+            "apple_daily_rows":apple_daily,
             "source_status":{
               k: {x:v for x,v in record.get("source_status",{}).get(k,{}).items()
                   if x in ("status","earnings_files","sales_files","fee_source_status",
