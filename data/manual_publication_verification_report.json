@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-06T13:54:33+09:00",
+  "checked_at": "2026-10-09T13:37:41+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 64,
-    "already_done": 57,
+    "checked": 68,
+    "already_done": 60,
     "verified": 0,
-    "pending": 7
+    "pending": 8
   },
   "items": [
     {
@@ -370,6 +370,18 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0016::x::en::x",
+      "topic_id": "TOPIC-0016",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2108080782656876864",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0016::bluesky::en::bluesky",
       "topic_id": "TOPIC-0016",
       "platform": "bluesky",
@@ -380,6 +392,18 @@
       "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mvtqczhxns2n",
       "verification_method": "",
       "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0016::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0016",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7513847492547919872/",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink"
     },
     {
       "manual_key": "TOPIC-0018::bluesky::en::bluesky",
@@ -500,6 +524,18 @@
       "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mx3zygb7gi24",
       "verification_method": "",
       "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0033::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0033",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7513847187164897281/",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink"
     },
     {
       "manual_key": "TOPIC-0001::devto::en::markdown",
@@ -694,30 +730,6 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0016::x::en::x",
-      "topic_id": "TOPIC-0016",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0016::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0016",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
       "manual_key": "TOPIC-0018::x::en::x",
       "topic_id": "TOPIC-0018",
       "platform": "x",
@@ -766,11 +778,47 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0033::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0033",
+      "manual_key": "TOPIC-0044::x::en::x",
+      "topic_id": "TOPIC-0044",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0044::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0044",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0044::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0044",
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0044::devto::en::markdown",
+      "topic_id": "TOPIC-0044",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
       "status": "pending",
       "reason": "No matching public post found",
       "posted_url": "",
