@@ -106,6 +106,87 @@ class LedgerTests(unittest.TestCase):
         self.assertEqual(status["earnings_months"], ["2026-08", "2026-09"])
         self.assertEqual(len(rows), 2)
 
+    def test_google_corrected_reports_replace_stale_fees_and_sales(self):
+        from store_sales_ledger import merge_sales_history
+        previous = {
+            "source_status":{"google":{
+                "status":"ok","sales_months":["2026-08","2026-09"],
+                "earnings_months":["2026-08","2026-09"]
+            }},
+            "rows":[
+                {"date":"2026-09-12","platform":"android","app_slug":"tagweaver",
+                 "country":"US","currency":"KRW","gross":"100","fee":"30"},
+                {"date":"2026-09-13","platform":"android","app_slug":"tagweaver",
+                 "country":"US","currency":"KRW","gross":"100","fee":"30"},
+                {"date":"2026-09-14","platform":"ios","app_slug":"tagweaver",
+                 "country":"US","currency":"USD","gross":"2.99"},
+            ]
+        }
+        latest = {
+            "source_status":{
+                "google":{"status":"ok","sales_files":2,"earnings_files":2,
+                          "sales_months":["2026-08","2026-09"],
+                          "earnings_months":["2026-08","2026-09"]},
+                "apple":{"refreshed_days":[]}
+            },
+            "rows":[
+                {"date":"2026-09-12","platform":"android","app_slug":"tagweaver",
+                 "country":"US","currency":"KRW","gross":"100","fee":"10"},
+            ]
+        }
+        merged=merge_sales_history(latest,previous,date(2026,10,9))
+        self.assertEqual(len(merged),2)
+        google=[row for row in merged if row["platform"]=="android"]
+        self.assertEqual(len(google),1)
+        self.assertEqual(google[0]["fee"],"10")
+        self.assertTrue(latest["source_status"]["google"]["snapshot_replaced"])
+
+    def test_incomplete_google_report_does_not_erase_previous_expense(self):
+        from store_sales_ledger import merge_sales_history
+        previous={
+            "source_status":{"google":{"status":"ok",
+                "sales_months":["2026-08","2026-09"],
+                "earnings_months":["2026-08","2026-09"]}},
+            "rows":[{"date":"2026-09-12","platform":"android",
+                     "app_slug":"tagweaver","country":"US","currency":"KRW",
+                     "fee":"825"}]
+        }
+        latest={
+            "source_status":{
+                "google":{"status":"ok","sales_files":2,"earnings_files":1,
+                          "sales_months":["2026-08","2026-09"],
+                          "earnings_months":["2026-09"]},
+                "apple":{"refreshed_days":[]}
+            },
+            "rows":[{"date":"2026-09-12","platform":"android",
+                     "app_slug":"tagweaver","country":"US","currency":"KRW",
+                     "fee":"0"}]
+        }
+        merged=merge_sales_history(latest,previous,date(2026,10,9))
+        self.assertEqual(merged[0]["fee"],"825")
+        self.assertEqual(latest["source_status"]["google"]["status"],"partial")
+        self.assertTrue(latest["source_status"]["google"]["previous_snapshot_retained"])
+
+    def test_google_complete_refresh_keeps_unaffected_apple_and_replaces_refresh(self):
+        from store_sales_ledger import merge_sales_history
+        previous={"source_status":{"google":{"status":"ok"}},
+                  "rows":[{"date":"2026-09-12","platform":"ios",
+                           "app_slug":"tagweaver","country":"US","currency":"USD",
+                           "gross":"2.99"}]}
+        latest={
+            "source_status":{
+                "google":{"status":"ok","sales_files":1,"earnings_files":1,
+                          "sales_months":["2026-09"],
+                          "earnings_months":["2026-09"]},
+                "apple":{"refreshed_days":["2026-09-12"]}
+            },
+            "rows":[{"date":"2026-09-12","platform":"ios",
+                     "app_slug":"tagweaver","country":"US","currency":"USD",
+                     "gross":"4.99"}]
+        }
+        self.assertEqual(merge_sales_history(latest,previous,date(2026,10,9))[0]["gross"],
+                         "4.99")
+
     def test_apple_daily_report_no_fee_inferred(self):
         fields = [
             "Apple Identifier", "Country Code", "Customer Currency", "Currency of Proceeds",

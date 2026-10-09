@@ -74,6 +74,10 @@ def sales_page_body(ledger: Mapping | None) -> str:
         code = str(source.get("status","not_collected")) if isinstance(source,dict) else "not_collected"
         state.append('<div class="sales-state-item"><b>'+name+'</b> <span>'+html.escape(labels.get(code,code))+'</span></div>')
     google_status = statuses.get("google", {})
+    if isinstance(google_status, dict) and google_status.get("previous_snapshot_retained"):
+        state.append('<div class="sales-state-item"><b>Google 정산</b><span>'
+                     '보고서 일부 미수신 · 이전 확인 자료 유지 중 (최신 거래 미반영 가능)'
+                     '</span></div>')
     if isinstance(google_status,dict) and google_status.get("missing_earnings_months"):
         missing = ", ".join(google_status["missing_earnings_months"])
         state.append('<div class="sales-state-item"><b>Google 확정 수수료</b><span>미수신 월: '+

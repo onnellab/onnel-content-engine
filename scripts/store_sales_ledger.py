@@ -283,6 +283,12 @@ def google_ledger(stores: list[dict], as_of: date, earliest: date = FIRST_DAY) -
     statuses["fee_source_status"] = (
         "available" if statuses["earnings_files"] else "awaiting_earnings_report"
     )
+    if not statuses["sales_files"] and not statuses["earnings_files"]:
+        statuses["status"] = "no_reports"
+    elif not statuses["sales_files"] or not statuses["earnings_files"] or (
+        statuses["earnings_unrecognized_files"]
+    ):
+        statuses["status"] = "partial"
     return events, statuses
 
 
@@ -476,6 +482,68 @@ def build_ledger(as_of: date, *, earliest: date = FIRST_DAY, apple: bool = True,
     }
 
 
+def merge_sales_history(latest: dict, previous: dict, as_of: date) -> list[dict]:
+    """Replace complete Google snapshots; refresh Apple only on fetched days.
+
+    Google ZIPs are collected afresh every run. Keeping a stale Google row when
+    it disappeared from a corrected monthly Earnings report would overstate
+    confirmed fees. Conversely, an incomplete source must not erase evidence.
+    """
+    old_rows = [row for row in previous.get("rows", []) if isinstance(row, dict)]
+    new_rows = [row for row in latest.get("rows", []) if isinstance(row, dict)]
+    statuses = latest.get("source_status", {})
+    current_google = statuses.get("google", {})
+    old_google = (previous.get("source_status") or {}).get("google") or {}
+
+    current_months = {
+        name: set(current_google.get(name, []))
+        for name in ("sales_months", "earnings_months")
+    }
+    missing_old = {
+        name: sorted(set(old_google.get(name, [])) - current_months[name])
+        for name in current_months
+    }
+    google_complete = (
+        current_google.get("status") == "ok"
+        and current_google.get("sales_files", 0) > 0
+        and current_google.get("earnings_files", 0) > 0
+        and not any(missing_old.values())
+    )
+    current_google["snapshot_replaced"] = google_complete
+    if not google_complete and any(row.get("platform") == "android" for row in old_rows):
+        current_google["underlying_status"] = current_google.get("status", "not_collected")
+        current_google["status"] = "partial"
+        current_google["previous_snapshot_retained"] = True
+        current_google["missing_previous_report_months"] = {
+            name: len(months) for name, months in missing_old.items()
+        }
+
+    refreshed_apple = set(
+        statuses.get("apple", {}).get("refreshed_days", [])
+    )
+    limit = as_of.isoformat()
+    def identity(row):
+        return tuple(str(row.get(field, "")) for field in
+                     ("date", "platform", "app_slug", "country", "currency"))
+    combined = {}
+    had_previous_google = any(row.get("platform") == "android" for row in old_rows)
+    for row in old_rows:
+        if row.get("date", "") > limit:
+            continue
+        if row.get("platform") == "ios" and row.get("date") in refreshed_apple:
+            continue
+        if row.get("platform") == "android" and google_complete:
+            continue
+        combined[identity(row)] = row
+    for row in new_rows:
+        if row.get("date", "") > limit:
+            continue
+        if row.get("platform") == "android" and not google_complete and had_previous_google:
+            continue
+        combined[identity(row)] = row
+    return sorted(combined.values(), key=identity, reverse=True)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build private store finance ledger")
     parser.add_argument("--output", type=Path, required=True)
@@ -491,18 +559,7 @@ def main() -> int:
     ledger = build_ledger(args.as_of, earliest=args.earliest, google=not args.no_google,
                           apple=not args.no_apple, previous=previous)
     if previous:
-        # On a refreshed report date remove historical rows first, then replace
-        # with the latest Apple daily source, avoiding stale/duplicated sales.
-        def identity(row):
-            return tuple(str(row.get(k, "")) for k in
-                         ("date", "platform", "app_slug", "country", "currency"))
-        refreshed = set(ledger["source_status"].get("apple", {}).get("refreshed_days", []))
-        combined = {identity(row): row for row in previous.get("rows", [])
-                    if isinstance(row, dict)
-                    and row.get("date", "") <= args.as_of.isoformat()
-                    and not (row.get("platform") == "ios" and row.get("date") in refreshed)}
-        combined.update({identity(row): row for row in ledger["rows"]})
-        ledger["rows"] = sorted(combined.values(), key=identity, reverse=True)
+        ledger["rows"] = merge_sales_history(ledger, previous, args.as_of)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     os.chmod(args.output, 0o600)

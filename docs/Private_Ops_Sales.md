@@ -30,7 +30,11 @@ Google Play:
   `earnings/earnings_YYYYMM_<account-identifier>.zip` actual Google fee,
   usually posted after the reporting month; fee refunds must reverse expense.
   The collector reports unmatched ZIP filenames as counts, without exposing
-  account identifiers.
+  account identifiers. A complete sync replaces previously aggregated Google
+  rows rather than preserving deleted/corrected fees. Before replacement, it
+  checks both Sales and Earnings reports are present and all previously
+  seen months remain available. If coverage is incomplete, the last verified
+  Google snapshot remains and the dashboard explicitly warns it may be stale.
 - Original foreign currencies are not directly summed. Dated ECB KRW reference estimates are shown separately, alongside original-currency breakdowns.
 
 Apple:

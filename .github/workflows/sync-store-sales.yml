@@ -85,7 +85,9 @@ jobs:
                   for field in ("status", "days_checked", "days_missing", "new_reports",
                                 "sales_files", "earnings_files", "earnings_objects_listed",
                                 "earnings_unrecognized_files", "missing_earnings_months",
-                                "fee_source_status", "app_mapping_version",
+                                "fee_source_status", "snapshot_replaced",
+                                "previous_snapshot_retained", "missing_previous_report_months",
+                                "app_mapping_version",
                                 "sku_mapping", "sku_aliases", "rechecked_history", "errors")
                   if field in status
               }
