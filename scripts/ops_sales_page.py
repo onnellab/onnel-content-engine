@@ -2,8 +2,11 @@
 from __future__ import annotations
 import html
 import json
+from pathlib import Path
 from collections.abc import Mapping
 from decimal import Decimal, InvalidOperation
+
+SALES_LOGIC = Path(__file__).with_name('ops_sales_ui.js').read_text(encoding='utf-8')
 
 def safe_json(value):
     return json.dumps(value, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c").replace("&", "\\u0026")
@@ -33,6 +36,8 @@ def confirmed_foreign_fees(rows: list[dict]) -> list[dict]:
             "currency":str(row.get("currency") or "").upper(),
             "source":"Google Play Earnings (Google fee)",
             "kind":"refund_adjustment" if fee < 0 else "platform_commission",
+            "fee_krw":row.get("fee_krw"),
+            "fx_sales_date":row.get("fx_sales_date"),
         })
     return verified
 
@@ -47,7 +52,9 @@ def sales_page_body(ledger: Mapping | None) -> str:
         statuses = {}
     allowed = {"date", "platform", "app_slug", "app_name", "country", "currency",
                "units", "gross", "refund", "net_sales", "fee", "fee_confirmed",
-               "proceeds", "proceeds_currency", "sources"}
+               "proceeds", "proceeds_currency", "sources",
+               "gross_krw", "refund_krw", "net_sales_krw", "fee_krw",
+               "fx_sales_rate", "fx_sales_date"}
     data = [{k: v for k, v in row.items() if k in allowed} for row in rows if isinstance(row, dict)]
     monthly = ledger.get("settlements", [])
     monthly = monthly if isinstance(monthly, list) else []
@@ -70,20 +77,31 @@ def sales_page_body(ledger: Mapping | None) -> str:
         missing = ", ".join(google_status["missing_earnings_months"])
         state.append('<div class="sales-state-item"><b>Google 확정 수수료</b><span>미수신 월: '+
                      html.escape(missing)+'</span></div>')
-    return HTML.replace("__LEDGER__",safe_json(data)).replace("__SETTLEMENTS__",safe_json(monthly)).replace("__GRANT__",safe_json(verified)).replace("__STATUSES__",safe_json(statuses)).replace(
-        "__STATE__", "".join(state)).replace("__CHECKED__", checked)
+    # Fill trusted HTML/script placeholders BEFORE user-derived JSON, so an
+    # app/report value that happens to contain a placeholder stays inert data.
+    base = (HTML.replace("__SALES_JS__", SALES_LOGIC)
+            .replace("__STATE__", "".join(state))
+            .replace("__CHECKED__", checked))
+    return (base.replace("__LEDGER__",safe_json(data))
+        .replace("__SETTLEMENTS__",safe_json(monthly))
+        .replace("__GRANT__",safe_json(verified))
+        .replace("__FX_STATUS__",safe_json(ledger.get("fx_status", {})))
+        .replace("__STATUSES__",safe_json(statuses)))
 
 HTML = r"""
 <header class="ops-head">
  <p class="eyebrow" data-ko="판매·정산" data-en="Sales & settlement">판매·정산</p>
- <h1 data-ko="월별 앱 매출" data-en="Monthly app sales">월별 앱 매출</h1>
- <p data-ko="매월 1일부터 조회일까지, 앱·국가·판매일별 판매금액을 확인해요."
- data-en="Review daily app sales by country, from the first of each month.">매월 1일부터 조회일까지, 앱·국가·판매일별 판매금액을 확인해요.</p>
+ <h1 data-ko="앱 매출 분석" data-en="App sales analytics">앱 매출 분석</h1>
+ <p data-ko="월별·연도별·직접 기간 지정·전체 누적 매출을 비교하고 원화 환산 추정액을 확인해요."
+ data-en="Explore monthly, yearly, custom, and lifetime sales with estimated KRW conversions.">월별·연도별·직접 기간 지정·전체 누적 매출을 비교하고 원화 환산 추정액을 확인해요.</p>
 </header>
 <style>
-.sales-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:17px;border:1px solid var(--line);background:white;border-radius:12px}
-.sales-controls label{display:grid;gap:5px;color:#625c55;font-size:12px;font-weight:730}
-.sales-controls select{width:100%;border:1px solid #ddd4c8;padding:10px;min-height:43px;border-radius:8px;color:#292825;background:white;font:inherit;font-size:14px}
+.sales-controls,.sales-period-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:17px;border:1px solid var(--line);background:white;border-radius:12px}
+.sales-period-controls{grid-template-columns:repeat(3,minmax(0,1fr));margin:14px 0 10px}
+.sales-controls [hidden],.sales-period-controls [hidden]{display:none!important}
+.sales-period-error{color:#a13c51;font-size:13px;margin:6px 0 10px}
+.sales-controls label,.sales-period-controls label{display:grid;gap:5px;color:#625c55;font-size:12px;font-weight:730}
+.sales-controls select,.sales-period-controls select,.sales-period-controls input{width:100%;box-sizing:border-box;border:1px solid #ddd4c8;padding:10px;min-height:43px;border-radius:8px;color:#292825;background:white;font:inherit;font-size:14px}
 .sales-actions{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:12px;margin:15px 0}
 .sales-actions button{padding:10px 15px;background:#f7f3ff;color:#514275;border:1px solid #d9c8f0;border-radius:8px;font-weight:750;cursor:pointer;min-height:42px}
 .sales-actions button:disabled{cursor:not-allowed;opacity:.55}
@@ -102,16 +120,48 @@ HTML = r"""
 .sales-caption{font-size:13px;color:#686159}
 .sales-amount{font-weight:740;color:#333039}
 .sales-secondary{margin-top:28px}.sales-secondary h2{font-size:19px;color:#36323b;margin:0 0 9px}
-@media(max-width:800px){.sales-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:480px){.sales-controls{gap:9px;padding:12px}.sales-table th,.sales-table td{padding:10px 9px}}
+.sales-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px;margin:16px 0 8px}
+.sales-summary-item{border:1px solid var(--line);border-radius:10px;padding:14px;background:white;display:grid;gap:9px;min-width:0}
+.sales-summary-item small{font-size:12px;color:#736a7b;font-weight:730}
+.sales-summary-item strong{font-size:21px;color:#34313b;font-weight:800;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.sales-original{margin:12px 0 0}
+.sales-original h2{font-size:16px;margin:16px 0 9px;color:#45404a}
+.sales-period-note{font-size:12px;line-height:1.6;color:#777067;margin:8px 0 13px}
+@media(max-width:800px){.sales-controls,.sales-period-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.sales-controls,.sales-period-controls{gap:9px;padding:12px}.sales-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.sales-summary-item{padding:12px}.sales-summary-item strong{font-size:18px}.sales-table th,.sales-table td{padding:10px 9px}}
 </style>
 <section class="sales-states" aria-label="연동 상태">__STATE__</section>
+<section class="sales-period-controls" aria-label="매출 조회 기간">
+ <label><span data-ko="조회 기준" data-en="Period">조회 기준</span>
+ <select id="sales-period-mode" aria-label="기간 선택">
+ <option value="month">월별</option><option value="year">연도별</option>
+ <option value="custom">기간 직접 지정</option><option value="all">전체 누적</option>
+ </select></label>
+ <label id="sales-month-field"><span data-ko="월" data-en="Month">월</span><select id="sales-month"></select></label>
+ <label id="sales-year-field" hidden><span data-ko="연도" data-en="Year">연도</span><select id="sales-year"></select></label>
+ <label id="sales-start-field" hidden><span data-ko="시작일" data-en="Start date">시작일</span><input type="date" id="sales-start"/></label>
+ <label id="sales-end-field" hidden><span data-ko="종료일" data-en="End date">종료일</span><input type="date" id="sales-end"/></label>
+</section>
+<div id="sales-period-error" class="sales-period-error" role="status" aria-live="polite"></div>
 <section class="sales-controls" aria-label="매출 상세 조건">
- <label><span data-ko="월" data-en="Month">월</span><select id="sales-month"></select></label>
  <label><span data-ko="스토어" data-en="Store">스토어</span>
    <select id="sales-platform"><option value="">전체 스토어</option><option value="android">Google Play</option><option value="ios">App Store</option></select></label>
  <label><span data-ko="앱" data-en="App">앱</span><select id="sales-app"><option value="">모든 앱</option></select></label>
  <label><span data-ko="국가" data-en="Country">국가</span><select id="sales-country"><option value="">모든 국가</option></select></label>
+</section>
+<section class="sales-summary" aria-label="선택한 기간의 원화 매출 요약">
+ <div class="sales-summary-item"><small>환불 반영 매출 · 원화 추정</small><strong id="sales-total-net">—</strong></div>
+ <div class="sales-summary-item"><small>고객 결제액 · 원화 추정</small><strong id="sales-total-gross">—</strong></div>
+ <div class="sales-summary-item"><small>환불 · 원화 추정</small><strong id="sales-total-refunds">—</strong></div>
+ <div class="sales-summary-item"><small>확정 수수료 · 원화 환산</small><strong id="sales-total-fee">—</strong></div>
+ <div class="sales-summary-item"><small>환불 반영 판매 건수</small><strong id="sales-total-units">—</strong></div>
+</section>
+<p id="sales-fx-status" class="sales-period-note" role="status" aria-live="polite">과거 기준환율을 확인하고 있어요.</p>
+<section class="sales-original">
+ <h2>통화별 원금액</h2>
+ <div class="sales-table-wrap"><table class="sales-table" aria-label="통화별 매출">
+ <thead><tr><th>통화</th><th>판매액</th><th>환불</th><th>환불 반영 매출</th><th>확정 수수료</th><th>건수</th></tr></thead>
+ <tbody id="sales-currency-body"></tbody></table></div>
 </section>
 <div class="sales-actions">
  <div class="sales-caption" id="sales-caption" aria-live="polite">데이터를 조회하고 있어요.</div>
@@ -124,15 +174,16 @@ HTML = r"""
 <th data-ko="스토어" data-en="Store">스토어</th><th data-ko="국가" data-en="Country">국가</th>
 <th data-ko="건수" data-en="Units">건수</th><th data-ko="판매금액" data-en="Gross sales">판매금액</th>
 <th data-ko="환불" data-en="Refunds">환불</th><th data-ko="수수료" data-en="Fee">수수료</th>
-<th data-ko="통화" data-en="Currency">통화</th></tr></thead>
+<th data-ko="통화" data-en="Currency">통화</th><th>환불 반영 매출(원화 추정)</th><th>환율 기준일</th></tr></thead>
 <tbody id="sales-body"></tbody>
 </table>
 </div>
 <section class="sales-secondary">
  <h2 data-ko="월별 확정 정산" data-en="Monthly finalized settlements">월별 확정 정산</h2>
- <p class="sales-note">Apple 회계월 기준 확정 재무 보고서예요. 실수령액에는 세금과 수수료가 반영되어 있으며, 수수료 자체를 뜻하지 않아요.</p>
+ <p class="sales-note">Apple 회계월 기준 확정 재무 보고서예요. 회계월은 달력 날짜와 다를 수 있어요. 원화 환산액은 회계월 말일 기준환율의 추정액이며 실제 입금액과 다를 수 있어요. 위의 판매액 총계에 더하지 않아요.</p>
+ <p class="sales-caption">선택된 Apple 회계월 정산금 · 원화 환산 추정: <strong id="sales-settlement-sum">—</strong></p>
  <div class="sales-table-wrap"><table class="sales-table" aria-label="확정 재무 보고서">
- <thead><tr><th>회계월</th><th>앱</th><th>국가</th><th>판매량</th><th>고객 결제액</th><th>확정 수익금</th><th>수수료 증빙</th></tr></thead>
+ <thead><tr><th>회계월</th><th>앱</th><th>국가</th><th>판매량</th><th>고객 결제액</th><th>확정 수익금</th><th>정산금 원화 추정</th><th>수수료 증빙</th></tr></thead>
  <tbody id="settlement-body"></tbody></table></div>
 </section>
 <section class="sales-secondary">
@@ -141,144 +192,20 @@ HTML = r"""
  <div class="sales-actions"><span id="grant-fee-count" class="sales-caption"></span>
  <button type="button" id="grant-fees-export">증빙 내역 CSV 저장</button></div>
  <div class="sales-table-wrap"><table class="sales-table" aria-label="해외 수수료 명세">
- <thead><tr><th>발생일자</th><th>세부내용</th><th>금액</th><th>통화</th><th>근거 자료</th></tr></thead>
+ <thead><tr><th>발생일자</th><th>세부내용</th><th>금액</th><th>통화</th><th>원화 환산</th><th>근거 자료</th></tr></thead>
  <tbody id="grant-fees-body"></tbody></table></div>
 </section>
 <p class="sales-note">
  • Google Play 판매금액은 현지 통화의 예상 판매 보고서, 수수료는 확정 수익 보고서의 Google fee 거래예요.<br>
  • Apple 판매액에는 세금이 포함될 수 있으므로 소비자 가격과 개발자 수익의 차이를 수수료로 표시하지 않아요.<br>
- • 국가·통화별 금액을 서로 환산하거나 임의로 더하지 않아요. 집계일 이후 거래와 보고서 미수집은 0원으로 취급하지 않아요.<br>
+ • 외화 매출은 ECB 판매일 또는 직전 발표일 기준환율로 환산해 원화 추정 합계를 보여줘요. 원화 금액은 환산하지 않아요. 환율을 확인할 수 없는 금액은 합계에서 제외하고 표시해요.<br>
+ • 집계일 이후 거래와 보고서 미수집은 0원으로 취급하지 않아요.<br>
  마지막 갱신: __CHECKED__ (UTC)
 </p>
 <script id="sales-ledger" type="application/json">__LEDGER__</script>
 <script id="sales-settlements" type="application/json">__SETTLEMENTS__</script>
 <script id="sales-verified-fees" type="application/json">__GRANT__</script>
 <script id="sales-source-status" type="application/json">__STATUSES__</script>
-<script>
-(() => {
- const rows = JSON.parse(document.getElementById('sales-ledger').textContent || '[]');
- const settlements = JSON.parse(document.getElementById('sales-settlements').textContent || '[]');
- const confirmedFees = JSON.parse(document.getElementById('sales-verified-fees').textContent || '[]');
- const month = document.getElementById('sales-month');
- const platform = document.getElementById('sales-platform');
- const app = document.getElementById('sales-app');
- const country = document.getElementById('sales-country');
- const body = document.getElementById('sales-body');
- const caption = document.getElementById('sales-caption');
- const exportButton = document.getElementById('sales-export');
- const nowParts = new Intl.DateTimeFormat('en', {timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'})
-   .formatToParts(new Date());
- const part = kind => nowParts.find(x => x.type === kind)?.value || '';
- const today = part('year') + '-' + part('month') + '-' + part('day');
- const currentMonth = today.slice(0,7);
- const months = new Set(rows.map(r=>String(r.date||'').slice(0,7)).filter(x=>/^\d{4}-\d{2}$/.test(x)));
- for(let year=2026;year<=Number(part('year'));year++){
-   for(let m=1;m<=12;m++){
-     const value=year+'-'+String(m).padStart(2,'0');
-     if(value<=currentMonth)months.add(value);
-   }
- }
- months.add(currentMonth);
- for(const value of [...months].sort().reverse()){
-   const opt=document.createElement('option');opt.value=value;opt.textContent=value;month.append(opt);
- }
- month.value=currentMonth;
- for(const [key,element] of [['app_slug',app],['country',country]]){
-   for(const value of [...new Set(rows.map(r=>String(r[key]||'')).filter(Boolean))].sort()){
-     const opt=document.createElement('option');opt.value=value;opt.textContent=value;element.append(opt);
-   }
- }
- const money = v => {const n=Number(v);return Number.isFinite(n)?n.toLocaleString('ko-KR',{maximumFractionDigits:2}):'—';};
- const cell = (tr,value,cls='') => {const td=document.createElement('td');td.textContent=String(value??'—');if(cls)td.className=cls;tr.append(td);};
- const filtered = () => rows.filter(r=>r.date && r.date.startsWith(month.value) && r.date<=today &&
-   (!platform.value||r.platform===platform.value)&&(!app.value||r.app_slug===app.value)&&
-   (!country.value||r.country===country.value));
- const draw = () => {
-   const visible=filtered();body.replaceChildren();
-   for(const row of visible){
-     const tr=document.createElement('tr');
-     cell(tr,row.date);cell(tr,row.app_name||row.app_slug);
-     cell(tr,row.platform==='ios'?'App Store':'Google Play');cell(tr,row.country);
-     cell(tr,row.units,'num');cell(tr,money(row.gross),'num sales-amount');
-     cell(tr,money(row.refund),'num');cell(tr,row.fee_confirmed?money(row.fee):'미확정','num');
-     cell(tr,row.currency);body.append(tr);
-   }
-   if(!visible.length){
-     const tr=document.createElement('tr');const td=document.createElement('td');
-     td.colSpan=9;td.className='sales-empty';td.textContent='이 조건에 해당하는 확인된 판매 자료가 없어요. 아직 수집 중일 수도 있어요.';
-     tr.append(td);body.append(tr);
-   }
-   caption.textContent=month.value+' · '+visible.length+'개 내역 (1일~'+(month.value===currentMonth?today:'말일')+')';
-   exportButton.disabled=!visible.length;
-   drawExtras();
- };
- const filteredFees = () => confirmedFees.filter(r => r.date.startsWith(month.value)
-     && (!platform.value || platform.value==='android') &&
-     (!app.value || r.app_slug===app.value) &&
-     (!country.value || r.country===country.value));
- const drawExtras = () => {
-   const settlementBody=document.getElementById('settlement-body');
-   settlementBody.replaceChildren();
-   const financeRows=settlements.filter(r=>r.fiscal_month===month.value
-      && (!platform.value || platform.value==='ios')
-      && (!app.value || r.app_slug===app.value)
-      && (!country.value || r.country===country.value));
-   for(const item of financeRows){
-     const tr=document.createElement('tr');
-     for(const field of [item.fiscal_month,item.app_name,item.country,item.units,
-       (item.gross||'0')+' '+(item.customer_currency||''),
-       (item.proceeds||'0')+' '+item.proceeds_currency,'별도 증빙 필요']){
-       cell(tr,field);
-     }
-     settlementBody.append(tr);
-   }
-   if(!financeRows.length){
-     const tr=document.createElement('tr'),td=document.createElement('td');
-     td.colSpan=7;td.className='sales-empty';td.textContent='이 회계월에 확인된 확정 정산 보고서가 없어요.';
-     tr.append(td);settlementBody.append(tr);
-   }
-   const grantBody=document.getElementById('grant-fees-body');
-   grantBody.replaceChildren();
-   const fees=filteredFees();
-   for(const item of fees){
-     const tr=document.createElement('tr');
-     const kind=item.kind==='refund_adjustment'?'환불 수수료 조정':'해외 판매 플랫폼 정산 수수료';
-     const detail='Google Play · '+item.app_name+' · '+item.country+' · '+kind;
-     for(const part of [item.date,detail,item.fee,item.currency,item.source])cell(tr,part);
-     grantBody.append(tr);
-   }
-   if(!fees.length){
-     const tr=document.createElement('tr'),td=document.createElement('td');
-     td.colSpan=5;td.className='sales-empty';
-     td.textContent='확정된 해외 플랫폼 수수료 자료가 없어요. Google Earnings 수신 후 자동 표시돼요.';
-     tr.append(td);grantBody.append(tr);
-   }
-   document.getElementById('grant-fee-count').textContent=month.value+' · 확인된 '+fees.length+'개 내역';
-   document.getElementById('grant-fees-export').disabled=!fees.length;
- };
- [month,platform,app,country].forEach(node=>node.addEventListener('change',draw));
- exportButton.addEventListener('click',()=>{
-   const fields=['date','app_name','platform','country','units','gross','refund','fee','fee_confirmed','currency'];
-   const escapeCsv=v=>'"'+String(v??'').replaceAll('"','""')+'"';
-   const csv=[fields.join(','),...filtered().map(r=>fields.map(k=>escapeCsv(k==='fee'&&!r.fee_confirmed?'':r[k])).join(','))].join('\r\n');
-   const url=URL.createObjectURL(new Blob(['\ufeff',csv],{type:'text/csv;charset=utf-8'}));
-   const anchor=document.createElement('a');anchor.href=url;anchor.download='ONNELLAB-sales-'+month.value+'.csv';anchor.click();
-   setTimeout(()=>URL.revokeObjectURL(url),2000);
- });
- document.getElementById('grant-fees-export').addEventListener('click',()=>{
-   const fields=['발생일자','세부내용','금액','통화','근거자료'];
-   const csvQuote=v=>'"'+String(v??'').replaceAll('"','""')+'"';
-   const entries=filteredFees().map(r=>[
-     r.date,'Google Play / '+r.app_name+' / '+r.country+' / '+
-       (r.kind==='refund_adjustment'?'환불 수수료 조정':'플랫폼 정산 수수료'),
-     r.fee,r.currency,r.source]);
-   const csv=[fields,...entries].map(row=>row.map(csvQuote).join(',')).join('\\r\\n');
-   const url=URL.createObjectURL(new Blob(['\\ufeff',csv],{type:'text/csv;charset=utf-8'}));
-   const a=document.createElement('a');
-   a.href=url;a.download='ONNELLAB-overseas-fees-'+month.value+'.csv';a.click();
-   setTimeout(()=>URL.revokeObjectURL(url),2000);
- });
- draw();
-})();
-</script>
+<script id="sales-fx-data" type="application/json">__FX_STATUS__</script>
+<script>__SALES_JS__</script>
 """
