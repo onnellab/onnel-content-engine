@@ -51,14 +51,14 @@
         "slug": "organize-local-music-library-offline-android",
         "category": "music",
         "language": "en",
-        "status": "review",
-        "url": "generated/markdown/en/music/organize-local-music-library-offline-android.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/organize-local-music-library-offline-android/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "music"
         ],
-        "score": 9
+        "score": 10
       },
       {
         "topic_id": "TOPIC-0003",

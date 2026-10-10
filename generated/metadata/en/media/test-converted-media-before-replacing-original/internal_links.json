@@ -31,24 +31,89 @@
     "related_articles": [
       {
         "topic_id": "TOPIC-0018",
-        "title": "Choose a media output format before conversion",
+        "title": "How to Choose a Media Output Format Before Conversion",
         "slug": "choose-media-output-format-before-conversion",
         "category": "media",
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/choose-media-output-format-before-conversion/",
         "destination": "published_article",
-        "relationship": "prerequisite",
+        "relationship": "comparison",
         "shared_clusters": [
           "media"
         ],
-        "score": 16,
-        "verification": {
-          "checked_at": "2026-10-09",
-          "method": "Read-only public HTTP GET; parent confirmed 200 and localized title",
-          "source_queue_language": "en",
-          "note": "Homepage localization of the existing article; no new source-queue identity is invented."
-        }
+        "score": 16
+      },
+      {
+        "topic_id": "TOPIC-0007",
+        "title": "How to Convert Local Media Files Privately",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 14
+      },
+      {
+        "topic_id": "TOPIC-0015",
+        "title": "How to Verify Audio Clips Before Combining Them",
+        "slug": "verify-audio-clips-before-combining",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/verify-audio-clips-before-combining/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 12
+      },
+      {
+        "topic_id": "TOPIC-0009",
+        "title": "How to Trim Audio Recordings Without a Full Editor",
+        "slug": "trim-audio-recordings-without-full-editor",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0031",
+        "title": "How to Inspect a Large Log File Without Altering the Original",
+        "slug": "inspect-large-log-file-without-altering-original",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0001",
+        "title": "How to Read Large TXT Files Without Lag",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
       }
     ],
     "related_apps": [
@@ -63,7 +128,30 @@
         "priority": 1
       }
     ],
-    "related_guides": []
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Media guide",
+        "category": "media",
+        "cluster": "media",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "converted audio checks cluster",
+        "category": "media",
+        "cluster": "converted audio checks",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "How to Read Large TXT Files Without Lag",
+        "category": "reading",
+        "cluster": "large TXT file reader",
+        "topic_id": "TOPIC-0001",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
   },
   "selection_policy": {
     "related_article_priority": [

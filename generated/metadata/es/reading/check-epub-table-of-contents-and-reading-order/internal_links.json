@@ -35,8 +35,21 @@
         "slug": "organize-local-music-library-offline-android",
         "category": "music",
         "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0069",
+        "title": "Cómo probar un archivo multimedia convertido antes de sustituir el original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "es",
         "status": "review",
-        "url": "generated/markdown/es/music/organize-local-music-library-offline-android.md",
+        "url": "generated/markdown/es/media/test-converted-media-before-replacing-original.md",
         "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
@@ -69,6 +82,14 @@
         "category": "reading",
         "cluster": "orden de capítulos EPUB",
         "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Como testar um arquivo de mídia convertido antes de substituir o original",
+        "category": "media",
+        "cluster": "testar um arquivo de mídia convertido",
+        "topic_id": "TOPIC-0066",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
   },

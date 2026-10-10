@@ -35,8 +35,21 @@
         "slug": "organize-local-music-library-offline-android",
         "category": "music",
         "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0067",
+        "title": "Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "de",
         "status": "review",
-        "url": "generated/markdown/de/music/organize-local-music-library-offline-android.md",
+        "url": "generated/markdown/de/media/test-converted-media-before-replacing-original.md",
         "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
@@ -69,6 +82,14 @@
         "category": "reading",
         "cluster": "EPUB Kapitelreihenfolge",
         "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen",
+        "category": "media",
+        "cluster": "konvertierte Mediendateien prüfen",
+        "topic_id": "TOPIC-0067",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
   },

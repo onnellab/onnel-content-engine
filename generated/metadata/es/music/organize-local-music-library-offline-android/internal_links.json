@@ -14,7 +14,7 @@
     "slug": "organize-local-music-library-offline-android",
     "category": "music",
     "language": "es",
-    "status": "review",
+    "status": "published",
     "topic_clusters": [
       "reproductor de música sin conexión",
       "archivos de audio locales",
@@ -41,6 +41,19 @@
         "relationship": "troubleshooting",
         "shared_clusters": [],
         "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0069",
+        "title": "Cómo probar un archivo multimedia convertido antes de sustituir el original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "es",
+        "status": "review",
+        "url": "generated/markdown/es/media/test-converted-media-before-replacing-original.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
       }
     ],
     "related_apps": [

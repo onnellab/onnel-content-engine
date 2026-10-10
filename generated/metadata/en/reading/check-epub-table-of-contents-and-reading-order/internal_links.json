@@ -105,17 +105,17 @@
         "score": 10
       },
       {
-        "topic_id": "TOPIC-0016",
-        "title": "How to Keep a Durable Research Reading Log",
-        "slug": "keep-durable-research-reading-log",
-        "category": "research",
+        "topic_id": "TOPIC-0044",
+        "title": "Organize a Local Music Library for Offline Listening on Android",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
         "language": "en",
         "status": "published",
-        "url": "https://onnellab.com/blog/en/keep-durable-research-reading-log/",
+        "url": "https://onnellab.com/blog/en/organize-local-music-library-offline-android/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 4
+        "score": 5
       }
     ],
     "related_apps": [

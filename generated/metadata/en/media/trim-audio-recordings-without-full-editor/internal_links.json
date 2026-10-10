@@ -76,6 +76,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0038",
+        "title": "How to Test a Converted Media File Before Replacing the Original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/media/test-converted-media-before-replacing-original.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0008",
         "title": "How to Clean Up MP3 Metadata Before Organizing Music",
         "slug": "clean-up-mp3-metadata-before-organizing-music",
@@ -96,19 +111,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0016",
-        "title": "How to Keep a Durable Research Reading Log",
-        "slug": "keep-durable-research-reading-log",
-        "category": "research",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/keep-durable-research-reading-log/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

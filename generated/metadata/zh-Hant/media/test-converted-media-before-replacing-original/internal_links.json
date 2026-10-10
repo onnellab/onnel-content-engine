@@ -30,25 +30,30 @@
   "recommendations": {
     "related_articles": [
       {
-        "topic_id": "TOPIC-0018",
-        "title": "轉檔前如何選擇媒體輸出格式",
-        "slug": "choose-media-output-format-before-conversion",
-        "category": "media",
+        "topic_id": "TOPIC-0048",
+        "title": "在 Android 整理音樂檔案，準備離線播放",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
         "language": "zh-Hant",
         "status": "published",
-        "url": "https://onnellab.com/blog/zh-hant/choose-media-output-format-before-conversion/",
+        "url": "https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/",
         "destination": "published_article",
-        "relationship": "prerequisite",
-        "shared_clusters": [
-          "media"
-        ],
-        "score": 12,
-        "verification": {
-          "checked_at": "2026-10-09",
-          "method": "Read-only public HTTP GET; parent confirmed 200 and localized title",
-          "source_queue_language": "en",
-          "note": "Homepage localization of the existing article; no new source-queue identity is invented."
-        }
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0057",
+        "title": "檢查 EPUB 的目錄連結與章節順序",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "zh-Hant",
+        "status": "review",
+        "url": "generated/markdown/zh-Hant/reading/check-epub-table-of-contents-and-reading-order.md",
+        "destination": "draft_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [
@@ -63,7 +68,22 @@
         "priority": 1
       }
     ],
-    "related_guides": []
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Media guide",
+        "category": "media",
+        "cluster": "media",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "轉檔後音訊檢查 cluster",
+        "category": "media",
+        "cluster": "轉檔後音訊檢查",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
   },
   "selection_policy": {
     "related_article_priority": [

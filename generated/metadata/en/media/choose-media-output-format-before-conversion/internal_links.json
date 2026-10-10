@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0038",
+        "title": "How to Test a Converted Media File Before Replacing the Original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/media/test-converted-media-before-replacing-original.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 15
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",
@@ -95,19 +110,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/large-text-file-slow-to-open/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0008",
-        "title": "How to Clean Up MP3 Metadata Before Organizing Music",
-        "slug": "clean-up-mp3-metadata-before-organizing-music",
-        "category": "music",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

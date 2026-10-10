@@ -14,7 +14,7 @@
     "slug": "organize-local-music-library-offline-android",
     "category": "music",
     "language": "fr",
-    "status": "review",
+    "status": "published",
     "topic_clusters": [
       "lecteur de musique hors ligne",
       "fichiers audio locaux",
@@ -41,6 +41,19 @@
         "relationship": "troubleshooting",
         "shared_clusters": [],
         "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0068",
+        "title": "Tester un fichier multimédia converti avant de remplacer l’original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "fr",
+        "status": "review",
+        "url": "generated/markdown/fr/media/test-converted-media-before-replacing-original.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
       }
     ],
     "related_apps": [

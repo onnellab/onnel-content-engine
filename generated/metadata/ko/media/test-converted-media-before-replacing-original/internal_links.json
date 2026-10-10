@@ -30,25 +30,90 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0011",
+        "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 13
+      },
+      {
         "topic_id": "TOPIC-0027",
-        "title": "변환 전에 미디어 출력 형식 선택하기",
+        "title": "미디어 변환 전에 출력 형식을 선택하는 방법",
         "slug": "choose-media-output-format-before-conversion",
         "category": "media",
         "language": "ko",
         "status": "published",
         "url": "https://onnellab.com/blog/ko/choose-media-output-format-before-conversion/",
         "destination": "published_article",
-        "relationship": "prerequisite",
+        "relationship": "comparison",
         "shared_clusters": [
           "media"
         ],
-        "score": 13,
-        "verification": {
-          "checked_at": "2026-10-09",
-          "method": "Read-only public HTTP GET; parent confirmed 200 and localized title",
-          "source_queue_language": "ko",
-          "note": "Homepage localization of the existing article; no new source-queue identity is invented."
-        }
+        "score": 13
+      },
+      {
+        "topic_id": "TOPIC-0023",
+        "title": "전문 편집기 없이 오디오 녹음을 자르는 방법",
+        "slug": "trim-audio-recordings-without-full-editor",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/trim-audio-recordings-without-full-editor/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0025",
+        "title": "오디오 클립을 합치기 전에 확인하는 방법",
+        "slug": "verify-audio-clips-before-combining",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/verify-audio-clips-before-combining/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0005",
+        "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0013",
+        "title": "음악 정리 전 MP3 메타데이터를 정돈하는 방법",
+        "slug": "clean-up-mp3-metadata-before-organizing-music",
+        "category": "music",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
       }
     ],
     "related_apps": [
@@ -63,7 +128,22 @@
         "priority": 1
       }
     ],
-    "related_guides": []
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Media guide",
+        "category": "media",
+        "cluster": "media",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "변환한 오디오 점검 cluster",
+        "category": "media",
+        "cluster": "변환한 오디오 점검",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
   },
   "selection_policy": {
     "related_article_priority": [

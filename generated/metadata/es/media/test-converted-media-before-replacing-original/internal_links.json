@@ -30,25 +30,30 @@
   "recommendations": {
     "related_articles": [
       {
-        "topic_id": "TOPIC-0018",
-        "title": "Elegir un formato de salida multimedia antes de convertir",
-        "slug": "choose-media-output-format-before-conversion",
-        "category": "media",
+        "topic_id": "TOPIC-0061",
+        "title": "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "es",
+        "status": "review",
+        "url": "generated/markdown/es/reading/check-epub-table-of-contents-and-reading-order.md",
+        "destination": "draft_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0052",
+        "title": "Cómo organizar música en Android para escucharla sin conexión",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
         "language": "es",
         "status": "published",
-        "url": "https://onnellab.com/blog/es/choose-media-output-format-before-conversion/",
+        "url": "https://onnellab.com/blog/es/organize-local-music-library-offline-android/",
         "destination": "published_article",
-        "relationship": "prerequisite",
-        "shared_clusters": [
-          "media"
-        ],
-        "score": 12,
-        "verification": {
-          "checked_at": "2026-10-09",
-          "method": "Read-only public HTTP GET; parent confirmed 200 and localized title",
-          "source_queue_language": "en",
-          "note": "Homepage localization of the existing article; no new source-queue identity is invented."
-        }
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
       }
     ],
     "related_apps": [
@@ -63,7 +68,30 @@
         "priority": 1
       }
     ],
-    "related_guides": []
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Media guide",
+        "category": "media",
+        "cluster": "media",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "comprobar audio convertido cluster",
+        "category": "media",
+        "cluster": "comprobar audio convertido",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Vérifier la table des matières et l’ordre des chapitres d’un EPUB",
+        "category": "reading",
+        "cluster": "vérifier la table des matières d’un EPUB",
+        "topic_id": "TOPIC-0060",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
   },
   "selection_policy": {
     "related_article_priority": [

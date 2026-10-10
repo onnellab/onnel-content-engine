@@ -45,6 +45,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0062",
+        "title": "원본을 교체하기 전에 변환한 미디어 파일 확인하기",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "ko",
+        "status": "review",
+        "url": "generated/markdown/ko/media/test-converted-media-before-replacing-original.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0023",
         "title": "전문 편집기 없이 오디오 녹음을 자르는 방법",
         "slug": "trim-audio-recordings-without-full-editor",
@@ -95,19 +110,6 @@
         "language": "ko",
         "status": "published",
         "url": "https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0017",
-        "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
-        "slug": "reuse-copied-text-snippets-iphone",
-        "category": "productivity",
-        "language": "ko",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
