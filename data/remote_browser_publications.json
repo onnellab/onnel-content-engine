@@ -423,7 +423,8 @@
       "observation_source": "dot cloud browser UI: fresh schedule/manual state/receipt inbox/manifest and public activity history checked before posting after due time. Verified authenticated ONNEL LAB author, public audience, complete body, article card destination and exact permalink. observed_at is tool-result observation time, not server publication time.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-10-10T04:39:25+00:00"
     }
   ]
 }
