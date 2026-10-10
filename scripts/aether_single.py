@@ -19,7 +19,7 @@ from urllib.parse import urlencode
 from zoneinfo import ZoneInfo
 
 from aether_compilation import thumbnail
-from aether_audio_review import review_audio
+from aether_offline_audio_review import review_audio
 from aether_compose import audio_duration, media_info, validate_output
 from aether_cover import lane_direction
 from aether_existing_cover import import_existing_cover
@@ -216,6 +216,10 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
         duration = audio_duration(partial)
         if abs(float(duration) - float(expected_duration)) > 5:
             raise VideoError("aether_single_backlog_duration_mismatch")
+        review = review_audio(partial, expected_duration=duration)
+        atomic_json(Path(folder) / "audio_review.json", review)
+        if not review.get("accepted"):
+            raise VideoError("aether_single_offline_audio_rejected")
         if target.exists():
             if not target.is_file() or file_hash(target) != source_hash:
                 raise VideoError("aether_single_backlog_source_integrity")
@@ -227,6 +231,7 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
         if str(error) in {
             "aether_single_backlog_duration_mismatch",
             "aether_single_backlog_source_integrity",
+            "aether_single_offline_audio_rejected",
         }:
             raise
         raise VideoError("aether_single_backlog_wav_unavailable") from None
@@ -241,7 +246,7 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
         "source_kind": "backlog_wav",
         "source_filename": source.name,
         "source_was_dataless": source_was_dataless,
-        "review": {"state": "not_run_existing_catalog_master"},
+        "review": review,
     }
 
 
@@ -516,8 +521,8 @@ def readiness(root=ROOT) -> dict:
         "render": "implemented_1920x1080_30fps_h264_yuv420p_aac256",
         "upload": "implemented_durable_aether_only",
         "technical_candidate_gate": "implemented",
-        "actual_audio_quality_review": "disabled_no_paid_api",
-        "backlog_wav_import": "implemented_catalog_bound_hash_and_duration_gate",
+        "actual_audio_quality_review": "offline_signal_quality_no_paid_api",
+        "backlog_wav_import": "implemented_catalog_bound_hash_duration_and_offline_signal_gate",
         "melodic_originality_certification": "not_claimed",
     }
 
@@ -625,7 +630,7 @@ def worker(
                             generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
                         chosen = select_candidate(
                             generated, _history_hashes(state),
-                            reviewer=lambda path: review_audio(path, job["title"], job["style"], job["lane"]),
+                            reviewer=lambda path: review_audio(path),
                         )
                     job["music"] = chosen
                     job["status"] = "music_ready"
