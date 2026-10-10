@@ -211,9 +211,26 @@ class SingleTests(unittest.TestCase):
             state["jobs"][created["job_id"]]["status"] = "blocked"
             atomic_json(root / "queue.json", state)
             with patch.object(aether_single, "publish_slot_stale", return_value=True):
+                settled = aether_single.worker(
+                    root, publish=True, execute=True, existing_only=True,
+                    api_factory=lambda: (_ for _ in ()).throw(AssertionError("network")),
+                )
+                self.assertEqual("idle", settled["status"])
+                self.assertFalse(settled["created_new_job"])
+                self.assertEqual(created["job_id"], settled["retired_stale_jobs"][0]["job_id"])
+                self.assertEqual("2026-09-26", settled["retired_stale_jobs"][0]["slot"])
+                self.assertEqual(
+                    "aether_single_publish_time_stale", settled["retired_stale_jobs"][0]["error"])
+                again = aether_single.worker(
+                    root, publish=True, execute=True, existing_only=True,
+                    api_factory=lambda: (_ for _ in ()).throw(AssertionError("network")),
+                )
+                self.assertEqual("idle", again["status"])
+                self.assertNotIn("retired_stale_jobs", again)
+                # Reconciliation cannot reopen the missed day's expired 09:00 window.
                 with self.assertRaisesRegex(Exception, "publish_time_stale"):
                     aether_single.worker(
-                        root, publish=True, execute=True, existing_only=True,
+                        root, slot="2026-09-26", publish=True, execute=True,
                         api_factory=lambda: (_ for _ in ()).throw(AssertionError("network")),
                     )
             state = json.loads((root / "queue.json").read_text())
@@ -221,6 +238,15 @@ class SingleTests(unittest.TestCase):
             self.assertEqual("rejected", job["status"])
             self.assertEqual("aether_single_publish_time_stale", job["error"])
             self.assertNotIn("upload", job)
+            fresh = aether_single.worker(
+                root, slot="2099-09-26", title="A Different Scheduled Single",
+                style="Warm fantasy road theme", lane="skybound_flight",
+                publish=False, execute=True, music_generator=self.fake_music,
+                cover_generator=self.fake_cover, renderer=self.fake_renderer,
+            )
+            self.assertNotEqual(created["job_id"], fresh["job_id"])
+            self.assertEqual("rejected", json.loads((root / "queue.json").read_text())
+                             ["jobs"][created["job_id"]]["status"])
 
     def test_backlog_worker_skips_title_already_public_before_wav_access(self):
         class ExistingApi:
