@@ -187,6 +187,49 @@ class SingleTests(unittest.TestCase):
             self.assertTrue(Path(imported["path"]).is_file())
             self.assertEqual(file_hash(source), imported["sha256"])
 
+    def test_cloud_placeholder_hydration_failure_prevents_copy_and_upload(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            source = root / "source.wav"
+            source.write_bytes(b"RIFFfixture")
+            job = root / "job"
+            job.mkdir()
+            with patch.object(aether_single, "_is_dataless", return_value=True), \
+                 patch.object(aether_single, "_hydrate_dataless_backlog_wav",
+                              side_effect=aether_single.VideoError("aether_single_backlog_wav_unavailable")), \
+                 patch.object(aether_single.shutil, "copyfile",
+                              side_effect=AssertionError("must not copy placeholder")):
+                with self.assertRaisesRegex(Exception, "aether_single_backlog_wav_unavailable"):
+                    aether_single.import_backlog_master(source, job, 138)
+            self.assertFalse((job / "source" / "master.wav").exists())
+
+    def test_publish_crossing_nine_after_render_fails_closed_without_upload(self):
+        api = Provider()
+        with tempfile.TemporaryDirectory() as temporary, \\
+             patch.object(aether_single, "publish_slot_stale", side_effect=[False, True]), \
+             patch.object(aether_single, "select_candidate", return_value={
+                 "candidate_index": 1, "path": str(Path(temporary) / "chosen.mp3"),
+                 "duration_seconds": 184, "sha256": "a" * 64}), \
+             patch.object(aether_single, "Uploader") as uploader:
+            root = Path(temporary).resolve()
+            (root / "chosen.mp3").write_bytes(b"chosen")
+            with self.assertRaisesRegex(Exception, "aether_single_publish_time_stale"):
+                aether_single.worker(
+                    root, slot="2099-09-26", title="A timed single",
+                    style="Warm fantasy road theme", lane="skybound_flight",
+                    publish=True, execute=True, api_factory=lambda: api,
+                    music_generator=self.fake_music, cover_generator=self.fake_cover,
+                    renderer=self.fake_renderer,
+                )
+            uploader.assert_not_called()
+            state = json.loads((root / "queue.json").read_text())
+            job = next(iter(state["jobs"].values()))
+            self.assertEqual("blocked", job["status"])
+            self.assertEqual("aether_single_publish_time_stale", job["error"])
+            self.assertIsNone(job.get("upload"))
+            self.assertIsNone(job.get("approval"))
+            self.assertIsNotNone(job.get("result"))
+
     def test_publish_slot_stale_at_nine_kst_boundary(self):
         before = datetime(2026, 9, 26, 8, 59, tzinfo=ZoneInfo("Asia/Seoul"))
         boundary = datetime(2026, 9, 26, 9, 0, tzinfo=ZoneInfo("Asia/Seoul"))
