@@ -12,6 +12,7 @@ import time
 import unicodedata
 
 from aether_compose import audio_duration
+from aether_offline_audio_review import review_audio
 from aether_compilation_cover import build as build_compilation_cover
 from aether_planner import THEMES, plan, read_catalog, tokens
 from short_video_pipeline import VideoError, atomic_json, file_hash, load_json
@@ -235,7 +236,15 @@ def sync(
             raise VideoError("aether_asset_approval_invalid")
         if source_title({"title": str(spec.get("title", ""))}) != source_title(catalog[key]):
             raise VideoError("aether_asset_approval_title_mismatch")
-        if spec.get("commercial_use_confirmed") is True and spec.get("quality_accepted") is True:
+        # Rights are owner-attested; quality may be measured automatically.
+        # Only previously accepted or explicitly pending reviews are eligible.
+        # An explicit quality rejection must not be silently overridden.
+        if spec.get("commercial_use_confirmed") is True and (
+            spec.get("quality_accepted") is True or (
+                spec.get("quality_accepted") is False
+                and spec.get("quality_basis") == "not_yet_owner_quality_approved"
+            )
+        ):
             eligible.append(catalog[key])
     if not eligible:
         raise VideoError("aether_asset_approval_incomplete")
@@ -247,6 +256,7 @@ def sync(
     wake_provider = source_root is None
     stage_key = theme or "all"
     approved_tracks = {}
+    quality_reviews = {}
     preselection = None
     measured_selection = None
 
@@ -277,11 +287,19 @@ def sync(
             staged, digest = stage_private_source(
                 source_path, target, wake_provider=wake_provider,
             )
+            review = review_audio(staged)
+            if review["source_sha256"] != digest:
+                raise VideoError("aether_offline_audio_source_changed")
+            quality_reviews[row["id"]] = review
+            if not review.get("accepted"):
+                continue
             staged_specs[row["id"]] = {
                 "path": staged.relative_to(assets_root).as_posix(),
                 "sha256": digest,
                 "commercial_use_confirmed": True,
                 "quality_accepted": True,
+                "quality_basis": "offline_signal_quality_v1",
+                "quality_review": review,
             }
             measured.append({**row, "duration_seconds": audio_duration(staged)})
             if len(measured) < 3:
@@ -305,13 +323,23 @@ def sync(
             staged, digest = stage_private_source(
                 source_path, target, wake_provider=wake_provider,
             )
+            review = review_audio(staged)
+            if review["source_sha256"] != digest:
+                raise VideoError("aether_offline_audio_source_changed")
+            quality_reviews[row["id"]] = review
+            if not review.get("accepted"):
+                continue
             approved_tracks[row["id"]] = {
                 "path": staged.relative_to(assets_root).as_posix(),
                 "sha256": digest,
                 "commercial_use_confirmed": True,
                 "quality_accepted": True,
+                "quality_basis": "offline_signal_quality_v1",
+                "quality_review": review,
             }
 
+    if not approved_tracks:
+        raise VideoError("aether_asset_no_accepted_audio")
     approved_covers = {}
     cover_specs = approval.get("covers") or {}
     cover_themes = (theme,) if theme is not None else tuple(THEMES)
@@ -347,6 +375,12 @@ def sync(
         "asset_source": "local_private_cache",
         "tracks": approved_tracks,
         "covers": approved_covers,
+        "offline_quality_review": {
+            "review_model": "local_signal_quality_v1",
+            "accepted_track_count": len(approved_tracks),
+            "rejected_track_ids": sorted(key for key, value in quality_reviews.items()
+                                         if not value.get("accepted")),
+        },
     }
     manifest_path = assets_root / "manifest.json"
     if execute:
@@ -357,6 +391,9 @@ def sync(
         "asset_source": "local_private_cache",
         "theme": theme,
         "approved_track_count": len(approved_tracks),
+        "offline_quality_rejected": len([review for review in quality_reviews.values()
+                                         if not review.get("accepted")]),
+        "offline_quality_review_model": "local_signal_quality_v1",
         "preselected_titles": [row["title"] for row in preselection["tracks"]] if preselection else [],
         "measured_selected_titles": [row["title"] for row in measured_selection["tracks"]] if measured_selection else [],
         "cover_themes": sorted(approved_covers),
