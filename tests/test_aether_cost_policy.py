@@ -76,7 +76,7 @@ class PaidApiPolicyTests(unittest.TestCase):
                     aether_single.worker(root, execute=True, publish=True, existing_only=True, api_factory=fixtures.Provider)
             self.assertEqual(1, len(json.loads((root / "queue.json").read_text())["jobs"]))
 
-    def test_recovered_candidates_cannot_skip_paid_review(self):
+    def test_recovered_candidates_require_offline_review_without_paid_api(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary).resolve()
             with self.assertRaises(CredentialError):
@@ -89,9 +89,13 @@ class PaidApiPolicyTests(unittest.TestCase):
             audio.write_bytes(b"x" * 4096)
             atomic_json(folder / "manifest.json", {"state": "generated", "candidates": [{"index": 1, "file": str(audio), "sha256": file_hash(audio)}]})
             with patch.object(aether_single, "audio_duration", return_value=184), \
+                 patch.object(aether_single, "review_audio", return_value={
+                     "accepted": False, "decision": "reject", "weighted_score": 0,
+                     "reason_codes": ["audio_clipping"]}) as local_review, \
                  patch.object(aether_audio_review, "access_token", side_effect=AssertionError("credentials")):
-                with self.assertRaisesRegex(CredentialError, "aether_paid_api_disabled"):
+                with self.assertRaisesRegex(Exception, "aether_single_no_accepted_candidate"):
                     aether_single.worker(root, execute=True, slot="2099-10-10")
+                local_review.assert_called_once_with(audio)
 
     def test_uploaded_reconcile_never_regenerates_missing_sources(self):
         fixture = fixtures.SingleTests()
@@ -99,6 +103,8 @@ class PaidApiPolicyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary, \
              patch.object(aether_single, "publish_slot_stale", return_value=False), \
              patch.object(aether_single, "audio_duration", return_value=138), \
+             patch.object(aether_single, "review_audio", side_effect=lambda path, **_: {
+                 "accepted": True, "state": "accepted", "source_sha256": file_hash(path)}), \
              patch.object(aether_single, "find_existing_public_video", return_value=None), \
              patch.object(aether_single, "validate_output", return_value=138):
             root = Path(temporary).resolve()
