@@ -107,6 +107,66 @@ class SingleSlotBoundary(unittest.TestCase):
         self.assertEqual("2026-09-29", args[args.index("--slot") + 1])
         self.assertEqual("scheduled", report["single_slot"]["status"])
 
+    def test_lyria_fallback_only_after_all_backlog_tracks_confirmed_public(self):
+        report = self.report()
+        now = datetime(2026, 10, 13, 6, 35, tzinfo=KST)
+        concept = {
+            "title": "Sails Above the Silver Cloud Sea",
+            "style": "Skybound travel with warm strings",
+            "lane": "skybound_flight",
+        }
+        calls = []
+        def fake_step(_report, name, args, **kwargs):
+            calls.append((name, args))
+            if name.startswith("backlog_"):
+                return 0, json.dumps({"status": "already_public"}), ""
+            self.assertEqual("new_lyria_single", name)
+            return 0, json.dumps({
+                "status": "scheduled", "source_kind": "new_lyria",
+                "title": concept["title"], "video_id": "existing-private-id",
+                "estimated_cost_usd": 0.08, "generation_count": 1,
+            }), ""
+        with patch.object(module, "now_kst", return_value=now), \
+             patch.object(module, "choose_approved_new_single", return_value=concept) as choose, \
+             patch.object(module, "sync_playlists_after_upload") as playlists, \
+             patch.object(module, "run_step", side_effect=fake_step):
+            module.run_single_slot(report, {"status": "idle"})
+        choose.assert_called_once_with()
+        self.assertEqual(len(module.BACKLOG) + 1, len(calls))
+        self.assertEqual("worker", calls[-1][1][3])
+        self.assertEqual("2026-10-13", calls[-1][1][calls[-1][1].index("--slot") + 1])
+        self.assertIn("--publish", calls[-1][1])
+        self.assertEqual("scheduled", report["single_slot"]["status"])
+        self.assertEqual(0.08, report["single_slot"]["estimated_cost_usd"])
+        playlists.assert_called_once()
+        self.assertEqual([], report["blockers"])
+
+    def test_backlog_remains_canonical_without_lyria_fallback(self):
+        report = self.report()
+        now = datetime(2026, 10, 13, 6, 30, tzinfo=KST)
+        with patch.object(module, "now_kst", return_value=now), \
+             patch.object(module, "run_step", return_value=(2, json.dumps({
+                 "status": "blocked", "error": "aether_single_cover_approval_missing"
+             }), "")) as run, \
+             patch.object(module, "choose_approved_new_single") as choose:
+            module.run_single_slot(report, {"status": "idle"})
+        self.assertEqual(1, run.call_count)
+        choose.assert_not_called()
+        self.assertEqual("aether_single_cover_approval_missing", report["single_slot"]["error"])
+
+    def test_paid_lyria_window_closes_at_0800_even_if_0900_has_not_passed(self):
+        report = self.report()
+        now = datetime(2026, 10, 13, 8, 0, tzinfo=KST)
+        with patch.object(module, "now_kst", return_value=now), \
+             patch.object(module, "run_step", return_value=(0, json.dumps({
+                 "status": "already_public"
+             }), "")) as run, \
+             patch.object(module, "choose_approved_new_single") as choose:
+            module.run_single_slot(report, {"status": "idle"})
+        self.assertEqual(len(module.BACKLOG), run.call_count)
+        choose.assert_not_called()
+        self.assertEqual("aether_lyria_generation_window_closed", report["single_slot"]["error"])
+
     def test_same_day_scheduled_reconcile_is_reused_without_backlog_attempt(self):
         report = self.report()
         now = datetime(2026, 9, 29, 8, 30, tzinfo=KST)
