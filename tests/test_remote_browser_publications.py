@@ -34,7 +34,7 @@ class RemoteBrowserPublicationTest(unittest.TestCase):
             social.parent.mkdir(parents=True)
             draft = root / "generated" / "social" / "x" / "en" / "posted.txt"
             draft.parent.mkdir(parents=True)
-            text = "Test exact post body.\\n".replace("\\\\n", "\\n")
+            text = "Test exact post body." + chr(10)
             draft.write_text(text, encoding="utf-8")
             post = {"topic_id": "T1", "platform": "x", "language": "en",
                     "template_id": "x", "draft_path": "generated/social/x/en/posted.txt",
@@ -45,7 +45,7 @@ class RemoteBrowserPublicationTest(unittest.TestCase):
             synd.write_text(json.dumps({"drafts": []}), encoding="utf-8")
             identity = {"topic_id": "T1", "platform": "x", "language": "en", "template_id": "x"}
             proofs = {"draft_sha256": hashlib.sha256(text.encode()).hexdigest(),
-                      "posted_body_sha256": hashlib.sha256(text.removesuffix("\\n").encode()).hexdigest()}
+                      "posted_body_sha256": hashlib.sha256(text.removesuffix(chr(10)).encode()).hexdigest()}
             permalink = "https://x.com/onnellab/status/123"
             receipt = {**identity, **proofs, "manual_key": "T1::x::en::x",
                        "status": "processed", "posted_url": permalink,
