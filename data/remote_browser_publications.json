@@ -397,6 +397,33 @@
       "verification_confidence": "browser_permalink",
       "status": "processed",
       "processed_at": "2026-10-10T00:49:34+00:00"
+    },
+    {
+      "manual_key": "TOPIC-0044::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0044",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7514544871399911424/",
+      "post_id": "urn:li:activity:7514544871399911424",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-10T04:38:47Z",
+      "observed_at_precision": "second",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_sha256": "7eeb55a4f5d794ef1f8bcd7f10cbc66715bb0ec9ffc61d24d812495a7f150c3a",
+      "posted_body_sha256": "3200f6aa091162cc1ebb7b07e688e19e168c2817181e31c1bfb80e0361b43ba2",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform URL shortening",
+      "submitted_body": "A reliable plan for how to organize audio files on Android and check that they play offline starts with the result and constraints.\n\nPreserve a separate copy of audio you have the right to use, choose a clear folder and browsing structure, and check a small library with Wi-Fi and mobile data disconnected before adding the rest. Verify that the expected files appear, play more than one track, and reopen the player while still offline.\n\nBefore changing tools:\n- Keep an untouched copy. Before moving, renaming, or editing audio, preserve another copy outside the working folder. If all copies are on the same phone, a second folder on the same phone will not protect against loss of that device. Confirm you can open the separate copy before treating it as a fallback.\n\nRead the full article:\nhttps://onnellab.com/blog/en/organize-local-music-library-offline-android/",
+      "source_draft_path": "generated/social/linkedin/en/music/organize-local-music-library-offline-android.txt",
+      "copy_adjustment": "None; approved queued source unchanged except terminal LF removal.",
+      "browser_ui_timestamp": "방금",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "dot cloud browser UI: fresh schedule/manual state/receipt inbox/manifest and public activity history checked before posting after due time. Verified authenticated ONNEL LAB author, public audience, complete body, article card destination and exact permalink. observed_at is tool-result observation time, not server publication time.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new"
     }
   ]
 }
