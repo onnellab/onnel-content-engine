@@ -113,6 +113,34 @@ The compilation worker continues using its existing approved masters/artwork and
 local render path. Production runtime installation must be verified separately
 from a repository commit; source tests do not prove a live upload or Mac update.
 
+## Autonomous no-cost audio quality gate
+
+Song-by-song owner listening approval is **not** a prerequisite for audio
+selection. The canonical worker analyzes the actual local WAV/MP3 with
+`scripts/aether_offline_audio_review.py` before a new single is accepted.
+It measures PCM loudness, clipping, silence, start/end continuity and
+rudimentary temporal variation, records the exact audio SHA-256, and rejects
+failures without asking the owner to rubber-stamp a candidate. Backlog masters
+use this path; existing/generated candidates also use the same no-cost gate
+when a production source is available.
+
+For compilation assets, the owner-attested **commercial-use rights** field
+continues to be mandatory. A track with `quality_accepted=false` and the
+explicit `quality_basis=not_yet_owner_quality_approved` can be evaluated
+automatically. Accepted tracks get a separate SHA-bound quality decision in
+the private compiled manifest; the original owner-approval file is not
+modified or rewritten as an owner signature. An explicitly rejected track or
+one without rights attestation must not be silently approved.
+
+This is an *automated signal-quality check*, not human/AI listening, legal
+originality certification, or a claim to judge melody memorability, genre
+fit or harmonic resolution. Inconclusive/malformed/unreadable material fails
+closed, with no synthetic perfect score. The paid Gemini listening service,
+paid Lyria generation and paid cover API are **still disabled** under the
+existing no-paid-API policy. Missing separately approved cover artwork or
+unverified commercial rights remain blockers; the audio quality delegation
+does not authorize bypassing those gates.
+
 ## Failure behavior
 
 The worker is single-instance. A second normal invocation on the same KST date
