@@ -157,6 +157,67 @@ limits. Missing separately approved cover artwork or
 unverified commercial rights remain blockers; the audio quality delegation
 does not authorize bypassing those gates.
 
+## Fail-closed compilation-only recovery (MYBOX)
+
+A `partial` report with **only** `aether_asset_source_materialization_failed`
+may be recovered on the **same Asia/Seoul date** by another invocation of the
+**same installed LaunchAgent**. An invocation of
+`scripts/aether_daily_local.py` after a same-day report now always checks that
+report before it can touch operational data:
+
+- `complete` returns `already_complete`; `running`, `failed`, malformed,
+  and non-recoverable `partial` records fail closed and never rerun the daily
+  YouTube/Ops/review/single workflow.
+- Compilation-only recovery requires the original current-date daily result,
+  the correct biweekly Sunday theme, that *one* recorded materialization blocker,
+  an idle compilation reconcile, synced playlists, **no compilation worker step**
+  or possible job/video/upload ID, and fewer than two same-day recovery attempts.
+- It preserves the original daily result, original workflow/approval/video IDs,
+  step history and other operational outcomes. The isolated recovery first
+  checks/pulls the current clean `main`, then retries only compilation asset
+  registration and, if successful, enters the canonical idempotent compilation
+  worker for the **same date/theme**. All rights, local PCM quality, cover,
+  upload, profile, thumbnail and public-observation guards still apply.
+- A first normal Sunday run itself allows two bounded delayed retries of
+  **asset registration only** after MYBOX materialization errors (45 s and
+  120 s). No delay/retry is permitted for approval, rights, quality, cover,
+  job/upload uncertainty or any other error. Once the publication worker
+  begins, it is never retried by this recovery route.
+- Every attempt is checkpointed in `result.json` under
+  `compilation_recovery_attempts` and `steps`. Successful recovery removes
+  the resolved transient blocker; other original blockers would remain.
+  `complete` is an operations-pass state, not proof of public video publication.
+
+The existing installed `com.onnellab.aether-daily-local` currently fires only
+at 06:20. **Repository code changes do not themselves install a revised
+LaunchAgent or start an immediate retry.** To permit unattended same-day
+recovery after a cloud hydrate completes, the owner-controlled local LaunchAgent
+installation must retain the 06:20 first invocation and add two later
+calendar triggers (for example 07:20 and 08:20) to the *same label, script,
+lock, result path and OS user*. The script's same-day guard makes these later
+invocations either a safe isolated compilation resume or a no-op; no separate
+production owner or extra ChatGPT task is introduced.
+
+Example for the existing plist's `StartCalendarInterval`, applied/reloaded
+**only through authorized local maintenance**, never from scheduled ChatGPT:
+
+```xml
+<key>StartCalendarInterval</key>
+<array>
+  <dict><key>Hour</key><integer>6</integer><key>Minute</key><integer>20</integer></dict>
+  <dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>20</integer></dict>
+  <dict><key>Hour</key><integer>8</integer><key>Minute</key><integer>20</integer></dict>
+</array>
+```
+
+Do not enable these later triggers until both the new recovery code and
+matching tests are installed on the Mac, the LaunchAgent's new schedule has
+been loaded, and the Mac's effective launchd configuration is verified.
+Do not kickstart, execute a shell, run a probe or trigger a replacement job
+from the reporting-only ChatGPT task. Until the install is verified, report
+the partial result honestly; a GitHub commit or an MYBOX file listing is
+**not** evidence that today's compilation was produced.
+
 ## Failure behavior
 
 The worker is single-instance. A second normal invocation on the same KST date

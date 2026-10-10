@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import time
 from datetime import datetime, date
 from zoneinfo import ZoneInfo
 
@@ -27,6 +28,10 @@ BACKLOG = [
     "When the Northern Lights Returned",
 ]
 COMPILATION_THEMES = ["open_roads", "lantern_towns", "woodland_water", "starlit_rest"]
+# These sleeps occur only inside the launchd-owned daily worker, before any
+# compilation job/render/upload exists. They never retry uncertain publication.
+COMPILATION_ASSET_RETRY_DELAYS = (45, 120)
+MAX_SAME_DAY_COMPILATION_RECOVERIES = 2
 
 TITLE_BANK = {
     "quiet_road": [
@@ -695,34 +700,64 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
         sync_playlists_after_upload(report)
 
 
-def run_compilation_slot(report: dict, now: datetime) -> None:
+def scheduled_compilation_theme(now: datetime) -> str | None:
     start = date(2026, 9, 27)
     delta = (now.date() - start).days
     if now.weekday() != 6 or delta < 0 or delta % 14:
+        return None
+    return COMPILATION_THEMES[(delta // 14) % len(COMPILATION_THEMES)]
+
+
+def run_compilation_slot(report: dict, now: datetime, *, recovery: bool = False) -> None:
+    """Run only the scheduled compilation; retry transient MYBOX reads before upload.
+
+    The compilation publisher runs at most once per invocation. Materialization
+    retries cannot produce a video, and their result is checkpointed durably.
+    """
+    theme = scheduled_compilation_theme(now)
+    if theme is None:
         report["compilation_slot"] = {"status": "not_scheduled_today"}
         return
-    theme = COMPILATION_THEMES[(delta // 14) % len(COMPILATION_THEMES)]
-    code, stdout, _ = run_step(
-        report,
-        "aether_compilation_assets",
-        [
-            sys.executable, "-B", "scripts/aether_compilation_assets.py", "sync",
-            "--execute", "--theme", theme, "--slot", now.date().isoformat(),
-        ],
-        timeout=1800,
-    )
-    assets = json_stdout(stdout) or {
-        "status": "blocked", "error": "aether_asset_registration_output_invalid",
-    }
-    report["aether_compilation_assets"] = assets
-    if code != 0:
+
+    stage = "aether_compilation_assets_recovery" if recovery else "aether_compilation_assets"
+    for attempt in range(len(COMPILATION_ASSET_RETRY_DELAYS) + 1):
+        if attempt:
+            time.sleep(COMPILATION_ASSET_RETRY_DELAYS[attempt - 1])
+        step = stage if not attempt else f"{stage}_retry_{attempt}"
+        code, stdout, _ = run_step(
+            report,
+            step,
+            [
+                sys.executable, "-B", "scripts/aether_compilation_assets.py", "sync",
+                "--execute", "--theme", theme, "--slot", now.date().isoformat(),
+            ],
+            timeout=1800,
+        )
+        assets = json_stdout(stdout) or {
+            "status": "blocked", "error": "aether_asset_registration_output_invalid",
+        }
+        report["aether_compilation_assets"] = assets
+        if code == 0 and assets.get("status") == "ready":
+            break
         error = assets.get("error") or "aether_asset_registration_failed"
+        if error == "aether_asset_source_materialization_failed" and attempt < len(COMPILATION_ASSET_RETRY_DELAYS):
+            report["compilation_slot"] = {
+                "status": "waiting_for_mybox",
+                "theme": theme,
+                "error": error,
+                "asset_retry_count": attempt + 1,
+            }
+            save(report)
+            continue
         report["compilation_slot"] = {"status": "blocked", "theme": theme, "error": error}
-        report["blockers"].append(error)
+        if error not in report["blockers"]:
+            report["blockers"].append(error)
         return
+
+    step = "aether_compilation_slot_recovery" if recovery else "aether_compilation_slot"
     code, stdout, _ = run_step(
         report,
-        "aether_compilation_slot",
+        step,
         [
             sys.executable, "-B", "scripts/aether_compilation.py", "worker",
             "--theme", theme, "--slot", now.date().isoformat(), "--execute", "--publish",
@@ -733,10 +768,92 @@ def run_compilation_slot(report: dict, now: datetime) -> None:
     report["compilation_slot"] = payload or {
         "status": "blocked", "theme": theme, "error": "aether_compilation_output_invalid",
     }
-    if code != 0:
-        report["blockers"].append(
-            report["compilation_slot"].get("error") or "aether_compilation_worker_failed"
-        )
+    if code != 0 or report["compilation_slot"].get("status") in {"blocked", "rejected", "reconcile_required", "idle"}:
+        error = report["compilation_slot"].get("error") or "aether_compilation_worker_failed"
+        if error not in report["blockers"]:
+            report["blockers"].append(error)
+
+
+def compilation_resume_allowed(report: dict, now: datetime) -> bool:
+    """Fail closed unless ONLY today's pre-publication MYBOX materialization failed."""
+    if not isinstance(report, dict) or report.get("kind") != "onnellab_aether_local_daily_result":
+        return False
+    if report.get("mode") != "daily" or report.get("local_date") != now.date().isoformat():
+        return False
+    if report.get("state") != "partial":
+        return False
+    theme = scheduled_compilation_theme(now)
+    slot = report.get("compilation_slot")
+    assets = report.get("aether_compilation_assets")
+    if not theme or not isinstance(slot, dict) or not isinstance(assets, dict):
+        return False
+    error = "aether_asset_source_materialization_failed"
+    if (
+        report.get("blockers") != [error]
+        or slot.get("status") != "blocked"
+        or slot.get("theme") != theme
+        or slot.get("error") != error
+        or assets.get("status") != "blocked"
+        or assets.get("error") != error
+        or slot.get("job_id") or slot.get("video_id") or slot.get("upload")
+    ):
+        return False
+    if report.get("aether_compilation_reconcile", {}).get("status") != "idle":
+        return False
+    if report.get("aether_playlists", {}).get("state") != "synced":
+        return False
+    attempts = report.get("compilation_recovery_attempts", [])
+    if not isinstance(attempts, list) or len(attempts) >= MAX_SAME_DAY_COMPILATION_RECOVERIES:
+        return False
+    steps = report.get("steps")
+    if not isinstance(steps, list):
+        return False
+    # Never re-attempt asset registration after a render/upload may have begun;
+    # even an interrupted or uncertain first worker call is a hard stop here.
+    if any(
+        isinstance(row, dict) and str(row.get("name", "")).startswith("aether_compilation_slot")
+        for row in steps
+    ):
+        return False
+    return any(
+        isinstance(row, dict)
+        and str(row.get("name", "")).startswith("aether_compilation_assets")
+        and row.get("exit_code") != 0
+        for row in steps
+    )
+
+
+def resume_compilation(report: dict, now: datetime) -> bool:
+    """Called ONLY when launchd invokes this same worker again on the same day."""
+    if not compilation_resume_allowed(report, now):
+        return False
+    history = report.setdefault("compilation_recovery_attempts", [])
+    attempt = {
+        "number": len(history) + 1,
+        "started_at": iso_now(),
+        "original_error": "aether_asset_source_materialization_failed",
+    }
+    history.append(attempt)
+    report["state"] = "running"
+    report.pop("finished_at", None)
+    save(report)
+    # Never use an unverified/stale repo; no YouTube reports, Ops workflows,
+    # review publishers, single jobs or playlist changes run in this path.
+    if not repo_sync(report):
+        attempt.update(status="blocked", finished_at=iso_now(), error="aether_compilation_recovery_repository_blocked")
+        finalize(report)
+        return False
+    report["blockers"] = [
+        error for error in report["blockers"]
+        if error != "aether_asset_source_materialization_failed"
+    ]
+    run_compilation_slot(report, now, recovery=True)
+    attempt["status"] = report["compilation_slot"].get("status", "blocked")
+    attempt["error"] = report["compilation_slot"].get("error")
+    attempt["finished_at"] = iso_now()
+    finalize(report)
+    return not report["blockers"]
+
 
 def publish_local_ops_sources(report: dict) -> None:
     code, clean, _ = run_step(report, "ops_prewrite_status", ["git", "status", "--porcelain"], timeout=30)
@@ -879,19 +996,37 @@ def main() -> int:
             try:
                 existing = json.loads(RESULT.read_text(encoding="utf-8"))
             except (OSError, json.JSONDecodeError):
-                existing = {}
-            if (
-                existing.get("kind") == "onnellab_aether_local_daily_result"
-                and existing.get("mode") == "daily"
-                and existing.get("local_date") == now.date().isoformat()
-                and existing.get("state") == "complete"
-            ):
+                print(json.dumps({"state": "blocked", "error": "local_daily_result_unreadable"}))
+                return 2
+            if not isinstance(existing, dict):
+                print(json.dumps({"state": "blocked", "error": "local_daily_result_invalid"}))
+                return 2
+            if existing.get("local_date") == now.date().isoformat():
+                if (
+                    existing.get("kind") != "onnellab_aether_local_daily_result"
+                    or existing.get("mode") != "daily"
+                ):
+                    print(json.dumps({"state": "blocked", "error": "local_daily_result_invalid"}))
+                    return 2
+                if existing.get("state") == "complete":
+                    print(json.dumps({
+                        "state": "already_complete",
+                        "local_date": existing.get("local_date"),
+                        "finished_at": existing.get("finished_at"),
+                    }))
+                    return 0
+                if compilation_resume_allowed(existing, now):
+                    report = existing
+                    return 0 if resume_compilation(report, now) else 2
+                # A partial/failed/unsettled daily pass must NEVER repeat the
+                # whole Ops/YouTube/publisher pipeline on a same-day relaunch.
                 print(json.dumps({
-                    "state": "already_complete",
+                    "state": "already_recorded",
                     "local_date": existing.get("local_date"),
-                    "finished_at": existing.get("finished_at"),
-                }))
-                return 0
+                    "original_state": existing.get("state"),
+                    "blockers": existing.get("blockers", []),
+                }, ensure_ascii=False))
+                return 2
         report = {
             "schema_version": 1,
             "kind": "onnellab_aether_local_daily_result",
