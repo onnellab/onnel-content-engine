@@ -106,6 +106,15 @@ def parse_audio_response(payload: bytes) -> tuple[bytes, str, dict]:
 def request_song(project_id: str, prompt: str, *, token: str | None = None, timeout: int = 240) -> tuple[bytes, str, dict]:
     require_paid_api_allowed(purpose=ALLOWED_LYRIA_PURPOSE, model=MODEL,
                              candidate_count=1, estimated_cost_usd=UNIT_PRICE_USD)
+    settings = load_settings(CONFIG_PATH)
+    if not settings or not settings["enabled"]:
+        raise CredentialError("lyria_generation_disabled")
+    if settings["project_id"] != project_id:
+        raise CredentialError("lyria_project_mismatch")
+    if (settings["candidate_count"] != 1
+            or settings["max_usd_per_run"] < UNIT_PRICE_USD - 1e-9
+            or settings["max_usd_per_run"] > UNIT_PRICE_USD + 1e-9):
+        raise CredentialError("lyria_owner_spend_limit")
     token = token or access_token()
     body = json.dumps({"model": MODEL, "input": [{"type": "text", "text": prompt}]}, ensure_ascii=False).encode("utf-8")
     request = Request(
