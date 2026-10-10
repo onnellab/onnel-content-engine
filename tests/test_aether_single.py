@@ -132,6 +132,28 @@ class SingleTests(unittest.TestCase):
         self.assertEqual(first["video_id"], second["video_id"])
         self.assertEqual(1, api.inserts)
 
+    def test_new_lyria_title_already_public_must_not_generate_or_upload(self):
+        api = Provider()
+        existing = {"video_id": "existingAeth", "title": "A New Sky Road",
+                    "published_at": "2026-10-10T00:00:00Z"}
+        with tempfile.TemporaryDirectory() as temporary, \
+             patch.object(aether_single, "find_existing_public_video", return_value=existing) as search, \
+             patch.object(aether_single, "approved_cover", side_effect=AssertionError("no cover")), \
+             patch.object(aether_single, "generate_music", side_effect=AssertionError("no charge")) as music:
+            root = Path(temporary).resolve()
+            result = aether_single.worker(
+                root, slot="2099-10-13", title="A New Sky Road",
+                style="Buoyant JRPG travel", lane="skybound_flight",
+                publish=True, execute=True, api_factory=lambda: api,
+            )
+            search.assert_called_once_with(api, "A New Sky Road")
+            music.assert_not_called()
+            self.assertEqual("already_public", result["status"])
+            self.assertEqual("existingAeth", result["video_id"])
+            self.assertEqual(0.0, result["estimated_cost_usd"])
+            self.assertEqual(0, api.inserts)
+            self.assertFalse((root / "queue.json").exists())
+
     def test_backlog_worker_imports_catalog_wav_without_lyria_generation(self):
         with tempfile.TemporaryDirectory() as temporary, patch.object(aether_single, "audio_duration", return_value=138), \
              patch.object(aether_single, "review_audio", side_effect=lambda path, **_: {
