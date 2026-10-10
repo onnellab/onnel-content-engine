@@ -50,7 +50,7 @@ class AiOpsMonitoringTest(unittest.TestCase):
         self.assertIn("보류 1건", render_home(report()))
 
     def test_source_refresh_is_not_qa_pass(self):
-        page = render_monitoring(report())
+        page = render_monitoring(report(), now=NOW)
         self.assertIn("자료 갱신 완료", page)
         self.assertIn("QA 보고서 기록이 없어요.", page)
         self.assertIn("검증 통과를 뜻하지는 않아요.", page)
@@ -84,6 +84,7 @@ class AiOpsMonitoringTest(unittest.TestCase):
     def test_old_report_and_missing_report_cannot_look_healthy(self):
         old = analyze(report(), now=datetime(2026, 10, 12, tzinfo=timezone.utc))
         self.assertEqual(old["collection"], "stale")
+        self.assertIn("자료 갱신 지연", render_monitoring(report(), now=datetime(2026, 10, 12, tzinfo=timezone.utc)))
         self.assertEqual(analyze({}, now=NOW)["collection"], "missing")
         self.assertIn("확인 불가", render_home({}))
         self.assertIn("보고서가 없어", render_monitoring({}))
