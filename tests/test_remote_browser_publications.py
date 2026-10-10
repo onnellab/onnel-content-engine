@@ -1,5 +1,5 @@
 from __future__ import annotations
-import json, sys, tempfile, unittest
+import hashlib, json, sys, tempfile, unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
@@ -27,6 +27,53 @@ class RemoteBrowserPublicationTest(unittest.TestCase):
             self.assertEqual(done['marked_by'],'chatgpt_remote_browser')
             self.assertEqual(done['posted_url'],'https://x.com/onnellab/status/123')
             self.assertEqual(json.loads(inbox.read_text())['records'][0]['status'],'processed')
+    def test_processed_hash_bound_receipt_repairs_stale_social_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            social = root / "generated" / "social" / "manifest.json"
+            social.parent.mkdir(parents=True)
+            draft = root / "generated" / "social" / "x" / "en" / "posted.txt"
+            draft.parent.mkdir(parents=True)
+            text = "Test exact post body.\\n".replace("\\\\n", "\\n")
+            draft.write_text(text, encoding="utf-8")
+            post = {"topic_id": "T1", "platform": "x", "language": "en",
+                    "template_id": "x", "draft_path": "generated/social/x/en/posted.txt",
+                    "is_variant": False, "status": "failed", "posted_url": "",
+                    "error": "Previous API failure", "error_type": "transient"}
+            social.write_text(json.dumps({"posts": [post]}), encoding="utf-8")
+            synd = root / "synd.json"
+            synd.write_text(json.dumps({"drafts": []}), encoding="utf-8")
+            identity = {"topic_id": "T1", "platform": "x", "language": "en", "template_id": "x"}
+            proofs = {"draft_sha256": hashlib.sha256(text.encode()).hexdigest(),
+                      "posted_body_sha256": hashlib.sha256(text.removesuffix("\\n").encode()).hexdigest()}
+            permalink = "https://x.com/onnellab/status/123"
+            receipt = {**identity, **proofs, "manual_key": "T1::x::en::x",
+                       "status": "processed", "posted_url": permalink,
+                       "observed_at": "2026-10-10T00:46:41Z",
+                       "observation_source": "authenticated exact post observation"}
+            done = {**identity, **proofs, "posted_url": permalink,
+                    "verified_at": "2026-10-10T00:49:34Z",
+                    "verification_method": "remote_chrome_permalink",
+                    "published_at_precision": "unknown"}
+            inbox = root / "inbox.json"
+            state = root / "state.json"
+            inbox.write_text(json.dumps({"schema_version": 1, "records": [receipt]}), encoding="utf-8")
+            state.write_text(json.dumps({"done": {"T1::x::en::x": done}}), encoding="utf-8")
+            self.assertEqual(0, reconcile(inbox, state, social, synd))
+            updated = json.loads(social.read_text())["posts"][0]
+            self.assertEqual("posted", updated["status"])
+            self.assertEqual(permalink, updated["posted_url"])
+            self.assertEqual("", updated["posted_at"])
+            self.assertEqual("", updated["error"])
+            before = social.read_bytes()
+            self.assertEqual(0, reconcile(inbox, state, social, synd))
+            self.assertEqual(before, social.read_bytes())
+            receipt["posted_body_sha256"] = "f" * 64
+            inbox.write_text(json.dumps({"schema_version": 1, "records": [receipt]}), encoding="utf-8")
+            social.write_text(json.dumps({"posts": [post]}), encoding="utf-8")
+            self.assertEqual(0, reconcile(inbox, state, social, synd))
+            self.assertEqual("failed", json.loads(social.read_text())["posts"][0]["status"])
+
     def test_invalid_record_fails_before_state_write(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d); social,synd=self.manifests(root); inbox=root/'inbox.json'; state=root/'state.json'
