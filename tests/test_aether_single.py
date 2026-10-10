@@ -145,6 +145,7 @@ class SingleTests(unittest.TestCase):
                 root, slot="2099-10-13", title="A New Sky Road",
                 style="Buoyant JRPG travel", lane="skybound_flight",
                 publish=True, execute=True, api_factory=lambda: api,
+                music_generator=music,
             )
             search.assert_called_once_with(api, "A New Sky Road")
             music.assert_not_called()
