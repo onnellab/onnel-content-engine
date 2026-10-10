@@ -133,7 +133,10 @@ class SingleTests(unittest.TestCase):
         self.assertEqual(1, api.inserts)
 
     def test_backlog_worker_imports_catalog_wav_without_lyria_generation(self):
-        with tempfile.TemporaryDirectory() as temporary, patch.object(aether_single, "audio_duration", return_value=138):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(aether_single, "audio_duration", return_value=138), \
+             patch.object(aether_single, "review_audio", side_effect=lambda path, **_: {
+                 "accepted": True, "state": "accepted", "source_sha256": file_hash(path),
+                 "review_model": "local_signal_quality_v1", "reason_codes": []}):
             root = Path(temporary).resolve()
             source = root / "Beyond the Road of Falling Petals.wav"
             source.write_bytes(b"RIFF" + b"catalog-master" * 512)
@@ -155,7 +158,9 @@ class SingleTests(unittest.TestCase):
             self.assertTrue(durable.is_file())
             self.assertNotEqual(source, durable)
             self.assertEqual(file_hash(source), file_hash(durable))
-            self.assertEqual("not_run_existing_catalog_master", job["music"]["review"]["state"])
+            self.assertEqual("accepted", job["music"]["review"]["state"])
+            self.assertEqual("local_signal_quality_v1", job["music"]["review"]["review_model"])
+            self.assertEqual(file_hash(durable), job["music"]["review"]["source_sha256"])
             self.assertEqual("canonical_wav_master", aether_single.policy_for(job)["music_provider"])
 
     def test_backlog_import_maps_file_provider_copy_timeout_to_unavailable(self):
@@ -173,19 +178,36 @@ class SingleTests(unittest.TestCase):
 
     def test_dataless_backlog_source_attempts_file_provider_copy(self):
         with tempfile.TemporaryDirectory() as temporary, \
-             patch.object(aether_single, "audio_duration", return_value=138):
+             patch.object(aether_single, "audio_duration", return_value=138), \
+             patch.object(aether_single, "review_audio", side_effect=lambda path, **_: {
+                 "accepted": True, "state": "accepted", "source_sha256": file_hash(path)}):
             root = Path(temporary).resolve()
             source = root / "Beyond the Road of Falling Petals.wav"
             source.write_bytes(b"RIFF" + b"placeholder" * 512)
             job = root / "job"
             job.mkdir(mode=0o700)
             with patch.object(aether_single, "_is_dataless", return_value=True), \
-                 patch.object(aether_single, "_warm_mybox_provider", return_value=True) as warm:
+                 patch.object(aether_single, "_hydrate_dataless_backlog_wav") as warm:
                 imported = aether_single.import_backlog_master(source, job, 138)
             warm.assert_called_once_with()
             self.assertTrue(imported["source_was_dataless"])
             self.assertTrue(Path(imported["path"]).is_file())
             self.assertEqual(file_hash(source), imported["sha256"])
+
+    def test_offline_audio_rejection_blocks_backlog_before_cover(self):
+        with tempfile.TemporaryDirectory() as temporary, \
+             patch.object(aether_single, "audio_duration", return_value=138), \
+             patch.object(aether_single, "review_audio", return_value={
+                 "accepted": False, "state": "rejected", "reason_codes": ["audio_clipping"]}):
+            root = Path(temporary).resolve()
+            source = root / "Beyond the Road of Falling Petals.wav"
+            source.write_bytes(b"RIFF" + b"mock-audio" * 512)
+            with self.assertRaisesRegex(Exception, "aether_single_offline_audio_rejected"):
+                aether_single.import_backlog_master(source, root / "job", 138)
+            report = json.loads((root / "job" / "audio_review.json").read_text())
+            self.assertEqual(["audio_clipping"], report["reason_codes"])
+            self.assertFalse((root / "job" / "source" / "master.wav").exists())
+
 
     def test_cloud_placeholder_hydration_failure_prevents_copy_and_upload(self):
         with tempfile.TemporaryDirectory() as temporary:
