@@ -515,8 +515,10 @@ def readiness(root=ROOT) -> dict:
         "worker": "generated_single",
         "youtube_credentials": credential_status(profile="aether_inn"),
         "lyria": lyria_connection_status(check_auth=False),
-        "paid_api_allowed": {"lyria_3_pro_single": True, "maximum_usd_per_song": 0.08,
-                             "maximum_candidates_per_song": 1, "other_paid_apis": False},
+        "paid_api_allowed": False,  # Legacy generic boolean: no blanket paid-API permission.
+        "lyria_3_pro_single_authorized": True,
+        "lyria_3_pro_max_usd_per_song": 0.08,
+        "lyria_3_pro_max_candidates_per_song": 1,
         "cover_model": "owner_approved_existing_cover",
         "cover_generation": "disabled_no_paid_api",
         "cover_import": "requires_per_title_sha_bound_rights_and_quality_approval",
