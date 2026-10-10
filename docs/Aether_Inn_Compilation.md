@@ -22,16 +22,29 @@ MYBOX File Provider, preselects only the tracks needed for that theme while hono
 durable compilation history, materializes and hashes those WAV masters, and builds
 the private `assets/manifest.json` from `assets/approval.json`. This avoids reading
 the entire cloud library for every compilation. The approval file is owner-controlled
-private state and is never committed. Missing or false approval flags stay
-fail-closed; file presence, prior uploads, model metadata, or schedule authorization
-never imply rights or quality.
+private state and is never committed. Explicit commercial-use rights remain a
+hard gate: a missing/false rights flag, prior upload, model metadata or schedule
+authorization never grants publishing rights.
 
 Initialize the private approval template once with
 `python3 -B scripts/aether_compilation_assets.py init-approval --execute`. Only set a
-track's `commercial_use_confirmed` and `quality_accepted` flags to true after those
-facts are explicitly confirmed, and only set a cover's `commercial_use_confirmed`
-after its use is confirmed. The sync step hashes the exact current files and emits a
-manifest that points to the canonical private MYBOX source.
+track's `commercial_use_confirmed` to true when its rights are confirmed, and
+only confirm cover commercial rights when supported by the owner. Manual
+`quality_accepted=true` flags remain historical owner attestations, never
+fabricated by the sync. For rights-confirmed tracks with
+`quality_accepted=false` and explicit
+`quality_basis=not_yet_owner_quality_approved`, the local worker now performs
+an actual-audio, SHA-bound **signal-quality** review at materialization time.
+Only auto-accepted files are given `quality_accepted=true` in the **generated
+private manifest**, along with `quality_basis=offline_signal_quality_v1` and the
+review measurements. The owner approval file stays unchanged, and any explicit
+quality rejection remains excluded. A failed decode or quality check cannot be
+reinterpreted as consent or an accepted master.
+
+This no-cost offline signal analysis is not subjective musical listening or
+melodic originality certification. Audio without rights evidence, a usable
+source, a positive signal-quality verdict, or an approved compilation cover
+cannot publish.
 
 Generation provenance is tracked separately in `data/aether_provenance.json`.
 The owner-attested catalog default is paid Suno generation. The two newest YouTube
