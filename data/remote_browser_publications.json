@@ -366,7 +366,8 @@
       "observation_source": "dot cloud browser UI: source schedule/manual state/receipt inbox/manifest reconciled; authenticated ONNELLAB profile and timeline checked before posting. Exact post detail author, body and permalink verified. Profile count increased from 14 to 16 across these two posts. Observation times are not server publication times.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-10-10T00:49:34+00:00"
     },
     {
       "manual_key": "TOPIC-0044::x::en::x",
@@ -394,7 +395,8 @@
       "observation_source": "dot cloud browser UI: source schedule/manual state/receipt inbox/manifest reconciled; authenticated ONNELLAB profile and timeline checked before posting. Exact post detail author, body and permalink verified. Profile count increased from 14 to 16 across these two posts. Observation times are not server publication times.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-10-10T00:49:34+00:00"
     }
   ]
 }

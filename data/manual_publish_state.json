@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-08T06:27:44Z",
+  "updated_at": "2026-10-10T00:49:34+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -647,6 +647,54 @@
       "marked_at": "2026-10-08T06:27:44Z",
       "marked_by": "dot_cloud_browser",
       "verified_at": "2026-10-08T06:27:44Z"
+    },
+    "TOPIC-0018::x::en::x": {
+      "topic_id": "TOPIC-0018",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "marked_at": "2026-10-10T00:49:34+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://x.com/onnellab/status/2108720781568159763",
+      "verified_at": "2026-10-10T00:49:34+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-10T00:46:41Z",
+      "observed_at_precision": "second",
+      "observation_source": "dot cloud browser UI: source schedule/manual state/receipt inbox/manifest reconciled; authenticated ONNELLAB profile and timeline checked before posting. Exact post detail author, body and permalink verified. Profile count increased from 14 to 16 across these two posts. Observation times are not server publication times.",
+      "browser_ui_timestamp": "5:46 PM · Oct 9, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "draft_sha256": "fb796868bd5db7fa282dca9ed9df2b8b704576c472ba99c120d318c8e0345bc0",
+      "posted_body_sha256": "e04d18472be19184f85f55322d262b5f601697ce088af22ab7f71fbb461f645e",
+      "account": "@onnellab",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "Submitted UTF-8 source, terminal LF removed, before platform URL shortening"
+    },
+    "TOPIC-0044::x::en::x": {
+      "topic_id": "TOPIC-0044",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "marked_at": "2026-10-10T00:49:34+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://x.com/onnellab/status/2108720971201036399",
+      "verified_at": "2026-10-10T00:49:34+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-10T00:47:45Z",
+      "observed_at_precision": "second",
+      "observation_source": "dot cloud browser UI: source schedule/manual state/receipt inbox/manifest reconciled; authenticated ONNELLAB profile and timeline checked before posting. Exact post detail author, body and permalink verified. Profile count increased from 14 to 16 across these two posts. Observation times are not server publication times.",
+      "browser_ui_timestamp": "5:47 PM · Oct 9, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "draft_sha256": "7985df37d48d389d7fdff7221e2ac0a7ee0e91de5c23f44c221c26deead598e5",
+      "posted_body_sha256": "41b92727c7b1f599a3baa55876a8fba4a31f8814446f4a31d0a1243fe4791f9c",
+      "account": "@onnellab",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
+      "posted_body_hash_normalization": "Submitted UTF-8 source, terminal LF removed, before platform URL shortening"
     }
   }
 }
