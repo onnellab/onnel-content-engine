@@ -1,14 +1,25 @@
 # Aether Inn — Lyria 3 Pro Production
 
-## Current no-paid-API policy
+## Current scoped Lyria 3 Pro authorization (2026-10-10)
 
-As of 2026-10-07, paid Lyria generation, Gemini cover generation and Gemini audio
-review are fail-closed, even if old local credentials and a spending cap remain
-configured. Provider execution stops before token access and API requests.
-Historical setup and generation descriptions below are not current spending
-authorization. Dry-run planning remains available. Existing approved masters and
-[existing single covers](Aether_Inn_Existing_Covers.md) may use local rendering;
-missing commercial-rights evidence or separately approved cover assets still blocks rather than generating replacements. Song audio signal quality is now checked locally without per-song owner listening approval.
+The owner explicitly authorized **one** Lyria 3 Pro music candidate at an
+estimated **$0.08** per eligible single. The Mac configuration already has
+`enabled=true`, `candidate_count=1`, and `max_usd_per_run=0.08`.
+Only `lyria-3-pro-preview` has a paid API exception, and a durable charge
+intent must be recorded before the call. The Gemini cover-image API,
+paid Gemini audio review, and **all other paid providers remain disabled**.
+An uncertain result never authorizes a second charged call.
+
+On Tuesday/Saturday the launchd worker always reconciles and finishes the
+registered WAV backlog first, *without* Lyria. Only after all six canonical
+backlog titles are confirmed public may it consider a new song, with an
+owner-approved, hash-verified local cover and enough time before 09:00.
+The new Lyria call must start before 08:00 KST. Missing approved cover or
+rights, unresolved upload, invalid audio or unready credentials blocks
+without a speculative generation charge. Existing masters and
+[approved single covers](Aether_Inn_Existing_Covers.md) use local
+rendering. Audio signal quality is checked locally without requiring
+per-song owner listening approval; this is not music-aesthetic certification.
 
 ## Purpose
 
@@ -31,7 +42,7 @@ Do not copy OAuth tokens, ADC JSON contents, or access tokens into Git, /ops/, p
     gcloud auth application-default login
     gcloud auth application-default set-quota-project PROJECT_ID
 
-Then open https://onnellab.com/ops/ and choose **Lyria 3 Pro 연결 · 자동화 설정**. Configure only Project ID, candidate count (1–5), maximum estimated USD per run, and the Tuesday/Saturday enable switch. Production work starts around 07:00–08:00 Asia/Seoul and uploads are scheduled private with YouTube `publishAt` for exactly 09:00 Asia/Seoul on each single day.
+Then open https://onnellab.com/ops/ and choose **Lyria 3 Pro 연결 · 자동화 설정**. Keep candidate count at exactly 1 and maximum estimated USD per run at $0.08; only the Tuesday/Saturday enable switch applies. Production work starts around 07:00–08:00 Asia/Seoul and uploads are scheduled private with YouTube `publishAt` for exactly 09:00 Asia/Seoul on each single day.
 
 The local console checks ADC readiness without making a paid music-generation call.
 
@@ -40,10 +51,11 @@ The local console checks ADC readiness without making a paid music-generation ca
 Paid generation requires all of the following:
 1. Local Lyria configuration exists and automatic generation is explicitly enabled.
 2. ADC can produce a valid access token.
-3. Requested candidate count does not exceed the configured count.
-4. Estimated run cost does not exceed the configured per-run cap.
-5. The downstream Aether single workflow is ready enough to use the generated audio; do not spend credits just to discover an already-known downstream blocker.
-6. The run uses `--execute`. Without it, the generator returns a dry-run plan.
+3. The exact model is `lyria-3-pro-preview`, with **one** candidate and a $0.08 estimate.
+4. Both the local spending cap and the central Lyria-only owner budget gate permit the request.
+5. The launchd-owned Aether worker has finished the WAV backlog, selected a fresh Tuesday/Saturday slot before 08:00, and verified a separately owner-approved local cover for this exact title; never spend only to discover a known downstream blocker.
+6. No existing uncertain paid request or active upload may be duplicated; a durable `request_started` manifest is written before the API call.
+7. The generator uses `--execute`. Without it, the generator returns a dry-run plan.
 
 Dry run:
 
@@ -142,8 +154,8 @@ The durable worker performs these stages in order:
 1. Verify the explicitly bound Aether Inn YouTube connection before paid generation.
 2. Call Lyria 3 Pro under the locally approved candidate count and music spend cap.
 3. Reject missing, malformed, exact-repeat, or out-of-range audio candidates. Apply the local zero-cost PCM signal-quality check to each valid candidate (level, silence, clipping, hard-cut and basic temporal variation), reject failures, then choose the best accepted candidate. The offline gate does not claim to judge melodic memorability, genre fit, emotional development or harmonic resolution; the former Gemini reviewer remains disabled under the no-paid-API policy.
-4. Generate one 16:9 landscape background with `gemini-2.5-flash-image` using the same Google Cloud ADC/project.
-5. Keep the generated background text-free, then apply the current contrast-adaptive 72 px champagne-ivory Baskerville/serif title plus small matte-gold Aether Inn branding and line/diamond ornament through a local SVG overlay, without a black title panel.
+4. Import the separately approved and SHA-bound existing 16:9 landscape background for that exact title; paid Gemini cover generation remains forbidden.
+5. Apply the current contrast-adaptive 72 px champagne-ivory Baskerville/serif title plus small matte-gold Aether Inn branding and line/diamond ornament through a local SVG overlay, without a black title panel.
 6. Render the single at 1920×1080, 30 fps, H.264, yuv420p, AAC 256 kbps.
 7. Create a 1280×720 thumbnail from the same branded cover.
 8. Upload with the Aether Inn OAuth profile only, AI-generated disclosure enabled, Music category, durable resumable state, and fail-closed public approval policy.
