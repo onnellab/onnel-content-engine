@@ -13,7 +13,8 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from short_video_credentials import CredentialError
-from aether_cost_policy import require_paid_api_allowed
+from aether_cost_policy import ALLOWED_LYRIA_PURPOSE, require_paid_api_allowed
+from short_video_pipeline import atomic_json
 from lyria_config import (
     CONFIG_PATH,
     MODEL,
@@ -103,7 +104,8 @@ def parse_audio_response(payload: bytes) -> tuple[bytes, str, dict]:
 
 
 def request_song(project_id: str, prompt: str, *, token: str | None = None, timeout: int = 240) -> tuple[bytes, str, dict]:
-    require_paid_api_allowed()
+    require_paid_api_allowed(purpose=ALLOWED_LYRIA_PURPOSE, model=MODEL,
+                             candidate_count=1, estimated_cost_usd=UNIT_PRICE_USD)
     token = token or access_token()
     body = json.dumps({"model": MODEL, "input": [{"type": "text", "text": prompt}]}, ensure_ascii=False).encode("utf-8")
     request = Request(
@@ -142,8 +144,6 @@ def slug(value: str) -> str:
 
 
 def generate(title: str, style: str, *, count: int | None = None, execute: bool = False, output_root: Path = PRIVATE_OUTPUT) -> dict:
-    if execute:
-        require_paid_api_allowed()
     settings = load_settings(CONFIG_PATH)
     if not settings:
         raise CredentialError("lyria_not_configured")
@@ -155,6 +155,9 @@ def generate(title: str, style: str, *, count: int | None = None, execute: bool 
     cost = estimate_cost(requested)
     if cost > settings["max_usd_per_run"] + 1e-9:
         raise CredentialError("lyria_spend_cap_exceeded")
+    if execute:
+        require_paid_api_allowed(purpose=ALLOWED_LYRIA_PURPOSE, model=MODEL,
+                                 candidate_count=requested, estimated_cost_usd=cost)
     prompt = build_aether_prompt(title, style)
     plan = {
         "model": MODEL,
@@ -171,38 +174,43 @@ def generate(title: str, style: str, *, count: int | None = None, execute: bool 
     run_dir = Path(output_root).expanduser() / (timestamp + "-" + slug(title))
     run_dir.mkdir(parents=True, exist_ok=False, mode=0o700)
     os.chmod(run_dir, 0o700)
-    candidates = []
-    try:
-        for index in range(1, requested + 1):
-            audio, mime, meta = request_song(settings["project_id"], prompt, token=token)
-            ext = ".mp3" if mime == "audio/mpeg" else ".wav"
-            path = run_dir / f"candidate-{index:02d}{ext}"
-            fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-            with os.fdopen(fd, "wb") as stream:
-                stream.write(audio)
-            candidates.append({
-                "index": index,
-                "file": str(path),
-                "mime_type": mime,
-                "bytes": len(audio),
-                "sha256": hashlib.sha256(audio).hexdigest(),
-                "description": meta.get("description", ""),
-            })
-        manifest = {
-            **plan,
-            "state": "generated",
-            "title": clean_text(title, field="title", limit=160),
-            "style": clean_text(style, field="style", limit=1800),
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "candidates": candidates,
-        }
-        manifest_path = run_dir / "manifest.json"
-        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        os.chmod(manifest_path, 0o600)
-        return {**manifest, "manifest": str(manifest_path)}
-    except Exception:
-        # Keep successfully returned paid candidates for diagnosis/recovery; never silently regenerate.
-        raise
+    # Durable charge intent is recorded before contacting the provider. On an
+    # ambiguous API failure, the existing job must not pay for a second attempt.
+    manifest_path = run_dir / "manifest.json"
+    manifest = {
+        **plan,
+        "state": "request_started",
+        "title": clean_text(title, field="title", limit=160),
+        "style": clean_text(style, field="style", limit=1800),
+        "request_started_at": datetime.now(timezone.utc).isoformat(),
+        "candidates": [],
+    }
+    atomic_json(manifest_path, manifest)
+    os.chmod(manifest_path, 0o600)
+    # This owner's authorization permits precisely one provider request per
+    # single; it does not authorize retries or multi-candidate generation.
+    audio, mime, meta = request_song(settings["project_id"], prompt, token=token)
+    ext = ".mp3" if mime == "audio/mpeg" else ".wav"
+    path = run_dir / f"candidate-01{ext}"
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(audio)
+        stream.flush()
+        os.fsync(stream.fileno())
+    manifest.update(
+        state="generated",
+        generated_at=datetime.now(timezone.utc).isoformat(),
+        candidates=[{
+            "index": 1,
+            "file": str(path),
+            "mime_type": mime,
+            "bytes": len(audio),
+            "sha256": hashlib.sha256(audio).hexdigest(),
+            "description": meta.get("description", ""),
+        }],
+    )
+    atomic_json(manifest_path, manifest)
+    return {**manifest, "manifest": str(manifest_path)}
 
 
 def main() -> int:
