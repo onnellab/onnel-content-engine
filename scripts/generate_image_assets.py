@@ -80,7 +80,7 @@ def localized_steps(language: str) -> tuple[str, str, list[tuple[str, str]], str
                 ("3. 흐름", "가벼운 경로 선택"),
                 ("4. 결과", "마찰을 줄여 읽기"),
             ],
-            "ONNELLAB Blog · 권장 읽기 워크플로",
+            "ONNELLAB Blog · 권장 워크플로",
             "워크플로 다이어그램",
         )
     return (

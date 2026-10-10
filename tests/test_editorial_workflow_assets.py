@@ -21,6 +21,26 @@ class EditorialWorkflowAssetTest(unittest.TestCase):
         self.assertIn(EDITORIAL['description'], svg)
         self.assertNotIn('Generated workflow asset for', svg)
 
+    def test_korean_media_regeneration_keeps_topic_neutral_footer_and_authored_copy(self):
+        root = Path(__file__).resolve().parents[1]
+        spec = json.loads((root / 'generated/images/ko/media/test-converted-media-before-replacing-original/image_spec.json').read_text(encoding='utf-8'))
+        editorial = spec['editorial_workflow']
+        title = spec['workflow_diagrams'][0]['title']
+        keyword = spec['topic']['primary_keyword']
+        svg = workflow_svg(title, keyword, 'ko', editorial)
+        self.assertEqual(svg, workflow_svg(title, keyword, 'ko', editorial))
+        document = ElementTree.fromstring(svg)
+        ns = '{http://www.w3.org/2000/svg}'
+        footer = document.findall(ns + 'text')[-1]
+        self.assertEqual(''.join(footer.itertext()), 'ONNELLAB Blog · 권장 워크플로')
+        self.assertNotIn('읽기', ''.join(footer.itertext()))
+        self.assertEqual(document.find(ns + 'desc').text, editorial['description'])
+        headings = [' '.join(group.find(ns + 'text').itertext()) for group in document.findall(ns + 'g')]
+        self.assertEqual(headings, [pair[0] for pair in editorial['steps']])
+        details = [' '.join(group.findall(ns + 'text')[1].itertext()) for group in document.findall(ns + 'g')]
+        self.assertEqual(details, [pair[1] for pair in editorial['steps']])
+        self.assertIn(editorial['message'], svg)
+
     def test_invalid_authored_structure_and_overflow_are_rejected(self):
         for editorial in [{}, {**EDITORIAL, 'steps': EDITORIAL['steps'][:3]}, {**EDITORIAL, 'steps': [['A heading that is far too long for a single card', 'Detail'], *EDITORIAL['steps'][1:]]}, {**EDITORIAL, 'message': 'Long message ' * 30}]:
             with self.subTest(editorial=editorial), self.assertRaises(ImageAssetError):
