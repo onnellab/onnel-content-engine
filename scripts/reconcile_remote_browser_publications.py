@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -101,6 +102,86 @@ def write_atomic(path: Path, payload: dict[str, Any]) -> None:
     os.replace(temp, path)
 
 
+
+def sync_verified_social_manifest(social: Path, inbox: dict[str, Any], state: dict[str, Any]) -> bool:
+    """Reflect only exact, source-bound processed publication evidence in the social manifest.
+
+    Legacy profile links and reports without draft/body hashes cannot be promoted.
+    This repairs manifest drift even when a previous reconciliation processed the receipt.
+    """
+    manifest = load_json(social)
+    posts = manifest.get("posts")
+    if not isinstance(posts, list):
+        raise RemotePublicationError("social manifest is malformed")
+    # The canonical manifest lives at <repo>/generated/social/manifest.json.
+    root = social.resolve().parents[2] if social.parent.name == "social" and social.parent.parent.name == "generated" else social.resolve().parent
+    receipts = inbox.get("records", [])
+    changed = False
+    for post in posts:
+        if not isinstance(post, dict) or post.get("is_variant") or post.get("platform") not in REMOTE_BROWSER_PLATFORMS:
+            continue
+        fields = ("topic_id", "platform", "language", "template_id")
+        identity = {field: str(post.get(field, "")) for field in fields}
+        if not all(identity.values()):
+            continue
+        manual_key = key(*(identity[field] for field in fields))
+        done = state.get("done", {}).get(manual_key)
+        if not isinstance(done, dict) or any(done.get(field) != value for field, value in identity.items()):
+            continue
+        url = done.get("posted_url")
+        if not specific_permalink(identity["platform"], url):
+            continue
+        matches = [record for record in receipts if isinstance(record, dict)
+                   and record.get("manual_key") == manual_key and record.get("status") == "processed"
+                   and record.get("posted_url") == url
+                   and all(record.get(field) == value for field, value in identity.items())]
+        if len(matches) != 1:
+            continue
+        receipt = matches[0]
+        if not receipt.get("observation_source") or not done.get("verification_method"):
+            continue
+        try:
+            observed = datetime.fromisoformat(receipt["observed_at"].replace("Z", "+00:00"))
+            verified = datetime.fromisoformat(done["verified_at"].replace("Z", "+00:00"))
+        except (KeyError, TypeError, ValueError, AttributeError):
+            continue
+        if observed.tzinfo is None or verified.tzinfo is None or verified < observed:
+            continue
+        relative = post.get("draft_path")
+        if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
+            continue
+        draft = (root / relative).resolve()
+        if not draft.is_relative_to(root) or not draft.is_file():
+            continue
+        try:
+            source = draft.read_text(encoding="utf-8").replace("\r\n", "\n")
+        except (OSError, UnicodeError):
+            continue
+        hashes = {
+            "draft_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest(),
+            "posted_body_sha256": hashlib.sha256(source.removesuffix("\n").encode("utf-8")).hexdigest(),
+        }
+        if any(done.get(field) != expected or receipt.get(field) != expected
+               for field, expected in hashes.items()):
+            continue
+        if post.get("posted_url") and post["posted_url"] != url:
+            raise RemotePublicationError(f"conflicting social manifest permalink: {manual_key}")
+        updated = dict(post, status="posted", posted_url=url, error="", error_type="")
+        if done.get("published_at_precision") == "unknown":
+            updated["posted_at"] = ""
+        elif not updated.get("posted_at"):
+            updated["posted_at"] = str(done.get("published_at") or "")
+        for field in PROVENANCE_FIELDS:
+            if field in done:
+                updated[field] = done[field]
+        if updated != post:
+            post.clear()
+            post.update(updated)
+            changed = True
+    if changed:
+        write_atomic(social, manifest)
+    return changed
+
 def reconcile(inbox_path: Path = DEFAULT_INBOX, state_path: Path = DEFAULT_STATE, social: Path = DEFAULT_SOCIAL, syndication: Path = DEFAULT_SYNDICATION) -> int:
     inbox = load_json(inbox_path)
     if inbox.get("schema_version") != 1 or not isinstance(inbox.get("records"), list):
@@ -136,6 +217,7 @@ def reconcile(inbox_path: Path = DEFAULT_INBOX, state_path: Path = DEFAULT_STATE
         receipt_provenance(record)  # Validate every record before changing either file.
         updates.append((record, item, permalink))
     if not updates:
+        sync_verified_social_manifest(social, inbox, state)
         return 0
     processed_at = now_iso()
     for record, item, permalink in updates:
@@ -157,6 +239,7 @@ def reconcile(inbox_path: Path = DEFAULT_INBOX, state_path: Path = DEFAULT_STATE
     state["updated_at"] = processed_at
     write_atomic(state_path, state)
     write_atomic(inbox_path, inbox)
+    sync_verified_social_manifest(social, inbox, state)
     return len(updates)
 
 
