@@ -8,7 +8,7 @@ configured. Provider execution stops before token access and API requests.
 Historical setup and generation descriptions below are not current spending
 authorization. Dry-run planning remains available. Existing approved masters and
 [existing single covers](Aether_Inn_Existing_Covers.md) may use local rendering;
-missing rights/quality evidence or assets blocks rather than generating replacements.
+missing commercial-rights evidence or separately approved cover assets still blocks rather than generating replacements. Song audio signal quality is now checked locally without per-song owner listening approval.
 
 ## Purpose
 
@@ -136,12 +136,12 @@ On an eligible Tuesday/Saturday slot, publish one recovery item with:
 
     python3 -B scripts/aether_single.py backlog-worker --slot YYYY-MM-DD --title "Beyond the Road of Falling Petals" --execute --publish
 
-Backlog jobs bypass new-concept duplicate and lane-rotation gates because the titles are already registered catalog masters, but they retain the same Aether-only YouTube binding, exact 09:00 Asia/Seoul schedule, durable upload/reconciliation, current cover generation/branding, render validation and thumbnail gates. Existing MP4 files are derivatives and are never source masters. The existing-master path does not run the new-Lyria audio review and must report that review as not run rather than inventing a quality score.
+Backlog jobs bypass new-concept duplicate and lane-rotation gates because the titles are already registered catalog masters, but they retain the same Aether-only YouTube binding, exact 09:00 Asia/Seoul schedule, durable upload/reconciliation, current cover generation/branding, render validation and thumbnail gates. Existing MP4 files are derivatives and are never source masters. The existing-master path performs a local decoded-PCM signal-quality review and records its SHA-bound outcome. It does not invoke Gemini or claim a human musical listening assessment.
 
 The durable worker performs these stages in order:
 1. Verify the explicitly bound Aether Inn YouTube connection before paid generation.
 2. Call Lyria 3 Pro under the locally approved candidate count and music spend cap.
-3. Reject missing, malformed, exact-repeat, or out-of-range audio candidates, then send each technically valid candidate to `gemini-2.5-flash` for fail-closed review of the actual audio. The reviewer checks Aether Inn fit, melody memorability, repeat-listening comfort, arrangement development, ending resolution and technical cleanliness, with explicit critical flags for unresolved endings, EDM/pop energy, trailer bombast and audible artifacts. Select the highest-scoring accepted candidate only.
+3. Reject missing, malformed, exact-repeat, or out-of-range audio candidates. Apply the local zero-cost PCM signal-quality check to each valid candidate (level, silence, clipping, hard-cut and basic temporal variation), reject failures, then choose the best accepted candidate. The offline gate does not claim to judge melodic memorability, genre fit, emotional development or harmonic resolution; the former Gemini reviewer remains disabled under the no-paid-API policy.
 4. Generate one 16:9 landscape background with `gemini-2.5-flash-image` using the same Google Cloud ADC/project.
 5. Keep the generated background text-free, then apply the current contrast-adaptive 72 px champagne-ivory Baskerville/serif title plus small matte-gold Aether Inn branding and line/diamond ornament through a local SVG overlay, without a black title panel.
 6. Render the single at 1920×1080, 30 fps, H.264, yuv420p, AAC 256 kbps.
@@ -152,4 +152,4 @@ The durable worker performs these stages in order:
 
 A failed later stage does not regenerate an already-paid Lyria candidate. The job keeps the music and cover hashes and resumes from the missing stage on the next run.
 
-The automatic candidate gate includes an actual-audio Gemini quality review plus deterministic technical checks. It is still not a copyright or melodic-originality certification. Exact hashes can reject identical files, but the system does not claim that a generated melody is legally or musically unique.
+The current automatic candidate gate analyzes actual decoded PCM locally without a paid API and saves SHA-bound signal quality findings. It is not a human/Gemini musical listening review or a copyright, genre-fit, tonal-resolution or melodic-originality certification. Exact hashes can reject identical files, but the system does not claim that a generated melody is legally or musically unique.
