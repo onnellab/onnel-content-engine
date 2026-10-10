@@ -44,6 +44,10 @@ def validate_settings(data: dict) -> dict:
     minimum = round(count * UNIT_PRICE_USD, 2)
     if enabled and float(cap) + 1e-9 < minimum:
         raise CredentialError("lyria_spend_cap_below_candidate_cost")
+    if enabled and count != 1:
+        raise CredentialError("lyria_owner_candidate_limit")
+    if enabled and float(cap) > UNIT_PRICE_USD + 1e-9:
+        raise CredentialError("lyria_owner_spend_limit")
     return {
         "schema_version": 1,
         "project_id": project_id,
