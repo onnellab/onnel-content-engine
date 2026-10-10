@@ -522,9 +522,25 @@ def worker(
         same_slot = [j for j in state["jobs"].values() if j["slot"] == slot]
         unfinished = [j for j in state["jobs"].values() if not j.get("upload") and j["status"] not in FINAL]
         if existing_only:
-            job = (pending or [j for j in unfinished if j.get("publish_requested")] or [None])[0]
+            # A previous slot's unuploaded job has no legal publishAt after 09:00.
+            # Retire it durably without creating an upload or consuming the next
+            # Tuesday/Saturday slot. Uploaded jobs always reconcile first.
+            retired = []
+            if publish and not pending:
+                for prior in unfinished:
+                    if prior.get("publish_requested") and publish_slot_stale(prior["slot"]):
+                        prior.update(status="rejected", error="aether_single_publish_time_stale")
+                        retired.append({"job_id": prior["id"], "slot": prior["slot"],
+                                        "error": "aether_single_publish_time_stale"})
+                if retired:
+                    atomic_json(q.state_path, state)
+            remaining = [j for j in unfinished if j.get("publish_requested") and j["status"] not in FINAL]
+            job = (pending or remaining or [None])[0]
             if job is None:
-                return {"profile": "aether_inn", "status": "idle", "created_new_job": False}
+                result = {"profile": "aether_inn", "status": "idle", "created_new_job": False}
+                if retired:
+                    result["retired_stale_jobs"] = retired
+                return result
         else:
             job = (pending or same_slot or unfinished or [None])[0]
         stale_slot = job["slot"] if job is not None else slot
