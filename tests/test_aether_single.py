@@ -205,7 +205,7 @@ class SingleTests(unittest.TestCase):
 
     def test_publish_crossing_nine_after_render_fails_closed_without_upload(self):
         api = Provider()
-        with tempfile.TemporaryDirectory() as temporary, \\
+        with tempfile.TemporaryDirectory() as temporary, \
              patch.object(aether_single, "publish_slot_stale", side_effect=[False, True]), \
              patch.object(aether_single, "select_candidate", return_value={
                  "candidate_index": 1, "path": str(Path(temporary) / "chosen.mp3"),
