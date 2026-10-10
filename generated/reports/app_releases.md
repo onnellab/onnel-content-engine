@@ -1,26 +1,27 @@
 # App Release Status
 
-Generated: 2026-10-10T13:21:31+09:00
+Generated: 2026-10-11T06:20:56+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
 | Store | in_review | 1 |
-| Store | unchanged | 14 |
+| Store | unchanged | 12 |
+| Store | updated | 2 |
 | GitHub Release | archived | 1 |
-| GitHub Release | planned | 1 |
-| GitHub Release | released | 8 |
+| GitHub Release | planned | 3 |
+| GitHub Release | released | 7 |
 
 ## Store Snapshots
 
 | App | Platform | Store version/package | Repository version | Comparison | Store | Release | Repository | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Aligna | android | 1.0.7 | 1.0.7 | same | unchanged | released | onnellab/aligna | No action |
-| Aligna | ios | 1.0.7 | 1.0.7 | same | unchanged | - | onnellab/aligna | No action |
+| Aligna | android | 1.0.9 | 1.0.9 | same | updated | released | onnellab/aligna | Create or verify release candidate |
+| Aligna | ios | 1.0.7 | 1.0.9 | local_ahead | unchanged | planned | onnellab/aligna | Private test only; do not publish public GitHub Release |
 | ClipNest | ios | 1.0.2 | 1.0.4 | local_ahead | unchanged | planned | onnellab/clipnest | Private test only; do not publish public GitHub Release |
-| Melivra | android | 1.0.6 | 1.0.6 | same | unchanged | released | onnellab/melivra | No action |
-| Melivra | ios | 6783644955 | 1.0.6 | unknown | in_review | - | onnellab/melivra | Review status |
+| Melivra | android | 1.0.7 | 1.0.7 | same | updated | planned | onnellab/melivra | Confirm matching public store version; auto-publish GitHub Release notes |
+| Melivra | ios | 6783644955 | 1.0.7 | unknown | in_review | - | onnellab/melivra | Review status |
 | Papira | android | 2.0.1 | - | unknown | unchanged | - | onnellab/papira | No action |
 | Papira | ios | 2.0.1 | - | unknown | unchanged | - | onnellab/papira | No action |
 | Quivra | android | 1.0.10 | 1.0.10 | same | unchanged | released | onnellab/quivra | No action |
@@ -45,10 +46,14 @@ Generated: 2026-10-10T13:21:31+09:00
 | REL-0019 | Quivra | android | public | v1.0.9 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.9 | - | - | No action |
 | REL-0020 | VaultXT | android | public | v2.0.1 | released | Public GitHub Release published | https://github.com/onnellab/onnellab-text/releases/tag/v2.0.1 | - | - | No action |
 | REL-0021 | Aligna | android | public | v1.0.7 | released | Public GitHub Release published | https://github.com/onnellab/aligna/releases/tag/v1.0.7 | - | - | No action |
-| REL-0023 | Melivra | android | public | v1.0.6 | released | Public GitHub Release published | https://github.com/onnellab/melivra/releases/tag/v1.0.6 | - | - | No action |
+| REL-0027 | Melivra | android | public | v1.0.7 | planned | Public store confirmed; preparing automatic release | - | - | - | Confirm matching public store version; auto-publish GitHub Release notes |
+| REL-0026 | Aligna | ios | private_test | v1.0.9 | planned | Private test; public GitHub Release disabled | - | - | 파일명 미리보기와 적용 과정을 더 쉽게 확인할 수 있도록 스토어 안내와 화면 이미지를 새로 정리했어요. | Private test only; do not publish public GitHub Release |
 
 ## Attention Queue
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
+| Aligna | android | updated | Create or verify release candidate | Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/aligna/pubspec.yaml version 1.0.9+25; confirm against Play Console if needed. |
 | ClipNest | ios | planned | Private test only; do not publish public GitHub Release | Generated from local build metadata because local version is ahead of store snapshot. Store version: 1.0.2. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. Private test channel; not promoted to public GitHub Release. |
+| Melivra | android | planned | Confirm matching public store version; auto-publish GitHub Release notes | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
+| Aligna | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.7. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |

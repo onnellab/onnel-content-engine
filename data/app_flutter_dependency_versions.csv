@@ -1,5 +1,5 @@
 app_id,app_slug,package_type,package_name,declared_version,resolved_version,flutter_constraint,status,source
-APP-0006,aligna,app_version,aligna,1.0.7+23,1.0.7,,ok,github:onnellab/aligna/pubspec.yaml
+APP-0006,aligna,app_version,aligna,1.0.9+25,1.0.9,,ok,github:onnellab/aligna/pubspec.yaml
 APP-0006,aligna,dependency,cupertino_icons,^1.0.8,1.0.8,,ok,github:onnellab/aligna/pubspec.yaml
 APP-0006,aligna,dependency,file_picker,^10.3.10,10.3.10,,ok,github:onnellab/aligna/pubspec.yaml
 APP-0006,aligna,dependency,flutter,sdk:flutter,0.0.0,,ok,github:onnellab/aligna/pubspec.yaml
@@ -22,7 +22,7 @@ APP-0005,clipnest,dependency,shared_preferences,^2.5.3,2.5.4,,ok,github:onnellab
 APP-0005,clipnest,dependency,sqflite,^2.4.2,2.4.2,,ok,github:onnellab/clipnest/pubspec.yaml
 APP-0005,clipnest,dependency,url_launcher,^6.3.2,6.3.2,,ok,github:onnellab/clipnest/pubspec.yaml
 APP-0005,clipnest,flutter_sdk,flutter,>=3.38.4,,>=3.38.4,ok,github:onnellab/clipnest/pubspec.yaml
-APP-0007,melivra,app_version,melivra,1.0.6+142,1.0.6,,ok,github:onnellab/melivra/pubspec.yaml
+APP-0007,melivra,app_version,melivra,1.0.7+144,1.0.7,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,crypto,^3.0.7,3.0.7,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,cupertino_icons,^1.0.8,1.0.9,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,dart_tags,^0.4.1,0.4.1,,ok,github:onnellab/melivra/pubspec.yaml
