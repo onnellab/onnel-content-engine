@@ -527,6 +527,53 @@ def sync_playlists_after_upload(report: dict) -> None:
     if code != 0 or payload.get("state") != "synced":
         report["blockers"].append(payload.get("error") or "aether_playlist_sync_after_upload_failed")
 
+def choose_approved_new_single() -> dict | None:
+    """Plan a no-duplicate Lyria concept only when its *own* cover is ready.
+
+    The launchd-owned caller may spend up to $0.08 for a single audio candidate;
+    it must not spend merely to discover a missing owner-approved cover.
+    """
+    from aether_single import FINAL, SingleQueue, enforce_lane_rotation
+    from aether_existing_cover import ASSETS_ROOT, approved_cover
+    from aether_cover import lane_direction
+    from aether_planner import inspect_candidate, read_catalog
+    from short_video_pipeline import VideoError
+
+    registry = json.loads((REPO / "data/aether_single_lanes.json").read_text(encoding="utf-8"))
+    lanes = registry.get("lanes", [])
+    # Prefer traversal/high-motion concepts when compatible with canonical rotation.
+    ordered = sorted(lanes, key=lambda row: (
+        row.get("energy") != "high_motion",
+        not bool(row.get("traversal")),
+        row.get("id", ""),
+    ))
+    catalog = read_catalog()
+    queue = SingleQueue()
+    with queue.lock():
+        state = queue._read()
+        if any(j.get("upload") and j.get("status") not in FINAL for j in state["jobs"].values()):
+            raise VideoError("aether_single_existing_job_unsettled")
+        used_titles = {str(j.get("title") or "") for j in state["jobs"].values()}
+        for row in ordered:
+            lane = str(row.get("id", ""))
+            if lane not in TITLE_BANK:
+                continue
+            try:
+                enforce_lane_rotation(state, lane)
+            except VideoError:
+                continue
+            style = lane_direction(lane) + COMMON_STYLE
+            for title in TITLE_BANK[lane]:
+                if title in used_titles or inspect_candidate(title, style, catalog)["metadata_gate"] == "rejected":
+                    continue
+                try:
+                    approved_cover(title, ASSETS_ROOT)
+                except VideoError:
+                    continue
+                return {"title": title, "style": style, "lane": lane}
+    return None
+
+
 def run_single_slot(report: dict, single_reconcile: dict) -> None:
     now = now_kst()
     if now.weekday() not in {1, 5}:
@@ -595,10 +642,57 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
             sync_playlists_after_upload(report)
         return
 
-    # Backlog exhaustion never authorizes a paid model, even if credentials and
-    # a historical per-run spending cap remain configured on the Mac.
-    report["single_slot"] = {"status": "blocked", "error": "aether_paid_api_disabled"}
-    report["blockers"].append("aether_paid_api_disabled")
+    # Only after every canonical backlog title has been confirmed public may
+    # this owner-authorized single Lyria 3 Pro slot be considered.
+    current = now_kst()
+    if current.date().isoformat() != slot or (current.hour, current.minute) >= (9, 0):
+        error = "aether_single_publish_time_stale"
+        report["single_slot"] = {"status": "blocked", "error": error}
+        report["blockers"].append(error)
+        return
+    # Leave sufficient time for generation, offline review, rendering and a
+    # private publishAt upload. Never charge for a likely missed 09:00 slot.
+    if (current.hour, current.minute) >= (8, 0):
+        error = "aether_lyria_generation_window_closed"
+        report["single_slot"] = {"status": "blocked", "error": error}
+        report["blockers"].append(error)
+        return
+    try:
+        concept = choose_approved_new_single()
+    except Exception as error:
+        reason = str(error) if str(error) == "aether_single_existing_job_unsettled" else "aether_lyria_concept_preflight_failed"
+        report["single_slot"] = {"status": "blocked", "error": reason}
+        report["blockers"].append(reason)
+        return
+    if not concept:
+        error = "aether_lyria_approved_cover_unavailable"
+        report["single_slot"] = {"status": "blocked", "error": error,
+                                 "source_kind": "new_lyria", "spent_usd": 0.0}
+        report["blockers"].append(error)
+        return
+    # All actual execution still belongs to the existing durable single worker.
+    # It rechecks the spend gate, cover, queue, exact publishAt and upload state.
+    code, stdout, _ = run_step(
+        report, "new_lyria_single",
+        [
+            sys.executable, "-B", "scripts/aether_single.py", "worker",
+            "--slot", slot, "--title", concept["title"],
+            "--style", concept["style"], "--lane", concept["lane"],
+            "--execute", "--publish",
+        ],
+        timeout=2400,
+    )
+    payload = json_stdout(stdout)
+    report["single_slot"] = payload or {
+        "status": "blocked", "source_kind": "new_lyria",
+        "title": concept["title"], "error": "aether_lyria_single_output_invalid",
+    }
+    if code != 0:
+        report["blockers"].append(
+            report["single_slot"].get("error") or "aether_lyria_single_failed"
+        )
+    elif payload.get("video_id") and payload.get("status") in {"scheduled", "processing", "published"}:
+        sync_playlists_after_upload(report)
 
 
 def run_compilation_slot(report: dict, now: datetime) -> None:
