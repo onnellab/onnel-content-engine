@@ -1,4 +1,5 @@
 """Existing artwork imports use local fixed fixtures; no API, ffmpeg or uploader."""
+import base64
 import json
 from pathlib import Path
 import sys
@@ -69,6 +70,42 @@ class ExistingCoverTests(unittest.TestCase):
              patch.object(cover, "brand_background", side_effect=brand), \
              patch.object(cover, "run_process", side_effect=AssertionError("unexpected renderer")):
             self.assertEqual("local-branding", self.imported()["layout"])
+
+    def test_owner_approved_base64_transfer_recovers_exact_png(self):
+        original = self.source.read_bytes()
+        self.spec["path"] = "staged/singles/art.png"
+        self.save()
+        staged = self.assets / "staged" / "singles"
+        staged.mkdir(parents=True)
+        (staged / "art.png.b64").write_bytes(base64.b64encode(original))
+        source, spec, approval_hash = cover.approved_cover(self.title, self.assets)
+        self.assertEqual(original, source.read_bytes())
+        self.assertEqual(self.spec["sha256"], file_hash(source))
+        self.assertEqual(file_hash(self.assets / cover.APPROVAL_FILE), approval_hash)
+        self.assertEqual(spec["kind"], "finished_cover")
+
+    def test_base64_transfer_hash_mismatch_fails_before_install(self):
+        self.spec["path"] = "staged/singles/art.png"
+        self.save()
+        staged = self.assets / "staged" / "singles"
+        staged.mkdir(parents=True)
+        (staged / "art.png.b64").write_bytes(base64.b64encode(b"wrong bytes"))
+        with self.assertRaisesRegex(Exception, "hash_mismatch"):
+            cover.approved_cover(self.title, self.assets)
+        self.assertFalse((staged / "art.png").exists())
+
+    def test_base64_transfer_does_not_bypass_owner_rights_or_quality(self):
+        self.spec["path"] = "staged/singles/art.png"
+        staged = self.assets / "staged" / "singles"
+        staged.mkdir(parents=True)
+        (staged / "art.png.b64").write_bytes(base64.b64encode(self.source.read_bytes()))
+        for name in ("commercial_use_confirmed", "quality_accepted"):
+            self.spec[name] = False
+            self.save()
+            with self.subTest(name=name), self.assertRaises(Exception):
+                cover.approved_cover(self.title, self.assets)
+            self.assertFalse((staged / "art.png").exists())
+            self.spec[name] = True
 
     def test_missing_or_inexact_approvals_fail_before_copy(self):
         for field in ("commercial_use_confirmed", "quality_accepted"):
