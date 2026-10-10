@@ -85,11 +85,16 @@ must not be followed by divergence decisions against a stale `origin/main`. The 
   wrapper does not touch the backlog WAV or create another upload;
 - synchronizes the six canonical Aether playlists idempotently;
 - on Tuesday/Saturday before 09:00 KST, processes the first actually-missing
-  canonical backlog WAV with an explicitly approved existing cover. Backlog
-  exhaustion stops with `aether_paid_api_disabled`; configured Lyria credentials
-  or a historical spending cap do not authorize paid generation. The wrapper re-reads current KST immediately
-  before each publish-capable backlog attempt, so crossing 09:00 during earlier
-  reconciliation stops before another `--publish` invocation;
+  canonical backlog WAV with its own approved cover. Only after all canonical
+  backlog entries are independently confirmed already public may the launchd-owned
+  wrapper attempt ONE newly approved-cover Lyria 3 Pro single at a fixed estimated
+  $0.08 charge. New audio generation must start before 08:00 KST, be authorized
+  by the local enabled/candidate/spend controls, and use the same durable single
+  queue and the exact 09:00 PRIVATE + publishAt YouTube policy. No per-song cover
+  approval means no spend or generated candidate; Lyria may never replace a
+  missing backlog master. The wrapper re-reads current KST before each backlog
+  attempt, and the canonical single worker checks the deadline again before a
+  first upload. Crossing 09:00 prevents late publication;
 - on every other Sunday beginning 2026-09-27, invokes at most one canonical
   existing-track compilation worker.
 
@@ -98,13 +103,23 @@ cross-check, same-video reconciliation, rights gates, and playlist classificatio
 remain owned by the canonical repository workers. The daily wrapper does not
 reimplement or weaken those contracts.
 
-## No-paid-API production policy
+## Scoped paid-API production policy (owner authorization 2026-10-10)
 
-Paid Lyria generation, Gemini cover generation and Gemini audio review are blocked
-at their entrypoints before credential access or API requests. No environment or
-CLI switch overrides this policy. Existing music/cover/result records and uploaded
-video IDs are preserved. Reconciliation of an uploaded job verifies its original
-hash-bound video and thumbnail; it never regenerates missing source media.
+Only `lyria-3-pro-preview` is enabled for **one** paid generated song at an
+estimated **$0.08 per eligible single**. `aether_cost_policy.py` requires the
+specific Lyria purpose, exact model, one candidate and no more than $0.08;
+`lyria_config.py` enforces the matching enabled local settings. The installed
+Mac config was already enabled for one candidate and a $0.08 per-run cap when
+this owner authorization was given. An error or uncertain response does NOT
+authorize a retry. The generator writes a private `request_started` manifest
+before the charged request and blocks resuming an uncertain result without
+additional owner action.
+
+Gemini paid image generation, Gemini paid audio review, and all other paid
+providers remain blocked before credentials or API requests. There is no generic
+environment, CLI or settings bypass. Existing music/cover/result records and
+uploaded video IDs are preserved; uploaded jobs reconcile only their hash-bound
+video and thumbnail, never regenerate missing source media.
 
 The no-cost single-cover path requires per-title, hash-bound commercial-use and
 quality approval. Missing approval or artwork stops the slot rather than falling
@@ -135,9 +150,10 @@ one without rights attestation must not be silently approved.
 This is an *automated signal-quality check*, not human/AI listening, legal
 originality certification, or a claim to judge melody memorability, genre
 fit or harmonic resolution. Inconclusive/malformed/unreadable material fails
-closed, with no synthetic perfect score. The paid Gemini listening service,
-paid Lyria generation and paid cover API are **still disabled** under the
-existing no-paid-API policy. Missing separately approved cover artwork or
+closed, with no synthetic perfect score. The paid Gemini listening service
+and paid cover API remain **disabled**. Only the owner-authorized one-candidate
+Lyria 3 Pro generation is enabled within its explicit budget and readiness
+limits. Missing separately approved cover artwork or
 unverified commercial rights remain blockers; the audio quality delegation
 does not authorize bypassing those gates.
 
