@@ -196,6 +196,29 @@ class LyriaGenerationTests(unittest.TestCase):
                 aether_single.recover_generated_result(root)
             self.assertEqual("request_started", json.loads(next((root / "lyria").glob("*/manifest.json")).read_text())["state"])
 
+    def test_raw_lyria_request_requires_current_enabled_one_song_config(self):
+        good = {
+            "project_id": "aether-music-123", "candidate_count": 1,
+            "max_usd_per_run": 0.08, "enabled": True,
+        }
+        cases = [
+            (None, "lyria_generation_disabled"),
+            ({**good, "enabled": False}, "lyria_generation_disabled"),
+            ({**good, "candidate_count": 2}, "lyria_owner_spend_limit"),
+            ({**good, "max_usd_per_run": 0.16}, "lyria_owner_spend_limit"),
+        ]
+        with patch.object(lyria_generate, "access_token", side_effect=AssertionError("no auth")) as auth, \
+             patch.object(lyria_generate, "urlopen", side_effect=AssertionError("no network")) as network:
+            for settings, reason in cases:
+                with self.subTest(reason=reason), patch.object(lyria_generate, "load_settings", return_value=settings):
+                    with self.assertRaisesRegex(CredentialError, reason):
+                        lyria_generate.request_song("aether-music-123", "Test prompt")
+            with patch.object(lyria_generate, "load_settings", return_value=good):
+                with self.assertRaisesRegex(CredentialError, "lyria_project_mismatch"):
+                    lyria_generate.request_song("different-project", "Test prompt")
+            auth.assert_not_called()
+            network.assert_not_called()
+
     def test_audio_response_decodes_only_completed_expected_model(self):
         raw = b"A" * 2048
         payload = json.dumps({
