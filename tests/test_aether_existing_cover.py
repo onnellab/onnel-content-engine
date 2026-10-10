@@ -203,7 +203,9 @@ class ExistingCoverTests(unittest.TestCase):
         with patch.object(cover, "media_info", side_effect=self.info), \
              patch.object(cover, "validate_full_bleed_background"), \
              patch.object(cover, "run_process", side_effect=self.render), \
-             patch.object(aether_single, "audio_duration", return_value=138):
+             patch.object(aether_single, "audio_duration", return_value=138), \
+             patch.object(aether_single, "review_audio", side_effect=lambda path, **_: {
+                 "accepted": True, "state": "accepted", "source_sha256": file_hash(path)}):
             result = aether_single.backlog_worker(self.root / "queue", slot="2099-10-10", title=self.title,
                                                  source_wav=source, execute=True, cover_generator=importer,
                                                  renderer=fixture.fake_renderer)
@@ -225,7 +227,9 @@ class ExistingCoverTests(unittest.TestCase):
         with patch.object(cover, "media_info", side_effect=self.info), \
              patch.object(cover, "validate_full_bleed_background"), \
              patch.object(cover, "run_process", side_effect=self.render), \
-             patch.object(aether_single, "audio_duration", return_value=138):
+             patch.object(aether_single, "audio_duration", return_value=138), \
+             patch.object(aether_single, "review_audio", side_effect=lambda path, **_: {
+                 "accepted": True, "state": "accepted", "source_sha256": file_hash(path)}):
             with self.assertRaisesRegex(OSError, "interrupted"):
                 aether_single.backlog_worker(self.root / "queue", slot="2099-10-10", title=self.title,
                                              source_wav=source, execute=True, cover_generator=importer,
