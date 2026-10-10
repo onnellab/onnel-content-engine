@@ -128,6 +128,70 @@ class LyriaGenerationTests(unittest.TestCase):
         self.assertEqual("planned", result["state"])
         self.assertFalse(result["execute"])
 
+    def test_one_paid_lyria_call_is_exactly_eight_cents_and_durably_recorded(self):
+        settings = {
+            "project_id": "aether-music-123", "candidate_count": 1,
+            "max_usd_per_run": 0.08, "enabled": True,
+        }
+        with TemporaryDirectory() as temporary:
+            output = Path(temporary)
+            calls = []
+            def fake_song(project, prompt, *, token):
+                calls.append((project, token))
+                manifests = list(output.glob("*/manifest.json"))
+                self.assertEqual(1, len(manifests))
+                intent = json.loads(manifests[0].read_text())
+                self.assertEqual("request_started", intent["state"])
+                self.assertEqual(0.08, intent["estimated_cost_usd"])
+                self.assertEqual(1, intent["candidate_count"])
+                self.assertEqual([], intent["candidates"])
+                self.assertNotIn("fixture-token", manifests[0].read_text())
+                return b"a" * 2048, "audio/mpeg", {"description": "instrumental"}
+            with patch.object(lyria_generate, "load_settings", return_value=settings), \
+                 patch.object(lyria_generate, "access_token", return_value="fixture-token"), \
+                 patch.object(lyria_generate, "request_song", side_effect=fake_song) as request:
+                result = lyria_generate.generate("A New Road", "Warm melodic travel", execute=True, output_root=output)
+            request.assert_called_once()
+            self.assertEqual([("aether-music-123", "fixture-token")], calls)
+            self.assertEqual("generated", result["state"])
+            self.assertEqual(1, len(result["candidates"]))
+            self.assertEqual(0.08, result["estimated_cost_usd"])
+            self.assertEqual("generated", json.loads(Path(result["manifest"]).read_text())["state"])
+
+    def test_multi_candidate_generation_is_refused_before_credentials_or_network(self):
+        settings = {
+            "project_id": "aether-music-123", "candidate_count": 3,
+            "max_usd_per_run": 1.0, "enabled": True,
+        }
+        with TemporaryDirectory() as temporary, \
+             patch.object(lyria_generate, "load_settings", return_value=settings), \
+             patch.object(lyria_generate, "access_token", side_effect=AssertionError("no credentials")) as auth, \
+             patch.object(lyria_generate, "request_song", side_effect=AssertionError("no API")) as api:
+            with self.assertRaisesRegex(CredentialError, "aether_lyria_candidate_limit"):
+                lyria_generate.generate("A New Road", "Warm melodic travel", execute=True, output_root=Path(temporary))
+            auth.assert_not_called()
+            api.assert_not_called()
+            self.assertEqual([], list(Path(temporary).iterdir()))
+
+    def test_uncertain_charge_cannot_be_retried_from_the_existing_job(self):
+        import aether_single
+        settings = {
+            "project_id": "aether-music-123", "candidate_count": 1,
+            "max_usd_per_run": 0.08, "enabled": True,
+        }
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "lyria").mkdir()
+            with patch.object(lyria_generate, "load_settings", return_value=settings), \
+                 patch.object(lyria_generate, "access_token", return_value="fixture-token"), \
+                 patch.object(lyria_generate, "request_song", side_effect=CredentialError("lyria_network_error")) as request:
+                with self.assertRaisesRegex(CredentialError, "lyria_network_error"):
+                    lyria_generate.generate("A New Road", "Warm melodic travel", execute=True, output_root=root / "lyria")
+            request.assert_called_once()
+            with self.assertRaisesRegex(Exception, "aether_lyria_generation_uncertain"):
+                aether_single.recover_generated_result(root)
+            self.assertEqual("request_started", json.loads(next((root / "lyria").glob("*/manifest.json")).read_text())["state"])
+
     def test_audio_response_decodes_only_completed_expected_model(self):
         raw = b"A" * 2048
         payload = json.dumps({
