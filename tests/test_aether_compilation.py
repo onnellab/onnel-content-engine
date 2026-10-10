@@ -101,6 +101,8 @@ class Compilation(unittest.TestCase):
             with patch('aether_compilation_assets.plan',return_value=planned), \
                  patch('aether_compilation_assets.tokens',return_value={'road'}), \
                  patch('aether_compilation_assets.audio_duration',return_value=600), \
+                 patch('aether_compilation_assets.review_audio',side_effect=lambda p: {
+                     'accepted':True,'source_sha256':file_hash(p),'review_model':'local_signal_quality_v1'}), \
                  patch('aether_compilation_assets.build_compilation_cover',side_effect=fake_cover):
                 result=sync_assets(assets,source_root=source,execute=True,theme='open_roads')
             manifest=json.loads((assets/'manifest.json').read_text())
@@ -130,12 +132,81 @@ class Compilation(unittest.TestCase):
             def fake_cover(_source,output,_title):
                 output.parent.mkdir(parents=True,exist_ok=True);output.write_bytes(b'compiled-cover')
                 return {'sha256':file_hash(output)}
-            with patch('aether_compilation_assets.build_compilation_cover',side_effect=fake_cover):
+            with patch('aether_compilation_assets.build_compilation_cover',side_effect=fake_cover), \
+                 patch('aether_compilation_assets.review_audio',side_effect=lambda p: {
+                     'accepted':True,'source_sha256':file_hash(p),'review_model':'local_signal_quality_v1'}):
                 result=sync_assets(assets,source_root=source,execute=True)
             manifest=json.loads((assets/'manifest.json').read_text())
             self.assertEqual('ready',result['status'])
             self.assertEqual({approved['id']},set(manifest['tracks']))
             self.assertNotIn(unapproved['id'],manifest['tracks'])
+
+    def test_pending_owner_quality_can_be_auto_checked_without_authorizing_rights(self):
+        from short_video_pipeline import atomic_json
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            source = root / 'source'
+            assets = root / 'assets'
+            (source / '01_Audio_Master').mkdir(parents=True)
+            (source / '02_Cover_Original').mkdir()
+            catalog = read_catalog()
+            allowed, rights_missing, explicit_reject = catalog[:3]
+            approval = approval_template()
+            approval['tracks'][allowed['id']].update(
+                commercial_use_confirmed=True, quality_accepted=False,
+                quality_basis='not_yet_owner_quality_approved')
+            approval['tracks'][rights_missing['id']].update(
+                commercial_use_confirmed=False, quality_accepted=True)
+            approval['tracks'][explicit_reject['id']].update(
+                commercial_use_confirmed=True, quality_accepted=False,
+                quality_basis='owner_quality_rejected')
+            for row in (allowed, rights_missing, explicit_reject):
+                (source / '01_Audio_Master' / f"{source_title(row)}.wav").write_bytes(
+                    b'WAV-test-fixture')
+            for theme, spec in approval['covers'].items():
+                spec['commercial_use_confirmed'] = True
+                (source / '02_Cover_Original' / spec['filename']).write_bytes(b'cover')
+            assets.mkdir()
+            atomic_json(assets / 'approval.json', approval)
+            def fake_cover(_src, output, _title):
+                output.parent.mkdir(parents=True, exist_ok=True)
+                output.write_bytes(b'compiled-cover')
+                return {'sha256': file_hash(output)}
+            with patch('aether_compilation_assets.review_audio', side_effect=lambda p: {
+                'accepted': True, 'review_model': 'local_signal_quality_v1',
+                'source_sha256': file_hash(p)}), \
+                 patch('aether_compilation_assets.build_compilation_cover',side_effect=fake_cover):
+                result = sync_assets(assets, source_root=source, execute=True)
+            manifest = json.loads((assets / 'manifest.json').read_text())
+            self.assertEqual({allowed['id']}, set(manifest['tracks']))
+            self.assertTrue(manifest['tracks'][allowed['id']]['quality_accepted'])
+            self.assertEqual('offline_signal_quality_v1', manifest['tracks'][allowed['id']]['quality_basis'])
+            untouched = json.loads((assets / 'approval.json').read_text())['tracks']
+            self.assertIs(untouched[allowed['id']]['quality_accepted'], False)
+            self.assertIs(untouched[rights_missing['id']]['commercial_use_confirmed'], False)
+            self.assertEqual(1, result['approved_track_count'])
+
+    def test_auto_rejected_audio_remains_unapproved_and_no_manifest_is_published(self):
+        from short_video_pipeline import atomic_json
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary).resolve()
+            source=root/'source'
+            (source/'01_Audio_Master').mkdir(parents=True)
+            assets=root/'assets'
+            assets.mkdir()
+            chosen=read_catalog()[0]
+            approval=approval_template()
+            approval['tracks'][chosen['id']].update(
+                commercial_use_confirmed=True, quality_accepted=False,
+                quality_basis='not_yet_owner_quality_approved')
+            atomic_json(assets/'approval.json',approval)
+            (source/'01_Audio_Master'/f"{source_title(chosen)}.wav").write_bytes(b'fixture')
+            with patch('aether_compilation_assets.review_audio', side_effect=lambda p: {
+                 'accepted':False, 'reason_codes':['audio_clipping'],
+                 'source_sha256':file_hash(p)}):
+                with self.assertRaisesRegex(VideoError, 'aether_asset_no_accepted_audio'):
+                    sync_assets(assets, source_root=source, execute=True)
+            self.assertFalse((assets/'manifest.json').exists())
 
 class DurablePublication(unittest.TestCase):
     def test_queue_creates_private_job_directory_before_rendering(self):
