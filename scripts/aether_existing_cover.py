@@ -1,6 +1,9 @@
 """Import a hash-bound, owner-approved single cover without a generation API."""
 from __future__ import annotations
 
+import base64
+import binascii
+import hashlib
 import os
 from pathlib import Path
 import shutil
@@ -13,6 +16,61 @@ from youtube_report_store import directory
 ASSETS_ROOT = Path.home() / "Library/Application Support/ONNELLAB/content-engine/aether-inn/assets"
 APPROVAL_FILE = "single_cover_approvals.json"
 MAX_COVER_BYTES = 32 * 1024 * 1024
+
+
+def _install_hash_bound_staged_cover(root: Path, spec: dict) -> None:
+    """Materialize an already owner-approved PNG from a local Base64 transfer.
+
+    This does not approve artwork or generate a replacement. The source remains
+    fail-closed until its exact bytes match the owner's SHA-256 in the approval.
+    """
+    if spec.get("commercial_use_confirmed") is not True:
+        return
+    relative = spec.get("path")
+    if not isinstance(relative, str):
+        return
+    fragment = Path(relative)
+    if fragment.is_absolute() or ".." in fragment.parts or fragment.suffix.lower() != ".png":
+        return
+    target = root / fragment
+    if target.exists() or target.is_symlink():
+        return
+    encoded = target.with_name(target.name + ".b64")
+    if encoded.is_symlink():
+        raise VideoError("aether_single_cover_staged_source_unsafe")
+    if not encoded.is_file():
+        return
+    current = encoded.parent
+    while current != root and current != current.parent:
+        if current.is_symlink():
+            raise VideoError("aether_single_cover_staged_source_unsafe")
+        current = current.parent
+    if not 0 < encoded.stat().st_size <= ((MAX_COVER_BYTES + 2) // 3) * 4:
+        raise VideoError("aether_single_cover_staged_size_invalid")
+    try:
+        data = base64.b64decode(encoded.read_bytes(), validate=True)
+    except (binascii.Error, ValueError):
+        raise VideoError("aether_single_cover_staged_encoding_invalid") from None
+    if not 0 < len(data) <= MAX_COVER_BYTES:
+        raise VideoError("aether_single_cover_staged_size_invalid")
+    if hashlib.sha256(data).hexdigest() != spec.get("sha256"):
+        raise VideoError("aether_asset_hash_mismatch")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    partial = target.with_name(target.name + ".partial")
+    if partial.is_symlink() or partial.exists():
+        raise VideoError("aether_single_cover_staged_partial_exists")
+    try:
+        with partial.open("xb") as output:
+            output.write(data)
+        os.chmod(partial, 0o600)
+        if file_hash(partial) != spec["sha256"]:
+            raise VideoError("aether_asset_hash_mismatch")
+        partial.replace(target)
+    except OSError:
+        raise VideoError("aether_single_cover_staging_failed") from None
+    finally:
+        if partial.is_file() and not partial.is_symlink():
+            partial.unlink(missing_ok=True)
 
 
 def approved_cover(title: str, assets_root: Path) -> tuple[Path, dict, str]:
@@ -36,6 +94,7 @@ def approved_cover(title: str, assets_root: Path) -> tuple[Path, dict, str]:
         raise VideoError("aether_single_cover_quality_unconfirmed")
     if spec.get("kind") not in {"finished_cover", "unbranded_background"}:
         raise VideoError("aether_single_cover_kind_invalid")
+    _install_hash_bound_staged_cover(root, spec)
     source = checked_asset(root, spec, {".png", ".jpg", ".jpeg"})
     if source.stat().st_size > MAX_COVER_BYTES:
         raise VideoError("aether_single_cover_too_large")
