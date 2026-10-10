@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-09T13:37:41+09:00",
+  "checked_at": "2026-10-10T13:21:58+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 68,
-    "already_done": 60,
+    "already_done": 62,
     "verified": 0,
-    "pending": 8
+    "pending": 6
   },
   "items": [
     {
@@ -406,6 +406,18 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0018::x::en::x",
+      "topic_id": "TOPIC-0018",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2108720781568159763",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0018::bluesky::en::bluesky",
       "topic_id": "TOPIC-0018",
       "platform": "bluesky",
@@ -535,6 +547,18 @@
       "reason": "",
       "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7513847187164897281/",
       "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
+      "manual_key": "TOPIC-0044::x::en::x",
+      "topic_id": "TOPIC-0044",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2108720971201036399",
+      "verification_method": "remote_chrome_permalink",
       "verification_confidence": "browser_permalink"
     },
     {
@@ -730,18 +754,6 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0018::x::en::x",
-      "topic_id": "TOPIC-0018",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "HTTP 402 from https://api.x.com/2/tweets: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
       "manual_key": "TOPIC-0018::linkedin::en::linkedin",
       "topic_id": "TOPIC-0018",
       "platform": "linkedin",
@@ -771,18 +783,6 @@
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0044::x::en::x",
-      "topic_id": "TOPIC-0044",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
       "status": "pending",
       "reason": "No matching public post found",
       "posted_url": "",
