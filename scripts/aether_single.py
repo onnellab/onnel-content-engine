@@ -22,7 +22,7 @@ from aether_compilation import thumbnail
 from aether_offline_audio_review import review_audio
 from aether_compose import audio_duration, media_info, validate_output
 from aether_cover import lane_direction
-from aether_existing_cover import import_existing_cover
+from aether_existing_cover import ASSETS_ROOT, approved_cover, import_existing_cover
 from aether_planner import inspect_candidate, read_catalog
 from lyria_generate import generate as generate_music
 from lyria_config import connection_status as lyria_connection_status
@@ -374,6 +374,8 @@ def recover_generated_result(folder: Path) -> dict | None:
             data = load_json(manifest, limit=2 * 1024 * 1024)
         except Exception:
             raise VideoError("aether_single_generation_manifest_invalid") from None
+        if data.get("state") == "request_started":
+            raise VideoError("aether_lyria_generation_uncertain")
         if data.get("state") != "generated" or not isinstance(data.get("candidates"), list):
             raise VideoError("aether_single_generation_manifest_invalid")
         for row in data["candidates"]:
@@ -513,7 +515,8 @@ def readiness(root=ROOT) -> dict:
         "worker": "generated_single",
         "youtube_credentials": credential_status(profile="aether_inn"),
         "lyria": lyria_connection_status(check_auth=False),
-        "paid_api_allowed": False,
+        "paid_api_allowed": {"lyria_3_pro_single": True, "maximum_usd_per_song": 0.08,
+                             "maximum_candidates_per_song": 1, "other_paid_apis": False},
         "cover_model": "owner_approved_existing_cover",
         "cover_generation": "disabled_no_paid_api",
         "cover_import": "requires_per_title_sha_bound_rights_and_quality_approval",
@@ -627,11 +630,18 @@ def worker(
                     else:
                         generated = recover_generated_result(folder)
                         if generated is None:
+                            # Do not spend for audio that cannot become a video.
+                            # Owner-approved cover rights, quality, exact title
+                            # and hash must already be valid before the API call.
+                            if cover_generator is import_existing_cover:
+                                approved_cover(job["title"], ASSETS_ROOT)
                             generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
                         chosen = select_candidate(
                             generated, _history_hashes(state),
                             reviewer=lambda path: review_audio(path),
                         )
+                        chosen["generation_count"] = len(generated.get("candidates") or [])
+                        chosen["estimated_cost_usd"] = generated.get("estimated_cost_usd")
                     job["music"] = chosen
                     job["status"] = "music_ready"
                     atomic_json(q.state_path, state)
@@ -694,6 +704,9 @@ def worker(
                 "slot": job["slot"], "title": job["title"], "lane": job["lane"],
                 "source_kind": job.get("source_kind", "new_lyria"),
                 "source_filename": job.get("source_filename"),
+                "generation_count": (job.get("music") or {}).get("generation_count"),
+                "estimated_cost_usd": (job.get("music") or {}).get("estimated_cost_usd"),
+                "audio_review": (job.get("music") or {}).get("review"),
                 "video_id": job.get("upload", {}).get("video_id"),
                 "thumbnail_status": job.get("thumbnail_status"),
                 "publish_at": (job.get("approval", {}).get("choices", {}) or {}).get("publish_at"),
