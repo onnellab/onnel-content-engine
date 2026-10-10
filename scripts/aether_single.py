@@ -173,13 +173,36 @@ def find_existing_public_video(api: YouTube, title: str) -> dict | None:
     return None
 
 
+
+def _hydrate_dataless_backlog_wav(source: Path) -> None:
+    """Read the entire MYBOX placeholder before copying its canonical WAV.
+
+    Merely launching MYBOX and sleeping is not sufficient: FileProvider may
+    still show a size for a dataless file whose bytes have not downloaded.
+    Reading in bounded chunks triggers hydration, with limited retries for
+    transient provider errors. Never fall back to new music generation.
+    """
+    _warm_mybox_provider()
+    for attempt in range(3):
+        try:
+            with source.open("rb") as stream:
+                while stream.read(2 * 1024 * 1024):
+                    pass
+            return
+        except OSError:
+            if attempt == 2:
+                raise VideoError("aether_single_backlog_wav_unavailable") from None
+            time.sleep(2 * (attempt + 1))
+
+
+
 def import_backlog_master(source: Path, folder: Path, expected_duration: float) -> dict:
     source = Path(source)
     if source.suffix.lower() != ".wav" or source.is_symlink() or not source.is_file():
         raise VideoError("aether_single_backlog_wav_not_synced")
     source_was_dataless = _is_dataless(source)
     if source_was_dataless:
-        _warm_mybox_provider()
+        _hydrate_dataless_backlog_wav(source)
     target_dir = directory(Path(folder) / "source")
     target = target_dir / "master.wav"
     partial = target_dir / "master.partial.wav"
@@ -629,6 +652,11 @@ def worker(
                     job.update(result=result, status="rendered", upload_eligible=True, error=None)
                     atomic_json(q.state_path, state)
             if publish:
+                # Rendering and FileProvider hydration can cross 09:00. Never
+                # start a first upload after the exact publishAt has gone stale.
+                # Existing uploads are reconciled with their same durable ID.
+                if not job.get("upload") and publish_slot_stale(job["slot"]):
+                    raise VideoError("aether_single_publish_time_stale")
                 uploader = Uploader(q, partial(YouTube, profile="aether_inn"))
                 if not job.get("approval"):
                     publish_at = scheduled_publish_at(job["slot"])
