@@ -37,6 +37,10 @@ class LyriaConfigTests(unittest.TestCase):
         self.assertEqual("global", result["location"])
         with self.assertRaisesRegex(CredentialError, "spend_cap_below"):
             lyria_config.validate_settings(self.settings(candidate_count=2, max_usd_per_run=0.08))
+        with self.assertRaisesRegex(CredentialError, "lyria_owner_candidate_limit"):
+            lyria_config.validate_settings(self.settings(candidate_count=2, max_usd_per_run=0.16))
+        with self.assertRaisesRegex(CredentialError, "lyria_owner_spend_limit"):
+            lyria_config.validate_settings(self.settings(max_usd_per_run=0.16))
         for project in ["UPPERCASE", "x", "bad_project"]:
             with self.subTest(project=project), self.assertRaises(CredentialError):
                 lyria_config.validate_project_id(project)
