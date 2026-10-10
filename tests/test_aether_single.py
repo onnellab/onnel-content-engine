@@ -189,7 +189,7 @@ class SingleTests(unittest.TestCase):
             with patch.object(aether_single, "_is_dataless", return_value=True), \
                  patch.object(aether_single, "_hydrate_dataless_backlog_wav") as warm:
                 imported = aether_single.import_backlog_master(source, job, 138)
-            warm.assert_called_once_with()
+            warm.assert_called_once_with(source)
             self.assertTrue(imported["source_was_dataless"])
             self.assertTrue(Path(imported["path"]).is_file())
             self.assertEqual(file_hash(source), imported["sha256"])
