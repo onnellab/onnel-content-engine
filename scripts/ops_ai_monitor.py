@@ -265,9 +265,9 @@ def _attention_card(item: Mapping[str, object], *, deferred: bool = False, polic
         + _loc(*badge, "span") + '</span></div>' + body + '</article>'
     )
 
-def render_monitoring(report: Mapping[str, object] | None) -> str:
+def render_monitoring(report: Mapping[str, object] | None, *, now: datetime | None = None) -> str:
     """Full detail page: urgent items first, zero metrics tucked away."""
-    state = analyze(report)
+    state = analyze(report, now=now)
     summary = state["summary"]
     has_report = state["has_report"]
     collection = str(state["collection"])
