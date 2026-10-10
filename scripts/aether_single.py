@@ -591,6 +591,20 @@ def worker(
             style = _clean(style, "style", 1200)
             lane = _clean(lane, "lane", 64)
             lane_direction(lane)
+            if publish and source_kind != "backlog_wav":
+                # Never buy a new candidate for a title already public on the
+                # verified Aether Inn channel, even if the local queue lacks it.
+                existing = find_existing_public_video(api, title)
+                if existing:
+                    return {
+                        "profile": "aether_inn", "status": "already_public",
+                        "created_new_job": False, "source_kind": "new_lyria",
+                        "title": title, "video_id": existing["video_id"],
+                        "existing_title": existing["title"],
+                        "existing_published_at": existing["published_at"],
+                        "generation_count": 0, "estimated_cost_usd": 0.0,
+                        "publication_complete": False,
+                    }
             if source_kind == "backlog_wav":
                 if not source_filename or type(source_expected_duration) not in (int, float):
                     raise VideoError("aether_single_backlog_source_invalid")
