@@ -1,24 +1,24 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-11T21:24:24+00:00",
+  "generated_at": "2026-10-11T22:54:33+00:00",
   "items": [
     {
       "review_id": "85189b71-d5c4-4e11-9c5b-c9218e13b3b1",
-      "category": "data_loss",
+      "category": "feature_request",
       "risk_flags": [
-        "data_loss"
+        "feature"
       ],
-      "similarity_key": "data_loss",
-      "similar_reviews": 1,
+      "similarity_key": "feature_request",
+      "similar_reviews": 2,
       "facts": [],
       "requires_human_approval": true,
       "actions": {
         "reply": "not_needed",
-        "github_issue": "approval_required",
+        "github_issue": "not_needed",
         "store_copy": "not_needed",
-        "code_change": "investigate"
+        "code_change": "not_needed"
       },
-      "issue_draft": "## Customer report (unverified)\n- App: Papira\n- Platform/version: android 2.0.1\n- Category: data_loss\n- Similarity key: data_loss\n\n## Sanitized summary\nCustomer reported a possible product problem. Review the original in the approval dashboard; do not copy personal data into this issue.\n\n## Required before implementation\n- Reproduce or identify telemetry evidence.\n- Confirm affected versions and rollback path."
+      "issue_draft": ""
     },
     {
       "review_id": "ad7c566c-d450-4973-b072-36b4c079dd1e",
@@ -293,7 +293,7 @@
         "feature"
       ],
       "similarity_key": "feature_request",
-      "similar_reviews": 1,
+      "similar_reviews": 2,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",
