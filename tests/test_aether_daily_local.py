@@ -60,6 +60,56 @@ class RepositoryFreshness(unittest.TestCase):
         self.assertEqual(2, run.call_count)
 
 
+    def test_legacy_dashboard_path_untracked_does_not_call_git_restore(self):
+        report = {"blockers": [], "steps": [], "warnings": []}
+        names = []
+        def fake_step(_report, name, args, **_kw):
+            names.append(name)
+            if name == "ops_prewrite_divergence":
+                return 0, "0 0", ""
+            if name == "dashboard_generated_track_check":
+                return 1, "", "pathspec not found"
+            if name == "ops_snapshot_changed_paths":
+                return 0, "", ""
+            return 0, "", ""
+        with patch.object(module, "run_step", side_effect=fake_step):
+            module.publish_local_ops_sources(report)
+        self.assertIn("dashboard_generated_track_check", names)
+        self.assertNotIn("restore_generated_dashboard", names)
+        self.assertEqual("not_tracked_not_required", report["generated_dashboard_restore"])
+        self.assertEqual({"status": "unchanged"}, report["ops_snapshot_commit"])
+        self.assertEqual([], report["blockers"])
+
+    def test_tracked_dashboard_restores_with_checked_result(self):
+        report = {"blockers": [], "steps": [], "warnings": []}
+        names = []
+        def fake_step(_report, name, args, **_kw):
+            names.append(name)
+            if name == "ops_prewrite_divergence":
+                return 0, "0 0", ""
+            if name == "dashboard_generated_track_check":
+                return 0, "generated/manual-publish/index.html", ""
+            if name == "ops_snapshot_changed_paths":
+                return 0, "", ""
+            return 0, "", ""
+        with patch.object(module, "run_step", side_effect=fake_step):
+            module.publish_local_ops_sources(report)
+        self.assertIn("restore_generated_dashboard", names)
+        self.assertEqual([], report["blockers"])
+
+    def test_failed_tracked_restore_is_a_blocker(self):
+        report = {"blockers": [], "steps": [], "warnings": []}
+        def fake_step(_report, name, args, **_kw):
+            if name == "ops_prewrite_divergence":
+                return 0, "0 0", ""
+            if name == "restore_generated_dashboard":
+                return 1, "", "cannot restore"
+            return 0, "", ""
+        with patch.object(module, "run_step", side_effect=fake_step):
+            module.publish_local_ops_sources(report)
+        self.assertIn("ops_generated_dashboard_restore_failed", report["blockers"])
+
+
 class SingleSlotBoundary(unittest.TestCase):
     def report(self):
         return {"blockers": [], "steps": []}

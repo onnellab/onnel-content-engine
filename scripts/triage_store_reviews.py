@@ -28,9 +28,27 @@ RISK_TERMS = {
     "billing": ("paid", "pay", "payment", "purchase", "refund", "charged", "free", "결제", "구매", "환불", "무료"),
     "privacy": ("privacy", "personal data", "tracking", "개인정보", "추적"),
     "security": ("security", "hack", "password", "보안", "해킹", "비밀번호"),
-    "data_loss": ("lost", "deleted", "missing", "data loss", "사라", "삭제", "유실"),
+    # Data loss needs an actual saved-file/data-loss context. The generic words
+    # 'deleted', 'missing', and '삭제' also describe *requested UI controls*
+    # (e.g. Papira "제목삭제가능") and must not trigger a critical loss report.
+    "data_loss": (
+        "data loss", "lost data", "lost my data", "lost all my",
+        "deleted my file", "deleted my data", "my files are gone",
+        "files disappeared", "notes disappeared", "records disappeared",
+        "my data is missing", "data is missing", "files missing",
+        "데이터 유실", "데이터 손실", "데이터가 사라", "기록이 사라",
+        "기록들이 사라", "파일이 사라", "파일들이 사라", "내용이 사라",
+        "내용이 지워", "기록이 지워", "파일이 삭제", "파일들이 삭제",
+        "기록이 삭제", "데이터가 삭제", "데이터 삭제됨",
+        "글이 날아", "저장한 글이 없어", "저장한 기록이 없어",
+    ),
     "bug": ("crash", "crashed", "freeze", "error", "doesn't work", "does not work", "failed", "버그", "크래시", "오류", "안 됨", "안됨"),
-    "feature": ("feature", "please add", "would like", "support", "기능", "추가", "지원"),
+    "feature": (
+        "feature", "please add", "would like", "support", "기능",
+        "추가", "지원", "수정바랍니다", "수정 부탁", "수정해주",
+        "개선해주", "고쳐주", "삭제 가능", "삭제가능", "제목삭제",
+        "remove title", "allow removing", "tablet layout", "padding",
+    ),
 }
 PRICING_CONFUSION = ("not free", "actually a paid", "paid app", "free as stated", "무료가 아니", "유료")
 
