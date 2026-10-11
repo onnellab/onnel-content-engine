@@ -1323,10 +1323,10 @@ def html_document(
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="ONNEL Dashboard">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
-  <link rel="icon" href="/favicon-32x32.png?v=20260712-ol-transparent-v2" sizes="32x32" type="image/png">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" href="./icon-180.png?v=20260713-dashboard-bg">
+  <link rel="apple-touch-icon" href="./icon-180.png?v=20261008-open-monogram-v1">
   <style>
     :root {{
       --ink: #191714; --muted: #746f69; --line: #ddd4ca; --surface: #fffaf5; --panel: #ffffff;
@@ -1565,7 +1565,7 @@ def html_document(
 <body>
   <header>
     <div class="bar">
-      <a class="brand" href="/" aria-label="ONNELLAB home"><img class="mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32"><div id="app-title">ONNELLAB Ops</div></a>
+      <a class="brand" href="/" aria-label="ONNELLAB home"><img class="mark" src="/favicon.svg?v=20261008-open-monogram-v1" alt="" width="32" height="32"><div id="app-title">ONNELLAB Ops</div></a>
       <div class="header-right">
         <button id="lang-toggle" type="button" class="lang">English</button>
       </div>
@@ -5278,18 +5278,18 @@ def pwa_manifest_document() -> str:
             "theme_color": "#fffaf5",
             "icons": [
                 {
-                    "src": "./icon-180.png?v=20260713-dashboard-bg",
+                    "src": "./icon-180.png?v=20261008-open-monogram-v1",
                     "sizes": "180x180",
                     "type": "image/png",
                 },
                 {
-                    "src": "./icon-192.png?v=20260713-dashboard-bg",
+                    "src": "./icon-192.png?v=20261008-open-monogram-v1",
                     "sizes": "192x192",
                     "type": "image/png",
                     "purpose": "any maskable",
                 },
                 {
-                    "src": "./icon-512.png?v=20260713-dashboard-bg",
+                    "src": "./icon-512.png?v=20261008-open-monogram-v1",
                     "sizes": "512x512",
                     "type": "image/png",
                     "purpose": "any maskable",

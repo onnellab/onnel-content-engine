@@ -130,3 +130,12 @@ never silently treats missing reports as zero sales.
 Before updating deployment workflows, add `ONNELLAB_OPS_PASSWORD` as a
 strong random (minimum 24-character) repository secret. Keep it out of Git,
 issue comments, CI logs, public HTML, analytics and support screenshots.
+
+## Ops app icons (canonical source)
+
+The seal-site operation rebuilds public/ops/ from scratch, including the encrypted login HTML.
+Its three public PWA icons are copied after sealing from the homepage repo's
+versioned public/brand/ops-mark-{180,192,512}.png originals.
+Missing or invalid icon sources stop publication before deleting the previous
+Ops deployment. Never store the only source under public/ops.
+The sealed artifact validator checks favicon version and all three icon sizes.

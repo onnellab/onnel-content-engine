@@ -43,6 +43,21 @@ function traverse(root){
 function jsonSafe(obj){
  return JSON.stringify(obj).replaceAll('<','\\u003c').replaceAll('&','\\u0026');
 }
+// The published /ops directory is deleted on each deploy. Read and verify
+// durable approved artwork from the adjacent public/brand directory first.
+const PNG_HEADER=Buffer.from('89504e470d0a1a0a','hex');
+function brandedIcons(target){
+ const sourceDir=join(dirname(resolve(target)),'brand');
+ return [180,192,512].map(size=>{
+  const name='icon-'+size+'.png';
+  const raw=readFileSync(join(sourceDir,'ops-mark-'+size+'.png'));
+  if(raw.length<33||!raw.subarray(0,8).equals(PNG_HEADER)||
+     raw.readUInt32BE(16)!==size||raw.readUInt32BE(20)!==size)
+    throw new Error('Invalid canonical Ops icon: '+name);
+  return {name,raw};
+ });
+}
+
 const [,,command,source,target]=process.argv;
 if(!command||!source||!target)throw new Error('Use seal-site src dest | seal-data src dest | unseal-data src dest');
 requirePassword();
@@ -53,6 +68,10 @@ if(command==='seal-site'){
  if(!files.some(p=>relative(source,p)==='index.html'))throw new Error('Dashboard index missing');
  const salt=randomBytes(16),key=derive(salt),shell=readFileSync(template,'utf8');
  if(!shell.includes('__OPS_ENCRYPTED_PAYLOAD__'))throw new Error('Unlock template payload marker is missing');
+ // Fail before destructive publication if any canonical icon is absent/invalid.
+ const icons=brandedIcons(target);
+ if(files.some(file=>/^icon-(180|192|512)\.png$/.test(relative(source,file))))
+   throw new Error('Ops icons must be published only from canonical brand sources');
  rmSync(target,{recursive:true,force:true});mkdirSync(target,{recursive:true});
  for(const file of files){
   const rel=relative(source,file).replaceAll('\\','/');
@@ -66,6 +85,8 @@ if(command==='seal-site'){
      "self.addEventListener('activate',e=>e.waitUntil((async()=>{for(const k of await caches.keys())await caches.delete(k);await self.registration.unregister()})()));\n");
   }else{cpSync(file,output);}
  }
+ // Icons are public assets, never embedded in the encrypted HTML payload.
+ for(const {name,raw} of icons)writeFileSync(join(target,name),raw);
  console.log('Encrypted static dashboard prepared');
 }else if(command==='seal-data'){
  const salt=randomBytes(16),key=derive(salt),blob=encrypt(gzipSync(readFileSync(source)),'onnel-private-sales-ledger',key,salt);

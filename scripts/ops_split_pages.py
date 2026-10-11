@@ -254,14 +254,14 @@ def _page(title: str, current: str, body: str) -> str:
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{_esc(title)} · ONNELLAB Ops</title>
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
-<link rel="icon" href="/favicon.svg?v=20260712-ol-transparent-v2" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
 <style>{OPS_BASE_CSS}</style>
 </head>
 <body>
 <header class="ops-topbar">
   <div class="ops-bar">
     <a class="ops-brand" href="/" aria-label="ONNELLAB home">
-      <img class="ops-mark" src="/favicon.svg?v=20260712-ol-transparent-v2" alt="" width="32" height="32">
+      <img class="ops-mark" src="/favicon.svg?v=20261008-open-monogram-v1" alt="" width="32" height="32">
       <span>ONNELLAB Ops</span>
     </a>
     <button class="ops-lang" id="ops-lang-toggle" type="button">English</button>

@@ -65,6 +65,22 @@ def validate_sealed_dashboard(path: Path) -> None:
     text = path.read_text(encoding="utf-8")
     if "ops-sealed-data" not in text or "PBKDF2" not in text:
         raise DashboardArtifactError("Sealed dashboard is missing its encrypted login shell")
+    if ('rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1"' not in text
+            or "20260712-ol-transparent-v2" in text):
+        raise DashboardArtifactError("Sealed dashboard branding is stale or missing")
+    if path.parent.name == "ops":
+        # The root's PWA icons must survive every destructive encrypted republish.
+        signature = bytes.fromhex("89504e470d0a1a0a")
+        for size in (180, 192, 512):
+            icon = path.parent / f"icon-{size}.png"
+            try:
+                blob = icon.read_bytes()
+            except OSError as error:
+                raise DashboardArtifactError(f"Sealed dashboard icon missing: {icon.name}") from error
+            if (len(blob) < 33 or blob[:8] != signature
+                    or int.from_bytes(blob[16:20], "big") != size
+                    or int.from_bytes(blob[20:24], "big") != size):
+                raise DashboardArtifactError(f"Sealed dashboard icon invalid: {icon.name}")
     if any(secret_marker in text for secret_marker in (
         'id="manual-data"', 'id="store-review-data"', 'id="sales-ledger"',
         '<nav class="ops-nav"', 'data-ops-view="home"'
