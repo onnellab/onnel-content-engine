@@ -133,5 +133,54 @@ class StoreReviewResponsesTest(unittest.TestCase):
             self.assertEqual(validate(drafts, reviews), [])
 
 
+    def test_papira_specific_feedback_gets_grateful_specific_reply_no_debug_request(self) -> None:
+        review = {
+            "app_slug": "papira",
+            "app_name": "Papira",
+            "platform": "android",
+            "rating": "3",
+            "title": "",
+            "body": "몇가지만 수정바랍니다 표지가 속표지만 된다는점 표지이미지만사용하게 제목삭제가능 패드로보는데 양쪽 간격이너무넓어서 기록이 너무좁아요",
+            "reviewer_language": "ko",
+        }
+        result = generate_reply(review)
+        self.assertEqual(result["reply_category"], "feature")
+        reply = result["suggested_reply"]
+        self.assertIn("감사합니다", reply)
+        self.assertIn("표지", reply)
+        self.assertIn("제목", reply)
+        self.assertIn("태블릿", reply)
+        self.assertIn("좌우 여백", reply)
+        self.assertIn("패치", reply)
+        self.assertNotIn("재현", reply)
+        self.assertNotIn("앱 버전", reply)
+        self.assertNotIn("발생 과정", reply)
+        self.assertFalse(reply.endswith("ONNELLAB"))
+        self.assertLessEqual(len(reply), 350)
+
+    def test_store_review_templates_have_no_brand_signoff(self) -> None:
+        from store_review_responses import load_templates
+        source = load_templates()
+        for lang in ("ko", "en"):
+            for category, template in source[lang].items():
+                with self.subTest(lang=lang, category=category):
+                    self.assertNotIn("— ONNELLAB", template)
+                    self.assertFalse(template.rstrip().endswith("ONNELLAB"))
+        for app, language_map in source["app_overrides"].items():
+            for lang, categories in language_map.items():
+                for category, template in categories.items():
+                    with self.subTest(app=app, lang=lang, category=category):
+                        self.assertFalse(template.rstrip().endswith("ONNELLAB"))
+
+    def test_genuine_bug_remains_reproduction_request_not_feature(self) -> None:
+        result = generate_reply({
+            "app_name": "Papira", "app_slug": "papira", "rating": "1",
+            "body": "저장하는 중 오류가 나서 앱이 멈춤",
+            "reviewer_language": "ko",
+        })
+        self.assertEqual(result["reply_category"], "bug")
+        self.assertIn("재현", result["suggested_reply"])
+
+
 if __name__ == "__main__":
     unittest.main()
