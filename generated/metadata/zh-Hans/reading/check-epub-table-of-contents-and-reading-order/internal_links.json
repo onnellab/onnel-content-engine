@@ -14,7 +14,7 @@
     "slug": "check-epub-table-of-contents-and-reading-order",
     "category": "reading",
     "language": "zh-Hans",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
       "EPUB 章节顺序",
       "EPUB 目录链接错误",

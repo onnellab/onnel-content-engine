@@ -48,9 +48,9 @@
         "slug": "check-epub-table-of-contents-and-reading-order",
         "category": "reading",
         "language": "ja",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/ja/reading/check-epub-table-of-contents-and-reading-order.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "troubleshooting",
         "shared_clusters": [],
         "score": 2

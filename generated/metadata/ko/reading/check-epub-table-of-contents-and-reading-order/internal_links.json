@@ -14,7 +14,7 @@
     "slug": "check-epub-table-of-contents-and-reading-order",
     "category": "reading",
     "language": "ko",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
       "EPUB 장 순서",
       "EPUB 목차 링크 오류",

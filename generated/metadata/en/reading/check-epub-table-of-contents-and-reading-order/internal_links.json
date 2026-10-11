@@ -14,7 +14,7 @@
     "slug": "check-epub-table-of-contents-and-reading-order",
     "category": "reading",
     "language": "en",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
       "EPUB chapter order",
       "EPUB navigation checks",

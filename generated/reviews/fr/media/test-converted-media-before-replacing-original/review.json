@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0068",
   "title": "Tester un fichier multimédia converti avant de remplacer l’original",
-  "input_fingerprint": "fda5fa469e946254ef111ae8120e1d23e4c2de45777f497a8c5e26e39c9bd0ed",
+  "input_fingerprint": "6b09b90702f7a3eaede13b0349f7346ffb7b0377e3bd81aca905f97eb789757c",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,
