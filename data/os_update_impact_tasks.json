@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-10T21:22:33+00:00",
+  "generated_at": "2026-10-11T21:22:26+00:00",
   "tasks": [
     {
       "task_id": "os-android-quivra",
@@ -8,8 +8,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "3917178ca9edc2fbabc503819c834a609471164d0ef61c47d560387d00c1468a",
-        "checked_at": "2026-10-10T21:22:29+00:00"
+        "content_hash": "cea0ad6ac9dfb194e6bfb1ae6ff123ad6658f8ee757a850405ce0cf6fadeea9d",
+        "checked_at": "2026-10-11T21:22:22+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -26,8 +26,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "3917178ca9edc2fbabc503819c834a609471164d0ef61c47d560387d00c1468a",
-        "checked_at": "2026-10-10T21:22:29+00:00"
+        "content_hash": "cea0ad6ac9dfb194e6bfb1ae6ff123ad6658f8ee757a850405ce0cf6fadeea9d",
+        "checked_at": "2026-10-11T21:22:22+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -44,8 +44,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "3917178ca9edc2fbabc503819c834a609471164d0ef61c47d560387d00c1468a",
-        "checked_at": "2026-10-10T21:22:29+00:00"
+        "content_hash": "cea0ad6ac9dfb194e6bfb1ae6ff123ad6658f8ee757a850405ce0cf6fadeea9d",
+        "checked_at": "2026-10-11T21:22:22+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -62,8 +62,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "3917178ca9edc2fbabc503819c834a609471164d0ef61c47d560387d00c1468a",
-        "checked_at": "2026-10-10T21:22:29+00:00"
+        "content_hash": "cea0ad6ac9dfb194e6bfb1ae6ff123ad6658f8ee757a850405ce0cf6fadeea9d",
+        "checked_at": "2026-10-11T21:22:22+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -80,8 +80,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "3917178ca9edc2fbabc503819c834a609471164d0ef61c47d560387d00c1468a",
-        "checked_at": "2026-10-10T21:22:29+00:00"
+        "content_hash": "cea0ad6ac9dfb194e6bfb1ae6ff123ad6658f8ee757a850405ce0cf6fadeea9d",
+        "checked_at": "2026-10-11T21:22:22+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -98,8 +98,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "3917178ca9edc2fbabc503819c834a609471164d0ef61c47d560387d00c1468a",
-        "checked_at": "2026-10-10T21:22:29+00:00"
+        "content_hash": "cea0ad6ac9dfb194e6bfb1ae6ff123ad6658f8ee757a850405ce0cf6fadeea9d",
+        "checked_at": "2026-10-11T21:22:22+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -116,8 +116,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "3917178ca9edc2fbabc503819c834a609471164d0ef61c47d560387d00c1468a",
-        "checked_at": "2026-10-10T21:22:29+00:00"
+        "content_hash": "cea0ad6ac9dfb194e6bfb1ae6ff123ad6658f8ee757a850405ce0cf6fadeea9d",
+        "checked_at": "2026-10-11T21:22:22+00:00"
       },
       "scope": [
         "OS/API deprecation",

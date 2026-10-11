@@ -1,4 +1,44 @@
 {
-  "generated_at": "2026-10-10T21:22:33+00:00",
-  "findings": []
+  "generated_at": "2026-10-11T21:22:25+00:00",
+  "findings": [
+    {
+      "finding_id": "review-85189b71-d5c4-4e11-9c5b-c9218e13b3b1",
+      "origin": "store_review",
+      "app_slug": "papira",
+      "severity": "critical",
+      "review": {
+        "review_id": "85189b71-d5c4-4e11-9c5b-c9218e13b3b1",
+        "app_id": "APP-0008",
+        "app_slug": "papira",
+        "app_name": "Papira",
+        "platform": "android",
+        "rating": "3",
+        "review_kind": "review",
+        "title": "",
+        "body": "몇가지만 수정바랍니다 표지가 속표지만 된다는점 표지이미지만사용하게 제목삭제가능 패드로보는데 양쪽 간격이너무넓어서 기록이 너무좁아요",
+        "reviewer_language": "ko",
+        "territory": "",
+        "app_version": "2.0.1",
+        "created_at": "2026-10-11T08:48:22+00:00",
+        "updated_at": "2026-10-11T08:48:22+00:00",
+        "developer_reply": "",
+        "reply_updated_at": "",
+        "status": "pending",
+        "synced_at": "2026-10-11T21:22:04+00:00",
+        "verified_at": "2026-10-11T21:22:04+00:00",
+        "verification_source": "google_reviews_get"
+      },
+      "related_review_ids": [
+        "85189b71-d5c4-4e11-9c5b-c9218e13b3b1"
+      ],
+      "hypothesis": "A high-risk store review identifies a symptom; reproduction and code evidence are required.",
+      "recommended_actions": [
+        "prepare a read-only app code context",
+        "reproduce on the reported app version when available",
+        "correlate with telemetry when a crash source becomes available"
+      ],
+      "github_issue_recommended": true,
+      "diagnosis_status": "pending"
+    }
+  ]
 }
