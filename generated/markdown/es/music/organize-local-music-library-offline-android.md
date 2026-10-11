@@ -54,17 +54,11 @@ En una colección pequeña, pueden bastar carpetas de álbum dentro de cada carp
 ## Procedimiento recomendado
 
 1. **Conserva una copia sin modificar.** Antes de mover, renombrar o editar el audio, guarda otra copia fuera de la carpeta de trabajo. Si todas las copias están en el mismo teléfono, otra carpeta no protege frente a la pérdida del dispositivo. Comprueba que puedes abrir la copia separada antes de confiar en ella para recuperar archivos.
-
 2. **Elige de tres a cinco archivos que tengas derecho a usar.** Por ejemplo, tres grabaciones propias: `01 Mañana.mp3`, `02 Río.mp3` y `03 Noche.mp3`. Son nombres ilustrativos; el artículo no proporciona esos audios. Coloca las copias de trabajo en una carpeta reconocible, como `Prueba de escucha`. Verifica que los datos estén realmente en el dispositivo y que la copia haya terminado.
-
 3. **Anota el resultado esperado.** Registra los nombres de los archivos seleccionados, su orden y los títulos o artistas conocidos. No inventes metadatos desconocidos. Este inventario distingue archivos ausentes de pistas presentes bajo otro título.
-
 4. **Añade la muestra según las instrucciones del reproductor.** Sigue el método actual para seleccionar archivos o ubicaciones y concede solo el acceso necesario. No supongas que la aplicación copia archivos, supervisa carpetas automáticamente o conserva el acceso después de moverlas. Mantén los archivos en su sitio durante esta primera comprobación.
-
 5. **Revisa la biblioteca antes de crear una lista.** Compara las pistas visibles con tu inventario. Si faltan al buscar por álbum o artista, prueba la vista de archivos o carpetas, cuando exista. Comprueba la ordenación: nombres de archivo en orden alfabético, números de pista integrados y listas organizadas manualmente pueden producir secuencias diferentes. Crea una lista corta si necesitas fijar el orden.
-
 6. **Desconecta la red y comprueba la reproducción.** Cuando puedas quedarte temporalmente sin comunicación de forma segura, desactiva tanto el Wi-Fi como los datos móviles. Si usas el modo avión, comprueba que el Wi-Fi no haya quedado activado. Escucha una pista de la muestra hasta el final y después selecciona otra. Prueba también una posición más avanzada de ese segundo archivo, no solo el principio. Cierra y vuelve a abrir el reproductor sin conexión e intenta escuchar las pistas restantes. Si sueles utilizar almacenamiento extraíble, mantenlo conectado durante la comprobación.
-
 7. **Registra el resultado antes de ampliar la colección.** Anota el archivo, la ubicación probada, el estado de la conexión y si falló la reproducción o la reapertura de la aplicación. Una observación como «Río se detiene siempre en el mismo punto» resulta más útil que «sin conexión no funciona». Restablece la conexión al terminar. Resuelve las diferencias, repite la comprobación con la misma muestra y añade después la colección en grupos fáciles de revisar. Repite la prueba si mueves archivos o cambias de almacenamiento.
 
 ![Cuatro etapas: conservar los archivos locales, crear una biblioteca pequeña, comprobar la reproducción sin conexión y ampliar la colección.](/blog-assets/es/organize-local-music-library-offline-android/workflow-diagram.svg "Organizar una biblioteca de audio sin conexión empezando por una muestra pequeña")

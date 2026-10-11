@@ -54,17 +54,11 @@ Numa coleção pequena, pastas de álbum dentro da pasta do artista podem bastar
 ## Passo a passo recomendado
 
 1. **Preserve uma cópia sem alterações.** Antes de mover, renomear ou editar os áudios, guarde outra cópia fora da pasta de trabalho. Se todas as cópias estão no mesmo celular, outra pasta não protege contra a perda do aparelho. Confirme que consegue abrir a cópia separada antes de confiar nela para recuperação.
-
 2. **Escolha de três a cinco arquivos que você tem direito de usar.** Por exemplo, use três gravações suas com os nomes `01 Manhã.mp3`, `02 Rio.mp3` e `03 Noite.mp3`. Os nomes são ilustrativos; o artigo não fornece esses áudios. Coloque as cópias de trabalho em uma pasta fácil de reconhecer, como `Teste de reprodução`. Confira se os dados estão realmente no aparelho e se a cópia terminou.
-
 3. **Anote o resultado esperado.** Registre os nomes dos arquivos selecionados, a ordem desejada e os títulos ou artistas conhecidos. Deixe informações desconhecidas em branco. Essa lista distingue arquivos ausentes de faixas presentes sob outro título.
-
 4. **Adicione a amostra pelo método indicado pelo player.** Siga as instruções atuais para selecionar arquivos ou locais, concedendo apenas o acesso necessário. Não presuma que o aplicativo copie arquivos, monitore pastas automaticamente ou mantenha acesso depois de movê-las. Deixe os arquivos no mesmo lugar durante a primeira verificação.
-
 5. **Confira a biblioteca antes de criar uma playlist.** Compare as faixas visíveis com sua lista. Se faltarem na navegação por álbum ou artista, tente a visualização de arquivos ou pastas, quando disponível. Confira a ordenação: nomes de arquivo em ordem alfabética, números de faixa nos metadados e playlists organizadas manualmente podem produzir sequências diferentes. Crie uma playlist curta se precisar definir a ordem.
-
 6. **Desconecte a rede e teste a reprodução.** Quando for seguro ficar temporariamente sem comunicação, desligue o Wi-Fi e os dados móveis. Se usar o modo avião, confira se o Wi-Fi não continuou ligado. Reproduza uma faixa da amostra até o fim e depois selecione outra. Teste também um trecho mais adiante nesse segundo arquivo, não apenas o começo. Feche e abra o player ainda sem conexão e tente reproduzir as faixas restantes. Se costuma usar armazenamento removível, mantenha-o conectado durante a verificação.
-
 7. **Registre o resultado antes de ampliar a coleção.** Anote o arquivo, o local testado, o estado da conexão e se houve falha na reprodução ou ao reabrir o aplicativo. Um relato como “Rio para sempre no mesmo ponto” ajuda mais do que “offline não funciona”. Reconecte a rede ao terminar. Resolva as diferenças, repita o teste com a mesma amostra e depois adicione a coleção em grupos fáceis de conferir. Repita a verificação ao mover arquivos ou mudar de armazenamento.
 
 ![Quatro etapas: preservar os arquivos locais, montar uma pequena biblioteca, testar a reprodução offline e ampliar a coleção.](/blog-assets/pt-BR/organize-local-music-library-offline-android/workflow-diagram.svg "Organização de uma biblioteca de áudio offline a partir de uma pequena amostra")

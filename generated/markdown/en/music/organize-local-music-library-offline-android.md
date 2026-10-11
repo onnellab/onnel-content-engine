@@ -55,17 +55,11 @@ For a modest collection, an artist folder with an album folder inside may be eno
 ## Recommended Workflow
 
 1. **Keep an untouched copy.** Before moving, renaming, or editing audio, preserve another copy outside the working folder. If all copies are on the same phone, a second folder on the same phone will not protect against loss of that device. Confirm you can open the separate copy before treating it as a fallback.
-
 2. **Select three to five files you have the right to use.** For example, use three of your own recordings named `01 Morning.mp3`, `02 River.mp3`, and `03 Evening.mp3`. These are illustrative names, not a supplied audio set. Place the working copies in a clearly named folder such as `Listening sample`. Verify that their data is actually available on the device and that the copy operation has finished.
-
 3. **Write down the expected result.** Note the selected filenames, their intended order, and any title or artist labels you already know. Leave unknown metadata unknown. This small inventory lets you distinguish a missing file from a present track displayed under an unexpected title.
-
 4. **Add the sample using the player's documented method.** Follow its current instructions for selecting files or a location, granting only the access needed for that choice. Do not assume it copies the files, watches a folder automatically, or continues to access a location after you move it. Keep the working files where they are during this first check.
-
 5. **Inspect the library before making a playlist.** Compare the visible tracks with your inventory. If album or artist browsing hides something, try the available file or folder view. Check the displayed sort order; alphabetical filename order, embedded track numbers, and a manually arranged playlist need not produce the same sequence. Create one short playlist if a chosen listening order would help.
-
 6. **Disconnect and check playback.** When it is safe to be temporarily unreachable, turn off both Wi-Fi and mobile data. If you use airplane mode, check that Wi-Fi has not remained enabled. Start a sample track, listen through its end, then select a different one. Test a later position in that file rather than only its opening. Close and reopen the player while still disconnected and try the remaining tracks. If you normally use removable storage, keep that storage connected during the check.
-
 7. **Record the outcome before expanding.** Note the file, tested location, connection state, and whether playback or reopening failed. A result such as “River stops at the same position” is more useful than “offline is broken.” Reconnect when finished. Resolve any discrepancy, repeat the small check, and then add the collection in manageable groups. Repeat it after moving files or changing storage.
 
 ![Four stages: preserve local files, build a small library, check offline playback, then expand the collection.](/blog-assets/en/organize-local-music-library-offline-android/workflow-diagram.svg "A small-sample workflow for organizing an offline audio library")

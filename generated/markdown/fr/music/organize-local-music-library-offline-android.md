@@ -54,17 +54,11 @@ Pour une petite collection, des dossiers d’album dans chaque dossier d’artis
 ## Méthode recommandée
 
 1. **Gardez une copie intacte.** Avant de déplacer, renommer ou modifier les audios, conservez une copie hors du dossier de travail. Si toutes vos copies se trouvent sur le même téléphone, un autre dossier ne protège pas contre sa perte. Vérifiez que la copie séparée s’ouvre avant de compter sur elle pour récupérer vos fichiers.
-
 2. **Choisissez trois à cinq fichiers que vous avez le droit d’utiliser.** Par exemple, trois enregistrements personnels : `01 Matin.mp3`, `02 Rivière.mp3` et `03 Soir.mp3`. Ces noms sont illustratifs ; aucun audio n’est fourni. Placez les copies de travail dans un dossier au nom clair, comme `Essai d’écoute`. Vérifiez que les données sont réellement sur l’appareil et que la copie est terminée.
-
 3. **Notez le résultat attendu.** Relevez les noms des fichiers sélectionnés, leur ordre et les titres ou artistes connus. N’inventez pas les métadonnées inconnues. Cet inventaire distingue un fichier absent d’un morceau présent sous un titre inattendu.
-
 4. **Suivez la méthode du lecteur pour ajouter l’échantillon.** Consultez ses instructions actuelles pour choisir fichiers ou emplacement, en accordant uniquement l’accès nécessaire. Ne supposez pas que l’application copie les fichiers, surveille automatiquement un dossier ou conserve son accès après déplacement. Laissez les fichiers en place pendant ce premier contrôle.
-
 5. **Inspectez la bibliothèque avant de créer une liste.** Comparez les morceaux à votre inventaire. Si certains manquent dans la navigation par album ou artiste, essayez la vue par fichiers ou dossiers, si disponible. Vérifiez le tri : ordre alphabétique des noms de fichier, numéros de piste intégrés et listes réorganisées manuellement peuvent donner des séquences différentes. Créez une courte liste si un ordre précis est utile.
-
 6. **Coupez la connexion et testez la lecture.** Quand vous pouvez être temporairement injoignable sans risque, désactivez Wi-Fi et données mobiles. En mode avion, vérifiez que le Wi-Fi est désactivé. Écoutez un morceau de l’échantillon jusqu’au bout, puis choisissez-en un autre. Testez aussi un passage plus loin dans ce deuxième fichier. Fermez et rouvrez le lecteur toujours hors ligne, puis essayez les morceaux restants. Si vous utilisez habituellement un support amovible, gardez-le connecté pendant le contrôle.
-
 7. **Consignez le résultat avant d’agrandir la collection.** Notez fichier, emplacement testé, état de connexion et échecs de lecture ou réouverture. « Rivière s’arrête toujours au même endroit » aide davantage que « le mode hors ligne ne marche pas ». Rétablissez la connexion en terminant. Corrigez les écarts, revérifiez le même échantillon, puis ajoutez la collection par groupes faciles à contrôler. Recommencez après déplacement des fichiers ou changement de stockage.
 
 ![Quatre étapes : conserver les fichiers locaux, créer une petite bibliothèque, vérifier la lecture hors ligne et agrandir la collection.](/blog-assets/fr/organize-local-music-library-offline-android/workflow-diagram.svg "Organiser une bibliothèque audio hors ligne en commençant par un petit échantillon")
