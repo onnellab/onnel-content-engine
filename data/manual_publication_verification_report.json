@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-10T13:21:58+09:00",
+  "checked_at": "2026-10-11T13:03:12+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 68,
-    "already_done": 62,
+    "already_done": 64,
     "verified": 0,
-    "pending": 6
+    "pending": 4
   },
   "items": [
     {
@@ -562,6 +562,30 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0044::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0044",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mxl4oixvnn2v",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0044::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0044",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7514544871399911424/",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0001::devto::en::markdown",
       "topic_id": "TOPIC-0001",
       "platform": "devto",
@@ -780,30 +804,6 @@
     {
       "manual_key": "TOPIC-0020::linkedin::en::linkedin",
       "topic_id": "TOPIC-0020",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0044::bluesky::en::bluesky",
-      "topic_id": "TOPIC-0044",
-      "platform": "bluesky",
-      "language": "en",
-      "template_id": "bluesky",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0044::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0044",
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
