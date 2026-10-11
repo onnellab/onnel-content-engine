@@ -104,9 +104,12 @@
         "android"
       ],
       "public_guide_shorts_observed": 0,
-      "state": "assets_and_copy_reviewed_contract_render_pending",
+      "state": "verified_guide_scheduled",
       "preparation_path": "data/screenshot_guides/melivra-favorites-20261012.preparation.json",
-      "claim_guard": "Android only. Real emulator screenshots with seeded demo library; no playback or speed claims."
+      "claim_guard": "Android only. Real emulator screenshots with seeded demo library; no playback or speed claims.",
+      "scheduled_video_id": "RC929En2dSw",
+      "scheduled_publish_at": "2026-10-12T09:00:00+09:00",
+      "receipt_path": "data/screenshot_guides/melivra-favorites-20261012.receipt.json"
     },
     {
       "app_id": "APP-0008",
@@ -143,9 +146,10 @@
     {
       "publish_at": "2026-10-12T09:00:00+09:00",
       "timezone": "Asia/Seoul",
-      "status": "unreserved",
+      "status": "scheduled",
       "preferred_candidate": "melivra-favorites-20261012",
-      "blocker": "Contract extension, tests and verified render must precede durable upload intent."
+      "video_id": "RC929En2dSw",
+      "receipt_path": "data/screenshot_guides/melivra-favorites-20261012.receipt.json"
     },
     {
       "publish_at": "2026-10-14T09:00:00+09:00",
@@ -171,10 +175,28 @@
     "aether_inn": "Untouched"
   },
   "verification_limits": [
+    "Initial review limitations below are historical to 09:58Z. Melivra was subsequently rendered, tested, visually reviewed, saved to Library and scheduled with durable intent/receipt.",
+    "Public platform observations for non-selected older apps retain today's registry/store snapshot; selected Melivra 1.0.7 was independently checked live.",
+    "Scheduled is not public. Verify RC929En2dSw after its release time. Other next slots remain unreserved.",
+    "Existing Quivra Public state was already reported October 9; no repeat publication announcement."
+  ],
+  "initial_review_verification_limits": [
     "No new guide rendered, uploaded, scheduled or saved as a completed Library video.",
     "Current screenshot validator remains Quivra-only; no code/gate changes made.",
     "Repository JSON shape and factual invariants checked in memory; no Python or renderer tests executed.",
     "Public platform observations for non-selected older apps retain today's registry/store snapshot; selected Melivra 1.0.7 was independently checked live.",
     "Existing Quivra Public state was already reported October 9; this is a durable reconciliation, not a new-publication announcement."
-  ]
+  ],
+  "schedule_update": {
+    "observed_at": "2026-10-11T13:00:24Z",
+    "video_id": "RC929En2dSw",
+    "scheduled_publish_at": "2026-10-12T09:00:00+09:00",
+    "receipt_path": "data/screenshot_guides/melivra-favorites-20261012.receipt.json",
+    "shorts_inventory_rows": "1-8 of 8",
+    "shorts_count": 8,
+    "public_shorts": 7,
+    "scheduled_shorts": 1,
+    "draft_shorts": 0,
+    "source_url": "https://studio.youtube.com/channel/UCXyRedrldRBl9Y35nyWoTLg/videos/short"
+  }
 }

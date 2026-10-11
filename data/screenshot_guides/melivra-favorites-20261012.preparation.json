@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "screenshot_guide_preparation",
   "guide_id": "melivra-favorites-20261012",
-  "status": "rendered_verified_pending_upload",
+  "status": "scheduled",
   "app_id": "APP-0007",
   "locale": "en",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
@@ -10,11 +10,11 @@
   "target": {
     "publish_at": "2026-10-12T09:00:00+09:00",
     "timezone": "Asia/Seoul",
-    "slot_reserved": false,
-    "upload_intent_created": false,
-    "upload_started": false,
-    "video_id": null,
-    "video_sha256": null
+    "slot_reserved": true,
+    "upload_intent_created": true,
+    "upload_started": true,
+    "video_id": "RC929En2dSw",
+    "video_sha256": "38b71bff0b0039f97a93f38f26e766d2d5cec91a263a6bfe348f6038f1cc5c3b"
   },
   "source": {
     "repository": "onnellab/melivra",
@@ -135,12 +135,11 @@
     "rendered": true,
     "final_frames_reviewed": true,
     "library_saved": true,
-    "upload_eligible": true
+    "upload_eligible": true,
+    "scheduled": true
   },
   "remaining_gates": [
-    "Reconcile complete live ONNELLAB Studio inventory before durable intent.",
-    "Persist reviewed manifest/video hash-bound intent before selecting the upload file.",
-    "Persist assigned video ID and confirm October 12 09:00 Asia/Seoul scheduling in Studio."
+    "Verify actual public state of existing video RC929En2dSw after 2026-10-12T00:00:00Z; do not re-upload."
   ],
   "execution_blocker": {
     "code": "no_authorized_non_cli_contract_executor",
@@ -169,5 +168,7 @@
     "Verify all output frames, silent 15-second 1080x1920 H.264/yuv420p/30fps MP4, bound hashes, and no owned encoder process left running."
   ],
   "resumed_at": "2026-10-11T12:25:55Z",
-  "verified_render_evidence_path": "data/screenshot_guides/melivra-favorites-20261012.render.json"
+  "verified_render_evidence_path": "data/screenshot_guides/melivra-favorites-20261012.render.json",
+  "scheduled_receipt_path": "data/screenshot_guides/melivra-favorites-20261012.receipt.json",
+  "scheduled_at_observed": "2026-10-11T12:59:49Z"
 }
