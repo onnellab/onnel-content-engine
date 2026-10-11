@@ -22,8 +22,8 @@ Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts
       "developer_reply": "",
       "reply_updated_at": "",
       "status": "pending",
-      "synced_at": "2026-10-11T15:30:27+00:00",
-      "verified_at": "2026-10-11T15:30:27+00:00",
+      "synced_at": "2026-10-11T21:22:46+00:00",
+      "verified_at": "2026-10-11T21:22:46+00:00",
       "verification_source": "google_reviews_get"
     },
     "triage": {
