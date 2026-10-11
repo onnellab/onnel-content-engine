@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_candidate_review",
+  "reviewed_at": "2026-10-11T09:58:30Z",
+  "candidate_source": "data/apps_registry.csv on current main; all eight released/content-eligible products considered",
+  "store_snapshot": "data/store_versions.csv checked 2026-10-11T13:01:39+09:00",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "studio_reconciliation": {
+    "observed_at": "2026-10-11T09:52:14Z",
+    "surface": "Verified ONNELLAB YouTube Studio",
+    "shorts_inventory_rows": "1-7 of 7",
+    "shorts_count": 7,
+    "public_shorts": 7,
+    "scheduled_shorts": 0,
+    "draft_shorts": 0,
+    "ordinary_video_inventory_rows": "1-6 of 6",
+    "ordinary_video_count": 6,
+    "scope": "Complete current Shorts and ordinary Videos tabs; no claims about deleted content or unlisted/private distribution.",
+    "source_url": "https://studio.youtube.com/channel/UCXyRedrldRBl9Y35nyWoTLg/videos/short"
+  },
+  "selection_order": [
+    "Verified released platform and honest matching real screenshot provenance",
+    "Distinct useful question visibly supported by the screenshots",
+    "Recent public app-guide exposure; favor unrepresented eligible apps without inventing ranking scores"
+  ],
+  "rows": [
+    {
+      "app_id": "APP-0001",
+      "app_name": "Quivra",
+      "candidate": true,
+      "public_platforms": [
+        "ios",
+        "android"
+      ],
+      "public_guide_shorts_observed": 1,
+      "latest_video_id": "sG-RwU-Z65s",
+      "state": "existing_guide_verified_public_do_not_repeat"
+    },
+    {
+      "app_id": "APP-0002",
+      "app_name": "TagWeaver",
+      "candidate": true,
+      "public_platforms": [
+        "ios",
+        "android"
+      ],
+      "public_guide_shorts_observed": 2,
+      "other_public_app_videos_observed": 2,
+      "state": "new_distinct_topic_asset_review_required",
+      "claim_guard": "Do not infer actual tag writes from mocked capture; explain iOS copy-save correctly."
+    },
+    {
+      "app_id": "APP-0003",
+      "app_name": "VaultXT",
+      "candidate": true,
+      "public_platforms": [
+        "ios",
+        "android"
+      ],
+      "public_guide_shorts_observed": 1,
+      "state": "new_distinct_topic_asset_review_required",
+      "claim_guard": "No unverified performance claims; do not repeat the existing log-inspection guide."
+    },
+    {
+      "app_id": "APP-0004",
+      "app_name": "Segra",
+      "candidate": true,
+      "public_platforms": [
+        "ios",
+        "android"
+      ],
+      "public_guide_shorts_observed": 1,
+      "state": "new_distinct_topic_asset_review_required",
+      "claim_guard": "No successful export or production-editor capability claim from static screenshots."
+    },
+    {
+      "app_id": "APP-0005",
+      "app_name": "ClipNest",
+      "candidate": true,
+      "public_platforms": [
+        "ios"
+      ],
+      "public_guide_shorts_observed": 1,
+      "state": "new_distinct_topic_asset_review_required",
+      "claim_guard": "No background clipboard-monitoring claim; do not repeat the recent pin-snippet guide."
+    },
+    {
+      "app_id": "APP-0006",
+      "app_name": "Aligna",
+      "candidate": true,
+      "public_platforms": [
+        "ios",
+        "android"
+      ],
+      "public_guide_shorts_observed": 1,
+      "state": "current_asset_release_parity_review_required",
+      "claim_guard": "Android public version advanced to 1.1.0; do not silently reuse older screenshot evidence. iOS copies must be described accurately."
+    },
+    {
+      "app_id": "APP-0007",
+      "app_name": "Melivra",
+      "candidate": true,
+      "public_platforms": [
+        "android"
+      ],
+      "public_guide_shorts_observed": 0,
+      "state": "assets_and_copy_reviewed_contract_render_pending",
+      "preparation_path": "data/screenshot_guides/melivra-favorites-20261012.preparation.json",
+      "claim_guard": "Android only. Real emulator screenshots with seeded demo library; no playback or speed claims."
+    },
+    {
+      "app_id": "APP-0008",
+      "app_name": "Papira",
+      "candidate": true,
+      "public_platforms": [
+        "ios",
+        "android"
+      ],
+      "public_guide_shorts_observed": 0,
+      "state": "blocked_current_capture_provenance",
+      "source_repository": "onnellab/papira",
+      "source_commit": "acf5e92ea001671eebbb29550efa54a62cf4e080",
+      "public_versions": {
+        "ios": "2.0.1",
+        "android": "2.0.1"
+      },
+      "source_version": "2.0.2+9",
+      "canonical_capture": {
+        "source_commit": "9935ad52c3c4f828dd26682292143d4b80d590b9",
+        "source_version": "1.0.0+4",
+        "captured_on": "2026-09-15",
+        "manifest_path": "assets/store_promo/capture_manifest.json"
+      },
+      "blockers": [
+        "Canonical capture predates current released UI and wording.",
+        "assets/store_promo/refresh_20261001/capture_manifest.pending.json has no files and visual_review_complete=false.",
+        "assets/store_promo/editorial_latest/README.md explicitly warns that final October captures are incomplete."
+      ],
+      "claim_guard": "Do not show the new 12-style picker with old images, imply current export success or call Papira a manuscript editor or ebook reader."
+    }
+  ],
+  "next_slots": [
+    {
+      "publish_at": "2026-10-12T09:00:00+09:00",
+      "timezone": "Asia/Seoul",
+      "status": "unreserved",
+      "preferred_candidate": "melivra-favorites-20261012",
+      "blocker": "Contract extension, tests and verified render must precede durable upload intent."
+    },
+    {
+      "publish_at": "2026-10-14T09:00:00+09:00",
+      "timezone": "Asia/Seoul",
+      "status": "unreserved",
+      "candidate": null,
+      "next_action": "Reassess Papira after matching capture evidence; otherwise review a distinct topic from another verified app. Do not reuse Quivra to fill the slot."
+    },
+    {
+      "publish_at": "2026-10-16T09:00:00+09:00",
+      "timezone": "Asia/Seoul",
+      "status": "unreserved",
+      "candidate": null,
+      "next_action": "Select only after verified preceding exposure and per-asset checks; no automatic near-duplicate."
+    }
+  ],
+  "publisher_controls": {
+    "data_video_rotation_enabled": false,
+    "legacy_coordination_branch": "shorts-coordination-state",
+    "legacy_branch_observation": "404 / not present in current branches list",
+    "legacy_branch_recreated": false,
+    "legacy_services": "Not inspected or activated",
+    "aether_inn": "Untouched"
+  },
+  "verification_limits": [
+    "No new guide rendered, uploaded, scheduled or saved as a completed Library video.",
+    "Current screenshot validator remains Quivra-only; no code/gate changes made.",
+    "Repository JSON shape and factual invariants checked in memory; no Python or renderer tests executed.",
+    "Public platform observations for non-selected older apps retain today's registry/store snapshot; selected Melivra 1.0.7 was independently checked live.",
+    "Existing Quivra Public state was already reported October 9; this is a durable reconciliation, not a new-publication announcement."
+  ]
+}

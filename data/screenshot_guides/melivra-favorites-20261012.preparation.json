@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_preparation",
+  "guide_id": "melivra-favorites-20261012",
+  "status": "blocked_before_render",
+  "app_id": "APP-0007",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "prepared_at": "2026-10-11T09:58:00Z",
+  "target": {
+    "publish_at": "2026-10-12T09:00:00+09:00",
+    "timezone": "Asia/Seoul",
+    "slot_reserved": false,
+    "upload_intent_created": false,
+    "upload_started": false,
+    "video_id": null,
+    "video_sha256": null
+  },
+  "source": {
+    "repository": "onnellab/melivra",
+    "commit": "6314b685a41c690e8ccd9a080c095078ebb0db10",
+    "git_tree_sha": "261cb0863ce683df5eaeb9dfc6e9afac2b6f8b62",
+    "capture_manifest_path": "assets/store_promo/raw/android/en/capture.json",
+    "capture_manifest_git_blob_sha": "2baea9bd221db9f086718ee37d6da5fd51130d04",
+    "capture_id": "20261010T010826Z-23651146",
+    "captured_at": "2026-10-10T01:12:07.756029+00:00",
+    "capture_device_kind": "Android emulator",
+    "capture_source_commit": "1341678a676ce9a2dc34888f271f1e4809182851",
+    "capture_source_version": "1.0.6+142",
+    "reviewed_source_version": "1.0.7+144",
+    "recorded_source_digest": "2f8f7372fd4fe10f8f1ba473a8ef2ec736d7e173861263d788d165959bb0d224",
+    "recorded_source_digest_independently_recomputed": false,
+    "capture_test": "integration_test/store_promo_capture_test.dart",
+    "capture_test_git_blob_sha": "7e4b720db19a88d97371f363a6c23f695f527610",
+    "capture_type": "real_app_ui_with_repository_demonstration_library",
+    "source_parity": "Recursive source comparison found all lib files and the screenshot harness identical between capture revision and reviewed commit except version/build constants in lib/core/config/app_env.dart.",
+    "capture_version_note": "Actual Android emulator screenshots. The capture manifest's real-device label does not override its emulator device_id. No exact signed-release-build capture attestation is claimed.",
+    "runtime_playback_verified": false,
+    "limitations": [
+      "Favorites, ratings, playlists, listening history and silent WAV files are seeded repository demonstration data.",
+      "Pixels do not prove successful import, playback, audio quality, save, conversion, performance or user results.",
+      "Claims are limited to actual visible screen labels, not off-screen labels in the capture manifest."
+    ]
+  },
+  "assets": [
+    {
+      "local_name": "1.png",
+      "source_path": "assets/store_promo/raw/android/en/1.png",
+      "git_blob_sha": "b4ce4f79886bf8eeeb40e23de3979e23374d5fea",
+      "sha256": "fdb884bb6996709110dc17b08a3a43c0a2a9b87ebf96640daf5ad944dc3e03cb",
+      "bytes": 132017,
+      "width": 1080,
+      "height": 2400,
+      "pixel_reviewed": true,
+      "sha256_independently_verified": true
+    },
+    {
+      "local_name": "4.png",
+      "source_path": "assets/store_promo/raw/android/en/4.png",
+      "git_blob_sha": "f7a180f48bcb8ff18afc48ef433f4e34d04bc7ab",
+      "sha256": "7c99e94b38b901d5be486a958138fd2719462fd6ab161ad27d4443320acb6ec9",
+      "bytes": 173040,
+      "width": 1080,
+      "height": 2400,
+      "pixel_reviewed": true,
+      "sha256_independently_verified": true
+    }
+  ],
+  "release_evidence": {
+    "platform": "android",
+    "version": "1.0.7",
+    "updated": "2026-10-10",
+    "url": "https://play.google.com/store/apps/details?id=com.onnellab.melivra",
+    "observed_at": "2026-10-11T09:54:29Z",
+    "surface": "Live dot cloud browser, expanded Google Play About this app",
+    "evidence": "Public installation control, matching package and ONNELLAB developer, version 1.0.7 and update date were visible.",
+    "ios": "Unconfirmed public availability; excluded from metadata and CTA."
+  },
+  "rights_basis": {
+    "basis": "Owner-authorized ONNELLAB app UI and repository-authored demonstration content.",
+    "artwork": "Original procedural geometric covers drawn by the screenshot harness.",
+    "text": "Repository-authored track, album and playlist names.",
+    "audio": "No audio or music to be included.",
+    "limit": "Scoped owned-asset basis; no claim of a public or open-source license."
+  },
+  "slides": [
+    {
+      "heading": "Find your favorite songs",
+      "caption": "Open Lists in Melivra.",
+      "asset": "1.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Choose Favorite Songs",
+      "caption": "Look under Smart Playlists.",
+      "asset": "4.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Browse by rating, too",
+      "caption": "Find 5-Star and 4-5 Star Songs.",
+      "asset": "4.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "How to Find Favorite Songs in Melivra | Android Screenshot Guide",
+    "description": "To find favorite songs in Melivra, open Lists and look under Smart Playlists for Favorite Songs. The same screen includes 5-Star Songs and 4-5 Star Songs.\n\nStill-screen guide using real Android app screenshots with an original demonstration library. No taps, playback, file import, save result, or speed demonstration is shown.\n\nExplore Melivra for Android:\nGoogle Play: https://play.google.com/store/apps/details?id=com.onnellab.melivra\n\n#Melivra #OfflineMusicPlayer #Shorts",
+    "format_disclosure": "Still-screen guide · Demo library",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "Melivra for Android · Link in description"
+  },
+  "render_requirements": {
+    "seconds": 15,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "audio": false,
+    "whole_screenshot_uniform_scaling": true,
+    "cropping": false,
+    "retouching": false,
+    "simulated_interactions": false,
+    "frame_review": "All three full output frames must be visually checked for text width, legibility, full screenshot fit, crops and disclosure before upload.",
+    "hash_evidence": "Bind output MP4 and exact manifest and source asset hashes before durable upload intent."
+  },
+  "publication_readiness": {
+    "approved_by_existing_validator": false,
+    "validator_extension_complete": false,
+    "official_tests_run": false,
+    "rendered": false,
+    "final_frames_reviewed": false,
+    "library_saved": false,
+    "upload_eligible": false
+  },
+  "remaining_gates": [
+    "Extend only the separate screenshot-guide validator with reviewed per-app source/hash/copy/geometry allowlist and dedicated tests; preserve all managed-recording gates.",
+    "Run official screenshot-guide tests and exact-byte asset verification.",
+    "Render bounded silent MP4 with existing local dependencies; verify ffprobe, full frames and output hash.",
+    "Verify owned renderer processes exited; leave other owners' processes untouched.",
+    "Save completed video to Library, persist durable hash-bound upload intent, then reconcile current Studio again before one upload and verified KST schedule receipt."
+  ],
+  "execution_blocker": {
+    "code": "no_authorized_non_cli_contract_executor",
+    "observed_at": "2026-10-11T09:57:48Z",
+    "details": "The available dot cloud browser supports UI interaction but not execution of the repository Python validator/renderer. Connected tools expose no non-CLI Python/Pillow/ffmpeg contract runner. Plugin search found no installed matching renderer; uninstalled AI/video services are not a verified cost-free execution route. Current scope prohibits CLI and separate Work/Codex, Remote and paid services.",
+    "required_capability": "An explicitly permitted bounded dot-cloud execution of existing Python/Pillow/ffmpeg/ffprobe for contract tests, verification and rendering, or an existing supported equivalent that executes the same checks.",
+    "new_login_or_security_action_required": false
+  },
+  "controls": {
+    "single_publisher": "dot parent-owned browser schedule only",
+    "legacy_publishers": "unchanged; not activated",
+    "recording_gates": "unchanged",
+    "aether_inn": "untouched",
+    "not_an_upload_intent": true
+  },
+  "validation_test_plan": [
+    "Accept only reviewed Melivra app/channel/locale/source revision/version and exact source PNG hashes/paths.",
+    "Reject changed bytes, unreviewed PNG, duplicate/missing assets, traversal and symlink paths.",
+    "Reject a wrong channel or cross-app reuse of the Quivra or Melivra contract.",
+    "Reject changed copy, unsupported success/performance/playback claims, missing persistent still-screen disclosure, narration/music or extra links.",
+    "Reject fake exact release-build attestation, unreleased-platform CTA and recording/upload-attestation flags.",
+    "Reject geometry drift from exact 1080x2400 Melivra source dimensions; uniformly fit complete screenshot without cropping.",
+    "Keep every existing Quivra positive/negative regression and all managed-recording safety gates unchanged.",
+    "Verify all output frames, silent 15-second 1080x1920 H.264/yuv420p/30fps MP4, bound hashes, and no owned encoder process left running."
+  ]
+}
