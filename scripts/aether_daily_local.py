@@ -901,11 +901,28 @@ def publish_local_ops_sources(report: dict) -> None:
     if code != 0:
         report["blockers"].append("youtube_ops_snapshot_failed")
         return
-    run_step(
-        report, "restore_generated_dashboard",
-        ["git", "restore", "--", "generated/manual-publish/index.html"],
+    # The legacy generated/manual-publish/index.html was deliberately removed
+    # from tracked sources. Restoring an untracked/nonexistent path emits a
+    # spurious Git pathspec error despite a successful /ops/ deployment.
+    code, _, _ = run_step(
+        report, "dashboard_generated_track_check",
+        ["git", "ls-files", "--cached", "--error-unmatch", "--", "generated/manual-publish/index.html"],
         timeout=30,
     )
+    if code == 0:
+        restored, _, _ = run_step(
+            report, "restore_generated_dashboard",
+            ["git", "restore", "--", "generated/manual-publish/index.html"],
+            timeout=30,
+        )
+        if restored != 0:
+            report["blockers"].append("ops_generated_dashboard_restore_failed")
+            return
+    elif code == 1:
+        report["generated_dashboard_restore"] = "not_tracked_not_required"
+    else:
+        report["blockers"].append("ops_generated_dashboard_tracking_check_failed")
+        return
     code, names, _ = run_step(
         report, "ops_snapshot_changed_paths",
         ["git", "diff", "--name-only"], timeout=30,
