@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-11T21:23:37+00:00",
+  "updated_at": "2026-10-12T07:52:49+09:00",
   "approvals": [
     {
       "approval_id": "review-report-6b652b2227b5da3cd8607adf",
@@ -77,16 +77,35 @@
       "app_id": "APP-0008",
       "app_slug": "papira",
       "platform": "android",
-      "reply": "기대에 미치지 못해 죄송합니다. 남겨주신 의견을 확인해 개선할 부분을 살펴보겠습니다. 문제를 재현할 정보가 있다면 개인정보 없이 앱 버전과 발생 과정을 공식 지원 경로로 알려주세요. — ONNELLAB",
-      "approved_at": "2026-10-11T21:23:22+00:00",
-      "approved_by": "owner_standing_scheduled_policy_2026-09-24",
-      "note": "Daily Ops standing authorization dated 2026-09-24; canonical repository reply template.",
-      "status": "published",
+      "reply": "소중한 의견을 남겨주셔서 감사합니다. 말씀해 주신 내용을 검토해 향후 개선 패치에 반영하겠습니다. 더 편리하게 사용하실 수 있도록 노력하겠습니다.",
+      "approved_at": "2026-10-12T07:52:49+09:00",
+      "approved_by": "owner_explicit_chat_approval_2026-10-12",
+      "note": "Owner explicitly approved same-review Google Play reply revision; prior published response preserved in revisions; no additional review ID",
+      "status": "queued",
       "publication": {
         "attempts": 1,
         "published_at": "2026-10-11T21:23:37+00:00",
         "external_response_id": "1791753815"
-      }
+      },
+      "revisions": [
+        {
+          "revision": 1,
+          "reason": "Owner-corrected response to a concrete Papira improvement suggestion; remove debugging request and signoff",
+          "previous_reply": "기대에 미치지 못해 죄송합니다. 남겨주신 의견을 확인해 개선할 부분을 살펴보겠습니다. 문제를 재현할 정보가 있다면 개인정보 없이 앱 버전과 발생 과정을 공식 지원 경로로 알려주세요. — ONNELLAB",
+          "previous_approved_at": "2026-10-11T21:23:22+00:00",
+          "previous_approved_by": "owner_standing_scheduled_policy_2026-09-24",
+          "previous_note": "Daily Ops standing authorization dated 2026-09-24; canonical repository reply template.",
+          "previous_publication": {
+            "attempts": 1,
+            "published_at": "2026-10-11T21:23:37+00:00",
+            "external_response_id": "1791753815"
+          },
+          "revision_approved_at": "2026-10-12T07:52:49+09:00",
+          "revision_approved_by": "owner_explicit_chat_approval_2026-10-12",
+          "requested_reply": "소중한 의견을 남겨주셔서 감사합니다. 말씀해 주신 내용을 검토해 향후 개선 패치에 반영하겠습니다. 더 편리하게 사용하실 수 있도록 노력하겠습니다.",
+          "same_review_id_required": true
+        }
+      ]
     }
   ]
 }
