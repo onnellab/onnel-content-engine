@@ -1,0 +1,46 @@
+{
+  "manifest_sha256": "05fa27efaced42cfeff5bfc0d4d2ca360f15156c73cd8d981605dcbf4ab33de5",
+  "asset_hashes": {
+    "1.png": "fdb884bb6996709110dc17b08a3a43c0a2a9b87ebf96640daf5ad944dc3e03cb",
+    "4.png": "7c99e94b38b901d5be486a958138fd2719462fd6ab161ad27d4443320acb6ec9"
+  },
+  "kind": "screenshot_guide",
+  "runtime_recording_attestation": false,
+  "upload_authorized_by_cli": false,
+  "video_file": "melivra-favorites-20261012.mp4",
+  "video_sha256": "38b71bff0b0039f97a93f38f26e766d2d5cec91a263a6bfe348f6038f1cc5c3b",
+  "seconds": 15,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "audio": false,
+  "slide_sha256": {
+    "slide-1.png": "e81df4369774e84528e28f6d21eab231cb3ddd6f4675cce5dd8c89a0cd8d9035",
+    "slide-2.png": "96b5ffad98a4d58d54688d5e1371bc6588b51a03866a430688bcf8528ba554cb",
+    "slide-3.png": "ca7803cbfef258d2c778e1f9a1a8ea4430b7ffe34ed45e3a9abbe0d904c23ab8"
+  },
+  "verified_at": "2026-10-11T12:32:33Z",
+  "actual_duration_seconds": 15.0,
+  "frame_count": 450,
+  "video_bytes": 222449,
+  "pixel_format": "yuv420p",
+  "all_three_full_frames_reviewed": true,
+  "encoded_frames_reviewed_at_seconds": [
+    2,
+    7,
+    12
+  ],
+  "source_asset_bytes_verified": true,
+  "whole_source_geometry": "1080x2400 uniformly scaled to 621x1380 without cropping",
+  "music_rights": "No audio stream or music",
+  "unit_tests": {
+    "command": "python3 -B -m unittest discover -s tests -p 'test_screenshot_guide*.py'",
+    "passed": 33,
+    "scope": "24 unchanged Quivra tests plus 9 Melivra tests; encoder unit checks use explicit mocks"
+  },
+  "independent_source_review": "Passed",
+  "independent_visual_review": "Passed",
+  "owned_encoder_processes_remaining": 0,
+  "library_saved": true,
+  "upload_started": false
+}

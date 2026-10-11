@@ -27,6 +27,92 @@ COPY = [
     ('Find the Convert button', 'Quivra · local media converter', '02.png'),
 ]
 
+# Reviewed Melivra contract. Any change requires new source/copy review and tests.
+MELIVRA_CONTRACT = {'schema_version': 1,
+ 'kind': 'screenshot_guide',
+ 'guide_id': 'melivra-favorites-20261012',
+ 'app_id': 'APP-0007',
+ 'locale': 'en',
+ 'channel_id': 'UCXyRedrldRBl9Y35nyWoTLg',
+ 'source': {'repository': 'onnellab/melivra',
+            'commit': '6314b685a41c690e8ccd9a080c095078ebb0db10',
+            'git_tree_sha': '261cb0863ce683df5eaeb9dfc6e9afac2b6f8b62',
+            'capture_manifest_path': 'assets/store_promo/raw/android/en/capture.json',
+            'capture_manifest_git_blob_sha': '2baea9bd221db9f086718ee37d6da5fd51130d04',
+            'capture_id': '20261010T010826Z-23651146',
+            'captured_at': '2026-10-10T01:12:07.756029+00:00',
+            'capture_device_kind': 'Android emulator',
+            'capture_source_commit': '1341678a676ce9a2dc34888f271f1e4809182851',
+            'capture_source_version': '1.0.6+142',
+            'reviewed_source_version': '1.0.7+144',
+            'recorded_source_digest': '2f8f7372fd4fe10f8f1ba473a8ef2ec736d7e173861263d788d165959bb0d224',
+            'recorded_source_digest_independently_recomputed': False,
+            'capture_test': 'integration_test/store_promo_capture_test.dart',
+            'capture_test_git_blob_sha': '7e4b720db19a88d97371f363a6c23f695f527610',
+            'capture_type': 'real_app_ui_with_repository_demonstration_library',
+            'source_parity': 'Recursive source comparison found all lib files and the screenshot '
+                             'harness identical between capture revision and reviewed commit '
+                             'except version/build constants in lib/core/config/app_env.dart.',
+            'capture_version_note': "Actual Android emulator screenshots. The capture manifest's "
+                                    'real-device label does not override its emulator device_id. '
+                                    'No exact signed-release-build capture attestation is claimed.',
+            'runtime_playback_verified': False,
+            'limitations': ['Favorites, ratings, playlists, listening history and silent WAV files '
+                            'are seeded repository demonstration data.',
+                            'Pixels do not prove successful import, playback, audio quality, save, '
+                            'conversion, performance or user results.',
+                            'Claims are limited to actual visible screen labels, not off-screen '
+                            'labels in the capture manifest.'],
+            'public_version_observed': '1.0.7',
+            'public_version_source': 'https://play.google.com/store/apps/details?id=com.onnellab.melivra',
+            'public_version_checked_at': '2026-10-11T09:54:29Z'},
+ 'assets': [{'local_name': '1.png',
+             'source_path': 'assets/store_promo/raw/android/en/1.png',
+             'sha256': 'fdb884bb6996709110dc17b08a3a43c0a2a9b87ebf96640daf5ad944dc3e03cb'},
+            {'local_name': '4.png',
+             'source_path': 'assets/store_promo/raw/android/en/4.png',
+             'sha256': '7c99e94b38b901d5be486a958138fd2719462fd6ab161ad27d4443320acb6ec9'}],
+ 'slides': [{'heading': 'Find your favorite songs',
+             'caption': 'Open Lists in Melivra.',
+             'asset': '1.png',
+             'seconds': 5},
+            {'heading': 'Choose Favorite Songs',
+             'caption': 'Look under Smart Playlists.',
+             'asset': '4.png',
+             'seconds': 5},
+            {'heading': 'Browse by rating, too',
+             'caption': 'Find 5-Star and 4-5 Star Songs.',
+             'asset': '4.png',
+             'seconds': 5}],
+ 'metadata': {'title': 'How to Find Favorite Songs in Melivra | Android Screenshot Guide',
+              'description': 'To find favorite songs in Melivra, open Lists and look under Smart '
+                             'Playlists for Favorite Songs. The same screen includes 5-Star Songs '
+                             'and 4-5 Star Songs.\n'
+                             '\n'
+                             'Still-screen guide using real Android app screenshots with an '
+                             'original demonstration library. No taps, playback, file import, save '
+                             'result, or speed demonstration is shown.\n'
+                             '\n'
+                             'Explore Melivra for Android:\n'
+                             'Google Play: '
+                             'https://play.google.com/store/apps/details?id=com.onnellab.melivra\n'
+                             '\n'
+                             '#Melivra #OfflineMusicPlayer #Shorts',
+              'format_disclosure': 'Still-screen guide · Demo library',
+              'audio': 'none',
+              'made_for_kids': False,
+              'synthetic_media': False,
+              'category': 'Education',
+              'cta': 'Melivra for Android · Link in description',
+              'target_publish_at': '2026-10-12T09:00:00+09:00',
+              'timezone': 'Asia/Seoul'},
+ 'authorization': {'format_approved_on': '2026-10-08',
+                   'rights_basis': 'ONNELLAB-owned app UI and repository-owned demonstration data',
+                   'scope': 'English screenshot-based app guide on ONNELLAB YouTube; no simulated '
+                            'interaction; existing recording gate unchanged',
+                   'execution_scope': 'Owner-authorized free dot-cloud Melivra production and test '
+                                      'commands; no separate Work/Codex or paid service.'}}
+
 class GuideError(ValueError):
     pass
 
@@ -50,7 +136,7 @@ def load(path):
     return json.loads(raw, object_pairs_hook=pairs,
                       parse_constant=lambda _: (_ for _ in ()).throw(GuideError('nonfinite_json')))
 
-def validate(manifest, asset_root):
+def _validate_quivra(manifest, asset_root):
     """Pilot allowlist is intentionally narrow; do not infer new asset rights."""
     root = Path(asset_root).resolve()
     expected = {'schema_version', 'kind', 'guide_id', 'app_id', 'locale',
@@ -118,8 +204,31 @@ def validate(manifest, asset_root):
             'asset_hashes': dict(APPROVED_ASSETS), 'kind': 'screenshot_guide',
             'runtime_recording_attestation': False, 'upload_authorized_by_cli': False}
 
+
+def validate(manifest, asset_root):
+    """Dispatch only independently reviewed per-app still-screen contracts."""
+    if isinstance(manifest, dict) and manifest.get('app_id') == 'APP-0007':
+        if canonical(manifest) != canonical(MELIVRA_CONTRACT):
+            raise GuideError('melivra_manifest_requires_review')
+        root = Path(asset_root).resolve()
+        hashes = {}
+        for asset in MELIVRA_CONTRACT['assets']:
+            name = asset['local_name']
+            path = root / name
+            if path.is_symlink() or not path.is_file() or path.resolve().parent != root:
+                raise GuideError('unsafe_asset_path')
+            if sha256(path) != asset['sha256']:
+                raise GuideError('asset_integrity')
+            hashes[name] = asset['sha256']
+        return {'manifest_sha256': hashlib.sha256(canonical(manifest)).hexdigest(),
+                'asset_hashes': hashes, 'kind': 'screenshot_guide',
+                'runtime_recording_attestation': False, 'upload_authorized_by_cli': False}
+    return _validate_quivra(manifest, asset_root)
+
+
 def render(manifest, asset_root, output):
     evidence = validate(manifest, asset_root)
+    melivra = manifest['app_id'] == 'APP-0007'
     output = Path(output)
     if output.exists():
         raise GuideError('output_exists_preserve_prior_artifact')
@@ -142,18 +251,20 @@ def render(manifest, asset_root, output):
                 raise GuideError('text_exceeds_safe_width')
             draw.text(((1080-width)/2,y), text, font=font, fill=color)
         draw.rounded_rectangle((64,64,1016,126), radius=25, fill='#eae4f5')
-        center('QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
+        center('MELIVRA · SCREENSHOT GUIDE' if melivra else 'QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
         center(slide['heading'], 166, bold(48))
         center(slide['caption'], 235, regular(32), '#645c74')
         source = Image.open(Path(asset_root) / slide['asset']).convert('RGB')
-        if source.size != (1080,1920):
+        if source.size != ((1080,2400) if melivra else (1080,1920)):
             raise GuideError('source_geometry_changed')
         # Entire screenshot, uniformly scaled. No crop, synthetic taps or UI edits.
-        source = source.resize((756,1344), Image.Resampling.LANCZOS)
-        canvas.paste(source,(162,320))
-        draw.rounded_rectangle((159,317,921,1667), radius=3, outline='#d8cdeb', width=3)
-        center(DISCLOSURE, 1721, regular(31), '#645c74')
-        center('App Store & Google Play links in the description', 1783, regular(29))
+        size = (621,1380) if melivra else (756,1344)
+        x, y = (229,300) if melivra else (162,320)
+        source = source.resize(size, Image.Resampling.LANCZOS)
+        canvas.paste(source,(x,y))
+        draw.rounded_rectangle((x-3,y-3,x+size[0]+3,y+size[1]+3), radius=3, outline='#d8cdeb', width=3)
+        center(manifest['metadata']['format_disclosure'], 1721, regular(31), '#645c74')
+        center('Melivra for Android · Link in description' if melivra else 'App Store & Google Play links in the description', 1783, regular(29))
         center('ONNELLAB', 1841, bold(26), '#8c839e')
         frame = output / f'slide-{index+1}.png'
         canvas.save(frame)
@@ -162,16 +273,16 @@ def render(manifest, asset_root, output):
     concat.write_text(''.join(f"file '{p.name}'\nduration 5\n" for p in frames) + f"file '{frames[-1].name}'\n")
     video = output / (manifest['guide_id'] + '.mp4')
     subprocess.run(['ffmpeg','-nostdin','-v','error','-f','concat','-safe','1','-i',str(concat),
-                    '-t','15','-r','30','-an','-c:v','libx264','-preset','medium',
+                    '-t','15','-vf','fps=30','-frames:v','450','-an','-c:v','libx264','-preset','medium',
                     '-crf','18','-threads','2','-pix_fmt','yuv420p','-movflags','+faststart',str(video)],
                    check=True, timeout=180)
     probe = json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-show_format',
                                                '-of','json',str(video)],timeout=30))
     streams = probe['streams']
     s = streams[0]
-    if len(streams)!=1 or (s['codec_name'],s['width'],s['height'],s['r_frame_rate']) != ('h264',1080,1920,'30/1'):
+    if len(streams)!=1 or (s['codec_name'],s['width'],s['height'],s['r_frame_rate'],s.get('pix_fmt')) != ('h264',1080,1920,'30/1','yuv420p'):
         raise GuideError('render_geometry_or_audio')
-    if abs(float(probe['format']['duration'])-15)>0.05:
+    if abs(float(probe['format']['duration'])-15)>0.001 or int(s.get('nb_frames', 0)) != 450:
         raise GuideError('render_duration')
     evidence.update(video_file=video.name, video_sha256=sha256(video),
                     seconds=15, width=1080, height=1920, fps=30, audio=False,
@@ -199,3 +310,4 @@ def main():
 
 if __name__=='__main__':
     raise SystemExit(main())
+

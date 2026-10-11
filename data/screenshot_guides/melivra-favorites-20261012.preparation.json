@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "screenshot_guide_preparation",
   "guide_id": "melivra-favorites-20261012",
-  "status": "blocked_before_render",
+  "status": "rendered_verified_pending_upload",
   "app_id": "APP-0007",
   "locale": "en",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
@@ -129,27 +129,27 @@
     "hash_evidence": "Bind output MP4 and exact manifest and source asset hashes before durable upload intent."
   },
   "publication_readiness": {
-    "approved_by_existing_validator": false,
-    "validator_extension_complete": false,
-    "official_tests_run": false,
-    "rendered": false,
-    "final_frames_reviewed": false,
-    "library_saved": false,
-    "upload_eligible": false
+    "approved_by_existing_validator": true,
+    "validator_extension_complete": true,
+    "official_tests_run": true,
+    "rendered": true,
+    "final_frames_reviewed": true,
+    "library_saved": true,
+    "upload_eligible": true
   },
   "remaining_gates": [
-    "Extend only the separate screenshot-guide validator with reviewed per-app source/hash/copy/geometry allowlist and dedicated tests; preserve all managed-recording gates.",
-    "Run official screenshot-guide tests and exact-byte asset verification.",
-    "Render bounded silent MP4 with existing local dependencies; verify ffprobe, full frames and output hash.",
-    "Verify owned renderer processes exited; leave other owners' processes untouched.",
-    "Save completed video to Library, persist durable hash-bound upload intent, then reconcile current Studio again before one upload and verified KST schedule receipt."
+    "Reconcile complete live ONNELLAB Studio inventory before durable intent.",
+    "Persist reviewed manifest/video hash-bound intent before selecting the upload file.",
+    "Persist assigned video ID and confirm October 12 09:00 Asia/Seoul scheduling in Studio."
   ],
   "execution_blocker": {
     "code": "no_authorized_non_cli_contract_executor",
     "observed_at": "2026-10-11T09:57:48Z",
     "details": "The available dot cloud browser supports UI interaction but not execution of the repository Python validator/renderer. Connected tools expose no non-CLI Python/Pillow/ffmpeg contract runner. Plugin search found no installed matching renderer; uninstalled AI/video services are not a verified cost-free execution route. Current scope prohibits CLI and separate Work/Codex, Remote and paid services.",
     "required_capability": "An explicitly permitted bounded dot-cloud execution of existing Python/Pillow/ffmpeg/ffprobe for contract tests, verification and rendering, or an existing supported equivalent that executes the same checks.",
-    "new_login_or_security_action_required": false
+    "new_login_or_security_action_required": false,
+    "resolved_at": "2026-10-11T12:25:16Z",
+    "resolution": "Owner explicitly authorized free dot-cloud Melivra production/test execution. No paid service or separate Work/Codex task used."
   },
   "controls": {
     "single_publisher": "dot parent-owned browser schedule only",
@@ -167,5 +167,7 @@
     "Reject geometry drift from exact 1080x2400 Melivra source dimensions; uniformly fit complete screenshot without cropping.",
     "Keep every existing Quivra positive/negative regression and all managed-recording safety gates unchanged.",
     "Verify all output frames, silent 15-second 1080x1920 H.264/yuv420p/30fps MP4, bound hashes, and no owned encoder process left running."
-  ]
+  ],
+  "resumed_at": "2026-10-11T12:25:55Z",
+  "verified_render_evidence_path": "data/screenshot_guides/melivra-favorites-20261012.render.json"
 }

@@ -120,3 +120,42 @@ Saving code or rendering a file never itself authorizes an upload. This first
 guide's upload/schedule is covered by the owner's explicit restoration and
 screenshot-format approval. Future runs remain bounded to the approved channel,
 format, fact checks, one due slot and the one parent-owned schedule.
+
+## Reviewed Melivra Favorites guide — 2026-10-11
+
+`data/screenshot_guides/melivra-favorites-20261012.json` is a second, independent
+allowlisted contract. It uses only English Android screenshots 1 and 4 from
+`onnellab/melivra` commit `6314b685a41c690e8ccd9a080c095078ebb0db10`.
+Exact source paths and SHA-256 hashes are pinned in the manifest and immutable
+`MELIVRA_CONTRACT`. Every manifest field, including copy, source limitations,
+rights, Android-only CTA and KST target, must match. This does not make arbitrary
+Melivra screenshots or future dates automatically eligible.
+
+These are actual Android emulator captures with repository-authored demonstration
+tracks, original procedural covers, seeded favorites/ratings and silent WAV data.
+Capture source is 1.0.6+142; public Android 1.0.7 was checked live on October 11.
+The reviewed source differs only in version/build constants across the app code
+and capture harness. Do not call the screenshots exact signed-release-build
+captures. No playback, import, conversion, save result or performance is shown.
+Public iOS availability is unconfirmed and is excluded.
+
+The full 1080×2400 screenshots are uniformly fitted to 621×1380 without cropping,
+retouching or simulated interaction. The visible persistent disclosure reads
+“Still-screen guide · Demo library”. The output contains no narration or music.
+The encoder is bounded to two threads and 180 seconds. Frame-rate filtering and
+an explicit frame limit produce exactly 450 frames at 30 fps; ffprobe checks
+15.000-second duration, H.264/yuv420p, 1080×1920 and absence of audio. Existing
+Quivra validation and all managed-recording gates remain separate and intact.
+Never rerender an existing uploaded video or replace its durable upload hashes.
+
+Run `python3 -B -m unittest discover -s tests -p 'test_screenshot_guide*.py'`.
+The Melivra tests cover exact contract matching, changed source/copy/claims,
+wrong app/channel/platform/link, type confusion, asset hash/path/symlink and
+geometry rejection, unchanged output preservation, bounded encoder arguments,
+and rejection of 449/451-frame, wrong-fps or wrong-pixel-format output.
+Actual frame/byte verification is separate from mocked encoder unit tests.
+The preparation packet records historical blockers; the reviewed manifest and
+render evidence record completed production checks. Neither file is an upload
+receipt. Persist hash-bound intent and reconcile live Studio before selecting
+any upload file, then persist the assigned ID and actual scheduling result.
+
