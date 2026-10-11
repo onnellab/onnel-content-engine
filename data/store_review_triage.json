@@ -1,7 +1,25 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-10T21:23:14+00:00",
+  "generated_at": "2026-10-11T15:30:51+00:00",
   "items": [
+    {
+      "review_id": "85189b71-d5c4-4e11-9c5b-c9218e13b3b1",
+      "category": "data_loss",
+      "risk_flags": [
+        "data_loss"
+      ],
+      "similarity_key": "data_loss",
+      "similar_reviews": 1,
+      "facts": [],
+      "requires_human_approval": true,
+      "actions": {
+        "reply": "recommended",
+        "github_issue": "approval_required",
+        "store_copy": "not_needed",
+        "code_change": "investigate"
+      },
+      "issue_draft": "## Customer report (unverified)\n- App: Papira\n- Platform/version: android 2.0.1\n- Category: data_loss\n- Similarity key: data_loss\n\n## Sanitized summary\nCustomer reported a possible product problem. Review the original in the approval dashboard; do not copy personal data into this issue.\n\n## Required before implementation\n- Reproduce or identify telemetry evidence.\n- Confirm affected versions and rollback path."
+    },
     {
       "review_id": "ad7c566c-d450-4973-b072-36b4c079dd1e",
       "category": "billing",
