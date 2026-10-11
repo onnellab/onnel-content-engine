@@ -107,6 +107,26 @@ class SalesPageTests(unittest.TestCase):
         self.assertIn('mode.value==="custom"',content)
         self.assertIn("일자 직접 지정 시 Apple 회계월",content)
 
+    def test_google_apple_proceeds_stay_side_by_side_without_refund_card(self):
+        page = sales_page_body({"rows": [{
+            "platform": "android", "date": "2026-10-07",
+            "app_name": "Aligna", "app_slug": "aligna",
+            "country": "KR", "currency": "KRW", "units": 1,
+            "gross": "5500", "refund": "0", "fee": "825",
+            "net_sales": "5500", "net_sales_krw": "5500",
+            "fee_krw": "825", "fee_confirmed": True,
+        }], "source_status": {"google": {"earnings_months": ["2026-10"]}}})
+        self.assertIn('class="sales-proceeds-pair"', page)
+        self.assertIn('grid-template-columns:repeat(2,minmax(0,1fr))', page)
+        self.assertIn('id="sales-total-android-proceeds"', page)
+        self.assertIn('id="sales-total-ios-proceeds"', page)
+        self.assertLess(page.index('id="sales-total-android-proceeds"'),
+                        page.index('id="sales-total-ios-proceeds"'))
+        self.assertNotIn('id="sales-total-refunds"', page)
+        self.assertIn('googleProceedsAvailable', page)
+        self.assertIn('googleFeeRows.length>0', page)
+        self.assertIn('Google Play 예상 개발자 수익금', page)
+
     def test_no_html_injection_in_sales_data(self):
         result = sales_page_body({"rows": [{
             "date":"2026-10-01", "app_name": "</script><script>alert(1)</script>"

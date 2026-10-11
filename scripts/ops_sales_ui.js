@@ -5,6 +5,7 @@
   const settlements = JSON.parse(byId("sales-settlements").textContent || "[]");
   const confirmedFees = JSON.parse(byId("sales-verified-fees").textContent || "[]");
   const fxState = JSON.parse(byId("sales-fx-data").textContent || "{}");
+  const sourceStatus = JSON.parse(byId("sales-source-status").textContent || "{}");
   const mode = byId("sales-period-mode");
   const month = byId("sales-month");
   const year = byId("sales-year");
@@ -151,7 +152,7 @@
 
   function renderSummary(visible,range) {
     const grouped=new Map();
-    let gross=0, refunds=0, net=0, fees=0, appleProceeds=0;
+    let gross=0, net=0, fees=0, appleProceeds=0;
     let converted=0, feeRows=0, unavailable=0, missingFee=0;
     let appleProceedsRows=0, missingAppleProceeds=0;
     for(const r of visible){
@@ -177,20 +178,36 @@
       }
       if(hasAmount(r,"net_sales_krw")){
         gross+=number(r.gross_krw);
-        refunds+=number(r.refund_krw);
         net+=number(r.net_sales_krw);
         converted++;
       }else if(number(r.net_sales)!==0 || number(r.gross)!==0 || number(r.refund)!==0) {
         unavailable++;
       }
     }
+    // Google Sales is buyer spend; Earnings supplies official Google fee
+    // adjustments, sometimes as separate day/currency rows. Sum only within
+    // the selected filters and never invent a commission rate for missing data.
+    const googleRows=visible.filter(r=>r.platform==="android");
+    const googleSalesRows=googleRows.filter(r=>
+      number(r.gross)!==0 || number(r.refund)!==0);
+    const googleFeeRows=googleRows.filter(r=>r.fee_confirmed);
+    const googleEarningsMonths=sourceStatus.google?.earnings_months;
+    const googleEarningsMissing=Array.isArray(googleEarningsMonths) &&
+      googleSalesRows.some(r=>!googleEarningsMonths.includes(String(r.date).slice(0,7)));
+    const googleConversionMissing=googleSalesRows.some(r=>!hasAmount(r,"net_sales_krw")) ||
+      googleFeeRows.some(r=>!hasAmount(r,"fee_krw"));
+    const googleProceedsAvailable=googleSalesRows.length>0 && googleFeeRows.length>0 &&
+      !googleEarningsMissing && !googleConversionMissing;
+    const googleProceeds=googleRows.reduce((sum,r)=>
+      sum+(hasAmount(r,"net_sales_krw")?number(r.net_sales_krw):0)-
+      (r.fee_confirmed && hasAmount(r,"fee_krw")?number(r.fee_krw):0),0);
     const summary=(id,value,empty=false)=> {
       byId(id).textContent=empty?"—":krw(value);
     };
     summary("sales-total-net",net, !visible.length || converted===0);
     summary("sales-total-gross",gross, !visible.length || converted===0);
-    summary("sales-total-refunds",refunds,!visible.length || converted===0);
     summary("sales-total-fee",fees,!feeRows);
+    summary("sales-total-android-proceeds",googleProceeds,!googleProceedsAvailable);
     summary("sales-total-ios-proceeds",appleProceeds,!appleProceedsRows);
     byId("sales-total-units").textContent=visible.length?
       money(visible.reduce((sum,r)=>sum+number(r.units),0))+"건":"—";
@@ -215,6 +232,7 @@
     if(unavailable) notes.push("외화 환율을 확인할 수 없는 매출 "+unavailable+"개 행은 원화 합계에서 제외했어요.");
     if(missingFee) notes.push("확정 수수료 "+missingFee+"개 행은 환율 미확인으로 제외했어요.");
     if(missingAppleProceeds) notes.push("Apple 예상 개발자 수익금 "+missingAppleProceeds+"개 행은 환율 미확인으로 제외했어요.");
+    if(googleSalesRows.length && !googleProceedsAvailable) notes.push("Google Play 예상 개발자 수익금은 해당 기간의 수수료 보고서 또는 환율이 충분하지 않아 표시하지 않았어요.");
     if(fxState.status==="unavailable") notes.push("ECB 연결이 불안정해 보관된 과거 환율만 사용했어요.");
     notes.push("ECB 기준환율을 우선 적용하고 미제공 통화는 NBU·NBP 공식 기준환율로 보완했어요. 금액은 원화 추정액이며 실제 입금액과 달라요.");
     notes.push("Apple 회계월 확정 정산액은 위의 판매액에 중복 합산하지 않아요.");

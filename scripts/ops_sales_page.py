@@ -135,6 +135,7 @@ HTML = r"""
 .sales-summary-item{border:1px solid var(--line);border-radius:10px;padding:14px;background:white;display:grid;gap:9px;min-width:0}
 .sales-summary-item small{font-size:12px;color:#736a7b;font-weight:730}
 .sales-summary-item strong{font-size:21px;color:#34313b;font-weight:800;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.sales-proceeds-pair{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .sales-original{margin:12px 0 0}
 .sales-original h2{font-size:16px;margin:16px 0 9px;color:#45404a}
 .sales-period-note{font-size:12px;line-height:1.6;color:#777067;margin:8px 0 13px}
@@ -163,10 +164,12 @@ HTML = r"""
 <section class="sales-summary" aria-label="선택한 기간의 원화 매출 요약">
  <div class="sales-summary-item"><small>고객 결제 기준 매출 · 환불 반영</small><strong id="sales-total-net">—</strong></div>
  <div class="sales-summary-item"><small>고객 결제액 · 원화 추정</small><strong id="sales-total-gross">—</strong></div>
- <div class="sales-summary-item"><small>환불 · 원화 추정</small><strong id="sales-total-refunds">—</strong></div>
  <div class="sales-summary-item"><small>확정 수수료 · 원화 환산</small><strong id="sales-total-fee">—</strong></div>
- <div class="sales-summary-item"><small>App Store 예상 개발자 수익금</small><strong id="sales-total-ios-proceeds">—</strong></div>
  <div class="sales-summary-item"><small>순판매 수량 · 환불 차감 후</small><strong id="sales-total-units">—</strong></div>
+ <div class="sales-proceeds-pair" aria-label="스토어별 예상 개발자 수익금">
+  <div class="sales-summary-item"><small>Google Play 예상 개발자 수익금</small><strong id="sales-total-android-proceeds">—</strong></div>
+  <div class="sales-summary-item"><small>App Store 예상 개발자 수익금</small><strong id="sales-total-ios-proceeds">—</strong></div>
+ </div>
 </section>
 <p id="sales-fx-status" class="sales-period-note" role="status" aria-live="polite">과거 기준환율을 확인하고 있어요.</p>
 <section class="sales-original">
@@ -209,6 +212,7 @@ HTML = r"""
 </section>
 <p class="sales-note">
  • 고객 결제 기준 매출은 수수료·세금 차감 전이고, 실제 입금액 또는 사업 순이익이 아니에요. App Store 예상 수익금과 확정 회계월 정산액도 구분해서 확인해요.<br>
+ • Google Play 예상 개발자 수익금은 환불 반영 매출에서 확인된 Google fee를 차감한 참고액이에요. 해당 기간의 수수료 보고서나 환율이 부족하면 금액을 표시하지 않으며, 세금·원천징수·정산 조정에 따라 실제 입금액과 달라질 수 있어요.<br>
  • Google Play 판매금액은 현지 통화의 예상 판매 보고서, 수수료는 확정 수익 보고서의 Google fee 거래예요.<br>
  • Apple 판매액에는 세금이 포함될 수 있으므로 소비자 가격과 개발자 수익의 차이를 수수료로 표시하지 않아요.<br>
  • 외화는 ECB 과거 기준환율을 우선 적용하고, 미제공 통화는 NBU·NBP 공식 과거 기준환율로 보완해 원화 추정 합계를 보여줘요. 환율이 없으면 미환산으로 구분해요.<br>
