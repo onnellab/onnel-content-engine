@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-12T07:52:49+09:00",
+  "updated_at": "2026-10-11T22:53:41+00:00",
   "approvals": [
     {
       "approval_id": "review-report-6b652b2227b5da3cd8607adf",
@@ -81,11 +81,11 @@
       "approved_at": "2026-10-12T07:52:49+09:00",
       "approved_by": "owner_explicit_chat_approval_2026-10-12",
       "note": "Owner explicitly approved same-review Google Play reply revision; prior published response preserved in revisions; no additional review ID",
-      "status": "queued",
+      "status": "published",
       "publication": {
-        "attempts": 1,
-        "published_at": "2026-10-11T21:23:37+00:00",
-        "external_response_id": "1791753815"
+        "attempts": 2,
+        "published_at": "2026-10-11T22:53:41+00:00",
+        "external_response_id": "1791759221"
       },
       "revisions": [
         {
