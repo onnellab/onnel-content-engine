@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-11T21:23:11+00:00",
+  "generated_at": "2026-10-11T21:24:24+00:00",
   "items": [
     {
       "review_id": "85189b71-d5c4-4e11-9c5b-c9218e13b3b1",
@@ -13,7 +13,7 @@
       "facts": [],
       "requires_human_approval": true,
       "actions": {
-        "reply": "recommended",
+        "reply": "not_needed",
         "github_issue": "approval_required",
         "store_copy": "not_needed",
         "code_change": "investigate"

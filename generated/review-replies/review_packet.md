@@ -2,47 +2,4 @@
 
 Read `prompts/codex_review_replies.md`, then create `data/store_review_ai_drafts.json`.
 
-[
-  {
-    "review": {
-      "review_id": "85189b71-d5c4-4e11-9c5b-c9218e13b3b1",
-      "app_id": "APP-0008",
-      "app_slug": "papira",
-      "app_name": "Papira",
-      "platform": "android",
-      "rating": "3",
-      "review_kind": "review",
-      "title": "",
-      "body": "몇가지만 수정바랍니다 표지가 속표지만 된다는점 표지이미지만사용하게 제목삭제가능 패드로보는데 양쪽 간격이너무넓어서 기록이 너무좁아요",
-      "reviewer_language": "ko",
-      "territory": "",
-      "app_version": "2.0.1",
-      "created_at": "2026-10-11T08:48:22+00:00",
-      "updated_at": "2026-10-11T08:48:22+00:00",
-      "developer_reply": "",
-      "reply_updated_at": "",
-      "status": "pending",
-      "synced_at": "2026-10-11T21:22:46+00:00",
-      "verified_at": "2026-10-11T21:22:46+00:00",
-      "verification_source": "google_reviews_get"
-    },
-    "triage": {
-      "review_id": "85189b71-d5c4-4e11-9c5b-c9218e13b3b1",
-      "category": "data_loss",
-      "risk_flags": [
-        "data_loss"
-      ],
-      "similarity_key": "data_loss",
-      "similar_reviews": 1,
-      "facts": [],
-      "requires_human_approval": true,
-      "actions": {
-        "reply": "recommended",
-        "github_issue": "approval_required",
-        "store_copy": "not_needed",
-        "code_change": "investigate"
-      },
-      "issue_draft": "## Customer report (unverified)\n- App: Papira\n- Platform/version: android 2.0.1\n- Category: data_loss\n- Similarity key: data_loss\n\n## Sanitized summary\nCustomer reported a possible product problem. Review the original in the approval dashboard; do not copy personal data into this issue.\n\n## Required before implementation\n- Reproduce or identify telemetry evidence.\n- Confirm affected versions and rollback path."
-    }
-  }
-]
+[]
