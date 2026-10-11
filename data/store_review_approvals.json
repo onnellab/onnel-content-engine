@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-28T21:22:54+00:00",
+  "updated_at": "2026-10-11T21:23:22+00:00",
   "approvals": [
     {
       "approval_id": "review-report-6b652b2227b5da3cd8607adf",
@@ -69,6 +69,23 @@
         "attempts": 1,
         "published_at": "2026-09-28T21:22:54+00:00",
         "external_response_id": "1790630572"
+      }
+    },
+    {
+      "approval_id": "review-85189b71-d5c4-4e11-9c5b-c9218e13b3b1",
+      "review_id": "85189b71-d5c4-4e11-9c5b-c9218e13b3b1",
+      "app_id": "APP-0008",
+      "app_slug": "papira",
+      "platform": "android",
+      "reply": "기대에 미치지 못해 죄송합니다. 남겨주신 의견을 확인해 개선할 부분을 살펴보겠습니다. 문제를 재현할 정보가 있다면 개인정보 없이 앱 버전과 발생 과정을 공식 지원 경로로 알려주세요. — ONNELLAB",
+      "approved_at": "2026-10-11T21:23:22+00:00",
+      "approved_by": "owner_standing_scheduled_policy_2026-09-24",
+      "note": "Daily Ops standing authorization dated 2026-09-24; canonical repository reply template.",
+      "status": "queued",
+      "publication": {
+        "attempts": 0,
+        "published_at": "",
+        "external_response_id": ""
       }
     }
   ]
