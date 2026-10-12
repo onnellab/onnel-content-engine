@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: onnellab/onnellab.github.io
-          ref: main
+          ref: 9f8f9531898cee36769f59f1a04194524dfb0d42
           path: .preview-homepage
           persist-credentials: false
       - name: Configure existing Node version
@@ -67,7 +67,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Check desktop and mobile and capture every page
         working-directory: .preview-homepage
-        run: npx playwright test tests/blog-preview.spec.ts --project=desktop --project=mobile --workers=1 --reporter=line,json
+        run: npx playwright test tests/blog-preview.spec.ts tests/blog-header-responsive.spec.ts --project=desktop --project=mobile --workers=1 --reporter=line,json
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: ../preview-evidence/playwright-results.json
       - name: Retain bounded preview evidence
