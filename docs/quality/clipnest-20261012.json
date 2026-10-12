@@ -1,0 +1,251 @@
+{
+  "run_id": 38239238693,
+  "artifact_id": 11742296243,
+  "artifact_sha256": "bc4106df3fbfe22824eac9fccc334d520e2ac545098723c86ab9cfab93904bae",
+  "content_engine_sha": "9b035d207c17c4642dc987eba3b2947ce4b55c2c",
+  "homepage_sha": "9f8f9531898cee36769f59f1a04194524dfb0d42",
+  "automated_pass": 56,
+  "manual_page_visual_pass": true,
+  "root_independent_review": "PT-BR mobile navigation and full JA revised page passed",
+  "publication_receipt": false,
+  "records": [
+    {
+      "file": "de-desktop.png",
+      "sha256": "22b02b2020788332a737020c8829c61603ac4c75bb9b1ffd76d814e46ca231a2",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "de-mobile.png",
+      "sha256": "81ff1ed17a53169bccb3edb0d4f1f25e51ad18f81e638c3b36c6250af1fd9c89",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "en-desktop.png",
+      "sha256": "d67674efcc0dd48889e9b5febd4ea7a2378b243da62f4a150d81964b94b9d573",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "en-mobile.png",
+      "sha256": "7a804cf07b0b3a79dc87ef911d5fded6f6061a3f3453f23af25c580bd7119665",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "es-desktop.png",
+      "sha256": "68cf0015914db3bce52128f3461c6f57b6e78a7c4a8c4ece2feb8579bbc53e79",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "es-mobile.png",
+      "sha256": "658163b00f39ae559fff9227c7c6cb937a03135bcf57268b7381b01af4d8c6e7",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "fr-desktop.png",
+      "sha256": "e6777c31fdc636614380eabca1268e414fb0e5c50358d89b6793b82810c21a6b",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "fr-mobile.png",
+      "sha256": "8ce3ed69bb15fdddbd9987ae1805b8fea69f419a9f2b340540f4a8559a9a1fb0",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "ja-desktop.png",
+      "sha256": "653b71ad1db5ad5eb4ad5c8e7767c683018e9ba685b753c8e9a6dabcb1ade8e5",
+      "same_as_full_inspected_baseline": false,
+      "visual_result": "PASS",
+      "method": "Re-viewed changed full page, including body/table/workflow/expanded FAQ/footer"
+    },
+    {
+      "file": "ja-mobile.png",
+      "sha256": "f372da2a9295dfdb5e393e71a138a1bfc0309475fcca4200990cc61bbf48bf50",
+      "same_as_full_inspected_baseline": false,
+      "visual_result": "PASS",
+      "method": "Re-viewed changed full page, including body/table/workflow/expanded FAQ/footer"
+    },
+    {
+      "file": "ko-desktop.png",
+      "sha256": "b32e65f7dd586a90398f4f28b1d462d11922e3cb5ee03d6713e41e14b2f1ebbd",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "ko-mobile.png",
+      "sha256": "c6574177e0f5b032eb6337ace40142f765e0cdde0b368abba180a51f3d4095b8",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "pt-BR-desktop.png",
+      "sha256": "5355898647030303a74da1d197578c2c75015677a27b7524f4aafc4063fc2d52",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "pt-BR-mobile.png",
+      "sha256": "1f5ee550686de79116d57c2c1b1ae767be9724a0258f271683dfb99b0ee9b952",
+      "same_as_full_inspected_baseline": false,
+      "visual_result": "PASS",
+      "method": "Re-viewed changed full page, including body/table/workflow/expanded FAQ/footer"
+    },
+    {
+      "file": "zh-Hans-desktop.png",
+      "sha256": "b9bec6cb11e14d6785ebe0b8fbd189e5f07aeb32ab8137aaabc01f226e35580c",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "zh-Hans-mobile.png",
+      "sha256": "6435cb65bf31827ce9d5745a5e5ec2269222ab583b805228ed30e25d0e7734d3",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "zh-Hant-desktop.png",
+      "sha256": "3162711ea18cd743d07290180cb4969d3d4a1f285e48f0af00a62ee85b892e2c",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    },
+    {
+      "file": "zh-Hant-mobile.png",
+      "sha256": "4d3556a025bf64803f7db9d5e29d4e878c0bb0570ba1616402f5f0b4d2432abe",
+      "same_as_full_inspected_baseline": true,
+      "visual_result": "PASS",
+      "method": "Full earlier pixel inspection plus byte-identity verification"
+    }
+  ],
+  "manual_language_review": "All nine complete manuscripts independently reviewed; corrections rechecked. Final Japanese heading polish reviewed separately. This is not native-speaker certification.",
+  "native_reviews": [
+    {
+      "topic_id": "TOPIC-0075",
+      "score": 10.0,
+      "passed": true,
+      "input_fingerprint": "c58d3904e672767c51eb6a9f4e6bf7a90323349cc5a4d2895c705f76ed085a5a"
+    },
+    {
+      "topic_id": "TOPIC-0042",
+      "score": 10.0,
+      "passed": true,
+      "input_fingerprint": "44b472ef824090fb7a2e8be086dc7f42275ce8acae3292f28cf8536524e541e3"
+    },
+    {
+      "topic_id": "TOPIC-0077",
+      "score": 10.0,
+      "passed": true,
+      "input_fingerprint": "fdef6f5af55c7ab209df7185c5b797e6198843a1aa79ab13eea2525c29cdc877"
+    },
+    {
+      "topic_id": "TOPIC-0076",
+      "score": 10.0,
+      "passed": true,
+      "input_fingerprint": "00df5caafa91b7a6c098f43bdd594a258b1118351ac1d76d26c948eb01c8eeab"
+    },
+    {
+      "topic_id": "TOPIC-0071",
+      "score": 10.0,
+      "passed": true,
+      "input_fingerprint": "8dcafb21b72509c75a126dcfd92b65411ddb593d2e63098ac4a8508c6735d7d0"
+    },
+    {
+      "topic_id": "TOPIC-0070",
+      "score": 10.0,
+      "passed": true,
+      "input_fingerprint": "8c6c46bad5d09755fdd82a94288f4736158827d90639ea9ab1059a1d70464b8e"
+    },
+    {
+      "topic_id": "TOPIC-0074",
+      "score": 10.0,
+      "passed": true,
+      "input_fingerprint": "f749b3f1464762b355d0d95c6cb7f7f0e232965912ac1240547355af160599c1"
+    },
+    {
+      "topic_id": "TOPIC-0072",
+      "score": 10.0,
+      "passed": true,
+      "input_fingerprint": "37b30086649719f5d1f57e6b6a9297098b58030c49c4c7925eed20868ba1a920"
+    },
+    {
+      "topic_id": "TOPIC-0073",
+      "score": 10.0,
+      "passed": true,
+      "input_fingerprint": "b497246c617cfe84c7a7460c2b0ad4eb5cb9c412fe84d730f8731045414346b1"
+    }
+  ],
+  "queue_validation": {
+    "state": "VALIDATED_FOR_CANONICAL_QUEUE",
+    "scheduled": [
+      {
+        "id": "TOPIC-0042",
+        "language": "en",
+        "at": "2026-10-18T09:00:00+09:00"
+      },
+      {
+        "id": "TOPIC-0070",
+        "language": "ko",
+        "at": "2026-10-18T09:00:00+09:00"
+      },
+      {
+        "id": "TOPIC-0071",
+        "language": "ja",
+        "at": "2026-10-18T09:00:00+09:00"
+      },
+      {
+        "id": "TOPIC-0072",
+        "language": "zh-Hans",
+        "at": "2026-10-18T09:00:00+09:00"
+      },
+      {
+        "id": "TOPIC-0073",
+        "language": "zh-Hant",
+        "at": "2026-10-18T09:00:00+09:00"
+      },
+      {
+        "id": "TOPIC-0074",
+        "language": "pt-BR",
+        "at": "2026-10-18T09:00:00+09:00"
+      },
+      {
+        "id": "TOPIC-0075",
+        "language": "de",
+        "at": "2026-10-18T09:00:00+09:00"
+      },
+      {
+        "id": "TOPIC-0076",
+        "language": "fr",
+        "at": "2026-10-18T09:00:00+09:00"
+      },
+      {
+        "id": "TOPIC-0077",
+        "language": "es",
+        "at": "2026-10-18T09:00:00+09:00"
+      }
+    ],
+    "existing_rows_preserved": 68,
+    "persisted_reviews_current": true,
+    "preview_run": 38239238693
+  },
+  "preview_url": "https://github.com/onnellab/onnel-content-engine/actions/runs/38239238693",
+  "note": "Future publication remains the existing Publishing Pipeline responsibility. No publication date was fabricated in the preview."
+}

@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/productivity/turn-repeated-text-into-reusable-snippets.md",
+  "topic": {
+    "id": "TOPIC-0071",
+    "title": "繰り返し使う文章を再利用できる定型文に整理する方法",
+    "slug": "turn-repeated-text-into-reusable-snippets",
+    "category": "productivity",
+    "language": "ja",
+    "primary_keyword": "再利用できる定型文",
+    "related_apps": [
+      "ClipNest"
+    ]
+  },
+  "article_sections_detected": [
+    "繰り返し使う文章を再利用できる定型文に整理する方法",
+    "質問",
+    "短い答え",
+    "固定の表現と変わる情報を分ける",
+    "推奨ワークフロー",
+    "小さな例",
+    "ONNELLAB の活用",
+    "関連ガイド",
+    "参考資料",
+    "結論",
+    "よくある質問",
+    "過去の返信を丸ごと保存してもよいですか？",
+    "プレースホルダーは自動で埋まりますか？",
+    "どのくらいの頻度で見直しますか？",
+    "端末内に保存すれば、貼り付けた文章も守られますか？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "よく入力する文章を、使う場面や正確さを損なわずに再利用するにはどうすればよいですか？",
+      "source_sections": [
+        "推奨ワークフロー"
+      ],
+      "structure": [
+        "1. 選ぶ",
+        "2. 印を付ける",
+        "3. 確認する",
+        "4. 見直す"
+      ],
+      "notes": "Editorial preparation and verification sequence. No product UI or app test claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "ClipNest"
+    ],
+    "reason": "Product-neutral editorial workflow; no app UI or device-test evidence claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "繰り返し使う文章を定型文に整理する方法",
+      "steps": [
+        "1. 選ぶ — 変わらない表現を選ぶ",
+        "2. 印を付ける — 差し替える箇所に印を付ける",
+        "3. 確認する — 貼り付け先を確認する",
+        "4. 見直す — 保存文を見直す"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "送信前に",
+    "message": "貼り付けた文章は毎回確認します。",
+    "description": "変わらない表現だけを保存し、毎回変える箇所に印を付け、使う場面を別に記録します。送信前に宛先を確認し、すべての印を実際の情報に置き換えて、全文を読み直します。根拠となる情報が変わったら保存文も見直します。",
+    "steps": [
+      [
+        "1. 選ぶ",
+        "変わらない表現を選ぶ"
+      ],
+      [
+        "2. 印を付ける",
+        "差し替える箇所に印を付ける"
+      ],
+      [
+        "3. 確認する",
+        "貼り付け先を確認する"
+      ],
+      [
+        "4. 見直す",
+        "保存文を見直す"
+      ]
+    ]
+  }
+}

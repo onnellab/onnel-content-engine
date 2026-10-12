@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/productivity/turn-repeated-text-into-reusable-snippets.md",
+  "topic": {
+    "id": "TOPIC-0077",
+    "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
+    "slug": "turn-repeated-text-into-reusable-snippets",
+    "category": "productivity",
+    "language": "es",
+    "primary_keyword": "fragmentos reutilizables",
+    "related_apps": [
+      "ClipNest"
+    ]
+  },
+  "article_sections_detected": [
+    "Cómo convertir textos repetidos en fragmentos reutilizables",
+    "Pregunta",
+    "Respuesta breve",
+    "Separa la redacción estable de los datos variables",
+    "Flujo de trabajo recomendado",
+    "Un pequeño ejemplo",
+    "Dónde encaja ONNELLAB",
+    "Guía relacionada",
+    "Referencias",
+    "Conclusión",
+    "Preguntas frecuentes",
+    "¿Debo guardar una respuesta anterior entera?",
+    "¿Los marcadores se rellenan solos?",
+    "¿Con qué frecuencia debo revisar los fragmentos?",
+    "¿El almacenamiento local basta para proteger un mensaje pegado?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "¿Cómo puedo reutilizar textos que escribo a menudo sin perder el contexto necesario para que sigan siendo correctos?",
+      "source_sections": [
+        "Flujo de trabajo recomendado"
+      ],
+      "structure": [
+        "1. Elige",
+        "2. Marca",
+        "3. Verifica",
+        "4. Revisa"
+      ],
+      "notes": "Editorial preparation and verification sequence. No product UI or app test claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "ClipNest"
+    ],
+    "reason": "Product-neutral editorial workflow; no app UI or device-test evidence claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
+      "steps": [
+        "1. Elige — Elige el texto estable",
+        "2. Marca — Marca lo que cambia",
+        "3. Verifica — Comprueba el destino",
+        "4. Revisa — Revisa los textos guardados"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Antes de enviar",
+    "message": "Revisa cada mensaje pegado.",
+    "description": "Guarda solo la redacción estable, marca los datos que cambian y anota por separado cuándo se aplica el texto. Antes de enviarlo, comprueba el destinatario, sustituye todos los marcadores y lee el mensaje completo. Revisa las copias guardadas cuando cambie su fuente.",
+    "steps": [
+      [
+        "1. Elige",
+        "Elige el texto estable"
+      ],
+      [
+        "2. Marca",
+        "Marca lo que cambia"
+      ],
+      [
+        "3. Verifica",
+        "Comprueba el destino"
+      ],
+      [
+        "4. Revisa",
+        "Revisa los textos guardados"
+      ]
+    ]
+  }
+}

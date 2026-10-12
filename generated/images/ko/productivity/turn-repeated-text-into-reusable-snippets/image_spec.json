@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/productivity/turn-repeated-text-into-reusable-snippets.md",
+  "topic": {
+    "id": "TOPIC-0070",
+    "title": "반복해서 쓰는 문장을 재사용 가능한 텍스트 조각으로 정리하기",
+    "slug": "turn-repeated-text-into-reusable-snippets",
+    "category": "productivity",
+    "language": "ko",
+    "primary_keyword": "재사용 가능한 텍스트 조각",
+    "related_apps": [
+      "ClipNest"
+    ]
+  },
+  "article_sections_detected": [
+    "반복해서 쓰는 문장을 재사용 가능한 텍스트 조각으로 정리하기",
+    "질문",
+    "짧은 답변",
+    "고정된 표현과 달라지는 사실 나누기",
+    "권장 워크플로",
+    "작은 예시",
+    "ONNELLAB 앱",
+    "함께 읽을 글",
+    "참고 자료",
+    "결론",
+    "자주 묻는 질문",
+    "이전 답변 전체를 저장해도 되나요?",
+    "자리표시자가 자동으로 채워지나요?",
+    "얼마나 자주 검토해야 하나요?",
+    "기기에 저장하면 붙여 넣은 메시지도 보호되나요?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "자주 입력하는 문장을 다시 쓸 때 정확한 사용 맥락을 어떻게 유지할 수 있나요?",
+      "source_sections": [
+        "권장 워크플로"
+      ],
+      "structure": [
+        "1. 선택",
+        "2. 표시",
+        "3. 확인",
+        "4. 검토"
+      ],
+      "notes": "Editorial preparation and verification sequence. No product UI or app test claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "ClipNest"
+    ],
+    "reason": "Product-neutral editorial workflow; no app UI or device-test evidence claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "반복해서 쓰는 문장을 재사용 가능한 텍스트 조각으로 정리하기",
+      "steps": [
+        "1. 선택 — 변하지 않는 표현 고르기",
+        "2. 표시 — 바뀌는 내용 표시하기",
+        "3. 확인 — 붙여 넣을 곳 확인하기",
+        "4. 검토 — 저장한 문장 검토하기"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "보내기 전",
+    "message": "붙여 넣은 메시지는 매번 확인하세요.",
+    "description": "늘 그대로 써도 되는 표현만 저장하고 바뀌는 부분을 표시한 뒤, 언제 쓰는 문장인지 따로 기록합니다. 보내기 전에는 받는 사람을 확인하고 모든 자리표시자를 바꾼 다음 전체 메시지를 읽습니다. 근거가 바뀌면 저장한 문장도 검토합니다.",
+    "steps": [
+      [
+        "1. 선택",
+        "변하지 않는 표현 고르기"
+      ],
+      [
+        "2. 표시",
+        "바뀌는 내용 표시하기"
+      ],
+      [
+        "3. 확인",
+        "붙여 넣을 곳 확인하기"
+      ],
+      [
+        "4. 검토",
+        "저장한 문장 검토하기"
+      ]
+    ]
+  }
+}

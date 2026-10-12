@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: onnellab/onnellab.github.io
-          ref: 9f8f9531898cee36769f59f1a04194524dfb0d42
+          ref: main
           path: .preview-homepage
           persist-credentials: false
       - name: Configure existing Node version

@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0070",
+    "title": "반복해서 쓰는 문장을 재사용 가능한 텍스트 조각으로 정리하기",
+    "slug": "turn-repeated-text-into-reusable-snippets",
+    "category": "productivity",
+    "language": "ko",
+    "status": "review",
+    "topic_clusters": [
+      "재사용 가능한 텍스트 조각",
+      "문장 사용 맥락",
+      "텍스트 자리표시자",
+      "저장한 답변",
+      "전송 전 확인",
+      "productivity"
+    ],
+    "related_app_names": [
+      "ClipNest"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0017",
+        "source_language": "ko",
+        "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
+        "slug": "reuse-copied-text-snippets-iphone",
+        "category": "productivity",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/",
+        "destination": "published_article",
+        "relationship": "broader",
+        "shared_clusters": [
+          "productivity"
+        ]
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0005",
+        "app_name": "ClipNest",
+        "slug": "clipnest",
+        "category": "productivity",
+        "url": "/apps/clipnest/",
+        "description": "",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": []
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

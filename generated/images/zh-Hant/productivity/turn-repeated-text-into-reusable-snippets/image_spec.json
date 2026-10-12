@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/productivity/turn-repeated-text-into-reusable-snippets.md",
+  "topic": {
+    "id": "TOPIC-0073",
+    "title": "如何整理可重複使用的文字片段",
+    "slug": "turn-repeated-text-into-reusable-snippets",
+    "category": "productivity",
+    "language": "zh-Hant",
+    "primary_keyword": "可重複使用的文字片段",
+    "related_apps": [
+      "ClipNest"
+    ]
+  },
+  "article_sections_detected": [
+    "如何整理可重複使用的文字片段",
+    "問題",
+    "簡短回答",
+    "區分固定表述與變動資訊",
+    "建議工作流程",
+    "一個小例子",
+    "ONNELLAB 應用程式說明",
+    "延伸閱讀",
+    "參考資料",
+    "結論",
+    "常見問題",
+    "可以儲存整則舊回覆嗎？",
+    "預留位置會自動填入嗎？",
+    "應該多久檢查一次？",
+    "在本機儲存就足以保護貼上的訊息嗎？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "如何重複使用經常輸入的文字，同時保留確保內容正確所需的情境？",
+      "source_sections": [
+        "建議工作流程"
+      ],
+      "structure": [
+        "1. 選擇",
+        "2. 標示",
+        "3. 檢查",
+        "4. 複查"
+      ],
+      "notes": "Editorial preparation and verification sequence. No product UI or app test claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "ClipNest"
+    ],
+    "reason": "Product-neutral editorial workflow; no app UI or device-test evidence claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "如何整理可重複使用的文字片段",
+      "steps": [
+        "1. 選擇 — 選擇固定表述",
+        "2. 標示 — 標示變動資訊",
+        "3. 檢查 — 檢查貼上位置",
+        "4. 複查 — 檢查儲存內容"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "傳送前",
+    "message": "每次貼上後都要檢查。",
+    "description": "只儲存固定不變的表述，標示每次要修改的資訊，並另外記錄適用情境。傳送前確認收件人、替換所有預留位置，再讀過完整訊息。依據改變時，也要重新檢查儲存的文字。",
+    "steps": [
+      [
+        "1. 選擇",
+        "選擇固定表述"
+      ],
+      [
+        "2. 標示",
+        "標示變動資訊"
+      ],
+      [
+        "3. 檢查",
+        "檢查貼上位置"
+      ],
+      [
+        "4. 複查",
+        "檢查儲存內容"
+      ]
+    ]
+  }
+}

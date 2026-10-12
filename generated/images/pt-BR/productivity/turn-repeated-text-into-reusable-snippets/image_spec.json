@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/pt-BR/productivity/turn-repeated-text-into-reusable-snippets.md",
+  "topic": {
+    "id": "TOPIC-0074",
+    "title": "Como transformar textos repetidos em trechos reutilizáveis",
+    "slug": "turn-repeated-text-into-reusable-snippets",
+    "category": "productivity",
+    "language": "pt-BR",
+    "primary_keyword": "trechos de texto reutilizáveis",
+    "related_apps": [
+      "ClipNest"
+    ]
+  },
+  "article_sections_detected": [
+    "Como transformar textos repetidos em trechos reutilizáveis",
+    "Pergunta",
+    "Resposta curta",
+    "Separe a redação estável dos fatos que mudam",
+    "Fluxo de trabalho recomendado",
+    "Um pequeno exemplo",
+    "Onde entra a ONNELLAB",
+    "Guia relacionado",
+    "Referências",
+    "Conclusão",
+    "Perguntas frequentes",
+    "Devo salvar uma resposta anterior inteira?",
+    "Os marcadores são preenchidos automaticamente?",
+    "Com que frequência devo revisar os trechos?",
+    "O armazenamento local basta para proteger uma mensagem colada?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Como reutilizar textos que digito com frequência sem perder o contexto necessário para que continuem corretos?",
+      "source_sections": [
+        "Fluxo de trabalho recomendado"
+      ],
+      "structure": [
+        "1. Escolha",
+        "2. Marque",
+        "3. Confira",
+        "4. Revise"
+      ],
+      "notes": "Editorial preparation and verification sequence. No product UI or app test claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "ClipNest"
+    ],
+    "reason": "Product-neutral editorial workflow; no app UI or device-test evidence claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Como transformar textos repetidos em trechos reutilizáveis",
+      "steps": [
+        "1. Escolha — Escolha o texto estável",
+        "2. Marque — Marque o que muda",
+        "3. Confira — Confira o destino",
+        "4. Revise — Revise os textos salvos"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Antes do envio",
+    "message": "Confira cada mensagem colada.",
+    "description": "Salve apenas a parte estável, marque os detalhes que mudam e registre separadamente quando o texto se aplica. Antes de enviar, confira o destinatário, substitua todos os campos e leia a mensagem inteira. Revise as cópias salvas quando a fonte mudar.",
+    "steps": [
+      [
+        "1. Escolha",
+        "Escolha o texto estável"
+      ],
+      [
+        "2. Marque",
+        "Marque o que muda"
+      ],
+      [
+        "3. Confira",
+        "Confira o destino"
+      ],
+      [
+        "4. Revise",
+        "Revise os textos salvos"
+      ]
+    ]
+  }
+}

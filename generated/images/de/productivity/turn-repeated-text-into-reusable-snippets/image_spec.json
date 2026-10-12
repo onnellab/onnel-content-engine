@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/de/productivity/turn-repeated-text-into-reusable-snippets.md",
+  "topic": {
+    "id": "TOPIC-0075",
+    "title": "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln",
+    "slug": "turn-repeated-text-into-reusable-snippets",
+    "category": "productivity",
+    "language": "de",
+    "primary_keyword": "wiederverwendbare Textbausteine",
+    "related_apps": [
+      "ClipNest"
+    ]
+  },
+  "article_sections_detected": [
+    "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln",
+    "Frage",
+    "Kurzantwort",
+    "Beständige Formulierungen und veränderliche Fakten trennen",
+    "Empfohlener Ablauf",
+    "Ein kleines Beispiel",
+    "Wo ONNELLAB dazu passt",
+    "Weiterführender Artikel",
+    "Quellen",
+    "Fazit",
+    "Häufige Fragen",
+    "Sollte ich eine frühere Antwort vollständig speichern?",
+    "Füllen sich Platzhalter automatisch?",
+    "Wie oft sollte ich Textbausteine überprüfen?",
+    "Schützt lokales Speichern auch die eingefügte Nachricht ausreichend?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Wie kann ich häufig getippte Texte wiederverwenden, ohne den für ihre Richtigkeit nötigen Kontext zu verlieren?",
+      "source_sections": [
+        "Empfohlener Ablauf"
+      ],
+      "structure": [
+        "1. Wählen",
+        "2. Setzen",
+        "3. Prüfen",
+        "4. Pflegen"
+      ],
+      "notes": "Editorial preparation and verification sequence. No product UI or app test claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "ClipNest"
+    ],
+    "reason": "Product-neutral editorial workflow; no app UI or device-test evidence claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln",
+      "steps": [
+        "1. Wählen — Beständigen Text auswählen",
+        "2. Setzen — Platzhalter setzen",
+        "3. Prüfen — Einfügeziel prüfen",
+        "4. Pflegen — Gespeicherte Texte prüfen"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Vor dem Senden",
+    "message": "Prüfen Sie jede eingefügte Nachricht.",
+    "description": "Speichern Sie nur beständige Formulierungen, markieren Sie veränderliche Angaben und halten Sie den Verwendungszweck getrennt fest. Prüfen Sie vor dem Senden den Empfänger, ersetzen Sie alle Platzhalter und lesen Sie die gesamte Nachricht. Ändert sich die Grundlage, prüfen Sie auch die gespeicherten Texte.",
+    "steps": [
+      [
+        "1. Wählen",
+        "Beständigen Text auswählen"
+      ],
+      [
+        "2. Setzen",
+        "Platzhalter setzen"
+      ],
+      [
+        "3. Prüfen",
+        "Einfügeziel prüfen"
+      ],
+      [
+        "4. Pflegen",
+        "Gespeicherte Texte prüfen"
+      ]
+    ]
+  }
+}

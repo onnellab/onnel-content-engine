@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hans/productivity/turn-repeated-text-into-reusable-snippets.md",
+  "topic": {
+    "id": "TOPIC-0072",
+    "title": "如何整理可重复使用的文本片段",
+    "slug": "turn-repeated-text-into-reusable-snippets",
+    "category": "productivity",
+    "language": "zh-Hans",
+    "primary_keyword": "可重复使用的文本片段",
+    "related_apps": [
+      "ClipNest"
+    ]
+  },
+  "article_sections_detected": [
+    "如何整理可重复使用的文本片段",
+    "问题",
+    "简短回答",
+    "区分固定表述与变化信息",
+    "推荐工作流程",
+    "一个小例子",
+    "ONNELLAB 应用",
+    "相关阅读",
+    "参考资料",
+    "结论",
+    "常见问题",
+    "可以保存整条旧回复吗？",
+    "占位符会自动填写吗？",
+    "应该多久复查一次？",
+    "本地保存足以保护粘贴后的消息吗？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "如何重复使用经常输入的文字，同时保留保证内容准确所需的语境？",
+      "source_sections": [
+        "推荐工作流程"
+      ],
+      "structure": [
+        "1. 选择",
+        "2. 标记",
+        "3. 检查",
+        "4. 复查"
+      ],
+      "notes": "Editorial preparation and verification sequence. No product UI or app test claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "applications": [
+      "ClipNest"
+    ],
+    "reason": "Product-neutral editorial workflow; no app UI or device-test evidence claimed."
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "如何整理可重复使用的文本片段",
+      "steps": [
+        "1. 选择 — 选择稳定表述",
+        "2. 标记 — 标出变化信息",
+        "3. 检查 — 检查粘贴目标",
+        "4. 复查 — 复查保存内容"
+      ],
+      "layout": "left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "发送前",
+    "message": "每次粘贴后都要检查。",
+    "description": "只保存稳定不变的表述，标出每次要修改的信息，并另行记录适用场景。发送前确认收件人、替换所有占位符，再通读完整消息。依据发生变化时，也要复查保存的文字。",
+    "steps": [
+      [
+        "1. 选择",
+        "选择稳定表述"
+      ],
+      [
+        "2. 标记",
+        "标出变化信息"
+      ],
+      [
+        "3. 检查",
+        "检查粘贴目标"
+      ],
+      [
+        "4. 复查",
+        "复查保存内容"
+      ]
+    ]
+  }
+}

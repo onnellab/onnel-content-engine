@@ -116,6 +116,7 @@ def wrap_display_text(value: str, width: int, font_size: int) -> list[str]:
 
 
 CATEGORY_LABELS = {
+    "ko": dict(zip(("reading", "music", "productivity", "media", "craft", "games", "research"), ("독서", "음악", "생산성", "미디어", "창작", "게임", "연구"))),
     "ja": dict(zip(("reading", "music", "productivity", "media", "craft", "games", "research"), ("読書", "音楽", "作業効率", "メディア", "創作", "ゲーム", "調査"))),
     "zh-Hans": dict(zip(("reading", "music", "productivity", "media", "craft", "games", "research"), ("阅读", "音乐", "效率", "媒体", "创作", "游戏", "研究"))),
     "zh-Hant": dict(zip(("reading", "music", "productivity", "media", "craft", "games", "research"), ("閱讀", "音樂", "生產力", "媒體", "創作", "遊戲", "研究"))),
@@ -124,3 +125,4 @@ CATEGORY_LABELS = {
     "fr": dict(zip(("reading", "music", "productivity", "media", "craft", "games", "research"), ("Lecture", "Musique", "Productivité", "Médias", "Création", "Jeux", "Recherche"))),
     "es": dict(zip(("reading", "music", "productivity", "media", "craft", "games", "research"), ("Lectura", "Música", "Productividad", "Multimedia", "Creación", "Juegos", "Investigación"))),
 }
+

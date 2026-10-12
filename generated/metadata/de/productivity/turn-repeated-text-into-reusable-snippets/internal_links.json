@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0075",
+    "title": "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln",
+    "slug": "turn-repeated-text-into-reusable-snippets",
+    "category": "productivity",
+    "language": "de",
+    "status": "review",
+    "topic_clusters": [
+      "wiederverwendbare Textbausteine",
+      "Textbausteine im Kontext",
+      "Platzhalter im Text",
+      "gespeicherte Antworten",
+      "Prüfung vor dem Senden",
+      "productivity"
+    ],
+    "related_app_names": [
+      "ClipNest"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0010",
+        "source_language": "en",
+        "title": "Kopierte Textbausteine auf dem iPhone wiederverwenden",
+        "slug": "reuse-copied-text-snippets-iphone",
+        "category": "productivity",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/reuse-copied-text-snippets-iphone/",
+        "destination": "published_article",
+        "relationship": "broader",
+        "shared_clusters": [
+          "productivity"
+        ]
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0005",
+        "app_name": "ClipNest",
+        "slug": "clipnest",
+        "category": "productivity",
+        "url": "/apps/clipnest/",
+        "description": "",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": []
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}
