@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check an EPUB’s Table of Contents and Chapter Order</title>
+  <meta name="description" content="Compare an exported EPUB with your intended chapter list, test navigation links and reading order, and trace any mismatch back to the source.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Check an EPUB’s Table of Contents and Chapter Order">
+  <meta property="og:description" content="Compare an exported EPUB with your intended chapter list, test navigation links and reading order, and trace any mismatch back to the source.">
+  <meta property="og:url" content="https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Check an EPUB’s Table of Contents and Chapter Order">
+  <meta name="twitter:description" content="Compare an exported EPUB with your intended chapter list, test navigation links and reading order, and trace any mismatch back to the source.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/en/check-epub-table-of-contents-and-reading-order/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/en/check-epub-table-of-contents-and-reading-order/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Check an EPUB’s Table of Contents and Chapter Order</h1>
+<p>An EPUB opens, but do its links and chapter sequence match your manuscript? To check an EPUB’s table of contents, compare it with your intended chapter list, then test both contents links and ordinary reading.</p>
+<p>This guide starts after export and focuses on inspection rather than cover, encoding, or manuscript setup.</p>
+<h2>Question</h2>
+<p>How can I check that an exported EPUB’s contents links and chapter order match my manuscript?</p>
+<h2>Short Answer</h2>
+<p>Write down the expected chapters, open the exported EPUB in a separate reader, test each contents link, and read across chapter boundaries. Record mismatches, correct the source or export setup, regenerate and check again. Keep the original manuscript and previous export until the replacement has been checked.</p>
+<h2>Separate the Three Things You Are Checking</h2>
+<p>The <strong>contents label</strong> is the text you select in the reader’s table of contents. The <strong>link target</strong> is where it opens. The <strong>reading order</strong> is the sequence encountered when reading without selecting another entry.</p>
+<p>EPUB 3 represents navigation and default reading order separately: its navigation document supplies the table of contents, while the package’s spine orders content documents. The order within each document also matters. These distinctions are defined in <a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a>. You do not need to edit those internal files to carry out the checks below.</p>
+<table><thead><tr><th>Check</th><th>What it tells you</th><th>What still needs checking</th></tr></thead><tbody><tr><td>Compare the displayed contents with your list</td><td>Whether expected entries and understandable labels appear</td><td>Where each link goes</td></tr><tr><td>Open each contents link</td><td>Whether it reaches the intended heading and opening text</td><td>What comes next during ordinary reading</td></tr><tr><td>Continue across chapter boundaries</td><td>Whether the reading sequence matches your plan</td><td>Whether all contents links are correct</td></tr><tr><td>Run EPUBCheck</td><td>Whether the package meets the EPUB rules it checks</td><td>Whether the book matches your editorial intent</td></tr></tbody></table>
+<p>A page headed “Contents” inside the book and the reader’s contents menu may be presented separately. Inspect the menu, and check a contents page too if the exported book includes one.</p>
+<h2>Make an Expected Chapter List</h2>
+<p>Using the manuscript as your reference, list the intended chapters in order, including expected front and back matter such as a preface or afterword. Decide which sections belong in the contents; every paragraph does not need an entry.</p>
+<p>For repeated headings such as “Notes,” add a short phrase from each opening paragraph to your private check sheet. Use recognizable text rather than reader page numbers, which can change with layout settings.</p>
+<p>Record the export filename, source revision, converter version, and reader name and version. After regeneration, confirm that the reader opens the new file. Preserve annotations before removing an older library copy.</p>
+<h2>Use a Small Check Sheet</h2>
+<p>This invented teaching example is not an actual defect report or device test. The expected sequence is “Arrival,” “The Trail,” then “Return.” Copy the columns and record your own observations.</p>
+<table><thead><tr><th>Expected heading</th><th>Contents label</th><th>Actual destination</th><th>Following chapter</th><th>Result</th><th>Source or setup follow-up</th></tr></thead><tbody><tr><td>1 Arrival</td><td>1 Arrival</td><td>1 Arrival</td><td>2 The Trail</td><td>Matches</td><td>None</td></tr><tr><td>2 The Trail</td><td>2 The Trail</td><td>3 Return</td><td>Not checked yet</td><td>Wrong destination</td><td>Check the source boundary and documented export rules</td></tr><tr><td>3 Return</td><td>3 Return</td><td>3 Return</td><td>End of body</td><td>Matches this check</td><td>Check any intended afterword separately</td></tr></tbody></table>
+<p>The second row does not prove that chapter 2 is absent. Search for its opening text or continue from chapter 1 before deciding whether the chapter is missing or its link is incorrect.</p>
+<h2>Recommended Workflow</h2>
+<ol><li><strong>Open the correct export.</strong> Keep the source and EPUB filenames visible in your notes. Use a reader that supports the file, and check its import or sync behavior before opening a private manuscript.</li><li><strong>Compare the whole contents list.</strong> Look for missing sections, unexpected entries, repeated labels, and a sequence that differs from your reference. Expand collapsed groups where the reader provides them.</li><li><strong>Test every contents link.</strong> Compare each destination’s heading and opening passage with the reference. Record where it lands; opening somewhere in the book does not establish that the destination is correct.</li><li><strong>Test ordinary reading separately.</strong> Begin before the first intended body chapter. Continue across its ending into the next chapter without using the contents menu. Check front matter and transitions near the beginning, middle, and end, then check the remaining chapter boundaries before treating the whole book as checked.</li><li><strong>Inspect the end.</strong> Confirm that the final chapter reaches its intended ending and that any afterword or appendix remains reachable. Keep expected auxiliary material distinct from the main chapter sequence.</li><li><strong>Check the same export in another reader when distribution requires it.</strong> If the results differ, record the file and reader versions. A difference is evidence to investigate; it does not by itself identify which component is responsible.</li></ol>
+<figure><img src="/blog-assets/en/check-epub-table-of-contents-and-reading-order/workflow-diagram.svg" alt="Illustrative flow from an expected chapter list to contents-link checks, reading-order checks, and source correction before regenerating the EPUB." title="Check links and reading order separately before regenerating"></figure>
+<p>The diagram illustrates a suggested workflow, not a screenshot or completed test.</p>
+<h2>Diagnose the Mismatch Before Changing the Source</h2>
+<table><thead><tr><th>Symptom</th><th>Evidence to collect</th><th>Next step</th></tr></thead><tbody><tr><td>A chapter is missing from the contents</td><td>Does its opening text still appear during ordinary reading?</td><td>If present, inspect heading recognition and the intended contents scope; if absent, check source completeness and export boundaries</td></tr><tr><td>A correct-looking label opens the wrong chapter</td><td>Record the opened heading and text</td><td>Compare the source boundary and documented heading rules; reproduce with a small sample</td></tr><tr><td>Two entries have the same label</td><td>Compare both targets and the corresponding source headings</td><td>Decide whether the repetition is intentional before changing a title or removing a marker</td></tr><tr><td>Links work, but ordinary reading skips or reorders chapters</td><td>Record the actual transition and the expected next chapter</td><td>Check source sequence and available export settings; retain the result for diagnosis if the source is correct</td></tr><tr><td>Only one reader shows the problem</td><td>Confirm that both readers opened the same export revision</td><td>Repeat the exact transition and compare versions before blaming the manuscript or reader</td></tr></tbody></table>
+<p>Change one relevant thing at a time. Correct the working manuscript or a documented conversion setting, export to a distinguishable new file, and retest the affected entry and neighboring transitions. Finish by repeating the whole contents-link check because a structural change may affect more than one destination.</p>
+<p>If a clean source still produces the mismatch, preserve the original and create a short sample using text you own or may share. Describe the expected and observed destinations when seeking support. Do not send an unpublished full manuscript merely to demonstrate one navigation issue.</p>
+<h2>Keep Validation and Reading Checks Together</h2>
+<p><a href="https://www.w3.org/publishing/epubcheck/">EPUBCheck</a> checks publications against EPUB specifications. Use its report to investigate package errors and warnings, then repeat validation on the regenerated file. A successful report cannot decide whether “Chapter 2” contains the chapter you intended.</p>
+<p>Likewise, opening a book successfully in one reader does not establish full conformance, accessibility, or compatibility with every reading system. Keep the validation report, your navigation observations, and any untested readers or sections separate. For confidential text, choose a local validation workflow or review a service’s data handling before uploading the book.</p>
+<h2>Where ONNELLAB Fits</h2>
+<p>If you need to regenerate an EPUB from a finished TXT manuscript, Papira is an optional ONNELLAB tool for that step. Its official listings describe offline EPUB assembly with a cover, book details, and a table of contents. Edit the manuscript elsewhere and inspect the exported EPUB in another reader: Papira does not provide body-text editing or an EPUB reader.</p>
+<p>Heading recognition depends on the documented platform and version. Do not assume that app interface languages establish which chapter-heading patterns are recognized, or that iOS and Android behave identically. This workflow therefore does not prescribe one automatic-detection rule for every manuscript. Check the current instructions for your installed version and verify the resulting contents against your list.</p>
+<p>See the official <a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira App Store listing</a> or <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Papira Google Play listing</a> for your platform and region. The inspection method above also works with other EPUB exporters.</p>
+<h2>Related Guide</h2>
+<p>If the mismatch takes you back to source preparation, use <a href="/blog/en/prepare-txt-manuscript-for-epub/">How to Prepare a TXT Manuscript for Reliable EPUB Conversion</a>. That guide covers the earlier preparation stage; this check sheet belongs after export.</p>
+<h2>References</h2>
+<ul><li><a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a> describes navigation documents and the spine that defines default reading order.</li><li><a href="https://www.w3.org/publishing/epubcheck/">W3C EPUBCheck</a> documents the EPUB conformance checker.</li><li><a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira on the App Store</a> and <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Papira on Google Play</a> describe the product’s scope and platform-specific guidance.</li></ul>
+<h2>Conclusion</h2>
+<p>Compare intention with observation: list expected chapters, test every contents link, and inspect ordinary reading order. Preserve evidence of differences, correct the source or supported export setup, and check the new file before sharing it.</p>
+<h2>FAQ</h2>
+<h3>Does a visible chapter title prove its contents link is correct?</h3>
+<p>No. Open the entry and compare its destination’s heading and opening text. Check the label and target separately.</p>
+<h3>Is a chapter missing if it does not appear in the contents menu?</h3>
+<p>Not necessarily. Its text may still exist in the reading sequence. Look for the opening passage and compare the intended contents scope before diagnosing missing content.</p>
+<h3>Why can the links work while chapters appear in the wrong order?</h3>
+<p>Selecting a link and continuing through the book exercise different navigation paths. Record the actual next chapter as a separate result, then compare it with the manuscript and export setup.</p>
+<h3>Does passing EPUBCheck mean the book is ready to distribute?</h3>
+<p>It is one useful check. You still need to confirm the intended text, navigation, reading sequence, and the requirements of your audience or distributor. It is not an editorial or accessibility sign-off.</p>
+<h3>Should I fix the exported EPUB directly?</h3>
+<p>Prefer correcting the source or documented export settings so the next export includes the fix. If a publishing workflow requires package editing, record that step and keep it reproducible rather than maintaining two conflicting versions.</p>
+<h3>Can I do these reading checks inside Papira?</h3>
+<p>No. Papira assembles finished TXT manuscripts into EPUB; it is not an EPUB reader. Open the exported file in a separate reader, and use a text editor when the manuscript needs correction.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>How to Prepare a TXT Manuscript for Reliable EPUB Conversion</h3><a class="related-article-link" href="https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/">Read article</a></article>
+<article class="related-article-card"><h3>TXT vs EPUB for Long Reading</h3><a class="related-article-link" href="https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/">Read article</a></article>
+<article class="related-article-card"><h3>How to Read Large TXT Files Without Lag</h3><a class="related-article-link" href="https://onnellab.com/blog/en/read-large-txt-files-without-lag/">Read article</a></article>
+<article class="related-article-card"><h3>What Makes Large Text Files Slow to Open</h3><a class="related-article-link" href="https://onnellab.com/blog/en/large-text-file-slow-to-open/">Read article</a></article>
+<article class="related-article-card"><h3>How to Inspect a Large Log File Without Altering the Original</h3><a class="related-article-link" href="https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/">Read article</a></article>
+<article class="related-article-card"><h3>Organize a Local Music Library for Offline Listening on Android</h3><a class="related-article-link" href="https://onnellab.com/blog/en/organize-local-music-library-offline-android/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

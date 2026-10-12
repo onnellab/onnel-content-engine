@@ -14,7 +14,7 @@
     "slug": "test-converted-media-before-replacing-original",
     "category": "media",
     "language": "fr",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
       "vérification audio après conversion",
       "test de lecture vidéo",

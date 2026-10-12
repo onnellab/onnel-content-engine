@@ -5,7 +5,7 @@ slug: "check-epub-table-of-contents-and-reading-order"
 category: "reading"
 language: "de"
 description: "Vergleichen Sie die exportierte EPUB mit der geplanten Kapitelliste und prüfen Sie Links und Lesereihenfolge getrennt."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0059"
 search_intent: "troubleshoot"
 primary_keyword: "Inhaltsverzeichnis einer EPUB prüfen"
@@ -15,6 +15,9 @@ tags: "EPUB|Inhaltsverzeichnis|Lesereihenfolge|Navigation|E-Book-Prüfung"
 short_answer: "Notieren Sie die erwarteten Kapitel, öffnen Sie die EPUB in einem separaten Leseprogramm und testen Sie jeden Inhaltsverzeichnis-Link. Prüfen Sie Kapitelübergänge, dokumentieren und korrigieren Sie Abweichungen und kontrollieren Sie den neuen Export."
 canonical_url: "https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/"
 image_specs: "Erwartete Kapitel|Inhaltsverzeichnis-Links|Lesereihenfolge|Korrigieren und erneut exportieren"
+published_at: "2026-10-12T09:00:00+09:00"
+updated_at: "2026-10-12T09:00:00+09:00"
+related_articles: "Musikdateien auf Android für die Offline-Wiedergabe ordnen => https://onnellab.com/blog/de/organize-local-music-library-offline-android/"
 ---
 
 # Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen

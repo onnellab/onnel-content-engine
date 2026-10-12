@@ -5,7 +5,7 @@ slug: "check-epub-table-of-contents-and-reading-order"
 category: "reading"
 language: "ja"
 description: "書き出したEPUBを原稿の章一覧と照合し、目次リンクと読書順を別々に点検。不一致を記録し、原稿や設定の修正後に再確認します。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0055"
 search_intent: "troubleshoot"
 primary_keyword: "EPUBの目次確認"
@@ -15,6 +15,9 @@ tags: "EPUB|目次|読書順|章の順序|電子書籍の確認"
 short_answer: "予定の章一覧を作り、別のEPUBリーダーで全目次リンクと章のつながりを確認します。不一致を原稿や書き出し設定で直し、再生成して再点検します。"
 canonical_url: "https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/"
 image_specs: "予定の章一覧|目次リンク|読書順|修正して再生成"
+published_at: "2026-10-12T09:00:00+09:00"
+updated_at: "2026-10-12T09:00:00+09:00"
+related_articles: "Androidの音楽ファイルをオフライン再生用に整理する方法 => https://onnellab.com/blog/ja/organize-local-music-library-offline-android/"
 ---
 
 # EPUBの目次リンクと章の順序を確認する方法

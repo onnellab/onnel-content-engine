@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vérifier la table des matières et l’ordre des chapitres d’un EPUB</title>
+  <meta name="description" content="Comparez l’EPUB exporté à la liste prévue et vérifiez séparément les liens de la table des matières et l’ordre de lecture.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Vérifier la table des matières et l’ordre des chapitres d’un EPUB">
+  <meta property="og:description" content="Comparez l’EPUB exporté à la liste prévue et vérifiez séparément les liens de la table des matières et l’ordre de lecture.">
+  <meta property="og:url" content="https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vérifier la table des matières et l’ordre des chapitres d’un EPUB">
+  <meta name="twitter:description" content="Comparez l’EPUB exporté à la liste prévue et vérifiez séparément les liens de la table des matières et l’ordre de lecture.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/fr/check-epub-table-of-contents-and-reading-order/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/fr/check-epub-table-of-contents-and-reading-order/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Vérifier la table des matières et l’ordre des chapitres d’un EPUB</h1>
+<p>L’EPUB s’ouvre et sa table des matières semble correcte. Chaque entrée atteint-elle le chapitre prévu ? La lecture continue suit-elle le même ordre ? Pour vérifier la table des matières d’un EPUB, comparez le fichier exporté à une liste tirée du manuscrit, puis testez ces deux parcours.</p>
+<p>Ce guide commence après l’exportation. Il propose une inspection reproductible, sans reprendre la préparation du manuscrit, de la couverture ou de l’encodage.</p>
+<h2>Question</h2>
+<p>Comment vérifier que les liens de la table des matières et l’ordre des chapitres correspondent au manuscrit ?</p>
+<h2>Réponse courte</h2>
+<p>Listez les chapitres attendus, ouvrez l’EPUB dans une autre application de lecture et testez chaque lien. Contrôlez les transitions, notez les écarts, corrigez la source ou les réglages, puis régénérez et vérifiez le fichier. Gardez le manuscrit original et l’export précédent jusqu’à vérification du nouveau.</p>
+<h2>Distinguer trois éléments</h2>
+<p>Le <strong>libellé</strong> est le texte sélectionné dans la table des matières. La <strong>destination</strong> est l’emplacement ouvert par le lien. L’<strong>ordre de lecture</strong> est la séquence rencontrée en continuant sans sélectionner une autre entrée.</p>
+<p>EPUB 3 représente séparément navigation et ordre de lecture : le document de navigation fournit la table des matières ; le spine du paquet ordonne les documents de contenu. Leur ordre interne compte aussi. <a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a> décrit cette structure. Ces vérifications ne nécessitent aucune modification des fichiers internes.</p>
+<table><thead><tr><th>Vérification</th><th>Ce qu’elle établit</th><th>Ce qui reste à vérifier</th></tr></thead><tbody><tr><td>Comparer table et liste</td><td>Entrées attendues, libellés compréhensibles</td><td>Destinations</td></tr><tr><td>Ouvrir chaque lien</td><td>Titre et début du chapitre atteint</td><td>Suite en lecture continue</td></tr><tr><td>Franchir les transitions</td><td>Séquence conforme au projet</td><td>Tous les liens</td></tr><tr><td>Exécuter EPUBCheck</td><td>Respect des règles EPUB contrôlées</td><td>Intention éditoriale</td></tr></tbody></table>
+<p>Le menu du lecteur et une page de sommaire dans le livre peuvent être distincts. Inspectez le menu et, si elle existe, les liens de cette page.</p>
+<h2>Préparer la liste attendue</h2>
+<p>Prenez le manuscrit comme référence. Listez les chapitres dans l’ordre voulu, avec les éléments avant et après le texte principal, comme préface et postface. Décidez lesquels doivent figurer dans la table des matières ; chaque paragraphe ne nécessite pas une entrée.</p>
+<p>Pour des titres répétés, ajoutez à votre fiche privée quelques mots du premier paragraphe. Vous distinguerez ainsi deux chapitres nommés « Notes ». Utilisez titres et passages reconnaissables plutôt que les numéros de page du lecteur, variables selon la mise en page.</p>
+<p>Notez nom du fichier exporté, révision du manuscrit, version du convertisseur, nom et version du lecteur. Après régénération, assurez-vous d’ouvrir le nouveau fichier, pas une copie déjà importée. Sauvegardez les annotations avant de supprimer un ancien exemplaire de la bibliothèque.</p>
+<h2>Tenir une fiche de contrôle</h2>
+<p>Cet exemple pédagogique est fictif. Il ne décrit ni défaut constaté ni test sur appareil. L’ordre prévu est « Arrivée », « Le sentier », « Retour ». Reprenez les colonnes avec vos propres observations.</p>
+<table><thead><tr><th>Titre attendu</th><th>Libellé affiché</th><th>Destination réelle</th><th>Chapitre suivant</th><th>Résultat</th><th>Contrôle de la source ou des réglages</th></tr></thead><tbody><tr><td>1 Arrivée</td><td>1 Arrivée</td><td>1 Arrivée</td><td>2 Le sentier</td><td>Conforme</td><td>Aucun</td></tr><tr><td>2 Le sentier</td><td>2 Le sentier</td><td>3 Retour</td><td>Non vérifié</td><td>Mauvaise destination</td><td>Vérifier la séparation des chapitres et les règles d’export documentées</td></tr><tr><td>3 Retour</td><td>3 Retour</td><td>3 Retour</td><td>Fin du texte principal</td><td>Conforme sur ce point</td><td>Vérifier séparément la postface prévue</td></tr></tbody></table>
+<p>La deuxième ligne établit seulement le résultat hypothétique du lien. Elle ne prouve pas l’absence du chapitre 2. Cherchez son début ou continuez depuis le chapitre 1 avant de distinguer contenu manquant et lien incorrect.</p>
+<h2>Méthode recommandée</h2>
+<p>Effectuez les contrôles dans une application de lecture EPUB distincte.</p>
+<ol><li><strong>Ouvrez le bon export.</strong> Gardez les noms du manuscrit et de l’EPUB dans vos notes. Choisissez un lecteur compatible ; vérifiez importation et synchronisation avant d’ouvrir un texte privé.</li><li><strong>Comparez toute la table.</strong> Repérez sections absentes, entrées inattendues, doublons et ordre différent. Dépliez les groupes repliés si le lecteur en propose.</li><li><strong>Testez chaque lien.</strong> Comparez titre et première phrase reconnaissable avec votre référence. Atteindre un emplacement quelconque ne suffit pas. Notez la destination réelle.</li><li><strong>Testez séparément la lecture continue.</strong> Commencez avant le premier chapitre principal et franchissez sa fin sans utiliser le menu. Vérifiez pages liminaires et transitions au début, au milieu et à la fin ; vérifiez toutes les autres transitions avant de considérer le livre entièrement vérifié.</li><li><strong>Contrôlez la fin.</strong> Le dernier chapitre doit atteindre sa conclusion prévue. Postface et annexes doivent rester accessibles. Distinguez ces compléments de la séquence principale.</li><li><strong>Essayez un autre lecteur si la diffusion l’exige.</strong> Utilisez le même export. En cas de différence, notez versions du fichier et des lecteurs. Un écart appelle une enquête, sans désigner à lui seul le responsable.</li></ol>
+<figure><img src="/blog-assets/fr/check-epub-table-of-contents-and-reading-order/workflow-diagram.svg" alt="Parcours illustratif : liste attendue, liens, ordre de lecture, puis correction de la source avant régénération." title="Contrôler séparément les liens et la séquence"></figure>
+<p>Ce schéma propose une méthode ; ce n’est ni une capture d’écran ni une preuve de tests réalisés.</p>
+<h2>Diagnostiquer avant de corriger</h2>
+<table><thead><tr><th>Symptôme</th><th>Preuve à recueillir</th><th>Étape suivante</th></tr></thead><tbody><tr><td>Chapitre absent du menu</td><td>Son début existe-t-il en lecture continue ?</td><td>Si oui : reconnaissance des titres et périmètre prévu ; sinon : intégralité source et limites d’export</td></tr><tr><td>Bon libellé, mauvais chapitre</td><td>Noter titre et texte ouverts</td><td>Comparer les limites des chapitres du manuscrit et les règles documentées de reconnaissance des titres ; reproduire sur un court exemple</td></tr><tr><td>Deux libellés identiques</td><td>Comparer destinations et titres originaux</td><td>Déterminer si la répétition est voulue avant de renommer ou supprimer un marqueur</td></tr><tr><td>Liens corrects, chapitres sautés ou inversés</td><td>Noter transition réelle et chapitre attendu</td><td>Vérifier ordre source et options disponibles ; conserver le résultat si la source est correcte</td></tr><tr><td>Un seul lecteur concerné</td><td>Confirmer une révision exportée identique</td><td>Répéter la transition exacte et comparer les versions avant d’attribuer la cause</td></tr></tbody></table>
+<p>Modifiez un seul élément pertinent à la fois. Corrigez le manuscrit de travail ou un réglage documenté, exportez sous un nom distinct et retestez entrée concernée et transitions voisines. Reprenez ensuite tous les liens : une modification structurelle peut affecter plusieurs destinations.</p>
+<p>Si une source correcte produit encore l’écart, gardez l’original et préparez un court exemple avec un texte personnel ou partageable. Indiquez au support destinations attendues et observées. N’envoyez pas un manuscrit inédit entier pour illustrer un seul défaut de navigation.</p>
+<h2>Associer validation et lecture</h2>
+<p><a href="https://www.w3.org/publishing/epubcheck/">EPUBCheck</a> vérifie les publications selon les spécifications EPUB. Examinez erreurs et avertissements du paquet, puis validez le fichier régénéré. Un rapport sans erreur ne détermine pas si le « Chapitre 2 » contient le texte voulu.</p>
+<p>Une ouverture réussie dans un lecteur ne prouve ni conformité complète, ni accessibilité, ni compatibilité universelle. Séparez rapport, observations et lecteurs ou sections non testés. Pour un texte confidentiel, validez localement ou examinez le traitement des données du service avant tout téléversement.</p>
+<h2>La place d’ONNELLAB</h2>
+<p>Pour recréer un EPUB à partir d’un TXT terminé, Papira est une option proposée par ONNELLAB. Ses fiches officielles décrivent un assemblage hors ligne avec couverture, informations du livre et table des matières. Modifiez le manuscrit ailleurs et examinez l’export dans un autre lecteur : Papira ne propose ni édition du corps du texte ni lecteur EPUB.</p>
+<p>La reconnaissance des titres dépend de la plateforme et de la version documentées. Les langues de l’interface ne prouvent pas quels motifs sont reconnus, ni un comportement identique sous iOS et Android. Cette méthode ne prescrit donc aucune règle automatique universelle. Consultez les instructions de votre version et comparez le résultat à votre liste.</p>
+<p>Consultez les fiches officielles de <a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira sur l’App Store</a> ou de <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Papira sur Google Play</a> selon votre plateforme et région. La méthode convient aussi aux autres exportateurs EPUB.</p>
+<h2>Guide associé</h2>
+<p>Si l’écart provient de la préparation, consultez <a href="/blog/fr/prepare-txt-manuscript-for-epub/">Préparer un manuscrit TXT pour la conversion EPUB</a>. Ce guide concerne l’amont ; la présente fiche intervient après exportation.</p>
+<h2>Références</h2>
+<ul><li><a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a> : navigation et spine définissant l’ordre par défaut.</li><li><a href="https://www.w3.org/publishing/epubcheck/">W3C EPUBCheck</a> : vérificateur de conformité EPUB.</li><li><a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira sur l’App Store</a> et <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Google Play</a> : périmètre et indications propres aux plateformes.</li></ul>
+<h2>Conclusion</h2>
+<p>Comparez intention et observations : liste attendue, chaque lien, puis lecture continue. En cas d’écart, conservez les preuves, corrigez source ou réglages pris en charge et vérifiez le nouveau fichier avant de le partager.</p>
+<h2>Questions fréquentes</h2>
+<h3>Un titre visible prouve-t-il que son lien est correct ?</h3>
+<p>Non. Ouvrez l’entrée et comparez titre et début du texte atteint. Libellé et destination se vérifient séparément.</p>
+<h3>Un chapitre absent du menu manque-t-il aussi dans le livre ?</h3>
+<p>Pas nécessairement. Il peut exister en lecture continue. Cherchez son début et vérifiez le périmètre voulu de la table avant de conclure.</p>
+<h3>Pourquoi les liens fonctionnent-ils malgré un ordre incorrect ?</h3>
+<p>Sélectionner un lien et continuer la lecture empruntent des parcours différents. Notez le chapitre suivant réel, puis comparez avec manuscrit et réglages d’exportation.</p>
+<h3>Réussir EPUBCheck suffit-il pour diffuser le livre ?</h3>
+<p>C’est un contrôle utile. Vérifiez encore texte, navigation, séquence et exigences du public ou du distributeur. Ce résultat ne vaut pas validation éditoriale ou d’accessibilité.</p>
+<h3>Faut-il corriger directement l’EPUB exporté ?</h3>
+<p>Préférez la source ou les réglages documentés pour retrouver la correction au prochain export. Si votre chaîne éditoriale exige une modification du paquet, documentez une étape reproductible et évitez deux versions contradictoires.</p>
+<h3>Peut-on faire ces contrôles de lecture dans Papira ?</h3>
+<p>Non. Papira assemble des TXT terminés en EPUB ; ce n’est pas un lecteur. Ouvrez l’export dans une autre application et corrigez le manuscrit dans un éditeur de texte.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Organiser sa musique sur Android pour une écoute hors ligne</h3><a class="related-article-link" href="https://onnellab.com/blog/fr/organize-local-music-library-offline-android/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

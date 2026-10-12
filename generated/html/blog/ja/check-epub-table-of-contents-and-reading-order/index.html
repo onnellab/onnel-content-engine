@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EPUBの目次リンクと章の順序を確認する方法</title>
+  <meta name="description" content="書き出したEPUBを原稿の章一覧と照合し、目次リンクと読書順を別々に点検。不一致を記録し、原稿や設定の修正後に再確認します。">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="EPUBの目次リンクと章の順序を確認する方法">
+  <meta property="og:description" content="書き出したEPUBを原稿の章一覧と照合し、目次リンクと読書順を別々に点検。不一致を記録し、原稿や設定の修正後に再確認します。">
+  <meta property="og:url" content="https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="EPUBの目次リンクと章の順序を確認する方法">
+  <meta name="twitter:description" content="書き出したEPUBを原稿の章一覧と照合し、目次リンクと読書順を別々に点検。不一致を記録し、原稿や設定の修正後に再確認します。">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/ja/check-epub-table-of-contents-and-reading-order/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/ja/check-epub-table-of-contents-and-reading-order/social-card.png">
+</head>
+<body>
+  <main>
+<h1>EPUBの目次リンクと章の順序を確認する方法</h1>
+<p>EPUBが開き、目次が正しく見えても、リンク先や章のつながりは別の確認が必要です。EPUBの目次確認では原稿の章一覧を基準に、目次からの移動と読み進める順序を照合します。書き出し後の点検を扱い、表紙・文字コード・原稿準備は繰り返しません。</p>
+<h2>質問</h2>
+<p>書き出したEPUBの目次リンクと章の順序が原稿どおりか確認するには？</p>
+<h2>短い回答</h2>
+<p>章一覧を作り、別のリーダーで全目次リンクと章のつながりを点検します。不一致を原稿や設定で直し、再生成して再点検。新しいファイルの確認までは原本と前回のEPUBを残します。</p>
+<h2>確認する三つの対象</h2>
+<p><strong>目次の表示</strong>は選ぶ文言、<strong>リンク先</strong>は開く位置、<strong>読書順</strong>は目次を使わず読み進める順序です。</p>
+<p><a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a>では、ナビゲーション文書が目次を、パッケージのスパインが文書の基本読書順を定義します。文書内の順序も重要です。点検のために内部ファイルを編集する必要はありません。</p>
+<table><thead><tr><th>確認</th><th>分かること</th><th>別途確認</th></tr></thead><tbody><tr><td>目次と一覧の比較</td><td>項目の有無と分かりやすさ</td><td>リンク先</td></tr><tr><td>各リンクを開く</td><td>見出しと冒頭の一致</td><td>続く章</td></tr><tr><td>章をまたいで読む</td><td>予定の読書順との一致</td><td>全リンク</td></tr><tr><td>EPUBCheck</td><td>検査対象の規格への適合</td><td>編集意図との一致</td></tr></tbody></table>
+<p>リーダーの目次メニューを確認し、本に目次ページもあればそのリンクも調べます。両者は別に表示されることがあります。</p>
+<h2>原稿から章一覧を作る</h2>
+<p>原稿を基準に章を順に並べ、序文・あとがきなど前後の内容も加え、目次に載せる範囲を決めます。全段落を項目にする必要はありません。</p>
+<p>同名の見出しには、個人用の確認表に冒頭の短い語句を添えます。二つの「記録」も区別できます。表示設定で変わるページ番号より見出しと本文を使いましょう。</p>
+<p>出力ファイル名、原稿の改訂版、変換アプリのバージョン、リーダー名・バージョンを記録。再生成後は以前の取り込み済みコピーではなく新しいファイルか確認し、古い本を削除する前に注釈を保存します。</p>
+<h2>小さな確認表</h2>
+<p>以下は説明用の架空例で、実際の不具合や実機試験の報告ではありません。予定は「到着→山道→帰還」。列をコピーし、実際の観察に置き換えます。</p>
+<table><thead><tr><th>予定の見出し</th><th>目次の表示</th><th>実際のリンク先</th><th>続く章</th><th>結果</th><th>原稿・設定の確認</th></tr></thead><tbody><tr><td>1 到着</td><td>1 到着</td><td>1 到着</td><td>2 山道</td><td>一致</td><td>なし</td></tr><tr><td>2 山道</td><td>2 山道</td><td>3 帰還</td><td>未確認</td><td>誤った位置</td><td>章境界と文書化された出力規則</td></tr><tr><td>3 帰還</td><td>3 帰還</td><td>3 帰還</td><td>本文終了</td><td>今回は一致</td><td>予定のあとがきは別途確認</td></tr></tbody></table>
+<p>二行目だけでは第2章の欠落は証明できません。冒頭を検索するか第1章から読み進め、本文の欠落とリンクの誤りを区別します。</p>
+<h2>おすすめの手順</h2>
+<ol><li><strong>対象ファイルを開く。</strong> 原稿とEPUBの名前を記録し、対応リーダーを使用。非公開原稿を開く前に取り込み・同期方法を確認します。</li><li><strong>目次全体を比較。</strong> 欠落、想定外の項目、重複、順序違いを探し、折り畳み項目があれば展開します。</li><li><strong>全リンクを開く。</strong> 見出しと識別できる冒頭を照合し、実際の位置を記録。本のどこかが開くだけでは合格にしません。</li><li><strong>読書順を別に確認。</strong> 本文の最初の章の前から、目次を使わず章をまたぎます。前付けと最初・中間・最後の境界を調べ、全体の確認完了前に残りの境界も点検します。</li><li><strong>末尾を確認。</strong> 最終章が予定の結末まで続き、あとがき・付録へ進めるか確認。補助資料と主な章順は分けて記録します。</li><li><strong>配布条件に応じ別のリーダーでも確認。</strong> 同じ出力版を使い、差があればファイルとリーダーの版を記録。差だけで原因を決めつけません。</li></ol>
+<figure><img src="/blog-assets/ja/check-epub-table-of-contents-and-reading-order/workflow-diagram.svg" alt="章一覧から目次リンクと読書順を別々に点検し、原稿や設定を直して再生成する説明図。" title="リンクと読書順を分けて点検"></figure>
+<p>図は推奨手順で、製品画面や試験済みの記録ではありません。</p>
+<h2>不一致を切り分けて直す</h2>
+<table><thead><tr><th>症状</th><th>集める根拠</th><th>次の確認</th></tr></thead><tbody><tr><td>目次に章がない</td><td>通読で冒頭が見つかるか</td><td>あれば見出し認識と目次範囲、なければ原稿欠落と出力境界</td></tr><tr><td>表示は正しくリンク先が違う</td><td>開いた見出し・本文</td><td>原稿の境界と文書化された見出し規則を比較し短い例で再現</td></tr><tr><td>表示が重複</td><td>両リンク先と原稿見出し</td><td>意図した反復か確認してから改題・マーカー削除を判断</td></tr><tr><td>リンクは正しく読書順が違う</td><td>実際の移動と予定の次章</td><td>原稿順と利用可能な出力設定を確認。原稿が正しければ結果を保存し調査</td></tr><tr><td>一つのリーダーだけで発生</td><td>同じ出力版か</td><td>同じ境界を再確認し、版を比較してから原因を判断</td></tr></tbody></table>
+<p>関連箇所を一つずつ直します。作業用原稿か文書化された設定を修正し、区別できる新ファイルへ出力。該当リンクと前後の境界を再点検し、構造変更は他のリンクにも影響しうるため最後に全リンクを確認します。</p>
+<p>正しい原稿でも再発するなら原本を保存し、自作または共有権限のある短い例を作ります。問い合わせには予定と実際の移動先を示し、一件の問題のために未公開原稿全体を送らないようにします。</p>
+<h2>形式検証と読書確認</h2>
+<p><a href="https://www.w3.org/publishing/epubcheck/">EPUBCheck</a>のエラー・警告を調べ、再生成版も検証します。合格しても「第2章」が意図した内容かは分かりません。</p>
+<p>一つのリーダーで開けても、完全な規格適合、アクセシビリティ、全リーダーとの互換性は保証されません。検証報告、移動の観察、未確認のリーダー・区間を分けます。機密原稿はローカル検証を使うか、アップロード前にサービスのデータ処理を確認してください。</p>
+<h2>ONNELLABのアプリを使う場合</h2>
+<p>完成したTXTから再生成するならPapiraも選択肢です。公式ストアでは、表紙・書誌情報・目次付きEPUBをオフラインで作るONNELLABアプリと説明されています。本文編集とEPUBリーダー機能はありません。原稿は別のエディターで直し、出力は別のリーダーで確認します。</p>
+<p>見出し認識はプラットフォームと版の説明に従います。画面の対応言語から認識パターンを推測したり、iOSとAndroidを同一視したりしないでください。全原稿共通の自動認識規則は示せません。インストール版の案内を確認し、目次を一覧と照合します。</p>
+<p>地域・端末に合う公式<a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">App Store</a>または<a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Google Play</a>を確認してください。この点検方法は他のEPUB出力ツールにも使えます。</p>
+<h2>関連ガイド</h2>
+<p>原稿準備に戻るなら<a href="/blog/ja/prepare-txt-manuscript-for-epub/">EPUB変換のためのTXT原稿準備</a>へ。準備は変換前、この確認表は書き出し後に使います。</p>
+<h2>参考資料</h2>
+<ul><li><a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a>：目次と読書順の構造。</li><li><a href="https://www.w3.org/publishing/epubcheck/">W3C EPUBCheck</a>：規格検証の公式案内。</li><li><a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira App Store</a>・<a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Google Play</a>：機能範囲と各環境の案内。</li></ul>
+<h2>まとめ</h2>
+<p>章一覧と実際の移動を比べ、全リンクと読書順を確認します。差があれば根拠を残し、原稿か対応設定を直して再生成し、共有前に新ファイルを点検しましょう。</p>
+<h2>よくある質問</h2>
+<h3>目次に章名があればリンクも正しい？</h3>
+<p>いいえ。表示と移動先は別です。開いた見出しと冒頭を照合します。</p>
+<h3>目次にない章は本文にもない？</h3>
+<p>必ずしもそうではありません。通読で冒頭を探し、予定の目次範囲を確認して判断します。</p>
+<h3>リンクは正しいのに章順が違うのは？</h3>
+<p>リンク選択と通読は別の経路です。実際の次章を記録し、原稿順と出力設定を比べます。</p>
+<h3>EPUBCheckに合格すれば配布できる？</h3>
+<p>検証の一部です。本文、移動、読書順、読者・配布先の要件も確認します。編集・アクセシビリティの承認ではありません。</p>
+<h3>出力済みEPUBを直接直すべき？</h3>
+<p>次回にも反映されるよう原稿か文書化された設定を直すのが基本です。出版工程で内部編集が必要なら再現できるよう記録し、矛盾する二つの版を作らないでください。</p>
+<h3>Papira内で読書確認できる？</h3>
+<p>いいえ。完成TXTをEPUBに組み立てるアプリです。読むには別のリーダー、原稿修正にはテキストエディターを使います。</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Androidの音楽ファイルをオフライン再生用に整理する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/organize-local-music-library-offline-android/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

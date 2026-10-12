@@ -1,0 +1,5 @@
+Check that an exported EPUB’s contents links and chapter order match my manuscript is easier when the process is clear before choosing an app.
+
+Install Papira:
+App Store: https://apps.apple.com/app/id6803919552
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.papira

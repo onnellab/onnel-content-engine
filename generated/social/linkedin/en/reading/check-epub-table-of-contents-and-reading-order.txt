@@ -1,0 +1,10 @@
+A reliable plan for how to check that an exported EPUB’s contents links and chapter order match my manuscript starts with the result and constraints.
+
+Write down the expected chapters, open the exported EPUB in a separate reader, test each contents link, and read across chapter boundaries. Record mismatches, correct the source or export setup, regenerate and check again.
+
+Before changing tools:
+- Open the correct export. Keep the source and EPUB filenames visible in your notes. Use a reader that supports the file, and check its import or sync behavior before opening a private manuscript.
+- Compare the whole contents list. Look for missing sections, unexpected entries, repeated labels, and a sequence that differs from your reference. Expand collapsed groups where the reader provides them.
+
+Read the full article:
+https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/

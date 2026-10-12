@@ -48,9 +48,9 @@
         "slug": "test-converted-media-before-replacing-original",
         "category": "media",
         "language": "zh-Hans",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/zh-Hans/media/test-converted-media-before-replacing-original.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 2

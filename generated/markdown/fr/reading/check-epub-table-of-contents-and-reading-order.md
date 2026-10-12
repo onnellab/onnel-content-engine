@@ -5,7 +5,7 @@ slug: "check-epub-table-of-contents-and-reading-order"
 category: "reading"
 language: "fr"
 description: "Comparez l’EPUB exporté à la liste prévue et vérifiez séparément les liens de la table des matières et l’ordre de lecture."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0060"
 search_intent: "troubleshoot"
 primary_keyword: "vérifier la table des matières d’un EPUB"
@@ -15,6 +15,9 @@ tags: "EPUB|table des matières|ordre de lecture|navigation|vérification ebook"
 short_answer: "Listez les chapitres attendus, ouvrez l’EPUB dans une autre application de lecture et testez chaque lien. Contrôlez les transitions, notez les écarts, corrigez la source ou les réglages, puis régénérez et vérifiez le fichier."
 canonical_url: "https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/"
 image_specs: "Chapitres attendus|Liens des chapitres|Ordre de lecture|Corriger et régénérer"
+published_at: "2026-10-12T09:00:00+09:00"
+updated_at: "2026-10-12T09:00:00+09:00"
+related_articles: "Organiser sa musique sur Android pour une écoute hors ligne => https://onnellab.com/blog/fr/organize-local-music-library-offline-android/"
 ---
 
 # Vérifier la table des matières et l’ordre des chapitres d’un EPUB

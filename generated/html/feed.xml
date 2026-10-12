@@ -291,5 +291,68 @@
     <description>Organiza una pequeña colección de archivos locales y comprueba su reproducción sin conexión antes de necesitarla lejos de una red.</description>
     <pubDate>Fri, 09 Oct 2026 04:36:03 GMT</pubDate>
   </item>
+  <item>
+    <title>Check an EPUB’s Table of Contents and Chapter Order</title>
+    <link>https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/</link>
+    <guid>https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/</guid>
+    <description>Compare an exported EPUB with your intended chapter list, test navigation links and reading order, and trace any mismatch back to the source.</description>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>EPUB 목차 링크와 장 순서 확인하기</title>
+    <link>https://onnellab.com/blog/ko/check-epub-table-of-contents-and-reading-order/</link>
+    <guid>https://onnellab.com/blog/ko/check-epub-table-of-contents-and-reading-order/</guid>
+    <description>내보낸 EPUB을 의도한 장 목록과 비교하고, 목차 링크와 읽기 순서를 따로 점검해 불일치 원인을 찾습니다.</description>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>EPUBの目次リンクと章の順序を確認する方法</title>
+    <link>https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/</link>
+    <guid>https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/</guid>
+    <description>書き出したEPUBを原稿の章一覧と照合し、目次リンクと読書順を別々に点検。不一致を記録し、原稿や設定の修正後に再確認します。</description>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>检查 EPUB 的目录链接和章节顺序</title>
+    <link>https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/</link>
+    <guid>https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/</guid>
+    <description>将导出的 EPUB 与原稿章节清单对照，分别检查目录链接和连续阅读顺序。记录差异，修改原稿或导出设置后重新生成并复查。</description>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>檢查 EPUB 的目錄連結與章節順序</title>
+    <link>https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/</link>
+    <guid>https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/</guid>
+    <description>將匯出的 EPUB 與原稿章節清單比對，分別檢查目錄連結和連續閱讀順序。記錄差異，修改原稿或匯出設定後重新產生並複查。</description>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Como conferir o sumário e a ordem dos capítulos de um EPUB</title>
+    <link>https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/</link>
+    <guid>https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/</guid>
+    <description>Compare o EPUB exportado com a lista de capítulos esperada e confira separadamente os links do sumário e a sequência de leitura.</description>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen</title>
+    <link>https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/</link>
+    <guid>https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/</guid>
+    <description>Vergleichen Sie die exportierte EPUB mit der geplanten Kapitelliste und prüfen Sie Links und Lesereihenfolge getrennt.</description>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Vérifier la table des matières et l’ordre des chapitres d’un EPUB</title>
+    <link>https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/</link>
+    <guid>https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/</guid>
+    <description>Comparez l’EPUB exporté à la liste prévue et vérifiez séparément les liens de la table des matières et l’ordre de lecture.</description>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Cómo comprobar el índice y el orden de los capítulos de un EPUB</title>
+    <link>https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/</link>
+    <guid>https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/</guid>
+    <description>Compara el EPUB exportado con la lista prevista de capítulos y revisa por separado los enlaces del índice y el orden de lectura.</description>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
 </channel>
 </rss>

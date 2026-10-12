@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cómo comprobar el índice y el orden de los capítulos de un EPUB</title>
+  <meta name="description" content="Compara el EPUB exportado con la lista prevista de capítulos y revisa por separado los enlaces del índice y el orden de lectura.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Cómo comprobar el índice y el orden de los capítulos de un EPUB">
+  <meta property="og:description" content="Compara el EPUB exportado con la lista prevista de capítulos y revisa por separado los enlaces del índice y el orden de lectura.">
+  <meta property="og:url" content="https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cómo comprobar el índice y el orden de los capítulos de un EPUB">
+  <meta name="twitter:description" content="Compara el EPUB exportado con la lista prevista de capítulos y revisa por separado los enlaces del índice y el orden de lectura.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/es/check-epub-table-of-contents-and-reading-order/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/es/check-epub-table-of-contents-and-reading-order/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Cómo comprobar el índice y el orden de los capítulos de un EPUB</h1>
+<p>El EPUB se abre y el índice parece correcto. ¿Cada entrada llega al capítulo previsto? ¿La lectura continua recorre esos capítulos en el mismo orden? Para comprobar el índice de un EPUB, compara el archivo con una lista del manuscrito y prueba ambas formas de navegar. Aquí, «índice» significa la lista de capítulos, no un índice alfabético de términos.</p>
+<p>Esta guía empieza después de exportar. Propone una inspección repetible, sin reiniciar la preparación de portada, codificación o manuscrito.</p>
+<h2>Pregunta</h2>
+<p>¿Cómo comprobar que los enlaces del índice y el orden de los capítulos del EPUB coinciden con el original?</p>
+<h2>Respuesta breve</h2>
+<p>Anota los capítulos previstos, abre el EPUB en otro lector y prueba cada enlace del índice. Revisa las transiciones, registra diferencias, corrige el original o los ajustes y vuelve a generar y comprobar el archivo. Conserva manuscrito original y exportación anterior hasta revisar el nuevo archivo.</p>
+<h2>Distingue tres elementos</h2>
+<p>El <strong>rótulo del índice</strong> es el texto que seleccionas en el menú del lector. El <strong>destino del enlace</strong> es la posición que abre. El <strong>orden de lectura</strong> es la secuencia que encuentras al seguir leyendo sin seleccionar otra entrada.</p>
+<p>EPUB 3 representa navegación y orden predeterminado por separado: el documento de navegación aporta el índice y el spine del paquete ordena los documentos de contenido. También importa el orden dentro de cada documento. <a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a> define esta estructura. No necesitas modificar los archivos internos para hacer estas comprobaciones.</p>
+<table><thead><tr><th>Comprobación</th><th>Qué permite saber</th><th>Qué queda por revisar</th></tr></thead><tbody><tr><td>Comparar índice y lista</td><td>Entradas previstas y rótulos comprensibles</td><td>Destino de cada enlace</td></tr><tr><td>Abrir cada enlace</td><td>Título y comienzo del capítulo alcanzado</td><td>Qué sigue en lectura continua</td></tr><tr><td>Cruzar límites entre capítulos</td><td>Secuencia acorde con el plan</td><td>Corrección de todos los enlaces</td></tr><tr><td>Ejecutar EPUBCheck</td><td>Cumplimiento de las reglas EPUB comprobadas</td><td>Correspondencia con la intención editorial</td></tr></tbody></table>
+<p>La página de índice dentro del libro y el menú del lector pueden aparecer por separado. Revisa el menú y, si existe esa página, también sus enlaces.</p>
+<h2>Prepara la lista de capítulos previstos</h2>
+<p>Usa el manuscrito como referencia. Anota capítulos en el orden previsto y materiales anteriores y posteriores, como prólogo y epílogo. Decide cuáles deben figurar en el índice. No hace falta una entrada por párrafo.</p>
+<p>Si se repiten títulos, añade a tu ficha privada una frase breve del primer párrafo. Así distinguirás, por ejemplo, dos capítulos llamados «Notas». Usa títulos y pasajes reconocibles en lugar de números de página, que pueden cambiar con la presentación del lector.</p>
+<p>Registra nombre del archivo exportado, revisión del manuscrito, versión del conversor, nombre y versión del lector. Tras generar de nuevo, confirma que abres el archivo nuevo, no una copia importada anteriormente. Guarda las anotaciones antes de eliminar un ejemplar antiguo de la biblioteca.</p>
+<h2>Lleva una ficha de comprobación</h2>
+<p>Este ejemplo didáctico es ficticio. No describe un fallo observado ni una prueba en dispositivos. La secuencia prevista es «Llegada», «El sendero», «Regreso». Copia las columnas y sustituye los datos por tus observaciones.</p>
+<table><thead><tr><th>Título previsto</th><th>Rótulo del índice</th><th>Destino real</th><th>Capítulo siguiente</th><th>Resultado</th><th>Revisión del original o los ajustes</th></tr></thead><tbody><tr><td>1 Llegada</td><td>1 Llegada</td><td>1 Llegada</td><td>2 El sendero</td><td>Coincide</td><td>Ninguna</td></tr><tr><td>2 El sendero</td><td>2 El sendero</td><td>3 Regreso</td><td>Sin comprobar</td><td>Destino incorrecto</td><td>Revisar límite del original y reglas documentadas de exportación</td></tr><tr><td>3 Regreso</td><td>3 Regreso</td><td>3 Regreso</td><td>Fin del texto principal</td><td>Coincide en esta prueba</td><td>Revisar por separado el epílogo previsto</td></tr></tbody></table>
+<p>La segunda fila solo registra el resultado hipotético del enlace. No demuestra que falte el capítulo 2. Busca su comienzo o sigue leyendo desde el capítulo 1 antes de distinguir entre contenido ausente y enlace incorrecto.</p>
+<h2>Procedimiento recomendado</h2>
+<p>Realiza estas comprobaciones en un lector EPUB independiente.</p>
+<ol><li><strong>Abre la exportación correcta.</strong> Anota los nombres del manuscrito y del EPUB. Usa un lector compatible y revisa cómo importa o sincroniza archivos antes de abrir un manuscrito privado.</li><li><strong>Compara el índice completo.</strong> Busca secciones ausentes, entradas inesperadas, rótulos repetidos y una secuencia distinta. Despliega grupos contraídos si el lector los ofrece.</li><li><strong>Prueba todos los enlaces.</strong> Compara título y primer pasaje reconocible de cada destino con la referencia. Que se abra algún lugar del libro no significa que sea el correcto. Registra dónde aterriza.</li><li><strong>Comprueba la lectura continua por separado.</strong> Empieza antes del primer capítulo principal y cruza su final sin usar el menú. Revisa páginas preliminares y transiciones al principio, en medio y al final; revisa después las transiciones restantes antes de dar todo el libro por comprobado.</li><li><strong>Revisa el final.</strong> Confirma que el último capítulo alcanza su cierre previsto y que epílogo o apéndices siguen accesibles. Distingue el material complementario de la secuencia principal.</li><li><strong>Usa otro lector si la distribución lo exige.</strong> Abre la misma exportación. Si hay diferencias, registra versiones del archivo y de los lectores. La diferencia merece investigación, pero no identifica por sí sola al componente responsable.</li></ol>
+<figure><img src="/blog-assets/es/check-epub-table-of-contents-and-reading-order/workflow-diagram.svg" alt="Proceso ilustrativo: lista prevista, enlaces del índice, orden de lectura y corrección del original antes de generar de nuevo." title="Comprueba enlaces y secuencia por separado"></figure>
+<p>El diagrama propone un método; no es una captura de pantalla ni un registro de pruebas realizadas.</p>
+<h2>Diagnostica antes de cambiar el original</h2>
+<table><thead><tr><th>Síntoma</th><th>Evidencia necesaria</th><th>Siguiente paso</th></tr></thead><tbody><tr><td>Falta un capítulo en el índice</td><td>¿Aparece su comienzo en lectura continua?</td><td>Si aparece, revisar reconocimiento de títulos y alcance del índice; si no, integridad del original y límites de exportación</td></tr><tr><td>Rótulo correcto abre otro capítulo</td><td>Registrar título y texto abiertos</td><td>Comparar límite del original y reglas documentadas de títulos; reproducir con una muestra breve</td></tr><tr><td>Dos entradas iguales</td><td>Comparar destinos y títulos originales</td><td>Determinar si la repetición es intencional antes de renombrar o quitar un marcador</td></tr><tr><td>Enlaces correctos, lectura salta o cambia capítulos</td><td>Anotar transición real y capítulo previsto</td><td>Revisar secuencia original y opciones disponibles; conservar el resultado si el original está bien</td></tr><tr><td>Problema en un solo lector</td><td>Confirmar la misma revisión exportada</td><td>Repetir la transición exacta y comparar versiones antes de atribuir la causa</td></tr></tbody></table>
+<p>Cambia un elemento relevante cada vez. Corrige el manuscrito de trabajo o un ajuste documentado, exporta con un nombre distinto y repite la entrada afectada y las transiciones vecinas. Al terminar, revisa todos los enlaces: un cambio estructural puede afectar a varios destinos.</p>
+<p>Si un original correcto sigue produciendo diferencias, consérvalo y crea una muestra breve con texto propio o autorizado para compartir. Describe al soporte los destinos previstos y observados. No envíes un manuscrito inédito completo para demostrar un único problema de navegación.</p>
+<h2>Combina validación y lectura</h2>
+<p><a href="https://www.w3.org/publishing/epubcheck/">EPUBCheck</a> verifica publicaciones conforme a las especificaciones EPUB. Investiga errores y advertencias del paquete y valida de nuevo el archivo regenerado. Un informe satisfactorio no decide si el «Capítulo 2» contiene el texto previsto.</p>
+<p>Abrir el libro en un lector tampoco demuestra conformidad completa, accesibilidad ni compatibilidad universal. Separa informe, observaciones de navegación y lectores o secciones sin probar. Para textos confidenciales, valida localmente o revisa el tratamiento de datos del servicio antes de subir el libro.</p>
+<h2>Dónde encaja ONNELLAB</h2>
+<p>Si necesitas regenerar un EPUB desde un TXT terminado, Papira es una opción de ONNELLAB. Sus fichas oficiales describen el montaje sin conexión con portada, datos del libro e índice. Edita el manuscrito en otra aplicación y revisa la exportación en otro lector: Papira no ofrece edición del cuerpo del texto ni lector EPUB.</p>
+<p>El reconocimiento de títulos depende de la plataforma y versión documentadas. Los idiomas de la interfaz no demuestran qué patrones reconoce, ni un comportamiento idéntico en iOS y Android. Por eso este método no prescribe una regla automática universal. Consulta las instrucciones de tu versión y compara el índice resultante con tu lista.</p>
+<p>Revisa las fichas oficiales de <a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira en App Store</a> o <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Papira en Google Play</a> para tu plataforma y región. El método también sirve con otros exportadores EPUB.</p>
+<h2>Guía relacionada</h2>
+<p>Si la diferencia obliga a volver a la preparación, consulta <a href="/blog/es/prepare-txt-manuscript-for-epub/">Cómo preparar un manuscrito TXT para convertirlo en EPUB</a>. Esa guía aborda la etapa anterior; esta ficha se utiliza después de exportar.</p>
+<h2>Referencias</h2>
+<ul><li><a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a>: documento de navegación y spine que define el orden predeterminado.</li><li><a href="https://www.w3.org/publishing/epubcheck/">W3C EPUBCheck</a>: verificador de conformidad EPUB.</li><li><a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira en App Store</a> y <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Google Play</a>: alcance y orientación por plataforma.</li></ul>
+<h2>Conclusión</h2>
+<p>Compara intención y observaciones: conserva la lista prevista, prueba cada enlace y revisa la lectura continua. Si difieren, guarda evidencias, corrige el original o los ajustes compatibles y comprueba el nuevo archivo antes de compartirlo.</p>
+<h2>Preguntas frecuentes</h2>
+<h3>¿Un título visible demuestra que su enlace es correcto?</h3>
+<p>No. Abre la entrada y compara título y comienzo del destino. El rótulo y la posición enlazada necesitan comprobaciones separadas.</p>
+<h3>¿Un capítulo fuera del índice también falta en el libro?</h3>
+<p>No necesariamente. Puede seguir en la secuencia de lectura. Busca su comienzo y comprueba el alcance previsto del índice antes de diagnosticar contenido ausente.</p>
+<h3>¿Por qué funcionan los enlaces si el orden es incorrecto?</h3>
+<p>Al seleccionar enlaces y al continuar leyendo, sigues caminos distintos. Anota el siguiente capítulo real y compáralo con el manuscrito y los ajustes de exportación.</p>
+<h3>¿Superar EPUBCheck basta para distribuir el libro?</h3>
+<p>Es una comprobación útil. Aún debes verificar texto, navegación, secuencia y requisitos del público o distribuidor. No sustituye la revisión editorial ni la de accesibilidad.</p>
+<h3>¿Debo corregir directamente el EPUB exportado?</h3>
+<p>Prefiere el original o los ajustes documentados, para mantener la corrección al exportar otra vez. Si tu proceso editorial exige editar el paquete, documenta ese paso de forma reproducible y evita versiones contradictorias.</p>
+<h3>¿Puedo realizar estas pruebas de lectura dentro de Papira?</h3>
+<p>No. Papira convierte TXT terminados en EPUB; no es un lector. Abre el resultado en otro lector y corrige el manuscrito con un editor de texto.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Cómo organizar música en Android para escucharla sin conexión</h3><a class="related-article-link" href="https://onnellab.com/blog/es/organize-local-music-library-offline-android/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

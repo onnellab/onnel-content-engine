@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>檢查 EPUB 的目錄連結與章節順序</title>
+  <meta name="description" content="將匯出的 EPUB 與原稿章節清單比對，分別檢查目錄連結和連續閱讀順序。記錄差異，修改原稿或匯出設定後重新產生並複查。">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="檢查 EPUB 的目錄連結與章節順序">
+  <meta property="og:description" content="將匯出的 EPUB 與原稿章節清單比對，分別檢查目錄連結和連續閱讀順序。記錄差異，修改原稿或匯出設定後重新產生並複查。">
+  <meta property="og:url" content="https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="檢查 EPUB 的目錄連結與章節順序">
+  <meta name="twitter:description" content="將匯出的 EPUB 與原稿章節清單比對，分別檢查目錄連結和連續閱讀順序。記錄差異，修改原稿或匯出設定後重新產生並複查。">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/zh-Hant/check-epub-table-of-contents-and-reading-order/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/zh-Hant/check-epub-table-of-contents-and-reading-order/social-card.png">
+</head>
+<body>
+  <main>
+<h1>檢查 EPUB 的目錄連結與章節順序</h1>
+<p>EPUB 能開啟，目錄看起來也合理，但每個項目是否指向正確章節？連續閱讀時是否仍依同一順序前進？EPUB 目錄檢查要以原稿章節清單為依據，分別核對目錄跳轉與連續閱讀。</p>
+<p>本文從已匯出的 EPUB 開始，提供可重複的檢查方法，不重新說明封面、編碼或原稿準備。</p>
+<h2>問題</h2>
+<p>如何確認匯出的 EPUB 目錄連結與章節順序和原稿一致？</p>
+<h2>簡短回答</h2>
+<p>列出預期章節，用另外的閱讀器逐一開啟目錄連結，並檢查跨章節閱讀。記錄差異，修改原稿或匯出設定，重新產生後複查。確認新版之前，保留原稿和上次匯出的檔案。</p>
+<h2>區分三個檢查對象</h2>
+<p><strong>目錄文字</strong>是指在閱讀器目錄中選取的文字；<strong>連結目標</strong>是開啟的位置；<strong>閱讀順序</strong>是不再選取目錄項目、繼續閱讀時遇到的順序。</p>
+<p><a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a>將導覽與預設閱讀順序分開：導覽文件提供目錄，套件中的 spine（書脊）決定內容文件的順序。各文件內部的順序也重要。完成以下檢查不需要編輯這些內部檔案。</p>
+<table><thead><tr><th>檢查</th><th>能確認什麼</th><th>還需確認什麼</th></tr></thead><tbody><tr><td>目錄與清單比對</td><td>預期項目是否齊全、名稱是否清楚</td><td>連結目標</td></tr><tr><td>逐一開啟目錄連結</td><td>標題與開頭是否符合預期</td><td>連續閱讀時的下一章</td></tr><tr><td>跨章節閱讀</td><td>閱讀順序是否符合計畫</td><td>所有目錄連結是否正確</td></tr><tr><td>執行 EPUBCheck</td><td>是否符合其檢查的 EPUB 規則</td><td>是否符合編輯意圖</td></tr></tbody></table>
+<p>書內目錄頁與閱讀器目錄選單可能分開顯示。檢查選單；匯出的書若含目錄頁，也檢查該頁連結。</p>
+<h2>從原稿列出預期章節</h2>
+<p>依原稿順序列出章節，以及序言、後記等前後內容，再決定哪些部分應列入目錄。並非每段都需要目錄項目。</p>
+<p>遇到同名標題，在私人檢查表中加上開頭的一小段文字，便於區分兩個都叫「筆記」的章節。用標題和可辨認的正文作依據，避免使用會隨排版設定改變的閱讀器頁碼。</p>
+<p>記錄匯出檔名、原稿修訂版、轉換工具版本及閱讀器名稱與版本。重新產生後，確認開啟的是新檔案，而非舊的已匯入副本。刪除舊書庫項目前先保存註記。</p>
+<h2>用小型檢查表記錄觀察</h2>
+<p>以下是虛構教學範例，不是實際故障或實機測試報告。預期順序為「抵達→山路→歸來」。可複製欄位，以自己的觀察取代範例。</p>
+<table><thead><tr><th>預期標題</th><th>目錄文字</th><th>實際目標</th><th>下一章</th><th>結果</th><th>原稿或設定後續檢查</th></tr></thead><tbody><tr><td>1 抵達</td><td>1 抵達</td><td>1 抵達</td><td>2 山路</td><td>一致</td><td>無</td></tr><tr><td>2 山路</td><td>2 山路</td><td>3 歸來</td><td>尚未檢查</td><td>目標錯誤</td><td>檢查原稿邊界與有文件說明的匯出規則</td></tr><tr><td>3 歸來</td><td>3 歸來</td><td>3 歸來</td><td>正文結束</td><td>本項檢查一致</td><td>另外檢查預期後記</td></tr></tbody></table>
+<p>第二列只說明連結去了別處，不能證明第2章遺漏。先搜尋其開頭，或從第1章繼續閱讀，再判斷是正文遺漏還是連結錯誤。</p>
+<h2>建議步驟</h2>
+<ol><li><strong>開啟正確檔案。</strong> 在記錄中保留原稿與 EPUB 檔名，使用支援該檔案的閱讀器。開啟非公開原稿前，確認匯入和同步方式。</li><li><strong>比較整份目錄。</strong> 尋找遺漏、非預期項目、重複文字和順序差異；有摺疊群組時展開檢查。</li><li><strong>測試每個連結。</strong> 比對標題和第一段可辨認文字，記錄實際位置。能開啟書內某處，不等於目標正確。</li><li><strong>另外測試連續閱讀。</strong> 從首個正文章節之前開始，不用目錄選單，越過章末進入下一章。先查前置內容及開頭、中段、末尾的銜接，再檢查其餘所有章節邊界，才能說全書已檢查。</li><li><strong>檢查結尾。</strong> 確認末章達到預期結尾，後記或附錄仍可存取。輔助資料與主要章節順序分開記錄。</li><li><strong>依發行需求換閱讀器檢查。</strong> 使用同一匯出版本；結果不同時記錄檔案和閱讀器版本。差異是調查線索，不能僅憑它認定問題出在哪個環節。</li></ol>
+<figure><img src="/blog-assets/zh-Hant/check-epub-table-of-contents-and-reading-order/workflow-diagram.svg" alt="由預期章節清單出發，分別檢查目錄連結和閱讀順序，再修改原稿或設定並重新產生 EPUB 的示意流程。" title="重新產生前分別檢查連結和閱讀順序"></figure>
+<p>圖示為建議流程，不是產品截圖或已完成的測試記錄。</p>
+<h2>先找出差異，再修改原稿</h2>
+<table><thead><tr><th>症狀</th><th>蒐集證據</th><th>下一步</th></tr></thead><tbody><tr><td>目錄缺少章節</td><td>連續閱讀時能否找到開頭</td><td>有正文則查標題辨識與目錄範圍；無正文則查原稿完整性和匯出邊界</td></tr><tr><td>文字正確卻開啟錯章</td><td>記錄實際標題和正文</td><td>比較原稿邊界與文件中的標題規則，用短範例重現</td></tr><tr><td>兩個項目文字相同</td><td>比較兩處目標與原稿標題</td><td>確定是否刻意重複，再決定改標題或刪標記</td></tr><tr><td>連結正確，連續閱讀卻跳章或亂序</td><td>記錄實際銜接及預期下一章</td><td>檢查原稿順序和可用匯出設定；原稿正確則保留結果供診斷</td></tr><tr><td>僅一個閱讀器出問題</td><td>確認兩者使用同一匯出版本</td><td>重試同一銜接並比較版本，再判斷原因</td></tr></tbody></table>
+<p>一次只改一個相關因素。修改工作原稿或文件說明的設定，匯出為容易區分的新檔案，複查受影響項目及前後銜接。結構變化可能影響其他目標，最後應重查全部目錄連結。</p>
+<p>原稿無誤卻仍有差異時，保留原本，用自己擁有或有權分享的文字製作短範例。求助時描述預期與實際目標；不要只為展示一個跳轉問題就傳送整份未公開原稿。</p>
+<h2>格式驗證與閱讀檢查配合使用</h2>
+<p><a href="https://www.w3.org/publishing/epubcheck/">EPUBCheck</a>依 EPUB 規範檢查檔案。調查報告中的錯誤和警告，重新產生後再次驗證。通過檢查不能證明「第2章」含有你預期的內容。</p>
+<p>在一個閱讀器中成功開啟，也不能證明完全符合規範、具備無障礙存取能力或相容於所有閱讀系統。分別保存驗證報告、跳轉觀察和未測試的閱讀器或章節。機密文本宜在本機驗證，或在上傳前審查服務的資料處理方式。</p>
+<h2>ONNELLAB 應用程式的適用範圍</h2>
+<p>需要從完成的 TXT 原稿重新產生 EPUB 時，可以考慮 Papira。官方商店將其描述為 ONNELLAB 的離線 EPUB 製作工具，可加入封面、書籍資訊和目錄。Papira 不提供正文編輯或 EPUB 閱讀器；原稿在其他編輯器中修改，匯出檔案在其他閱讀器中檢查。</p>
+<p>標題辨識應以對應平台和版本的說明為準。介面語言不代表可自動辨識的章節標題模式，也不能假定 iOS 與 Android 行為相同。因此這裡不提供適用於所有原稿的自動辨識規則。查看已安裝版本的說明，再用清單核對目錄。</p>
+<p>依平台與地區查看官方 <a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira App Store 頁面</a>或 <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Google Play 頁面</a>。上述檢查方法也適用於其他 EPUB 匯出工具。</p>
+<h2>延伸閱讀</h2>
+<p>若差異需要回到原稿準備階段，可參考<a href="/blog/zh-hant/prepare-txt-manuscript-for-epub/">如何準備適合 EPUB 轉換的 TXT 原稿</a>。該文說明轉換前準備，本檢查表用於匯出後。</p>
+<h2>參考資料</h2>
+<ul><li><a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a>：導覽文件和定義預設閱讀順序的 spine。</li><li><a href="https://www.w3.org/publishing/epubcheck/">W3C EPUBCheck</a>：EPUB 規範檢查工具說明。</li><li><a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira App Store</a>與 <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Google Play</a>：產品範圍及平台說明。</li></ul>
+<h2>總結</h2>
+<p>將預期章序與實際觀察比對，測試每個目錄連結及連續閱讀順序。發現差異就保留證據，修改原稿或支援的設定，重新產生並檢查新檔案後再分享。</p>
+<h2>常見問題</h2>
+<h3>目錄有章節標題，就能證明連結正確嗎？</h3>
+<p>不能。顯示文字與目標位置是兩項檢查。開啟項目，比對目標標題和開頭正文。</p>
+<h3>目錄中沒有某章，就代表正文也遺漏嗎？</h3>
+<p>未必。它可能仍在閱讀順序中。尋找開頭，並核對預期目錄範圍後再判斷。</p>
+<h3>為什麼連結正確，章節順序卻不對？</h3>
+<p>選取連結與連續閱讀經過不同路徑。另外記錄實際下一章，再比對原稿和匯出設定。</p>
+<h3>通過 EPUBCheck 就能發行嗎？</h3>
+<p>這只是檢查之一。還要確認正文、導覽、閱讀順序及讀者或發行方要求，不等於編輯或無障礙審核通過。</p>
+<h3>應直接修改匯出的 EPUB 嗎？</h3>
+<p>優先修正原稿或文件說明的設定，讓後續匯出保留修正。出版流程若要求編輯套件內部，應記錄可重複的步驟，避免維護兩個互相衝突的版本。</p>
+<h3>能在 Papira 內完成這些閱讀檢查嗎？</h3>
+<p>不能。Papira 將完成的 TXT 組裝成 EPUB，並非 EPUB 閱讀器。用其他閱讀器開啟匯出檔案，原稿需修改時使用文字編輯器。</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>在 Android 整理音樂檔案，準備離線播放</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

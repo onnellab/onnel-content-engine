@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen</title>
+  <meta name="description" content="Vergleichen Sie die exportierte EPUB mit der geplanten Kapitelliste und prüfen Sie Links und Lesereihenfolge getrennt.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen">
+  <meta property="og:description" content="Vergleichen Sie die exportierte EPUB mit der geplanten Kapitelliste und prüfen Sie Links und Lesereihenfolge getrennt.">
+  <meta property="og:url" content="https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen">
+  <meta name="twitter:description" content="Vergleichen Sie die exportierte EPUB mit der geplanten Kapitelliste und prüfen Sie Links und Lesereihenfolge getrennt.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/de/check-epub-table-of-contents-and-reading-order/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/de/check-epub-table-of-contents-and-reading-order/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen</h1>
+<p>Die EPUB lässt sich öffnen, das Inhaltsverzeichnis sieht plausibel aus. Führt aber jeder Eintrag zum richtigen Kapitel? Folgen diese Kapitel beim normalen Weiterlesen in derselben Reihenfolge? Wenn Sie das Inhaltsverzeichnis einer EPUB prüfen und die Lesereihenfolge abgleichen möchten, nutzen Sie eine Kapitelliste aus dem Manuskript als Referenz. Testen Sie sowohl die Links als auch die normale Lesefolge.</p>
+<p>Dieser Leitfaden beginnt mit der exportierten Datei. Er beschreibt eine wiederholbare Prüfung, ohne Cover, Zeichenkodierung oder Manuskriptvorbereitung neu aufzurollen.</p>
+<h2>Frage</h2>
+<p>Wie prüfe ich, ob Inhaltsverzeichnis-Links und Kapitelreihenfolge einer EPUB zum Manuskript passen?</p>
+<h2>Kurzantwort</h2>
+<p>Notieren Sie die erwarteten Kapitel, öffnen Sie die EPUB in einem separaten Leseprogramm und testen Sie jeden Inhaltsverzeichnis-Link. Prüfen Sie Kapitelübergänge, dokumentieren und korrigieren Sie Abweichungen und kontrollieren Sie den neuen Export. Bewahren Sie Originalmanuskript und bisherigen Export auf, bis die Ersatzdatei geprüft ist.</p>
+<h2>Drei Prüfpunkte unterscheiden</h2>
+<p>Die <strong>Eintragsbezeichnung</strong> ist der auswählbare Text im Inhaltsverzeichnis. Das <strong>Linkziel</strong> ist die dadurch geöffnete Stelle. Die <strong>Lesereihenfolge</strong> bezeichnet die Abfolge beim Weiterlesen, ohne erneut einen Eintrag auszuwählen.</p>
+<p>EPUB 3 bildet Navigation und Standardlesereihenfolge getrennt ab: Das Navigationsdokument liefert das Inhaltsverzeichnis, die Spine des Pakets ordnet die Inhaltsdokumente. Auch die Reihenfolge innerhalb jedes Dokuments zählt. Diese Struktur beschreibt <a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a>. Für die folgenden Prüfungen müssen Sie keine internen Dateien bearbeiten.</p>
+<table><thead><tr><th>Prüfung</th><th>Was sie zeigt</th><th>Was offenbleibt</th></tr></thead><tbody><tr><td>Inhaltsverzeichnis mit Liste vergleichen</td><td>Erwartete Einträge und verständliche Bezeichnungen</td><td>Ziele der Links</td></tr><tr><td>Jeden Eintrag öffnen</td><td>Richtige Überschrift und Textanfang</td><td>Folgendes Kapitel beim Weiterlesen</td></tr><tr><td>Kapitelgrenzen überschreiten</td><td>Übereinstimmung der Lesefolge mit dem Plan</td><td>Richtigkeit aller Inhaltsverzeichnis-Links</td></tr><tr><td>EPUBCheck ausführen</td><td>Erfüllung der geprüften EPUB-Regeln</td><td>Übereinstimmung mit der redaktionellen Absicht</td></tr></tbody></table>
+<p>Eine Inhaltsverzeichnisseite im Buch und das Menü des Leseprogramms können getrennt erscheinen. Prüfen Sie das Menü und gegebenenfalls auch die Links der enthaltenen Inhaltsverzeichnisseite.</p>
+<h2>Die erwartete Kapitelliste anlegen</h2>
+<p>Nehmen Sie das Manuskript als Referenz. Notieren Sie die Kapitel in der beabsichtigten Reihenfolge sowie erwartetes Vor- und Nachmaterial, etwa Vorwort oder Nachwort. Legen Sie fest, welche Abschnitte auch im Inhaltsverzeichnis stehen sollen. Nicht jeder Absatz braucht einen Eintrag.</p>
+<p>Ergänzen Sie bei wiederholten Überschriften einen kurzen Satzteil aus dem ersten Absatz in Ihrer privaten Prüfliste. So lassen sich beispielsweise zwei Kapitel namens „Notizen“ unterscheiden. Verwenden Sie Überschriften und wiedererkennbaren Text statt Seitenzahlen des Leseprogramms, die sich durch Layouteinstellungen ändern können.</p>
+<p>Halten Sie Exportdateiname, Manuskriptstand, Konverterversion sowie Name und Version des Leseprogramms fest. Prüfen Sie nach einem erneuten Export, ob wirklich die neue Datei geöffnet wird und keine früher importierte Kopie. Sichern Sie Anmerkungen, bevor Sie einen älteren Bibliothekseintrag entfernen.</p>
+<h2>Beobachtungen in einer Tabelle erfassen</h2>
+<p>Das folgende Lehrbeispiel ist frei erfunden. Es beschreibt weder einen beobachteten Fehler noch einen Gerätetest. Erwartet wird „Ankunft“, „Der Pfad“, „Rückkehr“. Übernehmen Sie die Spalten und tragen Sie Ihre eigenen Beobachtungen ein.</p>
+<table><thead><tr><th>Erwartete Überschrift</th><th>Verzeichniseintrag</th><th>Tatsächliches Ziel</th><th>Folgendes Kapitel</th><th>Ergebnis</th><th>Folgeprüfung an Quelle oder Einstellungen</th></tr></thead><tbody><tr><td>1 Ankunft</td><td>1 Ankunft</td><td>1 Ankunft</td><td>2 Der Pfad</td><td>Stimmt überein</td><td>Keine</td></tr><tr><td>2 Der Pfad</td><td>2 Der Pfad</td><td>3 Rückkehr</td><td>Noch ungeprüft</td><td>Falsches Ziel</td><td>Kapitelgrenze und dokumentierte Exportregeln prüfen</td></tr><tr><td>3 Rückkehr</td><td>3 Rückkehr</td><td>3 Rückkehr</td><td>Ende des Haupttexts</td><td>In dieser Prüfung korrekt</td><td>Erwartetes Nachwort separat prüfen</td></tr></tbody></table>
+<p>Die zweite Zeile hält nur die hypothetische Linkprüfung fest. Sie beweist nicht, dass Kapitel 2 fehlt. Suchen Sie dessen Textanfang oder lesen Sie ab Kapitel 1 weiter, bevor Sie zwischen fehlendem Inhalt und falschem Link unterscheiden.</p>
+<h2>Empfohlener Ablauf</h2>
+<p>Verwenden Sie für diese Prüfungen ein separates EPUB-Leseprogramm.</p>
+<ol><li><strong>Den richtigen Export öffnen.</strong> Notieren Sie Manuskript- und EPUB-Dateinamen. Verwenden Sie ein kompatibles Leseprogramm und prüfen Sie dessen Import- oder Synchronisationsverhalten, bevor Sie ein vertrauliches Manuskript öffnen.</li><li><strong>Das gesamte Inhaltsverzeichnis vergleichen.</strong> Achten Sie auf fehlende Abschnitte, unerwartete Einträge, doppelte Bezeichnungen und eine abweichende Abfolge. Klappen Sie eingeklappte Gruppen auf, sofern vorhanden.</li><li><strong>Jeden Link testen.</strong> Vergleichen Sie Überschrift und erste wiedererkennbare Passage mit Ihrer Referenz. Dass ein Link irgendwo im Buch landet, macht sein Ziel noch nicht richtig. Notieren Sie die tatsächlich geöffnete Stelle.</li><li><strong>Normales Weiterlesen getrennt prüfen.</strong> Beginnen Sie vor dem ersten Hauptkapitel. Lesen Sie über dessen Ende hinweg, ohne das Inhaltsverzeichnis zu verwenden. Prüfen Sie Vorseiten und Übergänge am Anfang, in der Mitte und am Ende; kontrollieren Sie danach alle übrigen Kapitelgrenzen, bevor das gesamte Buch als geprüft gilt.</li><li><strong>Das Buchende prüfen.</strong> Erreicht das letzte Kapitel seinen vorgesehenen Schluss? Bleiben Nachwort oder Anhang erreichbar? Unterscheiden Sie erwartetes Zusatzmaterial von der Hauptkapitelfolge.</li><li><strong>Bei entsprechenden Vertriebsanforderungen ein zweites Leseprogramm verwenden.</strong> Öffnen Sie denselben Export. Halten Sie bei Abweichungen Datei- und Programmversionen fest. Ein Unterschied ist ein Untersuchungsbefund, aber noch kein Beweis für die verantwortliche Komponente.</li></ol>
+<figure><img src="/blog-assets/de/check-epub-table-of-contents-and-reading-order/workflow-diagram.svg" alt="Schematischer Ablauf von der erwarteten Kapitelliste über Link- und Lesefolgeprüfung zur Quellkorrektur vor dem erneuten Export." title="Links und Lesereihenfolge getrennt prüfen"></figure>
+<p>Das Diagramm zeigt einen vorgeschlagenen Ablauf, keinen Screenshot und keinen Nachweis abgeschlossener Tests.</p>
+<h2>Abweichungen vor Änderungen eingrenzen</h2>
+<table><thead><tr><th>Symptom</th><th>Benötigter Befund</th><th>Nächster Schritt</th></tr></thead><tbody><tr><td>Kapitel fehlt im Inhaltsverzeichnis</td><td>Ist sein Text beim Weiterlesen vorhanden?</td><td>Falls ja: Überschriftenerkennung und vorgesehenen Umfang prüfen; falls nein: Vollständigkeit der Quelle und Exportgrenzen prüfen</td></tr><tr><td>Richtige Bezeichnung öffnet falsches Kapitel</td><td>Geöffnete Überschrift und Text notieren</td><td>Quellgrenze und dokumentierte Überschriftenregeln vergleichen; mit kurzem Beispiel reproduzieren</td></tr><tr><td>Zwei Einträge heißen gleich</td><td>Beide Ziele und Quellüberschriften vergleichen</td><td>Absichtliche Wiederholung ausschließen, bevor Titel geändert oder Markierungen entfernt werden</td></tr><tr><td>Links stimmen, Weiterlesen überspringt oder vertauscht Kapitel</td><td>Tatsächlichen Übergang und erwartetes Folgekapitel festhalten</td><td>Quellreihenfolge und verfügbare Exportoptionen prüfen; bei korrekter Quelle Ergebnis zur Diagnose aufbewahren</td></tr><tr><td>Nur ein Leseprogramm zeigt den Fehler</td><td>Identischen Exportstand bestätigen</td><td>Exakten Übergang wiederholen und Versionen vergleichen, bevor eine Ursache zugewiesen wird</td></tr></tbody></table>
+<p>Ändern Sie jeweils nur einen relevanten Punkt. Korrigieren Sie das Arbeitsmanuskript oder eine dokumentierte Konvertierungseinstellung, exportieren Sie unter unterscheidbarem Namen und prüfen Sie betroffenen Eintrag und benachbarte Übergänge erneut. Wiederholen Sie abschließend sämtliche Linkprüfungen: Strukturänderungen können mehrere Ziele betreffen.</p>
+<p>Bleibt die Abweichung bei sauberer Quelle bestehen, bewahren Sie das Original auf und erstellen Sie ein kurzes Beispiel mit eigenem oder zur Weitergabe freigegebenem Text. Beschreiben Sie dem Support erwartete und tatsächliche Ziele. Ein unveröffentlichtes Gesamtmanuskript ist zur Demonstration eines einzelnen Navigationsfehlers nicht nötig.</p>
+<h2>Validierung und Leseprüfung verbinden</h2>
+<p><a href="https://www.w3.org/publishing/epubcheck/">EPUBCheck</a> prüft Publikationen gegen EPUB-Spezifikationen. Untersuchen Sie Paketfehler und Warnungen und validieren Sie die neu erzeugte Datei erneut. Ein erfolgreicher Bericht entscheidet nicht, ob „Kapitel 2“ den beabsichtigten Inhalt enthält.</p>
+<p>Auch erfolgreiches Öffnen in einem Leseprogramm belegt weder vollständige Konformität noch Barrierefreiheit oder universelle Kompatibilität. Halten Sie Validierungsbericht, Navigationsbeobachtungen und ungeprüfte Programme oder Abschnitte getrennt fest. Validieren Sie vertrauliche Texte lokal oder prüfen Sie vor einem Upload den Umgang des Dienstes mit Daten.</p>
+<h2>Wo ONNELLAB dazu passt</h2>
+<p>Wenn Sie aus einem fertigen TXT-Manuskript erneut eine EPUB erstellen müssen, ist Papira eine optionale ONNELLAB-App dafür. Die offiziellen Store-Seiten beschreiben die Offline-Erstellung mit Cover, Buchangaben und Inhaltsverzeichnis. Bearbeiten Sie das Manuskript andernorts und prüfen Sie den Export in einem anderen Leseprogramm: Papira bietet weder die Bearbeitung des Buchtexts noch einen EPUB-Reader.</p>
+<p>Die Überschriftenerkennung hängt von der dokumentierten Plattform und Version ab. Aus Oberflächensprachen lassen sich keine unterstützten Überschriftenmuster ableiten; identisches Verhalten unter iOS und Android ist ebenfalls nicht vorauszusetzen. Daher gibt dieser Ablauf keine universelle automatische Erkennungsregel vor. Prüfen Sie die Anleitung Ihrer installierten Version und gleichen Sie das erzeugte Verzeichnis mit Ihrer Liste ab.</p>
+<p>Beachten Sie die offiziellen Einträge für <a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira im App Store</a> und <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">Papira bei Google Play</a> für Ihre Plattform und Region. Die Prüfmethode funktioniert auch mit anderen EPUB-Exportern.</p>
+<h2>Weiterführender Leitfaden</h2>
+<p>Liegt die Ursache in der Manuskriptvorbereitung, hilft <a href="/blog/de/prepare-txt-manuscript-for-epub/">Ein TXT-Manuskript für die EPUB-Konvertierung vorbereiten</a>. Dieser Leitfaden behandelt die Vorbereitung; die vorliegende Prüfliste setzt nach dem Export an.</p>
+<h2>Quellen</h2>
+<ul><li><a href="https://www.w3.org/TR/epub-33/">W3C EPUB 3.3</a>: Navigationsdokument und Spine für die Standardlesereihenfolge.</li><li><a href="https://www.w3.org/publishing/epubcheck/">W3C EPUBCheck</a>: EPUB-Konformitätsprüfung.</li><li><a href="https://apps.apple.com/us/app/papira-txt-to-epub-converter/id6803919552">Papira im App Store</a> und <a href="https://play.google.com/store/apps/details?id=com.onnellab.papira">bei Google Play</a>: Funktionsumfang und plattformspezifische Hinweise.</li></ul>
+<h2>Fazit</h2>
+<p>Eine brauchbare Navigationsprüfung vergleicht Absicht und Beobachtung. Führen Sie die erwartete Kapitelliste, testen Sie jeden Link und prüfen Sie die normale Lesefolge. Sichern Sie bei Abweichungen die Befunde, korrigieren Sie Quelle oder unterstützte Exportoptionen und prüfen Sie die neue Datei vor der Weitergabe.</p>
+<h2>Häufige Fragen</h2>
+<h3>Beweist eine sichtbare Kapitelüberschrift, dass der Link stimmt?</h3>
+<p>Nein. Öffnen Sie den Eintrag und vergleichen Sie Überschrift und Textanfang am Ziel. Bezeichnung und Zielstelle sind getrennte Prüfpunkte.</p>
+<h3>Fehlt ein Kapitel auch im Buch, wenn es nicht im Menü steht?</h3>
+<p>Nicht unbedingt. Sein Text kann in der Lesefolge vorhanden sein. Suchen Sie den Anfang und prüfen Sie den vorgesehenen Verzeichnisumfang, bevor Sie fehlenden Inhalt diagnostizieren.</p>
+<h3>Warum können Links stimmen und Kapitel trotzdem falsch angeordnet sein?</h3>
+<p>Linkauswahl und Weiterlesen nutzen unterschiedliche Wege. Dokumentieren Sie das tatsächlich folgende Kapitel separat und vergleichen Sie es mit Manuskript und Exporteinstellungen.</p>
+<h3>Ist das Buch nach bestandenem EPUBCheck vertriebsbereit?</h3>
+<p>Das ist eine hilfreiche Teilprüfung. Prüfen Sie weiterhin Text, Navigation, Lesefolge sowie Anforderungen von Publikum oder Vertrieb. Der Bericht ersetzt keine redaktionelle oder Barrierefreiheitsprüfung.</p>
+<h3>Sollte ich die exportierte EPUB direkt korrigieren?</h3>
+<p>Korrigieren Sie möglichst Quelle oder dokumentierte Einstellungen, damit der nächste Export die Änderung enthält. Erfordert der Publikationsablauf Paketbearbeitung, dokumentieren Sie diese reproduzierbar und vermeiden Sie widersprüchliche Fassungen.</p>
+<h3>Kann ich diese Leseprüfungen in Papira durchführen?</h3>
+<p>Nein. Papira erstellt EPUBs aus fertigen TXT-Manuskripten und ist kein EPUB-Reader. Öffnen Sie den Export in einem separaten Leseprogramm und ändern Sie das Manuskript in einem Texteditor.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Musikdateien auf Android für die Offline-Wiedergabe ordnen</h3><a class="related-article-link" href="https://onnellab.com/blog/de/organize-local-music-library-offline-android/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

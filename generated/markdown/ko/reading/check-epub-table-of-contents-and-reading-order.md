@@ -5,7 +5,7 @@ slug: "check-epub-table-of-contents-and-reading-order"
 category: "reading"
 language: "ko"
 description: "내보낸 EPUB을 의도한 장 목록과 비교하고, 목차 링크와 읽기 순서를 따로 점검해 불일치 원인을 찾습니다."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0054"
 search_intent: "troubleshoot"
 primary_keyword: "EPUB 목차 확인"
@@ -15,6 +15,9 @@ tags: "EPUB|목차|읽기 순서|장 순서|전자책 점검"
 short_answer: "예상한 장 목록을 적고 별도의 EPUB 리더에서 목차 링크를 하나씩 열어 보세요. 장 사이를 넘기는 순서도 확인한 뒤, 불일치를 원고나 내보내기 설정에서 수정하고 다시 생성해 점검합니다."
 canonical_url: "https://onnellab.com/blog/ko/check-epub-table-of-contents-and-reading-order/"
 image_specs: "예상 장 목록|목차 링크|읽기 순서|수정 후 다시 생성"
+published_at: "2026-10-12T09:00:00+09:00"
+updated_at: "2026-10-12T09:00:00+09:00"
+related_articles: "신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 방법 => https://onnellab.com/blog/ko/prepare-txt-manuscript-for-epub/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|대용량 텍스트 파일이 느리게 열리는 이유 => https://onnellab.com/blog/ko/large-text-file-slow-to-open/|원본을 바꾸지 않고 대용량 로그 파일을 검토하는 방법 => https://onnellab.com/blog/ko/inspect-large-log-file-without-altering-original/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/"
 ---
 
 # EPUB 목차 링크와 장 순서 확인하기

@@ -1,0 +1,5 @@
+Check an EPUB’s Table of Contents and Chapter Order
+
+Install Papira:
+App Store: https://apps.apple.com/app/id6803919552
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.papira

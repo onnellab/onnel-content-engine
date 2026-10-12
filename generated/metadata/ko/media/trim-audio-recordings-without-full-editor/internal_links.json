@@ -81,9 +81,9 @@
         "slug": "test-converted-media-before-replacing-original",
         "category": "media",
         "language": "ko",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/ko/media/test-converted-media-before-replacing-original.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "media"

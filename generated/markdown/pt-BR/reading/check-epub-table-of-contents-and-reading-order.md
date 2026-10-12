@@ -5,7 +5,7 @@ slug: "check-epub-table-of-contents-and-reading-order"
 category: "reading"
 language: "pt-BR"
 description: "Compare o EPUB exportado com a lista de capítulos esperada e confira separadamente os links do sumário e a sequência de leitura."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0058"
 search_intent: "troubleshoot"
 primary_keyword: "conferir o sumário do EPUB"
@@ -15,6 +15,9 @@ tags: "EPUB|sumário|ordem de leitura|navegação|verificação de ebooks"
 short_answer: "Liste os capítulos esperados, abra o EPUB em outro leitor e teste cada link do sumário. Confira as transições, registre diferenças, corrija o original ou os ajustes de exportação, gere um novo arquivo e confira-o."
 canonical_url: "https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/"
 image_specs: "Capítulos esperados|Links do sumário|Ordem de leitura|Corrigir e gerar novamente"
+published_at: "2026-10-12T09:00:00+09:00"
+updated_at: "2026-10-12T09:00:00+09:00"
+related_articles: "Como organizar músicas no Android para ouvir offline => https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/"
 ---
 
 # Como conferir o sumário e a ordem dos capítulos de um EPUB

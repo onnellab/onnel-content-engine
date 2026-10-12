@@ -5,7 +5,7 @@ slug: "check-epub-table-of-contents-and-reading-order"
 category: "reading"
 language: "es"
 description: "Compara el EPUB exportado con la lista prevista de capítulos y revisa por separado los enlaces del índice y el orden de lectura."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0061"
 search_intent: "troubleshoot"
 primary_keyword: "comprobar el índice de un EPUB"
@@ -15,6 +15,9 @@ tags: "EPUB|índice|orden de lectura|navegación|revisión de ebooks"
 short_answer: "Anota los capítulos previstos, abre el EPUB en otro lector y prueba cada enlace del índice. Revisa las transiciones, registra diferencias, corrige el original o los ajustes y vuelve a generar y comprobar el archivo."
 canonical_url: "https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/"
 image_specs: "Capítulos previstos|Enlaces del índice|Orden de lectura|Corregir y generar de nuevo"
+published_at: "2026-10-12T09:00:00+09:00"
+updated_at: "2026-10-12T09:00:00+09:00"
+related_articles: "Cómo organizar música en Android para escucharla sin conexión => https://onnellab.com/blog/es/organize-local-music-library-offline-android/"
 ---
 
 # Cómo comprobar el índice y el orden de los capítulos de un EPUB

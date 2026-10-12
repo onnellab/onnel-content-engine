@@ -5,7 +5,7 @@ slug: "check-epub-table-of-contents-and-reading-order"
 category: "reading"
 language: "zh-Hans"
 description: "将导出的 EPUB 与原稿章节清单对照，分别检查目录链接和连续阅读顺序。记录差异，修改原稿或导出设置后重新生成并复查。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0056"
 search_intent: "troubleshoot"
 primary_keyword: "EPUB 目录检查"
@@ -15,6 +15,9 @@ tags: "EPUB|目录|阅读顺序|章节顺序|电子书检查"
 short_answer: "列出预期章节，在单独的 EPUB 阅读器中逐一打开目录链接，并检查跨章节阅读的顺序。记录差异，修改原稿或导出设置后重新生成，再检查一次。"
 canonical_url: "https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/"
 image_specs: "预期章节清单|目录链接|阅读顺序|修改后重新生成"
+published_at: "2026-10-12T09:00:00+09:00"
+updated_at: "2026-10-12T09:00:00+09:00"
+related_articles: "在 Android 上整理音乐文件，准备离线播放 => https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/"
 ---
 
 # 检查 EPUB 的目录链接和章节顺序

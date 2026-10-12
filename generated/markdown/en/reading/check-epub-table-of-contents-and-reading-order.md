@@ -5,7 +5,7 @@ slug: "check-epub-table-of-contents-and-reading-order"
 category: "reading"
 language: "en"
 description: "Compare an exported EPUB with your intended chapter list, test navigation links and reading order, and trace any mismatch back to the source."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0053"
 search_intent: "troubleshoot"
 primary_keyword: "check an EPUB’s table of contents"
@@ -15,6 +15,9 @@ tags: "EPUB|table of contents|reading order|navigation|ebook checks"
 short_answer: "Write down the expected chapters, open the exported EPUB in a separate reader, test each contents link, and read across chapter boundaries. Record mismatches, correct the source or export setup, regenerate and check again."
 canonical_url: "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/"
 image_specs: "Expected chapters|Contents links|Reading order|Correct and regenerate"
+published_at: "2026-10-12T09:00:00+09:00"
+updated_at: "2026-10-12T09:00:00+09:00"
+related_articles: "How to Prepare a TXT Manuscript for Reliable EPUB Conversion => https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/|TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|How to Inspect a Large Log File Without Altering the Original => https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/|Organize a Local Music Library for Offline Listening on Android => https://onnellab.com/blog/en/organize-local-music-library-offline-android/"
 ---
 
 # Check an EPUB’s Table of Contents and Chapter Order
