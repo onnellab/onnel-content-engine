@@ -367,7 +367,7 @@ class PublishingTest(unittest.TestCase):
         ko_card_svg = self.root / "generated" / "assets" / "blog" / "ko" / "read-large-txt-files" / "social-card.svg"
         ko_svg = ko_card_svg.read_text(encoding="utf-8")
         self.assertIn("ONNELLAB Korean", ko_svg)
-        self.assertIn("READING · KO", ko_svg)
+        self.assertIn("독서 · KO", ko_svg)
         self.assertNotIn("ONNELLAB 아티클", ko_svg)
         self.assertIn('text-anchor="end">ONNELLAB</text>', ko_svg)
         self.assertIn("https://example.com/blog/en/read-large-txt-files/", (self.site_dir / "feed.xml").read_text(encoding="utf-8"))
