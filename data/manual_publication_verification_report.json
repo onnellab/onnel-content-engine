@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-11T13:03:12+09:00",
+  "checked_at": "2026-10-12T13:23:20+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 68,
-    "already_done": 64,
+    "checked": 72,
+    "already_done": 66,
     "verified": 0,
-    "pending": 4
+    "pending": 6
   },
   "items": [
     {
@@ -430,6 +430,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0018::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0018",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7515208841043546112/",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0020::bluesky::en::bluesky",
       "topic_id": "TOPIC-0020",
       "platform": "bluesky",
@@ -778,14 +790,14 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0018::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0018",
-      "platform": "linkedin",
+      "manual_key": "TOPIC-0044::devto::en::markdown",
+      "topic_id": "TOPIC-0044",
+      "platform": "devto",
       "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/organize-a-local-music-library-for-offline-listening-on-android-1ona",
       "verification_method": "",
       "verification_confidence": ""
     },
@@ -814,8 +826,44 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0044::devto::en::markdown",
-      "topic_id": "TOPIC-0044",
+      "manual_key": "TOPIC-0053::x::en::x",
+      "topic_id": "TOPIC-0053",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0053::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0053",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0053::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0053",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0053::devto::en::markdown",
+      "topic_id": "TOPIC-0053",
       "platform": "devto",
       "language": "en",
       "template_id": "markdown",
