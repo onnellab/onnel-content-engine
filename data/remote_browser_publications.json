@@ -425,6 +425,35 @@
       "verification_confidence": "browser_permalink",
       "status": "processed",
       "processed_at": "2026-10-10T04:39:25+00:00"
+    },
+    {
+      "manual_key": "TOPIC-0018::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0018",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7515208841043546112/",
+      "post_id": "urn:li:activity:7515208841043546112",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-12T00:37:13Z",
+      "observed_at_precision": "second",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_sha256": "b39805d903568d8e9d4f5845b6f1eb025bf32a1d47ba95dd09e9e4c84b5471cb",
+      "posted_body_sha256": "c5f585238c4966b9792272714c6de26cdd625fd365cca961a9e2192940fd1dc0",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF; terminal LF retained",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform normalization and URL shortening",
+      "submitted_body": "The clearest way to choose an output format before converting a media file is to separate the decision from the tool.\n\nChoose the destination first, then check its accepted container, codecs, limits, and the features you must preserve. If existing streams meet those requirements, passthrough or remux may be enough.\n\nBefore changing tools:\n- Preserve the original. Work on a duplicate or confirm that the tool creates a separate output. Do not use the conversion result as the only archive copy.\n- Inspect the source. Record the container, video codec, audio codec, dimensions, frame rate, sample rate, channels, subtitle tracks, duration, metadata, transparency, and file size as relevant.\n\nRead the full article:\nhttps://onnellab.com/blog/en/choose-media-output-format-before-conversion/",
+      "source_draft_path": "generated/social/linkedin/en/media/choose-media-output-format-before-conversion.txt",
+      "copy_adjustment": "None; approved queued source unchanged except terminal LF removal.",
+      "browser_ui_timestamp": "방금",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "dot cloud browser UI: fresh schedule, manual state, receipts and manifest reconciled. Authenticated ONNEL LAB activity checked for duplicates (16 existing posts). Verified public audience, complete body, success notification, exact permalink, author and canonical article-card destination. Observation time is the tool-result time, not server publication time; LinkedIn shortened the article URL to lnkd.in/gbZveQRp.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "processed",
+      "submitted_source_characters": 790,
+      "processed_at": "2026-10-12T00:41:21+00:00"
     }
   ]
 }

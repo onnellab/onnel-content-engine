@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-10T04:39:25+00:00",
+  "updated_at": "2026-10-12T00:41:21+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -719,6 +719,31 @@
       "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
       "draft_hash_normalization": "UTF-8 with CRLF normalized to LF",
       "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform URL shortening"
+    },
+    "TOPIC-0018::linkedin::en::linkedin": {
+      "topic_id": "TOPIC-0018",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "marked_at": "2026-10-12T00:41:21+00:00",
+      "marked_by": "dot_cloud_browser",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7515208841043546112/",
+      "verified_at": "2026-10-12T00:41:21+00:00",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-12T00:37:13Z",
+      "observed_at_precision": "second",
+      "observation_source": "dot cloud browser UI: fresh schedule, manual state, receipts and manifest reconciled. Authenticated ONNEL LAB activity checked for duplicates (16 existing posts). Verified public audience, complete body, success notification, exact permalink, author and canonical article-card destination. Observation time is the tool-result time, not server publication time; LinkedIn shortened the article URL to lnkd.in/gbZveQRp.",
+      "browser_ui_timestamp": "방금",
+      "browser_ui_timezone": "not_recorded",
+      "draft_sha256": "b39805d903568d8e9d4f5845b6f1eb025bf32a1d47ba95dd09e9e4c84b5471cb",
+      "posted_body_sha256": "c5f585238c4966b9792272714c6de26cdd625fd365cca961a9e2192940fd1dc0",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_hash_normalization": "UTF-8 with CRLF normalized to LF; terminal LF retained",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform normalization and URL shortening",
+      "post_id": "urn:li:activity:7515208841043546112"
     }
   }
 }
