@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-10-13T06:21:02+09:00
+Generated: 2026-10-13T06:21:48+09:00
 
 ## Summary
 
@@ -9,8 +9,7 @@ Generated: 2026-10-13T06:21:02+09:00
 | Store | in_review | 1 |
 | Store | unchanged | 14 |
 | GitHub Release | archived | 2 |
-| GitHub Release | planned | 1 |
-| GitHub Release | released | 8 |
+| GitHub Release | released | 9 |
 
 ## Store Snapshots
 
@@ -18,7 +17,7 @@ Generated: 2026-10-13T06:21:02+09:00
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Aligna | android | 1.1.0 | 1.1.0 | same | unchanged | released | onnellab/aligna | No action |
 | Aligna | ios | 1.1.0 | 1.1.0 | same | unchanged | archived | onnellab/aligna | No action |
-| ClipNest | ios | 1.0.5 | 1.0.5 | same | unchanged | planned | onnellab/clipnest | Confirm matching public store version; auto-publish GitHub Release notes |
+| ClipNest | ios | 1.0.5 | 1.0.5 | same | unchanged | released | onnellab/clipnest | No action |
 | Melivra | android | 1.0.7 | 1.0.7 | same | unchanged | released | onnellab/melivra | No action |
 | Melivra | ios | 6783644955 | 1.0.7 | unknown | in_review | - | onnellab/melivra | Review status |
 | Papira | android | 2.0.1 | - | unknown | unchanged | - | onnellab/papira | No action |
@@ -40,7 +39,7 @@ Generated: 2026-10-13T06:21:02+09:00
 | REL-0014 | VaultXT | ios | public | v2.0.0 | archived | Archived | - | - | Melivra에서 받은 가사 파일의 이름을 더 알아보기 쉽게 표시해요. | No action |
 | REL-0017 | Segra | android | public | v1.0.6 | released | Public GitHub Release published | https://github.com/onnellab/segra/releases/tag/v1.0.6 | - | - | No action |
 | REL-0025 | TagWeaver | ios | public | v2.5.3 | released | Public GitHub Release published | https://github.com/onnellab/tagweaver/releases/tag/v2.5.3 | - | - 화면 모드에서 시스템 설정, 라이트, 다크를 직접 선택할 수 있어요. - 라이브러리 탐색과 저장 피드백을 더 자연스럽게 다듬었어요. - 최신 ONNELLAB 디자인 규칙에 맞춰 화면의 일관성과 접근성을 개선했어요. | No action |
-| REL-0029 | ClipNest | ios | public | v1.0.5 | planned | Public store confirmed; preparing automatic release | - | - | - 저장한 텍스트를 검색하고 편집하는 화면을 다듬었어요. - 설정에서 9개 언어를 선택할 수 있고, Pro 구매 버튼에는 스토어 가격을 표시해요. - 공용 색상과 화면 구성을 정리하고, 키보드 붙여넣기 사용 예시와 스토어 안내를 개선했어요. | Confirm matching public store version; auto-publish GitHub Release notes |
+| REL-0029 | ClipNest | ios | public | v1.0.5 | released | Public GitHub Release published | https://github.com/onnellab/clipnest/releases/tag/v1.0.5 | - | - 저장한 텍스트를 검색하고 편집하는 화면을 다듬었어요. - 설정에서 9개 언어를 선택할 수 있고, Pro 구매 버튼에는 스토어 가격을 표시해요. - 공용 색상과 화면 구성을 정리하고, 키보드 붙여넣기 사용 예시와 스토어 안내를 개선했어요. | No action |
 | REL-0024 | Quivra | ios | public | v1.0.10 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.10 | - | 변환 전과 변환 중에도 파일 목록의 위치와 높이가 안정적으로 유지되도록 화면을 다듬었어요. | No action |
 | REL-0019 | Quivra | android | public | v1.0.9 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.9 | - | - | No action |
 | REL-0020 | VaultXT | android | public | v2.0.1 | released | Public GitHub Release published | https://github.com/onnellab/onnellab-text/releases/tag/v2.0.1 | - | - | No action |
@@ -50,6 +49,4 @@ Generated: 2026-10-13T06:21:02+09:00
 
 ## Attention Queue
 
-| App | Platform | Status | Next action | Notes |
-| --- | --- | --- | --- | --- |
-| ClipNest | ios | planned | Confirm matching public store version; auto-publish GitHub Release notes | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
+No release automation items need attention.
