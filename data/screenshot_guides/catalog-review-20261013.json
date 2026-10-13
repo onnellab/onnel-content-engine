@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_candidate_review",
+  "reviewed_at": "2026-10-13T09:16:00Z",
+  "repository_commit": "3031be6cb14db41735161f24fb6049ec1c2ebbae",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "studio_reconciliation": {
+    "shorts_observed_at": "2026-10-13T09:12:15Z",
+    "ordinary_videos_observed_at": "2026-10-13T09:13:18Z",
+    "surface": "dot cloud browser, ONNELLAB YouTube Studio",
+    "shorts_count": 8,
+    "public_shorts": 8,
+    "scheduled_shorts": 0,
+    "draft_shorts": 0,
+    "ordinary_video_count": 6,
+    "public_ordinary_videos": 2,
+    "unlisted_ordinary_videos": 1,
+    "private_ordinary_videos": 3,
+    "source_url": "https://studio.youtube.com/channel/UCXyRedrldRBl9Y35nyWoTLg/videos/short",
+    "account_transition": "Selected the already signed-in ONNELLAB account from YouTube account chooser after exact-channel Studio reported lack of access. No new login, credentials, permissions or other-channel writes.",
+    "verified_public_video_ids": [
+      "sG-RwU-Z65s",
+      "RC929En2dSw",
+      "ScIaoTTLmc8",
+      "iCAzEHp1tLg",
+      "hlpzeGysnzQ",
+      "a8nbWjbLNAM",
+      "NUWFnhBGJn8",
+      "QhKBzXVGM6c"
+    ],
+    "publication_timestamp_claim": null,
+    "duplicate_check": "Complete current Videos and Shorts inventory. No search-focused ClipNest guide or pending upload observed."
+  },
+  "next_slots": [
+    {
+      "publish_at": "2026-10-14T09:00:00+09:00",
+      "timezone": "Asia/Seoul",
+      "status": "unreserved"
+    },
+    {
+      "publish_at": "2026-10-16T09:00:00+09:00",
+      "timezone": "Asia/Seoul",
+      "status": "unreserved"
+    },
+    {
+      "publish_at": "2026-10-19T09:00:00+09:00",
+      "timezone": "Asia/Seoul",
+      "status": "unreserved"
+    }
+  ],
+  "store_snapshot": "data/store_versions.csv checked 2026-10-13T14:30:22+09:00",
+  "catalog": [
+    {
+      "repository": "onnellab/quivra",
+      "source_commit": "26a7a96fca0a8fda1da2577e095b6887a73244d3",
+      "review": "Repository current tree inspected; candidate-specific checks below. Non-selected sources not certified publication-ready."
+    },
+    {
+      "repository": "onnellab/tagweaver",
+      "source_commit": "1338b319f842e8a9bd73820fdc2afc5ade7601fa",
+      "review": "Repository current tree inspected; candidate-specific checks below. Non-selected sources not certified publication-ready."
+    },
+    {
+      "repository": "onnellab/onnellab-text",
+      "source_commit": "a0f77aaa7aa887f3078be219bb0235f34ab6bf6a",
+      "review": "Repository current tree inspected; candidate-specific checks below. Non-selected sources not certified publication-ready."
+    },
+    {
+      "repository": "onnellab/segra",
+      "source_commit": "1be73221ae2a19271a27866f172de0225bba53d3",
+      "review": "Repository current tree inspected; candidate-specific checks below. Non-selected sources not certified publication-ready."
+    },
+    {
+      "repository": "onnellab/clipnest",
+      "source_commit": "5db2441e1cff466012a020717c856aa357ba6cc7",
+      "review": "Repository current tree inspected; candidate-specific checks below. Non-selected sources not certified publication-ready."
+    },
+    {
+      "repository": "onnellab/aligna",
+      "source_commit": "bacfe6a3aaa704e7562fb0dfb4c7f473e7a21366",
+      "review": "Repository current tree inspected; candidate-specific checks below. Non-selected sources not certified publication-ready."
+    },
+    {
+      "repository": "onnellab/melivra",
+      "source_commit": "26d1f98dab0c84071498a3927e35b9ae549ef45e",
+      "review": "Repository current tree inspected; candidate-specific checks below. Non-selected sources not certified publication-ready."
+    },
+    {
+      "repository": "onnellab/papira",
+      "source_commit": "db19a81bde5a915d1498431a54cdd4ded35f7b4f",
+      "review": "Repository current tree inspected; candidate-specific checks below. Non-selected sources not certified publication-ready."
+    }
+  ],
+  "selected_candidate": {
+    "guide_id": "clipnest-search-20261014",
+    "app_id": "APP-0005",
+    "app_name": "ClipNest",
+    "state": "source_and_copy_reviewed_execution_permission_pending",
+    "distinct_question": "How can I find a saved text clip by a word I remember?",
+    "source_repository": "onnellab/clipnest",
+    "source_commit": "5db2441e1cff466012a020717c856aa357ba6cc7",
+    "capture_added_commit": "33baceb79cc19d090d09f5d6c298da6cd1474afb",
+    "capture_commit_source_version": "1.0.4+97",
+    "current_source_version": "1.0.5+98",
+    "public_version": "1.0.5",
+    "live_store_observed_at": "2026-10-13T09:14:19Z",
+    "live_store_url": "https://apps.apple.com/us/app/clipnest-clipboard-history/id6779928552",
+    "platforms": [
+      "ios"
+    ],
+    "assets": [
+      {
+        "path": "assets/store_promo/raw/en/iphone_medium/01.png",
+        "bytes": 273423,
+        "sha256": "61284871127de8f3d54a4c37adc688400f03b158d09358466449bc33853361fc",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "visual_review": "Actual pixels reviewed; entire screenshot retained."
+      },
+      {
+        "path": "assets/store_promo/raw/en/iphone_medium/02.png",
+        "bytes": 110820,
+        "sha256": "45b5dffa18771f5c5cd185e75fb1463781d68a0a6a71b2233cd78482bdc84de5",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "visual_review": "Actual pixels reviewed; entire screenshot retained."
+      }
+    ],
+    "provenance": "Real iPhone simulator captures using production HomeScreen/search presentation with FakeClipsStore, seeded original demonstration text, fake purchase and keyboard bridges. Not an exact signed-release capture or evidence of real storage/clipboard/paste actions.",
+    "rights": "User-owned ONNELLAB app UI and repository-authored six English sample clips. No user clipboard data, stock imagery, narration or music.",
+    "source_parity": "Capture commit and current main have identical home/search UI files and unchanged selected PNGs. Five lib files differ only in formatting/trailing commas or added scanner comments; capture harness unchanged between capture-added commit and current main. Capture build version is not independently attested.",
+    "excluded_assets": "Archived July root raw/en files and keyboard/settings/paywall captures are not used.",
+    "title": "How to Find Saved Text in ClipNest | iPhone Screenshot Guide",
+    "description": "To find saved text in ClipNest, open search in the main app and enter a word you remember. The example shows a search for Project and the matching Project brief clip.\n\nStill-screen guide using real iPhone simulator screenshots with original demonstration text. No typing, clipboard capture, paste action, save result, or speed demonstration is shown.\n\nExplore ClipNest for iPhone and iPad:\nhttps://apps.apple.com/us/app/clipnest-clipboard-history/id6779928552\n\n#ClipNest #ClipboardHistory #Shorts",
+    "planned_frames": [
+      {
+        "seconds": [
+          0,
+          5
+        ],
+        "asset": 1,
+        "headline": "Find a saved text clip",
+        "caption": "Open search in ClipNest."
+      },
+      {
+        "seconds": [
+          5,
+          10
+        ],
+        "asset": 2,
+        "headline": "Search a word you remember",
+        "caption": "Example: Project"
+      },
+      {
+        "seconds": [
+          10,
+          15
+        ],
+        "asset": 2,
+        "headline": "Review the matching text",
+        "caption": "ClipNest for iPhone and iPad"
+      }
+    ],
+    "persistent_disclosure": "Still-screen guide · Demo text",
+    "planned_output": {
+      "seconds": 15,
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "frames": 450,
+      "audio": false,
+      "source_handling": "Uniform full-image fit without cropping, retouching, fake taps or simulated transitions."
+    },
+    "execution_blocker": "Existing free dot-cloud Python/ffmpeg/ffprobe authorization explicitly names Melivra only. ClipNest production/test/render needs a specific bounded authorization before execution.",
+    "required_after_permission": [
+      "Extend independent exact allowlist and tests; preserve existing guide hashes/contracts.",
+      "Verify materialized source hashes again; render and inspect every frame/text/geometry; ffprobe actual output; verify owned processes exited.",
+      "Save completed video to Library.",
+      "Recheck channel complete inventory and durable intent before a single upload; persist assigned ID; verify KST schedule; commit receipt to main."
+    ]
+  },
+  "papira": {
+    "state": "blocked_current_capture_provenance",
+    "source_commit": "db19a81bde5a915d1498431a54cdd4ded35f7b4f",
+    "evidence_path": "assets/store_promo/refresh_20261001/capture_manifest.pending.json",
+    "files": 0,
+    "visual_review_complete": false
+  },
+  "constraints": {
+    "legacy_publishers_started": false,
+    "desktop_or_remote_used": false,
+    "work_or_codex_task_started": false,
+    "paid_tools_used": false,
+    "external_link_verification_performed": false,
+    "rendered": false,
+    "uploaded": false,
+    "scheduled": false,
+    "guide_upload_intent_created": false
+  },
+  "verification_limits": [
+    "No new video produced, uploaded or scheduled in this run.",
+    "Only selected ClipNest live store listing independently checked; other platform versions remain current repository snapshot evidence.",
+    "Preparation readiness is separate from rendered-media QA and publication receipt."
+  ]
+}
