@@ -35,14 +35,14 @@
         "slug": "check-epub-table-of-contents-and-reading-order",
         "category": "reading",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/reading/check-epub-table-of-contents-and-reading-order.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
         "relationship": "troubleshooting",
         "shared_clusters": [
           "reading"
         ],
-        "score": 13
+        "score": 14
       },
       {
         "topic_id": "TOPIC-0021",

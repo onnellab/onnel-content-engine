@@ -35,12 +35,12 @@
         "slug": "check-epub-table-of-contents-and-reading-order",
         "category": "reading",
         "language": "fr",
-        "status": "scheduled",
-        "url": "generated/markdown/fr/reading/check-epub-table-of-contents-and-reading-order.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
         "relationship": "troubleshooting",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       },
       {
         "topic_id": "TOPIC-0068",
@@ -50,6 +50,19 @@
         "language": "fr",
         "status": "scheduled",
         "url": "generated/markdown/fr/media/test-converted-media-before-replacing-original.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0076",
+        "title": "Transformer les textes répétitifs en extraits réutilisables",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "fr",
+        "status": "scheduled",
+        "url": "generated/markdown/fr/productivity/turn-repeated-text-into-reusable-snippets.md",
         "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

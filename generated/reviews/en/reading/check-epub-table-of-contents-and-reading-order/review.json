@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0053",
   "title": "Check an EPUB’s Table of Contents and Chapter Order",
-  "input_fingerprint": "c5d68e0bcfbc52fe86a67d8b17406bf11b1dc5d50ead5a846656810c200d744c",
+  "input_fingerprint": "867f6f56cb1da0d87b6fb31b7e3d90467ac959b6f9d368673cb72bd7ab0c454d",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

@@ -14,7 +14,7 @@
     "slug": "check-epub-table-of-contents-and-reading-order",
     "category": "reading",
     "language": "ja",
-    "status": "scheduled",
+    "status": "published",
     "topic_clusters": [
       "EPUB 章の順序",
       "EPUB 目次リンク",
@@ -50,6 +50,19 @@
         "language": "ja",
         "status": "scheduled",
         "url": "generated/markdown/ja/media/test-converted-media-before-replacing-original.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
+      },
+      {
+        "topic_id": "TOPIC-0071",
+        "title": "繰り返し使う文章を再利用できる定型文に整理する方法",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "ja",
+        "status": "scheduled",
+        "url": "generated/markdown/ja/productivity/turn-repeated-text-into-reusable-snippets.md",
         "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

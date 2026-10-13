@@ -75,6 +75,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0042",
+        "title": "How to Turn Repeated Text Into Reusable Snippets",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "en",
+        "status": "scheduled",
+        "url": "generated/markdown/en/productivity/turn-repeated-text-into-reusable-snippets.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0001",
         "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
@@ -97,19 +112,6 @@
         "url": "https://onnellab.com/blog/en/large-text-file-slow-to-open/",
         "destination": "published_article",
         "relationship": "prerequisite",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0031",
-        "title": "How to Inspect a Large Log File Without Altering the Original",
-        "slug": "inspect-large-log-file-without-altering-original",
-        "category": "reading",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5
       }

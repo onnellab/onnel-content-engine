@@ -35,12 +35,12 @@
         "slug": "check-epub-table-of-contents-and-reading-order",
         "category": "reading",
         "language": "es",
-        "status": "scheduled",
-        "url": "generated/markdown/es/reading/check-epub-table-of-contents-and-reading-order.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
         "relationship": "troubleshooting",
         "shared_clusters": [],
-        "score": 6
+        "score": 7
       },
       {
         "topic_id": "TOPIC-0052",
@@ -54,6 +54,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0077",
+        "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "es",
+        "status": "scheduled",
+        "url": "generated/markdown/es/productivity/turn-repeated-text-into-reusable-snippets.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
       }
     ],
     "related_apps": [

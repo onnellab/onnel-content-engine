@@ -48,10 +48,23 @@
         "slug": "check-epub-table-of-contents-and-reading-order",
         "category": "reading",
         "language": "zh-Hans",
-        "status": "scheduled",
-        "url": "generated/markdown/zh-Hans/reading/check-epub-table-of-contents-and-reading-order.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
         "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0072",
+        "title": "如何整理可重复使用的文本片段",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "zh-Hans",
+        "status": "scheduled",
+        "url": "generated/markdown/zh-Hans/productivity/turn-repeated-text-into-reusable-snippets.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 2
       }

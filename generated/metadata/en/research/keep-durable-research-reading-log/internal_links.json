@@ -93,17 +93,17 @@
         "score": 4
       },
       {
-        "topic_id": "TOPIC-0001",
-        "title": "How to Read Large TXT Files Without Lag",
-        "slug": "read-large-txt-files-without-lag",
+        "topic_id": "TOPIC-0053",
+        "title": "Check an EPUB’s Table of Contents and Chapter Order",
+        "slug": "check-epub-table-of-contents-and-reading-order",
         "category": "reading",
         "language": "en",
         "status": "published",
-        "url": "https://onnellab.com/blog/en/read-large-txt-files-without-lag/",
+        "url": "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
         "destination": "published_article",
-        "relationship": "cross_domain",
+        "relationship": "troubleshooting",
         "shared_clusters": [],
-        "score": 3
+        "score": 4
       }
     ],
     "related_apps": [],

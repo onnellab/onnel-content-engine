@@ -14,13 +14,13 @@
     "slug": "turn-repeated-text-into-reusable-snippets",
     "category": "productivity",
     "language": "zh-Hans",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
-      "可重复使用的文本片段",
       "文本使用场景",
       "文本占位符",
       "保存的回复",
       "发送前检查",
+      "可重复使用的文本片段",
       "productivity"
     ],
     "related_app_names": [
@@ -30,19 +30,43 @@
   "recommendations": {
     "related_articles": [
       {
-        "topic_id": "TOPIC-0010",
-        "source_language": "en",
-        "title": "怎样在 iPhone 上重复使用复制过的常用文本",
-        "slug": "reuse-copied-text-snippets-iphone",
-        "category": "productivity",
+        "topic_id": "TOPIC-0047",
+        "title": "在 Android 上整理音乐文件，准备离线播放",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
         "language": "zh-Hans",
         "status": "published",
-        "url": "https://onnellab.com/blog/zh-hans/reuse-copied-text-snippets-iphone/",
+        "url": "https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/",
         "destination": "published_article",
-        "relationship": "broader",
-        "shared_clusters": [
-          "productivity"
-        ]
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0056",
+        "title": "检查 EPUB 的目录链接和章节顺序",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "zh-Hans",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0064",
+        "title": "替换原文件前，如何检查转换后的媒体文件",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "zh-Hans",
+        "status": "scheduled",
+        "url": "generated/markdown/zh-Hans/media/test-converted-media-before-replacing-original.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [
@@ -52,12 +76,27 @@
         "slug": "clipnest",
         "category": "productivity",
         "url": "/apps/clipnest/",
-        "description": "",
+        "description": "A local iOS clipboard utility for saving and reusing copied text.",
         "relationship": "solution",
         "priority": 1
       }
     ],
-    "related_guides": []
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Productivity guide",
+        "category": "productivity",
+        "cluster": "productivity",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "文本使用场景 cluster",
+        "category": "productivity",
+        "cluster": "文本使用场景",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
   },
   "selection_policy": {
     "related_article_priority": [

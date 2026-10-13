@@ -73,6 +73,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0070",
+        "title": "반복해서 쓰는 문장을 재사용 가능한 텍스트 조각으로 정리하기",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/productivity/turn-repeated-text-into-reusable-snippets.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0005",
         "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
         "slug": "read-large-txt-files-without-lag",
@@ -93,19 +108,6 @@
         "language": "ko",
         "status": "published",
         "url": "https://onnellab.com/blog/ko/convert-local-media-files-privately/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0013",
-        "title": "음악 정리 전 MP3 메타데이터를 정돈하는 방법",
-        "slug": "clean-up-mp3-metadata-before-organizing-music",
-        "category": "music",
-        "language": "ko",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

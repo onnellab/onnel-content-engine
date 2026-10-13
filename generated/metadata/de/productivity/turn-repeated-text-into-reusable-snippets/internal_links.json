@@ -14,13 +14,13 @@
     "slug": "turn-repeated-text-into-reusable-snippets",
     "category": "productivity",
     "language": "de",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
-      "wiederverwendbare Textbausteine",
       "Textbausteine im Kontext",
       "Platzhalter im Text",
       "gespeicherte Antworten",
       "Prüfung vor dem Senden",
+      "wiederverwendbare Textbausteine",
       "productivity"
     ],
     "related_app_names": [
@@ -30,19 +30,43 @@
   "recommendations": {
     "related_articles": [
       {
-        "topic_id": "TOPIC-0010",
-        "source_language": "en",
-        "title": "Kopierte Textbausteine auf dem iPhone wiederverwenden",
-        "slug": "reuse-copied-text-snippets-iphone",
-        "category": "productivity",
+        "topic_id": "TOPIC-0050",
+        "title": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
         "language": "de",
         "status": "published",
-        "url": "https://onnellab.com/blog/de/reuse-copied-text-snippets-iphone/",
+        "url": "https://onnellab.com/blog/de/organize-local-music-library-offline-android/",
         "destination": "published_article",
-        "relationship": "broader",
-        "shared_clusters": [
-          "productivity"
-        ]
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0059",
+        "title": "Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0067",
+        "title": "Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "de",
+        "status": "scheduled",
+        "url": "generated/markdown/de/media/test-converted-media-before-replacing-original.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
       }
     ],
     "related_apps": [
@@ -52,12 +76,27 @@
         "slug": "clipnest",
         "category": "productivity",
         "url": "/apps/clipnest/",
-        "description": "",
+        "description": "A local iOS clipboard utility for saving and reusing copied text.",
         "relationship": "solution",
         "priority": 1
       }
     ],
-    "related_guides": []
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Productivity guide",
+        "category": "productivity",
+        "cluster": "productivity",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "Textbausteine im Kontext cluster",
+        "category": "productivity",
+        "cluster": "Textbausteine im Kontext",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
   },
   "selection_policy": {
     "related_article_priority": [

@@ -48,10 +48,23 @@
         "slug": "check-epub-table-of-contents-and-reading-order",
         "category": "reading",
         "language": "ja",
-        "status": "scheduled",
-        "url": "generated/markdown/ja/reading/check-epub-table-of-contents-and-reading-order.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
         "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0071",
+        "title": "繰り返し使う文章を再利用できる定型文に整理する方法",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "ja",
+        "status": "scheduled",
+        "url": "generated/markdown/ja/productivity/turn-repeated-text-into-reusable-snippets.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 2
       }

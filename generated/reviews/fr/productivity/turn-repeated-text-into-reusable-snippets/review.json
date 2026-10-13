@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0076",
   "title": "Transformer les textes répétitifs en extraits réutilisables",
-  "input_fingerprint": "00df5caafa91b7a6c098f43bdd594a258b1118351ac1d76d26c948eb01c8eeab",
+  "input_fingerprint": "b1b804aae969402083526ca432b8bd6479e73dc0bd9743bb2dbf705b25adf86b",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

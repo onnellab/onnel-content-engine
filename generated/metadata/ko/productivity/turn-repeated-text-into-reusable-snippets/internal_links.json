@@ -14,13 +14,13 @@
     "slug": "turn-repeated-text-into-reusable-snippets",
     "category": "productivity",
     "language": "ko",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
-      "재사용 가능한 텍스트 조각",
       "문장 사용 맥락",
       "텍스트 자리표시자",
       "저장한 답변",
       "전송 전 확인",
+      "재사용 가능한 텍스트 조각",
       "productivity"
     ],
     "related_app_names": [
@@ -31,7 +31,6 @@
     "related_articles": [
       {
         "topic_id": "TOPIC-0017",
-        "source_language": "ko",
         "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
         "slug": "reuse-copied-text-snippets-iphone",
         "category": "productivity",
@@ -39,10 +38,82 @@
         "status": "published",
         "url": "https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/",
         "destination": "published_article",
-        "relationship": "broader",
+        "relationship": "deeper",
         "shared_clusters": [
           "productivity"
-        ]
+        ],
+        "score": 13
+      },
+      {
+        "topic_id": "TOPIC-0019",
+        "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
+        "slug": "rename-files-safely-preview-workflow",
+        "category": "productivity",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0024",
+        "title": "거친 메모를 구조화된 초안으로 바꾸는 방법",
+        "slug": "turn-rough-notes-into-structured-first-draft",
+        "category": "productivity",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/turn-rough-notes-into-structured-first-draft/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0028",
+        "title": "작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법",
+        "slug": "organize-downloads-small-folder-system",
+        "category": "productivity",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/organize-downloads-small-folder-system/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0005",
+        "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0011",
+        "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
       }
     ],
     "related_apps": [
@@ -52,12 +123,27 @@
         "slug": "clipnest",
         "category": "productivity",
         "url": "/apps/clipnest/",
-        "description": "",
+        "description": "A local iOS clipboard utility for saving and reusing copied text.",
         "relationship": "solution",
         "priority": 1
       }
     ],
-    "related_guides": []
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Productivity guide",
+        "category": "productivity",
+        "cluster": "productivity",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "문장 사용 맥락 cluster",
+        "category": "productivity",
+        "cluster": "문장 사용 맥락",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
   },
   "selection_policy": {
     "related_article_priority": [

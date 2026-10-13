@@ -14,7 +14,7 @@
     "slug": "check-epub-table-of-contents-and-reading-order",
     "category": "reading",
     "language": "zh-Hant",
-    "status": "scheduled",
+    "status": "published",
     "topic_clusters": [
       "EPUB 章節順序",
       "EPUB 目錄連結錯誤",
@@ -50,6 +50,19 @@
         "language": "zh-Hant",
         "status": "scheduled",
         "url": "generated/markdown/zh-Hant/media/test-converted-media-before-replacing-original.md",
+        "destination": "scheduled_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
+      },
+      {
+        "topic_id": "TOPIC-0073",
+        "title": "如何整理可重複使用的文字片段",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "zh-Hant",
+        "status": "scheduled",
+        "url": "generated/markdown/zh-Hant/productivity/turn-repeated-text-into-reusable-snippets.md",
         "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
