@@ -120,6 +120,53 @@ def resolve_backlog_wav(title: str, *, root: Path = MYBOX_ROOT) -> Path:
     return source
 
 
+def reusable_backlog_master(title: str, singles_root: Path, assets_root: Path) -> dict | None:
+    """Read retained canonical masters, never revive or rewrite their old jobs."""
+    title = backlog_catalog_entry(title)["title"]
+    root, assets = Path(singles_root), Path(assets_root)
+    queue, approval = root / "queue.json", assets / "approval.json"
+    for path in (queue, approval):
+        if any(part.is_symlink() for part in (path, *path.parents)):
+            raise VideoError("aether_single_backlog_source_unsafe")
+        if not path.is_file():
+            return None
+    state = load_json(queue, limit=2 * 1024 * 1024)
+    rights = load_json(approval, limit=2 * 1024 * 1024)
+    if (state.get("schema_version") != 1 or not isinstance(state.get("jobs"), dict)
+            or rights.get("schema_version") != 1 or rights.get("profile") != "aether_inn"
+            or not isinstance(rights.get("tracks"), dict)):
+        raise VideoError("aether_single_backlog_reuse_record_invalid")
+    if not any(isinstance(row, dict) and row.get("title") == title
+               and row.get("commercial_use_confirmed") is True
+               for row in rights["tracks"].values()):
+        return None
+    candidates = []
+    for key, job in state["jobs"].items():
+        if not isinstance(job, dict) or job.get("title") != title or job.get("source_kind") != "backlog_wav":
+            continue
+        music = job.get("music")
+        if not isinstance(music, dict):
+            continue
+        if (not re.fullmatch(r"[0-9a-f]{24}", key) or job.get("id") != key
+                or job.get("source_filename") != title + ".wav"
+                or music.get("source_kind") != "backlog_wav"
+                or music.get("source_filename") != title + ".wav"):
+            raise VideoError("aether_single_backlog_reuse_record_invalid")
+        source = root / "jobs" / key / "source/master.wav"
+        if (music.get("path") != str(source)
+                or any(part.is_symlink() for part in (source, *source.parents))):
+            raise VideoError("aether_single_backlog_source_unsafe")
+        if not source.is_file() or _is_dataless(source):
+            continue
+        expected = music.get("sha256")
+        if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{64}", expected) or file_hash(source) != expected:
+            raise VideoError("aether_single_backlog_source_integrity")
+        candidates.append({"path": source, "sha256": expected, "job_id": key})
+    if len({candidate["sha256"] for candidate in candidates}) > 1:
+        raise VideoError("aether_single_backlog_source_ambiguous")
+    return candidates[0] if candidates else None
+
+
 def backlog_catalog_entry(title: str) -> dict:
     title = _clean(title, "title", 60)
     wanted = unicodedata.normalize("NFC", title)
@@ -196,7 +243,7 @@ def _hydrate_dataless_backlog_wav(source: Path) -> None:
 
 
 
-def import_backlog_master(source: Path, folder: Path, expected_duration: float) -> dict:
+def import_backlog_master(source: Path, folder: Path, expected_duration: float, *, expected_sha256=None) -> dict:
     source = Path(source)
     if source.suffix.lower() != ".wav" or source.is_symlink() or not source.is_file():
         raise VideoError("aether_single_backlog_wav_not_synced")
@@ -213,6 +260,8 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float) 
         shutil.copyfile(source, partial)
         os.chmod(partial, 0o600)
         source_hash = file_hash(partial)
+        if expected_sha256 is not None and source_hash != expected_sha256:
+            raise VideoError("aether_single_backlog_source_integrity")
         duration = audio_duration(partial)
         if abs(float(duration) - float(expected_duration)) > 5:
             raise VideoError("aether_single_backlog_duration_mismatch")
@@ -536,7 +585,7 @@ def worker(
     root=ROOT, *, slot=None, title=None, style=None, lane=None, publish=False, execute=False,
     api_factory=None, music_generator=generate_music, cover_generator=import_existing_cover,
     renderer=render_single, existing_only=False, source_kind=None, source_wav=None,
-    source_expected_duration=None, source_filename=None,
+    source_expected_duration=None, source_filename=None, source_expected_sha256=None,
 ):
     if not execute:
         return {"dry_run": True, **readiness(root)}
@@ -576,6 +625,25 @@ def worker(
                 return result
         else:
             job = (pending or same_slot or unfinished or [None])[0]
+        # Caller source bytes belong to one exact canonical title. Queue priority
+        # may select another job; reject before stale retirement or any write.
+        if source_kind == "backlog_wav" and not (job or {}).get("upload"):
+            entry = backlog_catalog_entry(title)
+            if (source_filename != entry["title"] + ".wav"
+                    or source_expected_duration != entry["duration_seconds"]):
+                raise VideoError("aether_single_backlog_source_job_mismatch")
+            if job is not None and (
+                job.get("title") != entry["title"]
+                or job.get("source_kind") != "backlog_wav"
+                or job.get("source_filename") != entry["title"] + ".wav"
+                or job.get("source_expected_duration") != entry["duration_seconds"]
+            ):
+                raise VideoError("aether_single_backlog_source_job_mismatch")
+            if source_expected_sha256 is not None:
+                bound = reusable_backlog_master(entry["title"], q.root, ASSETS_ROOT)
+                if (bound is None or source_wav is None or Path(source_wav) != bound["path"]
+                        or source_expected_sha256 != bound["sha256"]):
+                    raise VideoError("aether_single_backlog_source_job_mismatch")
         stale_slot = job["slot"] if job is not None else slot
         if publish and not (job or {}).get("upload") and publish_slot_stale(stale_slot):
             if job is not None:
@@ -641,8 +709,14 @@ def worker(
             if not job.get("upload"):
                 if not job.get("music"):
                     if job.get("source_kind") == "backlog_wav":
-                        source = Path(source_wav) if source_wav is not None else resolve_backlog_wav(job["title"])
-                        chosen = import_backlog_master(source, folder, job["source_expected_duration"])
+                        retained = reusable_backlog_master(job["title"], q.root, ASSETS_ROOT) if source_wav is None else None
+                        source = Path(source_wav) if source_wav is not None else (
+                            retained["path"] if retained else resolve_backlog_wav(job["title"]))
+                        chosen = import_backlog_master(
+                            source, folder, job["source_expected_duration"],
+                            expected_sha256=retained["sha256"] if retained else source_expected_sha256,
+                        )
+                        chosen["source_filename"] = job["source_filename"]
                     else:
                         generated = recover_generated_result(folder)
                         if generated is None:
@@ -765,13 +839,16 @@ def backlog_worker(
                 "existing_published_at": existing["published_at"],
             }
         api_factory = lambda: api
-    source = Path(source_wav) if source_wav is not None else resolve_backlog_wav(entry["title"])
+    retained = reusable_backlog_master(entry["title"], Path(root), ASSETS_ROOT) if source_wav is None else None
+    source = Path(source_wav) if source_wav is not None else (
+        retained["path"] if retained else resolve_backlog_wav(entry["title"]))
     return worker(
         root, slot=slot, title=entry["title"], style=entry["style"], lane=lane,
         publish=publish, execute=True, api_factory=api_factory, music_generator=music_generator,
         cover_generator=cover_generator, renderer=renderer, source_kind="backlog_wav",
         source_wav=source, source_expected_duration=entry["duration_seconds"],
-        source_filename=source.name,
+        source_filename=entry["title"] + ".wav",
+        source_expected_sha256=retained["sha256"] if retained else None,
     )
 
 

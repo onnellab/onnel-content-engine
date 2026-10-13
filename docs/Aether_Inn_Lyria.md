@@ -144,6 +144,18 @@ Production invocation:
 
 Missing legacy catalog uploads use a separate no-Lyria path so a canonical master is never regenerated merely to publish it. `backlog-worker` accepts only the six currently missing recovery titles registered in `scripts/aether_single.py`; `A Fantasy Still Breathing` was removed after its existing public Aether Inn upload was confirmed. Before a publish run touches MYBOX, the worker searches the verified Aether Inn channel and verifies matching candidate video status; an already-public matching title returns `already_public` without creating a job or reading the WAV. It resolves a genuinely missing master from the Unicode-normalized MYBOX `개인 폴더/Aether Inn/01_Audio_Master/<TITLE>.wav` path, copies that WAV into the private durable single job, verifies its SHA-256 and measured duration against the catalog, and records `source_kind=backlog_wav`. A visible File Provider placeholder is allowed to materialize through that verified copy even when macOS still reports `SF_DATALESS`; the flag alone is not a failure. When a backlog master is `SF_DATALESS`, the worker first wakes the installed MYBOX app in the background so its File Provider can service the read without requiring Finder interaction. A missing cloud item fails as `aether_single_backlog_wav_not_synced`, while a placeholder that cannot actually be read/copied fails as `aether_single_backlog_wav_unavailable`. Neither condition may fall back to Lyria.
 
+Before MYBOX access, the worker may reuse a complete retained `source/master.wav`
+from an existing canonical backlog job for the exact title. Reuse requires the
+existing Aether commercial-use attestation, matching original filename and job
+identity, a nonsymlink local path, and the queue's exact SHA-256. Dataless or absent
+copies are skipped; unsafe records, changed bytes and conflicting masters fail
+closed. The copied bytes are checked against that SHA again before the normal
+duration and offline signal-quality gates. This only supplies source bytes to a
+new eligible slot; it never rewrites, revives or reschedules the previous job.
+Public-title reconciliation, per-title cover approval, render, upload and 09:00
+publication contracts still apply. A retained WAV does not establish readiness
+of a future upload or authorize replacing another missing master.
+
 On an eligible Tuesday/Saturday slot, publish one recovery item with:
 
     python3 -B scripts/aether_single.py backlog-worker --slot YYYY-MM-DD --title "Beyond the Road of Falling Petals" --execute --publish
