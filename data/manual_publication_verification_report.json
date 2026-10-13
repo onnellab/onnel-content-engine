@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-12T13:23:20+09:00",
+  "checked_at": "2026-10-13T14:33:53+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 72,
-    "already_done": 66,
+    "already_done": 67,
     "verified": 0,
-    "pending": 6
+    "pending": 5
   },
   "items": [
     {
@@ -598,6 +598,18 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0053::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0053",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mxqcoiyzqw2y",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0001::devto::en::markdown",
       "topic_id": "TOPIC-0001",
       "platform": "devto",
@@ -831,18 +843,6 @@
       "platform": "x",
       "language": "en",
       "template_id": "x",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0053::bluesky::en::bluesky",
-      "topic_id": "TOPIC-0053",
-      "platform": "bluesky",
-      "language": "en",
-      "template_id": "bluesky",
       "status": "pending",
       "reason": "No matching public post found",
       "posted_url": "",
