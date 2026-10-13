@@ -3,8 +3,8 @@
   "kind": "screenshot_guide_upload_receipt",
   "guide_id": "clipnest-search-20261014",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "upload_started_reconciliation_required",
-  "video_id": null,
+  "status": "uploaded_private",
+  "video_id": "nRg8_Ion6pI",
   "target_publish_at": "2026-10-14T09:00:00+09:00",
   "timezone": "Asia/Seoul",
   "manifest_sha256": "4d638b562fda87e5e5eac89ea4b761816739a0e2c2daa8b17c9552c2601b55ef",
@@ -14,7 +14,7 @@
   "publisher": "dot-cloud-browser",
   "intent_at": "2026-10-13T11:08:07Z",
   "upload_started": true,
-  "observed_at": "2026-10-13T11:09:06Z",
+  "observed_at": "2026-10-13T11:09:57Z",
   "observed_matching_existing_title": false,
   "observed_prior_shorts_count": 8,
   "observed_ordinary_videos_count": 6,
@@ -27,5 +27,11 @@
   "library_file_id": "libfile_30c93db6e74c819191a48187b61f2a85",
   "title": "How to Find Saved Text in ClipNest | iPhone Screenshot Guide",
   "upload_started_at": "2026-10-13T11:09:06Z",
-  "reconciliation_blocker": "Read-only Studio getAXState returned JavaScript execution did not receive approval at 2026-10-13T11:09:17Z after one successful file selection; do not repeat file selection."
+  "reconciliation_blocker": null,
+  "video_url": "https://youtube.com/shorts/nRg8_Ion6pI",
+  "assigned_video_observed_at": "2026-10-13T11:09:57Z",
+  "observed_privacy": "private",
+  "checks": "Copyright checks complete, no issues found.",
+  "upload_reconciliation": "Read-only status retry succeeded; assigned video ID verified without repeating file selection.",
+  "duration_ui": "0:16 (YouTube preview); source ffprobe 15.000 seconds"
 }
