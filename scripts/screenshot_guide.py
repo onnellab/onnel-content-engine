@@ -113,6 +113,87 @@ MELIVRA_CONTRACT = {'schema_version': 1,
                    'execution_scope': 'Owner-authorized free dot-cloud Melivra production and test '
                                       'commands; no separate Work/Codex or paid service.'}}
 
+# Independently reviewed ClipNest contract; does not broaden existing apps.
+CLIPNEST_CONTRACT = {'schema_version': 1,
+ 'kind': 'screenshot_guide',
+ 'guide_id': 'clipnest-search-20261014',
+ 'app_id': 'APP-0005',
+ 'locale': 'en',
+ 'channel_id': 'UCXyRedrldRBl9Y35nyWoTLg',
+ 'source': {'repository': 'onnellab/clipnest',
+            'commit': '5db2441e1cff466012a020717c856aa357ba6cc7',
+            'capture_added_commit': '33baceb79cc19d090d09f5d6c298da6cd1474afb',
+            'capture_commit_source_version': '1.0.4+97',
+            'reviewed_source_version': '1.0.5+98',
+            'public_version_observed': '1.0.5',
+            'public_version_source': 'https://apps.apple.com/us/app/clipnest-clipboard-history/id6779928552',
+            'public_version_checked_at': '2026-10-13T09:14:19Z',
+            'capture_type': 'real_iphone_simulator_ui_with_repository_demonstration_text',
+            'provenance': 'Real iPhone simulator captures using production HomeScreen/search '
+                          'presentation with FakeClipsStore, seeded original demonstration text, '
+                          'fake purchase and keyboard bridges. Not an exact signed-release capture '
+                          'or evidence of real storage/clipboard/paste actions.',
+            'rights': 'User-owned ONNELLAB app UI and repository-authored six English sample '
+                      'clips. No user clipboard data, stock imagery, narration or music.',
+            'source_parity': 'Capture commit and current main have identical home/search UI files '
+                             'and unchanged selected PNGs. Five lib files differ only in '
+                             'formatting/trailing commas or added scanner comments; capture '
+                             'harness unchanged between capture-added commit and current main. '
+                             'Capture build version is not independently attested.',
+            'runtime_clipboard_or_paste_verified': False,
+            'signed_release_capture_attested': False,
+            'excluded_assets': 'Archived July root raw/en files and keyboard/settings/paywall '
+                               'captures are not used.'},
+ 'assets': [{'local_name': '01.png',
+             'source_path': 'assets/store_promo/raw/en/iphone_medium/01.png',
+             'sha256': '61284871127de8f3d54a4c37adc688400f03b158d09358466449bc33853361fc',
+             'dimensions': [1206, 2622]},
+            {'local_name': '02.png',
+             'source_path': 'assets/store_promo/raw/en/iphone_medium/02.png',
+             'sha256': '45b5dffa18771f5c5cd185e75fb1463781d68a0a6a71b2233cd78482bdc84de5',
+             'dimensions': [1206, 2622]}],
+ 'slides': [{'heading': 'Find a saved text clip',
+             'caption': 'Open search in ClipNest.',
+             'asset': '01.png',
+             'seconds': 5},
+            {'heading': 'Search a word you remember',
+             'caption': 'Example: Project',
+             'asset': '02.png',
+             'seconds': 5},
+            {'heading': 'Review the matching text',
+             'caption': 'ClipNest for iPhone and iPad',
+             'asset': '02.png',
+             'seconds': 5}],
+ 'metadata': {'title': 'How to Find Saved Text in ClipNest | iPhone Screenshot Guide',
+              'description': 'To find saved text in ClipNest, open search in the main app and '
+                             'enter a word you remember. The example shows a search for Project '
+                             'and the matching Project brief clip.\n'
+                             '\n'
+                             'Still-screen guide using real iPhone simulator screenshots with '
+                             'original demonstration text. No typing, clipboard capture, paste '
+                             'action, save result, or speed demonstration is shown.\n'
+                             '\n'
+                             'Explore ClipNest for iPhone and iPad:\n'
+                             'https://apps.apple.com/us/app/clipnest-clipboard-history/id6779928552\n'
+                             '\n'
+                             '#ClipNest #ClipboardHistory #Shorts',
+              'format_disclosure': 'Still-screen guide · Demo text',
+              'audio': 'none',
+              'made_for_kids': False,
+              'synthetic_media': False,
+              'category': 'Education',
+              'cta': 'ClipNest for iPhone and iPad · Link in description',
+              'target_publish_at': '2026-10-14T09:00:00+09:00',
+              'timezone': 'Asia/Seoul'},
+ 'authorization': {'format_approved_on': '2026-10-08',
+                   'execution_approved_on': '2026-10-13',
+                   'rights_basis': 'ONNELLAB-owned app UI and repository-owned demonstration data',
+                   'scope': 'English screenshot-based app guide on ONNELLAB YouTube; no simulated '
+                            'interaction; existing recording gate unchanged',
+                   'execution_scope': 'Owner-authorized free dot-cloud ClipNest '
+                                      'Python/ffmpeg/ffprobe production and tests; no separate '
+                                      'Work/Codex, paid service or user computer.'}}
+
 class GuideError(ValueError):
     pass
 
@@ -207,12 +288,14 @@ def _validate_quivra(manifest, asset_root):
 
 def validate(manifest, asset_root):
     """Dispatch only independently reviewed per-app still-screen contracts."""
-    if isinstance(manifest, dict) and manifest.get('app_id') == 'APP-0007':
-        if canonical(manifest) != canonical(MELIVRA_CONTRACT):
-            raise GuideError('melivra_manifest_requires_review')
+    if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0007', 'APP-0005'):
+        clipnest = manifest['app_id'] == 'APP-0005'
+        contract = CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
+        if canonical(manifest) != canonical(contract):
+            raise GuideError('clipnest_manifest_requires_review' if clipnest else 'melivra_manifest_requires_review')
         root = Path(asset_root).resolve()
         hashes = {}
-        for asset in MELIVRA_CONTRACT['assets']:
+        for asset in contract['assets']:
             name = asset['local_name']
             path = root / name
             if path.is_symlink() or not path.is_file() or path.resolve().parent != root:
@@ -229,6 +312,7 @@ def validate(manifest, asset_root):
 def render(manifest, asset_root, output):
     evidence = validate(manifest, asset_root)
     melivra = manifest['app_id'] == 'APP-0007'
+    clipnest = manifest['app_id'] == 'APP-0005'
     output = Path(output)
     if output.exists():
         raise GuideError('output_exists_preserve_prior_artifact')
@@ -241,6 +325,7 @@ def render(manifest, asset_root, output):
     regular = lambda size: ImageFont.truetype(str(font_root / 'DejaVuSans.ttf'), size)
     bold = lambda size: ImageFont.truetype(str(font_root / 'DejaVuSans-Bold.ttf'), size)
     frames = []
+    text_bounds = []
     for index, slide in enumerate(manifest['slides']):
         canvas = Image.new('RGB', (1080, 1920), '#fbfaf7')
         draw = ImageDraw.Draw(canvas)
@@ -249,22 +334,27 @@ def render(manifest, asset_root, output):
             width = box[2] - box[0]
             if width > 960:
                 raise GuideError('text_exceeds_safe_width')
-            draw.text(((1080-width)/2,y), text, font=font, fill=color)
+            position = ((1080-width)/2, y)
+            bounds = draw.textbbox(position, text, font=font)
+            if bounds[0] < 60 or bounds[2] > 1020 or bounds[1] < 64 or bounds[3] > 1880:
+                raise GuideError('text_outside_safe_bounds')
+            text_bounds.append({'slide': index+1, 'text': text, 'bbox': list(bounds)})
+            draw.text(position, text, font=font, fill=color)
         draw.rounded_rectangle((64,64,1016,126), radius=25, fill='#eae4f5')
-        center('MELIVRA · SCREENSHOT GUIDE' if melivra else 'QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
+        center('CLIPNEST · SCREENSHOT GUIDE' if clipnest else 'MELIVRA · SCREENSHOT GUIDE' if melivra else 'QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
         center(slide['heading'], 166, bold(48))
         center(slide['caption'], 235, regular(32), '#645c74')
         source = Image.open(Path(asset_root) / slide['asset']).convert('RGB')
-        if source.size != ((1080,2400) if melivra else (1080,1920)):
+        if source.size != ((1206,2622) if clipnest else (1080,2400) if melivra else (1080,1920)):
             raise GuideError('source_geometry_changed')
         # Entire screenshot, uniformly scaled. No crop, synthetic taps or UI edits.
-        size = (621,1380) if melivra else (756,1344)
-        x, y = (229,300) if melivra else (162,320)
+        size = (603,1311) if clipnest else (621,1380) if melivra else (756,1344)
+        x, y = (238,330) if clipnest else (229,300) if melivra else (162,320)
         source = source.resize(size, Image.Resampling.LANCZOS)
         canvas.paste(source,(x,y))
         draw.rounded_rectangle((x-3,y-3,x+size[0]+3,y+size[1]+3), radius=3, outline='#d8cdeb', width=3)
         center(manifest['metadata']['format_disclosure'], 1721, regular(31), '#645c74')
-        center('Melivra for Android · Link in description' if melivra else 'App Store & Google Play links in the description', 1783, regular(29))
+        center(manifest['metadata']['cta'] if clipnest else 'Melivra for Android · Link in description' if melivra else 'App Store & Google Play links in the description', 1783, regular(29))
         center('ONNELLAB', 1841, bold(26), '#8c839e')
         frame = output / f'slide-{index+1}.png'
         canvas.save(frame)
@@ -286,7 +376,8 @@ def render(manifest, asset_root, output):
         raise GuideError('render_duration')
     evidence.update(video_file=video.name, video_sha256=sha256(video),
                     seconds=15, width=1080, height=1920, fps=30, audio=False,
-                    slide_sha256={p.name:sha256(p) for p in frames})
+                    slide_sha256={p.name:sha256(p) for p in frames},
+                    text_bounds=text_bounds)
     (output/'render-evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')
     return evidence
 
@@ -310,4 +401,5 @@ def main():
 
 if __name__=='__main__':
     raise SystemExit(main())
+
 

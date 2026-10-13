@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "clipnest-search-20261014",
+  "app_id": "APP-0005",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/clipnest",
+    "commit": "5db2441e1cff466012a020717c856aa357ba6cc7",
+    "capture_added_commit": "33baceb79cc19d090d09f5d6c298da6cd1474afb",
+    "capture_commit_source_version": "1.0.4+97",
+    "reviewed_source_version": "1.0.5+98",
+    "public_version_observed": "1.0.5",
+    "public_version_source": "https://apps.apple.com/us/app/clipnest-clipboard-history/id6779928552",
+    "public_version_checked_at": "2026-10-13T09:14:19Z",
+    "capture_type": "real_iphone_simulator_ui_with_repository_demonstration_text",
+    "provenance": "Real iPhone simulator captures using production HomeScreen/search presentation with FakeClipsStore, seeded original demonstration text, fake purchase and keyboard bridges. Not an exact signed-release capture or evidence of real storage/clipboard/paste actions.",
+    "rights": "User-owned ONNELLAB app UI and repository-authored six English sample clips. No user clipboard data, stock imagery, narration or music.",
+    "source_parity": "Capture commit and current main have identical home/search UI files and unchanged selected PNGs. Five lib files differ only in formatting/trailing commas or added scanner comments; capture harness unchanged between capture-added commit and current main. Capture build version is not independently attested.",
+    "runtime_clipboard_or_paste_verified": false,
+    "signed_release_capture_attested": false,
+    "excluded_assets": "Archived July root raw/en files and keyboard/settings/paywall captures are not used."
+  },
+  "assets": [
+    {
+      "local_name": "01.png",
+      "source_path": "assets/store_promo/raw/en/iphone_medium/01.png",
+      "sha256": "61284871127de8f3d54a4c37adc688400f03b158d09358466449bc33853361fc",
+      "dimensions": [
+        1206,
+        2622
+      ]
+    },
+    {
+      "local_name": "02.png",
+      "source_path": "assets/store_promo/raw/en/iphone_medium/02.png",
+      "sha256": "45b5dffa18771f5c5cd185e75fb1463781d68a0a6a71b2233cd78482bdc84de5",
+      "dimensions": [
+        1206,
+        2622
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Find a saved text clip",
+      "caption": "Open search in ClipNest.",
+      "asset": "01.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Search a word you remember",
+      "caption": "Example: Project",
+      "asset": "02.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Review the matching text",
+      "caption": "ClipNest for iPhone and iPad",
+      "asset": "02.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "How to Find Saved Text in ClipNest | iPhone Screenshot Guide",
+    "description": "To find saved text in ClipNest, open search in the main app and enter a word you remember. The example shows a search for Project and the matching Project brief clip.\n\nStill-screen guide using real iPhone simulator screenshots with original demonstration text. No typing, clipboard capture, paste action, save result, or speed demonstration is shown.\n\nExplore ClipNest for iPhone and iPad:\nhttps://apps.apple.com/us/app/clipnest-clipboard-history/id6779928552\n\n#ClipNest #ClipboardHistory #Shorts",
+    "format_disclosure": "Still-screen guide · Demo text",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "ClipNest for iPhone and iPad · Link in description",
+    "target_publish_at": "2026-10-14T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "execution_approved_on": "2026-10-13",
+    "rights_basis": "ONNELLAB-owned app UI and repository-owned demonstration data",
+    "scope": "English screenshot-based app guide on ONNELLAB YouTube; no simulated interaction; existing recording gate unchanged",
+    "execution_scope": "Owner-authorized free dot-cloud ClipNest Python/ffmpeg/ffprobe production and tests; no separate Work/Codex, paid service or user computer."
+  }
+}

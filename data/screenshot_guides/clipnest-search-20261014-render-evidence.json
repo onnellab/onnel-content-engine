@@ -1,0 +1,491 @@
+{
+  "status": "pass",
+  "video_sha256": "25f806a960c856661778e56ea9a4e9c531a65240fa88183bfde17aa4c9b76442",
+  "source_evidence": {
+    "manifest_sha256": "4d638b562fda87e5e5eac89ea4b761816739a0e2c2daa8b17c9552c2601b55ef",
+    "asset_hashes": {
+      "01.png": "61284871127de8f3d54a4c37adc688400f03b158d09358466449bc33853361fc",
+      "02.png": "45b5dffa18771f5c5cd185e75fb1463781d68a0a6a71b2233cd78482bdc84de5"
+    },
+    "kind": "screenshot_guide",
+    "runtime_recording_attestation": false,
+    "upload_authorized_by_cli": false
+  },
+  "decoded_frames": 450,
+  "fps": 30,
+  "duration_seconds": 15,
+  "audio_streams": 0,
+  "segment_frames": [
+    [
+      0,
+      149
+    ],
+    [
+      150,
+      299
+    ],
+    [
+      300,
+      449
+    ]
+  ],
+  "all_frames_closest_to_expected_slide": true,
+  "full_resolution_rgb_comparison": true,
+  "maximum_frame_mean_absolute_rgb_error": 1.1554258294753086,
+  "maximum_fraction_channels_error_gt_24": 0.00012522505144032923,
+  "source_full_image_fit": {
+    "original": [
+      1206,
+      2622
+    ],
+    "display": [
+      603,
+      1311
+    ],
+    "uniform_scale": 0.5,
+    "origin": [
+      238,
+      330
+    ],
+    "source_pixels_match_preencode": true
+  },
+  "persistent_disclosure_verified": true,
+  "text_bounds": [
+    {
+      "slide": 1,
+      "text": "CLIPNEST · SCREENSHOT GUIDE",
+      "bbox": [
+        272.0,
+        83,
+        808.0,
+        105
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Find a saved text clip",
+      "bbox": [
+        249.5,
+        175,
+        830.5,
+        221
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Open search in ClipNest.",
+      "bbox": [
+        342.5,
+        241,
+        737.5,
+        272
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Still-screen guide · Demo text",
+      "bbox": [
+        309.5,
+        1726,
+        770.5,
+        1756
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "ClipNest for iPhone and iPad · Link in description",
+      "bbox": [
+        188.0,
+        1788,
+        892.0,
+        1816
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "CLIPNEST · SCREENSHOT GUIDE",
+      "bbox": [
+        272.0,
+        83,
+        808.0,
+        105
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Search a word you remember",
+      "bbox": [
+        140.5,
+        175,
+        939.5,
+        221
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Example: Project",
+      "bbox": [
+        405.5,
+        241,
+        674.5,
+        272
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Still-screen guide · Demo text",
+      "bbox": [
+        309.5,
+        1726,
+        770.5,
+        1756
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ClipNest for iPhone and iPad · Link in description",
+      "bbox": [
+        188.0,
+        1788,
+        892.0,
+        1816
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "CLIPNEST · SCREENSHOT GUIDE",
+      "bbox": [
+        272.0,
+        83,
+        808.0,
+        105
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Review the matching text",
+      "bbox": [
+        192.0,
+        175,
+        888.0,
+        221
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ClipNest for iPhone and iPad",
+      "bbox": [
+        313.5,
+        241,
+        766.5,
+        272
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Still-screen guide · Demo text",
+      "bbox": [
+        309.5,
+        1726,
+        770.5,
+        1756
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ClipNest for iPhone and iPad · Link in description",
+      "bbox": [
+        188.0,
+        1788,
+        892.0,
+        1816
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    }
+  ],
+  "boundary_images": [
+    "decoded-000.png",
+    "decoded-149.png",
+    "decoded-150.png",
+    "decoded-299.png",
+    "decoded-300.png",
+    "decoded-449.png"
+  ],
+  "decoder_exit_code": 0,
+  "schema_version": 1,
+  "guide_id": "clipnest-search-20261014",
+  "checked_at": "2026-10-13T11:01:18Z",
+  "render_evidence": {
+    "manifest_sha256": "4d638b562fda87e5e5eac89ea4b761816739a0e2c2daa8b17c9552c2601b55ef",
+    "asset_hashes": {
+      "01.png": "61284871127de8f3d54a4c37adc688400f03b158d09358466449bc33853361fc",
+      "02.png": "45b5dffa18771f5c5cd185e75fb1463781d68a0a6a71b2233cd78482bdc84de5"
+    },
+    "kind": "screenshot_guide",
+    "runtime_recording_attestation": false,
+    "upload_authorized_by_cli": false,
+    "video_file": "clipnest-search-20261014.mp4",
+    "video_sha256": "25f806a960c856661778e56ea9a4e9c531a65240fa88183bfde17aa4c9b76442",
+    "seconds": 15,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "audio": false,
+    "slide_sha256": {
+      "slide-1.png": "2380dbd5fa52635cdf5281a7ca6441cdbf17cd4ca9eb5c8cf6f75865d61354bf",
+      "slide-2.png": "839df4b108204fb163430713c684359d34e87f9685b5d2cb458f3f1e3a66288e",
+      "slide-3.png": "47a9b944b111fc5d681277f1f7ac723df258c2b71cbd245afa1a69acb842e9dc"
+    },
+    "text_bounds": [
+      {
+        "slide": 1,
+        "text": "CLIPNEST · SCREENSHOT GUIDE",
+        "bbox": [
+          272.0,
+          83,
+          808.0,
+          105
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Find a saved text clip",
+        "bbox": [
+          249.5,
+          175,
+          830.5,
+          221
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Open search in ClipNest.",
+        "bbox": [
+          342.5,
+          241,
+          737.5,
+          272
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Still-screen guide · Demo text",
+        "bbox": [
+          309.5,
+          1726,
+          770.5,
+          1756
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "ClipNest for iPhone and iPad · Link in description",
+        "bbox": [
+          188.0,
+          1788,
+          892.0,
+          1816
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "ONNELLAB",
+        "bbox": [
+          462.0,
+          1847,
+          618.0,
+          1866
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "CLIPNEST · SCREENSHOT GUIDE",
+        "bbox": [
+          272.0,
+          83,
+          808.0,
+          105
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Search a word you remember",
+        "bbox": [
+          140.5,
+          175,
+          939.5,
+          221
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Example: Project",
+        "bbox": [
+          405.5,
+          241,
+          674.5,
+          272
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Still-screen guide · Demo text",
+        "bbox": [
+          309.5,
+          1726,
+          770.5,
+          1756
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "ClipNest for iPhone and iPad · Link in description",
+        "bbox": [
+          188.0,
+          1788,
+          892.0,
+          1816
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "ONNELLAB",
+        "bbox": [
+          462.0,
+          1847,
+          618.0,
+          1866
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "CLIPNEST · SCREENSHOT GUIDE",
+        "bbox": [
+          272.0,
+          83,
+          808.0,
+          105
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Review the matching text",
+        "bbox": [
+          192.0,
+          175,
+          888.0,
+          221
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "ClipNest for iPhone and iPad",
+        "bbox": [
+          313.5,
+          241,
+          766.5,
+          272
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Still-screen guide · Demo text",
+        "bbox": [
+          309.5,
+          1726,
+          770.5,
+          1756
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "ClipNest for iPhone and iPad · Link in description",
+        "bbox": [
+          188.0,
+          1788,
+          892.0,
+          1816
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "ONNELLAB",
+        "bbox": [
+          462.0,
+          1847,
+          618.0,
+          1866
+        ]
+      }
+    ]
+  },
+  "all_frames_report_sha256": "3a78d6cc5b520a08ceae1c72c76420a43dc5a0b76617a71e4c8dfd20be8793be",
+  "tests": {
+    "command": "python -m unittest discover -s tests -v",
+    "result": "44 tests passed",
+    "test_log_sha256": "c21e1b8098e1d88f90c6dbea44a2630779df522c8b0db96f0c3af60f95a8fb3c"
+  },
+  "visual_review": {
+    "source_images": [
+      "01.png",
+      "02.png"
+    ],
+    "preencode_slides": [
+      1,
+      2,
+      3
+    ],
+    "decoded_frames": [
+      0,
+      150,
+      300
+    ],
+    "result": "Full uncropped source screenshots, English labels and persistent demo disclosure visibly legible without overlapping text."
+  },
+  "process_cleanup": {
+    "owned_encoder_exited": true,
+    "owned_decoder_exited": true,
+    "remaining_ffmpeg_ffprobe_processes": [],
+    "unowned_processes_terminated": false
+  },
+  "limits": [
+    "Still-screen simulator guide with original demonstration text; no live action, storage, clipboard or paste proof.",
+    "Not independently attested as exact signed release capture.",
+    "Local render evidence does not authorize upload; publication handled separately."
+  ],
+  "source_file_sha256": {
+    "scripts/screenshot_guide.py": "184132a12b44c0936abcb38baba7332956501ea3568c7631dfc4a3f4f2a29b6a",
+    "scripts/verify_clipnest_frames.py": "afdef2a61e59335261f1d827e0d8300a99c07d75c955389addcaed374f11fd1f",
+    "tests/test_screenshot_guide_clipnest.py": "509405c8f4db77f5318c409aafe9effb87596f0c3a4034639074b1330744d1a8",
+    "data/screenshot_guides/clipnest-search-20261014.json": "5b0daad85d5ac313b2594a4a7f80d6cb9e2bc1c3d5b63c5c1ae2deb5dbb62742"
+  }
+}

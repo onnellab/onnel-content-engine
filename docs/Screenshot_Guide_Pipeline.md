@@ -159,3 +159,41 @@ render evidence record completed production checks. Neither file is an upload
 receipt. Persist hash-bound intent and reconcile live Studio before selecting
 any upload file, then persist the assigned ID and actual scheduling result.
 
+
+## Reviewed ClipNest search guide — 2026-10-13
+
+The owner approved applying the same free dot-cloud Python, ffmpeg and ffprobe
+production and verification workflow to one ClipNest search guide for
+2026-10-14 09:00 Asia/Seoul. The earlier preparation pause was the narrow
+Melivra-only execution authorization, not an encoder or Studio outage. No new
+Work/Codex task, paid API/credits, desktop or legacy publisher is involved.
+
+The independent exact contract is
+`data/screenshot_guides/clipnest-search-20261014.json`. It uses English iPhone
+simulator screenshots `assets/store_promo/raw/en/iphone_medium/01.png` and
+`02.png` from `onnellab/clipnest` commit
+`5db2441e1cff466012a020717c856aa357ba6cc7`, verified against their full SHA-256.
+The selected PNGs were introduced in commit
+`33baceb79cc19d090d09f5d6c298da6cd1474afb` (source version 1.0.4+97), and are
+unchanged in current 1.0.5+98 sources. App Store public 1.0.5 and main-app text
+search were checked live on October 13. The relevant production HomeScreen and
+search presentation remain unchanged; intervening lib changes are formatting,
+trailing commas and static scanner comments. This is source/release parity
+evidence, not an attestation of an exact signed-release capture build.
+
+The capture harness renders actual production screens with FakeClipsStore,
+original repository-written example clips and fake purchase/keyboard bridges.
+The guide explains where search is and how to review the visible Project match.
+It does not show typing, clipboard capture, saving, pasting, speed or background
+monitoring. The still-screen/demo-text disclosure remains visible throughout.
+Full source screenshots are uniformly fitted without cropping or retouching.
+No music or narration is used. Do not reuse the old July screenshots or add
+keyboard/purchase/privacy claims to this contract.
+
+Preserve the existing Quivra and Melivra contracts, receipts and uploaded media.
+The complete ONNELLAB Studio inventory must be rechecked immediately before
+hash-bound intent and a single upload. No private draft counts as scheduled.
+Persist the assigned video ID, selected timezone and actual schedule readback;
+verify public state after the approved release time. A missing or ambiguous
+upload result requires reconciliation of the existing video before any retry.
+
