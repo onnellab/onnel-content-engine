@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-12T21:22:28+00:00",
+  "generated_at": "2026-10-13T21:22:14+00:00",
   "tasks": [
     {
       "task_id": "policy-google_play-quivra",
@@ -8,8 +8,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "88c913905b990e2d63cd9c7cb703328cc63795beae2bd2e3784d3d0fdbd90a62",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "0571f739c03e9a07431a93e70d1e5fafa56bfcbc145773cd9a8c427810ea8c32",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -26,8 +26,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "88c913905b990e2d63cd9c7cb703328cc63795beae2bd2e3784d3d0fdbd90a62",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "0571f739c03e9a07431a93e70d1e5fafa56bfcbc145773cd9a8c427810ea8c32",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -44,8 +44,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "88c913905b990e2d63cd9c7cb703328cc63795beae2bd2e3784d3d0fdbd90a62",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "0571f739c03e9a07431a93e70d1e5fafa56bfcbc145773cd9a8c427810ea8c32",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -62,8 +62,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "88c913905b990e2d63cd9c7cb703328cc63795beae2bd2e3784d3d0fdbd90a62",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "0571f739c03e9a07431a93e70d1e5fafa56bfcbc145773cd9a8c427810ea8c32",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -80,8 +80,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "88c913905b990e2d63cd9c7cb703328cc63795beae2bd2e3784d3d0fdbd90a62",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "0571f739c03e9a07431a93e70d1e5fafa56bfcbc145773cd9a8c427810ea8c32",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -98,8 +98,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "88c913905b990e2d63cd9c7cb703328cc63795beae2bd2e3784d3d0fdbd90a62",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "0571f739c03e9a07431a93e70d1e5fafa56bfcbc145773cd9a8c427810ea8c32",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -116,8 +116,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
-        "content_hash": "88c913905b990e2d63cd9c7cb703328cc63795beae2bd2e3784d3d0fdbd90a62",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "0571f739c03e9a07431a93e70d1e5fafa56bfcbc145773cd9a8c427810ea8c32",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -134,8 +134,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "a4f4efe4324a09a9df897493e15262fb7d57112cdd53fda5418bbd54c1e6c91b",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "12983b327088f890f3b2fecda1fdb0afb5c7d9aae2ac0fc17f1da5d07a7ba5dc",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -152,8 +152,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "a4f4efe4324a09a9df897493e15262fb7d57112cdd53fda5418bbd54c1e6c91b",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "12983b327088f890f3b2fecda1fdb0afb5c7d9aae2ac0fc17f1da5d07a7ba5dc",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -170,8 +170,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "a4f4efe4324a09a9df897493e15262fb7d57112cdd53fda5418bbd54c1e6c91b",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "12983b327088f890f3b2fecda1fdb0afb5c7d9aae2ac0fc17f1da5d07a7ba5dc",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -188,8 +188,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "a4f4efe4324a09a9df897493e15262fb7d57112cdd53fda5418bbd54c1e6c91b",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "12983b327088f890f3b2fecda1fdb0afb5c7d9aae2ac0fc17f1da5d07a7ba5dc",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -206,8 +206,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "a4f4efe4324a09a9df897493e15262fb7d57112cdd53fda5418bbd54c1e6c91b",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "12983b327088f890f3b2fecda1fdb0afb5c7d9aae2ac0fc17f1da5d07a7ba5dc",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -224,8 +224,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "a4f4efe4324a09a9df897493e15262fb7d57112cdd53fda5418bbd54c1e6c91b",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "12983b327088f890f3b2fecda1fdb0afb5c7d9aae2ac0fc17f1da5d07a7ba5dc",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -242,8 +242,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
-        "content_hash": "a4f4efe4324a09a9df897493e15262fb7d57112cdd53fda5418bbd54c1e6c91b",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "12983b327088f890f3b2fecda1fdb0afb5c7d9aae2ac0fc17f1da5d07a7ba5dc",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -260,8 +260,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "fd6296311330dd48b88d699f97acd4e6171756aa3bf14004a845882f1c15e4c6",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "c88e2a82db9adf664e098a360e2ec2482139579f607041f8db7f5dac707d7c21",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -278,8 +278,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "fd6296311330dd48b88d699f97acd4e6171756aa3bf14004a845882f1c15e4c6",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "c88e2a82db9adf664e098a360e2ec2482139579f607041f8db7f5dac707d7c21",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -296,8 +296,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "fd6296311330dd48b88d699f97acd4e6171756aa3bf14004a845882f1c15e4c6",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "c88e2a82db9adf664e098a360e2ec2482139579f607041f8db7f5dac707d7c21",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -314,8 +314,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "fd6296311330dd48b88d699f97acd4e6171756aa3bf14004a845882f1c15e4c6",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "c88e2a82db9adf664e098a360e2ec2482139579f607041f8db7f5dac707d7c21",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -332,8 +332,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "fd6296311330dd48b88d699f97acd4e6171756aa3bf14004a845882f1c15e4c6",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "c88e2a82db9adf664e098a360e2ec2482139579f607041f8db7f5dac707d7c21",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -350,8 +350,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "fd6296311330dd48b88d699f97acd4e6171756aa3bf14004a845882f1c15e4c6",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "c88e2a82db9adf664e098a360e2ec2482139579f607041f8db7f5dac707d7c21",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -368,8 +368,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "fd6296311330dd48b88d699f97acd4e6171756aa3bf14004a845882f1c15e4c6",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "c88e2a82db9adf664e098a360e2ec2482139579f607041f8db7f5dac707d7c21",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
@@ -386,8 +386,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/app-store/review/guidelines/",
-        "content_hash": "fd6296311330dd48b88d699f97acd4e6171756aa3bf14004a845882f1c15e4c6",
-        "checked_at": "2026-10-12T21:22:25+00:00"
+        "content_hash": "c88e2a82db9adf664e098a360e2ec2482139579f607041f8db7f5dac707d7c21",
+        "checked_at": "2026-10-13T21:22:11+00:00"
       },
       "scope": [
         "store listing",
