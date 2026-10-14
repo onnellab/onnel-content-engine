@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import sys
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -257,6 +258,70 @@ class OpsDeployIntegration(unittest.TestCase):
         self.assertEqual(["ops_dashboard_workflow_verification_unavailable"], report["blockers"])
         self.assertEqual("unverified", report["hosted_workflows"]["ops_dashboard"]["status"])
         self.assertNotIn("ops_dashboard_fetch", names)
+
+
+
+class MainPipelineIsolation(unittest.TestCase):
+    def test_ambiguous_hosted_source_skips_dependent_work_but_checks_music(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            from datetime import datetime
+            from zoneinfo import ZoneInfo
+            now = datetime(2026, 10, 13, 6, 30, tzinfo=ZoneInfo("Asia/Seoul"))
+            seen = []
+
+            def uncertain_source(report):
+                report["blockers"].append("app_operational_status_workflow_verification_unavailable")
+                return False
+
+            def fake_reconcile(report):
+                seen.append("aether_reconciled")
+                return {"status": "idle"}
+
+            def fake_single(report, state):
+                seen.append("aether_single_called")
+                report["single_slot"] = {"status": "blocked", "error": "fixture_no_upload"}
+
+            def fake_compilation(report, timestamp):
+                seen.append("aether_compilation_checked")
+                report["compilation_slot"] = {"status": "not_scheduled_today"}
+
+            def fake_step(report, name, args, **kwargs):
+                if name == "post_ops_repo_status":
+                    return 0, "", ""
+                self.fail(f"unexpected step {name}")
+
+            with patch.object(daily, "STATE", root), \
+                 patch.object(daily, "RESULT", root / "result.json"), \
+                 patch.object(daily, "LOCK", root / "worker.lock"), \
+                 patch.object(daily, "now_kst", return_value=now), \
+                 patch.object(daily, "repo_sync", return_value=True), \
+                 patch.object(daily, "run_youtube_reports"), \
+                 patch.object(daily, "publish_local_ops_sources"), \
+                 patch.object(daily, "run_hosted_ops_workflows", side_effect=uncertain_source), \
+                 patch.object(daily, "run_store_review_auto_replies") as reviews, \
+                 patch.object(daily, "run_ops_dashboard_deploy") as ops, \
+                 patch.object(daily, "run_reconcile", side_effect=fake_reconcile), \
+                 patch.object(daily, "run_single_slot", side_effect=fake_single), \
+                 patch.object(daily, "run_compilation_slot", side_effect=fake_compilation), \
+                 patch.object(daily, "run_step", side_effect=fake_step), \
+                 patch.object(sys, "argv", ["aether_daily_local.py"]):
+                code = daily.main()
+                reviews.assert_not_called()
+                ops.assert_not_called()
+            self.assertEqual(2, code)
+            self.assertEqual(
+                ["aether_reconciled", "aether_single_called", "aether_compilation_checked"],
+                seen,
+            )
+            saved = json.loads((root / "result.json").read_text(encoding="utf-8"))
+            self.assertEqual("partial", saved["state"])
+            self.assertEqual("skipped_unverified_or_failed_source",
+                             saved["hosted_ops_downstream"])
+            self.assertEqual(
+                ["app_operational_status_workflow_verification_unavailable"],
+                saved["blockers"],
+            )
 
 
 if __name__ == "__main__":
