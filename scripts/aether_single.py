@@ -309,6 +309,8 @@ def policy_for(job: dict) -> dict:
         })
     if (job.get("cover") or {}).get("source_kind") == "existing_approved_cover":
         policy.update({"version": 3, "cover_provider": "owner_approved_existing_cover"})
+        if job["cover"].get("quality_basis") == "dot_delegated_visual_v1":
+            policy.update({"version": 4, "cover_provider": "dot_reviewed_existing_cover"})
     return policy
 
 
@@ -742,7 +744,9 @@ def worker(
                     job["cover"] = {
                         "path": cover["path"], "sha256": cover["sha256"],
                         "model": cover.get("model"), "layout": cover.get("layout"),
-                        **{key: cover[key] for key in ("source_kind", "source_sha256", "approval_sha256", "approval_title") if key in cover},
+                        **{key: cover[key] for key in ("source_kind", "source_sha256", "approval_sha256", "approval_title",
+                           "quality_basis", "quality_reviewer", "quality_review_sha256",
+                           "quality_authority_reference", "quality_reviewed_at") if key in cover},
                     }
                     job["status"] = "cover_ready"
                     atomic_json(q.state_path, state)
@@ -896,3 +900,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
