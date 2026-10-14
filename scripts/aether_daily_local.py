@@ -247,7 +247,98 @@ def run_youtube_reports(report: dict) -> None:
             report["blockers"].append(f"youtube_report_{profile}_failed")
 
 
-def run_hosted_ops_workflows(report: dict) -> None:
+# gh run watch relies on the /jobs API; its HTTP 502 is not proof
+# that the already-dispatched workflow run itself failed.
+WORKFLOW_RECHECK_INTERVAL_SECONDS = 10
+WORKFLOW_RECHECK_MAX_POLLS = 90
+WORKFLOW_RECHECK_MAX_API_ERRORS = 6
+
+
+def watch_hosted_run(
+    report: dict, *, label: str, run_id: str, workflow: str,
+    watch_timeout: int = 1800, max_polls: int = WORKFLOW_RECHECK_MAX_POLLS,
+) -> dict:
+    """Verify an existing workflow run without creating a new attempt.
+
+    A nonzero gh watch exit is ambiguous. Read only the original ID's
+    /actions/runs endpoint, with exact workflow/branch/event matching.
+    Incomplete/unavailable evidence is unverified, never a proven failure.
+    """
+    repo = "onnellab/onnel-content-engine"
+    if not isinstance(run_id, str) or not run_id.isdecimal():
+        return {"status": "unverified", "verification_error": "invalid_run_id"}
+    code, _, _ = run_step(
+        report, f"watch_{label}",
+        ["gh", "run", "watch", run_id, "-R", repo, "--exit-status", "--interval", "3"],
+        timeout=watch_timeout,
+    )
+    if code == 0:
+        return {"status": "success", "watch_exit_code": 0,
+                "verification_source": "gh_run_watch_exit_status"}
+
+    # Only safe run metadata enters the local report; do not read logs/jobs.
+    selection = "{id: .id, name: .name, status: .status, conclusion: .conclusion, event: .event, head_branch: .head_branch}"
+    api_errors = 0
+    for attempt in range(1, max_polls + 1):
+        if attempt > 1:
+            time.sleep(WORKFLOW_RECHECK_INTERVAL_SECONDS)
+        result_code, stdout, _ = run_step(
+            report, f"verify_{label}_run_{attempt}",
+            ["gh", "api", "-X", "GET", f"repos/{repo}/actions/runs/{run_id}",
+             "--jq", selection],
+            timeout=45,
+        )
+        if result_code != 0:
+            api_errors += 1
+            if api_errors >= WORKFLOW_RECHECK_MAX_API_ERRORS:
+                return {"status": "unverified", "verification_source": "same_run_api",
+                        "verification_error": "run_api_unavailable",
+                        "watch_exit_code": code, "api_error_count": api_errors}
+            continue
+        try:
+            observed = json.loads(stdout)
+        except (TypeError, ValueError):
+            return {"status": "unverified", "verification_source": "same_run_api",
+                    "verification_error": "invalid_run_metadata",
+                    "watch_exit_code": code}
+        if not isinstance(observed, dict) or (
+            type(observed.get("id")) is not int
+            or str(observed.get("id")) != run_id
+            or observed.get("name") != workflow
+            or observed.get("event") != "workflow_dispatch"
+            or observed.get("head_branch") != "main"
+        ):
+            return {"status": "unverified", "verification_source": "same_run_api",
+                    "verification_error": "run_identity_mismatch",
+                    "watch_exit_code": code}
+        api_errors = 0
+        status = observed.get("status")
+        if status == "completed":
+            conclusion = observed.get("conclusion")
+            if conclusion not in {
+                "success", "failure", "cancelled", "timed_out",
+                "action_required", "neutral", "skipped", "stale",
+            }:
+                return {"status": "unverified", "verification_source": "same_run_api",
+                        "verification_error": "unknown_run_conclusion",
+                        "watch_exit_code": code}
+            if conclusion == "success":
+                report.setdefault("warnings", []).append(
+                    f"workflow_watch_error_recovered:{label}"
+                )
+            return {"status": "success" if conclusion == "success" else "failed",
+                    "verification_source": "same_run_api",
+                    "watch_exit_code": code, "observed_conclusion": conclusion}
+        if status not in {"queued", "in_progress", "requested", "waiting", "pending"}:
+            return {"status": "unverified", "verification_source": "same_run_api",
+                    "verification_error": "unknown_run_status",
+                    "watch_exit_code": code}
+    return {"status": "unverified", "verification_source": "same_run_api",
+            "verification_error": "run_completion_not_observed",
+            "watch_exit_code": code}
+
+
+def run_hosted_ops_workflows(report: dict) -> bool:
     repo = "onnellab/onnel-content-engine"
     workflows = [
         ("app_operational_status", "Sync app operational status", ["-f", "deploy_dashboard=false"]),
