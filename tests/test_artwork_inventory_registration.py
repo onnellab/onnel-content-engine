@@ -28,7 +28,9 @@ def png(width=3, height=4, color=1):
 class RegistrationTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.base = Path(self.temp.name)
+        # macOS temp roots may use /var -> /private/var; normalize the owned
+        # fixture root, while production symlink rejection remains unchanged.
+        self.base = Path(self.temp.name).resolve()
         self.project, self.site = self.base / "app", self.base / "site"
         self.project.mkdir()
         self.site.mkdir()
