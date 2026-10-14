@@ -1177,12 +1177,25 @@ def main() -> int:
             print(json.dumps({"state": report["state"], "blockers": report["blockers"]}))
             return 0 if not report["blockers"] else 2
         publish_local_ops_sources(report)
-        if not run_hosted_ops_workflows(report):
-            finalize(report)
-            print(json.dumps({"state": report["state"], "blockers": report["blockers"]}))
-            return 2
-        run_store_review_auto_replies(report)
-        run_ops_dashboard_deploy(report)
+        hosted_sources_ready = run_hosted_ops_workflows(report)
+        if hosted_sources_ready:
+            run_store_review_auto_replies(report)
+            if any(
+                blocker.startswith("store_review_reply_verification_unavailable:")
+                or blocker in {
+                    "store_review_verification_sync_unavailable",
+                    "store_review_verification_sync_failed",
+                }
+                for blocker in report["blockers"]
+            ):
+                report["ops_dashboard_skip_reason"] = "store_review_publication_unverified"
+            else:
+                run_ops_dashboard_deploy(report)
+        else:
+            report["hosted_ops_downstream"] = "skipped_unverified_or_failed_source"
+        # Aether reconciliation/music is independent of hosted workflows. A
+        # transient GitHub outage must not make us miss the 09:00 music slot.
+        # The existing post-Ops clean-worktree check still fails closed.
         code, status, _ = run_step(report, "post_ops_repo_status", ["git", "status", "--porcelain"], timeout=30)
         if code != 0 or status.strip():
             report["blockers"].append("repo_dirty_after_ops_snapshot")
