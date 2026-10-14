@@ -218,6 +218,45 @@ from the reporting-only ChatGPT task. Until the install is verified, report
 the partial result honestly; a GitHub commit or an MYBOX file listing is
 **not** evidence that today's compilation was produced.
 
+## GitHub workflow watch 502 reconciliation
+
+The Mac LaunchAgent is the **only** executor and dispatcher. A nonzero exit from
+`gh run watch --exit-status` is ambiguous because the GitHub **jobs** API can
+return HTTP 502 while the already-dispatched workflow ultimately succeeds.
+Never classify the watched workflow as failed solely from this CLI exit.
+
+After a nonzero watch, the same local worker now polls the read-only
+`/repos/onnellab/onnel-content-engine/actions/runs/<original-run-id>`
+endpoint. The query returns only an allowlisted set of run metadata:
+`id, name, status, conclusion, event, head_branch`. To trust the result it
+must match the dispatched run ID, expected workflow name, `workflow_dispatch`
+event and `main` branch. Run/job logs, credentials and headers are never
+written to the durable report.
+
+- `completed + success` => `success` with
+  `verification_source=same_run_api` and
+  `workflow_watch_error_recovered:<step>` warning.
+- `completed + failure/cancelled/timed_out/other nonsuccess` => real
+  `failed` with the confirmed conclusion.
+- In progress, unavailable API, malformed or mismatched run identity, or
+  missing terminal conclusion => bounded read-only polling, then `unverified`
+  with an explicit `*_workflow_verification_unavailable` blocker.
+- The polling is limited to 90 metadata reads spaced 10 seconds apart, with
+  early fail-closed stop after 6 consecutive read errors. No workflow is
+  dispatched or retried during reconciliation.
+- For the sequential app/AI/review source sync chain, a truly failed or
+  unverified predecessor prevents subsequent dispatches, reply approvals,
+  review publication and the Ops deploy. The Ops deploy and standing-review
+  publication paths use the same read-only check. Already dispatched review
+  replies retain their durable approval IDs and still require store-observed
+  reply proof before being reported as published.
+
+A prior local `partial` result with a watch error is **historical evidence**:
+reconciling its status for a report is read-only and does not rewrite the old
+`result.json`, reset its same-day state or trigger any production compensation.
+Scheduled ChatGPT verification remains file/GitHub-read-only; it must not invoke
+this helper independently, call local commands, or start GitHub workflows.
+
 ## Failure behavior
 
 The worker is single-instance. A second normal invocation on the same KST date
