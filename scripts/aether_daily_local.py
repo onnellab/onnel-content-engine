@@ -359,25 +359,25 @@ def run_hosted_ops_workflows(report: dict) -> bool:
         report["hosted_workflows"][key] = state
         if code != 0 or not run_id.isdigit():
             report["blockers"].append(f"{key}_workflow_dispatch_failed")
-            continue
-        code, _, _ = run_step(
-            report,
-            f"watch_{key}",
-            ["gh", "run", "watch", run_id, "-R", repo, "--exit-status", "--interval", "3"],
-            timeout=1800,
-        )
-        state["status"] = "success" if code == 0 else "failed"
-        if code != 0:
-            report["blockers"].append(f"{key}_workflow_failed")
+            return False
+        state.update(watch_hosted_run(
+            report, label=key, run_id=run_id, workflow=workflow,
+        ))
+        if state["status"] != "success":
+            report["blockers"].append(
+                f"{key}_workflow_failed" if state["status"] == "failed"
+                else f"{key}_workflow_verification_unavailable"
+            )
+            return False
 
     code, clean, _ = run_step(report, "hosted_ops_local_status", ["git", "status", "--porcelain"], timeout=30)
     if code != 0 or clean.strip():
         report["blockers"].append("hosted_ops_repo_not_clean")
-        return
+        return False
     code, _, _ = run_step(report, "hosted_ops_fetch", ["git", "fetch", "origin", "main"], timeout=120)
     if code != 0:
         report["blockers"].append("hosted_ops_fetch_failed")
-        return
+        return False
     code, counts, _ = run_step(
         report, "hosted_ops_divergence",
         ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
@@ -385,13 +385,15 @@ def run_hosted_ops_workflows(report: dict) -> bool:
     parts = counts.split()
     if code != 0 or len(parts) != 2 or int(parts[0]) != 0:
         report["blockers"].append("hosted_ops_divergence_invalid")
-        return
+        return False
     if int(parts[1]):
         code, _, _ = run_step(
             report, "hosted_ops_pull", ["git", "pull", "--ff-only", "origin", "main"], timeout=180,
         )
         if code != 0:
             report["blockers"].append("hosted_ops_pull_failed")
+            return False
+    return True
 
 
 def run_store_review_auto_replies(report: dict) -> None:
@@ -1172,7 +1174,10 @@ def main() -> int:
             print(json.dumps({"state": report["state"], "blockers": report["blockers"]}))
             return 0 if not report["blockers"] else 2
         publish_local_ops_sources(report)
-        run_hosted_ops_workflows(report)
+        if not run_hosted_ops_workflows(report):
+            finalize(report)
+            print(json.dumps({"state": report["state"], "blockers": report["blockers"]}))
+            return 2
         run_store_review_auto_replies(report)
         run_ops_dashboard_deploy(report)
         code, status, _ = run_step(report, "post_ops_repo_status", ["git", "status", "--porcelain"], timeout=30)
