@@ -41,7 +41,7 @@ def trigger(run_id="123", attempt="1"):
 class LocalChangeProbe(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
-        self.root = Path(self.temporary.name)
+        self.root = Path(self.temporary.name).resolve()
         self.engine = self.root / "engine"
         (self.engine / "data").mkdir(parents=True)
         self.site = self.root / "site"

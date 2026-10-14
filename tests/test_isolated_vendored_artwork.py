@@ -4,6 +4,7 @@ No test here invokes bubblewrap or app code. The separate trusted --self-test
 command is for the authorized Linux job and fails closed on denied namespaces.
 """
 import ast
+from contextlib import contextmanager
 import hashlib
 import json
 import os
@@ -18,10 +19,35 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import isolated_vendored_artwork as gate
 
 
+@contextmanager
+def mocked_linux_host():
+    """Supply only Linux namespace/system-mount facts to mocked command tests.
+
+    All application paths, symlinks and file reads still use the real filesystem.
+    No sandbox command or Linux-only production code is actually executed.
+    """
+    real_readlink, real_exists = os.readlink, Path.exists
+    namespaces = {"/proc/self/ns/net": "net:[unit-test-parent]",
+                  "/proc/self/ns/pid": "pid:[unit-test-parent]"}
+
+    def readlink(path, *args, **kwargs):
+        if os.fspath(path) in namespaces:
+            return namespaces[os.fspath(path)]
+        return real_readlink(path, *args, **kwargs)
+
+    def exists(path):
+        return True if str(path) in {"/usr", "/lib", "/lib64"} else real_exists(path)
+
+    with patch.object(gate.os, "readlink", side_effect=readlink), patch.object(Path, "exists", exists):
+        yield
+
+
 class BundleFixture(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.root = Path(self.temp.name)
+        # macOS temporary paths can begin with the system /var -> /private/var
+        # alias. Resolve the fixture itself, never the deliberate attack links.
+        self.root = Path(self.temp.name).resolve()
         self.repo = self.root / "repository"
         (self.repo / ".git/objects").mkdir(parents=True)
         (self.repo / ".git/HEAD").write_text("ref: refs/heads/main\n")
@@ -261,7 +287,7 @@ class SandboxContract(BundleFixture):
             captured["bootstrap"] = Path(mounts["/bootstrap.py"][1]).read_text()
             captured["git_config"] = Path(mounts["/app/.git/config"][1]).read_text()
             return subprocess.CompletedProcess(command, 0, "passed", "")
-        with patch.object(gate, "_runtime"), patch.object(gate.subprocess, "run", side_effect=run):
+        with mocked_linux_host(), patch.object(gate, "_runtime"), patch.object(gate.subprocess, "run", side_effect=run):
             gate.run_verified_gate(self.project, action, site)
         return captured
 
@@ -360,7 +386,9 @@ class SandboxContract(BundleFixture):
                 gate.run_verified_gate(self.project, "stage-site", site)
 
     def test_missing_bwrap_never_runs_an_unisolated_command(self):
-        with patch.object(gate, "BWRAP", self.root / "missing-bwrap"), patch.object(gate.subprocess, "run") as run:
+        with patch.object(gate.sys, "platform", "linux"), \
+                patch.object(gate, "BWRAP", self.root / "missing-bwrap"), \
+                patch.object(gate.subprocess, "run") as run:
             with self.assertRaisesRegex(ValueError, "no unisolated fallback"):
                 gate.run_verified_gate(self.project, "verify-site")
             run.assert_not_called()
@@ -415,6 +443,12 @@ class SandboxContract(BundleFixture):
 
 
 class EngineAllowlistAndProbe(unittest.TestCase):
+    def test_production_runtime_remains_linux_only(self):
+        with patch.object(gate.sys, "platform", "darwin"), patch.object(gate.subprocess, "run") as run:
+            with self.assertRaisesRegex(ValueError, "requires the Linux bubblewrap sandbox"):
+                gate.sandbox_preflight()
+            run.assert_not_called()
+
     def test_committed_ledger_has_all_27_canonical_files_and_exact_gate(self):
         data = gate.load_allowlist()
         self.assertEqual(len(data["sha256"]), 27)
@@ -435,19 +469,19 @@ class EngineAllowlistAndProbe(unittest.TestCase):
             self.assertNotIn("runpy", bootstrap)
             self.assertNotIn("release_artwork", bootstrap)
             return subprocess.CompletedProcess(command, 0, "ARTWORK_SANDBOX_OK\n", "")
-        with patch.object(gate, "_runtime"), patch.object(gate.subprocess, "run", side_effect=run):
+        with mocked_linux_host(), patch.object(gate, "_runtime"), patch.object(gate.subprocess, "run", side_effect=run):
             result = gate.sandbox_preflight()
         self.assertEqual(result["status"], "verified")
         self.assertNotIn("--bind", captured["command"])
 
     def test_runtime_probe_requires_exact_success_marker(self):
-        with patch.object(gate, "_runtime"), patch.object(gate.subprocess, "run", return_value=
+        with mocked_linux_host(), patch.object(gate, "_runtime"), patch.object(gate.subprocess, "run", return_value=
                 subprocess.CompletedProcess(["bwrap"], 0, "", "")):
             with self.assertRaisesRegex(ValueError, "did not confirm"):
                 gate.sandbox_preflight()
 
     def test_runtime_probe_rejects_denied_namespace(self):
-        with patch.object(gate, "_runtime"), patch.object(gate.subprocess, "run", return_value=
+        with mocked_linux_host(), patch.object(gate, "_runtime"), patch.object(gate.subprocess, "run", return_value=
                 subprocess.CompletedProcess(["bwrap"], 1, "", "Operation not permitted")) as run:
             with self.assertRaisesRegex(ValueError, "exit 1.*no unisolated fallback"):
                 gate.sandbox_preflight()
