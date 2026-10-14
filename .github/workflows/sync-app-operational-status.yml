@@ -1,9 +1,14 @@
 name: Sync app operational status
-run-name: ${{ inputs.artwork_read_only && 'Read-only artwork access probe' || (inputs.artwork_check_only || github.event_name == 'schedule') && 'Check reviewed artwork changes' || 'Sync app operational status' }}
+run-name: ${{ (inputs.artwork_read_only || inputs.artwork_docker_trial) && 'Read-only artwork access probe' || (inputs.artwork_check_only || github.event_name == 'schedule') && 'Check reviewed artwork changes' || 'Sync app operational status' }}
 
 on:
   workflow_dispatch:
     inputs:
+      artwork_docker_trial:
+        description: Public-fixture Docker isolation trial only; requires artwork_read_only and existing enforcing profile
+        required: false
+        default: false
+        type: boolean
       artwork_check_only:
         description: Update only when a current reviewed artwork candidate changes; otherwise no remote writes
         required: false
@@ -40,6 +45,14 @@ jobs:
       DEPLOY_DASHBOARD: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_dashboard }}
 
     steps:
+      - name: Validate read-only Docker trial inputs
+        if: inputs.artwork_docker_trial == true
+        run: |
+          if [ "${{ inputs.artwork_read_only }}" != "true" ]; then
+            echo "Docker trial requires artwork_read_only=true; no operations started" >&2
+            exit 1
+          fi
+
       - name: Checkout content engine
         uses: actions/checkout@v4
         with:
@@ -63,7 +76,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install isolated artwork verifier runtime
-        if: inputs.artwork_read_only == true || env.ARTWORK_CHECK_ONLY == 'true'
+        if: (inputs.artwork_read_only == true && inputs.artwork_docker_trial != true) || env.ARTWORK_CHECK_ONLY == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y bubblewrap
@@ -74,7 +87,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
         run: |
           set -euo pipefail
-          if [ "${{ inputs.artwork_read_only }}" = "true" ]; then
+          if [ "${{ inputs.artwork_docker_trial }}" = "true" ]; then
+            # This approved trial has no app/repository reads or credential use.
+            /usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 /usr/bin/python3 -I -B scripts/check_artwork_docker_isolation.py
+          elif [ "${{ inputs.artwork_read_only }}" = "true" ]; then
             python3 scripts/check_artwork_read_access.py
           else
             python3 scripts/sync_flutter_plugin_versions.py

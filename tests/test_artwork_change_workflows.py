@@ -22,6 +22,24 @@ class ArtworkChangeWorkflowTests(unittest.TestCase):
         self.assertIn('artwork_check_only:', status)
         self.assertIn('default: false', status)
 
+    def test_docker_trial_is_explicit_readonly_and_has_no_private_read_fallback(self):
+        text = STATUS.read_text()
+        blocks = steps(text)
+        self.assertTrue(blocks[0].startswith('Validate read-only Docker trial inputs'))
+        self.assertIn('inputs.artwork_docker_trial == true', blocks[0])
+        self.assertIn('inputs.artwork_read_only', blocks[0])
+        self.assertIn('exit 1', blocks[0])
+        self.assertIn("(inputs.artwork_read_only || inputs.artwork_docker_trial) && 'Read-only artwork access probe'", text)
+        install = next(b for b in blocks if b.startswith('Install isolated'))
+        self.assertIn('inputs.artwork_docker_trial != true', install)
+        guard = next(b for b in blocks if b.startswith('Sync GitHub main'))
+        self.assertIn('/usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 /usr/bin/python3 -I -B scripts/check_artwork_docker_isolation.py', guard)
+        self.assertLess(guard.index('check_artwork_docker_isolation.py'), guard.index('elif [ "${{ inputs.artwork_read_only }}"'))
+        self.assertNotIn('|| python', guard)
+        production = (ROOT / 'scripts/isolated_vendored_artwork.py').read_text()
+        self.assertNotIn('check_artwork_docker_isolation', production)
+        self.assertNotIn('docker', production.lower())
+
     def test_existing_bound_read_step_prepares_full_local_evidence_before_probe(self):
         block = next(b for b in steps(STATUS.read_text()) if b.startswith('Sync GitHub main'))
         names = ['sync_flutter_plugin_versions.py', 'sync_android_versions_from_repos.py',

@@ -160,3 +160,35 @@ output, profile names, host paths, credentials or private implementation code.
 The extra version/help reads do not retry the sandbox. Capability values alone
 are not proof of which security mechanism caused a failure. No kernel setting,
 profile, privilege or isolation option is changed by this diagnostic path.
+
+## Explicit public-fixture Docker trial
+
+The separately approved experiment uses the existing status workflow with
+`artwork_read_only=true`, `artwork_docker_trial=true`,
+`artwork_check_only=false`, and `deploy_dashboard=false`. The trial input defaults
+to false. Invalid combinations fail before checkout or other operations. Both
+valid and invalid trial requests use the publisher-excluded read-only run title.
+The trial branch clears inherited environment variables and does not call the
+private repository access probe, install bubblewrap, or execute any app code.
+
+Only an already-running local Docker daemon with existing access and an
+already-loaded enforcing `docker-default` profile is eligible. Missing or
+unverifiable prerequisites stop before image pull or container creation. No
+profile loading, daemon restart, group/socket permission change, host setting
+change, privileged/unconfined container or fallback is permitted.
+
+The public synthetic-canary trial is separate from production verification.
+It does not replace bubblewrap, select or publish app artwork, or enable a
+schedule. A passed trial establishes only the tested container boundaries;
+production adoption requires a separate reviewed change. The existing rootful
+Docker daemon is a different trust boundary, even with a nonroot child process.
+
+The chosen official linux/amd64 Python 3.12.15 bookworm image is pinned to
+`docker.io/library/python@sha256:edd0b3ec946cc68bd20e39480bd03929016d0fb6254cbf870cd3bc55ea25116d`.
+Its config ID is
+`sha256:61d53b56a648da09aa966c5cc46a7e751aea2b38d01f33b04456a9f289685be9`.
+Raw registry metadata hashes were verified on 2026-10-14; the matching official
+[image record](https://github.com/docker-library/repo-info/blob/ac916a0682807597ecd7a991ebf852e366b2571c/repos/python/remote/3.12-bookworm.md)
+and [package inventory](https://github.com/docker-library/repo-info/blob/b109cef5939d0a66fe91551f7d663a910a90d0cb/repos/python/local/3.12-bookworm.md)
+confirm the immutable image and Git dependency. A digest fixes identity, not a
+promise of vulnerability-free software or automatic security updates.
