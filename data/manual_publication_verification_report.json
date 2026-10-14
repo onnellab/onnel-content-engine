@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-13T14:33:53+09:00",
+  "checked_at": "2026-10-14T12:34:46+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 72,
-    "already_done": 67,
+    "already_done": 68,
     "verified": 0,
-    "pending": 5
+    "pending": 4
   },
   "items": [
     {
@@ -814,6 +814,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0053::devto::en::markdown",
+      "topic_id": "TOPIC-0053",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/check-an-epubs-table-of-contents-and-chapter-order-25g6",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0020::x::en::x",
       "topic_id": "TOPIC-0020",
       "platform": "x",
@@ -855,18 +867,6 @@
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0053::devto::en::markdown",
-      "topic_id": "TOPIC-0053",
-      "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
       "status": "pending",
       "reason": "No matching public post found",
       "posted_url": "",
