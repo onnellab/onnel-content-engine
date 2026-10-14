@@ -244,6 +244,9 @@ written to the durable report.
 - The polling is limited to 90 metadata reads spaced 10 seconds apart, with
   early fail-closed stop after 6 consecutive read errors. No workflow is
   dispatched or retried during reconciliation.
+- Hosted workflow verification failures stop the dependent hosted stage but do
+  not automatically cancel independent Aether reconciliation or music slots;
+  those still require the usual clean-worktree and timing gates.
 - For the sequential app/AI/review source sync chain, a truly failed or
   unverified predecessor prevents subsequent dispatches, reply approvals,
   review publication and the Ops deploy. The Ops deploy and standing-review
