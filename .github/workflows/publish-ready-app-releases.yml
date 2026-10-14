@@ -18,6 +18,7 @@ jobs:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     name: Publish public-store-confirmed release notes
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: write
     env:
@@ -35,6 +36,14 @@ jobs:
           repository: onnellab/onnellab.github.io
           path: ${{ env.HOMEPAGE_REPO_PATH }}
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+
+      - name: Checkout canonical artwork gate
+        uses: actions/checkout@v4
+        with:
+          repository: onnellab/onnellab-flutter-template
+          path: .artwork-template
+          token: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+          persist-credentials: false
 
       - name: Refresh main before dashboard mutation
         run: git pull --ff-only origin main
@@ -54,6 +63,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+
+      - name: Verify artwork publication contracts
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_homepage_release_artwork.py'
+          node --test "$HOMEPAGE_REPO_PATH/scripts/screenshot-versions-contract.mjs"
 
       - name: Install Playwright
         run: |
@@ -84,6 +99,18 @@ jobs:
           python3 scripts/generate_app_release_report.py
           python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
 
+      - name: Stage independently reviewed public-release app detail artwork
+        env:
+          ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 scripts/sync_homepage_release_artwork.py stage \
+            --homepage-repo "$HOMEPAGE_REPO_PATH" \
+            --gate .artwork-template/template/assets/store_promo/release_artwork.py \
+            --work-dir "$RUNNER_TEMP/release-artwork-apps" \
+            --report "$RUNNER_TEMP/artwork-staging.json"
+
       - name: Commit content engine release state
         run: |
           set -euo pipefail
@@ -105,7 +132,7 @@ jobs:
             git push origin HEAD:main
           fi
 
-      - name: Deploy manual publish dashboard
+      - name: Deploy dashboard and verified app detail artwork
         run: |
           set -euo pipefail
           mkdir -p "$HOMEPAGE_REPO_PATH/public/ops"
@@ -116,10 +143,32 @@ jobs:
           python3 scripts/validate_manual_publish_site.py --sealed "$HOMEPAGE_REPO_PATH/public/ops/index.html"
           git -C "$HOMEPAGE_REPO_PATH" diff --check
           git -C "$HOMEPAGE_REPO_PATH" add public/ops/
+          python3 scripts/sync_homepage_release_artwork.py stage-git \
+            --homepage-repo "$HOMEPAGE_REPO_PATH" \
+            --report "$RUNNER_TEMP/artwork-staging.json"
           if git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
-            echo "No manual publish dashboard changes"
+            echo "No dashboard or verified artwork changes"
           else
-            git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh app release dashboard"
+            git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh app release dashboard and verified detail artwork"
             git -C "$HOMEPAGE_REPO_PATH" pull --rebase origin main
             git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
           fi
+
+      - name: Verify deployed app detail image hashes and retain receipt
+        run: |
+          set -euo pipefail
+          python3 scripts/verify_homepage_release_artwork.py \
+            --staging-report "$RUNNER_TEMP/artwork-staging.json" \
+            --output "$RUNNER_TEMP/artwork-deployment-receipt.json" \
+            --deployment-sha "$(git -C "$HOMEPAGE_REPO_PATH" rev-parse HEAD)"
+
+      - name: Retain artwork staging and public verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artwork-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/artwork-staging.json
+            ${{ runner.temp }}/artwork-deployment-receipt.json
+          if-no-files-found: warn
+          retention-days: 30
