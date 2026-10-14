@@ -236,10 +236,11 @@ synthetic-image, environment, mount, namespace, capability and cleanup checks
 remain required; this mode is not production adoption or scheduled publication.
 
 
-### Prepared read-only Docker adapter (not selected)
+### Read-only Docker adapter (normal publisher not selected)
 
 `run_verified_gate(..., backend="docker-readonly")` is a prepared explicit API;
-all workflow and CLI calls retain the default `bubblewrap` backend. Docker staging
+the normal publisher and default CLI retain the `bubblewrap` backend. Only the
+explicit diagnostic below selects Docker. Docker staging
 is rejected. This adapter is not operationally enabled by the synthetic trial.
 It revalidates the exact independent canonical allowlist and custom-root adapter,
 copies verified bytes without reopening their source, masks checkout Git
@@ -251,3 +252,23 @@ The existing rootful Docker daemon remains a trusted host component; this does
 not provide bubblewrap's separate user namespace. Operational selection requires
 explicit authorization for recurring bounded profile inspection and a live
 read-only gate verification before any site staging or automatic scheduling.
+
+
+### Explicit real-app read-only Docker probe
+
+After the bounded recurring profile-reader and existing rootful Docker trust
+boundary have been approved, `artwork_docker_app_probe=true` selects an explicit
+read-only verification run. Set `artwork_read_only=true`, all other diagnostic
+inputs false, `artwork_check_only=false`, and `deploy_dashboard=false`.
+It reuses the existing credential-bound repository reader; no new credential
+binding is added. Credentials never enter the container or fixed profile reader.
+
+A fresh synthetic isolation check must pass before private app execution. Fresh
+registered app copies are independently hash-validated, then eligible canonical
+gates execute `verify-site` only. Unsupported custom roots, unverified inventories, and canonical bundle
+rejections are reported separately from successful gate execution. A generic
+gate failure leaves the runtime/evidence distinction unverified. Empty or partial coverage is not a successful run.
+Any gate/runtime/cleanup failure stops subsequent containers without retry; a
+nonzero attach is not misclassified as a proven per-app evidence rejection. The
+normal publisher still selects bubblewrap, Docker staging stays disabled, and
+no automatic schedule is added by this diagnostic.

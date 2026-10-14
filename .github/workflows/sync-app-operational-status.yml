@@ -1,9 +1,14 @@
 name: Sync app operational status
-run-name: ${{ (inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection || inputs.artwork_docker_profile_trial) && 'Read-only artwork access probe' || (inputs.artwork_check_only || github.event_name == 'schedule') && 'Check reviewed artwork changes' || 'Sync app operational status' }}
+run-name: ${{ (inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection || inputs.artwork_docker_profile_trial || inputs.artwork_docker_app_probe) && 'Read-only artwork access probe' || (inputs.artwork_check_only || github.event_name == 'schedule') && 'Check reviewed artwork changes' || 'Sync app operational status' }}
 
 on:
   workflow_dispatch:
     inputs:
+      artwork_docker_app_probe:
+        description: Read-only real app gate verification using approved Docker isolation; requires artwork_read_only
+        required: false
+        default: false
+        type: boolean
       artwork_docker_profile_trial:
         description: Public Docker trial with fresh approved read-only profile inspection; requires artwork_read_only
         required: false
@@ -56,14 +61,14 @@ jobs:
 
     steps:
       - name: Validate read-only isolation diagnostic inputs
-        if: inputs.artwork_docker_trial == true || inputs.artwork_profile_inspection == true || inputs.artwork_docker_profile_trial == true
+        if: inputs.artwork_docker_trial == true || inputs.artwork_profile_inspection == true || inputs.artwork_docker_profile_trial == true || inputs.artwork_docker_app_probe == true
         run: |
           if [ "${{ inputs.artwork_read_only }}" != "true" ]; then
             echo "Isolation diagnostics require artwork_read_only=true; no operations started" >&2
             exit 1
           fi
           diagnostic_count=0
-          for selected in "${{ inputs.artwork_docker_trial }}" "${{ inputs.artwork_profile_inspection }}" "${{ inputs.artwork_docker_profile_trial }}"; do
+          for selected in "${{ inputs.artwork_docker_trial }}" "${{ inputs.artwork_profile_inspection }}" "${{ inputs.artwork_docker_profile_trial }}" "${{ inputs.artwork_docker_app_probe }}"; do
             if [ "$selected" = "true" ]; then diagnostic_count=$((diagnostic_count + 1)); fi
           done
           if [ "$diagnostic_count" -ne 1 ]; then
@@ -94,7 +99,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install isolated artwork verifier runtime
-        if: (inputs.artwork_read_only == true && inputs.artwork_docker_trial != true && inputs.artwork_profile_inspection != true && inputs.artwork_docker_profile_trial != true) || env.ARTWORK_CHECK_ONLY == 'true'
+        if: (inputs.artwork_read_only == true && inputs.artwork_docker_trial != true && inputs.artwork_profile_inspection != true && inputs.artwork_docker_profile_trial != true && inputs.artwork_docker_app_probe != true) || env.ARTWORK_CHECK_ONLY == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y bubblewrap
@@ -105,7 +110,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
         run: |
           set -euo pipefail
-          if [ "${{ inputs.artwork_docker_profile_trial }}" = "true" ]; then
+          if [ "${{ inputs.artwork_docker_app_probe }}" = "true" ]; then
+            # Existing read credentials stay outside every container/helper.
+            python3 scripts/check_artwork_read_access.py --docker-verify
+          elif [ "${{ inputs.artwork_docker_profile_trial }}" = "true" ]; then
             # Fresh same-job fixed profile inspection; only public synthetic Docker fixtures.
             /usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 /usr/bin/python3 -I -B scripts/check_artwork_docker_isolation.py --inspect-profile-readonly
           elif [ "${{ inputs.artwork_profile_inspection }}" = "true" ]; then

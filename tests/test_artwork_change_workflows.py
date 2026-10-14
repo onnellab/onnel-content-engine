@@ -29,7 +29,7 @@ class ArtworkChangeWorkflowTests(unittest.TestCase):
         self.assertIn('inputs.artwork_docker_trial == true', blocks[0])
         self.assertIn('inputs.artwork_read_only', blocks[0])
         self.assertIn('exit 1', blocks[0])
-        self.assertIn("(inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection || inputs.artwork_docker_profile_trial) && 'Read-only artwork access probe'", text)
+        self.assertIn("(inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection || inputs.artwork_docker_profile_trial || inputs.artwork_docker_app_probe) && 'Read-only artwork access probe'", text)
         install = next(b for b in blocks if b.startswith('Install isolated'))
         self.assertIn('inputs.artwork_docker_trial != true', install)
         guard = next(b for b in blocks if b.startswith('Sync GitHub main'))
@@ -70,6 +70,20 @@ class ArtworkChangeWorkflowTests(unittest.TestCase):
         self.assertLess(guard.index('--inspect-profile-readonly'), guard.index('elif [ "${{ inputs.artwork_profile_inspection }}"'))
         self.assertNotIn('sudo', guard)
         self.assertNotIn('check_artwork_apparmor_profile', (ROOT / 'scripts/isolated_vendored_artwork.py').read_text())
+
+    def test_real_app_docker_probe_is_explicit_readonly_and_uses_existing_binding(self):
+        text = STATUS.read_text()
+        blocks = steps(text)
+        self.assertIn('artwork_docker_app_probe:', text)
+        self.assertIn('inputs.artwork_docker_app_probe == true', blocks[0])
+        self.assertIn('"${{ inputs.artwork_docker_app_probe }}"; do', blocks[0])
+        install = next(b for b in blocks if b.startswith('Install isolated'))
+        self.assertIn('inputs.artwork_docker_app_probe != true', install)
+        guard = next(b for b in blocks if b.startswith('Sync GitHub main'))
+        self.assertIn('python3 scripts/check_artwork_read_access.py --docker-verify', guard)
+        self.assertLess(guard.index('--docker-verify'), guard.index('elif [ "${{ inputs.artwork_docker_profile_trial }}"'))
+        self.assertNotIn('sudo', guard)
+        self.assertNotIn('stage-site', guard)
 
     def test_existing_bound_read_step_prepares_full_local_evidence_before_probe(self):
         block = next(b for b in steps(STATUS.read_text()) if b.startswith('Sync GitHub main'))

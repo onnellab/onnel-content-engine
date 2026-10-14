@@ -9,6 +9,7 @@ import csv
 import json
 import os
 import re
+import signal
 import sys
 import tempfile
 import subprocess
@@ -77,15 +78,20 @@ def check(config: Path, release_token: str, pages_token: str, fetch=request, emi
     return verified
 
 
-def check_bundles(config: Path, emit=print) -> None:
+def check_bundles(config: Path, emit=print, *, verify_backend: str | None = None) -> dict:
     """Inspect fresh authorized app copies as data; never execute their root CLIs."""
-    from isolated_vendored_artwork import validate_vendored_bundle
+    if verify_backend not in {None, "docker-readonly"}:
+        raise ValueError("Unsupported read-only artwork backend")
+    summary = {"registered": 0, "bundles_verified": 0, "gates_verified": 0, "unsupported": 0, "blocked": 0}
+    from isolated_vendored_artwork import validate_vendored_bundle, run_verified_gate
     from sync_homepage_release_artwork import checkout, locate_project, read_rows
     with tempfile.TemporaryDirectory(prefix="artwork-read-probe-") as directory:
         work = Path(directory)
         clones = {}
         clone_failures = {}
-        for row in read_rows(config):
+        rows = read_rows(config)
+        summary["registered"] = len(rows)
+        for row in rows:
             repo, slug = row["repository"], row["app_slug"]
             if repo not in clones and repo not in clone_failures:
                 try:
@@ -103,17 +109,60 @@ def check_bundles(config: Path, emit=print) -> None:
             except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as error:
                 # A missing/custom inventory is a per-app readiness limitation,
                 # not proof that the network or credential read failed.
-                emit(f"ARTWORK UNSUPPORTED {repo}/{slug} reason={phase} ({type(error).__name__})")
+                custom_root = str(error) == "Unsupported custom root artwork gate; a separately reviewed bridge is required"
+                if verify_backend is not None and not custom_root:
+                    summary["blocked"] += 1
+                    reason = "inventory_unverified" if phase == "inventory_missing_or_unsupported" else "canonical_bundle_unverified"
+                    emit(f"ARTWORK BLOCKED {repo}/{slug} reason={reason} ({type(error).__name__})")
+                else:
+                    summary["unsupported"] += 1
+                    reason = "custom_root_gate" if custom_root else phase
+                    emit(f"ARTWORK UNSUPPORTED {repo}/{slug} reason={reason} ({type(error).__name__})")
                 continue
+            summary["bundles_verified"] += 1
             emit(f"BUNDLE VERIFIED {repo}/{slug} source={bundle.source_commit}")
+            if verify_backend is not None:
+                try:
+                    run_verified_gate(project, "verify-site", backend=verify_backend)
+                except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
+                    summary["blocked"] += 1
+                    # A nonzero Docker attach cannot distinguish a boundary or
+                    # runtime failure from rejected artwork evidence. Stop every
+                    # subsequent container; never infer a safe per-app rejection.
+                    emit(f"ARTWORK BLOCKED {repo}/{slug} reason=runtime_or_gate_unverified")
+                    emit("READONLY ARTWORK SUMMARY " + json.dumps(summary, sort_keys=True))
+                    raise ValueError("Read-only artwork runtime or gate unverified; remaining probes stopped") from None
+                else:
+                    summary["gates_verified"] += 1
+                    emit(f"ARTWORK VERIFIED {repo}/{slug} backend=docker-readonly")
         if clone_failures:
             raise ValueError("; ".join(clone_failures.values()))
+    return summary
 
 
-def main() -> int:
+def _main(argv: list[str] | None = None) -> int:
+    arguments = sys.argv[1:] if argv is None else argv
+    if arguments not in ([], ["--docker-verify"]):
+        print("Unsupported read-only artwork probe arguments", file=sys.stderr)
+        return 1
+    docker_verify = bool(arguments)
     config = ROOT / "data/app_release_config.csv"
     try:
         check(config, os.environ.get("GITHUB_TOKEN", ""), os.environ.get("GITHUB_TOKEN", ""))
+        if docker_verify:
+            from check_artwork_docker_isolation import run_trial
+            proof = run_trial(inspect_profile_readonly=True)
+            if proof.get("status") != "passed" or proof.get("cleanup") != "verified":
+                raise ValueError("Synthetic Docker isolation proof was not verified")
+            print("ISOLATION VERIFIED: public synthetic Docker proof passed before app execution")
+            summary = check_bundles(config, verify_backend="docker-readonly")
+            print("READONLY ARTWORK SUMMARY " + json.dumps(summary, sort_keys=True))
+            if (summary["gates_verified"] == 0 or summary["blocked"] or summary["unsupported"]
+                    or summary["gates_verified"] != summary["registered"]):
+                print("Read-only artwork coverage incomplete; no publication performed")
+                return 1
+            print("Read-only artwork gates verified for the registered apps; no publication performed")
+            return 0
         from isolated_vendored_artwork import sandbox_preflight
         sandbox_preflight()
         print("ISOLATION VERIFIED: no app code executed")
@@ -123,6 +172,22 @@ def main() -> int:
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
         print(str(error), file=sys.stderr)
         return 1
+
+
+def main(argv: list[str] | None = None) -> int:
+    arguments = sys.argv[1:] if argv is None else argv
+    if arguments != ["--docker-verify"]:
+        return _main(arguments)
+    def interrupted(signum, frame):
+        raise KeyboardInterrupt
+    previous = signal.signal(signal.SIGTERM, interrupted)
+    try:
+        return _main(arguments)
+    except KeyboardInterrupt:
+        print("Read-only artwork probe interrupted; no publication performed", file=sys.stderr)
+        return 1
+    finally:
+        signal.signal(signal.SIGTERM, previous)
 
 
 if __name__ == "__main__":
