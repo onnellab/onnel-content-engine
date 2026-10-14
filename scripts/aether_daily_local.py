@@ -247,7 +247,98 @@ def run_youtube_reports(report: dict) -> None:
             report["blockers"].append(f"youtube_report_{profile}_failed")
 
 
-def run_hosted_ops_workflows(report: dict) -> None:
+# gh run watch relies on the /jobs API; its HTTP 502 is not proof
+# that the already-dispatched workflow run itself failed.
+WORKFLOW_RECHECK_INTERVAL_SECONDS = 10
+WORKFLOW_RECHECK_MAX_POLLS = 90
+WORKFLOW_RECHECK_MAX_API_ERRORS = 6
+
+
+def watch_hosted_run(
+    report: dict, *, label: str, run_id: str, workflow: str,
+    watch_timeout: int = 1800, max_polls: int = WORKFLOW_RECHECK_MAX_POLLS,
+) -> dict:
+    """Verify an existing workflow run without creating a new attempt.
+
+    A nonzero gh watch exit is ambiguous. Read only the original ID's
+    /actions/runs endpoint, with exact workflow/branch/event matching.
+    Incomplete/unavailable evidence is unverified, never a proven failure.
+    """
+    repo = "onnellab/onnel-content-engine"
+    if not isinstance(run_id, str) or not run_id.isdecimal():
+        return {"status": "unverified", "verification_error": "invalid_run_id"}
+    code, _, _ = run_step(
+        report, f"watch_{label}",
+        ["gh", "run", "watch", run_id, "-R", repo, "--exit-status", "--interval", "3"],
+        timeout=watch_timeout,
+    )
+    if code == 0:
+        return {"status": "success", "watch_exit_code": 0,
+                "verification_source": "gh_run_watch_exit_status"}
+
+    # Only safe run metadata enters the local report; do not read logs/jobs.
+    selection = "{id: .id, name: .name, status: .status, conclusion: .conclusion, event: .event, head_branch: .head_branch}"
+    api_errors = 0
+    for attempt in range(1, max_polls + 1):
+        if attempt > 1:
+            time.sleep(WORKFLOW_RECHECK_INTERVAL_SECONDS)
+        result_code, stdout, _ = run_step(
+            report, f"verify_{label}_run_{attempt}",
+            ["gh", "api", "-X", "GET", f"repos/{repo}/actions/runs/{run_id}",
+             "--jq", selection],
+            timeout=45,
+        )
+        if result_code != 0:
+            api_errors += 1
+            if api_errors >= WORKFLOW_RECHECK_MAX_API_ERRORS:
+                return {"status": "unverified", "verification_source": "same_run_api",
+                        "verification_error": "run_api_unavailable",
+                        "watch_exit_code": code, "api_error_count": api_errors}
+            continue
+        try:
+            observed = json.loads(stdout)
+        except (TypeError, ValueError):
+            return {"status": "unverified", "verification_source": "same_run_api",
+                    "verification_error": "invalid_run_metadata",
+                    "watch_exit_code": code}
+        if not isinstance(observed, dict) or (
+            type(observed.get("id")) is not int
+            or str(observed.get("id")) != run_id
+            or observed.get("name") != workflow
+            or observed.get("event") != "workflow_dispatch"
+            or observed.get("head_branch") != "main"
+        ):
+            return {"status": "unverified", "verification_source": "same_run_api",
+                    "verification_error": "run_identity_mismatch",
+                    "watch_exit_code": code}
+        api_errors = 0
+        status = observed.get("status")
+        if status == "completed":
+            conclusion = observed.get("conclusion")
+            if conclusion not in {
+                "success", "failure", "cancelled", "timed_out",
+                "action_required", "neutral", "skipped", "stale",
+            }:
+                return {"status": "unverified", "verification_source": "same_run_api",
+                        "verification_error": "unknown_run_conclusion",
+                        "watch_exit_code": code}
+            if conclusion == "success":
+                report.setdefault("warnings", []).append(
+                    f"workflow_watch_error_recovered:{label}"
+                )
+            return {"status": "success" if conclusion == "success" else "failed",
+                    "verification_source": "same_run_api",
+                    "watch_exit_code": code, "observed_conclusion": conclusion}
+        if status not in {"queued", "in_progress", "requested", "waiting", "pending"}:
+            return {"status": "unverified", "verification_source": "same_run_api",
+                    "verification_error": "unknown_run_status",
+                    "watch_exit_code": code}
+    return {"status": "unverified", "verification_source": "same_run_api",
+            "verification_error": "run_completion_not_observed",
+            "watch_exit_code": code}
+
+
+def run_hosted_ops_workflows(report: dict) -> bool:
     repo = "onnellab/onnel-content-engine"
     workflows = [
         ("app_operational_status", "Sync app operational status", ["-f", "deploy_dashboard=false"]),
@@ -268,25 +359,25 @@ def run_hosted_ops_workflows(report: dict) -> None:
         report["hosted_workflows"][key] = state
         if code != 0 or not run_id.isdigit():
             report["blockers"].append(f"{key}_workflow_dispatch_failed")
-            continue
-        code, _, _ = run_step(
-            report,
-            f"watch_{key}",
-            ["gh", "run", "watch", run_id, "-R", repo, "--exit-status", "--interval", "3"],
-            timeout=1800,
-        )
-        state["status"] = "success" if code == 0 else "failed"
-        if code != 0:
-            report["blockers"].append(f"{key}_workflow_failed")
+            return False
+        state.update(watch_hosted_run(
+            report, label=key, run_id=run_id, workflow=workflow,
+        ))
+        if state["status"] != "success":
+            report["blockers"].append(
+                f"{key}_workflow_failed" if state["status"] == "failed"
+                else f"{key}_workflow_verification_unavailable"
+            )
+            return False
 
     code, clean, _ = run_step(report, "hosted_ops_local_status", ["git", "status", "--porcelain"], timeout=30)
     if code != 0 or clean.strip():
         report["blockers"].append("hosted_ops_repo_not_clean")
-        return
+        return False
     code, _, _ = run_step(report, "hosted_ops_fetch", ["git", "fetch", "origin", "main"], timeout=120)
     if code != 0:
         report["blockers"].append("hosted_ops_fetch_failed")
-        return
+        return False
     code, counts, _ = run_step(
         report, "hosted_ops_divergence",
         ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
@@ -294,13 +385,15 @@ def run_hosted_ops_workflows(report: dict) -> None:
     parts = counts.split()
     if code != 0 or len(parts) != 2 or int(parts[0]) != 0:
         report["blockers"].append("hosted_ops_divergence_invalid")
-        return
+        return False
     if int(parts[1]):
         code, _, _ = run_step(
             report, "hosted_ops_pull", ["git", "pull", "--ff-only", "origin", "main"], timeout=180,
         )
         if code != 0:
             report["blockers"].append("hosted_ops_pull_failed")
+            return False
+    return True
 
 
 def run_store_review_auto_replies(report: dict) -> None:
@@ -386,13 +479,16 @@ def run_store_review_auto_replies(report: dict) -> None:
         if code != 0 or not run_id.isdigit():
             report["blockers"].append(f"store_review_reply_dispatch_failed:{review_id}")
             continue
-        code, _, _ = run_step(
-            report,
-            f"watch_review_reply_{review_id}",
-            ["gh", "run", "watch", run_id, "-R", "onnellab/onnel-content-engine", "--exit-status", "--interval", "3"],
-            timeout=1200,
+        observed = watch_hosted_run(
+            report, label=f"review_reply_{review_id}", run_id=run_id,
+            workflow="Publish Approved Store Review Reply", watch_timeout=1200,
         )
-        if code != 0:
+        if observed["status"] == "unverified":
+            report["blockers"].append(f"store_review_reply_verification_unavailable:{review_id}")
+            # It may already be published. Never start the next reply until
+            # the original external publication outcome is observable.
+            return
+        if observed["status"] == "failed":
             report["blockers"].append(f"store_review_reply_publish_failed:{review_id}")
         published_ids.append(review_id)
 
@@ -414,14 +510,15 @@ def run_store_review_auto_replies(report: dict) -> None:
     if code != 0 or not run_id.isdigit():
         report["blockers"].append("store_review_verification_sync_dispatch_failed")
         return
-    code, _, _ = run_step(
-        report,
-        "watch_review_verification_sync",
-        ["gh", "run", "watch", run_id, "-R", "onnellab/onnel-content-engine", "--exit-status", "--interval", "3"],
-        timeout=1800,
+    observed = watch_hosted_run(
+        report, label="review_verification_sync", run_id=run_id,
+        workflow="Sync Store Reviews",
     )
-    if code != 0:
-        report["blockers"].append("store_review_verification_sync_failed")
+    if observed["status"] != "success":
+        report["blockers"].append(
+            "store_review_verification_sync_failed" if observed["status"] == "failed"
+            else "store_review_verification_sync_unavailable"
+        )
         return
     code, _, _ = run_step(report, "review_verification_fetch", ["git", "fetch", "origin", "main"], timeout=120)
     if code != 0:
@@ -461,15 +558,14 @@ def run_ops_dashboard_deploy(report: dict) -> None:
     if code != 0 or not run_id.isdigit():
         report["blockers"].append("ops_dashboard_workflow_dispatch_failed")
         return
-    code, _, _ = run_step(
-        report,
-        "watch_ops_dashboard",
-        ["gh", "run", "watch", run_id, "-R", "onnellab/onnel-content-engine", "--exit-status", "--interval", "3"],
-        timeout=1800,
-    )
-    state["status"] = "success" if code == 0 else "failed"
-    if code != 0:
-        report["blockers"].append("ops_dashboard_workflow_failed")
+    state.update(watch_hosted_run(
+        report, label="ops_dashboard", run_id=run_id, workflow=workflow,
+    ))
+    if state["status"] != "success":
+        report["blockers"].append(
+            "ops_dashboard_workflow_failed" if state["status"] == "failed"
+            else "ops_dashboard_workflow_verification_unavailable"
+        )
         return
     code, _, _ = run_step(report, "ops_dashboard_fetch", ["git", "fetch", "origin", "main"], timeout=120)
     if code != 0:
@@ -1081,9 +1177,25 @@ def main() -> int:
             print(json.dumps({"state": report["state"], "blockers": report["blockers"]}))
             return 0 if not report["blockers"] else 2
         publish_local_ops_sources(report)
-        run_hosted_ops_workflows(report)
-        run_store_review_auto_replies(report)
-        run_ops_dashboard_deploy(report)
+        hosted_sources_ready = run_hosted_ops_workflows(report)
+        if hosted_sources_ready:
+            run_store_review_auto_replies(report)
+            if any(
+                blocker.startswith("store_review_reply_verification_unavailable:")
+                or blocker in {
+                    "store_review_verification_sync_unavailable",
+                    "store_review_verification_sync_failed",
+                }
+                for blocker in report["blockers"]
+            ):
+                report["ops_dashboard_skip_reason"] = "store_review_publication_unverified"
+            else:
+                run_ops_dashboard_deploy(report)
+        else:
+            report["hosted_ops_downstream"] = "skipped_unverified_or_failed_source"
+        # Aether reconciliation/music is independent of hosted workflows. A
+        # transient GitHub outage must not make us miss the 09:00 music slot.
+        # The existing post-Ops clean-worktree check still fails closed.
         code, status, _ = run_step(report, "post_ops_repo_status", ["git", "status", "--porcelain"], timeout=30)
         if code != 0 or status.strip():
             report["blockers"].append("repo_dirty_after_ops_snapshot")
