@@ -473,11 +473,20 @@ def sandbox_preflight() -> dict[str, str]:
             "environment": "allowlisted", "app": "read_only"}
 
 
-def run_verified_gate(project: Path, action: str, site: Path | None = None) -> None:
+def run_verified_gate(project: Path, action: str, site: Path | None = None, *,
+                      backend: str = "bubblewrap") -> None:
     if action not in {"verify-site", "stage-site"}:
         raise ValueError("Only verify-site and stage-site are permitted")
     if (action == "stage-site") != (site is not None):
         raise ValueError("A website destination is required only for stage-site")
+    if backend not in {"bubblewrap", "docker-readonly"}:
+        raise ValueError("Unsupported artwork isolation backend")
+    if backend == "docker-readonly":
+        if action != "verify-site" or site is not None:
+            raise ValueError("Docker artwork staging is not enabled")
+        from docker_artwork_runtime import verify
+        verify(project)
+        return
     verified = validate_vendored_bundle(project)
     destination = _no_symlink_path(site) if site is not None else None
     if destination is not None:

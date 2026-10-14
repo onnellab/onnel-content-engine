@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Opt-in, public synthetic Docker isolation trial; never an artwork backend.
+"""Opt-in public synthetic trial and trusted container-confinement primitives.
 
-No app checkout, private gate, credentials or publication is accepted by this
-module. Docker is contacted only through the existing local socket. Missing
+The trial entrypoint accepts no app checkout, private gate, or credentials.
+The default-off read-only adapter reuses only its trusted policy primitives. Docker is contacted only through the existing local socket. Missing
 access, policy, runtime or isolation fails closed; nothing repairs the host.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
 import hashlib
 import json
 import os
@@ -358,26 +359,44 @@ def _mount_specs(root: Path) -> list[tuple[Path, str, bool]]:
             (root / "empty-site-git", "/site/.git", True)]
 
 
-def _create_args(name: str, token: str, root: Path, facts: dict) -> list[str]:
+@dataclass(frozen=True)
+class LaunchSpec:
+    """Trusted engine-owned launch description, never populated from app metadata."""
+    mounts: tuple[tuple[Path, str, bool], ...]
+    arguments: tuple[str, ...]
+    environment: tuple[tuple[str, str], ...]
+    workdir: str = "/app"
+
+
+def _trial_spec(root: Path, facts: dict) -> LaunchSpec:
+    return LaunchSpec(tuple(_mount_specs(root)),
+                      (str(facts["uid"]), str(facts["gid"]),
+                       json.dumps(facts["namespaces"], sort_keys=True), str(root / "host-only")),
+                      tuple(CHILD_ENV.items()))
+
+
+def _create_args(name: str, token: str, root: Path, facts: dict, *,
+                 spec: LaunchSpec | None = None) -> list[str]:
+    spec = _trial_spec(root, facts) if spec is None else spec
     args = ["container", "create", "--pull=never", "--name", name, "--label", LABEL + "=" + token,
             "--network=none", "--read-only", "--user", f"{facts['uid']}:{facts['gid']}",
             "--cap-drop=ALL", "--security-opt=no-new-privileges=true",
             "--security-opt=apparmor=docker-default", "--ipc=private", "--cgroupns=private",
             "--hostname=artwork-trial", "--no-healthcheck", "--pids-limit=64", "--memory=256m",
-            "--cpus=1", "--log-driver=none", "--workdir=/app", "--entrypoint=/usr/bin/env",
+            "--cpus=1", "--log-driver=none", "--workdir=" + spec.workdir, "--entrypoint=/usr/bin/env",
             "--tmpfs", "/tmp:rw,nosuid,nodev,noexec,size=16m,mode=1777",
             "--tmpfs", "/run:rw,nosuid,nodev,noexec,size=1m,mode=755"]
-    for source, target, readonly in _mount_specs(root):
+    for source, target, readonly in spec.mounts:
         mount = f"type=bind,src={source},dst={target},bind-propagation=rprivate"
         mount += ",readonly,bind-recursive=readonly" if readonly else ",bind-recursive=disabled"
         args += ["--mount", mount]
-    return args + [APPROVED_IMAGE, "-i", *[key + "=" + value for key, value in CHILD_ENV.items()],
-                   "/usr/local/bin/python3", "-I", "-S", "-B", "/probe.py", str(facts["uid"]),
-                   str(facts["gid"]), json.dumps(facts["namespaces"], sort_keys=True), str(root / "host-only")]
+    return args + [APPROVED_IMAGE, "-i", *[key + "=" + value for key, value in spec.environment],
+                   "/usr/local/bin/python3", "-I", "-S", "-B", "/probe.py", *spec.arguments]
 
 
 def _validate_container(records: object, identity: str, name: str, token: str,
-                        root: Path, facts: dict, image_id: str) -> None:
+                        root: Path, facts: dict, image_id: str, *, spec: LaunchSpec | None = None) -> None:
+    spec = _trial_spec(root, facts) if spec is None else spec
     if not isinstance(records, list) or len(records) != 1 or not isinstance(records[0], dict):
         _blocked("container_metadata_invalid")
     item = records[0]
@@ -386,9 +405,9 @@ def _validate_container(records: object, identity: str, name: str, token: str,
         _blocked("container_metadata_invalid")
     if item.get("Id") != identity or item.get("Name") != "/" + name or item.get("Image") != image_id or config.get("Labels", {}).get(LABEL) != token:
         _blocked("container_identity_mismatch")
-    expected = _create_args(name, token, root, facts)
+    expected = _create_args(name, token, root, facts, spec=spec)
     command = expected[expected.index(APPROVED_IMAGE) + 1:]
-    if config.get("Entrypoint") != ["/usr/bin/env"] or config.get("Cmd") != command or config.get("User") != f"{facts['uid']}:{facts['gid']}" or config.get("WorkingDir") != "/app":
+    if config.get("Entrypoint") != ["/usr/bin/env"] or config.get("Cmd") != command or config.get("User") != f"{facts['uid']}:{facts['gid']}" or config.get("WorkingDir") != spec.workdir:
         _blocked("container_command_mismatch")
     # Validate loader-time environment too, before /usr/bin/env can clear it.
     # Docker's generated HOME/HOSTNAME occur at exec time, not in Config.Env;
@@ -412,9 +431,9 @@ def _validate_container(records: object, identity: str, name: str, token: str,
     if host.get("Tmpfs") != {"/tmp": "rw,nosuid,nodev,noexec,size=16m,mode=1777", "/run": "rw,nosuid,nodev,noexec,size=1m,mode=755"}:
         _blocked("container_temporary_mounts_mismatch")
     configured = host.get("Mounts", [])
-    if not isinstance(configured, list) or len(configured) != len(_mount_specs(root)):
+    if not isinstance(configured, list) or len(configured) != len(spec.mounts):
         _blocked("container_recursive_mounts_mismatch")
-    expected_configured = {target: (str(source), readonly) for source, target, readonly in _mount_specs(root)}
+    expected_configured = {target: (str(source), readonly) for source, target, readonly in spec.mounts}
     seen_configured = set()
     for mount in configured:
         target = mount.get("Target")
@@ -430,7 +449,7 @@ def _validate_container(records: object, identity: str, name: str, token: str,
         elif options.get("ReadOnlyForceRecursive") is not True or options.get("NonRecursive", False):
             _blocked("container_recursive_mounts_mismatch")
     mounts = item.get("Mounts", [])
-    expected_mounts = {target: (str(source), not readonly) for source, target, readonly in _mount_specs(root)}
+    expected_mounts = {target: (str(source), not readonly) for source, target, readonly in spec.mounts}
     # Engine versions may list tmpfs mounts here as well as in HostConfig.
     binds = [mount for mount in mounts if mount.get("Type") == "bind"]
     if len(binds) != len(expected_mounts) or any(mount.get("Type") not in {"bind", "tmpfs"} for mount in mounts):

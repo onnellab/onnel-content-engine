@@ -234,3 +234,20 @@ loading, security configuration, daemon restart, or production backend change is
 allowed. Standalone inspection continues to end after its report. All prior
 synthetic-image, environment, mount, namespace, capability and cleanup checks
 remain required; this mode is not production adoption or scheduled publication.
+
+
+### Prepared read-only Docker adapter (not selected)
+
+`run_verified_gate(..., backend="docker-readonly")` is a prepared explicit API;
+all workflow and CLI calls retain the default `bubblewrap` backend. Docker staging
+is rejected. This adapter is not operationally enabled by the synthetic trial.
+It revalidates the exact independent canonical allowlist and custom-root adapter,
+copies verified bytes without reopening their source, masks checkout Git
+credentials, and mounts the app, gate and engine bootstrap read-only. The
+bootstrap checks the actual container confinement before executing the unchanged
+import/process-restricted gate. Private stdout/stderr are never published.
+
+The existing rootful Docker daemon remains a trusted host component; this does
+not provide bubblewrap's separate user namespace. Operational selection requires
+explicit authorization for recurring bounded profile inspection and a live
+read-only gate verification before any site staging or automatic scheduling.

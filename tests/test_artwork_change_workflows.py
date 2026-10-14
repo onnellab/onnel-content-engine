@@ -38,7 +38,8 @@ class ArtworkChangeWorkflowTests(unittest.TestCase):
         self.assertNotIn('|| python', guard)
         production = (ROOT / 'scripts/isolated_vendored_artwork.py').read_text()
         self.assertNotIn('check_artwork_docker_isolation', production)
-        self.assertNotIn('docker', production.lower())
+        self.assertIn('backend: str = "bubblewrap"', production)
+        self.assertNotIn('backend="docker-readonly"', text)
 
     def test_profile_inspection_is_standalone_readonly_and_never_resumes_docker(self):
         text = STATUS.read_text()
