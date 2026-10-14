@@ -479,13 +479,16 @@ def run_store_review_auto_replies(report: dict) -> None:
         if code != 0 or not run_id.isdigit():
             report["blockers"].append(f"store_review_reply_dispatch_failed:{review_id}")
             continue
-        code, _, _ = run_step(
-            report,
-            f"watch_review_reply_{review_id}",
-            ["gh", "run", "watch", run_id, "-R", "onnellab/onnel-content-engine", "--exit-status", "--interval", "3"],
-            timeout=1200,
+        observed = watch_hosted_run(
+            report, label=f"review_reply_{review_id}", run_id=run_id,
+            workflow="Publish Approved Store Review Reply", watch_timeout=1200,
         )
-        if code != 0:
+        if observed["status"] == "unverified":
+            report["blockers"].append(f"store_review_reply_verification_unavailable:{review_id}")
+            # It may already be published. Never start the next reply until
+            # the original external publication outcome is observable.
+            return
+        if observed["status"] == "failed":
             report["blockers"].append(f"store_review_reply_publish_failed:{review_id}")
         published_ids.append(review_id)
 
@@ -507,14 +510,15 @@ def run_store_review_auto_replies(report: dict) -> None:
     if code != 0 or not run_id.isdigit():
         report["blockers"].append("store_review_verification_sync_dispatch_failed")
         return
-    code, _, _ = run_step(
-        report,
-        "watch_review_verification_sync",
-        ["gh", "run", "watch", run_id, "-R", "onnellab/onnel-content-engine", "--exit-status", "--interval", "3"],
-        timeout=1800,
+    observed = watch_hosted_run(
+        report, label="review_verification_sync", run_id=run_id,
+        workflow="Sync Store Reviews",
     )
-    if code != 0:
-        report["blockers"].append("store_review_verification_sync_failed")
+    if observed["status"] != "success":
+        report["blockers"].append(
+            "store_review_verification_sync_failed" if observed["status"] == "failed"
+            else "store_review_verification_sync_unavailable"
+        )
         return
     code, _, _ = run_step(report, "review_verification_fetch", ["git", "fetch", "origin", "main"], timeout=120)
     if code != 0:
@@ -554,15 +558,14 @@ def run_ops_dashboard_deploy(report: dict) -> None:
     if code != 0 or not run_id.isdigit():
         report["blockers"].append("ops_dashboard_workflow_dispatch_failed")
         return
-    code, _, _ = run_step(
-        report,
-        "watch_ops_dashboard",
-        ["gh", "run", "watch", run_id, "-R", "onnellab/onnel-content-engine", "--exit-status", "--interval", "3"],
-        timeout=1800,
-    )
-    state["status"] = "success" if code == 0 else "failed"
-    if code != 0:
-        report["blockers"].append("ops_dashboard_workflow_failed")
+    state.update(watch_hosted_run(
+        report, label="ops_dashboard", run_id=run_id, workflow=workflow,
+    ))
+    if state["status"] != "success":
+        report["blockers"].append(
+            "ops_dashboard_workflow_failed" if state["status"] == "failed"
+            else "ops_dashboard_workflow_verification_unavailable"
+        )
         return
     code, _, _ = run_step(report, "ops_dashboard_fetch", ["git", "fetch", "origin", "main"], timeout=120)
     if code != 0:
