@@ -10,6 +10,8 @@ import json
 import os
 import re
 import sys
+import tempfile
+import subprocess
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -36,16 +38,17 @@ def request(path: str, token: str) -> dict:
         return json.loads(raw)
 
 
-def check(config: Path, release_token: str, pages_token: str, fetch=request) -> list[str]:
+def check(config: Path, release_token: str, pages_token: str, fetch=request, emit=print) -> list[str]:
     if not release_token or not pages_token:
         raise ValueError("Existing release and Pages credentials are required")
     with config.open(newline="", encoding="utf-8") as handle:
         repositories = {row["repository"].strip() for row in csv.DictReader(handle)}
     if not repositories or any(not REPO.fullmatch(repo) for repo in repositories):
         raise ValueError("Invalid app repository registry")
-    checks = [(repo, release_token) for repo in sorted(repositories | {"onnellab/onnellab-flutter-template"})]
+    checks = [(repo, release_token) for repo in sorted(repositories)]
     checks += [("onnellab/onnellab.github.io", pages_token), ("onnellab/onnel-content-engine", pages_token)]
     verified = []
+    failures = []
     for repo, token in checks:
         try:
             metadata = fetch(repo, token)
@@ -61,19 +64,63 @@ def check(config: Path, release_token: str, pages_token: str, fetch=request) -> 
                 raise ValueError("Repository contents read not confirmed")
         except (OSError, ValueError, KeyError, TypeError) as error:
             # Never include a response body, header, token or redirect target.
-            raise ValueError(f"Existing credentials cannot verify {repo} ({type(error).__name__})") from None
+            status = (f" HTTP {error.code}" if isinstance(error, urllib.error.HTTPError)
+                      and type(error.code) is int and 100 <= error.code <= 599 else "")
+            message = f"Existing credentials cannot verify {repo} ({type(error).__name__}{status})"
+            failures.append(message)
+            emit("READ BLOCKED " + message)
+            continue
         verified.append(repo)
+        emit("READ VERIFIED " + repo)
+    if failures:
+        raise ValueError("; ".join(failures))
     return verified
 
 
+def check_bundles(config: Path, emit=print) -> None:
+    """Inspect fresh authorized app copies as data; never execute their root CLIs."""
+    from isolated_vendored_artwork import validate_vendored_bundle
+    from sync_homepage_release_artwork import checkout, locate_project, read_rows
+    with tempfile.TemporaryDirectory(prefix="artwork-read-probe-") as directory:
+        work = Path(directory)
+        clones = {}
+        clone_failures = {}
+        for row in read_rows(config):
+            repo, slug = row["repository"], row["app_slug"]
+            if repo not in clones and repo not in clone_failures:
+                try:
+                    clones[repo] = checkout(repo, work)
+                except (OSError, ValueError, subprocess.SubprocessError) as error:
+                    clone_failures[repo] = f"Fresh app checkout failed: {repo} ({type(error).__name__})"
+                    emit("READ BLOCKED " + clone_failures[repo])
+            if repo in clone_failures:
+                continue
+            phase = "inventory_missing_or_unsupported"
+            try:
+                project = locate_project(clones[repo], slug)
+                phase = "canonical_bundle_or_root_gate_untrusted"
+                bundle = validate_vendored_bundle(project)
+            except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as error:
+                # A missing/custom inventory is a per-app readiness limitation,
+                # not proof that the network or credential read failed.
+                emit(f"ARTWORK UNSUPPORTED {repo}/{slug} reason={phase} ({type(error).__name__})")
+                continue
+            emit(f"BUNDLE VERIFIED {repo}/{slug} source={bundle.source_commit}")
+        if clone_failures:
+            raise ValueError("; ".join(clone_failures.values()))
+
+
 def main() -> int:
+    config = ROOT / "data/app_release_config.csv"
     try:
-        for repo in check(ROOT / "data/app_release_config.csv", os.environ.get("GITHUB_TOKEN", ""),
-                          os.environ.get("GITHUB_TOKEN", "")):
-            print("READ VERIFIED " + repo)
-        print("Read-only preflight passed; no artwork, app release or site publication performed")
+        check(config, os.environ.get("GITHUB_TOKEN", ""), os.environ.get("GITHUB_TOKEN", ""))
+        from isolated_vendored_artwork import sandbox_preflight
+        sandbox_preflight()
+        print("ISOLATION VERIFIED: no app code executed")
+        check_bundles(config)
+        print("Read-only access/isolation preflight passed; unsupported app evidence remains blocked; no publication performed")
         return 0
-    except (OSError, ValueError) as error:
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
         print(str(error), file=sys.stderr)
         return 1
 

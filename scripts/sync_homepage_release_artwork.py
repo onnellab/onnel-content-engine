@@ -106,17 +106,16 @@ def locate_project(repository: Path, slug: str) -> Path:
     return found[0]
 
 
-def run_gate(gate: Path, action: str, project: Path, site: Path | None = None) -> None:
-    command = [sys.executable, str(gate), action, "--project", str(project)]
-    if site is not None:
-        command += ["--site", str(site)]
-    result = subprocess.run(command, capture_output=True, text=True, timeout=300)
-    if result.returncode:
-        # Gate diagnostics are ordinary project paths and evidence failures.
-        raise ValueError((result.stderr or result.stdout).strip()[-4000:])
+def run_gate(gate: None, action: str, project: Path, site: Path | None = None) -> None:
+    # Only the independently pinned bundle can execute, inside the OS sandbox.
+    # An arbitrary root CLI or caller-supplied gate is never a trusted substitute.
+    if gate is not None:
+        raise ValueError("Caller-supplied artwork gates are not supported")
+    from isolated_vendored_artwork import run_verified_gate
+    run_verified_gate(project, action, site=site)
 
 
-def stage_all(releases: Path, stores: Path, site: Path, gate: Path, work: Path) -> dict:
+def stage_all(releases: Path, stores: Path, site: Path, gate: None, work: Path) -> dict:
     report = {"schema_version": 1, "status": "staged_not_published", "apps": []}
     grouped: dict[str, list[dict[str, str]]] = {}
     for row in eligible_releases(releases, stores):
@@ -193,7 +192,6 @@ def main() -> int:
     parser.add_argument("--releases", type=Path, default=ROOT / "data/app_releases.csv")
     parser.add_argument("--stores", type=Path, default=ROOT / "data/store_versions.csv")
     parser.add_argument("--homepage-repo", type=Path, required=True)
-    parser.add_argument("--gate", type=Path)
     parser.add_argument("--work-dir", type=Path)
     parser.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
@@ -201,10 +199,12 @@ def main() -> int:
         if args.action == "stage-git":
             stage_git(args.homepage_repo, json.loads(args.report.read_text()))
             return 0
-        if not args.gate or not args.work_dir:
-            raise ValueError("stage requires --gate and --work-dir")
+        if not args.work_dir:
+            raise ValueError("stage requires --work-dir")
+        from isolated_vendored_artwork import sandbox_preflight
+        sandbox_preflight()
         report = stage_all(args.releases, args.stores, args.homepage_repo.resolve(),
-                           args.gate.resolve(strict=True), args.work_dir.resolve())
+                           None, args.work_dir.resolve())
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
         for app in report["apps"]:

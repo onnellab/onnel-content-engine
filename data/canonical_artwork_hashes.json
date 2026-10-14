@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "repository": "onnellab/onnellab-flutter-template",
+  "source_directory": "template/assets/store_promo",
+  "source_commits": [
+    "b6d2332c162a00285c3aa05186a47c0f6b18f5b4",
+    "e1744e271c6d669441e7ed35f97e109c990c14fc"
+  ],
+  "sha256": {
+    "README.md": "371b4f77ef46308047e8db3a137ae64d97c6fa5835fe47e6df9d989ca64f8d84",
+    "capture_android_release.py": "89d717f1a63c79f34500fabc56041b0699810d8421980b5cab1f450885b5f165",
+    "capture_apple_devices.py": "cd5f32bccc2434057d8579eb4f4891a880f46f80a1a180b91fab7d885ea5ae24",
+    "capture_iphone_duo.py": "61c795a25dd077060499518cbcfd7663c9c9f2cdf341c0fcb049da75a643b694",
+    "capture_release_identity.py": "32eaf2f07b38b62bcca4ec0da9e2380e6d58da7695792c466464cb44edbfccaf",
+    "creative_asset_core.py": "139c29ffbf5c26e6c53f6c52cc2d777a8250943c278102ec849454412497a9cd",
+    "header_icon_template.svg": "7a8c22ab3d01f2fa908348088c509990a8a055aa5152a9e96bb1d34d74d474ac",
+    "header_template.py": "35c5a8aa15140be8570ba5ed27c265b423281c5a097b9758920d0c9ed46f01ff",
+    "header_template.svg": "831caf42d682a0e6a81752f8804711e2f6f733c833886f7bc1e99b76fe93a22a",
+    "ios_device_manifest.example.json": "d1fc166ff3d1cf0d4931058573378cdabad971bf04512e73cc5c8fa5da91f6d9",
+    "play_manifest.example.json": "89fea08d614be6e1e38a3fca9b79e12b427ae10373985ce3c0588c2c608db52d",
+    "release_artwork.py": "9364e6e4db207e8c290fd3dba8e29f3d19f582aab5389e9ca527b25225445e4e",
+    "render_app_creatives.py": "dfc568299c879824f7d3318298a86df5a2d8d7afd5af70ac48560594c15b97f6",
+    "render_app_screenshot.py": "d027289848c40ceeccdbc43e26f237c341ee120357666fb51aae3333fc8bc70c",
+    "render_editorial_latest.py": "c654873db4ae5f80412df4242112386771089ce2874205e2804d9d6cf1082cb1",
+    "render_store_device_slots.py": "0ae15229692c576176ffe7ef37614d7011d9950a988dc659db14635febdacb7f",
+    "search_icon_template.svg": "55f480c52f466713142c362b759b3ed3d224994823b9cc1b43d9ca74f9310464",
+    "search_template.py": "7f16dc1c2e9bb2f4bd950e218827dcb24dd3c8f2beddb5cd29b6299e9449cb20",
+    "search_template.svg": "f8bf4f0c6a2bdc5d7729396bb84081f1d56b4455938d883177ced513a33cd96c",
+    "store_asset_workflow.py": "cac7bc614f11d41d4dbbea97f4112fd5b69c355f21d5723016955f21beba7f81",
+    "store_promo_focus.svg": "6e858042234b63c7d9f4d9a05d6dd4131c8b298612adb8d9dfcddd0b8e7004f6",
+    "store_promo_hero.svg": "3cc888f3ed6134d9ac13e33557917056196757c049c10782b534d701cd7931d7",
+    "store_promo_quiet.svg": "b1f297ea84325526d855555d68bbe8af18d9627890f81651ef3dd6d14a50c110",
+    "store_promo_template.py": "fcdf1fc218ead7e8239e76844b9b0dfe257b776da54cee5c2b02b831ec1f0a89",
+    "store_promo_template.svg": "ed2eceabf744c74c21cfef620c159c44ec943ddc930bbe0973b78e939da49c6a",
+    "verify_play_assets.py": "c96454c9a6b6aa57d801ac78537a161ba74a51e0aac7a3391a989cfca0120c18",
+    "verify_refresh_ios_creatives.py": "c0fc3d9c8b5b19758a3ffc68e7931103850f73b12a5718d874dcb7e2aafe7da2"
+  },
+  "root_adapter": {
+    "path": "assets/store_promo/release_artwork.py",
+    "sha256": "55c9afcbc66bf13b3e5f7033f0358b5ecfb146a740e6c445253fac05e769846c"
+  }
+}

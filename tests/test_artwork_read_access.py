@@ -2,7 +2,12 @@ import csv
 import importlib.util
 from pathlib import Path
 import tempfile
+import urllib.error
 import unittest
+from unittest.mock import patch
+from types import SimpleNamespace
+import sys
+sys.path.insert(0, str(Path(__file__).parents[1] / "scripts"))
 
 FILE = Path(__file__).parents[1] / 'scripts/check_artwork_read_access.py'
 spec = importlib.util.spec_from_file_location('access_probe', FILE)
@@ -23,8 +28,8 @@ class ReadAccessTests(unittest.TestCase):
 
     def test_deduplicated_exact_repo_reads_and_credential_separation(self):
         result = probe.check(self.config, 'release', 'pages', self.fetch)
-        self.assertEqual(len(result), 4)
-        self.assertEqual(len(self.calls), 8)
+        self.assertEqual(len(result), 3)
+        self.assertEqual(len(self.calls), 6)
         self.assertTrue(all(token == ('pages' if path.startswith(('onnellab/onnellab.github.io', 'onnellab/onnel-content-engine')) else 'release') for path, token in self.calls))
 
     def test_missing_credentials_or_invalid_repo_block_before_network(self):
@@ -42,6 +47,51 @@ class ReadAccessTests(unittest.TestCase):
         def denied(path, token): raise OSError('secret-token-value')
         with self.assertRaises(ValueError) as error: probe.check(self.config, 'release', 'pages', denied)
         self.assertNotIn('secret-token-value', str(error.exception))
+
+    def test_each_repository_reports_and_http_status_is_safe(self):
+        messages = []
+        def mixed(path, token):
+            if path == 'onnellab/app':
+                raise urllib.error.HTTPError('https://secret.invalid', 404, 'secret-body', {}, None)
+            return self.fetch(path, token)
+        with self.assertRaisesRegex(ValueError, 'HTTP 404') as caught:
+            probe.check(self.config, 'release', 'pages', mixed, emit=messages.append)
+        self.assertEqual(len(messages), 3)
+        self.assertEqual(sum('READ VERIFIED' in line for line in messages), 2)
+        self.assertNotIn('secret', str(caught.exception))
+        self.assertNotIn('flutter-template', ' '.join(messages))
+
+    def test_http_status_cannot_inject_nonnumeric_diagnostics(self):
+        def denied(path, token):
+            raise urllib.error.HTTPError('https://secret.invalid', 'secret-status', 'secret-body', {}, None)
+        with self.assertRaises(ValueError) as caught:
+            probe.check(self.config, 'release', 'pages', denied, emit=lambda _: None)
+        self.assertNotIn('secret', str(caught.exception))
+        self.assertNotIn('HTTP secret', str(caught.exception))
+
+    def test_fresh_bundle_probe_never_executes_app_code(self):
+        self.config.write_text('repository,app_slug\nonnellab/app,app\nonnellab/app,other\n')
+        messages = []
+        with patch('sync_homepage_release_artwork.checkout', return_value=Path('/fresh')) as clone, \
+             patch('sync_homepage_release_artwork.locate_project', side_effect=[Path('/fresh'), ValueError('custom inventory')]), \
+             patch('isolated_vendored_artwork.validate_vendored_bundle', return_value=SimpleNamespace(source_commit='a'*40)) as validate, \
+             patch('isolated_vendored_artwork.run_verified_gate') as execute:
+            probe.check_bundles(self.config, emit=messages.append)
+        clone.assert_called_once()
+        validate.assert_called_once_with(Path('/fresh'))
+        execute.assert_not_called()
+        self.assertIn('BUNDLE VERIFIED', messages[0])
+        self.assertIn('ARTWORK UNSUPPORTED', messages[1])
+
+    def test_bundle_checkout_failure_is_not_reported_as_success_or_retried(self):
+        self.config.write_text('repository,app_slug\nonnellab/app,app\nonnellab/app,other\n')
+        messages = []
+        with patch('sync_homepage_release_artwork.checkout', side_effect=OSError('secret value')) as clone:
+            with self.assertRaisesRegex(ValueError, 'Fresh app checkout failed') as caught:
+                probe.check_bundles(self.config, emit=messages.append)
+        clone.assert_called_once()
+        self.assertEqual(len(messages), 1)
+        self.assertNotIn('secret value', str(caught.exception))
 
     def test_redirects_do_not_forward_credentials(self):
         with self.assertRaisesRegex(ValueError, 'redirect'):

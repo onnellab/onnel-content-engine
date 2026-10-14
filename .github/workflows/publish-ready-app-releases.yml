@@ -33,53 +33,77 @@ jobs:
         with:
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
 
+      - name: Refresh main before dashboard mutation
+        run: git pull --ff-only origin main
+
+      - name: Gate automatic artwork checks by their exact changed run
+        id: artwork_run
+        env:
+          SOURCE_RUN_TITLE: ${{ github.event.workflow_run.display_title }}
+          SOURCE_RUN_ID: ${{ github.event.workflow_run.id }}
+          SOURCE_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+        run: |
+          set -euo pipefail
+          if [ "$SOURCE_RUN_TITLE" = "Check reviewed artwork changes" ]; then
+            python3 scripts/check_homepage_artwork_changes.py authorize \
+              --trigger data/artwork-change-trigger.json \
+              --source-run-id "$SOURCE_RUN_ID" \
+              --source-run-attempt "$SOURCE_RUN_ATTEMPT" \
+              --github-output "$GITHUB_OUTPUT"
+          else
+            echo "authorized=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout homepage
+        if: steps.artwork_run.outputs.authorized == 'true'
         uses: actions/checkout@v4
         with:
           repository: onnellab/onnellab.github.io
           path: ${{ env.HOMEPAGE_REPO_PATH }}
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
 
-      - name: Checkout canonical artwork gate
-        uses: actions/checkout@v4
-        with:
-          repository: onnellab/onnellab-flutter-template
-          path: .artwork-template
-          token: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
-          persist-credentials: false
-
-      - name: Refresh main before dashboard mutation
-        run: git pull --ff-only origin main
-
       - name: Configure Python
+        if: steps.artwork_run.outputs.authorized == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
+      - name: Install isolated artwork verifier runtime
+        if: steps.artwork_run.outputs.authorized == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y bubblewrap
+          python3 -c 'from scripts.isolated_vendored_artwork import sandbox_preflight; sandbox_preflight()'
+
       - name: Prepare automatic release readiness from confirmed public store versions
+        if: steps.artwork_run.outputs.authorized == 'true'
         run: |
           set -euo pipefail
           python3 scripts/fill_ready_app_releases.py
           python3 scripts/validate_app_releases.py
 
       - name: Configure Node
+        if: steps.artwork_run.outputs.authorized == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
       - name: Verify artwork publication contracts
+        if: steps.artwork_run.outputs.authorized == 'true'
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p 'test_homepage_release_artwork.py'
           node --test "$HOMEPAGE_REPO_PATH/scripts/screenshot-versions-contract.mjs"
 
       - name: Install Playwright
+        if: steps.artwork_run.outputs.authorized == 'true'
         run: |
           set -euo pipefail
           npm install playwright
           npx playwright install chromium --with-deps
 
       - name: Create public GitHub Releases
+        if: steps.artwork_run.outputs.authorized == 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
           ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN }}
@@ -88,6 +112,7 @@ jobs:
           python3 scripts/create_github_releases.py --publish
 
       - name: Sync GitHub release status
+        if: steps.artwork_run.outputs.authorized == 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
           ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN }}
@@ -96,6 +121,7 @@ jobs:
           python3 scripts/sync_github_release_status.py --allow-missing-token
 
       - name: Generate dashboard snapshots
+        if: steps.artwork_run.outputs.authorized == 'true'
         run: |
           set -euo pipefail
           python3 scripts/sync_ai_provider_pricing.py
@@ -103,6 +129,7 @@ jobs:
           python3 scripts/build_manual_publish_site.py --homepage-repo "$HOMEPAGE_REPO_PATH"
 
       - name: Stage independently reviewed public-release app detail artwork
+        if: steps.artwork_run.outputs.authorized == 'true'
         env:
           ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
@@ -110,11 +137,11 @@ jobs:
           set -euo pipefail
           python3 scripts/sync_homepage_release_artwork.py stage \
             --homepage-repo "$HOMEPAGE_REPO_PATH" \
-            --gate .artwork-template/template/assets/store_promo/release_artwork.py \
             --work-dir "$RUNNER_TEMP/release-artwork-apps" \
             --report "$RUNNER_TEMP/artwork-staging.json"
 
       - name: Commit content engine release state
+        if: steps.artwork_run.outputs.authorized == 'true'
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -136,6 +163,7 @@ jobs:
           fi
 
       - name: Deploy dashboard and verified app detail artwork
+        if: steps.artwork_run.outputs.authorized == 'true'
         run: |
           set -euo pipefail
           mkdir -p "$HOMEPAGE_REPO_PATH/public/ops"
@@ -158,6 +186,7 @@ jobs:
           fi
 
       - name: Verify deployed app detail image hashes and retain receipt
+        if: steps.artwork_run.outputs.authorized == 'true'
         run: |
           set -euo pipefail
           python3 scripts/verify_homepage_release_artwork.py \
@@ -166,7 +195,7 @@ jobs:
             --deployment-sha "$(git -C "$HOMEPAGE_REPO_PATH" rev-parse HEAD)"
 
       - name: Retain artwork staging and public verification evidence
-        if: always()
+        if: always() && steps.artwork_run.outputs.authorized == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: release-artwork-verification-${{ github.run_id }}-${{ github.run_attempt }}

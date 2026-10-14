@@ -1,9 +1,14 @@
 name: Sync app operational status
-run-name: ${{ inputs.artwork_read_only && 'Read-only artwork access probe' || 'Sync app operational status' }}
+run-name: ${{ inputs.artwork_read_only && 'Read-only artwork access probe' || (inputs.artwork_check_only || github.event_name == 'schedule') && 'Check reviewed artwork changes' || 'Sync app operational status' }}
 
 on:
   workflow_dispatch:
     inputs:
+      artwork_check_only:
+        description: Update only when a current reviewed artwork candidate changes; otherwise no remote writes
+        required: false
+        default: false
+        type: boolean
       artwork_read_only:
         description: Read-only artwork repository access test; skips all publication and status writes
         required: false
@@ -31,6 +36,7 @@ jobs:
       contents: write
     env:
       HOMEPAGE_REPO_PATH: .homepage
+      ARTWORK_CHECK_ONLY: ${{ inputs.artwork_read_only != true && (inputs.artwork_check_only == true || github.event_name == 'schedule') }}
       DEPLOY_DASHBOARD: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_dashboard }}
 
     steps:
@@ -56,7 +62,14 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Install isolated artwork verifier runtime
+        if: inputs.artwork_read_only == true || env.ARTWORK_CHECK_ONLY == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y bubblewrap
+
       - name: Sync GitHub main app versions and Flutter dependencies
+        id: artwork_guard
         env:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
         run: |
@@ -65,10 +78,26 @@ jobs:
             python3 scripts/check_artwork_read_access.py
           else
             python3 scripts/sync_flutter_plugin_versions.py
+            if [ "$ARTWORK_CHECK_ONLY" = "true" ]; then
+              # All these commands only update the disposable local checkout.
+              # No remote commit/push occurs unless reviewed artwork changes.
+              python3 scripts/sync_android_versions_from_repos.py
+              python3 scripts/check_store_versions.py
+              python3 scripts/prepare_app_release_rows.py
+              python3 scripts/fill_ready_app_releases.py
+              python3 scripts/check_homepage_artwork_changes.py stage \
+                --site "$HOMEPAGE_REPO_PATH" \
+                --run-id "$GITHUB_RUN_ID" \
+                --run-attempt "$GITHUB_RUN_ATTEMPT" \
+                --work-dir "$RUNNER_TEMP/artwork-change-preflight" \
+                --trigger data/artwork-change-trigger.json \
+                --report "$RUNNER_TEMP/artwork-change-preflight.json" \
+                --github-output "$GITHUB_OUTPUT"
+            fi
           fi
 
       - name: Sync Android fallback versions from app repositories
-        if: inputs.artwork_read_only != true
+        if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
         env:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
         run: |
@@ -76,26 +105,26 @@ jobs:
           python3 scripts/sync_android_versions_from_repos.py
 
       - name: Check public store versions
-        if: inputs.artwork_read_only != true
+        if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
         run: |
           set -euo pipefail
           python3 scripts/check_store_versions.py
 
       - name: Sync homepage release notes
-        if: inputs.artwork_read_only != true
+        if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
         run: |
           set -euo pipefail
           python3 -m unittest tests.test_homepage_release_notes_sync
           python3 scripts/sync_homepage_release_notes.py --homepage-repo "$HOMEPAGE_REPO_PATH"
 
       - name: Prepare app release candidates
-        if: inputs.artwork_read_only != true
+        if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
         run: |
           set -euo pipefail
           python3 scripts/prepare_app_release_rows.py
 
       - name: Sync GitHub release status
-        if: inputs.artwork_read_only != true
+        if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
         env:
           GITHUB_TOKEN: ${{ github.token }}
           ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN }}
@@ -104,13 +133,13 @@ jobs:
           python3 scripts/sync_github_release_status.py --allow-missing-token
 
       - name: Generate app release report
-        if: inputs.artwork_read_only != true
+        if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_app_release_report.py
 
       - name: Build operational dashboard
-        if: inputs.artwork_read_only != true && env.DEPLOY_DASHBOARD == 'true'
+        if: inputs.artwork_read_only != true && env.DEPLOY_DASHBOARD == 'true' && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
         run: |
           set -euo pipefail
           python3 scripts/build_manual_publish_site.py \
@@ -118,7 +147,7 @@ jobs:
             --store-review-triage /tmp/store-review-triage.json
 
       - name: Commit operational status snapshot
-        if: inputs.artwork_read_only != true
+        if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -137,6 +166,9 @@ jobs:
             data/app_release_sync_status.json \
             generated/reports/app_flutter_dependency_versions.md \
             generated/reports/app_releases.md
+          if [ "$ARTWORK_CHECK_ONLY" = "true" ]; then
+            git add data/artwork-change-trigger.json
+          fi
           if [ "$DEPLOY_DASHBOARD" = "true" ]; then
             echo "Dashboard plaintext artifacts stay out of git"
           fi
@@ -148,7 +180,7 @@ jobs:
           fi
 
       - name: Commit homepage release metadata and deploy dashboard
-        if: inputs.artwork_read_only != true
+        if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
         run: |
           set -euo pipefail
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"

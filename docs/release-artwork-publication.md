@@ -100,10 +100,55 @@ launch claim. No new schedule, workflow runner or app-release action is added.
 
 The existing `Sync app operational status` workflow accepts
 `artwork_read_only: true`. It reuses the already-bound credential in its existing
-repository-read step to read the configured app repositories and the private
-shared template; site/engine must still be public. It does not issue new tokens,
+repository-read step to read the configured app repositories and the public
+site/engine. The private shared template is not a runtime dependency. It does not issue new tokens,
 change permissions, mutate operational data, stage artwork, or publish. All
 mutation steps are skipped. Its run title is `Read-only artwork access probe`,
 which the existing publisher explicitly excludes from its workflow-run trigger.
 The normal manual workflow behavior remains unchanged. No schedule is enabled
 until this runtime check has actually succeeded using the existing credentials.
+
+## Isolated verifier and read-only runtime proof
+
+The publisher no longer reads the private template repository at runtime. It
+uses an existing app's vendored bundle only when all 27 files match the
+independently reviewed engine allowlist, and the app's root entry point matches
+the approved thin shim. The allowlist contains hashes, not template source.
+Unknown pins, missing dependencies, extra importable code, bytecode, symlinks or
+custom root gates block that app. Papira's distinct custom evidence remains
+unsupported until a separately reviewed bridge preserves its extra checks.
+There is no fallback to an older bundle or execution of arbitrary app code.
+
+The verified bytes execute with isolated Python inside Linux bubblewrap, with
+no network, credentials, host home, engine checkout or inherited environment.
+The app is read-only. Only stage-site receives the dedicated website directory,
+with its Git metadata hidden. Missing or denied OS isolation fails closed.
+The existing public standard-runner jobs install Ubuntu's bubblewrap package;
+no new credential, secret binding or permission is introduced.
+
+The existing status workflow's artwork_read_only input reports each repository
+read result, including a safe numeric HTTP status on failure, then exercises the
+actual sandbox and checks fresh app bundles as data. Unsupported app evidence
+is reported separately from successful access and isolation. This probe never
+executes app code, commits, publishes, or authorizes the follow-on publisher.
+A passed access/isolation probe alone does not prove any artwork was published.
+
+## Artwork-only change checks
+
+The existing status workflow has an opt-in artwork_check_only manual input.
+It refreshes store/version evidence locally and stages current reviewed artwork
+in a temporary checkout. Only a changed candidate or actual image bytes produces
+an engine trigger bound to the exact workflow run ID and run attempt. Timestamp
+or JSON-formatting-only changes do not create commits; an unchanged run preserves
+any old trigger bytes and skips all later operational mutations. Ordinary manual
+status runs retain their previous operational behavior.
+
+The sole existing publisher checks that exact trigger against its workflow_run
+source before proceeding. Reruns cannot reuse an earlier attempt's trigger.
+The publisher revalidates fresh app evidence rather than trusting the trigger as
+an approval. Existing concurrency serialization remains in effect.
+
+No hourly schedule is enabled in this patch. It remains contingent on verified
+read-only runtime access and isolation. Coverage is the current public-release
+registry and existing website pages, not every template consumer: registering
+other apps and resolving custom evidence are separate readiness requirements.

@@ -163,7 +163,7 @@ class Staging(unittest.TestCase):
     def test_stale_observation_blocks_before_network_or_site_changes(self):
         row = release(store_evidence_error='Public store observation is older than 24 hours')
         with patch.object(stage, 'eligible_releases', return_value=[row]), patch.object(stage, 'checkout') as checkout:
-            report = stage.stage_all(Path('releases'), Path('stores'), self.site, Path('gate'), self.root / 'work')
+            report = stage.stage_all(Path('releases'), Path('stores'), self.site, None, self.root / 'work')
         checkout.assert_not_called()
         self.assertEqual(report['apps'][0]['status'], 'blocked')
         self.assertIn('24 hours', report['apps'][0]['reason'])
@@ -176,7 +176,7 @@ class Staging(unittest.TestCase):
         self.project()
         rows = [release(version=version, store_checked_at='2026-10-14T00:00:00Z', store_url='https://play.google.com')]
         with patch.object(stage, 'eligible_releases', return_value=rows), patch.object(stage, 'checkout', return_value=self.repo), patch.object(stage, 'run_gate', side_effect=gate_effect):
-            return stage.stage_all(Path('releases'), Path('stores'), self.site, Path('gate'), self.root / 'work')
+            return stage.stage_all(Path('releases'), Path('stores'), self.site, None, self.root / 'work')
 
     def test_stale_review_blocks_without_staging(self):
         calls = []
@@ -217,7 +217,7 @@ class Staging(unittest.TestCase):
                 dest.parent.mkdir(parents=True)
                 dest.write_text(json.dumps(expected()[0]))
         with patch.object(stage, 'eligible_releases', return_value=rows), patch.object(stage, 'checkout', side_effect=lambda repo, work: self.repo if repo == 'onnellab/app' else badrepo), patch.object(stage, 'run_gate', side_effect=gate):
-            report = stage.stage_all(Path('releases'), Path('stores'), self.site, Path('gate'), self.root / 'work')
+            report = stage.stage_all(Path('releases'), Path('stores'), self.site, None, self.root / 'work')
         self.assertEqual([app['status'] for app in report['apps']], ['staged_not_published', 'blocked'])
 
     def test_git_stages_only_exact_verified_paths(self):
