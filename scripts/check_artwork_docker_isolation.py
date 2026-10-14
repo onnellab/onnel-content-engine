@@ -7,6 +7,7 @@ access, policy, runtime or isolation fails closed; nothing repairs the host.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -33,6 +34,10 @@ APPROVED_IMAGE_ENV = [
     "PYTHON_SHA256=c2c4321961fab0fb999d66e0cecf521c2ab3994c7992873ea99e306c1094fd5a",
 ]
 PROFILE_FILE = Path("/sys/kernel/security/apparmor/profiles")
+PROFILE_HELPER = Path(__file__).absolute().with_name("check_artwork_apparmor_profile.py")
+PROFILE_HELPER_SHA256 = "743b448efb35c21f6e6d98cda56bac9e7ff8b3f3a8bcbb5e226261133798fff3"
+PROFILE_HELPER_ENV = {"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8"}
+PROFILE_REPORT_LIMIT = 4096
 NAMESPACES = ("mnt", "net", "pid", "ipc", "uts", "cgroup")
 LABEL = "org.onnellab.artwork-isolation-trial"
 MARKER = "ARTWORK_DOCKER_TRIAL_OK\n"
@@ -128,7 +133,110 @@ def _blocked(category: str) -> None:
     raise TrialBlocked(category)
 
 
-def _profile_loaded() -> None:
+def _unique_profile_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError()
+        result[key] = value
+    return result
+
+
+def _validate_profile_report(raw: bytes) -> None:
+    """Accept only the unchanged helper's internally consistent success report."""
+    try:
+        if not raw or len(raw) > PROFILE_REPORT_LIMIT:
+            raise ValueError()
+        report = json.loads(raw.decode("utf-8", "strict"), object_pairs_hook=_unique_profile_object)
+        keys = {"status", "scope", "reason", "elevation_attempted", "precheck", "elevated",
+                "apparmor_enabled", "docker_default_enforcing_unique", "docker_continuation"}
+        if not isinstance(report, dict) or set(report) != keys:
+            raise ValueError()
+        if (report["status"] != "passed" or report["scope"] != "existing_apparmor_profile_read_only"
+                or report["reason"] != "existing_enforcing_profile_verified"
+                or report["apparmor_enabled"] is not True
+                or report["docker_default_enforcing_unique"] is not True
+                or report["docker_continuation"] is not False
+                or type(report["elevation_attempted"]) is not bool):
+            raise ValueError()
+
+        def record(value, identity):
+            if not isinstance(value, dict) or set(value) != {
+                    "protocol", "identity", "enabled_read", "profiles_read",
+                    "apparmor_enabled", "docker_default_enforcing_unique"}:
+                raise ValueError()
+            if type(value["protocol"]) is not int or value["protocol"] != 1 or value["identity"] != identity:
+                raise ValueError()
+            for status_key, bool_key in (("enabled_read", "apparmor_enabled"),
+                                          ("profiles_read", "docker_default_enforcing_unique")):
+                status, flag = value[status_key], value[bool_key]
+                if status not in {"ok", "EACCES", "EPERM"}:
+                    raise ValueError()
+                if (status == "ok" and flag is not True) or (status != "ok" and flag is not None):
+                    raise ValueError()
+            return {value["enabled_read"], value["profiles_read"]}
+
+        statuses = record(report["precheck"], "nonroot")
+        if report["elevation_attempted"]:
+            if not statuses.intersection({"EACCES", "EPERM"}) or record(report["elevated"], "root") != {"ok"}:
+                raise ValueError()
+        elif statuses != {"ok"} or report["elevated"] is not None:
+            raise ValueError()
+    except (ValueError, TypeError, UnicodeError, RecursionError):
+        _blocked("readonly_profile_report_unverified")
+
+
+def _trusted_profile_helper() -> str:
+    """Return only the bounded, hash-reviewed bytes of the fixed public sibling."""
+    path = PROFILE_HELPER
+    if not path.is_absolute() or ".." in path.parts or path.name != "check_artwork_apparmor_profile.py":
+        _blocked("readonly_profile_helper_untrusted")
+    try:
+        for component in (*reversed(path.parents), path):
+            if stat.S_ISLNK(component.lstat().st_mode):
+                _blocked("readonly_profile_helper_untrusted")
+        if not stat.S_ISREG(path.lstat().st_mode):
+            _blocked("readonly_profile_helper_untrusted")
+        descriptor = os.open(path, os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW | os.O_NONBLOCK)
+        with os.fdopen(descriptor, "rb") as stream:
+            if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+                _blocked("readonly_profile_helper_untrusted")
+            payload = stream.read(65537)
+        if len(payload) > 65536 or hashlib.sha256(payload).hexdigest() != PROFILE_HELPER_SHA256:
+            _blocked("readonly_profile_helper_untrusted")
+        program = payload.decode("utf-8", "strict")
+    except OSError:
+        _blocked("readonly_profile_helper_unavailable")
+    except UnicodeError:
+        _blocked("readonly_profile_helper_untrusted")
+    return program
+
+
+def _inspect_profile_readonly() -> None:
+    # Execute the exact verified bytes, not a pathname that can change after the
+    # hash check. This public helper has no __file__ dependency or caller input.
+    # It remains unprivileged; only its unchanged constant reader can use sudo.
+    program = _trusted_profile_helper()
+    try:
+        result = subprocess.run(
+            ["/usr/bin/python3", "-I", "-S", "-B", "-c", program],
+            env=dict(PROFILE_HELPER_ENV), cwd="/", stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=35,
+            check=False, close_fds=True, shell=False,
+        )
+    except subprocess.TimeoutExpired:
+        _blocked("readonly_profile_inspection_timeout")
+    except OSError:
+        _blocked("readonly_profile_inspection_unavailable")
+    if result.returncode != 0:
+        _blocked("readonly_profile_inspection_blocked")
+    _validate_profile_report(result.stdout)
+
+
+def _profile_loaded(*, inspect_profile_readonly: bool = False) -> None:
+    if inspect_profile_readonly:
+        _inspect_profile_readonly()
+        return
     try:
         with PROFILE_FILE.open() as stream:
             profiles = stream.read(MAX_OUTPUT + 1)
@@ -142,7 +250,7 @@ def _profile_loaded() -> None:
         _blocked("existing_enforcing_docker_profile_required")
 
 
-def _host_facts() -> dict:
+def _host_facts(*, inspect_profile_readonly: bool = False) -> dict:
     if sys.platform != "linux":
         _blocked("linux_required")
     if os.getuid() == 0 or os.getgid() == 0:
@@ -155,7 +263,7 @@ def _host_facts() -> dict:
         namespaces = {name: os.readlink("/proc/self/ns/" + name) for name in NAMESPACES}
     except OSError:
         _blocked("existing_local_runtime_unavailable")
-    _profile_loaded()
+    _profile_loaded(inspect_profile_readonly=inspect_profile_readonly)
     return {"uid": os.getuid(), "gid": os.getgid(), "namespaces": namespaces}
 
 
@@ -187,8 +295,8 @@ class Client:
             _blocked(category + "_invalid")
 
 
-def _readiness(client: Client) -> dict:
-    facts = _host_facts()
+def _readiness(client: Client, *, inspect_profile_readonly: bool = False) -> dict:
+    facts = _host_facts(inspect_profile_readonly=inspect_profile_readonly)
     version = client.read_json(["version", "--format", VERSION_FORMAT], "docker_version_unavailable")
     info = client.read_json(["info", "--format", INFO_FORMAT], "docker_info_unavailable")
     if not isinstance(version, dict) or not isinstance(info, dict):
@@ -367,8 +475,10 @@ def _cleanup(client: Client, name: str, token: str, expected_id: str | None = No
             _blocked("cleanup_container_still_present")
 
 
-def run_trial() -> dict:
+def run_trial(*, inspect_profile_readonly: bool = False) -> dict:
     """Run one synthetic trial. No fallback, publication or production adoption."""
+    if type(inspect_profile_readonly) is not bool:
+        _blocked("profile_inspection_mode_invalid")
     if not re.fullmatch(r"docker\.io/library/python@sha256:[0-9a-f]{64}", APPROVED_IMAGE):
         _blocked("reviewed_official_image_digest_required")
     name = "onnellab-artwork-trial-" + uuid.uuid4().hex
@@ -380,7 +490,7 @@ def run_trial() -> dict:
         (config / "config.json").write_text("{}\n")
         (config / "config.json").chmod(0o600)
         client = Client(config)
-        facts = _readiness(client)
+        facts = _readiness(client, inspect_profile_readonly=inspect_profile_readonly)
         client.call(["image", "pull", "--platform=linux/amd64", APPROVED_IMAGE], "image_pull_failed", timeout=180)
         image_id = _validate_image(client.read_json(["image", "inspect", APPROVED_IMAGE], "image_inspect_failed"))
         for directory in ("app", "gate", "site"):
@@ -394,7 +504,7 @@ def run_trial() -> dict:
             (root / directory / ".git/config").write_text("public synthetic credential canary\n")
         (root / "clean-git-config").write_text(CLEAN_GIT_CONFIG)
         (root / "empty-site-git").mkdir(mode=0o755)
-        _profile_loaded()  # Never ask Docker to install a missing default policy.
+        _profile_loaded(inspect_profile_readonly=inspect_profile_readonly)
         attempted_create = False
         identity = None
         try:
@@ -406,7 +516,7 @@ def run_trial() -> dict:
             identity = candidate
             records = client.read_json(["container", "inspect", identity], "container_inspect_failed")
             _validate_container(records, identity, name, token, root, facts, image_id)
-            _profile_loaded()
+            _profile_loaded(inspect_profile_readonly=inspect_profile_readonly)
             result = client.call(["container", "start", "--attach", identity], "synthetic_probe_failed", timeout=45)
             if result.stdout != MARKER or result.stderr:
                 _blocked("synthetic_probe_output_invalid")
@@ -430,13 +540,16 @@ def run_trial() -> dict:
             "production_backend_changed": False}
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     def interrupted(signum, frame):
         raise KeyboardInterrupt
     previous = signal.signal(signal.SIGTERM, interrupted)
     try:
         try:
-            report = run_trial()
+            arguments = sys.argv[1:] if argv is None else argv
+            if arguments not in ([], ["--inspect-profile-readonly"]):
+                _blocked("arguments_not_supported")
+            report = run_trial(inspect_profile_readonly=bool(arguments))
         except TrialBlocked as error:
             report = {"schema_version": 1, "status": "blocked", "category": str(error),
                       "scope": "public_synthetic_only", "production_backend_changed": False}

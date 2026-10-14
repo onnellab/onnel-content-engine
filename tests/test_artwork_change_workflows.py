@@ -29,7 +29,7 @@ class ArtworkChangeWorkflowTests(unittest.TestCase):
         self.assertIn('inputs.artwork_docker_trial == true', blocks[0])
         self.assertIn('inputs.artwork_read_only', blocks[0])
         self.assertIn('exit 1', blocks[0])
-        self.assertIn("(inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection) && 'Read-only artwork access probe'", text)
+        self.assertIn("(inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection || inputs.artwork_docker_profile_trial) && 'Read-only artwork access probe'", text)
         install = next(b for b in blocks if b.startswith('Install isolated'))
         self.assertIn('inputs.artwork_docker_trial != true', install)
         guard = next(b for b in blocks if b.startswith('Sync GitHub main'))
@@ -53,6 +53,21 @@ class ArtworkChangeWorkflowTests(unittest.TestCase):
         self.assertIn('/usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 /usr/bin/python3 -I -S -B scripts/check_artwork_apparmor_profile.py', guard)
         self.assertLess(guard.index('check_artwork_apparmor_profile.py'), guard.index('elif [ "${{ inputs.artwork_docker_trial }}"'))
         self.assertNotIn('|| python', guard)
+        self.assertNotIn('check_artwork_apparmor_profile', (ROOT / 'scripts/isolated_vendored_artwork.py').read_text())
+
+    def test_combined_trial_is_explicit_and_fresh_without_changing_standalone_probe(self):
+        text = STATUS.read_text()
+        blocks = steps(text)
+        self.assertIn('artwork_docker_profile_trial:', text)
+        self.assertIn('diagnostic_count', blocks[0])
+        self.assertIn('"$diagnostic_count" -ne 1', blocks[0])
+        self.assertIn('inputs.artwork_docker_profile_trial', blocks[0])
+        install = next(b for b in blocks if b.startswith('Install isolated'))
+        self.assertIn('inputs.artwork_docker_profile_trial != true', install)
+        guard = next(b for b in blocks if b.startswith('Sync GitHub main'))
+        self.assertIn('/usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 /usr/bin/python3 -I -B scripts/check_artwork_docker_isolation.py --inspect-profile-readonly', guard)
+        self.assertLess(guard.index('--inspect-profile-readonly'), guard.index('elif [ "${{ inputs.artwork_profile_inspection }}"'))
+        self.assertNotIn('sudo', guard)
         self.assertNotIn('check_artwork_apparmor_profile', (ROOT / 'scripts/isolated_vendored_artwork.py').read_text())
 
     def test_existing_bound_read_step_prepares_full_local_evidence_before_probe(self):

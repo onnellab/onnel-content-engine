@@ -213,3 +213,24 @@ Reads and execution are bounded. Sudo may produce ordinary system audit records.
 No profile is loaded, no configuration is changed, and no daemon, image pull, or
 container is started. The diagnostic always ends after its report; even a positive
 result does not authorize or automatically resume the Docker trial or production.
+
+
+### Explicit synthetic trial with fresh profile inspection
+
+The standalone inspection is a snapshot of one ephemeral runner and cannot serve
+as runtime evidence for a different runner. The separate default-off
+`artwork_docker_profile_trial=true` mode combines the approved fixed read-only
+inspection and public synthetic Docker trial in the same job. Set
+`artwork_read_only=true`, `artwork_docker_trial=false`,
+`artwork_profile_inspection=false`, `artwork_check_only=false`, and
+`deploy_dashboard=false`. Exactly one diagnostic mode must be selected.
+
+This mode performs a fresh fixed inspection at every existing profile checkpoint;
+no previous workflow report is reused. Missing, unreadable, disabled, or
+non-enforcing evidence stops the trial. The approved helper may use noninteractive
+sudo only to resolve permission-denied reads of the two fixed kernel files.
+Docker itself still runs through the existing ordinary daemon access. No profile
+loading, security configuration, daemon restart, or production backend change is
+allowed. Standalone inspection continues to end after its report. All prior
+synthetic-image, environment, mount, namespace, capability and cleanup checks
+remain required; this mode is not production adoption or scheduled publication.

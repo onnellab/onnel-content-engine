@@ -1,6 +1,7 @@
 """Synthetic trial tests. Every Docker invocation is mocked, on every OS."""
 import copy
 from contextlib import ExitStack
+import hashlib
 import io
 import json
 import os
@@ -14,6 +15,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import check_artwork_docker_isolation as trial
+REAL_PROFILE_LOADED = trial._profile_loaded
 
 FACTS = {"uid": 1001, "gid": 1001,
          "namespaces": {name: name + ":[parent-test]" for name in trial.NAMESPACES}}
@@ -153,6 +155,7 @@ class TrialFixture(unittest.TestCase):
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)
         self.command = self.stack.enter_context(patch.object(trial.subprocess, "run", side_effect=self.fake))
+        self.stack.enter_context(patch.object(trial.subprocess, "Popen", side_effect=AssertionError("Real subprocess forbidden in unit tests")))
         self.host = self.stack.enter_context(patch.object(trial, "_host_facts", return_value=copy.deepcopy(FACTS)))
         self.profile = self.stack.enter_context(patch.object(trial, "_profile_loaded"))
         self.disk = self.stack.enter_context(patch.object(trial.shutil, "disk_usage", return_value=SimpleNamespace(free=3 * 1024 ** 3)))
@@ -435,14 +438,14 @@ class CleanupAndReporting(TrialFixture):
         self.fake.start_stderr = "Traceback: private/source.py SECRET_CANARY"
         stream = io.StringIO()
         with patch("sys.stdout", stream):
-            self.assertEqual(trial.main(), 1)
+            self.assertEqual(trial.main([]), 1)
         self.assertEqual(json.loads(stream.getvalue())["category"], "synthetic_probe_output_invalid")
         self.assertNotIn("SECRET_CANARY", stream.getvalue())
         self.assertNotIn("private/source", stream.getvalue())
 
     def test_unexpected_exception_details_are_sanitized(self):
         with patch.object(trial, "run_trial", side_effect=ValueError("private SECRET")), patch("sys.stdout", new_callable=io.StringIO) as stream:
-            self.assertEqual(trial.main(), 1)
+            self.assertEqual(trial.main([]), 1)
         self.assertNotIn("SECRET", stream.getvalue())
         self.assertEqual(json.loads(stream.getvalue())["category"], "trial_interrupted_or_internal_error")
 
@@ -483,6 +486,270 @@ class HostPolicyTests(unittest.TestCase):
         self.assertIn("libc.unshare", trial.PROBE)
         self.assertIn("dict(os.environ) == expected_env", trial.PROBE)
         self.assertIn("os.getgroups() == [gid]", trial.PROBE)
+
+
+def profile_report(*, elevated=True):
+    verified = {"protocol": 1, "identity": "nonroot", "enabled_read": "ok",
+                "profiles_read": "ok", "apparmor_enabled": True,
+                "docker_default_enforcing_unique": True}
+    report = {"status": "passed", "scope": "existing_apparmor_profile_read_only",
+              "reason": "existing_enforcing_profile_verified", "elevation_attempted": elevated,
+              "precheck": copy.deepcopy(verified), "elevated": None,
+              "apparmor_enabled": True, "docker_default_enforcing_unique": True,
+              "docker_continuation": False}
+    if elevated:
+        report["precheck"]["profiles_read"] = "EACCES"
+        report["precheck"]["docker_default_enforcing_unique"] = None
+        report["elevated"] = dict(verified, identity="root")
+    return report
+
+
+class CombinedProfileTrial(TrialFixture):
+    def setUp(self):
+        super().setUp()
+        self.helpers = []
+        self.events = []
+        self.reports = [profile_report(), profile_report(), profile_report()]
+        self.helper_error = None
+        self.helper_code = 0
+        self.trusted = self.stack.enter_context(patch.object(
+            trial, "_trusted_profile_helper",
+            return_value="# public synthetic helper fixture, never executed\n"))
+        self.profile.side_effect = REAL_PROFILE_LOADED
+
+        def facts(**kwargs):
+            trial._profile_loaded(**kwargs)
+            return copy.deepcopy(FACTS)
+
+        self.host.side_effect = facts
+        self.command.side_effect = self.dispatch
+
+    def dispatch(self, argv, **kwargs):
+        if argv[0] != "/usr/bin/python3":
+            self.events.append(tuple(argv[5:7]))
+            return self.fake(argv, **kwargs)
+        self.events.append(("profile",))
+        self.helpers.append((argv, kwargs))
+        self.assertEqual(argv, ["/usr/bin/python3", "-I", "-S", "-B", "-c", self.trusted.return_value])
+        self.assertEqual(kwargs["env"], trial.PROFILE_HELPER_ENV)
+        self.assertEqual(kwargs["cwd"], "/")
+        self.assertEqual(kwargs["stdin"], subprocess.DEVNULL)
+        self.assertEqual(kwargs["stderr"], subprocess.DEVNULL)
+        self.assertEqual(kwargs["stdout"], subprocess.PIPE)
+        self.assertEqual(kwargs["timeout"], 35)
+        self.assertIs(kwargs["close_fds"], True)
+        self.assertIs(kwargs["shell"], False)
+        if self.helper_error:
+            raise self.helper_error
+        report = self.reports[len(self.helpers) - 1]
+        raw = report if isinstance(report, bytes) else json.dumps(report).encode()
+        return subprocess.CompletedProcess(argv, self.helper_code, raw, None)
+
+    def test_three_fresh_same_invocation_proofs_before_pull_create_start(self):
+        with patch.dict(os.environ, {"GITHUB_TOKEN": "secret", "PYTHONPATH": "/untrusted", "LD_PRELOAD": "/untrusted"}):
+            report = trial.run_trial(inspect_profile_readonly=True)
+        self.assertEqual(report["status"], "passed")
+        self.assertEqual(len(self.helpers), 3)
+        self.assertEqual(self.trusted.call_count, 3)
+        checkpoints = [index for index, event in enumerate(self.events) if event == ("profile",)]
+        self.assertLess(checkpoints[0], self.events.index(("image", "pull")))
+        self.assertLess(checkpoints[1], self.events.index(("container", "create")))
+        self.assertLess(checkpoints[2], self.events.index(("container", "start")))
+        self.assertFalse(self.fake.exists)
+
+    def test_no_elevation_is_required_when_all_fresh_unprivileged_reads_pass(self):
+        self.reports = [profile_report(elevated=False) for _ in range(3)]
+        self.assertEqual(trial.run_trial(inspect_profile_readonly=True)["status"], "passed")
+        self.assertEqual(len(self.helpers), 3)
+
+    def test_failed_fresh_initial_proof_stops_before_any_docker_call(self):
+        self.reports[0]["docker_default_enforcing_unique"] = False
+        with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_report_unverified"):
+            trial.run_trial(inspect_profile_readonly=True)
+        self.assertEqual(len(self.helpers), 1)
+        self.assertFalse(self.fake.calls)
+
+    def test_profile_lost_before_create_never_creates_or_starts(self):
+        self.reports[1]["docker_default_enforcing_unique"] = False
+        with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_report_unverified"):
+            trial.run_trial(inspect_profile_readonly=True)
+        self.assertEqual(len(self.helpers), 2)
+        self.assertFalse(self.commands(["container", "create"]))
+        self.assertFalse(self.commands(["container", "start"]))
+
+    def test_profile_lost_before_start_cleans_owned_container(self):
+        self.reports[2]["docker_default_enforcing_unique"] = False
+        with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_report_unverified"):
+            trial.run_trial(inspect_profile_readonly=True)
+        self.assertEqual(len(self.helpers), 3)
+        self.assertFalse(self.commands(["container", "start"]))
+        self.assertEqual(self.commands(["container", "rm"]), [["container", "rm", "--force", self.fake.identity]])
+        self.assertFalse(self.fake.exists)
+
+    def test_helper_timeout_fails_closed_without_docker_or_retry(self):
+        self.helper_error = subprocess.TimeoutExpired("private source", 35, stderr="private secret")
+        with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_inspection_timeout"):
+            trial.run_trial(inspect_profile_readonly=True)
+        self.assertEqual(len(self.helpers), 1)
+        self.assertFalse(self.fake.calls)
+
+    def test_helper_permission_denial_fails_closed(self):
+        self.helper_error = PermissionError("private path")
+        with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_inspection_unavailable"):
+            trial.run_trial(inspect_profile_readonly=True)
+        self.assertFalse(self.fake.calls)
+
+    def test_nonzero_helper_output_is_sanitized_without_continuation(self):
+        self.helper_code = 1
+        self.reports[0] = b"private host path and secret diagnostic"
+        with patch("sys.stdout", new_callable=io.StringIO) as stream:
+            self.assertEqual(trial.main(["--inspect-profile-readonly"]), 1)
+        report = json.loads(stream.getvalue())
+        self.assertEqual(report["category"], "readonly_profile_inspection_blocked")
+        self.assertNotIn("secret", stream.getvalue())
+        self.assertFalse(self.fake.calls)
+
+
+class ProfileHelperTrust(unittest.TestCase):
+    def setUp(self):
+        self.stack = ExitStack()
+        self.addCleanup(self.stack.close)
+        self.stack.enter_context(patch.object(trial.subprocess, "run", side_effect=AssertionError("Real subprocess forbidden")))
+        self.stack.enter_context(patch.object(trial.subprocess, "Popen", side_effect=AssertionError("Real subprocess forbidden")))
+        temporary = self.stack.enter_context(tempfile.TemporaryDirectory())
+        self.root = Path(temporary).resolve()
+        self.helper = self.root / "check_artwork_apparmor_profile.py"
+        self.payload = b"# public synthetic helper fixture, never executed\n"
+        self.helper.write_bytes(self.payload)
+        self.stack.enter_context(patch.object(trial, "PROFILE_HELPER", self.helper))
+        self.stack.enter_context(patch.object(trial, "PROFILE_HELPER_SHA256", hashlib.sha256(self.payload).hexdigest()))
+
+    def test_only_reviewed_regular_helper_is_accepted(self):
+        self.assertEqual(trial._trusted_profile_helper(), self.payload.decode())
+
+    def test_replacement_after_verification_cannot_change_executed_bytes(self):
+        original = trial._trusted_profile_helper
+
+        def replace_after_validation():
+            program = original()
+            self.helper.write_text("# unreviewed replacement must never execute\n")
+            return program
+
+        completed = subprocess.CompletedProcess([], 0, json.dumps(profile_report()).encode(), None)
+        with patch.object(trial, "_trusted_profile_helper", side_effect=replace_after_validation), patch.object(trial.subprocess, "run", return_value=completed) as command:
+            trial._inspect_profile_readonly()
+        self.assertEqual(command.call_args.args[0], ["/usr/bin/python3", "-I", "-S", "-B", "-c", self.payload.decode()])
+        self.assertNotIn("unreviewed replacement", command.call_args.args[0][-1])
+
+    def test_changed_helper_fails_hash_check(self):
+        self.helper.write_bytes(b"# changed public fixture\n")
+        with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_helper_untrusted"):
+            trial._trusted_profile_helper()
+
+    def test_symlinked_helper_is_rejected_even_when_bytes_match(self):
+        target = self.root / "target.py"
+        self.helper.rename(target)
+        self.helper.symlink_to(target)
+        with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_helper_untrusted"):
+            trial._trusted_profile_helper()
+
+    def test_symlinked_ancestor_is_rejected_even_when_bytes_match(self):
+        alias = self.root / "alias"
+        alias.symlink_to(self.root, target_is_directory=True)
+        with patch.object(trial, "PROFILE_HELPER", alias / self.helper.name):
+            with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_helper_untrusted"):
+                trial._trusted_profile_helper()
+
+    def test_unknown_filename_relative_and_parent_traversal_rejected(self):
+        for path in (Path("check_artwork_apparmor_profile.py"), self.root / "other.py",
+                     self.root / ".." / self.root.name / self.helper.name):
+            with self.subTest(path=path), patch.object(trial, "PROFILE_HELPER", path):
+                with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_helper_untrusted"):
+                    trial._trusted_profile_helper()
+
+    def test_missing_helper_fails_closed(self):
+        self.helper.unlink()
+        with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_helper_unavailable"):
+            trial._trusted_profile_helper()
+
+    def test_directory_is_not_a_helper(self):
+        self.helper.unlink()
+        self.helper.mkdir()
+        with self.assertRaises(trial.TrialBlocked):
+            trial._trusted_profile_helper()
+
+    def test_fifo_is_rejected_before_open(self):
+        self.helper.unlink()
+        os.mkfifo(self.helper)
+        with patch.object(trial.os, "open", side_effect=AssertionError("Must reject FIFO before opening")):
+            with self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_helper_untrusted"):
+                trial._trusted_profile_helper()
+
+
+class ProfileReportValidation(unittest.TestCase):
+    def test_exact_success_reports_are_accepted(self):
+        for elevated in (False, True):
+            trial._validate_profile_report(json.dumps(profile_report(elevated=elevated)).encode())
+
+    def test_booleans_schema_and_semantic_contradictions_are_rejected(self):
+        mutations = [
+            lambda report: report.__setitem__("apparmor_enabled", 1),
+            lambda report: report.__setitem__("docker_default_enforcing_unique", "true"),
+            lambda report: report.__setitem__("docker_continuation", True),
+            lambda report: report.__setitem__("elevation_attempted", 1),
+            lambda report: report.__setitem__("scope", "different_scope"),
+            lambda report: report.__setitem__("status", "blocked"),
+            lambda report: report.__setitem__("reason", "unverified"),
+            lambda report: report.__setitem__("extra", "secret"),
+            lambda report: report["elevated"].__setitem__("protocol", True),
+            lambda report: report["elevated"].__setitem__("identity", "nonroot"),
+            lambda report: report["elevated"].__setitem__("profiles_read", "EACCES"),
+            lambda report: report["precheck"].__setitem__("apparmor_enabled", False),
+            lambda report: report.__setitem__("precheck", None),
+            lambda report: report.__setitem__("elevation_attempted", False),
+            lambda report: report.__setitem__("precheck", profile_report(elevated=False)["precheck"]),
+        ]
+        for mutate in mutations:
+            report = profile_report()
+            mutate(report)
+            with self.subTest(report=report), self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_report_unverified"):
+                trial._validate_profile_report(json.dumps(report).encode())
+
+    def test_malformed_oversized_duplicate_and_non_utf8_reports_rejected(self):
+        duplicate = json.dumps(profile_report()).replace('"status": "passed"', '"status": "passed", "status": "passed"').encode()
+        for raw in (b"", b"null", b"[]", b"{}", b"not json", b"\xff", b" " * 4097, duplicate):
+            with self.subTest(raw=raw[:50]), self.assertRaisesRegex(trial.TrialBlocked, "readonly_profile_report_unverified"):
+                trial._validate_profile_report(raw)
+
+
+class ExplicitProfileMode(TrialFixture):
+    def test_default_trial_never_invokes_profile_helper(self):
+        with patch.object(trial, "_inspect_profile_readonly", side_effect=AssertionError("Opt-in required")):
+            trial.run_trial()
+        self.host.assert_called_once_with(inspect_profile_readonly=False)
+        for call in self.profile.call_args_list:
+            self.assertEqual(call.kwargs, {"inspect_profile_readonly": False})
+
+    def test_main_flag_selects_only_explicit_mode(self):
+        for arguments, enabled in (([], False), (["--inspect-profile-readonly"], True)):
+            with self.subTest(arguments=arguments), patch.object(trial, "run_trial", return_value={"status": "passed"}) as run, patch("sys.stdout", new_callable=io.StringIO):
+                self.assertEqual(trial.main(arguments), 0)
+                run.assert_called_once_with(inspect_profile_readonly=enabled)
+
+    def test_unexpected_duplicate_and_value_arguments_are_rejected_without_echo(self):
+        for arguments in (["--inspect-profile-readonly", "--inspect-profile-readonly"],
+                          ["--inspect-profile-readonly=true"], ["--path", "SECRET"], ["--help"]):
+            with self.subTest(arguments=arguments), patch.object(trial, "run_trial") as run, patch("sys.stdout", new_callable=io.StringIO) as stream:
+                self.assertEqual(trial.main(arguments), 1)
+                run.assert_not_called()
+                self.assertEqual(json.loads(stream.getvalue())["category"], "arguments_not_supported")
+                self.assertNotIn("SECRET", stream.getvalue())
+
+    def test_api_mode_is_exact_boolean(self):
+        for value in (None, 1, "yes", []):
+            with self.subTest(value=value), self.assertRaisesRegex(trial.TrialBlocked, "profile_inspection_mode_invalid"):
+                trial.run_trial(inspect_profile_readonly=value)
+        self.command.assert_not_called()
 
 
 if __name__ == "__main__":
