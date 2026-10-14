@@ -24,9 +24,13 @@ missing, invalid or future timestamps block publication. The shared gate also
 binds its own SHA-256 into the reviewed candidate, so a different central gate
 version cannot silently approve an old app-bundled gate candidate.
 
-Only the shared gate's `stage-site` operation copies the Android detail gallery
-using the explicit `site_path` values. Home hero originals and other apps are
-outside its staging scope. No missing candidate, stale review, changed source,
+The shared gate's `verify-site` validates a complete current reviewed source
+set, then `stage-site` copies the Android store-edited detail gallery, or the
+medium-iPhone edited gallery when Android is absent. Selection is uniform across
+locales and records its reason; broken/partial/stale Android inputs never silently
+fall back. Explicit `site_path` values preserve route names. Featured homepage
+slots consume the same receipt-backed gallery with exact hashes and dimensions;
+other apps and legacy original files are outside staging scope. No missing candidate, stale review, changed source,
 wrong version or invalid image is replaced by an old screenshot fallback.
 
 ## States, publication and recovery
@@ -42,6 +46,8 @@ wrong version or invalid image is replaced by an old screenshot fallback.
    each locale's ordinary canonical app-detail HTML URL (without a cache-busting query) and complete ordered image set, every
    hash-versioned screenshot URL, actual downloaded SHA-256 and PNG dimensions, and HTML image width/height
    attributes matching those same reviewed dimensions.
+   It also checks every featured homepage slot for that app and locale against
+   the same reviewed index/hash/dimensions; a raw legacy fallback cannot pass.
    It waits up to ten minutes for deployment/CDN propagation. A push alone, a
    successful manifest fetch, or successful HTTP image status is insufficient.
 4. The workflow retains `artwork-staging.json` and
@@ -68,8 +74,10 @@ new persistent grants are created. A clone access failure stays blocked.
 route. Its `Cache-Control: ... immutable` contract requires a content-dependent
 URL. `screenshot-versions.mjs` appends `?v=<full SHA-256>` to gallery URLs while
 keeping source filesystem and generated static output paths query-free. The
-source bytes, image service boundary, home originals and app metadata remain
-unchanged. Gallery width/height comes from those same cached PNG bytes in the
+source bytes, image service boundary and app metadata remain unchanged.
+Homepage slots use the receipt when available; apps without a receipt retain
+their explicit legacy originals. An invalid receipt or missing requested locale
+fails the site build rather than silently displaying another source. Gallery width/height comes from those same cached PNG bytes in the
 selected locale; no app-specific size override remains. Unsupported or mixed-size
 legacy galleries retain the existing template fallback. The site helper must land before enabling the content-engine verifier.
 
@@ -80,3 +88,22 @@ legacy galleries retain the existing template fallback. The site helper must lan
 - The app gate's own independent evidence/geometry/capture tests remain required.
 - A live receipt is available only after a future authorized release runs and
   successfully deploys. Local fixture tests do not claim production publication.
+
+The existing operational-status completion trigger checks the latest committed
+artwork candidate automatically on its next successful run; it is not a local
+filesystem watcher. Merely producing uncommitted files or an unreviewed candidate
+cannot publish. Store-public observations authorize release status independently
+of the selected image platform, and iPhone fallback never creates an Android
+launch claim. No new schedule, workflow runner or app-release action is added.
+
+## Read-only runtime access test
+
+The existing `Sync app operational status` workflow accepts
+`artwork_read_only: true`. It reuses the already-bound credential in its existing
+repository-read step to read the configured app repositories and the private
+shared template; site/engine must still be public. It does not issue new tokens,
+change permissions, mutate operational data, stage artwork, or publish. All
+mutation steps are skipped. Its run title is `Read-only artwork access probe`,
+which the existing publisher explicitly excludes from its workflow-run trigger.
+The normal manual workflow behavior remains unchanged. No schedule is enabled
+until this runtime check has actually succeeded using the existing credentials.

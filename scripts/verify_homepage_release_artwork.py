@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify public app-detail HTML and exact artwork bytes after existing deployment.
+"""Verify public app-detail/homepage HTML and exact selected artwork bytes.
 
 The checked-in manifest remains staged_not_published. This separately retained
 receipt is the only deployed_verified claim; a successful git push is not one.
@@ -21,6 +21,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 LOCALES = {"en", "ko", "ja", "zh-Hans", "zh-Hant", "pt-BR", "de", "fr", "es"}
+SOURCE_REASONS = {"android": "android_edited_available", "iphone_medium": "android_edited_absent"}
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 
 
@@ -30,6 +31,29 @@ def digest(raw: bytes) -> str:
 
 def canonical(value: object) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
+
+
+def image_dimensions(attrs: dict[str, str | None]) -> list[int] | None:
+    values = (attrs.get("width") or "", attrs.get("height") or "")
+    return [int(value) for value in values] if all(
+        re.fullmatch(r"[1-9][0-9]*", value) for value in values) else None
+
+
+def is_static_product_icon(attrs: dict[str, str | None], slug: str) -> bool:
+    icons = [f"/home-assets/app-icons/{slug}-{size}.webp" for size in (96, 192)]
+    srcset = attrs.get("srcset") or ""
+    variants = [item.split() for item in srcset.split(",")] if srcset else []
+    return (attrs.get("data-home-artwork-icon") == "true" and attrs.get("src") in icons and
+            (not variants or variants == [[icons[0], "96w"], [icons[1], "192w"]]) and
+            not attrs.get("data-home-artwork-source") and not attrs.get("data-home-artwork-slug"))
+
+
+def require_unique_attributes(attributes: list[tuple[str, str | None]]) -> None:
+    names = [name for name, _ in attributes]
+    if len(names) != len(set(names)):
+        # Browsers keep the first duplicate attribute; dict(attributes) would
+        # keep the last and could otherwise verify a src the browser never uses.
+        raise ValueError("Duplicate HTML attributes in reviewed artwork scope")
 
 
 class Gallery(HTMLParser):
@@ -42,16 +66,20 @@ class Gallery(HTMLParser):
 
     def handle_starttag(self, tag: str, attributes: list[tuple[str, str | None]]) -> None:
         attrs = dict(attributes)
+        in_gallery = any(gallery for _, gallery in self.stack) or "data-screenshot-row" in attrs
+        if in_gallery or (tag == "main" and "data-product-slug" in attrs):
+            require_unique_attributes(attributes)
         if tag == "main" and "data-product-slug" in attrs:
             self.identity.append((attrs.get("data-product-slug"), attrs.get("data-product-locale")))
-        in_gallery = any(gallery for _, gallery in self.stack) or "data-screenshot-row" in attrs
+        if in_gallery and tag in {"picture", "source"}:
+            raise ValueError("Unexpected picture/source alternative in reviewed artwork")
         if tag == "img" and in_gallery:
+            if any(ancestor == "picture" for ancestor, _ in self.stack):
+                raise ValueError("Unexpected picture/source alternative in reviewed artwork")
             if not attrs.get("src") or attrs.get("srcset"):
                 raise ValueError("Expected exact static screenshot src without transformed variants")
             self.images.append(str(attrs["src"]))
-            width, height = attrs.get("width") or "", attrs.get("height") or ""
-            self.dimensions.append([int(width), int(height)] if all(
-                re.fullmatch(r"[1-9][0-9]*", value) for value in (width, height)) else None)
+            self.dimensions.append(image_dimensions(attrs))
         if tag not in VOID:
             self.stack.append((tag, in_gallery))
 
@@ -60,6 +88,134 @@ class Gallery(HTMLParser):
             if self.stack[i][0] == tag:
                 del self.stack[i:]
                 break
+
+
+class HomeArtwork(HTMLParser):
+    """Collect reviewed images and every matching featured container.
+
+    The page contract distinguishes an uninstrumented/old homepage from a new
+    homepage on which this app genuinely is not featured. A container is marked
+    even when its images fall back to legacy originals, so that fallback fails
+    verification rather than disappearing from the evidence.
+    """
+    def __init__(self, slug: str, locale: str) -> None:
+        super().__init__()
+        self.slug, self.locale = slug, locale
+        self.stack: list[tuple[str, int | None]] = []
+        self.identity: list[tuple[str | None, str | None]] = []
+        self.containers: list[int] = []
+        self.images: list[dict] = []
+
+    def handle_starttag(self, tag: str, attributes: list[tuple[str, str | None]]) -> None:
+        attrs = dict(attributes)
+        container = self.stack[-1][1] if self.stack else None
+        has_target_marker = any(name in {"data-home-featured-slug", "data-home-artwork-slug"} and value == self.slug
+                                for name, value in attributes)
+        if (container is not None or has_target_marker or
+                (tag == "main" and "data-home-artwork-contract" in attrs)):
+            require_unique_attributes(attributes)
+        if tag == "main" and "data-home-artwork-contract" in attrs:
+            self.identity.append((attrs.get("data-home-artwork-contract"), attrs.get("data-home-locale")))
+        if attrs.get("data-home-featured-slug") == self.slug:
+            if attrs.get("data-home-featured-locale") != self.locale:
+                raise ValueError("Live homepage featured locale differs from reviewed artwork")
+            container = len(self.containers)
+            self.containers.append(0)
+        if container is not None and tag in {"picture", "source"}:
+            raise ValueError("Unexpected picture/source alternative in reviewed homepage artwork")
+        if tag == "img" and (container is not None or attrs.get("data-home-artwork-slug") == self.slug):
+            if any(ancestor == "picture" for ancestor, _ in self.stack):
+                raise ValueError("Unexpected picture/source alternative in reviewed homepage artwork")
+            # Product icons are not release screenshots. Only the explicitly
+            # marked, known static icon path is exempt; marking a screenshot as
+            # an icon cannot hide legacy/raw artwork from the verifier.
+            # Preserve the homepage's existing 96w/192w responsive icon pair,
+            # but do not exempt other srcset URLs or screenshot variants.
+            if is_static_product_icon(attrs, self.slug):
+                return
+            if (attrs.get("data-home-artwork-source") != "reviewed" or
+                    attrs.get("data-home-artwork-slug") != self.slug or
+                    attrs.get("data-home-artwork-locale") != self.locale or
+                    not re.fullmatch(r"[1-9][0-9]*", attrs.get("data-home-artwork-index") or "")):
+                raise ValueError("Live homepage featured artwork is missing reviewed image identity or uses legacy originals")
+            if not attrs.get("src") or attrs.get("srcset"):
+                raise ValueError("Expected exact static homepage src without transformed variants")
+            self.images.append({"source": attrs["src"], "index": int(str(attrs["data-home-artwork-index"])),
+                                "size": image_dimensions(attrs)})
+            if container is not None:
+                self.containers[container] += 1
+        if tag not in VOID:
+            self.stack.append((tag, container))
+
+    def handle_endtag(self, tag: str) -> None:
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i][0] == tag:
+                del self.stack[i:]
+                break
+
+
+def selected_assets(expected: dict) -> tuple[str, dict[str, list[dict]]]:
+    """Validate one complete source set; freshness is established by staging."""
+    if (not isinstance(expected.get("version"), str) or
+            not re.fullmatch(r"[0-9]+(?:\.[0-9]+){1,2}\+[0-9]+", expected["version"]) or
+            not isinstance(expected.get("source_commit"), str) or
+            not re.fullmatch(r"[a-f0-9]{40,64}", expected["source_commit"])):
+        raise ValueError("Invalid reviewed version/build/source commit")
+    if not isinstance(expected["assets"], list):
+        raise ValueError("Invalid public screenshot mapping")
+    grouped: dict[str, list[dict]] = {}
+    kinds, paths = set(), set()
+    for asset in expected["assets"]:
+        locale, path = asset["locale"], asset["site_path"]
+        size = asset.get("size")
+        if (locale not in LOCALES or asset["kind"] not in SOURCE_REASONS or
+                not isinstance(path, str) or Path(path).is_absolute() or ".." in Path(path).parts or
+                not path.startswith(locale + "/") or not re.fullmatch(r"[A-Za-z0-9_./-]+\.png", path) or
+                path in paths or not re.fullmatch(r"[a-f0-9]{64}", asset["sha256"]) or
+                type(asset.get("index")) is not int or asset["index"] < 1 or
+                not isinstance(size, list) or len(size) != 2 or
+                any(type(value) is not int or value <= 0 for value in size) or
+                ("version" in asset and asset["version"] != expected["version"]) or
+                ("source_commit" in asset and asset["source_commit"] != expected["source_commit"])):
+            raise ValueError("Invalid public screenshot mapping")
+        paths.add(path)
+        kinds.add(asset["kind"])
+        grouped.setdefault(locale, []).append(asset)
+    if len(kinds) != 1:
+        raise ValueError("Public screenshots must use one uniform selected source")
+    kind = next(iter(kinds))
+    if "source_selection" in expected:
+        selection = expected["source_selection"]
+        if (not isinstance(selection, dict) or
+                selection.get("policy") != "android-edited-then-iphone-edited" or
+                selection.get("kind") != kind or selection.get("reason") != SOURCE_REASONS[kind]):
+            raise ValueError("Invalid public artwork source_selection")
+    elif kind != "android":
+        raise ValueError("iPhone artwork requires explicit source_selection fallback evidence")
+    counts = set()
+    for assets in grouped.values():
+        assets.sort(key=lambda item: item["index"])
+        if [item["index"] for item in assets] != list(range(1, len(assets) + 1)):
+            raise ValueError("Non-contiguous public gallery indices")
+        counts.add(len(assets))
+    if len(counts) != 1:
+        raise ValueError("Incomplete public gallery index set across locales")
+    return kind, grouped
+
+
+def static_route(source: str, base: str, page_url: str) -> str:
+    url = urllib.parse.urlsplit(urllib.parse.urljoin(page_url, source))
+    if url.scheme != "https" or url.netloc != urllib.parse.urlsplit(base).netloc or url.fragment:
+        raise ValueError("Unexpected screenshot origin or fragment")
+    return url.path + ("?" + url.query if url.query else "")
+
+
+def verify_image(raw: bytes, asset: dict) -> None:
+    if digest(raw) != asset["sha256"]:
+        raise ValueError(f"Live screenshot hash mismatch: {asset['locale']}/{asset['index']}")
+    if (len(raw) < 24 or raw[:8] != b"\x89PNG\r\n\x1a\n" or raw[8:16] != b"\x00\x00\x00\rIHDR" or
+            list(struct.unpack(">II", raw[16:24])) != asset["size"]):
+        raise ValueError("Live screenshot dimensions differ from reviewed artwork")
 
 
 def public_get(url: str, *, deadline: float | None = None) -> bytes:
@@ -92,37 +248,20 @@ def verify_app(expected: dict, base: str, fetch=public_get) -> dict:
     candidate = expected["candidate_sha256"]
     if not re.fullmatch(r"[a-f0-9]{64}", candidate):
         raise ValueError("Invalid candidate hash")
+    kind, grouped = selected_assets(expected)
     receipt_url = f"{base}/release-artwork/{slug}.json"
     public_receipt = json.loads(fetch(receipt_url))
     if canonical(public_receipt) != canonical(expected):
         raise ValueError("Public artwork manifest differs from the reviewed/staged candidate")
-    grouped: dict[str, list[dict]] = {}
-    for asset in expected["assets"]:
-        locale = asset["locale"]
-        path = asset["site_path"]
-        if (locale not in LOCALES or asset["kind"] != "android" or
-                Path(path).is_absolute() or ".." in Path(path).parts or
-                not path.startswith(locale + "/") or not re.fullmatch(r"[A-Za-z0-9_./-]+\.png", path) or
-                not re.fullmatch(r"[a-f0-9]{64}", asset["sha256"])):
-            raise ValueError("Invalid public screenshot mapping")
-        grouped.setdefault(locale, []).append(asset)
-    pages, verified = [], []
+    pages, homepages, verified = [], [], []
     for locale, assets in sorted(grouped.items()):
-        assets.sort(key=lambda item: item["index"])
-        if [item["index"] for item in assets] != list(range(1, len(assets) + 1)):
-            raise ValueError("Non-contiguous public gallery indices")
         page_path = f"/apps/{slug}/" + (f"{locale.lower()}/" if locale != "en" else "")
         page_url = base + page_path
         html = fetch(page_url)
         gallery = Gallery()
         gallery.feed(html.decode("utf-8"))
         routes = [f"/app-assets/{slug}/assets/screenshots/{asset['site_path']}?v={asset['sha256']}" for asset in assets]
-        images = []
-        for source in gallery.images:
-            url = urllib.parse.urlsplit(urllib.parse.urljoin(base + "/", source))
-            if url.scheme != "https" or url.netloc != urllib.parse.urlsplit(base).netloc or url.fragment:
-                raise ValueError("Unexpected screenshot origin or fragment")
-            images.append(url.path + ("?" + url.query if url.query else ""))
+        images = [static_route(source, base, page_url) for source in gallery.images]
         if gallery.identity != [(slug, locale)] or images != routes:
             raise ValueError(f"Live {locale} app-detail gallery does not show the complete reviewed image set/order/hash URLs")
         if gallery.dimensions != [asset["size"] for asset in assets]:
@@ -131,15 +270,38 @@ def verify_app(expected: dict, base: str, fetch=public_get) -> dict:
                       "gallery_dimensions": gallery.dimensions})
         for asset, route in zip(assets, routes):
             raw = fetch(base + route)
-            if digest(raw) != asset["sha256"]:
-                raise ValueError(f"Live screenshot hash mismatch: {locale}/{asset['index']}")
-            if len(raw) < 24 or raw[:8] != b"\x89PNG\r\n\x1a\n" or list(struct.unpack(">II", raw[16:24])) != asset["size"]:
-                raise ValueError("Live screenshot dimensions differ from reviewed artwork")
+            verify_image(raw, asset)
             verified.append({"url": base + route, "sha256": digest(raw), "size": asset["size"]})
+        home_url = base + "/" + (locale.lower() + "/" if locale != "en" else "")
+        home_html = fetch(home_url)
+        home = HomeArtwork(slug, locale)
+        home.feed(home_html.decode("utf-8"))
+        if home.identity != [("1", locale)]:
+            raise ValueError(f"Live {locale} homepage lacks the current artwork/locale contract")
+        if any(count == 0 for count in home.containers):
+            raise ValueError(f"Live {locale} homepage featured container has no reviewed artwork")
+        home_images = []
+        for image in home.images:
+            index = image["index"]
+            if index > len(assets):
+                raise ValueError(f"Live {locale} homepage artwork index is absent from reviewed set")
+            asset, route = assets[index - 1], routes[index - 1]
+            if static_route(image["source"], base, home_url) != route:
+                raise ValueError(f"Live {locale} homepage does not show the selected reviewed image/hash URL")
+            if image["size"] != asset["size"]:
+                raise ValueError(f"Live {locale} homepage HTML screenshot dimensions differ from reviewed artwork")
+            # Fetch the actual featured src, rather than inferring publication
+            # from its marker or from a successful app-detail fetch.
+            raw = fetch(base + route)
+            verify_image(raw, asset)
+            home_images.append({"url": base + route, "index": index, "sha256": digest(raw), "size": asset["size"]})
+        homepages.append({"url": home_url, "sha256": digest(home_html),
+                          "featured_container_count": len(home.containers), "images": home_images})
     return {"app_slug": slug, "status": "deployed_verified", "candidate_sha256": candidate,
             "source_commit": expected["source_commit"], "version": expected["version"],
+            "selected_source_kind": kind,
             "public_manifest_sha256": digest(canonical(public_receipt)),
-            "pages": pages, "assets": verified,
+            "pages": pages, "homepages": homepages, "assets": verified,
             "verified_at": datetime.now(timezone.utc).isoformat()}
 
 

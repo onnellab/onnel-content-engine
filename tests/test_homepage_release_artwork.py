@@ -46,20 +46,30 @@ def expected(slug='app', locales=('en', 'ko')):
     return value, raw
 
 
-def public_fixture(value, raw):
+def public_fixture(value, raw, *, featured=True):
     def fetch(url):
         if '/release-artwork/' in url:
             return json.dumps(value).encode()
         if '/app-assets/' in url:
             return raw
-        segment = url.split('/apps/' + value['app_slug'] + '/')[1].split('/')[0].split('?')[0]
+        is_detail = '/apps/' in url
+        segment = (url.split('/apps/' + value['app_slug'] + '/')[1] if is_detail else
+                   url.split('://', 1)[1].split('/', 1)[1]).split('/')[0].split('?')[0]
         locale = next((locale for locale in live.LOCALES if locale.lower() == segment), 'en')
         images = []
         for asset in value['assets']:
             if asset['locale'] != locale:
                 continue
             src = f"/app-assets/{value['app_slug']}/assets/screenshots/{asset['site_path']}?v={asset['sha256']}"
-            images.append(f'<figure><a data-screenshot-link><img src="{src}" width="{asset["size"][0]}" height="{asset["size"][1]}"></a></figure>')
+            marker = ('' if is_detail else f'data-home-artwork-source="reviewed" '
+                      f'data-home-artwork-slug="{value["app_slug"]}" data-home-artwork-locale="{locale}" '
+                      f'data-home-artwork-index="{asset["index"]}"')
+            images.append(f'<figure><a data-screenshot-link><img {marker} src="{src}" width="{asset["size"][0]}" height="{asset["size"][1]}"></a></figure>')
+        if not is_detail:
+            content = (f'<section data-home-featured-slug="{value["app_slug"]}" data-home-featured-locale="{locale}">'
+                       + ''.join(images) + '</section>') if featured else ''
+            return (f'<main data-home-artwork-contract="1" data-home-locale="{locale}">'
+                    + content + '</main>').encode()
         return (f'<main data-product-slug="{value["app_slug"]}" data-product-locale="{locale}">'
                 '<div data-screenshot-row>' + ''.join(images) + '</div>'
                 '<img src="/home-original.png"></main>').encode()
@@ -174,14 +184,14 @@ class Staging(unittest.TestCase):
             calls.append(args[1])
             raise ValueError('Stale candidate source commit')
         report = self.report(gate)
-        self.assertEqual(calls, ['verify'])
+        self.assertEqual(calls, ['verify-site'])
         self.assertEqual(report['apps'][0]['status'], 'blocked')
         self.assertEqual(list(self.site.iterdir()), [])
 
     def test_nonpublic_current_candidate_blocks_without_staging(self):
         calls = []
         report = self.report(lambda *args: calls.append(args[1]), version='1.2.2')
-        self.assertEqual(calls, ['verify'])
+        self.assertEqual(calls, ['verify-site'])
         self.assertIn('not independently public', report['apps'][0]['reason'])
 
     def test_verified_candidate_stages_exact_paths_only(self):
@@ -239,6 +249,9 @@ class LiveVerification(unittest.TestCase):
         self.assertEqual(result['status'], 'deployed_verified')
         self.assertEqual(len(result['pages']), 2)
         self.assertEqual(len(result['assets']), 2)
+        self.assertEqual(len(result['homepages']), 2)
+        self.assertEqual([page['featured_container_count'] for page in result['homepages']], [1, 1])
+        self.assertEqual(result['selected_source_kind'], 'android')
 
     def test_all_nine_locales_and_multiple_ordered_images(self):
         value, raw = expected(locales=tuple(sorted(live.LOCALES)))
@@ -249,16 +262,211 @@ class LiveVerification(unittest.TestCase):
         result = live.verify_app(value, self.base, public_fixture(value, raw))
         self.assertEqual(len(result['pages']), 9)
         self.assertEqual(len(result['assets']), 18)
+        self.assertEqual(len(result['homepages']), 9)
+
+    def test_explicit_android_and_iphone_medium_source_selection(self):
+        for kind, reason in live.SOURCE_REASONS.items():
+            with self.subTest(kind=kind):
+                value, raw = expected()
+                for asset in value['assets']:
+                    asset['kind'] = kind
+                value['source_selection'] = dict(policy='android-edited-then-iphone-edited', kind=kind, reason=reason)
+                result = live.verify_app(value, self.base, public_fixture(value, raw))
+                self.assertEqual(result['selected_source_kind'], kind)
+
+    def test_invalid_selection_or_undeclared_iphone_fallback_blocks(self):
+        for selection in (None, {}, dict(policy='other', kind='iphone_medium', reason='android_edited_absent'),
+                          dict(policy='android-edited-then-iphone-edited', kind='iphone_medium', reason='android_edited_available'),
+                          dict(policy='android-edited-then-iphone-edited', kind='android', reason='android_edited_available')):
+            with self.subTest(selection=selection):
+                value, raw = expected()
+                for asset in value['assets']:
+                    asset['kind'] = 'iphone_medium'
+                if selection is not None:
+                    value['source_selection'] = selection
+                with self.assertRaisesRegex(ValueError, 'source_selection'):
+                    live.verify_app(value, self.base, public_fixture(value, raw))
+
+    def test_mixed_sources_and_incomplete_locale_index_sets_block(self):
+        self.value['assets'][1]['kind'] = 'iphone_medium'
+        with self.assertRaisesRegex(ValueError, 'uniform'):
+            live.verify_app(self.value, self.base, self.fetch)
+        self.value['assets'][1]['kind'] = 'android'
+        self.value['assets'].append(dict(self.value['assets'][0], index=2, site_path='en/02.png'))
+        with self.assertRaisesRegex(ValueError, 'Incomplete'):
+            live.verify_app(self.value, self.base, self.fetch)
+
+    def test_invalid_or_mixed_version_source_and_dimensions_block(self):
+        for field, wrong in (('version', '1.2.2+4'), ('source_commit', 'c' * 40), ('size', [True, 2160]),
+                             ('size', [0, 2160]), ('index', True), ('index', '1'), ('kind', 'iphone_large')):
+            with self.subTest(field=field, wrong=wrong):
+                value, raw = expected()
+                value['assets'][0][field] = wrong
+                with self.assertRaisesRegex(ValueError, 'mapping'):
+                    live.verify_app(value, self.base, public_fixture(value, raw))
+        for field, wrong in (('version', '1.2.3'), ('source_commit', 'not-a-commit')):
+            with self.subTest(field=field):
+                value, raw = expected()
+                value[field] = wrong
+                with self.assertRaisesRegex(ValueError, 'version/build/source'):
+                    live.verify_app(value, self.base, public_fixture(value, raw))
+
+    def test_duplicate_paths_and_noncontiguous_indices_block(self):
+        for index in (1, 3):
+            with self.subTest(index=index):
+                value, raw = expected()
+                value['assets'].append(dict(value['assets'][0], index=index, site_path='en/02.png'))
+                with self.assertRaisesRegex(ValueError, 'Non-contiguous'):
+                    live.verify_app(value, self.base, public_fixture(value, raw))
+        self.value['assets'].append(dict(self.value['assets'][0], index=2))
+        with self.assertRaisesRegex(ValueError, 'mapping'):
+            live.verify_app(self.value, self.base, self.fetch)
+
+    def home_fetch(self, transform):
+        def fetch(url):
+            raw = self.fetch(url)
+            return transform(raw) if url in (self.base + '/', self.base + '/ko/') else raw
+        return fetch
+
+    def test_homepage_nonfeatured_app_is_explicitly_reported(self):
+        result = live.verify_app(self.value, self.base, public_fixture(self.value, self.raw, featured=False))
+        self.assertEqual([page['featured_container_count'] for page in result['homepages']], [0, 0])
+        self.assertEqual([page['images'] for page in result['homepages']], [[], []])
+
+    def test_old_homepage_without_contract_or_wrong_locale_blocks(self):
+        for old, new in ((b'data-home-artwork-contract="1"', b''), (b'data-home-locale="en"', b'data-home-locale="ko"')):
+            with self.subTest(old=old), self.assertRaisesRegex(ValueError, 'contract'):
+                live.verify_app(self.value, self.base, self.home_fetch(lambda data: data.replace(old, new)))
+
+    def test_homepage_raw_originals_and_empty_featured_container_block(self):
+        for old, new in ((b'data-home-artwork-source="reviewed"', b'data-home-artwork-source="legacy"'),
+                         (b'data-home-artwork-source="reviewed"', b''),
+                         (b'<img ', b'<span ')):
+            with self.subTest(old=old), self.assertRaisesRegex(ValueError, 'homepage featured'):
+                live.verify_app(self.value, self.base, self.home_fetch(lambda data: data.replace(old, new)))
+
+    def test_homepage_marked_product_icon_does_not_count_as_artwork(self):
+        icon = b'<img data-home-artwork-icon="true" src="/home-assets/app-icons/app-96.webp">'
+        fetch = self.home_fetch(lambda data: data.replace(b'</section>', icon + b'</section>'))
+        result = live.verify_app(self.value, self.base, fetch)
+        self.assertEqual([len(page['images']) for page in result['homepages']], [1, 1])
+        spoofed = b'<img data-home-artwork-icon="true" src="/app-assets/app/assets/originals/en/01.png">'
+        with self.assertRaisesRegex(ValueError, 'identity'):
+            live.verify_app(self.value, self.base, self.home_fetch(
+                lambda data: data.replace(b'</section>', spoofed + b'</section>')))
+
+    def test_homepage_existing_responsive_icon_pair_is_preserved(self):
+        icon = (b'<img data-home-artwork-icon="true" src="/home-assets/app-icons/app-96.webp" '
+                b'srcset="/home-assets/app-icons/app-96.webp 96w, /home-assets/app-icons/app-192.webp 192w" '
+                b'sizes="56px" width="96" height="96">')
+        result = live.verify_app(self.value, self.base, self.home_fetch(
+            lambda data: data.replace(b'</section>', icon + b'</section>')))
+        self.assertEqual([len(page['images']) for page in result['homepages']], [1, 1])
+        self.assertEqual([page['featured_container_count'] for page in result['homepages']], [1, 1])
+
+    def test_homepage_icon_srcset_exemption_rejects_unknown_urls_or_variants(self):
+        pairs = (
+            '/home-assets/app-icons/app-96.webp 96w, /app-assets/app/assets/originals/en/01.png 192w',
+            '/home-assets/app-icons/app-96.webp 96w, /home-assets/app-icons/other-192.webp 192w',
+            '/home-assets/app-icons/app-96.webp 96w, https://example.com/app-192.webp 192w',
+            '/home-assets/app-icons/app-96.webp 96w, /home-assets/app-icons/app-192.webp 192w, /extra.webp 384w',
+            '/home-assets/app-icons/app-96.webp 1x, /home-assets/app-icons/app-192.webp 2x',
+            '/home-assets/app-icons/app-96.webp 96w',
+        )
+        for srcset in pairs:
+            icon = (f'<img data-home-artwork-icon="true" src="/home-assets/app-icons/app-96.webp" '
+                    f'srcset="{srcset}">').encode()
+            with self.subTest(srcset=srcset), self.assertRaisesRegex(ValueError, 'identity'):
+                live.verify_app(self.value, self.base, self.home_fetch(
+                    lambda data: data.replace(b'</section>', icon + b'</section>')))
+
+    def test_homepage_picture_or_source_cannot_override_reviewed_img(self):
+        transforms = (
+            lambda data: data.replace(b'<img ', b'<picture><source srcset="/unreviewed.webp"><img ').replace(
+                b'</figure>', b'</picture></figure>'),
+            lambda data: data.replace(b'<img ', b'<source srcset="/unreviewed.webp"><img '),
+            # Ancestor picture starts outside the marked featured container.
+            lambda data: data.replace(b'<section ', b'<picture><source srcset="/unreviewed.webp"><section ').replace(
+                b'</section>', b'</section></picture>'),
+        )
+        for transform in transforms:
+            with self.subTest(transform=transform), self.assertRaisesRegex(ValueError, 'picture/source'):
+                live.verify_app(self.value, self.base, self.home_fetch(transform))
+
+    def test_homepage_duplicate_attributes_fail_before_browser_parser_disagreement(self):
+        variants = (
+            (b'<img ', b'<img src="/unreviewed.png" '),
+            (b'<img ', b'<img width="999" '),
+            (b'<section ', b'<section data-home-featured-slug="other" '),
+            (b'<main ', b'<main data-home-locale="other" '),
+            (b'data-home-artwork-slug="app"', b'data-home-artwork-slug="app" data-home-artwork-slug="other"'),
+        )
+        for old, new in variants:
+            with self.subTest(old=old), self.assertRaisesRegex(ValueError, 'Duplicate HTML attributes'):
+                live.verify_app(self.value, self.base, self.home_fetch(lambda data: data.replace(old, new)))
+
+    def test_gallery_picture_source_and_duplicate_attributes_fail_closed(self):
+        transforms = (
+            lambda data: data.replace(b'<img ', b'<picture><source srcset="/unreviewed.webp"><img ').replace(
+                b'</figure>', b'</picture></figure>'),
+            lambda data: data.replace(b'<img ', b'<source srcset="/unreviewed.webp"><img '),
+            lambda data: data.replace(b'<div data-screenshot-row>', b'<picture><source srcset="/unreviewed.webp"><div data-screenshot-row>').replace(
+                b'</div>', b'</div></picture>'),
+            lambda data: data.replace(b'<img ', b'<img src="/unreviewed.png" '),
+            lambda data: data.replace(b'<img ', b'<img width="999" '),
+            lambda data: data.replace(b'<main ', b'<main data-product-slug="other" '),
+        )
+        for transform in transforms:
+            def fetch(url):
+                raw = self.fetch(url)
+                return transform(raw) if '/apps/' in url else raw
+            with self.subTest(transform=transform), self.assertRaisesRegex(ValueError, 'picture/source|Duplicate HTML attributes'):
+                live.verify_app(self.value, self.base, fetch)
+
+    def test_homepage_index_locale_hash_route_and_dimensions_must_match(self):
+        variants = ((b'data-home-artwork-index="1"', b'data-home-artwork-index="2"', 'index'),
+                    (b'data-home-artwork-locale="en"', b'data-home-artwork-locale="ko"', 'identity'),
+                    (b'data-home-featured-locale="en"', b'data-home-featured-locale="ko"', 'locale'),
+                    (b'?v=' + self.value['assets'][0]['sha256'].encode(), b'?v=old', 'image/hash'),
+                    (b'/screenshots/en/01.png', b'/originals/en/01.png', 'image/hash'),
+                    (b'height="2160"', b'height="2168"', 'dimensions'),
+                    (b'height="2160"', b'', 'dimensions'),
+                    (b'src="/app-assets/', b'src="https://untrusted.example/app-assets/', 'origin'),
+                    (b'src="/app-assets/', b'src="app-assets/', 'image/hash'),
+                    (b'<img ', b'<img srcset="/different.png 2x" ', 'transformed'))
+        for old, new, error in variants:
+            with self.subTest(old=old), self.assertRaisesRegex(ValueError, error):
+                live.verify_app(self.value, self.base, self.home_fetch(lambda data: data.replace(old, new)))
+
+    def test_homepage_image_bytes_are_fetched_and_verified_independently(self):
+        seen = set()
+        def fetch(url):
+            raw = self.fetch(url)
+            if '/app-assets/' in url:
+                if url in seen:
+                    return b'wrong featured bytes'
+                seen.add(url)
+            return raw
+        with self.assertRaisesRegex(ValueError, 'hash mismatch'):
+            live.verify_app(self.value, self.base, fetch)
+
+    def test_actual_png_dimensions_must_match_even_if_manifest_hash_matches(self):
+        bad_raw = self.raw[:16] + struct.pack('>II', 1080, 2168) + self.raw[24:]
+        for asset in self.value['assets']:
+            asset['sha256'] = hashlib.sha256(bad_raw).hexdigest()
+        with self.assertRaisesRegex(ValueError, 'dimensions'):
+            live.verify_app(self.value, self.base, public_fixture(self.value, bad_raw))
 
     def test_wrong_gallery_order_blocks(self):
-        self.value['assets'].insert(1, dict(self.value['assets'][0], index=2, site_path='en/02.png'))
+        self.value['assets'].extend(dict(asset, index=2, site_path=asset['locale'] + '/02.png')
+                                    for asset in list(self.value['assets']))
         normal = public_fixture(self.value, self.raw)
         def fetch(url):
             data = normal(url)
             if '/apps/' in url:
                 data = data.replace(b'en/01.png', b'en/temp.png').replace(b'en/02.png', b'en/01.png').replace(b'en/temp.png', b'en/02.png')
             return data
-        with self.assertRaisesRegex(ValueError, 'gallery'):
+        with self.assertRaisesRegex(ValueError, 'app-detail gallery'):
             live.verify_app(self.value, self.base, fetch)
 
     def test_stale_public_receipt_blocks(self):

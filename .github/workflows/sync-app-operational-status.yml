@@ -1,8 +1,14 @@
 name: Sync app operational status
+run-name: ${{ inputs.artwork_read_only && 'Read-only artwork access probe' || 'Sync app operational status' }}
 
 on:
   workflow_dispatch:
     inputs:
+      artwork_read_only:
+        description: Read-only artwork repository access test; skips all publication and status writes
+        required: false
+        default: false
+        type: boolean
       deploy_dashboard:
         description: "Build and deploy /ops/ after syncing app status"
         required: false
@@ -34,6 +40,7 @@ jobs:
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
 
       - name: Checkout homepage
+        if: inputs.artwork_read_only != true
         uses: actions/checkout@v4
         with:
           repository: onnellab/onnellab.github.io
@@ -41,6 +48,7 @@ jobs:
           token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
 
       - name: Refresh main before dashboard mutation
+        if: inputs.artwork_read_only != true
         run: git pull --ff-only origin main
 
       - name: Configure Python
@@ -53,9 +61,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
         run: |
           set -euo pipefail
-          python3 scripts/sync_flutter_plugin_versions.py
+          if [ "${{ inputs.artwork_read_only }}" = "true" ]; then
+            python3 scripts/check_artwork_read_access.py
+          else
+            python3 scripts/sync_flutter_plugin_versions.py
+          fi
 
       - name: Sync Android fallback versions from app repositories
+        if: inputs.artwork_read_only != true
         env:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
         run: |
@@ -63,22 +76,26 @@ jobs:
           python3 scripts/sync_android_versions_from_repos.py
 
       - name: Check public store versions
+        if: inputs.artwork_read_only != true
         run: |
           set -euo pipefail
           python3 scripts/check_store_versions.py
 
       - name: Sync homepage release notes
+        if: inputs.artwork_read_only != true
         run: |
           set -euo pipefail
           python3 -m unittest tests.test_homepage_release_notes_sync
           python3 scripts/sync_homepage_release_notes.py --homepage-repo "$HOMEPAGE_REPO_PATH"
 
       - name: Prepare app release candidates
+        if: inputs.artwork_read_only != true
         run: |
           set -euo pipefail
           python3 scripts/prepare_app_release_rows.py
 
       - name: Sync GitHub release status
+        if: inputs.artwork_read_only != true
         env:
           GITHUB_TOKEN: ${{ github.token }}
           ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN }}
@@ -87,12 +104,13 @@ jobs:
           python3 scripts/sync_github_release_status.py --allow-missing-token
 
       - name: Generate app release report
+        if: inputs.artwork_read_only != true
         run: |
           set -euo pipefail
           python3 scripts/generate_app_release_report.py
 
       - name: Build operational dashboard
-        if: env.DEPLOY_DASHBOARD == 'true'
+        if: inputs.artwork_read_only != true && env.DEPLOY_DASHBOARD == 'true'
         run: |
           set -euo pipefail
           python3 scripts/build_manual_publish_site.py \
@@ -100,6 +118,7 @@ jobs:
             --store-review-triage /tmp/store-review-triage.json
 
       - name: Commit operational status snapshot
+        if: inputs.artwork_read_only != true
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -129,6 +148,7 @@ jobs:
           fi
 
       - name: Commit homepage release metadata and deploy dashboard
+        if: inputs.artwork_read_only != true
         run: |
           set -euo pipefail
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
@@ -154,3 +174,4 @@ jobs:
             git -C "$HOMEPAGE_REPO_PATH" commit -m "Refresh app release metadata"
             git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
           fi
+

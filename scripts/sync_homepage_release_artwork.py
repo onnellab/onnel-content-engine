@@ -145,7 +145,7 @@ def stage_all(releases: Path, stores: Path, site: Path, gate: Path, work: Path) 
                     failures[repo] = f"Cannot obtain fresh app checkout ({type(error).__name__})"
                     raise ValueError(failures[repo]) from error
             project = locate_project(clones[repo], slug)
-            run_gate(gate, "verify", project)
+            run_gate(gate, "verify-site", project)
             candidate = json.loads((project / "release/artwork-candidate.json").read_text())
             if candidate.get("app_slug") != slug:
                 raise ValueError("Candidate app slug differs from release")

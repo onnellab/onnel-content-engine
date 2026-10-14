@@ -15,7 +15,10 @@ env:
 
 jobs:
   publish-ready-app-releases:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.display_title != 'Read-only artwork access probe')
     name: Publish public-store-confirmed release notes
     runs-on: ubuntu-latest
     timeout-minutes: 45
