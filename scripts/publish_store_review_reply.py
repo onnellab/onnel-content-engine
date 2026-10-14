@@ -12,6 +12,9 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from store_review_approvals import DEFAULT_REVIEWS, read_reviews
+from store_review_policy import require_owner_approval
+
 from sync_store_reviews import app_store_connect_read_token_from_env, google_play_access_token, urlopen_with_retry
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,7 +54,12 @@ def package_for(record: dict[str, object], stores_path: Path) -> str:
     return ""
 
 
-def publish(record: dict[str, object], apple_token: str, google_token: str, stores_path: Path, requester=json_request) -> str:
+def publish(record: dict[str, object], apple_token: str, google_token: str, stores_path: Path, requester=json_request, *, review: dict | None = None) -> str:
+    if review is None:
+        review = read_reviews(DEFAULT_REVIEWS).get(str(record.get("review_id", "")))
+    if not review:
+        raise ValueError("current review must be available before publication")
+    require_owner_approval(record, review)
     reply = str(record["reply"])
     if record.get("platform") == "android":
         if str(record.get("review_id", "")).startswith("report-"):
@@ -88,19 +96,24 @@ def main() -> int:
     parser.add_argument("--confirm-publish", action="store_true", help="Required for an external store write")
     parser.add_argument("--approvals", type=Path, default=DEFAULT_APPROVALS)
     parser.add_argument("--stores", type=Path, default=DEFAULT_STORES)
+    parser.add_argument("--reviews", type=Path, default=DEFAULT_REVIEWS)
     args = parser.parse_args()
     payload = json.loads(args.approvals.read_text(encoding="utf-8"))
     records = payload.get("approvals", [])
     record = next((item for item in records if item.get("approval_id") == args.approval_id), None)
     if not isinstance(record, dict) or record.get("status") != "queued":
         raise SystemExit("approval must exist and be queued")
+    review = read_reviews(args.reviews).get(str(record.get("review_id", "")))
+    if not review:
+        raise SystemExit("current review is missing; no publication permitted")
+    require_owner_approval(record, review)
     if not args.confirm_publish:
         print(f"dry run: would publish {args.approval_id}; pass --confirm-publish to write externally")
         return 0
     apple, google = credentials()
     attempts = int(record.get("publication", {}).get("attempts", 0)) + 1
     try:
-        external_id = publish(record, apple, google, args.stores)
+        external_id = publish(record, apple, google, args.stores, review=review)
     except Exception as error:
         record["status"] = "failed"
         record["publication"] = {
@@ -122,3 +135,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

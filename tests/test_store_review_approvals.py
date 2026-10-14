@@ -14,7 +14,7 @@ class StoreReviewApprovalsTest(unittest.TestCase):
 
     def test_approval_creates_a_queued_audit_record(self) -> None:
         payload = {"schema_version": 1, "approvals": []}
-        record = approve_review(self.reviews, payload, "review-1", "Thanks for the feedback.", "owner")
+        record = approve_review(self.reviews, payload, "review-1", "Thanks for the feedback.", "owner", approval_reference="Sentinel_11111111111111111111111111111111")
         self.assertEqual(record["status"], "queued")
         self.assertEqual(payload["approvals"][0]["reply"], "Thanks for the feedback.")
         self.assertNotIn("review_translation_ko", record)
@@ -38,3 +38,4 @@ class StoreReviewApprovalsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

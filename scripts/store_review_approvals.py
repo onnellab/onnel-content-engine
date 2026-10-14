@@ -11,6 +11,8 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+
+from store_review_policy import APPROVAL_TYPE, approval_fingerprint, require_owner_approval, review_fingerprint
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -51,7 +53,7 @@ def validate_reply(reply: str) -> str:
 
 
 def approve_review(
-    reviews: dict[str, dict[str, str]], payload: dict[str, object], review_id: str, reply: str, approver: str, note: str = ""
+    reviews: dict[str, dict[str, str]], payload: dict[str, object], review_id: str, reply: str, approver: str, note: str = "", *, approval_reference: str = ""
 ) -> dict[str, object]:
     review = reviews.get(review_id)
     if not review:
@@ -69,10 +71,16 @@ def approve_review(
         "approval_id": f"review-{review_id}", "review_id": review_id,
         "app_id": review.get("app_id", ""), "app_slug": review.get("app_slug", ""),
         "platform": review.get("platform", ""), "reply": clean_reply,
-        "approved_at": now_iso(), "approved_by": approver.strip() or "manual_approver",
+        "approved_at": now_iso(), "approved_by": approver.strip(),
         "note": note.strip(), "status": "queued",
+        "approval_type": APPROVAL_TYPE, "approval_channel": "chatgpt", "approval_reference": approval_reference.strip(),
+        "review_content_sha256": review_fingerprint(review),
         "publication": {"attempts": 0, "published_at": "", "external_response_id": ""},
     }
+    record["approval_sha256"] = approval_fingerprint(record)
+    require_owner_approval(record, review)
+    # Keep historical/quarantined attempts, but use a unique ID for each approval.
+    record["approval_id"] += "-" + str(record["approval_sha256"])[:12]
     approvals.append(record)
     payload["updated_at"] = record["approved_at"]
     return record
@@ -84,11 +92,12 @@ def main() -> int:
     parser.add_argument("--reply", required=True)
     parser.add_argument("--approver", required=True)
     parser.add_argument("--note", default="")
+    parser.add_argument("--approval-reference", required=True, help="Verified owner message/confirmation reference for this exact review and reply")
     parser.add_argument("--reviews", type=Path, default=DEFAULT_REVIEWS)
     parser.add_argument("--approvals", type=Path, default=DEFAULT_APPROVALS)
     args = parser.parse_args()
     payload = read_approvals(args.approvals)
-    record = approve_review(read_reviews(args.reviews), payload, args.review_id, args.reply, args.approver, args.note)
+    record = approve_review(read_reviews(args.reviews), payload, args.review_id, args.reply, args.approver, args.note, approval_reference=args.approval_reference)
     args.approvals.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"queued {record['approval_id']}")
     return 0
@@ -96,3 +105,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

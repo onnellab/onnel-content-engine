@@ -16,51 +16,82 @@ The workflow is:
 5. Verify the facts and tone, edit if needed, and copy the reply.
 6. Publish the reply in App Store Connect or Google Play Console.
 
-Reply publication is manual by default. A generated draft must not be posted
-without either a specific human approval or an explicit owner-approved standing
-automation policy.
+## Notify-first policy (2026-10-14)
 
-### Owner-approved scheduled reply exception
+The owner's 2026-10-14 instruction supersedes the 2026-09-24 standing scheduled
+reply exception. All new reviews are first presented to the owner in their
+existing assistant chat, with app, store, rating, original review text, and date.
+A generated draft, a legacy queued/failed record, a positive rating, or any
+standing policy is **not** approval. Do not publish any reply until the owner
+explicitly approves that exact review and reply text.
 
-On 2026-09-24 the owner authorized the daily operations automation to reply
-automatically to newly synchronized text reviews. This standing approval applies
-only to concise public developer replies that follow the existing ONNELLAB reply
-tone and the fact-grounding rules in this guide. The automation must use the
-review language where practical, may consult prior developer replies for the same
-app and issue type as tone precedents, and must ground product or pricing claims
-in the current repository facts. It must not invent a fix, cause, release date,
-refund result, entitlement, price, or future feature.
+Review collection, triage, unrelated operations, and schedules remain enabled.
+The daily worker prepares a durable notification outbox and never dispatches
+**Publish Approved Store Review Reply**. The compatibility command
+`python3 scripts/queue_standing_store_review_replies.py` always returns an empty
+`queued` list. It quarantines pending legacy approvals as
+`awaiting_owner_approval`, retaining all earlier audit fields. Published history
+is unchanged. Failed or uncertain publication attempts are never auto-retried.
 
-Rating-only records are never auto-replied. Security, privacy, billing-dispute,
-data-loss, or otherwise case-specific reviews may receive only a factual
-acknowledgement and safe support direction unless repository evidence supports
-more. The automation must never delete, hide, moderate, or alter the review.
-Each automatic reply still uses the durable approval/publisher audit path and
-must record that it was approved by the owner standing policy. After publication,
-reviews are synchronized again so the dashboard reflects the store-observed
-developer reply. Any uncertain publication result is retried only through the
-same durable record; never create a duplicate reply record to escape uncertainty.
+### Delivering owner notifications
 
-Selecting **Approve & queue** in the dashboard records the exact edited reply,
-review ID, platform, timestamp, and approval actor in
-`data/store_review_approvals.json`. This requires the dashboard GitHub token
-and creates a repository commit. It does **not** publish the reply: queued
-records remain a deliberate boundary until the separate store publisher is
-implemented and enabled.
+Read `data/store_review_notifications.json` and the current synchronized review
+snapshot. Send only still-current `pending` items to the owner's existing chat.
+Each notification ID binds the store/app/review and review content. Changes to
+review content create a new ID; removed, superseded, or replied records are not
+new pending notifications. The outbox and the daily result are preparation
+receipts, not evidence that the owner has been notified.
 
-## Publishing one approved reply
+After an accepted user-message send, verify the returned owner-chat message
+(`channel=chatgpt`, assistant author) and record its exact message ID:
 
-The publisher is deliberately one-at-a-time. Dispatch **Publish Approved Store
-Review Reply** and enter the exact `approval_id` plus `PUBLISH`. It publishes
-only a `queued` record, then changes that record to `published` with the store
-response ID. Running the script without `--confirm-publish` is always a dry
-run. Google Play replies are limited to approximately 350 characters.
+```sh
+python3 scripts/queue_standing_store_review_replies.py \
+  --ack-notification NOTIFICATION_ID --delivery-reference OWNER_CHAT_MESSAGE_ID
+```
 
-`data/store_review_triage.json` is an audit snapshot. It groups repeated
-reports, cites the applicable `docs/operations/*_FACTS.md` lines, and may
-create an unverified GitHub issue draft. It never writes to GitHub, a store,
-or a deployment system. Approve and create any issue in the relevant app
-repository after verifying reproduction and privacy-safe wording.
+A connector-based reporter may equivalently change only the matching row to
+`status=notified`, set `notified_at`, `delivery_channel=chatgpt` and
+`delivery_reference`, and update the
+outbox `updated_at`, using a content-SHA lease. Retain all other rows and fields.
+Commit the receipt before the next reporting pass. Search existing owner-chat
+messages by review/notification identity after an interrupted or uncertain send;
+never blindly resend or mark a prepared notification as delivered. This receipt
+is not a reply approval. Do not email the reviewer or contact any third party.
+
+### Publishing one owner-approved reply
+
+Read the referenced owner-chat message and verify `channel=chatgpt`, human owner
+author, and explicit approval of the exact review and localized reply. The reference
+must be the tool-returned `Sentinel_` message ID or its unchanged canonical room
+reference. Local logs, job/workflow IDs, draft IDs, or assistant-authored messages
+are not owner approval. Syntax/hash validation is only a safety check and cannot
+authenticate a message; the operator must verify it through the messaging source. Then:
+
+```sh
+python3 scripts/store_review_approvals.py REVIEW_ID \
+  --reply "Exact owner-approved reply" --approver "owner_explicit_chat_approval" \
+  --approval-reference OWNER_APPROVAL_MESSAGE_ID
+```
+
+The command records a new approval type, source reference, timestamp, reviewed
+content hash, and a SHA-256 binding of the exact target and reply. Old dashboard
+queue records and standing-policy records deliberately do not satisfy this
+contract. Until the dashboard supports this new evidence contract, use the
+approval CLI after verified owner confirmation; its legacy button alone cannot
+publish a reply. Never fabricate an approval reference or treat it as a token.
+
+Dispatch **Publish Approved Store Review Reply** manually with the new exact
+`approval_id` and `PUBLISH`, or run the publisher with `--confirm-publish`.
+The publisher validates owner evidence and current review content before even
+loading credentials and validates again at each Android/iOS write boundary.
+Changed review content, changed reply text, missing proof, legacy approvals,
+already-replied reviews, and failed/published records fail closed. Google Play
+replies must be at most 350 characters. A successful store receipt changes only
+that approval to `published`; synchronize the store again to verify the reply.
+
+`data/store_review_triage.json` remains an audit snapshot. It never authorizes a
+reply, issue, pull request, code change, merge, or deployment by itself.
 
 ## Custom AI drafts
 
@@ -160,7 +191,7 @@ The Apple key needs access to customer reviews in App Store Connect. The Google
 service account must be linked in Play Console and have permission to view
 reviews for the target apps.
 
-The `sync-store-reviews.yml` workflow runs daily and can also be started from
+The local daily worker dispatches `sync-store-reviews.yml`; it can also be started from
 the dashboard with **Sync reviews now** after the GitHub token is connected.
 The workflow fails clearly when any required store secret is missing instead of
 silently reporting success with every store skipped.
@@ -211,3 +242,4 @@ For a read-only investigation, run **Audit Store Review State** from GitHub
 Actions. It uses the existing store secrets and uploads a three-day audit
 artifact; it never posts replies or changes dashboard data. Do not put tokens,
 private keys, service-account JSON or reviewer identities into audit output.
+

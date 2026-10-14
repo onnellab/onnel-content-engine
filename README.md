@@ -571,11 +571,15 @@ The escalation must name an exact remediation scope and app-relative allowed
 file paths; the Coder runner rejects every policy-remediation diff outside that
 allowlist.
 
-Approved replies are recorded in `data/store_review_approvals.json` before any
-publisher may consume them. The approval CLI is useful for audited local use:
+Since 2026-10-14, the daily worker only prepares owner-chat notifications in
+`data/store_review_notifications.json`; the former standing auto-reply policy is
+revoked. A notification receipt or generated draft does not authorize a reply.
+Exact per-review owner approvals are recorded in `data/store_review_approvals.json`
+with a verified owner-message reference and review/reply content binding before a
+manual publisher may consume them. The approval CLI is useful for audited local use:
 
 ```bash
-python3 scripts/store_review_approvals.py REVIEW_ID --reply "Approved reply" --approver "your-name"
+python3 scripts/store_review_approvals.py REVIEW_ID --reply "Exact owner-approved reply" --approver "owner_explicit_chat_approval" --approval-reference OWNER_APPROVAL_MESSAGE_ID
 ```
 
 To create personalized drafts without an API, run
@@ -719,3 +723,4 @@ publication instead of asking for approval. See
 [Managed Screen Recording](docs/Short_Video_Recording.md), and
 [English YouTube Shorts Strategy](docs/Short_Video_Strategy.md), and
 [Motion & Product Film Guide](docs/Motion_Design_Guide.md).
+

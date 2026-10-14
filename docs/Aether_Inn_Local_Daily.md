@@ -18,8 +18,9 @@ the morning.
    Google ADC, MYBOX, ffmpeg, or the durable Aether queues.
 3. The scheduled ChatGPT task is read-only: it verifies the durable daily result,
    supporting report files, GitHub workflow/commit evidence, and the live `/ops/`
-   page. The local worker owns hosted source refreshes, review approvals and
-   publication, and `/ops/` reconciliation/deployment as well as local production.
+   page. The local worker owns hosted source refreshes, review notification
+   preparation, and `/ops/` reconciliation/deployment as well as local production.
+   Since 2026-10-14 it cannot approve or publish a store review reply.
    ChatGPT must not dispatch, retry, compensate for, or duplicate any of them.
 
 This is an execution-boundary fix, not a relaxation of any safety gate.
@@ -71,14 +72,16 @@ must not be followed by divergence decisions against a stale `origin/main`. The 
   `Refresh AI Operations Sources`, and `Sync Store Reviews` GitHub Actions in
   that order, with dashboard deployment disabled on the app/review sync calls, then
   runs the dedicated `Deploy Ops Dashboard` workflow exactly once after any
-  standing-policy review reply verification; that final workflow rebuilds and
+  store-review notification preparation; that final workflow rebuilds and
   deploys `/ops/` from the combined hosted and local snapshots and verifies
   custom-domain bytes, indexing directives, robots.txt, sitemap/navigation exclusion,
   and legacy-route absence into `data/ops_live_verification.json`;
-- after the fresh review sync, queues eligible real-ID text reviews under the
-  2026-09-24 owner standing policy, publishes them one-at-a-time through the
-  existing GitHub publisher workflow, then re-syncs reviews and requires the
-  store-observed developer reply before considering each reply complete;
+- after the fresh review sync, prepares pending owner notifications in
+  `data/store_review_notifications.json`, mirrored in the daily result's
+  `store_review_notifications` field. It never creates standing approvals,
+  dispatches a reply publisher, or retries a queued/failed public reply. The
+  owner-chat reporter delivers each current notification once and records the
+  returned owner-message receipt; see `docs/Store_Review_Response_Guide.md`;
 - reconciles existing durable Aether single and compilation jobs; when the
   single reconcile already returns a same-day durable job/video in scheduled,
   processing, or published state, that exact job becomes the slot result and the
@@ -249,8 +252,8 @@ written to the durable report.
   those still require the usual clean-worktree and timing gates.
 - For the sequential app/AI/review source sync chain, a truly failed or
   unverified predecessor prevents subsequent dispatches, reply approvals,
-  review publication and the Ops deploy. The Ops deploy and standing-review
-  publication paths use the same read-only check. Already dispatched review
+  notification preparation and the Ops deploy. The Ops deploy uses the same
+  read-only check. Historical already-dispatched review
   replies retain their durable approval IDs and still require store-observed
   reply proof before being reported as published.
 
@@ -281,3 +284,4 @@ Manual-only `--probe` performs a non-paid connectivity/readiness check and write
 `probe-result.json`, never the authoritative daily `result.json`. It may refresh
 read-only YouTube reports but never generates music, renders media, or publishes
 a video. Scheduled ChatGPT verification must not invoke this probe.
+

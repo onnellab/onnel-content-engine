@@ -397,150 +397,46 @@ def run_hosted_ops_workflows(report: dict) -> bool:
 
 
 def run_store_review_auto_replies(report: dict) -> None:
+    """Legacy function name retained; this stage only prepares owner notifications."""
     code, stdout, _ = run_step(
-        report,
-        "queue_standing_store_review_replies",
+        report, "prepare_store_review_notifications",
         [sys.executable, "-B", "scripts/queue_standing_store_review_replies.py"],
         timeout=120,
     )
     payload = json_stdout(stdout)
-    report["store_review_auto_replies"] = payload
+    report["store_review_notifications"] = payload
+    report["store_review_auto_replies"] = {"mode": "disabled", "queued": [], "publication_allowed": False}
     if code != 0:
-        report["blockers"].append("store_review_auto_reply_queue_failed")
+        report["blockers"].append("store_review_notification_prepare_failed")
         return
-    queued = payload.get("queued", []) if isinstance(payload, dict) else []
-    if not isinstance(queued, list):
-        report["blockers"].append("store_review_auto_reply_queue_invalid")
+    if (payload.get("mode") != "notify_only" or payload.get("queued") != []
+            or payload.get("publication_allowed") is not False
+            or not isinstance(payload.get("notifications"), list)):
+        report["blockers"].append("store_review_notification_contract_invalid")
         return
-
-    if payload.get("changed"):
-        code, names, _ = run_step(
-            report, "review_approval_changed_paths", ["git", "diff", "--name-only"], timeout=30,
-        )
-        changed = {line.strip() for line in names.splitlines() if line.strip()}
-        if code != 0 or changed != {"data/store_review_approvals.json"}:
-            report["blockers"].append("review_approval_unexpected_changes")
-            return
-        code, _, _ = run_step(
-            report, "review_approval_stage", ["git", "add", "data/store_review_approvals.json"], timeout=30,
-        )
-        if code != 0:
-            report["blockers"].append("review_approval_stage_failed")
-            return
-        code, _, _ = run_step(
-            report, "review_approval_commit", ["git", "commit", "-m", "Queue standing store review replies"], timeout=120,
-        )
-        if code != 0:
-            report["blockers"].append("review_approval_commit_failed")
-            return
-        code, _, _ = run_step(report, "review_approval_fetch", ["git", "fetch", "origin", "main"], timeout=120)
-        if code != 0:
-            report["blockers"].append("review_approval_fetch_failed")
-            return
-        code, counts, _ = run_step(
-            report, "review_approval_divergence",
-            ["git", "rev-list", "--left-right", "--count", "HEAD...origin/main"], timeout=30,
-        )
-        parts = counts.split()
-        if code != 0 or len(parts) != 2:
-            report["blockers"].append("review_approval_divergence_failed")
-            return
-        if int(parts[1]):
-            code, _, _ = run_step(report, "review_approval_rebase", ["git", "rebase", "origin/main"], timeout=180)
-            if code != 0:
-                report["blockers"].append("review_approval_rebase_failed")
-                return
-        code, _, _ = run_step(report, "review_approval_push", ["git", "push", "origin", "HEAD:main"], timeout=180)
-        if code != 0:
-            report["blockers"].append("review_approval_push_failed")
-            return
-
-    published_ids: list[str] = []
-    for row in queued:
-        if not isinstance(row, dict):
-            continue
-        approval_id = str(row.get("approval_id", ""))
-        review_id = str(row.get("review_id", ""))
-        if not approval_id or not review_id:
-            report["blockers"].append("store_review_auto_reply_record_invalid")
-            continue
-        code, dispatch_stdout, _ = run_step(
-            report,
-            f"dispatch_review_reply_{review_id}",
-            [
-                "gh", "workflow", "run", "Publish Approved Store Review Reply",
-                "-R", "onnellab/onnel-content-engine", "--ref", "main",
-                "-f", f"approval_id={approval_id}", "-f", "confirm_publish=PUBLISH",
-            ],
-            timeout=90,
-        )
-        url = next((line.strip() for line in reversed(dispatch_stdout.splitlines()) if "/actions/runs/" in line), "")
-        run_id = url.rstrip("/").split("/")[-1] if url else ""
-        if code != 0 or not run_id.isdigit():
-            report["blockers"].append(f"store_review_reply_dispatch_failed:{review_id}")
-            continue
-        observed = watch_hosted_run(
-            report, label=f"review_reply_{review_id}", run_id=run_id,
-            workflow="Publish Approved Store Review Reply", watch_timeout=1200,
-        )
-        if observed["status"] == "unverified":
-            report["blockers"].append(f"store_review_reply_verification_unavailable:{review_id}")
-            # It may already be published. Never start the next reply until
-            # the original external publication outcome is observable.
-            return
-        if observed["status"] == "failed":
-            report["blockers"].append(f"store_review_reply_publish_failed:{review_id}")
-        published_ids.append(review_id)
-
-    if not published_ids:
+    # The scheduled reporting task delivers pending notifications to the owner
+    # and records its message receipt. Preparing this outbox is not delivery.
+    if not payload.get("changed"):
         return
-
-    code, dispatch_stdout, _ = run_step(
-        report,
-        "dispatch_review_verification_sync",
-        [
-            "gh", "workflow", "run", "Sync Store Reviews",
-            "-R", "onnellab/onnel-content-engine", "--ref", "main",
-            "-f", "deploy_dashboard=false",
-        ],
-        timeout=90,
+    allowed = {"data/store_review_approvals.json", "data/store_review_notifications.json"}
+    code, names, _ = run_step(
+        report, "review_notification_changed_paths", ["git", "diff", "--name-only"], timeout=30,
     )
-    url = next((line.strip() for line in reversed(dispatch_stdout.splitlines()) if "/actions/runs/" in line), "")
-    run_id = url.rstrip("/").split("/")[-1] if url else ""
-    if code != 0 or not run_id.isdigit():
-        report["blockers"].append("store_review_verification_sync_dispatch_failed")
+    changed = {line.strip() for line in names.splitlines() if line.strip()}
+    if code != 0 or not changed or not changed.issubset(allowed):
+        report["blockers"].append("review_notification_unexpected_changes")
         return
-    observed = watch_hosted_run(
-        report, label="review_verification_sync", run_id=run_id,
-        workflow="Sync Store Reviews",
-    )
-    if observed["status"] != "success":
-        report["blockers"].append(
-            "store_review_verification_sync_failed" if observed["status"] == "failed"
-            else "store_review_verification_sync_unavailable"
-        )
-        return
-    code, _, _ = run_step(report, "review_verification_fetch", ["git", "fetch", "origin", "main"], timeout=120)
-    if code != 0:
-        report["blockers"].append("review_verification_fetch_failed")
-        return
-    code, _, _ = run_step(report, "review_verification_pull", ["git", "pull", "--ff-only", "origin", "main"], timeout=180)
-    if code != 0:
-        report["blockers"].append("store_review_verification_pull_failed")
-        return
-    with (REPO / "data/store_reviews.csv").open(encoding="utf-8", newline="") as handle:
-        reviews = {row.get("review_id", ""): row for row in csv.DictReader(handle)}
-    verified = []
-    for review_id in published_ids:
-        row = reviews.get(review_id, {})
-        if row.get("developer_reply") and row.get("status") == "replied":
-            verified.append(review_id)
-        else:
-            report["blockers"].append(f"store_review_reply_not_observed:{review_id}")
-    report["store_review_auto_replies"]["store_observed"] = verified
-
-
-
+    for name, argv, timeout in (
+        ("stage", ["git", "add", *sorted(changed)], 30),
+        ("commit", ["git", "commit", "-m", "Prepare store review owner notifications"], 120),
+        ("fetch", ["git", "fetch", "origin", "main"], 120),
+        ("rebase", ["git", "rebase", "origin/main"], 180),
+        ("push", ["git", "push", "origin", "HEAD:main"], 180),
+    ):
+        code, _, _ = run_step(report, f"review_notification_{name}", argv, timeout=timeout)
+        if code != 0:
+            report["blockers"].append(f"review_notification_{name}_failed")
+            return
 
 
 def run_ops_dashboard_deploy(report: dict) -> None:
@@ -1180,17 +1076,7 @@ def main() -> int:
         hosted_sources_ready = run_hosted_ops_workflows(report)
         if hosted_sources_ready:
             run_store_review_auto_replies(report)
-            if any(
-                blocker.startswith("store_review_reply_verification_unavailable:")
-                or blocker in {
-                    "store_review_verification_sync_unavailable",
-                    "store_review_verification_sync_failed",
-                }
-                for blocker in report["blockers"]
-            ):
-                report["ops_dashboard_skip_reason"] = "store_review_publication_unverified"
-            else:
-                run_ops_dashboard_deploy(report)
+            run_ops_dashboard_deploy(report)
         else:
             report["hosted_ops_downstream"] = "skipped_unverified_or_failed_source"
         # Aether reconciliation/music is independent of hosted workflows. A
@@ -1232,3 +1118,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
