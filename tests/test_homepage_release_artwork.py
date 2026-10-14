@@ -168,6 +168,25 @@ class Staging(unittest.TestCase):
         self.assertEqual(report['apps'][0]['status'], 'blocked')
         self.assertIn('24 hours', report['apps'][0]['reason'])
 
+    def test_committed_capture_and_candidate_without_inventory_do_not_register_app(self):
+        # Real observed migration shape: pubspec, store identity and captures
+        # exist, sometimes candidate/review too, but no release/artwork.json.
+        app = self.repo / 'nested/app'
+        (app / 'release').mkdir(parents=True)
+        (app / 'assets/store_promo/ios_devices/iphone_medium/en').mkdir(parents=True)
+        (app / 'pubspec.yaml').write_text('name: app\nversion: 2.5.4+98\n')
+        (app / 'release/store_upload.json').write_text('{"schema_version":1,"app_name":"App"}')
+        (app / 'release/artwork-candidate.json').write_text('{"app_slug":"app"}')
+        (app / 'release/artwork-review.json').write_text('{"status":"pending"}')
+        (app / 'assets/store_promo/ios_devices/iphone_medium/en/render_manifest.json').write_text('{"screens":[]}')
+        subprocess.run(['git', '-C', str(self.repo), 'add', '.'], check=True)
+        subprocess.run(['git', '-C', str(self.repo), '-c', 'user.name=Fixture',
+                        '-c', 'user.email=fixture@example.invalid', '-c', 'core.hooksPath=/dev/null',
+                        '-c', 'commit.gpgSign=false', 'commit', '-qm', 'Observed inventory gap'], check=True)
+        with self.assertRaisesRegex(ValueError, 'found 0'):
+            stage.locate_project(self.repo, 'app')
+        self.assertFalse((app / 'release/artwork.json').exists())
+
     def test_missing_inventory_does_not_fallback_to_existing_site_images(self):
         with self.assertRaises(ValueError):
             stage.locate_project(self.repo, 'app')

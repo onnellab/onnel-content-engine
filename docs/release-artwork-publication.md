@@ -272,3 +272,27 @@ Any gate/runtime/cleanup failure stops subsequent containers without retry; a
 nonzero attach is not misclassified as a proven per-app evidence rejection. The
 normal publisher still selects bubblewrap, Docker staging stays disabled, and
 no automatic schedule is added by this diagnostic.
+
+### Data-only inventory registration
+
+`register_artwork_inventory.py` prepares a partial `release/artwork.json` draft
+and a separate readiness report from existing app files and the existing site
+screenshot mapping. It never imports app code, captures, renders, resizes,
+approves, stages, or writes into either input checkout. The output directory must
+be new, owned, and outside both input trees. It refuses unsafe paths and records
+actual dimensions/hashes rather than normalizing legacy exports.
+
+The caller supplies explicit project/site paths, app slug, iPad support, the
+existing Android renderer path and arguments, and the existing shared-renderer
+directory. Locale, numeric index, count, source/capture, renderer and manifest
+mismatches remain blockers. Existing Android files remain present even when
+incompatible or stale; registration cannot silently select iPhone in their place.
+Missing records are omitted from the draft and listed in the report, never
+replaced with invented capture receipts or review approval. Source currentness,
+canonical verification and independent review remain unverified.
+
+A successfully generated draft exits with code 2 and reports readiness BLOCKED;
+this is not a release candidate or a gate pass. Installing the draft is a separate
+coordinated app change, followed by genuine current evidence and the canonical
+isolated verifier. App-specific custom gates such as Papira require their own
+reviewed compatibility plan; do not replace them with this shared schema.
