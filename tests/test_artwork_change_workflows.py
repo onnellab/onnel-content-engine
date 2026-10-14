@@ -25,11 +25,11 @@ class ArtworkChangeWorkflowTests(unittest.TestCase):
     def test_docker_trial_is_explicit_readonly_and_has_no_private_read_fallback(self):
         text = STATUS.read_text()
         blocks = steps(text)
-        self.assertTrue(blocks[0].startswith('Validate read-only Docker trial inputs'))
+        self.assertTrue(blocks[0].startswith('Validate read-only isolation diagnostic inputs'))
         self.assertIn('inputs.artwork_docker_trial == true', blocks[0])
         self.assertIn('inputs.artwork_read_only', blocks[0])
         self.assertIn('exit 1', blocks[0])
-        self.assertIn("(inputs.artwork_read_only || inputs.artwork_docker_trial) && 'Read-only artwork access probe'", text)
+        self.assertIn("(inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection) && 'Read-only artwork access probe'", text)
         install = next(b for b in blocks if b.startswith('Install isolated'))
         self.assertIn('inputs.artwork_docker_trial != true', install)
         guard = next(b for b in blocks if b.startswith('Sync GitHub main'))
@@ -39,6 +39,21 @@ class ArtworkChangeWorkflowTests(unittest.TestCase):
         production = (ROOT / 'scripts/isolated_vendored_artwork.py').read_text()
         self.assertNotIn('check_artwork_docker_isolation', production)
         self.assertNotIn('docker', production.lower())
+
+    def test_profile_inspection_is_standalone_readonly_and_never_resumes_docker(self):
+        text = STATUS.read_text()
+        blocks = steps(text)
+        self.assertIn('artwork_profile_inspection:', text)
+        self.assertIn('inputs.artwork_profile_inspection == true', blocks[0])
+        self.assertIn('Choose one standalone isolation diagnostic', blocks[0])
+        self.assertIn('inputs.artwork_read_only', blocks[0])
+        install = next(b for b in blocks if b.startswith('Install isolated'))
+        self.assertIn('inputs.artwork_profile_inspection != true', install)
+        guard = next(b for b in blocks if b.startswith('Sync GitHub main'))
+        self.assertIn('/usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 /usr/bin/python3 -I -S -B scripts/check_artwork_apparmor_profile.py', guard)
+        self.assertLess(guard.index('check_artwork_apparmor_profile.py'), guard.index('elif [ "${{ inputs.artwork_docker_trial }}"'))
+        self.assertNotIn('|| python', guard)
+        self.assertNotIn('check_artwork_apparmor_profile', (ROOT / 'scripts/isolated_vendored_artwork.py').read_text())
 
     def test_existing_bound_read_step_prepares_full_local_evidence_before_probe(self):
         block = next(b for b in steps(STATUS.read_text()) if b.startswith('Sync GitHub main'))

@@ -192,3 +192,24 @@ Raw registry metadata hashes were verified on 2026-10-14; the matching official
 and [package inventory](https://github.com/docker-library/repo-info/blob/b109cef5939d0a66fe91551f7d663a910a90d0cb/repos/python/local/3.12-bookworm.md)
 confirm the immutable image and Git dependency. A digest fixes identity, not a
 promise of vulnerability-free software or automatic security updates.
+
+
+### Standalone AppArmor profile inspection
+
+The Docker trial's `existing_apparmor_policy_unreadable` result does not distinguish
+permission denial from a missing kernel file. An explicitly approved standalone
+inspection can diagnose this without starting Docker. Dispatch the existing
+workflow with `artwork_read_only=true`, `artwork_profile_inspection=true`,
+`artwork_docker_trial=false`, `artwork_check_only=false`, and
+`deploy_dashboard=false`. Combining the two diagnostics is rejected before checkout.
+
+The fixed public probe uses noninteractive `sudo` only to read
+`/sys/kernel/security/apparmor/profiles` and
+`/sys/module/apparmor/parameters/enabled`. Its environment is empty except a fixed
+PATH and locale. Output contains only fixed status/error categories and the
+presence of the unique enforcing `docker-default` profile; no profile listing,
+private inputs, credentials, or arbitrary command/path arguments are accepted.
+Reads and execution are bounded. Sudo may produce ordinary system audit records.
+No profile is loaded, no configuration is changed, and no daemon, image pull, or
+container is started. The diagnostic always ends after its report; even a positive
+result does not authorize or automatically resume the Docker trial or production.

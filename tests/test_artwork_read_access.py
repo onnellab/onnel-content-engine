@@ -101,7 +101,7 @@ class ReadAccessTests(unittest.TestCase):
         text = (FILE.parents[1] / '.github/workflows/sync-app-operational-status.yml').read_text()
         self.assertIn('artwork_read_only:', text)
         self.assertIn('python3 scripts/check_artwork_read_access.py', text)
-        self.assertIn("run-name: ${{ (inputs.artwork_read_only || inputs.artwork_docker_trial) && 'Read-only artwork access probe'", text)
+        self.assertIn("run-name: ${{ (inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection) && 'Read-only artwork access probe'", text)
         publisher = (FILE.parents[1] / '.github/workflows/publish-ready-app-releases.yml').read_text()
         self.assertIn("github.event.workflow_run.display_title != 'Read-only artwork access probe'", publisher)
         self.assertNotIn('ARTWORK_READ_TOKEN:', text)
