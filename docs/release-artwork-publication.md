@@ -152,3 +152,11 @@ No hourly schedule is enabled in this patch. It remains contingent on verified
 read-only runtime access and isolation. Coverage is the current public-release
 registry and existing website pages, not every template consumer: registering
 other apps and resolving custom evidence are separate readiness requirements.
+
+If the fixed public sandbox self-test fails, it reports only allowlisted failure
+categories, fixed errno names, bubblewrap version/required-option support and
+bounded read-only namespace/AppArmor capability facts. It never prints raw child
+output, profile names, host paths, credentials or private implementation code.
+The extra version/help reads do not retry the sandbox. Capability values alone
+are not proof of which security mechanism caused a failure. No kernel setting,
+profile, privilege or isolation option is changed by this diagnostic path.

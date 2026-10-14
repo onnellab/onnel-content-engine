@@ -325,6 +325,130 @@ def _run(command: list[str], *, timeout: int = 300) -> subprocess.CompletedProce
     return result
 
 
+def _self_test_failure(stderr: str) -> dict[str, str]:
+    """Classify trusted public probe failures, never return captured text/paths.
+
+    These signatures come from upstream bubblewrap v0.9.0 and SELF_TEST. A
+    permission error alone cannot establish that AppArmor caused the failure.
+    This classifier is deliberately separate from the private gate sanitizer.
+    """
+    lines = [line.lower() for line in stderr.splitlines() if line.startswith("bwrap:")]
+    text = "\n".join(lines)
+    category = "self_test_program_failed" if not lines else "bwrap_startup_unclassified"
+    signatures = (
+        (("unknown option",), "bwrap_option_unsupported"),
+        (("requires --", "not compatible", "takes one argument", "takes two arguments"), "bwrap_arguments_invalid"),
+        (("loopback:", "netlink_route"), "network_namespace_setup_failed"),
+        (("cgroup namespace", "stat on /proc/self/ns/cgroup failed"), "cgroup_namespace_setup_failed"),
+        (("kernel does not support user namespaces",), "user_namespace_unsupported"),
+        (("max_*_namespaces exceeded", "nesting depth"), "namespace_limit_exceeded"),
+        (("no permissions to creating new namespace", "no permissions to create a new namespace"), "namespace_creation_denied"),
+        (("creating new namespace failed",), "namespace_creation_failed"),
+        (("setting up uid map", "setting up gid map", "setgroups"), "user_namespace_id_map_failed"),
+        (("max_user_namespaces", "sysctl user.max_user_namespaces", "unshare user ns"), "nested_user_namespace_setup_failed"),
+        (("can't find source path", "can't get type of source"), "sandbox_mount_source_unavailable"),
+        (("can't mount", "can't bind mount", "can't remount", "mounting"), "sandbox_mount_setup_failed"),
+        (("can't mkdir", "can't create file", "can't make symlink"), "sandbox_destination_setup_failed"),
+        (("chdir", "change directory"), "sandbox_working_directory_failed"),
+        (("execvp",), "sandbox_interpreter_exec_failed"),
+    )
+    for markers, value in signatures:
+        if any(marker in text for marker in markers):
+            category = value
+            break
+    if not lines:
+        assertions = (
+            ("Sandbox environment differs", "self_test_environment_failed"),
+            ("namespace was not isolated", "self_test_namespace_isolation_failed"),
+            ("Python startup is not isolated", "self_test_interpreter_isolation_failed"),
+            ("import path", "self_test_import_isolation_failed"),
+            ("host path is visible", "self_test_filesystem_visibility_failed"),
+            ("read-only", "self_test_readonly_mount_failed"),
+            ("Read-only", "self_test_readonly_mount_failed"),
+            ("Git credentials were not hidden", "self_test_git_metadata_failed"),
+            ("external network", "self_test_network_isolation_failed"),
+            ("external address", "self_test_network_isolation_failed"),
+        )
+        category = next((value for marker, value in assertions if marker in stderr), category)
+    error = next((value for marker, value in (
+        ("operation not permitted", "EPERM"), ("permission denied", "EACCES"),
+        ("no such file or directory", "ENOENT"), ("read-only file system", "EROFS"),
+        ("invalid argument", "EINVAL"), ("no space left on device", "ENOSPC"))
+        if marker in text), "unclassified")
+    return {"category": category, "errno_hint": error}
+
+
+def _self_test_host_capabilities() -> dict:
+    """Read fixed public host facts; never mutate security or create a sandbox."""
+    facts = {}
+    for option in ("--version", "--help"):
+        try:
+            result = subprocess.run([str(BWRAP), option], env=dict(LAUNCH_ENV), cwd="/",
+                                    stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE, text=True, timeout=5, close_fds=True)
+            output = result.stdout if result.returncode == 0 else ""
+        except (OSError, subprocess.SubprocessError):
+            output = ""
+        if option == "--version":
+            match = re.fullmatch(r"bubblewrap ([0-9]{1,3}(?:\.[0-9]{1,3}){1,3})\s*", output)
+            facts["bwrap_version"] = match[1] if match else "unavailable"
+        else:
+            required = ("--die-with-parent", "--new-session", "--unshare-user", "--unshare-pid",
+                        "--unshare-net", "--unshare-ipc", "--unshare-uts", "--unshare-cgroup",
+                        "--disable-userns", "--cap-drop", "--clearenv", "--ro-bind", "--bind",
+                        "--proc", "--dev", "--tmpfs", "--remount-ro", "--setenv", "--chdir")
+            supported = set(re.findall(r"(?m)^\s*(--[a-z-]+)(?=\s|$)", output))
+            facts["bwrap_help"] = "read" if supported else "unavailable"
+            facts["required_options_missing"] = [flag for flag in required if flag not in supported] if supported else []
+
+    def read(path):
+        try:
+            with Path(path).open(encoding="utf-8") as handle:
+                text = handle.read(4097)
+            return text.strip() if len(text) <= 4096 else ""
+        except (OSError, UnicodeError):
+            return ""
+
+    for key, path in (
+            ("unprivileged_userns_clone", "/proc/sys/kernel/unprivileged_userns_clone"),
+            ("apparmor_restrict_unprivileged_userns", "/proc/sys/kernel/apparmor_restrict_unprivileged_userns"),
+            ("max_user_namespaces", "/proc/sys/user/max_user_namespaces")):
+        value = read(path)
+        facts[key] = int(value) if re.fullmatch(r"[0-9]{1,10}", value) else "unavailable"
+    enabled = read("/sys/module/apparmor/parameters/enabled")
+    facts["apparmor_enabled"] = {"Y": True, "N": False}.get(enabled, "unavailable")
+    profile = read("/proc/self/attr/current")
+    facts["parent_apparmor_state"] = ("unconfined" if profile == "unconfined" else
+                                        "confined" if profile else "unavailable")
+    try:
+        facts["bwrap_apparmor_profile_file"] = "present" if Path("/etc/apparmor.d/bwrap").is_file() else "absent"
+    except OSError:
+        facts["bwrap_apparmor_profile_file"] = "unavailable"
+    # File presence does not prove profile loading or that AppArmor denied us.
+    return facts
+
+
+def _run_self_test(command: list[str]) -> subprocess.CompletedProcess:
+    """One unchanged sandbox attempt; only public SELF_TEST is eligible here."""
+    try:
+        result = subprocess.run(command, env=dict(LAUNCH_ENV), cwd="/", stdin=subprocess.DEVNULL,
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                timeout=30, close_fds=True)
+    except (OSError, subprocess.SubprocessError) as error:
+        detail = {"category": "self_test_timeout" if isinstance(error, subprocess.TimeoutExpired)
+                  else "self_test_launch_failed", "errno_hint": "unclassified"}
+        result = None
+    else:
+        if result.returncode == 0:
+            return result
+        detail = _self_test_failure(result.stderr or "")
+    detail["host"] = _self_test_host_capabilities()
+    code = f"exit {result.returncode}" if result is not None else "not_completed"
+    raise ValueError("Artwork sandbox self-test blocked (" + code + "): " +
+                     json.dumps(detail, sort_keys=True, separators=(",", ":")) +
+                     "; no unisolated fallback") from None
+
+
 def sandbox_preflight() -> dict[str, str]:
     """Exercise OS isolation with trusted probe code, no template/app execution."""
     _runtime()
@@ -342,7 +466,7 @@ def sandbox_preflight() -> dict[str, str]:
         config.write_text(GIT_CONFIG)
         arguments = [json.dumps(CHILD_ENV, sort_keys=True), os.readlink("/proc/self/ns/net"),
                      os.readlink("/proc/self/ns/pid"), str(hidden)]
-        result = _run(_sandbox_command(repository, bundle, bootstrap, config, arguments), timeout=30)
+        result = _run_self_test(_sandbox_command(repository, bundle, bootstrap, config, arguments))
         if result.stdout.strip() != "ARTWORK_SANDBOX_OK":
             raise ValueError("Artwork sandbox self-test did not confirm isolation")
     return {"status": "verified", "isolation": "bubblewrap", "network": "unshared",

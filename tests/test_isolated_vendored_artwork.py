@@ -6,6 +6,7 @@ command is for the authorized Linux job and fails closed on denied namespaces.
 import ast
 from contextlib import contextmanager
 import hashlib
+import io
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -481,11 +482,130 @@ class EngineAllowlistAndProbe(unittest.TestCase):
                 gate.sandbox_preflight()
 
     def test_runtime_probe_rejects_denied_namespace(self):
-        with mocked_linux_host(), patch.object(gate, "_runtime"), patch.object(gate.subprocess, "run", return_value=
+        with mocked_linux_host(), patch.object(gate, "_runtime"), \
+                patch.object(gate, "_self_test_host_capabilities", return_value={}), \
+                patch.object(gate.subprocess, "run", return_value=
                 subprocess.CompletedProcess(["bwrap"], 1, "", "Operation not permitted")) as run:
             with self.assertRaisesRegex(ValueError, "exit 1.*no unisolated fallback"):
                 gate.sandbox_preflight()
             self.assertEqual(run.call_count, 1)
+
+
+class TrustedSelfTestDiagnostics(unittest.TestCase):
+    def test_fixed_startup_categories_distinguish_arguments_namespaces_mounts_and_exec(self):
+        cases = (
+            ("bwrap: Unknown option --private-secret", "bwrap_option_unsupported", "unclassified"),
+            ("bwrap: --disable-userns requires --unshare-user", "bwrap_arguments_invalid", "unclassified"),
+            ("bwrap: loopback: Failed to create NETLINK_ROUTE socket: Operation not permitted", "network_namespace_setup_failed", "EPERM"),
+            ("bwrap: Cannot create new cgroup namespace because the kernel does not support it", "cgroup_namespace_setup_failed", "unclassified"),
+            ("bwrap: stat on /proc/self/ns/cgroup failed: Permission denied", "cgroup_namespace_setup_failed", "EACCES"),
+            ("bwrap: No permissions to creating new namespace, likely because the kernel does not allow non-privileged user namespaces.", "namespace_creation_denied", "unclassified"),
+            ("bwrap: Creating new namespace failed: Operation not permitted", "namespace_creation_failed", "EPERM"),
+            ("bwrap: Creating new namespace failed: nesting depth or max_*_namespaces exceeded (ENOSPC)", "namespace_limit_exceeded", "unclassified"),
+            ("bwrap: setting up uid map: Permission denied", "user_namespace_id_map_failed", "EACCES"),
+            ("bwrap: cannot open /proc/sys/user/max_user_namespaces: Permission denied", "nested_user_namespace_setup_failed", "EACCES"),
+            ("bwrap: Can't bind mount /host/private-canary on /app: Operation not permitted", "sandbox_mount_setup_failed", "EPERM"),
+            ("bwrap: Can't create file at /host/private-canary: Read-only file system", "sandbox_destination_setup_failed", "EROFS"),
+            ("bwrap: Can't find source path /host/private-canary: No such file or directory", "sandbox_mount_source_unavailable", "ENOENT"),
+            ("bwrap: execvp /usr/bin/python3: No such file or directory", "sandbox_interpreter_exec_failed", "ENOENT"),
+            ("bwrap: chdir /app: No such file or directory", "sandbox_working_directory_failed", "ENOENT"),
+            ("bwrap: Unrecognized failure /host/private-canary", "bwrap_startup_unclassified", "unclassified"),
+        )
+        for stderr, category, errno in cases:
+            with self.subTest(category=category):
+                result = gate._self_test_failure(stderr)
+                self.assertEqual(result, {"category": category, "errno_hint": errno})
+                self.assertNotIn("private", json.dumps(result))
+
+    def test_public_program_assertions_are_fixed_categories_without_paths(self):
+        result = gate._self_test_failure("Traceback PRIVATE_SOURCE\nRuntimeError: Unexpected host path is visible: /host/private-canary")
+        self.assertEqual(result["category"], "self_test_filesystem_visibility_failed")
+        self.assertNotIn("private", json.dumps(result))
+        self.assertNotIn("PRIVATE", json.dumps(result))
+
+    def test_failure_collects_facts_without_retrying_or_weakening_sandbox(self):
+        command = [str(gate.BWRAP), "--unshare-net", "--unshare-user", "--", "/trusted-public-probe"]
+        facts = {"bwrap_version": "0.9.0", "apparmor_restrict_unprivileged_userns": 1}
+        with patch.object(gate, "_self_test_host_capabilities", return_value=facts) as capabilities, \
+                patch.object(gate.subprocess, "run", return_value=subprocess.CompletedProcess(
+                    command, 1, "STDOUT_SECRET", "bwrap: Can't mount proc on /private-path: Operation not permitted")) as run:
+            with self.assertRaises(ValueError) as error:
+                gate._run_self_test(command)
+        self.assertEqual(run.call_count, 1)
+        self.assertEqual(run.call_args.args[0], command)
+        self.assertEqual(run.call_args.kwargs["env"], gate.LAUNCH_ENV)
+        self.assertTrue(run.call_args.kwargs["close_fds"])
+        self.assertEqual(capabilities.call_count, 1)
+        self.assertIn("sandbox_mount_setup_failed", str(error.exception))
+        self.assertNotIn("private-path", str(error.exception))
+        self.assertNotIn("STDOUT_SECRET", str(error.exception))
+        self.assertNotIn("apparmor_denied", str(error.exception))
+
+    def test_host_capabilities_query_only_public_help_version_and_fixed_readonly_files(self):
+        files = {"/proc/sys/kernel/unprivileged_userns_clone": "1\n",
+                 "/proc/sys/kernel/apparmor_restrict_unprivileged_userns": "1\n",
+                 "/proc/sys/user/max_user_namespaces": "6191584\n",
+                 "/sys/module/apparmor/parameters/enabled": "Y\n",
+                 "/proc/self/attr/current": "private-profile-name (enforce)\n"}
+        reads = []
+        def open_file(path, *args, **kwargs):
+            self.assertEqual(args, ())
+            self.assertEqual(kwargs, {"encoding": "utf-8"})
+            reads.append(str(path))
+            return io.StringIO(files[str(path)])
+        def command(argv, **kwargs):
+            self.assertEqual(argv[0], str(gate.BWRAP))
+            self.assertIn(argv[1], ("--version", "--help"))
+            self.assertEqual(len(argv), 2)
+            self.assertEqual(kwargs["env"], gate.LAUNCH_ENV)
+            self.assertEqual(kwargs["stdin"], subprocess.DEVNULL)
+            self.assertEqual(kwargs["timeout"], 5)
+            self.assertTrue(kwargs["close_fds"])
+            output = "bubblewrap 0.9.0\n" if argv[1] == "--version" else " --unshare-user Create namespace\n --clearenv Clear\n"
+            return subprocess.CompletedProcess(argv, 0, output, "PRIVATE_STDERR")
+        with patch.object(gate.subprocess, "run", side_effect=command) as run, \
+                patch.object(Path, "open", open_file), patch.object(Path, "is_file", return_value=True):
+            facts = gate._self_test_host_capabilities()
+        self.assertEqual(run.call_count, 2)
+        self.assertEqual(set(reads), set(files))
+        self.assertEqual(facts["bwrap_version"], "0.9.0")
+        self.assertEqual(facts["parent_apparmor_state"], "confined")
+        self.assertEqual(facts["max_user_namespaces"], 6191584)
+        self.assertIn("--disable-userns", facts["required_options_missing"])
+        self.assertNotIn("--clearenv", facts["required_options_missing"])
+        self.assertNotIn("private", json.dumps(facts))
+        self.assertNotIn("PRIVATE", json.dumps(facts))
+
+    def test_unreadable_or_malformed_host_facts_are_never_copied_to_output(self):
+        with patch.object(gate.subprocess, "run", return_value=subprocess.CompletedProcess(
+                ["bwrap"], 0, "PRIVATE_SOURCE_TOKEN /host/path\n", "PRIVATE_STDERR")), \
+                patch.object(Path, "open", side_effect=PermissionError("private path")), \
+                patch.object(Path, "is_file", side_effect=PermissionError("private path")):
+            facts = gate._self_test_host_capabilities()
+        self.assertEqual(facts["bwrap_version"], "unavailable")
+        self.assertEqual(facts["bwrap_help"], "unavailable")
+        self.assertEqual(facts["parent_apparmor_state"], "unavailable")
+        self.assertEqual(facts["bwrap_apparmor_profile_file"], "unavailable")
+        self.assertNotIn("PRIVATE", json.dumps(facts))
+        self.assertNotIn("private path", json.dumps(facts))
+
+    def test_launch_failure_and_timeout_are_sanitized_without_retry(self):
+        for failure in (PermissionError("PRIVATE_PATH"), subprocess.TimeoutExpired("PRIVATE_COMMAND", 30)):
+            with self.subTest(failure=type(failure).__name__), \
+                    patch.object(gate, "_self_test_host_capabilities", return_value={}), \
+                    patch.object(gate.subprocess, "run", side_effect=failure) as run:
+                with self.assertRaises(ValueError) as error:
+                    gate._run_self_test([str(gate.BWRAP)])
+            self.assertEqual(run.call_count, 1)
+            self.assertNotIn("PRIVATE", str(error.exception))
+
+    def test_success_has_no_extra_diagnostic_processes(self):
+        with patch.object(gate.subprocess, "run", return_value=subprocess.CompletedProcess(
+                ["bwrap"], 0, "ARTWORK_SANDBOX_OK\n", "")) as run, \
+                patch.object(gate, "_self_test_host_capabilities") as capabilities:
+            gate._run_self_test([str(gate.BWRAP)])
+        self.assertEqual(run.call_count, 1)
+        capabilities.assert_not_called()
 
 
 if __name__ == "__main__":
