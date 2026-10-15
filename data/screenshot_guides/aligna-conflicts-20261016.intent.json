@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "guide_id": "aligna-conflicts-20261016",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "status": "ready_for_browser_upload",
+  "video_sha256": "838e221f80d643d0d6d37c41c2c56351d02a339733d568f5a398adca4a499feb",
+  "manifest_sha256": "12b9fcdd314e96d38ce9a09d37c37f643f11012efadc3bf6d7939f9e92a6073f",
+  "library_file_id": "libfile_8b52c054f95081918c7d542a5dd0e3e8",
+  "target_publish_at": "2026-10-16T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "video_id": null,
+  "upload_attempts": 0,
+  "created_at": "2026-10-15T10:14:07Z",
+  "deduplication": "All 9 Shorts and 6 ordinary videos inspected in exact channel; existing Aligna a8nbWjbLNAM covers sequence preview, not this conflict-setting topic. No pending upload seen. Verify Studio again before any retry."
+}

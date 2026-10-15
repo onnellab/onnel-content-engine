@@ -286,13 +286,91 @@ def _validate_quivra(manifest, asset_root):
             'runtime_recording_attestation': False, 'upload_authorized_by_cli': False}
 
 
+ALIGNA_CONTRACT = {'schema_version': 1,
+ 'kind': 'screenshot_guide',
+ 'guide_id': 'aligna-conflicts-20261016',
+ 'app_id': 'APP-0006',
+ 'locale': 'en',
+ 'channel_id': 'UCXyRedrldRBl9Y35nyWoTLg',
+ 'source': {'repository': 'onnellab/aligna',
+            'commit': '2b72a1555d0be76df91064751db240cb218ba0e3',
+            'capture_manifest_path': 'assets/store_promo/evidence/capture_android.json',
+            'capture_source_commit': '427f7d94dcc1c165774efa27996f691f4b3b55a7',
+            'capture_source_version': '1.0.7+23',
+            'reviewed_source_version': '1.1.0+26',
+            'public_version_observed': '1.1.0',
+            'public_version_source': 'https://play.google.com/store/apps/details?id=com.onnellab.aligna',
+            'public_version_checked_at': '2026-10-15T10:07:31Z',
+            'capture_type': 'real_android_emulator_ui_with_repository_demonstration_filenames',
+            'provenance': 'Android emulator adb screencap, profile build, ALIGNA_SCREENSHOT_MODE '
+                          'fixture. Capture 2026-10-10. Whole frame retained; not a signed-release '
+                          'capture.',
+            'rights': 'ONNELLAB-owned app UI and repository-authored demonstration filenames. No '
+                      'user files, stock imagery, narration or music.',
+            'source_parity': 'The selected conflict option and preview widgets remain '
+                             'byte-identical from capture source to reviewed main. Other runtime '
+                             'files changed; no claim of complete source or exact signed-release '
+                             'visual parity. Public Play listing explicitly describes skipping '
+                             'conflicting files.',
+            'limitations': ['Screenshot is a seeded preview, not an actual rename or collision '
+                            'outcome.',
+                            'Capture version 1.0.7+23 predates public 1.1.0; only the '
+                            'still-present setting and visible demo preview are described.'],
+            'runtime_rename_verified': False,
+            'signed_release_capture_attested': False},
+ 'assets': [{'local_name': '04.png',
+             'source_path': 'assets/store_promo/raw/android/en/04.png',
+             'sha256': '810c45d061b8c75434ac63bc35f96c7aa5fd80a6dd5b1534aa8d74d102781bf0',
+             'dimensions': [1080, 2160]}],
+ 'slides': [{'heading': 'Handle matching file names',
+             'caption': 'Find Skip conflicting files in Aligna.',
+             'asset': '04.png',
+             'seconds': 5},
+            {'heading': 'Choose to skip conflicts',
+             'caption': 'The switch is on in this example.',
+             'asset': '04.png',
+             'seconds': 5},
+            {'heading': 'Review before you apply',
+             'caption': 'This is a preview, not a rename result.',
+             'asset': '04.png',
+             'seconds': 5}],
+ 'metadata': {'title': 'How to Skip Conflicting File Names in Aligna | Screenshot Guide',
+              'description': 'To skip files whose new names already exist, turn on Skip '
+                             'conflicting files in Aligna. Review the proposed names before using '
+                             'Apply.\n'
+                             '\n'
+                             'Still-screen guide using a real Android emulator screenshot with '
+                             'repository demonstration filenames. The switch is already on in the '
+                             'example. No taps, actual conflict, rename result, or speed '
+                             'demonstration is shown.\n'
+                             '\n'
+                             'Explore Aligna for Android:\n'
+                             'https://play.google.com/store/apps/details?id=com.onnellab.aligna\n'
+                             '\n'
+                             '#Aligna #FileRenamer #Shorts',
+              'format_disclosure': 'Still-screen guide · Demo filenames',
+              'audio': 'none',
+              'made_for_kids': False,
+              'synthetic_media': False,
+              'category': 'Education',
+              'cta': 'Aligna for Android · Link in description',
+              'target_publish_at': '2026-10-16T09:00:00+09:00',
+              'timezone': 'Asia/Seoul'},
+ 'authorization': {'format_approved_on': '2026-10-08',
+                   'rights_basis': 'ONNELLAB-owned app UI and repository-owned demonstration data',
+                   'scope': 'English screenshot-based app guide on ONNELLAB YouTube; no simulated '
+                            'interaction; existing recording gate unchanged',
+                   'execution_scope': 'User-requested free dot-cloud app Shorts production, '
+                                      'verification, and browser scheduling; no separate '
+                                      'Work/Codex or paid service.'}}
+
 def validate(manifest, asset_root):
     """Dispatch only independently reviewed per-app still-screen contracts."""
-    if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0007', 'APP-0005'):
+    if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0007', 'APP-0005', 'APP-0006'):
         clipnest = manifest['app_id'] == 'APP-0005'
-        contract = CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
+        contract = ALIGNA_CONTRACT if manifest['app_id'] == 'APP-0006' else CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
         if canonical(manifest) != canonical(contract):
-            raise GuideError('clipnest_manifest_requires_review' if clipnest else 'melivra_manifest_requires_review')
+            raise GuideError('aligna_manifest_requires_review' if manifest['app_id'] == 'APP-0006' else 'clipnest_manifest_requires_review' if clipnest else 'melivra_manifest_requires_review')
         root = Path(asset_root).resolve()
         hashes = {}
         for asset in contract['assets']:
@@ -311,6 +389,7 @@ def validate(manifest, asset_root):
 
 def render(manifest, asset_root, output):
     evidence = validate(manifest, asset_root)
+    aligna = manifest['app_id'] == 'APP-0006'
     melivra = manifest['app_id'] == 'APP-0007'
     clipnest = manifest['app_id'] == 'APP-0005'
     output = Path(output)
@@ -341,20 +420,20 @@ def render(manifest, asset_root, output):
             text_bounds.append({'slide': index+1, 'text': text, 'bbox': list(bounds)})
             draw.text(position, text, font=font, fill=color)
         draw.rounded_rectangle((64,64,1016,126), radius=25, fill='#eae4f5')
-        center('CLIPNEST · SCREENSHOT GUIDE' if clipnest else 'MELIVRA · SCREENSHOT GUIDE' if melivra else 'QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
+        center('ALIGNA · SCREENSHOT GUIDE' if aligna else 'CLIPNEST · SCREENSHOT GUIDE' if clipnest else 'MELIVRA · SCREENSHOT GUIDE' if melivra else 'QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
         center(slide['heading'], 166, bold(48))
         center(slide['caption'], 235, regular(32), '#645c74')
         source = Image.open(Path(asset_root) / slide['asset']).convert('RGB')
-        if source.size != ((1206,2622) if clipnest else (1080,2400) if melivra else (1080,1920)):
+        if source.size != ((1080,2160) if aligna else (1206,2622) if clipnest else (1080,2400) if melivra else (1080,1920)):
             raise GuideError('source_geometry_changed')
         # Entire screenshot, uniformly scaled. No crop, synthetic taps or UI edits.
-        size = (603,1311) if clipnest else (621,1380) if melivra else (756,1344)
-        x, y = (238,330) if clipnest else (229,300) if melivra else (162,320)
+        size = (675,1350) if aligna else (603,1311) if clipnest else (621,1380) if melivra else (756,1344)
+        x, y = (202,320) if aligna else (238,330) if clipnest else (229,300) if melivra else (162,320)
         source = source.resize(size, Image.Resampling.LANCZOS)
         canvas.paste(source,(x,y))
         draw.rounded_rectangle((x-3,y-3,x+size[0]+3,y+size[1]+3), radius=3, outline='#d8cdeb', width=3)
         center(manifest['metadata']['format_disclosure'], 1721, regular(31), '#645c74')
-        center(manifest['metadata']['cta'] if clipnest else 'Melivra for Android · Link in description' if melivra else 'App Store & Google Play links in the description', 1783, regular(29))
+        center(manifest['metadata']['cta'] if clipnest or aligna else 'Melivra for Android · Link in description' if melivra else 'App Store & Google Play links in the description', 1783, regular(29))
         center('ONNELLAB', 1841, bold(26), '#8c839e')
         frame = output / f'slide-{index+1}.png'
         canvas.save(frame)
@@ -401,5 +480,6 @@ def main():
 
 if __name__=='__main__':
     raise SystemExit(main())
+
 
 

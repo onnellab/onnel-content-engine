@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "aligna-conflicts-20261016",
+  "app_id": "APP-0006",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/aligna",
+    "commit": "2b72a1555d0be76df91064751db240cb218ba0e3",
+    "capture_manifest_path": "assets/store_promo/evidence/capture_android.json",
+    "capture_source_commit": "427f7d94dcc1c165774efa27996f691f4b3b55a7",
+    "capture_source_version": "1.0.7+23",
+    "reviewed_source_version": "1.1.0+26",
+    "public_version_observed": "1.1.0",
+    "public_version_source": "https://play.google.com/store/apps/details?id=com.onnellab.aligna",
+    "public_version_checked_at": "2026-10-15T10:07:31Z",
+    "capture_type": "real_android_emulator_ui_with_repository_demonstration_filenames",
+    "provenance": "Android emulator adb screencap, profile build, ALIGNA_SCREENSHOT_MODE fixture. Capture 2026-10-10. Whole frame retained; not a signed-release capture.",
+    "rights": "ONNELLAB-owned app UI and repository-authored demonstration filenames. No user files, stock imagery, narration or music.",
+    "source_parity": "The selected conflict option and preview widgets remain byte-identical from capture source to reviewed main. Other runtime files changed; no claim of complete source or exact signed-release visual parity. Public Play listing explicitly describes skipping conflicting files.",
+    "limitations": [
+      "Screenshot is a seeded preview, not an actual rename or collision outcome.",
+      "Capture version 1.0.7+23 predates public 1.1.0; only the still-present setting and visible demo preview are described."
+    ],
+    "runtime_rename_verified": false,
+    "signed_release_capture_attested": false
+  },
+  "assets": [
+    {
+      "local_name": "04.png",
+      "source_path": "assets/store_promo/raw/android/en/04.png",
+      "sha256": "810c45d061b8c75434ac63bc35f96c7aa5fd80a6dd5b1534aa8d74d102781bf0",
+      "dimensions": [
+        1080,
+        2160
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Handle matching file names",
+      "caption": "Find Skip conflicting files in Aligna.",
+      "asset": "04.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Choose to skip conflicts",
+      "caption": "The switch is on in this example.",
+      "asset": "04.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Review before you apply",
+      "caption": "This is a preview, not a rename result.",
+      "asset": "04.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "How to Skip Conflicting File Names in Aligna | Screenshot Guide",
+    "description": "To skip files whose new names already exist, turn on Skip conflicting files in Aligna. Review the proposed names before using Apply.\n\nStill-screen guide using a real Android emulator screenshot with repository demonstration filenames. The switch is already on in the example. No taps, actual conflict, rename result, or speed demonstration is shown.\n\nExplore Aligna for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.aligna\n\n#Aligna #FileRenamer #Shorts",
+    "format_disclosure": "Still-screen guide · Demo filenames",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "Aligna for Android · Link in description",
+    "target_publish_at": "2026-10-16T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned app UI and repository-owned demonstration data",
+    "scope": "English screenshot-based app guide on ONNELLAB YouTube; no simulated interaction; existing recording gate unchanged",
+    "execution_scope": "User-requested free dot-cloud app Shorts production, verification, and browser scheduling; no separate Work/Codex or paid service."
+  }
+}

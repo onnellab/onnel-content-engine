@@ -1,0 +1,220 @@
+{
+  "manifest_sha256": "12b9fcdd314e96d38ce9a09d37c37f643f11012efadc3bf6d7939f9e92a6073f",
+  "asset_hashes": {
+    "04.png": "810c45d061b8c75434ac63bc35f96c7aa5fd80a6dd5b1534aa8d74d102781bf0"
+  },
+  "kind": "screenshot_guide",
+  "runtime_recording_attestation": false,
+  "upload_authorized_by_cli": false,
+  "video_file": "aligna-conflicts-20261016.mp4",
+  "video_sha256": "838e221f80d643d0d6d37c41c2c56351d02a339733d568f5a398adca4a499feb",
+  "seconds": 15,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "audio": false,
+  "slide_sha256": {
+    "slide-1.png": "54124ae8ad72e9d35f422516fbae0f50db504a197deecc216406cff42a931328",
+    "slide-2.png": "a726092d3150da5d887db63e7ed88e4b31a27ac41f78a5b5199555912c8ee885",
+    "slide-3.png": "e96fdf5ac15bb6993fdd92c9881af9b05a8064cca60e6797ff42f381be41e636"
+  },
+  "text_bounds": [
+    {
+      "slide": 1,
+      "text": "ALIGNA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        290.0,
+        83,
+        790.0,
+        105
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Handle matching file names",
+      "bbox": [
+        162.0,
+        175,
+        918.0,
+        221
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Find Skip conflicting files in Aligna.",
+      "bbox": [
+        262.5,
+        241,
+        817.5,
+        272
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Still-screen guide \u00b7 Demo filenames",
+      "bbox": [
+        264.5,
+        1726,
+        815.5,
+        1756
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Aligna for Android \u00b7 Link in description",
+      "bbox": [
+        263.0,
+        1788,
+        817.0,
+        1816
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ALIGNA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        290.0,
+        83,
+        790.0,
+        105
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Choose to skip conflicts",
+      "bbox": [
+        219.0,
+        175,
+        861.0,
+        221
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "The switch is on in this example.",
+      "bbox": [
+        276.5,
+        241,
+        801.5,
+        272
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Still-screen guide \u00b7 Demo filenames",
+      "bbox": [
+        264.5,
+        1726,
+        815.5,
+        1756
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Aligna for Android \u00b7 Link in description",
+      "bbox": [
+        263.0,
+        1788,
+        817.0,
+        1816
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ALIGNA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        290.0,
+        83,
+        790.0,
+        105
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Review before you apply",
+      "bbox": [
+        205.5,
+        175,
+        874.5,
+        221
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "This is a preview, not a rename result.",
+      "bbox": [
+        231.5,
+        241,
+        846.5,
+        272
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Still-screen guide \u00b7 Demo filenames",
+      "bbox": [
+        264.5,
+        1726,
+        815.5,
+        1756
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Aligna for Android \u00b7 Link in description",
+      "bbox": [
+        263.0,
+        1788,
+        817.0,
+        1816
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    }
+  ],
+  "tests": {
+    "run": 54,
+    "passed": 52,
+    "skipped": 2,
+    "skips": "Optional old ClipNest assets/candidate not materialized; Aligna real source test passed"
+  },
+  "independent_review": {
+    "result": "passed",
+    "slides_reviewed": 3,
+    "tampered_inputs_rejected": 14,
+    "limitations": "Public store and source parity relied on producer verification; platform playback pending"
+  },
+  "full_frame_decode": {
+    "frames": 450,
+    "errors": 0
+  },
+  "library_file_id": "libfile_8b52c054f95081918c7d542a5dd0e3e8"
+}
