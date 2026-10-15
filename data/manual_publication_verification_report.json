@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-14T12:34:46+09:00",
+  "checked_at": "2026-10-15T12:18:47+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 72,
-    "already_done": 68,
+    "checked": 76,
+    "already_done": 71,
     "verified": 0,
-    "pending": 4
+    "pending": 5
   },
   "items": [
     {
@@ -442,6 +442,18 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0020::x::en::x",
+      "topic_id": "TOPIC-0020",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2110172440370270344",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0020::bluesky::en::bluesky",
       "topic_id": "TOPIC-0020",
       "platform": "bluesky",
@@ -598,6 +610,18 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0053::x::en::x",
+      "topic_id": "TOPIC-0053",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2110532662515417434",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0053::bluesky::en::bluesky",
       "topic_id": "TOPIC-0053",
       "platform": "bluesky",
@@ -608,6 +632,18 @@
       "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mxqcoiyzqw2y",
       "verification_method": "",
       "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0053::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0053",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7516298565556588544/",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
     },
     {
       "manual_key": "TOPIC-0001::devto::en::markdown",
@@ -826,18 +862,6 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0020::x::en::x",
-      "topic_id": "TOPIC-0020",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
       "manual_key": "TOPIC-0020::linkedin::en::linkedin",
       "topic_id": "TOPIC-0020",
       "platform": "linkedin",
@@ -850,8 +874,8 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0053::x::en::x",
-      "topic_id": "TOPIC-0053",
+      "manual_key": "TOPIC-0038::x::en::x",
+      "topic_id": "TOPIC-0038",
       "platform": "x",
       "language": "en",
       "template_id": "x",
@@ -862,11 +886,35 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0053::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0053",
+      "manual_key": "TOPIC-0038::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0038",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0038::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0038",
       "platform": "linkedin",
       "language": "en",
       "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0038::devto::en::markdown",
+      "topic_id": "TOPIC-0038",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
       "status": "pending",
       "reason": "No matching public post found",
       "posted_url": "",
