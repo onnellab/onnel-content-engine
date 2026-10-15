@@ -120,4 +120,27 @@ class ArtworkChangeWorkflowTests(unittest.TestCase):
                 self.assertIn("steps.artwork_run.outputs.authorized == 'true'", block)
         self.assertIn("github.event.workflow_run.display_title != 'Read-only artwork access probe'", text)
 
+
+    def test_ubuntu_bubblewrap_profile_preserves_security_and_fail_closed(self):
+        # Standard hosted Ubuntu 24.04 blocks netns setup for unprofiled bwrap.
+        # Both existing callers must load the packaged restricted profile,
+        # retain the system-wide AppArmor restriction, and never fall back.
+        for workflow in (STATUS, PUBLISH):
+            with self.subTest(workflow=workflow.name):
+                workflow_text = workflow.read_text()
+                self.assertIn("runs-on: ubuntu-24.04", workflow_text)
+                install = next(block for block in steps(workflow_text)
+                               if block.startswith("Install isolated artwork verifier runtime"))
+                self.assertIn("set -euo pipefail", install)
+                self.assertIn("apparmor-profiles", install)
+                self.assertIn("/usr/share/apparmor/extra-profiles/bwrap-userns-restrict", install)
+                self.assertIn("sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict", install)
+                self.assertEqual(
+                    install.count('test "$(cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns)" = "1"'), 2)
+                self.assertNotIn("sysctl -w", install)
+                self.assertNotIn("continue-on-error", workflow_text)
+                self.assertNotIn("|| true", install)
+        self.assertIn("sandbox_preflight()", PUBLISH.read_text())
+        self.assertIn("sync_homepage_release_artwork.py stage", PUBLISH.read_text())
+
 if __name__ == '__main__': unittest.main()
