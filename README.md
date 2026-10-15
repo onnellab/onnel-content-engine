@@ -739,4 +739,3 @@ publication instead of asking for approval. See
 [English YouTube Shorts Strategy](docs/Short_Video_Strategy.md), and
 [Motion & Product Film Guide](docs/Motion_Design_Guide.md).
 
-

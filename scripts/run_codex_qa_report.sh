@@ -93,4 +93,3 @@ mkdir -p "$engine_root/data/qa-reports"
 cp "$report" "$engine_root/data/qa-reports/${task_id}.json"
 python3 "$engine_root/scripts/validate_ai_qa_report.py" "$engine_root/data/qa-reports/${task_id}.json"
 echo "Validated QA report: data/qa-reports/${task_id}.json"
-

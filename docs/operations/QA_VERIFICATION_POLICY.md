@@ -51,4 +51,3 @@ app repository. Prioritize bottom actions, fixed Columns, forms/keyboards,
 modal sheets, SafeArea, scrolling, text scale, and hard-coded heights. Fix
 only objective overflow risks while preserving UX and Anchor/Spec. Do not pass
 without an edit when a fixable structural overflow risk is found.
-
