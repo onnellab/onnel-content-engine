@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "guide_id": "aligna-conflicts-20261016",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "status": "scheduled",
+  "video_id": "tNxMMWa6bb8",
+  "url": "https://youtube.com/shorts/tNxMMWa6bb8",
+  "title": "How to Skip Conflicting File Names in Aligna | Screenshot Guide",
+  "description": "To skip files whose new names already exist, turn on Skip conflicting files in Aligna. Review the proposed names before using Apply.\n\nStill-screen guide using a real Android emulator screenshot with repository demonstration filenames. The switch is already on in the example. No taps, actual conflict, rename result, or speed demonstration is shown.\n\nExplore Aligna for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.aligna\n\n#Aligna #FileRenamer #Shorts",
+  "target_publish_at": "2026-10-16T09:00:00+09:00",
+  "scheduled_publish_at_utc": "2026-10-16T00:00:00Z",
+  "timezone": "Asia/Seoul",
+  "observed_at": "2026-10-15T10:19:31Z",
+  "server_publication_time": null,
+  "actual_publication_verified": false,
+  "video_sha256": "838e221f80d643d0d6d37c41c2c56351d02a339733d568f5a398adca4a499feb",
+  "manifest_sha256": "12b9fcdd314e96d38ce9a09d37c37f643f11012efadc3bf6d7939f9e92a6073f",
+  "library_file_id": "libfile_8b52c054f95081918c7d542a5dd0e3e8",
+  "browser_evidence": {
+    "channel": "ONNELLAB",
+    "schedule_form": "2026.10.16 오전9:00 서울(GMT+09:00)",
+    "confirmation": "동영상 예약됨; 2026년10월15일17:00",
+    "readback": "예약됨; 2026.10.15 오후5:00 현지시간GMT-0700",
+    "sd_processing": "complete",
+    "hd_processing": "complete",
+    "copyright": "no issues found; not a future guarantee",
+    "thumbnail": "platform-generated; custom thumbnail not separately selected",
+    "external_links": "text only; UI says one-time verification required; not initiated",
+    "playback": "local full 450-frame decode and three-slide visual review; post-upload playback not yet reviewed"
+  }
+}
