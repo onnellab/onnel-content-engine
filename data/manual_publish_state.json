@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-12T00:41:21+00:00",
+  "updated_at": "2026-10-15T00:45:29+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -744,6 +744,30 @@
       "draft_hash_normalization": "UTF-8 with CRLF normalized to LF; terminal LF retained",
       "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform normalization and URL shortening",
       "post_id": "urn:li:activity:7515208841043546112"
+    },
+    "TOPIC-0020::x::en::x": {
+      "topic_id": "TOPIC-0020",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "marked_at": "2026-10-15T00:45:29+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://x.com/onnellab/status/2110172440370270344",
+      "verified_at": "2026-10-15T00:45:29+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "2026-10-14T00:54:49.000Z",
+      "published_at_precision": "second",
+      "observed_at": "2026-10-15T00:44:18Z",
+      "observed_at_precision": "second",
+      "observation_source": "dot cloud browser UI: existing public post found before composer; exact author, body, permalink and DOM time verified. Its t.co article card opened the matching canonical article. Missing receipt reconciled without reposting. observed_at is this verification time, distinct from server publication time.",
+      "browser_ui_timestamp": "5:54 PM · Oct 13, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "draft_sha256": "df5ddbb2153ab18d8eee8aaa5927799f64a2282916d1e8fe04a32044fb3c6e3f",
+      "posted_body_sha256": "e4f0ec9a5de9462e2c4dc1a8e03e2607b43b50e21ad184e80a80d81cccc40002",
+      "account": "@onnellab",
+      "draft_hash_normalization": "Current repository draft UTF-8 with CRLF normalized to LF; terminal LF retained. This is not proof of original submitted source.",
+      "posted_body_hash_normalization": "Observed post body as quoted in browser page title, UTF-8, single spaces, retaining platform t.co URL, no terminal LF. Original submitted source bytes unavailable."
     }
   }
 }

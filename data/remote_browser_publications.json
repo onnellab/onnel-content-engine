@@ -484,7 +484,8 @@
       "observation_source": "dot cloud browser UI: existing public post found before composer; exact author, body, permalink and DOM time verified. Its t.co article card opened the matching canonical article. Missing receipt reconciled without reposting. observed_at is this verification time, distinct from server publication time.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new"
+      "status": "processed",
+      "processed_at": "2026-10-15T00:45:29+00:00"
     }
   ]
 }
