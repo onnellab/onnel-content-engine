@@ -50,7 +50,7 @@ env:
 jobs:
   sync:
     name: Refresh app versions and dashboard
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
       contents: write
@@ -101,8 +101,18 @@ jobs:
       - name: Install isolated artwork verifier runtime
         if: (inputs.artwork_read_only == true && inputs.artwork_docker_trial != true && inputs.artwork_profile_inspection != true && inputs.artwork_docker_profile_trial != true && inputs.artwork_docker_app_probe != true) || env.ARTWORK_CHECK_ONLY == 'true'
         run: |
+          set -euo pipefail
+          # Do not disable Ubuntu's unprivileged-userns AppArmor restriction.
+          test "$(cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns)" = "1"
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y bubblewrap
+          sudo apt-get install --no-install-recommends -y bubblewrap apparmor apparmor-profiles
+          # Ubuntu's packaged *restrictive* bwrap profile permits namespace
+          # setup by bwrap but forbids further user namespaces in the child.
+          # A missing/unloadable profile blocks publication (no bypass).
+          test -f /usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          test "$(cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns)" = "1"
 
       - name: Sync GitHub main app versions and Flutter dependencies
         id: artwork_guard
