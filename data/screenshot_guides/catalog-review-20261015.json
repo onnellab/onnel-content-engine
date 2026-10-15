@@ -1,0 +1,65 @@
+{
+  "reviewed_at": "2026-10-15T10:20:19Z",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "next_slots": [
+    {
+      "at": "2026-10-16T09:00:00+09:00",
+      "status": "scheduled",
+      "video_id": "tNxMMWa6bb8"
+    },
+    {
+      "at": "2026-10-19T09:00:00+09:00",
+      "status": "unassigned_pending_verified_assets"
+    },
+    {
+      "at": "2026-10-21T09:00:00+09:00",
+      "status": "unassigned_pending_verified_assets"
+    }
+  ],
+  "candidates": [
+    {
+      "app": "Aligna",
+      "status": "selected",
+      "public_android_version": "1.1.0",
+      "source": "https://play.google.com/store/apps/details?id=com.onnellab.aligna",
+      "topic": "Skip conflicting file names",
+      "receipt": "aligna-conflicts-20261016.receipt.json"
+    },
+    {
+      "app": "Papira",
+      "status": "held",
+      "reason": "Public Play 2.0.1; latest captures 2.0.3+10 include subsequent UI changes; public release parity not proven."
+    },
+    {
+      "app": "TagWeaver",
+      "status": "held",
+      "reason": "Latest release screenshot work in progress; do not promote as completed."
+    },
+    {
+      "app": "Segra",
+      "status": "held",
+      "reason": "Available reviewed capture manifest is Flutter test-host render, not verified real emulator capture."
+    },
+    {
+      "app": "VaultXT",
+      "status": "held",
+      "reason": "Capture 2.0.2+67 versus recorded public 2.0.1; public parity not yet verified."
+    },
+    {
+      "app": "Quivra",
+      "status": "recently_published",
+      "video_id": "sG-RwU-Z65s"
+    },
+    {
+      "app": "Melivra",
+      "status": "recently_published",
+      "video_id": "RC929En2dSw"
+    },
+    {
+      "app": "ClipNest",
+      "status": "recently_published",
+      "video_id": "nRg8_Ion6pI"
+    }
+  ],
+  "new_uploads": 1
+}
