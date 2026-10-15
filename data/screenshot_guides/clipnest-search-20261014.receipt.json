@@ -3,7 +3,7 @@
   "kind": "screenshot_guide_upload_receipt",
   "guide_id": "clipnest-search-20261014",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "scheduled",
+  "status": "published",
   "video_id": "nRg8_Ion6pI",
   "target_publish_at": "2026-10-14T09:00:00+09:00",
   "timezone": "Asia/Seoul",
@@ -21,7 +21,7 @@
   "inventory_scope": "Complete exact ONNELLAB Studio Shorts and ordinary Videos inventory; no ClipNest search title, draft or reservation. Existing ClipNest pin topic is distinct.",
   "validated_contract_commit": "a43f0fee518ff3f43d9335ae1b84858910ed430a",
   "render_evidence_path": "data/screenshot_guides/clipnest-search-20261014-render-evidence.json",
-  "recovery_rule": "Existing nRg8_Ion6pI is scheduled for 2026-10-14 09:00 Asia/Seoul. Never upload this guide/hash again or refill this slot. Reconcile exact video before further writes.",
+  "recovery_rule": "Existing nRg8_Ion6pI is public, observed 2026-10-15T10:02:10Z. Preserve original target 2026-10-14 09:00 Asia/Seoul; exact server publish time not retrieved. Never upload this guide/hash again or refill its slot.",
   "legacy_publishers": "Not activated or changed",
   "metadata_language": "en",
   "library_file_id": "libfile_30c93db6e74c819191a48187b61f2a85",
@@ -30,7 +30,7 @@
   "reconciliation_blocker": null,
   "video_url": "https://youtube.com/shorts/nRg8_Ion6pI",
   "assigned_video_observed_at": "2026-10-13T11:09:57Z",
-  "observed_privacy": "scheduled",
+  "observed_privacy": "public",
   "checks": "Copyright checks complete, no issues found.",
   "upload_reconciliation": "Read-only status retry succeeded; assigned video ID verified without repeating file selection.",
   "duration_ui": "0:15",
@@ -60,5 +60,27 @@
     "total_shorts": 9,
     "matching_guide_entries": 1
   },
-  "external_link_verification": "Studio says one-time verification is needed to make external links clickable; not attempted. Approved App Store URL preserved as text."
+  "external_link_verification": "Studio says one-time verification is needed to make external links clickable; not attempted. Approved App Store URL preserved as text.",
+  "published_observed_at": "2026-10-15T10:02:10Z",
+  "publication_observation": {
+    "source": "https://studio.youtube.com/channel/UCXyRedrldRBl9Y35nyWoTLg/videos/short",
+    "observed_at": "2026-10-15T10:02:10Z",
+    "channel_name": "ONNELLAB",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "video_id": "nRg8_Ion6pI",
+    "title": "How to Find Saved Text in ClipNest | iPhone Screenshot Guide",
+    "visibility_label": "공개",
+    "displayed_publish_date": "2026. 10. 13.",
+    "displayed_date_timezone": "Browser local -07:00; date label is not exact server publication time",
+    "server_published_at": null,
+    "views": 11,
+    "duration": "0:15",
+    "inventory": {
+      "public_shorts": 9,
+      "total_shorts": 9,
+      "scheduled_shorts": 0,
+      "ordinary_videos": 6,
+      "matching_guide_entries": 1
+    }
+  }
 }
