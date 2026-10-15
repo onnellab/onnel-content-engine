@@ -229,6 +229,13 @@
     <pubDate>Sun, 04 Oct 2026 02:34:40 GMT</pubDate>
   </item>
   <item>
+    <title>How to Test a Converted Media File Before Replacing the Original</title>
+    <link>https://onnellab.com/blog/en/test-converted-media-before-replacing-original/</link>
+    <guid>https://onnellab.com/blog/en/test-converted-media-before-replacing-original/</guid>
+    <description>Check converted audio and video for missing content, playback and metadata. Test the destination and keep an original backup.</description>
+    <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>Organize a Local Music Library for Offline Listening on Android</title>
     <link>https://onnellab.com/blog/en/organize-local-music-library-offline-android/</link>
     <guid>https://onnellab.com/blog/en/organize-local-music-library-offline-android/</guid>
@@ -353,6 +360,62 @@
     <guid>https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/</guid>
     <description>Compara el EPUB exportado con la lista prevista de capítulos y revisa por separado los enlaces del índice y el orden de lectura.</description>
     <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>원본을 교체하기 전에 변환한 미디어 파일 확인하기</title>
+    <link>https://onnellab.com/blog/ko/test-converted-media-before-replacing-original/</link>
+    <guid>https://onnellab.com/blog/ko/test-converted-media-before-replacing-original/</guid>
+    <description>변환한 오디오와 동영상의 내용, 재생, 메타데이터를 실제 사용할 앱에서 확인하고 원본 백업을 보관하세요.</description>
+    <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>元ファイルを置き換える前に変換後のメディアを確認する方法</title>
+    <link>https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/</link>
+    <guid>https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/</guid>
+    <description>変換後の音声や動画について、内容の欠落、再生、必要なメタデータを確認します。使用先で試し、元ファイルのバックアップを残しましょう。</description>
+    <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>替换原文件前，如何检查转换后的媒体文件</title>
+    <link>https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/</link>
+    <guid>https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/</guid>
+    <description>检查转换后的音视频是否完整、能否正常播放，以及是否保留所需元数据。在实际使用的应用或设备上测试，并保留已核验的原文件备份。</description>
+    <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>取代原始檔案前，如何檢查轉檔後的媒體檔案</title>
+    <link>https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/</link>
+    <guid>https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/</guid>
+    <description>檢查轉檔後的音訊與影片是否完整、播放是否正常，以及是否保留必要的中繼資料。在實際使用的應用程式或裝置中測試，並保留已驗證的原始檔案備份。</description>
+    <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Como testar um arquivo de mídia convertido antes de substituir o original</title>
+    <link>https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/</link>
+    <guid>https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/</guid>
+    <description>Confira se o áudio e o vídeo convertidos estão completos, se reproduzem corretamente e se mantêm os metadados necessários. Teste no destino e verifique o backup do original.</description>
+    <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen</title>
+    <link>https://onnellab.com/blog/de/test-converted-media-before-replacing-original/</link>
+    <guid>https://onnellab.com/blog/de/test-converted-media-before-replacing-original/</guid>
+    <description>Prüfen Sie konvertierte Audio- und Videodateien auf Vollständigkeit, Wiedergabe und benötigte Metadaten. Testen Sie die Datei in der Zielanwendung und sichern Sie das Original.</description>
+    <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Tester un fichier multimédia converti avant de remplacer l’original</title>
+    <link>https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/</link>
+    <guid>https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/</guid>
+    <description>Vérifiez le contenu, la lecture et les métadonnées nécessaires après une conversion audio ou vidéo. Testez le fichier dans l’application prévue et conservez une sauvegarde vérifiée.</description>
+    <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Cómo probar un archivo multimedia convertido antes de sustituir el original</title>
+    <link>https://onnellab.com/blog/es/test-converted-media-before-replacing-original/</link>
+    <guid>https://onnellab.com/blog/es/test-converted-media-before-replacing-original/</guid>
+    <description>Comprueba que el audio y el vídeo convertidos estén completos, se reproduzcan bien y conserven los metadatos necesarios. Pruébalo en la aplicación prevista y verifica la copia del original.</description>
+    <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>

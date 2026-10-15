@@ -5,7 +5,7 @@ slug: "test-converted-media-before-replacing-original"
 category: "media"
 language: "ko"
 description: "변환한 오디오와 동영상의 내용, 재생, 메타데이터를 실제 사용할 앱에서 확인하고 원본 백업을 보관하세요."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0062"
 search_intent: "workflow"
 primary_keyword: "변환한 미디어 파일 확인"
@@ -15,6 +15,9 @@ tags: "변환한 미디어 파일 확인|변환한 오디오 점검|동영상 �
 short_answer: "원본을 보관한 상태에서 출력 파일의 정보를 살피고, 실제 사용할 앱에서 주요 구간을 재생한 뒤 필요한 트랙과 메타데이터를 확인하세요. 차이가 생기면 원인을 알아본 후 사용 여부를 판단하세요. 일부 구간이 정상이라고 유일한 원본을 삭제해도 되는 것은 아닙니다."
 canonical_url: "https://onnellab.com/blog/ko/test-converted-media-before-replacing-original/"
 image_specs: "원본 따로 보관|달라진 정보 확인|실제 앱에서 점검|결과 기록과 백업"
+published_at: "2026-10-15T09:00:00+09:00"
+updated_at: "2026-10-15T09:00:00+09:00"
+related_articles: "로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|미디어 변환 전에 출력 형식을 선택하는 방법 => https://onnellab.com/blog/ko/choose-media-output-format-before-conversion/|전문 편집기 없이 오디오 녹음을 자르는 방법 => https://onnellab.com/blog/ko/trim-audio-recordings-without-full-editor/|오디오 클립을 합치기 전에 확인하는 방법 => https://onnellab.com/blog/ko/verify-audio-clips-before-combining/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/"
 ---
 
 # 원본을 교체하기 전에 변환한 미디어 파일 확인하기

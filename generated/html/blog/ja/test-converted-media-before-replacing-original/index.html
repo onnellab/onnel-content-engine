@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>元ファイルを置き換える前に変換後のメディアを確認する方法</title>
+  <meta name="description" content="変換後の音声や動画について、内容の欠落、再生、必要なメタデータを確認します。使用先で試し、元ファイルのバックアップを残しましょう。">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="元ファイルを置き換える前に変換後のメディアを確認する方法">
+  <meta property="og:description" content="変換後の音声や動画について、内容の欠落、再生、必要なメタデータを確認します。使用先で試し、元ファイルのバックアップを残しましょう。">
+  <meta property="og:url" content="https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="元ファイルを置き換える前に変換後のメディアを確認する方法">
+  <meta name="twitter:description" content="変換後の音声や動画について、内容の欠落、再生、必要なメタデータを確認します。使用先で試し、元ファイルのバックアップを残しましょう。">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/ja/test-converted-media-before-replacing-original/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/ja/test-converted-media-before-replacing-original/social-card.png">
+</head>
+<body>
+  <main>
+<h1>元ファイルを置き換える前に変換後のメディアを確認する方法</h1>
+<p>変換が終わり、新しいファイルも開けました。ただし、それだけでは最後まで内容が残っているか、必要な音声があるか、使用先のアプリで正しく扱えるかは分かりません。作業用ファイルを置き換える前に、それぞれを確認し、元に戻せる状態を保ちましょう。</p>
+<h2>質問</h2>
+<p>元ファイルを置き換える前に、変換後のメディアファイルをどう確認すればよいですか？</p>
+<h2>短い回答</h2>
+<p>元ファイルを残したまま、出力ファイルの情報を調べ、実際に使うアプリで主な箇所を再生し、必要なトラックとメタデータを確認します。違いがあれば原因を調べてから採用を判断します。一部が正常でも、唯一の元ファイルを削除してよいとは限りません。</p>
+<h2>良い結果に必要な条件を決める</h2>
+<p><strong>受け入れ確認</strong>とは、用途に合わせて書き出した条件と変換結果を照合することです。出力が元ファイルと完全に同一であるという保証ではありません。</p>
+<p>元ファイル名、出力ファイル名、使用先のアプリや機器、必ず残したい内容を記録します。録音なら、最初と最後の言葉、聞き取れる音声、必要なチャンネルなどが条件になります。動画なら映像と音声、その同期も含めます。字幕、チャプター、アートワーク、タグが必要な場合は、自動で引き継がれると思わず、確認項目に加えてください。</p>
+<p>意図した変更と不具合を区別します。動画から音声だけを取り出す場合、映像がなくなるのは予定どおりです。出力も動画であるべき場合に、映像の欠落が問題になります。このガイドは変換後の点検を扱います。出力形式が未定なら、下の関連ガイドを先に参照してください。</p>
+<h2>三つの点検で分かることは異なる</h2>
+<table><thead><tr><th>点検</th><th>得られる手掛かり</th><th>それだけでは分からないこと</th></tr></thead><tbody><tr><td>ファイルの情報を調べる</td><td>長さ、ストリーム、確認できるメタデータが条件に合うか</td><td>全区間を正しく再生できるか</td></tr><tr><td>使用先で再生する</td><td>実際のアプリが確認した箇所を扱えるか</td><td>未確認の箇所や別の機器でも動くか</td></tr><tr><td>バックアップのチェックサムを確認する</td><td>コピーが記録済みのバイト列の指紋と一致するか</td><td>変換後の音や映像が適切か</td></tr></tbody></table>
+<p><strong>ストリーム</strong>とは、音声や映像のトラックなど、メディアを構成する個々の要素です。ファイル情報ツールでその構成を調べられます。<a href="https://ffmpeg.org/ffprobe.html">FFmpeg の ffprobe 文書</a>は、コンテナー、ストリーム、タグの情報確認を説明しています。変換ツールに情報表示がなければ、別の解析ツールを使います。情報レポートは、実際に聞いたり見たりする点検の代わりにはなりません。</p>
+<h2>推奨ワークフロー</h2>
+<ol><li><strong>元ファイルを分けて保存します。</strong> 入力用と出力用のフォルダーを分けるか、見分けやすい名前を付けます。何を変換したかを記録し、唯一の元ファイルを上書きしたり、点検中に整理機能で削除したりしないでください。</li><li><strong>出力ファイルそのものを開きます。</strong> ファイル管理アプリで名前と保存先を確かめます。変換ツールのプレビューやプレーヤーの古いライブラリー項目は、別のファイルを参照しているかもしれません。再確認に備えて、変換ツールとプレーヤーのバージョンも記録します。</li><li><strong>必要な属性を比較します。</strong> おおよその長さ、必要な音声・映像トラック、チャンネル情報、動画の縦横の画素数、必要なタグを確認します。容量だけでは品質は分かりません。長さが大きく違う場合は調査が必要です。小さな差は表示や形式の特性によることもあるため、実際の冒頭と末尾も比べます。</li><li><strong>代表的な箇所を再生します。</strong> 冒頭、中間、末尾を聞くか見ます。小声、大きな音、場面の切り替わりなど、そのファイルで気になる箇所も含めます。前後にシークしてください。動画では話す口元や衝突の瞬間で音とのずれを確認し、音声では内容の欠落、ひずみ、予期しない無音を調べます。</li><li><strong>実際の使用先で試します。</strong> 使う予定のプレーヤー、編集ソフト、機器に出力を読み込みます。必要ならトラックの選択や字幕もそこで確認します。そのファイルをアップロードしてよいと判断した場合にサービスを利用し、再処理されるなら処理後の結果も点検します。変換ツール内で正常でも、この確認は必要です。</li><li><strong>結果と復旧用のコピーを残します。</strong> 出力、使用先、確認した箇所、制約を書き留めます。撮り直せない重要な録音なら、最初から最後まで聞くか見る価値があります。抜き取り確認では未確認の区間が残ります。元ファイルを別の保存先にもバックアップし、取り出せることを確かめてから作業用ファイルを整理します。</li></ol>
+<figure><img src="/blog-assets/ja/test-converted-media-before-replacing-original/workflow-diagram.svg" alt="変換後のメディアを点検する手順図"></figure>
+<h2>簡単な確認表で問題を具体化する</h2>
+<p>これはアプリや機器の試験結果ではなく、説明用の架空の例です。インタビューの出力は冒頭が明瞭なのに、最後の一文がないとします。元ファイルと出力の名前、おおよその位置、元ファイルでは同じ箇所を再生できるかを記録します。調査中は両方を残してください。「変換品質が悪い」より「この出力には最後の一文がない」の方が解決につながります。</p>
+<table><thead><tr><th>見つかった現象</th><th>次の確認</th></tr></thead><tbody><tr><td>出力が途中で終わる</td><td>元ファイルの末尾と比べ、最新の出力を開いたか確認</td></tr><tr><td>動画の音が聞こえない</td><td>元の音声、出力の音声トラック、ミュート、選択中のトラックを確認</td></tr><tr><td>音と映像が次第にずれる</td><td>元ファイルと使用先で、序盤と終盤の出来事を比較</td></tr><tr><td>タグやアートワークがない</td><td>出力の情報とプレーヤーの表示を分けて調べる</td></tr><tr><td>一方のプレーヤーでしか動かない</td><td>使用先と対応入力を記録してから再変換を判断</td></tr></tbody></table>
+<p>ツールで変更できる場合は、関係する設定や変換方法を一つずつ変えます。元ファイルから再出力し、不合格だった点と基本的な再生を確認し直します。非可逆圧縮の出力を繰り返し変換しても、失われた元の細部を復元する方法にはなりません。</p>
+<h2>チェックサムが証明できることの範囲</h2>
+<p>チェックサムは、ファイルのバイト列から計算する値です。<a href="https://www.gnu.org/s/coreutils/manual/html_node/sha2-utilities.html">GNU の SHA-2 ツール</a>などで計算・検証できます。保存した元ファイルとそのバックアップ、または採用した出力と同じ出力のコピーを比較します。両方のファイルに SHA-256 など同じアルゴリズムを使ってください。その条件で値が変わった場合は、バイト単位の差を調べる必要があります。</p>
+<p>元ファイルと変換後の派生ファイルで、同じチェックサムになることは期待しないでください。通常はバイト列が異なります。バックアップのチェックサム一致はコピーの整合性を確認する根拠であり、音や映像の良さ、選んだ内容の完全性、使用先への適合性を判定するものではありません。</p>
+<h2>ONNELLAB の活用</h2>
+<p>決められた変換経路が目的に合う場合は、<a href="/apps/quivra/">Quivra</a>も選択肢になります。<a href="https://apps.apple.com/us/app/quivra-mp3-media-converter/id6759565093">iOS の掲載情報</a>と <a href="https://play.google.com/store/apps/details?id=com.onnellab.quivra2">Android の掲載情報</a>では、WAV・M4A から MP3、MP4 から MP3 音声の抽出、MOV から MP4 を案内しています。出力は入力に応じて自動的に決まります。</p>
+<p>この記事のファイル情報の確認と使用先での再生には、適切な別のツールを使ってください。掲載されている変換経路は、すべてのトラックやメタデータの保持を保証するものではありません。利用前に、その経路が用途に合うかを確認しましょう。</p>
+<h2>関連ガイド</h2>
+<ul><li><a href="https://onnellab.com/blog/ja/choose-media-output-format-before-conversion/">変換前にメディアの出力形式を選ぶ</a></li></ul>
+<h2>参考資料</h2>
+<ul><li><a href="https://ffmpeg.org/ffprobe.html">FFmpeg：ffprobe 文書</a></li><li><a href="https://www.gnu.org/s/coreutils/manual/html_node/sha2-utilities.html">GNU Coreutils：SHA-2 ツール</a></li><li><a href="https://ffmpeg.org/ffmpeg.html#Streamcopy">FFmpeg：ストリームコピーとトランスコード</a></li></ul>
+<h2>結論</h2>
+<p>変換後のメディアファイルを確認するには、短い条件リストと照合し、情報を調べ、実際の使用先で再生します。確認済みの範囲と未確認の範囲を記録してください。配布用コピーの採用と元ファイルの保管方針は別の判断です。失うと困る元ファイルは残しましょう。</p>
+<h2>よくある質問</h2>
+<h3>ファイルを開くだけで十分ですか？</h3>
+<p>いいえ。開くだけでは末尾、全トラック、すべての区間を確認できません。必要な属性を調べ、大切な内容を再生してください。</p>
+<h3>長さは完全に一致する必要がありますか？</h3>
+<p>必ずしもそうではありません。表示の丸めや形式の特性で小さな差が出ることがあります。一律の許容時間に頼らず、内容の欠落や大きな差を調べます。</p>
+<h3>容量が小さいと変換品質も悪いのですか？</h3>
+<p>容量だけでは判断できません。用途、必要な内容、実際の再生を基準に評価してください。</p>
+<h3>抜き取り確認に合格したら元ファイルを削除できますか？</h3>
+<p>抜き取りでは未確認の区間が残ります。特に撮り直せない録音や後で編集する可能性がある素材は、取り出せる元ファイルのバックアップを保管してください。</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Androidの音楽ファイルをオフライン再生用に整理する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>EPUBの目次リンクと章の順序を確認する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

@@ -5,7 +5,7 @@ slug: "test-converted-media-before-replacing-original"
 category: "media"
 language: "pt-BR"
 description: "Confira se o áudio e o vídeo convertidos estão completos, se reproduzem corretamente e se mantêm os metadados necessários. Teste no destino e verifique o backup do original."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0066"
 search_intent: "workflow"
 primary_keyword: "testar um arquivo de mídia convertido"
@@ -15,6 +15,9 @@ tags: "testar um arquivo de mídia convertido|verificação de áudio convertido
 short_answer: "Mantenha o original, inspecione o arquivo exportado, reproduza trechos representativos no aplicativo de destino e confira as faixas e os metadados necessários. Investigue as diferenças antes de aprovar o resultado. Um teste por amostragem bem-sucedido não justifica apagar o único original."
 canonical_url: "https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/"
 image_specs: "Mantenha o original|Veja o que mudou|Reproduza no destino|Registre e faça backup"
+published_at: "2026-10-15T09:00:00+09:00"
+updated_at: "2026-10-15T09:00:00+09:00"
+related_articles: "Como conferir o sumário e a ordem dos capítulos de um EPUB => https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/|Como organizar músicas no Android para ouvir offline => https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/"
 ---
 
 # Como testar um arquivo de mídia convertido antes de substituir o original

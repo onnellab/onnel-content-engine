@@ -5,7 +5,7 @@ slug: "test-converted-media-before-replacing-original"
 category: "media"
 language: "de"
 description: "Prüfen Sie konvertierte Audio- und Videodateien auf Vollständigkeit, Wiedergabe und benötigte Metadaten. Testen Sie die Datei in der Zielanwendung und sichern Sie das Original."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0067"
 search_intent: "workflow"
 primary_keyword: "konvertierte Mediendateien prüfen"
@@ -15,6 +15,9 @@ tags: "konvertierte Mediendateien prüfen|konvertierte Audiodatei prüfen|Videow
 short_answer: "Behalten Sie das Original, untersuchen Sie die exportierte Datei, spielen Sie repräsentative Stellen in der Zielanwendung ab und prüfen Sie benötigte Spuren und Metadaten. Klären Sie Unterschiede, bevor Sie das Ergebnis akzeptieren. Eine erfolgreiche Stichprobe rechtfertigt nicht, das einzige Original zu löschen."
 canonical_url: "https://onnellab.com/blog/de/test-converted-media-before-replacing-original/"
 image_specs: "Original behalten|Änderungen prüfen|Am Ziel testen|Notieren und sichern"
+published_at: "2026-10-15T09:00:00+09:00"
+updated_at: "2026-10-15T09:00:00+09:00"
+related_articles: "Musikdateien auf Android für die Offline-Wiedergabe ordnen => https://onnellab.com/blog/de/organize-local-music-library-offline-android/|Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen => https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/"
 ---
 
 # Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen

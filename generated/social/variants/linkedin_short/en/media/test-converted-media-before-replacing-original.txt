@@ -1,0 +1,9 @@
+How should I test a converted media file before replacing the original.
+
+Keep the original, inspect the exported file, play representative passages in the destination app, and check required tracks and metadata. Investigate differences before accepting the result.
+
+- Keep the source separate. Use distinct source and output folders, or unmistakable filenames. Record which file you converted. Do not overwrite the only source or let cleanup remove it during checking.
+- Open the exported file itself. Locate it in the file manager and confirm its name and path. A converter preview or an old player-library entry might refer to a different file. Record the converter and player versions for a useful repeatable check.
+
+Read the full article:
+https://onnellab.com/blog/en/test-converted-media-before-replacing-original/

@@ -5,7 +5,7 @@ slug: "test-converted-media-before-replacing-original"
 category: "media"
 language: "zh-Hans"
 description: "检查转换后的音视频是否完整、能否正常播放，以及是否保留所需元数据。在实际使用的应用或设备上测试，并保留已核验的原文件备份。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0064"
 search_intent: "workflow"
 primary_keyword: "检查转换后的媒体文件"
@@ -15,6 +15,9 @@ tags: "检查转换后的媒体文件|转换后音频检查|视频播放检查|�
 short_answer: "保留原文件，检查导出文件，在实际使用的应用中播放有代表性的片段，并核对所需轨道和元数据。确认差异的原因后，再决定是否接受转换结果。抽查通过，也不代表可以删除唯一的原文件。"
 canonical_url: "https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/"
 image_specs: "留好原文件|核对文件变化|在使用环境播放|记录并留存"
+published_at: "2026-10-15T09:00:00+09:00"
+updated_at: "2026-10-15T09:00:00+09:00"
+related_articles: "在 Android 上整理音乐文件，准备离线播放 => https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/|检查 EPUB 的目录链接和章节顺序 => https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/"
 ---
 
 # 替换原文件前，如何检查转换后的媒体文件

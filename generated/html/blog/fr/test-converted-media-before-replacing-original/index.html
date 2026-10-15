@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tester un fichier multimédia converti avant de remplacer l’original</title>
+  <meta name="description" content="Vérifiez le contenu, la lecture et les métadonnées nécessaires après une conversion audio ou vidéo. Testez le fichier dans l’application prévue et conservez une sauvegarde vérifiée.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Tester un fichier multimédia converti avant de remplacer l’original">
+  <meta property="og:description" content="Vérifiez le contenu, la lecture et les métadonnées nécessaires après une conversion audio ou vidéo. Testez le fichier dans l’application prévue et conservez une sauvegarde vérifiée.">
+  <meta property="og:url" content="https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tester un fichier multimédia converti avant de remplacer l’original">
+  <meta name="twitter:description" content="Vérifiez le contenu, la lecture et les métadonnées nécessaires après une conversion audio ou vidéo. Testez le fichier dans l’application prévue et conservez une sauvegarde vérifiée.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/fr/test-converted-media-before-replacing-original/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/fr/test-converted-media-before-replacing-original/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Tester un fichier multimédia converti avant de remplacer l’original</h1>
+<p>La conversion se termine et le nouveau fichier s’ouvre. C’est un bon début, mais cela ne montre pas si la fin est intacte, si le son attendu est présent ou si l’application de destination traite correctement le fichier. Avant de remplacer une copie de travail, vérifiez ces points séparément et gardez un moyen de revenir à l’original.</p>
+<h2>Question</h2>
+<p>Comment tester un fichier multimédia converti avant de remplacer l’original ?</p>
+<h2>Réponse courte</h2>
+<p>Conservez l’original, inspectez le fichier exporté, lisez des passages représentatifs dans l’application de destination et vérifiez les pistes et métadonnées nécessaires. Examinez les différences avant de valider le résultat. Un test par échantillonnage réussi ne justifie pas la suppression du seul original.</p>
+<h2>Définir ce qu’un bon résultat doit préserver</h2>
+<p>Un <strong>contrôle d’acceptation</strong> est une comparaison entre le fichier obtenu et les exigences que vous avez consignées pour son usage prévu. Il ne garantit pas que le nouveau fichier est identique à sa source.</p>
+<p>Notez le nom du fichier source, celui du fichier obtenu, l’application ou l’appareil de destination et les éléments à préserver. Pour un enregistrement audio, il peut s’agir des premiers et derniers mots, d’une parole intelligible et des canaux nécessaires. Pour une vidéo, incluez l’image, le son et leur synchronisation. Si les sous-titres, les chapitres, les pochettes ou les balises de métadonnées sont importants, ajoutez-les à la liste plutôt que de supposer leur transfert.</p>
+<p>Distinguez les changements voulus des défauts. Extraire le son d’une vidéo supprime volontairement l’image. Une image absente n’est un problème que si le résultat attendu devait encore être une vidéo. Ce guide commence après la conversion ; si vous n’avez pas encore choisi le format cible, consultez le guide associé ci-dessous.</p>
+<h2>Trois vérifications répondent à des questions différentes</h2>
+<table><thead><tr><th>Vérification</th><th>Indication utile</th><th>Ce qu’elle ne permet pas d’établir</th></tr></thead><tbody><tr><td>Inspecter les propriétés du fichier</td><td>La durée, les flux et les métadonnées disponibles correspondent à vos exigences</td><td>Tous les passages se lisent correctement</td></tr><tr><td>Lire le fichier à destination</td><td>L’application qui recevra réellement le fichier traite les passages testés</td><td>Les passages non testés ou un autre appareil fonctionneront</td></tr><tr><td>Vérifier la somme de contrôle d’une sauvegarde</td><td>Le fichier copié correspond à l’empreinte enregistrée de ses octets</td><td>Le son ou l’image issus de la conversion sont satisfaisants</td></tr></tbody></table>
+<p>Un <strong>flux</strong> est un composant multimédia distinct, par exemple une piste audio ou vidéo. Un outil d’analyse des fichiers peut répertorier ces composants. La <a href="https://ffmpeg.org/ffprobe.html">documentation de ffprobe, dans FFmpeg</a>, décrit l’inspection des conteneurs, des flux et des balises. Utilisez un outil d’inspection séparé si votre convertisseur n’affiche pas ces détails ; un rapport d’analyse ne remplace pas une écoute ou un visionnage.</p>
+<h2>Méthode recommandée</h2>
+<ol><li><strong>Conservez la source séparément.</strong> Utilisez des dossiers distincts pour la source et le fichier obtenu, ou des noms de fichiers sans ambiguïté. Notez quel fichier vous avez converti. N’écrasez pas le seul exemplaire de la source et veillez à ce qu’un nettoyage ne le supprime pas pendant les vérifications.</li><li><strong>Ouvrez le fichier exporté lui-même.</strong> Retrouvez-le dans le gestionnaire de fichiers et confirmez son nom et son chemin. Un aperçu du convertisseur ou une ancienne entrée de la bibliothèque du lecteur peut renvoyer à un autre fichier. Notez les versions du convertisseur et du lecteur pour pouvoir répéter utilement le contrôle.</li><li><strong>Comparez les propriétés importantes.</strong> Vérifiez la durée approximative, les pistes audio et vidéo attendues, les informations sur les canaux, les dimensions de l’image pour une vidéo et les balises nécessaires. La taille du fichier ne suffit pas à mesurer sa qualité. Un écart important de durée doit être examiné ; une petite différence peut venir de la manière dont la durée est indiquée ou du comportement du format. Comparez donc aussi le début et la fin réels.</li><li><strong>Lisez des passages représentatifs.</strong> Écoutez ou regardez le début, le milieu et la fin. Incluez une voix faible, un passage fort, un changement de scène ou un autre extrait exigeant de votre fichier. Avancez et reculez dans la lecture. Pour une vidéo, observez une personne qui parle ou un impact visible afin d’évaluer la synchronisation du son. Pour l’audio, recherchez les éléments manquants, la distorsion et les silences inattendus.</li><li><strong>Utilisez la destination réelle.</strong> Importez le fichier obtenu dans le lecteur, le logiciel de montage ou l’appareil que vous comptez utiliser. Testez-y la sélection des pistes nécessaires et les sous-titres, le cas échéant. Si l’envoi de ce fichier au service est approprié et que celui-ci traite les fichiers reçus, inspectez également le résultat de ce traitement. Un test réussi dans le convertisseur ne remplace pas cette vérification.</li><li><strong>Consignez le résultat et gardez des copies de récupération.</strong> Notez le fichier obtenu, la destination, les passages vérifiés et les éventuelles limites. Les enregistrements importants d’événements uniques méritent une écoute ou un visionnage intégral ; l’échantillonnage laisse des intervalles non testés. Conservez une sauvegarde de l’original stockée séparément et vérifiez que vous pouvez la récupérer avant de réorganiser vos fichiers de travail.</li></ol>
+<figure><img src="/blog-assets/fr/test-converted-media-before-replacing-original/workflow-diagram.svg" alt="Étapes de vérification d’un fichier multimédia converti"></figure>
+<h2>Une courte fiche de contrôle facilite la recherche des défauts</h2>
+<p>Voici un exemple hypothétique, et non un test d’application ou d’appareil : un entretien exporté commence clairement, mais sa dernière phrase a disparu. Notez les noms du fichier source et du fichier obtenu, la position approximative et si ce même passage se lit dans la source. Conservez les deux fichiers pendant la recherche de la cause. « La dernière phrase manque dans ce fichier exporté » est une observation plus utile que « la qualité de conversion est mauvaise ».</p>
+<table><thead><tr><th>Observation</th><th>Vérification suivante</th></tr></thead><tbody><tr><td>Le fichier obtenu se termine trop tôt</td><td>Comparer la fin de la source, puis confirmer que le dernier export a bien été ouvert</td></tr><tr><td>La vidéo n’a pas de son audible</td><td>Vérifier le son de la source, les pistes audio du fichier obtenu, le mode muet du lecteur et la piste sélectionnée</td></tr><tr><td>Le son se décale par rapport à l’image</td><td>Comparer un événement au début et un autre vers la fin dans la source et à destination</td></tr><tr><td>Les balises ou la pochette manquent</td><td>Inspecter les champs du fichier obtenu séparément de ce qu’affiche le lecteur</td></tr><tr><td>Un lecteur fonctionne et un autre échoue</td><td>Noter la destination et examiner les entrées qu’elle accepte avant de reconvertir</td></tr></tbody></table>
+<p>Modifiez un seul réglage pertinent ou la méthode de conversion à la fois, si votre outil le permet. Exportez de nouveau à partir de l’original, puis répétez le contrôle qui a échoué et les tests de lecture de base. Convertir plusieurs fois un fichier obtenu avec pertes ne permet pas de restaurer les détails manquants de la source.</p>
+<h2>Ce qu’une somme de contrôle prouve et ne prouve pas</h2>
+<p>Une somme de contrôle est une valeur calculée à partir des octets d’un fichier. Des outils comme les <a href="https://www.gnu.org/s/coreutils/manual/html_node/sha2-utilities.html">utilitaires SHA-2 de GNU</a> calculent et vérifient ces valeurs. Comparez un original conservé avec sa sauvegarde, ou un fichier obtenu et validé avec une copie de ce même fichier. Utilisez le même algorithme pour les deux fichiers, par exemple SHA-256. Une valeur différente signale alors une différence au niveau des octets à examiner.</p>
+<p>Ne vous attendez pas à ce que l’original et un fichier dérivé par conversion aient la même somme de contrôle. Leurs octets diffèrent normalement. Une somme de contrôle identique pour la sauvegarde aide à vérifier l’intégrité de la copie ; elle n’évalue ni le son, ni l’image, ni la présence de tout le contenu choisi, ni l’adéquation à une destination.</p>
+<h2>Utiliser ONNELLAB</h2>
+<p>Si vous avez besoin de l’une de ses conversions prédéfinies, <a href="/apps/quivra/">Quivra</a> est un outil de conversion facultatif. Sa <a href="https://apps.apple.com/us/app/quivra-mp3-media-converter/id6759565093">fiche iOS</a> et sa <a href="https://play.google.com/store/apps/details?id=com.onnellab.quivra2">fiche Android</a> indiquent la conversion de WAV et M4A vers MP3, l’extraction du son de MP4 vers MP3 et la conversion de MOV vers MP4. Le format d’entrée détermine automatiquement le format de sortie.</p>
+<p>Effectuez les inspections et les tests de lecture à destination décrits dans cet article avec des outils distincts et adaptés. Les conversions indiquées ne permettent pas d’affirmer que toutes les pistes et tous les champs de métadonnées sont préservés. Confirmez que la conversion proposée convient à votre tâche avant d’utiliser l’application.</p>
+<h2>Guide associé</h2>
+<ul><li><a href="https://onnellab.com/blog/fr/choose-media-output-format-before-conversion/">Choisir un format de sortie multimédia avant la conversion</a></li></ul>
+<h2>Références</h2>
+<ul><li><a href="https://ffmpeg.org/ffprobe.html">FFmpeg : documentation de ffprobe</a></li><li><a href="https://www.gnu.org/s/coreutils/manual/html_node/sha2-utilities.html">GNU Coreutils : utilitaires SHA-2</a></li><li><a href="https://ffmpeg.org/ffmpeg.html#Streamcopy">FFmpeg : copie de flux et transcodage</a></li></ul>
+<h2>Conclusion</h2>
+<p>Pour tester un fichier multimédia converti, comparez-le à une courte liste d’exigences, inspectez-le et lisez-le à la destination prévue. Consignez ce que vous avez vérifié et ce qui reste non testé. Valider une copie à livrer et décider comment archiver l’original sont deux décisions distinctes ; conservez l’original si sa perte aurait un coût important.</p>
+<h2>Questions fréquentes</h2>
+<h3>Ouvrir le fichier suffit-il ?</h3>
+<p>Non. L’ouverture ne vérifie ni la fin, ni toutes les pistes, ni chaque passage. Inspectez les propriétés nécessaires et lisez le contenu important.</p>
+<h3>La durée doit-elle être exactement identique ?</h3>
+<p>Pas toujours. Les arrondis d’affichage et le comportement du format peuvent produire de petites différences. Examinez les contenus manquants ou un écart important plutôt que de vous fier à une tolérance temporelle universelle.</p>
+<h3>Un fichier plus petit signifie-t-il une moins bonne conversion ?</h3>
+<p>La taille seule ne permet pas de le savoir. Évaluez le fichier selon l’usage prévu, le contenu nécessaire et la lecture réelle.</p>
+<h3>Puis-je supprimer l’original après un test par échantillonnage réussi ?</h3>
+<p>Un échantillonnage laisse des passages non vérifiés. Conservez une sauvegarde récupérable de l’original, surtout pour les enregistrements irremplaçables ou les contenus que vous pourriez modifier plus tard.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Vérifier la table des matières et l’ordre des chapitres d’un EPUB</h3><a class="related-article-link" href="https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/">Read article</a></article>
+<article class="related-article-card"><h3>Organiser sa musique sur Android pour une écoute hors ligne</h3><a class="related-article-link" href="https://onnellab.com/blog/fr/organize-local-music-library-offline-android/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

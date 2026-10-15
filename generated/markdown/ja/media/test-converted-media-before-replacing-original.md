@@ -5,7 +5,7 @@ slug: "test-converted-media-before-replacing-original"
 category: "media"
 language: "ja"
 description: "変換後の音声や動画について、内容の欠落、再生、必要なメタデータを確認します。使用先で試し、元ファイルのバックアップを残しましょう。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0063"
 search_intent: "workflow"
 primary_keyword: "変換後のメディアファイルを確認"
@@ -15,6 +15,9 @@ tags: "変換後のメディアファイルを確認|変換後の音声確認|�
 short_answer: "元ファイルを残したまま、出力ファイルの情報を調べ、実際に使うアプリで主な箇所を再生し、必要なトラックとメタデータを確認します。違いがあれば原因を調べてから採用を判断します。一部が正常でも、唯一の元ファイルを削除してよいとは限りません。"
 canonical_url: "https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/"
 image_specs: "元ファイルを残す|変更点を調べる|使用先で試す|記録と予備コピー"
+published_at: "2026-10-15T09:00:00+09:00"
+updated_at: "2026-10-15T09:00:00+09:00"
+related_articles: "Androidの音楽ファイルをオフライン再生用に整理する方法 => https://onnellab.com/blog/ja/organize-local-music-library-offline-android/|EPUBの目次リンクと章の順序を確認する方法 => https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/"
 ---
 
 # 元ファイルを置き換える前に変換後のメディアを確認する方法

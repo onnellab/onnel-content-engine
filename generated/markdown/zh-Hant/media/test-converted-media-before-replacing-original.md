@@ -5,7 +5,7 @@ slug: "test-converted-media-before-replacing-original"
 category: "media"
 language: "zh-Hant"
 description: "檢查轉檔後的音訊與影片是否完整、播放是否正常，以及是否保留必要的中繼資料。在實際使用的應用程式或裝置中測試，並保留已驗證的原始檔案備份。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0065"
 search_intent: "workflow"
 primary_keyword: "檢查轉檔後的媒體檔案"
@@ -15,6 +15,9 @@ tags: "檢查轉檔後的媒體檔案|轉檔後音訊檢查|影片播放檢查|�
 short_answer: "保留原始檔案，檢查匯出檔案，在實際使用的應用程式中播放具代表性的片段，並確認必要的軌道與中繼資料。先釐清差異，再決定是否接受轉檔結果。抽樣檢查通過，也不代表可以刪除唯一的原始檔案。"
 canonical_url: "https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/"
 image_specs: "留下原始檔|確認檔案變化|在使用環境播放|記錄並保存"
+published_at: "2026-10-15T09:00:00+09:00"
+updated_at: "2026-10-15T09:00:00+09:00"
+related_articles: "在 Android 整理音樂檔案，準備離線播放 => https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/|檢查 EPUB 的目錄連結與章節順序 => https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/"
 ---
 
 # 取代原始檔案前，如何檢查轉檔後的媒體檔案

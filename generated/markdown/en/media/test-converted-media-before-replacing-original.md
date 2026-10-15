@@ -5,7 +5,7 @@ slug: "test-converted-media-before-replacing-original"
 category: "media"
 language: "en"
 description: "Check converted audio and video for missing content, playback and metadata. Test the destination and keep an original backup."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0038"
 search_intent: "workflow"
 primary_keyword: "test a converted media file"
@@ -15,6 +15,9 @@ tags: "test a converted media file|converted audio checks|video playback check|m
 short_answer: "Keep the original, inspect the exported file, play representative passages in the destination app, and check required tracks and metadata. Investigate differences before accepting the result. A successful sample does not justify deleting the only original."
 canonical_url: "https://onnellab.com/blog/en/test-converted-media-before-replacing-original/"
 image_specs: "Keep the original|Check what changed|Test the destination|Record and back up"
+published_at: "2026-10-15T09:00:00+09:00"
+updated_at: "2026-10-15T09:00:00+09:00"
+related_articles: "How to Choose a Media Output Format Before Conversion => https://onnellab.com/blog/en/choose-media-output-format-before-conversion/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/|How to Verify Audio Clips Before Combining Them => https://onnellab.com/blog/en/verify-audio-clips-before-combining/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/|How to Inspect a Large Log File Without Altering the Original => https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/"
 ---
 
 # How to Test a Converted Media File Before Replacing the Original
