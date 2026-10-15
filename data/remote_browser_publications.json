@@ -454,6 +454,37 @@
       "status": "processed",
       "submitted_source_characters": 790,
       "processed_at": "2026-10-12T00:41:21+00:00"
+    },
+    {
+      "manual_key": "TOPIC-0020::x::en::x",
+      "topic_id": "TOPIC-0020",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "posted_url": "https://x.com/onnellab/status/2110172440370270344",
+      "post_id": "2110172440370270344",
+      "published_at": "2026-10-14T00:54:49.000Z",
+      "published_at_precision": "second",
+      "published_at_source": "Published post UI time element datetime attribute, independently read on 2026-10-15.",
+      "observed_at": "2026-10-15T00:44:18Z",
+      "observed_at_precision": "second",
+      "account": "@onnellab",
+      "draft_sha256": "df5ddbb2153ab18d8eee8aaa5927799f64a2282916d1e8fe04a32044fb3c6e3f",
+      "draft_hash_normalization": "Current repository draft UTF-8 with CRLF normalized to LF; terminal LF retained. This is not proof of original submitted source.",
+      "posted_body_sha256": "e4f0ec9a5de9462e2c4dc1a8e03e2607b43b50e21ad184e80a80d81cccc40002",
+      "posted_body_hash_normalization": "Observed post body as quoted in browser page title, UTF-8, single spaces, retaining platform t.co URL, no terminal LF. Original submitted source bytes unavailable.",
+      "observed_body": "Treat Downloads as an inbox. Sort files into Action, Reference, Archive, and Temporary, then review them regularly. Read the full article: https://t.co/5e8sWcCJHB",
+      "source_draft_path": "generated/social/x/en/productivity/organize-downloads-small-folder-system.txt",
+      "canonical_url": "https://onnellab.com/blog/en/organize-downloads-small-folder-system/",
+      "observed_short_url": "https://t.co/5e8sWcCJHB",
+      "canonical_destination_verified_at": "2026-10-15T00:44:47Z",
+      "copy_adjustment": "Existing public post uses concrete four-folder guidance rather than current generated hook. No posting or editing in this reconciliation.",
+      "browser_ui_timestamp": "5:54 PM · Oct 13, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "dot cloud browser UI: existing public post found before composer; exact author, body, permalink and DOM time verified. Its t.co article card opened the matching canonical article. Missing receipt reconciled without reposting. observed_at is this verification time, distinct from server publication time.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new"
     }
   ]
 }
