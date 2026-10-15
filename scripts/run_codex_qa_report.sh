@@ -4,14 +4,12 @@ set -euo pipefail
 
 engine_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 task_id="${1:-}"
-review_args=()
 if [[ ! "$task_id" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] ||
    { [[ $# -ne 1 ]] && [[ $# -ne 3 ]]; } ||
    { [[ $# -eq 3 ]] && [[ "$2" != "--review-report" || ! -f "$3" ]]; }; then
   echo "Usage: $0 TASK_ID [--review-report REVIEW.json]" >&2
   exit 2
 fi
-if [[ $# -eq 3 ]]; then review_args=(--review-report "$3"); fi
 packet="$(mktemp "${TMPDIR:-/tmp}/codex-qa-packet.XXXXXX.json")"
 report="$(mktemp "${TMPDIR:-/tmp}/codex-qa-report.XXXXXX.json")"
 trap 'rm -f "$packet" "$report" "${packet}.analyze" "${packet}.test" "${packet}.performance"' EXIT
@@ -87,8 +85,13 @@ data['source_integrity']='passed' if head == data['task']['commit'] and not dirt
 path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 PY
 
-python3 "$engine_root/scripts/assemble_local_qa_report.py" "$packet" \
-  --output "$report" "${review_args[@]}"
+# macOS ships Bash 3.2: an empty array expansion is unbound under `set -u`.
+if [[ $# -eq 3 ]]; then
+  python3 "$engine_root/scripts/assemble_local_qa_report.py" "$packet" \
+    --output "$report" --review-report "$3"
+else
+  python3 "$engine_root/scripts/assemble_local_qa_report.py" "$packet" --output "$report"
+fi
 mkdir -p "$engine_root/data/qa-reports"
 cp "$report" "$engine_root/data/qa-reports/${task_id}.json"
 python3 "$engine_root/scripts/validate_ai_qa_report.py" "$engine_root/data/qa-reports/${task_id}.json"
