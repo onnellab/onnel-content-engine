@@ -486,6 +486,91 @@
       "verification_confidence": "browser_permalink",
       "status": "processed",
       "processed_at": "2026-10-15T00:45:29+00:00"
+    },
+    {
+      "topic_id": "TOPIC-0053",
+      "language": "en",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "copy_adjustment": "Owner-approved first-sentence correction: inspect contents links and manuscript chapter order in a separate EPUB reader. Existing destination links and remaining content retained.",
+      "approval_source": "Explicit owner chat approval on 2026-10-14 for both named profiles, existing links and first-sentence correction.",
+      "canonical_url": "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new",
+      "manual_key": "TOPIC-0053::x::en::x",
+      "platform": "x",
+      "template_id": "x",
+      "posted_url": "https://x.com/onnellab/status/2110532662515417434",
+      "post_id": "2110532662515417434",
+      "published_at": "2026-10-15T00:46:13.000Z",
+      "published_at_precision": "second",
+      "published_at_source": "Published post UI time element datetime attribute.",
+      "observed_at": "2026-10-15T00:47:04Z",
+      "observed_at_precision": "second",
+      "account": "@onnellab",
+      "draft_sha256": "d73d46123caaa42392e881dc387bf1a3af9fe1d3c9950f642d0581dfd384c299",
+      "posted_body_sha256": "6ca31ecb16fe0ba60d70d1ea7a91a56f19977713a188409d648714ee7e1a603f",
+      "submitted_body": "Open your exported EPUB in a separate reader. Compare its contents links and chapter order with your manuscript.\n\nInstall Papira:\nApp Store: https://apps.apple.com/app/id6803919552\nGoogle Play: https://play.google.com/store/apps/details?id=com.onnellab.papira",
+      "submitted_source_characters": 259,
+      "source_draft_path": "generated/social/x/en/reading/check-epub-table-of-contents-and-reading-order.txt",
+      "browser_ui_timestamp": "5:46 PM · Oct 14, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "dot cloud browser UI: fresh state/receipts and authenticated @onnellab history checked before posting. Approved copy and store links verified in composer; profile count 17 to 18; full post author/body/permalink and UI time datetime verified. observed_at records verification, separately from server published_at.",
+      "observations": [
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-15T00:46:41Z",
+          "precision": "second"
+        },
+        {
+          "event": "server_timestamp_ui_attribute_verified",
+          "observed_at": "2026-10-15T00:47:04Z",
+          "precision": "second"
+        }
+      ]
+    },
+    {
+      "topic_id": "TOPIC-0053",
+      "language": "en",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "copy_adjustment": "Owner-approved first-sentence correction: inspect contents links and manuscript chapter order in a separate EPUB reader. Existing destination links and remaining content retained.",
+      "approval_source": "Explicit owner chat approval on 2026-10-14 for both named profiles, existing links and first-sentence correction.",
+      "canonical_url": "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new",
+      "manual_key": "TOPIC-0053::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "template_id": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7516298565556588544/",
+      "post_id": "urn:li:activity:7516298565556588544",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-15T00:47:31Z",
+      "observed_at_precision": "second",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_sha256": "b6c09cc9b4a02656f7c1e31d44ca46933ff419afaed9385b421618c93afece66",
+      "posted_body_sha256": "55556c19abc896a743cde7a95b052248f75ab561b18f9f5b5aa2ffbe46b52a03",
+      "submitted_body": "Open your exported EPUB in a separate reader, then compare its contents links and chapter order with your manuscript.\n\nWrite down the expected chapters, open the exported EPUB in a separate reader, test each contents link, and read across chapter boundaries. Record mismatches, correct the source or export setup, regenerate and check again.\n\nBefore changing tools:\n- Open the correct export. Keep the source and EPUB filenames visible in your notes. Use a reader that supports the file, and check its import or sync behavior before opening a private manuscript.\n- Compare the whole contents list. Look for missing sections, unexpected entries, repeated labels, and a sequence that differs from your reference. Expand collapsed groups where the reader provides them.\n\nRead the full article:\nhttps://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
+      "submitted_source_characters": 867,
+      "source_draft_path": "generated/social/linkedin/en/reading/check-epub-table-of-contents-and-reading-order.txt",
+      "browser_ui_timestamp": "방금",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "dot cloud browser UI: fresh state/receipts and ONNEL LAB activity history checked for duplicates. Verified public audience, full approved copy, success notification, exact permalink, author/body and canonical article-card destination. Article URL shortened to lnkd.in/gZ7dzNy8. observed_at is verification time; server publication time remains unknown.",
+      "observations": [
+        {
+          "event": "publish_success_notification",
+          "observed_at": "2026-10-15T00:47:12Z",
+          "precision": "second"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-15T00:47:31Z",
+          "precision": "second"
+        }
+      ]
     }
   ]
 }
