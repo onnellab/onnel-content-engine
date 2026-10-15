@@ -123,8 +123,15 @@ The verified bytes execute with isolated Python inside Linux bubblewrap, with
 no network, credentials, host home, engine checkout or inherited environment.
 The app is read-only. Only stage-site receives the dedicated website directory,
 with its Git metadata hidden. Missing or denied OS isolation fails closed.
-The existing public standard-runner jobs install Ubuntu's bubblewrap package;
-no new credential, secret binding or permission is introduced.
+The existing Ubuntu 24.04 runner jobs install bubblewrap and Ubuntu's
+packaged `bwrap-userns-restrict` AppArmor profile before running the unchanged
+sandbox self-test. The profile grants only the narrowly scoped namespace setup
+required by bubblewrap and restricts nested user namespaces in the child.
+The system-wide `kernel.apparmor_restrict_unprivileged_userns` policy must stay
+enabled (`1`) before and after loading the distro-provided profile. Any
+missing/unloadable profile or failed sandbox proof blocks the job; there is no
+unisolated fallback, permissive custom profile, global sysctl downgrade, Docker
+backend switch, new secret, or new credential grant.
 
 The existing status workflow's artwork_read_only input reports each repository
 read result, including a safe numeric HTTP status on failure, then exercises the
