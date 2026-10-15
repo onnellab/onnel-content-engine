@@ -497,7 +497,7 @@
       "canonical_url": "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "manual_key": "TOPIC-0053::x::en::x",
       "platform": "x",
       "template_id": "x",
@@ -528,7 +528,8 @@
           "observed_at": "2026-10-15T00:47:04Z",
           "precision": "second"
         }
-      ]
+      ],
+      "processed_at": "2026-10-15T00:48:18+00:00"
     },
     {
       "topic_id": "TOPIC-0053",
@@ -540,7 +541,7 @@
       "canonical_url": "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "manual_key": "TOPIC-0053::linkedin::en::linkedin",
       "platform": "linkedin",
       "template_id": "linkedin",
@@ -570,7 +571,8 @@
           "observed_at": "2026-10-15T00:47:31Z",
           "precision": "second"
         }
-      ]
+      ],
+      "processed_at": "2026-10-15T00:48:18+00:00"
     }
   ]
 }
