@@ -301,15 +301,30 @@ and `tool/verify_patch_notes.sh` from a selected template ref. It requires the
 explicit `TEMPLATE_SYNC` confirmation, creates no PR when those files already
 match, and never merges or deploys.
 
-For a recorded Draft PR, generate the detailed read-only Codex QA report:
+For a recorded Draft PR, run the free local QA report entrypoint (the historical
+filename is retained for compatibility; it never starts Codex or another model):
 
 ```bash
 scripts/run_codex_qa_report.sh TASK_ID
 ```
 
-It runs Flutter analysis and tests, then asks Codex to emit the required
-evidence-only QA JSON. A missing objective iOS/device fact produces `STOP`,
-which correctly prevents the merge gate from passing.
+It runs Flutter analysis, tests, and the app-owned performance gate. The mapped
+checkout must be clean and at the task's recorded commit. It writes their actual
+results and `STOP` for missing source-review/platform evidence; an unverified
+report returns nonzero and cannot pass the merge gate. This does not start any
+paid service, API, or separate Codex/Work session.
+
+To combine those local results with an existing independent review, pass
+`--review-report /path/to/review.json`. Follow
+`docs/operations/QA_VERIFICATION_POLICY.md` and the QA report example; include
+the exact `task_id`, `repository`, `pr_url`, `qa_profile`, and recorded `commit`.
+The supplied report must cover the required checks with objective evidence.
+Local test failures override review claims. Missing checks remain `STOP`, and
+a missing commit-bound physical-iOS-device PASS still blocks final QA. Legacy
+device reports without a commit remain `STOP`. Development can
+continue on independent work while device checks are deferred; the report does
+not turn that deferral into release approval. Review generation is not tied to
+a paid model or hosted service.
 
 The GitHub **Run App QA Gate** follows the Flutter template's portable gates:
 format verification, analyze, tests, template patch-note validation when
@@ -723,4 +738,5 @@ publication instead of asking for approval. See
 [Managed Screen Recording](docs/Short_Video_Recording.md), and
 [English YouTube Shorts Strategy](docs/Short_Video_Strategy.md), and
 [Motion & Product Film Guide](docs/Motion_Design_Guide.md).
+
 
