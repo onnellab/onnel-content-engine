@@ -24,8 +24,8 @@
     "sd_processing": "complete",
     "hd_processing": "complete",
     "copyright": "no issues found; not a future guarantee",
-    "thumbnail": "platform-generated; custom thumbnail not separately selected",
+    "thumbnail": "No custom thumbnail selected; final Shorts thumbnail not independently verified.",
     "external_links": "text only; UI says one-time verification required; not initiated",
-    "playback": "local full 450-frame decode and three-slide visual review; post-upload playback not yet reviewed"
+    "playback": "Processed Studio player started and displayed the correct app screenshot; full hosted-frame playback not independently audited. Local 450-frame decode and all 3 source slides reviewed."
   }
 }
