@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
 from build_manual_publish_site import apply_manual_publish_schedule
-from publication_history import specific_permalink
+from publication_history import specific_permalink, body_evidence_matches
 
 class ManualPublishBacklogScheduleTest(unittest.TestCase):
     def write_schedule(self,path,backlog):
@@ -77,7 +77,7 @@ class ManualPublishBacklogScheduleTest(unittest.TestCase):
                 source=(ROOT/posts[0]['draft_path']).resolve()
                 self.assertTrue(source.is_relative_to(ROOT))
                 draft=source.read_text(encoding='utf-8').replace('\r\n','\n')
-                self.assert_verified_requeue_completion(done,previous[key],matching[0],draft,audit['requeued_at'],key)
+                self.assert_verified_requeue_completion(done,previous[key],matching[0],draft,audit['requeued_at'],key,posts[0])
                 self.assertEqual(posts[0]['status'],'posted')
                 self.assertEqual(posts[0]['posted_url'],done['posted_url'])
         self.assertIn('TOPIC-0020::medium::en::markdown',state)
@@ -87,7 +87,7 @@ class ManualPublishBacklogScheduleTest(unittest.TestCase):
         self.assertEqual(audit['source_availability']['canonical_pages_http_status'],200)
         self.assertEqual(audit['source_availability']['social_cards_http_status'],200)
 
-    def assert_verified_requeue_completion(self,done,previous,receipt,draft,requeued_at,manual_key):
+    def assert_verified_requeue_completion(self,done,previous,receipt,draft,requeued_at,manual_key,post=None):
         for record in (done,receipt):
             self.assertEqual('::'.join(str(record.get(field,'')) for field in ('topic_id','platform','language','template_id')),manual_key)
         self.assertTrue(specific_permalink(done['platform'],done.get('posted_url')))
@@ -105,13 +105,7 @@ class ManualPublishBacklogScheduleTest(unittest.TestCase):
         self.assertGreaterEqual(verified,observed)
         self.assertTrue(receipt.get('observation_source'))
         self.assertTrue(done.get('verification_method'))
-        expected={
-            'draft_sha256':hashlib.sha256(draft.encode('utf-8')).hexdigest(),
-            'posted_body_sha256':hashlib.sha256(draft.removesuffix('\n').encode('utf-8')).hexdigest(),
-        }
-        for field,digest in expected.items():
-            self.assertEqual(done.get(field),digest)
-            self.assertEqual(receipt.get(field),digest)
+        self.assertTrue(body_evidence_matches(done,receipt,draft,post or {}))
 
     def test_requeue_completion_rejects_profile_stale_and_unbound_evidence(self):
         draft='A verified draft.\n'

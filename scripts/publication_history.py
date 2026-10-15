@@ -5,8 +5,10 @@ copy replacement, but must not be promoted to a verified posted manifest item.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
+from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -16,7 +18,73 @@ RECEIPT_PROVENANCE_FIELDS = (
     'observation_source', 'browser_ui_timestamp', 'browser_ui_timezone',
     'draft_sha256', 'posted_body_sha256', 'account',
     'draft_hash_normalization', 'posted_body_hash_normalization',
+    'body_evidence_kind', 'observed_body', 'observed_body_sha256',
+    'observed_body_hash_normalization', 'observed_body_normalization', 'post_id', 'source_draft_path',
+    'observed_short_url', 'canonical_destination_verified_at',
 )
+
+
+def body_evidence_matches(done: dict, receipt: dict, source: str, post: dict) -> bool:
+    """Check the declared evidence, never equate a rendered body with source bytes.
+
+    The legacy contract proves a submitted body identical to the current draft.
+    Recovered X observations instead bind the retained, normalized public body
+    to the exact account/post and the independently verified canonical target.
+    Their draft digest is context only, not proof of the missing submission.
+    Identity, specific permalink, receipt status and observation freshness must
+    also be checked by the caller.
+    """
+    draft_hash = hashlib.sha256(source.encode('utf-8')).hexdigest()
+    if any(record.get('draft_sha256') != draft_hash for record in (done, receipt)):
+        return False
+    kind = receipt.get('body_evidence_kind', 'submitted_source')
+    if done.get('body_evidence_kind', 'submitted_source') != kind:
+        return False
+    if kind == 'submitted_source':
+        if any(record.get('observed_body_sha256') for record in (done, receipt)):
+            return False
+        digest = hashlib.sha256(source.removesuffix('\n').encode('utf-8')).hexdigest()
+        return all(record.get('posted_body_sha256') == digest for record in (done, receipt))
+    if kind != 'observed_public_body' or post.get('platform') != 'x':
+        return False
+    fields = ('observed_body', 'observed_body_sha256', 'observed_body_hash_normalization',
+              'observed_body_normalization',
+              'observed_at', 'observation_source',
+              'account', 'post_id', 'source_draft_path', 'canonical_url',
+              'observed_short_url', 'canonical_destination_verified_at')
+    if any(not isinstance(receipt.get(field), str) or not receipt[field]
+           or done.get(field) != receipt[field] for field in fields):
+        return False
+    # An observation cannot simultaneously claim to recover unknown source bytes.
+    if any(record.get(field) for record in (done, receipt)
+           for field in ('posted_body_sha256', 'posted_body_hash_normalization', 'submitted_body')):
+        return False
+    body = receipt['observed_body']
+    if receipt['observed_body_normalization'] != 'utf8_whitespace_collapsed_urls_preserved_v1':
+        return False
+    if body != ' '.join(body.split()) or any(ord(c) < 32 for c in body):
+        return False
+    if hashlib.sha256(body.encode('utf-8')).hexdigest() != receipt['observed_body_sha256']:
+        return False
+    if receipt['account'] != '@onnellab' or not receipt['post_id'].isdigit():
+        return False
+    url = f"https://x.com/onnellab/status/{receipt['post_id']}"
+    if receipt.get('posted_url') != url or done.get('posted_url') != url:
+        return False
+    if receipt['source_draft_path'] != post.get('draft_path') or receipt['canonical_url'] != post.get('canonical_url'):
+        return False
+    if not receipt['canonical_url'].startswith('https://onnellab.com/blog/'):
+        return False
+    short_url = receipt['observed_short_url']
+    if not re.fullmatch(r'https://t\.co/[A-Za-z0-9]+', short_url) or short_url not in body.split():
+        return False
+    try:
+        observed = datetime.fromisoformat(receipt['observed_at'].replace('Z', '+00:00'))
+        destination = datetime.fromisoformat(receipt['canonical_destination_verified_at'].replace('Z', '+00:00'))
+        verified = datetime.fromisoformat(done['verified_at'].replace('Z', '+00:00'))
+        return all(value.tzinfo is not None for value in (observed, destination, verified)) and observed <= destination <= verified
+    except (KeyError, TypeError, ValueError, AttributeError):
+        return False
 
 
 def specific_permalink(platform: str, value: object) -> bool:
@@ -89,6 +157,9 @@ def preserve_publication(item: dict[str, object], history: dict[str, dict[str, o
     item = dict(item)
     evidence = history.get(publication_key(item, template))
     if evidence is not None:
+        if (evidence.get('body_evidence_kind') == 'observed_public_body'
+                and evidence.get('canonical_url') != item.get('canonical_url')):
+            raise ValueError('publication canonical URL mismatch')
         item["_publication_recorded"] = True
         if evidence["_valid_permalink"]:
             if not item.get("posted_url"):
@@ -98,6 +169,9 @@ def preserve_publication(item: dict[str, object], history: dict[str, dict[str, o
                 for field in RECEIPT_PROVENANCE_FIELDS:
                     if field in evidence:
                         item[field] = evidence[field]
+                if evidence.get('body_evidence_kind') == 'observed_public_body':
+                    item.pop('posted_body_sha256', None)
+                    item.pop('posted_body_hash_normalization', None)
                 if evidence.get('published_at_precision') == 'unknown':
                     item['posted_at'] = ''
                 elif not item.get("posted_at"):

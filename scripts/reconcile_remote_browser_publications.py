@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
 import re
@@ -12,7 +11,7 @@ import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
-from publication_history import specific_permalink, RECEIPT_PROVENANCE_FIELDS
+from publication_history import specific_permalink, RECEIPT_PROVENANCE_FIELDS, body_evidence_matches
 from distribution_policy import channel_excluded
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,7 +20,8 @@ DEFAULT_STATE = ROOT / "data" / "manual_publish_state.json"
 DEFAULT_SOCIAL = ROOT / "generated" / "social" / "manifest.json"
 DEFAULT_SYNDICATION = ROOT / "generated" / "syndication" / "manifest.json"
 REMOTE_BROWSER_PLATFORMS = {"x", "linkedin"}
-PROVENANCE_FIELDS = RECEIPT_PROVENANCE_FIELDS
+# Receipt context is validated against, never blindly copied over, the manifest.
+PROVENANCE_FIELDS = (*RECEIPT_PROVENANCE_FIELDS, 'canonical_url')
 
 class RemotePublicationError(ValueError):
     pass
@@ -44,6 +44,8 @@ def receipt_provenance(record: dict[str, Any]) -> dict[str, str]:
         result[field] = value
     if result.get('published_at_precision') == 'unknown' and record.get('published_at') not in (None, ''):
         raise RemotePublicationError('unknown publication time must not contain published_at')
+    if result.get('body_evidence_kind', 'submitted_source') not in {'submitted_source', 'observed_public_body'}:
+        raise RemotePublicationError('unknown body evidence kind')
     return result
 
 
@@ -58,8 +60,8 @@ def key(topic_id: object, platform: object, language: object, template_id: objec
     return "::".join(map(str, (topic_id, platform, language, template_id)))
 
 
-def known_items(social: Path, syndication: Path) -> dict[str, dict[str, str]]:
-    result: dict[str, dict[str, str]] = {}
+def known_items(social: Path, syndication: Path) -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
     for post in load_json(social).get("posts", []):
         if not isinstance(post, dict) or post.get("is_variant"):
             continue
@@ -68,6 +70,7 @@ def known_items(social: Path, syndication: Path) -> dict[str, dict[str, str]]:
             continue
         manual_key = key(post.get("topic_id", ""), platform, post.get("language", ""), post.get("template_id", ""))
         result[manual_key] = {"platform": platform, "topic_id": str(post.get("topic_id", "")), "language": str(post.get("language", "")), "template_id": str(post.get("template_id", ""))}
+        result[manual_key].update(draft_path=post.get('draft_path'), canonical_url=post.get('canonical_url'))
     for draft in load_json(syndication).get("drafts", []):
         if not isinstance(draft, dict):
             continue
@@ -103,8 +106,22 @@ def write_atomic(path: Path, payload: dict[str, Any]) -> None:
 
 
 
+def social_draft_source(social: Path, post: dict[str, Any]) -> str | None:
+    root = social.resolve().parents[2] if social.parent.name == 'social' and social.parent.parent.name == 'generated' else social.resolve().parent
+    relative = post.get('draft_path')
+    if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
+        return None
+    draft = (root / relative).resolve()
+    if not draft.is_relative_to(root) or not draft.is_file():
+        return None
+    try:
+        return draft.read_text(encoding='utf-8').replace('\r\n', '\n')
+    except (OSError, UnicodeError):
+        return None
+
+
 def sync_verified_social_manifest(social: Path, inbox: dict[str, Any], state: dict[str, Any]) -> bool:
-    """Reflect only exact, source-bound processed publication evidence in the social manifest.
+    """Reflect exact, hash-bound processed publication evidence in the social manifest.
 
     Legacy profile links and reports without draft/body hashes cannot be promoted.
     This repairs manifest drift even when a previous reconciliation processed the receipt.
@@ -113,8 +130,6 @@ def sync_verified_social_manifest(social: Path, inbox: dict[str, Any], state: di
     posts = manifest.get("posts")
     if not isinstance(posts, list):
         raise RemotePublicationError("social manifest is malformed")
-    # The canonical manifest lives at <repo>/generated/social/manifest.json.
-    root = social.resolve().parents[2] if social.parent.name == "social" and social.parent.parent.name == "generated" else social.resolve().parent
     receipts = inbox.get("records", [])
     changed = False
     for post in posts:
@@ -147,22 +162,10 @@ def sync_verified_social_manifest(social: Path, inbox: dict[str, Any], state: di
             continue
         if observed.tzinfo is None or verified.tzinfo is None or verified < observed:
             continue
-        relative = post.get("draft_path")
-        if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
+        source = social_draft_source(social, post)
+        if source is None:
             continue
-        draft = (root / relative).resolve()
-        if not draft.is_relative_to(root) or not draft.is_file():
-            continue
-        try:
-            source = draft.read_text(encoding="utf-8").replace("\r\n", "\n")
-        except (OSError, UnicodeError):
-            continue
-        hashes = {
-            "draft_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest(),
-            "posted_body_sha256": hashlib.sha256(source.removesuffix("\n").encode("utf-8")).hexdigest(),
-        }
-        if any(done.get(field) != expected or receipt.get(field) != expected
-               for field, expected in hashes.items()):
+        if not body_evidence_matches(done, receipt, source, post):
             continue
         if post.get("posted_url") and post["posted_url"] != url:
             raise RemotePublicationError(f"conflicting social manifest permalink: {manual_key}")
@@ -171,9 +174,12 @@ def sync_verified_social_manifest(social: Path, inbox: dict[str, Any], state: di
             updated["posted_at"] = ""
         elif not updated.get("posted_at"):
             updated["posted_at"] = str(done.get("published_at") or "")
-        for field in PROVENANCE_FIELDS:
+        for field in RECEIPT_PROVENANCE_FIELDS:
             if field in done:
                 updated[field] = done[field]
+        if done.get('body_evidence_kind') == 'observed_public_body':
+            updated.pop('posted_body_sha256', None)
+            updated.pop('posted_body_hash_normalization', None)
         if updated != post:
             post.clear()
             post.update(updated)
@@ -215,6 +221,13 @@ def reconcile(inbox_path: Path = DEFAULT_INBOX, state_path: Path = DEFAULT_STATE
         if specific_permalink(platform, previous_url) and normalized_permalink(platform, previous_url) != permalink:
             raise RemotePublicationError(f"conflicting existing publication permalink: {manual_key}")
         receipt_provenance(record)  # Validate every record before changing either file.
+        if record.get('body_evidence_kind') == 'observed_public_body':
+            source = social_draft_source(social, item)
+            candidate = dict(record, verified_at=now_iso())
+            if (source is None or any(record.get(field) != item[field]
+                                      for field in ('topic_id', 'platform', 'language', 'template_id'))
+                    or not body_evidence_matches(candidate, record, source, item)):
+                raise RemotePublicationError(f'invalid observed body evidence: {manual_key}')
         updates.append((record, item, permalink))
     if not updates:
         sync_verified_social_manifest(social, inbox, state)

@@ -471,8 +471,6 @@
       "account": "@onnellab",
       "draft_sha256": "df5ddbb2153ab18d8eee8aaa5927799f64a2282916d1e8fe04a32044fb3c6e3f",
       "draft_hash_normalization": "Current repository draft UTF-8 with CRLF normalized to LF; terminal LF retained. This is not proof of original submitted source.",
-      "posted_body_sha256": "e4f0ec9a5de9462e2c4dc1a8e03e2607b43b50e21ad184e80a80d81cccc40002",
-      "posted_body_hash_normalization": "Observed post body as quoted in browser page title, UTF-8, single spaces, retaining platform t.co URL, no terminal LF. Original submitted source bytes unavailable.",
       "observed_body": "Treat Downloads as an inbox. Sort files into Action, Reference, Archive, and Temporary, then review them regularly. Read the full article: https://t.co/5e8sWcCJHB",
       "source_draft_path": "generated/social/x/en/productivity/organize-downloads-small-folder-system.txt",
       "canonical_url": "https://onnellab.com/blog/en/organize-downloads-small-folder-system/",
@@ -485,7 +483,20 @@
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
       "status": "processed",
-      "processed_at": "2026-10-15T00:45:29+00:00"
+      "processed_at": "2026-10-15T00:45:29+00:00",
+      "body_evidence_kind": "observed_public_body",
+      "observed_body_normalization": "utf8_whitespace_collapsed_urls_preserved_v1",
+      "observed_body_sha256": "e4f0ec9a5de9462e2c4dc1a8e03e2607b43b50e21ad184e80a80d81cccc40002",
+      "observed_body_hash_normalization": "Observed post body as quoted in browser page title, UTF-8, single spaces, retaining platform t.co URL, no terminal LF. Original submitted source bytes unavailable.",
+      "evidence_schema_correction": {
+        "reason": "The recovered digest identifies the retained public observation, not unavailable submitted source bytes.",
+        "original_receipt_commit": "24d14dd469dbdb851de5ffd154cdc0522b8e9aea",
+        "field_renames": {
+          "posted_body_sha256": "observed_body_sha256",
+          "posted_body_hash_normalization": "observed_body_hash_normalization"
+        },
+        "preserved": "Digest value, observed text, permalink and all publication/observation/processing timestamps."
+      }
     },
     {
       "topic_id": "TOPIC-0053",

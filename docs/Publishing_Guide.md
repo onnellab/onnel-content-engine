@@ -861,6 +861,30 @@ Before opening a destination composer, the publisher must fetch the latest `data
 
 After a successful publication, append a `status=new` record to `data/remote_browser_publications.json` through the connected GitHub app. Each record contains `manual_key`, `platform`, the specific public `posted_url`, and `published_at`. Profile pages, feeds, compose/editor URLs, and guessed URLs are forbidden.
 
+#### Publication body evidence
+
+`draft_sha256` hashes repository UTF-8 text after CRLF-to-LF normalization,
+retaining its terminal LF. Legacy `posted_body_sha256` proves that same source
+with one terminal LF removed. Do not put a rendered observation in this field
+or manufacture a matching digest when the actual public copy differs.
+
+For a recovered X post whose submitted bytes are unavailable, explicitly use
+`body_evidence_kind=observed_public_body`, retain `observed_body`, and hash it as
+`observed_body_sha256`. The machine normalization is
+`utf8_whitespace_collapsed_urls_preserved_v1`: UTF-8, whitespace collapsed to
+single spaces, URLs (including t.co) retained, no terminal LF. Preserve the
+human-readable `observed_body_hash_normalization` and omit submitted-body hash
+fields. The draft digest identifies the comparison draft only.
+
+This recovery evidence must bind the exact @onnellab post URL/ID, source draft
+path and canonical URL to the manifest. Retain the observed t.co URL and the
+time its destination was independently verified. Done state and the receipt
+must agree; body tampering, missing or conflicting evidence, a profile link,
+or a destination check outside the observation-to-verification interval fails
+validation. This does not authorize a new post or a source rewrite.
+Publication server time, browser observation time and ledger processing time
+remain separate and must not be replaced during a schema correction.
+
 `.github/workflows/reconcile-remote-browser-publications.yml` validates the permalink and current manifest identity, records completion in `data/manual_publish_state.json`, rebuilds the dashboard, and deploys it. It also runs hourly as a fallback if the inbox push does not start immediately. Invalid entries fail closed and do not alter completion state.
 
 Reuse the existing authenticated Chrome sessions without reading passwords, cookies, passkeys, recovery information, or 2FA secrets. If a site requires reauthentication, CAPTCHA, passkey/device approval, or another human-only step, leave the item pending. Never mark an attempted-but-unpublished item complete.
