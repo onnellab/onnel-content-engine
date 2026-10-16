@@ -627,6 +627,48 @@
         }
       ],
       "processed_at": "2026-10-16T00:42:13+00:00"
+    },
+    {
+      "topic_id": "TOPIC-0038",
+      "language": "en",
+      "manual_key": "TOPIC-0038::x::en::x",
+      "platform": "x",
+      "template_id": "x",
+      "posted_url": "https://x.com/onnellab/status/2110894522792104352",
+      "post_id": "2110894522792104352",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-16T00:44:48Z",
+      "observed_at_precision": "second",
+      "account": "@onnellab",
+      "draft_sha256": "a38dd950a0438f9eb41812fc0c04dbf129efb8e624de87b2011ecdea209a7fee",
+      "posted_body_sha256": "e52c15e4d8c171914c533672bea9fb90b42d3a19261ccccf0e6239e9ff6eff65",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "submitted_body": "Keep the original. Test the converted media file in its destination app, then check required tracks and metadata.\n\nInstall Quivra:\nApp Store: https://apps.apple.com/app/id6759565093\nGoogle Play: https://play.google.com/store/apps/details?id=com.onnellab.quivra2",
+      "submitted_source_characters": 261,
+      "source_draft_path": "generated/social/x/en/media/test-converted-media-before-replacing-original.txt",
+      "canonical_url": "https://onnellab.com/blog/en/test-converted-media-before-replacing-original/",
+      "copy_adjustment": "Routine first-sentence direct answer preserving the approved article and remaining draft.",
+      "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new",
+      "browser_ui_timestamp": "5:44 PM · Oct 15, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "Cloud browser authenticated @onnellab and checked current receipts and recent profile history before posting. Canonical article and both actual Quivra store listings verified. Exact complete body checked in composer after correcting input before submission. Success toast and post count 18 to 19 observed. Exact permalink verifies author, body and store-link labels. UI timestamp timezone unavailable; server UTC time remains unknown.",
+      "observations": [
+        {
+          "event": "publish_success_notification",
+          "observed_at": "2026-10-16T00:44:11Z",
+          "precision": "second"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-16T00:44:48Z",
+          "precision": "second"
+        }
+      ]
     }
   ]
 }
