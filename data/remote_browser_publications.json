@@ -696,7 +696,7 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "방금",
       "browser_ui_timezone": "not_recorded",
       "observation_source": "Cloud browser verified ONNEL LAB identity, public audience, full body and correct canonical card in composer, success notification, then exact permalink author and complete body. Article shortened to lnkd.in/g969EiVQ. Server publication time unavailable; observed_at is verification time. A dismissed pre-navigation browser check resolved on one same authorized navigation retry, with no new security permission.",
@@ -711,7 +711,8 @@
           "observed_at": "2026-10-16T00:47:24Z",
           "precision": "second"
         }
-      ]
+      ],
+      "processed_at": "2026-10-16T00:48:38+00:00"
     }
   ]
 }
