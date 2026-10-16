@@ -653,7 +653,7 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "5:44 PM · Oct 15, 2026",
       "browser_ui_timezone": "not_recorded",
       "observation_source": "Cloud browser authenticated @onnellab and checked current receipts and recent profile history before posting. Canonical article and both actual Quivra store listings verified. Exact complete body checked in composer after correcting input before submission. Success toast and post count 18 to 19 observed. Exact permalink verifies author, body and store-link labels. UI timestamp timezone unavailable; server UTC time remains unknown.",
@@ -668,7 +668,8 @@
           "observed_at": "2026-10-16T00:44:48Z",
           "precision": "second"
         }
-      ]
+      ],
+      "processed_at": "2026-10-16T00:45:54+00:00"
     }
   ]
 }
