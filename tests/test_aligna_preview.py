@@ -179,6 +179,35 @@ class DisposablePreviewBoundaries(unittest.TestCase):
             self.assertGreater(len(draft["body"]), 2000)
             self.assertEqual(len(draft["image"]["steps"]), 4)
 
+    def test_all_nine_authored_images_fit_existing_svg_layout(self):
+        from generate_image_assets import workflow_svg
+        drafts = preview.validate_drafts(ROOT / "preview/aligna")
+        for locale, draft in drafts.items():
+            with self.subTest(locale=locale):
+                image = draft["image"]
+                editorial = {
+                    "subtitle": image["subtitle"], "message": image["message"],
+                    "description": draft["short_answer"], "steps": image["steps"],
+                }
+                svg = workflow_svg(image["title"], draft["primary_keyword"], locale, editorial)
+                self.assertIn('<svg ', svg)
+
+    def test_original_overlong_headings_still_fail_existing_layout_gate(self):
+        from generate_image_assets import ImageAssetError, workflow_svg
+        drafts = preview.validate_drafts(ROOT / "preview/aligna")
+        for locale, index, heading in (("pt-BR", 0, "1. Identidade"),
+                                       ("de", 2, "3. Reihenfolge")):
+            with self.subTest(locale=locale):
+                draft = drafts[locale]
+                image = copy.deepcopy(draft["image"])
+                image["steps"][index][0] = heading
+                editorial = {
+                    "subtitle": image["subtitle"], "message": image["message"],
+                    "description": draft["short_answer"], "steps": image["steps"],
+                }
+                with self.assertRaisesRegex(ImageAssetError, "card heading exceeds"):
+                    workflow_svg(image["title"], draft["primary_keyword"], locale, editorial)
+
     def test_incomplete_or_altered_draft_fails(self):
         with tempfile.TemporaryDirectory() as d:
             target = Path(d)
