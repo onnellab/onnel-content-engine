@@ -610,7 +610,7 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "1분",
       "browser_ui_timezone": "not_recorded",
       "observation_source": "Cloud browser verified authenticated ONNEL LAB, current receipt/state and full recent activity before posting. Success notification supplied exact permalink; permalink confirms author, complete body and canonical article-card destination. URL shortened to lnkd.in/gaHA65BF. Server publication time unavailable; observed_at is verification time.",
@@ -625,7 +625,8 @@
           "observed_at": "2026-10-16T00:40:33Z",
           "precision": "second"
         }
-      ]
+      ],
+      "processed_at": "2026-10-16T00:42:13+00:00"
     }
   ]
 }
