@@ -1,15 +1,16 @@
 # App Release Status
 
-Generated: 2026-10-16T12:09:33+09:00
+Generated: 2026-10-17T06:20:55+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
 | Store | in_review | 1 |
-| Store | unchanged | 14 |
+| Store | unchanged | 13 |
+| Store | updated | 1 |
 | GitHub Release | archived | 1 |
-| GitHub Release | planned | 2 |
+| GitHub Release | planned | 3 |
 | GitHub Release | released | 8 |
 
 ## Store Snapshots
@@ -21,7 +22,7 @@ Generated: 2026-10-16T12:09:33+09:00
 | ClipNest | ios | 1.0.5 | 1.0.5 | same | unchanged | released | onnellab/clipnest | No action |
 | Melivra | android | 1.0.7 | 1.0.7 | same | unchanged | released | onnellab/melivra | No action |
 | Melivra | ios | 6783644955 | 1.0.7 | unknown | in_review | - | onnellab/melivra | Review status |
-| Papira | android | 2.0.1 | - | unknown | unchanged | - | onnellab/papira | No action |
+| Papira | android | 2.0.3 | - | unknown | updated | planned | onnellab/papira | Confirm matching public store version; auto-publish GitHub Release notes |
 | Papira | ios | 2.0.1 | - | unknown | unchanged | - | onnellab/papira | No action |
 | Quivra | android | 1.0.10 | 1.0.10 | same | unchanged | released | onnellab/quivra | No action |
 | Quivra | ios | 1.0.10 | 1.0.10 | same | unchanged | released | onnellab/quivra | No action |
@@ -47,6 +48,7 @@ Generated: 2026-10-16T12:09:33+09:00
 | REL-0028 | Aligna | android | public | v1.1.0 | released | Public GitHub Release published | https://github.com/onnellab/aligna/releases/tag/v1.1.0 | - | - | No action |
 | REL-0027 | Melivra | android | public | v1.0.7 | released | Public GitHub Release published | https://github.com/onnellab/melivra/releases/tag/v1.0.7 | - | - | No action |
 | REL-0026 | Aligna | ios | private_test | v1.0.9 | archived | Private test; public GitHub Release disabled | - | - | Android 앱 용량을 줄였어요. 스토어 이미지를 새로 업데이트했어요. | Private test only; do not publish public GitHub Release |
+| REL-0032 | Papira | android | public | v2.0.3 | planned | Public store confirmed; preparing automatic release | - | - | - | Confirm matching public store version; auto-publish GitHub Release notes |
 
 ## Attention Queue
 
@@ -56,3 +58,4 @@ Generated: 2026-10-16T12:09:33+09:00
 | VaultXT | android | unchanged | Store release complete; confirm next public rollout | Version/update date read from Google Play public page; Android snapshot version 2.0.2 is stale for public version 2.0.1 and was not merged. |
 | VaultXT | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 2.0.1. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
 | TagWeaver | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 2.5.3. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
+| Papira | android | planned | Confirm matching public store version; auto-publish GitHub Release notes | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
