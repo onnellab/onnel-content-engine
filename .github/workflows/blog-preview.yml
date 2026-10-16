@@ -5,6 +5,12 @@ on:
     paths:
       - '.github/workflows/blog-preview.yml'
       - 'preview/clipnest/**'
+      - 'preview/aligna/**'
+      - 'scripts/prepare_aligna_preview.py'
+      - 'scripts/evaluate_article.py'
+      - 'tests/test_aligna_preview.py'
+      - 'tests/test_preview_candidate_profiles.py'
+      - 'tests/test_conversational_korean_definitions.py'
       - 'scripts/prepare_blog_preview.py'
       - 'tests/test_blog_preview.py'
       - 'tests/blog-preview.spec.ts'
@@ -42,11 +48,18 @@ jobs:
       - name: Validate overlay boundaries and source checksums
         run: |
           python3 -m unittest discover -s tests -p test_blog_preview.py -v
+          python3 -m unittest discover -s tests -p test_preview_candidate_profiles.py -v
+          python3 -m unittest discover -s tests -p test_conversational_korean_definitions.py -v
+          python3 -m unittest discover -s tests -p test_aligna_preview.py -v
           python3 scripts/prepare_blog_preview.py --bundle preview/clipnest/candidate.json --validate-only
       - name: Install existing publisher renderer dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y librsvg2-bin fonts-noto-cjk
+      - name: Validate Aligna with actual native gates in a disposable engine copy
+        run: python3 scripts/prepare_aligna_preview.py
+      - name: Verify tracked source remains unchanged
+        run: git diff --exit-code
       - name: Audit locked homepage dependencies
         working-directory: .preview-homepage
         run: npm audit --package-lock-only --include=dev --audit-level=high
@@ -55,7 +68,7 @@ jobs:
         run: npm ci
       - name: Overlay candidate only in disposable checkout
         run: |
-          python3 scripts/prepare_blog_preview.py --bundle preview/clipnest/candidate.json --homepage .preview-homepage --evidence preview-evidence
+          python3 scripts/prepare_blog_preview.py --bundle preview-evidence/aligna/candidate.json --homepage .preview-homepage --evidence preview-evidence
           test ! -e .preview-homepage/tests/blog-preview.spec.ts
           test ! -L .preview-homepage/tests/blog-preview.spec.ts
           cp tests/blog-preview.spec.ts .preview-homepage/tests/blog-preview.spec.ts

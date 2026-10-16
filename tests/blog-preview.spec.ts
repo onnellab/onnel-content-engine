@@ -24,11 +24,13 @@ for (const locale of candidate.locales as string[]) {
     await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute('href', `https://onnellab.com/blog/en/${candidate.slug}/`);
     await expect(page.locator('meta[property="article:published_time"]')).toHaveCount(0);
     await expect(page.locator('.faq-list details')).toHaveCount(4);
-    await expect(page.locator('article table tbody tr')).toHaveCount(3);
+    await expect(page.locator('article table tbody tr')).toHaveCount(candidate.table_rows[locale]);
     const image = page.locator('article img[src*="workflow-diagram"]');
     await image.scrollIntoViewIfNeeded();
     await expect.poll(() => image.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
-    await expect(page.locator('article a[href="https://apps.apple.com/us/app/clipnest-clipboard-tool/id6779928552"]').first()).toBeVisible();
+    for (const storeUrl of candidate.store_urls as string[]) {
+      await expect(page.locator(`article a[href="${storeUrl}"]`).first()).toBeVisible();
+    }
     const hrefs = await page.locator('a[href]').evaluateAll(links => links.map(link => link.getAttribute('href')!));
     const checked: string[] = [];
     for (const href of [...new Set(hrefs)]) {

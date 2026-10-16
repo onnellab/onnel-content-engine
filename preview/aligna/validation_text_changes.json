@@ -1,0 +1,92 @@
+{
+  "state": "PROPOSED_NOT_APPLIED_TO_ORIGINALS",
+  "reason": "Use existing structural heading contracts without changing claims; clarify Chinese definitions and avoid irrelevant file-terminology trigger for simple lexical sorting.",
+  "changes": {
+    "en": [
+      [
+        "Zero padding helps plain text sorting",
+        "Zero padding helps simple text sorting"
+      ]
+    ],
+    "ko": [
+      [
+        "## 권장 작업 순서",
+        "## 권장 워크플로"
+      ],
+      [
+        "## 선택 사항: Aligna로 일괄 변경을 검토해요",
+        "## ONNELLAB 앱"
+      ],
+      [
+        "## 마무리",
+        "## 결론"
+      ]
+    ],
+    "ja": [
+      [
+        "## おすすめの進め方",
+        "## おすすめの手順"
+      ],
+      [
+        "## 必要ならAlignaで一括変更を検討する",
+        "## ONNELLAB の活用"
+      ]
+    ],
+    "zh-Hans": [
+      [
+        "## 推荐操作流程",
+        "## 推荐流程"
+      ],
+      [
+        "## 可选工具：用 Aligna 检查批量重命名",
+        "## ONNELLAB 的用途"
+      ],
+      [
+        "## 结语",
+        "## 结论"
+      ],
+      [
+        "“字段”是文件名中承担一种含义的部分",
+        "“字段”是指文件名中承担一种含义的部分"
+      ]
+    ],
+    "zh-Hant": [
+      [
+        "## 建議操作流程",
+        "## 建議流程"
+      ],
+      [
+        "## 選用工具：以 Aligna 檢查批次重新命名",
+        "## ONNELLAB 的用途"
+      ],
+      [
+        "「欄位」是檔名中負責表達一種意思的部分",
+        "「欄位」是指檔名中負責表達一種意思的部分"
+      ]
+    ],
+    "pt-BR": [
+      [
+        "## Aligna como opção para renomear em lote",
+        "## Como usar ONNELLAB"
+      ]
+    ],
+    "de": [
+      [
+        "## Aligna als optionale Hilfe beim Stapelumbenennen",
+        "## ONNELLAB im Einsatz"
+      ]
+    ],
+    "fr": [
+      [
+        "## Aligna, une option pour renommer par lots",
+        "## Utiliser ONNELLAB"
+      ]
+    ],
+    "es": [
+      [
+        "## Aligna como opción para renombrar por lotes",
+        "## Cómo usar ONNELLAB"
+      ]
+    ]
+  }
+}

@@ -12,6 +12,42 @@ from xml.etree import ElementTree as ET
 LOCALES = ('en', 'ko', 'ja', 'zh-Hans', 'zh-Hant', 'pt-BR', 'de', 'fr', 'es')
 MAX_BUNDLE = 2_000_000
 
+# Closed candidate profiles: incoming bundle metadata cannot grant new links.
+def candidate_profile(slug):
+    if slug == 'turn-repeated-text-into-reusable-snippets':
+        return {
+            'app_path': '/apps/clipnest/',
+            'store_urls': ['https://apps.apple.com/us/app/clipnest-clipboard-tool/id6779928552'],
+            'related_slugs': ['reuse-copied-text-snippets-iphone'],
+            'table_rows': {locale: 3 for locale in LOCALES},
+        }
+    if slug == 'design-consistent-file-naming-system':
+        return {
+            'app_path': '/apps/aligna/',
+            'store_urls': [
+                'https://apps.apple.com/us/app/aligna-file-renamer/id6783642658',
+                'https://play.google.com/store/apps/details?id=com.onnellab.aligna',
+            ],
+            'related_slugs': [
+                'rename-files-safely-preview-workflow',
+                'organize-downloads-small-folder-system',
+            ],
+            'table_rows': {locale: (5 if locale == 'en' else 6) for locale in LOCALES},
+        }
+    raise ValueError('Unknown preview candidate')
+
+def allowed_candidate_links(slug, locale):
+    if locale not in LOCALES:
+        raise ValueError('Unknown preview locale')
+    profile = candidate_profile(slug)
+    return {
+        f'/blog-assets/{locale}/{slug}/workflow-diagram.svg',
+        profile['app_path'],
+        *profile['store_urls'],
+        *(f'https://onnellab.com/blog/{locale.lower()}/{related}/'
+          for related in profile['related_slugs']),
+    }
+
 def sha(data):
     return hashlib.sha256(data).hexdigest()
 
@@ -42,6 +78,7 @@ def validate_bundle(bundle_path):
     slug = bundle.get('slug', '')
     if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+){1,15}', slug):
         raise ValueError('Invalid slug')
+    candidate_profile(slug)
     expected_paths = {f'generated/markdown/{locale}/productivity/{slug}.md' for locale in LOCALES}
     expected_paths |= {f'generated/assets/blog/{locale}/{slug}/{kind}.svg' for locale in LOCALES for kind in ('workflow-diagram', 'social-card')}
     files = bundle.get('files', [])
@@ -58,7 +95,7 @@ def validate_bundle(bundle_path):
             allowed_image = f'/blog-assets/{locale}/{slug}/workflow-diagram.svg'
             if re.findall(r'!\[[^\]]*\]\(([^\s)]+)', content) != [allowed_image]:
                 raise ValueError('Only the exact reviewed workflow image is allowed')
-            allowed_links = {allowed_image, '/apps/clipnest/', 'https://apps.apple.com/us/app/clipnest-clipboard-tool/id6779928552', f'https://onnellab.com/blog/{locale.lower()}/reuse-copied-text-snippets-iphone/'}
+            allowed_links = allowed_candidate_links(slug, locale)
             if any(link not in allowed_links for link in re.findall(r'\]\(([^\s)]+)', content)):
                 raise ValueError('Unexpected Markdown link/resource')
             values, body = metadata(content)
@@ -135,7 +172,7 @@ def prepare(bundle_path, homepage, evidence):
         p=homepage/'public/blog-assets'/locale/bundle['slug']/'social-card.png'
         record['overlay_sha256'][str(p.relative_to(homepage))]=sha(p.read_bytes())
     (evidence/'provenance.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
-    manifest_destination.write_text(json.dumps({'slug':bundle['slug'],'locales':list(LOCALES)},indent=2)+'\n')
+    manifest_destination.write_text(json.dumps({'slug':bundle['slug'],'locales':list(LOCALES), 'store_urls':candidate_profile(bundle['slug'])['store_urls'], 'table_rows':candidate_profile(bundle['slug'])['table_rows']},indent=2)+'\n')
     return record
 
 if __name__ == '__main__':

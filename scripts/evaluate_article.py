@@ -195,6 +195,14 @@ def has_clear_definitions(body: str, language: str = "en") -> bool:
             prose,
             flags=re.MULTILINE,
         )
+        or re.search(
+            r"(?:^|\n|[.!?]\s*)(?!(?:이것|그것)(?:은|는|이|가)\b)"
+            r"[가-힣A-Za-z0-9 /-]{1,40}(?:은|는|이|가)\s+[^.\n]{2,240}"
+            r"(?:정한|정하는|고정하는|표현하는|나타내는|맡는|담당하는|구성하는)\s+"
+            r"(?:규칙|약속|부분)이에요(?:[.!?]|\s|$)",
+            prose,
+            flags=re.MULTILINE,
+        )
     )
 
 
