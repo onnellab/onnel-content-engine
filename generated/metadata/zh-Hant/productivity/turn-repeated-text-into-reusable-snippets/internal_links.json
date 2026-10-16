@@ -61,12 +61,12 @@
         "slug": "test-converted-media-before-replacing-original",
         "category": "media",
         "language": "zh-Hant",
-        "status": "scheduled",
-        "url": "generated/markdown/zh-Hant/media/test-converted-media-before-replacing-original.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 2
+        "score": 3
       }
     ],
     "related_apps": [

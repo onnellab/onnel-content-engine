@@ -61,6 +61,21 @@
         "score": 12
       },
       {
+        "topic_id": "TOPIC-0038",
+        "title": "How to Test a Converted Media File Before Replacing the Original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",
@@ -69,21 +84,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/en/convert-local-media-files-privately/",
         "destination": "published_article",
-        "relationship": "deeper",
-        "shared_clusters": [
-          "media"
-        ],
-        "score": 11
-      },
-      {
-        "topic_id": "TOPIC-0038",
-        "title": "How to Test a Converted Media File Before Replacing the Original",
-        "slug": "test-converted-media-before-replacing-original",
-        "category": "media",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/media/test-converted-media-before-replacing-original.md",
-        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "media"

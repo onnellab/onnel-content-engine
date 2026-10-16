@@ -14,7 +14,7 @@
     "slug": "test-converted-media-before-replacing-original",
     "category": "media",
     "language": "en",
-    "status": "scheduled",
+    "status": "published",
     "topic_clusters": [
       "converted audio checks",
       "video playback check",

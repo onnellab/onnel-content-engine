@@ -35,14 +35,14 @@
         "slug": "test-converted-media-before-replacing-original",
         "category": "media",
         "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/media/test-converted-media-before-replacing-original.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "media"
         ],
-        "score": 15
+        "score": 16
       },
       {
         "topic_id": "TOPIC-0007",
