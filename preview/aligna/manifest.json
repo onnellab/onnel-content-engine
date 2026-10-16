@@ -1,0 +1,86 @@
+{
+  "schema": "onnellab.editorial-draft.v1",
+  "state": "DRAFT_UNVALIDATED_NOT_QUEUED",
+  "slug": "design-consistent-file-naming-system",
+  "category": "productivity",
+  "existing_english_topic_id": "TOPIC-0035",
+  "counterpart_topic_ids_reserved": false,
+  "locales": [
+    "en",
+    "ko",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "pt-BR",
+    "de",
+    "fr",
+    "es"
+  ],
+  "artifacts": [
+    {
+      "locale": "en",
+      "file": "en.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "ko",
+      "file": "ko.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "ja",
+      "file": "ja.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "zh-Hans",
+      "file": "zh-Hans.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "zh-Hant",
+      "file": "zh-Hant.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "pt-BR",
+      "file": "pt-BR.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "de",
+      "file": "de.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "fr",
+      "file": "fr.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "es",
+      "file": "es.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    }
+  ],
+  "source_engine_sha": "e93879017f788bfc2cd634665b559f549ba536ff",
+  "source_homepage_sha": "67c8997293bbfee1a22d17fb0bdcb0a984701ae4",
+  "sources": [
+    "https://apps.apple.com/us/app/aligna-file-renamer/id6783642658",
+    "https://play.google.com/store/apps/details?id=com.onnellab.aligna",
+    "https://onnellab.com/apps/aligna/"
+  ],
+  "product_claim_scope": "Eight fixed presets, preview and conflict handling. No custom-builder or iOS original/copy behavior claims.",
+  "keyword_evidence": "Editorial hypotheses; no measured demand or ranking claims.",
+  "publication_receipt": false,
+  "queue_modified": false,
+  "scheduled_at": null,
+  "verification": {
+    "source_and_language_review": "All nine complete manuscripts independently reviewed as text; four image-copy labels clarified. See editorial_review.json. Rendering and native gates remain unperformed.",
+    "native_repository_validators": "NOT RUN",
+    "review_scores_or_fingerprints": "NOT GENERATED",
+    "svg_png_rendering": "NOT RUN; localized image copy only",
+    "astro_browser_preview": "NOT RUN",
+    "file_readback": "Complete nine-draft JSON readback via Library on 2026-10-16; English also compared with its existing Git blob."
+  }
+}

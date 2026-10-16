@@ -1,0 +1,80 @@
+{
+  "type": "editorial_text_review",
+  "publication_ready": false,
+  "rendered_images_reviewed": false,
+  "rendered_pages_reviewed": false,
+  "locales": {
+    "en": {
+      "reviewer": "Independent editorial text review",
+      "result": "No material semantic, factual or SEO issue found."
+    },
+    "ko": {
+      "reviewer": "Independent editorial text review",
+      "result": "해요체, scope and six-step guidance preserved."
+    },
+    "ja": {
+      "reviewer": "Independent editorial text review",
+      "result": "Natural Japanese acceptable; all six steps, limitations and links preserved."
+    },
+    "zh-Hans": {
+      "reviewer": "Independent editorial text review",
+      "result": "Complete Simplified Chinese; date meaning, sorting scope, revision/approval distinction and fixed-preset limits preserved."
+    },
+    "zh-Hant": {
+      "reviewer": "Independent editorial text review",
+      "result": "Complete Traditional Chinese; localized terminology, case-sensitive paths and product limits preserved."
+    },
+    "pt-BR": {
+      "reviewer": "Independent editorial text review",
+      "result": "Complete natural Brazilian Portuguese; image zero-padding label clarified."
+    },
+    "de": {
+      "reviewer": "Independent editorial text review",
+      "result": "Complete German; image zero-padding label clarified."
+    },
+    "fr": {
+      "reviewer": "Independent editorial text review",
+      "result": "Complete French; image zero-padding label clarified."
+    },
+    "es": {
+      "reviewer": "Independent editorial text review",
+      "result": "Complete Spanish; image zero-padding label clarified."
+    }
+  },
+  "corrections": [
+    {
+      "locale": "de",
+      "field": "image.steps[2][1]",
+      "before": "Nummern auffüllen",
+      "after": "Führende Nullen",
+      "applied": "Corrected in the reviewed draft."
+    },
+    {
+      "locale": "fr",
+      "field": "image.steps[2][1]",
+      "before": "Numéros complétés",
+      "after": "Zéros en tête",
+      "applied": "Corrected in the reviewed draft."
+    },
+    {
+      "locale": "pt-BR",
+      "field": "image.steps[2][1]",
+      "before": "Números com zeros",
+      "after": "Zeros à esquerda",
+      "applied": "Corrected in the reviewed draft."
+    },
+    {
+      "locale": "es",
+      "field": "image.steps[2][1]",
+      "before": "Completa los números",
+      "after": "Añade ceros iniciales",
+      "applied": "Corrected in the reviewed draft."
+    }
+  ],
+  "limits": [
+    "Text review is not native-speaker certification.",
+    "Rendered SVG/PNG and desktop/mobile Astro checks not performed.",
+    "Repository scorer, fingerprints, nine-language gate and supply validator not run.",
+    "No scheduling or publication; draft storage does not establish readiness."
+  ]
+}
