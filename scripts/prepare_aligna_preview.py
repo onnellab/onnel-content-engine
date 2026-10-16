@@ -57,6 +57,11 @@ def source_inventory(source):
     return inventory
 
 def copy_source(source, stage, inventory):
+    if source.is_symlink() or stage.is_symlink():
+        raise ValueError("Direct source/stage symlink forbidden")
+    # Canonicalize OS-owned ancestor aliases (macOS /var -> /private/var).
+    # Symlinks within the repository remain forbidden by inventory and copy checks.
+    source, stage = source.resolve(), stage.resolve()
     if stage.resolve().is_relative_to(source.resolve()):
         raise ValueError("Stage must be outside source checkout")
     if stage.exists() and any(stage.iterdir()):
@@ -218,6 +223,7 @@ def run_gates(stage, output):
                                 stderr=subprocess.STDOUT, timeout=180)
         (output / f"{index:02d}-{arguments[0]}.log").write_text(result.stdout, encoding="utf-8")
         if result.returncode:
+            print(result.stdout, file=sys.stderr, flush=True)
             raise ValueError(f"Native gate failed: {arguments[0]} (see retained log)")
 
 def collect(stage, output, candidates, seeds):
@@ -275,6 +281,8 @@ def stage_worker():
     collect(ROOT, output, candidates, seeds)
 
 def prepare(source=ROOT):
+    if source.is_symlink():
+        raise ValueError("Direct source symlink forbidden")
     source = source.resolve()
     evidence_parent = source / "preview-evidence"
     output = evidence_parent / "aligna"
@@ -292,6 +300,7 @@ def prepare(source=ROOT):
                                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=600)
             (output / "generation.log").write_text(result.stdout, encoding="utf-8")
             if result.returncode:
+                print(result.stdout, file=sys.stderr, flush=True)
                 raise ValueError("Disposable native validation failed; inspect generation and gate logs")
     finally:
         after = source_inventory(source)

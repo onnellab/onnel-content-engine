@@ -64,6 +64,75 @@ class DisposablePreviewBoundaries(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Symlink"):
                 preview.source_inventory(source)
 
+
+    def test_os_ancestor_alias_is_canonicalized_but_direct_root_symlink_fails(self):
+        with tempfile.TemporaryDirectory() as d:
+            real = Path(d).resolve() / "real"
+            real.mkdir()
+            alias = Path(d).resolve() / "alias"
+            alias.symlink_to(real, target_is_directory=True)
+            source = alias / "source"
+            source.mkdir()
+            self.make_source(source)
+            preview.copy_source(source, alias / "stage", preview.source_inventory(source))
+            self.assertEqual((real / "stage/data/topics.csv").read_bytes(),
+                             (real / "source/data/topics.csv").read_bytes())
+            direct = real / "direct"
+            direct.symlink_to(real / "source", target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, "Direct"):
+                preview.copy_source(direct, real / "other", preview.source_inventory(source))
+            direct_stage = real / "direct-stage"
+            direct_stage.symlink_to(real / "stage", target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, "Direct"):
+                preview.copy_source(source, direct_stage, preview.source_inventory(source))
+
+
+    def test_internal_symlink_inserted_after_inventory_is_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            source = Path(d).resolve() / "source"
+            source.mkdir()
+            self.make_source(source)
+            before = preview.source_inventory(source)
+            target = source / "docs/fixture.txt"
+            target.unlink()
+            target.symlink_to(source / "data/topics.csv")
+            with self.assertRaisesRegex(ValueError, "symlink"):
+                preview.copy_source(source, Path(d).resolve() / "stage", before)
+
+    def test_prepare_rejects_direct_source_symlink_before_any_side_effect(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d).resolve()
+            source = root / "source"
+            source.mkdir()
+            self.make_source(source)
+            before = preview.source_inventory(source)
+            paths_before = sorted(p.relative_to(source).as_posix() for p in source.rglob("*"))
+            direct = root / "direct"
+            direct.symlink_to(source, target_is_directory=True)
+            with patch.object(preview.subprocess, "run") as run:
+                with self.assertRaisesRegex(ValueError, "Direct source symlink"):
+                    preview.prepare(direct)
+                run.assert_not_called()
+            self.assertFalse((source / "preview-evidence").exists())
+            self.assertEqual(preview.source_inventory(source), before)
+            self.assertEqual(sorted(p.relative_to(source).as_posix() for p in source.rglob("*")),
+                             paths_before)
+
+    def test_worker_failure_is_echoed_and_retained_without_changing_source(self):
+        with tempfile.TemporaryDirectory() as d:
+            source = Path(d).resolve()
+            self.make_source(source)
+            before = preview.source_inventory(source)
+            result = type("Result", (), {"returncode": 1, "stdout": "native child traceback"})()
+            with patch.object(preview.subprocess, "run", return_value=result), patch("sys.stderr") as stderr:
+                with self.assertRaisesRegex(ValueError, "Disposable native validation failed"):
+                    preview.prepare(source)
+                self.assertIn("native child traceback", "".join(str(call.args[0]) for call in stderr.write.call_args_list))
+            evidence = source / "preview-evidence/aligna"
+            self.assertEqual((evidence / "generation.log").read_text(), "native child traceback")
+            self.assertTrue(json.loads((evidence / "source-integrity.json").read_text())["source_unchanged"])
+            self.assertEqual(preview.source_inventory(source), before)
+
     def test_worker_cannot_run_against_live_checkout(self):
         with patch.object(preview, "ROOT", ROOT):
             with self.assertRaisesRegex(ValueError, "disposable"):
@@ -95,10 +164,11 @@ class DisposablePreviewBoundaries(unittest.TestCase):
         self.assertEqual(preview.GATES[-1][1:], ("--require-healthy", "--minimum-ideas", "8"))
         with tempfile.TemporaryDirectory() as d:
             result = type("Result", (), {"returncode": 1, "stdout": "real gate failure"})()
-            with patch.object(preview.subprocess, "run", return_value=result) as run:
+            with patch.object(preview.subprocess, "run", return_value=result) as run, patch("sys.stderr") as stderr:
                 with self.assertRaisesRegex(ValueError, "Native gate failed"):
                     preview.run_gates(Path(d), Path(d))
                 self.assertEqual(run.call_count, 1)
+                self.assertIn("real gate failure", "".join(str(call.args[0]) for call in stderr.write.call_args_list))
                 self.assertEqual((Path(d) / "01-validate_topics.py.log").read_text(), "real gate failure")
 
     def test_nine_complete_authored_drafts_and_changes(self):
