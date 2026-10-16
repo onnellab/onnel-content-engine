@@ -670,6 +670,48 @@
         }
       ],
       "processed_at": "2026-10-16T00:45:54+00:00"
+    },
+    {
+      "topic_id": "TOPIC-0038",
+      "language": "en",
+      "manual_key": "TOPIC-0038::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "template_id": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7516660962079367169/",
+      "post_id": "urn:li:activity:7516660962079367169",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-16T00:47:24Z",
+      "observed_at_precision": "second",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_sha256": "971b3f79a95e3df9734ab709b08e37d8e2df7b492e72daa6ebddb147e7f0f9aa",
+      "posted_body_sha256": "45d96d09300a72206fa294da1e57722b59ab091775705cdff43ecb219b1d7753",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "submitted_body": "Keep the original. Test the converted media file in its destination app, then check required tracks and metadata.\n\nKeep the original, inspect the exported file, play representative passages in the destination app, and check required tracks and metadata. Investigate differences before accepting the result.\n\nBefore changing tools:\n- Keep the source separate. Use distinct source and output folders, or unmistakable filenames. Record which file you converted. Do not overwrite the only source or let cleanup remove it during checking.\n- Open the exported file itself. Locate it in the file manager and confirm its name and path. A converter preview or an old player-library entry might refer to a different file. Record the converter and player versions for a useful repeatable check.\n\nRead the full article:\nhttps://onnellab.com/blog/en/test-converted-media-before-replacing-original/",
+      "submitted_source_characters": 884,
+      "source_draft_path": "generated/social/linkedin/en/media/test-converted-media-before-replacing-original.txt",
+      "canonical_url": "https://onnellab.com/blog/en/test-converted-media-before-replacing-original/",
+      "copy_adjustment": "Routine first-sentence direct answer preserving the approved article and remaining draft.",
+      "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new",
+      "browser_ui_timestamp": "방금",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "Cloud browser verified ONNEL LAB identity, public audience, full body and correct canonical card in composer, success notification, then exact permalink author and complete body. Article shortened to lnkd.in/g969EiVQ. Server publication time unavailable; observed_at is verification time. A dismissed pre-navigation browser check resolved on one same authorized navigation retry, with no new security permission.",
+      "observations": [
+        {
+          "event": "publish_success_notification",
+          "observed_at": "2026-10-16T00:47:10Z",
+          "precision": "second"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-16T00:47:24Z",
+          "precision": "second"
+        }
+      ]
     }
   ]
 }
