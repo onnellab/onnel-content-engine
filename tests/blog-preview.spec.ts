@@ -25,6 +25,27 @@ for (const locale of candidate.locales as string[]) {
     await expect(page.locator('meta[property="article:published_time"]')).toHaveCount(0);
     await expect(page.locator('.faq-list details')).toHaveCount(4);
     await expect(page.locator('article table tbody tr')).toHaveCount(candidate.table_rows[locale]);
+
+    // Check the browser's actual native list-marker inputs and computed style.
+    // Blank-separated workflow steps must keep their authored start numbers.
+    if (candidate.slug === 'design-consistent-file-naming-system') {
+      const renderedNumbers = await page.locator('.article-body ol').evaluateAll(lists =>
+        lists.flatMap(list => {
+          const ol = list as HTMLOListElement;
+          let current = ol.start;
+          return Array.from(ol.children).filter(node => node.tagName === 'LI').map(node => {
+            const li = node as HTMLLIElement;
+            if (li.hasAttribute('value')) current = li.value;
+            const style = getComputedStyle(li);
+            const result = { number: current, display: style.display, type: style.listStyleType };
+            current += ol.reversed ? -1 : 1;
+            return result;
+          });
+        }));
+      expect(renderedNumbers).toEqual([1, 2, 3, 4, 5, 6].map(number => ({
+        number, display: 'list-item', type: 'decimal',
+      })));
+    }
     const image = page.locator('article img[src*="workflow-diagram"]');
     await image.scrollIntoViewIfNeeded();
     await expect.poll(() => image.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);

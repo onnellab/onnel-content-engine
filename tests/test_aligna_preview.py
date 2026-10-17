@@ -208,6 +208,18 @@ class DisposablePreviewBoundaries(unittest.TestCase):
                 with self.assertRaisesRegex(ImageAssetError, "card heading exceeds"):
                     workflow_svg(image["title"], draft["primary_keyword"], locale, editorial)
 
+
+    def test_portuguese_revision_detail_wraps_only_at_word_boundaries(self):
+        from generate_image_assets import wrap_display_text
+        draft = preview.validate_drafts(ROOT / "preview/aligna")["pt-BR"]
+        detail = draft["image"]["steps"][3][1]
+        lines = wrap_display_text(detail, 142, 15)
+        self.assertEqual(detail, "Indica a revisão")
+        self.assertEqual(" ".join(lines), detail)
+        self.assertLessEqual(len(lines), 3)
+        self.assertNotEqual(" ".join(wrap_display_text("Revisões identificadas", 142, 15)),
+                            "Revisões identificadas")
+
     def test_incomplete_or_altered_draft_fails(self):
         with tempfile.TemporaryDirectory() as d:
             target = Path(d)
