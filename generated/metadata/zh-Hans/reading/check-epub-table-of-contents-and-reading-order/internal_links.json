@@ -67,6 +67,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 2
+      },
+      {
+        "topic_id": "TOPIC-0080",
+        "title": "如何建立一致、好查找的文件命名规则",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "zh-Hans",
+        "status": "review",
+        "url": "generated/markdown/zh-Hans/productivity/design-consistent-file-naming-system.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [

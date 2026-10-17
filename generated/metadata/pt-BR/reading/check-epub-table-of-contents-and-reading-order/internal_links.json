@@ -67,6 +67,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0082",
+        "title": "Como criar um padrão consistente para nomes de arquivos",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "pt-BR",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/productivity/design-consistent-file-naming-system.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
       }
     ],
     "related_apps": [

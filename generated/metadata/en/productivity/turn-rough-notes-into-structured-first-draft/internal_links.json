@@ -88,6 +88,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0035",
+        "title": "How to Design a File Naming System That Stays Consistent",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/productivity/design-consistent-file-naming-system.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0009",
         "title": "How to Trim Audio Recordings Without a Full Editor",
         "slug": "trim-audio-recordings-without-full-editor",
@@ -95,19 +110,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0015",
-        "title": "How to Verify Audio Clips Before Combining Them",
-        "slug": "verify-audio-clips-before-combining",
-        "category": "media",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/verify-audio-clips-before-combining/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

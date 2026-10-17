@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0083",
+        "title": "Einheitliche Dateinamen: eine einfache Konvention entwickeln",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "de",
+        "status": "review",
+        "url": "generated/markdown/de/productivity/design-consistent-file-naming-system.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 10
+      },
+      {
         "topic_id": "TOPIC-0050",
         "title": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
         "slug": "organize-local-music-library-offline-android",

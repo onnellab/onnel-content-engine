@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0079",
+        "title": "探しやすいファイル命名ルールの作り方",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "ja",
+        "status": "review",
+        "url": "generated/markdown/ja/productivity/design-consistent-file-naming-system.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0046",
         "title": "Androidの音楽ファイルをオフライン再生用に整理する方法",
         "slug": "organize-local-music-library-offline-android",

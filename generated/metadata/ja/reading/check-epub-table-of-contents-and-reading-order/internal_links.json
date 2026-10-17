@@ -67,6 +67,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 2
+      },
+      {
+        "topic_id": "TOPIC-0079",
+        "title": "探しやすいファイル命名ルールの作り方",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "ja",
+        "status": "review",
+        "url": "generated/markdown/ja/productivity/design-consistent-file-naming-system.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [

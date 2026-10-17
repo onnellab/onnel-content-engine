@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0080",
+        "title": "如何建立一致、好查找的文件命名规则",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "zh-Hans",
+        "status": "review",
+        "url": "generated/markdown/zh-Hans/productivity/design-consistent-file-naming-system.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0047",
         "title": "在 Android 上整理音乐文件，准备离线播放",
         "slug": "organize-local-music-library-offline-android",

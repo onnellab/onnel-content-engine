@@ -139,6 +139,14 @@
         "category": "music",
         "cluster": "MP3 track number",
         "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "How to Mark Uncertainty Clearly in Research Notes",
+        "category": "research",
+        "cluster": "uncertainty in research notes",
+        "topic_id": "TOPIC-0086",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
   },

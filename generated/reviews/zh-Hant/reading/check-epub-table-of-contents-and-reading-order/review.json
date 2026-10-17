@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0057",
   "title": "檢查 EPUB 的目錄連結與章節順序",
-  "input_fingerprint": "537f86d580e2cf2ba2a8eb23007c8cfc26583c862d81f4e61891448892773b3f",
+  "input_fingerprint": "a1d085cc778ee537ef5511d4b85e31cb202bd824e9fd6184030b86cf0272e493",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

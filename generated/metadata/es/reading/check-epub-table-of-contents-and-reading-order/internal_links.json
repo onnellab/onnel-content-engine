@@ -56,6 +56,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0085",
+        "title": "Cómo crear un sistema coherente para nombrar archivos",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "es",
+        "status": "review",
+        "url": "generated/markdown/es/productivity/design-consistent-file-naming-system.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0077",
         "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
         "slug": "turn-repeated-text-into-reusable-snippets",

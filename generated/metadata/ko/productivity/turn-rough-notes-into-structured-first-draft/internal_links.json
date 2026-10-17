@@ -88,6 +88,21 @@
         "score": 9
       },
       {
+        "topic_id": "TOPIC-0078",
+        "title": "찾기 쉬운 파일명 규칙을 만드는 방법",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "ko",
+        "status": "review",
+        "url": "generated/markdown/ko/productivity/design-consistent-file-naming-system.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0005",
         "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
         "slug": "read-large-txt-files-without-lag",
@@ -95,19 +110,6 @@
         "language": "ko",
         "status": "published",
         "url": "https://onnellab.com/blog/ko/read-large-txt-files-without-lag/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0011",
-        "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
-        "slug": "convert-local-media-files-privately",
-        "category": "media",
-        "language": "ko",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ko/convert-local-media-files-privately/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
