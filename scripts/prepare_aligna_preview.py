@@ -226,34 +226,189 @@ def run_gates(stage, output):
             print(result.stdout, file=sys.stderr, flush=True)
             raise ValueError(f"Native gate failed: {arguments[0]} (see retained log)")
 
+
+NATIVE_MANIFEST = "native-output-manifest.json"
+NATIVE_MANIFEST_PREFIX = "ALIGNA_NATIVE_OUTPUT_MANIFEST "
+MAX_NATIVE_BYTES = 25_000_000
+
+def native_output_paths():
+    paths = []
+    for locale in LOCALES:
+        paths.extend((
+            f"generated/markdown/{locale}/{CATEGORY}/{SLUG}.md",
+            f"generated/images/{locale}/{CATEGORY}/{SLUG}/image_spec.json",
+            f"generated/metadata/{locale}/{CATEGORY}/{SLUG}/internal_links.json",
+            f"generated/reviews/{locale}/{CATEGORY}/{SLUG}/review.json",
+            *(f"generated/assets/blog/{locale}/{SLUG}/{name}" for name in
+              ("workflow-diagram.svg", "workflow-diagram.png", "social-card.svg", "social-card.png")),
+        ))
+    if len(paths) != 72 or len(set(paths)) != 72:
+        raise ValueError("Exactly 72 distinct native output paths required")
+    return tuple(paths)
+
+def safe_native_path(root, relative, *, required=False, absent=False):
+    """Reject noncanonical paths and symlinks before any read or write."""
+    if not isinstance(relative, str) or not relative or "\\" in relative:
+        raise ValueError("Unsafe native output path")
+    path = Path(relative)
+    if not path.parts or path.is_absolute() or path.as_posix() != relative or ".." in path.parts:
+        raise ValueError("Unsafe native output path")
+    if root.is_symlink() or not root.is_dir():
+        raise ValueError("Missing or symlink native root")
+    root = root.resolve()
+    current = root
+    for index, part in enumerate(path.parts):
+        current = current / part
+        if current.is_symlink():
+            raise ValueError(f"Symlink native output path: {relative}")
+        if current.exists():
+            if index < len(path.parts) - 1 and not current.is_dir():
+                raise ValueError(f"Invalid native output parent: {relative}")
+            if index == len(path.parts) - 1 and not current.is_file():
+                raise ValueError(f"Invalid native output file: {relative}")
+    if required and not current.is_file():
+        raise ValueError(f"Missing native output: {relative}")
+    if absent and current.exists():
+        raise ValueError(f"Native evidence collision: {relative}")
+    return current
+
+def read_native_bytes(path, limit=MAX_NATIVE_BYTES):
+    with path.open("rb") as stream:
+        raw = stream.read(limit + 1)
+    if len(raw) > limit:
+        raise ValueError("Native output exceeds size limit")
+    return raw
+
+def unique_native_object(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError("Duplicate native manifest JSON key")
+        value[key] = item
+    return value
+
+def native_entry(relative, raw):
+    if len(raw) > MAX_NATIVE_BYTES:
+        raise ValueError(f"Native output exceeds size limit: {relative}")
+    header = f"blob {len(raw)}\0".encode("ascii")
+    return {"path": relative, "byte_length": len(raw), "sha256": digest(raw),
+            "git_blob_sha1": hashlib.sha1(header + raw, usedforsecurity=False).hexdigest()}
+
+def validate_native_manifest(manifest):
+    expected = native_output_paths()
+    if (not isinstance(manifest, dict) or
+            set(manifest) != {"schema", "slug", "locales", "files"} or
+            type(manifest["schema"]) is not int or manifest["schema"] != 1 or
+            manifest["slug"] != SLUG or manifest["locales"] != list(LOCALES)):
+        raise ValueError("Invalid native manifest identity")
+    entries = manifest["files"]
+    if not isinstance(entries, list) or len(entries) != 72:
+        raise ValueError("Native manifest requires exactly 72 entries")
+    seen = set()
+    total = 0
+    for entry in entries:
+        if not isinstance(entry, dict) or set(entry) != {"path", "byte_length", "sha256", "git_blob_sha1"}:
+            raise ValueError("Invalid native manifest entry")
+        relative = entry["path"]
+        if not isinstance(relative, str) or relative not in expected or relative in seen:
+            raise ValueError("Duplicate or unexpected native manifest path")
+        seen.add(relative)
+        size = entry["byte_length"]
+        if type(size) is not int or not 0 <= size <= MAX_NATIVE_BYTES:
+            raise ValueError("Invalid native manifest byte length")
+        total += size
+        for key, length in (("sha256", 64), ("git_blob_sha1", 40)):
+            value = entry[key]
+            if not isinstance(value, str) or len(value) != length or any(c not in "0123456789abcdef" for c in value):
+                raise ValueError("Invalid native manifest digest")
+    if seen != set(expected) or total > 100_000_000:
+        raise ValueError("Native manifest path set or total size mismatch")
+    return manifest
+
+def verified_native_manifest(output):
+    manifest_path = safe_native_path(output, NATIVE_MANIFEST, required=True)
+    raw = read_native_bytes(manifest_path, 100_000)
+    manifest = validate_native_manifest(json.loads(raw.decode("utf-8"), object_pairs_hook=unique_native_object))
+    artifacts = output / "artifacts"
+    if artifacts.is_symlink() or not artifacts.is_dir():
+        raise ValueError("Missing or symlink native artifacts root")
+    actual = set()
+    for path in artifacts.rglob("*"):
+        if path.is_symlink():
+            raise ValueError("Symlink native artifact")
+        if path.is_file():
+            actual.add(path.relative_to(artifacts).as_posix())
+            if len(actual) > 72:
+                raise ValueError("Unexpected native artifact count")
+        elif not path.is_dir():
+            raise ValueError("Invalid native artifact type")
+    if actual != set(native_output_paths()):
+        raise ValueError("Native artifact path set mismatch")
+    for entry in manifest["files"]:
+        path = safe_native_path(output, "artifacts/" + entry["path"], required=True)
+        if native_entry(entry["path"], read_native_bytes(path)) != entry:
+            raise ValueError(f"Native artifact fingerprint mismatch: {entry['path']}")
+    return manifest
+
 def collect(stage, output, candidates, seeds):
     # The native read-only gate also recomputes current fingerprints and requires
     # every mandatory check. It imports the existing score verifier, never its CLI.
     from check_nine_language_publication import check_reviewed_candidates
     check_reviewed_candidates(stage / "data/topics.csv")
-    files = []
+    expected = native_output_paths()
+    if (len(candidates) != len(LOCALES) or
+            {row["primary_language"] for row in candidates} != set(LOCALES)):
+        raise ValueError("Exactly nine distinct native candidate locales required")
     for row in candidates:
-        locale = row["primary_language"]
-        asset_dir = stage / "generated/assets/blog" / locale / SLUG
-        # Existing publisher uses the workflow as its social source, too.
-        shutil.copyfile(asset_dir / "workflow-diagram.svg", asset_dir / "social-card.svg")
-        shutil.copyfile(asset_dir / "workflow-diagram.png", asset_dir / "social-card.png")
-        paths = [row["canonical_path"],
-                 f"generated/images/{locale}/{CATEGORY}/{SLUG}/image_spec.json",
-                 f"generated/metadata/{locale}/{CATEGORY}/{SLUG}/internal_links.json",
-                 f"generated/reviews/{locale}/{CATEGORY}/{SLUG}/review.json"]
-        paths += [f"generated/assets/blog/{locale}/{SLUG}/{name}" for name in
-                  ("workflow-diagram.svg", "workflow-diagram.png", "social-card.svg", "social-card.png")]
-        for relative in paths:
-            src = stage / relative
-            if not src.is_file() or src.is_symlink():
-                raise ValueError(f"Missing native output: {relative}")
-            target = output / "artifacts" / relative
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(src, target)
-            if relative.endswith(".md") or relative.endswith(".svg"):
-                content = src.read_text(encoding="utf-8")
-                files.append({"path": relative, "content": content, "sha256": digest(content.encode())})
+        canonical = f"generated/markdown/{row['primary_language']}/{CATEGORY}/{SLUG}.md"
+        if row["canonical_path"] != canonical:
+            raise ValueError("Unexpected native candidate Markdown path")
+    aliases = {}
+    for locale in LOCALES:
+        base = f"generated/assets/blog/{locale}/{SLUG}/"
+        for suffix in ("svg", "png"):
+            aliases[base + "social-card." + suffix] = base + "workflow-diagram." + suffix
+    artifacts = output / "artifacts"
+    if artifacts.exists() or artifacts.is_symlink():
+        raise ValueError("Native artifacts destination collision")
+    # Validate every source, social-alias destination, and evidence destination
+    # before the first copy. A late invalid locale must not mutate early aliases.
+    for relative in expected:
+        safe_native_path(stage, relative, required=relative not in aliases)
+        safe_native_path(output, "artifacts/" + relative, absent=True)
+    for name in ("candidate.json", "candidate.sha256", "candidate-topic-rows.json", NATIVE_MANIFEST):
+        safe_native_path(output, name, absent=True)
+    planned_bytes = 0
+    for relative in expected:
+        src = safe_native_path(stage, aliases.get(relative, relative), required=True)
+        size = src.stat().st_size
+        if size > MAX_NATIVE_BYTES:
+            raise ValueError(f"Native output exceeds size limit: {relative}")
+        planned_bytes += size
+    if planned_bytes > 100_000_000:
+        raise ValueError("Native outputs exceed total size limit")
+    for destination, source in aliases.items():
+        src = safe_native_path(stage, source, required=True)
+        target = safe_native_path(stage, destination)
+        shutil.copyfile(src, target)
+    files = []
+    entries = []
+    total = 0
+    for relative in expected:
+        src = safe_native_path(stage, relative, required=True)
+        raw = read_native_bytes(src)
+        total += len(raw)
+        if total > 100_000_000:
+            raise ValueError("Native outputs exceed total size limit")
+        entry = native_entry(relative, raw)
+        target = safe_native_path(output, "artifacts/" + relative, absent=True)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target = safe_native_path(output, "artifacts/" + relative, absent=True)
+        with target.open("xb") as stream:
+            stream.write(raw)
+        entries.append(entry)
+        if relative.endswith(".md") or relative.endswith(".svg"):
+            files.append({"path": relative, "content": raw.decode("utf-8"), "sha256": entry["sha256"]})
     bundle = {"schema": 1, "state": "UNSCHEDULED_PREVIEW_ONLY", "slug": SLUG,
               "locales": list(LOCALES), "files": files}
     write_json(output / "candidate.json", bundle)
@@ -262,6 +417,9 @@ def collect(stage, output, candidates, seeds):
     validate_bundle(output / "candidate.json")
     write_json(output / "candidate-topic-rows.json", {"candidates": candidates, "idea_seeds": seeds,
                                                     "ids_reserved": False, "live_queue_modified": False})
+    manifest = validate_native_manifest({"schema": 1, "slug": SLUG, "locales": list(LOCALES), "files": entries})
+    write_json(output / NATIVE_MANIFEST, manifest)
+    verified_native_manifest(output)
 
 def stage_worker():
     marker = ROOT / MARKER
@@ -313,6 +471,10 @@ def prepare(source=ROOT):
         })
         if before != after:
             raise ValueError("Source checkout changed during disposable validation")
+    # The worker's output remains in generation.log. Emit only the verified,
+    # fixed-path fingerprint manifest after the finally block proves integrity.
+    manifest = verified_native_manifest(output)
+    print(NATIVE_MANIFEST_PREFIX + json.dumps(manifest, ensure_ascii=False, separators=(",", ":")), flush=True)
     print(f"Validated unscheduled preview: {output / 'candidate.json'}")
 
 if __name__ == "__main__":
@@ -323,3 +485,4 @@ if __name__ == "__main__":
         stage_worker()
     else:
         prepare()
+
