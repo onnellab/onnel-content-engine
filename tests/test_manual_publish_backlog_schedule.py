@@ -132,5 +132,47 @@ class ManualPublishBacklogScheduleTest(unittest.TestCase):
             with self.subTest(change=change),self.assertRaises(AssertionError):
                 self.assert_verified_requeue_completion(done,previous,dict(receipt,**change),draft,'2026-09-19T07:40:43+09:00','TOPIC-0016::x::en::x')
 
+
+    def test_declared_linkedin_lead_adjustment_is_hash_bound_and_tail_preserving(self):
+        draft=('A vague introduction.\n\nKeep the original content.\n\n'
+               'Read the full article:\nhttps://onnellab.com/blog/en/example/\n')
+        submitted=('Put completed downloads in clear folders before they pile up.\n\n'
+                   'Keep the original content.\n\n'
+                   'Read the full article:\nhttps://onnellab.com/blog/en/example/')
+        digest=hashlib.sha256(submitted.encode('utf-8')).hexdigest()
+        done={'draft_sha256':hashlib.sha256(draft.encode('utf-8')).hexdigest(),
+              'posted_body_sha256':digest}
+        post={'platform':'linkedin',
+              'draft_path':'generated/social/linkedin/en/example.txt',
+              'canonical_url':'https://onnellab.com/blog/en/example/'}
+        receipt={
+            **done,
+            'submitted_body':submitted,
+            'submitted_source_characters':len(submitted),
+            'source_draft_path':post['draft_path'],
+            'canonical_url':post['canonical_url'],
+            'copy_adjustment':'Routine first-sentence direct answer preserving the approved article and remaining draft.',
+            'approval_source':"Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
+        }
+        self.assertTrue(body_evidence_matches(done,receipt,draft,post))
+        for altered in (
+                {'submitted_body':submitted+' altered'},
+                {'submitted_source_characters':len(submitted)+1},
+                {'copy_adjustment':'Unapproved unrelated rewrite'},
+                {'approval_source':''},
+                {'source_draft_path':'generated/social/linkedin/en/other.txt'},
+                {'canonical_url':'https://example.invalid/'},
+                {'posted_body_sha256':'0'*64}):
+            with self.subTest(altered=altered):
+                self.assertFalse(body_evidence_matches(done,dict(receipt,**altered),draft,post))
+        changed_tail=submitted.replace('Keep the original content.', 'Alter the original content.')
+        changed_digest=hashlib.sha256(changed_tail.encode('utf-8')).hexdigest()
+        self.assertFalse(body_evidence_matches(
+            dict(done,posted_body_sha256=changed_digest),
+            dict(receipt,submitted_body=changed_tail,submitted_source_characters=len(changed_tail),
+                 posted_body_sha256=changed_digest),draft,post))
+        self.assertFalse(body_evidence_matches(done,receipt,draft,dict(post,platform='x')))
+        self.assertFalse(body_evidence_matches(done,receipt,draft.replace('original', 'different'),post))
+
 if __name__=='__main__': unittest.main()
 

@@ -273,9 +273,11 @@ def _sandbox_command(repository: Path, bundle: Path, bootstrap: Path, git_config
                      arguments: list[str], *, project_relative: PurePosixPath = PurePosixPath("."),
                      site: Path | None = None) -> list[str]:
     _runtime()
+    # Bubblewrap --clearenv retains PWD; remove it without loosening CHILD_ENV.
     command = [str(BWRAP), "--die-with-parent", "--new-session", "--unshare-user",
                "--unshare-pid", "--unshare-net", "--unshare-ipc", "--unshare-uts",
-               "--unshare-cgroup", "--disable-userns", "--cap-drop", "ALL", "--clearenv"]
+               "--unshare-cgroup", "--disable-userns", "--cap-drop", "ALL", "--clearenv",
+               "--unsetenv", "PWD"]
     for name in ("/usr", "/lib", "/lib64"):
         if Path(name).exists():
             command += ["--ro-bind", name, name]
@@ -395,7 +397,8 @@ def _self_test_host_capabilities() -> dict:
         else:
             required = ("--die-with-parent", "--new-session", "--unshare-user", "--unshare-pid",
                         "--unshare-net", "--unshare-ipc", "--unshare-uts", "--unshare-cgroup",
-                        "--disable-userns", "--cap-drop", "--clearenv", "--ro-bind", "--bind",
+                        "--disable-userns", "--cap-drop", "--clearenv", "--unsetenv",
+                        "--ro-bind", "--bind",
                         "--proc", "--dev", "--tmpfs", "--remount-ro", "--setenv", "--chdir")
             supported = set(re.findall(r"(?m)^\s*(--[a-z-]+)(?=\s|$)", output))
             facts["bwrap_help"] = "read" if supported else "unavailable"
@@ -421,7 +424,7 @@ def _self_test_host_capabilities() -> dict:
     facts["parent_apparmor_state"] = ("unconfined" if profile == "unconfined" else
                                         "confined" if profile else "unavailable")
     try:
-        facts["bwrap_apparmor_profile_file"] = "present" if Path("/etc/apparmor.d/bwrap").is_file() else "absent"
+        facts["bwrap_apparmor_profile_file"] = "present" if Path("/etc/apparmor.d/bwrap-userns-restrict").is_file() else "absent"
     except OSError:
         facts["bwrap_apparmor_profile_file"] = "unavailable"
     # File presence does not prove profile loading or that AppArmor denied us.

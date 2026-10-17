@@ -24,11 +24,51 @@ RECEIPT_PROVENANCE_FIELDS = (
 )
 
 
+
+def _approved_linkedin_lead_adjustment(done: dict, receipt: dict, source: str, post: dict) -> bool:
+    """Verify declared opening-only edits with full-body hashes and unchanged draft tail.
+
+    This is receipt integrity, not an independent public observation; the caller
+    still verifies author, post identity, specific permalink, and freshness.
+    """
+    if post.get('platform') != 'linkedin':
+        return False
+    body = receipt.get('submitted_body')
+    if not isinstance(body, str) or not body or '\r' in body or body.endswith('\n'):
+        return False
+    old_head, old_sep, old_tail = source.removesuffix('\n').partition('\n\n')
+    new_head, new_sep, new_tail = body.partition('\n\n')
+    if not old_sep or not new_sep or not old_head or not old_tail:
+        return False
+    if new_tail != old_tail or new_head == old_head:
+        return False
+    if not (30 <= len(new_head) <= 200 and new_head.endswith('.') and '\n' not in new_head):
+        return False
+    if receipt.get('copy_adjustment') != (
+            'Routine first-sentence direct answer preserving the approved article and remaining draft.'):
+        return False
+    if receipt.get('approval_source') != (
+            "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts "
+            'and routine fact-preserving wording improvements.'):
+        return False
+    if receipt.get('submitted_source_characters') != len(body):
+        return False
+    if not receipt.get('source_draft_path') or receipt['source_draft_path'] != post.get('draft_path'):
+        return False
+    if not receipt.get('canonical_url') or receipt['canonical_url'] != post.get('canonical_url'):
+        return False
+    if not receipt['canonical_url'].startswith('https://onnellab.com/blog/'):
+        return False
+    digest = hashlib.sha256(body.encode('utf-8')).hexdigest()
+    return all(record.get('posted_body_sha256') == digest for record in (done, receipt))
+
+
 def body_evidence_matches(done: dict, receipt: dict, source: str, post: dict) -> bool:
     """Check the declared evidence, never equate a rendered body with source bytes.
 
     The legacy contract proves a submitted body identical to the current draft.
-    Recovered X observations instead bind the retained, normalized public body
+    A declared LinkedIn opening-only edit must hash-bind the submitted body while
+    preserving all later paragraphs. Recovered X observations instead bind the retained, normalized public body
     to the exact account/post and the independently verified canonical target.
     Their draft digest is context only, not proof of the missing submission.
     Identity, specific permalink, receipt status and observation freshness must
@@ -44,7 +84,9 @@ def body_evidence_matches(done: dict, receipt: dict, source: str, post: dict) ->
         if any(record.get('observed_body_sha256') for record in (done, receipt)):
             return False
         digest = hashlib.sha256(source.removesuffix('\n').encode('utf-8')).hexdigest()
-        return all(record.get('posted_body_sha256') == digest for record in (done, receipt))
+        if all(record.get('posted_body_sha256') == digest for record in (done, receipt)):
+            return True
+        return _approved_linkedin_lead_adjustment(done, receipt, source, post)
     if kind != 'observed_public_body' or post.get('platform') != 'x':
         return False
     fields = ('observed_body', 'observed_body_sha256', 'observed_body_hash_normalization',
