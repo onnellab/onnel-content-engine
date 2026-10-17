@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0078",
+    "title": "찾기 쉬운 파일명 규칙을 만드는 방법",
+    "slug": "design-consistent-file-naming-system",
+    "category": "productivity",
+    "language": "ko",
+    "status": "review",
+    "topic_clusters": [
+      "파일 이름 정리",
+      "파일명 날짜 형식",
+      "파일 순번",
+      "수정본 관리",
+      "파일명 규칙",
+      "productivity"
+    ],
+    "related_app_names": [
+      "Aligna"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0019",
+        "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
+        "slug": "rename-files-safely-preview-workflow",
+        "category": "productivity",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 13
+      },
+      {
+        "topic_id": "TOPIC-0017",
+        "title": "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법",
+        "slug": "reuse-copied-text-snippets-iphone",
+        "category": "productivity",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0024",
+        "title": "거친 메모를 구조화된 초안으로 바꾸는 방법",
+        "slug": "turn-rough-notes-into-structured-first-draft",
+        "category": "productivity",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/turn-rough-notes-into-structured-first-draft/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0028",
+        "title": "작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법",
+        "slug": "organize-downloads-small-folder-system",
+        "category": "productivity",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/organize-downloads-small-folder-system/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0070",
+        "title": "반복해서 쓰는 문장을 재사용 가능한 텍스트 조각으로 정리하기",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "ko",
+        "status": "scheduled",
+        "url": "generated/markdown/ko/productivity/turn-repeated-text-into-reusable-snippets.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
+        "topic_id": "TOPIC-0005",
+        "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0006",
+        "app_name": "Aligna",
+        "slug": "aligna",
+        "category": "productivity",
+        "url": "/apps/aligna/",
+        "description": "A rule-based file-renaming utility with preview-before-apply workflows.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Productivity guide",
+        "category": "productivity",
+        "cluster": "productivity",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "파일 이름 정리 cluster",
+        "category": "productivity",
+        "cluster": "파일 이름 정리",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

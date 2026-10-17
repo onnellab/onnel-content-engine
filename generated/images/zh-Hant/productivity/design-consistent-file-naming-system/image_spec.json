@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/productivity/design-consistent-file-naming-system.md",
+  "topic": {
+    "id": "TOPIC-0081",
+    "title": "如何建立一致又好找的檔案命名規則",
+    "slug": "design-consistent-file-naming-system",
+    "category": "productivity",
+    "language": "zh-Hant",
+    "primary_keyword": "檔案命名規則",
+    "related_apps": [
+      "Aligna"
+    ]
+  },
+  "article_sections_detected": [
+    "如何建立一致又好找的檔案命名規則",
+    "問題",
+    "簡短回答",
+    "從一套小規則開始",
+    "建議流程",
+    "看懂四種欄位的用途",
+    "讓規則容易維持",
+    "ONNELLAB 的用途",
+    "延伸閱讀",
+    "參考資料",
+    "結語",
+    "常見問題",
+    "每個檔名都需要日期嗎？",
+    "日期和專案應該哪個在前面？",
+    "v03 代表檔案已經核准嗎？",
+    "Aligna 能做出和範例完全相同的檔名嗎？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "如何訂出一套檔案變多後，仍能持續使用的命名規則？",
+      "structure": [
+        "1. 識別",
+        "2. 日期",
+        "3. 順序",
+        "4. 修訂"
+      ],
+      "notes": "Explain filename fields; this is not an application screenshot or arbitrary-pattern capability claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an educational naming convention, not an application interface.",
+    "applications": [
+      "Aligna"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "建立一致的檔案命名規則",
+      "steps": [
+        "1. 識別",
+        "2. 日期",
+        "3. 順序",
+        "4. 修訂"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "先定義欄位的意思",
+    "message": "一個欄位，一種意思",
+    "description": "選擇少量意思明確的欄位，每次都依固定順序排列。使用穩定的識別資訊、意思清楚的日期、位數一致的序號，以及與核准狀態分開的修訂編號；寫下簡短規則與範例，再用五個具代表性的檔案測試。",
+    "steps": [
+      [
+        "1. 識別",
+        "固定指向的對象"
+      ],
+      [
+        "2. 日期",
+        "定義日期的意思"
+      ],
+      [
+        "3. 順序",
+        "統一數字位數"
+      ],
+      [
+        "4. 修訂",
+        "標示修訂編號"
+      ]
+    ]
+  }
+}

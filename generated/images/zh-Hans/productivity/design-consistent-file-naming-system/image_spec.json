@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hans/productivity/design-consistent-file-naming-system.md",
+  "topic": {
+    "id": "TOPIC-0080",
+    "title": "如何建立一致、好查找的文件命名规则",
+    "slug": "design-consistent-file-naming-system",
+    "category": "productivity",
+    "language": "zh-Hans",
+    "primary_keyword": "文件命名规则",
+    "related_apps": [
+      "Aligna"
+    ]
+  },
+  "article_sections_detected": [
+    "如何建立一致、好查找的文件命名规则",
+    "问题",
+    "简短回答",
+    "先制定一套小规则",
+    "推荐流程",
+    "看清四个字段的作用",
+    "让规则容易坚持",
+    "ONNELLAB 的用途",
+    "相关指南",
+    "参考资料",
+    "结论",
+    "常见问题",
+    "每个文件名都需要日期吗？",
+    "日期和项目应该把哪个放在前面？",
+    "v03 表示文件已经获批吗？",
+    "Aligna 能生成与示例完全相同的文件名吗？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "怎样制定一套文件多了也能持续使用的命名规则？",
+      "structure": [
+        "1. 标识",
+        "2. 日期",
+        "3. 排序",
+        "4. 修订"
+      ],
+      "notes": "Explain filename fields; this is not an application screenshot or arbitrary-pattern capability claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an educational naming convention, not an application interface.",
+    "applications": [
+      "Aligna"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "建立一致的文件命名规则",
+      "steps": [
+        "1. 标识",
+        "2. 日期",
+        "3. 排序",
+        "4. 修订"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "先定义字段含义",
+    "message": "一个字段，一种含义",
+    "description": "选用少量含义明确的字段，并始终按固定顺序排列。使用稳定的标识、含义明确的日期、位数统一的序号，以及与批准状态分开的修订编号；写下简短规则和示例，再用五个有代表性的文件测试。",
+    "steps": [
+      [
+        "1. 标识",
+        "固定所指对象"
+      ],
+      [
+        "2. 日期",
+        "明确日期含义"
+      ],
+      [
+        "3. 排序",
+        "统一数字位数"
+      ],
+      [
+        "4. 修订",
+        "标明修订编号"
+      ]
+    ]
+  }
+}

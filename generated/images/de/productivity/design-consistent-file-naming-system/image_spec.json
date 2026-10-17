@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/de/productivity/design-consistent-file-naming-system.md",
+  "topic": {
+    "id": "TOPIC-0083",
+    "title": "Einheitliche Dateinamen: eine einfache Konvention entwickeln",
+    "slug": "design-consistent-file-naming-system",
+    "category": "productivity",
+    "language": "de",
+    "primary_keyword": "einheitliche Dateinamen",
+    "related_apps": [
+      "Aligna"
+    ]
+  },
+  "article_sections_detected": [
+    "Einheitliche Dateinamen: eine einfache Konvention entwickeln",
+    "Frage",
+    "Kurzantwort",
+    "Eine kleine Konvention festlegen",
+    "Empfohlener Ablauf",
+    "Die vier Bausteine im Überblick",
+    "Die Regel leicht anwendbar halten",
+    "ONNELLAB im Einsatz",
+    "Weiterführende Anleitungen",
+    "Quellen",
+    "Fazit",
+    "Häufige Fragen",
+    "Braucht jeder Dateiname ein Datum?",
+    "Sollte das Datum oder das Projekt zuerst stehen?",
+    "Bedeutet `v03`, dass eine Datei freigegeben ist?",
+    "Kann Aligna genau dieses Namensmuster erzeugen?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Wie entwickelt man ein System für Dateinamen, das im Alltag verständlich bleibt?",
+      "structure": [
+        "1. Identität",
+        "2. Datum",
+        "3. Folge",
+        "4. Version"
+      ],
+      "notes": "Explain filename fields; this is not an application screenshot or arbitrary-pattern capability claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an educational naming convention, not an application interface.",
+    "applications": [
+      "Aligna"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Ein nachvollziehbares System für Dateinamen",
+      "steps": [
+        "1. Identität",
+        "2. Datum",
+        "3. Folge",
+        "4. Version"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Zuerst die Bedeutung festlegen",
+    "message": "Ein Feld, eine Bedeutung",
+    "description": "Legen Sie wenige Felder mit einer festen Reihenfolge und eindeutiger Bedeutung fest. Verwenden Sie eine stabile Kennung, ein unmissverständliches Datum und bei Bedarf Nummern mit führenden Nullen. Trennen Sie Revisionen von Freigaben, dokumentieren Sie ein Beispiel und prüfen Sie die Regel an typischen Dateien.",
+    "steps": [
+      [
+        "1. Identität",
+        "Stabiler Bezug"
+      ],
+      [
+        "2. Datum",
+        "Bedeutung festlegen"
+      ],
+      [
+        "3. Folge",
+        "Führende Nullen"
+      ],
+      [
+        "4. Version",
+        "Revisionen kennzeichnen"
+      ]
+    ]
+  }
+}

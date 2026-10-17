@@ -1,0 +1,499 @@
+{
+  "schema": 1,
+  "slug": "design-consistent-file-naming-system",
+  "state": "REVIEW_UNSCHEDULED",
+  "engine_validation_commit": "3e656f2f8238c1b1f73bce79f51dbd295c3e80dc",
+  "preview_run": 38991609237,
+  "homepage_used": "e4985f981f4a2cf693e3cbeac94e6c559d8b5b31",
+  "visual_review": {
+    "result": "PASS",
+    "reviewed_at_utc": "2026-10-17T01:23:00Z",
+    "engine_commit": "11e32939182f2e12655c68844f2033afe022241d",
+    "homepage_commit": "d696949258d370f5bb1a18a1dbd9128421d90715",
+    "preview_run": 38988582787,
+    "artifact_id": 12083753092,
+    "artifact_sha256": "23d9117cffa7a55a35d62e239729a866d6de28d885fc021c773cbb09fa14d8ee",
+    "page_captures": 18,
+    "native_diagrams": 9,
+    "locales": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ],
+    "findings": "All visible workflow numbers 1 through 6; no clipping, overlap or missing glyphs. Portuguese revision label remains semantic and wraps cleanly.",
+    "scope_note": "New provenance run has byte-identical 72 native outputs; homepage differences are confined to public/ops HTML. No claim that new screenshots were separately inspected."
+  },
+  "checks": {
+    "native_tests": 26,
+    "browser_tests": 56,
+    "offline_matrix": "PASS",
+    "publishing_push_dry_run": "PASS",
+    "independent_translation_review": "PASS",
+    "all_72_native_byte_digests_match": true,
+    "canonical_hreflang_links": "PASS",
+    "original_unrelated_queue_rows_preserved": 76
+  },
+  "scheduling": {
+    "owner": "GitHub Publishing Pipeline",
+    "existing_clipnest_slot": "2026-10-18T09:00:00+09:00",
+    "next_expected_slot": "2026-10-21T09:00:00+09:00",
+    "assigned": false,
+    "interval_days": 3,
+    "publication_time_kst": "09:00"
+  },
+  "native_output_manifest": {
+    "schema": 1,
+    "slug": "design-consistent-file-naming-system",
+    "locales": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ],
+    "files": [
+      {
+        "path": "generated/markdown/en/productivity/design-consistent-file-naming-system.md",
+        "byte_length": 7607,
+        "sha256": "ccbb962b6c82a5b452fa56fd46a87a9d1abc2c68e5b2d099c832c7eb5ccbb108",
+        "git_blob_sha1": "771e71d12f6fce45d719969e190da7a994ccab80"
+      },
+      {
+        "path": "generated/images/en/productivity/design-consistent-file-naming-system/image_spec.json",
+        "byte_length": 3860,
+        "sha256": "4e856b62b66aeb7f296e19b6d6f5938028a49223e6f3c675ccf204a03f2ce8ea",
+        "git_blob_sha1": "3cc9025fa3e35f28de528528a402ad4985886b1a"
+      },
+      {
+        "path": "generated/metadata/en/productivity/design-consistent-file-naming-system/internal_links.json",
+        "byte_length": 5694,
+        "sha256": "25f29db598681f58b9c765275ac35503420e9d2f42c1b436d345a3e03d5e7253",
+        "git_blob_sha1": "19239a1ac8e2a4d028247130ab276a18715d1e7a"
+      },
+      {
+        "path": "generated/reviews/en/productivity/design-consistent-file-naming-system/review.json",
+        "byte_length": 3593,
+        "sha256": "6ec4b0e2a2c46143e30eb877d61922f7807ff5c879645b51027e526213b8ae11",
+        "git_blob_sha1": "c2bdec406aba1ec460c7f9dca02a4655c3f7c313"
+      },
+      {
+        "path": "generated/assets/blog/en/design-consistent-file-naming-system/workflow-diagram.svg",
+        "byte_length": 4364,
+        "sha256": "9d66ea9e9a095875b53bf328d96e65893b8b2e3b5e4c0d63554bcda616ed83c9",
+        "git_blob_sha1": "7f850b1b9c118bf3a492bef6a52cd39c71b0e5fe"
+      },
+      {
+        "path": "generated/assets/blog/en/design-consistent-file-naming-system/workflow-diagram.png",
+        "byte_length": 59460,
+        "sha256": "4b2baf331c8d63c68fd589c0037bdc6b233287878c338e6963d34f5dc2e318d9",
+        "git_blob_sha1": "f20d86616d56106126f116c85889e28bd6ecd3ad"
+      },
+      {
+        "path": "generated/assets/blog/en/design-consistent-file-naming-system/social-card.svg",
+        "byte_length": 4364,
+        "sha256": "9d66ea9e9a095875b53bf328d96e65893b8b2e3b5e4c0d63554bcda616ed83c9",
+        "git_blob_sha1": "7f850b1b9c118bf3a492bef6a52cd39c71b0e5fe"
+      },
+      {
+        "path": "generated/assets/blog/en/design-consistent-file-naming-system/social-card.png",
+        "byte_length": 59460,
+        "sha256": "4b2baf331c8d63c68fd589c0037bdc6b233287878c338e6963d34f5dc2e318d9",
+        "git_blob_sha1": "f20d86616d56106126f116c85889e28bd6ecd3ad"
+      },
+      {
+        "path": "generated/markdown/ko/productivity/design-consistent-file-naming-system.md",
+        "byte_length": 10957,
+        "sha256": "73d780d343d97d0905aeeb9eacf9436a9b2fa8435b4c2d063ad6817c6cacf144",
+        "git_blob_sha1": "9aa972bc992b208904fa49365df0d30546a25a84"
+      },
+      {
+        "path": "generated/images/ko/productivity/design-consistent-file-naming-system/image_spec.json",
+        "byte_length": 4192,
+        "sha256": "e546ab96a37a83b8f08162a98f0bd0c43654cd775dabe5a5b16384f47023be69",
+        "git_blob_sha1": "8f5376ffa5506846dbb40e7cc4896bc36e27d09e"
+      },
+      {
+        "path": "generated/metadata/ko/productivity/design-consistent-file-naming-system/internal_links.json",
+        "byte_length": 5516,
+        "sha256": "5ac82e4436ea46df834ac8484f756a892fcad88cecc2dd218b4a7f0f5694378f",
+        "git_blob_sha1": "f4f82ec9a1e153539cf02ad2832cab9bed9c720b"
+      },
+      {
+        "path": "generated/reviews/ko/productivity/design-consistent-file-naming-system/review.json",
+        "byte_length": 3587,
+        "sha256": "540d33cd79a6f08a9d5d5b3a68f5c4ef3a62c9a86d97a723356b5c8c47a0e600",
+        "git_blob_sha1": "18a3725b0f9c50e1af7d3a00734af43f41378f17"
+      },
+      {
+        "path": "generated/assets/blog/ko/design-consistent-file-naming-system/workflow-diagram.svg",
+        "byte_length": 4184,
+        "sha256": "02d9dd305f9448b0f44c5419ae4252ec23a034fa812d0af3600159090521c0db",
+        "git_blob_sha1": "9f633a74710dea664eba29a22cace26107d2a4c1"
+      },
+      {
+        "path": "generated/assets/blog/ko/design-consistent-file-naming-system/workflow-diagram.png",
+        "byte_length": 45515,
+        "sha256": "97dc2febabd418552d891aec6608f2f543807badd16b352970f6f5b7946afbb4",
+        "git_blob_sha1": "fd3bab8a8b545a6ef882c121e10ff03cd6f57680"
+      },
+      {
+        "path": "generated/assets/blog/ko/design-consistent-file-naming-system/social-card.svg",
+        "byte_length": 4184,
+        "sha256": "02d9dd305f9448b0f44c5419ae4252ec23a034fa812d0af3600159090521c0db",
+        "git_blob_sha1": "9f633a74710dea664eba29a22cace26107d2a4c1"
+      },
+      {
+        "path": "generated/assets/blog/ko/design-consistent-file-naming-system/social-card.png",
+        "byte_length": 45515,
+        "sha256": "97dc2febabd418552d891aec6608f2f543807badd16b352970f6f5b7946afbb4",
+        "git_blob_sha1": "fd3bab8a8b545a6ef882c121e10ff03cd6f57680"
+      },
+      {
+        "path": "generated/markdown/ja/productivity/design-consistent-file-naming-system.md",
+        "byte_length": 10915,
+        "sha256": "44d5d6d26fcad6bf456262d75badc6c3e9af0e140cf206bc34dad794bc418c39",
+        "git_blob_sha1": "43d6a02e9197da2eab4507a8cf6088a6d024bb96"
+      },
+      {
+        "path": "generated/images/ja/productivity/design-consistent-file-naming-system/image_spec.json",
+        "byte_length": 4047,
+        "sha256": "5e17236c0e7ec88f432a27e4fa69744ed8583bc11917b77bf710aa672422564a",
+        "git_blob_sha1": "aa6ba6740292284e46a502a5f03d8d332bf4cb17"
+      },
+      {
+        "path": "generated/metadata/ja/productivity/design-consistent-file-naming-system/internal_links.json",
+        "byte_length": 4460,
+        "sha256": "4c578fcdb5c9fc02e42ae80169212ed8a1955b0908643d7ed589f6f45ca70be8",
+        "git_blob_sha1": "b0d5eda6be4a196d4d236249d02070176ddbe5da"
+      },
+      {
+        "path": "generated/reviews/ja/productivity/design-consistent-file-naming-system/review.json",
+        "byte_length": 3591,
+        "sha256": "6b0d1f28ee14a2c2569b5836e42e25dcda4b160aea70b6943fdbed9690436fd1",
+        "git_blob_sha1": "6d7da6acbd303aca59062bfedb706850e0f2f596"
+      },
+      {
+        "path": "generated/assets/blog/ja/design-consistent-file-naming-system/workflow-diagram.svg",
+        "byte_length": 3671,
+        "sha256": "b58e9e2d23f3f6e69cff7616ba052955b292186f40d403fc5730f541ca1c17a9",
+        "git_blob_sha1": "cd4a1fc2722aef33537a765995e2a31dd1d11c82"
+      },
+      {
+        "path": "generated/assets/blog/ja/design-consistent-file-naming-system/workflow-diagram.png",
+        "byte_length": 52653,
+        "sha256": "8f73acd75664b10ec07fdbb70b89540ce06a5668d3b4e2b5e7396fe27d272200",
+        "git_blob_sha1": "b0069576a5ccde179eb5cfadfb0d868bb7a263c3"
+      },
+      {
+        "path": "generated/assets/blog/ja/design-consistent-file-naming-system/social-card.svg",
+        "byte_length": 3671,
+        "sha256": "b58e9e2d23f3f6e69cff7616ba052955b292186f40d403fc5730f541ca1c17a9",
+        "git_blob_sha1": "cd4a1fc2722aef33537a765995e2a31dd1d11c82"
+      },
+      {
+        "path": "generated/assets/blog/ja/design-consistent-file-naming-system/social-card.png",
+        "byte_length": 52653,
+        "sha256": "8f73acd75664b10ec07fdbb70b89540ce06a5668d3b4e2b5e7396fe27d272200",
+        "git_blob_sha1": "b0069576a5ccde179eb5cfadfb0d868bb7a263c3"
+      },
+      {
+        "path": "generated/markdown/zh-Hans/productivity/design-consistent-file-naming-system.md",
+        "byte_length": 9086,
+        "sha256": "08c41d9968ab0f67e521052cb523ad58b56e0b21f2a1433af20cfc07f63a2882",
+        "git_blob_sha1": "1fbb6237f2952d0462535e13db235aaaa8704302"
+      },
+      {
+        "path": "generated/images/zh-Hans/productivity/design-consistent-file-naming-system/image_spec.json",
+        "byte_length": 3824,
+        "sha256": "13ae56c69e8e16629240c398ec5c5ebcabfdf2ccaa7a88b818a8c91839d35495",
+        "git_blob_sha1": "d390b7f2a4b9ff4b55b1b40d063c79191efb0df9"
+      },
+      {
+        "path": "generated/metadata/zh-Hans/productivity/design-consistent-file-naming-system/internal_links.json",
+        "byte_length": 4368,
+        "sha256": "ebd74cb5acf63702893ead9cbf88ff0f3bd144ae225e75fec8eb214f6a00fa98",
+        "git_blob_sha1": "d9dba9d26c31714090e05927107bf2b007a30208"
+      },
+      {
+        "path": "generated/reviews/zh-Hans/productivity/design-consistent-file-naming-system/review.json",
+        "byte_length": 3588,
+        "sha256": "db097933bf53ee8f4f8d8160be163ba4c73dd5e6586efe19cdb14d9f12147c02",
+        "git_blob_sha1": "6efcb28db3ef5f7fc69eda46fb556aa50525dcc4"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hans/design-consistent-file-naming-system/workflow-diagram.svg",
+        "byte_length": 3581,
+        "sha256": "b1513e979dbb2f89aa5c438eef86d2d5d08f56f25d8350c7f5a6203608ad6676",
+        "git_blob_sha1": "095de0020276eea42bc5c9fde210574d7ce990bc"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hans/design-consistent-file-naming-system/workflow-diagram.png",
+        "byte_length": 49857,
+        "sha256": "6b2c4fbddc5f730991e7a35d405dfe955dc70c437793b38b9f11f4b2b015f867",
+        "git_blob_sha1": "b29fd418fd217cbf5ac4df271a0b6b68af5db80a"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hans/design-consistent-file-naming-system/social-card.svg",
+        "byte_length": 3581,
+        "sha256": "b1513e979dbb2f89aa5c438eef86d2d5d08f56f25d8350c7f5a6203608ad6676",
+        "git_blob_sha1": "095de0020276eea42bc5c9fde210574d7ce990bc"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hans/design-consistent-file-naming-system/social-card.png",
+        "byte_length": 49857,
+        "sha256": "6b2c4fbddc5f730991e7a35d405dfe955dc70c437793b38b9f11f4b2b015f867",
+        "git_blob_sha1": "b29fd418fd217cbf5ac4df271a0b6b68af5db80a"
+      },
+      {
+        "path": "generated/markdown/zh-Hant/productivity/design-consistent-file-naming-system.md",
+        "byte_length": 9130,
+        "sha256": "f5516d92181a49325fc11e8c22b2f5cd268352875ed1db67735345b6ae4f867e",
+        "git_blob_sha1": "f8376021b3bd7e102e8f6e36ce9fdda55d62697a"
+      },
+      {
+        "path": "generated/images/zh-Hant/productivity/design-consistent-file-naming-system/image_spec.json",
+        "byte_length": 3827,
+        "sha256": "e7abaa6767cfce2f5247a80e5ffc3ab8bddad3851e22c9c9b2cd223147a4dc5b",
+        "git_blob_sha1": "276310d1f72c9f27f4e06595849460aa8b6e8749"
+      },
+      {
+        "path": "generated/metadata/zh-Hant/productivity/design-consistent-file-naming-system/internal_links.json",
+        "byte_length": 4353,
+        "sha256": "9f2bc9871058a166e047a5bce1fb9a1084298ec192413e39bfe7bac83c5cbc70",
+        "git_blob_sha1": "d22612d04d8bf2e72bad0bb59d21f33a01d6cb20"
+      },
+      {
+        "path": "generated/reviews/zh-Hant/productivity/design-consistent-file-naming-system/review.json",
+        "byte_length": 3585,
+        "sha256": "89430260eaf76960251582ee7133536d310a640e80fc95cd6d45173b7e2e9bc9",
+        "git_blob_sha1": "cad75c685e154054f0d8b5b1028c8d94688c48fa"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hant/design-consistent-file-naming-system/workflow-diagram.svg",
+        "byte_length": 3596,
+        "sha256": "eb68e2b08bc37eef7d755ade2459c4fff3ad08902bf5048f7a9e3f22991aaa30",
+        "git_blob_sha1": "540462f789a9ef436a835415d5e2d2561e5550ed"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hant/design-consistent-file-naming-system/workflow-diagram.png",
+        "byte_length": 53320,
+        "sha256": "e2642f58adf569f957a3b439048f63a3e75d5e5b1a7abfc288b05eed2135ce7d",
+        "git_blob_sha1": "41c11c6b262467af764f2911cd6b3c060428ae0c"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hant/design-consistent-file-naming-system/social-card.svg",
+        "byte_length": 3596,
+        "sha256": "eb68e2b08bc37eef7d755ade2459c4fff3ad08902bf5048f7a9e3f22991aaa30",
+        "git_blob_sha1": "540462f789a9ef436a835415d5e2d2561e5550ed"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hant/design-consistent-file-naming-system/social-card.png",
+        "byte_length": 53320,
+        "sha256": "e2642f58adf569f957a3b439048f63a3e75d5e5b1a7abfc288b05eed2135ce7d",
+        "git_blob_sha1": "41c11c6b262467af764f2911cd6b3c060428ae0c"
+      },
+      {
+        "path": "generated/markdown/pt-BR/productivity/design-consistent-file-naming-system.md",
+        "byte_length": 7266,
+        "sha256": "f8c85bfd477646bfc6b7b1f8e860111976be8fbfd75a9540095d92cb015bd93c",
+        "git_blob_sha1": "bfa1981b7904dbc99c343ac6150c9b26170012eb"
+      },
+      {
+        "path": "generated/images/pt-BR/productivity/design-consistent-file-naming-system/image_spec.json",
+        "byte_length": 3929,
+        "sha256": "24ebc071718131234a8dedcbc55053b46b3c07bb2e7d5b40645563ca7f9368c0",
+        "git_blob_sha1": "89da6d8617b44247173649d4b8e23e87759d4b4c"
+      },
+      {
+        "path": "generated/metadata/pt-BR/productivity/design-consistent-file-naming-system/internal_links.json",
+        "byte_length": 4824,
+        "sha256": "ea72aaceac7679887adef6343d57d83f6ac84fb7daea3a52b136e07944145d21",
+        "git_blob_sha1": "36690c756f6c6f100b115fc1a6800ffcfd6391b4"
+      },
+      {
+        "path": "generated/reviews/pt-BR/productivity/design-consistent-file-naming-system/review.json",
+        "byte_length": 3593,
+        "sha256": "c5a89ae5c1e46b9f1fc3c67826d276c07219534ae908667f6988e29948fccad4",
+        "git_blob_sha1": "3a17539a1a5636416963cad72255565468bbf62f"
+      },
+      {
+        "path": "generated/assets/blog/pt-BR/design-consistent-file-naming-system/workflow-diagram.svg",
+        "byte_length": 4282,
+        "sha256": "0c2724f598515e81c70f79f108df4188040739bbea11de9758248412793fe473",
+        "git_blob_sha1": "40bc9a2a5428eabbd34da661686583dde48fea55"
+      },
+      {
+        "path": "generated/assets/blog/pt-BR/design-consistent-file-naming-system/workflow-diagram.png",
+        "byte_length": 63985,
+        "sha256": "1ef1e10a50df3f5e234e336b3a13ebcde8f95936289c5d62f6ce750d357f9290",
+        "git_blob_sha1": "f16496569d1bee665306e732d7f0962e2e07654b"
+      },
+      {
+        "path": "generated/assets/blog/pt-BR/design-consistent-file-naming-system/social-card.svg",
+        "byte_length": 4282,
+        "sha256": "0c2724f598515e81c70f79f108df4188040739bbea11de9758248412793fe473",
+        "git_blob_sha1": "40bc9a2a5428eabbd34da661686583dde48fea55"
+      },
+      {
+        "path": "generated/assets/blog/pt-BR/design-consistent-file-naming-system/social-card.png",
+        "byte_length": 63985,
+        "sha256": "1ef1e10a50df3f5e234e336b3a13ebcde8f95936289c5d62f6ce750d357f9290",
+        "git_blob_sha1": "f16496569d1bee665306e732d7f0962e2e07654b"
+      },
+      {
+        "path": "generated/markdown/de/productivity/design-consistent-file-naming-system.md",
+        "byte_length": 8198,
+        "sha256": "57fdcd30387450472ea58a1343ce71bb6901fd0fa95ae1ac26ee1bc190d01165",
+        "git_blob_sha1": "07797e8daa0055bdb75bd723738604366a0f558b"
+      },
+      {
+        "path": "generated/images/de/productivity/design-consistent-file-naming-system/image_spec.json",
+        "byte_length": 3985,
+        "sha256": "eb8b374885e204ea15403efff77a293c9515514cd8e213930ba9ed69bb72dbe0",
+        "git_blob_sha1": "6e98698e36dcf9ecd6cbdcc00d0d56c7509fe0f6"
+      },
+      {
+        "path": "generated/metadata/de/productivity/design-consistent-file-naming-system/internal_links.json",
+        "byte_length": 4432,
+        "sha256": "b70b6a3819fcc27cc643ac9c9df5e2005a69d1a8ea174f121a9a4c0e3d825b32",
+        "git_blob_sha1": "f094d9ef37b957a44781804aabdbeea81a6db203"
+      },
+      {
+        "path": "generated/reviews/de/productivity/design-consistent-file-naming-system/review.json",
+        "byte_length": 3597,
+        "sha256": "07f7f7850aa021641f75be56debc9da5b9d669c0c871af1a06a171cbe04b0e3a",
+        "git_blob_sha1": "85962cedd5483b65b378ab88128c676a08e080fc"
+      },
+      {
+        "path": "generated/assets/blog/de/design-consistent-file-naming-system/workflow-diagram.svg",
+        "byte_length": 4384,
+        "sha256": "e904f6089d2eebb13cdbd9f8e9ba637a90e1c0fa5458eeab60ec29518adb62fd",
+        "git_blob_sha1": "0e041c5006aad2360800aa7f0d22fedf3b6e5b50"
+      },
+      {
+        "path": "generated/assets/blog/de/design-consistent-file-naming-system/workflow-diagram.png",
+        "byte_length": 64541,
+        "sha256": "c44bf4a788f8131313ca2b961ded348213224c631f7cc81b2ece1ebf152078c6",
+        "git_blob_sha1": "1f5eb932f36e841f6f8302d0ed67ab184270147f"
+      },
+      {
+        "path": "generated/assets/blog/de/design-consistent-file-naming-system/social-card.svg",
+        "byte_length": 4384,
+        "sha256": "e904f6089d2eebb13cdbd9f8e9ba637a90e1c0fa5458eeab60ec29518adb62fd",
+        "git_blob_sha1": "0e041c5006aad2360800aa7f0d22fedf3b6e5b50"
+      },
+      {
+        "path": "generated/assets/blog/de/design-consistent-file-naming-system/social-card.png",
+        "byte_length": 64541,
+        "sha256": "c44bf4a788f8131313ca2b961ded348213224c631f7cc81b2ece1ebf152078c6",
+        "git_blob_sha1": "1f5eb932f36e841f6f8302d0ed67ab184270147f"
+      },
+      {
+        "path": "generated/markdown/fr/productivity/design-consistent-file-naming-system.md",
+        "byte_length": 7653,
+        "sha256": "4b093805f2fbb6cf4ac5c5da2756e063202a0d7df0d86a31890ce957ac2c2b9b",
+        "git_blob_sha1": "bc658392ce87290e1c07edd753b5bcc2bbd2cf48"
+      },
+      {
+        "path": "generated/images/fr/productivity/design-consistent-file-naming-system/image_spec.json",
+        "byte_length": 3995,
+        "sha256": "98026f71f6548b89b254cd6337340e4d04fa8def8b771ac2283d3580af91f6e6",
+        "git_blob_sha1": "689c11b0d21157ae436b8f163a811bd9082026d9"
+      },
+      {
+        "path": "generated/metadata/fr/productivity/design-consistent-file-naming-system/internal_links.json",
+        "byte_length": 4832,
+        "sha256": "167f3d0de9b598c14775d48bb2093cdd8641f3079f84f05c329626677cb8367f",
+        "git_blob_sha1": "f124477af42bd21793b55755216e3f36de1f51ba"
+      },
+      {
+        "path": "generated/reviews/fr/productivity/design-consistent-file-naming-system/review.json",
+        "byte_length": 3594,
+        "sha256": "a3b34e065fb9aac9e1aa387b22799c9c7c2d9a8b50af0a7ff235642b457119b7",
+        "git_blob_sha1": "870b53eb8f31de23ff2cf1c258269fc911442a36"
+      },
+      {
+        "path": "generated/assets/blog/fr/design-consistent-file-naming-system/workflow-diagram.svg",
+        "byte_length": 4266,
+        "sha256": "be408689ef0a9cc4a27335dcbfd32327b733c5ae6b87d04a979feb6566a06965",
+        "git_blob_sha1": "5105a5519d15908f1efcbfb5df4a8c14639daabf"
+      },
+      {
+        "path": "generated/assets/blog/fr/design-consistent-file-naming-system/workflow-diagram.png",
+        "byte_length": 63110,
+        "sha256": "2ec4b997b108f4990cdd73c58746790cdce49a1d628f58054b0b30fc041d8ba6",
+        "git_blob_sha1": "9c613a2599f48af70fbbc2bf02631e3d80b3183d"
+      },
+      {
+        "path": "generated/assets/blog/fr/design-consistent-file-naming-system/social-card.svg",
+        "byte_length": 4266,
+        "sha256": "be408689ef0a9cc4a27335dcbfd32327b733c5ae6b87d04a979feb6566a06965",
+        "git_blob_sha1": "5105a5519d15908f1efcbfb5df4a8c14639daabf"
+      },
+      {
+        "path": "generated/assets/blog/fr/design-consistent-file-naming-system/social-card.png",
+        "byte_length": 63110,
+        "sha256": "2ec4b997b108f4990cdd73c58746790cdce49a1d628f58054b0b30fc041d8ba6",
+        "git_blob_sha1": "9c613a2599f48af70fbbc2bf02631e3d80b3183d"
+      },
+      {
+        "path": "generated/markdown/es/productivity/design-consistent-file-naming-system.md",
+        "byte_length": 7403,
+        "sha256": "9543c2687ce9d0bef5e4c978d8fc2833a7dc990b685004ca79168e97cefe6aa7",
+        "git_blob_sha1": "07e8bb11040a1304a7f42d9a22c970b4c9f8bdc8"
+      },
+      {
+        "path": "generated/images/es/productivity/design-consistent-file-naming-system/image_spec.json",
+        "byte_length": 3992,
+        "sha256": "65b46e47b247e4c6154cc034988c3ec31be6ca5a22319d928ff04cf7e82ec1c9",
+        "git_blob_sha1": "f49cd9ede3617d65a3169e2dcbea223489326e93"
+      },
+      {
+        "path": "generated/metadata/es/productivity/design-consistent-file-naming-system/internal_links.json",
+        "byte_length": 4482,
+        "sha256": "92d78683032b0343656da6f9e326622cd55d4c1910a44b1a56a2a5d5c17042ee",
+        "git_blob_sha1": "e3887ce85e126d4f87b460f692ce304ab1ea1e8a"
+      },
+      {
+        "path": "generated/reviews/es/productivity/design-consistent-file-naming-system/review.json",
+        "byte_length": 3591,
+        "sha256": "67a31c705eb7bc53e8d9f45e50eba1a64062bc244edcf816b55f585ebe022788",
+        "git_blob_sha1": "bbf6d7ecef7cf03bf74c96f2aa810b4dca9bb871"
+      },
+      {
+        "path": "generated/assets/blog/es/design-consistent-file-naming-system/workflow-diagram.svg",
+        "byte_length": 4364,
+        "sha256": "a2fc2c5bc0be2806164a0b73de57be3c3ae71fdca69a1b891ba468864796cbeb",
+        "git_blob_sha1": "0758c2d73624f672b968ab688b86790bce53ff57"
+      },
+      {
+        "path": "generated/assets/blog/es/design-consistent-file-naming-system/workflow-diagram.png",
+        "byte_length": 67275,
+        "sha256": "dc68b5c690d1f81846939bbd8fd07c439a081ac3e14e8b7899b7f53070eef159",
+        "git_blob_sha1": "c2dca29b146ffc8b95427896d2f790e360f84b06"
+      },
+      {
+        "path": "generated/assets/blog/es/design-consistent-file-naming-system/social-card.svg",
+        "byte_length": 4364,
+        "sha256": "a2fc2c5bc0be2806164a0b73de57be3c3ae71fdca69a1b891ba468864796cbeb",
+        "git_blob_sha1": "0758c2d73624f672b968ab688b86790bce53ff57"
+      },
+      {
+        "path": "generated/assets/blog/es/design-consistent-file-naming-system/social-card.png",
+        "byte_length": 67275,
+        "sha256": "dc68b5c690d1f81846939bbd8fd07c439a081ac3e14e8b7899b7f53070eef159",
+        "git_blob_sha1": "c2dca29b146ffc8b95427896d2f790e360f84b06"
+      }
+    ]
+  }
+}

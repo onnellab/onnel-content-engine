@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0079",
+    "title": "探しやすいファイル命名ルールの作り方",
+    "slug": "design-consistent-file-naming-system",
+    "category": "productivity",
+    "language": "ja",
+    "status": "review",
+    "topic_clusters": [
+      "ファイル名の付け方",
+      "日付の書式",
+      "連番の桁数",
+      "改訂番号",
+      "ファイル命名ルール",
+      "productivity"
+    ],
+    "related_app_names": [
+      "Aligna"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0071",
+        "title": "繰り返し使う文章を再利用できる定型文に整理する方法",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "ja",
+        "status": "scheduled",
+        "url": "generated/markdown/ja/productivity/turn-repeated-text-into-reusable-snippets.md",
+        "destination": "scheduled_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 9
+      },
+      {
+        "topic_id": "TOPIC-0046",
+        "title": "Androidの音楽ファイルをオフライン再生用に整理する方法",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "ja",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ja/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0055",
+        "title": "EPUBの目次リンクと章の順序を確認する方法",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "ja",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0063",
+        "title": "元ファイルを置き換える前に変換後のメディアを確認する方法",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "ja",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0006",
+        "app_name": "Aligna",
+        "slug": "aligna",
+        "category": "productivity",
+        "url": "/apps/aligna/",
+        "description": "A rule-based file-renaming utility with preview-before-apply workflows.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Productivity guide",
+        "category": "productivity",
+        "cluster": "productivity",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "ファイル名の付け方 cluster",
+        "category": "productivity",
+        "cluster": "ファイル名の付け方",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

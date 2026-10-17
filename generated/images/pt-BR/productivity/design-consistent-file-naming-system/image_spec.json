@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/pt-BR/productivity/design-consistent-file-naming-system.md",
+  "topic": {
+    "id": "TOPIC-0082",
+    "title": "Como criar um padrão consistente para nomes de arquivos",
+    "slug": "design-consistent-file-naming-system",
+    "category": "productivity",
+    "language": "pt-BR",
+    "primary_keyword": "padrão de nomes de arquivos",
+    "related_apps": [
+      "Aligna"
+    ]
+  },
+  "article_sections_detected": [
+    "Como criar um padrão consistente para nomes de arquivos",
+    "Pergunta",
+    "Resposta curta",
+    "Defina uma convenção pequena",
+    "Fluxo de trabalho recomendado",
+    "Veja os quatro componentes",
+    "Mantenha a regra fácil de seguir",
+    "Como usar ONNELLAB",
+    "Guias relacionados",
+    "Referências",
+    "Conclusão",
+    "Perguntas frequentes",
+    "Todo nome precisa de uma data?",
+    "É melhor começar pela data ou pelo projeto?",
+    "`v03` significa que o arquivo foi aprovado?",
+    "O Aligna cria exatamente o padrão deste exemplo?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Como criar um padrão de nomes de arquivos que continue útil com o tempo?",
+      "structure": [
+        "1. Assunto",
+        "2. Data",
+        "3. Ordem",
+        "4. Versão"
+      ],
+      "notes": "Explain filename fields; this is not an application screenshot or arbitrary-pattern capability claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an educational naming convention, not an application interface.",
+    "applications": [
+      "Aligna"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Um padrão de nomes que faz sentido",
+      "steps": [
+        "1. Assunto",
+        "2. Data",
+        "3. Ordem",
+        "4. Versão"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Defina primeiro o significado",
+    "message": "Um campo, um significado",
+    "description": "Escolha poucos campos em uma ordem fixa e defina o significado de cada um. Use uma identificação estável, datas sem ambiguidade e sequências com zeros à esquerda quando necessário. Separe revisão de aprovação, documente um exemplo e teste a regra em arquivos representativos.",
+    "steps": [
+      [
+        "1. Assunto",
+        "Assunto estável"
+      ],
+      [
+        "2. Data",
+        "Significado definido"
+      ],
+      [
+        "3. Ordem",
+        "Zeros à esquerda"
+      ],
+      [
+        "4. Versão",
+        "Indica a revisão"
+      ]
+    ]
+  }
+}

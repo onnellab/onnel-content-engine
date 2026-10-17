@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/fr/productivity/design-consistent-file-naming-system.md",
+  "topic": {
+    "id": "TOPIC-0084",
+    "title": "Créer une convention cohérente pour nommer ses fichiers",
+    "slug": "design-consistent-file-naming-system",
+    "category": "productivity",
+    "language": "fr",
+    "primary_keyword": "convention de nommage des fichiers",
+    "related_apps": [
+      "Aligna"
+    ]
+  },
+  "article_sections_detected": [
+    "Créer une convention cohérente pour nommer ses fichiers",
+    "Question",
+    "Réponse courte",
+    "Définir une convention simple",
+    "Méthode recommandée",
+    "Les quatre éléments à retenir",
+    "Garder une règle facile à appliquer",
+    "Utiliser ONNELLAB",
+    "Guides associés",
+    "Références",
+    "Conclusion",
+    "Questions fréquentes",
+    "Faut-il toujours inclure une date ?",
+    "Vaut-il mieux commencer par la date ou le projet ?",
+    "`v03` signifie-t-il que le fichier est validé ?",
+    "Aligna peut-il reproduire exactement cet exemple ?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Comment créer une convention de nommage des fichiers qui reste utile au quotidien ?",
+      "structure": [
+        "1. Identité",
+        "2. Date",
+        "3. Ordre",
+        "4. Version"
+      ],
+      "notes": "Explain filename fields; this is not an application screenshot or arbitrary-pattern capability claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an educational naming convention, not an application interface.",
+    "applications": [
+      "Aligna"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Des noms de fichiers compréhensibles",
+      "steps": [
+        "1. Identité",
+        "2. Date",
+        "3. Ordre",
+        "4. Version"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Définir le sens avant le format",
+    "message": "Un champ, une signification",
+    "description": "Choisissez quelques champs dans un ordre fixe, chacun avec une signification précise. Utilisez un identifiant stable, une date sans ambiguïté et, si nécessaire, des numéros complétés par des zéros. Distinguez révision et validation, documentez un exemple et testez la règle sur des fichiers représentatifs.",
+    "steps": [
+      [
+        "1. Identité",
+        "Sujet stable"
+      ],
+      [
+        "2. Date",
+        "Sens défini"
+      ],
+      [
+        "3. Ordre",
+        "Zéros en tête"
+      ],
+      [
+        "4. Version",
+        "Révisions indiquées"
+      ]
+    ]
+  }
+}

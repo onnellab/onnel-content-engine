@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/productivity/design-consistent-file-naming-system.md",
+  "topic": {
+    "id": "TOPIC-0078",
+    "title": "찾기 쉬운 파일명 규칙을 만드는 방법",
+    "slug": "design-consistent-file-naming-system",
+    "category": "productivity",
+    "language": "ko",
+    "primary_keyword": "파일명 규칙",
+    "related_apps": [
+      "Aligna"
+    ]
+  },
+  "article_sections_detected": [
+    "찾기 쉬운 파일명 규칙을 만드는 방법",
+    "질문",
+    "짧은 답변",
+    "작은 규칙부터 정해요",
+    "권장 워크플로",
+    "항목별 역할을 한눈에 확인해요",
+    "지키기 쉬운 규칙으로 유지해요",
+    "ONNELLAB 앱",
+    "함께 읽을 가이드",
+    "참고 자료",
+    "결론",
+    "자주 묻는 질문",
+    "모든 파일명에 날짜를 넣어야 하나요?",
+    "날짜와 프로젝트 중 무엇을 먼저 쓰나요?",
+    "`v03`이면 승인된 파일인가요?",
+    "Aligna에서 이 예시와 똑같은 형식을 만들 수 있나요?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "파일이 늘어나도 일관되게 사용할 파일명 규칙은 어떻게 만들까요?",
+      "structure": [
+        "1. 식별 정보",
+        "2. 날짜",
+        "3. 순서",
+        "4. 수정본"
+      ],
+      "notes": "Explain filename fields; this is not an application screenshot or arbitrary-pattern capability claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an educational naming convention, not an application interface.",
+    "applications": [
+      "Aligna"
+    ],
+    "rules": [
+      "실제 기능을 설명할 때에만 스크린샷을 사용합니다.",
+      "불필요한 UI는 잘라냅니다.",
+      "관련 컨트롤이나 워크플로 영역만 강조합니다.",
+      "높은 해상도를 유지합니다.",
+      "스크린샷을 장식으로 사용하지 않습니다."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "일관된 파일명 규칙 만들기",
+      "steps": [
+        "1. 식별 정보",
+        "2. 날짜",
+        "3. 순서",
+        "4. 수정본"
+      ],
+      "layout": "세로 또는 좌우 순서형"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+    "이 단계에서는 스크린샷을 만들지 않습니다.",
+    "이 단계에서는 에셋을 게시하지 않습니다.",
+    "설명 목적이 없는 장식용 이미지는 사용하지 않습니다."
+  ],
+  "editorial_workflow": {
+    "subtitle": "각 항목의 뜻부터 정해요",
+    "message": "한 항목에는 한 가지 뜻을 담아요",
+    "description": "뜻이 분명한 몇 개의 항목을 정해 항상 같은 순서로 써요. 바뀌지 않는 식별 정보, 의미를 정한 날짜, 자릿수를 맞춘 번호, 승인 상태와 구분한 수정본 번호를 짧은 예시로 기록하고 실제 파일 다섯 개에 적용해 봐요.",
+    "steps": [
+      [
+        "1. 식별 정보",
+        "바뀌지 않는 대상"
+      ],
+      [
+        "2. 날짜",
+        "무슨 날짜인지 정의"
+      ],
+      [
+        "3. 순서",
+        "번호 자릿수 통일"
+      ],
+      [
+        "4. 수정본",
+        "수정 차수 표시"
+      ]
+    ]
+  }
+}
