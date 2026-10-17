@@ -73,6 +73,58 @@ class BlogPreviewBoundaries(unittest.TestCase):
                 p=r/name;p.parent.mkdir(exist_ok=True);p.write_text('preserve')
                 with self.assertRaises(ValueError):safe_destination(r,name)
 
+
+    def test_exact_workflow_alias_uses_the_existing_workflow_brand_contract(self):
+        from generate_image_assets import workflow_svg
+        from blog_branding import branded_blog_svg, MARKER
+        from prepare_blog_preview import branded_preview_svg
+        import prepare_aligna_preview as aligna
+        mark = 'M 0 0 L 100 0 L 100 100 Z'
+        drafts = aligna.validate_drafts(ROOT / 'preview/aligna')
+        for locale, draft in drafts.items():
+            with self.subTest(locale=locale):
+                image = draft['image']
+                editorial = {key: image[key] for key in ('subtitle', 'message', 'steps')}
+                editorial['description'] = draft['short_answer']
+                svg = workflow_svg(image['title'], draft['primary_keyword'], locale, editorial)
+                prefix = f"generated/assets/blog/{locale}/{aligna.SLUG}/"
+                workflow = {'path': prefix + 'workflow-diagram.svg', 'content': svg}
+                social = {'path': prefix + 'social-card.svg', 'content': svg}
+                files = [workflow, social]
+                expected = branded_blog_svg(svg, 'workflow', mark).encode()
+                self.assertIn(MARKER.encode(), expected)
+                self.assertEqual(branded_preview_svg(workflow, files, mark), expected)
+                self.assertEqual(branded_preview_svg(social, files, mark), expected)
+                self.assertEqual(social['content'], svg)
+
+    def test_distinct_social_layout_keeps_its_existing_brand_contract(self):
+        from generate_image_assets import workflow_svg
+        from blog_branding import branded_blog_svg
+        from prepare_blog_preview import branded_preview_svg
+        import publishing
+        topic = {'primary_language': 'en', 'category': 'productivity', 'slug': 'fixture'}
+        article = publishing.Article(topic, ROOT / 'unused.md', ROOT / 'unused.html',
+                                     'blog/en/fixture/', 'Reviewed title', '', 'Description', '', '')
+        svg = publishing.social_card_svg(article)
+        workflow = {'path': 'generated/assets/blog/en/fixture/workflow-diagram.svg',
+                    'content': workflow_svg('Reviewed title', 'task', 'en')}
+        social = {'path': 'generated/assets/blog/en/fixture/social-card.svg', 'content': svg}
+        mark = 'M 0 0 L 100 0 L 100 100 Z'
+        self.assertEqual(branded_preview_svg(social, [workflow, social], mark),
+                         branded_blog_svg(svg, 'social', mark).encode())
+
+    def test_mismatched_or_missing_workflow_alias_fails_closed(self):
+        from generate_image_assets import workflow_svg
+        from prepare_blog_preview import branded_preview_svg
+        from publishing import PublishingError
+        svg = workflow_svg('Reviewed title', 'task', 'en')
+        workflow = {'path': 'generated/assets/blog/en/fixture/workflow-diagram.svg', 'content': svg}
+        social = {'path': 'generated/assets/blog/en/fixture/social-card.svg', 'content': svg + '\n'}
+        mark = 'M 0 0 L 100 0 L 100 100 Z'
+        for files in ([workflow, social], [social]):
+            with self.subTest(paired=len(files)), self.assertRaises(PublishingError):
+                branded_preview_svg(social, files, mark)
+
     def test_workflow_cannot_publish(self):
         text=(ROOT/'.github/workflows/blog-preview.yml').read_text()
         for forbidden in ('pages: write','contents: write','id-token: write','secrets.','deploy-pages','git push','run_pipeline','publish_due','schedule_ready','generate_social_posts'):

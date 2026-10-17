@@ -132,6 +132,23 @@ def safe_destination(homepage, relative):
         raise ValueError('Destination escapes checkout')
     return destination
 
+def branded_preview_svg(item, files, mark):
+    """Brand the validated source layout, including exact workflow aliases."""
+    from publishing import branded_export_bytes
+    source = item['path']
+    if source.endswith('/workflow-diagram.svg'):
+        kind = 'workflow'
+    elif source.endswith('/social-card.svg'):
+        workflow_path = source.removesuffix('social-card.svg') + 'workflow-diagram.svg'
+        workflow = next((entry for entry in files if entry['path'] == workflow_path), None)
+        # The native Aligna collector deliberately reuses the workflow SVG as
+        # its social source. Only byte-identical paired content is that alias;
+        # other social assets must pass the existing social-layout contract.
+        kind = 'workflow' if workflow is not None and item['content'] == workflow['content'] else 'social'
+    else:
+        raise ValueError('Unexpected preview SVG path')
+    return branded_export_bytes(item['content'].encode(), kind, mark)
+
 def prepare(bundle_path, homepage, evidence):
     bundle, digest = validate_bundle(bundle_path)
     homepage = homepage.resolve()
@@ -141,7 +158,7 @@ def prepare(bundle_path, homepage, evidence):
     safe_destination(homepage, 'tests/blog-preview.spec.ts')
     # Reuse the canonical publisher's exact brand transformation. No deploy,
     # queue, privacy export, git-write or social-distribution entrypoint is used.
-    from publishing import homepage_approved_blog_mark, branded_export_bytes
+    from publishing import homepage_approved_blog_mark
     mark = homepage_approved_blog_mark(homepage)
     if not mark:
         raise ValueError('Approved homepage mark is required')
@@ -154,7 +171,7 @@ def prepare(bundle_path, homepage, evidence):
             content = item['content'].encode()
         else:
             target = 'public/blog-assets/' + source.removeprefix('generated/assets/blog/')
-            content = branded_export_bytes(item['content'].encode(), 'workflow' if source.endswith('workflow-diagram.svg') else 'social', mark)
+            content = branded_preview_svg(item, bundle['files'], mark)
         pending[safe_destination(homepage, target)] = content
     for locale in LOCALES:
         safe_destination(homepage, f'public/blog-assets/{locale}/{bundle["slug"]}/social-card.png')
