@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-16T12:10:07+09:00",
+  "checked_at": "2026-10-17T12:01:10+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 76,
-    "already_done": 75,
+    "already_done": 76,
     "verified": 0,
-    "pending": 1
+    "pending": 0
   },
   "items": [
     {
@@ -886,6 +886,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0038::devto::en::markdown",
+      "topic_id": "TOPIC-0038",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-test-a-converted-media-file-before-replacing-the-original-5805",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0044::devto::en::markdown",
       "topic_id": "TOPIC-0044",
       "platform": "devto",
@@ -906,18 +918,6 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://dev.to/onnellab/check-an-epubs-table-of-contents-and-chapter-order-25g6",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0038::devto::en::markdown",
-      "topic_id": "TOPIC-0038",
-      "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
     }
