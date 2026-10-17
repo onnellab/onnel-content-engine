@@ -79,7 +79,7 @@ APP-0002,tagweaver,dependency,path,^1.9.0,1.9.1,,ok,github:onnellab/tagweaver/pu
 APP-0002,tagweaver,dependency,shared_preferences,^2.3.2,2.5.4,,ok,github:onnellab/tagweaver/pubspec.yaml
 APP-0002,tagweaver,dependency,url_launcher,^6.3.2,6.3.2,,ok,github:onnellab/tagweaver/pubspec.yaml
 APP-0002,tagweaver,flutter_sdk,flutter,>=3.38.4,,>=3.38.4,ok,github:onnellab/tagweaver/pubspec.yaml
-APP-0003,vaultxt,app_version,vaultxt,2.0.2+67,2.0.2,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
+APP-0003,vaultxt,app_version,vaultxt,2.0.2+69,2.0.2,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,characters,1.4.1,1.4.1,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,charset_converter,^2.3.0,2.3.0,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,clock,^1.1.2,1.1.2,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml

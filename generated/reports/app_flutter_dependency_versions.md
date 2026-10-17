@@ -116,7 +116,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | vaultxt | 2.0.2+67 | 2.0.2 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
+| app_version | vaultxt | 2.0.2+69 | 2.0.2 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | characters | 1.4.1 | 1.4.1 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | charset_converter | ^2.3.0 | 2.3.0 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | clock | ^1.1.2 | 1.1.2 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |

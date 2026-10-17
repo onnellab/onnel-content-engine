@@ -1,13 +1,14 @@
 # App Release Status
 
-Generated: 2026-10-17T12:00:38+09:00
+Generated: 2026-10-18T06:21:04+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
 | Store | in_review | 1 |
-| Store | unchanged | 14 |
+| Store | unchanged | 13 |
+| Store | updated | 1 |
 | GitHub Release | archived | 1 |
 | GitHub Release | planned | 2 |
 | GitHub Release | released | 9 |
@@ -29,7 +30,7 @@ Generated: 2026-10-17T12:00:38+09:00
 | Segra | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/segra | No action |
 | TagWeaver | android | 2.5.3 | 2.5.4 | local_ahead | unchanged | released | onnellab/tagweaver | Covered by private test release row |
 | TagWeaver | ios | 2.5.3 | 2.5.4 | local_ahead | unchanged | planned | onnellab/tagweaver | Private test only; do not publish public GitHub Release |
-| VaultXT | android | 2.0.1 | 2.0.2 | local_ahead | unchanged | released | onnellab/onnellab-text | Store release complete; confirm next public rollout |
+| VaultXT | android | 2.0.2 | 2.0.2 | same | updated | released | onnellab/onnellab-text | Create or verify release candidate |
 | VaultXT | ios | 2.0.1 | 2.0.2 | local_ahead | unchanged | planned | onnellab/onnellab-text | Private test only; do not publish public GitHub Release |
 
 ## Release Candidates
@@ -54,6 +55,6 @@ Generated: 2026-10-17T12:00:38+09:00
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
 | TagWeaver | android | unchanged | Covered by private test release row | Version/update date read from Google Play public page; Android snapshot version 2.5.4 is stale for public version 2.5.3 and was not merged. |
-| VaultXT | android | unchanged | Store release complete; confirm next public rollout | Version/update date read from Google Play public page; Android snapshot version 2.0.2 is stale for public version 2.0.1 and was not merged. |
+| VaultXT | android | updated | Create or verify release candidate | Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/onnellab-text/vaultxt/pubspec.yaml version 2.0.2+69; confirm against Play Console if needed. |
 | VaultXT | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 2.0.1. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
 | TagWeaver | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 2.5.3. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
