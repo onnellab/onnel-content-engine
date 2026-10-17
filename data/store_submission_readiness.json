@@ -1,33 +1,4 @@
 {
-  "generated_at": "2026-10-16T21:23:28+00:00",
-  "records": [
-    {
-      "release_id": "REL-0032",
-      "app_slug": "papira",
-      "platform": "android",
-      "store": "google_play",
-      "status": "already_available",
-      "reasons": [
-        "release artifact and public release readiness are not complete",
-        "human submission approval with QA PASS is missing",
-        "google_play connection is not enabled"
-      ],
-      "approval": {},
-      "public_store_snapshot": {
-        "app_id": "APP-0008",
-        "app_slug": "papira",
-        "app_name": "Papira",
-        "platform": "android",
-        "store_url": "https://play.google.com/store/apps/details?id=com.onnellab.papira",
-        "store_app_id": "",
-        "store_package": "com.onnellab.papira",
-        "version": "2.0.3",
-        "last_updated": "2026. 10. 16.",
-        "release_notes": "",
-        "checked_at": "2026-10-17T06:23:06+09:00",
-        "status": "unchanged",
-        "notes": "Version/update date read from Google Play public page."
-      }
-    }
-  ]
+  "generated_at": "2026-10-17T21:23:49+00:00",
+  "records": []
 }
