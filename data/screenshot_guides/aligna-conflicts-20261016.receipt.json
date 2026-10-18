@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "aligna-conflicts-20261016",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "scheduled",
+  "status": "published",
   "video_id": "tNxMMWa6bb8",
   "url": "https://youtube.com/shorts/tNxMMWa6bb8",
   "title": "How to Skip Conflicting File Names in Aligna | Screenshot Guide",
@@ -12,7 +12,7 @@
   "timezone": "Asia/Seoul",
   "observed_at": "2026-10-15T10:19:31Z",
   "server_publication_time": null,
-  "actual_publication_verified": false,
+  "actual_publication_verified": true,
   "video_sha256": "838e221f80d643d0d6d37c41c2c56351d02a339733d568f5a398adca4a499feb",
   "manifest_sha256": "12b9fcdd314e96d38ce9a09d37c37f643f11012efadc3bf6d7939f9e92a6073f",
   "library_file_id": "libfile_8b52c054f95081918c7d542a5dd0e3e8",
@@ -27,5 +27,22 @@
     "thumbnail": "No custom thumbnail selected; final Shorts thumbnail not independently verified.",
     "external_links": "text only; UI says one-time verification required; not initiated",
     "playback": "Processed Studio player started and displayed the correct app screenshot; full hosted-frame playback not independently audited. Local 450-frame decode and all 3 source slides reviewed."
+  },
+  "publication_observed_at": "2026-10-18T09:49:29Z",
+  "publication_observation": {
+    "surface": "Public ONNELLAB channel Shorts listing in dot cloud browser",
+    "source_url": "https://www.youtube.com/channel/UCXyRedrldRBl9Y35nyWoTLg/shorts",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "channel_name": "ONNELLAB",
+    "channel_handle": "@ONNELLAB",
+    "video_id": "tNxMMWa6bb8",
+    "title": "How to Skip Conflicting File Names in Aligna | Screenshot Guide",
+    "observed_privacy": "public",
+    "matching_entries": 1,
+    "public_shorts_count": 10,
+    "views": 23,
+    "server_publication_time": null,
+    "scope": "Public listing verifies title, video ID and channel. Provider publication timestamp, description, processing and Studio-only settings not reverified; exact channel Studio returned access denied. Original scheduling evidence and hashes preserved.",
+    "write_actions_on_youtube": false
   }
 }
