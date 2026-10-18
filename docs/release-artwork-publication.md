@@ -13,7 +13,7 @@ fetching obsolete historical image bytes while preserving source-commit checks).
 `pubspec.yaml`. Nested apps such as `onnellab-text/vaultxt` are supported.
 
 The shared gate from `onnellab-flutter-template` verifies the tracked candidate,
-independent review, exact version/build and latest app source commit, captures,
+independent review, exact target version/build and latest app source commit, captures,
 render inputs, locale/kind/index completeness, sizes and SHA-256 values. It never
 renders or approves images in this publication workflow. The marketing version
 must also equal an independently observed public store version using the same
@@ -32,6 +32,57 @@ fall back. Explicit `site_path` values preserve route names. Featured homepage
 slots consume the same receipt-backed gallery with exact hashes and dimensions;
 other apps and legacy original files are outside staging scope. No missing candidate, stale review, changed source,
 wrong version or invalid image is replaced by an old screenshot fallback.
+
+### Capture refresh scope and unchanged-screen reuse
+
+Only screens whose design/rendering inputs changed need new captures. A version
+or unrelated commit change alone is not a full-recapture instruction. The
+canonical changed-screen reuse contract keeps the original raw bytes, capture
+receipt, capture version/source commit and installed-build hashes intact. A
+separate per-screen `.reuse.json` binds independently reviewed historical input
+hashes to the current target; the gate checks the actual current bytes. Missing
+or unverified origin/scope evidence cannot be replaced by an `unchanged` flag.
+See the template's `docs/release_artwork.md` for the exact evidence schema.
+
+This contract does not become operational merely because this documentation or
+data-only registrar recognizes it. The new canonical gate must first pass
+independent review, then the engine allowlist and app vendored bundles must be
+coordinated at their exact hashes. Until then the existing pin remains fail-closed.
+No isolation command, permission, renderer, publisher or schedule is broadened.
+
+Allowlist schema 2 retains the complete previously approved bundle for its two
+original source commits and adds a second complete bundle at template commit
+`0d8a37eefa4283e82e2c7ea803580a7c5eed1835`. Relative to the previous 27-file
+bundle, only the release gate and four header/search SVG hashes change; the
+other 22 files and root adapter hash stay identical. The SVGs preserve the
+already-approved 12% background wash from template commit `1d975fb`; adopting
+them may require affected derivative rerenders and review, not new raw UI
+captures. App bundles must copy the exact complete source revision and update
+`TEMPLATE_SOURCE.json`; an old commit label cannot describe the new gate.
+Selection uses the exact app-declared source commit, followed by all 27 exact
+file hashes. Each complete map is independently pinned; unknown sources,
+duplicate source assignments, mixed old/new files or a failed selected bundle
+are rejected without trying another bundle. Older apps retain their existing
+approved bundle and checks. No app migration or release readiness is implied
+by the engine pin. Sandbox commands and permissions are unchanged.
+
+The current candidate/review still binds the exact target release, while reused
+captures retain their honest historical identity. Genuine capture, raw bytes,
+renderer provenance, rights/claims, independent visual review, required slot
+coverage and fresh store-public observations remain mandatory. An app-only patch
+can require zero new captures while still having pre-existing release gaps.
+
+Reports must distinguish `current_patch_required_screens` from known
+`never_captured_slots`. Data-only inventory cannot establish either fact from a
+missing file or changed identity, so it reports these values as null and lists
+missing evidence/slots and per-screen applicability separately. It preserves
+existing `.reuse.json` companions as unverified dependencies, never as approval.
+Its source identity comparison uses the declared marker only; that marker is not
+proof of the latest Git source or a newly installed build. The canonical verifier
+must resolve the actual target identity independently.
+Historical input completeness/source comparison is independently reviewed
+attestation; the verifier does not claim to reconstruct history or prove it
+cryptographically. Never relabel original captures as current-build execution.
 
 ## States, publication and recovery
 

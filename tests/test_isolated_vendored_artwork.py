@@ -69,12 +69,21 @@ class BundleFixture(unittest.TestCase):
         for name, payload in self.contents.items():
             (self.bundle / name).write_bytes(payload)
         self.hashes = {name: hashlib.sha256(payload).hexdigest() for name, payload in self.contents.items()}
-        self.ledger = {"schema_version": 1, "repository": "onnellab/onnellab-flutter-template",
-                       "source_directory": "template/assets/store_promo",
-                       "source_commits": sorted(gate.SOURCE_COMMITS), "sha256": self.hashes}
+        self.bundle_contents = {
+            "legacy_v20261011": dict(self.contents),
+            "unchanged_screen_v20261018": dict(self.contents,
+                **{"release_artwork.py": b"# synthetic new gate\n",
+                   "header_icon_template.svg": b"<svg>new wash</svg>\n"}),
+        }
+        self.ledger = {"schema_version": 2, "repository": "onnellab/onnellab-flutter-template",
+                       "source_directory": "template/assets/store_promo", "bundles": {
+            name: {"source_commits": sorted(pin["source_commits"]),
+                   "sha256": {file: hashlib.sha256(payload).hexdigest()
+                              for file, payload in self.bundle_contents[name].items()}}
+            for name, pin in gate.BUNDLE_PINS.items()}}
         self.metadata = {"repository": self.ledger["repository"],
                          "source_directory": self.ledger["source_directory"],
-                         "commit": "b6d2332c162a00285c3aa05186a47c0f6b18f5b4",
+                         "commit": sorted(gate.BUNDLE_PINS["legacy_v20261011"]["source_commits"])[0],
                          "preserved_safety_hardening": [], "sha256": dict(self.hashes)}
         self.write_metadata()
         self.allow = patch.object(gate, "load_allowlist", return_value=self.ledger)
@@ -87,6 +96,16 @@ class BundleFixture(unittest.TestCase):
 
     def validate(self):
         return gate.validate_vendored_bundle(self.project)
+
+    def activate(self, source):
+        name = next(name for name, entry in self.ledger["bundles"].items()
+                    if source in entry["source_commits"])
+        self.contents = dict(self.bundle_contents[name])
+        self.hashes = dict(self.ledger["bundles"][name]["sha256"])
+        for file, payload in self.contents.items():
+            (self.bundle / file).write_bytes(payload)
+        self.metadata.update(commit=source, sha256=dict(self.hashes))
+        self.write_metadata()
 
 
 class CanonicalValidation(BundleFixture):
@@ -105,12 +124,56 @@ class CanonicalValidation(BundleFixture):
         self.assertEqual(result.repository_root, root_app)
         self.assertEqual(result.project_relative, PurePosixPath("."))
 
-    def test_both_explicit_canonical_source_commits_are_accepted(self):
+    def test_each_explicit_canonical_source_commit_is_accepted(self):
         for commit in gate.SOURCE_COMMITS:
+            with self.subTest(commit=commit):
+                self.activate(commit)
+                self.assertEqual(self.validate().source_commit, commit)
+
+    def test_previous_source_commits_cannot_label_updated_bundle(self):
+        self.activate("0d8a37eefa4283e82e2c7ea803580a7c5eed1835")
+        for commit in ("b6d2332c162a00285c3aa05186a47c0f6b18f5b4",
+                       "e1744e271c6d669441e7ed35f97e109c990c14fc"):
             with self.subTest(commit=commit):
                 self.metadata["commit"] = commit
                 self.write_metadata()
-                self.assertEqual(self.validate().source_commit, commit)
+                with self.assertRaisesRegex(ValueError, "independent canonical"):
+                    self.validate()
+
+    def test_new_source_cannot_label_old_bundle(self):
+        self.metadata["commit"] = "0d8a37eefa4283e82e2c7ea803580a7c5eed1835"
+        self.write_metadata()
+        with self.assertRaisesRegex(ValueError, "independent canonical"):
+            self.validate()
+
+    def test_hybrid_bytes_and_hybrid_declared_map_never_fall_back(self):
+        for source in gate.SOURCE_COMMITS:
+            self.activate(source)
+            alternate = ("legacy_v20261011" if source.startswith("0d8a37")
+                         else "unchanged_screen_v20261018")
+            for name in ("release_artwork.py", "header_icon_template.svg"):
+                with self.subTest(source=source, file=name):
+                    self.activate(source)
+                    payload = self.bundle_contents[alternate][name]
+                    (self.bundle / name).write_bytes(payload)
+                    with patch.object(gate.subprocess, "run") as run:
+                        with self.assertRaisesRegex(ValueError, "Noncanonical"):
+                            gate.run_verified_gate(self.project, "verify-site")
+                        run.assert_not_called()
+                    self.metadata["sha256"][name] = hashlib.sha256(payload).hexdigest()
+                    self.write_metadata()
+                    with self.assertRaisesRegex(ValueError, "independent canonical"):
+                        self.validate()
+
+    def test_legacy_metadata_shape_supported_for_each_exact_bundle(self):
+        for source in gate.SOURCE_COMMITS:
+            with self.subTest(source=source):
+                self.activate(source)
+                rich = dict(self.metadata)
+                self.metadata = {key: rich[key] for key in ("repository", "commit", "sha256")}
+                self.write_metadata()
+                self.assertEqual(self.validate().file_hashes, self.hashes)
+                self.metadata = rich
 
     def test_tag3_legacy_three_key_metadata_is_supported_with_exact_code_pins(self):
         self.metadata = {key: self.metadata[key] for key in ("repository", "commit", "sha256")}
@@ -448,6 +511,60 @@ class SandboxContract(BundleFixture):
 
 
 class EngineAllowlistAndProbe(unittest.TestCase):
+    def mutated_allowlist(self, change):
+        data = json.loads(gate.ALLOWLIST.read_text())
+        change(data)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp).resolve() / "allowlist.json"
+            path.write_text(json.dumps(data))
+            with patch.object(gate, "ALLOWLIST", path):
+                return gate.load_allowlist()
+
+    def test_legacy_complete_map_is_preserved_and_only_five_new_hashes_differ(self):
+        data = gate.load_allowlist()["bundles"]
+        old = data["legacy_v20261011"]["sha256"]
+        new = data["unchanged_screen_v20261018"]["sha256"]
+        self.assertEqual(hashlib.sha256(json.dumps(old, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
+                         "e19c7f63242e270cffea804249081d7b189885ce5fb9d8513b1e92d47d66b9fd")
+        self.assertEqual(set(old), set(new))
+        self.assertEqual({name for name in old if old[name] != new[name]},
+                         {"release_artwork.py", "header_icon_template.svg", "header_template.svg",
+                          "search_icon_template.svg", "search_template.svg"})
+
+    def test_allowlist_schema_unknown_missing_and_extra_bundles_are_rejected(self):
+        changes = (
+            lambda d: d.update(schema_version=1),
+            lambda d: d.update(schema_version=True),
+            lambda d: d["bundles"].pop("legacy_v20261011"),
+            lambda d: d["bundles"].update(unreviewed=d["bundles"]["legacy_v20261011"]),
+            lambda d: d.update(fallback=True),
+        )
+        for change in changes:
+            with self.subTest(change=change), self.assertRaisesRegex(ValueError, "Unrecognized"):
+                self.mutated_allowlist(change)
+
+    def test_allowlist_duplicate_unknown_and_cross_assigned_sources_are_rejected(self):
+        changes = (
+            lambda d: d["bundles"]["legacy_v20261011"]["source_commits"].append(
+                d["bundles"]["legacy_v20261011"]["source_commits"][0]),
+            lambda d: d["bundles"]["unchanged_screen_v20261018"].update(source_commits=["a" * 40]),
+            lambda d: d["bundles"]["unchanged_screen_v20261018"].update(
+                source_commits=d["bundles"]["legacy_v20261011"]["source_commits"]),
+            lambda d: d["bundles"]["legacy_v20261011"].update(source_commits=[{}]),
+        )
+        for change in changes:
+            with self.subTest(change=change), self.assertRaisesRegex(ValueError, "source pins"):
+                self.mutated_allowlist(change)
+
+    def test_allowlist_cannot_mix_or_change_even_a_non_gate_file(self):
+        for bundle in gate.BUNDLE_PINS:
+            for name in ("release_artwork.py", "README.md", "header_template.svg"):
+                with self.subTest(bundle=bundle, file=name), self.assertRaisesRegex(ValueError, "complete reviewed"):
+                    self.mutated_allowlist(lambda d: d["bundles"][bundle]["sha256"].update({name: "0" * 64}))
+        with self.assertRaisesRegex(ValueError, "complete reviewed"):
+            self.mutated_allowlist(lambda d: d["bundles"]["unchanged_screen_v20261018"].update(
+                sha256=d["bundles"]["legacy_v20261011"]["sha256"]))
+
     def test_production_runtime_remains_linux_only(self):
         with patch.object(gate.sys, "platform", "darwin"), patch.object(gate.subprocess, "run") as run:
             with self.assertRaisesRegex(ValueError, "requires the Linux bubblewrap sandbox"):
@@ -456,12 +573,28 @@ class EngineAllowlistAndProbe(unittest.TestCase):
 
     def test_committed_ledger_has_all_27_canonical_files_and_exact_gate(self):
         data = gate.load_allowlist()
-        self.assertEqual(len(data["sha256"]), 27)
-        self.assertEqual(data["sha256"]["release_artwork.py"], gate.GATE_SHA256)
-        self.assertEqual(set(data["source_commits"]), gate.SOURCE_COMMITS)
-        self.assertIn("header_icon_template.svg", data["sha256"])
-        self.assertIn("capture_iphone_duo.py", data["sha256"])
-        self.assertIn("store_asset_workflow.py", data["sha256"])
+        self.assertEqual(set(data["bundles"]), set(gate.BUNDLE_PINS))
+        for name, bundle in data["bundles"].items():
+            with self.subTest(bundle=name):
+                self.assertEqual(len(bundle["sha256"]), 27)
+                self.assertEqual(bundle["sha256"]["release_artwork.py"], gate.BUNDLE_PINS[name]["gate_sha256"])
+                self.assertEqual(set(bundle["source_commits"]), gate.BUNDLE_PINS[name]["source_commits"])
+                self.assertIn("header_icon_template.svg", bundle["sha256"])
+                self.assertIn("capture_iphone_duo.py", bundle["sha256"])
+                self.assertIn("store_asset_workflow.py", bundle["sha256"])
+
+    def test_reviewed_reuse_gate_and_preexisting_twelve_percent_wash_pins(self):
+        expected = {
+            "release_artwork.py": "7d28497c40140d8a5f55577c327be1edd258554fedb838f35aa6befb470b1391",
+            "header_icon_template.svg": "aa667c615c62aab284d1beb53992eee5f87f1d5a329d416cd754e686365c57fb",
+            "header_template.svg": "728684ca06779b88f65ad798f1e37c938d6565a775f46b74134fdffc5725bf1c",
+            "search_icon_template.svg": "01db33d7679a27d495b7833fda52a2c4b268c63be207a85664aff90e30ddd3d8",
+            "search_template.svg": "11d695726ad0b6e5d6275229f1186db8982d83c9dd954fe17a7b30447073fe41",
+        }
+        actual = gate.load_allowlist()["bundles"]["unchanged_screen_v20261018"]["sha256"]
+        for name, digest in expected.items():
+            with self.subTest(name=name):
+                self.assertEqual(actual[name], digest)
 
     def test_runtime_probe_contains_no_app_code_or_canonical_bundle(self):
         captured = {}

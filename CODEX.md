@@ -297,6 +297,17 @@ Sell last.
 
 Implementation follows documentation. Documentation does not follow implementation.
 
+## Screenshot capture refresh scope
+
+Refresh only screens whose visible design/rendering inputs changed, not every
+screen after each commit or version change. Preserve original capture bytes,
+version/source identity and receipts. Reuse requires explicit reviewed unchanged
+render-input evidence and accurate claims; see `docs/release-artwork-publication.md`
+and `docs/Screenshot_Guide_Pipeline.md`. Historical missing device/locale slots
+are separate from this patch's changed-screen scope and remain release
+completeness gaps. This does not relax runtime recording, rights, canonical
+verification, isolation, visual-review or publication-readiness gates.
+
 ## Approved educational demo-short scope exception
 
 The user-approved short-video pipeline may create English-only, problem-first

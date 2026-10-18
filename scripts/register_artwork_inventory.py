@@ -241,6 +241,7 @@ class Builder:
         self.blockers: list[dict] = []
         self.files: dict[str, dict] = {}
         self.missing: set[tuple[bool, str]] = set()
+        self.capture_applicability: list[dict] = []
 
     def block(self, code: str, subject: str, detail: str) -> None:
         value = {"code": code, "subject": subject, "detail": detail}
@@ -343,12 +344,30 @@ class Builder:
             self.block("capture_evidence_missing", key, "No valid installed-build capture receipt")
             return
         for field, expected in {"raw_path": source, "locale": loc, "kind": kind,
-                                "version": version, "screen_confirmed": True}.items():
+                                "screen_confirmed": True}.items():
             self.match(receipt, field, expected, receipt_name)
         if raw is not None:
             self.match(receipt, "raw_sha256", raw["sha256"], receipt_name)
-        if marker.get("source_commit"):
-            self.match(receipt, "source_commit", marker["source_commit"], receipt_name)
+        changed_identity = (receipt.get("version") != version or
+                            (marker.get("source_commit") and receipt.get("source_commit") != marker["source_commit"]))
+        reuse_name = str(Path(source).with_suffix(".reuse.json"))
+        reuse = self.file(reuse_name, required=False)
+        if reuse is not None:
+            asset["capture_reuse"] = reuse_name
+            asset["dependencies"].append(reuse_name)
+            self.block("capture_reuse_unverified", reuse_name,
+                       "Existing per-screen reuse evidence preserved; the canonical gate must validate its source/scope review and unchanged render inputs")
+        if changed_identity:
+            self.block("capture_identity_changed", receipt_name,
+                       "Original capture version/source_commit differs from target; this alone does not require recapture. Review unchanged-screen reuse or identify affected visual inputs")
+        self.capture_applicability.append({"screen": {"locale": loc, "kind": kind, "index": asset["index"]},
+            "capture_version": receipt.get("version"), "capture_source_commit": receipt.get("source_commit"),
+            "capture_receipt_sha256": self.files["project:" + receipt_name]["sha256"],
+            "target_version": version, "target_source_commit_claim": marker.get("source_commit"),
+            "identity_comparison": "PUBSPEC_AND_DECLARED_MARKER_ONLY",
+            "identity_differs_from_declared_target": bool(changed_identity),
+            "reuse_evidence": reuse_name if reuse is not None else None,
+            "status": "UNVERIFIED"})
         provider, field = ("android", "package_name") if kind == "android" else ("ios", "bundle_id")
         provider_data = store.get(provider, {})
         expected_id = provider_data.get(field) if isinstance(provider_data, dict) else None
@@ -680,6 +699,13 @@ def build_inventory(*, project: Path, site: Path, slug: str, ipad_supported: boo
               "data_checks": "BLOCKED" if data_blockers else "INSPECTED_NOT_VERIFIED",
               "structural_checks": "BLOCKED" if data_blockers else "COMPLETE_DATA_ONLY",
               "current_source_and_capture_checks": "UNVERIFIED", "review_checks": "NOT_PERFORMED",
+              "capture_scope": {
+                  "current_patch_required_screens": None, "never_captured_slots": None,
+                  "scope_status": "NOT_ESTABLISHED_BY_DATA_ONLY_INVENTORY",
+                  "policy": "Refresh only visually affected screens. Missing historical evidence or device slots are separate completeness gaps, not proof of current-patch design changes or never-captured history.",
+                  "applicability": builder.capture_applicability,
+                  "missing_required_slots": [b for b in builder.blockers if b["code"] == "missing_required_gallery"],
+                  "missing_capture_evidence": [b for b in builder.blockers if b["code"] == "capture_evidence_missing"]},
               "android_presence": "present" if android_present else "absent",
               "gallery_preference": "android" if android_present else "iphone_medium_if_canonical_gate_accepts",
               "observed_counts_by_locale": counts_by_locale, "manifest_locale_coverage": manifest_coverage,

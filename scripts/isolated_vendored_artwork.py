@@ -23,11 +23,25 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWLIST = ROOT / "data/canonical_artwork_hashes.json"
 VENDORED = Path("assets/store_promo/onnellab_shared_v20261011")
-GATE_SHA256 = "9364e6e4db207e8c290fd3dba8e29f3d19f582aab5389e9ca527b25225445e4e"
+GATE_SHA256 = "7d28497c40140d8a5f55577c327be1edd258554fedb838f35aa6befb470b1391"
 ROOT_ADAPTER = Path("assets/store_promo/release_artwork.py")
 ROOT_ADAPTER_SHA256 = "55c9afcbc66bf13b3e5f7033f0358b5ecfb146a740e6c445253fac05e769846c"
-SOURCE_COMMITS = frozenset({"b6d2332c162a00285c3aa05186a47c0f6b18f5b4",
-                            "e1744e271c6d669441e7ed35f97e109c990c14fc"})
+# Two individually reviewed, indivisible bundles. Source aliases are accepted
+# only for the exact corresponding complete map, never interchangeable files.
+BUNDLE_PINS = {
+    "legacy_v20261011": {
+        "source_commits": frozenset({"b6d2332c162a00285c3aa05186a47c0f6b18f5b4",
+                                     "e1744e271c6d669441e7ed35f97e109c990c14fc"}),
+        "gate_sha256": "9364e6e4db207e8c290fd3dba8e29f3d19f582aab5389e9ca527b25225445e4e",
+        "file_map_sha256": "e19c7f63242e270cffea804249081d7b189885ce5fb9d8513b1e92d47d66b9fd",
+    },
+    "unchanged_screen_v20261018": {
+        "source_commits": frozenset({"0d8a37eefa4283e82e2c7ea803580a7c5eed1835"}),
+        "gate_sha256": GATE_SHA256,
+        "file_map_sha256": "ba0baadc8895e9883c0a208b9e730a0df0d20b562346a31645e9768da57be16e",
+    },
+}
+SOURCE_COMMITS = frozenset(commit for pin in BUNDLE_PINS.values() for commit in pin["source_commits"])
 BWRAP = Path("/usr/bin/bwrap")
 PYTHON = Path("/usr/bin/python3")
 MAX_FILE_BYTES = 2 * 1024 * 1024
@@ -169,16 +183,29 @@ def _file_map(value: object) -> dict[str, str]:
 
 def load_allowlist() -> dict:
     data = _json(_read_regular(_no_symlink_path(ALLOWLIST)))
-    if (data.get("schema_version") != 1
+    if (set(data) != {"schema_version", "repository", "source_directory", "bundles", "root_adapter"}
+            or type(data.get("schema_version")) is not int or data["schema_version"] != 2
             or data.get("repository") != "onnellab/onnellab-flutter-template"
             or data.get("source_directory") != "template/assets/store_promo"
-            or not isinstance(data.get("source_commits"), list)
-            or set(data["source_commits"]) != SOURCE_COMMITS
-            or len(data["source_commits"]) != len(SOURCE_COMMITS)):
+            or not isinstance(data.get("bundles"), dict)
+            or set(data["bundles"]) != set(BUNDLE_PINS)):
         raise ValueError("Unrecognized canonical artwork allowlist")
-    hashes = _file_map(data.get("sha256"))
-    if hashes.get("release_artwork.py") != GATE_SHA256:
-        raise ValueError("Canonical release gate pin differs from the reviewed gate")
+    seen_sources = set()
+    for name, pin in BUNDLE_PINS.items():
+        bundle = data["bundles"][name]
+        if (not isinstance(bundle, dict) or set(bundle) != {"source_commits", "sha256"}
+                or not isinstance(bundle["source_commits"], list)
+                or not all(isinstance(source, str) for source in bundle["source_commits"])
+                or set(bundle["source_commits"]) != pin["source_commits"]
+                or len(bundle["source_commits"]) != len(pin["source_commits"])
+                or seen_sources.intersection(bundle["source_commits"])):
+            raise ValueError("Canonical bundle source pins differ from reviewed sources")
+        seen_sources.update(bundle["source_commits"])
+        hashes = _file_map(bundle["sha256"])
+        fingerprint = hashlib.sha256(json.dumps(hashes, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        if (len(hashes) != 27 or hashes.get("release_artwork.py") != pin["gate_sha256"]
+                or fingerprint != pin["file_map_sha256"]):
+            raise ValueError("Canonical bundle file map differs from the complete reviewed bundle")
     if data.get("root_adapter") != {"path": ROOT_ADAPTER.as_posix(), "sha256": ROOT_ADAPTER_SHA256}:
         raise ValueError("Canonical root adapter differs from the reviewed thin shim")
     return data
@@ -222,7 +249,6 @@ def validate_vendored_bundle(project: Path) -> ValidatedBundle:
     if not bundle.is_dir():
         raise ValueError("Canonical vendored artwork directory is missing")
     ledger = load_allowlist()
-    approved = ledger["sha256"]
     # A custom root gate may impose additional app-specific safety checks.
     # Never bypass it by running a generic vendored copy, even when that copy
     # itself is canonical. A separately reviewed bridge is required first.
@@ -235,11 +261,15 @@ def validate_vendored_bundle(project: Path) -> ValidatedBundle:
     if set(metadata) not in (legacy_keys, rich_keys):
         raise ValueError("Unsupported vendored source metadata shape")
     if (metadata.get("repository") != ledger["repository"]
-            or metadata.get("commit") not in ledger["source_commits"]
             or (set(metadata) == rich_keys and (
                 metadata["source_directory"] != ledger["source_directory"]
                 or metadata["preserved_safety_hardening"] != []))):
         raise ValueError("Vendored source pin or custom hardening is not approved for this gate")
+    selected = [entry for entry in ledger["bundles"].values()
+                if metadata.get("commit") in entry["source_commits"]]
+    if len(selected) != 1:
+        raise ValueError("Vendored source pin is not uniquely approved for this gate")
+    approved = selected[0]["sha256"]
     if _file_map(metadata.get("sha256")) != approved:
         raise ValueError("App-declared hashes differ from the independent canonical allowlist")
     # Do not merely search for .py: native libraries, .pth, bytecode, packages,

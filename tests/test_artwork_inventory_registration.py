@@ -254,6 +254,50 @@ class RegistrationTests(unittest.TestCase):
         _, report = self.build()
         self.assertIn("invalid_capture_evidence", self.codes(report))
 
+    def test_identity_change_is_not_reported_as_mandatory_full_recapture(self):
+        self.android_locale("en", receipts=True)
+        receipt = self.project / "assets/store_promo/raw/en/android/01.capture.json"
+        data = json.loads(receipt.read_text())
+        data.update(version="1.0.0+1", source_commit="b" * 40)
+        receipt.write_text(json.dumps(data))
+        before = receipt.read_bytes()
+        _, report = self.build()
+        self.assertIn("capture_identity_changed", self.codes(report))
+        scope = report["capture_scope"]
+        self.assertIsNone(scope["current_patch_required_screens"])
+        self.assertIsNone(scope["never_captured_slots"])
+        self.assertTrue(scope["missing_required_slots"])
+        first = scope["applicability"][0]
+        self.assertTrue(first["identity_differs_from_declared_target"])
+        self.assertEqual(first["identity_comparison"], "PUBSPEC_AND_DECLARED_MARKER_ONLY")
+        self.assertEqual(first["target_source_commit_claim"], "a" * 40)
+        self.assertEqual(first["capture_version"], "1.0.0+1")
+        self.assertEqual(first["target_version"], "1.2.3+4")
+        self.assertEqual(first["status"], "UNVERIFIED")
+        self.assertEqual(receipt.read_bytes(), before)
+
+    def test_reuse_sidecar_is_preserved_without_approval_or_readiness_claim(self):
+        self.android_locale("en", receipts=True)
+        name = "assets/store_promo/raw/en/android/01.reuse.json"
+        self.write(name, {"schema_version": 1, "kind": "unchanged_screen_capture_reuse"})
+        before = (self.project / name).read_bytes()
+        inventory, report = self.build()
+        asset = next(a for a in inventory["assets"] if a["kind"] == "android" and a["index"] == 1)
+        self.assertEqual(asset["capture_reuse"], name)
+        self.assertIn(name, asset["dependencies"])
+        self.assertIn("capture_reuse_unverified", self.codes(report))
+        self.assertEqual(report["status"], "BLOCKED")
+        self.assertEqual(report["review_checks"], "NOT_PERFORMED")
+        self.assertEqual((self.project / name).read_bytes(), before)
+
+    def test_missing_capture_history_never_becomes_never_captured_or_changed_screen(self):
+        _, report = self.build()
+        scope = report["capture_scope"]
+        self.assertIsNone(scope["never_captured_slots"])
+        self.assertIsNone(scope["current_patch_required_screens"])
+        self.assertTrue(scope["missing_capture_evidence"])
+        self.assertEqual(scope["scope_status"], "NOT_ESTABLISHED_BY_DATA_ONLY_INVENTORY")
+
     def test_source_missing_does_not_invent_a_raw_path(self):
         (self.project / "assets/store_promo/raw/en/android/01.png").unlink()
         inventory, report = self.build()
