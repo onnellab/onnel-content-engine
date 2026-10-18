@@ -1,0 +1,4 @@
+How can I reuse frequently typed text without losing the context that makes it accurate?
+
+Install ClipNest:
+App Store: https://apps.apple.com/app/id6779928552

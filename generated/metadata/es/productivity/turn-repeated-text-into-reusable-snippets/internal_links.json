@@ -35,9 +35,9 @@
         "slug": "design-consistent-file-naming-system",
         "category": "productivity",
         "language": "es",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/es/productivity/design-consistent-file-naming-system.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"

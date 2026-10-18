@@ -1,0 +1,10 @@
+A reliable plan for how to reuse frequently typed text without losing the context that makes it accurate starts with the result and constraints.
+
+Save only the stable wording, mark details that change, and keep a note about when the text applies. Before sending, check the recipient, replace every placeholder and read the complete message.
+
+Before changing tools:
+- Choose one recurring task. Start with a few low-risk replies you genuinely repeat. Keep sentences that remain true across those cases.
+- Remove case-specific details. Replace dates, names and links with conspicuous markers. Remove promises, prices and exceptions unless you will verify them for each use.
+
+Read the full article:
+https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/

@@ -1,0 +1,4 @@
+A practical way to reuse frequently typed text without losing the context that makes it accurate starts with the constraints, not the app.
+
+Install ClipNest:
+App Store: https://apps.apple.com/app/id6779928552

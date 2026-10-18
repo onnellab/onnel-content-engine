@@ -5,7 +5,7 @@ slug: "turn-repeated-text-into-reusable-snippets"
 category: "productivity"
 language: "ja"
 description: "使う場面と差し替える項目を明確にし、送信前に確認する定型文の作り方。少数から始め、内容を最新に保ちます。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0071"
 search_intent: "workflow"
 primary_keyword: "再利用できる定型文"
@@ -15,6 +15,9 @@ tags: "再利用できる定型文|定型文の使用場面|プレースホル�
 short_answer: "変わらない表現だけを保存し、毎回変える箇所に印を付け、使う場面を別に記録します。送信前に宛先を確認し、すべての印を実際の情報に置き換えて、全文を読み直します。根拠となる情報が変わったら保存文も見直します。"
 canonical_url: "https://onnellab.com/blog/ja/turn-repeated-text-into-reusable-snippets/"
 image_specs: "変わらない表現を選ぶ|差し替える箇所に印を付ける|貼り付け先を確認する|保存文を見直す"
+published_at: "2026-10-18T09:00:00+09:00"
+updated_at: "2026-10-18T09:00:00+09:00"
+related_articles: "Androidの音楽ファイルをオフライン再生用に整理する方法 => https://onnellab.com/blog/ja/organize-local-music-library-offline-android/|EPUBの目次リンクと章の順序を確認する方法 => https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/|元ファイルを置き換える前に変換後のメディアを確認する方法 => https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/"
 ---
 
 # 繰り返し使う文章を再利用できる定型文に整理する方法

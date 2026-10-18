@@ -5,7 +5,7 @@ slug: "turn-repeated-text-into-reusable-snippets"
 category: "productivity"
 language: "ko"
 description: "사용 맥락과 바꿀 항목을 분명히 표시하고 보내기 전에 확인하는 방법입니다. 자주 쓰는 문장을 작게 모아 최신 상태로 유지하세요."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0070"
 search_intent: "workflow"
 primary_keyword: "재사용 가능한 텍스트 조각"
@@ -15,6 +15,9 @@ tags: "재사용 가능한 텍스트 조각|문장 사용 맥락|텍스트 자�
 short_answer: "늘 그대로 써도 되는 표현만 저장하고 바뀌는 부분을 표시한 뒤, 언제 쓰는 문장인지 따로 기록합니다. 보내기 전에는 받는 사람을 확인하고 모든 자리표시자를 바꾼 다음 전체 메시지를 읽습니다. 근거가 바뀌면 저장한 문장도 검토합니다."
 canonical_url: "https://onnellab.com/blog/ko/turn-repeated-text-into-reusable-snippets/"
 image_specs: "변하지 않는 표현 고르기|바뀌는 내용 표시하기|붙여 넣을 곳 확인하기|저장한 문장 검토하기"
+published_at: "2026-10-18T09:00:00+09:00"
+updated_at: "2026-10-18T09:00:00+09:00"
+related_articles: "아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/|미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/|거친 메모를 구조화된 초안으로 바꾸는 방법 => https://onnellab.com/blog/ko/turn-rough-notes-into-structured-first-draft/|작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법 => https://onnellab.com/blog/ko/organize-downloads-small-folder-system/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/"
 ---
 
 # 반복해서 쓰는 문장을 재사용 가능한 텍스트 조각으로 정리하기

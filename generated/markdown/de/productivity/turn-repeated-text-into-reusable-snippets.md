@@ -5,7 +5,7 @@ slug: "turn-repeated-text-into-reusable-snippets"
 category: "productivity"
 language: "de"
 description: "Textbausteine mit klarem Verwendungszweck und sichtbaren Platzhaltern vorbereiten. Vor dem Senden prüfen und eine kleine Sammlung aktuell halten."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0075"
 search_intent: "workflow"
 primary_keyword: "wiederverwendbare Textbausteine"
@@ -15,6 +15,9 @@ tags: "wiederverwendbare Textbausteine|Textbausteine im Kontext|Platzhalter im T
 short_answer: "Speichern Sie nur beständige Formulierungen, markieren Sie veränderliche Angaben und halten Sie den Verwendungszweck getrennt fest. Prüfen Sie vor dem Senden den Empfänger, ersetzen Sie alle Platzhalter und lesen Sie die gesamte Nachricht. Ändert sich die Grundlage, prüfen Sie auch die gespeicherten Texte."
 canonical_url: "https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/"
 image_specs: "Beständigen Text auswählen|Veränderliche Angaben markieren|Einfügeziel prüfen|Gespeicherte Texte prüfen"
+published_at: "2026-10-18T09:00:00+09:00"
+updated_at: "2026-10-18T09:00:00+09:00"
+related_articles: "Musikdateien auf Android für die Offline-Wiedergabe ordnen => https://onnellab.com/blog/de/organize-local-music-library-offline-android/|Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen => https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/|Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen => https://onnellab.com/blog/de/test-converted-media-before-replacing-original/"
 ---
 
 # Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln

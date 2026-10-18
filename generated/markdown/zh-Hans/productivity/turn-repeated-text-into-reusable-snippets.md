@@ -5,7 +5,7 @@ slug: "turn-repeated-text-into-reusable-snippets"
 category: "productivity"
 language: "zh-Hans"
 description: "保留使用场景，用醒目的占位符标出变化信息，并在发送前逐项检查。先建立小规模、便于维护的常用文字集合。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0072"
 search_intent: "workflow"
 primary_keyword: "可重复使用的文本片段"
@@ -15,6 +15,9 @@ tags: "可重复使用的文本片段|文本使用场景|文本占位符|保存�
 short_answer: "只保存稳定不变的表述，标出每次要修改的信息，并另行记录适用场景。发送前确认收件人、替换所有占位符，再通读完整消息。依据发生变化时，也要复查保存的文字。"
 canonical_url: "https://onnellab.com/blog/zh-hans/turn-repeated-text-into-reusable-snippets/"
 image_specs: "选择稳定表述|标出变化信息|检查粘贴目标|复查保存内容"
+published_at: "2026-10-18T09:00:00+09:00"
+updated_at: "2026-10-18T09:00:00+09:00"
+related_articles: "在 Android 上整理音乐文件，准备离线播放 => https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/|检查 EPUB 的目录链接和章节顺序 => https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/|替换原文件前，如何检查转换后的媒体文件 => https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/"
 ---
 
 # 如何整理可重复使用的文本片段

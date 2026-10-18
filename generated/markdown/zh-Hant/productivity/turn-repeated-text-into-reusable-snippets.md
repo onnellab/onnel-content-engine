@@ -5,7 +5,7 @@ slug: "turn-repeated-text-into-reusable-snippets"
 category: "productivity"
 language: "zh-Hant"
 description: "保留使用情境，以明顯的預留位置標示變動資訊，並在傳送前逐項檢查。先建立小而容易維護的常用文字集合。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0073"
 search_intent: "workflow"
 primary_keyword: "可重複使用的文字片段"
@@ -15,6 +15,9 @@ tags: "可重複使用的文字片段|文字使用情境|文字預留位置|儲�
 short_answer: "只儲存固定不變的表述，標示每次要修改的資訊，並另外記錄適用情境。傳送前確認收件人、替換所有預留位置，再讀過完整訊息。依據改變時，也要重新檢查儲存的文字。"
 canonical_url: "https://onnellab.com/blog/zh-hant/turn-repeated-text-into-reusable-snippets/"
 image_specs: "選擇固定表述|標示變動資訊|檢查貼上位置|檢查儲存內容"
+published_at: "2026-10-18T09:00:00+09:00"
+updated_at: "2026-10-18T09:00:00+09:00"
+related_articles: "在 Android 整理音樂檔案，準備離線播放 => https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/|檢查 EPUB 的目錄連結與章節順序 => https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/|取代原始檔案前，如何檢查轉檔後的媒體檔案 => https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/"
 ---
 
 # 如何整理可重複使用的文字片段

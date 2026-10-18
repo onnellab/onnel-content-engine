@@ -1,16 +1,15 @@
 # App Release Status
 
-Generated: 2026-10-18T06:21:04+09:00
+Generated: 2026-10-18T12:03:09+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
 | Store | in_review | 1 |
-| Store | unchanged | 13 |
-| Store | updated | 1 |
-| GitHub Release | archived | 1 |
-| GitHub Release | planned | 2 |
+| Store | unchanged | 14 |
+| GitHub Release | archived | 2 |
+| GitHub Release | planned | 1 |
 | GitHub Release | released | 9 |
 
 ## Store Snapshots
@@ -30,21 +29,21 @@ Generated: 2026-10-18T06:21:04+09:00
 | Segra | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/segra | No action |
 | TagWeaver | android | 2.5.3 | 2.5.4 | local_ahead | unchanged | released | onnellab/tagweaver | Covered by private test release row |
 | TagWeaver | ios | 2.5.3 | 2.5.4 | local_ahead | unchanged | planned | onnellab/tagweaver | Private test only; do not publish public GitHub Release |
-| VaultXT | android | 2.0.2 | 2.0.2 | same | updated | released | onnellab/onnellab-text | Create or verify release candidate |
-| VaultXT | ios | 2.0.1 | 2.0.2 | local_ahead | unchanged | planned | onnellab/onnellab-text | Private test only; do not publish public GitHub Release |
+| VaultXT | android | 2.0.2 | 2.0.2 | same | unchanged | released | onnellab/onnellab-text | No action |
+| VaultXT | ios | 2.0.1 | 2.0.2 | local_ahead | unchanged | archived | onnellab/onnellab-text | Platform rollout not public |
 
 ## Release Candidates
 
 | ID | App | Platform | Channel | Tag | Status | Automatic publication | Release URL | Artifact | Store notes | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | REL-0018 | TagWeaver | android | public | v2.5.2 | released | Public GitHub Release published | https://github.com/onnellab/tagweaver/releases/tag/v2.5.2 | - | - | No action |
-| REL-0031 | VaultXT | ios | private_test | v2.0.2 | planned | Private test; public GitHub Release disabled | - | - | Melivra에서 받은 가사 파일의 이름을 더 알아보기 쉽게 표시해요. | Private test only; do not publish public GitHub Release |
+| REL-0014 | VaultXT | ios | public | v2.0.0 | archived | Archived | - | - | Melivra에서 받은 가사 파일의 이름을 더 알아보기 쉽게 표시해요. | No action |
 | REL-0017 | Segra | android | public | v1.0.6 | released | Public GitHub Release published | https://github.com/onnellab/segra/releases/tag/v1.0.6 | - | - | No action |
 | REL-0030 | TagWeaver | ios | private_test | v2.5.4 | planned | Private test; public GitHub Release disabled | - | - | - 화면 모드에서 시스템 설정, 라이트, 다크를 직접 선택할 수 있어요. - 라이브러리 탐색과 저장 피드백을 더 자연스럽게 다듬었어요. - 최신 ONNELLAB 디자인 규칙에 맞춰 화면의 일관성과 접근성을 개선했어요. | Private test only; do not publish public GitHub Release |
 | REL-0029 | ClipNest | ios | public | v1.0.5 | released | Public GitHub Release published | https://github.com/onnellab/clipnest/releases/tag/v1.0.5 | - | - 저장한 텍스트를 검색하고 편집하는 화면을 다듬었어요. - 설정에서 9개 언어를 선택할 수 있고, Pro 구매 버튼에는 스토어 가격을 표시해요. - 공용 색상과 화면 구성을 정리하고, 키보드 붙여넣기 사용 예시와 스토어 안내를 개선했어요. | No action |
 | REL-0024 | Quivra | ios | public | v1.0.10 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.10 | - | 변환 전과 변환 중에도 파일 목록의 위치와 높이가 안정적으로 유지되도록 화면을 다듬었어요. | No action |
 | REL-0019 | Quivra | android | public | v1.0.9 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.9 | - | - | No action |
-| REL-0020 | VaultXT | android | public | v2.0.1 | released | Public GitHub Release published | https://github.com/onnellab/onnellab-text/releases/tag/v2.0.1 | - | - | No action |
+| REL-0031 | VaultXT | android | public | v2.0.2 | released | Public GitHub Release published | https://github.com/onnellab/onnellab-text/releases/tag/v2.0.2 | - | - | No action |
 | REL-0028 | Aligna | android | public | v1.1.0 | released | Public GitHub Release published | https://github.com/onnellab/aligna/releases/tag/v1.1.0 | - | - | No action |
 | REL-0027 | Melivra | android | public | v1.0.7 | released | Public GitHub Release published | https://github.com/onnellab/melivra/releases/tag/v1.0.7 | - | - | No action |
 | REL-0026 | Aligna | ios | private_test | v1.0.9 | archived | Private test; public GitHub Release disabled | - | - | Android 앱 용량을 줄였어요. 스토어 이미지를 새로 업데이트했어요. | Private test only; do not publish public GitHub Release |
@@ -55,6 +54,5 @@ Generated: 2026-10-18T06:21:04+09:00
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
 | TagWeaver | android | unchanged | Covered by private test release row | Version/update date read from Google Play public page; Android snapshot version 2.5.4 is stale for public version 2.5.3 and was not merged. |
-| VaultXT | android | updated | Create or verify release candidate | Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/onnellab-text/vaultxt/pubspec.yaml version 2.0.2+69; confirm against Play Console if needed. |
-| VaultXT | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 2.0.1. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
+| VaultXT | ios | unchanged | Platform rollout not public | - |
 | TagWeaver | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 2.5.3. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |

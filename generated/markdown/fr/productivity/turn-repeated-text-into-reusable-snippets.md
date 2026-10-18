@@ -5,7 +5,7 @@ slug: "turn-repeated-text-into-reusable-snippets"
 category: "productivity"
 language: "fr"
 description: "Préparez des extraits réutilisables avec un contexte clair, des champs à remplacer et une vérification avant l’envoi. Gardez une petite collection à jour."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0076"
 search_intent: "workflow"
 primary_keyword: "extraits réutilisables"
@@ -15,6 +15,9 @@ tags: "extraits réutilisables|contexte des extraits|champs à remplacer|répons
 short_answer: "Enregistrez uniquement la formulation stable, signalez les éléments variables et notez séparément les situations où le texte convient. Avant l’envoi, vérifiez le destinataire, remplacez tous les champs et relisez le message entier. Révisez les copies enregistrées lorsque leur source change."
 canonical_url: "https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/"
 image_specs: "Choisir le texte stable|Signaler ce qui change|Vérifier la destination|Réviser les textes enregistrés"
+published_at: "2026-10-18T09:00:00+09:00"
+updated_at: "2026-10-18T09:00:00+09:00"
+related_articles: "Vérifier la table des matières et l’ordre des chapitres d’un EPUB => https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/|Tester un fichier multimédia converti avant de remplacer l’original => https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/|Organiser sa musique sur Android pour une écoute hors ligne => https://onnellab.com/blog/fr/organize-local-music-library-offline-android/"
 ---
 
 # Transformer les textes répétitifs en extraits réutilisables

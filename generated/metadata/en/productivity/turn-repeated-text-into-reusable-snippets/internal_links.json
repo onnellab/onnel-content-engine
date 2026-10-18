@@ -95,9 +95,9 @@
         "slug": "design-consistent-file-naming-system",
         "category": "productivity",
         "language": "en",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/en/productivity/design-consistent-file-naming-system.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"

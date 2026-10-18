@@ -5,7 +5,7 @@ slug: "turn-repeated-text-into-reusable-snippets"
 category: "productivity"
 language: "es"
 description: "Prepara fragmentos reutilizables con contexto, marcadores visibles y una revisión antes de enviar. Mantén una colección pequeña y actualizada."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0077"
 search_intent: "workflow"
 primary_keyword: "fragmentos reutilizables"
@@ -15,6 +15,9 @@ tags: "fragmentos reutilizables|contexto del fragmento|marcadores de texto|respu
 short_answer: "Guarda solo la redacción estable, marca los datos que cambian y anota por separado cuándo se aplica el texto. Antes de enviarlo, comprueba el destinatario, sustituye todos los marcadores y lee el mensaje completo. Revisa las copias guardadas cuando cambie su fuente."
 canonical_url: "https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/"
 image_specs: "Elige el texto estable|Marca lo que cambia|Comprueba el destino|Revisa los textos guardados"
+published_at: "2026-10-18T09:00:00+09:00"
+updated_at: "2026-10-18T09:00:00+09:00"
+related_articles: "Cómo organizar música en Android para escucharla sin conexión => https://onnellab.com/blog/es/organize-local-music-library-offline-android/|Cómo comprobar el índice y el orden de los capítulos de un EPUB => https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/|Cómo probar un archivo multimedia convertido antes de sustituir el original => https://onnellab.com/blog/es/test-converted-media-before-replacing-original/"
 ---
 
 # Cómo convertir textos repetidos en fragmentos reutilizables

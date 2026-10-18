@@ -5,7 +5,7 @@ slug: "turn-repeated-text-into-reusable-snippets"
 category: "productivity"
 language: "pt-BR"
 description: "Prepare trechos de texto reutilizáveis com contexto, campos visíveis para substituir e uma conferência antes do envio. Mantenha uma coleção pequena e atualizada."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0074"
 search_intent: "workflow"
 primary_keyword: "trechos de texto reutilizáveis"
@@ -15,6 +15,9 @@ tags: "trechos de texto reutilizáveis|contexto do trecho|campos para substituir
 short_answer: "Salve apenas a parte estável, marque os detalhes que mudam e registre separadamente quando o texto se aplica. Antes de enviar, confira o destinatário, substitua todos os campos e leia a mensagem inteira. Revise as cópias salvas quando a fonte mudar."
 canonical_url: "https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/"
 image_specs: "Escolha o texto estável|Marque o que muda|Confira o destino|Revise os textos salvos"
+published_at: "2026-10-18T09:00:00+09:00"
+updated_at: "2026-10-18T09:00:00+09:00"
+related_articles: "Como organizar músicas no Android para ouvir offline => https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/|Como conferir o sumário e a ordem dos capítulos de um EPUB => https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/|Como testar um arquivo de mídia convertido antes de substituir o original => https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/"
 ---
 
 # Como transformar textos repetidos em trechos reutilizáveis

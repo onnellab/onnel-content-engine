@@ -5,7 +5,7 @@ slug: "turn-repeated-text-into-reusable-snippets"
 category: "productivity"
 language: "en"
 description: "Prepare reusable text snippets with clear context, visible placeholders and a final check before sending. Keep a small collection current."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0042"
 search_intent: "workflow"
 primary_keyword: "reusable text snippets"
@@ -15,6 +15,9 @@ tags: "reusable text snippets|snippet context|text placeholders|saved replies"
 short_answer: "Save only the stable wording, mark details that change, and keep a note about when the text applies. Before sending, check the recipient, replace every placeholder and read the complete message. Review saved copies when their source changes."
 canonical_url: "https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/"
 image_specs: "Choose stable text|Mark changing details|Check the destination|Review saved copies"
+published_at: "2026-10-18T09:00:00+09:00"
+updated_at: "2026-10-18T09:00:00+09:00"
+related_articles: "How to Reuse Copied Text Snippets on iPhone => https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/|How to Turn Rough Notes Into a Structured First Draft => https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/|How to Rename Files Safely With a Preview Workflow => https://onnellab.com/blog/en/rename-files-safely-preview-workflow/|How to Organize Downloads With a Small, Durable Folder System => https://onnellab.com/blog/en/organize-downloads-small-folder-system/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/"
 ---
 
 # How to Turn Repeated Text Into Reusable Snippets
