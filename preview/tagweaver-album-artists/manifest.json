@@ -1,0 +1,112 @@
+{
+  "schema": "onnellab.editorial-draft.v1",
+  "state": "DRAFT_UNVALIDATED_NOT_QUEUED",
+  "slug": "consistent-album-artist-names",
+  "category": "music",
+  "existing_english_topic_id": "TOPIC-0039",
+  "counterpart_topic_ids_reserved": false,
+  "locales": [
+    "en",
+    "ko",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "pt-BR",
+    "de",
+    "fr",
+    "es"
+  ],
+  "related_apps": [
+    "TagWeaver"
+  ],
+  "source_engine_sha": "c0e64aa3c31957a3a90c977fb5c5229f3dbcbdfa",
+  "source_homepage_sha": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+  "sources": [
+    "https://apps.apple.com/app/id6759609875",
+    "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2"
+  ],
+  "source_observed_at_utc": "2026-10-18T09:13:16Z",
+  "product_claim_scope": "Public store descriptions: MP3/FLAC album and artist metadata edits; preview; explicit save; single-file versus Pro common/batch edits. iOS release notes: update writable selected original; copy destination fallback when original location is unwritable. No automatic lookup, player-grouping guarantee, price or outcome claim.",
+  "keyword_evidence": "Editorial hypotheses; no measured demand or ranking claims.",
+  "planning_target_only": "Second future cadence slot after Aligna, expected 2026-10-24T09:00:00+09:00; not assigned or reserved.",
+  "publication_receipt": false,
+  "queue_modified": false,
+  "scheduled_at": null,
+  "verification": {
+    "native_repository_validators": "NOT RUN",
+    "review_scores_or_fingerprints": "NOT GENERATED",
+    "svg_png_rendering": "NOT RUN; localized image copy only",
+    "astro_browser_preview": "NOT RUN",
+    "public_links": "Store pages opened. Related article source paths exist for all nine locales; public web fetch returned cache miss for sampled ONNELLAB URLs. No live-link pass claimed.",
+    "related_article_paths": "All 18 localized related article paths exist in homepage source; live page behavior unverified",
+    "structural_text_checks": {
+      "method": "Readback and tool-level JSON/text inspection; not repository-native scoring or rendering",
+      "locales_checked": 9,
+      "section_count_each": 11,
+      "workflow_steps_each": 8,
+      "faq_each": 4,
+      "image_copy_steps_each": 4,
+      "source_paths_found": 18
+    },
+    "source_and_language_review": "Nine complete manuscripts reviewed independently as text; corrections tracked in editorial_review.json. Rendering and native gates remain unperformed.",
+    "final_blobs": {
+      "en": "af5023281da5168cedea7aecfef358dddf9534f1",
+      "pt-BR": "57533ca2e387bf5976c8431170f4e1b3f9b61647",
+      "de": "0ffe37d41c2e2cc989b26980154635900f4b9749",
+      "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
+      "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
+      "fr": "188d7fbcaf72a3bf86881917b289db50734da11f",
+      "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
+      "es": "a12c978a370a4275e91c4dc289bfac40e932c8f7",
+      "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
+    }
+  },
+  "artifacts": [
+    {
+      "locale": "en",
+      "file": "en.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "ko",
+      "file": "ko.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "ja",
+      "file": "ja.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "zh-Hans",
+      "file": "zh-Hans.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "zh-Hant",
+      "file": "zh-Hant.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "pt-BR",
+      "file": "pt-BR.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "de",
+      "file": "de.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "fr",
+      "file": "fr.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    },
+    {
+      "locale": "es",
+      "file": "es.json",
+      "format": "Localized metadata, complete Markdown body and image copy"
+    }
+  ],
+  "related_published_correction": "multidisc-ios-save-correction.proposed.json"
+}

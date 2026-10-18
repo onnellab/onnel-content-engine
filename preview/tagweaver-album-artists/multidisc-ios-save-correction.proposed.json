@@ -1,0 +1,152 @@
+{
+  "schema": "onnellab.blog-correction-proposal.v1",
+  "state": "DRAFT_CORRECTION_NOT_APPLIED",
+  "observed_at_utc": "2026-10-18",
+  "source_engine_sha": "c0e64aa3c31957a3a90c977fb5c5229f3dbcbdfa",
+  "source_homepage_sha": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+  "correction_basis": {
+    "source": "https://apps.apple.com/us/app/tagweaver-mp3-flac-tagger/id6759609875",
+    "version": "2.5.1",
+    "release_date": "2026-09-25",
+    "description": "Writable original updated; copy destination requested when original location cannot be written."
+  },
+  "corrections": [
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "ref": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+      "path": "src/content/blog/ko/number-tracks-multi-disc-mp3-album.md",
+      "locale": "ko",
+      "source_blob_sha": "7430c53697318aadfdbb93bf816ead669608111e",
+      "old_sentence": "iOS에서는 원본 파일을 제자리에서 교체한다고 가정하지 말고 앱이 문서화한 복사 저장 동작을 따라야 합니다.",
+      "replacement_text": "App Store의 2.5.1 릴리스 노트에 따르면 iOS에서는 선택한 원본 위치에 쓰기가 가능하면 원본 파일을 업데이트하고, 쓰기가 불가능하면 복사본을 저장할 위치를 묻습니다. 편집 전에 별도 백업을 만들고 저장된 파일의 위치를 확인하세요."
+    },
+    {
+      "repository": "onnellab/onnel-content-engine",
+      "ref": "c0e64aa3c31957a3a90c977fb5c5229f3dbcbdfa",
+      "path": "generated/markdown/ko/music/number-tracks-multi-disc-mp3-album.md",
+      "locale": "ko",
+      "source_blob_sha": "7430c53697318aadfdbb93bf816ead669608111e",
+      "old_sentence": "iOS에서는 원본 파일을 제자리에서 교체한다고 가정하지 말고 앱이 문서화한 복사 저장 동작을 따라야 합니다.",
+      "replacement_text": "App Store의 2.5.1 릴리스 노트에 따르면 iOS에서는 선택한 원본 위치에 쓰기가 가능하면 원본 파일을 업데이트하고, 쓰기가 불가능하면 복사본을 저장할 위치를 묻습니다. 편집 전에 별도 백업을 만들고 저장된 파일의 위치를 확인하세요."
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "ref": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+      "path": "src/content/blog/en/number-tracks-multi-disc-mp3-album.md",
+      "locale": "en",
+      "source_blob_sha": "79b95811a6099b421ccac4f21c1768812b625241",
+      "old_sentence": "On iOS, follow the app's documented copy-save behavior rather than assuming the original file is replaced in place.",
+      "replacement_text": "According to the App Store release notes for version 2.5.1, saving on iOS updates the selected original when its location is writable; otherwise, TagWeaver asks where to save a copy. Make a separate backup before editing and verify the saved file’s location."
+    },
+    {
+      "repository": "onnellab/onnel-content-engine",
+      "ref": "c0e64aa3c31957a3a90c977fb5c5229f3dbcbdfa",
+      "path": "generated/markdown/en/music/number-tracks-multi-disc-mp3-album.md",
+      "locale": "en",
+      "source_blob_sha": "79b95811a6099b421ccac4f21c1768812b625241",
+      "old_sentence": "On iOS, follow the app's documented copy-save behavior rather than assuming the original file is replaced in place.",
+      "replacement_text": "According to the App Store release notes for version 2.5.1, saving on iOS updates the selected original when its location is writable; otherwise, TagWeaver asks where to save a copy. Make a separate backup before editing and verify the saved file’s location."
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "ref": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+      "path": "src/content/blog/ja/number-tracks-multi-disc-mp3-album.md",
+      "locale": "ja",
+      "source_blob_sha": "e9184cb0e4365dc4cafbe0d3cd0c7da96cf760b0",
+      "old_sentence": "iOSでは原本がその場で置き換わると考えず、案内されたコピー保存の動作に従います。",
+      "replacement_text": "App Storeのバージョン2.5.1のリリースノートによると、iOSでは選択した元ファイルの保存場所に書き込める場合は元ファイルを更新し、書き込めない場合はコピーの保存先を確認します。編集前に別のバックアップを作成し、保存後のファイルの場所を確認してください。"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "ref": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+      "path": "src/content/blog/zh-Hans/number-tracks-multi-disc-mp3-album.md",
+      "locale": "zh-Hans",
+      "source_blob_sha": "066c040f79e5d9b4c5f1964afcc4246a7b19dfa3",
+      "old_sentence": "iOS 上应遵循文档中的另存副本行为，不要假定原件会被原地替换。",
+      "replacement_text": "根据 App Store 中 2.5.1 版本的更新说明，在 iOS 上保存时，如果所选原文件的位置允许写入，应用会更新原文件；否则，TagWeaver 会询问副本的保存位置。编辑前请另行备份，并确认保存后的文件位置。"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "ref": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+      "path": "src/content/blog/zh-Hant/number-tracks-multi-disc-mp3-album.md",
+      "locale": "zh-Hant",
+      "source_blob_sha": "a6c5deb2c74743c2218a7c9cbc17e232a98b1dc7",
+      "old_sentence": "iOS 上應遵循文件中的另存副本行為，不要假定原始檔會在原處被取代。",
+      "replacement_text": "根據 App Store 中 2.5.1 版本的更新說明，在 iOS 上儲存時，如果所選原始檔的位置允許寫入，應用程式會更新原始檔；否則，TagWeaver 會詢問副本的儲存位置。編輯前請另行備份，並確認儲存後的檔案位置。"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "ref": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+      "path": "src/content/blog/pt-BR/number-tracks-multi-disc-mp3-album.md",
+      "locale": "pt-BR",
+      "source_blob_sha": "faaf163571ba7ef6c511fb4bac687805df94bd40",
+      "old_sentence": "No iOS, siga o comportamento documentado de salvar uma cópia, sem presumir substituição do original no mesmo local.",
+      "replacement_text": "Segundo as notas da versão 2.5.1 na App Store, ao salvar no iOS, o original selecionado é atualizado quando seu local permite gravação; caso contrário, o TagWeaver pergunta onde salvar uma cópia. Faça um backup separado antes de editar e confira o local do arquivo salvo."
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "ref": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+      "path": "src/content/blog/de/number-tracks-multi-disc-mp3-album.md",
+      "locale": "de",
+      "source_blob_sha": "7c3f1f22f516acc038fb5417e47dc7ccc8e593a7",
+      "old_sentence": "Unter iOS gilt das dokumentierte Speichern als Kopie; setze nicht voraus, dass die Originaldatei an Ort und Stelle ersetzt wird.",
+      "replacement_text": "Laut den Versionshinweisen zu Version 2.5.1 im App Store wird unter iOS beim Speichern die ausgewählte Originaldatei aktualisiert, wenn ihr Speicherort beschreibbar ist; andernfalls fragt TagWeaver nach einem Speicherort für eine Kopie. Erstelle vor dem Bearbeiten eine separate Sicherung und prüfe den Speicherort der gespeicherten Datei."
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "ref": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+      "path": "src/content/blog/fr/number-tracks-multi-disc-mp3-album.md",
+      "locale": "fr",
+      "source_blob_sha": "68e9d1246d3c15514f21847b2853f161b7a49187",
+      "old_sentence": "Sur iOS, suivez le fonctionnement documenté d’enregistrement d’une copie sans supposer le remplacement de l’original sur place.",
+      "replacement_text": "Selon les notes de la version 2.5.1 sur l’App Store, l’enregistrement sous iOS met à jour l’original sélectionné si son emplacement autorise l’écriture ; sinon, TagWeaver demande où enregistrer une copie. Créez une sauvegarde séparée avant toute modification et vérifiez l’emplacement du fichier enregistré."
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "ref": "addf0fc0007cfa9c46376f93855d1d8b15a9f6c3",
+      "path": "src/content/blog/es/number-tracks-multi-disc-mp3-album.md",
+      "locale": "es",
+      "source_blob_sha": "d0ec98bdad7041f91067b4d87b82ee807e1415de",
+      "old_sentence": "En iOS, sigue el funcionamiento documentado de guardar una copia, sin asumir que el original se sustituye en la misma ubicación.",
+      "replacement_text": "Según las notas de la versión 2.5.1 en App Store, al guardar en iOS se actualiza el original seleccionado si su ubicación permite la escritura; de lo contrario, TagWeaver pregunta dónde guardar una copia. Haz una copia de seguridad aparte antes de editar y comprueba la ubicación del archivo guardado."
+    }
+  ],
+  "application_constraints": [
+    "Proposals only; do not interpret as a publication receipt.",
+    "Re-read current source and match exact old sentence before applying; stop if source changed.",
+    "Preserve original publication date, stable URL, slug, canonical URL, alternate-language links and unrelated text.",
+    "Run relevant native quality/link/page checks and verify canonical deployment before calling correction published.",
+    "Use only the existing Publishing Pipeline; do not requeue as a new article."
+  ],
+  "registry_observation": {
+    "repository": "onnellab/onnel-content-engine",
+    "path": "data/apps_registry.csv",
+    "app": "TagWeaver",
+    "existing_note": "Explain iOS copy-save behavior accurately when relevant.",
+    "finding": "Copy-save framing should be reconciled with current original-write/copy-fallback release evidence by the app registry owner; no registry change proposed or applied here."
+  },
+  "verification": {
+    "exact_old_sentences_found": 11,
+    "already_accurate_sources": 0,
+    "published_sources_modified": 0,
+    "native_checks_run": false,
+    "rendering_run": false,
+    "deployment_run": false,
+    "independent_replacement_text_review": {
+      "date": "2026-10-18",
+      "locales": [
+        "en",
+        "ko",
+        "ja",
+        "zh-Hans",
+        "zh-Hant",
+        "pt-BR",
+        "de",
+        "fr",
+        "es"
+      ],
+      "result": "No material meaning or naturalness issues in proposed replacement text.",
+      "scope": "Text-only review by reviewers other than the correction author; not application, native validation or deployment."
+    }
+  }
+}
