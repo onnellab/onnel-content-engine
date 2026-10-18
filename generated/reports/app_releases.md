@@ -1,13 +1,14 @@
 # App Release Status
 
-Generated: 2026-10-18T12:03:09+09:00
+Generated: 2026-10-19T06:21:00+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
 | Store | in_review | 1 |
-| Store | unchanged | 14 |
+| Store | unchanged | 13 |
+| Store | updated | 1 |
 | GitHub Release | archived | 2 |
 | GitHub Release | planned | 1 |
 | GitHub Release | released | 9 |
@@ -27,7 +28,7 @@ Generated: 2026-10-18T12:03:09+09:00
 | Quivra | ios | 1.0.10 | 1.0.10 | same | unchanged | released | onnellab/quivra | No action |
 | Segra | android | 1.0.6 | 1.0.6 | same | unchanged | released | onnellab/segra | No action |
 | Segra | ios | 1.0.6 | 1.0.6 | same | unchanged | - | onnellab/segra | No action |
-| TagWeaver | android | 2.5.3 | 2.5.4 | local_ahead | unchanged | released | onnellab/tagweaver | Covered by private test release row |
+| TagWeaver | android | 2.5.4 | 2.5.4 | same | updated | released | onnellab/tagweaver | Create or verify release candidate |
 | TagWeaver | ios | 2.5.3 | 2.5.4 | local_ahead | unchanged | planned | onnellab/tagweaver | Private test only; do not publish public GitHub Release |
 | VaultXT | android | 2.0.2 | 2.0.2 | same | unchanged | released | onnellab/onnellab-text | No action |
 | VaultXT | ios | 2.0.1 | 2.0.2 | local_ahead | unchanged | archived | onnellab/onnellab-text | Platform rollout not public |
@@ -53,6 +54,6 @@ Generated: 2026-10-18T12:03:09+09:00
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| TagWeaver | android | unchanged | Covered by private test release row | Version/update date read from Google Play public page; Android snapshot version 2.5.4 is stale for public version 2.5.3 and was not merged. |
+| TagWeaver | android | updated | Create or verify release candidate | Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/tagweaver/pubspec.yaml version 2.5.4+98; confirm against Play Console if needed. |
 | VaultXT | ios | unchanged | Platform rollout not public | - |
 | TagWeaver | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 2.5.3. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
