@@ -52,6 +52,59 @@ class BacklogReuseTests(unittest.TestCase):
         self.assertEqual(self.job_id, result["job_id"])
         self.assertEqual(before, (self.root / "queue.json").read_bytes())
 
+    def stage_master(self):
+        self.staged = self.assets / "staged/singles/masters" / (self.title + ".wav")
+        self.staged.parent.mkdir(parents=True)
+        self.staged.write_bytes(self.source.read_bytes())
+        self.rights["tracks"]["asset"]["local_master"] = {
+            "path": str(self.staged.relative_to(self.assets)),
+            "sha256": file_hash(self.staged),
+            "source_filename": self.title + ".wav",
+        }
+        atomic_json(self.root / "queue.json", {"schema_version": 1, "jobs": {}})
+        atomic_json(self.assets / "approval.json", self.rights)
+
+    def test_staged_recovered_master_requires_no_job_and_preserves_records(self):
+        self.stage_master()
+        before = [(p, p.read_bytes()) for p in (self.root / "queue.json", self.assets / "approval.json")]
+        result = self.resolve()
+        self.assertIsNotNone(result)
+        self.assertEqual(self.staged, result["path"])
+        self.assertEqual(file_hash(self.staged), result["sha256"])
+        for p, raw in before:
+            self.assertEqual(raw, p.read_bytes())
+
+    def test_staged_master_rejects_corruption_and_unsafe_paths(self):
+        self.stage_master()
+        self.staged.write_bytes(b"corrupt")
+        with self.assertRaises(single.VideoError):
+            self.resolve()
+        self.rights["tracks"]["asset"]["local_master"]["path"] = "../outside.wav"
+        atomic_json(self.assets / "approval.json", self.rights)
+        with self.assertRaises(single.VideoError):
+            self.resolve()
+
+    def test_staged_master_requires_existing_commercial_rights(self):
+        self.stage_master()
+        self.rights["tracks"]["asset"]["commercial_use_confirmed"] = False
+        atomic_json(self.assets / "approval.json", self.rights)
+        self.assertIsNone(self.resolve())
+
+    def test_staged_master_rejects_symlink_and_wrong_title_filename(self):
+        self.stage_master()
+        other = self.base / "outside.wav"
+        other.write_bytes(self.staged.read_bytes())
+        self.staged.unlink()
+        self.staged.symlink_to(other)
+        with self.assertRaises(single.VideoError):
+            self.resolve()
+        self.staged.unlink()
+        self.staged.write_bytes(other.read_bytes())
+        self.rights["tracks"]["asset"]["local_master"]["source_filename"] = "Other.wav"
+        atomic_json(self.assets / "approval.json", self.rights)
+        with self.assertRaises(single.VideoError):
+            self.resolve()
+
     def test_different_title_and_non_backlog_job_are_not_candidates(self):
         self.job["title"] = "The Meadow Before Dawn"
         self.persist()

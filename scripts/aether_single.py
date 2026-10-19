@@ -20,7 +20,7 @@ from zoneinfo import ZoneInfo
 
 from aether_compilation import thumbnail
 from aether_offline_audio_review import review_audio
-from aether_compose import audio_duration, media_info, validate_output
+from aether_compose import audio_duration, checked_asset, media_info, validate_output
 from aether_cover import lane_direction
 from aether_existing_cover import ASSETS_ROOT, approved_cover, import_existing_cover
 from aether_planner import inspect_candidate, read_catalog
@@ -141,6 +141,26 @@ def reusable_backlog_master(title: str, singles_root: Path, assets_root: Path) -
                for row in rights["tracks"].values()):
         return None
     candidates = []
+    # A recovered canonical WAV may be staged without creating a queue job.
+    # The existing per-title rights row binds it; quality still runs on import.
+    for row in rights["tracks"].values():
+        if (not isinstance(row, dict) or row.get("title") != title
+                or row.get("commercial_use_confirmed") is not True or "local_master" not in row):
+            continue
+        spec = row["local_master"]
+        if (not isinstance(spec, dict) or spec.get("source_filename") != title + ".wav"
+                or not isinstance(spec.get("path"), str)):
+            raise VideoError("aether_single_backlog_reuse_record_invalid")
+        relative = Path(spec["path"])
+        if relative.is_absolute() or ".." in relative.parts or relative.name != title + ".wav":
+            raise VideoError("aether_single_backlog_source_unsafe")
+        source = assets / relative
+        if any(part.is_symlink() for part in (source, *source.parents)):
+            raise VideoError("aether_single_backlog_source_unsafe")
+        if not source.is_file() or _is_dataless(source):
+            raise VideoError("aether_single_backlog_source_integrity")
+        source = checked_asset(assets, {**spec, "commercial_use_confirmed": True}, {".wav"})
+        candidates.append({"path": source, "sha256": spec["sha256"], "source_kind": "staged_canonical_wav"})
     for key, job in state["jobs"].items():
         if not isinstance(job, dict) or job.get("title") != title or job.get("source_kind") != "backlog_wav":
             continue

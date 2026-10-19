@@ -285,3 +285,15 @@ Manual-only `--probe` performs a non-paid connectivity/readiness check and write
 read-only YouTube reports but never generates music, renders media, or publishes
 a video. Scheduled ChatGPT verification must not invoke this probe.
 
+
+## Recovered local backlog masters
+
+An existing per-title commercial-rights row in private `assets/approval.json` may
+carry `local_master` with an assets-relative `path`, exact WAV `sha256`, and
+`source_filename` equal to the exact catalog title plus `.wav`. Stage the original
+bytes under `assets/staged/singles/masters/`; do not replace MYBOX originals or
+create queue jobs to make a source reusable. The worker checks profile, title,
+rights, regular local files, symlinks, SHA and conflicting retained masters. It
+then applies the usual duration and offline-audio review on import. This mapping
+does not change existing quality approval, attest human listening, authorize a
+new music charge, or complete an upload.
