@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_publication_receipt",
+  "guide_id": "melivra-albums-20261021",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "video_id": "W0wvvo7AbpI",
+  "status": "scheduled_verified",
+  "upload_attempts": 1,
+  "video_sha256": "50ebc7b421ab15e360bdcf46bc43e07e7b8d5dd1cf85d097e39b99922ad9ddd9",
+  "manifest_sha256": "e9da3370ff4bb04de2b0426acb8efbcdb12ee493d3deb2c604530a48d664be62",
+  "library_file_id": "libfile_25ca41a8cd288191a32550af44d85c80",
+  "title": "How to Browse Albums in Melivra | Android Screenshot Guide",
+  "target_publish_at": "2026-10-21T09:00:00+09:00",
+  "target_publish_at_utc": "2026-10-21T00:00:00Z",
+  "timezone": "Asia/Seoul",
+  "observed_at": "2026-10-19T00:16:00Z",
+  "observation_surface": "Signed-in ONNELLAB YouTube Studio in dot cloud browser",
+  "schedule_readback": {
+    "date": "2026. 10. 21.",
+    "time": "오전 9:00",
+    "timezone": "서울 (GMT+09:00)",
+    "confirmation": "동영상 예약됨; 2026년 10월 21일 9:00 공개",
+    "inventory": "Same title, 0:15, 예약됨, 2026.10.21 예약 날짜"
+  },
+  "checks": {
+    "upload_complete": true,
+    "processed_preview_observed": true,
+    "duration_seconds": 15,
+    "copyright": "Checks complete; no issues",
+    "metadata_applied": true,
+    "category": "Education"
+  },
+  "disclosures": {
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "paid_promotion": false,
+    "owner_confirmation_obtained": true
+  },
+  "source_link": "https://youtube.com/shorts/W0wvvo7AbpI?feature=share",
+  "public_state": "Not yet due; public publication not verified",
+  "deduplication": "Publisher verified exact channel in live Studio at 2026-10-19 00:10 UTC: 10 public Shorts, no drafts or scheduled Shorts, no Albums topic or matching title. Source MP4 SHA verified before file selection. This intent is durable before selecting the file; reconcile an ambiguous result before any retry.",
+  "prior_blocker": {
+    "status": "uploaded_private_pending_disclosure_confirmation",
+    "observed_at": "2026-10-19T00:13:18Z",
+    "reason": "Publisher paused for owner confirmation of AI-use and paid-promotion disclosure answers. Uploaded video remains private; no schedule confirmed. Preserve the existing video and do not re-upload.",
+    "resolved_by": "Owner explicitly approved both disclosure answers before publisher resumed the existing video."
+  },
+  "follow_up": "Verify the same video ID becomes public after October 21 09:00 Asia/Seoul. Do not re-upload on ambiguity."
+}
