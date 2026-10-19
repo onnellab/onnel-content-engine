@@ -2,16 +2,17 @@
   "schema_version": 1,
   "guide_id": "melivra-albums-20261021",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "prepared_pending_final_studio_reconciliation",
+  "status": "upload_attempt_started",
   "video_sha256": "50ebc7b421ab15e360bdcf46bc43e07e7b8d5dd1cf85d097e39b99922ad9ddd9",
   "manifest_sha256": "e9da3370ff4bb04de2b0426acb8efbcdb12ee493d3deb2c604530a48d664be62",
   "library_file_id": "libfile_25ca41a8cd288191a32550af44d85c80",
   "target_publish_at": "2026-10-21T09:00:00+09:00",
   "timezone": "Asia/Seoul",
   "video_id": null,
-  "upload_attempts": 0,
+  "upload_attempts": 1,
   "created_at": "2026-10-19T00:08:47.430800+00:00",
-  "deduplication": "Parent observed 10 public Shorts and no scheduled or draft Shorts on October 19. Final exact album-topic/title reconciliation is required immediately before one upload. Never retry blindly after an ambiguous result.",
+  "deduplication": "Publisher verified exact channel in live Studio at 2026-10-19 00:10 UTC: 10 public Shorts, no drafts or scheduled Shorts, no Albums topic or matching title. Source MP4 SHA verified before file selection. This intent is durable before selecting the file; reconcile an ambiguous result before any retry.",
   "prior_related_video": "RC929En2dSw",
-  "prior_related_topic": "Favorites and Smart Playlists, using screenshots 1 and 4; this guide uses screenshot 2 and album browsing."
+  "prior_related_topic": "Favorites and Smart Playlists, using screenshots 1 and 4; this guide uses screenshot 2 and album browsing.",
+  "upload_attempt_started_at": "2026-10-19T00:11:32Z"
 }
