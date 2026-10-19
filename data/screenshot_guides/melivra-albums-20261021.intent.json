@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "melivra-albums-20261021",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "uploaded_pending_schedule",
+  "status": "uploaded_private_pending_disclosure_confirmation",
   "video_sha256": "50ebc7b421ab15e360bdcf46bc43e07e7b8d5dd1cf85d097e39b99922ad9ddd9",
   "manifest_sha256": "e9da3370ff4bb04de2b0426acb8efbcdb12ee493d3deb2c604530a48d664be62",
   "library_file_id": "libfile_25ca41a8cd288191a32550af44d85c80",
@@ -16,5 +16,15 @@
   "prior_related_topic": "Favorites and Smart Playlists, using screenshots 1 and 4; this guide uses screenshot 2 and album browsing.",
   "upload_attempt_started_at": "2026-10-19T00:11:32Z",
   "upload_observed_at": "2026-10-19T00:12:25Z",
-  "upload_observation": "Publisher observed one completed file upload, assigned video ID, saved private and processing soon. Scheduling not yet confirmed."
+  "upload_observation": "Publisher observed one completed file upload, assigned video ID, saved private and processing soon. Scheduling not yet confirmed.",
+  "blocked_observed_at": "2026-10-19T00:13:18Z",
+  "blocker": "Publisher paused for owner confirmation of AI-use and paid-promotion disclosure answers. Uploaded video remains private; no schedule confirmed. Preserve the existing video and do not re-upload.",
+  "metadata_observed": {
+    "title": "How to Browse Albums in Melivra | Android Screenshot Guide",
+    "description_applied": true,
+    "made_for_kids": false,
+    "category": "Education",
+    "copyright_checks": "no issues"
+  },
+  "resume_instruction": "After owner confirmation, continue the existing draft/video ID, verify October 21 09:00 Asia/Seoul schedule, then persist actual receipt."
 }
