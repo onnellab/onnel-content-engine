@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-18T21:23:32+00:00",
+  "generated_at": "2026-10-19T21:23:52+00:00",
   "tasks": [
     {
       "task_id": "os-android-quivra",
@@ -8,8 +8,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "192b77e6c82e2183fb399d372c279a54f84d10222a9970d490d998fd2021ad65",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "6556d45a774c424e43c9c0f94c29139bfc25d57971a64c78328f57d4702f088e",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -26,8 +26,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "192b77e6c82e2183fb399d372c279a54f84d10222a9970d490d998fd2021ad65",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "6556d45a774c424e43c9c0f94c29139bfc25d57971a64c78328f57d4702f088e",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -44,8 +44,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "192b77e6c82e2183fb399d372c279a54f84d10222a9970d490d998fd2021ad65",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "6556d45a774c424e43c9c0f94c29139bfc25d57971a64c78328f57d4702f088e",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -62,8 +62,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "192b77e6c82e2183fb399d372c279a54f84d10222a9970d490d998fd2021ad65",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "6556d45a774c424e43c9c0f94c29139bfc25d57971a64c78328f57d4702f088e",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -80,8 +80,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "192b77e6c82e2183fb399d372c279a54f84d10222a9970d490d998fd2021ad65",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "6556d45a774c424e43c9c0f94c29139bfc25d57971a64c78328f57d4702f088e",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -98,8 +98,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "192b77e6c82e2183fb399d372c279a54f84d10222a9970d490d998fd2021ad65",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "6556d45a774c424e43c9c0f94c29139bfc25d57971a64c78328f57d4702f088e",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -116,8 +116,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.android.com/about/versions",
-        "content_hash": "192b77e6c82e2183fb399d372c279a54f84d10222a9970d490d998fd2021ad65",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "6556d45a774c424e43c9c0f94c29139bfc25d57971a64c78328f57d4702f088e",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -134,8 +134,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
-        "content_hash": "70977b3ea6611d51f98b7a5bc0672313a89a903652b51cd26088cbc4c39f5292",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "bc2638e9426559f07e1fb88d40592898a8cfbbb048e8c5cfac0b0fd5ef4cbb40",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -152,8 +152,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
-        "content_hash": "70977b3ea6611d51f98b7a5bc0672313a89a903652b51cd26088cbc4c39f5292",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "bc2638e9426559f07e1fb88d40592898a8cfbbb048e8c5cfac0b0fd5ef4cbb40",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -170,8 +170,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
-        "content_hash": "70977b3ea6611d51f98b7a5bc0672313a89a903652b51cd26088cbc4c39f5292",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "bc2638e9426559f07e1fb88d40592898a8cfbbb048e8c5cfac0b0fd5ef4cbb40",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -188,8 +188,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
-        "content_hash": "70977b3ea6611d51f98b7a5bc0672313a89a903652b51cd26088cbc4c39f5292",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "bc2638e9426559f07e1fb88d40592898a8cfbbb048e8c5cfac0b0fd5ef4cbb40",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -206,8 +206,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
-        "content_hash": "70977b3ea6611d51f98b7a5bc0672313a89a903652b51cd26088cbc4c39f5292",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "bc2638e9426559f07e1fb88d40592898a8cfbbb048e8c5cfac0b0fd5ef4cbb40",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -224,8 +224,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
-        "content_hash": "70977b3ea6611d51f98b7a5bc0672313a89a903652b51cd26088cbc4c39f5292",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "bc2638e9426559f07e1fb88d40592898a8cfbbb048e8c5cfac0b0fd5ef4cbb40",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -242,8 +242,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
-        "content_hash": "70977b3ea6611d51f98b7a5bc0672313a89a903652b51cd26088cbc4c39f5292",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "bc2638e9426559f07e1fb88d40592898a8cfbbb048e8c5cfac0b0fd5ef4cbb40",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
@@ -260,8 +260,8 @@
       "status": "review_required",
       "evidence": {
         "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
-        "content_hash": "70977b3ea6611d51f98b7a5bc0672313a89a903652b51cd26088cbc4c39f5292",
-        "checked_at": "2026-10-18T21:23:28+00:00"
+        "content_hash": "bc2638e9426559f07e1fb88d40592898a8cfbbb048e8c5cfac0b0fd5ef4cbb40",
+        "checked_at": "2026-10-19T21:23:49+00:00"
       },
       "scope": [
         "OS/API deprecation",
