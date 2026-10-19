@@ -1,0 +1,162 @@
+{
+  "schema": "onnellab.blog-correction-editorial-review.v1",
+  "reviewed_at_utc": "2026-10-19T09:26:40Z",
+  "scope": "Independent text-only review of previously authored replacement sentences in their complete existing article context. Manuscript assembly is an exact one-sentence substitution per locale.",
+  "source_of_replacement": "preview/tagweaver-album-artists/multidisc-ios-save-correction.proposed.json",
+  "prior_independent_review_date": "2026-10-18",
+  "shared_fact_units": [
+    "App Store version 2.5.1 is the attribution.",
+    "The behavior applies to iOS saves.",
+    "The selected original is updated if its location is writable.",
+    "Otherwise the app asks where to save a copy.",
+    "Create a separate backup before editing.",
+    "Verify the saved file location."
+  ],
+  "locales": [
+    {
+      "locale": "ko",
+      "result": "PASS",
+      "meaning_and_omission": "All six shared fact units retained; no added feature or guarantee.",
+      "naturalness_and_terminology": "원본 위치의 쓰기 가능 여부와 불가능할 때 복사본 위치를 묻는 조건을 분리했다. 별도 백업과 저장 위치 확인을 명시하며 자동 백업을 약속하지 않는다.",
+      "context": "The existing copy-first, explicit-save and reopen-verification workflow is preserved.",
+      "structural_checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      },
+      "replacement_text": "App Store의 2.5.1 릴리스 노트에 따르면 iOS에서는 선택한 원본 위치에 쓰기가 가능하면 원본 파일을 업데이트하고, 쓰기가 불가능하면 복사본을 저장할 위치를 묻습니다. 편집 전에 별도 백업을 만들고 저장된 파일의 위치를 확인하세요."
+    },
+    {
+      "locale": "en",
+      "result": "PASS",
+      "meaning_and_omission": "All six shared fact units retained; no added feature or guarantee.",
+      "naturalness_and_terminology": "Preserves the distinction between a writable selected original and an unwritable original location. Backup and saved-location checks remain explicit.",
+      "context": "The existing copy-first, explicit-save and reopen-verification workflow is preserved.",
+      "structural_checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      },
+      "replacement_text": "According to the App Store release notes for version 2.5.1, saving on iOS updates the selected original when its location is writable; otherwise, TagWeaver asks where to save a copy. Make a separate backup before editing and verify the saved file’s location."
+    },
+    {
+      "locale": "ja",
+      "result": "PASS",
+      "meaning_and_omission": "All six shared fact units retained; no added feature or guarantee.",
+      "naturalness_and_terminology": "選択した元ファイルを更新できる条件と、書き込めない場合のコピー保存先確認を区別している。事前の別バックアップと保存先確認を省いていない。",
+      "context": "The existing copy-first, explicit-save and reopen-verification workflow is preserved.",
+      "structural_checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      },
+      "replacement_text": "App Storeのバージョン2.5.1のリリースノートによると、iOSでは選択した元ファイルの保存場所に書き込める場合は元ファイルを更新し、書き込めない場合はコピーの保存先を確認します。編集前に別のバックアップを作成し、保存後のファイルの場所を確認してください。"
+    },
+    {
+      "locale": "zh-Hans",
+      "result": "PASS",
+      "meaning_and_omission": "All six shared fact units retained; no added feature or guarantee.",
+      "naturalness_and_terminology": "区分可写原文件位置与不可写时询问副本位置，保留编辑前另行备份及保存后位置确认，不承诺自动备份。",
+      "context": "The existing copy-first, explicit-save and reopen-verification workflow is preserved.",
+      "structural_checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      },
+      "replacement_text": "根据 App Store 中 2.5.1 版本的更新说明，在 iOS 上保存时，如果所选原文件的位置允许写入，应用会更新原文件；否则，TagWeaver 会询问副本的保存位置。编辑前请另行备份，并确认保存后的文件位置。"
+    },
+    {
+      "locale": "zh-Hant",
+      "result": "PASS",
+      "meaning_and_omission": "All six shared fact units retained; no added feature or guarantee.",
+      "naturalness_and_terminology": "區分可寫入原始位置與無法寫入時詢問副本位置，保留事前另行備份與儲存後位置確認，沒有自動備份承諾。",
+      "context": "The existing copy-first, explicit-save and reopen-verification workflow is preserved.",
+      "structural_checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      },
+      "replacement_text": "根據 App Store 中 2.5.1 版本的更新說明，在 iOS 上儲存時，如果所選原始檔的位置允許寫入，應用程式會更新原始檔；否則，TagWeaver 會詢問副本的儲存位置。編輯前請另行備份，並確認儲存後的檔案位置。"
+    },
+    {
+      "locale": "pt-BR",
+      "result": "PASS",
+      "meaning_and_omission": "All six shared fact units retained; no added feature or guarantee.",
+      "naturalness_and_terminology": "A condição de gravação no local do original e a alternativa de escolher onde salvar uma cópia estão claras. Backup separado e conferência do destino permanecem explícitos.",
+      "context": "The existing copy-first, explicit-save and reopen-verification workflow is preserved.",
+      "structural_checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      },
+      "replacement_text": "Segundo as notas da versão 2.5.1 na App Store, ao salvar no iOS, o original selecionado é atualizado quando seu local permite gravação; caso contrário, o TagWeaver pergunta onde salvar uma cópia. Faça um backup separado antes de editar e confira o local do arquivo salvo."
+    },
+    {
+      "locale": "de",
+      "result": "PASS",
+      "meaning_and_omission": "All six shared fact units retained; no added feature or guarantee.",
+      "naturalness_and_terminology": "Beschreibbarer Originalspeicherort und Abfrage eines Kopiespeicherorts bei fehlender Schreibmöglichkeit sind klar getrennt. Separate Sicherung und Kontrolle des Speicherorts bleiben enthalten.",
+      "context": "The existing copy-first, explicit-save and reopen-verification workflow is preserved.",
+      "structural_checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      },
+      "replacement_text": "Laut den Versionshinweisen zu Version 2.5.1 im App Store wird unter iOS beim Speichern die ausgewählte Originaldatei aktualisiert, wenn ihr Speicherort beschreibbar ist; andernfalls fragt TagWeaver nach einem Speicherort für eine Kopie. Erstelle vor dem Bearbeiten eine separate Sicherung und prüfe den Speicherort der gespeicherten Datei."
+    },
+    {
+      "locale": "fr",
+      "result": "PASS",
+      "meaning_and_omission": "All six shared fact units retained; no added feature or guarantee.",
+      "naturalness_and_terminology": "La condition d’écriture à l’emplacement de l’original et le choix d’un emplacement pour une copie restent distincts. La sauvegarde séparée et la vérification du fichier enregistré sont conservées.",
+      "context": "The existing copy-first, explicit-save and reopen-verification workflow is preserved.",
+      "structural_checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      },
+      "replacement_text": "Selon les notes de la version 2.5.1 sur l’App Store, l’enregistrement sous iOS met à jour l’original sélectionné si son emplacement autorise l’écriture ; sinon, TagWeaver demande où enregistrer une copie. Créez une sauvegarde séparée avant toute modification et vérifiez l’emplacement du fichier enregistré."
+    },
+    {
+      "locale": "es",
+      "result": "PASS",
+      "meaning_and_omission": "All six shared fact units retained; no added feature or guarantee.",
+      "naturalness_and_terminology": "Distingue la actualización del original cuando se puede escribir en su ubicación de la pregunta sobre dónde guardar una copia en caso contrario. Conserva la copia de seguridad y la comprobación del destino.",
+      "context": "The existing copy-first, explicit-save and reopen-verification workflow is preserved.",
+      "structural_checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      },
+      "replacement_text": "Según las notas de la versión 2.5.1 en App Store, al guardar en iOS se actualiza el original seleccionado si su ubicación permite la escritura; de lo contrario, TagWeaver pregunta dónde guardar una copia. Haz una copia de seguridad aparte antes de editar y comprueba la ubicación del archivo guardado."
+    }
+  ],
+  "findings": {
+    "blocking_text_issues": [],
+    "original_text": "The older copy-save-only wording is inconsistent with the verified iOS 2.5.1 original-write/copy-fallback behavior.",
+    "replacement_changes_from_prior_review": 0
+  },
+  "limits": [
+    "This is not a fresh whole-article editorial certification.",
+    "No native evaluator, image renderer, Astro build or corrected-page preview was run.",
+    "The complete originals and their links were verified on the public site before this preparation; that does not verify these corrected manuscripts as deployed."
+  ]
+}

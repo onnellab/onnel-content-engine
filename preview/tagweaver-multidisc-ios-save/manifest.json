@@ -1,0 +1,246 @@
+{
+  "schema": "onnellab.blog-correction-manuscripts.v1",
+  "state": "MANUSCRIPTS_CORRECTED_NOT_APPLIED_TO_PUBLISHED_SOURCES",
+  "prepared_at_utc": "2026-10-19T09:26:40Z",
+  "slug": "number-tracks-multi-disc-mp3-album",
+  "category": "music",
+  "source_engine_sha": "f5a1ca783518db7d9e9bbb0113dbd67a3b8d8ea4",
+  "source_homepage_sha": "460b54dece32598838733e6c10377c01463441fe",
+  "proposal_path": "preview/tagweaver-album-artists/multidisc-ios-save-correction.proposed.json",
+  "proposal_blob_sha": "912a25c5fd07199d02919c791d3d5eabe21f4b83",
+  "correction_basis": {
+    "source": "https://apps.apple.com/us/app/tagweaver-mp3-flac-tagger/id6759609875",
+    "version": "2.5.1",
+    "fact": "Saving on iOS updates the selected original when its location is writable; otherwise the app asks where to save a copy.",
+    "date_note": "This correction does not depend on the regional display date of the release.",
+    "public_release_notes_rechecked_on": "2026-10-19"
+  },
+  "manuscripts": [
+    {
+      "locale": "ko",
+      "path": "preview/tagweaver-multidisc-ios-save/ko.md",
+      "source_path": "src/content/blog/ko/number-tracks-multi-disc-mp3-album.md",
+      "source_blob_sha": "7430c53697318aadfdbb93bf816ead669608111e",
+      "checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      }
+    },
+    {
+      "locale": "en",
+      "path": "preview/tagweaver-multidisc-ios-save/en.md",
+      "source_path": "src/content/blog/en/number-tracks-multi-disc-mp3-album.md",
+      "source_blob_sha": "79b95811a6099b421ccac4f21c1768812b625241",
+      "checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      }
+    },
+    {
+      "locale": "ja",
+      "path": "preview/tagweaver-multidisc-ios-save/ja.md",
+      "source_path": "src/content/blog/ja/number-tracks-multi-disc-mp3-album.md",
+      "source_blob_sha": "e9184cb0e4365dc4cafbe0d3cd0c7da96cf760b0",
+      "checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      }
+    },
+    {
+      "locale": "zh-Hans",
+      "path": "preview/tagweaver-multidisc-ios-save/zh-Hans.md",
+      "source_path": "src/content/blog/zh-Hans/number-tracks-multi-disc-mp3-album.md",
+      "source_blob_sha": "066c040f79e5d9b4c5f1964afcc4246a7b19dfa3",
+      "checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      }
+    },
+    {
+      "locale": "zh-Hant",
+      "path": "preview/tagweaver-multidisc-ios-save/zh-Hant.md",
+      "source_path": "src/content/blog/zh-Hant/number-tracks-multi-disc-mp3-album.md",
+      "source_blob_sha": "a6c5deb2c74743c2218a7c9cbc17e232a98b1dc7",
+      "checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      }
+    },
+    {
+      "locale": "pt-BR",
+      "path": "preview/tagweaver-multidisc-ios-save/pt-BR.md",
+      "source_path": "src/content/blog/pt-BR/number-tracks-multi-disc-mp3-album.md",
+      "source_blob_sha": "faaf163571ba7ef6c511fb4bac687805df94bd40",
+      "checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      }
+    },
+    {
+      "locale": "de",
+      "path": "preview/tagweaver-multidisc-ios-save/de.md",
+      "source_path": "src/content/blog/de/number-tracks-multi-disc-mp3-album.md",
+      "source_blob_sha": "7c3f1f22f516acc038fb5417e47dc7ccc8e593a7",
+      "checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      }
+    },
+    {
+      "locale": "fr",
+      "path": "preview/tagweaver-multidisc-ios-save/fr.md",
+      "source_path": "src/content/blog/fr/number-tracks-multi-disc-mp3-album.md",
+      "source_blob_sha": "68e9d1246d3c15514f21847b2853f161b7a49187",
+      "checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      }
+    },
+    {
+      "locale": "es",
+      "path": "preview/tagweaver-multidisc-ios-save/es.md",
+      "source_path": "src/content/blog/es/number-tracks-multi-disc-mp3-album.md",
+      "source_blob_sha": "d0ec98bdad7041f91067b4d87b82ee807e1415de",
+      "checks": {
+        "exact_replacement_count": 1,
+        "frontmatter_unchanged": true,
+        "headings_unchanged": true,
+        "markdown_link_targets_unchanged": true,
+        "other_text_byte_equivalent": true
+      }
+    }
+  ],
+  "application_targets": [
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "path": "src/content/blog/ko/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "7430c53697318aadfdbb93bf816ead669608111e",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/ko.md",
+      "locale": "ko"
+    },
+    {
+      "repository": "onnellab/onnel-content-engine",
+      "path": "generated/markdown/ko/music/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "7430c53697318aadfdbb93bf816ead669608111e",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/ko.md",
+      "locale": "ko"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "path": "src/content/blog/en/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "79b95811a6099b421ccac4f21c1768812b625241",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/en.md",
+      "locale": "en"
+    },
+    {
+      "repository": "onnellab/onnel-content-engine",
+      "path": "generated/markdown/en/music/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "79b95811a6099b421ccac4f21c1768812b625241",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/en.md",
+      "locale": "en"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "path": "src/content/blog/ja/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "e9184cb0e4365dc4cafbe0d3cd0c7da96cf760b0",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/ja.md",
+      "locale": "ja"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "path": "src/content/blog/zh-Hans/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "066c040f79e5d9b4c5f1964afcc4246a7b19dfa3",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/zh-Hans.md",
+      "locale": "zh-Hans"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "path": "src/content/blog/zh-Hant/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "a6c5deb2c74743c2218a7c9cbc17e232a98b1dc7",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/zh-Hant.md",
+      "locale": "zh-Hant"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "path": "src/content/blog/pt-BR/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "faaf163571ba7ef6c511fb4bac687805df94bd40",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/pt-BR.md",
+      "locale": "pt-BR"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "path": "src/content/blog/de/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "7c3f1f22f516acc038fb5417e47dc7ccc8e593a7",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/de.md",
+      "locale": "de"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "path": "src/content/blog/fr/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "68e9d1246d3c15514f21847b2853f161b7a49187",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/fr.md",
+      "locale": "fr"
+    },
+    {
+      "repository": "onnellab/onnellab.github.io",
+      "path": "src/content/blog/es/number-tracks-multi-disc-mp3-album.md",
+      "expected_blob_sha": "d0ec98bdad7041f91067b4d87b82ee807e1415de",
+      "manuscript": "preview/tagweaver-multidisc-ios-save/es.md",
+      "locale": "es"
+    }
+  ],
+  "application_blocker": {
+    "kind": "CANONICAL_PUBLISHER_SOURCE_COVERAGE",
+    "details": "The current publisher exports topics whose canonical_path is registered in data/topics.csv. This historical article has only en and ko records and engine manuscripts; the seven added translations exist in the homepage repository only. There is no staged-correction consumer in the current publishing exporter. Applying only the two engine sources would update only two public locales. Direct homepage publishing would bypass the single-publisher contract.",
+    "sources": [
+      "scripts/publishing.py:load_publishable_articles",
+      "scripts/publishing.py:export_markdown_to_homepage",
+      "data/topics.csv",
+      "docs/Nine_Language_Publishing.md"
+    ],
+    "resolution_required": "A separately validated, scoped path for applying all nine historical corrections through the existing canonical publisher. Do not fabricate publication records or assign a new publication slot to this correction."
+  },
+  "status_semantics": "The Markdown frontmatter is an exact copy of historical metadata, including status=published and original dates. It describes the original pages only. Files in this preview directory are corrected manuscripts, not public deployment receipts, and are not connected to the publisher or queue.",
+  "verification": {
+    "exact_source_match_count": 11,
+    "full_corrected_manuscripts": 9,
+    "text_and_structural_checks": "PASS",
+    "independent_editorial_review": "PASS_TEXT_ONLY",
+    "native_quality_checks": "NOT_RUN",
+    "rendered_corrected_pages": "NOT_RUN",
+    "published_correction": "NOT_APPLIED",
+    "queue_or_schedule_changed": false
+  },
+  "constraints": [
+    "Keep all 9 locale corrections together.",
+    "Re-read both repository heads and every target blob before applying; stop on a mismatch.",
+    "Preserve publication dates, stable URLs, frontmatter, canonical and alternate-language behavior, internal links, image references and unrelated content.",
+    "Do not overwrite current engine sources with only EN/KO until the 9-language application path is validated.",
+    "Run relevant current native quality, link, image and page gates before canonical deployment; verify the deployed pages before reporting a published correction.",
+    "Do not alter app registry, privacy policy, store release, social distribution, security, account or billing state."
+  ]
+}
