@@ -1,0 +1,203 @@
+{
+  "manifest_sha256": "e9da3370ff4bb04de2b0426acb8efbcdb12ee493d3deb2c604530a48d664be62",
+  "asset_hashes": {
+    "2.png": "a8a160863108d27bd6b4971889b7e9584954b10d3a2551a9ef2202972322e605"
+  },
+  "kind": "screenshot_guide",
+  "runtime_recording_attestation": false,
+  "upload_authorized_by_cli": false,
+  "video_file": "melivra-albums-20261021.mp4",
+  "video_sha256": "50ebc7b421ab15e360bdcf46bc43e07e7b8d5dd1cf85d097e39b99922ad9ddd9",
+  "seconds": 15,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "audio": false,
+  "slide_sha256": {
+    "slide-1.png": "64b06e5b38429455aab016a22d85f628d43cc17b6082a36907a1b051bdd13ade",
+    "slide-2.png": "7681e2d51b4cdef947f51f6dbc1595edf58556ed4d849a8a96575b51d07be4c5",
+    "slide-3.png": "9772b5ebbadb31fd02b8cc9f1f06a667fbb99b5024cec19bcc9ee99191d2f500"
+  },
+  "text_bounds": [
+    {
+      "slide": 1,
+      "text": "MELIVRA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        278.0,
+        83,
+        802.0,
+        105
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Browse your music by album",
+      "bbox": [
+        151.0,
+        175,
+        929.0,
+        221
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Use the Albums view in Library.",
+      "bbox": [
+        288.5,
+        241,
+        791.5,
+        272
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Still-screen guide \u00b7 Demo library",
+      "bbox": [
+        290.0,
+        1726,
+        790.0,
+        1756
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Melivra for Android \u00b7 Link in description",
+      "bbox": [
+        255.5,
+        1788,
+        824.5,
+        1816
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "MELIVRA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        278.0,
+        83,
+        802.0,
+        105
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Recognize the album",
+      "bbox": [
+        256.5,
+        175,
+        823.5,
+        221
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Match the title with its cover.",
+      "bbox": [
+        307.0,
+        241,
+        773.0,
+        265
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Still-screen guide \u00b7 Demo library",
+      "bbox": [
+        290.0,
+        1726,
+        790.0,
+        1756
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Melivra for Android \u00b7 Link in description",
+      "bbox": [
+        255.5,
+        1788,
+        824.5,
+        1816
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "MELIVRA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        278.0,
+        83,
+        802.0,
+        105
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Check what is inside",
+      "bbox": [
+        263.0,
+        175,
+        817.0,
+        212
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "See the track count and total length.",
+      "bbox": [
+        244.5,
+        241,
+        835.5,
+        272
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Still-screen guide \u00b7 Demo library",
+      "bbox": [
+        290.0,
+        1726,
+        790.0,
+        1756
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Melivra for Android \u00b7 Link in description",
+      "bbox": [
+        255.5,
+        1788,
+        824.5,
+        1816
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    }
+  ]
+}

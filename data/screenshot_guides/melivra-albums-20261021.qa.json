@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "guide_id": "melivra-albums-20261021",
+  "reviewed_at": "2026-10-19T00:08:47.430800+00:00",
+  "status": "production_qa_passed_upload_not_started",
+  "video_sha256": "50ebc7b421ab15e360bdcf46bc43e07e7b8d5dd1cf85d097e39b99922ad9ddd9",
+  "manifest_sha256": "e9da3370ff4bb04de2b0426acb8efbcdb12ee493d3deb2c604530a48d664be62",
+  "source_image_sha256": "a8a160863108d27bd6b4971889b7e9584954b10d3a2551a9ef2202972322e605",
+  "full_frame": {
+    "source": [
+      1080,
+      2400
+    ],
+    "fitted": [
+      621,
+      1380
+    ],
+    "position": [
+      229,
+      300
+    ],
+    "uniform_scale": 0.575,
+    "cropped": false,
+    "retouched": false,
+    "fake_interactions": false
+  },
+  "visual_review": {
+    "all_three_source_slides": true,
+    "decoded_mp4_frames": [
+      30,
+      180,
+      330
+    ],
+    "observations": "Album titles Blue Hour and Night Letters, cover art, 4-track counts and 17:32/21:44 totals are readable. Entire source image including navigation/mini-player preserved. Headings, captions and disclosure fit without clipping. No slide claims audio playback or interaction. The mini-player and progress position remain stationary."
+  },
+  "text_bounds": [
+    {
+      "slide": 1,
+      "text": "MELIVRA · SCREENSHOT GUIDE",
+      "bbox": [
+        278,
+        83,
+        802,
+        105
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Browse your music by album",
+      "bbox": [
+        151,
+        175,
+        929,
+        221
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Use the Albums view in Library.",
+      "bbox": [
+        288.5,
+        241,
+        791.5,
+        272
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Still-screen guide · Demo library",
+      "bbox": [
+        290,
+        1726,
+        790,
+        1756
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Melivra for Android · Link in description",
+      "bbox": [
+        255.5,
+        1788,
+        824.5,
+        1816
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "ONNELLAB",
+      "bbox": [
+        462,
+        1847,
+        618,
+        1866
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "MELIVRA · SCREENSHOT GUIDE",
+      "bbox": [
+        278,
+        83,
+        802,
+        105
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Recognize the album",
+      "bbox": [
+        256.5,
+        175,
+        823.5,
+        221
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Match the title with its cover.",
+      "bbox": [
+        307,
+        241,
+        773,
+        265
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Still-screen guide · Demo library",
+      "bbox": [
+        290,
+        1726,
+        790,
+        1756
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Melivra for Android · Link in description",
+      "bbox": [
+        255.5,
+        1788,
+        824.5,
+        1816
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ONNELLAB",
+      "bbox": [
+        462,
+        1847,
+        618,
+        1866
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "MELIVRA · SCREENSHOT GUIDE",
+      "bbox": [
+        278,
+        83,
+        802,
+        105
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Check what is inside",
+      "bbox": [
+        263,
+        175,
+        817,
+        212
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "See the track count and total length.",
+      "bbox": [
+        244.5,
+        241,
+        835.5,
+        272
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Still-screen guide · Demo library",
+      "bbox": [
+        290,
+        1726,
+        790,
+        1756
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Melivra for Android · Link in description",
+      "bbox": [
+        255.5,
+        1788,
+        824.5,
+        1816
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ONNELLAB",
+      "bbox": [
+        462,
+        1847,
+        618,
+        1866
+      ]
+    }
+  ],
+  "audio_rights": "No audio stream, music or narration. Capture harness drawCover uses original procedural shapes; writeSilentWav writes zero-filled PCM; demo names authored in repository.",
+  "source_parity": {
+    "capture_revision": "1341678a676ce9a2dc34888f271f1e4809182851",
+    "reviewed_release_revision": "6314b685a41c690e8ccd9a080c095078ebb0db10",
+    "lib_files_compared": 240,
+    "added_or_removed_lib_files": 0,
+    "changed_lib_files": [
+      "lib/core/config/app_env.dart"
+    ],
+    "change_scope": "Only version and build defaults. Screenshot harness blob unchanged.",
+    "exact_signed_binary_attestation": false
+  },
+  "store_check": {
+    "surface": "Live dot cloud browser, Google Play About this app dialog",
+    "version": "1.0.7",
+    "checked_at": "2026-10-19T00:06:29Z",
+    "url": "https://play.google.com/store/apps/details?id=com.onnellab.melivra",
+    "platform_cta": "Android only"
+  },
+  "tests": {
+    "command": "python3 -B -m unittest discover -s tests -p 'test_screenshot_guide*.py'",
+    "ran": 64,
+    "failed": 0,
+    "skipped": 4,
+    "skip_reason": "Optional real production assets absent for other-app tests; new actual asset verify and render executed separately."
+  },
+  "probe": {
+    "duration": "15.000000",
+    "size_bytes": 171862,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1080,
+        "height": 1920,
+        "pix_fmt": "yuv420p",
+        "r_frame_rate": "30/1",
+        "nb_frames": "450"
+      }
+    ]
+  },
+  "process_cleanup": "Owned render and decode ffmpeg processes exited normally. No app/emulator launched; exact-comm process check follows.",
+  "independent_parent_visual_review": {
+    "observed_at": "2026-10-19T00:08:49Z",
+    "decoded_frames": [
+      30,
+      180,
+      330
+    ],
+    "result": "Legible, no clipping, consistent static demo disclosure; factual album title, track count and duration."
+  }
+}

@@ -197,3 +197,38 @@ Persist the assigned video ID, selected timezone and actual schedule readback;
 verify public state after the approved release time. A missing or ambiguous
 upload result requires reconciliation of the existing video before any retry.
 
+
+
+## Reviewed Melivra Albums guide — 2026-10-19
+
+`data/screenshot_guides/melivra-albums-20261021.json` is an independent exact
+contract for the October 21, 09:00 Asia/Seoul slot. It uses only Android English
+`2.png` from the same genuine emulator capture set as the earlier Favorites
+guide, with a different screen and question: how to browse the album library.
+The selected PNG hash is independently pinned; original Favorites, Quivra,
+ClipNest and Aligna manifests and receipts are unchanged.
+
+All 240 lib files and the capture harness were compared between capture source
+1341678a676ce9a2dc34888f271f1e4809182851 and reviewed release source
+6314b685a41c690e8ccd9a080c095078ebb0db10. Only app_env version/build
+defaults differ (1.0.6+142 to 1.0.7+144). Live Google Play About this app showed
+public 1.0.7 on October 19. This is source parity, not signed-binary attestation.
+
+Rights review inspected the harness: cover art is original procedural circles
+and horizon paths; names are original demo metadata; WAV fixtures are valid
+zero-filled PCM silence. The video has no audio stream. The full screenshot is
+fitted uniformly to 621x1380, with no crop, UI retouch, motion or fake taps.
+It only identifies titles/covers and displayed track counts/total lengths.
+Existing still-screen disclosure, exact 450-frame encoding and bounded two-thread
+renderer are retained. Every manifest leaf is fail-closed and covered by tests.
+
+Papira was checked first but held: live Apple public 2.0.1 versus pinned fresh
+capture source 2.0.3+10, with visible reading-style card/header changes and no
+verified released-screen parity. Its capture integrity is not release approval.
+Segra's current manifest still explicitly describes test-host renders rather
+than genuine emulator/simulator captures. Neither is silently substituted into
+the approved genuine-capture format. No Papira upload intent was created.
+
+Before upload, the parent must reconcile the complete target-channel inventory
+for this exact topic/title and preserve the same hash-bound intent across retries.
+Prepared media and a planned slot are not a scheduled receipt.

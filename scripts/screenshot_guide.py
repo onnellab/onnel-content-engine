@@ -364,11 +364,107 @@ ALIGNA_CONTRACT = {'schema_version': 1,
                                       'verification, and browser scheduling; no separate '
                                       'Work/Codex or paid service.'}}
 
+# Independently reviewed album guide; original Favorites contract remains immutable.
+MELIVRA_ALBUMS_CONTRACT = {'schema_version': 1,
+ 'kind': 'screenshot_guide',
+ 'guide_id': 'melivra-albums-20261021',
+ 'app_id': 'APP-0007',
+ 'locale': 'en',
+ 'channel_id': 'UCXyRedrldRBl9Y35nyWoTLg',
+ 'source': {'repository': 'onnellab/melivra',
+            'commit': '6314b685a41c690e8ccd9a080c095078ebb0db10',
+            'git_tree_sha': '261cb0863ce683df5eaeb9dfc6e9afac2b6f8b62',
+            'capture_manifest_path': 'assets/store_promo/raw/android/en/capture.json',
+            'capture_manifest_git_blob_sha': '2baea9bd221db9f086718ee37d6da5fd51130d04',
+            'capture_id': '20261010T010826Z-23651146',
+            'captured_at': '2026-10-10T01:12:07.756029+00:00',
+            'capture_device_kind': 'Android emulator',
+            'capture_source_commit': '1341678a676ce9a2dc34888f271f1e4809182851',
+            'capture_source_version': '1.0.6+142',
+            'reviewed_source_version': '1.0.7+144',
+            'recorded_source_digest': '2f8f7372fd4fe10f8f1ba473a8ef2ec736d7e173861263d788d165959bb0d224',
+            'recorded_source_digest_independently_recomputed': False,
+            'capture_test': 'integration_test/store_promo_capture_test.dart',
+            'capture_test_git_blob_sha': '7e4b720db19a88d97371f363a6c23f695f527610',
+            'capture_type': 'real_app_ui_with_repository_demonstration_library',
+            'source_parity': 'Independently compared all lib blob SHAs at capture revision '
+                             '1341678a676ce9a2dc34888f271f1e4809182851 and reviewed release source '
+                             '6314b685a41c690e8ccd9a080c095078ebb0db10. Only app_env.dart differs, '
+                             'solely version/build default constants (1.0.6+142 to 1.0.7+144). '
+                             'Capture harness blob is unchanged. This is not signed-binary '
+                             'attestation.',
+            'capture_version_note': "Actual Android emulator screenshots. The capture manifest's "
+                                    'real-device label does not override its emulator device_id. '
+                                    'No exact signed-release-build capture attestation is claimed.',
+            'runtime_playback_verified': False,
+            'limitations': ['Favorites, ratings, playlists, listening history and silent WAV files '
+                            'are seeded repository demonstration data.',
+                            'Pixels do not prove successful import, playback, audio quality, save, '
+                            'conversion, performance or user results.',
+                            'Claims are limited to actual visible screen labels, not off-screen '
+                            'labels in the capture manifest.'],
+            'public_version_observed': '1.0.7',
+            'public_version_source': 'https://play.google.com/store/apps/details?id=com.onnellab.melivra',
+            'public_version_checked_at': '2026-10-19T00:06:29Z',
+            'public_version_check_method': 'Live Google Play About this app dialog in dot cloud '
+                                           'browser; version 1.0.7, updated October 10.',
+            'rights_review': 'Capture harness drawCover creates original flat-color circles and '
+                             'horizon paths; writeSilentWav creates zero-filled PCM. Titles are '
+                             'repository-authored demonstration metadata. No third-party album art '
+                             'or recorded music is used.'},
+ 'assets': [{'local_name': '2.png',
+             'source_path': 'assets/store_promo/raw/android/en/2.png',
+             'sha256': 'a8a160863108d27bd6b4971889b7e9584954b10d3a2551a9ef2202972322e605',
+             'dimensions': [1080, 2400]}],
+ 'slides': [{'heading': 'Browse your music by album',
+             'caption': 'Use the Albums view in Library.',
+             'asset': '2.png',
+             'seconds': 5},
+            {'heading': 'Recognize the album',
+             'caption': 'Match the title with its cover.',
+             'asset': '2.png',
+             'seconds': 5},
+            {'heading': 'Check what is inside',
+             'caption': 'See the track count and total length.',
+             'asset': '2.png',
+             'seconds': 5}],
+ 'metadata': {'title': 'How to Browse Albums in Melivra | Android Screenshot Guide',
+              'description': 'To browse your music by album in Melivra, use the Albums view in '
+                             'Library. Identify an album by its title and cover, then check the '
+                             'track count and total duration shown below it.\n'
+                             '\n'
+                             'Still-screen guide using a real Android emulator screenshot with '
+                             'original demonstration titles, procedural cover art and silent audio '
+                             'fixtures. The screen remains stationary; no taps, playback, import, '
+                             'save result, or speed demonstration is shown. Displayed times belong '
+                             'to the demo library.\n'
+                             '\n'
+                             'Explore Melivra for Android:\n'
+                             'https://play.google.com/store/apps/details?id=com.onnellab.melivra\n'
+                             '\n'
+                             '#Melivra #OfflineMusicPlayer #MusicLibrary #Shorts',
+              'format_disclosure': 'Still-screen guide · Demo library',
+              'audio': 'none',
+              'made_for_kids': False,
+              'synthetic_media': False,
+              'category': 'Education',
+              'cta': 'Melivra for Android · Link in description',
+              'target_publish_at': '2026-10-21T09:00:00+09:00',
+              'timezone': 'Asia/Seoul'},
+ 'authorization': {'format_approved_on': '2026-10-08',
+                   'rights_basis': 'ONNELLAB-owned app UI and repository-owned demonstration data',
+                   'scope': 'English screenshot-based app guide on ONNELLAB YouTube; no simulated '
+                            'interaction; existing recording gate unchanged',
+                   'execution_scope': 'Owner-authorized free dot-cloud app Shorts '
+                                      'Python/ffmpeg/ffprobe production and tests, expanded to all '
+                                      'apps; no separate Work/Codex, paid service or user '
+                                      'computer.'}}
+
 def validate(manifest, asset_root):
     """Dispatch only independently reviewed per-app still-screen contracts."""
     if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0007', 'APP-0005', 'APP-0006'):
         clipnest = manifest['app_id'] == 'APP-0005'
-        contract = ALIGNA_CONTRACT if manifest['app_id'] == 'APP-0006' else CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
+        contract = MELIVRA_ALBUMS_CONTRACT if manifest.get('guide_id') == 'melivra-albums-20261021' else ALIGNA_CONTRACT if manifest['app_id'] == 'APP-0006' else CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
         if canonical(manifest) != canonical(contract):
             raise GuideError('aligna_manifest_requires_review' if manifest['app_id'] == 'APP-0006' else 'clipnest_manifest_requires_review' if clipnest else 'melivra_manifest_requires_review')
         root = Path(asset_root).resolve()
@@ -480,6 +576,7 @@ def main():
 
 if __name__=='__main__':
     raise SystemExit(main())
+
 
 
 
