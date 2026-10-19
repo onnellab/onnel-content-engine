@@ -43,6 +43,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0074",
+        "title": "Como transformar textos repetidos em trechos reutilizáveis",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0082",
         "title": "Como criar um padrão consistente para nomes de arquivos",
         "slug": "design-consistent-file-naming-system",
@@ -64,19 +77,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0074",
-        "title": "Como transformar textos repetidos em trechos reutilizáveis",
-        "slug": "turn-repeated-text-into-reusable-snippets",
-        "category": "productivity",
-        "language": "pt-BR",
-        "status": "scheduled",
-        "url": "generated/markdown/pt-BR/productivity/turn-repeated-text-into-reusable-snippets.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5

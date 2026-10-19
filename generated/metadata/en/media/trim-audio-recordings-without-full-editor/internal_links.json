@@ -91,6 +91,19 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0042",
+        "title": "How to Turn Repeated Text Into Reusable Snippets",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
         "topic_id": "TOPIC-0008",
         "title": "How to Clean Up MP3 Metadata Before Organizing Music",
         "slug": "clean-up-mp3-metadata-before-organizing-music",
@@ -98,19 +111,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0014",
-        "title": "How to Turn Rough Notes Into a Structured First Draft",
-        "slug": "turn-rough-notes-into-structured-first-draft",
-        "category": "productivity",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

@@ -56,6 +56,19 @@
         "score": 6
       },
       {
+        "topic_id": "TOPIC-0076",
+        "title": "Transformer les textes répétitifs en extraits réutilisables",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0084",
         "title": "Créer une convention cohérente pour nommer ses fichiers",
         "slug": "design-consistent-file-naming-system",
@@ -67,19 +80,6 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0076",
-        "title": "Transformer les textes répétitifs en extraits réutilisables",
-        "slug": "turn-repeated-text-into-reusable-snippets",
-        "category": "productivity",
-        "language": "fr",
-        "status": "scheduled",
-        "url": "generated/markdown/fr/productivity/turn-repeated-text-into-reusable-snippets.md",
-        "destination": "scheduled_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
       }
     ],
     "related_apps": [

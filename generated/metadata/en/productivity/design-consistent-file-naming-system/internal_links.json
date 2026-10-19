@@ -60,6 +60,21 @@
         "score": 12
       },
       {
+        "topic_id": "TOPIC-0042",
+        "title": "How to Turn Repeated Text Into Reusable Snippets",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "productivity"
+        ],
+        "score": 11
+      },
+      {
         "topic_id": "TOPIC-0010",
         "title": "How to Reuse Copied Text Snippets on iPhone",
         "slug": "reuse-copied-text-snippets-iphone",
@@ -83,21 +98,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/",
         "destination": "published_article",
-        "relationship": "deeper",
-        "shared_clusters": [
-          "productivity"
-        ],
-        "score": 10
-      },
-      {
-        "topic_id": "TOPIC-0042",
-        "title": "How to Turn Repeated Text Into Reusable Snippets",
-        "slug": "turn-repeated-text-into-reusable-snippets",
-        "category": "productivity",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/productivity/turn-repeated-text-into-reusable-snippets.md",
-        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"

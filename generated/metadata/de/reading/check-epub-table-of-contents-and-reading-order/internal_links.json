@@ -61,12 +61,12 @@
         "slug": "turn-repeated-text-into-reusable-snippets",
         "category": "productivity",
         "language": "de",
-        "status": "scheduled",
-        "url": "generated/markdown/de/productivity/turn-repeated-text-into-reusable-snippets.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 4
+        "score": 5
       },
       {
         "topic_id": "TOPIC-0083",
