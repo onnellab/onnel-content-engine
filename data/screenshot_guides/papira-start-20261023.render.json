@@ -1,0 +1,203 @@
+{
+  "manifest_sha256": "940390b163c08168c1ccb4c7dfff0d2aeed04ace5523b2936ed85eedaaa4b487",
+  "asset_hashes": {
+    "01.png": "497e31dc4f2ed3db0295b79da8bddbe42616babb1f112e3a039c313bdc04fa7a"
+  },
+  "kind": "screenshot_guide",
+  "runtime_recording_attestation": false,
+  "upload_authorized_by_cli": false,
+  "video_file": "papira-start-20261023.mp4",
+  "video_sha256": "50980b84365aee047f5595ff092455e77d266b1904e6f17c93d8f656c69a5ecf",
+  "seconds": 15,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "audio": false,
+  "slide_sha256": {
+    "slide-1.png": "6c537c0a6eee81702d36da4396e0d50ef9fec1226d59b428e0c2b8163f3dfed5",
+    "slide-2.png": "c5d069b1f0a52dfcb3152fe19c1f80c22223278c6d71c2d0a65580178380b46d",
+    "slide-3.png": "9973fc7ed624a3fd6e10dc4b9f1640ce77db66723180b12d1dc0e5081b4cc1b3"
+  },
+  "text_bounds": [
+    {
+      "slide": 1,
+      "text": "PAPIRA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        292.0,
+        83,
+        788.0,
+        105
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Choose how to start",
+      "bbox": [
+        267.5,
+        175,
+        812.5,
+        212
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Two paths from Papira\u2019s home screen.",
+      "bbox": [
+        234.5,
+        241,
+        843.5,
+        272
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Still-screen guide \u00b7 No conversion shown",
+      "bbox": [
+        225.5,
+        1726,
+        854.5,
+        1756
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Papira for Android \u00b7 Link in description",
+      "bbox": [
+        263.0,
+        1788,
+        817.0,
+        1816
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "PAPIRA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        292.0,
+        83,
+        788.0,
+        105
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Create a book",
+      "bbox": [
+        350.5,
+        175,
+        729.5,
+        212
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Add a cover and table of contents.",
+      "bbox": [
+        263.5,
+        241,
+        816.5,
+        265
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Still-screen guide \u00b7 No conversion shown",
+      "bbox": [
+        225.5,
+        1726,
+        854.5,
+        1756
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Papira for Android \u00b7 Link in description",
+      "bbox": [
+        263.0,
+        1788,
+        817.0,
+        1816
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "PAPIRA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        292.0,
+        83,
+        788.0,
+        105
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Convert TXT",
+      "bbox": [
+        374.0,
+        175,
+        706.0,
+        212
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "No cover or publishing details.",
+      "bbox": [
+        296.0,
+        241,
+        784.0,
+        272
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Still-screen guide \u00b7 No conversion shown",
+      "bbox": [
+        225.5,
+        1726,
+        854.5,
+        1756
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Papira for Android \u00b7 Link in description",
+      "bbox": [
+        263.0,
+        1788,
+        817.0,
+        1816
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    }
+  ]
+}

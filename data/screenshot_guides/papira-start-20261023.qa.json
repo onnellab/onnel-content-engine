@@ -1,0 +1,56 @@
+{
+  "guide_id": "papira-start-20261023",
+  "reviewed_at": "2026-10-20T09:32:37.169931+00:00",
+  "state": "independent_review_passed_ready_for_upload",
+  "source_sha256": "497e31dc4f2ed3db0295b79da8bddbe42616babb1f112e3a039c313bdc04fa7a",
+  "video_sha256": "50980b84365aee047f5595ff092455e77d266b1904e6f17c93d8f656c69a5ecf",
+  "canonical_manifest_sha256": "940390b163c08168c1ccb4c7dfff0d2aeed04ace5523b2936ed85eedaaa4b487",
+  "source_visual_review": "Actual Android 1080x2400 home screenshot reviewed. Empty home, two actual feature entries. No manuscript, photograph, user data or third-party artwork.",
+  "final_visual_review": "All three distinct slide states inspected including decoded frames 150 and 300. Headers/captions fit, full screenshot uniformly scaled without crop, no fake interaction, persistent still-screen disclosure, Android-only CTA.",
+  "full_frame_verification": {
+    "decoded": 450,
+    "expected": 450,
+    "matched_expected_slide_intervals": true,
+    "maximum_rgb_mean_absolute_error": 0.8315432098765432,
+    "threshold": 2.5,
+    "log": "render/full-frame-check.json"
+  },
+  "tests": {
+    "run": 74,
+    "passed": 70,
+    "skipped": 4,
+    "skip_reason": "Prior guide optional materialized production assets absent; Papira real-source test ran.",
+    "result": "OK"
+  },
+  "media": {
+    "seconds": 15,
+    "frames": 450,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "audio_streams": 0,
+    "rights": "No audio used."
+  },
+  "production": {
+    "free_cloud_only": true,
+    "encoder_threads": 2,
+    "encoder_timeout_seconds": 180,
+    "new_software_installed": false,
+    "owned_processes_after_completion": []
+  },
+  "limitations": [
+    "Not exact signed public-build capture attestation.",
+    "Android version2.0.3 from Oct20 store snapshot; live Play Oct20 showed current listing and Oct16 update, not version number.",
+    "No upload, schedule or publication performed by renderer.",
+    "Fresh duplicate check, durable intent and verified Studio receipt still required before claiming scheduled."
+  ],
+  "independent_review": {
+    "reviewer": "Separate publisher/reviewer",
+    "reported_at": "2026-10-20T09:32:37Z",
+    "evidence": "Parent inspected actual Android01 plus decoded frames 1/2/3, confirming claims, readability, uncropped fit and persistent disclosure.",
+    "result": "pass"
+  },
+  "library_file_id": "libfile_f28277f7dee081919d90436fcb5b71e8"
+}

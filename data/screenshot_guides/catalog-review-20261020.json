@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_candidate_review",
+  "reviewed_at": "2026-10-20T09:29:22Z",
+  "repository_commit": "8a1096dd274591d06c65db8856d970b5165b046f",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "studio_reconciliation": {
+    "surface": "dot cloud browser, target ONNELLAB YouTube Studio",
+    "account": "onnellab.app@gmail.com",
+    "account_transition": "Selected existing signed-in ONNELLAB; no new login, credential, permission, or other-channel write.",
+    "shorts_count": 11,
+    "public_shorts": 10,
+    "scheduled_shorts": 1,
+    "draft_shorts": 0,
+    "ordinary_video_count": 6,
+    "public_ordinary_videos": 2,
+    "unlisted_ordinary_videos": 1,
+    "private_ordinary_videos": 3,
+    "verified_public_video_ids": [
+      "sG-RwU-Z65s",
+      "RC929En2dSw",
+      "nRg8_Ion6pI",
+      "tNxMMWa6bb8",
+      "ScIaoTTLmc8",
+      "iCAzEHp1tLg",
+      "hlpzeGysnzQ",
+      "a8nbWjbLNAM",
+      "NUWFnhBGJn8",
+      "QhKBzXVGM6c"
+    ],
+    "scheduled_video": {
+      "id": "W0wvvo7AbpI",
+      "title": "How to Browse Albums in Melivra | Android Screenshot Guide",
+      "date": "2026. 10. 21.",
+      "time": "오전 9:00",
+      "selected_timezone_readback": "현지 시간(GMT+0900)",
+      "equivalent_target": "2026-10-21T09:00:00+09:00",
+      "publication_verified": false,
+      "settings_changed": false
+    },
+    "duplicate_check": "Full Shorts and ordinary Videos inventories read. No Papira topic/title or pending Papira upload visible.",
+    "external_link_limit": "Studio still requests one-time verification before external links become clickable; no verification initiated."
+  },
+  "next_slots": [
+    {
+      "at": "2026-10-21T09:00:00+09:00",
+      "status": "existing_schedule_reverified",
+      "video_id": "W0wvvo7AbpI"
+    },
+    {
+      "at": "2026-10-23T09:00:00+09:00",
+      "status": "rendered_verified_ready_for_single_upload",
+      "candidate": "Papira Android workflow choice",
+      "guide_id": "papira-start-20261023"
+    },
+    {
+      "at": "2026-10-26T09:00:00+09:00",
+      "status": "unassigned_pending_verified_assets"
+    }
+  ],
+  "store_evidence": {
+    "snapshot_path": "data/store_versions.csv",
+    "snapshot_checked_at": "2026-10-20T12:25:37+09:00",
+    "papira_android": {
+      "snapshot_version": "2.0.3",
+      "live_public_listing": true,
+      "live_updated_date": "2026. 10. 16.",
+      "live_checked_at": "2026-10-20T09:27:47Z",
+      "source": "https://play.google.com/store/apps/details?id=com.onnellab.papira",
+      "live_version_field_visible": false,
+      "note": "Public listing and current workflow description independently read. Exact version is snapshot evidence, not independently visible in this browser UI."
+    },
+    "papira_ios": {
+      "version": "2.0.1",
+      "source": "repository_snapshot",
+      "include_in_candidate": false
+    }
+  },
+  "constraints": {
+    "legacy_publishers_started": false,
+    "desktop_used": false,
+    "work_or_codex_task_started": false,
+    "paid_tools_used": false,
+    "uploaded": false,
+    "scheduled": false,
+    "rendered": true
+  },
+  "selected_candidate": {
+    "app": "Papira",
+    "platform": "android",
+    "guide_id": "papira-start-20261023",
+    "source_commit": "dcfd66693b4bc283356907574c59f90026dacbe7",
+    "capture_source_commit": "f347cefeb75f83752d0d449d039912a5d7479984",
+    "source_asset": "assets/store_promo/raw/android/en/01.png",
+    "source_sha256": "497e31dc4f2ed3db0295b79da8bddbe42616babb1f112e3a039c313bdc04fa7a",
+    "note": "Android capture/release source parity and current Play listing verified. Prior iOS 2.0.1 hold not applied to independently checked Android source. No user manuscript or third-party art in first home capture."
+  }
+}

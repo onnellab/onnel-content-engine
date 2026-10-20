@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "papira-start-20261023",
+  "app_id": "APP-0008",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/papira",
+    "commit": "dcfd66693b4bc283356907574c59f90026dacbe7",
+    "capture_source_commit": "f347cefeb75f83752d0d449d039912a5d7479984",
+    "capture_source_version": "2.0.3+10",
+    "capture_manifest_path": "release/capture-provenance-20261014.json",
+    "capture_test": "integration_test/store_promo_screenshot_test.dart",
+    "capture_type": "real_android_emulator_app_ui",
+    "source_parity": "GitHub compare from capture source to reviewed commit contains no lib runtime or selected Android raw image changes. Release identity identifies capture source and version 2.0.3+10.",
+    "public_version_recorded": "2.0.3",
+    "public_version_record_source": "onnellab/onnel-content-engine data/store_versions.csv checked 2026-10-20T12:25:37+09:00",
+    "public_listing_source": "https://play.google.com/store/apps/details?id=com.onnellab.papira",
+    "public_listing_checked_at": "2026-10-20",
+    "public_listing_observation": "Live browser confirms ONNELLAB purchase listing, October 16 update and current features; version number not exposed in inspected UI. Version 2.0.3 is repository store snapshot evidence, not independently read live.",
+    "rights": "ONNELLAB-owned app UI. Home screen captured before sample-project injection; no manuscript, photo, third-party art, user data or audio.",
+    "signed_release_capture_attested": false,
+    "runtime_conversion_verified_by_video": false,
+    "limitations": [
+      "Still home screenshot only; no taps, conversion, saved result or speed demonstration.",
+      "Android only; iOS public version remains 2.0.1."
+    ]
+  },
+  "assets": [
+    {
+      "local_name": "01.png",
+      "source_path": "assets/store_promo/raw/android/en/01.png",
+      "sha256": "497e31dc4f2ed3db0295b79da8bddbe42616babb1f112e3a039c313bdc04fa7a",
+      "dimensions": [
+        1080,
+        2400
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Choose how to start",
+      "caption": "Two paths from Papira’s home screen.",
+      "asset": "01.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Create a book",
+      "caption": "Add a cover and table of contents.",
+      "asset": "01.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Convert TXT",
+      "caption": "No cover or publishing details.",
+      "asset": "01.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "How to Choose a Starting Option in Papira | Android Screenshot Guide",
+    "description": "In Papira, choose Create a book for an EPUB with a cover and table of contents, or Convert TXT for an EPUB without a cover or publishing details. Start with a finished TXT manuscript.\n\nStill-screen guide using a real Android emulator screenshot of the app home screen. No taps, conversion, saved result, or speed demonstration is shown. Papira is an EPUB maker, not a manuscript editor or EPUB reader.\n\nExplore Papira for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.papira\n\n#Papira #TXTtoEPUB #EPUBMaker #Shorts",
+    "format_disclosure": "Still-screen guide · No conversion shown",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "Papira for Android · Link in description",
+    "target_publish_at": "2026-10-23T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned app UI",
+    "scope": "English screenshot-based app guide on ONNELLAB YouTube; no simulated interaction; existing recording gate unchanged",
+    "execution_scope": "Owner-authorized free dot-cloud app Shorts Python/ffmpeg/ffprobe production and tests; no separate Work/Codex, paid service or user computer."
+  }
+}

@@ -460,13 +460,93 @@ MELIVRA_ALBUMS_CONTRACT = {'schema_version': 1,
                                       'apps; no separate Work/Codex, paid service or user '
                                       'computer.'}}
 
+# Independently reviewed Papira home-screen contract.
+PAPIRA_CONTRACT = {'schema_version': 1,
+ 'kind': 'screenshot_guide',
+ 'guide_id': 'papira-start-20261023',
+ 'app_id': 'APP-0008',
+ 'locale': 'en',
+ 'channel_id': 'UCXyRedrldRBl9Y35nyWoTLg',
+ 'source': {'repository': 'onnellab/papira',
+            'commit': 'dcfd66693b4bc283356907574c59f90026dacbe7',
+            'capture_source_commit': 'f347cefeb75f83752d0d449d039912a5d7479984',
+            'capture_source_version': '2.0.3+10',
+            'capture_manifest_path': 'release/capture-provenance-20261014.json',
+            'capture_test': 'integration_test/store_promo_screenshot_test.dart',
+            'capture_type': 'real_android_emulator_app_ui',
+            'source_parity': 'GitHub compare from capture source to reviewed commit contains no '
+                             'lib runtime or selected Android raw image changes. Release identity '
+                             'identifies capture source and version 2.0.3+10.',
+            'public_version_recorded': '2.0.3',
+            'public_version_record_source': 'onnellab/onnel-content-engine data/store_versions.csv '
+                                            'checked 2026-10-20T12:25:37+09:00',
+            'public_listing_source': 'https://play.google.com/store/apps/details?id=com.onnellab.papira',
+            'public_listing_checked_at': '2026-10-20',
+            'public_listing_observation': 'Live browser confirms ONNELLAB purchase listing, '
+                                          'October 16 update and current features; version number '
+                                          'not exposed in inspected UI. Version 2.0.3 is '
+                                          'repository store snapshot evidence, not independently '
+                                          'read live.',
+            'rights': 'ONNELLAB-owned app UI. Home screen captured before sample-project '
+                      'injection; no manuscript, photo, third-party art, user data or audio.',
+            'signed_release_capture_attested': False,
+            'runtime_conversion_verified_by_video': False,
+            'limitations': ['Still home screenshot only; no taps, conversion, saved result or '
+                            'speed demonstration.',
+                            'Android only; iOS public version remains 2.0.1.']},
+ 'assets': [{'local_name': '01.png',
+             'source_path': 'assets/store_promo/raw/android/en/01.png',
+             'sha256': '497e31dc4f2ed3db0295b79da8bddbe42616babb1f112e3a039c313bdc04fa7a',
+             'dimensions': [1080, 2400]}],
+ 'slides': [{'heading': 'Choose how to start',
+             'caption': 'Two paths from Papira’s home screen.',
+             'asset': '01.png',
+             'seconds': 5},
+            {'heading': 'Create a book',
+             'caption': 'Add a cover and table of contents.',
+             'asset': '01.png',
+             'seconds': 5},
+            {'heading': 'Convert TXT',
+             'caption': 'No cover or publishing details.',
+             'asset': '01.png',
+             'seconds': 5}],
+ 'metadata': {'title': 'How to Choose a Starting Option in Papira | Android Screenshot Guide',
+              'description': 'In Papira, choose Create a book for an EPUB with a cover and table '
+                             'of contents, or Convert TXT for an EPUB without a cover or '
+                             'publishing details. Start with a finished TXT manuscript.\n'
+                             '\n'
+                             'Still-screen guide using a real Android emulator screenshot of the '
+                             'app home screen. No taps, conversion, saved result, or speed '
+                             'demonstration is shown. Papira is an EPUB maker, not a manuscript '
+                             'editor or EPUB reader.\n'
+                             '\n'
+                             'Explore Papira for Android:\n'
+                             'https://play.google.com/store/apps/details?id=com.onnellab.papira\n'
+                             '\n'
+                             '#Papira #TXTtoEPUB #EPUBMaker #Shorts',
+              'format_disclosure': 'Still-screen guide · No conversion shown',
+              'audio': 'none',
+              'made_for_kids': False,
+              'synthetic_media': False,
+              'category': 'Education',
+              'cta': 'Papira for Android · Link in description',
+              'target_publish_at': '2026-10-23T09:00:00+09:00',
+              'timezone': 'Asia/Seoul'},
+ 'authorization': {'format_approved_on': '2026-10-08',
+                   'rights_basis': 'ONNELLAB-owned app UI',
+                   'scope': 'English screenshot-based app guide on ONNELLAB YouTube; no simulated '
+                            'interaction; existing recording gate unchanged',
+                   'execution_scope': 'Owner-authorized free dot-cloud app Shorts '
+                                      'Python/ffmpeg/ffprobe production and tests; no separate '
+                                      'Work/Codex, paid service or user computer.'}}
+
 def validate(manifest, asset_root):
     """Dispatch only independently reviewed per-app still-screen contracts."""
-    if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0007', 'APP-0005', 'APP-0006'):
+    if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0007', 'APP-0005', 'APP-0006', 'APP-0008'):
         clipnest = manifest['app_id'] == 'APP-0005'
-        contract = MELIVRA_ALBUMS_CONTRACT if manifest.get('guide_id') == 'melivra-albums-20261021' else ALIGNA_CONTRACT if manifest['app_id'] == 'APP-0006' else CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
+        contract = PAPIRA_CONTRACT if manifest['app_id'] == 'APP-0008' else MELIVRA_ALBUMS_CONTRACT if manifest.get('guide_id') == 'melivra-albums-20261021' else ALIGNA_CONTRACT if manifest['app_id'] == 'APP-0006' else CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
         if canonical(manifest) != canonical(contract):
-            raise GuideError('aligna_manifest_requires_review' if manifest['app_id'] == 'APP-0006' else 'clipnest_manifest_requires_review' if clipnest else 'melivra_manifest_requires_review')
+            raise GuideError('papira_manifest_requires_review' if manifest['app_id'] == 'APP-0008' else 'aligna_manifest_requires_review' if manifest['app_id'] == 'APP-0006' else 'clipnest_manifest_requires_review' if clipnest else 'melivra_manifest_requires_review')
         root = Path(asset_root).resolve()
         hashes = {}
         for asset in contract['assets']:
@@ -485,6 +565,7 @@ def validate(manifest, asset_root):
 
 def render(manifest, asset_root, output):
     evidence = validate(manifest, asset_root)
+    papira = manifest['app_id'] == 'APP-0008'
     aligna = manifest['app_id'] == 'APP-0006'
     melivra = manifest['app_id'] == 'APP-0007'
     clipnest = manifest['app_id'] == 'APP-0005'
@@ -516,20 +597,20 @@ def render(manifest, asset_root, output):
             text_bounds.append({'slide': index+1, 'text': text, 'bbox': list(bounds)})
             draw.text(position, text, font=font, fill=color)
         draw.rounded_rectangle((64,64,1016,126), radius=25, fill='#eae4f5')
-        center('ALIGNA · SCREENSHOT GUIDE' if aligna else 'CLIPNEST · SCREENSHOT GUIDE' if clipnest else 'MELIVRA · SCREENSHOT GUIDE' if melivra else 'QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
+        center('PAPIRA · SCREENSHOT GUIDE' if papira else 'ALIGNA · SCREENSHOT GUIDE' if aligna else 'CLIPNEST · SCREENSHOT GUIDE' if clipnest else 'MELIVRA · SCREENSHOT GUIDE' if melivra else 'QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
         center(slide['heading'], 166, bold(48))
         center(slide['caption'], 235, regular(32), '#645c74')
         source = Image.open(Path(asset_root) / slide['asset']).convert('RGB')
-        if source.size != ((1080,2160) if aligna else (1206,2622) if clipnest else (1080,2400) if melivra else (1080,1920)):
+        if source.size != ((1080,2160) if aligna else (1206,2622) if clipnest else (1080,2400) if melivra or papira else (1080,1920)):
             raise GuideError('source_geometry_changed')
         # Entire screenshot, uniformly scaled. No crop, synthetic taps or UI edits.
-        size = (675,1350) if aligna else (603,1311) if clipnest else (621,1380) if melivra else (756,1344)
-        x, y = (202,320) if aligna else (238,330) if clipnest else (229,300) if melivra else (162,320)
+        size = (675,1350) if aligna else (603,1311) if clipnest else (621,1380) if melivra or papira else (756,1344)
+        x, y = (202,320) if aligna else (238,330) if clipnest else (229,300) if melivra or papira else (162,320)
         source = source.resize(size, Image.Resampling.LANCZOS)
         canvas.paste(source,(x,y))
         draw.rounded_rectangle((x-3,y-3,x+size[0]+3,y+size[1]+3), radius=3, outline='#d8cdeb', width=3)
         center(manifest['metadata']['format_disclosure'], 1721, regular(31), '#645c74')
-        center(manifest['metadata']['cta'] if clipnest or aligna else 'Melivra for Android · Link in description' if melivra else 'App Store & Google Play links in the description', 1783, regular(29))
+        center(manifest['metadata']['cta'] if clipnest or aligna or papira else 'Melivra for Android · Link in description' if melivra else 'App Store & Google Play links in the description', 1783, regular(29))
         center('ONNELLAB', 1841, bold(26), '#8c839e')
         frame = output / f'slide-{index+1}.png'
         canvas.save(frame)

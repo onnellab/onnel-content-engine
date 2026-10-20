@@ -232,3 +232,32 @@ the approved genuine-capture format. No Papira upload intent was created.
 Before upload, the parent must reconcile the complete target-channel inventory
 for this exact topic/title and preserve the same hash-bound intent across retries.
 Prepared media and a planned slot are not a scheduled receipt.
+
+## Papira home-screen guide (2026-10-23)
+
+`papira-start-20261023.json` is an independent exact Papira contract, not a
+replacement for any managed-recording or prior screenshot-guide gate. It uses
+only `assets/store_promo/raw/android/en/01.png` at reviewed Papira commit
+`dcfd66693b4bc283356907574c59f90026dacbe7`, SHA-256
+`497e31dc4f2ed3db0295b79da8bddbe42616babb1f112e3a039c313bdc04fa7a`.
+The 1080x2400 real Android emulator home screenshot is uniformly fitted in full.
+The capture fixture records this empty home before injecting a sample project;
+there are no user manuscripts, photographs, third-party artwork, or audio.
+
+The source identity is 2.0.3+10 at
+`f347cefeb75f83752d0d449d039912a5d7479984`. Comparison to the reviewed commit
+shows no runtime `lib/` or selected Android PNG changes. The October 20 store
+snapshot records public Android 2.0.3; the October 20 live Play inspection
+confirms the ONNELLAB purchase listing, October 16 update, and current features,
+but did not expose a version number. These are distinct evidence sources.
+The iOS listing remains 2.0.1 and is not promoted by this Android-only guide.
+No exact signed-public-build capture attestation is claimed.
+
+The guide explains Create a book versus Convert TXT without showing a tap,
+conversion, output, or speed demonstration. The source and final frames must be
+reviewed; persistent disclosure, Android-only CTA, 15 seconds/450 frames,
+1080x1920 H.264/yuv420p, and no audio are required. Rendering uses only existing
+free cloud Python/Pillow/ffmpeg/ffprobe, two encoder threads and a 180-second
+encoder timeout. CLI validation does not authorize upload. Publication requires
+independent review, current duplicate reconciliation, durable intent, and a
+separate actual Studio scheduling receipt; a render is not a scheduled video.
