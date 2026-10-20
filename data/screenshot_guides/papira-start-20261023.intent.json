@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "papira-start-20261023",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "uploaded_private",
+  "status": "scheduled_verified",
   "video_sha256": "50980b84365aee047f5595ff092455e77d266b1904e6f17c93d8f656c69a5ecf",
   "manifest_sha256": "940390b163c08168c1ccb4c7dfff0d2aeed04ace5523b2936ed85eedaaa4b487",
   "library_file_id": "libfile_f28277f7dee081919d90436fcb5b71e8",
@@ -18,5 +18,19 @@
   "pre_upload_reconciliation_at": "2026-10-20T09:36:54Z",
   "recovery_note": "Old tab timeout before file selection recovered in fresh target-channel tab; same 11 Shorts, no Papira entry. No prior file upload.",
   "upload_observed_at": "2026-10-20T09:37:58Z",
-  "upload_observation": "UI upload complete, saved private, processing soon; assigned ID X-G8oy1boSc. No scheduling yet."
+  "upload_observation": "UI upload complete, saved private, processing soon; assigned ID X-G8oy1boSc. No scheduling yet.",
+  "scheduled_observed_at": "2026-10-20T09:41:17Z",
+  "receipt_path": "data/screenshot_guides/papira-start-20261023.receipt.json",
+  "schedule_readback": {
+    "date": "2026. 10. 23.",
+    "time": "오전 9:00",
+    "timezone": "서울(GMT+09:00)",
+    "confirmation": "2026년 10월 23일 9:00 에 동영상이 공개 상태로 설정됩니다."
+  },
+  "disclosures": {
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "paid_promotion": false,
+    "basis": "Owner-authorized ordinary metadata: own genuine UI screenshot, no generated realistic scene, music, sponsor or paid placement."
+  }
 }
