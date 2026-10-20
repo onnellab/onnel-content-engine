@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "guide_id": "papira-start-20261023",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "video_id": "X-G8oy1boSc",
+  "status": "scheduled_verified",
+  "video_sha256": "50980b84365aee047f5595ff092455e77d266b1904e6f17c93d8f656c69a5ecf",
+  "manifest_sha256": "940390b163c08168c1ccb4c7dfff0d2aeed04ace5523b2936ed85eedaaa4b487",
+  "library_file_id": "libfile_f28277f7dee081919d90436fcb5b71e8",
+  "upload_attempts": 1,
+  "title": "How to Choose a Starting Option in Papira | Android Screenshot Guide",
+  "video_url": "https://youtube.com/shorts/X-G8oy1boSc?feature=share",
+  "scheduled_for": "2026-10-23T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "scheduled_for_utc": "2026-10-23T00:00:00Z",
+  "observed_at": "2026-10-20T09:41:17Z",
+  "server_publication_timestamp": null,
+  "publication_verified": false,
+  "evidence": {
+    "surface": "dot cloud browser, ONNELLAB Studio",
+    "account": "onnellab.app@gmail.com",
+    "schedule_readback": {
+      "date": "2026. 10. 23.",
+      "time": "오전 9:00",
+      "timezone": "서울(GMT+09:00)",
+      "confirmation": "2026년 10월 23일 9:00 에 동영상이 공개 상태로 설정됩니다."
+    },
+    "confirmation_duration": "0:15",
+    "upload_complete": true,
+    "processed_preview_visible": true,
+    "copyright_checks": "No issues found; YouTube says check is not final.",
+    "title_and_description_applied": true,
+    "category": "Education",
+    "disclosures": {
+      "made_for_kids": false,
+      "synthetic_media": false,
+      "paid_promotion": false,
+      "basis": "Owner-authorized ordinary metadata: own genuine UI screenshot, no generated realistic scene, music, sponsor or paid placement."
+    },
+    "thumbnail_status": "No separate custom thumbnail applied; completion modal image placeholder did not permit final thumbnail pixel verification.",
+    "post_confirmation_inventory": "Reload attempted after authoritative success modal; DOMSnapshot timed out. No second schedule or upload attempted.",
+    "external_link_limit": "Description store URL is text; Studio still asks one-time verification for clickable external links, which was not initiated."
+  },
+  "source_and_quality": {
+    "source_asset_sha256": "497e31dc4f2ed3db0295b79da8bddbe42616babb1f112e3a039c313bdc04fa7a",
+    "actual_media": "15.000 seconds;450frames;1080x1920;30fps;H264/yuv420p;no audio",
+    "full_frame_comparison": true,
+    "tests_run": 74,
+    "tests_passed": 70,
+    "tests_skipped": 4,
+    "independent_visual_and_claim_review": true
+  },
+  "notification": {
+    "accepted_message_id": "Sentinel_2d99894d56088191985f191cfaf25865",
+    "accepted_at": "2026-10-20T09:41:44Z",
+    "read_by_user_verified": false
+  },
+  "recovery": {
+    "new_login_or_permission": false,
+    "old_tab_before_upload_timeout": "Recovered with a fresh target-channel tab before any file selection.",
+    "duplicates_created": false
+  }
+}
