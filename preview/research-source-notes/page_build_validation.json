@@ -1,0 +1,160 @@
+{
+  "observed_at_utc": "2026-10-20T11:31:56.035103+00:00",
+  "engine_source_commit": "8fafda85cdd8ca502932362366529f55b55ff59f",
+  "homepage_base_commit": "afdca0c2318e443c8081a6eeb7953e240c1b263d",
+  "locked_dependencies": {
+    "restored": 202,
+    "ignore_scripts": true,
+    "lock_sha256": "de2e73ecfcd0b81f60b2643809893ca189c847bd1983059302d8e848dc7f37d7"
+  },
+  "initial_build": {
+    "exit_code": 137,
+    "last_phase": "generating static routes",
+    "kill_cause": "not proven",
+    "log_sha256": "94721bb51522a1eb6a0fd8847b13fbad97416a4ab1bd65c6bf0beb313ffa01d7"
+  },
+  "bounded_retry": {
+    "heap_mib": 384,
+    "group_rss_limit_mib": 768,
+    "minimum_available_mib": 512,
+    "timeout_seconds": 180,
+    "source_and_lockfile_changed": false,
+    "start_available_bytes": 1874194432,
+    "exit_code": 0,
+    "stop_reason": null,
+    "peak_group_rss_bytes": 505221120,
+    "minimum_available_bytes": 1372680192,
+    "duration_seconds": 6.974,
+    "remaining_owned_pids": [],
+    "result": "passed"
+  },
+  "command": "node node_modules/astro/bin/astro.mjs build",
+  "environment": {
+    "NODE_OPTIONS": "--max-old-space-size=384",
+    "UV_THREADPOOL_SIZE": "1",
+    "RAYON_NUM_THREADS": "1",
+    "GOMAXPROCS": "1",
+    "ASTRO_TELEMETRY_DISABLED": "1"
+  },
+  "generated_pages": 700,
+  "build_log_sha256": "eec375d0a5adf82b37955f8cab52501239e6c4d7380cae30523106741aef39af",
+  "generated_html_checks": {
+    "observed_at_utc": "2026-10-20T11:31:56.035103+00:00",
+    "result": "PASS",
+    "pages": [
+      {
+        "locale": "en",
+        "route": "/blog/en/separate-source-notes-from-conclusions/",
+        "html_sha256": "13c844396091e3563eb2fc4635bd5810e85136c0bffae54b3b325ace5f70788c",
+        "title_canonical_hreflang": true,
+        "publication_date_absent": true,
+        "local_link_targets_verified": 26,
+        "social_card_dimensions": [
+          1200,
+          675
+        ]
+      },
+      {
+        "locale": "ko",
+        "route": "/blog/ko/separate-source-notes-from-conclusions/",
+        "html_sha256": "e90f033a7dd58c2cef4aa1d3f741cb6eb3731408240ae06e3202a037386bbc7b",
+        "title_canonical_hreflang": true,
+        "publication_date_absent": true,
+        "local_link_targets_verified": 26,
+        "social_card_dimensions": [
+          1200,
+          675
+        ]
+      },
+      {
+        "locale": "ja",
+        "route": "/blog/ja/separate-source-notes-from-conclusions/",
+        "html_sha256": "56c68d636cd3a498fd0103ac565322c42e2e6b113dfe637acb6e3b531c50b47a",
+        "title_canonical_hreflang": true,
+        "publication_date_absent": true,
+        "local_link_targets_verified": 26,
+        "social_card_dimensions": [
+          1200,
+          675
+        ]
+      },
+      {
+        "locale": "zh-Hans",
+        "route": "/blog/zh-hans/separate-source-notes-from-conclusions/",
+        "html_sha256": "7970c7a315a91d7a8ba1a705b257d267629f4e3ffa37ca85c277ede8ab5e11bd",
+        "title_canonical_hreflang": true,
+        "publication_date_absent": true,
+        "local_link_targets_verified": 26,
+        "social_card_dimensions": [
+          1200,
+          675
+        ]
+      },
+      {
+        "locale": "zh-Hant",
+        "route": "/blog/zh-hant/separate-source-notes-from-conclusions/",
+        "html_sha256": "becbe01326888d7d96d2d07b64a9634fb73c5cb40f3432b320609dfa406da291",
+        "title_canonical_hreflang": true,
+        "publication_date_absent": true,
+        "local_link_targets_verified": 26,
+        "social_card_dimensions": [
+          1200,
+          675
+        ]
+      },
+      {
+        "locale": "pt-BR",
+        "route": "/blog/pt-br/separate-source-notes-from-conclusions/",
+        "html_sha256": "c58e47185d030a88fc53da03fae289211f86fdb95176473f0356a43378a2ed68",
+        "title_canonical_hreflang": true,
+        "publication_date_absent": true,
+        "local_link_targets_verified": 26,
+        "social_card_dimensions": [
+          1200,
+          675
+        ]
+      },
+      {
+        "locale": "de",
+        "route": "/blog/de/separate-source-notes-from-conclusions/",
+        "html_sha256": "0676bb87d15edb11d773380d208b97c875c0735cae2792f74cbf1094d5acced7",
+        "title_canonical_hreflang": true,
+        "publication_date_absent": true,
+        "local_link_targets_verified": 26,
+        "social_card_dimensions": [
+          1200,
+          675
+        ]
+      },
+      {
+        "locale": "fr",
+        "route": "/blog/fr/separate-source-notes-from-conclusions/",
+        "html_sha256": "755c8669601baaba3825a8be24faebc16ffe4fb5b1b2ef140fdfcd750cc7f992",
+        "title_canonical_hreflang": true,
+        "publication_date_absent": true,
+        "local_link_targets_verified": 26,
+        "social_card_dimensions": [
+          1200,
+          675
+        ]
+      },
+      {
+        "locale": "es",
+        "route": "/blog/es/separate-source-notes-from-conclusions/",
+        "html_sha256": "271bf9b1324551b41fce5a03af9383eb5f212cc4c258da7d3c33a2596065e2a8",
+        "title_canonical_hreflang": true,
+        "publication_date_absent": true,
+        "local_link_targets_verified": 26,
+        "social_card_dimensions": [
+          1200,
+          675
+        ]
+      }
+    ],
+    "scope": "generated HTML and local link targets only; not browser display, responsive controls, HTTP or live publication"
+  },
+  "browser_display": "NOT VERIFIED: existing cloud sandbox Chromium socket/ptrace restriction; no security bypass or alternate deployment",
+  "queue_modified": false,
+  "scheduled_at": null,
+  "published": false
+}

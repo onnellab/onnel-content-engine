@@ -504,7 +504,7 @@
   },
   "native_source_unchanged": true,
   "renderer": "Installed librsvg-2.so.2 and libcairo.so.2 via task-local Python CLI adapter; no substitute renderer or package install. Final output requires independent visual inspection.",
-  "page_build": "NOT RUN: exact locked npm dependency restoration denied; specific confirmation pending.",
+  "page_build": "PASS: locked Astro build generated 700 pages; nine candidate HTML pages passed title/canonical/hreflang/local-target checks. Actual browser rendering still unverified. See page_build_validation.json.",
   "visual_review": {
     "result": "PASS",
     "reviewed_at_utc": "2026-10-20T10:41:55.044864+00:00",
