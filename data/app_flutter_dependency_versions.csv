@@ -26,7 +26,7 @@ APP-0007,melivra,app_version,melivra,1.0.7+144,1.0.7,,ok,github:onnellab/melivra
 APP-0007,melivra,dependency,crypto,^3.0.7,3.0.7,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,cupertino_icons,^1.0.8,1.0.9,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,dart_tags,^0.4.1,0.4.1,,ok,github:onnellab/melivra/pubspec.yaml
-APP-0007,melivra,dependency,ffmpeg_kit_flutter_new_audio,ref:3df1263ed1c7380d9303007c0a844088777d479e,2.5.2,,ok,github:onnellab/melivra/pubspec.yaml
+APP-0007,melivra,dependency,ffmpeg_kit_flutter_new_audio,ref:bf0ffe958d518ad3a46009fad05bf5080fba966b,2.5.2,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,file_picker,^12.0.0,12.0.0,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,flutter,sdk:flutter,0.0.0,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,flutter_localizations,sdk:flutter,0.0.0,,ok,github:onnellab/melivra/pubspec.yaml
@@ -39,6 +39,7 @@ APP-0007,melivra,dependency,shared_preferences,^2.5.3,2.5.5,,ok,github:onnellab/
 APP-0007,melivra,dependency,sqflite,^2.4.3,2.4.3,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,sqflite_common_ffi,^2.4.2+1,2.4.2+1,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,sqlite3,^3.5.2,3.5.2,,ok,github:onnellab/melivra/pubspec.yaml
+APP-0007,melivra,dependency,tflite_flutter,0.12.1,0.12.1,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,dependency,url_launcher,^6.3.2,6.3.2,,ok,github:onnellab/melivra/pubspec.yaml
 APP-0007,melivra,flutter_sdk,flutter,>=3.44.0,,>=3.44.0,ok,github:onnellab/melivra/pubspec.yaml
 APP-0001,quivra,app_version,quivra,1.0.10+85,1.0.10,,ok,github:onnellab/quivra/pubspec.yaml
@@ -67,7 +68,7 @@ APP-0004,segra,dependency,share_plus,^10.1.2,10.1.4,,ok,github:onnellab/segra/pu
 APP-0004,segra,dependency,shared_preferences,^2.5.3,2.5.4,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,url_launcher,^6.3.2,6.3.2,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,flutter_sdk,flutter,>=3.38.4,,>=3.38.4,ok,github:onnellab/segra/pubspec.yaml
-APP-0002,tagweaver,app_version,tagweaver,2.5.4+98,2.5.4,,ok,github:onnellab/tagweaver/pubspec.yaml
+APP-0002,tagweaver,app_version,tagweaver,2.5.5+99,2.5.5,,ok,github:onnellab/tagweaver/pubspec.yaml
 APP-0002,tagweaver,dependency,cupertino_icons,^1.0.8,1.0.8,,ok,github:onnellab/tagweaver/pubspec.yaml
 APP-0002,tagweaver,dependency,file_picker,^8.0.0,8.3.7,,ok,github:onnellab/tagweaver/pubspec.yaml
 APP-0002,tagweaver,dependency,flutter,sdk:flutter,0.0.0,,ok,github:onnellab/tagweaver/pubspec.yaml

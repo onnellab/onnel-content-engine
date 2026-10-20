@@ -43,7 +43,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 | dependency | crypto | ^3.0.7 | 3.0.7 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.9 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | dart_tags | ^0.4.1 | 0.4.1 | - | ok | github:onnellab/melivra/pubspec.yaml |
-| dependency | ffmpeg_kit_flutter_new_audio | ref:3df1263ed1c7380d9303007c0a844088777d479e | 2.5.2 | - | ok | github:onnellab/melivra/pubspec.yaml |
+| dependency | ffmpeg_kit_flutter_new_audio | ref:bf0ffe958d518ad3a46009fad05bf5080fba966b | 2.5.2 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | file_picker | ^12.0.0 | 12.0.0 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | flutter_localizations | sdk:flutter | 0.0.0 | - | ok | github:onnellab/melivra/pubspec.yaml |
@@ -56,6 +56,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 | dependency | sqflite | ^2.4.3 | 2.4.3 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | sqflite_common_ffi | ^2.4.2+1 | 2.4.2+1 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | sqlite3 | ^3.5.2 | 3.5.2 | - | ok | github:onnellab/melivra/pubspec.yaml |
+| dependency | tflite_flutter | 0.12.1 | 0.12.1 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | url_launcher | ^6.3.2 | 6.3.2 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | flutter_sdk | flutter | >=3.44.0 | - | >=3.44.0 | ok | github:onnellab/melivra/pubspec.yaml |
 
@@ -99,7 +100,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | tagweaver | 2.5.4+98 | 2.5.4 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
+| app_version | tagweaver | 2.5.5+99 | 2.5.5 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | file_picker | ^8.0.0 | 8.3.7 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
