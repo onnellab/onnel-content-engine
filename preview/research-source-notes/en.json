@@ -13,19 +13,19 @@
     "steps": [
       [
         "Capture",
-        "Quote or paraphrase with a source locator"
+        "Text + source"
       ],
       [
         "Separate",
-        "Label your own interpretation"
+        "Your inference"
       ],
       [
         "Check",
-        "Record context and the next question"
+        "Context + check"
       ],
       [
         "Revise",
-        "Keep a dated correction trail"
+        "Dated changes"
       ]
     ]
   },

@@ -32,9 +32,7 @@
     }
   ],
   "unverified": [
-    "Native repository validation and current quality fingerprints",
-    "Generated SVG/PNG assets and font/layout quality",
-    "Actual new article page rendering and responsive behavior",
+    "Actual new article Astro page rendering and responsive behavior",
     "Queue insertion and canonical scheduling"
   ],
   "publication_allowed": false,
@@ -45,5 +43,21 @@
     "result": "Matching localized H1, language, self canonical, nine alternates and x-default",
     "slug": "keep-durable-research-reading-log"
   },
-  "local_byte_identity_claimed": false
+  "local_byte_identity_claimed": true,
+  "initial_reviewed_commit": "2434d1b37cf7d66a6d9fa4bcd60a9960a067b82d",
+  "followup_review": {
+    "date": "2026-10-20",
+    "reviewer_separate_from_author": true,
+    "corrections": [
+      "Five locale image captions shortened to preserve words within unchanged layout; German and Spanish headings shortened.",
+      "Korean and Chinese definition phrasing made explicit without semantic change."
+    ],
+    "records": [
+      "image_text_changes.json",
+      "validation_text_changes.json"
+    ],
+    "current_raw_byte_identity": "reviewed-source-sha256.json",
+    "scope": "Text and semantic equivalence. Final image and actual page rendering are separate gates."
+  },
+  "native_and_image_evidence": "native_validation.json"
 }

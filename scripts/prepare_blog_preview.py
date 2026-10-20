@@ -16,23 +16,42 @@ MAX_BUNDLE = 2_000_000
 def candidate_profile(slug):
     if slug == 'turn-repeated-text-into-reusable-snippets':
         return {
+            'category': 'productivity',
+            'faq_count': 4,
             'app_path': '/apps/clipnest/',
             'store_urls': ['https://apps.apple.com/us/app/clipnest-clipboard-tool/id6779928552'],
+            'source_urls': [],
             'related_slugs': ['reuse-copied-text-snippets-iphone'],
             'table_rows': {locale: 3 for locale in LOCALES},
         }
     if slug == 'design-consistent-file-naming-system':
         return {
+            'category': 'productivity',
+            'faq_count': 4,
             'app_path': '/apps/aligna/',
             'store_urls': [
                 'https://apps.apple.com/us/app/aligna-file-renamer/id6783642658',
                 'https://play.google.com/store/apps/details?id=com.onnellab.aligna',
             ],
+            'source_urls': [],
             'related_slugs': [
                 'rename-files-safely-preview-workflow',
                 'organize-downloads-small-folder-system',
             ],
             'table_rows': {locale: (5 if locale == 'en' else 6) for locale in LOCALES},
+        }
+    if slug == 'separate-source-notes-from-conclusions':
+        return {
+            'category': 'research',
+            'faq_count': 3,
+            'app_path': None,
+            'store_urls': [],
+            'source_urls': [
+                'https://library.leeds.ac.uk/info/1401/academic-skills/85/note-making',
+                'https://owl.purdue.edu/owl/research_and_citation/using_research/quoting_paraphrasing_and_summarizing/index.html',
+            ],
+            'related_slugs': ['keep-durable-research-reading-log'],
+            'table_rows': {locale: 3 for locale in LOCALES},
         }
     raise ValueError('Unknown preview candidate')
 
@@ -40,13 +59,16 @@ def allowed_candidate_links(slug, locale):
     if locale not in LOCALES:
         raise ValueError('Unknown preview locale')
     profile = candidate_profile(slug)
-    return {
+    links = {
         f'/blog-assets/{locale}/{slug}/workflow-diagram.svg',
-        profile['app_path'],
         *profile['store_urls'],
+        *profile['source_urls'],
         *(f'https://onnellab.com/blog/{locale.lower()}/{related}/'
           for related in profile['related_slugs']),
     }
+    if profile['app_path'] is not None:
+        links.add(profile['app_path'])
+    return links
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
@@ -78,8 +100,8 @@ def validate_bundle(bundle_path):
     slug = bundle.get('slug', '')
     if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+){1,15}', slug):
         raise ValueError('Invalid slug')
-    candidate_profile(slug)
-    expected_paths = {f'generated/markdown/{locale}/productivity/{slug}.md' for locale in LOCALES}
+    profile = candidate_profile(slug)
+    expected_paths = {f'generated/markdown/{locale}/{profile["category"]}/{slug}.md' for locale in LOCALES}
     expected_paths |= {f'generated/assets/blog/{locale}/{slug}/{kind}.svg' for locale in LOCALES for kind in ('workflow-diagram', 'social-card')}
     files = bundle.get('files', [])
     if len(files) != 27 or {item.get('path') for item in files} != expected_paths:
@@ -101,6 +123,10 @@ def validate_bundle(bundle_path):
             values, body = metadata(content)
             if values.get('language') != locale or values.get('slug') != slug or values.get('status') != 'review':
                 raise ValueError('Metadata identity/status mismatch')
+            if values.get('category') != profile['category']:
+                raise ValueError('Metadata category mismatch')
+            if profile['app_path'] is None and values.get('related_apps') != '':
+                raise ValueError('Product-neutral preview must not include related apps')
             if values.get('canonical_url') != f'https://onnellab.com/blog/{locale.lower()}/{slug}/':
                 raise ValueError('Canonical URL mismatch')
             if values.get('title') != values.get('card_title') or not body.lstrip().startswith('# ' + values['title'] + '\n'):
@@ -189,7 +215,15 @@ def prepare(bundle_path, homepage, evidence):
         p=homepage/'public/blog-assets'/locale/bundle['slug']/'social-card.png'
         record['overlay_sha256'][str(p.relative_to(homepage))]=sha(p.read_bytes())
     (evidence/'provenance.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
-    manifest_destination.write_text(json.dumps({'slug':bundle['slug'],'locales':list(LOCALES), 'store_urls':candidate_profile(bundle['slug'])['store_urls'], 'table_rows':candidate_profile(bundle['slug'])['table_rows']},indent=2)+'\n')
+    profile = candidate_profile(bundle['slug'])
+    manifest_destination.write_text(json.dumps({
+        'slug': bundle['slug'],
+        'locales': list(LOCALES),
+        'category': profile['category'],
+        'faq_count': profile['faq_count'],
+        'store_urls': profile['store_urls'],
+        'table_rows': profile['table_rows'],
+    }, indent=2) + '\n')
     return record
 
 if __name__ == '__main__':

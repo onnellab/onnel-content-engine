@@ -23,7 +23,7 @@ for (const locale of candidate.locales as string[]) {
     }
     await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute('href', `https://onnellab.com/blog/en/${candidate.slug}/`);
     await expect(page.locator('meta[property="article:published_time"]')).toHaveCount(0);
-    await expect(page.locator('.faq-list details')).toHaveCount(4);
+    await expect(page.locator('.faq-list details')).toHaveCount(candidate.faq_count);
     await expect(page.locator('article table tbody tr')).toHaveCount(candidate.table_rows[locale]);
 
     // Check the browser's actual native list-marker inputs and computed style.
@@ -51,6 +51,9 @@ for (const locale of candidate.locales as string[]) {
     await expect.poll(() => image.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
     for (const storeUrl of candidate.store_urls as string[]) {
       await expect(page.locator(`article a[href="${storeUrl}"]`).first()).toBeVisible();
+    }
+    if (candidate.slug === 'separate-source-notes-from-conclusions') {
+      await expect(page.locator('article a[href^="/apps/"], article a[href^="https://onnellab.com/apps/"], article a[href*="apps.apple.com"], article a[href*="play.google.com"]')).toHaveCount(0);
     }
     const hrefs = await page.locator('a[href]').evaluateAll(links => links.map(link => link.getAttribute('href')!));
     const checked: string[] = [];

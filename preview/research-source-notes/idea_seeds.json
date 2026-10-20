@@ -1,0 +1,19 @@
+[
+  {
+    "status": "idea",
+    "category": "research",
+    "primary_language": "en",
+    "slug": "record-source-version-before-revising-notes",
+    "primary_question": "How can I preserve a source version when revising research notes?",
+    "working_title": "Preserve Source Versions When Revising Research Notes",
+    "priority": "normal",
+    "search_intent": "workflow",
+    "related_apps": "",
+    "primary_keyword": "source version history",
+    "secondary_keywords": "research notes|source snapshots|revision history",
+    "evergreen": "true",
+    "source_type": "editorial",
+    "review_required": "true",
+    "notes": "Product-neutral editorial hypothesis; no measured demand or app claim. Independently reviewed 2026-10-20."
+  }
+]

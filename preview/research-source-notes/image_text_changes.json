@@ -1,0 +1,242 @@
+{
+  "en": {
+    "before": {
+      "title": "Keep the source and your conclusion separate",
+      "subtitle": "A small structure for traceable research notes",
+      "message": "Make the boundary between evidence and interpretation visible.",
+      "steps": [
+        [
+          "Capture",
+          "Quote or paraphrase with a source locator"
+        ],
+        [
+          "Separate",
+          "Label your own interpretation"
+        ],
+        [
+          "Check",
+          "Record context and the next question"
+        ],
+        [
+          "Revise",
+          "Keep a dated correction trail"
+        ]
+      ]
+    },
+    "after": {
+      "title": "Keep the source and your conclusion separate",
+      "subtitle": "A small structure for traceable research notes",
+      "message": "Make the boundary between evidence and interpretation visible.",
+      "steps": [
+        [
+          "Capture",
+          "Text + source"
+        ],
+        [
+          "Separate",
+          "Your inference"
+        ],
+        [
+          "Check",
+          "Context + check"
+        ],
+        [
+          "Revise",
+          "Dated changes"
+        ]
+      ]
+    }
+  },
+  "pt-BR": {
+    "before": {
+      "title": "Separe a fonte da sua conclusão",
+      "subtitle": "Uma estrutura simples para anotações de pesquisa rastreáveis",
+      "message": "Deixe visível a fronteira entre evidência e interpretação.",
+      "steps": [
+        [
+          "Registre",
+          "Cite ou parafraseie indicando onde encontrar o trecho"
+        ],
+        [
+          "Separe",
+          "Identifique sua própria interpretação"
+        ],
+        [
+          "Confira",
+          "Registre o contexto e a próxima pergunta"
+        ],
+        [
+          "Revise",
+          "Mantenha um histórico de correções com datas"
+        ]
+      ]
+    },
+    "after": {
+      "title": "Separe a fonte da sua conclusão",
+      "subtitle": "Uma estrutura simples para anotações de pesquisa rastreáveis",
+      "message": "Deixe visível a fronteira entre evidência e interpretação.",
+      "steps": [
+        [
+          "Registre",
+          "Texto e fonte"
+        ],
+        [
+          "Separe",
+          "Sua análise"
+        ],
+        [
+          "Confira",
+          "Contexto e pergunta"
+        ],
+        [
+          "Revise",
+          "Correções datadas"
+        ]
+      ]
+    }
+  },
+  "de": {
+    "before": {
+      "title": "Quelle und Schlussfolgerung getrennt halten",
+      "subtitle": "Eine einfache Struktur für nachvollziehbare Forschungsnotizen",
+      "message": "Machen Sie die Grenze zwischen Beleg und Interpretation sichtbar.",
+      "steps": [
+        [
+          "Erfassen",
+          "Zitieren oder paraphrasieren und die Fundstelle angeben"
+        ],
+        [
+          "Trennen",
+          "Die eigene Interpretation kennzeichnen"
+        ],
+        [
+          "Prüfen",
+          "Kontext und nächste Frage festhalten"
+        ],
+        [
+          "Überarbeiten",
+          "Korrekturen mit Datum dokumentieren"
+        ]
+      ]
+    },
+    "after": {
+      "title": "Quelle und Schlussfolgerung getrennt halten",
+      "subtitle": "Eine einfache Struktur für nachvollziehbare Forschungsnotizen",
+      "message": "Machen Sie die Grenze zwischen Beleg und Interpretation sichtbar.",
+      "steps": [
+        [
+          "Erfassen",
+          "Text und Quelle"
+        ],
+        [
+          "Trennen",
+          "Eigene Deutung"
+        ],
+        [
+          "Prüfen",
+          "Kontext und Frage"
+        ],
+        [
+          "Ändern",
+          "Korrektur mit Datum"
+        ]
+      ]
+    }
+  },
+  "fr": {
+    "before": {
+      "title": "Séparez la source de votre conclusion",
+      "subtitle": "Une structure simple pour des notes de recherche traçables",
+      "message": "Rendez visible la frontière entre éléments probants et interprétation.",
+      "steps": [
+        [
+          "Consigner",
+          "Citer ou reformuler avec un repère dans la source"
+        ],
+        [
+          "Séparer",
+          "Identifier votre propre interprétation"
+        ],
+        [
+          "Vérifier",
+          "Noter le contexte et la prochaine question"
+        ],
+        [
+          "Réviser",
+          "Garder une trace datée des corrections"
+        ]
+      ]
+    },
+    "after": {
+      "title": "Séparez la source de votre conclusion",
+      "subtitle": "Une structure simple pour des notes de recherche traçables",
+      "message": "Distinguez les éléments probants de votre interprétation.",
+      "steps": [
+        [
+          "Consigner",
+          "Texte et source"
+        ],
+        [
+          "Séparer",
+          "Votre analyse"
+        ],
+        [
+          "Vérifier",
+          "Contexte et question"
+        ],
+        [
+          "Réviser",
+          "Corrections datées"
+        ]
+      ]
+    }
+  },
+  "es": {
+    "before": {
+      "title": "Mantén separadas la fuente y tu conclusión",
+      "subtitle": "Una estructura sencilla para notas de investigación rastreables",
+      "message": "Haz visible el límite entre la evidencia y la interpretación.",
+      "steps": [
+        [
+          "Registra",
+          "Cita o parafrasea e indica dónde está el pasaje"
+        ],
+        [
+          "Separa",
+          "Identifica tu propia interpretación"
+        ],
+        [
+          "Comprueba",
+          "Registra el contexto y la siguiente pregunta"
+        ],
+        [
+          "Revisa",
+          "Conserva un historial de correcciones con fechas"
+        ]
+      ]
+    },
+    "after": {
+      "title": "Mantén separadas la fuente y tu conclusión",
+      "subtitle": "Una estructura sencilla para notas de investigación rastreables",
+      "message": "Haz visible el límite entre la evidencia y la interpretación.",
+      "steps": [
+        [
+          "Registra",
+          "Texto y fuente"
+        ],
+        [
+          "Separa",
+          "Tu análisis"
+        ],
+        [
+          "Verifica",
+          "Contexto y pregunta"
+        ],
+        [
+          "Revisa",
+          "Cambios con fecha"
+        ]
+      ]
+    }
+  }
+}

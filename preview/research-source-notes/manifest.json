@@ -19,7 +19,7 @@
   "queue_modified": false,
   "scheduled_at": null,
   "publication_receipt": false,
-  "source_engine_sha": "8a1096dd274591d06c65db8856d970b5165b046f",
+  "source_engine_sha": "2434d1b37cf7d66a6d9fa4bcd60a9960a067b82d",
   "source_homepage_sha": "c460167518d7094a1ad7db80a044e8de02d0747a",
   "related_apps": [],
   "scope": "Product-neutral existing editorial idea, separate from durable reading logs and uncertainty-only notes. No product or store claims.",
@@ -39,15 +39,16 @@
   "fictional_example": "Memo A, v1, six participants, four template B choices, quiet room and absent delayed recall test are invented editorial examples, not research evidence.",
   "verification": {
     "independent_language_review": "All nine final text payloads independently reviewed by the coordinating reviewer on 2026-10-20. No blocking semantic findings; minor nonblocking French wording retained frozen. See editorial_review.json.",
-    "native_repository_gates": "NOT RUN; CLI authorization pending",
-    "generated_image_assets": "NOT GENERATED; image copy and intended paths only",
-    "actual_page_rendering": "NOT RUN",
+    "native_repository_gates": "Five native gates passed for all nine locales; exact final-source run is retained separately.",
+    "generated_image_assets": "Native SVG/PNG and branded homepage preview images generated; all nine final PNGs independently visually reviewed PASS. See native_validation.json hashes.",
+    "actual_page_rendering": "NOT RUN; npm lockfile dependency restoration blocked, specific approval pending.",
     "related_links": "All nine existing research-reading-log pages loaded in dot cloud browser on 2026-10-20T09:45:59Z; localized H1, html lang, self canonical, nine alternate links and x-default matched.",
-    "sha256": "Local byte hashes not verified; Git blob identities will identify newly serialized reviewed field values, not original local file bytes.",
+    "sha256": "Current raw-byte SHA-256 identities verified and enforced by reviewed-source-sha256.json.",
     "connector_readback_schema": "9/9 passed on fresh GitHub blobs: JSON schema essentials, H1, 5 numbered steps, 3 content table rows, keyword presence, exact localized asset/related-link paths and terminal LF. Not native repository validation."
   },
-  "source_preservation": "Freshly serialized field-value-identical reviewed payloads. Local byte identity is not asserted.",
-  "artifacts": [
+  "source_preservation": "Original draft bytes remain at initial_draft_commit; only reviewed short image copy and explicit definition phrasing changed. See change records.",
+  "initial_draft_commit": "2434d1b37cf7d66a6d9fa4bcd60a9960a067b82d",
+  "initial_artifacts": [
     {
       "locale": "en",
       "file": "en.json",
@@ -101,6 +102,62 @@
       "file": "es.json",
       "git_blob_sha1": "33a8d33458699acf554ac550e92bcaac7679b71e",
       "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    }
+  ],
+  "artifacts": [
+    {
+      "locale": "en",
+      "file": "en.json",
+      "sha256": "c998a74e2fd5e66614884e4a2a1c848bfe16a89973bf470d4690ba844094037f",
+      "identity_scope": "Current raw UTF-8 file bytes after independently reviewed validation and image-copy corrections"
+    },
+    {
+      "locale": "ko",
+      "file": "ko.json",
+      "sha256": "6c67657f658148a453a040441ccd4f7969d15220b2f3febb00738ca68e734738",
+      "identity_scope": "Current raw UTF-8 file bytes after independently reviewed validation and image-copy corrections"
+    },
+    {
+      "locale": "ja",
+      "file": "ja.json",
+      "sha256": "8ca65668b1207ad14c56f7db8b32152e987283e7c5f92e481081636859dada88",
+      "identity_scope": "Current raw UTF-8 file bytes after independently reviewed validation and image-copy corrections"
+    },
+    {
+      "locale": "zh-Hans",
+      "file": "zh-Hans.json",
+      "sha256": "93b9756a4f6fedace47e3268c1ce6c3d561b8ee1c06d92e82f6568694f38ae91",
+      "identity_scope": "Current raw UTF-8 file bytes after independently reviewed validation and image-copy corrections"
+    },
+    {
+      "locale": "zh-Hant",
+      "file": "zh-Hant.json",
+      "sha256": "41f6e9bcd00a5c3325f2bb5643913b52f4cba4bbce0c2b718304a2efc4cdf609",
+      "identity_scope": "Current raw UTF-8 file bytes after independently reviewed validation and image-copy corrections"
+    },
+    {
+      "locale": "pt-BR",
+      "file": "pt-BR.json",
+      "sha256": "49e1243edf1ea5c265d93038aee97d37b3cb560a1c291675e99a2189000d4c80",
+      "identity_scope": "Current raw UTF-8 file bytes after independently reviewed validation and image-copy corrections"
+    },
+    {
+      "locale": "de",
+      "file": "de.json",
+      "sha256": "2aff03d9de1ad8081a99fe525331851c9b5c32563138f0ef403efd38d4002f43",
+      "identity_scope": "Current raw UTF-8 file bytes after independently reviewed validation and image-copy corrections"
+    },
+    {
+      "locale": "fr",
+      "file": "fr.json",
+      "sha256": "9604f3ead87b8428b2554693d79bbee518c54005e98af8d24aaca97a6764d54e",
+      "identity_scope": "Current raw UTF-8 file bytes after independently reviewed validation and image-copy corrections"
+    },
+    {
+      "locale": "es",
+      "file": "es.json",
+      "sha256": "1bf2b198e2119ae7c524f2c446d8a5bd63152859c1cc7617c31ac738fa7b9e2c",
+      "identity_scope": "Current raw UTF-8 file bytes after independently reviewed validation and image-copy corrections"
     }
   ]
 }

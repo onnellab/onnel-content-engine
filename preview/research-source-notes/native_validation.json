@@ -1,0 +1,528 @@
+{
+  "state": "NATIVE_VALIDATED_NOT_QUEUED",
+  "observed_at_utc": "2026-10-20T10:41:18.761895+00:00",
+  "source_commit": "2434d1b37cf7d66a6d9fa4bcd60a9960a067b82d",
+  "native_gates_passed": [
+    "validate_topics",
+    "validate_foundation",
+    "evaluate_all_articles",
+    "check_nine_language_publication",
+    "check_content_supply"
+  ],
+  "locale_reviews": {
+    "en": {
+      "score": 10.0,
+      "all_mandatory_checks_passed": true
+    },
+    "ko": {
+      "score": 10.0,
+      "all_mandatory_checks_passed": true
+    },
+    "ja": {
+      "score": 10.0,
+      "all_mandatory_checks_passed": true
+    },
+    "zh-Hans": {
+      "score": 10.0,
+      "all_mandatory_checks_passed": true
+    },
+    "zh-Hant": {
+      "score": 10.0,
+      "all_mandatory_checks_passed": true
+    },
+    "pt-BR": {
+      "score": 10.0,
+      "all_mandatory_checks_passed": true
+    },
+    "de": {
+      "score": 10.0,
+      "all_mandatory_checks_passed": true
+    },
+    "fr": {
+      "score": 10.0,
+      "all_mandatory_checks_passed": true
+    },
+    "es": {
+      "score": 10.0,
+      "all_mandatory_checks_passed": true
+    }
+  },
+  "unit_tests": {
+    "run": 1703,
+    "passed": 1695,
+    "skipped": 8,
+    "failed": 0
+  },
+  "native_manifest": {
+    "schema": 1,
+    "slug": "separate-source-notes-from-conclusions",
+    "locales": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ],
+    "files": [
+      {
+        "path": "generated/markdown/en/research/separate-source-notes-from-conclusions.md",
+        "byte_length": 6392,
+        "sha256": "2b67c62c14ce17cfd923a9d3aaeb761b666f362f25ea089aa5aff68ba42826b0",
+        "git_blob_sha1": "4a01a1fd0ac48a89b42ba045915cd134aabe2cd3"
+      },
+      {
+        "path": "generated/images/en/research/separate-source-notes-from-conclusions/image_spec.json",
+        "byte_length": 3776,
+        "sha256": "bca9cf4b8540e485cd666aa2bb0ead61c2f54412f83bf86918c4a1a4c8ee9969",
+        "git_blob_sha1": "d9ed6947f6e7f84bf54b40c78e06023b3b5fd0ae"
+      },
+      {
+        "path": "generated/metadata/en/research/separate-source-notes-from-conclusions/internal_links.json",
+        "byte_length": 5110,
+        "sha256": "6981b471b0c8c293b0902094404643a689535469a8b99634bbd4e0161f0cd539",
+        "git_blob_sha1": "9b6987c52e6ea66c83534803151c346a19468b00"
+      },
+      {
+        "path": "generated/reviews/en/research/separate-source-notes-from-conclusions/review.json",
+        "byte_length": 3587,
+        "sha256": "312ac6dd4e5e7e72358f14243ef5925abd2aff1330e5868c3b6e0f76412183f9",
+        "git_blob_sha1": "f5e4aac7ecfd71767cc89b792d790e86620add5c"
+      },
+      {
+        "path": "generated/assets/blog/en/separate-source-notes-from-conclusions/workflow-diagram.svg",
+        "byte_length": 4329,
+        "sha256": "e4a5491fcd9b68bccc9fc3567bdf9591c6aa45b5207a54da282787ebdfeb1122",
+        "git_blob_sha1": "64b5540ab126d3bf23c40937b339be9d60b6635c"
+      },
+      {
+        "path": "generated/assets/blog/en/separate-source-notes-from-conclusions/workflow-diagram.png",
+        "byte_length": 71261,
+        "sha256": "89026b4d03faae19481d6685fb47920239bc84849b4b5a952299f39c54b45d2f",
+        "git_blob_sha1": "d45d19ae9cb405873a425df1c7ffbe7424fb087e"
+      },
+      {
+        "path": "generated/assets/blog/en/separate-source-notes-from-conclusions/social-card.svg",
+        "byte_length": 4329,
+        "sha256": "e4a5491fcd9b68bccc9fc3567bdf9591c6aa45b5207a54da282787ebdfeb1122",
+        "git_blob_sha1": "64b5540ab126d3bf23c40937b339be9d60b6635c"
+      },
+      {
+        "path": "generated/assets/blog/en/separate-source-notes-from-conclusions/social-card.png",
+        "byte_length": 71261,
+        "sha256": "89026b4d03faae19481d6685fb47920239bc84849b4b5a952299f39c54b45d2f",
+        "git_blob_sha1": "d45d19ae9cb405873a425df1c7ffbe7424fb087e"
+      },
+      {
+        "path": "generated/markdown/ko/research/separate-source-notes-from-conclusions.md",
+        "byte_length": 8587,
+        "sha256": "82e297026e2dbdfcd04e6370342554dab756c182a5524e9af4189e4e566c82c4",
+        "git_blob_sha1": "b63bc69adb7e95290ca77e3ed0ebde1a9e78955f"
+      },
+      {
+        "path": "generated/images/ko/research/separate-source-notes-from-conclusions/image_spec.json",
+        "byte_length": 4308,
+        "sha256": "a770905bcdb1a05eb1ae0def8d3b68bf3e17331bc5c0bcc0d95b4a7a0bd97983",
+        "git_blob_sha1": "5d9a47a6abecf47895e8bae6a5ec15c09a0dd396"
+      },
+      {
+        "path": "generated/metadata/ko/research/separate-source-notes-from-conclusions/internal_links.json",
+        "byte_length": 5056,
+        "sha256": "2fbc7136adb99aaa2a106644fc9543006553f661741a40525958318fccd68863",
+        "git_blob_sha1": "742b2fe212f1837d0595d87eeef92fc049895fa1"
+      },
+      {
+        "path": "generated/reviews/ko/research/separate-source-notes-from-conclusions/review.json",
+        "byte_length": 3593,
+        "sha256": "e533b3594a12ef98a0162fb9e62ac575ea39826eb69fe37cf6649ca35f6d6b65",
+        "git_blob_sha1": "25b4f185d53dec895c323089f26a1f2d18535ef7"
+      },
+      {
+        "path": "generated/assets/blog/ko/separate-source-notes-from-conclusions/workflow-diagram.svg",
+        "byte_length": 4666,
+        "sha256": "367831ac814a2f8214db3cff0d4b2457b9d788a5fad2422f710a5e234801b863",
+        "git_blob_sha1": "341097864a7a81f0b42f0e1ecdd96c758da4db76"
+      },
+      {
+        "path": "generated/assets/blog/ko/separate-source-notes-from-conclusions/workflow-diagram.png",
+        "byte_length": 59525,
+        "sha256": "4ccbac9414c5084badc03db3dbff7a71ce41b05653b4a7ded0153066a2adc050",
+        "git_blob_sha1": "149cf0fdd765e947c5d6c53fb4b957e9e4a8de93"
+      },
+      {
+        "path": "generated/assets/blog/ko/separate-source-notes-from-conclusions/social-card.svg",
+        "byte_length": 4666,
+        "sha256": "367831ac814a2f8214db3cff0d4b2457b9d788a5fad2422f710a5e234801b863",
+        "git_blob_sha1": "341097864a7a81f0b42f0e1ecdd96c758da4db76"
+      },
+      {
+        "path": "generated/assets/blog/ko/separate-source-notes-from-conclusions/social-card.png",
+        "byte_length": 59525,
+        "sha256": "4ccbac9414c5084badc03db3dbff7a71ce41b05653b4a7ded0153066a2adc050",
+        "git_blob_sha1": "149cf0fdd765e947c5d6c53fb4b957e9e4a8de93"
+      },
+      {
+        "path": "generated/markdown/ja/research/separate-source-notes-from-conclusions.md",
+        "byte_length": 8691,
+        "sha256": "bbdcb08d9f2d2d52e13e47c66439e8ed8e2f8fabd5ced15a4307d0a6b069f25b",
+        "git_blob_sha1": "3bea5233c7df85d21b44001b265aa91cba58b442"
+      },
+      {
+        "path": "generated/images/ja/research/separate-source-notes-from-conclusions/image_spec.json",
+        "byte_length": 4167,
+        "sha256": "9ad6e1afb09cb567f8a08160ce91ef88f837911f194f2945df95519144c5d957",
+        "git_blob_sha1": "cfb93abdd1962f315570c985dca78ee50c583867"
+      },
+      {
+        "path": "generated/metadata/ja/research/separate-source-notes-from-conclusions/internal_links.json",
+        "byte_length": 4607,
+        "sha256": "74e492331d73d8688d56bd8713cedc2cc790306c3e2ebabd74e74ccd8715c745",
+        "git_blob_sha1": "4f6c194b7fd7ca409482e70e924bee4d7521fbf8"
+      },
+      {
+        "path": "generated/reviews/ja/research/separate-source-notes-from-conclusions/review.json",
+        "byte_length": 3585,
+        "sha256": "b8b0c8e1c8131b652f4967710cc5fb57cbbb58ad7fbe659fc26ec07caddd40a0",
+        "git_blob_sha1": "0f22a725b13a7bc736083e1850f2dfd8aae7da12"
+      },
+      {
+        "path": "generated/assets/blog/ja/separate-source-notes-from-conclusions/workflow-diagram.svg",
+        "byte_length": 4061,
+        "sha256": "7c8899c802bf1c8726b57aead100a125e3889c09b8eabf9eccefc8bcaff57213",
+        "git_blob_sha1": "698503645b833921f18c10181822d07c6994f83d"
+      },
+      {
+        "path": "generated/assets/blog/ja/separate-source-notes-from-conclusions/workflow-diagram.png",
+        "byte_length": 76840,
+        "sha256": "e4f7a85e18bffe6bb8b4205cb0e6485c2374fb2c522e24b4687acc9c1bf2f0e8",
+        "git_blob_sha1": "21c6e4dd13e4920a623b6e95cbf8af6bfe820d0e"
+      },
+      {
+        "path": "generated/assets/blog/ja/separate-source-notes-from-conclusions/social-card.svg",
+        "byte_length": 4061,
+        "sha256": "7c8899c802bf1c8726b57aead100a125e3889c09b8eabf9eccefc8bcaff57213",
+        "git_blob_sha1": "698503645b833921f18c10181822d07c6994f83d"
+      },
+      {
+        "path": "generated/assets/blog/ja/separate-source-notes-from-conclusions/social-card.png",
+        "byte_length": 76840,
+        "sha256": "e4f7a85e18bffe6bb8b4205cb0e6485c2374fb2c522e24b4687acc9c1bf2f0e8",
+        "git_blob_sha1": "21c6e4dd13e4920a623b6e95cbf8af6bfe820d0e"
+      },
+      {
+        "path": "generated/markdown/zh-Hans/research/separate-source-notes-from-conclusions.md",
+        "byte_length": 6645,
+        "sha256": "c641572e4b1980b6fcc45d8a60de04cb8bb31fb8fd2910285a540d138ceda60b",
+        "git_blob_sha1": "6255a919df3ee709ede7312d1b20ff3dbc49acdb"
+      },
+      {
+        "path": "generated/images/zh-Hans/research/separate-source-notes-from-conclusions/image_spec.json",
+        "byte_length": 3870,
+        "sha256": "559dbf1fdf7b32f6cf08bb8d1850db453ce245795b7cbf6cb94ec20c310d5c0d",
+        "git_blob_sha1": "20dd790eb98d31f720302dfbeb7a40a3c65ca31b"
+      },
+      {
+        "path": "generated/metadata/zh-Hans/research/separate-source-notes-from-conclusions/internal_links.json",
+        "byte_length": 4534,
+        "sha256": "9bb5061f09191fc422c202ab6a6cdc0d9a0867c394d40da1a4637a6550199bd9",
+        "git_blob_sha1": "70d4ccf2c58ffe1dabf50fe630bea3837a5f461b"
+      },
+      {
+        "path": "generated/reviews/zh-Hans/research/separate-source-notes-from-conclusions/review.json",
+        "byte_length": 3579,
+        "sha256": "f771b250f65560165577fd58402cc3192bcdd8158ac5853ba8493bd98c6506bf",
+        "git_blob_sha1": "56c01c2730184b1ab4d4cada51ddf7257ccab585"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hans/separate-source-notes-from-conclusions/workflow-diagram.svg",
+        "byte_length": 3893,
+        "sha256": "d4533ef1672da4489d3797d3e013473536c863ac37cd6149d310f524a83fd40f",
+        "git_blob_sha1": "2a2a5af832ceeaad88704977ab9e82f17995d78f"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hans/separate-source-notes-from-conclusions/workflow-diagram.png",
+        "byte_length": 70500,
+        "sha256": "c4abf53d38a4d22fc58f1cd3d41969e893b0e8ae2722c8f59211794d6b69c0b1",
+        "git_blob_sha1": "caaf8f616f3c309026148740102385a0ca38eb94"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hans/separate-source-notes-from-conclusions/social-card.svg",
+        "byte_length": 3893,
+        "sha256": "d4533ef1672da4489d3797d3e013473536c863ac37cd6149d310f524a83fd40f",
+        "git_blob_sha1": "2a2a5af832ceeaad88704977ab9e82f17995d78f"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hans/separate-source-notes-from-conclusions/social-card.png",
+        "byte_length": 70500,
+        "sha256": "c4abf53d38a4d22fc58f1cd3d41969e893b0e8ae2722c8f59211794d6b69c0b1",
+        "git_blob_sha1": "caaf8f616f3c309026148740102385a0ca38eb94"
+      },
+      {
+        "path": "generated/markdown/zh-Hant/research/separate-source-notes-from-conclusions.md",
+        "byte_length": 6681,
+        "sha256": "f6b4f54ee9bc5dfa7f205a81a1ab6b93634018b23c3a5e2d773019d77f87984c",
+        "git_blob_sha1": "f2bd4cb5b0a4d28945c9fe324146a44ada105d49"
+      },
+      {
+        "path": "generated/images/zh-Hant/research/separate-source-notes-from-conclusions/image_spec.json",
+        "byte_length": 3861,
+        "sha256": "65365f30a68d04856811f848e53c1fd207ccf8c78465b556302ff05c98ac7f52",
+        "git_blob_sha1": "0642a511f6825779a8ff63ea186470a0f3aafdc1"
+      },
+      {
+        "path": "generated/metadata/zh-Hant/research/separate-source-notes-from-conclusions/internal_links.json",
+        "byte_length": 4531,
+        "sha256": "13c6506830158dd3783e3316279bc8acdcb99e588c309760fd80ddc213bd4575",
+        "git_blob_sha1": "53fbe3dde650373a67d4ab9424bf86d64030a43e"
+      },
+      {
+        "path": "generated/reviews/zh-Hant/research/separate-source-notes-from-conclusions/review.json",
+        "byte_length": 3579,
+        "sha256": "9e057338c31334f5c52afcdab4c9f93e968de11d2498103013ebdfe7b5ad284d",
+        "git_blob_sha1": "fe26c6641b618b70a40a1e2f32aa3c5db5fe72a5"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hant/separate-source-notes-from-conclusions/workflow-diagram.svg",
+        "byte_length": 3878,
+        "sha256": "74b42848f443a31c8688be4a699b4514b70ace0a3412cac98532330cc8965532",
+        "git_blob_sha1": "95088ccb31275ea5e391700ba73b631456888bed"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hant/separate-source-notes-from-conclusions/workflow-diagram.png",
+        "byte_length": 73984,
+        "sha256": "4b10631ea36f127d7b52f5374b580771fd98e578228bf095582cc8a5dbda566e",
+        "git_blob_sha1": "5af5ccdbef92279470dafb88554089b9c72076cf"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hant/separate-source-notes-from-conclusions/social-card.svg",
+        "byte_length": 3878,
+        "sha256": "74b42848f443a31c8688be4a699b4514b70ace0a3412cac98532330cc8965532",
+        "git_blob_sha1": "95088ccb31275ea5e391700ba73b631456888bed"
+      },
+      {
+        "path": "generated/assets/blog/zh-Hant/separate-source-notes-from-conclusions/social-card.png",
+        "byte_length": 73984,
+        "sha256": "4b10631ea36f127d7b52f5374b580771fd98e578228bf095582cc8a5dbda566e",
+        "git_blob_sha1": "5af5ccdbef92279470dafb88554089b9c72076cf"
+      },
+      {
+        "path": "generated/markdown/pt-BR/research/separate-source-notes-from-conclusions.md",
+        "byte_length": 7727,
+        "sha256": "20820b5a2551db1332c0b2e7258e68a1d51bb08f087f63e153ef5e6763864abf",
+        "git_blob_sha1": "b3888700de65c1e007f61cc0bfc048fec70be7b1"
+      },
+      {
+        "path": "generated/images/pt-BR/research/separate-source-notes-from-conclusions/image_spec.json",
+        "byte_length": 3962,
+        "sha256": "749dd1bdbdbf19618816f142fca387d3efcf32b805bf50d5a577dcada8054d98",
+        "git_blob_sha1": "e3cf84003930f264987cd99a558b1a406a8592f2"
+      },
+      {
+        "path": "generated/metadata/pt-BR/research/separate-source-notes-from-conclusions/internal_links.json",
+        "byte_length": 4582,
+        "sha256": "22137a73afd2072407da5b3965967bdaafd862aeac1c4d0fcab3bf73e20d67b0",
+        "git_blob_sha1": "660a3fda774c98819d085745d7c61949bf9e4b4a"
+      },
+      {
+        "path": "generated/reviews/pt-BR/research/separate-source-notes-from-conclusions/review.json",
+        "byte_length": 3598,
+        "sha256": "291b6cc309952e086925dc27964046dddd5f9278e0393bdc67aa391e0f1ff9de",
+        "git_blob_sha1": "5d633521e1aa43aa8cce93b2ded691088cbe94ac"
+      },
+      {
+        "path": "generated/assets/blog/pt-BR/separate-source-notes-from-conclusions/workflow-diagram.svg",
+        "byte_length": 4375,
+        "sha256": "6bb609567fcd648f4cf070a88a233dc7e2da6f50298836e287b87a414578ed76",
+        "git_blob_sha1": "214037063380b993ef2e53de8235037fa78af299"
+      },
+      {
+        "path": "generated/assets/blog/pt-BR/separate-source-notes-from-conclusions/workflow-diagram.png",
+        "byte_length": 72669,
+        "sha256": "518fd8d7d91393f0870e179b2bdad03333ebc4029b9d2448d547488c455885d6",
+        "git_blob_sha1": "1dd31b5645043b8a44b6c64f4ae49de6b352bae4"
+      },
+      {
+        "path": "generated/assets/blog/pt-BR/separate-source-notes-from-conclusions/social-card.svg",
+        "byte_length": 4375,
+        "sha256": "6bb609567fcd648f4cf070a88a233dc7e2da6f50298836e287b87a414578ed76",
+        "git_blob_sha1": "214037063380b993ef2e53de8235037fa78af299"
+      },
+      {
+        "path": "generated/assets/blog/pt-BR/separate-source-notes-from-conclusions/social-card.png",
+        "byte_length": 72669,
+        "sha256": "518fd8d7d91393f0870e179b2bdad03333ebc4029b9d2448d547488c455885d6",
+        "git_blob_sha1": "1dd31b5645043b8a44b6c64f4ae49de6b352bae4"
+      },
+      {
+        "path": "generated/markdown/de/research/separate-source-notes-from-conclusions.md",
+        "byte_length": 8305,
+        "sha256": "eb6e0817f7ed9e2d19974f0b395c49cc7457a9685d9b0f34b0e3eedf27907e57",
+        "git_blob_sha1": "d760775a13c0efd2de899c0c79ff6730e60d25b7"
+      },
+      {
+        "path": "generated/images/de/research/separate-source-notes-from-conclusions/image_spec.json",
+        "byte_length": 4050,
+        "sha256": "eabffe34ecee198af20b711dc8d3c589cfa1f32711033198b904ff6bc1d08c11",
+        "git_blob_sha1": "d816fcfc840232071463375fee56e125f5709476"
+      },
+      {
+        "path": "generated/metadata/de/research/separate-source-notes-from-conclusions/internal_links.json",
+        "byte_length": 4579,
+        "sha256": "a73871766683f0864b775b82cf80cc596f5a12a71365058b61c96866676cf15d",
+        "git_blob_sha1": "b5b923f20d8b388580baa7857d410139a97de38d"
+      },
+      {
+        "path": "generated/reviews/de/research/separate-source-notes-from-conclusions/review.json",
+        "byte_length": 3594,
+        "sha256": "1402f61a6d4c0fc75bb93d05da4eb2fd519873a790c366af4cf4525ea36be873",
+        "git_blob_sha1": "918971668d9f02800bf8c45b5c8d8d537cdf8246"
+      },
+      {
+        "path": "generated/assets/blog/de/separate-source-notes-from-conclusions/workflow-diagram.svg",
+        "byte_length": 4534,
+        "sha256": "fd84ac7bce0eef6529aad80ee83bd66673a093ed1fb80debb5208e55e5a71959",
+        "git_blob_sha1": "aa29074fcbe3b71221c9258c39c795732b72a8ca"
+      },
+      {
+        "path": "generated/assets/blog/de/separate-source-notes-from-conclusions/workflow-diagram.png",
+        "byte_length": 76044,
+        "sha256": "813754a023ace566d2a4587d26f4c0f9a473d71d1a05f33d35ed0a984b67aaa0",
+        "git_blob_sha1": "468fd42e0d4334537e4d9f3240646876ac29c835"
+      },
+      {
+        "path": "generated/assets/blog/de/separate-source-notes-from-conclusions/social-card.svg",
+        "byte_length": 4534,
+        "sha256": "fd84ac7bce0eef6529aad80ee83bd66673a093ed1fb80debb5208e55e5a71959",
+        "git_blob_sha1": "aa29074fcbe3b71221c9258c39c795732b72a8ca"
+      },
+      {
+        "path": "generated/assets/blog/de/separate-source-notes-from-conclusions/social-card.png",
+        "byte_length": 76044,
+        "sha256": "813754a023ace566d2a4587d26f4c0f9a473d71d1a05f33d35ed0a984b67aaa0",
+        "git_blob_sha1": "468fd42e0d4334537e4d9f3240646876ac29c835"
+      },
+      {
+        "path": "generated/markdown/fr/research/separate-source-notes-from-conclusions.md",
+        "byte_length": 8015,
+        "sha256": "abccb49052c8f1b0a2348a037169a047118ad2f70e871e58f7824854b40ee389",
+        "git_blob_sha1": "694ec5e2f0ab301ed2d5ee53673bd4cd10ce25f0"
+      },
+      {
+        "path": "generated/images/fr/research/separate-source-notes-from-conclusions/image_spec.json",
+        "byte_length": 3993,
+        "sha256": "3658f9aa478793bd0232c52e8e6e9df5d4b3d13cfea6f194b70e651076ac0d38",
+        "git_blob_sha1": "3adcd450c5a5e3a2c36eddb9c69a2791a781bddd"
+      },
+      {
+        "path": "generated/metadata/fr/research/separate-source-notes-from-conclusions/internal_links.json",
+        "byte_length": 4869,
+        "sha256": "acc29c201326a894f04568a11f60699927a468fa449a45c1b3acdbb3c3c8ff91",
+        "git_blob_sha1": "1b3b34999da985535478a8ad70caf90568d0e49f"
+      },
+      {
+        "path": "generated/reviews/fr/research/separate-source-notes-from-conclusions/review.json",
+        "byte_length": 3592,
+        "sha256": "5ce487b62b0caff2399b28bf1edab3afee569a9112c12e6a6ec1aa9b78cbcaa2",
+        "git_blob_sha1": "348cee8a594451977360ce710c35702d3c48c52d"
+      },
+      {
+        "path": "generated/assets/blog/fr/separate-source-notes-from-conclusions/workflow-diagram.svg",
+        "byte_length": 4459,
+        "sha256": "5ba6c1e6cb5b52fb092faede6471961e2abb4a957134e09c03d27429ad9e4f18",
+        "git_blob_sha1": "ca3f39df4312b3c22ffec74daf9cbd764d331cba"
+      },
+      {
+        "path": "generated/assets/blog/fr/separate-source-notes-from-conclusions/workflow-diagram.png",
+        "byte_length": 72815,
+        "sha256": "b4f02481a49469637bbf21f752f690074e73518008ad3ddd97305fd96309f900",
+        "git_blob_sha1": "772cbc7b3145ed24611c0bc646202e82ecdbd981"
+      },
+      {
+        "path": "generated/assets/blog/fr/separate-source-notes-from-conclusions/social-card.svg",
+        "byte_length": 4459,
+        "sha256": "5ba6c1e6cb5b52fb092faede6471961e2abb4a957134e09c03d27429ad9e4f18",
+        "git_blob_sha1": "ca3f39df4312b3c22ffec74daf9cbd764d331cba"
+      },
+      {
+        "path": "generated/assets/blog/fr/separate-source-notes-from-conclusions/social-card.png",
+        "byte_length": 72815,
+        "sha256": "b4f02481a49469637bbf21f752f690074e73518008ad3ddd97305fd96309f900",
+        "git_blob_sha1": "772cbc7b3145ed24611c0bc646202e82ecdbd981"
+      },
+      {
+        "path": "generated/markdown/es/research/separate-source-notes-from-conclusions.md",
+        "byte_length": 7631,
+        "sha256": "f20b4bd593fe340402344ed39c8a88ad4e032fc8954602aaead3716049686a40",
+        "git_blob_sha1": "dc6f015ddd5e90f1670374592d2b24a943b45735"
+      },
+      {
+        "path": "generated/images/es/research/separate-source-notes-from-conclusions/image_spec.json",
+        "byte_length": 3973,
+        "sha256": "767f44ec5cd36d4c6bf91efa234002f668dc60afc3ce42258d9e0c8b4ab986f2",
+        "git_blob_sha1": "c6d1e168f0795511fc83b17c25eade42b29fddcd"
+      },
+      {
+        "path": "generated/metadata/es/research/separate-source-notes-from-conclusions/internal_links.json",
+        "byte_length": 4899,
+        "sha256": "005b961e8546caffee3041b70fd1d3ab28f9307baa330de366d650235365719f",
+        "git_blob_sha1": "d3988ceb48a883feeb48b38a13b3c1caf7ffa47f"
+      },
+      {
+        "path": "generated/reviews/es/research/separate-source-notes-from-conclusions/review.json",
+        "byte_length": 3595,
+        "sha256": "67f9befc20ba540c7d05554387efcab9a8197383d3c48239363de11af1b6f6ef",
+        "git_blob_sha1": "f03c5768d4b630080cb63d03838a7b1d4f33ac5a"
+      },
+      {
+        "path": "generated/assets/blog/es/separate-source-notes-from-conclusions/workflow-diagram.svg",
+        "byte_length": 4450,
+        "sha256": "438ccaf893c32e5fd9c6d5ec1560748a20969a6ba447f6453cb42688b2f80ec1",
+        "git_blob_sha1": "d53564c976db87a445df98a0618426c9352b97bc"
+      },
+      {
+        "path": "generated/assets/blog/es/separate-source-notes-from-conclusions/workflow-diagram.png",
+        "byte_length": 73233,
+        "sha256": "519d6d2ee18d3d2fab704c58a94b6891c8e540eac4bae96f869a36a5311eb5c5",
+        "git_blob_sha1": "b6b22d3529ca7a7f314c019496d2f4057dd05786"
+      },
+      {
+        "path": "generated/assets/blog/es/separate-source-notes-from-conclusions/social-card.svg",
+        "byte_length": 4450,
+        "sha256": "438ccaf893c32e5fd9c6d5ec1560748a20969a6ba447f6453cb42688b2f80ec1",
+        "git_blob_sha1": "d53564c976db87a445df98a0618426c9352b97bc"
+      },
+      {
+        "path": "generated/assets/blog/es/separate-source-notes-from-conclusions/social-card.png",
+        "byte_length": 73233,
+        "sha256": "519d6d2ee18d3d2fab704c58a94b6891c8e540eac4bae96f869a36a5311eb5c5",
+        "git_blob_sha1": "b6b22d3529ca7a7f314c019496d2f4057dd05786"
+      }
+    ]
+  },
+  "native_source_unchanged": true,
+  "renderer": "Installed librsvg-2.so.2 and libcairo.so.2 via task-local Python CLI adapter; no substitute renderer or package install. Final output requires independent visual inspection.",
+  "page_build": "NOT RUN: exact locked npm dependency restoration denied; specific confirmation pending.",
+  "visual_review": {
+    "result": "PASS",
+    "reviewed_at_utc": "2026-10-20T10:41:55.044864+00:00",
+    "reviewer_separate_from_author": true,
+    "scope": "All nine actual final branded 1200x675 PNGs, glyphs, clipping, overlap, whole Latin words, message/steps and branding. Not HTML page verification.",
+    "files": {
+      "en": "37d52917bdec9934f119a82e7afee6afeb38a201fb0fa875a13ce9b2cd515471",
+      "ko": "ecd7e51e78cbd386922c7c5044aca01f449099d227f5e2d8d6b3123c7eac0a81",
+      "ja": "ddd31d2d3dc724d93dc4e75d5a94aac2aed87e975668c524e2d2997eb52d4727",
+      "zh-Hans": "681787c34cb2c4b2da439d848fc31a2cb9656d9b8827bafb79c2a38ef3e66e6a",
+      "zh-Hant": "04c1aafe368e56efa3376c91f258773d6539224b54432167506a8d3b563b58f0",
+      "pt-BR": "d3845c80adac97e3fbc1b8d8f5f778ba4fc2af370ad797f14c628e806f9ba767",
+      "de": "3d1cb1c46ee22bfbd8dbbc7e68a3c83430fbf558a578e4957b3b4becbb89bf17",
+      "fr": "ed59e57d89808df287e3de99f1be336d142313760e0dc46ca51ec5371ee02a19",
+      "es": "fe03a1e40d855cb96d255f650d1f135b07857084cf37246c0c9faf45d89da5be"
+    }
+  },
+  "queue_modified": false,
+  "scheduled_at": null,
+  "published": false
+}

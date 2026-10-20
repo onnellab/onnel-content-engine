@@ -9,23 +9,23 @@
   "image": {
     "title": "Séparez la source de votre conclusion",
     "subtitle": "Une structure simple pour des notes de recherche traçables",
-    "message": "Rendez visible la frontière entre éléments probants et interprétation.",
+    "message": "Distinguez les éléments probants de votre interprétation.",
     "steps": [
       [
         "Consigner",
-        "Citer ou reformuler avec un repère dans la source"
+        "Texte et source"
       ],
       [
         "Séparer",
-        "Identifier votre propre interprétation"
+        "Votre analyse"
       ],
       [
         "Vérifier",
-        "Noter le contexte et la prochaine question"
+        "Contexte et question"
       ],
       [
         "Réviser",
-        "Garder une trace datée des corrections"
+        "Corrections datées"
       ]
     ]
   },

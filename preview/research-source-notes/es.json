@@ -13,19 +13,19 @@
     "steps": [
       [
         "Registra",
-        "Cita o parafrasea e indica dónde está el pasaje"
+        "Texto y fuente"
       ],
       [
         "Separa",
-        "Identifica tu propia interpretación"
+        "Tu análisis"
       ],
       [
-        "Comprueba",
-        "Registra el contexto y la siguiente pregunta"
+        "Verifica",
+        "Contexto y pregunta"
       ],
       [
         "Revisa",
-        "Conserva un historial de correcciones con fechas"
+        "Cambios con fecha"
       ]
     ]
   },

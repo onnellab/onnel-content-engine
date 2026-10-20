@@ -13,19 +13,19 @@
     "steps": [
       [
         "Erfassen",
-        "Zitieren oder paraphrasieren und die Fundstelle angeben"
+        "Text und Quelle"
       ],
       [
         "Trennen",
-        "Die eigene Interpretation kennzeichnen"
+        "Eigene Deutung"
       ],
       [
         "Prüfen",
-        "Kontext und nächste Frage festhalten"
+        "Kontext und Frage"
       ],
       [
-        "Überarbeiten",
-        "Korrekturen mit Datum dokumentieren"
+        "Ändern",
+        "Korrektur mit Datum"
       ]
     ]
   },
