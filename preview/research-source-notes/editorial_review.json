@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "slug": "separate-source-notes-from-conclusions",
+  "reviewed_at_utc": "2026-10-20T09:46:51Z",
+  "review_type": "independent_full_text_comparison",
+  "author_and_reviewer_separate": true,
+  "locales": [
+    "en",
+    "ko",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "pt-BR",
+    "de",
+    "fr",
+    "es"
+  ],
+  "result": "NO_BLOCKING_TEXT_FINDINGS_NOT_PUBLISH_READY",
+  "scope": [
+    "Meaning and omissions against English master",
+    "Fictional six participants/four choices example explicitly invented",
+    "Preference not misrepresented as learning benefit",
+    "Quotation/paraphrase/source/inference distinctions",
+    "Context limitations, unknowns, correction trail and privacy caution",
+    "Natural localized register and terminology",
+    "Consistent references and non-measured editorial keyword hypotheses"
+  ],
+  "minor_findings": [
+    {
+      "locale": "fr",
+      "text": "notes de source is understandable; notes tirées des sources may be more idiomatic. Original frozen wording retained; nonblocking."
+    }
+  ],
+  "unverified": [
+    "Native repository validation and current quality fingerprints",
+    "Generated SVG/PNG assets and font/layout quality",
+    "Actual new article page rendering and responsive behavior",
+    "Queue insertion and canonical scheduling"
+  ],
+  "publication_allowed": false,
+  "related_link_check": {
+    "observed_at_utc": "2026-10-20T09:45:59Z",
+    "method": "Dot cloud browser visible page/DOM",
+    "pages": 9,
+    "result": "Matching localized H1, language, self canonical, nine alternates and x-default",
+    "slug": "keep-durable-research-reading-log"
+  },
+  "local_byte_identity_claimed": false
+}

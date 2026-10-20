@@ -1,0 +1,106 @@
+{
+  "schema": "onnellab.editorial-draft.v1",
+  "state": "DRAFT_UNVALIDATED_NOT_QUEUED",
+  "slug": "separate-source-notes-from-conclusions",
+  "category": "research",
+  "existing_english_topic_id": "TOPIC-0037",
+  "locales": [
+    "en",
+    "ko",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "pt-BR",
+    "de",
+    "fr",
+    "es"
+  ],
+  "counterpart_topic_ids_reserved": false,
+  "queue_modified": false,
+  "scheduled_at": null,
+  "publication_receipt": false,
+  "source_engine_sha": "8a1096dd274591d06c65db8856d970b5165b046f",
+  "source_homepage_sha": "c460167518d7094a1ad7db80a044e8de02d0747a",
+  "related_apps": [],
+  "scope": "Product-neutral existing editorial idea, separate from durable reading logs and uncertainty-only notes. No product or store claims.",
+  "keyword_evidence": "Editorial hypotheses only, no measured demand or ranking claims.",
+  "sources": [
+    {
+      "url": "https://library.leeds.ac.uk/info/1401/academic-skills/85/note-making",
+      "checked_at": "2026-10-20",
+      "supports": "Distinguishing source quotations/paraphrases from own ideas; retaining bibliographic details."
+    },
+    {
+      "url": "https://owl.purdue.edu/owl/research_and_citation/using_research/quoting_paraphrasing_and_summarizing/index.html",
+      "checked_at": "2026-10-20",
+      "supports": "Accurate quotation and attributed paraphrase in one's own words."
+    }
+  ],
+  "fictional_example": "Memo A, v1, six participants, four template B choices, quiet room and absent delayed recall test are invented editorial examples, not research evidence.",
+  "verification": {
+    "independent_language_review": "All nine final text payloads independently reviewed by the coordinating reviewer on 2026-10-20. No blocking semantic findings; minor nonblocking French wording retained frozen. See editorial_review.json.",
+    "native_repository_gates": "NOT RUN; CLI authorization pending",
+    "generated_image_assets": "NOT GENERATED; image copy and intended paths only",
+    "actual_page_rendering": "NOT RUN",
+    "related_links": "All nine existing research-reading-log pages loaded in dot cloud browser on 2026-10-20T09:45:59Z; localized H1, html lang, self canonical, nine alternate links and x-default matched.",
+    "sha256": "Local byte hashes not verified; Git blob identities will identify newly serialized reviewed field values, not original local file bytes.",
+    "connector_readback_schema": "9/9 passed on fresh GitHub blobs: JSON schema essentials, H1, 5 numbered steps, 3 content table rows, keyword presence, exact localized asset/related-link paths and terminal LF. Not native repository validation."
+  },
+  "source_preservation": "Freshly serialized field-value-identical reviewed payloads. Local byte identity is not asserted.",
+  "artifacts": [
+    {
+      "locale": "en",
+      "file": "en.json",
+      "git_blob_sha1": "4e1dde8f4dc8b82185096c3cac20eb8b426cb758",
+      "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    },
+    {
+      "locale": "ko",
+      "file": "ko.json",
+      "git_blob_sha1": "01195bda62ce22f4a0cf60f6572c99b4c07c47e7",
+      "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    },
+    {
+      "locale": "ja",
+      "file": "ja.json",
+      "git_blob_sha1": "18fa0550a61bdfb7ee9befb83edf42b5a65979aa",
+      "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    },
+    {
+      "locale": "zh-Hans",
+      "file": "zh-Hans.json",
+      "git_blob_sha1": "77afd57974afbc2744ca1155becba182134aa92b",
+      "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    },
+    {
+      "locale": "zh-Hant",
+      "file": "zh-Hant.json",
+      "git_blob_sha1": "7b2da8c0d23b128c70b5fda3677934831be9b189",
+      "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    },
+    {
+      "locale": "pt-BR",
+      "file": "pt-BR.json",
+      "git_blob_sha1": "3dfd92518ab7223aee8c86669f5d2eb6deec3005",
+      "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    },
+    {
+      "locale": "de",
+      "file": "de.json",
+      "git_blob_sha1": "928c644742f2d728d050a235a8a4db2d08ebd609",
+      "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    },
+    {
+      "locale": "fr",
+      "file": "fr.json",
+      "git_blob_sha1": "5162247a22af6d2350044ad8d266ebb55198c86e",
+      "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    },
+    {
+      "locale": "es",
+      "file": "es.json",
+      "git_blob_sha1": "33a8d33458699acf554ac550e92bcaac7679b71e",
+      "identity_scope": "Freshly serialized reviewed fields; not asserted identical to local file bytes"
+    }
+  ]
+}
