@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-20T12:26:17+09:00",
+  "checked_at": "2026-10-21T12:25:39+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 80,
+    "checked": 84,
     "already_done": 80,
     "verified": 0,
-    "pending": 0
+    "pending": 4
   },
   "items": [
     {
@@ -966,6 +966,54 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://dev.to/onnellab/check-an-epubs-table-of-contents-and-chapter-order-25g6",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0035::x::en::x",
+      "topic_id": "TOPIC-0035",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0035::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0035",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0035::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0035",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0035::devto::en::markdown",
+      "topic_id": "TOPIC-0035",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
     }
