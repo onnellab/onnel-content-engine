@@ -1,0 +1,8 @@
+The clearest way to design a small file naming system that stays consistent is to separate the decision from the tool.
+
+Choose a few fields in a fixed order, define what each field means, and write down one example. Use a stable identifier for the subject, an unambiguous date when useful, and a fixed width for sequence numbers.
+
+- Choose the main lookup key. Put the date first if you browse a chronological collection; put the project identifier first if you group by project. Sorting follows the entire filename, so a date after a project groups dates within each project, not across all projects.
+
+Read the full article:
+https://onnellab.com/blog/en/design-consistent-file-naming-system/

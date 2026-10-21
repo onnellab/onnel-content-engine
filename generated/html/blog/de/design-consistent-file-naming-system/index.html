@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Einheitliche Dateinamen: eine einfache Konvention entwickeln</title>
+  <meta name="description" content="Entwickeln Sie eine verständliche Dateinamen-Konvention mit stabilen Kennungen, eindeutigen Datumsangaben, Nummernfolgen und klar bezeichneten Revisionen.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/de/design-consistent-file-naming-system/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Einheitliche Dateinamen: eine einfache Konvention entwickeln">
+  <meta property="og:description" content="Entwickeln Sie eine verständliche Dateinamen-Konvention mit stabilen Kennungen, eindeutigen Datumsangaben, Nummernfolgen und klar bezeichneten Revisionen.">
+  <meta property="og:url" content="https://onnellab.com/blog/de/design-consistent-file-naming-system/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Einheitliche Dateinamen: eine einfache Konvention entwickeln">
+  <meta name="twitter:description" content="Entwickeln Sie eine verständliche Dateinamen-Konvention mit stabilen Kennungen, eindeutigen Datumsangaben, Nummernfolgen und klar bezeichneten Revisionen.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/de/design-consistent-file-naming-system/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/de/design-consistent-file-naming-system/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Einheitliche Dateinamen: eine einfache Konvention entwickeln</h1>
+<h2>Frage</h2>
+<p>Wie entwickelt man ein System für Dateinamen, das im Alltag verständlich bleibt?</p>
+<h2>Kurzantwort</h2>
+<p>Legen Sie wenige Felder mit einer festen Reihenfolge und eindeutiger Bedeutung fest. Verwenden Sie eine stabile Kennung, ein unmissverständliches Datum und bei Bedarf Nummern mit führenden Nullen. Trennen Sie Revisionen von Freigaben, dokumentieren Sie ein Beispiel und prüfen Sie die Regel an typischen Dateien.</p>
+<h2>Eine kleine Konvention festlegen</h2>
+<p>Eine Dateinamen-Konvention beschreibt, wie Dateien benannt werden. Ein Feld ist dabei ein einzelner Bestandteil mit einer vereinbarten Aufgabe, etwa Projektkennung, Datum oder Revision. Die Regel sollte auch dann verständlich sein, wenn eine andere Person die Datei übernimmt oder Sie sie Monate später wiederfinden.</p>
+<p>Das manuell erstellte Beispiel `atlas_2026-10-05_notes_003_v02.txt` dient der Erklärung. Es zeigt keine zugesicherte App-Funktion. Atlas ist ein fiktives Projekt; die einzelnen Bestandteile haben hier folgende Bedeutung:</p>
+<table><thead><tr><th>Feld</th><th>Bedeutung im Beispiel</th></tr></thead><tbody><tr><td>`atlas`</td><td>Stabile Kennung des Projekts Atlas</td></tr><tr><td>`2026-10-05`</td><td>Besprechungsdatum: 5. Oktober 2026</td></tr><tr><td>`notes`</td><td>Dokumentart: Notizen</td></tr><tr><td>`003`</td><td>Eintrag 003 innerhalb der Notizen dieser Besprechung</td></tr><tr><td>`v02`</td><td>Gespeicherte Revision 02</td></tr><tr><td>`.txt`</td><td>Dateiendung der Textdatei</td></tr></tbody></table>
+<p>Die englische Bezeichnung `notes` gehört nur zu diesem Beispiel. Ein Team kann deutsche Begriffe wählen, sofern es deren Bedeutung festhält und sie einheitlich verwendet.</p>
+<h2>Empfohlener Ablauf</h2>
+<ol><li><strong>Den wichtigsten Suchschlüssel wählen.</strong> Überlegen Sie, wie Sie Dateien tatsächlich wiederfinden. Beginnen Sie mit dem Datum, wenn Sie überwiegend chronologisch suchen, oder mit der Projektkennung, wenn das Projekt der Ausgangspunkt ist. Bei lexikografischer Sortierung ordnet eine vorangestellte Projektkennung die Datumsangaben innerhalb der Projekte. Sie erzeugt keine projektübergreifende chronologische Reihenfolge.</li></ol>
+<ol><li><strong>Die Bedeutung des Datums bestimmen.</strong> Nutzen Sie `YYYY-MM-DD` (Jahr-Monat-Tag) mit zweistelligem Monat und Tag. Halten Sie fest, ob damit das Ereignis-, Aufnahme- oder Ausstellungsdatum gemeint ist. Fehlt die Information, lassen Sie das Feld weg oder verwenden Sie eine dokumentierte Kennzeichnung für ein unbekanntes Datum. Das heutige Datum einzusetzen, nur um das Feld zu füllen, würde eine falsche Bedeutung vermitteln.</li></ol>
+<ol><li><strong>Eine stabile Identität verwenden.</strong> Wählen Sie eine kurze Projekt- oder Vorgangskennung. Namen vorübergehend zuständiger Personen und Wörter wie „dringend“ verändern ihre Bedeutung im Laufe der Zeit. Vermeiden Sie unnötige personenbezogene oder vertrauliche Angaben. Dateinamen können in Anhängen, Links und Benachrichtigungen sichtbar werden, auch wenn der ursprüngliche Ordner geschützt ist.</li></ol>
+<ol><li><strong>Den Nummernkreis festlegen.</strong> Gilt die Folge für ein Projekt, eine Besprechung oder einen Stapel? Wählen Sie passend zur erwarteten Menge eine Stellenzahl. `001`, `002` und `010` bleiben bei einfacher Textsortierung in numerischer Reihenfolge. Manche Programme nutzen bereits eine natürliche Sortierung. Wird die Stellenzahl überschritten, passen Sie die betroffene Nummernfolge geplant und einheitlich an.</li></ol>
+<ol><li><strong>Revision und Freigabe trennen.</strong> Definieren Sie, wann aus `v01` eine `v02` wird, beispielsweise bei jeder neu gespeicherten Revision, die unterscheidbar bleiben soll. Eine höhere Nummer belegt keine Freigabe. Dokumentieren Sie diese im vorgesehenen Verfahren. Auch „final-final“ sagt nicht zuverlässig aus, ob jemand den Inhalt geprüft oder genehmigt hat.</li></ol>
+<ol><li><strong>Die Regel aufschreiben und fünf Dateien testen.</strong> Notieren Sie Feldreihenfolge, optionale Bestandteile, Trennzeichen und Ausnahmen. Wählen Sie fünf repräsentative Dateien, darunter einen Fall mit unbekanntem Datum und einen mit neuer Revision. Prüfen Sie Benennung, Suche, Darstellung und Sortierung in den tatsächlich verwendeten Anwendungen und beim empfangenden System.</li></ol>
+<h2>Die vier Bausteine im Überblick</h2>
+<figure><img src="/blog-assets/de/design-consistent-file-naming-system/workflow-diagram.svg" alt="Vier Bausteine eines Dateinamens: stabile Identität, Datum mit definierter Bedeutung, Nummernfolge mit führenden Nullen und gekennzeichnete Revision."></figure>
+<h2>Die Regel leicht anwendbar halten</h2>
+<p>Verwenden Sie Trennzeichen einheitlich. Kleinschreibung ist eine redaktionelle Entscheidung, keine allgemeine technische Pflicht. Prüfen Sie erlaubte Zeichen und Längenbegrenzungen der empfangenden Systeme. Behalten Sie die Dateiendung bei: Eine andere Endung wandelt den Dateiinhalt nicht in ein anderes Format um.</p>
+<p>Eine Benennungsregel ersetzt weder Versionshistorie noch Zugriffsrechte oder eine sinnvolle Ordnerstruktur. Ändert sich die Regel, benennen Sie nicht automatisch das gesamte Archiv um. Klären Sie zuerst, welche Links, Verweise und Abläufe von vorhandenen Namen abhängen.</p>
+<h2>ONNELLAB im Einsatz</h2>
+<p>Für mehrere Dateien kommt <a href="/apps/aligna/">Aligna</a> als Stapelumbenenner für iOS und Android infrage. Die Store-Beschreibungen nennen acht feste Vorlagen, eine Vorschau und Konfliktbehandlung. Wählen Sie nur eine Vorlage, die zum benötigten Ergebnis passt. Prüfen Sie die ausgewählte Vorlage und die Vorschau, bevor Sie die Änderung anwenden. Daraus lässt sich weder ein frei konfigurierbarer Regelbaukasten noch die Unterstützung der Feldkombination aus diesem Artikel ableiten.</p>
+<h2>Weiterführende Anleitungen</h2>
+<ul><li><a href="https://onnellab.com/blog/de/rename-files-safely-preview-workflow/">Dateien mit Vorschau sicher umbenennen</a></li><li><a href="https://onnellab.com/blog/de/organize-downloads-small-folder-system/">Downloads mit wenigen Ordnern organisieren</a></li></ul>
+<h2>Quellen</h2>
+<p>Die Produktangaben stammen aus den Aligna-Beschreibungen im <a href="https://apps.apple.com/us/app/aligna-file-renamer/id6783642658">App Store</a> und bei <a href="https://play.google.com/store/apps/details?id=com.onnellab.aligna">Google Play</a>. Die Benennungsempfehlungen sind redaktionelle Orientierung, keine gemessenen Leistungs- oder Zeitersparnisversprechen.</p>
+<h2>Fazit</h2>
+<p>Ein brauchbares System besteht aus wenigen Feldern mit klarer Bedeutung. Dokumentieren Sie die Regel und prüfen Sie typische Ausnahmen, bevor Sie viele Dateien damit benennen.</p>
+<h2>Häufige Fragen</h2>
+<h3>Braucht jeder Dateiname ein Datum?</h3>
+<p>Nein. Ein Datum ist sinnvoll, wenn es beim Suchen oder Einordnen hilft. Legen Sie dann ausdrücklich fest, welche Art von Datum es bezeichnet.</p>
+<h3>Sollte das Datum oder das Projekt zuerst stehen?</h3>
+<p>Entscheidend ist Ihr wichtigster Suchschlüssel. Das Datum unterstützt die chronologische Suche; die Projektkennung hält Dateien zunächst nach Projekten zusammen.</p>
+<h3>Bedeutet `v03`, dass eine Datei freigegeben ist?</h3>
+<p>Nein. Die Kennzeichnung beschreibt eine Revision nach Ihrer Regel. Eine Freigabe braucht einen eigenen nachvollziehbaren Nachweis.</p>
+<h3>Kann Aligna genau dieses Namensmuster erzeugen?</h3>
+<p>Das ist durch die genannten Produktinformationen nicht belegt. Aligna bietet feste Vorlagen. Prüfen Sie, ob eine davon Ihren konkreten Bedarf abdeckt.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln</h3><a class="related-article-link" href="https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/">Read article</a></article>
+<article class="related-article-card"><h3>Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen</h3><a class="related-article-link" href="https://onnellab.com/blog/de/test-converted-media-before-replacing-original/">Read article</a></article>
+<article class="related-article-card"><h3>Musikdateien auf Android für die Offline-Wiedergabe ordnen</h3><a class="related-article-link" href="https://onnellab.com/blog/de/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen</h3><a class="related-article-link" href="https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

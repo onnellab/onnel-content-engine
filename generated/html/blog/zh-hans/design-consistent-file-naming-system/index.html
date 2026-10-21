@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>如何建立一致、好查找的文件命名规则</title>
+  <meta name="description" content="明确标识、日期、序号和修订编号的含义与顺序，再用五个真实文件测试，建立容易坚持的文件命名规则。">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="如何建立一致、好查找的文件命名规则">
+  <meta property="og:description" content="明确标识、日期、序号和修订编号的含义与顺序，再用五个真实文件测试，建立容易坚持的文件命名规则。">
+  <meta property="og:url" content="https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="如何建立一致、好查找的文件命名规则">
+  <meta name="twitter:description" content="明确标识、日期、序号和修订编号的含义与顺序，再用五个真实文件测试，建立容易坚持的文件命名规则。">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/zh-Hans/design-consistent-file-naming-system/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/zh-Hans/design-consistent-file-naming-system/social-card.png">
+</head>
+<body>
+  <main>
+<h1>如何建立一致、好查找的文件命名规则</h1>
+<h2>问题</h2>
+<p>怎样制定一套文件多了也能持续使用的命名规则？</p>
+<h2>简短回答</h2>
+<p>选用少量含义明确的字段，并始终按固定顺序排列。使用稳定的标识、含义明确的日期、位数统一的序号，以及与批准状态分开的修订编号；写下简短规则和示例，再用五个有代表性的文件测试。</p>
+<p>文件名不必容纳全部背景信息。它的作用是让你在列表中认出对象、区分相似文件，并按需要查找。如果每次命名都要重新做很多判断，就值得减少字段或简化规则。</p>
+<h2>先制定一套小规则</h2>
+<p>“字段”是指文件名中承担一种含义的部分，例如项目标识或日期。命名规则则约定使用哪些字段、各自表示什么、按什么顺序排列，以及用什么符号分隔。下面是人工设计的说明性示例，不代表某个应用支持生成这一组合。</p>
+<p>`atlas_2026-10-05_notes_003_v02.txt`</p>
+<table><thead><tr><th>字段</th><th>在本例中的含义</th></tr></thead><tbody><tr><td>`atlas`</td><td>虚构项目 Atlas 的稳定标识</td></tr><tr><td>`2026-10-05`</td><td>会议日期，即 2026 年 10 月 5 日</td></tr><tr><td>`notes`</td><td>文档类型：会议记录</td></tr><tr><td>`003`</td><td>本次会议记录集合中的条目编号 003</td></tr><tr><td>`v02`</td><td>已保存修订稿的编号 02</td></tr><tr><td>`.txt`</td><td>文件扩展名</td></tr></tbody></table>
+<p>这一顺序是“项目_会议日期_文档类型_条目编号_修订编号”。003 用于区分集合中的条目，v02 用于区分同一条目的修订稿。两种编号的作用不同，不要让一个数字同时承担这两种含义。</p>
+<h2>推荐流程</h2>
+<ol><li><strong>把主要查找依据放在前面。</strong></li></ol>
+<p>如果通常先想到项目名称，就把项目标识放在首位。如果经常跨项目按日期浏览，可以把日期放在首位。采用普通的文本排序时，项目在前的格式会先按项目分组，再在各项目内按日期排列；它不会让所有项目的文件一起按日期排序。先想清楚自己最常问的是“哪个项目”，还是“哪一天”。</p>
+<ol><li><strong>同时定义日期格式和日期含义。</strong></li></ol>
+<p>使用 `YYYY-MM-DD`，年份四位，月份和日期各两位，例如 `2026-10-05`。固定格式可避免简写带来的月、日顺序歧义。还要明确它表示活动日期、拍摄日期还是发布日期，不要在同一字段中混用保存日期和事件日期。如果日期未知，按约定省略该字段，或使用写入规则的未知标记，例如 `unknown`。不要为了填满位置而代入今天的日期。</p>
+<ol><li><strong>选择短而稳定的标识。</strong></li></ol>
+<p>项目简称或记录编号应当持续指向同一个对象。临时负责人姓名、`urgent` 之类的紧急程度描述会随情况变化，不适合作为主要身份标识。若两个项目的简称相似，先规定能区分它们的写法。文件名可能显示在附件列表或共享链接中，因此不要不必要地写入个人信息、客户隐私或机密内容。</p>
+<ol><li><strong>明确序号的范围和位数。</strong></li></ol>
+<p>序号是在整个项目内连续计算，还是每次会议、每批资料重新开始？把范围写清楚。本例中的003只在这次会议的记录集合内使用。`001`、`002`、`010` 这样的补零方式，有助于普通文本排序；采用自然排序的应用可能本来就会按数字大小排列。根据预计数量选择位数。若数量超出原定范围，先规划一致的扩位方式，避免同一范围内混用宽度。</p>
+<ol><li><strong>把修订编号和批准状态分开。</strong></li></ol>
+<p>写明从 `v01` 增加到 `v02` 的条件。例如，可以在保存一份包含新内容、准备送审的修订稿时递增编号。是否每次小改动都递增，或只在形成新的审阅稿时递增，应按工作需要决定并保持一致。`v03` 只说明约定中的修订编号，不能证明文件已经获批。`final-final` 也不能作为批准依据。批准情况应通过单独约定的状态或记录确认。</p>
+<ol><li><strong>写下简短规则，并用五个文件测试。</strong></li></ol>
+<p>记录字段顺序、含义、分隔符、可选字段，以及例外的处理方式。选择五个代表性文件，例如普通文件、另一项目的文件、编号为010的条目、日期未知的文件，以及v02修订稿。在实际使用的文件管理器和接收方应用中检查名称显示、搜索、排序和重名情况。若省略日期，也要确认剩余字段不会被误读。小范围测试通过后，再决定应用到哪些文件。</p>
+<h2>看清四个字段的作用</h2>
+<figure><img src="/blog-assets/zh-Hans/design-consistent-file-naming-system/workflow-diagram.svg" alt="用稳定标识确认对象，定义日期含义，统一序号位数，并单独标记修订编号的四个步骤"></figure>
+<p>关键是让一个字段只承担一种含义。日期时而表示会议日、时而表示保存日，或同一个数字既表示条目又表示修订次数，都会让阅读者不得不猜测。</p>
+<h2>让规则容易坚持</h2>
+<p>统一使用分隔符。本例在字段之间使用下划线，在日期内部使用连字符。英文字母全部小写只是本例的编辑选择，并非所有系统都要求这样做。还要检查接收系统允许的字符和文件名长度，不要把某个环境的习惯当成通用标准。</p>
+<p>重命名时保留扩展名。把 `.txt` 改成 `.pdf` 不会转换文件格式。文件命名规则也不能代替文件夹结构、访问权限或版本历史；这些仍需要各自管理。若某项信息放在文件夹或记录中更合适，就不必重复塞进文件名。</p>
+<p>修改规则时，不要自动重命名所有历史归档文件。旧名称可能关联链接、引用或他人的工作流程。先决定新规则只用于后续文件，还是用于经过检查的一小批既有文件，再处理迁移范围。</p>
+<h2>ONNELLAB 的用途</h2>
+<p>规则确定后，如果需要工具处理重复的重命名操作，可以了解 <a href="/apps/aligna/">Aligna</a>。公开的 iOS 和 Android 应用商店说明列出了八种固定预设、预览和名称冲突处理。只有在现有预设符合需求时才选用；应用前，检查所选预设的内容，以及预览中的新文件名。</p>
+<p>本文的完整命名组合是人工设计的示例。现有信息并未确认 Aligna 支持任意自定义规则构建，也未确认可以组合多个预设来生成这个完整模式。是否满足你的具体命名需求，应以提供的预设和实际预览为准。</p>
+<h2>相关指南</h2>
+<ul><li><a href="https://onnellab.com/blog/zh-hans/rename-files-safely-preview-workflow/">通过预览安全地重命名文件</a></li><li><a href="https://onnellab.com/blog/zh-hans/organize-downloads-small-folder-system/">用小型文件夹体系整理下载文件</a></li></ul>
+<h2>参考资料</h2>
+<ul><li><a href="https://apps.apple.com/us/app/aligna-file-renamer/id6783642658">App Store 上的 Aligna</a></li><li><a href="https://play.google.com/store/apps/details?id=com.onnellab.aligna">Google Play 上的 Aligna</a></li></ul>
+<p>应用商店资料用于支持产品说明。本文的命名规则和示例属于编辑建议，不代表经过测量的时间节省或整理效果。</p>
+<h2>结论</h2>
+<p>一套实用的命名规则应该容易解释，也容易重复使用。保留少量字段，固定排列顺序，明确日期、序号范围和修订条件，再用五个真实文件验证。遇到例外时，先检查能否简化规则，而不是不断增加字段。</p>
+<h2>常见问题</h2>
+<h3>每个文件名都需要日期吗？</h3>
+<p>不需要。只有日期能帮助查找或区分文件时才添加。添加时要明确它表示什么；日期未知时，不要用今天的日期替代。</p>
+<h3>日期和项目应该把哪个放在前面？</h3>
+<p>按主要查找方式决定。经常跨项目按日期查找，可以先写日期；希望按项目聚在一起，可以先写项目。项目在前时，日期排序是在各项目内部进行的。</p>
+<h3>v03 表示文件已经获批吗？</h3>
+<p>不表示。它是按约定生成的修订编号。批准情况需要另外查看相应状态或记录。</p>
+<h3>Aligna 能生成与示例完全相同的文件名吗？</h3>
+<p>目前确认的是八种固定预设，尚未确认能重现本文的完整组合。检查是否有符合需求的预设，并在应用前查看预览。</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>如何整理可重复使用的文本片段</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/turn-repeated-text-into-reusable-snippets/">Read article</a></article>
+<article class="related-article-card"><h3>在 Android 上整理音乐文件，准备离线播放</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>检查 EPUB 的目录链接和章节顺序</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/">Read article</a></article>
+<article class="related-article-card"><h3>替换原文件前，如何检查转换后的媒体文件</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

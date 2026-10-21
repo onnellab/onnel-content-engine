@@ -5,7 +5,7 @@ slug: "design-consistent-file-naming-system"
 category: "productivity"
 language: "zh-Hans"
 description: "明确标识、日期、序号和修订编号的含义与顺序，再用五个真实文件测试，建立容易坚持的文件命名规则。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0080"
 search_intent: "workflow"
 primary_keyword: "文件命名规则"
@@ -14,6 +14,9 @@ tags: "文件命名规则"
 short_answer: "选用少量含义明确的字段，并始终按固定顺序排列。使用稳定的标识、含义明确的日期、位数统一的序号，以及与批准状态分开的修订编号；写下简短规则和示例，再用五个有代表性的文件测试。"
 related_apps: "Aligna"
 canonical_url: "https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/"
+published_at: "2026-10-21T09:00:00+09:00"
+updated_at: "2026-10-21T09:00:00+09:00"
+related_articles: "如何整理可重复使用的文本片段 => https://onnellab.com/blog/zh-hans/turn-repeated-text-into-reusable-snippets/|在 Android 上整理音乐文件，准备离线播放 => https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/|检查 EPUB 的目录链接和章节顺序 => https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/|替换原文件前，如何检查转换后的媒体文件 => https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/"
 ---
 
 # 如何建立一致、好查找的文件命名规则

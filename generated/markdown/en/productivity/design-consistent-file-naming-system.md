@@ -5,7 +5,7 @@ slug: "design-consistent-file-naming-system"
 category: "productivity"
 language: "en"
 description: "Choose a clear field order, define what each date means, and use stable identifiers, padded numbers and version labels in a small file naming system."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0035"
 search_intent: "workflow"
 primary_keyword: "consistent file naming"
@@ -14,6 +14,9 @@ tags: "consistent file naming"
 short_answer: "Choose a few fields in a fixed order, define what each field means, and write down one example. Use a stable identifier for the subject, an unambiguous date when useful, and a fixed width for sequence numbers. Keep revisions separate from approval status. Test the convention on a small set before using it more widely."
 related_apps: "Aligna"
 canonical_url: "https://onnellab.com/blog/en/design-consistent-file-naming-system/"
+published_at: "2026-10-21T09:00:00+09:00"
+updated_at: "2026-10-21T09:00:00+09:00"
+related_articles: "How to Rename Files Safely With a Preview Workflow => https://onnellab.com/blog/en/rename-files-safely-preview-workflow/|How to Organize Downloads With a Small, Durable Folder System => https://onnellab.com/blog/en/organize-downloads-small-folder-system/|How to Turn Repeated Text Into Reusable Snippets => https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/|How to Reuse Copied Text Snippets on iPhone => https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/|How to Turn Rough Notes Into a Structured First Draft => https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/"
 ---
 
 # How to Design a File Naming System That Stays Consistent

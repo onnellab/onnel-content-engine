@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Como criar um padrão consistente para nomes de arquivos</title>
+  <meta name="description" content="Defina campos, datas, sequências e revisões com significados claros para criar nomes de arquivos fáceis de interpretar e manter.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Como criar um padrão consistente para nomes de arquivos">
+  <meta property="og:description" content="Defina campos, datas, sequências e revisões com significados claros para criar nomes de arquivos fáceis de interpretar e manter.">
+  <meta property="og:url" content="https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Como criar um padrão consistente para nomes de arquivos">
+  <meta name="twitter:description" content="Defina campos, datas, sequências e revisões com significados claros para criar nomes de arquivos fáceis de interpretar e manter.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/pt-BR/design-consistent-file-naming-system/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/pt-BR/design-consistent-file-naming-system/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Como criar um padrão consistente para nomes de arquivos</h1>
+<h2>Pergunta</h2>
+<p>Como criar um padrão de nomes de arquivos que continue útil com o tempo?</p>
+<h2>Resposta curta</h2>
+<p>Escolha poucos campos em uma ordem fixa e defina o significado de cada um. Use uma identificação estável, datas sem ambiguidade e sequências com zeros à esquerda quando necessário. Separe revisão de aprovação, documente um exemplo e teste a regra em arquivos representativos.</p>
+<h2>Defina uma convenção pequena</h2>
+<p>Uma convenção de nomes é um acordo sobre como nomear arquivos. Cada campo é uma parte do nome com uma função definida: identificar o projeto, registrar uma data ou indicar uma revisão. O objetivo é reconhecer o arquivo sem depender da memória de quem o salvou.</p>
+<p>Considere o exemplo editorial e manual `atlas_2026-10-05_notes_003_v02.txt`. Ele não representa uma função de aplicativo. Atlas é um projeto fictício; os demais campos seguem este acordo:</p>
+<table><thead><tr><th>Campo</th><th>Significado neste exemplo</th></tr></thead><tbody><tr><td>`atlas`</td><td>Identificador estável do projeto Atlas</td></tr><tr><td>`2026-10-05`</td><td>Data da reunião: 5 de outubro de 2026</td></tr><tr><td>`notes`</td><td>Tipo de documento: notas</td></tr><tr><td>`003`</td><td>Item 003 entre as notas dessa reunião</td></tr><tr><td>`v02`</td><td>Revisão salva 02</td></tr><tr><td>`.txt`</td><td>Extensão do arquivo de texto</td></tr></tbody></table>
+<h2>Fluxo de trabalho recomendado</h2>
+<ol><li><strong>Escolha a principal chave de busca.</strong> Comece pela data se a consulta costuma ser cronológica; comece pelo projeto se o trabalho gira em torno dele. Na ordenação alfabética, projeto primeiro agrupa as datas dentro de cada projeto. Isso não produz uma sequência cronológica global entre projetos.</li></ol>
+<ol><li><strong>Defina o que a data representa.</strong> Use `YYYY-MM-DD` (ano-mês-dia), com mês e dia de dois dígitos. Especifique se é a data do evento, da captura ou da emissão. Se ela for desconhecida, omita o campo ou use um marcador documentado. Não preencha com a data de hoje apenas para completar o nome.</li></ol>
+<ol><li><strong>Mantenha a identidade estável.</strong> Prefira um identificador curto de projeto ou registro. Evite nomes de responsáveis temporários e palavras como “urgente”, que deixam de descrever o arquivo. Não inclua dados pessoais ou confidenciais desnecessários: nomes de arquivos podem aparecer em anexos, links e notificações, mesmo fora da pasta original.</li></ol>
+<ol><li><strong>Delimite a sequência.</strong> Diga se a numeração pertence ao projeto, à reunião ou a um lote. Escolha uma largura adequada à quantidade prevista: `001`, `002` e `010` mantêm a ordem numérica na ordenação textual simples. Alguns aplicativos já usam ordenação natural. Se a sequência ultrapassar a largura escolhida, ajuste o conjunto afetado de forma consistente e planejada.</li></ol>
+<ol><li><strong>Separe revisão e aprovação.</strong> Defina quando `v01` passa a `v02`, por exemplo, a cada nova revisão salva que precisa ser distinguida. Isso não demonstra aprovação. Registre a aprovação no processo apropriado; “final-final” também não comprova que alguém revisou ou autorizou o conteúdo.</li></ol>
+<ol><li><strong>Escreva a regra e teste cinco arquivos.</strong> Inclua a ordem dos campos, os campos opcionais, os separadores e as exceções. Escolha cinco casos representativos, incluindo uma data desconhecida e uma nova revisão. Renomeie e confira busca, ordenação e leitura nos aplicativos realmente usados, inclusive no sistema que receberá os arquivos.</li></ol>
+<h2>Veja os quatro componentes</h2>
+<figure><img src="/blog-assets/pt-BR/design-consistent-file-naming-system/workflow-diagram.svg" alt="Quatro componentes do nome: identidade estável, data com significado definido, sequência com zeros à esquerda e revisão identificada."></figure>
+<h2>Mantenha a regra fácil de seguir</h2>
+<p>Use separadores consistentes. Letras minúsculas são uma escolha editorial, não uma exigência universal. Verifique os caracteres e os limites de tamanho aceitos pelos sistemas de destino. Preserve a extensão: trocar `.txt` por outra extensão não converte o conteúdo.</p>
+<p>Uma convenção não substitui histórico de versões, permissões ou uma estrutura de pastas. Se a regra mudar, não renomeie automaticamente todo o arquivo histórico. Primeiro avalie referências, links e fluxos que dependem dos nomes existentes.</p>
+<h2>Como usar ONNELLAB</h2>
+<p>O <a href="/apps/aligna/">Aligna</a> é uma opção de renomeador em lote disponível para iOS e Android. As listagens nas lojas descrevem oito predefinições fixas, prévia e tratamento de conflitos. Escolha somente uma predefinição que corresponda à necessidade. Confira a predefinição selecionada e a prévia antes de aplicar as alterações. Essas informações não estabelecem um construtor de regras personalizadas nem garantem a combinação de campos do exemplo acima.</p>
+<h2>Guias relacionados</h2>
+<ul><li><a href="https://onnellab.com/blog/pt-br/rename-files-safely-preview-workflow/">Renomear arquivos com segurança usando uma prévia</a></li><li><a href="https://onnellab.com/blog/pt-br/organize-downloads-small-folder-system/">Organizar downloads com poucas pastas</a></li></ul>
+<h2>Referências</h2>
+<p>As descrições do produto estão nas páginas do Aligna na <a href="https://apps.apple.com/us/app/aligna-file-renamer/id6783642658">App Store</a> e no <a href="https://play.google.com/store/apps/details?id=com.onnellab.aligna">Google Play</a>. As recomendações de nomenclatura deste guia são orientações editoriais, não resultados medidos de desempenho.</p>
+<h2>Conclusão</h2>
+<p>Um bom padrão usa poucos campos com significados claros. Registre a regra, teste situações reais e ajuste as exceções antes de aplicá-la a muitos arquivos.</p>
+<h2>Perguntas frequentes</h2>
+<h3>Todo nome precisa de uma data?</h3>
+<p>Não. Inclua uma data quando ela ajudar a localizar ou interpretar o arquivo. Defina seu significado antes de usá-la.</p>
+<h3>É melhor começar pela data ou pelo projeto?</h3>
+<p>Depende da principal chave de busca. Data primeiro favorece a consulta cronológica; projeto primeiro mantém o agrupamento por projeto.</p>
+<h3>`v03` significa que o arquivo foi aprovado?</h3>
+<p>Não. Indica uma revisão conforme a regra adotada. A aprovação precisa de um registro separado.</p>
+<h3>O Aligna cria exatamente o padrão deste exemplo?</h3>
+<p>Isso não está estabelecido pelas informações citadas. O aplicativo oferece predefinições fixas; confira se alguma atende à sua necessidade antes de usá-lo.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Como transformar textos repetidos em trechos reutilizáveis</h3><a class="related-article-link" href="https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/">Read article</a></article>
+<article class="related-article-card"><h3>Como organizar músicas no Android para ouvir offline</h3><a class="related-article-link" href="https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>Como conferir o sumário e a ordem dos capítulos de um EPUB</h3><a class="related-article-link" href="https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/">Read article</a></article>
+<article class="related-article-card"><h3>Como testar um arquivo de mídia convertido antes de substituir o original</h3><a class="related-article-link" href="https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

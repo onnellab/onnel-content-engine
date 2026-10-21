@@ -5,7 +5,7 @@ slug: "design-consistent-file-naming-system"
 category: "productivity"
 language: "zh-Hant"
 description: "先定義識別資訊、日期、序號與修訂編號的意思和順序，再用五個實際檔案測試，建立容易維持的檔案命名規則。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0081"
 search_intent: "workflow"
 primary_keyword: "檔案命名規則"
@@ -14,6 +14,9 @@ tags: "檔案命名規則"
 short_answer: "選擇少量意思明確的欄位，每次都依固定順序排列。使用穩定的識別資訊、意思清楚的日期、位數一致的序號，以及與核准狀態分開的修訂編號；寫下簡短規則與範例，再用五個具代表性的檔案測試。"
 related_apps: "Aligna"
 canonical_url: "https://onnellab.com/blog/zh-hant/design-consistent-file-naming-system/"
+published_at: "2026-10-21T09:00:00+09:00"
+updated_at: "2026-10-21T09:00:00+09:00"
+related_articles: "如何整理可重複使用的文字片段 => https://onnellab.com/blog/zh-hant/turn-repeated-text-into-reusable-snippets/|在 Android 整理音樂檔案，準備離線播放 => https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/|檢查 EPUB 的目錄連結與章節順序 => https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/|取代原始檔案前，如何檢查轉檔後的媒體檔案 => https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/"
 ---
 
 # 如何建立一致又好找的檔案命名規則

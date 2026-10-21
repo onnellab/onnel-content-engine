@@ -5,7 +5,7 @@ slug: "design-consistent-file-naming-system"
 category: "productivity"
 language: "ko"
 description: "식별 정보, 날짜, 번호, 수정본의 뜻과 순서를 정하고 실제 파일 다섯 개로 시험하는 실용적인 파일명 규칙 안내예요."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0078"
 search_intent: "workflow"
 primary_keyword: "파일명 규칙"
@@ -14,6 +14,9 @@ tags: "파일명 규칙"
 short_answer: "뜻이 분명한 몇 개의 항목을 정해 항상 같은 순서로 써요. 바뀌지 않는 식별 정보, 의미를 정한 날짜, 자릿수를 맞춘 번호, 승인 상태와 구분한 수정본 번호를 짧은 예시로 기록하고 실제 파일 다섯 개에 적용해 봐요."
 related_apps: "Aligna"
 canonical_url: "https://onnellab.com/blog/ko/design-consistent-file-naming-system/"
+published_at: "2026-10-21T09:00:00+09:00"
+updated_at: "2026-10-21T09:00:00+09:00"
+related_articles: "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/|거친 메모를 구조화된 초안으로 바꾸는 방법 => https://onnellab.com/blog/ko/turn-rough-notes-into-structured-first-draft/|작고 오래 유지되는 폴더 체계로 다운로드를 정리하는 방법 => https://onnellab.com/blog/ko/organize-downloads-small-folder-system/|반복해서 쓰는 문장을 재사용 가능한 텍스트 조각으로 정리하기 => https://onnellab.com/blog/ko/turn-repeated-text-into-reusable-snippets/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/"
 ---
 
 # 찾기 쉬운 파일명 규칙을 만드는 방법

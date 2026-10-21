@@ -5,7 +5,7 @@ slug: "design-consistent-file-naming-system"
 category: "productivity"
 language: "pt-BR"
 description: "Defina campos, datas, sequências e revisões com significados claros para criar nomes de arquivos fáceis de interpretar e manter."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0082"
 search_intent: "workflow"
 primary_keyword: "padrão de nomes de arquivos"
@@ -14,6 +14,9 @@ tags: "padrão de nomes de arquivos"
 short_answer: "Escolha poucos campos em uma ordem fixa e defina o significado de cada um. Use uma identificação estável, datas sem ambiguidade e sequências com zeros à esquerda quando necessário. Separe revisão de aprovação, documente um exemplo e teste a regra em arquivos representativos."
 related_apps: "Aligna"
 canonical_url: "https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/"
+published_at: "2026-10-21T09:00:00+09:00"
+updated_at: "2026-10-21T09:00:00+09:00"
+related_articles: "Como transformar textos repetidos em trechos reutilizáveis => https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/|Como organizar músicas no Android para ouvir offline => https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/|Como conferir o sumário e a ordem dos capítulos de um EPUB => https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/|Como testar um arquivo de mídia convertido antes de substituir o original => https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/"
 ---
 
 # Como criar um padrão consistente para nomes de arquivos

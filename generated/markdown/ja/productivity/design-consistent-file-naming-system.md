@@ -5,7 +5,7 @@ slug: "design-consistent-file-naming-system"
 category: "productivity"
 language: "ja"
 description: "識別子、日付、連番、改訂番号の意味と順序を決め、実際のファイル5件で確かめる、続けやすい命名ルールの作り方です。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0079"
 search_intent: "workflow"
 primary_keyword: "ファイル命名ルール"
@@ -14,6 +14,9 @@ tags: "ファイル命名ルール"
 short_answer: "意味を決めた少数の項目を、毎回同じ順序で並べます。変わりにくい識別子、意味が明確な日付、桁数をそろえた連番、承認状態と分けた改訂番号を使い、短いルールと例を残して実際のファイル5件で試しましょう。"
 related_apps: "Aligna"
 canonical_url: "https://onnellab.com/blog/ja/design-consistent-file-naming-system/"
+published_at: "2026-10-21T09:00:00+09:00"
+updated_at: "2026-10-21T09:00:00+09:00"
+related_articles: "繰り返し使う文章を再利用できる定型文に整理する方法 => https://onnellab.com/blog/ja/turn-repeated-text-into-reusable-snippets/|Androidの音楽ファイルをオフライン再生用に整理する方法 => https://onnellab.com/blog/ja/organize-local-music-library-offline-android/|EPUBの目次リンクと章の順序を確認する方法 => https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/|元ファイルを置き換える前に変換後のメディアを確認する方法 => https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/"
 ---
 
 # 探しやすいファイル命名ルールの作り方

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Design a File Naming System That Stays Consistent</title>
+  <meta name="description" content="Choose a clear field order, define what each date means, and use stable identifiers, padded numbers and version labels in a small file naming system.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/en/design-consistent-file-naming-system/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Design a File Naming System That Stays Consistent">
+  <meta property="og:description" content="Choose a clear field order, define what each date means, and use stable identifiers, padded numbers and version labels in a small file naming system.">
+  <meta property="og:url" content="https://onnellab.com/blog/en/design-consistent-file-naming-system/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Design a File Naming System That Stays Consistent">
+  <meta name="twitter:description" content="Choose a clear field order, define what each date means, and use stable identifiers, padded numbers and version labels in a small file naming system.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/en/design-consistent-file-naming-system/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/en/design-consistent-file-naming-system/social-card.png">
+</head>
+<body>
+  <main>
+<h1>How to Design a File Naming System That Stays Consistent</h1>
+<p>A folder can contain perfectly readable filenames and still be hard to search: one date means the meeting day, another the download day, and “final” appears on several revisions. Consistent file naming starts with shared meanings.</p>
+<h2>Question</h2>
+<p>How can I design a small file naming system that stays consistent?</p>
+<h2>Short Answer</h2>
+<p>Choose a few fields in a fixed order, define what each field means, and write down one example. Use a stable identifier for the subject, an unambiguous date when useful, and a fixed width for sequence numbers. Keep revisions separate from approval status. Test the convention on a small set before using it more widely.</p>
+<h2>Define a Small Convention</h2>
+<p>A <strong>field</strong> is one part of a filename, such as a project identifier or date. A <strong>naming convention</strong> records the fields, their order, separators and meaning. Start with what you actually use to find files. More fields mean more decisions each time you save.</p>
+<p>For a fictional project, `atlas_2026-10-05_notes_003_v02.txt` could mean project Atlas, notes from the meeting on October 5, item 003, saved revision 02. This is an example you can adapt manually, not a claim that an app can assemble that pattern.</p>
+<table><thead><tr><th>Field</th><th>Rule in this example</th></tr></thead><tbody><tr><td>atlas</td><td>Keep the same project identifier</td></tr><tr><td>2026-10-05</td><td>Meeting date, never download date</td></tr><tr><td>notes</td><td>Use one agreed document-type label</td></tr><tr><td>003</td><td>Three-digit item number within this meeting&#x27;s notes</td></tr><tr><td>v02</td><td>Saved revision, not approval status</td></tr></tbody></table>
+<h2>Recommended Workflow</h2>
+<ol><li><strong>Choose the main lookup key.</strong> Put the date first if you browse a chronological collection; put the project identifier first if you group by project. Sorting follows the entire filename, so a date after a project groups dates within each project, not across all projects.</li><li><strong>Give dates one meaning.</strong> Write year-month-day with a four-digit year and two-digit month and day, such as `2026-10-05`. Decide whether it means the event, capture or issue date. Do not silently replace a missing event date with today&#x27;s date; omit the optional field or use a documented unknown marker.</li><li><strong>Keep identity stable.</strong> Use a short project or record identifier that remains the same across revisions. Do not put a temporary owner or “urgent” into that identity field. Avoid unnecessary personal or confidential details because filenames can appear in shared links and attachments.</li><li><strong>Set sequence scope and width.</strong> Decide what starts a new sequence: a project, meeting or batch. Use `001`, `002`, `010` when three digits cover the expected set. Zero padding helps simple text sorting; file managers with natural sorting may already order numbers numerically. If the set outgrows its width, revise the convention consistently.</li><li><strong>Separate revisions from status.</strong> Use `v01`, `v02` for meaningful saved revisions. Define when the number increases. If approval status is necessary, use a separate agreed field or tracking record; “final-final” and the largest version number do not prove approval.</li><li><strong>Write a short rule and test it.</strong> Record the pattern, one example, optional fields and exceptions in a shared note. Try five representative files, including an unknown date and a later revision. Check that you can find and sort them in the apps you actually use.</li></ol>
+<figure><img src="/blog-assets/en/design-consistent-file-naming-system/workflow-diagram.svg" alt="Four decisions for a small naming convention: identity, date, sequence and revision"></figure>
+<h2>Keep the Rule Easy to Apply</h2>
+<p>Choose one separator between fields and consistent labels. A short lowercase label set can simplify typing, but it is an editorial choice, not a universal requirement. Keep the existing file extension: changing `.txt` to `.pdf` does not convert a file. Check the character and length limits of the systems that receive your files before adopting a pattern.</p>
+<p>A naming convention describes a file; it does not replace version history, permissions or a folder system. When the rule changes, document the change and its scope rather than renaming every old archive automatically.</p>
+<h2>Where ONNELLAB Fits</h2>
+<p><a href="/apps/aligna/">Aligna</a> is an optional batch-renaming tool available through its <a href="https://apps.apple.com/us/app/aligna-file-renamer/id6783642658">App Store listing</a> and <a href="https://play.google.com/store/apps/details?id=com.onnellab.aligna">Google Play listing</a>. Its store descriptions list eight naming presets, a preview and conflict handling.</p>
+<p>Choose it when an available preset matches the change you need. This guide&#x27;s multi-field example is a naming design exercise; it does not imply a custom rule builder or that every field can be combined in Aligna. Check the selected preset and preview before applying it. The naming decisions above remain useful with manual renaming or another suitable tool.</p>
+<h2>Related Guides</h2>
+<ul><li><a href="https://onnellab.com/blog/en/rename-files-safely-preview-workflow/">Preview a file-renaming change safely</a></li><li><a href="https://onnellab.com/blog/en/organize-downloads-small-folder-system/">Organize downloads with a small folder system</a></li></ul>
+<h2>References</h2>
+<ul><li><a href="https://apps.apple.com/us/app/aligna-file-renamer/id6783642658">Aligna on the App Store</a></li><li><a href="https://play.google.com/store/apps/details?id=com.onnellab.aligna">Aligna on Google Play</a></li></ul>
+<p>The store listings support the product description. The naming convention and examples are editorial guidance, not a measured productivity result or an app feature specification.</p>
+<h2>Conclusion</h2>
+<p>Consistent file naming depends on a few rules people can remember: stable identity, explicit date meaning, predictable sequence numbers and clear revision labels. Keep an example beside the rule and change it deliberately when the real workflow requires it.</p>
+<h2>FAQ</h2>
+<h3>Must every filename include a date?</h3>
+<p>No. Include a date when it helps distinguish or retrieve files, and define its meaning. A stable identifier may be enough for other collections.</p>
+<h3>Should the date or project come first?</h3>
+<p>Use the field you most often browse by first. Date-first supports chronological grouping; project-first groups each project&#x27;s files together when sorting by name.</p>
+<h3>Does v03 mean the approved version?</h3>
+<p>No. A revision number identifies a saved revision under your convention. Approval needs a separate, agreed signal.</p>
+<h3>Can Aligna create this exact multi-field pattern?</h3>
+<p>This guide does not establish that capability. Aligna offers fixed presets; check whether one matches your intended change rather than assuming an arbitrary pattern builder.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>How to Rename Files Safely With a Preview Workflow</h3><a class="related-article-link" href="https://onnellab.com/blog/en/rename-files-safely-preview-workflow/">Read article</a></article>
+<article class="related-article-card"><h3>How to Organize Downloads With a Small, Durable Folder System</h3><a class="related-article-link" href="https://onnellab.com/blog/en/organize-downloads-small-folder-system/">Read article</a></article>
+<article class="related-article-card"><h3>How to Turn Repeated Text Into Reusable Snippets</h3><a class="related-article-link" href="https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/">Read article</a></article>
+<article class="related-article-card"><h3>How to Reuse Copied Text Snippets on iPhone</h3><a class="related-article-link" href="https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/">Read article</a></article>
+<article class="related-article-card"><h3>How to Turn Rough Notes Into a Structured First Draft</h3><a class="related-article-link" href="https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/">Read article</a></article>
+<article class="related-article-card"><h3>How to Read Large TXT Files Without Lag</h3><a class="related-article-link" href="https://onnellab.com/blog/en/read-large-txt-files-without-lag/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

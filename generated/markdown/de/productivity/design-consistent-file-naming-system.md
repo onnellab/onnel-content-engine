@@ -5,7 +5,7 @@ slug: "design-consistent-file-naming-system"
 category: "productivity"
 language: "de"
 description: "Entwickeln Sie eine verständliche Dateinamen-Konvention mit stabilen Kennungen, eindeutigen Datumsangaben, Nummernfolgen und klar bezeichneten Revisionen."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0083"
 search_intent: "workflow"
 primary_keyword: "einheitliche Dateinamen"
@@ -14,6 +14,9 @@ tags: "einheitliche Dateinamen"
 short_answer: "Legen Sie wenige Felder mit einer festen Reihenfolge und eindeutiger Bedeutung fest. Verwenden Sie eine stabile Kennung, ein unmissverständliches Datum und bei Bedarf Nummern mit führenden Nullen. Trennen Sie Revisionen von Freigaben, dokumentieren Sie ein Beispiel und prüfen Sie die Regel an typischen Dateien."
 related_apps: "Aligna"
 canonical_url: "https://onnellab.com/blog/de/design-consistent-file-naming-system/"
+published_at: "2026-10-21T09:00:00+09:00"
+updated_at: "2026-10-21T09:00:00+09:00"
+related_articles: "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln => https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/|Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen => https://onnellab.com/blog/de/test-converted-media-before-replacing-original/|Musikdateien auf Android für die Offline-Wiedergabe ordnen => https://onnellab.com/blog/de/organize-local-music-library-offline-android/|Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen => https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/"
 ---
 
 # Einheitliche Dateinamen: eine einfache Konvention entwickeln

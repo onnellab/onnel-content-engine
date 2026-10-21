@@ -5,7 +5,7 @@ slug: "design-consistent-file-naming-system"
 category: "productivity"
 language: "fr"
 description: "Définissez des champs clairs, des dates explicites et des règles de numérotation et de révision pour garder des noms de fichiers compréhensibles."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0084"
 search_intent: "workflow"
 primary_keyword: "convention de nommage des fichiers"
@@ -14,6 +14,9 @@ tags: "convention de nommage des fichiers"
 short_answer: "Choisissez quelques champs dans un ordre fixe, chacun avec une signification précise. Utilisez un identifiant stable, une date sans ambiguïté et, si nécessaire, des numéros complétés par des zéros. Distinguez révision et validation, documentez un exemple et testez la règle sur des fichiers représentatifs."
 related_apps: "Aligna"
 canonical_url: "https://onnellab.com/blog/fr/design-consistent-file-naming-system/"
+published_at: "2026-10-21T09:00:00+09:00"
+updated_at: "2026-10-21T09:00:00+09:00"
+related_articles: "Transformer les textes répétitifs en extraits réutilisables => https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/|Organiser sa musique sur Android pour une écoute hors ligne => https://onnellab.com/blog/fr/organize-local-music-library-offline-android/|Vérifier la table des matières et l’ordre des chapitres d’un EPUB => https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/|Tester un fichier multimédia converti avant de remplacer l’original => https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/"
 ---
 
 # Créer une convention cohérente pour nommer ses fichiers

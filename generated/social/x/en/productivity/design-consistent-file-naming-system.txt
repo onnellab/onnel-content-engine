@@ -1,0 +1,5 @@
+Design a small file naming system that stays consistent is easier when the process is clear before choosing an app.
+
+Install Aligna:
+App Store: https://apps.apple.com/app/id6783642658
+Google Play: https://play.google.com/store/apps/details?id=com.onnellab.aligna

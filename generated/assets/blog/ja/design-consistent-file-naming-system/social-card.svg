@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
-  <title id="title">一貫したファイル名を作る</title>
-  <desc id="desc">意味を決めた少数の項目を、毎回同じ順序で並べます。変わりにくい識別子、意味が明確な日付、桁数をそろえた連番、承認状態と分けた改訂番号を使い、短いルールと例を残して実際のファイル5件で試しましょう。</desc>
-  <rect width="1200" height="675" fill="#fbf7ef"/>
-  <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
-  <text fill="#30302c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="38" font-weight="680"><tspan x="92" y="100">一貫したファイル名を作る</tspan></text>
-  <text fill="#69645c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="19"><tspan x="92" y="134">まず各項目の意味を決める · ファイル命名ルール</tspan></text>
-  <g transform="translate(72 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">1. 識別子</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">変わらない対象</tspan></text></g><g transform="translate(346 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">2. 日付</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">何の日付かを定義</tspan></text></g><g transform="translate(620 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">3. 順序</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">番号の桁数を統一</tspan></text></g><g transform="translate(894 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">4. 改訂</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">改訂番号を付ける</tspan></text></g>
-  <path d="M280 237H328m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M554 237H602m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M828 237H876m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.6"/>
-  <text x="124" y="506" fill="#30302c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="20" font-weight="650">1つの項目に1つの意味</text>
-  <text x="92" y="588" fill="#817c73" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="14">ONNELLAB Blog · 手順図</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">探しやすいファイル命名ルールの作り方</title>
+  <desc id="desc">識別子、日付、連番、改訂番号の意味と順序を決め、実際のファイル5件で確かめる、続けやすい命名ルールの作り方です。</desc>
+  <rect width="1200" height="630" fill="#f8f4ec"/>
+  <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
+  <rect x="92" y="92" width="210" height="44" rx="22" fill="#e8f5ee" stroke="#b9dbc8" stroke-width="1.4"/>
+  <text x="118" y="121" fill="#28543a" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="18" font-weight="700">作業効率</text>
+  <text x="92" y="218" fill="#282723" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">探しやすいファイル命名ルールの作り</tspan><tspan x="92" y="282">方</tspan></text>
+  <text fill="#5f5b54" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="24"><tspan x="92" y="410">識別子、日付、連番、改訂番号の意味と順序を決め、実際のファイル5件で確かめる、</tspan><tspan x="92" y="444">続けやすい命名ルールの作り方です。</tspan></text>
+  <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
+  <text x="92" y="552" fill="#817c73" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="19">作業効率 · JA</text>
+  <text x="1048" y="552" fill="#30302c" font-family="Noto Sans CJK JP, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
 </svg>

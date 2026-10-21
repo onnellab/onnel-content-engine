@@ -229,6 +229,13 @@
     <pubDate>Sun, 04 Oct 2026 02:34:40 GMT</pubDate>
   </item>
   <item>
+    <title>How to Design a File Naming System That Stays Consistent</title>
+    <link>https://onnellab.com/blog/en/design-consistent-file-naming-system/</link>
+    <guid>https://onnellab.com/blog/en/design-consistent-file-naming-system/</guid>
+    <description>Choose a clear field order, define what each date means, and use stable identifiers, padded numbers and version labels in a small file naming system.</description>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>How to Test a Converted Media File Before Replacing the Original</title>
     <link>https://onnellab.com/blog/en/test-converted-media-before-replacing-original/</link>
     <guid>https://onnellab.com/blog/en/test-converted-media-before-replacing-original/</guid>
@@ -479,6 +486,62 @@
     <guid>https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/</guid>
     <description>Prepara fragmentos reutilizables con contexto, marcadores visibles y una revisión antes de enviar. Mantén una colección pequeña y actualizada.</description>
     <pubDate>Sun, 18 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>찾기 쉬운 파일명 규칙을 만드는 방법</title>
+    <link>https://onnellab.com/blog/ko/design-consistent-file-naming-system/</link>
+    <guid>https://onnellab.com/blog/ko/design-consistent-file-naming-system/</guid>
+    <description>식별 정보, 날짜, 번호, 수정본의 뜻과 순서를 정하고 실제 파일 다섯 개로 시험하는 실용적인 파일명 규칙 안내예요.</description>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>探しやすいファイル命名ルールの作り方</title>
+    <link>https://onnellab.com/blog/ja/design-consistent-file-naming-system/</link>
+    <guid>https://onnellab.com/blog/ja/design-consistent-file-naming-system/</guid>
+    <description>識別子、日付、連番、改訂番号の意味と順序を決め、実際のファイル5件で確かめる、続けやすい命名ルールの作り方です。</description>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>如何建立一致、好查找的文件命名规则</title>
+    <link>https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/</link>
+    <guid>https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/</guid>
+    <description>明确标识、日期、序号和修订编号的含义与顺序，再用五个真实文件测试，建立容易坚持的文件命名规则。</description>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>如何建立一致又好找的檔案命名規則</title>
+    <link>https://onnellab.com/blog/zh-hant/design-consistent-file-naming-system/</link>
+    <guid>https://onnellab.com/blog/zh-hant/design-consistent-file-naming-system/</guid>
+    <description>先定義識別資訊、日期、序號與修訂編號的意思和順序，再用五個實際檔案測試，建立容易維持的檔案命名規則。</description>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Como criar um padrão consistente para nomes de arquivos</title>
+    <link>https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/</link>
+    <guid>https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/</guid>
+    <description>Defina campos, datas, sequências e revisões com significados claros para criar nomes de arquivos fáceis de interpretar e manter.</description>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Einheitliche Dateinamen: eine einfache Konvention entwickeln</title>
+    <link>https://onnellab.com/blog/de/design-consistent-file-naming-system/</link>
+    <guid>https://onnellab.com/blog/de/design-consistent-file-naming-system/</guid>
+    <description>Entwickeln Sie eine verständliche Dateinamen-Konvention mit stabilen Kennungen, eindeutigen Datumsangaben, Nummernfolgen und klar bezeichneten Revisionen.</description>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Créer une convention cohérente pour nommer ses fichiers</title>
+    <link>https://onnellab.com/blog/fr/design-consistent-file-naming-system/</link>
+    <guid>https://onnellab.com/blog/fr/design-consistent-file-naming-system/</guid>
+    <description>Définissez des champs clairs, des dates explicites et des règles de numérotation et de révision pour garder des noms de fichiers compréhensibles.</description>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Cómo crear un sistema coherente para nombrar archivos</title>
+    <link>https://onnellab.com/blog/es/design-consistent-file-naming-system/</link>
+    <guid>https://onnellab.com/blog/es/design-consistent-file-naming-system/</guid>
+    <description>Define campos, fechas, secuencias y revisiones con significados claros para crear nombres de archivo fáciles de interpretar y mantener.</description>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>

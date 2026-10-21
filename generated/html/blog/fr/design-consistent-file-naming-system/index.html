@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Créer une convention cohérente pour nommer ses fichiers</title>
+  <meta name="description" content="Définissez des champs clairs, des dates explicites et des règles de numérotation et de révision pour garder des noms de fichiers compréhensibles.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/fr/design-consistent-file-naming-system/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Créer une convention cohérente pour nommer ses fichiers">
+  <meta property="og:description" content="Définissez des champs clairs, des dates explicites et des règles de numérotation et de révision pour garder des noms de fichiers compréhensibles.">
+  <meta property="og:url" content="https://onnellab.com/blog/fr/design-consistent-file-naming-system/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Créer une convention cohérente pour nommer ses fichiers">
+  <meta name="twitter:description" content="Définissez des champs clairs, des dates explicites et des règles de numérotation et de révision pour garder des noms de fichiers compréhensibles.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/fr/design-consistent-file-naming-system/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/fr/design-consistent-file-naming-system/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Créer une convention cohérente pour nommer ses fichiers</h1>
+<h2>Question</h2>
+<p>Comment créer une convention de nommage des fichiers qui reste utile au quotidien ?</p>
+<h2>Réponse courte</h2>
+<p>Choisissez quelques champs dans un ordre fixe, chacun avec une signification précise. Utilisez un identifiant stable, une date sans ambiguïté et, si nécessaire, des numéros complétés par des zéros. Distinguez révision et validation, documentez un exemple et testez la règle sur des fichiers représentatifs.</p>
+<h2>Définir une convention simple</h2>
+<p>Une convention de nommage est une règle commune pour construire les noms de fichiers. Un champ est une partie du nom qui remplit une fonction : identifier le projet, préciser une date ou indiquer une révision. Chaque champ doit rester compréhensible hors de son contexte d’origine.</p>
+<p>Voici un exemple éditorial, à réaliser manuellement : `atlas_2026-10-05_notes_003_v02.txt`. Il ne décrit pas une fonction d’application. Atlas est un projet fictif.</p>
+<table><thead><tr><th>Champ</th><th>Signification dans cet exemple</th></tr></thead><tbody><tr><td>`atlas`</td><td>Identifiant stable du projet Atlas</td></tr><tr><td>`2026-10-05`</td><td>Date de la réunion : 5 octobre 2026</td></tr><tr><td>`notes`</td><td>Type de document : notes</td></tr><tr><td>`003`</td><td>Élément 003 parmi les notes de cette réunion</td></tr><tr><td>`v02`</td><td>Révision enregistrée 02</td></tr><tr><td>`.txt`</td><td>Extension du fichier texte</td></tr></tbody></table>
+<h2>Méthode recommandée</h2>
+<ol><li><strong>Choisir le principal critère de recherche.</strong> Placez la date en premier pour une recherche chronologique, ou le projet en premier si c’est votre point d’entrée habituel. Dans un tri textuel, le projet en tête classe les dates à l’intérieur de chaque projet. Il ne crée pas un classement chronologique global.</li></ol>
+<ol><li><strong>Préciser ce que représente la date.</strong> Adoptez `YYYY-MM-DD`, soit année-mois-jour, avec deux chiffres pour le mois et le jour. Indiquez s’il s’agit de la date de l’événement, de la capture ou de l’émission. Si elle manque, omettez le champ ou utilisez un marqueur documenté. Ne remplacez pas une date inconnue par celle d’aujourd’hui.</li></ol>
+<ol><li><strong>Conserver une identité stable.</strong> Préférez un identifiant court de projet ou de document. Évitez le nom d’un responsable temporaire et les mentions comme « urgent », qui deviennent vite obsolètes. Limitez les informations personnelles ou confidentielles : les noms peuvent apparaître dans des pièces jointes, des liens et des notifications, au-delà du dossier d’origine.</li></ol>
+<ol><li><strong>Délimiter la numérotation.</strong> Décidez si la séquence concerne un projet, une réunion ou un lot. Adaptez le nombre de chiffres au volume prévu. `001`, `002` et `010` gardent leur ordre numérique dans un tri textuel simple. Certaines applications utilisent déjà un tri naturel. Si la capacité prévue est dépassée, ajustez la séquence concernée de manière cohérente et planifiée.</li></ol>
+<ol><li><strong>Séparer révision et validation.</strong> Définissez quand `v01` devient `v02`, par exemple à chaque nouvelle révision enregistrée devant être distinguée. Une révision supplémentaire ne prouve aucune validation. Consignez l’approbation dans le processus prévu. Les noms « final-final » ne démontrent pas davantage qu’une personne a relu ou approuvé le contenu.</li></ol>
+<ol><li><strong>Écrire la règle et tester cinq fichiers.</strong> Documentez l’ordre des champs, les champs facultatifs, les séparateurs et les exceptions. Choisissez cinq cas représentatifs, dont une date inconnue et une nouvelle révision. Vérifiez la recherche, le tri et l’affichage dans les applications réellement utilisées, ainsi que dans le système destinataire.</li></ol>
+<h2>Les quatre éléments à retenir</h2>
+<figure><img src="/blog-assets/fr/design-consistent-file-naming-system/workflow-diagram.svg" alt="Quatre éléments d’un nom de fichier : identité stable, date au sens défini, séquence complétée par des zéros et révision indiquée."></figure>
+<h2>Garder une règle facile à appliquer</h2>
+<p>Utilisez les séparateurs de façon constante. Les minuscules sont un choix éditorial, pas une obligation universelle. Vérifiez les caractères autorisés et les limites de longueur des systèmes destinataires. Conservez l’extension : modifier celle-ci ne convertit pas le contenu du fichier.</p>
+<p>Une convention ne remplace ni l’historique des versions, ni les droits d’accès, ni les dossiers. Si elle change, ne renommez pas automatiquement toutes les archives. Examinez d’abord les liens, références et habitudes de travail qui dépendent des noms existants.</p>
+<h2>Utiliser ONNELLAB</h2>
+<p><a href="/apps/aligna/">Aligna</a> est un outil de renommage par lots disponible sur iOS et Android. Ses fiches de boutique décrivent huit modèles prédéfinis fixes, un aperçu et une gestion des conflits. Choisissez uniquement un modèle adapté au besoin. Examinez le modèle sélectionné et l’aperçu avant d’appliquer les changements. Ces informations ne confirment ni un générateur de règles personnalisées ni la combinaison exacte de champs présentée ici.</p>
+<h2>Guides associés</h2>
+<ul><li><a href="https://onnellab.com/blog/fr/rename-files-safely-preview-workflow/">Renommer des fichiers avec précaution grâce à l’aperçu</a></li><li><a href="https://onnellab.com/blog/fr/organize-downloads-small-folder-system/">Organiser les téléchargements avec quelques dossiers</a></li></ul>
+<h2>Références</h2>
+<p>Les caractéristiques du produit sont décrites sur l’<a href="https://apps.apple.com/us/app/aligna-file-renamer/id6783642658">App Store</a> et <a href="https://play.google.com/store/apps/details?id=com.onnellab.aligna">Google Play</a>. Les conseils de nommage sont des recommandations éditoriales, sans résultat mesuré de performance.</p>
+<h2>Conclusion</h2>
+<p>Quelques champs bien définis suffisent pour commencer. Écrivez la règle, vérifiez les exceptions courantes et testez-la avant de l’appliquer à un ensemble important de fichiers.</p>
+<h2>Questions fréquentes</h2>
+<h3>Faut-il toujours inclure une date ?</h3>
+<p>Non. Ajoutez-la si elle aide à retrouver ou à comprendre le fichier, en précisant ce qu’elle représente.</p>
+<h3>Vaut-il mieux commencer par la date ou le projet ?</h3>
+<p>Choisissez votre principal critère de recherche. La date favorise l’ordre chronologique ; le projet regroupe d’abord les fichiers par projet.</p>
+<h3>`v03` signifie-t-il que le fichier est validé ?</h3>
+<p>Non. Ce champ indique une révision selon votre convention. La validation demande une trace distincte.</p>
+<h3>Aligna peut-il reproduire exactement cet exemple ?</h3>
+<p>Les informations citées ne l’établissent pas. L’application propose des modèles fixes ; vérifiez si l’un d’eux correspond à votre besoin.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Transformer les textes répétitifs en extraits réutilisables</h3><a class="related-article-link" href="https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/">Read article</a></article>
+<article class="related-article-card"><h3>Organiser sa musique sur Android pour une écoute hors ligne</h3><a class="related-article-link" href="https://onnellab.com/blog/fr/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>Vérifier la table des matières et l’ordre des chapitres d’un EPUB</h3><a class="related-article-link" href="https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/">Read article</a></article>
+<article class="related-article-card"><h3>Tester un fichier multimédia converti avant de remplacer l’original</h3><a class="related-article-link" href="https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

@@ -5,7 +5,7 @@ slug: "design-consistent-file-naming-system"
 category: "productivity"
 language: "es"
 description: "Define campos, fechas, secuencias y revisiones con significados claros para crear nombres de archivo fáciles de interpretar y mantener."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0085"
 search_intent: "workflow"
 primary_keyword: "convención para nombrar archivos"
@@ -14,6 +14,9 @@ tags: "convención para nombrar archivos"
 short_answer: "Elige pocos campos en un orden fijo y define qué significa cada uno. Utiliza un identificador estable, una fecha inequívoca y secuencias con ceros iniciales cuando convenga. Separa la revisión de la aprobación, documenta un ejemplo y prueba la regla con archivos representativos."
 related_apps: "Aligna"
 canonical_url: "https://onnellab.com/blog/es/design-consistent-file-naming-system/"
+published_at: "2026-10-21T09:00:00+09:00"
+updated_at: "2026-10-21T09:00:00+09:00"
+related_articles: "Cómo convertir textos repetidos en fragmentos reutilizables => https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/|Cómo organizar música en Android para escucharla sin conexión => https://onnellab.com/blog/es/organize-local-music-library-offline-android/|Cómo comprobar el índice y el orden de los capítulos de un EPUB => https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/|Cómo probar un archivo multimedia convertido antes de sustituir el original => https://onnellab.com/blog/es/test-converted-media-before-replacing-original/"
 ---
 
 # Cómo crear un sistema coherente para nombrar archivos

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>探しやすいファイル命名ルールの作り方</title>
+  <meta name="description" content="識別子、日付、連番、改訂番号の意味と順序を決め、実際のファイル5件で確かめる、続けやすい命名ルールの作り方です。">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/ja/design-consistent-file-naming-system/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="探しやすいファイル命名ルールの作り方">
+  <meta property="og:description" content="識別子、日付、連番、改訂番号の意味と順序を決め、実際のファイル5件で確かめる、続けやすい命名ルールの作り方です。">
+  <meta property="og:url" content="https://onnellab.com/blog/ja/design-consistent-file-naming-system/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="探しやすいファイル命名ルールの作り方">
+  <meta name="twitter:description" content="識別子、日付、連番、改訂番号の意味と順序を決め、実際のファイル5件で確かめる、続けやすい命名ルールの作り方です。">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/ja/design-consistent-file-naming-system/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/ja/design-consistent-file-naming-system/social-card.png">
+</head>
+<body>
+  <main>
+<h1>探しやすいファイル命名ルールの作り方</h1>
+<h2>質問</h2>
+<p>ファイルが増えても一貫して使える命名ルールは、どう作ればよいですか？</p>
+<h2>短い回答</h2>
+<p>意味を決めた少数の項目を、毎回同じ順序で並べます。変わりにくい識別子、意味が明確な日付、桁数をそろえた連番、承認状態と分けた改訂番号を使い、短いルールと例を残して実際のファイル5件で試しましょう。</p>
+<p>ファイル名にすべての情報を詰め込む必要はありません。一覧で対象を見分け、似たファイルを区別し、必要な順序で探せることが目的です。名前を付けるたびに判断が増えるなら、項目を減らす余地があります。</p>
+<h2>小さな命名ルールを決める</h2>
+<p>ここでいう「項目」とは、識別子や日付など、1つの意味を担う部分です。命名ルールでは、使う項目、その意味、並べる順序、区切り方を決めます。次は手作業で付ける場合の説明用の例です。特定のアプリでこの組み合わせを作れると示すものではありません。</p>
+<p>`atlas_2026-10-05_notes_003_v02.txt`</p>
+<table><thead><tr><th>項目</th><th>この例での意味</th></tr></thead><tbody><tr><td>`atlas`</td><td>架空のプロジェクトAtlasの固定識別子</td></tr><tr><td>`2026-10-05`</td><td>会議が行われた日、2026年10月5日</td></tr><tr><td>`notes`</td><td>文書の種類である会議メモ</td></tr><tr><td>`003`</td><td>この会議のメモ一式の中で使う項目番号003</td></tr><tr><td>`v02`</td><td>保存した改訂版の番号02</td></tr><tr><td>`.txt`</td><td>ファイルの拡張子</td></tr></tbody></table>
+<p>並びは「プロジェクト_会議日_文書の種類_項目番号_改訂番号」です。番号003は対象を区別し、v02はその対象の改訂版を区別します。この2つを同じ役割として扱わないことが大切です。</p>
+<h2>おすすめの手順</h2>
+<ol><li><strong>普段の探し方に合わせて先頭の項目を選びます。</strong></li></ol>
+<p>プロジェクトを思い浮かべてから探すなら、プロジェクト名を先頭に置きます。複数のプロジェクトを日付で横断して見るなら、日付を先頭にする方法があります。通常の文字列順では、プロジェクト名が先なら日付順になるのは各プロジェクトの中です。全ファイルがプロジェクトをまたいで日付順になるわけではありません。</p>
+<ol><li><strong>日付の書式と意味をセットで決めます。</strong></li></ol>
+<p>年4桁、月日各2桁の `YYYY-MM-DD` を使います。`2026-10-05` のようにゼロを補い、月と日の順序が曖昧な短い表記を避けます。その日付が開催日、撮影日、発行日などのどれなのかも決めてください。同じ位置に保存日と開催日を混在させないようにします。不明な場合は決めた方法で省略するか、`unknown` などの明文化した表示を使います。今日の日付で穴埋めすると、実際と違う意味になります。</p>
+<ol><li><strong>変わりにくい短い識別子を選びます。</strong></li></ol>
+<p>プロジェクトの略称や記録番号など、対象を継続して指せる情報が向いています。一時的な担当者名や `urgent` のような状況表示は、時間がたつと変わります。似た略称があるなら、先に区別できる形を決めましょう。ファイル名は添付ファイル一覧や共有リンクにも表示されることがあるため、個人情報や機密情報を不用意に入れないでください。</p>
+<ol><li><strong>連番を数える範囲と桁数を決めます。</strong></li></ol>
+<p>プロジェクト全体、会議ごと、処理する一式ごとなど、番号の範囲を明記します。この例の003は、その会議のメモ一式の中の番号です。`001`、`002`、`010` のように桁数をそろえると、単純な文字列順でも並べやすくなります。数字を数値として扱う自然順ソートでは、ゼロがなくても数値順になる場合があります。想定件数に合う桁数を選び、上限を超えた場合は同じ範囲で一貫して桁数を広げる方針を決めます。</p>
+<ol><li><strong>改訂番号と承認状態を分けます。</strong></li></ol>
+<p>`v01` から `v02` に進める条件を短く記録します。たとえば、新しい内容をまとめたレビュー用ファイルを保存するときに番号を上げる方法があります。細かな保存のたびに上げるのか、共有する改訂版ごとなのかを決め、一貫して使いましょう。`v03` は承認済みという意味ではありません。承認は別の合意された状態や記録で確認します。`final-final` という名前も承認の証拠にはなりません。</p>
+<ol><li><strong>例外を含む短いルールを書き、5件で試します。</strong></li></ol>
+<p>項目の順序と意味、区切り文字、省略できる項目、例外の扱いを残します。通常のファイル、別プロジェクトのファイル、番号010の項目、日付不明のファイル、v02の改訂版など、代表例を5件選びます。実際に使うファイル管理アプリや受け渡し先のアプリで、表示、検索、並び順、同名ファイルの有無を確認しましょう。日付を省略した場合に残りの項目を読み違えないかも試します。</p>
+<h2>4つの役割を確認する</h2>
+<figure><img src="/blog-assets/ja/design-consistent-file-naming-system/workflow-diagram.svg" alt="識別子で対象を固定し、日付の意味を定め、連番の桁数をそろえ、改訂番号を付ける4段階"></figure>
+<p>1つの項目には1つの意味を持たせます。日付を会議日と保存日で使い分けたり、同じ番号で項目と改訂の両方を表したりすると、読む側に推測が必要になります。</p>
+<h2>守りやすいルールにする</h2>
+<p>区切り文字は統一します。この例では項目の間にアンダースコア、日付の中にハイフンを使っています。英字を小文字にするのは、この例の編集上の選択です。すべての環境に共通する必須条件ではありません。受け渡し先で使える文字とファイル名の長さも確認してください。</p>
+<p>名前を変更するときは拡張子を保ちます。`.txt` を `.pdf` に変えても、ファイル形式は変換されません。また、命名ルールはフォルダー構成、アクセス権、変更履歴の代わりにはなりません。それぞれ別に管理する必要があります。</p>
+<p>ルールを変更しても、過去の保管ファイルを一括で自動改名しないようにします。リンクや他の人の作業に影響する可能性があるためです。新しいファイルから適用するのか、確認した一部だけを変更するのか、先に範囲を決めましょう。</p>
+<h2>ONNELLAB の活用</h2>
+<p>ルールを決めた後、繰り返す改名作業にツールが必要なら、<a href="/apps/aligna/">Aligna</a>が選択肢になります。公開されているiOS・Androidのストア説明では、8種類の固定プリセット、プレビュー、名前の競合処理が案内されています。目的に合うプリセットがある場合に選び、選択したプリセットの内容と変更後のプレビューを確認してから適用してください。</p>
+<p>この記事の例は手作業で設計した命名例です。Alignaに任意のカスタムルールを組み立てる機能があることや、複数のプリセットを組み合わせて例と同じ名前を作れることは確認されていません。必要な形式が提供されているかを、実際のプリセットとプレビューで確かめます。</p>
+<h2>関連ガイド</h2>
+<ul><li><a href="https://onnellab.com/blog/ja/rename-files-safely-preview-workflow/">プレビューを使って安全にファイル名を変更する</a></li><li><a href="https://onnellab.com/blog/ja/organize-downloads-small-folder-system/">小さなフォルダー構成でダウンロードを整理する</a></li></ul>
+<h2>参考資料</h2>
+<ul><li><a href="https://apps.apple.com/us/app/aligna-file-renamer/id6783642658">App StoreのAligna</a></li><li><a href="https://play.google.com/store/apps/details?id=com.onnellab.aligna">Google PlayのAligna</a></li></ul>
+<p>ストア情報は製品説明の出典です。命名ルールと例は編集上の提案であり、作業時間や整理効果を測定した結果ではありません。</p>
+<h2>まとめ</h2>
+<p>少ない項目を固定した順序で使い、それぞれの意味を説明できるようにしましょう。日付、番号の範囲、改訂の条件を決め、実際のファイル5件で確認します。迷う場面があれば、項目を増やす前にルールを簡単にできないか見直してください。</p>
+<h2>よくある質問</h2>
+<h3>すべてのファイルに日付が必要ですか？</h3>
+<p>いいえ。検索や区別に役立つ場合だけ付けます。付ける場合は何の日付かを定め、不明な日付を今日の日付で置き換えないようにします。</p>
+<h3>日付とプロジェクトのどちらを先にしますか？</h3>
+<p>主な探し方に合わせます。日付順で横断的に見るなら日付、プロジェクトごとにまとめたいならプロジェクトを先にします。プロジェクトが先の場合、日付順になるのは各プロジェクトの中です。</p>
+<h3>v03は承認済みという意味ですか？</h3>
+<p>いいえ。決めたルールに沿った改訂番号です。承認は、別の状態や記録で確認する必要があります。</p>
+<h3>Alignaで例とまったく同じ形式を作れますか？</h3>
+<p>確認されているのは8種類の固定プリセットです。この記事の組み合わせ全体を再現できるとは確認されていません。目的に合うプリセットがあるか調べ、適用前にプレビューを確認してください。</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>繰り返し使う文章を再利用できる定型文に整理する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/turn-repeated-text-into-reusable-snippets/">Read article</a></article>
+<article class="related-article-card"><h3>Androidの音楽ファイルをオフライン再生用に整理する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>EPUBの目次リンクと章の順序を確認する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/">Read article</a></article>
+<article class="related-article-card"><h3>元ファイルを置き換える前に変換後のメディアを確認する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>
