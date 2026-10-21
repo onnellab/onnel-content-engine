@@ -1,0 +1,44 @@
+# Security-only integration probe: never stages artwork, publishes releases,
+# renders media, writes to another repository, or uses credentials.
+name: Artwork Sandbox Security Preflight
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/isolated_vendored_artwork.py"
+      - ".github/workflows/artwork-sandbox-preflight.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: artwork-sandbox-preflight-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout uncredentialed verifier
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install restrictive Bubblewrap AppArmor runtime
+        run: |
+          set -euo pipefail
+          test "$(cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns)" = "1"
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y bubblewrap apparmor apparmor-profiles
+          test -f /usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          test "$(cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns)" = "1"
+
+      - name: Verify real isolated namespaces, mounts, network and child environment
+        run: |
+          set -euo pipefail
+          python3 -c 'from scripts.isolated_vendored_artwork import sandbox_preflight; print(sandbox_preflight())'
