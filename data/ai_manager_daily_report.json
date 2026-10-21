@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T21:22:15+00:00",
+  "generated_at": "2026-10-21T21:26:12+00:00",
   "summary": {
     "reviews_triaged": 13,
     "high_risk_reports": 0,
@@ -44,135 +44,135 @@
   },
   "requires_attention": [],
   "refresh_status": {
-    "generated_at": "2026-10-20T21:22:15+00:00",
-    "checked_at": "2026-10-20T21:22:15+00:00",
+    "generated_at": "2026-10-21T21:26:12+00:00",
+    "checked_at": "2026-10-21T21:26:12+00:00",
     "status": "complete",
     "steps": [
       {
         "script": "check_store_versions.py",
-        "checked_at": "2026-10-20T21:21:46+00:00",
+        "checked_at": "2026-10-21T21:25:41+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "sync_store_reviews.py",
-        "checked_at": "2026-10-20T21:21:49+00:00",
+        "checked_at": "2026-10-21T21:25:45+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "collect_github_issues.py",
-        "checked_at": "2026-10-20T21:22:08+00:00",
+        "checked_at": "2026-10-21T21:26:05+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "collect_os_updates.py",
-        "checked_at": "2026-10-20T21:22:11+00:00",
+        "checked_at": "2026-10-21T21:26:08+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "collect_store_policy_updates.py",
-        "checked_at": "2026-10-20T21:22:12+00:00",
+        "checked_at": "2026-10-21T21:26:09+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "collect_gmail_policy_alerts.py",
-        "checked_at": "2026-10-20T21:22:13+00:00",
+        "checked_at": "2026-10-21T21:26:10+00:00",
         "exit_code": 0,
         "status": "ok",
         "account": "developer"
       },
       {
         "script": "collect_gmail_policy_alerts.py",
-        "checked_at": "2026-10-20T21:22:14+00:00",
+        "checked_at": "2026-10-21T21:26:11+00:00",
         "exit_code": 0,
         "status": "ok",
         "account": "official"
       },
       {
         "script": "validate_crash_source_config.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "collect_sentry_crashes.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "collect_crashlytics_incidents.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "collect_codemagic_private_test_builds.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "not_applicable"
       },
       {
         "script": "collect_internal_store_processing_status.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "triage_store_reviews.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "analyze_incidents.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "analyze_internal_test_feedback.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "generate_ai_coder_tasks.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "analyze_os_update_impact.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "analyze_store_policy_impact.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "evaluate_store_submission_readiness.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "generate_ai_manager_report.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       },
       {
         "script": "generate_chatgpt_monitor_snapshot.py",
-        "checked_at": "2026-10-20T21:22:15+00:00",
+        "checked_at": "2026-10-21T21:26:12+00:00",
         "exit_code": 0,
         "status": "ok"
       }
@@ -193,13 +193,13 @@
       {
         "path": "data/ai_doctor_findings.json",
         "count": 1,
-        "sha256": "a9548563e15279574a071267ce914fc8269befaf3968e8bf82f55c50edd31889",
+        "sha256": "dd5ec854741de44090e100b225624a9fc69d90eaac0a8507f1db91b82e73776d",
         "status": "recorded_only"
       },
       {
         "path": "data/ai_coder_tasks.json",
         "count": 1,
-        "sha256": "5cc81c56cf655f634200bd668ffad79c1c19f49f474083f674dd867256a3010d",
+        "sha256": "3d7ffde05a3080a34f31bc728e3583a1dd805c18ca021a0bca3cc3878f2f43ee",
         "status": "recorded_only"
       },
       {
@@ -211,7 +211,7 @@
       {
         "path": "data/internal_test_findings.json",
         "count": 1,
-        "sha256": "29e1d84633b696e047cc8d7edb24f0e1dac5f21cbe9a8996de4f0b611e69659d",
+        "sha256": "226cd76854d9294cb55edbb423f62545e2ce503be0a364194731f279256da011",
         "status": "recorded_only"
       },
       {
