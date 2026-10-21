@@ -16,7 +16,9 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Pages runs include security audit, site rendering, browser checks and live
+    # byte verification. Keep a bounded wait longer than the entire Pages job.
+    timeout-minutes: 30
     env:
       HOMEPAGE_REPO_PATH: .homepage
     steps:
@@ -89,8 +91,11 @@ jobs:
           HOMEPAGE_SHA: ${{ steps.homepage_sync.outputs.sha }}
         run: |
           set -euo pipefail
-          for attempt in $(seq 1 60); do
-            echo "Checking homepage deployment ($attempt/60)"
+          # Pages build can legitimately take >5 minutes; 60*5s caused a
+          # false stale error just before an otherwise successful verification.
+          # This polls the same exact commit and still fails closed after 15m.
+          for attempt in $(seq 1 180); do
+            echo "Checking homepage deployment ($attempt/180)"
             pages_state="$(
               gh api "repos/onnellab/onnellab.github.io/commits/$HOMEPAGE_SHA/status" \
                 --jq '[.statuses[] | select(.context == "onnellab/pages-deploy")][0].state // ""'
@@ -113,7 +118,7 @@ jobs:
             fi
             sleep 5
           done
-          echo "::error title=homepage_deploy_verification_stale::Homepage Pages deployment or live /ops/ verification did not report success within the bounded verification window"
+          echo "::error title=homepage_deploy_verification_stale::Homepage Pages or live /ops/ did not verify for $HOMEPAGE_SHA within 15 minutes (pages=$pages_state ops=$ops_state)"
           exit 1
 
       - name: Verify live ops deployment

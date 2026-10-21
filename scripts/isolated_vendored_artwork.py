@@ -86,6 +86,9 @@ runpy.run_path("/gate/release_artwork.py", run_name="__main__")
 
 SELF_TEST = '''import errno, json, os, pathlib, socket, sys
 expected_env = json.loads(sys.argv[1])
+# Bubblewrap sets PWD to the selected sandbox --chdir *after* --unsetenv.
+# Require exactly the trusted cwd; reject every other unexpected variable.
+expected_env["PWD"] = "/app"
 parent_net, parent_pid, hidden = sys.argv[2:5]
 if dict(os.environ) != expected_env:
     raise RuntimeError("Sandbox environment differs from the fixed allowlist")
@@ -303,11 +306,12 @@ def _sandbox_command(repository: Path, bundle: Path, bootstrap: Path, git_config
                      arguments: list[str], *, project_relative: PurePosixPath = PurePosixPath("."),
                      site: Path | None = None) -> list[str]:
     _runtime()
-    # Bubblewrap --clearenv retains PWD; remove it without loosening CHILD_ENV.
+    # Bubblewrap sets PWD to the selected --chdir even after --unsetenv.
+    # --clearenv still removes all inherited host variables; SELF_TEST expects
+    # only CHILD_ENV plus the deterministic sandbox PWD=/app.
     command = [str(BWRAP), "--die-with-parent", "--new-session", "--unshare-user",
                "--unshare-pid", "--unshare-net", "--unshare-ipc", "--unshare-uts",
-               "--unshare-cgroup", "--disable-userns", "--cap-drop", "ALL", "--clearenv",
-               "--unsetenv", "PWD"]
+               "--unshare-cgroup", "--disable-userns", "--cap-drop", "ALL", "--clearenv"]
     for name in ("/usr", "/lib", "/lib64"):
         if Path(name).exists():
             command += ["--ro-bind", name, name]

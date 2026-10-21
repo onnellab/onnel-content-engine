@@ -369,10 +369,12 @@ class SandboxContract(BundleFixture):
             self.assertIn(required, command)
         self.assertEqual(command[-2:], ["verify-site", "/app/apps/example"])
         self.assertEqual(command[command.index("--chdir") + 1], "/app/apps/example")
-        self.assertEqual(command.count("--unsetenv"), 1)
-        self.assertEqual(command[command.index("--unsetenv") + 1], "PWD")
-        self.assertGreater(command.index("--unsetenv"), command.index("--clearenv"))
+        self.assertNotIn("--unsetenv", command)
         self.assertNotIn("PWD", gate.CHILD_ENV)
+        # Bubblewrap reintroduces its trusted working directory at exec time.
+        # The probe must continue requiring the full, exact child environment.
+        self.assertIn('expected_env["PWD"] = "/app"', gate.SELF_TEST)
+        self.assertIn('if dict(os.environ) != expected_env:', gate.SELF_TEST)
         environment ={command[i + 1]: command[i + 2] for i, item in enumerate(command) if item == "--setenv"}
         self.assertEqual(environment, gate.CHILD_ENV)
         self.assertEqual(kwargs["env"], gate.LAUNCH_ENV)

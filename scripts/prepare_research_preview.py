@@ -101,10 +101,20 @@ def validate_drafts(directory):
            for value in reviewed.values()):
         raise ValueError("Invalid reviewed source SHA-256")
     manifest = read_json(directory / "manifest.json")
-    if manifest.get("state") != "DRAFT_UNVALIDATED_NOT_QUEUED" or manifest.get("slug") != SLUG:
+    # A reviewed source can advance from authored draft to native/static verified
+    # without being approved for browser publication. Both are private preview
+    # states; never accept queued, scheduled, or public release transitions.
+    preview_states = {"DRAFT_UNVALIDATED_NOT_QUEUED",
+                      "NATIVE_AND_STATIC_VALIDATED_BROWSER_PENDING_NOT_QUEUED"}
+    if manifest.get("state") not in preview_states or manifest.get("slug") != SLUG:
         raise ValueError("Unexpected authored draft manifest")
     if manifest.get("locales") != list(LOCALES) or manifest.get("queue_modified") is not False:
         raise ValueError("Unexpected locale or queue contract")
+    if (manifest.get("counterpart_topic_ids_reserved") is not False or
+            manifest.get("scheduled_at") is not None or
+            manifest.get("publication_receipt") is not False or
+            manifest.get("related_apps") != []):
+        raise ValueError("Research preview must remain unqueued and unpublished")
     for locale in LOCALES:
         path = safe_native_path(directory, f"{locale}.json", required=True)
         raw = read_native_bytes(path, 100_000)

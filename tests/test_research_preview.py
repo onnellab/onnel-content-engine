@@ -182,6 +182,36 @@ class DisposablePreviewBoundaries(unittest.TestCase):
                 self.assertIn("real gate failure", "".join(str(call.args[0]) for call in stderr.write.call_args_list))
                 self.assertEqual((Path(d) / "01-validate_topics.py.log").read_text(), "real gate failure")
 
+
+    def test_reviewed_preview_lifecycle_accepts_only_nonpublication_states(self):
+        allowed = ("DRAFT_UNVALIDATED_NOT_QUEUED",
+                   "NATIVE_AND_STATIC_VALIDATED_BROWSER_PENDING_NOT_QUEUED")
+        for state in allowed:
+            with self.subTest(state=state), tempfile.TemporaryDirectory() as d:
+                target = Path(d)
+                self.copy_draft_fixture(target)
+                manifest_path = target / "manifest.json"
+                manifest = json.loads(manifest_path.read_text())
+                manifest["state"] = state
+                manifest_path.write_text(json.dumps(manifest))
+                self.assertEqual(set(preview.validate_drafts(target)), set(preview.LOCALES))
+        for field, value in (
+                ("state", "QUEUED_FOR_PUBLICATION"),
+                ("queue_modified", True),
+                ("counterpart_topic_ids_reserved", True),
+                ("scheduled_at", "2026-10-21T09:00:00+09:00"),
+                ("publication_receipt", True),
+                ("related_apps", ["TagWeaver"])):
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as d:
+                target = Path(d)
+                self.copy_draft_fixture(target)
+                manifest_path = target / "manifest.json"
+                manifest = json.loads(manifest_path.read_text())
+                manifest[field] = value
+                manifest_path.write_text(json.dumps(manifest))
+                with self.assertRaises(ValueError):
+                    preview.validate_drafts(target)
+
     def test_nine_complete_hash_bound_authored_drafts(self):
         drafts = preview.validate_drafts(ROOT / "preview/research-source-notes")
         self.assertEqual(set(drafts), set(preview.LOCALES))

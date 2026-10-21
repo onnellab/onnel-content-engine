@@ -88,5 +88,18 @@ class LiveOpsVerificationTests(unittest.TestCase):
             self.assertEqual("abc123", json.loads(output.read_text())["deployment_sha"])
 
 
+    def test_deployment_wait_matches_exact_commit_and_outlasts_normal_pages_build(self):
+        workflow = (ROOT / ".github/workflows/deploy-ops-dashboard.yml").read_text()
+        self.assertIn("timeout-minutes: 30", workflow)
+        self.assertIn("for attempt in $(seq 1 180)", workflow)
+        self.assertIn("gh api \"repos/onnellab/onnellab.github.io/commits/$HOMEPAGE_SHA/status\"", workflow)
+        self.assertIn('select(.context == "onnellab/pages-deploy")', workflow)
+        self.assertIn('select(.context == "onnellab/ops-live-verify")', workflow)
+        self.assertIn('if [ "$pages_state" = "failure" ]', workflow)
+        self.assertIn('if [ "$ops_state" = "failure" ]', workflow)
+        self.assertIn("homepage_deploy_verification_stale", workflow)
+        self.assertIn("exit 1", workflow)
+
+
 if __name__ == "__main__":
     unittest.main()
