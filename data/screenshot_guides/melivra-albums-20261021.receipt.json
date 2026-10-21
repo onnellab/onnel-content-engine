@@ -4,7 +4,7 @@
   "guide_id": "melivra-albums-20261021",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
   "video_id": "W0wvvo7AbpI",
-  "status": "scheduled_verified",
+  "status": "published",
   "upload_attempts": 1,
   "video_sha256": "50ebc7b421ab15e360bdcf46bc43e07e7b8d5dd1cf85d097e39b99922ad9ddd9",
   "manifest_sha256": "e9da3370ff4bb04de2b0426acb8efbcdb12ee493d3deb2c604530a48d664be62",
@@ -37,7 +37,7 @@
     "owner_confirmation_obtained": true
   },
   "source_link": "https://youtube.com/shorts/W0wvvo7AbpI?feature=share",
-  "public_state": "Not yet due; public publication not verified",
+  "public_state": "Public visibility observed in exact-video ONNELLAB YouTube Studio at 2026-10-21T00:28:07Z. Exact server publication timestamp was not retrieved.",
   "deduplication": "Publisher verified exact channel in live Studio at 2026-10-19 00:10 UTC: 10 public Shorts, no drafts or scheduled Shorts, no Albums topic or matching title. Source MP4 SHA verified before file selection. This intent is durable before selecting the file; reconcile an ambiguous result before any retry.",
   "prior_blocker": {
     "status": "uploaded_private_pending_disclosure_confirmation",
@@ -45,5 +45,48 @@
     "reason": "Publisher paused for owner confirmation of AI-use and paid-promotion disclosure answers. Uploaded video remains private; no schedule confirmed. Preserve the existing video and do not re-upload.",
     "resolved_by": "Owner explicitly approved both disclosure answers before publisher resumed the existing video."
   },
-  "follow_up": "Verify the same video ID becomes public after October 21 09:00 Asia/Seoul. Do not re-upload on ambiguity."
+  "follow_up": "Public-state reconciliation is complete for existing video W0wvvo7AbpI. Do not re-upload this guide/hash or refill its October 21 slot. Thumbnail appearance and uninterrupted playback remain unverified because the cloud Chromium page crashed.",
+  "observed_privacy": "public",
+  "published_observed_at": "2026-10-21T00:28:07Z",
+  "published_at": null,
+  "publication_observation": {
+    "observed_at": "2026-10-21T00:28:07Z",
+    "surface": "Signed-in ONNELLAB YouTube Studio exact-video details in dot cloud browser",
+    "source_url": "https://studio.youtube.com/video/W0wvvo7AbpI/edit",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "channel_name": "ONNELLAB",
+    "video_id": "W0wvvo7AbpI",
+    "video_url": "https://youtube.com/shorts/W0wvvo7AbpI",
+    "title": "How to Browse Albums in Melivra | Android Screenshot Guide",
+    "visibility_label": "공개",
+    "observed_privacy": "public",
+    "duration": "0:15",
+    "processing_quality_badges": [
+      "표준 화질 완료",
+      "고화질 완료"
+    ],
+    "channel_identity_evidence": "Studio dashboard and channel-content links contained channel UCXyRedrldRBl9Y35nyWoTLg; exact video ID and title matched.",
+    "server_published_at": null,
+    "scheduled_publish_at": "2026-10-21T09:00:00+09:00",
+    "scheduled_publish_at_utc": "2026-10-21T00:00:00Z",
+    "schedule_evidence": "Original target, original observed_at and schedule_readback preserved. Observation time is not server publication time.",
+    "watch_page_observation": {
+      "observed_at": "2026-10-21T00:25:31Z",
+      "source_url": "https://www.youtube.com/watch?v=W0wvvo7AbpI",
+      "title_matches": true,
+      "displayed_age": "25분 전",
+      "duration": "0:15",
+      "player_state": "Pause control and 0:00/0:15 shown; advancing playhead and rendered frames not captured.",
+      "signed_in_owner_view": true
+    },
+    "thumbnail_observation": "Studio exposed selected auto-generated preview image 2; thumbnail pixels not visually verified.",
+    "playback_verification": "Incomplete: cloud Chromium crashed with error code 9 before progressing playhead or rendered frame captured. Not evidence of YouTube publication or playback failure.",
+    "write_actions_performed": false
+  },
+  "owner_notification": {
+    "channel": "chatgpt",
+    "message_id": "Sentinel_1c3e92e101e0819186bcc017a769321b",
+    "sent_at": "2026-10-21T00:28:22.662813Z",
+    "purpose": "Reported newly verified actual-public status to the owner."
+  }
 }
