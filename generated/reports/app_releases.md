@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-10-22T06:21:19+09:00
+Generated: 2026-10-22T06:23:51+09:00
 
 ## Summary
 
@@ -10,8 +10,8 @@ Generated: 2026-10-22T06:21:19+09:00
 | Store | unchanged | 12 |
 | Store | updated | 2 |
 | GitHub Release | archived | 2 |
-| GitHub Release | planned | 2 |
-| GitHub Release | released | 8 |
+| GitHub Release | planned | 1 |
+| GitHub Release | released | 9 |
 
 ## Store Snapshots
 
@@ -20,7 +20,7 @@ Generated: 2026-10-22T06:21:19+09:00
 | Aligna | android | 1.1.0 | 1.1.0 | same | unchanged | released | onnellab/aligna | No action |
 | Aligna | ios | 1.1.0 | 1.1.0 | same | unchanged | archived | onnellab/aligna | No action |
 | ClipNest | ios | 1.0.5 | 1.0.5 | same | unchanged | released | onnellab/clipnest | No action |
-| Melivra | android | 1.0.8 | 1.0.8 | same | updated | planned | onnellab/melivra | Confirm matching public store version; auto-publish GitHub Release notes |
+| Melivra | android | 1.0.8 | 1.0.8 | same | updated | released | onnellab/melivra | No action |
 | Melivra | ios | 6783644955 | 1.0.8 | unknown | in_review | - | onnellab/melivra | Review status |
 | Papira | android | 2.0.3 | - | unknown | unchanged | released | onnellab/papira | No action |
 | Papira | ios | 2.0.1 | - | unknown | unchanged | - | onnellab/papira | No action |
@@ -46,7 +46,7 @@ Generated: 2026-10-22T06:21:19+09:00
 | REL-0019 | Quivra | android | public | v1.0.9 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.9 | - | - | No action |
 | REL-0031 | VaultXT | android | public | v2.0.2 | released | Public GitHub Release published | https://github.com/onnellab/onnellab-text/releases/tag/v2.0.2 | - | - | No action |
 | REL-0028 | Aligna | android | public | v1.1.0 | released | Public GitHub Release published | https://github.com/onnellab/aligna/releases/tag/v1.1.0 | - | - | No action |
-| REL-0034 | Melivra | android | public | v1.0.8 | planned | Public store confirmed; preparing automatic release | - | - | - | Confirm matching public store version; auto-publish GitHub Release notes |
+| REL-0034 | Melivra | android | public | v1.0.8 | released | Public GitHub Release published | https://github.com/onnellab/melivra/releases/tag/v1.0.8 | - | - | No action |
 | REL-0026 | Aligna | ios | private_test | v1.0.9 | archived | Private test; public GitHub Release disabled | - | - | Android 앱 용량을 줄였어요. 스토어 이미지를 새로 업데이트했어요. | Private test only; do not publish public GitHub Release |
 | REL-0032 | Papira | android | public | v2.0.3 | released | Public GitHub Release published | https://github.com/onnellab/papira/releases/tag/v2.0.3 | - | - | No action |
 
@@ -57,4 +57,3 @@ Generated: 2026-10-22T06:21:19+09:00
 | TagWeaver | android | updated | Create or verify release candidate | Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata. Imported from github:onnellab/tagweaver/pubspec.yaml version 2.5.5+99; confirm against Play Console if needed. |
 | VaultXT | ios | unchanged | Platform rollout not public | - |
 | TagWeaver | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 2.5.4. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
-| Melivra | android | planned | Confirm matching public store version; auto-publish GitHub Release notes | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
