@@ -43,7 +43,7 @@ class ReadinessProbeTest(unittest.TestCase):
             "repository": "template/repo",
             "source_directory": "template/assets/store_promo",
             "commit": "expectedsource",
-            "sha256": self.ledger["bundles"]["approved"]["sha256"],
+            "sha256": dict(self.ledger["bundles"]["approved"]["sha256"]),
             "preserved_safety_hardening": [],
         }
         self.save_metadata()
