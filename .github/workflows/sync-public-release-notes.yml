@@ -65,6 +65,10 @@ jobs:
           set -euo pipefail
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
           git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # The earlier preview generation dirties only this generated file.
+          # Discard that preview, rebase latest main, then deterministically
+          # regenerate verified notes. Never discard unrelated local changes.
+          git -C "$HOMEPAGE_REPO_PATH" restore -- src/data/store-release-notes.json
           git -C "$HOMEPAGE_REPO_PATH" pull --rebase origin main
           python3 scripts/sync_homepage_release_notes.py --homepage-repo "$HOMEPAGE_REPO_PATH"
           git -C "$HOMEPAGE_REPO_PATH" add src/data/store-release-notes.json
