@@ -103,9 +103,17 @@ cryptographically. Never relabel original captures as current-build execution.
    successful manifest fetch, or successful HTTP image status is insufficient.
 4. The workflow retains `artwork-staging.json` and
    `artwork-deployment-receipt.json` as its existing run's artifact for 30 days.
-   Only successfully observed apps get `deployed_verified`. Any blocked or
-   unverified app makes the terminal verification step fail visibly. No eligible
-   public releases produces an explicit no-op state, not a publication claim.
+   Only successfully observed apps get `deployed_verified`. An explicit manual
+   or artwork-change run fails if any app is blocked or deployment-unverified.
+   A routine `Sync app operational status` completion with **zero** staged
+   candidates instead retains `blocked_no_candidates` and a GitHub Actions
+   warning; the independent release/ops workflow is not marked failed solely
+   by this pre-existing artwork evidence backlog. Its retained receipt still
+   lists every blocked app and exact reason. This is **not** `deployed_verified`,
+   `published`, or an authorization to use legacy screenshots. If even one
+   reviewed candidate was staged, any blocked/unverified sibling still fails
+   the terminal verifier in every trigger mode. No public-store-confirmed
+   releases produces an explicit no-op state, not a publication claim.
 
 The checked-in public manifest intentionally remains `staged_not_published`:
 checking it in cannot prove it is deployed. The separately retained deployment
@@ -354,3 +362,38 @@ this is not a release candidate or a gate pass. Installing the draft is a separa
 coordinated app change, followed by genuine current evidence and the canonical
 isolated verifier. App-specific custom gates such as Papira require their own
 reviewed compatibility plan; do not replace them with this shared schema.
+
+
+### Unready evidence is not an Ops deployment failure (2026-10-22)
+
+Run [39678119739](https://github.com/onnellab/onnel-content-engine/actions/runs/39678119739)
+pushed the sealed Ops dashboard successfully, but all seven public app artwork
+candidates were blocked before any image could be staged. The subsequent live
+artwork receipt correctly failed because it had zero `deployed_verified` apps;
+this did **not** mean the site push, Ops seal, or image bytes themselves had
+been verified or had failed. The recurring cause is missing or unreviewed
+source evidence, not a reason to disable the canonical isolation/byte-hash gate.
+
+The retained 2026-10-22 staging receipt lists:
+- `aligna`, `clipnest`, `papira`, `quivra`, `segra`: no tracked
+  `release/artwork.json` adjacent to a uniquely identified Flutter
+  `pubspec.yaml`; registration is only a *draft*, not visual approval. Produce
+  genuine source-bound capture/render receipts and independent candidate review
+  before introducing an approved inventory.
+- `melivra`: the vendored `capture_iphone_duo.py` bytes differ from the
+  independently pinned shared bundle. Resolve/review the app-specific source
+  change or restore the genuinely canonical full bundle and revalidate the
+  candidate; do not add ad hoc hashes to the allowlist.
+- `vaultxt`: an extra `test_capture_iphone_duo_status.py` lives inside the
+  sealed vendor directory. Move tests into the app's own test area with
+  preserved coverage, then verify every remaining canonical byte before
+  rerunning the reviewed gate. An extra-file removal alone does not prove
+  complete release readiness.
+
+Each subsequent routine run still clones fresh sources and records the
+current per-app reasons. Only routine workflow-run events may classify a
+zero-candidate attempt as `blocked_no_candidates`. Manual dispatches and
+explicit changed-artwork runs use the old strict terminal failure behavior;
+no new cron, worker, publisher, privilege, or cross-repository permission
+is introduced. A no-candidate receipt never validates remote screenshots,
+nor should a green *independent release/ops* job be reported as artwork success.
