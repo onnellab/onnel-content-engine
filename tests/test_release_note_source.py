@@ -47,10 +47,11 @@ class ReleaseNoteSourceTest(unittest.TestCase):
         self.assertEqual(len(result["localizations"]), 9)
         self.assertEqual(result["localizations"]["ja"]["changes"], ["User-visible change in ja"])
 
-    def test_plain_text_is_allowed_for_existing_aligna_source(self):
+    def test_plain_text_without_bullets_is_not_a_release_note(self):
         sample = fixture()
         sample["locales"] = {code: f"Improved layout: {code}" for code in LOCALES}
-        self.assertEqual(validate_note("aligna", sample), sample)
+        with self.assertRaisesRegex(ValueError, "invalid"):
+            validate_note("aligna", sample)
 
 
 if __name__ == "__main__":
