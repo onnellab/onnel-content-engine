@@ -68,5 +68,42 @@
     "thumbnail_pixels_verified": false,
     "post_save_inventory_verified": false,
     "prior_schedule_success_preserved": true
+  },
+  "read_only_reconciliation_20261022": {
+    "observed_at": "2026-10-22T09:53:36Z",
+    "source_url": "https://studio.youtube.com/video/X-G8oy1boSc/edit",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "channel_name": "ONNELLAB",
+    "status": "scheduled_verified",
+    "schedule_readback": {
+      "date": "2026. 10. 23.",
+      "time": "오전 9:00",
+      "timezone": "현지 시간대(GMT+0900)"
+    },
+    "shorts_inventory": {
+      "total": 12,
+      "public": 11,
+      "scheduled": 1,
+      "draft": 0
+    },
+    "ordinary_videos_inventory": {
+      "total": 6,
+      "public": 2,
+      "unlisted": 1,
+      "private": 3
+    },
+    "post_save_inventory_verified": true,
+    "processing_quality_badges": [
+      "표준 화질 완료",
+      "고화질 완료"
+    ],
+    "title_description_match": true,
+    "thumbnail_pixels_verified": false,
+    "thumbnail_observation": "Current screenshot of thumbnail section shows upload/select-from-video placeholders, not a selected thumbnail image. No thumbnail modified.",
+    "duration_observation": "Inventory and detail label show 0:15; player UI shows 0:00 / 0:16. Original 15.000-second media verification retained; no new media-duration test performed.",
+    "settings_changed": false,
+    "upload_attempts": 1,
+    "publication_verified": false,
+    "notes": "Historical observation timeout no longer prevents Studio inventory/schedule readback. No new upload, schedule save, login, permission, or external-link verification."
   }
 }
