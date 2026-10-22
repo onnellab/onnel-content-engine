@@ -2,6 +2,11 @@ name: Sync public app release notes
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/release_note_source.py'
+      - '.github/workflows/sync-public-release-notes.yml'
   schedule:
     # Public store availability is checked every four hours, not at build upload.
     - cron: '17 */4 * * *'
