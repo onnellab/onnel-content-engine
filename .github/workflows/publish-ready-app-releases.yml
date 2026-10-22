@@ -195,14 +195,24 @@ jobs:
             git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
           fi
 
-      - name: Verify deployed app detail image hashes and retain receipt
+      - name: Verify deployed app detail images or retain evidence blockers
         if: steps.artwork_run.outputs.authorized == 'true'
+        env:
+          # Daily operational syncs do not fail solely because NO app has a
+          # reviewed candidate. Explicit artwork-change runs and manual
+          # dispatches remain strict; a staged-but-unverified app always fails.
+          ARTWORK_REPORT_BLOCKED_ONLY: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.display_title != 'Check reviewed artwork changes' }}
         run: |
           set -euo pipefail
+          report_only=()
+          if [ "$ARTWORK_REPORT_BLOCKED_ONLY" = "true" ]; then
+            report_only=(--report-blocked-no-candidates)
+          fi
           python3 scripts/verify_homepage_release_artwork.py \
             --staging-report "$RUNNER_TEMP/artwork-staging.json" \
             --output "$RUNNER_TEMP/artwork-deployment-receipt.json" \
-            --deployment-sha "$(git -C "$HOMEPAGE_REPO_PATH" rev-parse HEAD)"
+            --deployment-sha "$(git -C "$HOMEPAGE_REPO_PATH" rev-parse HEAD)" \
+            "${report_only[@]}"
 
       - name: Retain artwork staging and public verification evidence
         if: always() && steps.artwork_run.outputs.authorized == 'true'
