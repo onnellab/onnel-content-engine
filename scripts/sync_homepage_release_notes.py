@@ -147,7 +147,18 @@ def _merge_history(
         if slug and version:
             merged[(slug, version)] = note
     for note in current:
-        merged[(str(note["appSlug"]), str(note["version"]))] = note
+        key = (str(note["appSlug"]), str(note["version"]))
+        original = merged.get(key)
+        if original and isinstance(original.get("localizations"), dict):
+            # A store scraper often returns only the version, not What's New.
+            # Never replace verified translations with a generic availability line.
+            if not isinstance(note.get("localizations"), dict):
+                note.update({
+                    field: original[field]
+                    for field in ("summary", "summaryKo", "changes", "changesKo", "localizations")
+                    if field in original
+                })
+        merged[key] = note
     return sorted(
         merged.values(),
         key=lambda note: (
