@@ -214,6 +214,7 @@ def google_play_lookup(store_url: str, app_id: str, android_versions: dict[str, 
                 raise StoreVersionError(f"Android version package does not match Play Store URL for {app_id}")
             public_version = current["version"]
             source_matches_public = not public_version or source["version"] == public_version
+            note = ""
             if not current["version"]:
                 # A Play page date alone cannot prove a particular binary is
                 # publicly distributed. Keep the snapshot for diagnostics,
