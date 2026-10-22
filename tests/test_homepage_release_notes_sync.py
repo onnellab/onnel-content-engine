@@ -28,6 +28,20 @@ def write_store_versions(path: Path, rows: list[dict[str, str]]) -> None:
 
 
 class HomepageReleaseNotesSyncTest(unittest.TestCase):
+    def test_unknown_public_version_does_not_invent_release_notes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            store = root / "store.csv"
+            homepage = root / "homepage"
+            write_store_versions(store, [{
+                "app_id": "APP-0007", "app_slug": "melivra",
+                "app_name": "Melivra", "platform": "android",
+                "version": "9.9.9", "status": "unchanged",
+                "last_updated": "2026-10-21",
+            }])
+            output = sync_homepage_release_notes(store, homepage, {})
+            self.assertEqual(json.loads(output.read_text(encoding="utf-8")), [])
+
     def test_sync_preserves_history_and_builds_public_notes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -100,7 +114,24 @@ class HomepageReleaseNotesSyncTest(unittest.TestCase):
                 ],
             )
 
-            result = sync_homepage_release_notes(store_versions, homepage)
+            localized = {
+                slug: {
+                    "version": version + "+10",
+                    "locales": {
+                        locale: "- " + (
+                            "Melivra에서 보낸 음악 파일을 더 쉽게 열 수 있어요."
+                            if slug == "tagweaver" and locale == "ko"
+                            else f"{slug} user-visible improvement ({locale})"
+                        )
+                        for locale in ("ko", "en", "ja", "zh-Hans", "zh-Hant",
+                                       "pt-BR", "de", "fr", "es")
+                    },
+                }
+                for slug, version in (
+                    ("melivra", "1.0.4"), ("papira", "1.0"), ("tagweaver", "2.5.2")
+                )
+            }
+            result = sync_homepage_release_notes(store_versions, homepage, localized)
             self.assertEqual(result, output)
             payload = json.loads(output.read_text(encoding="utf-8"))
             by_key = {(item["appSlug"], item["version"]): item for item in payload}
@@ -112,7 +143,9 @@ class HomepageReleaseNotesSyncTest(unittest.TestCase):
             self.assertEqual(by_key[("melivra", "1.0.4")]["releasedDate"], "2026-09-29")
             self.assertEqual(by_key[("papira", "1.0")]["platform"], "iOS")
             self.assertIn("Melivra에서 보낸", by_key[("tagweaver", "2.5.2")]["changesKo"][0])
-            self.assertIn("now available", by_key[("tagweaver", "2.5.2")]["changes"][0])
+            self.assertIn("user-visible improvement", by_key[("tagweaver", "2.5.2")]["changes"][0])
+            self.assertEqual(len(by_key[("tagweaver", "2.5.2")]["localizations"]), 9)
+            self.assertNotIn("now available", by_key[("melivra", "1.0.4")]["changes"][0])
 
 
 if __name__ == "__main__":
