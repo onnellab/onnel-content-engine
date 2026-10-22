@@ -170,6 +170,8 @@ jobs:
 
       - name: Sync homepage release notes
         if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
+        env:
+          ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
         run: |
           set -euo pipefail
           python3 -m unittest tests.test_homepage_release_notes_sync
@@ -239,6 +241,8 @@ jobs:
 
       - name: Commit homepage release metadata and deploy dashboard
         if: inputs.artwork_read_only != true && (env.ARTWORK_CHECK_ONLY != 'true' || steps.artwork_guard.outputs.changed == 'true')
+        env:
+          ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
         run: |
           set -euo pipefail
           git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
