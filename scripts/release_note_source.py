@@ -55,8 +55,10 @@ def validate_note(slug: str, value: Any) -> dict[str, Any]:
         raise ValueError(f"{slug}: expected nine localized release notes")
     for locale, body in notes.items():
         if (not isinstance(body, str) or not body.strip() or body != body.strip()
-                or len(body) > 500 or any(not line.strip().removeprefix("- ").strip()
-                                          for line in body.splitlines())):
+                or len(body) > 500 or any(
+                    not line.startswith("- ") or not line[2:].strip()
+                    for line in body.splitlines()
+                )):
             raise ValueError(f"{slug}: missing or invalid {locale} release-note text")
         if any(generic in body.casefold() for generic in GENERIC):
             raise ValueError(f"{slug}: generic release statement in {locale}")
