@@ -560,7 +560,8 @@ class LiveVerification(unittest.TestCase):
         self.assertEqual({app['status'] for app in result['apps']}, {'blocked', 'deployed_verified'})
 
     def test_routine_sync_retains_only_blocked_evidence_without_claiming_deployment(self):
-        staging = {'apps': [
+        staging = {'status': 'blocked_no_candidates', 'staged_count': 0, 'blocked_count': 2,
+                   'apps': [
             {'app_slug': 'aligna', 'status': 'blocked', 'reason': 'Missing artwork inventory'},
             {'app_slug': 'vaultxt', 'status': 'blocked', 'reason': 'Unexpected vendored file'},
         ]}
@@ -572,6 +573,13 @@ class LiveVerification(unittest.TestCase):
         self.assertEqual([app['status'] for app in result['apps']], ['blocked', 'blocked'])
         self.assertEqual(result['apps'][0]['reason'], 'Missing artwork inventory')
         self.assertNotIn('deployed_verified', str(result))
+
+    def test_inconsistent_staging_counters_cannot_claim_an_evidence_only_noop(self):
+        staging = {'status': 'blocked_no_candidates', 'staged_count': 0, 'blocked_count': 0,
+                   'apps': [{'app_slug': 'app', 'status': 'blocked', 'reason': 'Missing review'}]}
+        result = live.verify_report(staging, self.base, 0, 1, self.fetch,
+                                    report_blocked_no_candidates=True)
+        self.assertEqual(result['status'], 'failed')
 
     def test_opt_in_never_hides_an_actual_unverified_artwork_attempt(self):
         staging = {'apps': [
