@@ -787,7 +787,7 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "observed_at_precision": "second",
       "browser_ui_timezone": "not_recorded",
       "manual_key": "TOPIC-0035::x::en::x",
@@ -806,7 +806,8 @@
       "submitted_source_characters": 275,
       "source_draft_path": "generated/social/x/en/productivity/design-consistent-file-naming-system.txt",
       "browser_ui_timestamp": "9:18 AM · Oct 22, 2026",
-      "observation_source": "Dot cloud browser verified authenticated @onnellab, current ledgers and profile history before posting. Complete copy and both official store destinations checked; post count increased 20 to 21. Exact permalink author, body and UI time datetime attribute verified. Canonical article live before posting. observed_at is verification time, separate from server published_at."
+      "observation_source": "Dot cloud browser verified authenticated @onnellab, current ledgers and profile history before posting. Complete copy and both official store destinations checked; post count increased 20 to 21. Exact permalink author, body and UI time datetime attribute verified. Canonical article live before posting. observed_at is verification time, separate from server published_at.",
+      "processed_at": "2026-10-22T00:20:52+00:00"
     },
     {
       "topic_id": "TOPIC-0035",
@@ -818,7 +819,7 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "observed_at_precision": "second",
       "browser_ui_timezone": "not_recorded",
       "manual_key": "TOPIC-0035::linkedin::en::linkedin",
@@ -836,7 +837,8 @@
       "submitted_source_characters": 687,
       "source_draft_path": "generated/social/linkedin/en/productivity/design-consistent-file-naming-system.txt",
       "browser_ui_timestamp": "방금",
-      "observation_source": "Dot cloud browser verified authenticated ONNEL LAB, current ledgers and recent activity before posting. Public audience and complete body verified in composer. Success alert and exact permalink confirm author, complete body and canonical article-card destination. Article shortened to lnkd.in/gKJQ6waB. Server publication time unavailable; observed_at is verification time."
+      "observation_source": "Dot cloud browser verified authenticated ONNEL LAB, current ledgers and recent activity before posting. Public audience and complete body verified in composer. Success alert and exact permalink confirm author, complete body and canonical article-card destination. Article shortened to lnkd.in/gKJQ6waB. Server publication time unavailable; observed_at is verification time.",
+      "processed_at": "2026-10-22T00:20:52+00:00"
     }
   ]
 }
