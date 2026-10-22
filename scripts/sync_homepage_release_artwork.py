@@ -143,6 +143,18 @@ def stage_all(releases: Path, stores: Path, site: Path, gate: None, work: Path) 
                     # Do not leak network diagnostics or authentication headers.
                     failures[repo] = f"Cannot obtain fresh app checkout ({type(error).__name__})"
                     raise ValueError(failures[repo]) from error
+            # Diagnostics inspect app files only as untrusted data. They can
+            # expose simultaneous drift and missing inventory in one pass,
+            # but cannot authorize or substitute for the sandboxed gate.
+            try:
+                from artwork_readiness_probe import probe as read_only_probe
+                result["readiness_probe"] = read_only_probe(clones[repo], slug)
+            except (OSError, ValueError, UnicodeError, TypeError, subprocess.SubprocessError):
+                result["readiness_probe"] = {
+                    "status": "data_only_unavailable",
+                    "diagnostic_only": True,
+                    "blockers": ["readiness_probe_unavailable"],
+                }
             project = locate_project(clones[repo], slug)
             run_gate(gate, "verify-site", project)
             candidate = json.loads((project / "release/artwork-candidate.json").read_text())
