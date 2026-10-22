@@ -1,6 +1,26 @@
 {
   "schema_version": 1,
   "policy_changed_at": "2026-10-14T06:14:53+00:00",
-  "updated_at": "",
-  "notifications": []
+  "updated_at": "2026-10-22T21:37:51+00:00",
+  "notifications": [
+    {
+      "review_id": "10b4e93e-b9cd-4ef4-ad91-2726f5256651",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "platform": "android",
+      "rating": "3",
+      "title": "",
+      "body": "Some tags aren't removed correctly when the file is saved. When the X next to URL is pressed, for example, saving doesn't actually retain the change.",
+      "created_at": "2026-10-22T15:19:50+00:00",
+      "updated_at": "2026-10-22T15:19:50+00:00",
+      "reviewer_language": "en",
+      "territory": "",
+      "notification_id": "store-review-bafafa84564a0291cfa31758094da5fff749946c5f0c4a21579be0b70bf3f788",
+      "status": "pending",
+      "detected_at": "2026-10-22T21:37:51+00:00",
+      "delivery_reference": "",
+      "owner_approval_required": true
+    }
+  ]
 }
