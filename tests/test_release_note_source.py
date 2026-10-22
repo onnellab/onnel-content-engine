@@ -35,7 +35,7 @@ class ReleaseNoteSourceTest(unittest.TestCase):
 
     def test_rejects_generic_version_announcements(self):
         copy = fixture()
-        copy["locales"]["en"] = "Sample 1.2.3 is now available on iOS."
+        copy["locales"]["en"] = "- Sample 1.2.3 is now available on iOS."
         with self.assertRaisesRegex(ValueError, "generic"):
             validate_note("sample", copy)
 
