@@ -1,0 +1,68 @@
+name: Sync public app release notes
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Public store availability is checked every four hours, not at build upload.
+    - cron: '17 */4 * * *'
+
+concurrency:
+  group: onnellab-manual-dashboard-writer
+  cancel-in-progress: false
+
+jobs:
+  release-notes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      HOMEPAGE_REPO_PATH: .homepage
+      ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN || secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+    steps:
+      - name: Checkout release status source
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.ONNELLAB_RELEASE_TOKEN || github.token }}
+      - name: Checkout public homepage
+        uses: actions/checkout@v4
+        with:
+          repository: onnellab/onnellab.github.io
+          ref: main
+          path: .homepage
+          token: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
+      - name: Verify source and synchronizer contracts
+        run: |
+          set -euo pipefail
+          python3 -m unittest tests.test_release_note_source tests.test_homepage_release_notes_sync
+      - name: Check only public store versions and approved notes
+        run: |
+          set -euo pipefail
+          python3 scripts/check_store_versions.py
+          python3 scripts/sync_homepage_release_notes.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+      - name: Commit latest public store snapshot
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/store_versions.csv
+          git diff --cached --check
+          if ! git diff --cached --quiet; then
+            git commit -m "Check latest public app store releases"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Publish verified nine-locale website release notes
+        run: |
+          set -euo pipefail
+          git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
+          git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$HOMEPAGE_REPO_PATH" pull --rebase origin main
+          python3 scripts/sync_homepage_release_notes.py --homepage-repo "$HOMEPAGE_REPO_PATH"
+          git -C "$HOMEPAGE_REPO_PATH" add src/data/store-release-notes.json
+          git -C "$HOMEPAGE_REPO_PATH" diff --cached --check
+          if ! git -C "$HOMEPAGE_REPO_PATH" diff --cached --quiet; then
+            git -C "$HOMEPAGE_REPO_PATH" commit -m "Publish localized public app release notes"
+            git -C "$HOMEPAGE_REPO_PATH" push origin HEAD:main
+          fi
