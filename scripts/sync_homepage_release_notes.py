@@ -15,14 +15,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 OUTPUT_RELATIVE_PATH = Path("src/data/store-release-notes.json")
 
-NON_PUBLIC_STATUSES = {
-    "failed",
-    "in_review",
-    "manual_check",
-    "not_released",
-    "unavailable",
-    "unknown",
-}
+# Only a version independently observed on a public store may become a
+# public release-note page. Future/unknown states stay unpublished by default.
+PUBLIC_STATES = {"new", "updated", "unchanged"}
 PLATFORM_LABELS = {"ios": "iOS", "android": "Android"}
 PLATFORM_ORDER = {"iOS": 0, "Android": 1}
 
@@ -74,7 +69,7 @@ def _build_current(
         slug = (row.get("app_slug") or "").strip()
         status = (row.get("status") or "").strip()
         platform_key = (row.get("platform") or "").strip().lower()
-        if not slug or not version or status in NON_PUBLIC_STATUSES:
+        if not slug or not version or status not in PUBLIC_STATES:
             continue
         platform = PLATFORM_LABELS.get(platform_key)
         if not platform:
