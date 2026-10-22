@@ -2,7 +2,10 @@
 
 import unittest
 
-from scripts.release_note_source import LOCALES, localized_content, validate_note
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from release_note_source import LOCALES, localized_content, validate_note
 
 
 def fixture(version="1.2.3+45"):
