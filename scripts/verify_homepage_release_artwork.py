@@ -318,8 +318,13 @@ def verify_report(staging: dict, base: str, timeout: float, interval: float,
         if app["status"] == "staged_not_published":
             pending.append(app)
         elif app["status"] == "blocked":
-            output["apps"].append({"app_slug": app["app_slug"], "status": "blocked",
-                                   "reason": app.get("reason", "No verified artwork candidate")})
+            blocked = {"app_slug": app["app_slug"], "status": "blocked",
+                       "reason": app.get("reason", "No verified artwork candidate")}
+            # Carry the existing stage's read-only hints into the terminal
+            # receipt. These hints never change the verification decision.
+            if "readiness_probe" in app:
+                blocked["readiness_probe"] = app["readiness_probe"]
+            output["apps"].append(blocked)
         else:
             raise ValueError("Unknown artwork staging status")
     had_candidate = bool(pending)

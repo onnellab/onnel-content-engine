@@ -397,3 +397,39 @@ explicit changed-artwork runs use the old strict terminal failure behavior;
 no new cron, worker, publisher, privilege, or cross-repository permission
 is introduced. A no-candidate receipt never validates remote screenshots,
 nor should a green *independent release/ops* job be reported as artwork success.
+
+## Multi-blocker readiness diagnostics (non-authorizing)
+
+The existing public-release publisher's **same** stage step now attaches
+`readiness_probe` to each app's retained `artwork-staging.json` record and,
+when that app remains blocked, to the terminal
+`artwork-deployment-receipt.json`. It performs bounded, read-only inspection
+of the fresh app checkout; it neither imports app code nor runs a second
+worker. It does not modify capture, inventory, review, approved source pins,
+publication, or any GitHub workflow trigger.
+
+A `data_only_source_conformant_release_unverified` result means *only* that
+the preflight could not find a pinned **source bundle** mismatch. It is
+**not** a gate pass, independent visual review, current-build capture,
+public-store observation, website staging, image upload, or live deployment
+verification. A `data_only_blocked` result may enumerate simultaneous
+`missing_tracked_inventory`, `bundle_metadata_mismatch`,
+`canonical_file_hash_mismatch`, `canonical_files_missing`,
+`unexpected_bundle_files`, and `unsupported_root_adapter`, rather
+than hiding later defects behind the first failing file. Presence of
+`artwork-candidate.json` or `artwork-review.json` is reported only as
+`tracked_unverified`; no proposed, stale, or synthetic approval is honored.
+
+If no unambiguous app project exists, the probe reports
+`project_not_unambiguously_discoverable`, never picks one. Unknown source
+pins, symlinks/nonregular bundle files, and incomplete evidence remain
+blockers for the independently enforced canonical gate. Diagnostics failing
+to run return `data_only_unavailable` and do not bypass that gate.
+
+The owner must still register a real inventory from existing files and
+genuine device-bound evidence; repair app-specific custom dependencies
+through separately reviewed canonical source changes rather than relaxing
+the allowlist; prepare fresh candidates; obtain truly independent reviews;
+and wait for actual live hash-verified deployment. The normal daily
+`blocked_no_candidates` reporting path remains warning-only **only**
+when no publishable candidate was staged, as separately documented.
