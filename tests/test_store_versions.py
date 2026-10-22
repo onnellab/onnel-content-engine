@@ -298,6 +298,40 @@ class StoreVersionsTest(unittest.TestCase):
             self.assertEqual(rows[1]["release_notes"], "Android release.")
             self.assertIn("Google Play public page", rows[1]["notes"])
 
+    def test_play_date_without_public_version_cannot_verify_local_binary(self) -> None:
+        from check_store_versions import google_play_lookup
+        url = "https://play.google.com/store/apps/details?id=com.onnellab.quivra2"
+        local = {"APP-0001": {
+            "package": "com.onnellab.quivra2",
+            "version": "7.7.7",
+            "last_updated": "2026-10-20",
+            "release_notes": "Local-only change.",
+        }}
+        page = {
+            "store_app_id": "",
+            "store_package": "com.onnellab.quivra2",
+            "version": "",
+            "last_updated": "2026. 10. 20.",
+            "release_notes": "",
+        }
+        with patch("check_store_versions.google_play_homepage_lookup", return_value=page):
+            result, note = google_play_lookup(url, "APP-0001", local)
+        self.assertEqual(result["version"], "7.7.7")
+        self.assertIn("unconfirmed", note)
+
+    def test_play_lookup_failure_is_not_proof_of_public_release(self) -> None:
+        from check_store_versions import google_play_lookup
+        url = "https://play.google.com/store/apps/details?id=com.onnellab.quivra2"
+        local = {"APP-0001": {
+            "package": "com.onnellab.quivra2",
+            "version": "7.7.7",
+            "last_updated": "2026-10-20",
+            "release_notes": "Local-only change.",
+        }}
+        with patch("check_store_versions.google_play_homepage_lookup", side_effect=StoreVersionError("unavailable")):
+            _, note = google_play_lookup(url, "APP-0001", local)
+        self.assertIn("public page lookup failed", note)
+
     def test_google_play_homepage_lookup_reads_public_page_version(self) -> None:
         html = '"141":[[["2.0.1"]]],"146":[["2026. 7. 13."]] com.onnellab.quivra2'
         with patch("check_store_versions.html_get", return_value=html):
