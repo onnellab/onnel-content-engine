@@ -29,7 +29,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-          token: ${{ secrets.ONNELLAB_RELEASE_TOKEN || github.token }}
+          # Separate the writable workflow token from the read-only
+          # cross-repository release source token.
+          token: ${{ github.token }}
       - name: Checkout public homepage
         uses: actions/checkout@v4
         with:
