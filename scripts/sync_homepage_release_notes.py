@@ -9,6 +9,8 @@ import json
 import re
 from pathlib import Path
 
+from release_note_source import fetch_source_notes, localized_content
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STORE_VERSIONS = ROOT / "data" / "store_versions.csv"
 OUTPUT_RELATIVE_PATH = Path("src/data/store-release-notes.json")
@@ -63,7 +65,9 @@ def _read_existing(path: Path) -> list[dict[str, object]]:
     return [item for item in payload if isinstance(item, dict)]
 
 
-def _build_current(rows: list[dict[str, str]]) -> list[dict[str, object]]:
+def _build_current(
+    rows: list[dict[str, str]], verified_notes: dict[str, dict[str, object]] | None = None
+) -> list[dict[str, object]]:
     grouped: dict[tuple[str, str], dict[str, object]] = {}
     for row in rows:
         version = (row.get("version") or "").strip()
@@ -99,24 +103,24 @@ def _build_current(rows: list[dict[str, str]]) -> list[dict[str, object]]:
                 record["storeNotes"].append(note)
 
     output: list[dict[str, object]] = []
+    verified_notes = verified_notes or {}
     for record in grouped.values():
+        source_copy = localized_content(
+            str(record["appSlug"]), str(record["appName"]), str(record["version"]),
+            verified_notes,
+        )
+        # Version discovery only confirms public availability. If the matching
+        # nine-locale release text is absent, do not fabricate a changelog.
+        if source_copy is None:
+            continue
         platforms = sorted(record["platforms"], key=lambda item: PLATFORM_ORDER[item])
         platform_text = " · ".join(platforms)
         app_name = str(record["appName"])
         version = str(record["version"])
         store_notes = [str(item) for item in record["storeNotes"]]
 
-        english_generic = f"{app_name} {version} is now available on {platform_text}."
-        korean_generic = f"{app_name} {version} 버전이 {platform_text}에 공개됐어요."
-        if store_notes and any(_has_hangul(item) for item in store_notes):
-            changes = [english_generic]
-            changes_ko = store_notes
-        elif store_notes:
-            changes = store_notes
-            changes_ko = [korean_generic]
-        else:
-            changes = [english_generic]
-            changes_ko = [korean_generic]
+        changes = source_copy["changes"]
+        changes_ko = source_copy["changesKo"]
 
         output.append(
             {
@@ -127,10 +131,11 @@ def _build_current(rows: list[dict[str, str]]) -> list[dict[str, object]]:
                 "platform": platform_text,
                 "releasedDate": record["releasedDate"],
                 "title": f"{app_name} v{version} ({platform_text})",
-                "summary": f"Latest public store release of {app_name} {version} for {platform_text}.",
-                "summaryKo": f"{app_name} {version} {platform_text} 공개 스토어 릴리즈 변경 사항이에요.",
+                "summary": source_copy["summary"],
+                "summaryKo": source_copy["summaryKo"],
                 "changes": changes,
                 "changesKo": changes_ko,
+                "localizations": source_copy["localizations"],
                 "internalGitHubUrl": "",
             }
         )
@@ -169,12 +174,18 @@ def _merge_history(
     )
 
 
-def sync_homepage_release_notes(store_versions: Path, homepage_repo: Path) -> Path:
+def sync_homepage_release_notes(
+    store_versions: Path,
+    homepage_repo: Path,
+    verified_notes: dict[str, dict[str, object]] | None = None,
+) -> Path:
     with store_versions.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
     output_path = homepage_repo / OUTPUT_RELATIVE_PATH
     existing = _read_existing(output_path)
-    merged = _merge_history(existing, _build_current(rows))
+    if verified_notes is None:
+        verified_notes = fetch_source_notes()
+    merged = _merge_history(existing, _build_current(rows, verified_notes))
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         json.dumps(merged, ensure_ascii=False, indent=2) + "\n",
