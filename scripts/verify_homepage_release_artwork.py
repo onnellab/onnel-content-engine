@@ -3,6 +3,8 @@
 
 The checked-in manifest remains staged_not_published. This separately retained
 receipt is the only deployed_verified claim; a successful git push is not one.
+An explicitly opted-in routine operational sync may retain a blocked_no_candidates
+receipt without failing unrelated release/ops work; it never verifies artwork.
 """
 from __future__ import annotations
 
@@ -306,15 +308,21 @@ def verify_app(expected: dict, base: str, fetch=public_get) -> dict:
 
 
 def verify_report(staging: dict, base: str, timeout: float, interval: float,
-                  fetch=public_get, sleep=time.sleep, monotonic=time.monotonic) -> dict:
+                  fetch=public_get, sleep=time.sleep, monotonic=time.monotonic, *,
+                  report_blocked_no_candidates: bool = False) -> dict:
     output = {"schema_version": 1, "status": "pending", "apps": []}
+    if not isinstance(staging.get("apps"), list):
+        raise ValueError("Invalid artwork staging report")
     pending = []
     for app in staging["apps"]:
         if app["status"] == "staged_not_published":
             pending.append(app)
-        else:
+        elif app["status"] == "blocked":
             output["apps"].append({"app_slug": app["app_slug"], "status": "blocked",
                                    "reason": app.get("reason", "No verified artwork candidate")})
+        else:
+            raise ValueError("Unknown artwork staging status")
+    had_candidate = bool(pending)
     deadline = monotonic() + timeout
     errors = {}
     def bounded_fetch(url: str) -> bytes:
@@ -336,8 +344,14 @@ def verify_report(staging: dict, base: str, timeout: float, interval: float,
     for app in pending:
         output["apps"].append({"app_slug": app["app_slug"], "status": "deployment_unverified",
                                "reason": errors[app["app_slug"]]})
-    output["status"] = ("failed" if any(app["status"] != "deployed_verified" for app in output["apps"])
-                        else "deployed_verified" if output["apps"] else "no_public_store_confirmed_releases")
+    if any(app["status"] != "deployed_verified" for app in output["apps"]):
+        # Do not mislabel incomplete artwork as deployment success. Only a
+        # routine workflow_run with zero staged candidates may decouple an
+        # evidence backlog from unrelated Ops/release publication.
+        output["status"] = ("blocked_no_candidates"
+                            if report_blocked_no_candidates and not had_candidate else "failed")
+    else:
+        output["status"] = "deployed_verified" if output["apps"] else "no_public_store_confirmed_releases"
     return output
 
 
@@ -349,6 +363,8 @@ def main() -> int:
     parser.add_argument("--deployment-sha", required=True)
     parser.add_argument("--timeout", type=float, default=600)
     parser.add_argument("--interval", type=float, default=20)
+    parser.add_argument("--report-blocked-no-candidates", action="store_true",
+                        help="For routine operational syncs only; retain blockers without claiming artwork publication")
     args = parser.parse_args()
     base = args.base_url.rstrip("/")
     parsed = urllib.parse.urlsplit(base)
@@ -358,13 +374,18 @@ def main() -> int:
         parser.error("timeout must be nonnegative and interval must be positive")
     output = {"schema_version": 1, "status": "failed", "apps": []}
     try:
-        output = verify_report(json.loads(args.staging_report.read_text()), base, args.timeout, args.interval)
+        output = verify_report(json.loads(args.staging_report.read_text()), base, args.timeout, args.interval,
+                               report_blocked_no_candidates=args.report_blocked_no_candidates)
     except (OSError, ValueError, KeyError, TypeError) as error:
         output["reason"] = str(error)
     output["expected_site_commit"] = args.deployment_sha
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n")
     print(f"homepage artwork: {output['status']}")
+    if output["status"] == "blocked_no_candidates":
+        print(f"::warning title=Release artwork evidence blocked::"
+              f"{len(output['apps'])} public app(s) have no publishable reviewed candidate; "
+              "blockers are retained in the run artifact. No artwork was verified.")
     return 1 if output["status"] == "failed" else 0
 
 
