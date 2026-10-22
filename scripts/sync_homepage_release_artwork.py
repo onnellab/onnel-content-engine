@@ -164,8 +164,19 @@ def stage_all(releases: Path, stores: Path, site: Path, gate: None, work: Path) 
                               for asset in receipt["assets"]])
         except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as error:
             result["reason"] = str(error)
+    # The staging header must reflect what was actually staged. The previous
+    # unconditional staged_not_published header was misleading when every app
+    # was blocked (and the daily Ops workflow subsequently failed).
+    staged = sum(app["status"] == "staged_not_published" for app in report["apps"])
+    blocked = len(report["apps"]) - staged
+    report["staged_count"] = staged
+    report["blocked_count"] = blocked
     if not grouped:
         report["status"] = "no_public_store_confirmed_releases"
+    elif not staged:
+        report["status"] = "blocked_no_candidates"
+    elif blocked:
+        report["status"] = "partially_staged"
     return report
 
 
