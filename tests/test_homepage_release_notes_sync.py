@@ -42,6 +42,26 @@ class HomepageReleaseNotesSyncTest(unittest.TestCase):
             output = sync_homepage_release_notes(store, homepage, {})
             self.assertEqual(json.loads(output.read_text(encoding="utf-8")), [])
 
+    def test_unknown_state_does_not_publish_a_matching_source(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            rows = root / "store.csv"
+            site = root / "site"
+            write_store_versions(rows, [{
+                "app_id": "APP-0002", "app_slug": "tagweaver",
+                "app_name": "TagWeaver", "platform": "android",
+                "version": "2.5.5", "status": "staged",
+                "last_updated": "2026-10-22",
+            }])
+            source = {"tagweaver": {
+                "version": "2.5.5+99",
+                "locales": {lang: f"- Test user-visible {lang}" for lang in
+                    ("ko", "en", "ja", "zh-Hans", "zh-Hant",
+                     "pt-BR", "de", "fr", "es")},
+            }}
+            output = sync_homepage_release_notes(rows, site, source)
+            self.assertEqual(json.loads(output.read_text(encoding="utf-8")), [])
+
     def test_sync_preserves_history_and_builds_public_notes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
