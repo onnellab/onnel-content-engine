@@ -68,7 +68,7 @@ def _valid_listing(repo: Path, paths: list[str], slug: str) -> list[Path]:
         if relative.is_absolute() or ".." in relative.parts:
             continue
         project = repo / relative.parent
-        if not (project / VENDORED / "TEMPLATE_SOURCE.json").exists():
+        if not (project / VENDORED).is_dir():
             continue
         pubspec = _read(repo, repo / relative)
         if not pubspec:
