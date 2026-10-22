@@ -238,6 +238,22 @@ class Staging(unittest.TestCase):
         with patch.object(stage, 'eligible_releases', return_value=rows), patch.object(stage, 'checkout', side_effect=lambda repo, work: self.repo if repo == 'onnellab/app' else badrepo), patch.object(stage, 'run_gate', side_effect=gate):
             report = stage.stage_all(Path('releases'), Path('stores'), self.site, None, self.root / 'work')
         self.assertEqual([app['status'] for app in report['apps']], ['staged_not_published', 'blocked'])
+        self.assertEqual(report['status'], 'partially_staged')
+        self.assertEqual((report['staged_count'], report['blocked_count']), (1, 1))
+
+    def test_all_unready_apps_have_an_explicit_nonstaged_report(self):
+        report = self.report(gate_effect=ValueError('Missing independently reviewed evidence'))
+        self.assertEqual(report['status'], 'blocked_no_candidates')
+        self.assertEqual((report['staged_count'], report['blocked_count']), (0, 1))
+        self.assertEqual(report['apps'][0]['status'], 'blocked')
+        self.assertIn('reviewed evidence', report['apps'][0]['reason'])
+
+    def test_no_public_store_confirmed_release_is_a_distinct_noop(self):
+        with patch.object(stage, 'eligible_releases', return_value=[]), patch.object(stage, 'checkout') as clone:
+            report = stage.stage_all(Path('releases'), Path('stores'), self.site, None, self.root / 'work')
+        clone.assert_not_called()
+        self.assertEqual(report['status'], 'no_public_store_confirmed_releases')
+        self.assertEqual((report['staged_count'], report['blocked_count']), (0, 0))
 
     def test_git_stages_only_exact_verified_paths(self):
         subprocess.run(['git', 'init', '-q', str(self.site)], check=True)
@@ -543,6 +559,44 @@ class LiveVerification(unittest.TestCase):
         self.assertEqual(result['status'], 'failed')
         self.assertEqual({app['status'] for app in result['apps']}, {'blocked', 'deployed_verified'})
 
+    def test_routine_sync_retains_only_blocked_evidence_without_claiming_deployment(self):
+        staging = {'status': 'blocked_no_candidates', 'staged_count': 0, 'blocked_count': 2,
+                   'apps': [
+            {'app_slug': 'aligna', 'status': 'blocked', 'reason': 'Missing artwork inventory'},
+            {'app_slug': 'vaultxt', 'status': 'blocked', 'reason': 'Unexpected vendored file'},
+        ]}
+        def no_network(url):
+            self.fail('No live check is allowed with zero staged candidates')
+        result = live.verify_report(staging, self.base, 0, 1, no_network,
+                                    report_blocked_no_candidates=True)
+        self.assertEqual(result['status'], 'blocked_no_candidates')
+        self.assertEqual([app['status'] for app in result['apps']], ['blocked', 'blocked'])
+        self.assertEqual(result['apps'][0]['reason'], 'Missing artwork inventory')
+        self.assertNotIn('deployed_verified', str(result))
+
+    def test_inconsistent_staging_counters_cannot_claim_an_evidence_only_noop(self):
+        staging = {'status': 'blocked_no_candidates', 'staged_count': 0, 'blocked_count': 0,
+                   'apps': [{'app_slug': 'app', 'status': 'blocked', 'reason': 'Missing review'}]}
+        result = live.verify_report(staging, self.base, 0, 1, self.fetch,
+                                    report_blocked_no_candidates=True)
+        self.assertEqual(result['status'], 'failed')
+
+    def test_opt_in_never_hides_an_actual_unverified_artwork_attempt(self):
+        staging = {'apps': [
+            {'app_slug': 'app', 'status': 'staged_not_published', 'expected': self.value},
+            {'app_slug': 'vaultxt', 'status': 'blocked', 'reason': 'Unreviewed dependency'},
+        ]}
+        result = live.verify_report(staging, self.base, 1, 1, self.fetch,
+                                    report_blocked_no_candidates=True)
+        self.assertEqual(result['status'], 'failed')
+        self.assertEqual({app['status'] for app in result['apps']},
+                         {'blocked', 'deployed_verified'})
+
+    def test_unknown_stage_state_never_becomes_a_silent_blocker(self):
+        with self.assertRaisesRegex(ValueError, 'Unknown artwork staging status'):
+            live.verify_report({'apps': [{'app_slug': 'app', 'status': 'unknown'}]},
+                               self.base, 0, 1, self.fetch, report_blocked_no_candidates=True)
+
     def test_deployment_wait_retries_then_finishes_on_actual_bytes(self):
         staging = {'apps': [{'app_slug': 'app', 'status': 'staged_not_published', 'expected': self.value}]}
         count = [0]
@@ -586,6 +640,10 @@ class WorkflowContract(unittest.TestCase):
         self.assertNotIn('continue-on-error', text)
         self.assertIn('artwork-deployment-receipt.json', text)
         self.assertIn('if: always()', text)
+        self.assertIn("ARTWORK_REPORT_BLOCKED_ONLY:", text)
+        self.assertIn("github.event.workflow_run.display_title != 'Check reviewed artwork changes'", text)
+        self.assertIn('--report-blocked-no-candidates', text)
+        self.assertIn('release-artwork-verification-', text)
 
 
 if __name__ == '__main__':
