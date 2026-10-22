@@ -345,11 +345,17 @@ def verify_report(staging: dict, base: str, timeout: float, interval: float,
         output["apps"].append({"app_slug": app["app_slug"], "status": "deployment_unverified",
                                "reason": errors[app["app_slug"]]})
     if any(app["status"] != "deployed_verified" for app in output["apps"]):
-        # Do not mislabel incomplete artwork as deployment success. Only a
-        # routine workflow_run with zero staged candidates may decouple an
-        # evidence backlog from unrelated Ops/release publication.
-        output["status"] = ("blocked_no_candidates"
-                            if report_blocked_no_candidates and not had_candidate else "failed")
+        # Require the exact stage report's internally consistent zero-candidate
+        # counters. A malformed or tampered report is still a workflow failure,
+        # even when the caller opted into routine evidence-only reporting.
+        evidence_only = (report_blocked_no_candidates and not had_candidate
+                         and bool(output["apps"])
+                         and staging.get("status") == "blocked_no_candidates"
+                         and type(staging.get("staged_count")) is int
+                         and staging["staged_count"] == 0
+                         and type(staging.get("blocked_count")) is int
+                         and staging["blocked_count"] == len(output["apps"]))
+        output["status"] = "blocked_no_candidates" if evidence_only else "failed"
     else:
         output["status"] = "deployed_verified" if output["apps"] else "no_public_store_confirmed_releases"
     return output
