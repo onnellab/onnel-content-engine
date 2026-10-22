@@ -215,11 +215,16 @@ def google_play_lookup(store_url: str, app_id: str, android_versions: dict[str, 
             public_version = current["version"]
             source_matches_public = not public_version or source["version"] == public_version
             if not current["version"]:
+                # A Play page date alone cannot prove a particular binary is
+                # publicly distributed. Keep the snapshot for diagnostics,
+                # but mark this version unconfirmed for release publication.
                 current["version"] = source["version"]
+                note = "Google Play public version was not exposed; local version is unconfirmed."
             if source_matches_public:
                 current["last_updated"] = current["last_updated"] or source["last_updated"]
                 current["release_notes"] = current["release_notes"] or source_notes
-                note = "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata."
+                if "local version is unconfirmed" not in note:
+                    note = "Version/update date read from Google Play public page; matching Android snapshot used as fallback metadata."
             else:
                 note = (
                     "Version/update date read from Google Play public page; "
@@ -326,6 +331,9 @@ def store_rows_from_apps(
                     status = "updated"
                 if platform == "android":
                     if current["version"]:
+                        if ("public page lookup failed" in notes.lower()
+                                or "local version is unconfirmed" in notes.lower()):
+                            status = "manual_check"
                         android_source = android_versions.get(app["app_id"], {})
                         source_note = (
                             android_source.get("notes", "")
