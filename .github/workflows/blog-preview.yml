@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: onnellab/onnellab.github.io
-          ref: fb463fc63560357fb774830ea7ee56b91762a657
+          ref: 5700b8429be99f28e900216835946ec3d2e36b20
           path: .preview-homepage
           persist-credentials: false
       - name: Configure existing Node version
@@ -70,6 +70,12 @@ jobs:
       - name: Install locked homepage dependencies
         working-directory: .preview-homepage
         run: npm ci
+      - name: Verify summary content preservation and existing Astro template contracts
+        working-directory: .preview-homepage
+        run: |
+          node --test scripts/blog-summary-blocks-contract.mjs
+          npm run test:blog-template
+          npm run check:i18n-quality
       - name: Overlay candidate only in disposable checkout
         run: |
           python3 scripts/prepare_blog_preview.py --bundle preview-evidence/research-source-notes/candidate.json --homepage .preview-homepage --evidence preview-evidence

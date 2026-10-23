@@ -21,6 +21,15 @@ for (const locale of candidate.locales as string[]) {
       Array.from(header.childNodes).filter(node => node.nodeType === Node.TEXT_NODE)
         .map(node => node.textContent?.trim() || '').filter(Boolean));
     expect(strayHeaderText).toEqual([]);
+    if (candidate.slug === 'separate-source-notes-from-conclusions') {
+      const answerSection = source.split(/^## /m)[2];
+      const paragraphs = answerSection.slice(answerSection.indexOf('\n') + 1).trim().split(/\n\s*\n/);
+      expect(paragraphs.length).toBeGreaterThan(1);
+      for (const paragraph of paragraphs) {
+        await expect(page.locator('.article-body')).toContainText(paragraph);
+      }
+    }
+
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://onnellab.com${route}`);
     for (const other of candidate.locales as string[]) {
       await expect(page.locator(`link[rel="alternate"][hreflang="${other}"]`)).toHaveAttribute('href', `https://onnellab.com/blog/${other.toLowerCase()}/${candidate.slug}/`);
