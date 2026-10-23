@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hans/research/separate-source-notes-from-conclusions.md",
+  "topic": {
+    "id": "TOPIC-0090",
+    "title": "如何区分资料笔记与自己的结论",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "zh-Hans",
+    "primary_keyword": "区分资料笔记与自己的结论",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "如何区分资料笔记与自己的结论",
+    "问题",
+    "简短回答",
+    "需要分开的三个栏目",
+    "一个虚构示例",
+    "推荐流程",
+    "这种方法的局限",
+    "参考资料",
+    "结论",
+    "常见问题",
+    "每份资料都必须直接引用吗？",
+    "可以综合多份资料得出一个结论吗？",
+    "如果找不到原文对应的段落怎么办？",
+    "相关指南"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "如何区分资料说了什么，以及自己得出了什么结论？",
+      "structure": [
+        "记录",
+        "区分",
+        "核实",
+        "修订"
+      ],
+      "notes": "Explain source, context, interpretation and revision; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains source provenance and interpretation, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "把资料内容与自己的结论分开",
+      "steps": [
+        "记录",
+        "区分",
+        "核实",
+        "修订"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "让研究笔记可追溯的简单结构",
+    "message": "让证据与解读之间的界线清晰可见。",
+    "description": "为每段直接引文或转述注明出处及准确位置。将自己的解读放在单独且明确标注的栏目中，保留原资料的适用范围与限制，并记下仍需核实的问题。结论发生变化时，保留简短的修改记录，以便看清各个版本的结论分别得到了哪些资料的支持。",
+    "steps": [
+      [
+        "记录",
+        "直接引用或转述，并注明原文位置"
+      ],
+      [
+        "区分",
+        "标明哪些是自己的解读"
+      ],
+      [
+        "核实",
+        "记录背景与下一步要问的问题"
+      ],
+      [
+        "修订",
+        "保留带日期的修改记录"
+      ]
+    ]
+  }
+}

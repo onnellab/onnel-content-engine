@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0094",
+    "title": "Comment séparer les notes de source de vos conclusions",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "fr",
+    "status": "review",
+    "topic_clusters": [
+      "source et déduction",
+      "provenance des notes de recherche",
+      "citation et reformulation",
+      "notes de recherche traçables",
+      "séparer les notes de source",
+      "research"
+    ],
+    "related_app_names": []
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0060",
+        "title": "Vérifier la table des matières et l’ordre des chapitres d’un EPUB",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0076",
+        "title": "Transformer les textes répétitifs en extraits réutilisables",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0084",
+        "title": "Créer une convention cohérente pour nommer ses fichiers",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0051",
+        "title": "Organiser sa musique sur Android pour une écoute hors ligne",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0068",
+        "title": "Tester un fichier multimédia converti avant de remplacer l’original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      }
+    ],
+    "related_apps": [],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Research guide",
+        "category": "research",
+        "cluster": "research",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "source et déduction cluster",
+        "category": "research",
+        "cluster": "source et déduction",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "How to Turn Rough Notes Into a Structured First Draft",
+        "category": "productivity",
+        "cluster": "structure rough notes",
+        "topic_id": "TOPIC-0014",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

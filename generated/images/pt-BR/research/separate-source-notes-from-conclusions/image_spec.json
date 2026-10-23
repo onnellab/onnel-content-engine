@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/pt-BR/research/separate-source-notes-from-conclusions.md",
+  "topic": {
+    "id": "TOPIC-0092",
+    "title": "Como separar as anotações sobre fontes das suas conclusões",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "pt-BR",
+    "primary_keyword": "separar as anotações sobre fontes",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Como separar as anotações sobre fontes das suas conclusões",
+    "Pergunta",
+    "Resposta curta",
+    "Três campos para manter separados",
+    "Um exemplo fictício",
+    "Fluxo de trabalho recomendado",
+    "Limitações do método",
+    "Referências",
+    "Conclusão",
+    "Perguntas frequentes",
+    "Preciso citar literalmente todas as fontes?",
+    "Posso combinar várias fontes em uma conclusão?",
+    "E se eu não conseguir localizar o trecho original?",
+    "Guia relacionado"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Como separar o que uma fonte diz daquilo que você conclui?",
+      "structure": [
+        "Registre",
+        "Separe",
+        "Confira",
+        "Revise"
+      ],
+      "notes": "Explain source, context, interpretation and revision; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains source provenance and interpretation, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Separe a fonte da sua conclusão",
+      "steps": [
+        "Registre",
+        "Separe",
+        "Confira",
+        "Revise"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Uma estrutura simples para anotações de pesquisa rastreáveis",
+    "message": "Deixe visível a fronteira entre evidência e interpretação.",
+    "description": "Associe cada citação ou paráfrase a uma fonte e indique exatamente onde encontrar o trecho. Coloque sua interpretação em um campo separado e claramente identificado, preserve as limitações da fonte e registre o que ainda precisa ser verificado. Quando sua conclusão mudar, mantenha um breve histórico de correções para identificar qual fonte sustentou cada versão.",
+    "steps": [
+      [
+        "Registre",
+        "Texto e fonte"
+      ],
+      [
+        "Separe",
+        "Sua análise"
+      ],
+      [
+        "Confira",
+        "Contexto e pergunta"
+      ],
+      [
+        "Revise",
+        "Correções datadas"
+      ]
+    ]
+  }
+}

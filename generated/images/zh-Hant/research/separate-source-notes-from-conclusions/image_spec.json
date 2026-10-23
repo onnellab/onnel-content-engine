@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/research/separate-source-notes-from-conclusions.md",
+  "topic": {
+    "id": "TOPIC-0091",
+    "title": "如何區分資料筆記與自己的結論",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "zh-Hant",
+    "primary_keyword": "區分資料筆記與自己的結論",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "如何區分資料筆記與自己的結論",
+    "問題",
+    "簡短回答",
+    "需要分開的三個欄位",
+    "一個虛構範例",
+    "建議流程",
+    "這個方法的限制",
+    "參考資料",
+    "結論",
+    "常見問題",
+    "每份資料都必須直接引用嗎？",
+    "可以綜合多份資料得出一個結論嗎？",
+    "如果找不到原文對應的段落，該怎麼辦？",
+    "相關指南"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "如何區分資料說了什麼，以及自己得出了什麼結論？",
+      "structure": [
+        "記錄",
+        "區分",
+        "查證",
+        "修訂"
+      ],
+      "notes": "Explain source, context, interpretation and revision; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains source provenance and interpretation, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "把資料內容與自己的結論分開",
+      "steps": [
+        "記錄",
+        "區分",
+        "查證",
+        "修訂"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "讓研究筆記可追溯的簡單架構",
+    "message": "讓證據與解讀之間的界線清楚可見。",
+    "description": "為每段直接引文或轉述註明出處及準確位置。將自己的解讀放在獨立且明確標示的欄位，保留原資料的適用範圍與限制，並記下仍待查證的問題。結論改變時，保留簡短的修訂紀錄，方便確認各個版本的結論分別由哪些資料支持。",
+    "steps": [
+      [
+        "記錄",
+        "直接引用或轉述，並註明原文位置"
+      ],
+      [
+        "區分",
+        "標示哪些是自己的解讀"
+      ],
+      [
+        "查證",
+        "記下背景與下一步要問的問題"
+      ],
+      [
+        "修訂",
+        "保留附有日期的修訂紀錄"
+      ]
+    ]
+  }
+}

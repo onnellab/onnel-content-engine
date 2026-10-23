@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/research/separate-source-notes-from-conclusions.md",
+  "topic": {
+    "id": "TOPIC-0037",
+    "title": "How to Separate Source Notes from Your Conclusions",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "en",
+    "primary_keyword": "separate source notes",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "How to Separate Source Notes from Your Conclusions",
+    "Question",
+    "Short Answer",
+    "Three fields to keep apart",
+    "A fictional example",
+    "Recommended Workflow",
+    "Limits of the method",
+    "References",
+    "Conclusion",
+    "FAQ",
+    "Must I quote every source?",
+    "Can I combine several sources in one conclusion?",
+    "What if I cannot locate the original passage?",
+    "Related guide"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "How do you separate what a source says from what you conclude?",
+      "structure": [
+        "Capture",
+        "Separate",
+        "Check",
+        "Revise"
+      ],
+      "notes": "Explain source, context, interpretation and revision; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains source provenance and interpretation, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Keep the source and your conclusion separate",
+      "steps": [
+        "Capture",
+        "Separate",
+        "Check",
+        "Revise"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "A small structure for traceable research notes",
+    "message": "Make the boundary between evidence and interpretation visible.",
+    "description": "Give every quotation or paraphrase a source and a precise locator. Put your interpretation in a separate, clearly labeled field, preserve the source’s limits, and record what still needs checking. When your conclusion changes, retain a brief correction trail so you can see which source supported which version.",
+    "steps": [
+      [
+        "Capture",
+        "Text + source"
+      ],
+      [
+        "Separate",
+        "Your inference"
+      ],
+      [
+        "Check",
+        "Context + check"
+      ],
+      [
+        "Revise",
+        "Dated changes"
+      ]
+    ]
+  }
+}

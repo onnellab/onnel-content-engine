@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/de/research/separate-source-notes-from-conclusions.md",
+  "topic": {
+    "id": "TOPIC-0093",
+    "title": "Quellennotizen und eigene Schlussfolgerungen klar trennen",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "de",
+    "primary_keyword": "Quellennotizen und eigene Schlussfolgerungen",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Quellennotizen und eigene Schlussfolgerungen klar trennen",
+    "Frage",
+    "Kurzantwort",
+    "Drei Felder, die getrennt bleiben sollten",
+    "Ein fiktives Beispiel",
+    "Empfohlener Arbeitsablauf",
+    "Grenzen der Methode",
+    "Quellen",
+    "Fazit",
+    "Häufige Fragen",
+    "Muss ich jede Quelle wörtlich zitieren?",
+    "Kann ich mehrere Quellen zu einer Schlussfolgerung zusammenführen?",
+    "Was ist, wenn ich die ursprüngliche Passage nicht finde?",
+    "Weiterführender Leitfaden"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Wie trennen Sie die Aussagen einer Quelle von Ihren eigenen Schlussfolgerungen?",
+      "structure": [
+        "Erfassen",
+        "Trennen",
+        "Prüfen",
+        "Ändern"
+      ],
+      "notes": "Explain source, context, interpretation and revision; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains source provenance and interpretation, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Quelle und Schlussfolgerung getrennt halten",
+      "steps": [
+        "Erfassen",
+        "Trennen",
+        "Prüfen",
+        "Ändern"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Eine einfache Struktur für nachvollziehbare Forschungsnotizen",
+    "message": "Machen Sie die Grenze zwischen Beleg und Interpretation sichtbar.",
+    "description": "Geben Sie für jedes Zitat und jede Paraphrase die Quelle und eine genaue Fundstelle an. Schreiben Sie Ihre Interpretation in ein separates, eindeutig gekennzeichnetes Feld, bewahren Sie die Einschränkungen der Quelle und halten Sie fest, was noch geprüft werden muss. Wenn sich Ihre Schlussfolgerung ändert, dokumentieren Sie die Korrektur kurz, damit erkennbar bleibt, welche Quelle welche Fassung gestützt hat.",
+    "steps": [
+      [
+        "Erfassen",
+        "Text und Quelle"
+      ],
+      [
+        "Trennen",
+        "Eigene Deutung"
+      ],
+      [
+        "Prüfen",
+        "Kontext und Frage"
+      ],
+      [
+        "Ändern",
+        "Korrektur mit Datum"
+      ]
+    ]
+  }
+}

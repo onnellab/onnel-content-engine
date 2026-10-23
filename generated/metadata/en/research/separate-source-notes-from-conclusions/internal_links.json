@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0037",
+    "title": "How to Separate Source Notes from Your Conclusions",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "en",
+    "status": "review",
+    "topic_clusters": [
+      "source vs inference",
+      "research note provenance",
+      "quotation and paraphrase",
+      "traceable research notes",
+      "separate source notes",
+      "research"
+    ],
+    "related_app_names": []
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0016",
+        "title": "How to Keep a Durable Research Reading Log",
+        "slug": "keep-durable-research-reading-log",
+        "category": "research",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/keep-durable-research-reading-log/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "research"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0014",
+        "title": "How to Turn Rough Notes Into a Structured First Draft",
+        "slug": "turn-rough-notes-into-structured-first-draft",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
+        "topic_id": "TOPIC-0001",
+        "title": "How to Read Large TXT Files Without Lag",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0003",
+        "title": "TXT vs EPUB for Long Reading",
+        "slug": "txt-vs-epub-for-long-reading",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/",
+        "destination": "published_article",
+        "relationship": "comparison",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0004",
+        "title": "What Makes Large Text Files Slow to Open",
+        "slug": "large-text-file-slow-to-open",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/large-text-file-slow-to-open/",
+        "destination": "published_article",
+        "relationship": "prerequisite",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0007",
+        "title": "How to Convert Local Media Files Privately",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Research guide",
+        "category": "research",
+        "cluster": "research",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "source vs inference cluster",
+        "category": "research",
+        "cluster": "source vs inference",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "How to Turn Rough Notes Into a Structured First Draft",
+        "category": "productivity",
+        "cluster": "structure rough notes",
+        "topic_id": "TOPIC-0014",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

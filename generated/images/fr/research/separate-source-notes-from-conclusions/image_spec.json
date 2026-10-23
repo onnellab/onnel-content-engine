@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/fr/research/separate-source-notes-from-conclusions.md",
+  "topic": {
+    "id": "TOPIC-0094",
+    "title": "Comment séparer les notes de source de vos conclusions",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "fr",
+    "primary_keyword": "séparer les notes de source",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Comment séparer les notes de source de vos conclusions",
+    "Question",
+    "Réponse courte",
+    "Trois champs à garder distincts",
+    "Un exemple fictif",
+    "Méthode recommandée",
+    "Les limites de la méthode",
+    "Références",
+    "Conclusion",
+    "Questions fréquentes",
+    "Faut-il citer chaque source mot pour mot ?",
+    "Puis-je combiner plusieurs sources dans une même conclusion ?",
+    "Que faire si je ne retrouve pas le passage original ?",
+    "Guide connexe"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Comment séparer ce qu’une source affirme de ce que vous en concluez ?",
+      "structure": [
+        "Consigner",
+        "Séparer",
+        "Vérifier",
+        "Réviser"
+      ],
+      "notes": "Explain source, context, interpretation and revision; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains source provenance and interpretation, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Séparez la source de votre conclusion",
+      "steps": [
+        "Consigner",
+        "Séparer",
+        "Vérifier",
+        "Réviser"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Une structure simple pour des notes de recherche traçables",
+    "message": "Distinguez les éléments probants de votre interprétation.",
+    "description": "Associez chaque citation ou reformulation à une source et à un repère précis permettant de retrouver le passage. Placez votre interprétation dans un champ distinct et clairement identifié, conservez les limites de la source et notez ce qui reste à vérifier. Lorsque votre conclusion évolue, gardez une brève trace des corrections pour savoir quelle source étayait chaque version.",
+    "steps": [
+      [
+        "Consigner",
+        "Texte et source"
+      ],
+      [
+        "Séparer",
+        "Votre analyse"
+      ],
+      [
+        "Vérifier",
+        "Contexte et question"
+      ],
+      [
+        "Réviser",
+        "Corrections datées"
+      ]
+    ]
+  }
+}

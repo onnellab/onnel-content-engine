@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/research/separate-source-notes-from-conclusions.md",
+  "topic": {
+    "id": "TOPIC-0089",
+    "title": "出典メモと自分の結論を分ける方法",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "ja",
+    "primary_keyword": "出典メモと自分の結論",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "出典メモと自分の結論を分ける方法",
+    "質問",
+    "短い回答",
+    "分けておく3つの欄",
+    "架空の例",
+    "推奨ワークフロー",
+    "この方法の限界",
+    "参考資料",
+    "結論",
+    "よくある質問",
+    "すべての出典を直接引用する必要がありますか？",
+    "複数の出典を一つの結論にまとめてもよいですか？",
+    "元の該当箇所が見つからない場合はどうすればよいですか？",
+    "関連ガイド"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "出典に書かれていることと、自分が導いた結論をどう分ければよいですか？",
+      "structure": [
+        "記録する",
+        "分ける",
+        "確認する",
+        "見直す"
+      ],
+      "notes": "Explain source, context, interpretation and revision; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains source provenance and interpretation, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "出典の内容と自分の結論を分ける",
+      "steps": [
+        "記録する",
+        "分ける",
+        "確認する",
+        "見直す"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "根拠をたどれる研究メモのシンプルな構成",
+    "message": "根拠と解釈の境界を見える形にしましょう。",
+    "description": "引用や言い換えには、出典と該当箇所を正確に記録します。自分の解釈は明示した別の欄に書き、出典が示す範囲や限界を保ち、まだ確認が必要な点も残しましょう。結論が変わったときは、どの出典がどの時点の結論を支えていたか分かるよう、短い修正履歴を残します。",
+    "steps": [
+      [
+        "記録する",
+        "引用や言い換えに出典の該当箇所を添える"
+      ],
+      [
+        "分ける",
+        "自分の解釈であることを明示する"
+      ],
+      [
+        "確認する",
+        "文脈と次に確かめる問いを残す"
+      ],
+      [
+        "見直す",
+        "日付付きの修正履歴を残す"
+      ]
+    ]
+  }
+}

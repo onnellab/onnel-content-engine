@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/research/separate-source-notes-from-conclusions.md",
+  "topic": {
+    "id": "TOPIC-0088",
+    "title": "출처 메모와 자신의 결론을 구분하는 방법",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "ko",
+    "primary_keyword": "출처 메모와 자신의 결론",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "출처 메모와 자신의 결론을 구분하는 방법",
+    "질문",
+    "핵심 답변",
+    "구분해서 적을 세 가지 항목",
+    "가상의 예시",
+    "권장 워크플로",
+    "이 방법의 한계",
+    "참고 자료",
+    "결론",
+    "자주 묻는 질문",
+    "모든 출처를 직접 인용해야 하나요?",
+    "여러 출처를 종합해 하나의 결론을 내려도 되나요?",
+    "원문의 해당 부분을 찾을 수 없다면 어떻게 하나요?",
+    "관련 안내"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "출처에 담긴 내용과 자신이 내린 결론을 어떻게 구분하나요?",
+      "structure": [
+        "기록",
+        "구분",
+        "확인",
+        "수정"
+      ],
+      "notes": "Explain source, context, interpretation and revision; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains source provenance and interpretation, not an application interface.",
+    "applications": [],
+    "rules": [
+      "실제 기능을 설명할 때에만 스크린샷을 사용합니다.",
+      "불필요한 UI는 잘라냅니다.",
+      "관련 컨트롤이나 워크플로 영역만 강조합니다.",
+      "높은 해상도를 유지합니다.",
+      "스크린샷을 장식으로 사용하지 않습니다."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "출처의 내용과 자신의 결론을 구분하세요",
+      "steps": [
+        "기록",
+        "구분",
+        "확인",
+        "수정"
+      ],
+      "layout": "세로 또는 좌우 순서형"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+    "이 단계에서는 스크린샷을 만들지 않습니다.",
+    "이 단계에서는 에셋을 게시하지 않습니다.",
+    "설명 목적이 없는 장식용 이미지는 사용하지 않습니다."
+  ],
+  "editorial_workflow": {
+    "subtitle": "근거를 추적할 수 있는 연구 메모의 간단한 구조",
+    "message": "근거와 해석의 경계가 드러나게 기록하세요.",
+    "description": "모든 인용문과 바꿔 쓴 내용에 출처와 해당 부분의 정확한 위치를 남기세요. 자신의 해석은 별도의 항목에 명확히 표시하고, 출처에서 다루는 범위와 한계를 유지하며, 추가로 확인할 내용을 기록하세요. 결론이 달라지면 간단한 수정 이력을 남겨 어느 출처가 어느 시점의 결론을 뒷받침했는지 확인할 수 있게 하세요.",
+    "steps": [
+      [
+        "기록",
+        "인용하거나 바꿔 쓰고 출처 내 위치를 남기기"
+      ],
+      [
+        "구분",
+        "자신의 해석임을 표시하기"
+      ],
+      [
+        "확인",
+        "맥락과 다음에 확인할 질문 기록하기"
+      ],
+      [
+        "수정",
+        "날짜가 있는 수정 이력 남기기"
+      ]
+    ]
+  }
+}

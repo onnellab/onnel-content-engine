@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0093",
+    "title": "Quellennotizen und eigene Schlussfolgerungen klar trennen",
+    "slug": "separate-source-notes-from-conclusions",
+    "category": "research",
+    "language": "de",
+    "status": "review",
+    "topic_clusters": [
+      "Quelle und Schlussfolgerung",
+      "Herkunft von Forschungsnotizen",
+      "Zitat und Paraphrase",
+      "nachvollziehbare Forschungsnotizen",
+      "Quellennotizen und eigene Schlussfolgerungen",
+      "research"
+    ],
+    "related_app_names": []
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0050",
+        "title": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0059",
+        "title": "Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0067",
+        "title": "Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0075",
+        "title": "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
+        "topic_id": "TOPIC-0083",
+        "title": "Einheitliche Dateinamen: eine einfache Konvention entwickeln",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      }
+    ],
+    "related_apps": [],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Research guide",
+        "category": "research",
+        "cluster": "research",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "Quelle und Schlussfolgerung cluster",
+        "category": "research",
+        "cluster": "Quelle und Schlussfolgerung",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}
