@@ -9,7 +9,7 @@
   "image": {
     "title": "Des noms cohérents, des crédits préservés",
     "subtitle": "Vérifiez l’édition avant de modifier les tags",
-    "message": "Partagez les données d’album, préservez les différences entre pistes.",
+    "message": "Données communes à l’album, différences propres aux pistes.",
     "steps": [
       [
         "1. Édition",
@@ -17,15 +17,15 @@
       ],
       [
         "2. Comparer",
-        "Séparez champs communs et spécifiques"
+        "Champs communs et par piste"
       ],
       [
         "3. Enreg.",
-        "Modifiez un petit ensemble de travail"
+        "Modifiez une petite sélection"
       ],
       [
         "4. Vérifier",
-        "Rouvrez les fichiers et testez le lecteur"
+        "Rouvrez; testez le lecteur"
       ]
     ]
   },

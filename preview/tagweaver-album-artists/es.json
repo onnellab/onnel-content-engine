@@ -9,7 +9,7 @@
   "image": {
     "title": "Nombres coherentes, créditos conservados",
     "subtitle": "Comprueba la edición antes de editar etiquetas",
-    "message": "Comparte los datos del álbum y conserva las diferencias entre pistas.",
+    "message": "Datos comunes del álbum, diferencias propias de cada pista.",
     "steps": [
       [
         "1. Edición",
@@ -17,15 +17,15 @@
       ],
       [
         "2. Comparar",
-        "Separa campos comunes e individuales"
+        "Campos comunes y por pista"
       ],
       [
         "3. Guardar",
-        "Modifica un pequeño conjunto de trabajo"
+        "Modifica una pequeña selección"
       ],
       [
         "4. Verificar",
-        "Reabre los archivos y prueba el reproductor"
+        "Reabre; prueba el reproductor"
       ]
     ]
   },

@@ -35,7 +35,7 @@
   "verification": {
     "native_repository_validators": "NOT RUN",
     "review_scores_or_fingerprints": "NOT GENERATED",
-    "svg_png_rendering": "Initial preview 39984028329 failed the existing two-line image-heading gate in pt-BR/de/fr/es; six labels corrected without changing layout limits. Revalidation pending.",
+    "svg_png_rendering": "Runs39984028329 and39985033569 identified heading/detail/message layout failures. Six labels and fifteen image detail/message fields in four locales were compacted without changing native font or layout gates. Full native/rendered revalidation pending.",
     "astro_browser_preview": "NOT RUN",
     "public_links": "Official store pages read again 2026-10-23. All 18 related article URLs loaded in the dot cloud browser with substantive article text, matching language and self-canonical, and 10 alternate links. This verifies existing related pages, not this unpublished draft.",
     "related_article_paths": "18/18 source paths and live related page URLs confirmed; candidate rendering remains NOT RUN.",
@@ -48,16 +48,16 @@
       "image_copy_steps_each": 4,
       "source_paths_found": 18
     },
-    "source_and_language_review": "Original nine-language full-text review remains historical. Six image-step labels in four locales received a separate independent semantic review on 2026-10-23; body, details and other five locale bytes are unchanged. See image_label_review_20261023.json. Native/rendered validation pending after correction.",
+    "source_and_language_review": "Historical nine-language body review retained. Separate image_label_review_20261023.json and image_detail_review_20261023.json document independent reviews of changed image copy. Article bodies and other five locale bytes unchanged. Current final_blobs are not represented as the old reviewer-approved complete blobs.",
     "final_blobs": {
       "en": "af5023281da5168cedea7aecfef358dddf9534f1",
-      "pt-BR": "0df7b6392a09e60b114d99b4680f48146e7462fe",
-      "de": "9e556e9214cf697bbc4b5c42c2c0c9e4b00396f4",
+      "pt-BR": "362f19a71dc492c641ad5e9d1696f1efde4c9d9f",
+      "de": "eca448f36491bb56f118502a706e101a8691d8d6",
       "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
       "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
-      "fr": "3d70d6a58bd723bcd4619b159d6c0839c9db1b53",
+      "fr": "d140f2688370385042b1ca1201c431398605b7b2",
       "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
-      "es": "55ec31349a75a095489447ea682492d5b87fa352",
+      "es": "055fa43f5aa9a0b1e661902cd2c3c3b73387a1dd",
       "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
     },
     "live_related_page_review": {
@@ -237,7 +237,8 @@
       "es": "a12c978a370a4275e91c4dc289bfac40e932c8f7",
       "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
     },
-    "image_label_review": "image_label_review_20261023.json"
+    "image_label_review": "image_label_review_20261023.json",
+    "image_detail_review": "image_detail_review_20261023.json"
   },
   "artifacts": [
     {
