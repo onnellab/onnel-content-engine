@@ -100,8 +100,42 @@ for (const locale of candidate.locales as string[]) {
       devicePixelRatio: window.devicePixelRatio,
     }));
     fs.writeFileSync(path.join(output, `${locale}-${testInfo.project.name}-viewer.json`), JSON.stringify(viewerEvidence, null, 2));
+    const zoom = page.locator('[data-article-image-zoom]');
+    const viewport = page.locator('[data-article-image-viewport]');
+    const viewerImage = page.locator('[data-article-image-viewer-img]');
+    await expect(zoom).toHaveAttribute('aria-pressed', 'false');
+    await expect(zoom).not.toHaveText('');
+    await zoom.focus();
+    await page.keyboard.press('Enter');
+    await expect(zoom).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(() => viewerImage.evaluate((node: HTMLImageElement) =>
+      Math.abs(node.getBoundingClientRect().width - node.naturalWidth))).toBeLessThanOrEqual(2);
+    await expect(viewport).toHaveAttribute('tabindex', '0');
+    await viewport.focus();
+    await page.screenshot({ path: path.join(output, `${locale}-${testInfo.project.name}-original-start.png`) });
+    const scrollBounds = await viewport.evaluate(node => ({ max: node.scrollWidth - node.clientWidth, pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth }));
+    expect(scrollBounds.pageOverflow).toBeLessThanOrEqual(1);
+    if (testInfo.project.name === 'mobile') {
+      expect(scrollBounds.max).toBeGreaterThan(500);
+      await page.keyboard.press('ArrowRight');
+      await expect.poll(() => viewport.evaluate(node => node.scrollLeft)).toBeGreaterThan(0);
+    }
+    await viewport.evaluate(node => { node.scrollLeft = node.scrollWidth; });
+    await expect.poll(() => viewport.evaluate(node => node.scrollLeft)).toBeGreaterThanOrEqual(Math.max(0, scrollBounds.max - 1));
+    await page.screenshot({ path: path.join(output, `${locale}-${testInfo.project.name}-original-end.png`) });
+    await zoom.click();
+    await expect(zoom).toHaveAttribute('aria-pressed', 'false');
+    await expect.poll(() => viewport.evaluate(node => node.scrollLeft)).toBe(0);
     await page.keyboard.press('Escape');
     await expect(page.locator('dialog.article-image-viewer')).not.toBeVisible();
+    await expect(page.locator('[data-article-image-trigger]').first()).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('dialog.article-image-viewer')).toBeVisible();
+    await expect(zoom).toHaveAttribute('aria-pressed', 'false');
+    await expect.poll(() => viewport.evaluate(node => node.scrollLeft)).toBe(0);
+    await page.locator('[data-article-image-close]').click();
+    await expect(page.locator('dialog.article-image-viewer')).not.toBeVisible();
+    await expect(page.locator('[data-article-image-trigger]').first()).toBeFocused();
     // Expand real FAQ controls so the screenshot includes all reviewed text.
     for (const detail of await page.locator('.faq-list details').all()) await detail.locator('summary').click();
     await page.evaluate(() => document.fonts.ready);

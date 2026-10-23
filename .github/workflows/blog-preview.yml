@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: onnellab/onnellab.github.io
-          ref: 5700b8429be99f28e900216835946ec3d2e36b20
+          ref: 992753863934ce805e6aebcd7e147d3122d3bb55
           path: .preview-homepage
           persist-credentials: false
       - name: Configure existing Node version
@@ -57,9 +57,11 @@ jobs:
           python3 -m unittest discover -s tests -p test_research_preview.py -v
           python3 scripts/prepare_blog_preview.py --bundle preview/clipnest/candidate.json --validate-only
       - name: Install existing publisher renderer dependencies
+        timeout-minutes: 8
         run: |
-          sudo apt-get update
-          sudo apt-get install -y librsvg2-bin fonts-noto-cjk
+          printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt > /dev/null
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y librsvg2-bin fonts-noto-cjk
       - name: Validate research source notes with actual native gates in a disposable engine copy
         run: python3 scripts/prepare_research_preview.py
       - name: Verify tracked source remains unchanged
