@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-21T12:25:39+09:00",
+  "checked_at": "2026-10-23T12:48:52+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 84,
-    "already_done": 80,
+    "already_done": 84,
     "verified": 0,
-    "pending": 4
+    "pending": 0
   },
   "items": [
     {
@@ -586,6 +586,42 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0035::x::en::x",
+      "topic_id": "TOPIC-0035",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2113062344838598787",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
+      "manual_key": "TOPIC-0035::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0035",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3myjbhwijbx2r",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0035::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0035",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7518828394092916737/",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0038::x::en::x",
       "topic_id": "TOPIC-0038",
       "platform": "x",
@@ -922,6 +958,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0035::devto::en::markdown",
+      "topic_id": "TOPIC-0035",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-design-a-file-naming-system-that-stays-consistent-75l",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0038::devto::en::markdown",
       "topic_id": "TOPIC-0038",
       "platform": "devto",
@@ -966,54 +1014,6 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://dev.to/onnellab/check-an-epubs-table-of-contents-and-chapter-order-25g6",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0035::x::en::x",
-      "topic_id": "TOPIC-0035",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0035::bluesky::en::bluesky",
-      "topic_id": "TOPIC-0035",
-      "platform": "bluesky",
-      "language": "en",
-      "template_id": "bluesky",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0035::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0035",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0035::devto::en::markdown",
-      "topic_id": "TOPIC-0035",
-      "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
     }
