@@ -33,11 +33,11 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-      - name: Checkout current canonical homepage
+      - name: Checkout exact nonpublishing blog metadata validation revision
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: onnellab/onnellab.github.io
-          ref: main
+          ref: fb463fc63560357fb774830ea7ee56b91762a657
           path: .preview-homepage
           persist-credentials: false
       - name: Configure existing Node version
@@ -76,7 +76,7 @@ jobs:
           test ! -e .preview-homepage/tests/blog-preview.spec.ts
           test ! -L .preview-homepage/tests/blog-preview.spec.ts
           cp tests/blog-preview.spec.ts .preview-homepage/tests/blog-preview.spec.ts
-      - name: Build unchanged Astro templates and styles
+      - name: Build pinned Astro templates and styles
         working-directory: .preview-homepage
         run: npm run build
       - name: Install existing homepage test browser

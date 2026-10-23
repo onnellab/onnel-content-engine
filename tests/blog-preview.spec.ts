@@ -17,6 +17,10 @@ for (const locale of candidate.locales as string[]) {
     const response = await page.goto(route);
     expect(response?.status()).toBe(200);
     await expect(page.locator('article h1')).toHaveText(title);
+    const strayHeaderText = await page.locator('.article-header').evaluate(header =>
+      Array.from(header.childNodes).filter(node => node.nodeType === Node.TEXT_NODE)
+        .map(node => node.textContent?.trim() || '').filter(Boolean));
+    expect(strayHeaderText).toEqual([]);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://onnellab.com${route}`);
     for (const other of candidate.locales as string[]) {
       await expect(page.locator(`link[rel="alternate"][hreflang="${other}"]`)).toHaveAttribute('href', `https://onnellab.com/blog/${other.toLowerCase()}/${candidate.slug}/`);
