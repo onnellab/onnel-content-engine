@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-10-24T06:21:04+09:00
+Generated: 2026-10-24T06:33:25+09:00
 
 ## Summary
 
@@ -10,8 +10,8 @@ Generated: 2026-10-24T06:21:04+09:00
 | Store | unchanged | 13 |
 | Store | updated | 1 |
 | GitHub Release | archived | 2 |
-| GitHub Release | planned | 3 |
-| GitHub Release | released | 8 |
+| GitHub Release | planned | 2 |
+| GitHub Release | released | 9 |
 
 ## Store Snapshots
 
@@ -27,7 +27,7 @@ Generated: 2026-10-24T06:21:04+09:00
 | Quivra | android | 1.0.10 | 1.0.10 | same | unchanged | released | onnellab/quivra | No action |
 | Quivra | ios | 1.0.10 | 1.0.10 | same | unchanged | released | onnellab/quivra | No action |
 | Segra | android | 1.0.7 | 1.0.6 | store_ahead | unchanged | released | onnellab/segra | Sync local metadata |
-| Segra | ios | 1.0.7 | 1.0.6 | store_ahead | updated | planned | onnellab/segra | Confirm matching public store version; auto-publish GitHub Release notes |
+| Segra | ios | 1.0.7 | 1.0.6 | store_ahead | updated | released | onnellab/segra | Sync local metadata |
 | TagWeaver | android | 2.5.5 | 2.5.6 | local_ahead | unchanged | released | onnellab/tagweaver | Covered by private test release row |
 | TagWeaver | ios | 2.5.5 | 2.5.6 | local_ahead | unchanged | planned | onnellab/tagweaver | Private test only; do not publish public GitHub Release |
 | VaultXT | android | 2.0.2 | 2.0.2 | same | unchanged | released | onnellab/onnellab-text | No action |
@@ -49,7 +49,7 @@ Generated: 2026-10-24T06:21:04+09:00
 | REL-0037 | Melivra | android | private_test | v1.0.9 | planned | Private test; public GitHub Release disabled | - | - | - | Private test only; do not publish public GitHub Release |
 | REL-0026 | Aligna | ios | private_test | v1.0.9 | archived | Private test; public GitHub Release disabled | - | - | Android 앱 용량을 줄였어요. 스토어 이미지를 새로 업데이트했어요. | Private test only; do not publish public GitHub Release |
 | REL-0032 | Papira | android | public | v2.0.3 | released | Public GitHub Release published | https://github.com/onnellab/papira/releases/tag/v2.0.3 | - | - | No action |
-| REL-0036 | Segra | ios | public | v1.0.7 | planned | Public store confirmed; preparing automatic release | - | - | - 설정에서 선택한 언어의 개인정보 처리방침을 바로 열 수 있어요. - Pro 구매 버튼에 스토어 가격을 함께 표시해요. - 영상 준비와 자막 설정 화면의 사용성을 개선했어요. | Confirm matching public store version; auto-publish GitHub Release notes |
+| REL-0036 | Segra | ios | public | v1.0.7 | released | Public GitHub Release published | https://github.com/onnellab/segra/releases/tag/v1.0.7 | - | - 설정에서 선택한 언어의 개인정보 처리방침을 바로 열 수 있어요. - Pro 구매 버튼에 스토어 가격을 함께 표시해요. - 영상 준비와 자막 설정 화면의 사용성을 개선했어요. | No action |
 
 ## Attention Queue
 
@@ -57,7 +57,7 @@ Generated: 2026-10-24T06:21:04+09:00
 | --- | --- | --- | --- | --- |
 | TagWeaver | android | unchanged | Covered by private test release row | Version/update date read from Google Play public page; Android snapshot version 2.5.6 is stale for public version 2.5.5 and was not merged. |
 | VaultXT | ios | unchanged | Platform rollout not public | - |
+| Segra | ios | updated | Sync local metadata | - |
 | Segra | android | unchanged | Sync local metadata | Version/update date read from Google Play public page; Android snapshot version 1.0.6 is stale for public version 1.0.7 and was not merged. |
 | TagWeaver | ios | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 2.5.5. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
 | Melivra | android | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.8. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
-| Segra | ios | planned | Confirm matching public store version; auto-publish GitHub Release notes | Generated from public store version snapshot. Patch notes must describe changes since the previous public release. |
