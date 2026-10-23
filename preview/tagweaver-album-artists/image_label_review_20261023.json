@@ -2,7 +2,7 @@
   "schema": 1,
   "kind": "independent_image_label_review_not_render_or_publication",
   "slug": "consistent-album-artist-names",
-  "reviewed_at_utc": "2026-10-23T16:09:40Z",
+  "reviewed_at_utc": "2026-10-23T16:11:43Z",
   "method": "Separate language reviewer compared six proposed labels and unchanged details; author verified only exact six JSON label strings changed.",
   "reviewer_type": "delegated AI language review; not user approval or native speaker certification",
   "original_full_text_review": "editorial_review.json",
@@ -35,7 +35,7 @@
     {
       "locale": "de",
       "previous_blob_sha": "0ffe37d41c2e2cc989b26980154635900f4b9749",
-      "current_blob_sha": "95a8807047f3e14e3d38fe074f0ea78777e41fe9",
+      "current_blob_sha": "9e556e9214cf697bbc4b5c42c2c0c9e4b00396f4",
       "labels": [
         {
           "before": "1. Bestimmen",
@@ -43,7 +43,7 @@
         },
         {
           "before": "2. Vergleichen",
-          "after": "2. Felder"
+          "after": "2. Abgleich"
         }
       ]
     },
@@ -74,7 +74,7 @@
       ]
     }
   ],
-  "finding": "Edition/field nouns retain precise actions in unchanged details. French Enreg. is a conventional space-constrained abbreviation of Enregistrer; readability is lower than the full word and must be visually checked.",
+  "finding": "Edition nouns retain identification via unchanged details. German Abgleich explicitly retains comparison. French Enreg. is a conventional, precise space-constrained abbreviation of Enregistrer; no equally natural full short replacement was identified, and the full article explicitly describes saving. Rendered readability must still be verified.",
   "native_gate_status": "PENDING_REVALIDATION",
   "render_status": "NOT_RUN_AFTER_CHANGE",
   "scheduled": false,

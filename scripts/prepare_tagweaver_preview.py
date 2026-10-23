@@ -34,7 +34,7 @@ GATES = (
 REVIEWED_BLOBS = {
     "en": "af5023281da5168cedea7aecfef358dddf9534f1",
     "pt-BR": "0df7b6392a09e60b114d99b4680f48146e7462fe",
-    "de": "95a8807047f3e14e3d38fe074f0ea78777e41fe9",
+    "de": "9e556e9214cf697bbc4b5c42c2c0c9e4b00396f4",
     "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
     "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
     "fr": "3d70d6a58bd723bcd4619b159d6c0839c9db1b53",
