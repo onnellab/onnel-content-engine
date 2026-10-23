@@ -14,7 +14,13 @@ for one day. It does not host a preview website or publish a blog article.
 - Only `contents: read` is granted. Both checkouts disable credential persistence.
 - There is no Pages deployment, queue update, distribution, app release, API
   secret or new persistent authentication.
-- Candidate files live under `preview/clipnest`, outside every publishing queue.
+- The active native candidate is `preview/research-source-notes`, outside every publishing queue.
+  The existing `prepare_research_preview.py` validates its hash-bound nine-language
+  draft in a disposable engine copy and emits `preview-evidence/research-source-notes/candidate.json`.
+  Aligna and ClipNest source adapters, closed profiles and regression tests remain
+  unchanged; already-published Aligna is not regenerated as a fresh idea.
+- The workflow runs research adapter boundary tests as well as the existing preview
+  regression suites before native generation. It does not relax any native gate.
 - Source SHA256, exact nine-language membership, slug/path identity, size,
   inactive SVG content, absent fabricated dates and destination collisions are
   checked before overlay. Only exact Markdown and blog-asset paths are allowed.
