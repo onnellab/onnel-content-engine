@@ -10,7 +10,7 @@ import re
 import sys
 from pathlib import Path
 
-from article_localization import LOCALIZED_SECTIONS, SECTION_KEYS, DEFINITION_PATTERNS, WORKFLOW_LABELS, localized_section_aliases
+from article_localization import LOCALIZED_SECTIONS, SECTION_KEYS, DEFINITION_PATTERNS, WORKFLOW_LABELS, localized_section_aliases, tagweaver_section_aliases
 
 from topic_management import DEFAULT_TOPICS_PATH, TOPIC_HEADER, read_csv
 
@@ -168,6 +168,12 @@ SECTION_ALIASES = {
 
 for _language in LOCALIZED_SECTIONS:
     for _key, _aliases in localized_section_aliases(_language).items():
+        SECTION_ALIASES[_key].update(_aliases)
+
+# English and Korean retain their existing native translation-quality paths.
+# Add only exact reviewed headings; never infer a product section by substring.
+for _language in ("en", "ko"):
+    for _key, _aliases in tagweaver_section_aliases(_language).items():
         SECTION_ALIASES[_key].update(_aliases)
 
 

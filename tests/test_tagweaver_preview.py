@@ -400,5 +400,219 @@ class NativeProvenance(unittest.TestCase):
                 preview.validate_native_manifest(broken)
 
 
+class ReviewedTagWeaverSectionHeadings(unittest.TestCase):
+    EXPECTED = {
+        "en": ("Recommended Workflow", "Where TagWeaver Fits", "Conclusion"),
+        "ko": ("권장 작업 순서", "TagWeaver를 활용하는 단계", "결론"),
+        "ja": ("推奨する作業手順", "TagWeaverを使う場面", "まとめ"),
+        "zh-Hans": ("建议操作流程", "TagWeaver 适合在哪个环节使用", "总结"),
+        "zh-Hant": ("建議操作流程", "TagWeaver 適合在哪個階段使用", "結語"),
+        "pt-BR": ("Fluxo recomendado", "Onde o TagWeaver se encaixa", "Conclusão"),
+        "de": ("Empfohlener Ablauf", "Wo TagWeaver hilft", "Fazit"),
+        "fr": ("Méthode recommandée", "Le rôle de TagWeaver", "Conclusion"),
+        "es": ("Flujo recomendado", "Dónde encaja TagWeaver", "Conclusión"),
+    }
+
+    def drafts(self):
+        return {
+            locale: json.loads((ROOT / preview.PREVIEW_DIRECTORY / f"{locale}.json").read_text())
+            for locale in preview.LOCALES
+        }
+
+    def test_all_nine_exact_headings_are_shared_with_native_quality_checks(self):
+        from article_localization import (
+            TAGWEAVER_REVIEWED_SECTION_HEADINGS, TAGWEAVER_REVIEWED_SECTION_KEYS,
+            LOCALIZED_SECTIONS, localized_section_aliases, tagweaver_section_aliases,
+        )
+        from evaluate_article import (
+            SECTION_ALIASES, _h2_heading_positions, _find_section_position,
+            find_product_section, has_required_sections, sections,
+        )
+        self.assertEqual(TAGWEAVER_REVIEWED_SECTION_HEADINGS, self.EXPECTED)
+        self.assertEqual(set(self.EXPECTED), set(preview.LOCALES))
+        self.assertEqual(TAGWEAVER_REVIEWED_SECTION_KEYS,
+                         ("recommended_workflow", "onnellab_application", "conclusion"))
+        self.assertNotIn("en", LOCALIZED_SECTIONS)
+        self.assertNotIn("ko", LOCALIZED_SECTIONS)
+        for locale, draft in self.drafts().items():
+            with self.subTest(locale=locale):
+                aliases = tagweaver_section_aliases(locale)
+                self.assertEqual(aliases, {
+                    key: {heading.lower()} for key, heading in zip(
+                        TAGWEAVER_REVIEWED_SECTION_KEYS, self.EXPECTED[locale])
+                })
+                preview.require_reviewed_section_headings(draft["body"], locale)
+                found = _h2_heading_positions(draft["body"])
+                for key, approved in aliases.items():
+                    matching = [heading for heading, _ in found if heading in SECTION_ALIASES[key]]
+                    self.assertEqual(len(matching), 1)
+                    self.assertIn(matching[0], approved)
+                    if locale in LOCALIZED_SECTIONS:
+                        self.assertTrue(approved <= localized_section_aliases(locale)[key])
+                self.assertTrue(has_required_sections(sections(draft["body"])))
+                self.assertGreater(find_product_section(draft["body"]),
+                                   _find_section_position(draft["body"], "recommended_workflow"))
+        # Recognized section order is not a claim that first product mention passes.
+
+    def test_alias_results_are_fresh_and_do_not_change_source_contract(self):
+        from article_localization import (
+            TAGWEAVER_REVIEWED_SECTION_HEADINGS, localized_section_aliases,
+            tagweaver_section_aliases,
+        )
+        before = copy.deepcopy(TAGWEAVER_REVIEWED_SECTION_HEADINGS)
+        first = tagweaver_section_aliases("ko")
+        first["recommended_workflow"].add("arbitrary workflow")
+        self.assertEqual(tagweaver_section_aliases("ko")["recommended_workflow"], {"권장 작업 순서"})
+        localized = localized_section_aliases("ja")
+        localized["recommended_workflow"].add("arbitrary workflow")
+        self.assertNotIn("arbitrary workflow", localized_section_aliases("ja")["recommended_workflow"])
+        self.assertEqual(TAGWEAVER_REVIEWED_SECTION_HEADINGS, before)
+        with self.assertRaises(ValueError):
+            tagweaver_section_aliases("zh-hans")
+
+    def test_missing_duplicate_substring_or_fenced_only_workflow_is_rejected(self):
+        for locale, draft in self.drafts().items():
+            marker = "## " + self.EXPECTED[locale][0]
+            body = draft["body"]
+            altered = {
+                "missing": body.replace(marker + "\n", "## Not a workflow\n", 1),
+                "duplicate": body + "\n" + marker + "\n\nDuplicate section.\n",
+                "substring": body.replace(marker + "\n", marker + " extra\n", 1),
+                "fenced_only": body.replace(marker + "\n", "## Not a workflow\n", 1)
+                    + "\n" + chr(96) * 3 + "text\n" + marker + "\n" + chr(96) * 3 + "\n",
+                "tilde_fenced_only": body.replace(marker + "\n", "## Not a workflow\n", 1)
+                    + "\n~~~text\n" + marker + "\n~~~\n",
+            }
+            for case, changed in altered.items():
+                with self.subTest(locale=locale, case=case), self.assertRaisesRegex(
+                        ValueError, "Exactly one reviewed recommended_workflow"):
+                    preview.require_reviewed_section_headings(changed, locale)
+
+    def test_workflow_from_wrong_locale_is_not_accepted(self):
+        for locale, draft in self.drafts().items():
+            heading = self.EXPECTED[locale][0]
+            other = next(values[0] for key, values in self.EXPECTED.items()
+                         if key != locale and values[0] != heading)
+            changed = draft["body"].replace("## " + heading + "\n", "## " + other + "\n", 1)
+            with self.subTest(locale=locale), self.assertRaisesRegex(
+                    ValueError, "Exactly one reviewed recommended_workflow"):
+                preview.require_reviewed_section_headings(changed, locale)
+
+    def test_unreviewed_product_heading_cannot_pass_by_app_name_substring(self):
+        for locale, draft in self.drafts().items():
+            marker = "## " + self.EXPECTED[locale][1] + "\n"
+            for replacement in ("## About TagWeaver\n",
+                                "## " + self.EXPECTED[locale][1] + " extra\n",
+                                "## Where Another App Fits\n"):
+                changed = draft["body"].replace(marker, replacement, 1)
+                with self.subTest(locale=locale, heading=replacement), self.assertRaisesRegex(
+                        ValueError, "Exactly one reviewed onnellab_application"):
+                    preview.require_reviewed_section_headings(changed, locale)
+
+    def test_duplicate_or_missing_app_and_conclusion_are_rejected(self):
+        for locale, draft in self.drafts().items():
+            for index in (1, 2):
+                marker = "## " + self.EXPECTED[locale][index]
+                for changed in (draft["body"] + "\n" + marker + "\n",
+                                draft["body"].replace(marker + "\n", "## Unapproved heading\n", 1)):
+                    with self.subTest(locale=locale, section=index), self.assertRaises(ValueError):
+                        preview.require_reviewed_section_headings(changed, locale)
+
+    def test_second_recognized_workflow_alias_is_rejected_as_ambiguous(self):
+        from article_localization import LOCALIZED_SECTIONS, localized_section_aliases
+        for locale, draft in self.drafts().items():
+            canonical = (sorted(localized_section_aliases(locale)["recommended_workflow"])[0]
+                         if locale in LOCALIZED_SECTIONS else
+                         "recommended workflow" if locale == "en" else "권장 워크플로")
+            with self.subTest(locale=locale), self.assertRaisesRegex(
+                    ValueError, "Exactly one reviewed recommended_workflow"):
+                preview.require_reviewed_section_headings(draft["body"] + "\n## " + canonical + "\n", locale)
+
+    def test_fenced_fake_extra_headings_do_not_count_as_real_sections(self):
+        for locale, draft in self.drafts().items():
+            fake = "\n".join("## " + heading for heading in self.EXPECTED[locale])
+            for opening, closing in ((chr(96) * 3 + "text", chr(96) * 3), ("~~~text", "~~~")):
+                body = draft["body"] + "\n" + opening + "\n" + fake + "\n" + closing + "\n"
+                with self.subTest(locale=locale, fence=opening):
+                    preview.require_reviewed_section_headings(body, locale)
+
+    def test_native_image_insertion_preserves_all_reviewed_body_text_and_is_idempotent(self):
+        from generate_image_assets import ensure_markdown_references_asset, markdown_image_line
+        for locale, draft in self.drafts().items():
+            with self.subTest(locale=locale), tempfile.TemporaryDirectory() as temporary:
+                path = Path(temporary) / "candidate.md"
+                original = draft["body"]
+                path.write_text(original, encoding="utf-8")
+                ensure_markdown_references_asset(path, locale, preview.SLUG, draft["image"]["title"])
+                result = path.read_text(encoding="utf-8")
+                image = markdown_image_line(locale, preview.SLUG, draft["image"]["title"])
+                self.assertEqual(result.count(image), 1)
+                self.assertEqual(result.replace("\n\n" + image, "", 1), original)
+                ensure_markdown_references_asset(path, locale, preview.SLUG, draft["image"]["title"])
+                self.assertEqual(path.read_text(encoding="utf-8"), result)
+
+    def test_native_image_insertion_rejects_duplicate_workflow_without_writing(self):
+        from generate_image_assets import ImageAssetError, ensure_markdown_references_asset
+        for locale, draft in self.drafts().items():
+            with self.subTest(locale=locale), tempfile.TemporaryDirectory() as temporary:
+                path = Path(temporary) / "candidate.md"
+                original = draft["body"] + "\n## " + self.EXPECTED[locale][0] + "\n"
+                path.write_text(original, encoding="utf-8")
+                with self.assertRaisesRegex(ImageAssetError, "exactly one reviewed workflow"):
+                    ensure_markdown_references_asset(path, locale, preview.SLUG, draft["image"]["title"])
+                self.assertEqual(path.read_text(encoding="utf-8"), original)
+
+    def test_unrelated_slug_keeps_legacy_insertion_and_does_not_gain_korean_tag_alias(self):
+        from generate_image_assets import ImageAssetError, ensure_markdown_references_asset, markdown_image_line
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "legacy.md"
+            original = "# Fixture\n\n## 권장 워크플로\n\n1. First.\n\n## 권장 워크플로\n\n2. Second.\n\n## 결론\n\nEnd.\n"
+            path.write_text(original, encoding="utf-8")
+            slug = "unrelated-legacy-fixture"
+            ensure_markdown_references_asset(path, "ko", slug, "Fixture")
+            result = path.read_text(encoding="utf-8")
+            image = markdown_image_line("ko", slug, "Fixture")
+            self.assertEqual(result.count(image), 1)
+            self.assertEqual(result.replace("\n\n" + image, "", 1), original)
+            ensure_markdown_references_asset(path, "ko", slug, "Fixture")
+            self.assertEqual(path.read_text(encoding="utf-8"), result)
+            for unrelated in ("unrelated-legacy-fixture", preview.SLUG + "-extra"):
+                reviewed = self.drafts()["ko"]["body"]
+                path.write_text(reviewed, encoding="utf-8")
+                with self.assertRaisesRegex(ImageAssetError, "cannot place workflow image"):
+                    ensure_markdown_references_asset(path, "ko", unrelated, "Fixture")
+                self.assertEqual(path.read_text(encoding="utf-8"), reviewed)
+
+    def test_last_locale_heading_failure_precedes_all_materialization(self):
+        drafts = self.drafts()
+        locale = preview.LOCALES[-1]
+        marker = "## " + self.EXPECTED[locale][0] + "\n"
+        drafts[locale]["body"] = drafts[locale]["body"].replace(marker, "## Unapproved heading\n", 1)
+        with tempfile.TemporaryDirectory() as temporary:
+            stage = Path(temporary)
+            with patch("generate_image_spec.generate_image_spec") as spec, \
+                 patch("generate_image_assets.generate_image_asset") as asset, \
+                 patch("generate_internal_links.generate_internal_links") as links:
+                with self.assertRaisesRegex(ValueError, "Exactly one reviewed recommended_workflow"):
+                    preview.materialize_candidates(stage, drafts, [], None)
+                spec.assert_not_called()
+                asset.assert_not_called()
+                links.assert_not_called()
+            self.assertEqual(list(stage.iterdir()), [])
+
+    def test_product_after_education_formula_threshold_and_points_are_unchanged(self):
+        import inspect
+        import evaluate_article
+        source = inspect.getsource(evaluate_article.score_article)
+        self.assertIn(
+            '"product_after_education",\n'
+            '        not related_apps or (workflow_section >= 0 and app_section > workflow_section and first_app >= app_section),\n'
+            '        1.0,',
+            source,
+        )
+        self.assertEqual(evaluate_article.DEFAULT_THRESHOLD, 9.0)
+        self.assertEqual(evaluate_article.REVIEW_VERSION, 4)
+
+
 if __name__ == "__main__":
     unittest.main()

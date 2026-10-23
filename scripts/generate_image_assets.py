@@ -10,7 +10,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from article_localization import WORKFLOW_LABELS, LOCALIZED_SECTIONS, wrap_display_text, localized_section_aliases
+from article_localization import WORKFLOW_LABELS, LOCALIZED_SECTIONS, wrap_display_text, localized_section_aliases, TAGWEAVER_REVIEWED_SLUG, tagweaver_section_aliases
 
 from publishing import rsvg_convert_command
 from topic_management import DEFAULT_TOPICS_PATH, LEGACY_TOPICS_PATH, TOPIC_HEADER, TopicError, TopicStore, read_csv
@@ -278,6 +278,8 @@ def ensure_markdown_references_asset(markdown_path: Path, language: str, slug: s
     if localized_asset in content:
         return
     aliases = localized_section_aliases(language)["recommended_workflow"] if language in LOCALIZED_SECTIONS else {"권장 워크플로"} if language == "ko" else {"recommended workflow"}
+    if slug == TAGWEAVER_REVIEWED_SLUG:
+        aliases = aliases | tagweaver_section_aliases(language)["recommended_workflow"]
     headings = []
     offset = 0
     fence = None
@@ -295,7 +297,10 @@ def ensure_markdown_references_asset(markdown_path: Path, language: str, slug: s
             if heading:
                 headings.append((heading.group(1).strip().lower(), offset))
         offset += len(line)
-    marker_index = next((position for heading, position in headings if heading in aliases), -1)
+    matching = [position for heading, position in headings if heading in aliases]
+    if slug == TAGWEAVER_REVIEWED_SLUG and len(matching) != 1:
+        raise ImageAssetError(f"exactly one reviewed workflow heading required in {markdown_path}")
+    marker_index = matching[0] if matching else -1
     if marker_index == -1:
         raise ImageAssetError(f"cannot place workflow image in {markdown_path}")
     next_section = next((position for _, position in headings if position > marker_index), -1)

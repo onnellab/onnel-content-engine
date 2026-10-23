@@ -66,6 +66,16 @@ def bounded_json(directory, filename, limit=100_000):
     return json.loads(read_native_bytes(path, limit).decode("utf-8"),
                       object_pairs_hook=unique_native_object)
 
+def require_reviewed_section_headings(body, locale):
+    from article_localization import tagweaver_section_aliases
+    from evaluate_article import SECTION_ALIASES, _h2_heading_positions
+    headings = _h2_heading_positions(body)
+    for key, approved in tagweaver_section_aliases(locale).items():
+        matching = [heading for heading, _ in headings if heading in SECTION_ALIASES[key]]
+        if len(matching) != 1 or matching[0] not in approved:
+            raise ValueError(f"Exactly one reviewed {key} heading required: {locale}")
+
+
 def validate_drafts(directory):
     manifest = bounded_json(directory, "manifest.json")
     if not isinstance(manifest, dict):
@@ -115,6 +125,7 @@ def validate_drafts(directory):
                     any(not isinstance(text, str) or not text.strip() for text in pair)
                     for pair in steps)):
             raise ValueError("Exactly four image heading/detail pairs required")
+        require_reviewed_section_headings(draft["body"], locale)
         drafts[locale] = draft
     return drafts
 
@@ -164,6 +175,11 @@ def stage_topics(stage, drafts):
     return store, candidates, seed_rows
 
 def materialize_candidates(stage, drafts, candidates, store):
+    # Check every locale before the first Markdown/spec/image write.
+    if set(drafts) != set(LOCALES):
+        raise ValueError("Exactly nine draft locales required")
+    for locale in LOCALES:
+        require_reviewed_section_headings(drafts[locale]["body"], locale)
     from generate_image_spec import generate_image_spec
     from generate_image_assets import generate_image_asset
     from generate_internal_links import generate_internal_links
