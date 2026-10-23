@@ -37,8 +37,8 @@
     "review_scores_or_fingerprints": "NOT GENERATED",
     "svg_png_rendering": "NOT RUN; localized image copy only",
     "astro_browser_preview": "NOT RUN",
-    "public_links": "Store pages opened. Related article source paths exist for all nine locales; public web fetch returned cache miss for sampled ONNELLAB URLs. No live-link pass claimed.",
-    "related_article_paths": "All 18 localized related article paths exist in homepage source; live page behavior unverified",
+    "public_links": "Official store pages read again 2026-10-23. All 18 related article URLs loaded in the dot cloud browser with substantive article text, matching language and self-canonical, and 10 alternate links. This verifies existing related pages, not this unpublished draft.",
+    "related_article_paths": "18/18 source paths and live related page URLs confirmed; candidate rendering remains NOT RUN.",
     "structural_text_checks": {
       "method": "Readback and tool-level JSON/text inspection; not repository-native scoring or rendering",
       "locales_checked": 9,
@@ -59,6 +59,172 @@
       "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
       "es": "a12c978a370a4275e91c4dc289bfac40e932c8f7",
       "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
+    },
+    "live_related_page_review": {
+      "observed_at_utc": "2026-10-23T09:10:48Z",
+      "method": "dot cloud browser read-only rendered DOM; English cleanup guide initial viewport also visually inspected",
+      "source_homepage_sha": "02a780577a29fd24188432a7551d7f1541bb8290",
+      "pages": [
+        {
+          "alternateCount": 10,
+          "articleTextLength": 8597,
+          "canonical": "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/",
+          "lang": "en",
+          "title": "How to Clean Up MP3 Metadata Before Organizing Music",
+          "url": "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 4656,
+          "canonical": "https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/",
+          "lang": "ko",
+          "title": "음악 정리 전 MP3 메타데이터를 정돈하는 방법",
+          "url": "https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 4147,
+          "canonical": "https://onnellab.com/blog/ja/clean-up-mp3-metadata-before-organizing-music/",
+          "lang": "ja",
+          "title": "音楽を整理する前にMP3メタデータを整える方法",
+          "url": "https://onnellab.com/blog/ja/clean-up-mp3-metadata-before-organizing-music/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 2934,
+          "canonical": "https://onnellab.com/blog/zh-hans/clean-up-mp3-metadata-before-organizing-music/",
+          "lang": "zh-Hans",
+          "title": "整理音乐前，怎样清理 MP3 元数据",
+          "url": "https://onnellab.com/blog/zh-hans/clean-up-mp3-metadata-before-organizing-music/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 2933,
+          "canonical": "https://onnellab.com/blog/zh-hant/clean-up-mp3-metadata-before-organizing-music/",
+          "lang": "zh-Hant",
+          "title": "整理音樂前，如何清理 MP3 中繼資料",
+          "url": "https://onnellab.com/blog/zh-hant/clean-up-mp3-metadata-before-organizing-music/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 8946,
+          "canonical": "https://onnellab.com/blog/pt-br/clean-up-mp3-metadata-before-organizing-music/",
+          "lang": "pt-BR",
+          "title": "Como organizar os metadados de MP3 antes de arrumar sua biblioteca",
+          "url": "https://onnellab.com/blog/pt-br/clean-up-mp3-metadata-before-organizing-music/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 9402,
+          "canonical": "https://onnellab.com/blog/de/clean-up-mp3-metadata-before-organizing-music/",
+          "lang": "de",
+          "title": "MP3-Metadaten vor dem Sortieren der Musiksammlung bereinigen",
+          "url": "https://onnellab.com/blog/de/clean-up-mp3-metadata-before-organizing-music/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 9520,
+          "canonical": "https://onnellab.com/blog/fr/clean-up-mp3-metadata-before-organizing-music/",
+          "lang": "fr",
+          "title": "Nettoyer les métadonnées MP3 avant d’organiser sa musique",
+          "url": "https://onnellab.com/blog/fr/clean-up-mp3-metadata-before-organizing-music/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 8649,
+          "canonical": "https://onnellab.com/blog/es/clean-up-mp3-metadata-before-organizing-music/",
+          "lang": "es",
+          "title": "Cómo limpiar los metadatos MP3 antes de organizar tu música",
+          "url": "https://onnellab.com/blog/es/clean-up-mp3-metadata-before-organizing-music/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 10492,
+          "canonical": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
+          "lang": "en",
+          "title": "How to Number Tracks in a Multi-Disc MP3 Album",
+          "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 6479,
+          "canonical": "https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/",
+          "lang": "ko",
+          "title": "여러 장으로 된 MP3 앨범의 트랙 번호를 매기는 방법",
+          "url": "https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 3927,
+          "canonical": "https://onnellab.com/blog/ja/number-tracks-multi-disc-mp3-album/",
+          "lang": "ja",
+          "title": "複数枚組MP3アルバムのトラック番号を付ける方法",
+          "url": "https://onnellab.com/blog/ja/number-tracks-multi-disc-mp3-album/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 3146,
+          "canonical": "https://onnellab.com/blog/zh-hans/number-tracks-multi-disc-mp3-album/",
+          "lang": "zh-Hans",
+          "title": "多碟 MP3 专辑如何设置音轨编号",
+          "url": "https://onnellab.com/blog/zh-hans/number-tracks-multi-disc-mp3-album/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 3186,
+          "canonical": "https://onnellab.com/blog/zh-hant/number-tracks-multi-disc-mp3-album/",
+          "lang": "zh-Hant",
+          "title": "多碟 MP3 專輯如何設定音軌編號",
+          "url": "https://onnellab.com/blog/zh-hant/number-tracks-multi-disc-mp3-album/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 9131,
+          "canonical": "https://onnellab.com/blog/pt-br/number-tracks-multi-disc-mp3-album/",
+          "lang": "pt-BR",
+          "title": "Como numerar as faixas de um álbum MP3 com vários discos",
+          "url": "https://onnellab.com/blog/pt-br/number-tracks-multi-disc-mp3-album/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 9896,
+          "canonical": "https://onnellab.com/blog/de/number-tracks-multi-disc-mp3-album/",
+          "lang": "de",
+          "title": "Tracks in einem MP3-Album mit mehreren Discs nummerieren",
+          "url": "https://onnellab.com/blog/de/number-tracks-multi-disc-mp3-album/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 9806,
+          "canonical": "https://onnellab.com/blog/fr/number-tracks-multi-disc-mp3-album/",
+          "lang": "fr",
+          "title": "Comment numéroter les pistes d’un album MP3 multidisque",
+          "url": "https://onnellab.com/blog/fr/number-tracks-multi-disc-mp3-album/"
+        },
+        {
+          "alternateCount": 10,
+          "articleTextLength": 9686,
+          "canonical": "https://onnellab.com/blog/es/number-tracks-multi-disc-mp3-album/",
+          "lang": "es",
+          "title": "Cómo numerar las pistas de un álbum MP3 de varios discos",
+          "url": "https://onnellab.com/blog/es/number-tracks-multi-disc-mp3-album/"
+        }
+      ],
+      "scope_limits": [
+        "Not candidate screenshots or desktop/mobile preview.",
+        "Not a complete visual or image-load review of related pages.",
+        "Not native quality scoring, scheduling, or publication."
+      ],
+      "known_content_issue": "Multi-disc article English page still contains older iOS copy-save framing. Existing multidisc-ios-save-correction.proposed.json remains unapplied; current App Store release notes support writable-original update with copy-save fallback."
+    },
+    "product_source_recheck": {
+      "checked_at_utc": "2026-10-23T09:10:54Z",
+      "method": "Public official App Store and Google Play pages via web retrieval; returned crawl label last week, not an app execution test",
+      "sources": [
+        "https://apps.apple.com/app/id6759609875",
+        "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2"
+      ],
+      "result": "Current retrieved descriptions support scoped metadata, preview, explicit-save and Pro claims; App Store 2.5.1 notes support writable-original/copy-fallback description."
     }
   },
   "artifacts": [
