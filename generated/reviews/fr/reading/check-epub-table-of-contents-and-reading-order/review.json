@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0060",
   "title": "Vérifier la table des matières et l’ordre des chapitres d’un EPUB",
-  "input_fingerprint": "06b6508562548e358dc5e9c5ef111e6ce666af0b4bbcd1735c7e192ea56bd88f",
+  "input_fingerprint": "1defadae974883708de2a35c300e56f5db36a42f4262e5dd3fea9a5e939b27a3",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

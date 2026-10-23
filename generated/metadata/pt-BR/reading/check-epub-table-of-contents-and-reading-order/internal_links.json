@@ -74,12 +74,12 @@
         "slug": "design-consistent-file-naming-system",
         "category": "productivity",
         "language": "pt-BR",
-        "status": "scheduled",
-        "url": "generated/markdown/pt-BR/productivity/design-consistent-file-naming-system.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       }
     ],
     "related_apps": [

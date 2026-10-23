@@ -56,6 +56,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0083",
+        "title": "Einheitliche Dateinamen: eine einfache Konvention entwickeln",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0075",
         "title": "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -64,19 +77,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0083",
-        "title": "Einheitliche Dateinamen: eine einfache Konvention entwickeln",
-        "slug": "design-consistent-file-naming-system",
-        "category": "productivity",
-        "language": "de",
-        "status": "scheduled",
-        "url": "generated/markdown/de/productivity/design-consistent-file-naming-system.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5

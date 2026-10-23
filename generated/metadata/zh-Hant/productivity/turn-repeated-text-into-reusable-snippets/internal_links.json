@@ -35,14 +35,14 @@
         "slug": "design-consistent-file-naming-system",
         "category": "productivity",
         "language": "zh-Hant",
-        "status": "scheduled",
-        "url": "generated/markdown/zh-Hant/productivity/design-consistent-file-naming-system.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/design-consistent-file-naming-system/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "productivity"
         ],
-        "score": 9
+        "score": 10
       },
       {
         "topic_id": "TOPIC-0048",

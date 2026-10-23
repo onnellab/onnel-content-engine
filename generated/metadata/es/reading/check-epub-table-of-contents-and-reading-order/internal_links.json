@@ -56,6 +56,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0085",
+        "title": "Cómo crear un sistema coherente para nombrar archivos",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0077",
         "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -64,19 +77,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0085",
-        "title": "Cómo crear un sistema coherente para nombrar archivos",
-        "slug": "design-consistent-file-naming-system",
-        "category": "productivity",
-        "language": "es",
-        "status": "scheduled",
-        "url": "generated/markdown/es/productivity/design-consistent-file-naming-system.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6

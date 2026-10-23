@@ -80,6 +80,19 @@
         "score": 4
       },
       {
+        "topic_id": "TOPIC-0035",
+        "title": "How to Design a File Naming System That Stays Consistent",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0042",
         "title": "How to Turn Repeated Text Into Reusable Snippets",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -87,19 +100,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0044",
-        "title": "Organize a Local Music Library for Offline Listening on Android",
-        "slug": "organize-local-music-library-offline-android",
-        "category": "music",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/organize-local-music-library-offline-android/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

@@ -56,6 +56,19 @@
         "score": 5
       },
       {
+        "topic_id": "TOPIC-0084",
+        "title": "Créer une convention cohérente pour nommer ses fichiers",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
         "topic_id": "TOPIC-0051",
         "title": "Organiser sa musique sur Android pour une écoute hors ligne",
         "slug": "organize-local-music-library-offline-android",
@@ -64,19 +77,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/fr/organize-local-music-library-offline-android/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0084",
-        "title": "Créer une convention cohérente pour nommer ses fichiers",
-        "slug": "design-consistent-file-naming-system",
-        "category": "productivity",
-        "language": "fr",
-        "status": "scheduled",
-        "url": "generated/markdown/fr/productivity/design-consistent-file-naming-system.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 4

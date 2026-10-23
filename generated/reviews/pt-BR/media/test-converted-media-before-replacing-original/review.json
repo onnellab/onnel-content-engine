@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0066",
   "title": "Como testar um arquivo de mídia convertido antes de substituir o original",
-  "input_fingerprint": "5cb43909fdb36bf7bc1c1771fbe021151bbf1c6e5af9ea37c5111636784c08ac",
+  "input_fingerprint": "60bca64631d43ed9eee77bae99e835b6b653ad5dc25d6449406c05894817ff31",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,
