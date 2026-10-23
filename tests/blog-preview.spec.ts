@@ -90,6 +90,16 @@ for (const locale of candidate.locales as string[]) {
     // Exercise the actual image viewer and its keyboard dismissal.
     await page.locator('[data-article-image-trigger]').first().click();
     await expect(page.locator('dialog.article-image-viewer')).toBeVisible();
+    await page.screenshot({ path: path.join(output, `${locale}-${testInfo.project.name}-viewer.png`) });
+    const viewerEvidence = await page.locator('[data-article-image-viewer-img]').evaluate((node: HTMLImageElement) => ({
+      renderedWidth: node.getBoundingClientRect().width,
+      renderedHeight: node.getBoundingClientRect().height,
+      naturalWidth: node.naturalWidth,
+      naturalHeight: node.naturalHeight,
+      viewportWidth: window.innerWidth,
+      devicePixelRatio: window.devicePixelRatio,
+    }));
+    fs.writeFileSync(path.join(output, `${locale}-${testInfo.project.name}-viewer.json`), JSON.stringify(viewerEvidence, null, 2));
     await page.keyboard.press('Escape');
     await expect(page.locator('dialog.article-image-viewer')).not.toBeVisible();
     // Expand real FAQ controls so the screenshot includes all reviewed text.
