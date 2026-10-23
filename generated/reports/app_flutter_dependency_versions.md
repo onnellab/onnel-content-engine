@@ -39,7 +39,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | melivra | 1.0.8+145 | 1.0.8 | - | ok | github:onnellab/melivra/pubspec.yaml |
+| app_version | melivra | 1.0.9+146 | 1.0.9 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | crypto | ^3.0.7 | 3.0.7 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.9 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | dart_tags | ^0.4.1 | 0.4.1 | - | ok | github:onnellab/melivra/pubspec.yaml |
@@ -100,7 +100,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | tagweaver | 2.5.5+99 | 2.5.5 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
+| app_version | tagweaver | 2.5.6+100 | 2.5.6 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | file_picker | ^8.0.0 | 8.3.7 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/tagweaver/pubspec.yaml |
