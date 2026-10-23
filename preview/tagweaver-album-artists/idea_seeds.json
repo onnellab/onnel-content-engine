@@ -1,0 +1,19 @@
+[
+  {
+    "status": "idea",
+    "category": "music",
+    "primary_language": "en",
+    "slug": "distinguish-recording-date-from-release-date",
+    "primary_question": "How can I distinguish a recording date from a release date when documenting music metadata?",
+    "working_title": "Distinguish Recording Dates from Release Dates in Music Metadata",
+    "priority": "normal",
+    "search_intent": "workflow",
+    "related_apps": "",
+    "primary_keyword": "recording date versus release date",
+    "secondary_keywords": "music metadata dates|release booklet|official release information",
+    "evergreen": "true",
+    "source_type": "editorial",
+    "review_required": "true",
+    "notes": "Product-neutral editorial hypothesis: compare official release information and the booklet, record the evidence and keep an unknown recording or release date unknown rather than estimating it. No app-capability, search-demand or ranking claim. Separate from album/artist naming, duplicate recordings and multi-disc numbering. ID remains unassigned until normal allocation."
+  }
+]

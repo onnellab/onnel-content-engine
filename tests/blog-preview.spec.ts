@@ -41,7 +41,7 @@ for (const locale of candidate.locales as string[]) {
 
     // Check the browser's actual native list-marker inputs and computed style.
     // Blank-separated workflow steps must keep their authored start numbers.
-    if (candidate.slug === 'design-consistent-file-naming-system') {
+    if (['design-consistent-file-naming-system', 'consistent-album-artist-names'].includes(candidate.slug)) {
       const renderedNumbers = await page.locator('.article-body ol').evaluateAll(lists =>
         lists.flatMap(list => {
           const ol = list as HTMLOListElement;
@@ -55,7 +55,8 @@ for (const locale of candidate.locales as string[]) {
             return result;
           });
         }));
-      expect(renderedNumbers).toEqual([1, 2, 3, 4, 5, 6].map(number => ({
+      const expectedNumbers = candidate.slug === 'consistent-album-artist-names' ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5, 6];
+      expect(renderedNumbers).toEqual(expectedNumbers.map(number => ({
         number, display: 'list-item', type: 'decimal',
       })));
     }

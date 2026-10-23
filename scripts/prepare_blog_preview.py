@@ -53,6 +53,22 @@ def candidate_profile(slug):
             'related_slugs': ['keep-durable-research-reading-log'],
             'table_rows': {locale: 3 for locale in LOCALES},
         }
+    if slug == 'consistent-album-artist-names':
+        return {
+            'category': 'music',
+            'faq_count': 4,
+            'app_path': '/apps/tagweaver/',
+            'store_urls': [
+                'https://apps.apple.com/app/id6759609875',
+                'https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2',
+            ],
+            'source_urls': [],
+            'related_slugs': [
+                'clean-up-mp3-metadata-before-organizing-music',
+                'number-tracks-multi-disc-mp3-album',
+            ],
+            'table_rows': {locale: 4 for locale in LOCALES},
+        }
     raise ValueError('Unknown preview candidate')
 
 def allowed_candidate_links(slug, locale):
@@ -127,6 +143,8 @@ def validate_bundle(bundle_path):
                 raise ValueError('Metadata category mismatch')
             if profile['app_path'] is None and values.get('related_apps') != '':
                 raise ValueError('Product-neutral preview must not include related apps')
+            if slug == 'consistent-album-artist-names' and values.get('related_apps') != 'TagWeaver':
+                raise ValueError('TagWeaver preview must name exactly its reviewed app')
             if values.get('canonical_url') != f'https://onnellab.com/blog/{locale.lower()}/{slug}/':
                 raise ValueError('Canonical URL mismatch')
             if values.get('title') != values.get('card_title') or not body.lstrip().startswith('# ' + values['title'] + '\n'):
