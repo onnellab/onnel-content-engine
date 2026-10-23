@@ -33,13 +33,13 @@ GATES = (
 )
 REVIEWED_BLOBS = {
     "en": "af5023281da5168cedea7aecfef358dddf9534f1",
-    "pt-BR": "57533ca2e387bf5976c8431170f4e1b3f9b61647",
-    "de": "0ffe37d41c2e2cc989b26980154635900f4b9749",
+    "pt-BR": "0df7b6392a09e60b114d99b4680f48146e7462fe",
+    "de": "95a8807047f3e14e3d38fe074f0ea78777e41fe9",
     "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
     "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
-    "fr": "188d7fbcaf72a3bf86881917b289db50734da11f",
+    "fr": "3d70d6a58bd723bcd4619b159d6c0839c9db1b53",
     "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
-    "es": "a12c978a370a4275e91c4dc289bfac40e932c8f7",
+    "es": "55ec31349a75a095489447ea682492d5b87fa352",
     "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
 }
 

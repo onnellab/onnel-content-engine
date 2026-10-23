@@ -12,11 +12,11 @@
     "message": "Albumdaten gemeinsam nutzen, Unterschiede pro Titel erhalten.",
     "steps": [
       [
-        "1. Bestimmen",
+        "1. Ausgabe",
         "Die genaue Veröffentlichung bestätigen"
       ],
       [
-        "2. Vergleichen",
+        "2. Felder",
         "Gemeinsame und individuelle Felder trennen"
       ],
       [

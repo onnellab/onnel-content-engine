@@ -35,7 +35,7 @@
   "verification": {
     "native_repository_validators": "NOT RUN",
     "review_scores_or_fingerprints": "NOT GENERATED",
-    "svg_png_rendering": "NOT RUN; localized image copy only",
+    "svg_png_rendering": "Initial preview 39984028329 failed the existing two-line image-heading gate in pt-BR/de/fr/es; six labels corrected without changing layout limits. Revalidation pending.",
     "astro_browser_preview": "NOT RUN",
     "public_links": "Official store pages read again 2026-10-23. All 18 related article URLs loaded in the dot cloud browser with substantive article text, matching language and self-canonical, and 10 alternate links. This verifies existing related pages, not this unpublished draft.",
     "related_article_paths": "18/18 source paths and live related page URLs confirmed; candidate rendering remains NOT RUN.",
@@ -48,16 +48,16 @@
       "image_copy_steps_each": 4,
       "source_paths_found": 18
     },
-    "source_and_language_review": "Nine complete manuscripts reviewed independently as text; corrections tracked in editorial_review.json. Rendering and native gates remain unperformed.",
+    "source_and_language_review": "Original nine-language full-text review remains historical. Six image-step labels in four locales received a separate independent semantic review on 2026-10-23; body, details and other five locale bytes are unchanged. See image_label_review_20261023.json. Native/rendered validation pending after correction.",
     "final_blobs": {
       "en": "af5023281da5168cedea7aecfef358dddf9534f1",
-      "pt-BR": "57533ca2e387bf5976c8431170f4e1b3f9b61647",
-      "de": "0ffe37d41c2e2cc989b26980154635900f4b9749",
+      "pt-BR": "0df7b6392a09e60b114d99b4680f48146e7462fe",
+      "de": "95a8807047f3e14e3d38fe074f0ea78777e41fe9",
       "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
       "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
-      "fr": "188d7fbcaf72a3bf86881917b289db50734da11f",
+      "fr": "3d70d6a58bd723bcd4619b159d6c0839c9db1b53",
       "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
-      "es": "a12c978a370a4275e91c4dc289bfac40e932c8f7",
+      "es": "55ec31349a75a095489447ea682492d5b87fa352",
       "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
     },
     "live_related_page_review": {
@@ -218,14 +218,26 @@
       "known_content_issue": "Multi-disc article English page still contains older iOS copy-save framing. Existing multidisc-ios-save-correction.proposed.json remains unapplied; current App Store release notes support writable-original update with copy-save fallback."
     },
     "product_source_recheck": {
-      "checked_at_utc": "2026-10-23T09:10:54Z",
-      "method": "Public official App Store and Google Play pages via web retrieval; returned crawl label last week, not an app execution test",
+      "checked_at_utc": "2026-10-23T15:40:26Z",
+      "method": "Read-only rendered official App Store and Google Play pages in dot cloud browser; not app execution",
       "sources": [
         "https://apps.apple.com/app/id6759609875",
         "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2"
       ],
-      "result": "Current retrieved descriptions support scoped metadata, preview, explicit-save and Pro claims; App Store 2.5.1 notes support writable-original/copy-fallback description."
-    }
+      "result": "App Store 2.5.5 and Google Play 2.5.5; Play updated 2026-10-20. Current descriptions retain metadata, preview, explicit save and Pro distinctions; App Store release history 2.5.1 supports writable-original update with copy-destination fallback."
+    },
+    "previous_final_blobs_before_image_label_review": {
+      "en": "af5023281da5168cedea7aecfef358dddf9534f1",
+      "pt-BR": "57533ca2e387bf5976c8431170f4e1b3f9b61647",
+      "de": "0ffe37d41c2e2cc989b26980154635900f4b9749",
+      "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
+      "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
+      "fr": "188d7fbcaf72a3bf86881917b289db50734da11f",
+      "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
+      "es": "a12c978a370a4275e91c4dc289bfac40e932c8f7",
+      "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
+    },
+    "image_label_review": "image_label_review_20261023.json"
   },
   "artifacts": [
     {

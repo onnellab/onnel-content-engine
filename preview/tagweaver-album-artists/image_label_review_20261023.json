@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "kind": "independent_image_label_review_not_render_or_publication",
+  "slug": "consistent-album-artist-names",
+  "reviewed_at_utc": "2026-10-23T16:09:40Z",
+  "method": "Separate language reviewer compared six proposed labels and unchanged details; author verified only exact six JSON label strings changed.",
+  "reviewer_type": "delegated AI language review; not user approval or native speaker certification",
+  "original_full_text_review": "editorial_review.json",
+  "failure_run": 39984028329,
+  "unchanged": {
+    "body_all_nine": true,
+    "metadata_all_nine": true,
+    "image_details_all_nine": true,
+    "other_locale_file_bytes": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant"
+    ],
+    "renderer_font_and_layout_limits": true
+  },
+  "changes": [
+    {
+      "locale": "pt-BR",
+      "previous_blob_sha": "57533ca2e387bf5976c8431170f4e1b3f9b61647",
+      "current_blob_sha": "0df7b6392a09e60b114d99b4680f48146e7462fe",
+      "labels": [
+        {
+          "before": "1. Identificar",
+          "after": "1. Edição"
+        }
+      ]
+    },
+    {
+      "locale": "de",
+      "previous_blob_sha": "0ffe37d41c2e2cc989b26980154635900f4b9749",
+      "current_blob_sha": "95a8807047f3e14e3d38fe074f0ea78777e41fe9",
+      "labels": [
+        {
+          "before": "1. Bestimmen",
+          "after": "1. Ausgabe"
+        },
+        {
+          "before": "2. Vergleichen",
+          "after": "2. Felder"
+        }
+      ]
+    },
+    {
+      "locale": "fr",
+      "previous_blob_sha": "188d7fbcaf72a3bf86881917b289db50734da11f",
+      "current_blob_sha": "3d70d6a58bd723bcd4619b159d6c0839c9db1b53",
+      "labels": [
+        {
+          "before": "1. Identifier",
+          "after": "1. Édition"
+        },
+        {
+          "before": "3. Enregistrer",
+          "after": "3. Enreg."
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "previous_blob_sha": "a12c978a370a4275e91c4dc289bfac40e932c8f7",
+      "current_blob_sha": "55ec31349a75a095489447ea682492d5b87fa352",
+      "labels": [
+        {
+          "before": "1. Identificar",
+          "after": "1. Edición"
+        }
+      ]
+    }
+  ],
+  "finding": "Edition/field nouns retain precise actions in unchanged details. French Enreg. is a conventional space-constrained abbreviation of Enregistrer; readability is lower than the full word and must be visually checked.",
+  "native_gate_status": "PENDING_REVALIDATION",
+  "render_status": "NOT_RUN_AFTER_CHANGE",
+  "scheduled": false,
+  "published": false
+}
