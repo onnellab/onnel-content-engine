@@ -19,7 +19,9 @@
         "published_at": "",
         "store_observed_at": "",
         "error": ""
-      }
+      },
+      "expected_public_store_version": "2.5.5",
+      "target_version_under_review": "2.5.6"
     }
   ]
 }
