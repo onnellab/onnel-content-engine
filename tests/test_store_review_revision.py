@@ -17,8 +17,9 @@ ID = "10b4e93e-b9cd-4ef4-ad91-2726f5256651"
 BODY = "Some tags aren't removed correctly when the file is saved. When the X next to URL is pressed, for example, saving doesn't actually retain the change."
 ORIGINAL = "Previously posted reply"
 REPLACEMENT = "The Android 2.5.6 fix is under review by Google Play."
-OWNER = {"actor": "onnellab", "repository": "onnellab/onnel-content-engine",
-         "event": "workflow_dispatch", "run_id": "123456"}
+OWNER = {"actor": "onnellab", "triggering_actor": "onnellab",
+         "repository": "onnellab/onnel-content-engine",
+         "event": "workflow_dispatch", "run_id": "123456", "run_attempt": "1"}
 
 
 def live(reply=ORIGINAL, *, body=BODY, rating=3, version="2.5.5", rid=ID):
@@ -89,8 +90,9 @@ class PublishedReplyRevisionTest(unittest.TestCase):
         self.assertEqual(len(calls), 1)
 
     def test_rejects_wrong_owner_channel_or_run_without_post(self):
-        for changes in ({"actor": "someone_else"}, {"repository": "different/repo"},
-                        {"event": "schedule"}, {"run_id": ""}):
+        for changes in ({"actor": "someone_else"}, {"triggering_actor": "collaborator"},
+                        {"repository": "different/repo"}, {"event": "schedule"},
+                        {"run_id": ""}, {"run_attempt": "0"}):
             with self.subTest(changes=changes):
                 calls = []
                 owner = {**OWNER, **changes}
@@ -99,6 +101,15 @@ class PublishedReplyRevisionTest(unittest.TestCase):
                                    google_token="private", getter=lambda *_: live(),
                                    poster=lambda *args: calls.append(args), **owner)
                 self.assertEqual(calls, [])
+
+    def test_rerun_may_not_originate_a_store_post(self):
+        calls = []
+        with self.assertRaisesRegex(ValueError, "rerun cannot"):
+            apply_revision(revision(), review(), package="com.onnellab.tagweaver2",
+                           google_token="private", getter=lambda *_: live(ORIGINAL),
+                           poster=lambda *args: calls.append(args),
+                           **{**OWNER, "run_attempt": "2"})
+        self.assertEqual(calls, [])
 
     def test_stale_or_unknown_live_review_rejected_before_post(self):
         cases = [live(body="Edited user review"), live(reply="Another reply"),
@@ -139,7 +150,8 @@ class PublishedReplyRevisionTest(unittest.TestCase):
             revisions = root / "revisions.json"
             revisions.write_text(json.dumps({"schema_version": 1, "requests": [revision()]}))
             env = {"GITHUB_ACTOR": "onnellab", "GITHUB_REPOSITORY": "onnellab/onnel-content-engine",
-                   "GITHUB_EVENT_NAME": "workflow_dispatch", "GITHUB_RUN_ID": "99"}
+                   "GITHUB_EVENT_NAME": "workflow_dispatch", "GITHUB_RUN_ID": "99",
+                   "REPLY_TRIGGERING_ACTOR": "onnellab", "REPLY_RUN_ATTEMPT": "1"}
             responses = iter([live(ORIGINAL), live(ORIGINAL)])
             outcome = process_revision("revision-tagweaver-test", reviews_path=reviews,
                                        stores_path=stores, token="private",
