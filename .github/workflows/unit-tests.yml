@@ -73,6 +73,10 @@ jobs:
         run: python -m pip install -r requirements-test.txt
       - name: Run complete suite without live network calls
         run: python scripts/run_unit_tests.py
+      # Closed registration gate only; never require published bundles to stay in review.
+      - name: Validate both registered blog bundles in a disposable copy
+        if: github.event_name == 'pull_request' && github.head_ref == 'verify/blog-review-integration-20261024'
+        run: python scripts/validate_blog_review_integration.py
       - name: Checkout exact pre-fallback renderer for visual comparison
         if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
