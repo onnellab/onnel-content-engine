@@ -1,0 +1,93 @@
+{
+  "schema": "onnellab.independent-editorial-review.v1",
+  "reviewed_at_utc": "2026-10-24T01:39:27Z",
+  "source_commit": "fdde5c504a0d7a939ca06b1d644c427f81029e18",
+  "final_blobs": {
+    "en": "e5e8d5e973ee503176dd1c28f65bdf6cba888362",
+    "ko": "8aa4dbe4cf21461c7d963b9ec45f9282b6002ef4",
+    "ja": "4be616532fa63824f39c09f94c40b56c7e35cc0e",
+    "zh-Hans": "de3d16b1b99bae0a14e9987c010c4df14ae48603",
+    "zh-Hant": "5eb2f4634ee16c3328654ef6a8223ec2fe9846da",
+    "pt-BR": "2b16d1e71ade064e946c7df4eeb80ea0401ee342",
+    "de": "1359bd35dd8672c3ac622077405485223d20bb45",
+    "fr": "aef06de4719c6c01b9f7ef2305aa2e2937f68914",
+    "es": "041460993822dcdc1c2d21aacc547ea273891c2f"
+  },
+  "method": "A reviewer separate from the author read all nine pinned full originals and reconstructed full revisions from exact title/keyword/paragraph transformations and replacement steps. Parent applied the three exact Chinese precision corrections. This is semantic review, not native scoring or rendered-layout approval.",
+  "changes": [
+    "Problem-first titles and H1s; natural matching keyword for four CJK locales.",
+    "Relocated three existing app-specific sentences per locale verbatim into product section; no product fact omitted.",
+    "Generic steps explicitly compare, save, reopen and retain originals until full checking is complete.",
+    "zh-Hans FAQ uses field values rather than numeric values; both Chinese step8 variants explicitly preserve originals through completion."
+  ],
+  "locale_results": {
+    "en": {
+      "meaning": "reviewed",
+      "omissions": "none identified",
+      "facts": "unchanged product/store/Pro/iOS qualifications",
+      "naturalness": "reviewed",
+      "image_copy": "unchanged"
+    },
+    "ko": {
+      "meaning": "reviewed",
+      "omissions": "none identified",
+      "facts": "unchanged product/store/Pro/iOS qualifications",
+      "naturalness": "reviewed",
+      "image_copy": "unchanged"
+    },
+    "ja": {
+      "meaning": "reviewed",
+      "omissions": "none identified",
+      "facts": "unchanged product/store/Pro/iOS qualifications",
+      "naturalness": "reviewed",
+      "image_copy": "unchanged"
+    },
+    "zh-Hans": {
+      "meaning": "reviewed",
+      "omissions": "none identified",
+      "facts": "unchanged product/store/Pro/iOS qualifications",
+      "naturalness": "reviewed with exact precision corrections applied",
+      "image_copy": "unchanged"
+    },
+    "zh-Hant": {
+      "meaning": "reviewed",
+      "omissions": "none identified",
+      "facts": "unchanged product/store/Pro/iOS qualifications",
+      "naturalness": "reviewed with exact precision corrections applied",
+      "image_copy": "unchanged"
+    },
+    "pt-BR": {
+      "meaning": "reviewed",
+      "omissions": "none identified",
+      "facts": "unchanged product/store/Pro/iOS qualifications",
+      "naturalness": "reviewed",
+      "image_copy": "unchanged"
+    },
+    "de": {
+      "meaning": "reviewed",
+      "omissions": "none identified",
+      "facts": "unchanged product/store/Pro/iOS qualifications",
+      "naturalness": "reviewed",
+      "image_copy": "unchanged"
+    },
+    "fr": {
+      "meaning": "reviewed",
+      "omissions": "none identified",
+      "facts": "unchanged product/store/Pro/iOS qualifications",
+      "naturalness": "reviewed",
+      "image_copy": "unchanged"
+    },
+    "es": {
+      "meaning": "reviewed",
+      "omissions": "none identified",
+      "facts": "unchanged product/store/Pro/iOS qualifications",
+      "naturalness": "reviewed",
+      "image_copy": "unchanged"
+    }
+  },
+  "limits": [
+    "No live store recheck in this semantic review; source recheck remains dated2026-10-23.",
+    "No rendered screenshot inspection or native quality pass claimed.",
+    "No queue, date, upload or publication action."
+  ]
+}

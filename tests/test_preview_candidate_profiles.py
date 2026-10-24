@@ -20,7 +20,7 @@ RESEARCH_SOURCES = {
 class PreviewCandidateProfiles(unittest.TestCase):
     def test_unknown_candidate_and_locale_fail_closed(self):
         for slug in ("", "../aligna", "other-product", "design-consistent-file-naming-system-extra",
-                     RESEARCH_SLUG + "-extra"):
+                     RESEARCH_SLUG + "-extra", "consistent-album-artist-names-extra"):
             with self.subTest(slug=slug), self.assertRaises(ValueError):
                 candidate_profile(slug)
         with self.assertRaises(ValueError):
@@ -78,7 +78,7 @@ class PreviewCandidateProfiles(unittest.TestCase):
 
     def test_profiles_do_not_share_mutable_state(self):
         for slug in ("design-consistent-file-naming-system",
-                     "turn-repeated-text-into-reusable-snippets", RESEARCH_SLUG):
+                     "turn-repeated-text-into-reusable-snippets", RESEARCH_SLUG, "consistent-album-artist-names"):
             with self.subTest(slug=slug):
                 expected = candidate_profile(slug)
                 profile = candidate_profile(slug)
@@ -87,6 +87,26 @@ class PreviewCandidateProfiles(unittest.TestCase):
                 profile["table_rows"]["en"] = 999
                 self.assertEqual(candidate_profile(slug), expected)
                 self.assertNotIn("https://example.invalid/", allowed_candidate_links(slug, "en"))
+
+    def test_tagweaver_exact_closed_profile(self):
+        slug = "consistent-album-artist-names"
+        profile = candidate_profile(slug)
+        stores = [
+            "https://apps.apple.com/app/id6759609875",
+            "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2",
+        ]
+        self.assertEqual(profile["category"], "music")
+        self.assertEqual(profile["faq_count"], 4)
+        self.assertEqual(profile["store_urls"], stores)
+        self.assertEqual(profile["source_urls"], [])
+        for locale in LOCALES:
+            self.assertEqual(profile["table_rows"][locale], 4)
+            self.assertEqual(allowed_candidate_links(slug, locale), {
+                f"/blog-assets/{locale}/{slug}/workflow-diagram.svg",
+                "/apps/tagweaver/", *stores,
+                f"https://onnellab.com/blog/{locale.lower()}/clean-up-mp3-metadata-before-organizing-music/",
+                f"https://onnellab.com/blog/{locale.lower()}/number-tracks-multi-disc-mp3-album/",
+            })
 
 
 class ResearchPreviewBundle(unittest.TestCase):
@@ -252,6 +272,68 @@ class ResearchPreviewBundle(unittest.TestCase):
             self.assertFalse(record["publication_dates_added"])
             for locale in LOCALES:
                 self.assertTrue((homepage / "src/content/blog" / locale / f"{RESEARCH_SLUG}.md").is_file())
+
+
+class TagWeaverPreviewBundle(unittest.TestCase):
+    add_file = ResearchPreviewBundle.add_file
+    replace_content = ResearchPreviewBundle.replace_content
+    write_bundle = ResearchPreviewBundle.write_bundle
+    validate = ResearchPreviewBundle.validate
+
+    def setUp(self):
+        slug = "consistent-album-artist-names"
+        self.bundle = {"schema": 1, "state": "UNSCHEDULED_PREVIEW_ONLY",
+                       "slug": slug, "locales": list(LOCALES), "files": []}
+        for locale in LOCALES:
+            draft = json.loads((ROOT / "preview/tagweaver-album-artists" / f"{locale}.json").read_text())
+            header = {
+                "title": draft["title"], "card_title": draft["title"],
+                "category": "music", "language": locale, "slug": slug,
+                "status": "review", "related_apps": "TagWeaver",
+                "canonical_url": f"https://onnellab.com/blog/{locale.lower()}/{slug}/",
+            }
+            markdown = "---\n" + "".join(f"{key}: {json.dumps(value, ensure_ascii=False)}\n"
+                                         for key, value in header.items()) + "---\n\n" + draft["body"]
+            markdown += f'\n![Workflow](/blog-assets/{locale}/{slug}/workflow-diagram.svg)\n'
+            self.add_file(f"generated/markdown/{locale}/music/{slug}.md", markdown)
+            for kind in ("workflow-diagram", "social-card"):
+                self.add_file(f"generated/assets/blog/{locale}/{slug}/{kind}.svg",
+                              '<svg xmlns="http://www.w3.org/2000/svg"><title>Fixture only</title></svg>')
+
+    def test_nine_exact_reviewed_drafts_validate(self):
+        result, digest = self.validate()
+        self.assertEqual(result, self.bundle)
+        self.assertEqual(len(result["files"]), 27)
+        self.assertEqual(len(digest), 64)
+
+    def test_tagweaver_identity_cannot_be_substituted(self):
+        for app in ("", "Aligna", "TagWeaver|Aligna"):
+            bundle = copy.deepcopy(self.bundle)
+            self.replace_content(bundle, 0, bundle["files"][0]["content"].replace(
+                'related_apps: "TagWeaver"', "related_apps: " + json.dumps(app)))
+            with self.subTest(app=app), self.assertRaisesRegex(ValueError, "reviewed app"):
+                self.validate(bundle)
+        for link in ("https://example.invalid/", "/apps/aligna/",
+                     "https://play.google.com/store/apps/details?id=com.onnellab.aligna"):
+            bundle = copy.deepcopy(self.bundle)
+            bundle["store_urls"] = [link]
+            self.replace_content(bundle, 0, bundle["files"][0]["content"] + f"\n[Foreign]({link})\n")
+            with self.subTest(link=link), self.assertRaisesRegex(ValueError, "link/resource"):
+                self.validate(bundle)
+
+    def test_tagweaver_retains_dates_paths_and_hash_guards(self):
+        for key in ("published_at", "updated_at", "scheduled_at"):
+            bundle = copy.deepcopy(self.bundle)
+            self.replace_content(bundle, 0, bundle["files"][0]["content"].replace(
+                "---\n", f'---\n{key}: "2026-10-23"\n', 1))
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, "publication dates"):
+                self.validate(bundle)
+        bundle = copy.deepcopy(self.bundle)
+        bundle["files"][0]["path"] = bundle["files"][0]["path"].replace("/music/", "/research/")
+        with self.assertRaises(ValueError):
+            self.validate(bundle)
+        with self.assertRaisesRegex(ValueError, "checksum"):
+            self.validate(corrupt_checksum=True)
 
 if __name__ == "__main__":
     unittest.main()

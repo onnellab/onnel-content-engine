@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "kind": "independent_compact_image_copy_review_not_render_or_publication",
+  "slug": "consistent-album-artist-names",
+  "reviewed_at_utc": "2026-10-23T16:16:29Z",
+  "scope": "Fifteen image detail/message fields across four locales; six already-reviewed heading changes preserved. Bodies, metadata and other five locales unchanged.",
+  "reviewer_type": "separate AI language review plus author byte-diff check; not user listening or native-speaker certification",
+  "failure_run": 39985033569,
+  "changes": [
+    {
+      "locale": "pt-BR",
+      "field": "image.steps[1][1]",
+      "before": "Separe campos comuns e individuais",
+      "after": "Separe dados comuns e por faixa"
+    },
+    {
+      "locale": "pt-BR",
+      "field": "image.steps[2][1]",
+      "before": "Altere um pequeno conjunto de trabalho",
+      "after": "Altere uma pequena seleção"
+    },
+    {
+      "locale": "pt-BR",
+      "field": "image.steps[3][1]",
+      "before": "Reabra os arquivos e teste o player",
+      "after": "Reabra; teste o player"
+    },
+    {
+      "locale": "de",
+      "field": "image.steps[0][1]",
+      "before": "Die genaue Veröffentlichung bestätigen",
+      "after": "Genaue Ausgabe bestätigen"
+    },
+    {
+      "locale": "de",
+      "field": "image.steps[1][1]",
+      "before": "Gemeinsame und individuelle Felder trennen",
+      "after": "Album- und Track-Felder trennen"
+    },
+    {
+      "locale": "de",
+      "field": "image.steps[2][1]",
+      "before": "Eine kleine Arbeitsauswahl ändern",
+      "after": "Kleine Auswahl ändern"
+    },
+    {
+      "locale": "de",
+      "field": "image.steps[3][1]",
+      "before": "Dateien erneut öffnen und Player testen",
+      "after": "Neu öffnen; Player testen"
+    },
+    {
+      "locale": "fr",
+      "field": "image.steps[1][1]",
+      "before": "Séparez champs communs et spécifiques",
+      "after": "Champs communs et par piste"
+    },
+    {
+      "locale": "fr",
+      "field": "image.steps[2][1]",
+      "before": "Modifiez un petit ensemble de travail",
+      "after": "Modifiez une petite sélection"
+    },
+    {
+      "locale": "fr",
+      "field": "image.steps[3][1]",
+      "before": "Rouvrez les fichiers et testez le lecteur",
+      "after": "Rouvrez; testez le lecteur"
+    },
+    {
+      "locale": "fr",
+      "field": "image.message",
+      "before": "Partagez les données d’album, préservez les différences entre pistes.",
+      "after": "Données communes à l’album, différences propres aux pistes."
+    },
+    {
+      "locale": "es",
+      "field": "image.steps[1][1]",
+      "before": "Separa campos comunes e individuales",
+      "after": "Campos comunes y por pista"
+    },
+    {
+      "locale": "es",
+      "field": "image.steps[2][1]",
+      "before": "Modifica un pequeño conjunto de trabajo",
+      "after": "Modifica una pequeña selección"
+    },
+    {
+      "locale": "es",
+      "field": "image.steps[3][1]",
+      "before": "Reabre los archivos y prueba el reproductor",
+      "after": "Reabre; prueba el reproductor"
+    },
+    {
+      "locale": "es",
+      "field": "image.message",
+      "before": "Comparte los datos del álbum y conserva las diferencias entre pistas.",
+      "after": "Datos comunes del álbum, diferencias propias de cada pista."
+    }
+  ],
+  "previous_blobs": {
+    "en": "af5023281da5168cedea7aecfef358dddf9534f1",
+    "pt-BR": "0df7b6392a09e60b114d99b4680f48146e7462fe",
+    "de": "9e556e9214cf697bbc4b5c42c2c0c9e4b00396f4",
+    "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
+    "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
+    "fr": "3d70d6a58bd723bcd4619b159d6c0839c9db1b53",
+    "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
+    "es": "55ec31349a75a095489447ea682492d5b87fa352",
+    "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
+  },
+  "current_blobs": {
+    "en": "af5023281da5168cedea7aecfef358dddf9534f1",
+    "pt-BR": "362f19a71dc492c641ad5e9d1696f1efde4c9d9f",
+    "de": "eca448f36491bb56f118502a706e101a8691d8d6",
+    "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
+    "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
+    "fr": "d140f2688370385042b1ca1201c431398605b7b2",
+    "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
+    "es": "055fa43f5aa9a0b1e661902cd2c3c3b73387a1dd",
+    "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
+  },
+  "semantic_limits": [
+    "Reopening files is implicit in compact step4; full article retains explicit file reopening and player test instructions.",
+    "Small working selection is shortened to small selection; small-batch meaning retained.",
+    "German album/track fields express the shared/per-track distinction for this album metadata guide.",
+    "Image is a compact summary, not a complete standalone equivalent of the eight article steps."
+  ],
+  "layout_precheck": "JavaScript transcription of existing Latin width estimator: all changed headings <=2lines, details<=3lines, bottom messages1line. This is not native test or actual glyph verification.",
+  "native_gate_status": "PENDING_REVALIDATION",
+  "render_status": "NOT_RUN_AFTER_CHANGE",
+  "scheduled": false,
+  "published": false
+}
