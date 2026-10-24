@@ -73,5 +73,23 @@ jobs:
         run: python -m pip install -r requirements-test.txt
       - name: Run complete suite without live network calls
         run: python scripts/run_unit_tests.py
+      - name: Checkout exact pre-fallback renderer for visual comparison
+        if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: c44880130edd0a0a5d07afec1a2565df120b2964
+          path: .comparison-old
+          persist-credentials: false
+      - name: Render bounded nine-language social card comparison
+        if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
+        run: python scripts/render_social_card_regression.py
+      - name: Retain public social card comparison images
+        if: always() && matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: social-card-regression-${{ github.sha }}
+          path: card-regression-evidence
+          if-no-files-found: error
+          retention-days: 1
       - name: Ensure tests did not mutate tracked operational state
         run: git diff --exit-code

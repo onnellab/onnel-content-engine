@@ -465,6 +465,14 @@ def social_card_font_defs(language: str) -> tuple[str, str]:
     return "", "ONNELLAB Korean, Noto Sans KR, Malgun Gothic, system-ui, sans-serif"
 
 
+def social_card_error_context(article: Article) -> str:
+    """Bound error identity without logging article text or control characters."""
+    fields = (article.topic.get("id", ""), article.topic.get("primary_language", ""),
+              article.topic.get("slug", ""))
+    safe = [re.sub(r"[^A-Za-z0-9_-]", "?", str(value))[:80] for value in fields]
+    return f"{safe[0]} ({safe[1]}, {safe[2]})"
+
+
 def social_card_svg(article: Article) -> str:
     language = article.topic["primary_language"]
     label = f"{article.topic['category'].upper()} · {language.upper()}"
@@ -481,15 +489,21 @@ def social_card_svg(article: Article) -> str:
                 title_lines, title_font, title_height = candidate, candidate_font, candidate_font + 10
                 break
         else:
-            raise PublishingError("Localized social card title cannot fit without truncation")
+            raise PublishingError(f"Localized social card title cannot fit without truncation: {social_card_error_context(article)}")
         description_y = max(410, 218 + (len(title_lines) - 1) * title_height + 44)
-        for candidate_font in (24, 22, 20):
-            candidate = wrap_display_text(article.description, 1016, candidate_font)
-            if description_y + (len(candidate) - 1) * (candidate_font + 10) <= 490:
-                description_lines, description_font, description_height = candidate, candidate_font, candidate_font + 10
+        description_positions = (description_y, max(390, 218 + (len(title_lines) - 1) * title_height + 44))
+        fitted = False
+        for candidate_y in dict.fromkeys(description_positions):
+            for candidate_font in (24, 22, 20):
+                candidate = wrap_display_text(article.description, 1016, candidate_font)
+                if candidate_y + (len(candidate) - 1) * (candidate_font + 10) <= 490:
+                    description_lines, description_font, description_height = candidate, candidate_font, candidate_font + 10
+                    description_y, fitted = candidate_y, True
+                    break
+            if fitted:
                 break
-        else:
-            raise PublishingError("Localized social card description cannot fit without truncation")
+        if not fitted:
+            raise PublishingError(f"Localized social card description cannot fit without truncation: {social_card_error_context(article)}")
     category_colors = {
         "reading": ("#e7f2fb", "#b9d7ea", "#24465c"),
         "music": ("#f3e9fb", "#d8c3ec", "#4e3568"),
