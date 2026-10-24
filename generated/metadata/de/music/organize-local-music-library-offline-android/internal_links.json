@@ -56,6 +56,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0093",
+        "title": "Quellennotizen und eigene Schlussfolgerungen klar trennen",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "de",
+        "status": "review",
+        "url": "generated/markdown/de/research/separate-source-notes-from-conclusions.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0075",
         "title": "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln",
         "slug": "turn-repeated-text-into-reusable-snippets",

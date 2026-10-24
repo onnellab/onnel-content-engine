@@ -706,6 +706,27 @@
       "retry_count": 0
     },
     {
+      "topic_id": "TOPIC-0037",
+      "source_status": "published",
+      "publish_after_canonical": false,
+      "platform": "devto",
+      "language": "en",
+      "category": "research",
+      "slug": "separate-source-notes-from-conclusions",
+      "draft_path": "generated/syndication/devto/en/research/separate-source-notes-from-conclusions.md",
+      "canonical_url": "https://onnellab.com/blog/en/separate-source-notes-from-conclusions/",
+      "status": "draft",
+      "approved_by": "",
+      "approved_at": "",
+      "post_id": "",
+      "posted_url": "",
+      "posted_at": "",
+      "last_attempt_at": "",
+      "error": "",
+      "error_type": "",
+      "retry_count": 0
+    },
+    {
       "topic_id": "TOPIC-0038",
       "source_status": "published",
       "publish_after_canonical": false,

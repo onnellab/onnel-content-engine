@@ -5,7 +5,7 @@ slug: "separate-source-notes-from-conclusions"
 category: "research"
 language: "zh-Hans"
 description: "借助准确的出处定位、实用对照表和五步研究笔记流程，清楚区分直接引文、转述和自己的解读。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0090"
 search_intent: "workflow"
 primary_keyword: "区分资料笔记与自己的结论"
@@ -14,6 +14,9 @@ tags: "区分资料笔记与自己的结论"
 short_answer: "为每段直接引文或转述注明出处及准确位置。将自己的解读放在单独且明确标注的栏目中，保留原资料的适用范围与限制，并记下仍需核实的问题。结论发生变化时，保留简短的修改记录，以便看清各个版本的结论分别得到了哪些资料的支持。"
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/zh-hans/separate-source-notes-from-conclusions/"
+published_at: "2026-10-24T12:18:54+09:00"
+updated_at: "2026-10-24T12:18:54+09:00"
+related_articles: "在 Android 上整理音乐文件，准备离线播放 => https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/|检查 EPUB 的目录链接和章节顺序 => https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/|替换原文件前，如何检查转换后的媒体文件 => https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/|如何整理可重复使用的文本片段 => https://onnellab.com/blog/zh-hans/turn-repeated-text-into-reusable-snippets/|如何建立一致、好查找的文件命名规则 => https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/"
 ---
 
 # 如何区分资料笔记与自己的结论

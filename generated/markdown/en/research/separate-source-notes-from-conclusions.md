@@ -5,7 +5,7 @@ slug: "separate-source-notes-from-conclusions"
 category: "research"
 language: "en"
 description: "Keep quotations, paraphrases, and your own interpretations distinct with source locators, a practical comparison table, and a five-step research-note workflow."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0037"
 search_intent: "workflow"
 primary_keyword: "separate source notes"
@@ -14,6 +14,9 @@ tags: "separate source notes"
 short_answer: "Give every quotation or paraphrase a source and a precise locator. Put your interpretation in a separate, clearly labeled field, preserve the source’s limits, and record what still needs checking. When your conclusion changes, retain a brief correction trail so you can see which source supported which version."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/en/separate-source-notes-from-conclusions/"
+published_at: "2026-10-24T12:18:54+09:00"
+updated_at: "2026-10-24T12:18:54+09:00"
+related_articles: "How to Keep a Durable Research Reading Log => https://onnellab.com/blog/en/keep-durable-research-reading-log/|How to Turn Rough Notes Into a Structured First Draft => https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|How to Convert Local Media Files Privately => https://onnellab.com/blog/en/convert-local-media-files-privately/"
 ---
 
 # How to Separate Source Notes from Your Conclusions

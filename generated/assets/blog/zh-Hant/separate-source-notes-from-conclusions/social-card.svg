@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
-  <title id="title">把資料內容與自己的結論分開</title>
-  <desc id="desc">為每段直接引文或轉述註明出處及準確位置。將自己的解讀放在獨立且明確標示的欄位，保留原資料的適用範圍與限制，並記下仍待查證的問題。結論改變時，保留簡短的修訂紀錄，方便確認各個版本的結論分別由哪些資料支持。</desc>
-  <rect width="1200" height="675" fill="#fbf7ef"/>
-  <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
-  <text fill="#30302c" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="38" font-weight="680"><tspan x="92" y="100">把資料內容與自己的結論分開</tspan></text>
-  <text fill="#69645c" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="19"><tspan x="92" y="134">讓研究筆記可追溯的簡單架構 · 區分資料筆記與自己的結論</tspan></text>
-  <g transform="translate(72 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">記錄</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">直接引用或轉述，</tspan><tspan x="24" y="105">並註明原文位置</tspan></text></g><g transform="translate(346 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">區分</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">標示哪些是自己的</tspan><tspan x="24" y="105">解讀</tspan></text></g><g transform="translate(620 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">查證</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">記下背景與下一步</tspan><tspan x="24" y="105">要問的問題</tspan></text></g><g transform="translate(894 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">修訂</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">保留附有日期的修</tspan><tspan x="24" y="105">訂紀錄</tspan></text></g>
-  <path d="M280 237H328m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M554 237H602m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M828 237H876m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.6"/>
-  <text x="124" y="506" fill="#30302c" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="20" font-weight="650">讓證據與解讀之間的界線清楚可見。</text>
-  <text x="92" y="588" fill="#817c73" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="14">ONNELLAB Blog · 流程圖</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">如何區分資料筆記與自己的結論</title>
+  <desc id="desc">透過準確的出處定位、實用對照表與五步驟研究筆記流程，清楚區分直接引文、轉述及自己的解讀。</desc>
+  <rect width="1200" height="630" fill="#f8f4ec"/>
+  <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
+  <rect x="92" y="92" width="210" height="44" rx="22" fill="#e9f3f1" stroke="#b9d8d2" stroke-width="1.4"/>
+  <text x="118" y="121" fill="#244f4a" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="18" font-weight="700">研究</text>
+  <text x="92" y="218" fill="#282723" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">如何區分資料筆記與自己的結論</tspan></text>
+  <text fill="#5f5b54" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="24"><tspan x="92" y="410">透過準確的出處定位、實用對照表與五步驟研究筆記流程，清楚區分直接引文、轉述及自</tspan><tspan x="92" y="444">己的解讀。</tspan></text>
+  <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
+  <text x="92" y="552" fill="#817c73" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="19">研究 · ZH-HANT</text>
+  <text x="1048" y="552" fill="#30302c" font-family="Noto Sans CJK TC, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
 </svg>

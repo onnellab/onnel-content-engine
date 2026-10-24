@@ -82,6 +82,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0092",
+        "title": "Como separar as anotações sobre fontes das suas conclusões",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "pt-BR",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/research/separate-source-notes-from-conclusions.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
       }
     ],
     "related_apps": [

@@ -134,9 +134,9 @@
       },
       {
         "type": "cross_domain",
-        "title": "How to Separate Source Notes From Research Conclusions",
+        "title": "How to Separate Source Notes from Your Conclusions",
         "category": "research",
-        "cluster": "separate source notes from conclusions",
+        "cluster": "separate source notes",
         "topic_id": "TOPIC-0037",
         "reason": "Supports cross-domain navigation when the concepts overlap."
       }

@@ -5,7 +5,7 @@ slug: "separate-source-notes-from-conclusions"
 category: "research"
 language: "de"
 description: "Halten Sie Zitate, Paraphrasen und eigene Interpretationen auseinander: mit genauen Fundstellen, einer praktischen Vergleichstabelle und einem Ablauf in fünf Schritten für Forschungsnotizen."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0093"
 search_intent: "workflow"
 primary_keyword: "Quellennotizen und eigene Schlussfolgerungen"
@@ -14,6 +14,9 @@ tags: "Quellennotizen und eigene Schlussfolgerungen"
 short_answer: "Geben Sie für jedes Zitat und jede Paraphrase die Quelle und eine genaue Fundstelle an. Schreiben Sie Ihre Interpretation in ein separates, eindeutig gekennzeichnetes Feld, bewahren Sie die Einschränkungen der Quelle und halten Sie fest, was noch geprüft werden muss. Wenn sich Ihre Schlussfolgerung ändert, dokumentieren Sie die Korrektur kurz, damit erkennbar bleibt, welche Quelle welche Fassung gestützt hat."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/de/separate-source-notes-from-conclusions/"
+published_at: "2026-10-24T12:18:54+09:00"
+updated_at: "2026-10-24T12:18:54+09:00"
+related_articles: "Musikdateien auf Android für die Offline-Wiedergabe ordnen => https://onnellab.com/blog/de/organize-local-music-library-offline-android/|Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen => https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/|Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen => https://onnellab.com/blog/de/test-converted-media-before-replacing-original/|Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln => https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/|Einheitliche Dateinamen: eine einfache Konvention entwickeln => https://onnellab.com/blog/de/design-consistent-file-naming-system/"
 ---
 
 # Quellennotizen und eigene Schlussfolgerungen klar trennen

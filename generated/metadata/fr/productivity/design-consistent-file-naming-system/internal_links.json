@@ -82,6 +82,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0094",
+        "title": "Comment séparer les notes de source de vos conclusions",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "fr",
+        "status": "review",
+        "url": "generated/markdown/fr/research/separate-source-notes-from-conclusions.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
       }
     ],
     "related_apps": [

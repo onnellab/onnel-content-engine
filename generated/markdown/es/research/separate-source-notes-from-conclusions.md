@@ -5,7 +5,7 @@ slug: "separate-source-notes-from-conclusions"
 category: "research"
 language: "es"
 description: "Distingue las citas, las paráfrasis y tus propias interpretaciones con referencias precisas a los pasajes, una tabla comparativa práctica y un proceso de cinco pasos para tus notas de investigación."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0095"
 search_intent: "workflow"
 primary_keyword: "separar las notas de las fuentes"
@@ -14,6 +14,9 @@ tags: "separar las notas de las fuentes"
 short_answer: "Asocia cada cita o paráfrasis a una fuente e indica exactamente dónde encontrar el pasaje. Coloca tu interpretación en un campo separado y claramente identificado, conserva las limitaciones de la fuente y registra lo que aún falta por comprobar. Cuando tu conclusión cambie, guarda un breve historial de correcciones para saber qué fuente respaldaba cada versión."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/es/separate-source-notes-from-conclusions/"
+published_at: "2026-10-24T12:18:54+09:00"
+updated_at: "2026-10-24T12:18:54+09:00"
+related_articles: "Cómo organizar música en Android para escucharla sin conexión => https://onnellab.com/blog/es/organize-local-music-library-offline-android/|Cómo comprobar el índice y el orden de los capítulos de un EPUB => https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/|Cómo crear un sistema coherente para nombrar archivos => https://onnellab.com/blog/es/design-consistent-file-naming-system/|Cómo probar un archivo multimedia convertido antes de sustituir el original => https://onnellab.com/blog/es/test-converted-media-before-replacing-original/|Cómo convertir textos repetidos en fragmentos reutilizables => https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/"
 ---
 
 # Cómo separar las notas de las fuentes de tus conclusiones

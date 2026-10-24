@@ -69,6 +69,19 @@
         "score": 5
       },
       {
+        "topic_id": "TOPIC-0093",
+        "title": "Quellennotizen und eigene Schlussfolgerungen klar trennen",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "de",
+        "status": "review",
+        "url": "generated/markdown/de/research/separate-source-notes-from-conclusions.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
         "topic_id": "TOPIC-0083",
         "title": "Einheitliche Dateinamen: eine einfache Konvention entwickeln",
         "slug": "design-consistent-file-naming-system",

@@ -80,6 +80,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0090",
+        "title": "如何区分资料笔记与自己的结论",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "zh-Hans",
+        "status": "review",
+        "url": "generated/markdown/zh-Hans/research/separate-source-notes-from-conclusions.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [

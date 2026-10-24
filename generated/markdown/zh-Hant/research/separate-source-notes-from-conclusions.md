@@ -5,7 +5,7 @@ slug: "separate-source-notes-from-conclusions"
 category: "research"
 language: "zh-Hant"
 description: "透過準確的出處定位、實用對照表與五步驟研究筆記流程，清楚區分直接引文、轉述及自己的解讀。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0091"
 search_intent: "workflow"
 primary_keyword: "區分資料筆記與自己的結論"
@@ -14,6 +14,9 @@ tags: "區分資料筆記與自己的結論"
 short_answer: "為每段直接引文或轉述註明出處及準確位置。將自己的解讀放在獨立且明確標示的欄位，保留原資料的適用範圍與限制，並記下仍待查證的問題。結論改變時，保留簡短的修訂紀錄，方便確認各個版本的結論分別由哪些資料支持。"
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/zh-hant/separate-source-notes-from-conclusions/"
+published_at: "2026-10-24T12:18:54+09:00"
+updated_at: "2026-10-24T12:18:54+09:00"
+related_articles: "在 Android 整理音樂檔案，準備離線播放 => https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/|檢查 EPUB 的目錄連結與章節順序 => https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/|取代原始檔案前，如何檢查轉檔後的媒體檔案 => https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/|如何整理可重複使用的文字片段 => https://onnellab.com/blog/zh-hant/turn-repeated-text-into-reusable-snippets/|如何建立一致又好找的檔案命名規則 => https://onnellab.com/blog/zh-hant/design-consistent-file-naming-system/"
 ---
 
 # 如何區分資料筆記與自己的結論

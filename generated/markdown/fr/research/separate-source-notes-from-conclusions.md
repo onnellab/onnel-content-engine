@@ -5,7 +5,7 @@ slug: "separate-source-notes-from-conclusions"
 category: "research"
 language: "fr"
 description: "Distinguez citations, reformulations et interprétations personnelles grâce à des repères précis dans les sources, un tableau comparatif pratique et une méthode en cinq étapes pour vos notes de recherche."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0094"
 search_intent: "workflow"
 primary_keyword: "séparer les notes de source"
@@ -14,6 +14,9 @@ tags: "séparer les notes de source"
 short_answer: "Associez chaque citation ou reformulation à une source et à un repère précis permettant de retrouver le passage. Placez votre interprétation dans un champ distinct et clairement identifié, conservez les limites de la source et notez ce qui reste à vérifier. Lorsque votre conclusion évolue, gardez une brève trace des corrections pour savoir quelle source étayait chaque version."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/"
+published_at: "2026-10-24T12:18:54+09:00"
+updated_at: "2026-10-24T12:18:54+09:00"
+related_articles: "Vérifier la table des matières et l’ordre des chapitres d’un EPUB => https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/|Transformer les textes répétitifs en extraits réutilisables => https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/|Créer une convention cohérente pour nommer ses fichiers => https://onnellab.com/blog/fr/design-consistent-file-naming-system/|Organiser sa musique sur Android pour une écoute hors ligne => https://onnellab.com/blog/fr/organize-local-music-library-offline-android/|Tester un fichier multimédia converti avant de remplacer l’original => https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/"
 ---
 
 # Comment séparer les notes de source de vos conclusions

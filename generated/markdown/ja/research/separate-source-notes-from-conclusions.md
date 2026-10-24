@@ -5,7 +5,7 @@ slug: "separate-source-notes-from-conclusions"
 category: "research"
 language: "ja"
 description: "引用、言い換え、自分の解釈を明確に分けましょう。出典の該当箇所の記録方法、実用的な比較表、研究メモを整理する5つの手順を紹介します。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0089"
 search_intent: "workflow"
 primary_keyword: "出典メモと自分の結論"
@@ -14,6 +14,9 @@ tags: "出典メモと自分の結論"
 short_answer: "引用や言い換えには、出典と該当箇所を正確に記録します。自分の解釈は明示した別の欄に書き、出典が示す範囲や限界を保ち、まだ確認が必要な点も残しましょう。結論が変わったときは、どの出典がどの時点の結論を支えていたか分かるよう、短い修正履歴を残します。"
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/ja/separate-source-notes-from-conclusions/"
+published_at: "2026-10-24T12:18:54+09:00"
+updated_at: "2026-10-24T12:18:54+09:00"
+related_articles: "Androidの音楽ファイルをオフライン再生用に整理する方法 => https://onnellab.com/blog/ja/organize-local-music-library-offline-android/|EPUBの目次リンクと章の順序を確認する方法 => https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/|元ファイルを置き換える前に変換後のメディアを確認する方法 => https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/|繰り返し使う文章を再利用できる定型文に整理する方法 => https://onnellab.com/blog/ja/turn-repeated-text-into-reusable-snippets/|探しやすいファイル命名ルールの作り方 => https://onnellab.com/blog/ja/design-consistent-file-naming-system/"
 ---
 
 # 出典メモと自分の結論を分ける方法

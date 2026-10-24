@@ -5,7 +5,7 @@ slug: "separate-source-notes-from-conclusions"
 category: "research"
 language: "ko"
 description: "인용문, 바꿔 쓴 내용, 자신의 해석을 구분해 보세요. 출처 내 위치를 기록하는 방법, 실제로 활용할 수 있는 비교 표, 연구 메모를 위한 5단계 절차를 소개합니다."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0088"
 search_intent: "workflow"
 primary_keyword: "출처 메모와 자신의 결론"
@@ -14,6 +14,9 @@ tags: "출처 메모와 자신의 결론"
 short_answer: "모든 인용문과 바꿔 쓴 내용에 출처와 해당 부분의 정확한 위치를 남기세요. 자신의 해석은 별도의 항목에 명확히 표시하고, 출처에서 다루는 범위와 한계를 유지하며, 추가로 확인할 내용을 기록하세요. 결론이 달라지면 간단한 수정 이력을 남겨 어느 출처가 어느 시점의 결론을 뒷받침했는지 확인할 수 있게 하세요."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/ko/separate-source-notes-from-conclusions/"
+published_at: "2026-10-24T12:18:54+09:00"
+updated_at: "2026-10-24T12:18:54+09:00"
+related_articles: "오래 활용할 수 있는 연구 독서 기록을 만드는 방법 => https://onnellab.com/blog/ko/keep-durable-research-reading-log/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/|미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법 => https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/"
 ---
 
 # 출처 메모와 자신의 결론을 구분하는 방법

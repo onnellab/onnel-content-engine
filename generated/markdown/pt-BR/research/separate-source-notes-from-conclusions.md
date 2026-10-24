@@ -5,7 +5,7 @@ slug: "separate-source-notes-from-conclusions"
 category: "research"
 language: "pt-BR"
 description: "Mantenha citações, paráfrases e interpretações próprias separadas, com referências precisas aos trechos, uma tabela prática de comparação e um fluxo de cinco etapas para anotações de pesquisa."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0092"
 search_intent: "workflow"
 primary_keyword: "separar as anotações sobre fontes"
@@ -14,6 +14,9 @@ tags: "separar as anotações sobre fontes"
 short_answer: "Associe cada citação ou paráfrase a uma fonte e indique exatamente onde encontrar o trecho. Coloque sua interpretação em um campo separado e claramente identificado, preserve as limitações da fonte e registre o que ainda precisa ser verificado. Quando sua conclusão mudar, mantenha um breve histórico de correções para identificar qual fonte sustentou cada versão."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/"
+published_at: "2026-10-24T12:18:54+09:00"
+updated_at: "2026-10-24T12:18:54+09:00"
+related_articles: "Como transformar textos repetidos em trechos reutilizáveis => https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/|Como criar um padrão consistente para nomes de arquivos => https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/|Como organizar músicas no Android para ouvir offline => https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/|Como conferir o sumário e a ordem dos capítulos de um EPUB => https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/|Como testar um arquivo de mídia convertido antes de substituir o original => https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/"
 ---
 
 # Como separar as anotações sobre fontes das suas conclusões

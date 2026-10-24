@@ -82,6 +82,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0089",
+        "title": "出典メモと自分の結論を分ける方法",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "ja",
+        "status": "review",
+        "url": "generated/markdown/ja/research/separate-source-notes-from-conclusions.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [
