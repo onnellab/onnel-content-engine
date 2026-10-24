@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "kind": "independent_editorial_correction_review_not_render_receipt",
+  "reviewer": "review_ja_de_corrections",
+  "reviewed_at_utc": "2026-10-24T14:33:42Z",
+  "result": "PASS_TEXT_ONLY",
+  "reason": "Independent actual pixel review of run40102482975 found mid-word wraps despite structural gates passing; preserve strict layout and improve concise localized diagram copy.",
+  "changes": {
+    "de": {
+      "before": "84d303d8501b203317a42d5d39581293613f697e",
+      "after": "823516fa3848041a71de66461c7a0b43f552e585",
+      "change": "step2 detail Überschriften notieren → Übersicht anlegen"
+    },
+    "es": {
+      "before": "57fa798585ba82175b3a5016976259419bd07ba5",
+      "after": "ca58b276af950942c912ef29ff1689e3adae20e1",
+      "change": "step4 label Comprueba → Verifica"
+    }
+  },
+  "readback": "All other JSON fields and full bodies unchanged.",
+  "limits": [
+    "Fresh-ID native review pending",
+    "Updated glyph rendering pending",
+    "Independent visual reinspection pending"
+  ],
+  "staging_base": "ca7a4c1fe6d91d08f43646945e3617f9278568f2"
+}

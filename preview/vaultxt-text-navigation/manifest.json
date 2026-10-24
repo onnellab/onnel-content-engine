@@ -49,7 +49,7 @@
     "astro_browser_preview": "NOT RUN",
     "candidate_page_checks": "NOT RUN: draft is not deployed",
     "related_page_checks": "18/18 live existing related pages loaded in dot cloud browser at 2026-10-24T09:33Z with substantive article text, matching html language and self-canonical. This is not candidate rendering.",
-    "independent_language_review": "PASS all nine final revised blobs by independent review_ja_de_corrections after complete actual-language review and final JA/DE correction readback. See native_readiness_editorial_review.json. Native/render/page gates remain pending."
+    "independent_language_review": "PASS all nine final revised blobs by independent review_ja_de_corrections after complete actual-language review and final JA/DE correction readback. See native_readiness_editorial_review.json. Native/render/page gates remain pending. DE/ES diagram copy amended after independent pixel review; exact replacement blobs independently read back. See diagram_wordwrap_editorial_review.json. New rendering and fresh-ID native validation pending."
   },
   "artifacts": [
     {
@@ -91,7 +91,7 @@
     {
       "locale": "de",
       "file": "de.json",
-      "git_blob_sha1": "84d303d8501b203317a42d5d39581293613f697e",
+      "git_blob_sha1": "823516fa3848041a71de66461c7a0b43f552e585",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
@@ -103,7 +103,7 @@
     {
       "locale": "es",
       "file": "es.json",
-      "git_blob_sha1": "57fa798585ba82175b3a5016976259419bd07ba5",
+      "git_blob_sha1": "ca58b276af950942c912ef29ff1689e3adae20e1",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     }
   ]

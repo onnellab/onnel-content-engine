@@ -23,6 +23,8 @@ def copy_drafts(directory):
 
 
 def make_stage(stage):
+    if stage.is_symlink() or stage.resolve() == ROOT.resolve():
+        raise ValueError("Test fixture requires a separate disposable root")
     for relative in ("data/topics.csv", "data/apps_registry.csv", "topics/topics.csv"):
         target = stage / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -31,8 +33,18 @@ def make_stage(stage):
     preview.write_json(stage / preview.PREVIEW_DIRECTORY / "idea_seeds.json",
                        [copy.deepcopy(preview.APPROVED_IDEA_SEED)])
     from topic_management import TopicStore
-    return TopicStore(stage / "data/topics.csv", apps_path=stage / "data/apps_registry.csv",
-                      mirror_path=stage / "topics/topics.csv")
+    store = TopicStore(stage / "data/topics.csv", apps_path=stage / "data/apps_registry.csv",
+                       mirror_path=stage / "topics/topics.csv")
+    # Test fixture only: a registered production candidate must remain rejected
+    # by the adapter; restore its pre-registration state solely in this temp copy.
+    rows = [row for row in store.read()
+            if (row["slug"] != preview.SLUG or row["id"] == preview.TOPIC_ID)
+            and row["slug"] != preview.APPROVED_IDEA_SEED["slug"]]
+    candidate = next(row for row in rows if row["id"] == preview.TOPIC_ID)
+    candidate.update(status="idea", canonical_path="", scheduled_at="",
+                     published_at="", published_url="")
+    store.write(rows)
+    return store
 
 
 class ReviewedDrafts(unittest.TestCase):
@@ -165,7 +177,7 @@ class TopicIsolation(unittest.TestCase):
     def test_reserved_wrong_or_duplicate_candidate_rejected_before_writes(self):
         from topic_management import next_topic_id
         drafts = preview.validate_drafts(ROOT / preview.PREVIEW_DIRECTORY)
-        cases = (("status", "approved"), ("category", "research"),
+        cases = (("status", "approved"), ("status", "review"), ("category", "research"),
                  ("primary_language", "ko"), ("related_apps", ""), ("duplicate", ""))
         for key, value in cases:
             with self.subTest(key=key), tempfile.TemporaryDirectory() as temporary:
