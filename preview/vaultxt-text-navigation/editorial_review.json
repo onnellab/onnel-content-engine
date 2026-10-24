@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "kind": "independent_editorial_review_not_publication_receipt",
+  "reviewed_at_utc": "2026-10-24T09:37:33Z",
+  "slug": "make-long-plain-text-easier-to-navigate",
+  "reviewer": "independent_nav_review (separate reviewer, not manuscript author)",
+  "result": "PASS_TEXT_AND_IMAGE_COPY_ONLY",
+  "reviewed_final_blobs": {
+    "en": "ab4c92cbba946e98a111961ee6b31a1a766d1a0d",
+    "pt-BR": "b74b81dcebd94236460b5549a93e42d8c477c360",
+    "de": "126d63a44b40be382b60b147376179c18d28c813",
+    "fr": "b2fa83baf72a7d62914835963729c2264bc05a1f",
+    "es": "fd410621852c9f9047647cb6a138a32bddfccf71",
+    "ko": "82c56e7be06b2e42563f55653f18074e702a24d7",
+    "ja": "acf8ec93c93309eae27d04bbddd277982c0a5219",
+    "zh-Hans": "83394b3567550f8d737ece3209086702039ecb76",
+    "zh-Hant": "ca7571de2caafa8ff40bc0c97d3fe02931c8d3c5"
+  },
+  "scope": [
+    "Complete actual-language bodies",
+    "Title, description, question, short answer, keywords",
+    "Four-stage localized diagram copy",
+    "Five-stage workflow, FAQs and localized related-link strings",
+    "Original preservation, external navigation maps, search/context/version checks",
+    "Narrow factual app claims and absence of unsupported feature, pricing, performance or search-demand claims"
+  ],
+  "corrections": {
+    "en": "Removed saved-position ambiguity; recorded reference and text/line-number wording.",
+    "ko": "Natural product description; automatic heading-navigation caveat.",
+    "ja": "Automatic heading-navigation caveat.",
+    "zh-Hans": "Heading-navigation caveat and natural context terminology.",
+    "zh-Hant": "Heading-navigation caveat, natural context terminology and local usage.",
+    "pt-BR": "Automatic heading-navigation, not heading creation.",
+    "de": "Automatic heading-navigation caveat; natural description.",
+    "fr": "Automatic heading-navigation, not heading creation.",
+    "es": "Automatic heading-navigation caveat; natural diagram label Ubícate."
+  },
+  "final_readback": "Reviewer fetched every final Git blob and confirmed requested substitutions and other parsed fields unchanged.",
+  "semantic_fidelity": "Substantive equivalence, not sentence-for-sentence translation. FAQ selection varies; core five stages and safety/factual limits preserved in all nine.",
+  "not_performed": [
+    "Native numerical scoring or review fingerprints",
+    "Renderer/font/overflow checks",
+    "Candidate Astro page rendering",
+    "Responsive and image viewer behavior",
+    "Publication quality gates",
+    "Scheduling or deployment"
+  ],
+  "separate_evidence": "Parent verified current official Play listing and 18 existing related pages. This independent editorial review does not recertify browser checks."
+}

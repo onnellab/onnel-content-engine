@@ -1,0 +1,33 @@
+{
+  "locale": "de",
+  "title": "Lange Textdokumente leichter navigieren",
+  "description": "Mit einer Übersicht vorhandener Überschriften, gezielten Suchstellen und einem Prüfung nach erneutem Öffnen finden Sie Passagen wieder, ohne das Original zu verändern.",
+  "question": "Wie finden Sie Passagen in einem langen Textdokument wieder und setzen die Lektüre fort, ohne jedes Mal von vorn zu suchen?",
+  "primary_keyword": "lange Textdokumente navigieren",
+  "secondary_keywords": "Überschriften in TXT-Dateien|Textstellen wiederfinden|Leseposition festhalten|Fundstellen notieren",
+  "short_answer": "Bewahren Sie das Original auf, notieren Sie vorhandene Überschriften und wählen Sie eindeutige Suchformulierungen. Halten Sie die Fundstelle in einer separaten Notiz fest. Schließen und öffnen Sie dieselbe Version erneut, um den Rückweg zu prüfen.",
+  "image": {
+    "title": "Textstellen wiederfinden",
+    "subtitle": "Orientierung mit überprüfbaren Angaben",
+    "message": "Prüfen Sie den Rückweg in derselben Version.",
+    "steps": [
+      [
+        "Bewahren",
+        "Original unverändert lassen"
+      ],
+      [
+        "Ordnen",
+        "Vorhandene Überschriften notieren"
+      ],
+      [
+        "Finden",
+        "Suchen und Kontext prüfen"
+      ],
+      [
+        "Prüfen",
+        "Erneut öffnen und Stelle aufsuchen"
+      ]
+    ]
+  },
+  "body": "# Lange Textdokumente leichter navigieren\n\n## Frage\n\nWie finden Sie Passagen in einem langen Textdokument wieder und setzen die Lektüre fort, ohne jedes Mal von vorn zu suchen?\n\n## Kurzantwort\n\nBewahren Sie das Original auf, notieren Sie vorhandene Überschriften und wählen Sie eindeutige Suchformulierungen. Halten Sie die Fundstelle in einer separaten Notiz fest. Schließen und öffnen Sie dieselbe Version erneut, um den Rückweg zu prüfen.\n\n## Warum man die Lesestelle leicht verliert\n\nEine Textdatei kann Tausende Zeilen enthalten, ohne ein anklickbares Inhaltsverzeichnis zu besitzen. Auch die sichtbare Position verändert sich, wenn Sie Fensterbreite, Schrift oder Zeilenumbruch anpassen. Umgebrochene Bildschirmzeilen sind deshalb keine stabilen Fundstellenangaben. Eine markante Formulierung zusammen mit Abschnitt und Dateiversion liefert mehr Kontext.\n\n## Vorgehen in fünf Schritten\n\n1. **Original bewahren und Arbeitsweise festlegen.** Identifizieren Sie Dateinamen sowie Version oder Dokumentdatum. Entscheiden Sie, ob Sie nur lesen oder eine bearbeitbare Kopie benötigen. Lassen Sie das Original bei einer Prüfung unverändert. Bearbeiten Sie Protokolle, Beweismaterial oder Exporte nicht allein, um die Navigation zu erleichtern.\n\n2. **Vorhandene Überschriften extern erfassen.** Notieren Sie Überschriften oder Bezeichnungen, die den Inhalt tatsächlich gliedern. Eine kurze Liste reicht oft, um die Themen wiederzuerkennen. Fehlen Überschriften, beschreiben Sie die Abschnitte in Ihrer Notiz, ohne diese Bezeichnungen als Originaltext auszugeben. Eine geschriebene Überschrift wird nicht automatisch zu einem Link oder Inhaltsverzeichniseintrag.\n\n3. **Markante Suchformulierungen wählen und Treffer prüfen.** Kopieren Sie eine kurze, genaue Formulierung aus der gesuchten Passage statt eines häufigen Einzelworts. Testen Sie die Suche und lesen Sie die benachbarten Absätze. Ergänzen Sie bei vielen Treffern weitere Wörter oder suchen Sie nach einer nahen Überschrift. Der Umgang mit Großschreibung, Sonderzeichen und Zeilenumbrüchen hängt vom Programm und dessen Suchoptionen ab.\n\n4. **Eine externe Fundstellennotiz anlegen.** Notieren Sie Datei, Version, Abschnitt und Suchformulierung außerhalb des Dokuments. Ergänzen Sie Ihre nächste Lesefrage. Verwenden Sie klare Bezeichnungen, damit Ihre Notiz nicht mit dem Originaltext verwechselt wird. Zeilennummern können helfen, ersetzen aber nicht die Prüfung des Kontexts.\n\n5. **Schließen, erneut öffnen und Rückwege prüfen.** Öffnen Sie dieselbe Version und testen Sie die Suche mit den Angaben Ihrer externen Notiz. Kontrollieren Sie den Absatz, nicht nur die scheinbare Position. Wiederholen Sie die Prüfung, bevor Sie die Angabe für eine neue Version verwenden: Einfügungen oder Löschungen können Zeilennummern verschieben oder Formulierungen entfernen.\n\n## Grenzen des Verfahrens\n\nDie Orientierungspunkte helfen beim Wiederfinden. Sie beheben keine unleserlichen Zeichen und garantieren kein schnelles Öffnen großer Dateien. Ein fehlender Treffer beweist nicht, dass Inhalt gelöscht wurde. Prüfen Sie Version, Suchtext und Optionen. Übernehmen Sie keine unnötigen personenbezogenen oder vertraulichen Angaben in gemeinsam genutzte Notizen.\n\n## Eine mögliche App\n\nVaultXT ist ein optionaler lokaler Texteditor. Die [Beschreibung bei Google Play](https://play.google.com/store/apps/details?id=com.onnellab.vaultxt) nennt Textsuche und importierte Arbeitskopien, die von externen Originalen getrennt bleiben. Dieser Leitfaden belegt keine automatische Navigation über Überschriften in VaultXT und gibt keine Garantie für Dateigröße oder Leistung. Wählen Sie ein Leseprogramm, das zu Ihrer Aufgabe passt.\n\n## Weiterführende Leitfäden\n\nLesen Sie auch [große TXT-Dateien lesen](https://onnellab.com/blog/de/read-large-txt-files-without-lag/) und [große Protokolldateien prüfen, ohne das Original zu verändern](https://onnellab.com/blog/de/inspect-large-log-file-without-altering-original/).\n\n## Fazit\n\nTesten Sie vor dem Beenden der Lektüre einen konkreten Rückweg: identifizierte Datei, Abschnitt, Suchstelle und nächste Aufgabe.\n\n## Häufige Fragen\n\n### Bleibt eine Fundstellenangabe in einer neuen Version gültig?\n\nSetzen Sie das nicht voraus. Suchen Sie die Formulierung erneut und prüfen Sie Abschnitt und Kontext, bevor Sie die Notiz weiterverwenden.\n\n### Muss ich den Text bearbeiten, um ihn zu gliedern?\n\nNein. Eine externe Liste vorhandener Überschriften oder Themen kann die Lektüre strukturieren, ohne den Inhalt zu verändern.\n\n### Was tun bei mehrfach vorkommenden Formulierungen?\n\nWählen Sie eine genauere Suchstelle und prüfen Sie Abschnitt und Nachbarabsätze. Übernehmen Sie nicht ungeprüft den ersten Treffer.\n"
+}

@@ -1,0 +1,33 @@
+{
+  "locale": "fr",
+  "title": "Se repérer plus facilement dans un long document texte",
+  "description": "Retrouvez vos passages avec une liste des titres existants, des expressions précises et un test de reprise, tout en préservant le fichier original.",
+  "question": "Comment retrouver un passage et reprendre la lecture d’un long document texte sans le parcourir à nouveau depuis le début ?",
+  "primary_keyword": "se repérer dans un long document texte",
+  "secondary_keywords": "titres dans un fichier TXT|retrouver un passage|reprendre sa lecture|références de lecture",
+  "short_answer": "Préservez l’original, notez les titres existants et choisissez des expressions distinctives à rechercher. Conservez les références dans une note séparée. Fermez puis rouvrez la même version pour vérifier que vous retrouvez le passage.",
+  "image": {
+    "title": "Retrouver son passage",
+    "subtitle": "Des repères que l’on peut vérifier",
+    "message": "Testez le retour dans la même version.",
+    "steps": [
+      [
+        "Préserver",
+        "Garder l’original intact"
+      ],
+      [
+        "Repérer",
+        "Noter les titres existants"
+      ],
+      [
+        "Trouver",
+        "Rechercher et lire le contexte"
+      ],
+      [
+        "Vérifier",
+        "Rouvrir et retrouver le passage"
+      ]
+    ]
+  },
+  "body": "# Se repérer plus facilement dans un long document texte\n\n## Question\n\nComment retrouver un passage et reprendre la lecture d’un long document texte sans le parcourir à nouveau depuis le début ?\n\n## Réponse courte\n\nPréservez l’original, notez les titres existants et choisissez des expressions distinctives à rechercher. Conservez les références dans une note séparée. Fermez puis rouvrez la même version pour vérifier que vous retrouvez le passage.\n\n## Pourquoi on perd facilement sa place\n\nUn fichier texte peut contenir des milliers de lignes sans sommaire cliquable. La position visuelle change lorsque vous modifiez la largeur de la fenêtre, la police ou le retour automatique à la ligne. Les lignes affichées à l’écran ne sont donc pas des repères stables. Une expression distinctive, accompagnée de la section et de la version du fichier, donne davantage de contexte.\n\n## Une méthode en cinq étapes\n\n1. **Préserver l’original et définir le travail.** Identifiez le nom du fichier et sa version ou la date du document. Décidez si vous devez simplement lire ou travailler sur une copie modifiable. Pour un examen, conservez l’original intact. Ne modifiez pas des journaux techniques, des éléments de preuve ou des exports pour faciliter la navigation.\n\n2. **Recenser les titres existants dans une note séparée.** Notez les titres ou libellés qui structurent réellement le contenu. Une liste courte peut suffire à reconnaître les sujets. En l’absence de titres, décrivez les blocs dans votre note externe sans présenter ces libellés comme du texte original. Un titre écrit ne devient pas automatiquement un lien ou une entrée de sommaire.\n\n3. **Choisir des expressions distinctives et vérifier les résultats.** Copiez une courte formulation exacte du passage visé plutôt qu’un mot fréquent. Testez la recherche et lisez les paragraphes voisins de chaque occurrence. Si les résultats sont nombreux, ajoutez des mots ou recherchez un titre proche. Le traitement des majuscules, accents et sauts de ligne dépend du lecteur et de ses options.\n\n4. **Conserver une référence dans une note externe.** Notez séparément le fichier, la version, la section et l’expression recherchable. Ajoutez votre prochaine question de lecture. Utilisez des libellés clairs pour distinguer votre note du texte original. Les numéros de ligne peuvent compléter cette référence, mais ne remplacent pas le contexte.\n\n5. **Fermer, rouvrir et vérifier les chemins.** Ouvrez la même version et testez la recherche avec les références de votre note externe. Vérifiez le paragraphe, pas seulement sa position apparente. Refaites ce contrôle avant de réutiliser la référence dans une nouvelle version : des ajouts ou suppressions peuvent déplacer les lignes ou faire disparaître l’expression.\n\n## Les limites de cette méthode\n\nCes repères facilitent la navigation. Ils ne corrigent pas les caractères illisibles et ne garantissent pas l’ouverture rapide d’un gros fichier. Une recherche sans résultat ne prouve pas que le contenu a été supprimé. Vérifiez la version, l’expression et les options. Évitez de recopier des informations personnelles ou confidentielles inutiles dans des notes partagées.\n\n## Une application possible\n\nVaultXT est un éditeur de texte local que vous pouvez envisager. Sa [description sur Google Play](https://play.google.com/store/apps/details?id=com.onnellab.vaultxt) mentionne la recherche de texte et des copies de travail importées séparées des originaux externes. Ce guide ne confirme pas la navigation automatique par titres dans VaultXT et ne fournit aucune garantie de taille de fichier ou de performances. Choisissez un lecteur adapté à votre tâche.\n\n## Guides complémentaires\n\nConsultez les guides pour [lire de gros fichiers TXT](https://onnellab.com/blog/fr/read-large-txt-files-without-lag/) et [examiner un gros fichier journal sans modifier l’original](https://onnellab.com/blog/fr/inspect-large-log-file-without-altering-original/).\n\n## Conclusion\n\nAvant de terminer votre lecture, testez un moyen concret de revenir : fichier identifié, section, expression recherchable et prochaine tâche.\n\n## Questions fréquentes\n\n### La référence reste-t-elle valable dans une nouvelle version ?\n\nNe le supposez pas. Recherchez à nouveau l’expression et vérifiez la section ainsi que le contexte avant de réutiliser votre note.\n\n### Faut-il modifier le document pour lui donner une structure ?\n\nNon. Une liste des titres ou sujets dans une note séparée peut guider la lecture sans modifier le contenu.\n\n### Que faire si l’expression apparaît plusieurs fois ?\n\nChoisissez une formulation plus précise et vérifiez la section ainsi que les paragraphes voisins. Ne retenez pas automatiquement le premier résultat.\n"
+}

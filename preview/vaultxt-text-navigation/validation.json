@@ -1,0 +1,179 @@
+{
+  "schema": 1,
+  "kind": "draft_structural_and_live_related_link_audit_not_native_qa",
+  "checked_at_utc": "2026-10-24T09:37:33Z",
+  "structural": [
+    {
+      "locale": "en",
+      "git_blob_sha1": "ab4c92cbba946e98a111961ee6b31a1a766d1a0d",
+      "locale_matches": true,
+      "h1_matches": true,
+      "image_steps": 4,
+      "body_characters": 4461,
+      "terminal_lf": true,
+      "play_link": true,
+      "related_links": true,
+      "bookmark_absent": true,
+      "h3_count": 3
+    },
+    {
+      "locale": "pt-BR",
+      "git_blob_sha1": "b74b81dcebd94236460b5549a93e42d8c477c360",
+      "locale_matches": true,
+      "h1_matches": true,
+      "image_steps": 4,
+      "body_characters": 4313,
+      "terminal_lf": true,
+      "play_link": true,
+      "related_links": true,
+      "bookmark_absent": true,
+      "h3_count": 3
+    },
+    {
+      "locale": "de",
+      "git_blob_sha1": "126d63a44b40be382b60b147376179c18d28c813",
+      "locale_matches": true,
+      "h1_matches": true,
+      "image_steps": 4,
+      "body_characters": 4686,
+      "terminal_lf": true,
+      "play_link": true,
+      "related_links": true,
+      "bookmark_absent": true,
+      "h3_count": 3
+    },
+    {
+      "locale": "fr",
+      "git_blob_sha1": "b2fa83baf72a7d62914835963729c2264bc05a1f",
+      "locale_matches": true,
+      "h1_matches": true,
+      "image_steps": 4,
+      "body_characters": 4709,
+      "terminal_lf": true,
+      "play_link": true,
+      "related_links": true,
+      "bookmark_absent": true,
+      "h3_count": 3
+    },
+    {
+      "locale": "es",
+      "git_blob_sha1": "fd410621852c9f9047647cb6a138a32bddfccf71",
+      "locale_matches": true,
+      "h1_matches": true,
+      "image_steps": 4,
+      "body_characters": 4438,
+      "terminal_lf": true,
+      "play_link": true,
+      "related_links": true,
+      "bookmark_absent": true,
+      "h3_count": 3
+    },
+    {
+      "locale": "ko",
+      "git_blob_sha1": "82c56e7be06b2e42563f55653f18074e702a24d7",
+      "locale_matches": true,
+      "h1_matches": true,
+      "image_steps": 4,
+      "body_characters": 2522,
+      "terminal_lf": true,
+      "play_link": true,
+      "related_links": true,
+      "bookmark_absent": true,
+      "h3_count": 8
+    },
+    {
+      "locale": "ja",
+      "git_blob_sha1": "acf8ec93c93309eae27d04bbddd277982c0a5219",
+      "locale_matches": true,
+      "h1_matches": true,
+      "image_steps": 4,
+      "body_characters": 2223,
+      "terminal_lf": true,
+      "play_link": true,
+      "related_links": true,
+      "bookmark_absent": true,
+      "h3_count": 8
+    },
+    {
+      "locale": "zh-Hans",
+      "git_blob_sha1": "83394b3567550f8d737ece3209086702039ecb76",
+      "locale_matches": true,
+      "h1_matches": true,
+      "image_steps": 4,
+      "body_characters": 1775,
+      "terminal_lf": true,
+      "play_link": true,
+      "related_links": true,
+      "bookmark_absent": true,
+      "h3_count": 8
+    },
+    {
+      "locale": "zh-Hant",
+      "git_blob_sha1": "ca7571de2caafa8ff40bc0c97d3fe02931c8d3c5",
+      "locale_matches": true,
+      "h1_matches": true,
+      "image_steps": 4,
+      "body_characters": 1781,
+      "terminal_lf": true,
+      "play_link": true,
+      "related_links": true,
+      "bookmark_absent": true,
+      "h3_count": 8
+    }
+  ],
+  "method": "GitHub UTF-8 JSON readback and JavaScript field/string checks, not repository native scoring.",
+  "related_links": {
+    "count": 18,
+    "result": "Loaded in dot cloud browser; substantive article body, localized H1, correct html lang and self-canonical",
+    "checked_at_utc": "2026-10-24T09:33:20Z",
+    "slugs": [
+      "read-large-txt-files-without-lag",
+      "inspect-large-log-file-without-altering-original"
+    ],
+    "locales": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ]
+  },
+  "existing_page_matrix": {
+    "homepage_sha": "2fbcbc1770471e6f81089da8f491c59590a32204",
+    "article_identities": 22,
+    "locales": 9,
+    "markdown_pages": 198,
+    "missing_locale_cells": 0,
+    "note": ".gitkeep excluded; source path audit, not full re-review of every published text."
+  },
+  "publication_observation": {
+    "slug": "separate-source-notes-from-conclusions",
+    "ledger_published_at": "2026-10-24T12:18:54+09:00",
+    "live_nine_pages": "All nine loaded; matching html lang/self-canonical and 10 alternate links.",
+    "observed_at_utc": "2026-10-24T09:29:26Z",
+    "pipeline_run": 40073347314,
+    "homepage_deployment_run": 40073351992
+  },
+  "cadence_targets_not_schedules": [
+    {
+      "slug": "consistent-album-artist-names",
+      "target_kst": "2026-10-27T09:00:00+09:00",
+      "state": "Existing candidate; code/assets/review registration integration remains pending separate explicit approval."
+    },
+    {
+      "slug": "make-long-plain-text-easier-to-navigate",
+      "target_kst": "2026-10-30T09:00:00+09:00",
+      "state": "New text-reviewed draft; native/rendered gates unrun; no queue registration."
+    }
+  ],
+  "non_actions": [
+    "No workflow or engine code changes",
+    "No topic queue, scheduling or publication state changes",
+    "No app release, privacy, account, security or payment change",
+    "No user computer, CLI, Work/Codex task or paid API used"
+  ]
+}

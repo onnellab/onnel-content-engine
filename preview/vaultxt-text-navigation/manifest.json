@@ -1,0 +1,110 @@
+{
+  "schema": "onnellab.editorial-draft.v1",
+  "state": "TEXT_REVIEWED_NATIVE_RENDER_PENDING_NOT_QUEUED",
+  "slug": "make-long-plain-text-easier-to-navigate",
+  "category": "reading",
+  "existing_english_topic_id": "TOPIC-0040",
+  "locales": [
+    "en",
+    "ko",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "pt-BR",
+    "de",
+    "fr",
+    "es"
+  ],
+  "related_apps": [
+    "VaultXT"
+  ],
+  "source_engine_sha": "d7c4775d52f47fcc98335e77b75b970f11765442",
+  "source_homepage_sha": "2fbcbc1770471e6f81089da8f491c59590a32204",
+  "planning_target_only": "2026-10-30T09:00:00+09:00; second future cadence target after existing TagWeaver candidate, not assigned or reserved",
+  "queue_modified": false,
+  "counterpart_topic_ids_reserved": false,
+  "scheduled_at": null,
+  "published_at": null,
+  "publication_receipt": false,
+  "keyword_evidence": "Editorial hypotheses only; no measured search demand, ranking, installation or performance claims.",
+  "scope": "Five-stage external navigation aid: preserve original; map existing structure; verify distinctive search phrases in context; record an external locator note; reopen the same version and recheck. No bookmark feature, automatic headings, speed guarantee, file-size limit, iOS availability, price or release-version claim.",
+  "sources": [
+    {
+      "url": "https://play.google.com/store/apps/details?id=com.onnellab.vaultxt",
+      "observed_at_utc": "2026-10-24T09:34:23Z",
+      "method": "Live rendered official Google Play listing in dot cloud browser; Korean listing shows updated 2026-10-17. Not an app execution test.",
+      "supports": [
+        "Public Android app listing",
+        "Local text editor with find and replace",
+        "Imports copied as local working copies separate from external originals"
+      ],
+      "limits": "No bookmark or automatic heading-navigation claim established; current product capability scope limited to these descriptions."
+    }
+  ],
+  "source_notes": "sources/vaultxt/README.md does not exist at inspected main; directory contains .gitkeep only. No source file was invented or amended.",
+  "verification": {
+    "native_repository_validators": "NOT RUN",
+    "review_scores_or_fingerprints": "NOT GENERATED",
+    "svg_png_rendering": "NOT RUN; localized image text only",
+    "astro_browser_preview": "NOT RUN",
+    "candidate_page_checks": "NOT RUN: draft is not deployed",
+    "related_page_checks": "18/18 live existing related pages loaded in dot cloud browser at 2026-10-24T09:33Z with substantive article text, matching html language and self-canonical. This is not candidate rendering.",
+    "independent_language_review": "PASS all nine final Git blobs by separate independent_nav_review agent after complete-language review and exact correction readback; editorial text/image-copy only. See editorial_review.json."
+  },
+  "artifacts": [
+    {
+      "locale": "en",
+      "file": "en.json",
+      "git_blob_sha1": "ab4c92cbba946e98a111961ee6b31a1a766d1a0d",
+      "format": "Localized metadata, complete Markdown body and localized diagram copy"
+    },
+    {
+      "locale": "ko",
+      "file": "ko.json",
+      "git_blob_sha1": "82c56e7be06b2e42563f55653f18074e702a24d7",
+      "format": "Localized metadata, complete Markdown body and localized diagram copy"
+    },
+    {
+      "locale": "ja",
+      "file": "ja.json",
+      "git_blob_sha1": "acf8ec93c93309eae27d04bbddd277982c0a5219",
+      "format": "Localized metadata, complete Markdown body and localized diagram copy"
+    },
+    {
+      "locale": "zh-Hans",
+      "file": "zh-Hans.json",
+      "git_blob_sha1": "83394b3567550f8d737ece3209086702039ecb76",
+      "format": "Localized metadata, complete Markdown body and localized diagram copy"
+    },
+    {
+      "locale": "zh-Hant",
+      "file": "zh-Hant.json",
+      "git_blob_sha1": "ca7571de2caafa8ff40bc0c97d3fe02931c8d3c5",
+      "format": "Localized metadata, complete Markdown body and localized diagram copy"
+    },
+    {
+      "locale": "pt-BR",
+      "file": "pt-BR.json",
+      "git_blob_sha1": "b74b81dcebd94236460b5549a93e42d8c477c360",
+      "format": "Localized metadata, complete Markdown body and localized diagram copy"
+    },
+    {
+      "locale": "de",
+      "file": "de.json",
+      "git_blob_sha1": "126d63a44b40be382b60b147376179c18d28c813",
+      "format": "Localized metadata, complete Markdown body and localized diagram copy"
+    },
+    {
+      "locale": "fr",
+      "file": "fr.json",
+      "git_blob_sha1": "b2fa83baf72a7d62914835963729c2264bc05a1f",
+      "format": "Localized metadata, complete Markdown body and localized diagram copy"
+    },
+    {
+      "locale": "es",
+      "file": "es.json",
+      "git_blob_sha1": "fd410621852c9f9047647cb6a138a32bddfccf71",
+      "format": "Localized metadata, complete Markdown body and localized diagram copy"
+    }
+  ]
+}
