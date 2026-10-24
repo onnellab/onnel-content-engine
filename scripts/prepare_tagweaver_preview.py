@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the unchanged TagWeaver draft bundle in an isolated copy; never publish."""
+"""Validate the reviewed TagWeaver draft bundle in an isolated copy; never publish."""
 from __future__ import annotations
 import argparse
 import json
@@ -45,15 +45,15 @@ REVIEW_DIAGNOSTIC_CHECK_NAMES = (
     "image_quality", "internal_links", "readability_depth", "translation_quality",
 )
 REVIEWED_BLOBS = {
-    "en": "af5023281da5168cedea7aecfef358dddf9534f1",
-    "pt-BR": "362f19a71dc492c641ad5e9d1696f1efde4c9d9f",
-    "de": "eca448f36491bb56f118502a706e101a8691d8d6",
-    "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
-    "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
-    "fr": "d140f2688370385042b1ca1201c431398605b7b2",
-    "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
-    "es": "055fa43f5aa9a0b1e661902cd2c3c3b73387a1dd",
-    "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
+    "en": "e5e8d5e973ee503176dd1c28f65bdf6cba888362",
+    "ko": "8aa4dbe4cf21461c7d963b9ec45f9282b6002ef4",
+    "ja": "4be616532fa63824f39c09f94c40b56c7e35cc0e",
+    "zh-Hans": "de3d16b1b99bae0a14e9987c010c4df14ae48603",
+    "zh-Hant": "5eb2f4634ee16c3328654ef6a8223ec2fe9846da",
+    "pt-BR": "2b16d1e71ade064e946c7df4eeb80ea0401ee342",
+    "de": "1359bd35dd8672c3ac622077405485223d20bb45",
+    "fr": "aef06de4719c6c01b9f7ef2305aa2e2937f68914",
+    "es": "041460993822dcdc1c2d21aacc547ea273891c2f"
 }
 
 APPROVED_IDEA_SEED = {

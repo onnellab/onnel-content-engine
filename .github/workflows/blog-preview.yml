@@ -36,11 +36,11 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-      - name: Checkout exact deployed blog template revision for disposable preview
+      - name: Checkout exact verified blog template revision for disposable preview
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: onnellab/onnellab.github.io
-          ref: e1219ed51d8f4b5ea0cc89ef3db4b210b083bb0d
+          ref: 85747fead19facb4414072370daacf6828617f4e
           path: .preview-homepage
           persist-credentials: false
       - name: Configure existing Node version
@@ -56,6 +56,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_blog_preview.py -v
           python3 -m unittest discover -s tests -p test_preview_candidate_profiles.py -v
           python3 -m unittest discover -s tests -p test_conversational_korean_definitions.py -v
+          python3 -m unittest discover -s tests -p test_functional_field_definitions.py -v
           python3 -m unittest discover -s tests -p test_aligna_preview.py -v
           python3 -m unittest discover -s tests -p test_research_preview.py -v
           python3 -m unittest discover -s tests -p test_tagweaver_preview.py -v

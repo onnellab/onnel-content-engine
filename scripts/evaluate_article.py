@@ -182,8 +182,30 @@ def has_required_sections(found_sections: set[str]) -> bool:
     return all(aliases & found_sections for aliases in required)
 
 
+def has_functional_field_definition(prose: str, language: str) -> bool:
+    """Recognize a named field's declarative role, not an editing instruction."""
+    if language == "ko":
+        return bool(re.search(
+            r"(?:^|\n|[.!?]\s+)(?!(?:이것|그것|무엇|어떤 것)(?:은|는|이|가)\s)"
+            r"[가-힣A-Za-z][가-힣A-Za-z0-9 /-]{1,39}(?:은|는|이|가)\s+"
+            r"(?![^.?!\n]{0,160}(?:버튼|눌러|클릭|터치))"
+            r"[^.?!\n]{4,160}(?:식별해요|나타내요)\.",
+            prose,
+        ))
+    if language in {"zh-Hans", "zh-Hant"}:
+        return bool(re.search(
+            r"(?:^|\n|[。！？]\s*)(?!(?:这|這|它|那|什么|什麼|请|請|将|將|把|不要|不得|是否|如何|怎么|怎麼))"
+            r"[\u3400-\u9fffA-Za-z][\u3400-\u9fffA-Za-z0-9]{1,19}"
+            r"(?:用于识别|用於識別|表示)[^。！？\n]{4,160}。",
+            prose,
+        ))
+    return False
+
+
 def has_clear_definitions(body: str, language: str = "en") -> bool:
     prose = human_readable_prose(body)
+    if has_functional_field_definition(prose, language):
+        return True
     if language in DEFINITION_PATTERNS:
         return bool(re.search(DEFINITION_PATTERNS[language], prose))
     return bool(
