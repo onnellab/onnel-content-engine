@@ -491,12 +491,18 @@ def social_card_svg(article: Article) -> str:
         else:
             raise PublishingError(f"Localized social card title cannot fit without truncation: {social_card_error_context(article)}")
         description_y = max(410, 218 + (len(title_lines) - 1) * title_height + 44)
-        for candidate_font in (24, 22, 20):
-            candidate = wrap_display_text(article.description, 1016, candidate_font)
-            if description_y + (len(candidate) - 1) * (candidate_font + 10) <= 490:
-                description_lines, description_font, description_height = candidate, candidate_font, candidate_font + 10
+        description_positions = (description_y, max(390, 218 + (len(title_lines) - 1) * title_height + 44))
+        fitted = False
+        for candidate_y in dict.fromkeys(description_positions):
+            for candidate_font in (24, 22, 20):
+                candidate = wrap_display_text(article.description, 1016, candidate_font)
+                if candidate_y + (len(candidate) - 1) * (candidate_font + 10) <= 490:
+                    description_lines, description_font, description_height = candidate, candidate_font, candidate_font + 10
+                    description_y, fitted = candidate_y, True
+                    break
+            if fitted:
                 break
-        else:
+        if not fitted:
             raise PublishingError(f"Localized social card description cannot fit without truncation: {social_card_error_context(article)}")
     category_colors = {
         "reading": ("#e7f2fb", "#b9d7ea", "#24465c"),

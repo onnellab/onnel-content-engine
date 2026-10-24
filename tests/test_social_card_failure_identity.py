@@ -1,5 +1,6 @@
 from pathlib import Path
 import unittest
+import xml.etree.ElementTree as ET
 from unittest.mock import patch
 import sys
 
@@ -29,6 +30,28 @@ class SocialCardFailureIdentity(unittest.TestCase):
                 self.assertNotIn("PRIVATE_CONTENT", message)
                 self.assertNotIn("PRIVATE_BODY", message)
                 run.assert_not_called()
+
+    def test_german_four_line_description_preserves_every_word_and_bounds(self):
+        article = self.article(topic={"id": "TOPIC-0093", "primary_language": "de",
+                                      "slug": "separate-source-notes-from-conclusions", "category": "research"},
+                               title="Quellennotizen und eigene Schlussfolgerungen klar trennen", description="Halten Sie Zitate, Paraphrasen und eigene Interpretationen auseinander: mit genauen Fundstellen, einer praktischen Vergleichstabelle und einem Ablauf in fünf Schritten für Forschungsnotizen.")
+        root = ET.fromstring(social_card_svg(article))
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        title_node = root.find("s:text[@font-weight='760']", ns)
+        description = root.find("s:text[@fill='#5f5b54']", ns)
+        lines = description.findall("s:tspan", ns)
+        self.assertEqual(" ".join(line.text for line in lines), article.description)
+        self.assertEqual([int(line.attrib["y"]) for line in lines], [390, 422, 454, 486])
+        self.assertEqual(int(description.attrib["font-size"]), 22)
+        self.assertGreaterEqual(int(lines[0].attrib["y"]) - int(title_node.findall("s:tspan", ns)[-1].attrib["y"]), 44)
+        self.assertLessEqual(int(lines[-1].attrib["y"]), 490)
+
+    def test_existing_short_card_keeps_original_position_and_font(self):
+        root = ET.fromstring(social_card_svg(self.article()))
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        node = root.find("s:text[@fill='#5f5b54']", ns)
+        self.assertEqual(node.attrib["font-size"], "24")
+        self.assertEqual(node.find("s:tspan", ns).attrib["y"], "410")
 
     def test_missing_identifiers_do_not_introduce_a_diagnostic_error(self):
         self.assertEqual(social_card_error_context(self.article(topic={})), " (, )")
