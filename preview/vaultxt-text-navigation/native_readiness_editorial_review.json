@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "kind": "independent_editorial_review_not_publication_receipt",
+  "reviewed_at_utc": "2026-10-24T14:22:11Z",
+  "reviewer": "review_ja_de_corrections (independent agent)",
+  "result": "PASS_TEXT_AND_IMAGE_COPY_ONLY",
+  "reviewed_final_blobs": {
+    "en": "67212fda1ed176fe1feadb2b8a8d8b1e92feb739",
+    "ko": "99e370b48e219a170b364fa7b6b238e845a25393",
+    "ja": "551c746c189a1e616e46eaae18a44c08a8e78df1",
+    "zh-Hans": "6211c0ca9848885f4fd2d7c721cacc12bf6daafc",
+    "zh-Hant": "143e480c65745f701ad1c02ab0f8d842286078fe",
+    "pt-BR": "2bd19c290826446a4395c12c96df872ee56ff142",
+    "de": "84d303d8501b203317a42d5d39581293613f697e",
+    "fr": "f46a1d89162796840b9bd7aba7908c812caab02f",
+    "es": "57fa798585ba82175b3a5016976259419bd07ba5"
+  },
+  "scope": "Full nine complete JSON bodies/metadata/image copy after useful locator-definition and three-row comparison-table additions; CJK/Korean numbered workflow formatting; editorial keywords aligned with natural title wording; JA natural tableheader and DE grammatical correction read back.",
+  "idea_seed": {
+    "slug": "choose-literal-or-pattern-search-for-text",
+    "result": "PASS_PRODUCT_NEUTRAL_EDITORIAL_IDEA_ONLY"
+  },
+  "limitations": [
+    "Native review scores pending",
+    "SVG/PNG rendering pending",
+    "Astro/browser page QA pending",
+    "No schedule or publication"
+  ]
+}

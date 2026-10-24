@@ -45,18 +45,36 @@ REVIEW_DIAGNOSTIC_CHECK_NAMES = (
     "image_quality", "internal_links", "readability_depth", "translation_quality",
 )
 REVIEWED_BLOBS = {
-    "en": "ab4c92cbba946e98a111961ee6b31a1a766d1a0d",
-    "ko": "82c56e7be06b2e42563f55653f18074e702a24d7",
-    "ja": "523adc2f471278fad24a1d7c9167fe2b66888832",
-    "zh-Hans": "83394b3567550f8d737ece3209086702039ecb76",
-    "zh-Hant": "ca7571de2caafa8ff40bc0c97d3fe02931c8d3c5",
-    "pt-BR": "b74b81dcebd94236460b5549a93e42d8c477c360",
-    "de": "585d61b5cfa2859d26e62e78d80c79c7b1ac2095",
-    "fr": "b2fa83baf72a7d62914835963729c2264bc05a1f",
-    "es": "fd410621852c9f9047647cb6a138a32bddfccf71"
+    "en": "67212fda1ed176fe1feadb2b8a8d8b1e92feb739",
+    "ko": "99e370b48e219a170b364fa7b6b238e845a25393",
+    "ja": "551c746c189a1e616e46eaae18a44c08a8e78df1",
+    "zh-Hans": "6211c0ca9848885f4fd2d7c721cacc12bf6daafc",
+    "zh-Hant": "143e480c65745f701ad1c02ab0f8d842286078fe",
+    "pt-BR": "2bd19c290826446a4395c12c96df872ee56ff142",
+    "de": "84d303d8501b203317a42d5d39581293613f697e",
+    "fr": "f46a1d89162796840b9bd7aba7908c812caab02f",
+    "es": "57fa798585ba82175b3a5016976259419bd07ba5"
 }
 
 
+
+APPROVED_IDEA_SEED = {
+    "status": "idea",
+    "category": "reading",
+    "primary_language": "en",
+    "slug": "choose-literal-or-pattern-search-for-text",
+    "primary_question": "How can I choose between literal text search and pattern matching before searching a document?",
+    "working_title": "Choose Literal or Pattern Search for Text",
+    "priority": "normal",
+    "search_intent": "workflow",
+    "related_apps": "",
+    "primary_keyword": "literal text search versus pattern matching",
+    "secondary_keywords": "exact phrase search|search metacharacters|test search query",
+    "evergreen": "true",
+    "source_type": "editorial",
+    "review_required": "true",
+    "notes": "Independently reviewed product-neutral editorial hypothesis: explain literal versus interpreted search syntax using small invented examples; verify each reader’s supported modes and escape rules without assuming regex support. No app-capability, search-demand or performance claim; do not copy sensitive source text. Distinct from navigation locators and encoding troubleshooting. ID remains unassigned until normal allocation."
+}
 
 def bounded_json(directory, filename, limit=100_000):
     path = safe_native_path(directory, filename, required=True)
@@ -237,7 +255,11 @@ def stage_topics(stage, drafts):
             matches[0]["related_apps"] != RELATED_APP or any(matches[0][key] for key in
                 ("canonical_path", "scheduled_at", "published_at", "published_url"))):
         raise ValueError("Unexpected candidate identity")
-    seeds = []
+    seeds = bounded_json(stage / PREVIEW_DIRECTORY, "idea_seeds.json")
+    if seeds != [APPROVED_IDEA_SEED]:
+        raise ValueError("Exactly the reviewed unassigned editorial seed required")
+    if any(row["slug"] == APPROVED_IDEA_SEED["slug"] for row in rows):
+        raise ValueError("Reviewed editorial seed already exists; do not duplicate")
     if set(drafts) != set(LOCALES):
         raise ValueError("Exactly nine draft locales required")
     original_other = [dict(r) for r in rows if r["id"] != TOPIC_ID]

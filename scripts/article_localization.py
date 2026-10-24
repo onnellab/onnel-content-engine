@@ -45,6 +45,38 @@ EDITORIAL_SECTION_ALIASES = {
 }
 
 
+# Exact headings already present in the independently reviewed TagWeaver drafts.
+# This is a syntax contract, not evidence that product placement passes review.
+TAGWEAVER_REVIEWED_SLUG = "consistent-album-artist-names"
+TAGWEAVER_REVIEWED_SECTION_KEYS = (
+    "recommended_workflow", "onnellab_application", "conclusion",
+)
+TAGWEAVER_REVIEWED_SECTION_HEADINGS = {
+    "en": ("Recommended Workflow", "Where TagWeaver Fits", "Conclusion"),
+    "ko": ("권장 작업 순서", "TagWeaver를 활용하는 단계", "결론"),
+    "ja": ("推奨する作業手順", "TagWeaverを使う場面", "まとめ"),
+    "zh-Hans": ("建议操作流程", "TagWeaver 适合在哪个环节使用", "总结"),
+    "zh-Hant": ("建議操作流程", "TagWeaver 適合在哪個階段使用", "結語"),
+    "pt-BR": ("Fluxo recomendado", "Onde o TagWeaver se encaixa", "Conclusão"),
+    "de": ("Empfohlener Ablauf", "Wo TagWeaver hilft", "Fazit"),
+    "fr": ("Méthode recommandée", "Le rôle de TagWeaver", "Conclusion"),
+    "es": ("Flujo recomendado", "Dónde encaja TagWeaver", "Conclusión"),
+}
+
+
+def tagweaver_section_aliases(language):
+    if language not in TAGWEAVER_REVIEWED_SECTION_HEADINGS:
+        raise ValueError("Unknown reviewed TagWeaver locale")
+    return {
+        key: {heading.lower()}
+        for key, heading in zip(TAGWEAVER_REVIEWED_SECTION_KEYS,
+                                TAGWEAVER_REVIEWED_SECTION_HEADINGS[language])
+    }
+
+
+from vaultxt_preview_contract import section_aliases as vaultxt_section_aliases
+
+
 def localized_section_aliases(language):
     result = {key: {label.lower()} for key, label in zip(SECTION_KEYS, LOCALIZED_SECTIONS[language])}
     result["faq"].add("faq")
@@ -54,6 +86,10 @@ def localized_section_aliases(language):
         result[key].update(alias.lower() for alias in aliases)
     for key, aliases in EDITORIAL_SECTION_ALIASES.get(language, {}).items():
         result[key].update(alias.lower() for alias in aliases)
+    for key, aliases in tagweaver_section_aliases(language).items():
+        result[key].update(aliases)
+    for key, aliases in vaultxt_section_aliases(language).items():
+        result[key].update(aliases)
     return result
 
 DEFINITION_PATTERNS = {

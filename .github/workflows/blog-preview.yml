@@ -1,7 +1,7 @@
 name: Preview nine-language blog candidate
 on:
   push:
-    branches: [main, verify/vaultxt-text-navigation-20261024]
+    branches: [main, verify/vaultxt-text-navigation-20261024, verify/tagweaver-caption-20261024]
     paths:
       - '.github/workflows/blog-preview.yml'
       - 'preview/clipnest/**'
@@ -9,6 +9,10 @@ on:
       - 'preview/research-source-notes/**'
       - 'preview/vaultxt-text-navigation/**'
       - 'scripts/prepare_vaultxt_preview.py'
+      - 'scripts/vaultxt_preview_contract.py'
+      - 'scripts/prepare_tagweaver_preview.py'
+      - 'preview/tagweaver-album-artists/**'
+      - 'tests/test_tagweaver_preview.py'
       - 'tests/test_vaultxt_preview.py'
       - 'scripts/prepare_aligna_preview.py'
       - 'scripts/prepare_research_preview.py'
@@ -26,7 +30,7 @@ on:
         description: Nonpublishing candidate
         type: choice
         default: research-source-notes
-        options: [research-source-notes, vaultxt-text-navigation]
+        options: [research-source-notes, vaultxt-text-navigation, tagweaver-album-artists]
 permissions:
   contents: read
 concurrency:
@@ -39,6 +43,7 @@ jobs:
     timeout-minutes: 15
     env:
       VAULTXT_PREVIEW: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/verify/vaultxt-text-navigation-20261024') || inputs.candidate == 'vaultxt-text-navigation' }}
+      TAGWEAVER_PREVIEW: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/verify/tagweaver-caption-20261024') || inputs.candidate == 'tagweaver-album-artists' }}
     steps:
       - name: Checkout preview source
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -48,7 +53,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: onnellab/onnellab.github.io
-          ref: 992753863934ce805e6aebcd7e147d3122d3bb55
+          ref: fd8f97cbb1af94bdb42f25be28aa88d322bc3ec1
           path: .preview-homepage
           persist-credentials: false
       - name: Configure existing Node version
@@ -67,6 +72,8 @@ jobs:
           python3 -m unittest discover -s tests -p test_aligna_preview.py -v
           python3 -m unittest discover -s tests -p test_research_preview.py -v
           python3 -m unittest discover -s tests -p test_vaultxt_preview.py -v
+          python3 -m unittest discover -s tests -p test_tagweaver_preview.py -v
+          python3 -m unittest discover -s tests -p test_functional_field_definitions.py -v
           python3 scripts/prepare_blog_preview.py --bundle preview/clipnest/candidate.json --validate-only
       - name: Install existing publisher renderer dependencies
         timeout-minutes: 8
@@ -75,11 +82,14 @@ jobs:
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y librsvg2-bin fonts-noto-cjk
       - name: Validate research source notes with actual native gates in a disposable engine copy
-        if: env.VAULTXT_PREVIEW != 'true'
+        if: env.VAULTXT_PREVIEW != 'true' && env.TAGWEAVER_PREVIEW != 'true'
         run: python3 scripts/prepare_research_preview.py
       - name: Validate VaultXT with actual native gates in a disposable engine copy
         if: env.VAULTXT_PREVIEW == 'true'
         run: python3 scripts/prepare_vaultxt_preview.py
+      - name: Validate TagWeaver with actual native gates in a disposable engine copy
+        if: env.TAGWEAVER_PREVIEW == 'true'
+        run: python3 scripts/prepare_tagweaver_preview.py
       - name: Verify tracked source remains unchanged
         run: git diff --exit-code
       - name: Audit locked homepage dependencies
@@ -98,6 +108,8 @@ jobs:
         run: |
           if [ "$VAULTXT_PREVIEW" = "true" ]; then
             python3 scripts/prepare_blog_preview.py --bundle preview-evidence/vaultxt-text-navigation/candidate.json --homepage .preview-homepage --evidence preview-evidence
+          elif [ "$TAGWEAVER_PREVIEW" = "true" ]; then
+            python3 scripts/prepare_blog_preview.py --bundle preview-evidence/tagweaver-album-artists/candidate.json --homepage .preview-homepage --evidence preview-evidence
           else
             python3 scripts/prepare_blog_preview.py --bundle preview-evidence/research-source-notes/candidate.json --homepage .preview-homepage --evidence preview-evidence
           fi

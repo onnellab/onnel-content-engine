@@ -1,0 +1,19 @@
+[
+  {
+    "status": "idea",
+    "category": "reading",
+    "primary_language": "en",
+    "slug": "choose-literal-or-pattern-search-for-text",
+    "primary_question": "How can I choose between literal text search and pattern matching before searching a document?",
+    "working_title": "Choose Literal or Pattern Search for Text",
+    "priority": "normal",
+    "search_intent": "workflow",
+    "related_apps": "",
+    "primary_keyword": "literal text search versus pattern matching",
+    "secondary_keywords": "exact phrase search|search metacharacters|test search query",
+    "evergreen": "true",
+    "source_type": "editorial",
+    "review_required": "true",
+    "notes": "Independently reviewed product-neutral editorial hypothesis: explain literal versus interpreted search syntax using small invented examples; verify each reader’s supported modes and escape rules without assuming regex support. No app-capability, search-demand or performance claim; do not copy sensitive source text. Distinct from navigation locators and encoding troubleshooting. ID remains unassigned until normal allocation."
+  }
+]

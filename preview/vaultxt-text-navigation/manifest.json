@@ -49,61 +49,61 @@
     "astro_browser_preview": "NOT RUN",
     "candidate_page_checks": "NOT RUN: draft is not deployed",
     "related_page_checks": "18/18 live existing related pages loaded in dot cloud browser at 2026-10-24T09:33Z with substantive article text, matching html language and self-canonical. This is not candidate rendering.",
-    "independent_language_review": "PASS all nine final Git blobs by separate independent_nav_review agent after complete-language review and exact correction readback; editorial text/image-copy only. See editorial_review.json. Focused JA punctuation and DE diagram-copy corrections independently reviewed 2026-10-24T14:15Z; see qa_corrections_review.json."
+    "independent_language_review": "PASS all nine final revised blobs by independent review_ja_de_corrections after complete actual-language review and final JA/DE correction readback. See native_readiness_editorial_review.json. Native/render/page gates remain pending."
   },
   "artifacts": [
     {
       "locale": "en",
       "file": "en.json",
-      "git_blob_sha1": "ab4c92cbba946e98a111961ee6b31a1a766d1a0d",
+      "git_blob_sha1": "67212fda1ed176fe1feadb2b8a8d8b1e92feb739",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
       "locale": "ko",
       "file": "ko.json",
-      "git_blob_sha1": "82c56e7be06b2e42563f55653f18074e702a24d7",
+      "git_blob_sha1": "99e370b48e219a170b364fa7b6b238e845a25393",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
       "locale": "ja",
       "file": "ja.json",
-      "git_blob_sha1": "523adc2f471278fad24a1d7c9167fe2b66888832",
+      "git_blob_sha1": "551c746c189a1e616e46eaae18a44c08a8e78df1",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
       "locale": "zh-Hans",
       "file": "zh-Hans.json",
-      "git_blob_sha1": "83394b3567550f8d737ece3209086702039ecb76",
+      "git_blob_sha1": "6211c0ca9848885f4fd2d7c721cacc12bf6daafc",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
       "locale": "zh-Hant",
       "file": "zh-Hant.json",
-      "git_blob_sha1": "ca7571de2caafa8ff40bc0c97d3fe02931c8d3c5",
+      "git_blob_sha1": "143e480c65745f701ad1c02ab0f8d842286078fe",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
       "locale": "pt-BR",
       "file": "pt-BR.json",
-      "git_blob_sha1": "b74b81dcebd94236460b5549a93e42d8c477c360",
+      "git_blob_sha1": "2bd19c290826446a4395c12c96df872ee56ff142",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
       "locale": "de",
       "file": "de.json",
-      "git_blob_sha1": "585d61b5cfa2859d26e62e78d80c79c7b1ac2095",
+      "git_blob_sha1": "84d303d8501b203317a42d5d39581293613f697e",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
       "locale": "fr",
       "file": "fr.json",
-      "git_blob_sha1": "b2fa83baf72a7d62914835963729c2264bc05a1f",
+      "git_blob_sha1": "f46a1d89162796840b9bd7aba7908c812caab02f",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
       "locale": "es",
       "file": "es.json",
-      "git_blob_sha1": "fd410621852c9f9047647cb6a138a32bddfccf71",
+      "git_blob_sha1": "57fa798585ba82175b3a5016976259419bd07ba5",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     }
   ]

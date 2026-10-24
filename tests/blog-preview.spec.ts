@@ -41,7 +41,7 @@ for (const locale of candidate.locales as string[]) {
 
     // Check the browser's actual native list-marker inputs and computed style.
     // Blank-separated workflow steps must keep their authored start numbers.
-    if (candidate.slug === 'design-consistent-file-naming-system') {
+    if (['design-consistent-file-naming-system', 'consistent-album-artist-names'].includes(candidate.slug)) {
       const renderedNumbers = await page.locator('.article-body ol').evaluateAll(lists =>
         lists.flatMap(list => {
           const ol = list as HTMLOListElement;
@@ -55,7 +55,8 @@ for (const locale of candidate.locales as string[]) {
             return result;
           });
         }));
-      expect(renderedNumbers).toEqual([1, 2, 3, 4, 5, 6].map(number => ({
+      const expectedNumbers = candidate.slug === 'consistent-album-artist-names' ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5, 6];
+      expect(renderedNumbers).toEqual(expectedNumbers.map(number => ({
         number, display: 'list-item', type: 'decimal',
       })));
     }
@@ -90,6 +91,41 @@ for (const locale of candidate.locales as string[]) {
     // Exercise the actual image viewer and its keyboard dismissal.
     await page.locator('[data-article-image-trigger]').first().click();
     await expect(page.locator('dialog.article-image-viewer')).toBeVisible();
+    const assertCaptionContained = async () => {
+      const bounds = await page.locator('[data-article-image-viewer-caption]').evaluate(caption => {
+        const panel = caption.closest('.article-image-viewer-panel')!;
+        const frame = panel.getBoundingClientRect();
+        const box = caption.getBoundingClientRect();
+        const textRects: {left: number; right: number; top: number; bottom: number}[] = [];
+        const walker = document.createTreeWalker(caption, NodeFilter.SHOW_TEXT);
+        while (walker.nextNode()) {
+          if (!walker.currentNode.textContent?.trim()) continue;
+          const range = document.createRange();
+          range.selectNodeContents(walker.currentNode);
+          for (const r of Array.from(range.getClientRects())) {
+            if (r.width && r.height) textRects.push({left: r.left, right: r.right, top: r.top, bottom: r.bottom});
+          }
+        }
+        return {
+          frame: {left: Math.max(0, frame.left), right: Math.min(innerWidth, frame.right),
+                  top: Math.max(0, frame.top), bottom: Math.min(innerHeight, frame.bottom)},
+          box: {left: box.left, right: box.right, top: box.top, bottom: box.bottom},
+          textRects, scroll: caption.scrollWidth, client: caption.clientWidth,
+          text: caption.textContent?.trim(),
+        };
+      });
+      expect(bounds.text).toBeTruthy();
+      expect(bounds.textRects.length).toBeGreaterThan(0);
+      expect(bounds.scroll).toBeLessThanOrEqual(bounds.client + 1);
+      for (const r of [bounds.box, ...bounds.textRects]) {
+        expect(r.left).toBeGreaterThanOrEqual(bounds.frame.left - 1);
+        expect(r.right).toBeLessThanOrEqual(bounds.frame.right + 1);
+        expect(r.top).toBeGreaterThanOrEqual(bounds.frame.top - 1);
+        expect(r.bottom).toBeLessThanOrEqual(bounds.frame.bottom + 1);
+      }
+    };
+
+    await assertCaptionContained();
     await page.screenshot({ path: path.join(output, `${locale}-${testInfo.project.name}-viewer.png`) });
     const viewerEvidence = await page.locator('[data-article-image-viewer-img]').evaluate((node: HTMLImageElement) => ({
       renderedWidth: node.getBoundingClientRect().width,
@@ -112,6 +148,7 @@ for (const locale of candidate.locales as string[]) {
       Math.abs(node.getBoundingClientRect().width - node.naturalWidth))).toBeLessThanOrEqual(2);
     await expect(viewport).toHaveAttribute('tabindex', '0');
     await viewport.focus();
+    await assertCaptionContained();
     await page.screenshot({ path: path.join(output, `${locale}-${testInfo.project.name}-original-start.png`) });
     const scrollBounds = await viewport.evaluate(node => ({ max: node.scrollWidth - node.clientWidth, pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth }));
     expect(scrollBounds.pageOverflow).toBeLessThanOrEqual(1);
@@ -122,6 +159,7 @@ for (const locale of candidate.locales as string[]) {
     }
     await viewport.evaluate(node => { node.scrollLeft = node.scrollWidth; });
     await expect.poll(() => viewport.evaluate(node => node.scrollLeft)).toBeGreaterThanOrEqual(Math.max(0, scrollBounds.max - 1));
+    await assertCaptionContained();
     await page.screenshot({ path: path.join(output, `${locale}-${testInfo.project.name}-original-end.png`) });
     await zoom.click();
     await expect(zoom).toHaveAttribute('aria-pressed', 'false');

@@ -28,14 +28,14 @@
   "source_observed_at_utc": "2026-10-18T09:13:16Z",
   "product_claim_scope": "Public store descriptions: MP3/FLAC album and artist metadata edits; preview; explicit save; single-file versus Pro common/batch edits. iOS release notes: update writable selected original; copy destination fallback when original location is unwritable. No automatic lookup, player-grouping guarantee, price or outcome claim.",
   "keyword_evidence": "Editorial hypotheses; no measured demand or ranking claims.",
-  "planning_target_only": "Second future cadence slot after Aligna, expected 2026-10-24T09:00:00+09:00; not assigned or reserved.",
+  "planning_target_only": "Second future cadence slot, not assigned or reserved; historical planning date is not a schedule.",
   "publication_receipt": false,
   "queue_modified": false,
   "scheduled_at": null,
   "verification": {
-    "native_repository_validators": "NOT RUN",
+    "native_repository_validators": "Previous draft failed mandatory product_after_education in all nine locales; four CJK keyword checks and three functional-definition detection checks also failed in run40048466191. Revised candidate awaits fresh native validation; no prior score reused.",
     "review_scores_or_fingerprints": "NOT GENERATED",
-    "svg_png_rendering": "NOT RUN; localized image copy only",
+    "svg_png_rendering": "Runs39984028329 and39985033569 identified heading/detail/message layout failures. Six labels and fifteen image detail/message fields in four locales were compacted without changing native font or layout gates. Full native/rendered revalidation pending.",
     "astro_browser_preview": "NOT RUN",
     "public_links": "Official store pages read again 2026-10-23. All 18 related article URLs loaded in the dot cloud browser with substantive article text, matching language and self-canonical, and 10 alternate links. This verifies existing related pages, not this unpublished draft.",
     "related_article_paths": "18/18 source paths and live related page URLs confirmed; candidate rendering remains NOT RUN.",
@@ -48,17 +48,17 @@
       "image_copy_steps_each": 4,
       "source_paths_found": 18
     },
-    "source_and_language_review": "Nine complete manuscripts reviewed independently as text; corrections tracked in editorial_review.json. Rendering and native gates remain unperformed.",
+    "source_and_language_review": "New independent nine-language semantic review of the complete reconstructed problem-first revisions on 2026-10-24. Exact changes and review limits recorded in problem_first_review_20261024.json. Historical body/image reviews remain provenance, not approval of changed body bytes.",
     "final_blobs": {
-      "en": "af5023281da5168cedea7aecfef358dddf9534f1",
-      "pt-BR": "57533ca2e387bf5976c8431170f4e1b3f9b61647",
-      "de": "0ffe37d41c2e2cc989b26980154635900f4b9749",
-      "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
-      "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
-      "fr": "188d7fbcaf72a3bf86881917b289db50734da11f",
-      "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
-      "es": "a12c978a370a4275e91c4dc289bfac40e932c8f7",
-      "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
+      "en": "e5e8d5e973ee503176dd1c28f65bdf6cba888362",
+      "ko": "8aa4dbe4cf21461c7d963b9ec45f9282b6002ef4",
+      "ja": "4be616532fa63824f39c09f94c40b56c7e35cc0e",
+      "zh-Hans": "de3d16b1b99bae0a14e9987c010c4df14ae48603",
+      "zh-Hant": "5eb2f4634ee16c3328654ef6a8223ec2fe9846da",
+      "pt-BR": "2b16d1e71ade064e946c7df4eeb80ea0401ee342",
+      "de": "1359bd35dd8672c3ac622077405485223d20bb45",
+      "fr": "aef06de4719c6c01b9f7ef2305aa2e2937f68914",
+      "es": "041460993822dcdc1c2d21aacc547ea273891c2f"
     },
     "live_related_page_review": {
       "observed_at_utc": "2026-10-23T09:10:48Z",
@@ -218,14 +218,39 @@
       "known_content_issue": "Multi-disc article English page still contains older iOS copy-save framing. Existing multidisc-ios-save-correction.proposed.json remains unapplied; current App Store release notes support writable-original update with copy-save fallback."
     },
     "product_source_recheck": {
-      "checked_at_utc": "2026-10-23T09:10:54Z",
-      "method": "Public official App Store and Google Play pages via web retrieval; returned crawl label last week, not an app execution test",
+      "checked_at_utc": "2026-10-23T15:40:26Z",
+      "method": "Read-only rendered official App Store and Google Play pages in dot cloud browser; not app execution",
       "sources": [
         "https://apps.apple.com/app/id6759609875",
         "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2"
       ],
-      "result": "Current retrieved descriptions support scoped metadata, preview, explicit-save and Pro claims; App Store 2.5.1 notes support writable-original/copy-fallback description."
-    }
+      "result": "App Store 2.5.5 and Google Play 2.5.5; Play updated 2026-10-20. Current descriptions retain metadata, preview, explicit save and Pro distinctions; App Store release history 2.5.1 supports writable-original update with copy-destination fallback."
+    },
+    "previous_final_blobs_before_image_label_review": {
+      "en": "af5023281da5168cedea7aecfef358dddf9534f1",
+      "pt-BR": "57533ca2e387bf5976c8431170f4e1b3f9b61647",
+      "de": "0ffe37d41c2e2cc989b26980154635900f4b9749",
+      "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
+      "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
+      "fr": "188d7fbcaf72a3bf86881917b289db50734da11f",
+      "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
+      "es": "a12c978a370a4275e91c4dc289bfac40e932c8f7",
+      "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
+    },
+    "image_label_review": "image_label_review_20261023.json",
+    "image_detail_review": "image_detail_review_20261023.json",
+    "previous_final_blobs_before_problem_first_review": {
+      "en": "af5023281da5168cedea7aecfef358dddf9534f1",
+      "pt-BR": "362f19a71dc492c641ad5e9d1696f1efde4c9d9f",
+      "de": "eca448f36491bb56f118502a706e101a8691d8d6",
+      "ko": "d42c002343c9c8422c3efd02357f3390c01d4c25",
+      "ja": "12eedc391ddce89161f5f12cfc3c285f1623f5b1",
+      "fr": "d140f2688370385042b1ca1201c431398605b7b2",
+      "zh-Hans": "f939947c649d46d9bff56875534037bfa08ddd5e",
+      "es": "055fa43f5aa9a0b1e661902cd2c3c3b73387a1dd",
+      "zh-Hant": "544100d95b0590cd3b09e876c08f0c4929115877"
+    },
+    "problem_first_review": "problem_first_review_20261024.json"
   },
   "artifacts": [
     {

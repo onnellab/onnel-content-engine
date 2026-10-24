@@ -28,6 +28,7 @@ def make_stage(stage):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes((ROOT / relative).read_bytes())
     copy_drafts(stage / preview.PREVIEW_DIRECTORY)
+    preview.write_json(stage / preview.PREVIEW_DIRECTORY / "idea_seeds.json", [preview.APPROVED_IDEA_SEED])
     from topic_management import TopicStore
     return TopicStore(stage / "data/topics.csv", apps_path=stage / "data/apps_registry.csv",
                       mirror_path=stage / "topics/topics.csv")
@@ -134,9 +135,9 @@ class TopicIsolation(unittest.TestCase):
             for row in before:
                 if row["id"] != preview.TOPIC_ID:
                     self.assertEqual(by_id[row["id"]], row)
-            self.assertEqual(len(after), len(before) + 8)
+            self.assertEqual(len(after), len(before) + 9)
             self.assertEqual(sum(row["status"] == "idea" for row in after),
-                             sum(row["status"] == "idea" for row in before) - 1)
+                             sum(row["status"] == "idea" for row in before))
             self.assertEqual([row["primary_language"] for row in candidates], list(preview.LOCALES))
             self.assertEqual(candidates[0]["id"], preview.TOPIC_ID)
             for row in candidates:
@@ -145,7 +146,8 @@ class TopicIsolation(unittest.TestCase):
                 self.assertEqual(row["canonical_path"],
                                  f"generated/markdown/{row['primary_language']}/reading/{preview.SLUG}.md")
                 self.assertFalse(row["scheduled_at"] or row["published_at"] or row["published_url"])
-            self.assertEqual(seeds, [])
+            self.assertEqual(len(seeds), 1)
+            self.assertEqual(seeds[0]["slug"], preview.APPROVED_IDEA_SEED["slug"])
             self.assertEqual((stage / "data/topics.csv").read_bytes(),
                              (stage / "topics/topics.csv").read_bytes())
         for path, raw in live.items():
@@ -379,7 +381,7 @@ class ReviewedVaultXTSectionHeadings(unittest.TestCase):
         profile = candidate_profile(preview.SLUG)
         self.assertEqual(profile["category"], "reading")
         self.assertEqual(profile["faq_count"], 3)
-        self.assertEqual(profile["table_rows"], {locale: 0 for locale in preview.LOCALES})
+        self.assertEqual(profile["table_rows"], {locale: 3 for locale in preview.LOCALES})
         self.assertEqual(profile["store_urls"], ["https://play.google.com/store/apps/details?id=com.onnellab.vaultxt"])
         self.assertEqual(candidate_profile(research.SLUG)["category"], "research")
         for locale in preview.LOCALES:
