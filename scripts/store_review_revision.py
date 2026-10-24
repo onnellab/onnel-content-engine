@@ -12,7 +12,7 @@ import os
 import re
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from store_review_approvals import read_reviews
@@ -133,6 +133,7 @@ def apply_revision(record: dict, review: dict, *, package: str, google_token: st
     publication["approval_channel"] = "github_owner_workflow_dispatch"
     record["status"] = "published_unverified"  # set before external operation
     poster(url + ":reply", google_token, "POST", {"replyText": replacement})
+    publication["published_at"] = observed_at()
     after = getter(url, google_token)
     user_after, observed_after = current_comments(after, record["review_id"])
     verify_live_identity(user_after, record)
@@ -173,6 +174,16 @@ def process_revision(revision_id: str, *, reviews_path: Path, stores_path: Path,
                   if row.get("app_id") == record["app_id"] and row.get("platform") == "android"]
     if len(stores) != 1:
         raise ValueError("Expected one Google Play package lookup")
+    if (record.get("expected_public_store_version") != stores[0].get("version")
+            or not record.get("target_version_under_review")):
+        raise ValueError("Public store version changed or target update declaration is missing")
+    try:
+        checked = datetime.fromisoformat(stores[0]["checked_at"].replace("Z", "+00:00"))
+        age = datetime.now(timezone.utc) - checked
+        if checked.tzinfo is None or age < timedelta(minutes=-1) or age > timedelta(hours=24):
+            raise ValueError("Store observation is stale")
+    except (KeyError, ValueError, TypeError) as error:
+        raise ValueError("Fresh public Android store observation is required") from error
     query = urllib.parse.parse_qs(urllib.parse.urlsplit(stores[0].get("store_url", "")).query)
     package = query.get("id", [""])[0]
     try:
