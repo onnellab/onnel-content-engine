@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       approval_id:
-        description: Exact queued approval ID
+        description: Exact queued approval ID (PUBLISH) or registered revision ID (REPLACE)
         required: true
         type: string
       confirm_publish:
