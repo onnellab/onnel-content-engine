@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/de/reading/make-long-plain-text-easier-to-navigate.md",
+  "topic": {
+    "id": "TOPIC-0111",
+    "title": "Lange Textdokumente leichter navigieren",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "de",
+    "primary_keyword": "Textdokumente leichter navigieren",
+    "related_apps": [
+      "VaultXT"
+    ]
+  },
+  "article_sections_detected": [
+    "Lange Textdokumente leichter navigieren",
+    "Frage",
+    "Kurzantwort",
+    "Warum man die Lesestelle leicht verliert",
+    "Vorgehen in fünf Schritten",
+    "Grenzen des Verfahrens",
+    "Eine mögliche App",
+    "Weiterführende Leitfäden",
+    "Fazit",
+    "Häufige Fragen",
+    "Bleibt eine Fundstellenangabe in einer neuen Version gültig?",
+    "Muss ich den Text bearbeiten, um ihn zu gliedern?",
+    "Was tun bei mehrfach vorkommenden Formulierungen?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Wie finden Sie Passagen in einem langen Textdokument wieder und setzen die Lektüre fort, ohne jedes Mal von vorn zu suchen?",
+      "structure": [
+        "Bewahren",
+        "Ordnen",
+        "Finden",
+        "Prüfen"
+      ],
+      "notes": "Explain preservation, external mapping, search and version verification; not an application screenshot or automatic navigation claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial navigation workflow, not an application interface.",
+    "applications": [
+      "VaultXT"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Textstellen wiederfinden",
+      "steps": [
+        "Bewahren",
+        "Ordnen",
+        "Finden",
+        "Prüfen"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Orientierung mit überprüfbaren Angaben",
+    "message": "Prüfen Sie den Rückweg in derselben Version.",
+    "description": "Bewahren Sie das Original auf, notieren Sie vorhandene Überschriften und wählen Sie eindeutige Suchformulierungen. Halten Sie die Fundstelle in einer separaten Notiz fest. Schließen und öffnen Sie dieselbe Version erneut, um den Rückweg zu prüfen.",
+    "steps": [
+      [
+        "Bewahren",
+        "Original unverändert lassen"
+      ],
+      [
+        "Ordnen",
+        "Übersicht anlegen"
+      ],
+      [
+        "Finden",
+        "Suchen und Kontext prüfen"
+      ],
+      [
+        "Prüfen",
+        "Erneut öffnen und prüfen"
+      ]
+    ]
+  }
+}

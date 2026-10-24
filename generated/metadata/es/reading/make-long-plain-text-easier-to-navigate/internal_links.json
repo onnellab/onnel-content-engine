@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0113",
+    "title": "Cómo orientarte en un documento de texto largo",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "es",
+    "status": "review",
+    "topic_clusters": [
+      "títulos en archivos TXT",
+      "encontrar pasajes de texto",
+      "retomar la lectura",
+      "referencias de lectura",
+      "orientarte en un documento de texto largo",
+      "reading"
+    ],
+    "related_app_names": [
+      "VaultXT"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0061",
+        "title": "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 14
+      },
+      {
+        "topic_id": "TOPIC-0052",
+        "title": "Cómo organizar música en Android para escucharla sin conexión",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0069",
+        "title": "Cómo probar un archivo multimedia convertido antes de sustituir el original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0077",
+        "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0085",
+        "title": "Cómo crear un sistema coherente para nombrar archivos",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0095",
+        "title": "Cómo separar las notas de las fuentes de tus conclusiones",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0003",
+        "app_name": "VaultXT",
+        "slug": "vaultxt",
+        "category": "reading",
+        "url": "/apps/vaultxt/",
+        "description": "A text editor and viewer designed for working with large plain-text files.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Reading guide",
+        "category": "reading",
+        "cluster": "reading",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "títulos en archivos TXT cluster",
+        "category": "reading",
+        "cluster": "títulos en archivos TXT",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Cómo organizar música en Android para escucharla sin conexión",
+        "category": "music",
+        "cluster": "organizar música en Android",
+        "topic_id": "TOPIC-0052",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

@@ -1,16 +1,11 @@
 {
   "schema": 1,
-  "state": "VERIFICATION_BRANCH_ONLY_NOT_MAIN_NOT_SCHEDULED",
-  "slug": "consistent-album-artist-names",
-  "source_run": 40102812824,
-  "source_commit": "ce881928ea46136d35d13efee03fe6590db0e150",
-  "native_manifest_recheck": "identical to independently extracted72-file manifest of artifact12550323217",
-  "artifact": 12562728961,
-  "all_native_blobs_uploaded": 54,
-  "pending": [
-    "independent corrected-caption screenshot review",
-    "aggregate registration-tree unit tests"
-  ],
-  "readiness": false,
-  "scheduled": false
+  "state": "QUALITY_PASSED_REVIEW_BUNDLE_UNSCHEDULED",
+  "native_run": 40102812824,
+  "native_files": 72,
+  "all_blobs_uploaded": 54,
+  "independent_corrected_caption_review": "PASS",
+  "scheduled": false,
+  "publication_receipt": false,
+  "combined_integration_record": "preview/integration-qa-20261024.json"
 }

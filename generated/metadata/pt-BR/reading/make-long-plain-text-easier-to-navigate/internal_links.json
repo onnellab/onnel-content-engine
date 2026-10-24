@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0110",
+    "title": "Como facilitar a navegação em um documento de texto longo",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "pt-BR",
+    "status": "review",
+    "topic_clusters": [
+      "títulos em arquivo TXT",
+      "encontrar trechos de texto",
+      "retomar a leitura",
+      "referências de leitura",
+      "navegação em um documento de texto longo",
+      "reading"
+    ],
+    "related_app_names": [
+      "VaultXT"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0058",
+        "title": "Como conferir o sumário e a ordem dos capítulos de um EPUB",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 13
+      },
+      {
+        "topic_id": "TOPIC-0074",
+        "title": "Como transformar textos repetidos em trechos reutilizáveis",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0066",
+        "title": "Como testar um arquivo de mídia convertido antes de substituir o original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0082",
+        "title": "Como criar um padrão consistente para nomes de arquivos",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0049",
+        "title": "Como organizar músicas no Android para ouvir offline",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0101",
+        "title": "Tags de álbum e artista consistentes: preserve os créditos",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "pt-BR",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0003",
+        "app_name": "VaultXT",
+        "slug": "vaultxt",
+        "category": "reading",
+        "url": "/apps/vaultxt/",
+        "description": "A text editor and viewer designed for working with large plain-text files.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Reading guide",
+        "category": "reading",
+        "cluster": "reading",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "títulos em arquivo TXT cluster",
+        "category": "reading",
+        "cluster": "títulos em arquivo TXT",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Como testar um arquivo de mídia convertido antes de substituir o original",
+        "category": "media",
+        "cluster": "testar um arquivo de mídia convertido",
+        "topic_id": "TOPIC-0066",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

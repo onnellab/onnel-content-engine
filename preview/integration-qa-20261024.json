@@ -1,0 +1,974 @@
+{
+  "schema": 1,
+  "kind": "review_bundle_integration_candidate_not_publication_receipt",
+  "prepared_at_utc": "2026-10-24T15:08:26Z",
+  "state": "TWO_REVIEW_BUNDLES_UNSCHEDULED",
+  "main_rollout_requires": "Exact combined-tree checks and approved homepage deployment/live verification",
+  "publisher": "Existing ONNELLAB Publishing Pipeline only",
+  "dates_assigned": false,
+  "bundles": [
+    {
+      "slug": "consistent-album-artist-names",
+      "native_run": 40102812824,
+      "artifact": 12562728961,
+      "native_files": 72,
+      "unique_blobs": 54,
+      "language_scores": "all nine 10.0",
+      "independent_editorial_review": "preview/tagweaver-album-artists/problem_first_review_20261024.json",
+      "independent_visual_review": "PASS: 9 native diagrams, 18 pages, 27 corrected mobile viewer states"
+    },
+    {
+      "slug": "make-long-plain-text-easier-to-navigate",
+      "native_run": 40103275905,
+      "artifact": 12563826640,
+      "native_files": 72,
+      "unique_blobs": 54,
+      "language_scores": "all nine 10.0",
+      "independent_editorial_review": "preview/vaultxt-text-navigation/native_readiness_editorial_review.json and preview/vaultxt-text-navigation/diagram_wordwrap_editorial_review.json",
+      "independent_visual_review": "PASS: all nine native diagrams and page/viewer coverage; final DE/ES corrected artwork reinspected, other seven images identical"
+    }
+  ],
+  "code_matrix": {
+    "run": 40103279064,
+    "tests_per_environment": 1858,
+    "environments": [
+      "ubuntu Python3.12",
+      "ubuntu Python3.14",
+      "macOS Python3.14"
+    ],
+    "scope": "Prior staged Tag bundle plus final Vault draft/code; complete combined registration tree requires fresh checks"
+  },
+  "homepage_css": {
+    "verification_commit": "fd8f97cbb1af94bdb42f25be28aa88d322bc3ec1",
+    "main_commit": "48da41e104aa1bcde055aaf8475f4deefae57b86",
+    "scope": "Five CSS caption containment lines only"
+  },
+  "topic_ids": {
+    "tag": [
+      "TOPIC-0039",
+      "TOPIC-0097",
+      "TOPIC-0098",
+      "TOPIC-0099",
+      "TOPIC-0100",
+      "TOPIC-0101",
+      "TOPIC-0102",
+      "TOPIC-0103",
+      "TOPIC-0104"
+    ],
+    "vault": [
+      "TOPIC-0040",
+      "TOPIC-0106",
+      "TOPIC-0107",
+      "TOPIC-0108",
+      "TOPIC-0109",
+      "TOPIC-0110",
+      "TOPIC-0111",
+      "TOPIC-0112",
+      "TOPIC-0113"
+    ],
+    "new_ideas": [
+      "TOPIC-0105",
+      "TOPIC-0114"
+    ]
+  },
+  "native_manifests": {
+    "tag": {
+      "schema": 1,
+      "slug": "consistent-album-artist-names",
+      "locales": [
+        "en",
+        "ko",
+        "ja",
+        "zh-Hans",
+        "zh-Hant",
+        "pt-BR",
+        "de",
+        "fr",
+        "es"
+      ],
+      "files": [
+        {
+          "path": "generated/markdown/en/music/consistent-album-artist-names.md",
+          "byte_length": 8201,
+          "sha256": "1043f0e97c7d0bce002d149867c132673bde7db498391901dd4ba0be38dae6db",
+          "git_blob_sha1": "65da095704e4ed11c3ddebef4494c556260c5977"
+        },
+        {
+          "path": "generated/images/en/music/consistent-album-artist-names/image_spec.json",
+          "byte_length": 3982,
+          "sha256": "ee9751090594c29678b12415efe66e4a4f76aa826e743dc84656ccbfc348f7e6",
+          "git_blob_sha1": "5a5f1dd46e3aa0b8f756b43b0084408817267e43"
+        },
+        {
+          "path": "generated/metadata/en/music/consistent-album-artist-names/internal_links.json",
+          "byte_length": 5604,
+          "sha256": "b6770e29abd5f6cf8e4c71341b499573d9d3a5bc9162dc494c2d5099d3c99cec",
+          "git_blob_sha1": "6d70317c82d7f4ab1ff2583baa5315c62f21173b"
+        },
+        {
+          "path": "generated/reviews/en/music/consistent-album-artist-names/review.json",
+          "byte_length": 3598,
+          "sha256": "5a5051d0bc4d958aa760f7e2dcc04567b69292f33ac264d375ed8bc66a935168",
+          "git_blob_sha1": "d6e010a8e31ee1f155a128889907f509b2b2205c"
+        },
+        {
+          "path": "generated/assets/blog/en/consistent-album-artist-names/workflow-diagram.svg",
+          "byte_length": 4423,
+          "sha256": "a4fd4836b3c6651520c8fc4a06b20292431f6bc6b0e2692a05d8d4e6bd1be78e",
+          "git_blob_sha1": "8a6bc538763ccac84a6f7771dd0ea6dfae9ff3da"
+        },
+        {
+          "path": "generated/assets/blog/en/consistent-album-artist-names/workflow-diagram.png",
+          "byte_length": 77134,
+          "sha256": "70b8c236b0b1b0e8debd2bdec7543ccd4661539f6af9acd5e2fee97e3477c611",
+          "git_blob_sha1": "3129cfbf16077949049ec2664a4163778d403ea5"
+        },
+        {
+          "path": "generated/assets/blog/en/consistent-album-artist-names/social-card.svg",
+          "byte_length": 4423,
+          "sha256": "a4fd4836b3c6651520c8fc4a06b20292431f6bc6b0e2692a05d8d4e6bd1be78e",
+          "git_blob_sha1": "8a6bc538763ccac84a6f7771dd0ea6dfae9ff3da"
+        },
+        {
+          "path": "generated/assets/blog/en/consistent-album-artist-names/social-card.png",
+          "byte_length": 77134,
+          "sha256": "70b8c236b0b1b0e8debd2bdec7543ccd4661539f6af9acd5e2fee97e3477c611",
+          "git_blob_sha1": "3129cfbf16077949049ec2664a4163778d403ea5"
+        },
+        {
+          "path": "generated/markdown/ko/music/consistent-album-artist-names.md",
+          "byte_length": 10441,
+          "sha256": "07846cae67feaba6d9eb773456c4b03d14a4b3bfc68e48b95f4003302e114a90",
+          "git_blob_sha1": "572512a05ba1749a8e6c04c5f15986b72cf7cf77"
+        },
+        {
+          "path": "generated/images/ko/music/consistent-album-artist-names/image_spec.json",
+          "byte_length": 4492,
+          "sha256": "bad2a4621aa1c7a09cb97c63dd4f59855a6aa8474fb15901e490acd946462664",
+          "git_blob_sha1": "76a858b928e3ccdcae3fdeb711c513f0ef33b1bb"
+        },
+        {
+          "path": "generated/metadata/ko/music/consistent-album-artist-names/internal_links.json",
+          "byte_length": 5361,
+          "sha256": "e0f136050997f5698633f524e6d37badde961b092c139cc09f31a8fc7fa7044f",
+          "git_blob_sha1": "9c8baf89e11c0bd5d902f90d291e1d9c2047434c"
+        },
+        {
+          "path": "generated/reviews/ko/music/consistent-album-artist-names/review.json",
+          "byte_length": 3609,
+          "sha256": "404a4b30beecd19b9d439cb0f2f2f4895bb8bfa6f2b6ff55037dd3d3d0b1fbdf",
+          "git_blob_sha1": "26918b0e2b934bc8f9e4203db42ba075e0100118"
+        },
+        {
+          "path": "generated/assets/blog/ko/consistent-album-artist-names/workflow-diagram.svg",
+          "byte_length": 4496,
+          "sha256": "1788f87407dbaeef7d1fda4f8d6834347cd972d479906c0c9f3864a5b189da55",
+          "git_blob_sha1": "2fa9f57aca55338af115f0c364faf2f07d71b897"
+        },
+        {
+          "path": "generated/assets/blog/ko/consistent-album-artist-names/workflow-diagram.png",
+          "byte_length": 57059,
+          "sha256": "6e00222d9e1b1cc9db5471a3b472c2bfa4eabf093041cd991e383321956c55b6",
+          "git_blob_sha1": "68163e5229d909ea9eb416303b9bea940368abb1"
+        },
+        {
+          "path": "generated/assets/blog/ko/consistent-album-artist-names/social-card.svg",
+          "byte_length": 4496,
+          "sha256": "1788f87407dbaeef7d1fda4f8d6834347cd972d479906c0c9f3864a5b189da55",
+          "git_blob_sha1": "2fa9f57aca55338af115f0c364faf2f07d71b897"
+        },
+        {
+          "path": "generated/assets/blog/ko/consistent-album-artist-names/social-card.png",
+          "byte_length": 57059,
+          "sha256": "6e00222d9e1b1cc9db5471a3b472c2bfa4eabf093041cd991e383321956c55b6",
+          "git_blob_sha1": "68163e5229d909ea9eb416303b9bea940368abb1"
+        },
+        {
+          "path": "generated/markdown/ja/music/consistent-album-artist-names.md",
+          "byte_length": 11628,
+          "sha256": "02219bcca6dbd4e70f769c62960419d825bec4b7d9da792422a943653b23b148",
+          "git_blob_sha1": "8c9204fc19a9e714df7bf97edcb7456325300de7"
+        },
+        {
+          "path": "generated/images/ja/music/consistent-album-artist-names/image_spec.json",
+          "byte_length": 4499,
+          "sha256": "0c81656ded431cffbc5b77a905fe10885b88e0b6303b983a8862cea30b68ad5f",
+          "git_blob_sha1": "0e8a8d9888c648639d9ca41f7991897b3cc5f110"
+        },
+        {
+          "path": "generated/metadata/ja/music/consistent-album-artist-names/internal_links.json",
+          "byte_length": 5428,
+          "sha256": "3bf79986d391cad7048ee6daf4f4b1d467be621dd71cdff3e408a7f0e0a37a33",
+          "git_blob_sha1": "2339a221091098bede60c21c42417bf6dc9b8c14"
+        },
+        {
+          "path": "generated/reviews/ja/music/consistent-album-artist-names/review.json",
+          "byte_length": 3636,
+          "sha256": "637d7cce0628e2148c9c39bb30e71d302e246bd5efa093c7961aee4f9bda3b8a",
+          "git_blob_sha1": "fa88cc651d3ba6be1f7521959b7f0be851cd7cdd"
+        },
+        {
+          "path": "generated/assets/blog/ja/consistent-album-artist-names/workflow-diagram.svg",
+          "byte_length": 4046,
+          "sha256": "37b3264eee251402d9c97c10215ee95bd0957570db9dd4ef787afd87cdd9a65e",
+          "git_blob_sha1": "d135a636828963f8055f44e247e0b64a5ea6e3e4"
+        },
+        {
+          "path": "generated/assets/blog/ja/consistent-album-artist-names/workflow-diagram.png",
+          "byte_length": 75027,
+          "sha256": "4d1b1615ea13c804ac0f4dc95bdc2bfbe6d0eefad73169bdd0d1408125fa1681",
+          "git_blob_sha1": "584fe4f8e3d4a28bdf266eb41e5b69aecc907d7e"
+        },
+        {
+          "path": "generated/assets/blog/ja/consistent-album-artist-names/social-card.svg",
+          "byte_length": 4046,
+          "sha256": "37b3264eee251402d9c97c10215ee95bd0957570db9dd4ef787afd87cdd9a65e",
+          "git_blob_sha1": "d135a636828963f8055f44e247e0b64a5ea6e3e4"
+        },
+        {
+          "path": "generated/assets/blog/ja/consistent-album-artist-names/social-card.png",
+          "byte_length": 75027,
+          "sha256": "4d1b1615ea13c804ac0f4dc95bdc2bfbe6d0eefad73169bdd0d1408125fa1681",
+          "git_blob_sha1": "584fe4f8e3d4a28bdf266eb41e5b69aecc907d7e"
+        },
+        {
+          "path": "generated/markdown/zh-Hans/music/consistent-album-artist-names.md",
+          "byte_length": 8315,
+          "sha256": "f6068f2438681dbbd12afd17122a60d76e250cfc1f86fdfacd7d8429738b416a",
+          "git_blob_sha1": "6337009a03a81540442e153327c6d17d2709a84a"
+        },
+        {
+          "path": "generated/images/zh-Hans/music/consistent-album-artist-names/image_spec.json",
+          "byte_length": 3994,
+          "sha256": "24d0f619736a7defe7a09b3b1b1f58cdc62bd00100cffd0570aaf40f5ff8e7d8",
+          "git_blob_sha1": "3b7294bcaec693ead14c78d4be3e3246be5f60a7"
+        },
+        {
+          "path": "generated/metadata/zh-Hans/music/consistent-album-artist-names/internal_links.json",
+          "byte_length": 5270,
+          "sha256": "f4b34c43180d65ea3c8553458f710422aa631faddb0a13af870e100e5df28afd",
+          "git_blob_sha1": "135102b7909c073f758b0a2e1680c4ddaa89c962"
+        },
+        {
+          "path": "generated/reviews/zh-Hans/music/consistent-album-artist-names/review.json",
+          "byte_length": 3585,
+          "sha256": "0c7078f9def685da7d7d19d7f39617bc994737d3adf03bb9325ac3f1e113424d",
+          "git_blob_sha1": "c198491c78c866a2c6480bef6658864d02202e0f"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/consistent-album-artist-names/workflow-diagram.svg",
+          "byte_length": 3743,
+          "sha256": "f4ccc459ae5b8e52d860aeac2bc5783837b7c0ec3036a909e9594d99c960e6c3",
+          "git_blob_sha1": "bfd50f72b1deb13d1116e68580309696075c3ef1"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/consistent-album-artist-names/workflow-diagram.png",
+          "byte_length": 62414,
+          "sha256": "68fe644796d71d0f1adf3d72eb617703b0f6fc96e0c9bc7f4cf8c35551708eee",
+          "git_blob_sha1": "b630449c7f61c0354883ed9c30fc55639eaddd79"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/consistent-album-artist-names/social-card.svg",
+          "byte_length": 3743,
+          "sha256": "f4ccc459ae5b8e52d860aeac2bc5783837b7c0ec3036a909e9594d99c960e6c3",
+          "git_blob_sha1": "bfd50f72b1deb13d1116e68580309696075c3ef1"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/consistent-album-artist-names/social-card.png",
+          "byte_length": 62414,
+          "sha256": "68fe644796d71d0f1adf3d72eb617703b0f6fc96e0c9bc7f4cf8c35551708eee",
+          "git_blob_sha1": "b630449c7f61c0354883ed9c30fc55639eaddd79"
+        },
+        {
+          "path": "generated/markdown/zh-Hant/music/consistent-album-artist-names.md",
+          "byte_length": 8324,
+          "sha256": "afe04fd4b89273b6950d6ff2d827f0a502998448061f060412da8fcf87e84f09",
+          "git_blob_sha1": "27f23d6c4a8d9463825eb565e0bc0b454bfedb6b"
+        },
+        {
+          "path": "generated/images/zh-Hant/music/consistent-album-artist-names/image_spec.json",
+          "byte_length": 3982,
+          "sha256": "7f5860434011577dad3a0233f82726f88247a7966965e76d64a587825a2835d7",
+          "git_blob_sha1": "fc5acbc2d60ffa4a026fbc5773748beedda22b8b"
+        },
+        {
+          "path": "generated/metadata/zh-Hant/music/consistent-album-artist-names/internal_links.json",
+          "byte_length": 5270,
+          "sha256": "5c4eb857c11cb4815556bf8059a85122c7528a87ede870fe831ae458fe1b1d56",
+          "git_blob_sha1": "d372d08d231335f23eff46ba329eb5b810900cde"
+        },
+        {
+          "path": "generated/reviews/zh-Hant/music/consistent-album-artist-names/review.json",
+          "byte_length": 3585,
+          "sha256": "614b01539304ee8472299c7047a0590332136d71510da6e5d1f963121319441f",
+          "git_blob_sha1": "f0366f859ab9f078fa7c2baba04a6f043e145932"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/consistent-album-artist-names/workflow-diagram.svg",
+          "byte_length": 3764,
+          "sha256": "88bc5990c9f1237ba6eb2a7d0304ea7f0b0eb817fa6535184ed19f6b375efa88",
+          "git_blob_sha1": "e583de57278dc49c86e871b816be5cf2d62f95da"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/consistent-album-artist-names/workflow-diagram.png",
+          "byte_length": 65818,
+          "sha256": "b7152e858d32b64e25434bd79ac7ab80e5ae71f831878c56a7489549cbca7abd",
+          "git_blob_sha1": "0295dd500b7ad888066502c9949b34bf848c3c7b"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/consistent-album-artist-names/social-card.svg",
+          "byte_length": 3764,
+          "sha256": "88bc5990c9f1237ba6eb2a7d0304ea7f0b0eb817fa6535184ed19f6b375efa88",
+          "git_blob_sha1": "e583de57278dc49c86e871b816be5cf2d62f95da"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/consistent-album-artist-names/social-card.png",
+          "byte_length": 65818,
+          "sha256": "b7152e858d32b64e25434bd79ac7ab80e5ae71f831878c56a7489549cbca7abd",
+          "git_blob_sha1": "0295dd500b7ad888066502c9949b34bf848c3c7b"
+        },
+        {
+          "path": "generated/markdown/pt-BR/music/consistent-album-artist-names.md",
+          "byte_length": 9442,
+          "sha256": "cde33521715ba0f11599600cb68394949ad19fd7a4a3ce0a5adb1a811caa498e",
+          "git_blob_sha1": "3a3689022c8b5237097d7e174214d0b80aa2277e"
+        },
+        {
+          "path": "generated/images/pt-BR/music/consistent-album-artist-names/image_spec.json",
+          "byte_length": 4160,
+          "sha256": "280f1b98fcd70d86a722f8811d819ad10a173759b62d18cb0449e52bf645b9cc",
+          "git_blob_sha1": "43c26c9a0988deb3979285921ce44ea9e7e42794"
+        },
+        {
+          "path": "generated/metadata/pt-BR/music/consistent-album-artist-names/internal_links.json",
+          "byte_length": 5689,
+          "sha256": "549d4a618671220726e6db3697a6334985f618b2e9ba47f5e69ac6de382da42f",
+          "git_blob_sha1": "62c60631733369c163a9b9f8e42534ac09983d98"
+        },
+        {
+          "path": "generated/reviews/pt-BR/music/consistent-album-artist-names/review.json",
+          "byte_length": 3597,
+          "sha256": "b847a3fddb6036fafb1a0d463dea31041812cd206fc0f98d094dc11fcc0963c3",
+          "git_blob_sha1": "41f6ad0fd80e706c1900067bcfbd8da76f899f33"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/consistent-album-artist-names/workflow-diagram.svg",
+          "byte_length": 4560,
+          "sha256": "2171db4555b571eb07510c4d2b9469adbc2e9fff1b05a136dcb98f9393f9a758",
+          "git_blob_sha1": "23616576fbb734e3e6ab5fd770ade81ba4000bfb"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/consistent-album-artist-names/workflow-diagram.png",
+          "byte_length": 86706,
+          "sha256": "0850b1614d18b0b50a315fe8101d71fd2f00b7c33fef79767994c226c9853134",
+          "git_blob_sha1": "ff3fed4eb5cc81a5647d15973b87d41a35476a65"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/consistent-album-artist-names/social-card.svg",
+          "byte_length": 4560,
+          "sha256": "2171db4555b571eb07510c4d2b9469adbc2e9fff1b05a136dcb98f9393f9a758",
+          "git_blob_sha1": "23616576fbb734e3e6ab5fd770ade81ba4000bfb"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/consistent-album-artist-names/social-card.png",
+          "byte_length": 86706,
+          "sha256": "0850b1614d18b0b50a315fe8101d71fd2f00b7c33fef79767994c226c9853134",
+          "git_blob_sha1": "ff3fed4eb5cc81a5647d15973b87d41a35476a65"
+        },
+        {
+          "path": "generated/markdown/de/music/consistent-album-artist-names.md",
+          "byte_length": 9967,
+          "sha256": "1e675e90c881e48b75d8024f59aae730bf8f08dbac1a3a09f1838d6dbb35719b",
+          "git_blob_sha1": "91b10f9bc859b63a0a19e677fafaa5d6b2a2ad80"
+        },
+        {
+          "path": "generated/images/de/music/consistent-album-artist-names/image_spec.json",
+          "byte_length": 4207,
+          "sha256": "d0fda8469905dab680dad3533646ac227f6b226003f38192d3ca7688d29f83dd",
+          "git_blob_sha1": "7bfb08845d75626fca204ae8f013116a3e2d8804"
+        },
+        {
+          "path": "generated/metadata/de/music/consistent-album-artist-names/internal_links.json",
+          "byte_length": 5641,
+          "sha256": "0efc6c4570dc35372921fb6a2673027c5244e638bdc513a44017220ad60b1f0e",
+          "git_blob_sha1": "46830cd2eeb87ec98560caec281215e1f2afecac"
+        },
+        {
+          "path": "generated/reviews/de/music/consistent-album-artist-names/review.json",
+          "byte_length": 3602,
+          "sha256": "6e5aaff6e5a69e55d952955b79d4dbb5536b13a33ff9e7575679b60035c35612",
+          "git_blob_sha1": "41c37b04b0ff4739324330278f654f5144b5dc5a"
+        },
+        {
+          "path": "generated/assets/blog/de/consistent-album-artist-names/workflow-diagram.svg",
+          "byte_length": 4642,
+          "sha256": "f4f289c6067f1548f77f44c12ae7f74ad20b49cdf6bd491a53849c9898436bc4",
+          "git_blob_sha1": "26ccb00d58f0287d9d9ae01cacaf31e822369956"
+        },
+        {
+          "path": "generated/assets/blog/de/consistent-album-artist-names/workflow-diagram.png",
+          "byte_length": 81392,
+          "sha256": "f81373a6f8befccd4df304cbdf040bae2379bbd836e6552fe0e807684b6f766a",
+          "git_blob_sha1": "ce315f4b326921d284bef042db21f3fd23ce37fa"
+        },
+        {
+          "path": "generated/assets/blog/de/consistent-album-artist-names/social-card.svg",
+          "byte_length": 4642,
+          "sha256": "f4f289c6067f1548f77f44c12ae7f74ad20b49cdf6bd491a53849c9898436bc4",
+          "git_blob_sha1": "26ccb00d58f0287d9d9ae01cacaf31e822369956"
+        },
+        {
+          "path": "generated/assets/blog/de/consistent-album-artist-names/social-card.png",
+          "byte_length": 81392,
+          "sha256": "f81373a6f8befccd4df304cbdf040bae2379bbd836e6552fe0e807684b6f766a",
+          "git_blob_sha1": "ce315f4b326921d284bef042db21f3fd23ce37fa"
+        },
+        {
+          "path": "generated/markdown/fr/music/consistent-album-artist-names.md",
+          "byte_length": 10431,
+          "sha256": "c93fb84ef77c2c5a83bae5d5bc9938f83b22f133865fba2f58af687318101a14",
+          "git_blob_sha1": "2798475a88a76832f7fcead655f1f92caf463aa0"
+        },
+        {
+          "path": "generated/images/fr/music/consistent-album-artist-names/image_spec.json",
+          "byte_length": 4287,
+          "sha256": "45d494a0efd86420485e1c33d7ad60f0bc30aa8ee70ab0ca86c222eb11308c75",
+          "git_blob_sha1": "31a473ff13e154be990432cf3debff0b5d931cb6"
+        },
+        {
+          "path": "generated/metadata/fr/music/consistent-album-artist-names/internal_links.json",
+          "byte_length": 5343,
+          "sha256": "cb83826352941a87cf4ca34369f22a20ba57537760542a1753c8ebda0d1b710a",
+          "git_blob_sha1": "e93c35ee7347eb3e453a9a3282000e5b2310e438"
+        },
+        {
+          "path": "generated/reviews/fr/music/consistent-album-artist-names/review.json",
+          "byte_length": 3607,
+          "sha256": "b72a45f704254d5fd37362b1ff66ca0ef0bae3e7b783c62d6431034b041ec4a0",
+          "git_blob_sha1": "f8e27e9a36f47e19af300ff1caa3a53a815fe35f"
+        },
+        {
+          "path": "generated/assets/blog/fr/consistent-album-artist-names/workflow-diagram.svg",
+          "byte_length": 4672,
+          "sha256": "3202e23bce9984d17c0e77f22e6a232c27d8115217020e38ba490e5124a60002",
+          "git_blob_sha1": "542ccbe611a40525c94de9c24e0d5eed570b2833"
+        },
+        {
+          "path": "generated/assets/blog/fr/consistent-album-artist-names/workflow-diagram.png",
+          "byte_length": 83889,
+          "sha256": "ef768a3a8455bc29f7a5730d9bec3e1f88c6eed83496f77c4785f4aa55efbde0",
+          "git_blob_sha1": "30cb3a2ec2557d4fa1c8fac763c305acc251516c"
+        },
+        {
+          "path": "generated/assets/blog/fr/consistent-album-artist-names/social-card.svg",
+          "byte_length": 4672,
+          "sha256": "3202e23bce9984d17c0e77f22e6a232c27d8115217020e38ba490e5124a60002",
+          "git_blob_sha1": "542ccbe611a40525c94de9c24e0d5eed570b2833"
+        },
+        {
+          "path": "generated/assets/blog/fr/consistent-album-artist-names/social-card.png",
+          "byte_length": 83889,
+          "sha256": "ef768a3a8455bc29f7a5730d9bec3e1f88c6eed83496f77c4785f4aa55efbde0",
+          "git_blob_sha1": "30cb3a2ec2557d4fa1c8fac763c305acc251516c"
+        },
+        {
+          "path": "generated/markdown/es/music/consistent-album-artist-names.md",
+          "byte_length": 9940,
+          "sha256": "a9d40648a211383b180c897cb9671005a22dbee269a8843a4f5a7a16940434d2",
+          "git_blob_sha1": "079608a73ff736c88a5cda48e4961cbfd940cdb0"
+        },
+        {
+          "path": "generated/images/es/music/consistent-album-artist-names/image_spec.json",
+          "byte_length": 4234,
+          "sha256": "0586e21ae47c54ebf4b8086536375809598aee3fe875666179f02815606fe466",
+          "git_blob_sha1": "e6a701a3d771fb077022d05f8fb828ff774972fe"
+        },
+        {
+          "path": "generated/metadata/es/music/consistent-album-artist-names/internal_links.json",
+          "byte_length": 5672,
+          "sha256": "2bf5909dd261a63fa98967df1d7b683e846508a0d08deeb96de0f5707c241d61",
+          "git_blob_sha1": "bb9618c7c1393b4725958ce65c2219b154f4e1c7"
+        },
+        {
+          "path": "generated/reviews/es/music/consistent-album-artist-names/review.json",
+          "byte_length": 3598,
+          "sha256": "d69262901b02c3cbb87cf6fad8ff0d54ffe3f9a4bf7c8965e0594bac34eb96c3",
+          "git_blob_sha1": "fa5271ecac94c08f3494a5915dea6604bc0bc88e"
+        },
+        {
+          "path": "generated/assets/blog/es/consistent-album-artist-names/workflow-diagram.svg",
+          "byte_length": 4671,
+          "sha256": "d444e85c7df5628957a5077b885d1892914942fd020f02ea65d8e5b0b465c6fa",
+          "git_blob_sha1": "633607c7628990d39d15a47b06e377fc2e442047"
+        },
+        {
+          "path": "generated/assets/blog/es/consistent-album-artist-names/workflow-diagram.png",
+          "byte_length": 87312,
+          "sha256": "102a87f4db9e9f63025f08cadb0d40e9377501ed184b3c678d5a5bcfbc1285fa",
+          "git_blob_sha1": "6be200c6f19376d65c55e5a1592c2f9f623191d9"
+        },
+        {
+          "path": "generated/assets/blog/es/consistent-album-artist-names/social-card.svg",
+          "byte_length": 4671,
+          "sha256": "d444e85c7df5628957a5077b885d1892914942fd020f02ea65d8e5b0b465c6fa",
+          "git_blob_sha1": "633607c7628990d39d15a47b06e377fc2e442047"
+        },
+        {
+          "path": "generated/assets/blog/es/consistent-album-artist-names/social-card.png",
+          "byte_length": 87312,
+          "sha256": "102a87f4db9e9f63025f08cadb0d40e9377501ed184b3c678d5a5bcfbc1285fa",
+          "git_blob_sha1": "6be200c6f19376d65c55e5a1592c2f9f623191d9"
+        }
+      ]
+    },
+    "vault": {
+      "schema": 1,
+      "slug": "make-long-plain-text-easier-to-navigate",
+      "locales": [
+        "en",
+        "ko",
+        "ja",
+        "zh-Hans",
+        "zh-Hant",
+        "pt-BR",
+        "de",
+        "fr",
+        "es"
+      ],
+      "files": [
+        {
+          "path": "generated/markdown/en/reading/make-long-plain-text-easier-to-navigate.md",
+          "byte_length": 6040,
+          "sha256": "ff688b47f674128c2aacfb19e887a92ea8a4d7e2e34076a296fc4cc102d82e3b",
+          "git_blob_sha1": "8cbf2ca20889eef28e86baa2a662f81209c60d25"
+        },
+        {
+          "path": "generated/images/en/reading/make-long-plain-text-easier-to-navigate/image_spec.json",
+          "byte_length": 3797,
+          "sha256": "abe43c2c2c636641ffe79e0e5c09baa0bced90f2c793e940b0325f10acb59f4b",
+          "git_blob_sha1": "0da498fa2907bbfba41d6801a2b902898c6a6fb2"
+        },
+        {
+          "path": "generated/metadata/en/reading/make-long-plain-text-easier-to-navigate/internal_links.json",
+          "byte_length": 5642,
+          "sha256": "f2dbc821cc605389a5f72509c91115ec56c782c9862e397ac7c6799d26baf730",
+          "git_blob_sha1": "249be83737934bb05d4c70e879d0b19bb5e4bba4"
+        },
+        {
+          "path": "generated/reviews/en/reading/make-long-plain-text-easier-to-navigate/review.json",
+          "byte_length": 3579,
+          "sha256": "560cabd821f5530758ad882f293e9e99de2bdb05e643a6a301fb7c64302b55bd",
+          "git_blob_sha1": "483c5b9cf0cc7a85c46c4f6a814820898de213ff"
+        },
+        {
+          "path": "generated/assets/blog/en/make-long-plain-text-easier-to-navigate/workflow-diagram.svg",
+          "byte_length": 4417,
+          "sha256": "28474ececa657ba07407af25969a1d1cbabeda74840984062870e482ca2fcc2a",
+          "git_blob_sha1": "20076b1117ddddb9a3dd6445ca4de904103dfb37"
+        },
+        {
+          "path": "generated/assets/blog/en/make-long-plain-text-easier-to-navigate/workflow-diagram.png",
+          "byte_length": 69214,
+          "sha256": "2dbd080fa3c00a6370acf908c1541b5149ea2a37e6c802c2016c7669de8edf76",
+          "git_blob_sha1": "75f926e7192253ac70a4044e8963514cf31e99ff"
+        },
+        {
+          "path": "generated/assets/blog/en/make-long-plain-text-easier-to-navigate/social-card.svg",
+          "byte_length": 4417,
+          "sha256": "28474ececa657ba07407af25969a1d1cbabeda74840984062870e482ca2fcc2a",
+          "git_blob_sha1": "20076b1117ddddb9a3dd6445ca4de904103dfb37"
+        },
+        {
+          "path": "generated/assets/blog/en/make-long-plain-text-easier-to-navigate/social-card.png",
+          "byte_length": 69214,
+          "sha256": "2dbd080fa3c00a6370acf908c1541b5149ea2a37e6c802c2016c7669de8edf76",
+          "git_blob_sha1": "75f926e7192253ac70a4044e8963514cf31e99ff"
+        },
+        {
+          "path": "generated/markdown/ko/reading/make-long-plain-text-easier-to-navigate.md",
+          "byte_length": 7378,
+          "sha256": "96102af8d6d0b64b97ba3e592c5991a5dbdd51e36e22599990a258fa8e7314b7",
+          "git_blob_sha1": "f1d6dd14e126d1712c82919bb9a5a2959b8d829f"
+        },
+        {
+          "path": "generated/images/ko/reading/make-long-plain-text-easier-to-navigate/image_spec.json",
+          "byte_length": 4115,
+          "sha256": "aa14fb58e5c760645c56ddaccab22bac2345bc595a13e2d205480b5817e77798",
+          "git_blob_sha1": "68b3c2d87bbc94fa75301d8eaddcd70693782752"
+        },
+        {
+          "path": "generated/metadata/ko/reading/make-long-plain-text-easier-to-navigate/internal_links.json",
+          "byte_length": 5411,
+          "sha256": "659bce2ac5c332b3b535ddedbdbd1673f8101eedaad62d022c099fae9a71f4ae",
+          "git_blob_sha1": "4f7c88e6aa7241864d287cac62bb7f0503b0c1d7"
+        },
+        {
+          "path": "generated/reviews/ko/reading/make-long-plain-text-easier-to-navigate/review.json",
+          "byte_length": 3611,
+          "sha256": "e4055c3622c2a8fd118ddb74370f824a996095e0c9d2e8fcc5b37bd45680bf3d",
+          "git_blob_sha1": "f61aabe1693a94f562dcdf7152c4a802c133be16"
+        },
+        {
+          "path": "generated/assets/blog/ko/make-long-plain-text-easier-to-navigate/workflow-diagram.svg",
+          "byte_length": 4257,
+          "sha256": "04f41b0a8d5fab5012127d92619ec9faa853e095fb8ab6cf36d5e2af77cf1f76",
+          "git_blob_sha1": "9ee423017ee622e7789a70ae4e135408fdaf8eb6"
+        },
+        {
+          "path": "generated/assets/blog/ko/make-long-plain-text-easier-to-navigate/workflow-diagram.png",
+          "byte_length": 45161,
+          "sha256": "bd15aa4fc669094c3885a324a783c60ca2b3586a732d71650026ac61519e621e",
+          "git_blob_sha1": "b7c375b1d603788e916972a520937abf22eedc07"
+        },
+        {
+          "path": "generated/assets/blog/ko/make-long-plain-text-easier-to-navigate/social-card.svg",
+          "byte_length": 4257,
+          "sha256": "04f41b0a8d5fab5012127d92619ec9faa853e095fb8ab6cf36d5e2af77cf1f76",
+          "git_blob_sha1": "9ee423017ee622e7789a70ae4e135408fdaf8eb6"
+        },
+        {
+          "path": "generated/assets/blog/ko/make-long-plain-text-easier-to-navigate/social-card.png",
+          "byte_length": 45161,
+          "sha256": "bd15aa4fc669094c3885a324a783c60ca2b3586a732d71650026ac61519e621e",
+          "git_blob_sha1": "b7c375b1d603788e916972a520937abf22eedc07"
+        },
+        {
+          "path": "generated/markdown/ja/reading/make-long-plain-text-easier-to-navigate.md",
+          "byte_length": 7615,
+          "sha256": "e1c1003e12913d82a25550fc23e02f143653fc8413ec184e2c8fa31bb4c09564",
+          "git_blob_sha1": "584ec9d14b2f6d57716b1201e2eeae78097830b2"
+        },
+        {
+          "path": "generated/images/ja/reading/make-long-plain-text-easier-to-navigate/image_spec.json",
+          "byte_length": 4041,
+          "sha256": "c6a580c8f7502571419ad03095bafef7f67484853658575cc835ec42cb672c66",
+          "git_blob_sha1": "90c12b03f195c042dd4440485a94ec2e1642b723"
+        },
+        {
+          "path": "generated/metadata/ja/reading/make-long-plain-text-easier-to-navigate/internal_links.json",
+          "byte_length": 5432,
+          "sha256": "dde7696ec0a163f2036ac14ea0584d399954e7ab1677f2341577a4f5de84e2b6",
+          "git_blob_sha1": "69ca9fc27b460c76581107e6eb342f2f56af68a9"
+        },
+        {
+          "path": "generated/reviews/ja/reading/make-long-plain-text-easier-to-navigate/review.json",
+          "byte_length": 3612,
+          "sha256": "a806bad170f2ed75bbe5bc74c802e4d94eb8aa1108d9b09a15dd4a149cd2d744",
+          "git_blob_sha1": "607eed3926e9deabd153271c67d5d1b5f7fd4180"
+        },
+        {
+          "path": "generated/assets/blog/ja/make-long-plain-text-easier-to-navigate/workflow-diagram.svg",
+          "byte_length": 3845,
+          "sha256": "531996d7d4a0dec212fac8a57fde2eaa3cc6176d796f9a15abad72cbf1fa1b71",
+          "git_blob_sha1": "2af42cae73f3a1b2a4ce1e6e735a3e2b8b776e99"
+        },
+        {
+          "path": "generated/assets/blog/ja/make-long-plain-text-easier-to-navigate/workflow-diagram.png",
+          "byte_length": 63404,
+          "sha256": "890a6b02c659d714eb102a886e8d8258d4002e9cf7209f6f76b1ff5405180988",
+          "git_blob_sha1": "a62d9b77f13306d38ee38632c08738c7fa372053"
+        },
+        {
+          "path": "generated/assets/blog/ja/make-long-plain-text-easier-to-navigate/social-card.svg",
+          "byte_length": 3845,
+          "sha256": "531996d7d4a0dec212fac8a57fde2eaa3cc6176d796f9a15abad72cbf1fa1b71",
+          "git_blob_sha1": "2af42cae73f3a1b2a4ce1e6e735a3e2b8b776e99"
+        },
+        {
+          "path": "generated/assets/blog/ja/make-long-plain-text-easier-to-navigate/social-card.png",
+          "byte_length": 63404,
+          "sha256": "890a6b02c659d714eb102a886e8d8258d4002e9cf7209f6f76b1ff5405180988",
+          "git_blob_sha1": "a62d9b77f13306d38ee38632c08738c7fa372053"
+        },
+        {
+          "path": "generated/markdown/zh-Hans/reading/make-long-plain-text-easier-to-navigate.md",
+          "byte_length": 6005,
+          "sha256": "d7000be488351ca235e98d9e9e0a985bf46764c583402977f05029f94c63952d",
+          "git_blob_sha1": "5cb37e976415c8144a1bcff968af65eeb7b475ba"
+        },
+        {
+          "path": "generated/images/zh-Hans/reading/make-long-plain-text-easier-to-navigate/image_spec.json",
+          "byte_length": 3772,
+          "sha256": "2978539cb84e5cfbde6993099190c11965df1e4eeab951f65893bee93a8a9d8e",
+          "git_blob_sha1": "ed5fe99b6632588ffbb45345cecf157d2e268f34"
+        },
+        {
+          "path": "generated/metadata/zh-Hans/reading/make-long-plain-text-easier-to-navigate/internal_links.json",
+          "byte_length": 5336,
+          "sha256": "b99cbaa2a24898c7ff489d1e07c00c8722b76c29c3d2f8fdb37d217c5bd477a8",
+          "git_blob_sha1": "f3569b33ff5411f0cbd6c5efca237990f47ef102"
+        },
+        {
+          "path": "generated/reviews/zh-Hans/reading/make-long-plain-text-easier-to-navigate/review.json",
+          "byte_length": 3588,
+          "sha256": "8aeb82e89ac403c771f23b4f2fa83316aea04cefbb15a27444bcc60720ebfa89",
+          "git_blob_sha1": "8b906abc8dae54545826a898e8553626e25ce415"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/make-long-plain-text-easier-to-navigate/workflow-diagram.svg",
+          "byte_length": 3692,
+          "sha256": "275bb299fb88cd5f89601db508273fd402148227cb5144e3bf3abaa138ff8e66",
+          "git_blob_sha1": "ff6e2b810b35f1bdb6394aabbf5fbece32b4873a"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/make-long-plain-text-easier-to-navigate/workflow-diagram.png",
+          "byte_length": 59877,
+          "sha256": "2722595be11580c2a2b716f21327009255cfdd0c0d809372dd3a9e7d425b8f67",
+          "git_blob_sha1": "9827afdf236cfec5ef957fe0013a8e654fed024c"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/make-long-plain-text-easier-to-navigate/social-card.svg",
+          "byte_length": 3692,
+          "sha256": "275bb299fb88cd5f89601db508273fd402148227cb5144e3bf3abaa138ff8e66",
+          "git_blob_sha1": "ff6e2b810b35f1bdb6394aabbf5fbece32b4873a"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/make-long-plain-text-easier-to-navigate/social-card.png",
+          "byte_length": 59877,
+          "sha256": "2722595be11580c2a2b716f21327009255cfdd0c0d809372dd3a9e7d425b8f67",
+          "git_blob_sha1": "9827afdf236cfec5ef957fe0013a8e654fed024c"
+        },
+        {
+          "path": "generated/markdown/zh-Hant/reading/make-long-plain-text-easier-to-navigate.md",
+          "byte_length": 6029,
+          "sha256": "2ddbe4e01b075165ceadfbc99a8eeb0ad829ecb93f1701e1a361646273787232",
+          "git_blob_sha1": "288ddc29e339bd803de336c6c7ad1bc951094423"
+        },
+        {
+          "path": "generated/images/zh-Hant/reading/make-long-plain-text-easier-to-navigate/image_spec.json",
+          "byte_length": 3778,
+          "sha256": "4978657ec914f906411f656c279213a128b822bd69610c691298474b4e8f7084",
+          "git_blob_sha1": "7b0bc2d086d744d61db80b495962ec83a8aa2d7b"
+        },
+        {
+          "path": "generated/metadata/zh-Hant/reading/make-long-plain-text-easier-to-navigate/internal_links.json",
+          "byte_length": 5336,
+          "sha256": "470391bc7ed327cf3aa7a3ff53302f2de3103137ed98da97847b0e2c25dfb0d5",
+          "git_blob_sha1": "3b1508d81734d5d1cc17132bfd7624050928f831"
+        },
+        {
+          "path": "generated/reviews/zh-Hant/reading/make-long-plain-text-easier-to-navigate/review.json",
+          "byte_length": 3591,
+          "sha256": "7c15af326af311bb40d52338b350f113cd75f2ccb82289cac754c1e28c5e861c",
+          "git_blob_sha1": "605f6df0d94cd41a0b7cfe555ab2934ab13bb28a"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/make-long-plain-text-easier-to-navigate/workflow-diagram.svg",
+          "byte_length": 3692,
+          "sha256": "b00be6e4a580a42ab2635a707b902771babd1e5955494f229c0ee09fe6ab6d25",
+          "git_blob_sha1": "eec1eccfdc38011113f311a97e4d012be233a0f1"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/make-long-plain-text-easier-to-navigate/workflow-diagram.png",
+          "byte_length": 62305,
+          "sha256": "adcbdd381ca123dbaaa14af8c96b9edb30def99a42b5d392438a480beef50e11",
+          "git_blob_sha1": "6709e88d2d9a74777387d9c4b409b541f7e8bb48"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/make-long-plain-text-easier-to-navigate/social-card.svg",
+          "byte_length": 3692,
+          "sha256": "b00be6e4a580a42ab2635a707b902771babd1e5955494f229c0ee09fe6ab6d25",
+          "git_blob_sha1": "eec1eccfdc38011113f311a97e4d012be233a0f1"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/make-long-plain-text-easier-to-navigate/social-card.png",
+          "byte_length": 62305,
+          "sha256": "adcbdd381ca123dbaaa14af8c96b9edb30def99a42b5d392438a480beef50e11",
+          "git_blob_sha1": "6709e88d2d9a74777387d9c4b409b541f7e8bb48"
+        },
+        {
+          "path": "generated/markdown/pt-BR/reading/make-long-plain-text-easier-to-navigate.md",
+          "byte_length": 6099,
+          "sha256": "f6a16fcc30660a998b22c529eb72595f7439455b1ab38512d22f97d5f046dbad",
+          "git_blob_sha1": "88dec4a9676fcd6b936e5aebceee561c57a5f14f"
+        },
+        {
+          "path": "generated/images/pt-BR/reading/make-long-plain-text-easier-to-navigate/image_spec.json",
+          "byte_length": 3900,
+          "sha256": "d3116bd6327e84e627e9447c55b11fdb4ea1a4b30df3033a3b221ed9a7c4bc78",
+          "git_blob_sha1": "deca5d1d9048fcd9c02be15b6095a435372c7a9b"
+        },
+        {
+          "path": "generated/metadata/pt-BR/reading/make-long-plain-text-easier-to-navigate/internal_links.json",
+          "byte_length": 5770,
+          "sha256": "c7cd7b6777fc41dd19e24a6fdce340fd0c417513341ea7925fb27f6427d7e2ac",
+          "git_blob_sha1": "fd35e76761b0f60e0abeee79ce7bcbdbc2eb35fa"
+        },
+        {
+          "path": "generated/reviews/pt-BR/reading/make-long-plain-text-easier-to-navigate/review.json",
+          "byte_length": 3596,
+          "sha256": "d4abe2269894236fe2832e6dd487b106395069781d4c029caceb95540b511bd8",
+          "git_blob_sha1": "ee1def8fc81c077edda6cdef0f0ef88352985c92"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/make-long-plain-text-easier-to-navigate/workflow-diagram.svg",
+          "byte_length": 4391,
+          "sha256": "24f1f907a2f3941f03bf6af184eb549f1598aaad65cc1f3bbdd59fd0a1f8a4fb",
+          "git_blob_sha1": "e5076e697221cbc4d01fd8bd366d0af9fbb5473b"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/make-long-plain-text-easier-to-navigate/workflow-diagram.png",
+          "byte_length": 73586,
+          "sha256": "d15912a9a27c75c16cf91141b90375e29711a9f446c65646b9f5a835e83e4a46",
+          "git_blob_sha1": "f3bcb071074e690280e5b4e65f29497f5537b86c"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/make-long-plain-text-easier-to-navigate/social-card.svg",
+          "byte_length": 4391,
+          "sha256": "24f1f907a2f3941f03bf6af184eb549f1598aaad65cc1f3bbdd59fd0a1f8a4fb",
+          "git_blob_sha1": "e5076e697221cbc4d01fd8bd366d0af9fbb5473b"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/make-long-plain-text-easier-to-navigate/social-card.png",
+          "byte_length": 73586,
+          "sha256": "d15912a9a27c75c16cf91141b90375e29711a9f446c65646b9f5a835e83e4a46",
+          "git_blob_sha1": "f3bcb071074e690280e5b4e65f29497f5537b86c"
+        },
+        {
+          "path": "generated/markdown/de/reading/make-long-plain-text-easier-to-navigate.md",
+          "byte_length": 6417,
+          "sha256": "c4de187782b248eed7ad5154afd56afae009490789d2d5c3543f45c0d9e03d7b",
+          "git_blob_sha1": "4ae877f24f3fd6d40e3a192cbe89cad9a6dd2b00"
+        },
+        {
+          "path": "generated/images/de/reading/make-long-plain-text-easier-to-navigate/image_spec.json",
+          "byte_length": 3888,
+          "sha256": "69ccbf6ac4546f9aac8333e1673088c2ecadca2d04544a671a85d9aed6eda5f2",
+          "git_blob_sha1": "c0b032ad769337cb2c8dabb1c44703f847b5ba31"
+        },
+        {
+          "path": "generated/metadata/de/reading/make-long-plain-text-easier-to-navigate/internal_links.json",
+          "byte_length": 5384,
+          "sha256": "859aa8282a10a5660068deb864458518da245e242dccab3745fa7577e3a70f68",
+          "git_blob_sha1": "466600cfee517435fb370759ff625b0b26192c54"
+        },
+        {
+          "path": "generated/reviews/de/reading/make-long-plain-text-easier-to-navigate/review.json",
+          "byte_length": 3576,
+          "sha256": "7240c78f1b029c0ec79f080fd6ee03f2fe60a8ede28a29b3a9c76337408c5395",
+          "git_blob_sha1": "5cd9fa5da5437a9affbb63b1c8c8c9e2c616faa6"
+        },
+        {
+          "path": "generated/assets/blog/de/make-long-plain-text-easier-to-navigate/workflow-diagram.svg",
+          "byte_length": 4369,
+          "sha256": "bc546c4ee6cecb7e70da2f5666a12a6de090b8b2135d8cee5618838dd0be9dd5",
+          "git_blob_sha1": "d58186eb9468f4061945c323c236987dabe04851"
+        },
+        {
+          "path": "generated/assets/blog/de/make-long-plain-text-easier-to-navigate/workflow-diagram.png",
+          "byte_length": 66154,
+          "sha256": "b70d6d823323dd43c0b10f880ed6bc6008716f8847aded4bf39b26e4e63c827c",
+          "git_blob_sha1": "fef075ccd28bfdaacd8ae2f0e2ec96fd1c037143"
+        },
+        {
+          "path": "generated/assets/blog/de/make-long-plain-text-easier-to-navigate/social-card.svg",
+          "byte_length": 4369,
+          "sha256": "bc546c4ee6cecb7e70da2f5666a12a6de090b8b2135d8cee5618838dd0be9dd5",
+          "git_blob_sha1": "d58186eb9468f4061945c323c236987dabe04851"
+        },
+        {
+          "path": "generated/assets/blog/de/make-long-plain-text-easier-to-navigate/social-card.png",
+          "byte_length": 66154,
+          "sha256": "b70d6d823323dd43c0b10f880ed6bc6008716f8847aded4bf39b26e4e63c827c",
+          "git_blob_sha1": "fef075ccd28bfdaacd8ae2f0e2ec96fd1c037143"
+        },
+        {
+          "path": "generated/markdown/fr/reading/make-long-plain-text-easier-to-navigate.md",
+          "byte_length": 6489,
+          "sha256": "eec92524c059fdff5f982cba4fb99352c3a4fc4bfed00d13bb4a72e869b8c9e4",
+          "git_blob_sha1": "ce51ca5e6b88188748995e79a4402e232a273a24"
+        },
+        {
+          "path": "generated/images/fr/reading/make-long-plain-text-easier-to-navigate/image_spec.json",
+          "byte_length": 3975,
+          "sha256": "9fa39f61b67d3b1e20c0159e30a76f1dd58c0e36e1407047d69ba50a43cea123",
+          "git_blob_sha1": "b6b6770ad7f8ccdef5c12a2ab77fbef4ce9dfc7e"
+        },
+        {
+          "path": "generated/metadata/fr/reading/make-long-plain-text-easier-to-navigate/internal_links.json",
+          "byte_length": 5398,
+          "sha256": "85d77da9aeaecbbb610d235cf48e813a3b0724e553b830819b1531c9e0ef3315",
+          "git_blob_sha1": "17b238775af56b08a2bc9ecd7adae095b013eea2"
+        },
+        {
+          "path": "generated/reviews/fr/reading/make-long-plain-text-easier-to-navigate/review.json",
+          "byte_length": 3592,
+          "sha256": "b35d9d6a6a8edd040c84d9f93abf9577a50a8873e3429838fbfed4b5f59cc1de",
+          "git_blob_sha1": "7300f22026a8310df56cf06c938a84e71374324c"
+        },
+        {
+          "path": "generated/assets/blog/fr/make-long-plain-text-easier-to-navigate/workflow-diagram.svg",
+          "byte_length": 4369,
+          "sha256": "cd3031c2911418fff904680e0f3443b88f4ffdb435fba233a515fe7c8e4993f8",
+          "git_blob_sha1": "aacb04f53d7bb9a0dbb8f99238810b5787ff0ad3"
+        },
+        {
+          "path": "generated/assets/blog/fr/make-long-plain-text-easier-to-navigate/workflow-diagram.png",
+          "byte_length": 66691,
+          "sha256": "0279c6874530048f7aefbc58e86203566df72c4b946a65c30e0466bca7007cda",
+          "git_blob_sha1": "7ebe827e2ef564f06f6770f0a122f6c16c032990"
+        },
+        {
+          "path": "generated/assets/blog/fr/make-long-plain-text-easier-to-navigate/social-card.svg",
+          "byte_length": 4369,
+          "sha256": "cd3031c2911418fff904680e0f3443b88f4ffdb435fba233a515fe7c8e4993f8",
+          "git_blob_sha1": "aacb04f53d7bb9a0dbb8f99238810b5787ff0ad3"
+        },
+        {
+          "path": "generated/assets/blog/fr/make-long-plain-text-easier-to-navigate/social-card.png",
+          "byte_length": 66691,
+          "sha256": "0279c6874530048f7aefbc58e86203566df72c4b946a65c30e0466bca7007cda",
+          "git_blob_sha1": "7ebe827e2ef564f06f6770f0a122f6c16c032990"
+        },
+        {
+          "path": "generated/markdown/es/reading/make-long-plain-text-easier-to-navigate.md",
+          "byte_length": 6165,
+          "sha256": "56a5c3d75ad54f601abed737e3e9e3461a574d8a801c950bd7324ad0ff88b4d5",
+          "git_blob_sha1": "4e95ec17878cb37c11cea1dca87b0c4e1a22a5a6"
+        },
+        {
+          "path": "generated/images/es/reading/make-long-plain-text-easier-to-navigate/image_spec.json",
+          "byte_length": 3923,
+          "sha256": "a936b62538e3eeed01a5a57eed7f80fabc8d364a24b16a6cf400f9ed016cb296",
+          "git_blob_sha1": "709a30c30ebd5766fa76688f576e52cc55d18369"
+        },
+        {
+          "path": "generated/metadata/es/reading/make-long-plain-text-easier-to-navigate/internal_links.json",
+          "byte_length": 5744,
+          "sha256": "a59fc0d98b490259e89396feec5d6369e260f07a868da9313c357b3146fe5585",
+          "git_blob_sha1": "4127fa01fce2d9fffa68958402399bf166f5c714"
+        },
+        {
+          "path": "generated/reviews/es/reading/make-long-plain-text-easier-to-navigate/review.json",
+          "byte_length": 3584,
+          "sha256": "4227896afaec70b9d533f15477202470cc74b5dd4d8f5d69720d74dfdc660dcf",
+          "git_blob_sha1": "0afbe64cf7373fe0bad9be8e60238cd1ce635b2d"
+        },
+        {
+          "path": "generated/assets/blog/es/make-long-plain-text-easier-to-navigate/workflow-diagram.svg",
+          "byte_length": 4398,
+          "sha256": "3e4a5ca4af1736783613d794776fc36eb1a6525d0bf5f0621b6e82c4f4daf5a6",
+          "git_blob_sha1": "8d6a4ecc4cd2c0c7e9ff09acd812096e6d7c94f4"
+        },
+        {
+          "path": "generated/assets/blog/es/make-long-plain-text-easier-to-navigate/workflow-diagram.png",
+          "byte_length": 73427,
+          "sha256": "a1dee1655cb0c4362b6c8896bc98624e4af00b453d535804b625854e25d878af",
+          "git_blob_sha1": "e1541a95f5e2e1704dc81e741f28a889c31caab8"
+        },
+        {
+          "path": "generated/assets/blog/es/make-long-plain-text-easier-to-navigate/social-card.svg",
+          "byte_length": 4398,
+          "sha256": "3e4a5ca4af1736783613d794776fc36eb1a6525d0bf5f0621b6e82c4f4daf5a6",
+          "git_blob_sha1": "8d6a4ecc4cd2c0c7e9ff09acd812096e6d7c94f4"
+        },
+        {
+          "path": "generated/assets/blog/es/make-long-plain-text-easier-to-navigate/social-card.png",
+          "byte_length": 73427,
+          "sha256": "a1dee1655cb0c4362b6c8896bc98624e4af00b453d535804b625854e25d878af",
+          "git_blob_sha1": "e1541a95f5e2e1704dc81e741f28a889c31caab8"
+        }
+      ]
+    }
+  }
+}

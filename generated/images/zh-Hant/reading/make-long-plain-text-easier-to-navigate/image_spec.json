@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/reading/make-long-plain-text-easier-to-navigate.md",
+  "topic": {
+    "id": "TOPIC-0109",
+    "title": "如何在長篇純文字文件中找回需要的段落",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "zh-Hant",
+    "primary_keyword": "長篇純文字文件",
+    "related_apps": [
+      "VaultXT"
+    ]
+  },
+  "article_sections_detected": [
+    "如何在長篇純文字文件中找回需要的段落",
+    "問題",
+    "簡短回答",
+    "為什麼只記捲動位置不夠",
+    "五步工作流程",
+    "方法的限制",
+    "一種可選工具：VaultXT",
+    "常見問題",
+    "需要記錄全部標題嗎？",
+    "只記錄行號是否足夠？",
+    "版本改變後，還能使用同一份位置筆記嗎？",
+    "結論",
+    "延伸閱讀"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "面對很長的TXT文件，如何重新找到讀到的位置或需要的段落？",
+      "structure": [
+        "保留",
+        "整理",
+        "查找",
+        "確認"
+      ],
+      "notes": "Explain preservation, external mapping, search and version verification; not an application screenshot or automatic navigation claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial navigation workflow, not an application interface.",
+    "applications": [
+      "VaultXT"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "為長文件留下查找線索",
+      "steps": [
+        "保留",
+        "整理",
+        "查找",
+        "確認"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "不修改原檔的導覽方法",
+    "message": "重新開啟同一版本，確認路徑。",
+    "description": "先保留原始檔案，決定唯讀檢視還是使用工作副本。在獨立的筆記中整理現有標題，搜尋有辨識度的短語並核對上下文。用外部位置筆記留下查找路徑，再重新開啟同一版本確認。",
+    "steps": [
+      [
+        "保留",
+        "區分原檔與工作副本"
+      ],
+      [
+        "整理",
+        "另行記錄現有標題"
+      ],
+      [
+        "查找",
+        "核對搜尋詞與上下文"
+      ],
+      [
+        "確認",
+        "重新開啟並檢查路徑"
+      ]
+    ]
+  }
+}

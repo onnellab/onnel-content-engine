@@ -1,0 +1,157 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0108",
+    "title": "怎样在长篇纯文本文档中找回所需段落",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "zh-Hans",
+    "status": "review",
+    "topic_clusters": [
+      "TXT文档搜索",
+      "记录文档结构",
+      "记录阅读位置",
+      "搜索位置笔记",
+      "长篇纯文本文档",
+      "reading"
+    ],
+    "related_app_names": [
+      "VaultXT"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0056",
+        "title": "检查 EPUB 的目录链接和章节顺序",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "zh-Hans",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0047",
+        "title": "在 Android 上整理音乐文件，准备离线播放",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "zh-Hans",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0064",
+        "title": "替换原文件前，如何检查转换后的媒体文件",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "zh-Hans",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0072",
+        "title": "如何整理可重复使用的文本片段",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "zh-Hans",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0080",
+        "title": "如何建立一致、好查找的文件命名规则",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "zh-Hans",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0090",
+        "title": "如何区分资料笔记与自己的结论",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "zh-Hans",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0003",
+        "app_name": "VaultXT",
+        "slug": "vaultxt",
+        "category": "reading",
+        "url": "/apps/vaultxt/",
+        "description": "A text editor and viewer designed for working with large plain-text files.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Reading guide",
+        "category": "reading",
+        "cluster": "reading",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "TXT文档搜索 cluster",
+        "category": "reading",
+        "cluster": "TXT文档搜索",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

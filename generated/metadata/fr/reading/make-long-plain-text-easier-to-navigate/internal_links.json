@@ -1,0 +1,157 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0112",
+    "title": "Se repérer plus facilement dans un long document texte",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "fr",
+    "status": "review",
+    "topic_clusters": [
+      "titres dans un fichier TXT",
+      "retrouver un passage",
+      "reprendre sa lecture",
+      "références de lecture",
+      "Se repérer plus facilement",
+      "reading"
+    ],
+    "related_app_names": [
+      "VaultXT"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0060",
+        "title": "Vérifier la table des matières et l’ordre des chapitres d’un EPUB",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 14
+      },
+      {
+        "topic_id": "TOPIC-0076",
+        "title": "Transformer les textes répétitifs en extraits réutilisables",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0051",
+        "title": "Organiser sa musique sur Android pour une écoute hors ligne",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0068",
+        "title": "Tester un fichier multimédia converti avant de remplacer l’original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0103",
+        "title": "Des tags d’album et d’artiste cohérents, des crédits préservés",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "fr",
+        "status": "review",
+        "url": "generated/markdown/fr/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0084",
+        "title": "Créer une convention cohérente pour nommer ses fichiers",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0003",
+        "app_name": "VaultXT",
+        "slug": "vaultxt",
+        "category": "reading",
+        "url": "/apps/vaultxt/",
+        "description": "A text editor and viewer designed for working with large plain-text files.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Reading guide",
+        "category": "reading",
+        "cluster": "reading",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "titres dans un fichier TXT cluster",
+        "category": "reading",
+        "cluster": "titres dans un fichier TXT",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

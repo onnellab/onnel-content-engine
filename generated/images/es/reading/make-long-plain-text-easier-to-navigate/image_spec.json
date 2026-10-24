@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/reading/make-long-plain-text-easier-to-navigate.md",
+  "topic": {
+    "id": "TOPIC-0113",
+    "title": "Cómo orientarte en un documento de texto largo",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "es",
+    "primary_keyword": "orientarte en un documento de texto largo",
+    "related_apps": [
+      "VaultXT"
+    ]
+  },
+  "article_sections_detected": [
+    "Cómo orientarte en un documento de texto largo",
+    "Pregunta",
+    "Respuesta breve",
+    "Por qué es fácil perder el punto de lectura",
+    "Un método en cinco pasos",
+    "Límites del método",
+    "Una aplicación opcional",
+    "Guías relacionadas",
+    "Conclusión",
+    "Preguntas frecuentes",
+    "¿La referencia sigue siendo válida en una nueva versión?",
+    "¿Necesito editar el documento para darle una estructura?",
+    "¿Qué hago si la frase aparece varias veces?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "¿Cómo encontrar un pasaje y retomar la lectura de un documento de texto largo sin recorrerlo otra vez desde el principio?",
+      "structure": [
+        "Conserva",
+        "Ubícate",
+        "Encuentra",
+        "Verifica"
+      ],
+      "notes": "Explain preservation, external mapping, search and version verification; not an application screenshot or automatic navigation claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial navigation workflow, not an application interface.",
+    "applications": [
+      "VaultXT"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Vuelve al pasaje que necesitas",
+      "steps": [
+        "Conserva",
+        "Ubícate",
+        "Encuentra",
+        "Verifica"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Referencias que puedes comprobar",
+    "message": "Prueba el regreso en la misma versión.",
+    "description": "Conserva el original, anota los títulos existentes y elige frases distintivas para buscarlas. Guarda las referencias en una nota separada. Cierra y vuelve a abrir la misma versión para comprobar que puedes regresar al pasaje.",
+    "steps": [
+      [
+        "Conserva",
+        "Mantén el original intacto"
+      ],
+      [
+        "Ubícate",
+        "Anota los títulos existentes"
+      ],
+      [
+        "Encuentra",
+        "Busca y revisa el contexto"
+      ],
+      [
+        "Verifica",
+        "Reabre y vuelve al pasaje"
+      ]
+    ]
+  }
+}

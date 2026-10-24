@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/fr/reading/make-long-plain-text-easier-to-navigate.md",
+  "topic": {
+    "id": "TOPIC-0112",
+    "title": "Se repérer plus facilement dans un long document texte",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "fr",
+    "primary_keyword": "Se repérer plus facilement",
+    "related_apps": [
+      "VaultXT"
+    ]
+  },
+  "article_sections_detected": [
+    "Se repérer plus facilement dans un long document texte",
+    "Question",
+    "Réponse courte",
+    "Pourquoi on perd facilement sa place",
+    "Une méthode en cinq étapes",
+    "Les limites de cette méthode",
+    "Une application possible",
+    "Guides complémentaires",
+    "Conclusion",
+    "Questions fréquentes",
+    "La référence reste-t-elle valable dans une nouvelle version ?",
+    "Faut-il modifier le document pour lui donner une structure ?",
+    "Que faire si l’expression apparaît plusieurs fois ?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Comment retrouver un passage et reprendre la lecture d’un long document texte sans le parcourir à nouveau depuis le début ?",
+      "structure": [
+        "Préserver",
+        "Repérer",
+        "Trouver",
+        "Vérifier"
+      ],
+      "notes": "Explain preservation, external mapping, search and version verification; not an application screenshot or automatic navigation claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial navigation workflow, not an application interface.",
+    "applications": [
+      "VaultXT"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Retrouver son passage",
+      "steps": [
+        "Préserver",
+        "Repérer",
+        "Trouver",
+        "Vérifier"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Des repères que l’on peut vérifier",
+    "message": "Testez le retour dans la même version.",
+    "description": "Préservez l’original, notez les titres existants et choisissez des expressions distinctives à rechercher. Conservez les références dans une note séparée. Fermez puis rouvrez la même version pour vérifier que vous retrouvez le passage.",
+    "steps": [
+      [
+        "Préserver",
+        "Garder l’original intact"
+      ],
+      [
+        "Repérer",
+        "Noter les titres existants"
+      ],
+      [
+        "Trouver",
+        "Rechercher et lire le contexte"
+      ],
+      [
+        "Vérifier",
+        "Rouvrir et retrouver le passage"
+      ]
+    ]
+  }
+}

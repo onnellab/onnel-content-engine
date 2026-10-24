@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/reading/make-long-plain-text-easier-to-navigate.md",
+  "topic": {
+    "id": "TOPIC-0107",
+    "title": "長いプレーンテキスト文書で必要な箇所を見つける方法",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "ja",
+    "primary_keyword": "長いプレーンテキスト文書",
+    "related_apps": [
+      "VaultXT"
+    ]
+  },
+  "article_sections_detected": [
+    "長いプレーンテキスト文書で必要な箇所を見つける方法",
+    "質問",
+    "短い答え",
+    "スクロール位置だけでは不十分な理由",
+    "五つの手順",
+    "この方法の限界",
+    "選択肢の一つ：VaultXT",
+    "よくある質問",
+    "すべての見出しを記録する必要がありますか？",
+    "行番号だけで十分ですか？",
+    "版が変わっても同じメモを使えますか？",
+    "結論",
+    "関連ガイド"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "長いTXT文書で、読みかけの場所や必要な段落にどうすれば戻れるでしょうか？",
+      "structure": [
+        "保つ",
+        "整理する",
+        "探す",
+        "確かめる"
+      ],
+      "notes": "Explain preservation, external mapping, search and version verification; not an application screenshot or automatic navigation claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial navigation workflow, not an application interface.",
+    "applications": [
+      "VaultXT"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "長い文書に戻るための目印",
+      "steps": [
+        "保つ",
+        "整理する",
+        "探す",
+        "確かめる"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "原本を変えずに探す",
+    "message": "同じ版を開き直して確認します。",
+    "description": "原本を保ち、読み取り専用で見るか作業用コピーを使うかを決めます。既存の見出しを別のメモに整理し、特徴的な語句を検索して文脈を確認します。外部の位置メモに経路を残し、同じ版を開き直して確かめましょう。",
+    "steps": [
+      [
+        "保つ",
+        "原本と作業用コピーを分ける"
+      ],
+      [
+        "整理する",
+        "既存の見出しを別に記録"
+      ],
+      [
+        "探す",
+        "検索語と文脈を確認"
+      ],
+      [
+        "確かめる",
+        "開き直して経路を検証"
+      ]
+    ]
+  }
+}

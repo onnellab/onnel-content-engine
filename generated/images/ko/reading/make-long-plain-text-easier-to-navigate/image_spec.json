@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/reading/make-long-plain-text-easier-to-navigate.md",
+  "topic": {
+    "id": "TOPIC-0106",
+    "title": "긴 일반 텍스트 문서에서 필요한 부분을 쉽게 찾는 방법",
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "category": "reading",
+    "language": "ko",
+    "primary_keyword": "일반 텍스트 문서",
+    "related_apps": [
+      "VaultXT"
+    ]
+  },
+  "article_sections_detected": [
+    "긴 일반 텍스트 문서에서 필요한 부분을 쉽게 찾는 방법",
+    "질문",
+    "짧은 답",
+    "스크롤 위치만으로는 부족한 이유",
+    "다섯 단계 작업 방법",
+    "이 방법의 한계",
+    "선택 가능한 도구: VaultXT",
+    "자주 묻는 질문",
+    "모든 제목을 기록해야 하나요?",
+    "줄 번호만 기록해도 되나요?",
+    "파일 버전이 바뀌어도 같은 메모를 쓸 수 있나요?",
+    "결론",
+    "함께 읽기"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "긴 TXT 문서에서 읽던 곳이나 필요한 단락을 어떻게 다시 찾을 수 있을까요?",
+      "structure": [
+        "보존",
+        "정리",
+        "찾기",
+        "확인"
+      ],
+      "notes": "Explain preservation, external mapping, search and version verification; not an application screenshot or automatic navigation claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial navigation workflow, not an application interface.",
+    "applications": [
+      "VaultXT"
+    ],
+    "rules": [
+      "실제 기능을 설명할 때에만 스크린샷을 사용합니다.",
+      "불필요한 UI는 잘라냅니다.",
+      "관련 컨트롤이나 워크플로 영역만 강조합니다.",
+      "높은 해상도를 유지합니다.",
+      "스크린샷을 장식으로 사용하지 않습니다."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "긴 문서에서 다시 찾을 길",
+      "steps": [
+        "보존",
+        "정리",
+        "찾기",
+        "확인"
+      ],
+      "layout": "세로 또는 좌우 순서형"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+    "이 단계에서는 스크린샷을 만들지 않습니다.",
+    "이 단계에서는 에셋을 게시하지 않습니다.",
+    "설명 목적이 없는 장식용 이미지는 사용하지 않습니다."
+  ],
+  "editorial_workflow": {
+    "subtitle": "원본을 바꾸지 않는 탐색",
+    "message": "같은 버전을 다시 열어 확인하세요.",
+    "description": "원본을 보존하고 읽기 전용으로 볼지 별도 작업본을 쓸지 먼저 정하세요. 기존 제목을 별도 메모에 정리하고, 특징적인 문구를 검색해 문맥을 확인하세요. 외부 위치 메모로 경로를 남긴 뒤 같은 버전을 다시 열어 확인하세요.",
+    "steps": [
+      [
+        "보존",
+        "원본과 작업본 구분"
+      ],
+      [
+        "정리",
+        "기존 제목을 별도 기록"
+      ],
+      [
+        "찾기",
+        "검색어와 문맥 확인"
+      ],
+      [
+        "확인",
+        "다시 열어 경로 검증"
+      ]
+    ]
+  }
+}
