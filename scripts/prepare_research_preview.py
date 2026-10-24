@@ -374,11 +374,108 @@ def verified_native_manifest(output):
             raise ValueError(f"Native artifact fingerprint mismatch: {entry['path']}")
     return manifest
 
-def collect(stage, output, candidates, seeds):
+
+REGISTERED_AUDIT = "data/blog_review_supply_20261023_research.json"
+REGISTERED_IDS = dict(zip(LOCALES, (
+    "TOPIC-0037", "TOPIC-0088", "TOPIC-0089", "TOPIC-0090",
+    "TOPIC-0091", "TOPIC-0092", "TOPIC-0093", "TOPIC-0094", "TOPIC-0095",
+)))
+
+def read_registered_json(stage, relative, limit=100_000):
+    path = safe_native_path(stage, relative, required=True)
+    return json.loads(read_native_bytes(path, limit).decode("utf-8"),
+                      object_pairs_hook=unique_native_object)
+
+def validate_registered_candidates(stage):
+    """Read existing registration; never repair, regenerate, or reserve IDs."""
+    from topic_management import TOPIC_HEADER, read_csv
+    from check_nine_language_publication import check_reviewed_candidates
+
+    audit = read_registered_json(stage, REGISTERED_AUDIT)
+    if (not isinstance(audit, dict) or type(audit.get("schema")) is not int or
+            audit["schema"] != 1 or
+            audit.get("kind") != "review_supply_audit_not_publication_receipt" or
+            audit.get("slug") != SLUG or audit.get("category") != CATEGORY or
+            audit.get("stage") != "review" or
+            any(key not in audit or audit[key] is not None
+                for key in ("scheduled_at", "published_at", "published_url")) or
+            audit.get("queue_ids") != list(REGISTERED_IDS.values())):
+        raise ValueError("Invalid registered research audit identity")
+
+    manifest = validate_native_manifest({
+        "schema": 1, "slug": SLUG, "locales": list(LOCALES),
+        "files": audit.get("reviewed_files"),
+    })
+    reviewed = read_registered_json(
+        stage, "preview/research-source-notes/reviewed-source-sha256.json", 4096)
+    if (not isinstance(reviewed, dict) or set(reviewed) != set(LOCALES) or
+            audit.get("reviewed_source_digests") != reviewed):
+        raise ValueError("Registered reviewed source digest set mismatch")
+    for locale in LOCALES:
+        path = safe_native_path(
+            stage, f"preview/research-source-notes/{locale}.json", required=True)
+        if digest(read_native_bytes(path, 100_000)) != reviewed[locale]:
+            raise ValueError(f"Registered reviewed source digest mismatch: {locale}")
+
+    topics = safe_native_path(stage, "data/topics.csv", required=True)
+    mirror = safe_native_path(stage, "topics/topics.csv", required=True)
+    if read_native_bytes(topics) != read_native_bytes(mirror):
+        raise ValueError("Registered topic mirror mismatch")
+    rows = read_csv(topics, TOPIC_HEADER)
+    selected = [row for row in rows
+                if row["slug"] == SLUG or row["id"] in REGISTERED_IDS.values()]
+    identities = {(row["primary_language"], row["id"]) for row in selected}
+    if len(selected) != 9 or identities != set(REGISTERED_IDS.items()):
+        raise ValueError("Exactly nine registered candidate identities required")
+    by_locale = {row["primary_language"]: row for row in selected}
+    candidates = [by_locale[locale] for locale in LOCALES]
+    for row in candidates:
+        locale = row["primary_language"]
+        if (row["slug"] != SLUG or row["category"] != CATEGORY or
+                row["status"] != "review" or row["review_required"] != "true" or
+                row["canonical_path"] !=
+                f"generated/markdown/{locale}/{CATEGORY}/{SLUG}.md" or
+                any(row[key] != "" for key in
+                    ("related_apps", "scheduled_at", "published_at", "published_url"))):
+            raise ValueError("Registered candidate must remain unscheduled review")
+
+    for entry in manifest["files"]:
+        path = safe_native_path(stage, entry["path"], required=True)
+        if native_entry(entry["path"], read_native_bytes(path)) != entry:
+            raise ValueError(f"Registered artifact fingerprint mismatch: {entry['path']}")
+    for row in candidates:
+        review = read_registered_json(
+            stage, f"generated/reviews/{row['primary_language']}/{CATEGORY}/{SLUG}/review.json")
+        if (not isinstance(review, dict) or type(review.get("version")) is not int or
+                review["version"] != 4 or review.get("topic_id") != row["id"]):
+            raise ValueError("Registered candidate requires its version 4 review")
+    # This read-only gate compares persisted reports against newly computed
+    # current fingerprints, strict >9.0 scores, and every mandatory check.
+    check_reviewed_candidates(topics)
+    return candidates, manifest
+
+def run_registered_gates(stage, output):
+    """Preserve registered bytes while native evaluators write in another copy."""
+    before = source_inventory(stage)
+    with tempfile.TemporaryDirectory(prefix="onnellab-registered-research-gates-") as temporary:
+        gate_stage = Path(temporary)
+        copy_source(stage, gate_stage, before)
+        run_gates(gate_stage, output)
+    if source_inventory(stage) != before:
+        raise ValueError("Registered stage changed during native validation")
+    validate_registered_candidates(stage)
+
+def collect(stage, output, candidates, seeds, *, registered_manifest=None):
     # The native read-only gate also recomputes current fingerprints and requires
     # every mandatory check. It imports the existing score verifier, never its CLI.
     from check_nine_language_publication import check_reviewed_candidates
     check_reviewed_candidates(stage / "data/topics.csv")
+    if registered_manifest is not None:
+        actual_candidates, actual_manifest = validate_registered_candidates(stage)
+        if candidates != actual_candidates or registered_manifest != actual_manifest or seeds:
+            raise ValueError("Registered collection evidence mismatch")
+    expected_entries = ({entry["path"]: entry for entry in registered_manifest["files"]}
+                        if registered_manifest is not None else None)
     expected = native_output_paths()
     if (len(candidates) != len(LOCALES) or
             {row["primary_language"] for row in candidates} != set(LOCALES)):
@@ -388,7 +485,7 @@ def collect(stage, output, candidates, seeds):
         if row["canonical_path"] != canonical:
             raise ValueError("Unexpected native candidate Markdown path")
     aliases = {}
-    for locale in LOCALES:
+    for locale in (() if registered_manifest is not None else LOCALES):
         base = f"generated/assets/blog/{locale}/{SLUG}/"
         for suffix in ("svg", "png"):
             aliases[base + "social-card." + suffix] = base + "workflow-diagram." + suffix
@@ -425,6 +522,8 @@ def collect(stage, output, candidates, seeds):
         if total > 100_000_000:
             raise ValueError("Native outputs exceed total size limit")
         entry = native_entry(relative, raw)
+        if expected_entries is not None and entry != expected_entries[relative]:
+            raise ValueError(f"Registered artifact changed during collection: {relative}")
         target = safe_native_path(output, "artifacts/" + relative, absent=True)
         target.parent.mkdir(parents=True, exist_ok=True)
         target = safe_native_path(output, "artifacts/" + relative, absent=True)
@@ -440,7 +539,7 @@ def collect(stage, output, candidates, seeds):
     from prepare_blog_preview import validate_bundle
     validate_bundle(output / "candidate.json")
     write_json(output / "candidate-topic-rows.json", {"candidates": candidates, "idea_seeds": seeds,
-                                                    "ids_reserved": False, "live_queue_modified": False})
+                                                    "ids_reserved": registered_manifest is not None, "live_queue_modified": False})
     manifest = validate_native_manifest({"schema": 1, "slug": SLUG, "locales": list(LOCALES), "files": entries})
     write_json(output / NATIVE_MANIFEST, manifest)
     verified_native_manifest(output)
@@ -456,11 +555,17 @@ def stage_worker():
     output = Path(settings["output"])
     if output.resolve() != original / "preview-evidence/research-source-notes":
         raise ValueError("Unexpected evidence destination")
-    drafts = validate_drafts(ROOT / "preview/research-source-notes")
-    store, candidates, seeds = stage_topics(ROOT, drafts)
-    candidates = materialize_candidates(ROOT, drafts, candidates, store)
-    run_gates(ROOT, output)
-    collect(ROOT, output, candidates, seeds)
+    audit_path = safe_native_path(ROOT, REGISTERED_AUDIT)
+    if audit_path.exists():
+        candidates, manifest = validate_registered_candidates(ROOT)
+        run_registered_gates(ROOT, output)
+        collect(ROOT, output, candidates, [], registered_manifest=manifest)
+    else:
+        drafts = validate_drafts(ROOT / "preview/research-source-notes")
+        store, candidates, seeds = stage_topics(ROOT, drafts)
+        candidates = materialize_candidates(ROOT, drafts, candidates, store)
+        run_gates(ROOT, output)
+        collect(ROOT, output, candidates, seeds)
 
 def prepare(source=ROOT):
     if source.is_symlink():

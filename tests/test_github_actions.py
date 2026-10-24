@@ -89,11 +89,53 @@ class GitHubActionsTest(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/unit-tests.yml").read_text(encoding="utf-8")
         for expected in ("ubuntu-latest", "macos-latest", "requirements-test.txt", "python scripts/run_unit_tests.py", "git diff --exit-code", "contents: read"):
             self.assertIn(expected, workflow)
-        self.assertIn("sudo apt-get install -y librsvg2-bin", workflow)
+        self.assert_bounded_linux_install_contract(workflow)
         self.assertIn("brew install librsvg", workflow)
         self.assertIn("rsvg-convert --version", workflow)
         live = (ROOT / ".github/workflows/verify-manual-publications.yml").read_text(encoding="utf-8")
         self.assertLess(live.index("--pattern 'test_*publication*.py'"), live.index("- name: Verify manual publications"))
+
+    def assert_bounded_linux_install_contract(self, workflow: str) -> None:
+        configuration = yaml.safe_load(workflow)
+        job = configuration["jobs"]["test"]
+        linux_install = next(step for step in job["steps"]
+                             if step.get("name") == "Install SVG renderer on Linux")
+        self.assertEqual(linux_install["if"], "runner.os == 'Linux'")
+        self.assertEqual(linux_install["run"].splitlines(), [
+            "printf '%s\\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt > /dev/null",
+            "sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update",
+            "sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y librsvg2-bin fonts-noto-cjk",
+        ])
+        self.assertEqual(job["timeout-minutes"], 10)
+        self.assertEqual(configuration["permissions"], {"contents": "read"})
+        self.assertEqual(job["strategy"], {
+            "fail-fast": False,
+            "matrix": {"include": [
+                {"os": "ubuntu-latest", "python": "3.12"},
+                {"os": "ubuntu-latest", "python": "3.14"},
+                {"os": "macos-latest", "python": "3.14"},
+            ]},
+        })
+
+    def test_unit_install_contract_rejects_weakened_configuration(self) -> None:
+        workflow = (ROOT / ".github/workflows/unit-tests.yml").read_text(encoding="utf-8")
+        mutations = {
+            "missing_retry": workflow.replace("-o Acquire::Retries=3 ", ""),
+            "missing_http_timeout": workflow.replace("-o Acquire::http::Timeout=30 ", ""),
+            "missing_https_timeout": workflow.replace("-o Acquire::https::Timeout=30 ", ""),
+            "insecure_mirror": workflow.replace("https://archive.ubuntu.com/ubuntu/", "http://archive.ubuntu.com/ubuntu/"),
+            "wrong_mirror": workflow.replace("https://archive.ubuntu.com/ubuntu/", "https://example.invalid/ubuntu/"),
+            "longer_job": workflow.replace("timeout-minutes: 10", "timeout-minutes: 20"),
+            "changed_matrix": workflow.replace("python: '3.14'", "python: '3.13'"),
+            "write_permission": workflow.replace("contents: read", "contents: write"),
+            "missing_font": workflow.replace("librsvg2-bin fonts-noto-cjk", "librsvg2-bin"),
+            "changed_renderer": workflow.replace("librsvg2-bin fonts-noto-cjk", "another-renderer fonts-noto-cjk"),
+        }
+        for label, changed in mutations.items():
+            with self.subTest(case=label):
+                self.assertNotEqual(changed, workflow)
+                with self.assertRaises(AssertionError):
+                    self.assert_bounded_linux_install_contract(changed)
 
     def test_dry_run_pipeline_does_not_modify_repository_topics(self) -> None:
         topics_path = ROOT / "data" / "topics.csv"

@@ -401,14 +401,73 @@ class DisposablePreviewBoundaries(unittest.TestCase):
 
 class ResearchTopicIsolation(unittest.TestCase):
     def make_stage(self, stage):
-        for relative in ("data/topics.csv", "data/apps_registry.csv", "topics/topics.csv",
+        for relative in ("data/apps_registry.csv",
                          "preview/research-source-notes/idea_seeds.json"):
             path = stage / relative
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes((ROOT / relative).read_bytes())
-        from topic_management import TopicStore
-        return TopicStore(stage / "data/topics.csv", apps_path=stage / "data/apps_registry.csv",
-                          mirror_path=stage / "topics/topics.csv")
+        from topic_management import TOPIC_HEADER, TopicStore
+        store = TopicStore(stage / "data/topics.csv", apps_path=stage / "data/apps_registry.csv",
+                           mirror_path=stage / "topics/topics.csv")
+        # Model the pre-registration boundary explicitly. Advancing the live
+        # editorial queue must not change the setup of these unit tests.
+        candidate = dict.fromkeys(TOPIC_HEADER, "")
+        candidate.update({
+            "id": "TOPIC-0037", "status": "idea", "category": "research",
+            "primary_question": "How can I separate source notes from conclusions?",
+            "working_title": "Separate Source Notes from Conclusions",
+            "slug": preview.SLUG, "primary_language": "en", "priority": "normal",
+            "search_intent": "workflow", "primary_keyword": "source notes",
+            "evergreen": "true", "source_type": "editorial", "review_required": "true",
+            "notes": "Disposable pre-registration test fixture only.",
+        })
+        unrelated_idea = dict(candidate, id="TOPIC-0036", slug="unrelated-test-idea",
+                              category="productivity", notes="Preserve this unrelated idea.")
+        unrelated_published = dict(
+            candidate, id="TOPIC-0087", slug="unrelated-published-test-topic",
+            category="reading", status="published",
+            canonical_path="generated/markdown/en/reading/unrelated-published-test-topic.md",
+            published_url="https://example.test/blog/unrelated-published-test-topic/",
+            scheduled_at="2026-01-01T09:00:00+09:00",
+            published_at="2026-01-01T09:00:00+09:00",
+            updated_at="2026-01-01T09:00:00+09:00",
+            notes="Preserve this unrelated published row and its dates.",
+        )
+        store.write([unrelated_idea, candidate, unrelated_published])
+        return store
+
+    def test_registered_bundle_states_are_rejected_before_topic_writes(self):
+        drafts = preview.validate_drafts(ROOT / "preview/research-source-notes")
+        live_before = {relative: (ROOT / relative).read_bytes()
+                       for relative in ("data/topics.csv", "topics/topics.csv")}
+        for status in ("review", "scheduled", "published"):
+            with self.subTest(status=status), tempfile.TemporaryDirectory() as d:
+                stage = Path(d)
+                store = self.make_stage(stage)
+                rows = store.read()
+                original = next(row for row in rows if row["id"] == "TOPIC-0037")
+                unrelated = [row for row in rows if row["id"] != "TOPIC-0037"]
+                registered = []
+                for index, locale in enumerate(preview.LOCALES):
+                    row = dict(original, id="TOPIC-0037" if index == 0 else f"TOPIC-{87 + index:04d}",
+                               status=status, primary_language=locale,
+                               canonical_path=f"generated/markdown/{locale}/research/{preview.SLUG}.md")
+                    if status in ("scheduled", "published"):
+                        row["scheduled_at"] = "2026-01-01T09:00:00+09:00"
+                    if status == "published":
+                        row["published_at"] = "2026-01-01T09:00:00+09:00"
+                        row["published_url"] = f"https://example.test/blog/{locale}/{preview.SLUG}/"
+                    registered.append(row)
+                store.write(unrelated + registered)
+                before = {relative: (stage / relative).read_bytes() for relative in live_before}
+                with patch("topic_management.TopicStore.write") as write:
+                    with self.assertRaisesRegex(ValueError, "reserved, duplicated or no longer an idea"):
+                        preview.stage_topics(stage, drafts)
+                    write.assert_not_called()
+                for relative, raw in before.items():
+                    self.assertEqual((stage / relative).read_bytes(), raw)
+        for relative, raw in live_before.items():
+            self.assertEqual((ROOT / relative).read_bytes(), raw)
 
     def test_nine_candidate_rows_and_one_seed_preserve_unrelated_rows_and_idea_count(self):
         live_before = {relative: (ROOT / relative).read_bytes()
