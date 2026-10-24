@@ -94,10 +94,20 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Publish exactly one approved review reply")
     parser.add_argument("approval_id")
     parser.add_argument("--confirm-publish", action="store_true", help="Required for an external store write")
+    parser.add_argument("--confirm-replace", action="store_true", help="Manual owner-dispatched revision of an existing verified Google reply")
     parser.add_argument("--approvals", type=Path, default=DEFAULT_APPROVALS)
     parser.add_argument("--stores", type=Path, default=DEFAULT_STORES)
     parser.add_argument("--reviews", type=Path, default=DEFAULT_REVIEWS)
     args = parser.parse_args()
+    if args.confirm_replace:
+        if args.confirm_publish:
+            raise SystemExit("A new-reply publication and an existing-reply edit are mutually exclusive")
+        # One existing canonical workflow owns both paths. A revision does not
+        # masquerade as a pending review or bypass require_owner_approval.
+        from store_review_revision import process_revision
+        _, google = credentials()
+        return process_revision(args.approval_id, reviews_path=args.reviews,
+                                stores_path=args.stores, token=google, poster=json_request)
     payload = json.loads(args.approvals.read_text(encoding="utf-8"))
     records = payload.get("approvals", [])
     record = next((item for item in records if item.get("approval_id") == args.approval_id), None)

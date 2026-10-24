@@ -93,6 +93,39 @@ that approval to `published`; synchronize the store again to verify the reply.
 `data/store_review_triage.json` remains an audit snapshot. It never authorizes a
 reply, issue, pull request, code change, merge, or deployment by itself.
 
+## Revising an already-posted Google Play reply (owner-only)
+
+A correction to an **existing** developer reply is not a newly discovered
+pending text review. Do not queue it via `store_review_approvals.py` or run a
+second new-review approval; the regular publisher and all scheduled workers
+still reject already-replied reviews and do not republish them.
+
+The existing **Publish Approved Store Review Reply** workflow has a distinct
+manual `REPLACE` option. Only the authenticated GitHub account
+`onnellab`, explicitly selecting the exact registered `revision-...`
+request ID and typing `REPLACE`, can authorize this owner-initiated edit.
+The request in `data/store_review_reply_revisions.json` is a **proposal**,
+not approval: it stores the original review identity, existing store-observed
+reply, replacement text, and `awaiting_owner_dispatch`. Do not represent
+that state as posted, accepted, pending automatic dispatch, or store-verified.
+
+In the canonical workflow, the same publisher must fetch the real Google Play
+review ID again, match review body, rating, app version, and the **previous
+developer reply** exactly, and refuse report-only IDs. Only then may the
+existing Google Play `reviews.reply` endpoint replace the reply **once**.
+A second read of `reviews.get` must observe the exact replacement before
+`store_verified` is allowed. If publication is accepted or uncertain but the
+new text is not observed, retain `published_unverified` and the workflow ID.
+Subsequent owner reruns may **verify**, but must never re-POST an uncertain
+replacement. A changed review/reply must stop for fresh owner inspection.
+
+This path remains disabled for scheduled ChatGPT reports and for the Mac
+LaunchAgent: neither may perform a direct replacement, create an approval, or
+dispatch the publisher workflow. It introduces no automatic review reply,
+no standing approval, no new store publisher, no token handling change, and
+no local command worker. A store synchronization report is not proof of
+an edit; only a current store-observed matching reply is proof.
+
 ## Custom AI drafts
 
 Run `python3 scripts/generate_ai_review_drafts.py` to create a review packet,
