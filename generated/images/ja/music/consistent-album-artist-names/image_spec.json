@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/music/consistent-album-artist-names.md",
+  "topic": {
+    "id": "TOPIC-0098",
+    "title": "アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る",
+    "slug": "consistent-album-artist-names",
+    "category": "music",
+    "language": "ja",
+    "primary_keyword": "アルバム名とアーティスト名のタグを整える",
+    "related_apps": [
+      "TagWeaver"
+    ]
+  },
+  "article_sections_detected": [
+    "アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る",
+    "質問",
+    "短い回答",
+    "編集前に項目を分ける",
+    "推奨する作業手順",
+    "コンピレーションの例",
+    "TagWeaverを使う場面",
+    "それでも名前が一致しない場合",
+    "関連ガイド",
+    "参考資料",
+    "まとめ",
+    "よくある質問",
+    "アルバムの全曲を同じアーティストにするべきですか？",
+    "アルバム名を一つにすれば、すべてのプレーヤーで正しくまとまりますか？",
+    "TagWeaverは正しいクレジットを判断しますか？",
+    "iOSで保存すると、原本は必ず保持されますか？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "正しい曲別クレジットを上書きせずに、アルバム名とアーティスト名を統一するにはどうすればよいですか？",
+      "structure": [
+        "1. 特定",
+        "2. 比較",
+        "3. 保存",
+        "4. 検証"
+      ],
+      "notes": "Explain release identification, shared fields, sample saving and verification; not an application screenshot or a player-grouping guarantee."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial metadata workflow, not an application interface.",
+    "applications": [
+      "TagWeaver"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "名前をそろえ、クレジットを守る",
+      "steps": [
+        "1. 特定",
+        "2. 比較",
+        "3. 保存",
+        "4. 検証"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "タグを編集する前にリリースを確認",
+    "message": "アルバム情報は共通化し、曲ごとの違いは保持。",
+    "description": "対象のリリースを正確に特定し、確認済みのアルバム名にそろえつつ、各曲に記載されたアーティストは保持します。作業用コピーを編集し、共通の値は該当するファイルにだけ適用してから、保存結果を開き直し、使っているプレーヤーで確認します。",
+    "steps": [
+      [
+        "1. 特定",
+        "対象のリリースを正確に確認"
+      ],
+      [
+        "2. 比較",
+        "共通項目と個別項目を分ける"
+      ],
+      [
+        "3. 保存",
+        "少数の作業用ファイルを変更"
+      ],
+      [
+        "4. 検証",
+        "ファイルを開き直し、プレーヤーで確認"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hans/music/consistent-album-artist-names.md",
+  "topic": {
+    "id": "TOPIC-0099",
+    "title": "统一专辑与艺人标签，保留曲目署名",
+    "slug": "consistent-album-artist-names",
+    "category": "music",
+    "language": "zh-Hans",
+    "primary_keyword": "统一专辑与艺人标签",
+    "related_apps": [
+      "TagWeaver"
+    ]
+  },
+  "article_sections_detected": [
+    "统一专辑与艺人标签，保留曲目署名",
+    "问题",
+    "简短回答",
+    "编辑之前先区分字段",
+    "建议操作流程",
+    "合辑示例",
+    "TagWeaver 适合在哪个环节使用",
+    "名称仍然不一致时",
+    "相关指南",
+    "参考资料",
+    "总结",
+    "常见问题",
+    "一张专辑的所有歌曲都应该使用同一个艺人吗？",
+    "统一专辑名称能解决所有播放器的分组问题吗？",
+    "TagWeaver 会判断正确的署名吗？",
+    "在 iOS 上保存时，原文件一定会保留不变吗？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "如何统一专辑和艺人名称，同时避免覆盖正确的曲目署名？",
+      "structure": [
+        "1. 识别",
+        "2. 比较",
+        "3. 保存",
+        "4. 验证"
+      ],
+      "notes": "Explain release identification, shared fields, sample saving and verification; not an application screenshot or a player-grouping guarantee."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial metadata workflow, not an application interface.",
+    "applications": [
+      "TagWeaver"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "统一名称，保留署名",
+      "steps": [
+        "1. 识别",
+        "2. 比较",
+        "3. 保存",
+        "4. 验证"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "编辑标签之前，先核对发行版本",
+    "message": "共用专辑信息，保留曲目差异。",
+    "description": "先确认具体发行版本，选用一个经过核实的专辑名称，并保留每首曲目原有的艺人署名。编辑工作副本，只对相符的文件应用共同值，然后重新打开保存结果，在实际使用的播放器中测试。",
+    "steps": [
+      [
+        "1. 识别",
+        "确认具体发行版本"
+      ],
+      [
+        "2. 比较",
+        "区分共同字段和独立字段"
+      ],
+      [
+        "3. 保存",
+        "先修改少量工作副本"
+      ],
+      [
+        "4. 验证",
+        "重新打开文件并测试播放器"
+      ]
+    ]
+  }
+}

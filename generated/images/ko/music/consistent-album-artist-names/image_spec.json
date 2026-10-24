@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/music/consistent-album-artist-names.md",
+  "topic": {
+    "id": "TOPIC-0097",
+    "title": "곡별 크레딧을 지키며 앨범과 아티스트 태그 정리하기",
+    "slug": "consistent-album-artist-names",
+    "category": "music",
+    "language": "ko",
+    "primary_keyword": "앨범과 아티스트 태그",
+    "related_apps": [
+      "TagWeaver"
+    ]
+  },
+  "article_sections_detected": [
+    "곡별 크레딧을 지키며 앨범과 아티스트 태그 정리하기",
+    "질문",
+    "짧은 답변",
+    "편집 전에 항목 구분하기",
+    "권장 작업 순서",
+    "컴필레이션 앨범 예시",
+    "TagWeaver를 활용하는 단계",
+    "이름이 여전히 일치하지 않을 때",
+    "관련 안내",
+    "참고 자료",
+    "결론",
+    "자주 묻는 질문",
+    "앨범의 모든 곡에 같은 아티스트를 써야 하나요?",
+    "앨범 제목을 하나로 통일하면 모든 플레이어의 묶음 표시가 해결되나요?",
+    "TagWeaver가 올바른 크레딧을 판단하나요?",
+    "iOS에서 저장하면 원본이 항상 보존되나요?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "올바른 곡별 크레딧을 덮어쓰지 않고 앨범과 아티스트 이름을 일관되게 정리하려면 어떻게 하나요?",
+      "structure": [
+        "1. 식별",
+        "2. 비교",
+        "3. 저장",
+        "4. 검증"
+      ],
+      "notes": "Explain release identification, shared fields, sample saving and verification; not an application screenshot or a player-grouping guarantee."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial metadata workflow, not an application interface.",
+    "applications": [
+      "TagWeaver"
+    ],
+    "rules": [
+      "실제 기능을 설명할 때에만 스크린샷을 사용합니다.",
+      "불필요한 UI는 잘라냅니다.",
+      "관련 컨트롤이나 워크플로 영역만 강조합니다.",
+      "높은 해상도를 유지합니다.",
+      "스크린샷을 장식으로 사용하지 않습니다."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "이름은 일관되게, 크레딧은 그대로",
+      "steps": [
+        "1. 식별",
+        "2. 비교",
+        "3. 저장",
+        "4. 검증"
+      ],
+      "layout": "세로 또는 좌우 순서형"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+    "이 단계에서는 스크린샷을 만들지 않습니다.",
+    "이 단계에서는 에셋을 게시하지 않습니다.",
+    "설명 목적이 없는 장식용 이미지는 사용하지 않습니다."
+  ],
+  "editorial_workflow": {
+    "subtitle": "태그를 편집하기 전에 발매판을 확인해요",
+    "message": "앨범 정보는 공유하고 곡별 차이는 보존해요.",
+    "description": "정확한 발매판을 확인하고 검증한 앨범 제목 하나를 선택하되, 각 곡에 표기된 아티스트는 보존해요. 작업용 복사본을 편집하고 공통값은 해당하는 파일에만 적용한 다음, 저장 결과를 다시 열고 사용하는 플레이어에서 확인해요.",
+    "steps": [
+      [
+        "1. 식별",
+        "정확한 발매판을 확인해요"
+      ],
+      [
+        "2. 비교",
+        "공통 항목과 개별 항목을 나눠요"
+      ],
+      [
+        "3. 저장",
+        "소규모 작업용 파일부터 수정해요"
+      ],
+      [
+        "4. 검증",
+        "파일을 다시 열고 플레이어에서 확인해요"
+      ]
+    ]
+  }
+}

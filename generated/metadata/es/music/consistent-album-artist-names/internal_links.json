@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0104",
+    "title": "Etiquetas de álbum y artista coherentes sin perder créditos",
+    "slug": "consistent-album-artist-names",
+    "category": "music",
+    "language": "es",
+    "status": "review",
+    "topic_clusters": [
+      "TagWeaver",
+      "metadatos MP3",
+      "nombres de álbumes",
+      "créditos de artistas",
+      "etiquetas de álbum y artista coherentes",
+      "music"
+    ],
+    "related_app_names": [
+      "TagWeaver"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0052",
+        "title": "Cómo organizar música en Android para escucharla sin conexión",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 13
+      },
+      {
+        "topic_id": "TOPIC-0077",
+        "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0061",
+        "title": "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0069",
+        "title": "Cómo probar un archivo multimedia convertido antes de sustituir el original",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0095",
+        "title": "Cómo separar las notas de las fuentes de tus conclusiones",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0085",
+        "title": "Cómo crear un sistema coherente para nombrar archivos",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0002",
+        "app_name": "TagWeaver",
+        "slug": "tagweaver",
+        "category": "music",
+        "url": "/apps/tagweaver/",
+        "description": "A local MP3 metadata editor designed for focused tag management.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Music guide",
+        "category": "music",
+        "cluster": "music",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "TagWeaver cluster",
+        "category": "music",
+        "cluster": "TagWeaver",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
+        "category": "reading",
+        "cluster": "comprobar el índice de un EPUB",
+        "topic_id": "TOPIC-0061",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

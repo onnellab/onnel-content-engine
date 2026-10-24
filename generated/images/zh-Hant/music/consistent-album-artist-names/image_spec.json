@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/music/consistent-album-artist-names.md",
+  "topic": {
+    "id": "TOPIC-0100",
+    "title": "統一專輯與藝人標籤，保留曲目署名",
+    "slug": "consistent-album-artist-names",
+    "category": "music",
+    "language": "zh-Hant",
+    "primary_keyword": "統一專輯與藝人標籤",
+    "related_apps": [
+      "TagWeaver"
+    ]
+  },
+  "article_sections_detected": [
+    "統一專輯與藝人標籤，保留曲目署名",
+    "問題",
+    "簡短回答",
+    "編輯前先區分欄位",
+    "建議操作流程",
+    "合輯範例",
+    "TagWeaver 適合在哪個階段使用",
+    "名稱仍然不一致時",
+    "相關指南",
+    "參考資料",
+    "結語",
+    "常見問題",
+    "一張專輯的所有歌曲都應該使用同一位藝人嗎？",
+    "統一專輯名稱能解決所有播放器的分組問題嗎？",
+    "TagWeaver 會判斷正確的署名嗎？",
+    "在 iOS 上儲存時，原始檔一定會保留不變嗎？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "如何統一專輯和藝人名稱，同時避免覆寫正確的曲目署名？",
+      "structure": [
+        "1. 識別",
+        "2. 比較",
+        "3. 儲存",
+        "4. 驗證"
+      ],
+      "notes": "Explain release identification, shared fields, sample saving and verification; not an application screenshot or a player-grouping guarantee."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial metadata workflow, not an application interface.",
+    "applications": [
+      "TagWeaver"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "統一名稱，保留署名",
+      "steps": [
+        "1. 識別",
+        "2. 比較",
+        "3. 儲存",
+        "4. 驗證"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "編輯標籤前，先核對發行版本",
+    "message": "共用專輯資訊，保留曲目差異。",
+    "description": "先確認確切的發行版本，選用經過核實的專輯名稱，並保留每首曲目的藝人署名。編輯工作副本，只對相符的檔案套用共同值，接著重新開啟儲存結果，在實際使用的播放器中測試。",
+    "steps": [
+      [
+        "1. 識別",
+        "確認確切的發行版本"
+      ],
+      [
+        "2. 比較",
+        "區分共同欄位和個別欄位"
+      ],
+      [
+        "3. 儲存",
+        "先修改少量工作副本"
+      ],
+      [
+        "4. 驗證",
+        "重新開啟檔案並測試播放器"
+      ]
+    ]
+  }
+}

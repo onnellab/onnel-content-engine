@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/music/consistent-album-artist-names.md",
+  "topic": {
+    "id": "TOPIC-0039",
+    "title": "Consistent Album and Artist Tags Without Losing Track Credits",
+    "slug": "consistent-album-artist-names",
+    "category": "music",
+    "language": "en",
+    "primary_keyword": "consistent album and artist tags",
+    "related_apps": [
+      "TagWeaver"
+    ]
+  },
+  "article_sections_detected": [
+    "Consistent Album and Artist Tags Without Losing Track Credits",
+    "Question",
+    "Short Answer",
+    "Separate the Fields Before Editing",
+    "Recommended Workflow",
+    "A Compilation Example",
+    "Where TagWeaver Fits",
+    "When Names Still Do Not Match",
+    "Related Guides",
+    "References",
+    "Conclusion",
+    "FAQ",
+    "Should every song on an album have the same artist?",
+    "Will one album title fix grouping in every player?",
+    "Does TagWeaver decide the correct credits?",
+    "Is the original always preserved when saving on iOS?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "How can I keep album and artist names consistent without overwriting correct track credits?",
+      "structure": [
+        "1. Identify",
+        "2. Compare",
+        "3. Save",
+        "4. Verify"
+      ],
+      "notes": "Explain release identification, shared fields, sample saving and verification; not an application screenshot or a player-grouping guarantee."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial metadata workflow, not an application interface.",
+    "applications": [
+      "TagWeaver"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Consistent names, preserved credits",
+      "steps": [
+        "1. Identify",
+        "2. Compare",
+        "3. Save",
+        "4. Verify"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Check the release before editing tags",
+    "message": "Share album data, preserve track differences.",
+    "description": "Identify the exact release, choose one verified album title, and preserve each track's credited artist. Edit working copies, apply shared values only to matching files, then reopen the saved result and test it in your player.",
+    "steps": [
+      [
+        "1. Identify",
+        "Confirm the exact release"
+      ],
+      [
+        "2. Compare",
+        "Separate shared and unique fields"
+      ],
+      [
+        "3. Save",
+        "Change a small working set"
+      ],
+      [
+        "4. Verify",
+        "Reopen files and test the player"
+      ]
+    ]
+  }
+}

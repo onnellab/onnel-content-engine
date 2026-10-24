@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/music/consistent-album-artist-names.md",
+  "topic": {
+    "id": "TOPIC-0104",
+    "title": "Etiquetas de álbum y artista coherentes sin perder créditos",
+    "slug": "consistent-album-artist-names",
+    "category": "music",
+    "language": "es",
+    "primary_keyword": "etiquetas de álbum y artista coherentes",
+    "related_apps": [
+      "TagWeaver"
+    ]
+  },
+  "article_sections_detected": [
+    "Etiquetas de álbum y artista coherentes sin perder créditos",
+    "Pregunta",
+    "Respuesta breve",
+    "Distingue los campos antes de editar",
+    "Flujo recomendado",
+    "Ejemplo de una recopilación",
+    "Dónde encaja TagWeaver",
+    "Si los nombres siguen sin coincidir",
+    "Guías relacionadas",
+    "Referencias",
+    "Conclusión",
+    "Preguntas frecuentes",
+    "¿Todas las canciones de un álbum deberían tener el mismo artista?",
+    "¿Un único título de álbum corregirá la agrupación en todos los reproductores?",
+    "¿TagWeaver decide cuáles son los créditos correctos?",
+    "¿Siempre se conserva el original al guardar en iOS?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "¿Cómo puedo mantener coherentes los nombres de álbum y artista sin sobrescribir los créditos correctos de cada pista?",
+      "structure": [
+        "1. Edición",
+        "2. Comparar",
+        "3. Guardar",
+        "4. Verificar"
+      ],
+      "notes": "Explain release identification, shared fields, sample saving and verification; not an application screenshot or a player-grouping guarantee."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial metadata workflow, not an application interface.",
+    "applications": [
+      "TagWeaver"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Nombres coherentes, créditos conservados",
+      "steps": [
+        "1. Edición",
+        "2. Comparar",
+        "3. Guardar",
+        "4. Verificar"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Comprueba la edición antes de editar etiquetas",
+    "message": "Datos comunes del álbum, diferencias propias de cada pista.",
+    "description": "Identifica la edición exacta, elige un título de álbum verificado y conserva el artista acreditado en cada pista. Edita copias de trabajo, aplica valores compartidos solo a los archivos correspondientes y después vuelve a abrir el resultado guardado y pruébalo en tu reproductor.",
+    "steps": [
+      [
+        "1. Edición",
+        "Confirma la edición exacta"
+      ],
+      [
+        "2. Comparar",
+        "Campos comunes y por pista"
+      ],
+      [
+        "3. Guardar",
+        "Modifica una pequeña selección"
+      ],
+      [
+        "4. Verificar",
+        "Reabre; prueba el reproductor"
+      ]
+    ]
+  }
+}

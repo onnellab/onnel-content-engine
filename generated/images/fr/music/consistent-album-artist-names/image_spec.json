@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/fr/music/consistent-album-artist-names.md",
+  "topic": {
+    "id": "TOPIC-0103",
+    "title": "Des tags d’album et d’artiste cohérents, des crédits préservés",
+    "slug": "consistent-album-artist-names",
+    "category": "music",
+    "language": "fr",
+    "primary_keyword": "tags d’album et d’artiste cohérents",
+    "related_apps": [
+      "TagWeaver"
+    ]
+  },
+  "article_sections_detected": [
+    "Des tags d’album et d’artiste cohérents, des crédits préservés",
+    "Question",
+    "Réponse courte",
+    "Distinguer les champs avant de les modifier",
+    "Méthode recommandée",
+    "Exemple d’une compilation",
+    "Le rôle de TagWeaver",
+    "Si les noms ne correspondent toujours pas",
+    "Guides associés",
+    "Références",
+    "Conclusion",
+    "Questions fréquentes",
+    "Toutes les chansons d’un album doivent-elles avoir le même artiste ?",
+    "Un seul titre d’album corrigera-t-il le regroupement dans tous les lecteurs ?",
+    "TagWeaver détermine-t-il les crédits corrects ?",
+    "L’original est-il toujours préservé lors de l’enregistrement sur iOS ?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Comment harmoniser les noms d’album et d’artiste sans écraser les crédits corrects de chaque piste ?",
+      "structure": [
+        "1. Édition",
+        "2. Comparer",
+        "3. Enreg.",
+        "4. Vérifier"
+      ],
+      "notes": "Explain release identification, shared fields, sample saving and verification; not an application screenshot or a player-grouping guarantee."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial metadata workflow, not an application interface.",
+    "applications": [
+      "TagWeaver"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Des noms cohérents, des crédits préservés",
+      "steps": [
+        "1. Édition",
+        "2. Comparer",
+        "3. Enreg.",
+        "4. Vérifier"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Vérifiez l’édition avant de modifier les tags",
+    "message": "Données communes à l’album, différences propres aux pistes.",
+    "description": "Identifiez l’édition exacte, choisissez un titre d’album vérifié et préservez l’artiste crédité pour chaque piste. Modifiez des copies de travail, appliquez les valeurs communes uniquement aux fichiers correspondants, puis rouvrez le résultat enregistré et testez-le dans votre lecteur.",
+    "steps": [
+      [
+        "1. Édition",
+        "Confirmez l’édition exacte"
+      ],
+      [
+        "2. Comparer",
+        "Champs communs et par piste"
+      ],
+      [
+        "3. Enreg.",
+        "Modifiez une petite sélection"
+      ],
+      [
+        "4. Vérifier",
+        "Rouvrez; testez le lecteur"
+      ]
+    ]
+  }
+}
