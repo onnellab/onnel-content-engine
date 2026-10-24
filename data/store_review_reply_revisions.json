@@ -11,9 +11,9 @@
       "rating": 3,
       "expected_review_body": "Some tags aren't removed correctly when the file is saved. When the X next to URL is pressed, for example, saving doesn't actually retain the change.",
       "expected_current_reply": "Thank you for reporting this issue! We’ve fixed the problem where changes to URL and other tags weren’t retained after saving. The fix is included in version 2.5.6. Please try it once the update is available, and let us know if you still experience any issues.",
-      "replacement_reply": "Thank you for reporting this issue! We've fixed the problem where changes to URL and other tags weren't retained after saving. The fix is included in Android version 2.5.6, which is currently under review by Google Play. Once the update is approved and available, please try it and let us know if you still experience any issues.",
+      "replacement_reply": "Thank you for reporting this issue. We've prepared a fix for changes to URL and other tags not being saved correctly. It's included in Android version 2.5.6, which isn't publicly available on Google Play yet. Please update once it's available and let us know if the issue continues.",
       "status": "awaiting_owner_dispatch",
-      "note": "Owner requested an EDIT of the existing Google Play developer reply to disclose Android 2.5.6 review status; not a new review reply or automatic scheduled response.",
+      "note": "Owner's explicit 2026-10-24 instruction to REPLACE this existing TagWeaver Google Play reply. Android 2.5.6 fix is documented in the app's release/store_release_notes.json; publicly observed Play version 2.5.5 as of 2026-10-24 08:12 KST. Do not claim Google Play review approval, publication or store-observed replacement before authenticated owner workflow dispatch and live GET verification.",
       "publication": {
         "attempts": 0,
         "published_at": "",
