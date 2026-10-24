@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "kind": "independent_editorial_correction_review_not_render_receipt",
+  "reviewer": "review_ja_de_corrections (separate focused reviewer)",
+  "reviewed_at_utc": "2026-10-24T14:15:17Z",
+  "result": "PASS_TEXT_ONLY",
+  "base_commit": "635c8a3043d24ecffc1fda4a8186a34925ec0e01",
+  "changes": {
+    "ja": {
+      "before": "acf8ec93c93309eae27d04bbddd277982c0a5219",
+      "after": "523adc2f471278fad24a1d7c9167fe2b66888832",
+      "scope": "Metadata question terminal 。 changed to ？; body unchanged."
+    },
+    "de": {
+      "before": "126d63a44b40be382b60b147376179c18d28c813",
+      "after": "585d61b5cfa2859d26e62e78d80c79c7b1ac2095",
+      "scope": "Diagram details: Überschriften notieren; Erneut öffnen und prüfen. Other fields unchanged."
+    }
+  },
+  "limits": [
+    "Native gates pending",
+    "Renderer and page QA pending"
+  ]
+}

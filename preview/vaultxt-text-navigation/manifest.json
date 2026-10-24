@@ -49,7 +49,7 @@
     "astro_browser_preview": "NOT RUN",
     "candidate_page_checks": "NOT RUN: draft is not deployed",
     "related_page_checks": "18/18 live existing related pages loaded in dot cloud browser at 2026-10-24T09:33Z with substantive article text, matching html language and self-canonical. This is not candidate rendering.",
-    "independent_language_review": "PASS all nine final Git blobs by separate independent_nav_review agent after complete-language review and exact correction readback; editorial text/image-copy only. See editorial_review.json."
+    "independent_language_review": "PASS all nine final Git blobs by separate independent_nav_review agent after complete-language review and exact correction readback; editorial text/image-copy only. See editorial_review.json. Focused JA punctuation and DE diagram-copy corrections independently reviewed 2026-10-24T14:15Z; see qa_corrections_review.json."
   },
   "artifacts": [
     {
@@ -67,7 +67,7 @@
     {
       "locale": "ja",
       "file": "ja.json",
-      "git_blob_sha1": "acf8ec93c93309eae27d04bbddd277982c0a5219",
+      "git_blob_sha1": "523adc2f471278fad24a1d7c9167fe2b66888832",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {
@@ -91,7 +91,7 @@
     {
       "locale": "de",
       "file": "de.json",
-      "git_blob_sha1": "126d63a44b40be382b60b147376179c18d28c813",
+      "git_blob_sha1": "585d61b5cfa2859d26e62e78d80c79c7b1ac2095",
       "format": "Localized metadata, complete Markdown body and localized diagram copy"
     },
     {

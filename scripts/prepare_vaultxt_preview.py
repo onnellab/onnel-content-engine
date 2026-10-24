@@ -47,11 +47,11 @@ REVIEW_DIAGNOSTIC_CHECK_NAMES = (
 REVIEWED_BLOBS = {
     "en": "ab4c92cbba946e98a111961ee6b31a1a766d1a0d",
     "ko": "82c56e7be06b2e42563f55653f18074e702a24d7",
-    "ja": "acf8ec93c93309eae27d04bbddd277982c0a5219",
+    "ja": "523adc2f471278fad24a1d7c9167fe2b66888832",
     "zh-Hans": "83394b3567550f8d737ece3209086702039ecb76",
     "zh-Hant": "ca7571de2caafa8ff40bc0c97d3fe02931c8d3c5",
     "pt-BR": "b74b81dcebd94236460b5549a93e42d8c477c360",
-    "de": "126d63a44b40be382b60b147376179c18d28c813",
+    "de": "585d61b5cfa2859d26e62e78d80c79c7b1ac2095",
     "fr": "b2fa83baf72a7d62914835963729c2264bc05a1f",
     "es": "fd410621852c9f9047647cb6a138a32bddfccf71"
 }
