@@ -31,7 +31,12 @@ def json_request(url: str, token: str, method: str, body: dict[str, object]) -> 
         "Authorization": f"Bearer {token}", "Content-Type": "application/json", "Accept": "application/json",
         "User-Agent": "ONNELLAB-Store-Review-Publisher/1.0",
     })
-    with urlopen_with_retry(request, timeout=30) as response:
+    # A timed-out POST may already have changed the store. A helper-level
+    # retry would silently submit a *second* write before the durable
+    # published_unverified receipt could protect an owner rerun.
+    # Only idempotent reads are permitted to use bounded transient retries.
+    with urlopen_with_retry(request, timeout=30,
+                            max_attempts=1 if method.upper() != "GET" else 5) as response:
         payload = json.loads(response.read().decode())
     return payload if isinstance(payload, dict) else {}
 
