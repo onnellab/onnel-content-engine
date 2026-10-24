@@ -188,7 +188,7 @@ class PublishedReplyRevisionTest(unittest.TestCase):
         before = live()
         after = live(REPLACEMENT)
         for raw in (before, after):
-            raw["comments"][0]["userComment"]["text"] = "Title from reviewer\\t" + BODY
+            raw["comments"][0]["userComment"]["text"] = "Title from reviewer\t" + BODY
         # Python source should have a tab escape, not a literal backslash+t.
         calls = []
         responses = iter([before, after])
@@ -200,7 +200,7 @@ class PublishedReplyRevisionTest(unittest.TestCase):
 
     def test_rejects_changed_title_and_original_review_without_post(self):
         scenarios = [
-            ("live_review_title_mismatch", "Injected title\\t" + BODY, None),
+            ("live_review_title_mismatch", "Injected title\t" + BODY, None),
             ("live_review_body_mismatch", "Altered user body", None),
             ("live_review_body_mismatch", "Unrelated translation", "Changed original"),
             ("live_review_rating_mismatch", BODY, None, 4),
@@ -244,9 +244,9 @@ class PublishedReplyRevisionTest(unittest.TestCase):
                 writer.writerow(review())
             stores = root / "stores.csv"
             stores.write_text(
-                "app_id,platform,store_url,version,checked_at\\n"
+                "app_id,platform,store_url,version,checked_at\n"
                 "APP-0002,android,https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2,2.5.5,"
-                + datetime.now(timezone.utc).isoformat() + "\\n",
+                + datetime.now(timezone.utc).isoformat() + "\n",
                 encoding="utf-8")
             path = root / "revisions.json"
             path.write_text(json.dumps({"schema_version": 1, "requests": [revision()]}))
