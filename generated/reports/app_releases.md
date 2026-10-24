@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-10-25T06:21:01+09:00
+Generated: 2026-10-25T06:23:29+09:00
 
 ## Summary
 
@@ -9,8 +9,8 @@ Generated: 2026-10-25T06:21:01+09:00
 | Store | in_review | 1 |
 | Store | unchanged | 14 |
 | GitHub Release | archived | 2 |
-| GitHub Release | planned | 2 |
-| GitHub Release | released | 9 |
+| GitHub Release | planned | 1 |
+| GitHub Release | released | 10 |
 
 ## Store Snapshots
 
@@ -28,7 +28,7 @@ Generated: 2026-10-25T06:21:01+09:00
 | Segra | android | 1.0.7 | 1.0.6 | store_ahead | unchanged | released | onnellab/segra | Sync local metadata |
 | Segra | ios | 1.0.7 | 1.0.6 | store_ahead | unchanged | released | onnellab/segra | Sync local metadata |
 | TagWeaver | android | 2.5.6 | 2.5.6 | same | unchanged | released | onnellab/tagweaver | No action |
-| TagWeaver | ios | 2.5.6 | 2.5.6 | same | unchanged | planned | onnellab/tagweaver | Confirm matching public store version; auto-publish GitHub Release notes |
+| TagWeaver | ios | 2.5.6 | 2.5.6 | same | unchanged | released | onnellab/tagweaver | No action |
 | VaultXT | android | 2.0.2 | 2.0.2 | same | unchanged | released | onnellab/onnellab-text | No action |
 | VaultXT | ios | 2.0.1 | 2.0.2 | local_ahead | unchanged | archived | onnellab/onnellab-text | Platform rollout not public |
 
@@ -39,7 +39,7 @@ Generated: 2026-10-25T06:21:01+09:00
 | REL-0030 | TagWeaver | android | public | v2.5.4 | released | Public GitHub Release published | https://github.com/onnellab/tagweaver/releases/tag/v2.5.4 | - | - | No action |
 | REL-0014 | VaultXT | ios | public | v2.0.0 | archived | Archived | - | - | Melivra에서 받은 가사 파일의 이름을 더 알아보기 쉽게 표시해요. | No action |
 | REL-0017 | Segra | android | public | v1.0.6 | released | Public GitHub Release published | https://github.com/onnellab/segra/releases/tag/v1.0.6 | - | - | No action |
-| REL-0035 | TagWeaver | ios | public | v2.5.6 | planned | Public store confirmed; preparing automatic release | - | - | - URL 등 추가 태그를 수정하거나 삭제한 뒤 저장하면 변경 내용이 유지되도록 고쳤어요. - FLAC 파일의 태그를 편집할 때 다른 태그 값도 더 안전하게 보존해요. | Confirm matching public store version; auto-publish GitHub Release notes |
+| REL-0035 | TagWeaver | ios | public | v2.5.6 | released | Public GitHub Release published | https://github.com/onnellab/tagweaver/releases/tag/v2.5.6 | - | - URL 등 추가 태그를 수정하거나 삭제한 뒤 저장하면 변경 내용이 유지되도록 고쳤어요. - FLAC 파일의 태그를 편집할 때 다른 태그 값도 더 안전하게 보존해요. | No action |
 | REL-0029 | ClipNest | ios | public | v1.0.5 | released | Public GitHub Release published | https://github.com/onnellab/clipnest/releases/tag/v1.0.5 | - | - 저장한 텍스트를 검색하고 편집하는 화면을 다듬었어요. - 설정에서 9개 언어를 선택할 수 있고, Pro 구매 버튼에는 스토어 가격을 표시해요. - 공용 색상과 화면 구성을 정리하고, 키보드 붙여넣기 사용 예시와 스토어 안내를 개선했어요. | No action |
 | REL-0024 | Quivra | ios | public | v1.0.10 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.10 | - | 변환 전과 변환 중에도 파일 목록의 위치와 높이가 안정적으로 유지되도록 화면을 다듬었어요. | No action |
 | REL-0019 | Quivra | android | public | v1.0.9 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.9 | - | - | No action |
@@ -57,5 +57,4 @@ Generated: 2026-10-25T06:21:01+09:00
 | VaultXT | ios | unchanged | Platform rollout not public | - |
 | Segra | ios | unchanged | Sync local metadata | - |
 | Segra | android | unchanged | Sync local metadata | Version/update date read from Google Play public page; Android snapshot version 1.0.6 is stale for public version 1.0.7 and was not merged. |
-| TagWeaver | ios | planned | Confirm matching public store version; auto-publish GitHub Release notes | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
 | Melivra | android | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.8. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |

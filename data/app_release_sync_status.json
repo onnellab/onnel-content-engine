@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-24T21:21:01.535224Z",
+  "checked_at": "2026-10-24T21:23:28.682293Z",
   "outcome": "synced",
   "token_configured": true,
   "messages": [
@@ -23,6 +23,7 @@
     "synced onnellab/papira v2.0.3 https://github.com/onnellab/papira/releases/tag/v2.0.3",
     "synced onnellab/tagweaver v2.5.5 https://github.com/onnellab/tagweaver/releases/tag/v2.5.5",
     "synced onnellab/melivra v1.0.8 https://github.com/onnellab/melivra/releases/tag/v1.0.8",
+    "synced onnellab/tagweaver v2.5.6 https://github.com/onnellab/tagweaver/releases/tag/v2.5.6",
     "synced onnellab/segra v1.0.7 https://github.com/onnellab/segra/releases/tag/v1.0.7"
   ]
 }
