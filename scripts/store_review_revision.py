@@ -19,7 +19,7 @@ from store_review_approvals import read_reviews
 from sync_store_reviews import urlopen_with_retry
 
 REVISION_PATH = Path(__file__).resolve().parents[1] / "data/store_review_reply_revisions.json"
-UUID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\Z")
+UUID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\Z")
 VALID_STATES = {"awaiting_owner_dispatch", "published_unverified", "store_verified"}
 
 
