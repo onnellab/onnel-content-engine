@@ -8,6 +8,22 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from publishing import Article, PublishingError, social_card_svg, social_card_error_context
 
+from render_social_card_regression import complete_wrapped_text
+
+class WrappedTextCompleteness(unittest.TestCase):
+    def test_character_and_word_wrapping_preserves_source(self):
+        self.assertTrue(complete_wrapped_text(["研究ノート", "を整理する"], "研究ノートを整理する"))
+        self.assertTrue(complete_wrapped_text(["Keep source", "notes intact."], "Keep source notes intact."))
+        self.assertTrue(complete_wrapped_text(["source notes", " remain"], "source notes\nremain"))
+
+    def test_missing_reordered_changed_or_extra_text_is_rejected(self):
+        for lines in (["Keep source"], ["notes intact.", "Keep source"],
+                      ["Keep sauce", "notes intact."], ["Keep source", "notes intact. extra"],
+                      ["Keep source", "", "notes intact."]):
+            with self.subTest(lines=lines):
+                self.assertFalse(complete_wrapped_text(lines, "Keep source notes intact."))
+        self.assertFalse(complete_wrapped_text(["研究ノート", "整理する"], "研究ノートを整理する"))
+
 class SocialCardFailureIdentity(unittest.TestCase):
     def article(self, **changes):
         values = dict(topic={"id": "TOPIC-0088", "primary_language": "ko",
