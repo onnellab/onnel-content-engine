@@ -53,6 +53,32 @@ class SocialCardFailureIdentity(unittest.TestCase):
         self.assertEqual(node.attrib["font-size"], "24")
         self.assertEqual(node.find("s:tspan", ns).attrib["y"], "410")
 
+
+    def test_english_card_preserves_complete_title_and_description(self):
+        article = self.article(topic={"id": "TOPIC-0037", "primary_language": "en",
+                                     "slug": "source-notes", "category": "research"},
+                               title="How to Separate Source Notes from Your Conclusions",
+                               description="Keep quotations, paraphrases, and your own interpretations distinct with source locators, a practical comparison table, and a five-step research-note workflow.")
+        root = ET.fromstring(social_card_svg(article))
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        for selector, expected in (("s:text[@font-weight='760']", article.title),
+                                   ("s:text[@fill='#5f5b54']", article.description)):
+            lines = root.find(selector, ns).findall("s:tspan", ns)
+            self.assertEqual(" ".join(line.text for line in lines), expected)
+        title_lines = root.find("s:text[@font-weight='760']", ns).findall("s:tspan", ns)
+        self.assertNotEqual(title_lines[0].text, "How to Separate Source Notes from")
+        description = root.find("s:text[@fill='#5f5b54']", ns).findall("s:tspan", ns)
+        self.assertLessEqual(int(description[-1].attrib["y"]), 490)
+        self.assertGreaterEqual(int(description[0].attrib["y"]) - int(title_lines[-1].attrib["y"]), 44)
+
+    def test_english_oversized_text_fails_instead_of_truncating(self):
+        for field in ("title", "description"):
+            with self.subTest(field=field), patch("publishing.subprocess.run") as run:
+                with self.assertRaises(PublishingError):
+                    social_card_svg(self.article(topic={"primary_language": "en", "category": "research"},
+                                                 **{field: "Long complete text " * 2000}))
+                run.assert_not_called()
+
     def test_missing_identifiers_do_not_introduce_a_diagnostic_error(self):
         self.assertEqual(social_card_error_context(self.article(topic={})), " (, )")
         with self.assertRaisesRegex(PublishingError, "Localized social card title cannot fit without truncation"):

@@ -480,8 +480,8 @@ def social_card_svg(article: Article) -> str:
     description_lines = wrap_text(article.description, 72 if language == "en" else 36, 2)
     category = article.topic["category"].upper()
     title_font, title_height, description_font, description_y, description_height = 54, 64, 24, 442, 34
-    if language in CATEGORY_LABELS:
-        category = CATEGORY_LABELS[language][article.topic["category"]]
+    if language == "en" or language in CATEGORY_LABELS:
+        category = CATEGORY_LABELS.get(language, {}).get(article.topic["category"], category)
         label = f"{category} · {language.upper()}"
         for candidate_font in (54, 48, 44, 40, 36, 32):
             candidate = wrap_display_text(article.title, 1016, candidate_font)

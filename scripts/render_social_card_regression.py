@@ -35,15 +35,22 @@ def main():
                                      meta["description"], "/unused.png", "https://onnellab.com/unused.png")
         record = {"locale": row["primary_language"], "topic_id": row["id"]}
         current = publishing.social_card_svg(article)
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        parsed = ET.fromstring(current)
+        for selector, expected_text in (("s:text[@font-weight='760']", article.title),
+                                        ("s:text[@fill='#5f5b54']", article.description)):
+            actual_text = " ".join(n.text or "" for n in parsed.find(selector, ns).findall("s:tspan", ns))
+            if actual_text != " ".join(expected_text.split()):
+                raise AssertionError("Rendered card text incomplete: " + row["primary_language"])
         try:
             previous = baseline.social_card_svg(article)
         except baseline.PublishingError:
             previous = None
             record["baseline"] = "overflow_refused"
         else:
-            if previous != current:
+            if previous != current and row["primary_language"] != "en":
                 raise AssertionError("Passing SVG unexpectedly changed: " + row["primary_language"])
-            record["baseline"] = "exact_svg_preserved"
+            record["baseline"] = "english_full_text_repaired" if row["primary_language"] == "en" else "exact_svg_preserved"
         for label, content in (("after", current), ("before", previous)):
             if content is None:
                 continue
