@@ -267,6 +267,9 @@ def markdown_image_line(language: str, slug: str, title: str) -> str:
     return f'![{alt}](/blog-assets/{language}/{slug}/workflow-diagram.svg "{title}")'
 
 
+from vaultxt_preview_contract import SLUG as VAULTXT_SLUG, section_aliases as vaultxt_section_aliases
+
+
 def ensure_markdown_references_asset(markdown_path: Path, language: str, slug: str, title: str) -> None:
     content = markdown_path.read_text(encoding="utf-8")
     legacy_asset = f"/blog-assets/{slug}/workflow-diagram.svg"
@@ -278,6 +281,8 @@ def ensure_markdown_references_asset(markdown_path: Path, language: str, slug: s
     if localized_asset in content:
         return
     aliases = localized_section_aliases(language)["recommended_workflow"] if language in LOCALIZED_SECTIONS else {"권장 워크플로"} if language == "ko" else {"recommended workflow"}
+    if slug == VAULTXT_SLUG:
+        aliases = vaultxt_section_aliases(language)["recommended_workflow"]
     headings = []
     offset = 0
     fence = None
@@ -295,7 +300,10 @@ def ensure_markdown_references_asset(markdown_path: Path, language: str, slug: s
             if heading:
                 headings.append((heading.group(1).strip().lower(), offset))
         offset += len(line)
-    marker_index = next((position for heading, position in headings if heading in aliases), -1)
+    matching = [position for heading, position in headings if heading in aliases]
+    if slug == VAULTXT_SLUG and len(matching) != 1:
+        raise ImageAssetError("Exactly one reviewed VaultXT workflow heading required")
+    marker_index = matching[0] if matching else -1
     if marker_index == -1:
         raise ImageAssetError(f"cannot place workflow image in {markdown_path}")
     next_section = next((position for _, position in headings if position > marker_index), -1)

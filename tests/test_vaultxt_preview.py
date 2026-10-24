@@ -720,5 +720,39 @@ class BoundedReviewFailureDiagnostics(unittest.TestCase):
                 collect.assert_not_called()
 
 
+class NativeVaultXTHeadingContract(unittest.TestCase):
+    def test_reviewed_sections_match_native_gate_without_changing_scores(self):
+        from evaluate_article import SECTION_ALIASES, has_required_sections
+        from vaultxt_preview_contract import section_aliases
+        drafts = preview.validate_drafts(ROOT / preview.PREVIEW_DIRECTORY)
+        for locale, draft in drafts.items():
+            aliases = section_aliases(locale)
+            for key, names in aliases.items():
+                self.assertEqual(len(names), 1)
+                self.assertTrue(names <= SECTION_ALIASES[key])
+            found = {line[3:].lower() for line in draft["body"].splitlines() if line.startswith("## ")}
+            self.assertTrue(has_required_sections(found))
+        with self.assertRaises(ValueError):
+            section_aliases("zh-hans")
+
+    def test_exact_workflow_insertion_preserves_every_authored_character(self):
+        from generate_image_assets import ensure_markdown_references_asset, ImageAssetError
+        from vaultxt_preview_contract import section_aliases
+        for locale, draft in preview.validate_drafts(ROOT / preview.PREVIEW_DIRECTORY).items():
+            with self.subTest(locale=locale), tempfile.TemporaryDirectory() as temporary:
+                path = Path(temporary) / "candidate.md"
+                path.write_text(draft["body"], encoding="utf-8")
+                ensure_markdown_references_asset(path, locale, preview.SLUG, draft["image"]["title"])
+                rendered = path.read_text(encoding="utf-8")
+                lines = [line for line in rendered.splitlines() if not line.startswith("![")]
+                self.assertEqual("\n".join(line for line in lines if line.strip()),
+                                 "\n".join(line for line in draft["body"].splitlines() if line.strip()))
+                ensure_markdown_references_asset(path, locale, preview.SLUG, draft["image"]["title"])
+                self.assertEqual(path.read_text(encoding="utf-8"), rendered)
+                workflow = next(iter(section_aliases(locale)["recommended_workflow"]))
+                path.write_text(draft["body"] + "\n## " + workflow + "\n", encoding="utf-8")
+                with self.assertRaises(ImageAssetError):
+                    ensure_markdown_references_asset(path, locale, preview.SLUG, draft["image"]["title"])
+
 if __name__ == "__main__":
     unittest.main()

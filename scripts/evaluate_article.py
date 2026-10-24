@@ -155,6 +155,8 @@ def _article_input_fingerprint(
     return hashlib.sha256(canonical).hexdigest()
 
 
+from vaultxt_preview_contract import HEADINGS as VAULTXT_HEADINGS, section_aliases as vaultxt_section_aliases
+
 SECTION_ALIASES = {
     "question": {"question", "질문"},
     "short_answer": {"short answer", "짧은 답변", "요약 답변", "핵심 답변", "요약"},
@@ -168,6 +170,11 @@ SECTION_ALIASES = {
 
 for _language in LOCALIZED_SECTIONS:
     for _key, _aliases in localized_section_aliases(_language).items():
+        SECTION_ALIASES[_key].update(_aliases)
+
+
+for _language in VAULTXT_HEADINGS:
+    for _key, _aliases in vaultxt_section_aliases(_language).items():
         SECTION_ALIASES[_key].update(_aliases)
 
 
