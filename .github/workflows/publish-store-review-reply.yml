@@ -45,6 +45,8 @@ jobs:
           GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64 }}
           REVIEW_RECORD_ID: ${{ inputs.approval_id }}
           REVIEW_CONFIRM_MODE: ${{ inputs.confirm_publish }}
+          REPLY_TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+          REPLY_RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
           set -euo pipefail
           if [ "$REVIEW_CONFIRM_MODE" = "REPLACE" ]; then
