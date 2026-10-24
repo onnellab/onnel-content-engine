@@ -27,9 +27,12 @@ def observed_at() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
-def require_owner_dispatch(*, actor: str, repository: str, event: str, run_id: str) -> None:
-    if (actor != "onnellab" or repository != "onnellab/onnel-content-engine"
-            or event != "workflow_dispatch" or not re.fullmatch(r"[1-9][0-9]*", run_id)):
+def require_owner_dispatch(*, actor: str, triggering_actor: str, repository: str, event: str,
+                           run_id: str, run_attempt: str) -> None:
+    if (actor != "onnellab" or triggering_actor != "onnellab"
+            or repository != "onnellab/onnel-content-engine" or event != "workflow_dispatch"
+            or not re.fullmatch(r"[1-9][0-9]*", run_id)
+            or not re.fullmatch(r"[1-9][0-9]*", run_attempt)):
         raise ValueError("Exact GitHub owner workflow dispatch is required for an existing reply revision")
 
 
@@ -101,10 +104,12 @@ def verify_live_identity(user: dict, record: dict) -> None:
 
 
 def apply_revision(record: dict, review: dict, *, package: str, google_token: str,
-                   actor: str, repository: str, event: str, run_id: str,
-                   getter=get_live_google_review, poster=None) -> str:
+                   actor: str, triggering_actor: str, repository: str, event: str, run_id: str,
+                   run_attempt: str, getter=get_live_google_review, poster=None) -> str:
     """Return store_verified or published_unverified; never retry an uncertain POST."""
-    require_owner_dispatch(actor=actor, repository=repository, event=event, run_id=run_id)
+    require_owner_dispatch(actor=actor, triggering_actor=triggering_actor,
+                           repository=repository, event=event, run_id=run_id,
+                           run_attempt=run_attempt)
     bind_current_review(record, review)
     if not google_token or poster is None:
         raise ValueError("Google Play credentials/canonical publisher are required")
@@ -125,10 +130,13 @@ def apply_revision(record: dict, review: dict, *, package: str, google_token: st
         # A prior accepted/uncertain POST must never be repeated just because
         # eventual consistency has not surfaced the new reply.
         raise ValueError("Previous reply edit is not store-verified; no duplicate POST")
+    if run_attempt != "1":
+        raise ValueError("A rerun cannot originate a second external review reply edit")
     publication = record.setdefault("publication", {})
     publication["attempts"] = int(publication.get("attempts", 0)) + 1
     publication["last_attempt_at"] = observed_at()
     publication["workflow_run_id"] = run_id
+    publication["workflow_run_attempt"] = run_attempt
     publication["approved_by"] = actor
     publication["approval_channel"] = "github_owner_workflow_dispatch"
     record["status"] = "published_unverified"  # set before external operation
@@ -153,9 +161,11 @@ def process_revision(revision_id: str, *, reviews_path: Path, stores_path: Path,
                      environment=None) -> int:
     env = dict(os.environ if environment is None else environment)
     require_owner_dispatch(actor=env.get("GITHUB_ACTOR", ""),
+                           triggering_actor=env.get("REPLY_TRIGGERING_ACTOR", ""),
                            repository=env.get("GITHUB_REPOSITORY", ""),
                            event=env.get("GITHUB_EVENT_NAME", ""),
-                           run_id=env.get("GITHUB_RUN_ID", ""))
+                           run_id=env.get("GITHUB_RUN_ID", ""),
+                           run_attempt=env.get("REPLY_RUN_ATTEMPT", ""))
     recordset = json.loads(revisions_path.read_text(encoding="utf-8"))
     if recordset.get("schema_version") != 1 or not isinstance(recordset.get("requests"), list):
         raise ValueError("Invalid revision request ledger")
@@ -188,8 +198,9 @@ def process_revision(revision_id: str, *, reviews_path: Path, stores_path: Path,
     package = query.get("id", [""])[0]
     try:
         outcome = apply_revision(record, review, package=package, google_token=token,
-                                 actor=env["GITHUB_ACTOR"], repository=env["GITHUB_REPOSITORY"],
-                                 event=env["GITHUB_EVENT_NAME"], run_id=env["GITHUB_RUN_ID"],
+                                 actor=env["GITHUB_ACTOR"], triggering_actor=env["REPLY_TRIGGERING_ACTOR"],
+                                 repository=env["GITHUB_REPOSITORY"], event=env["GITHUB_EVENT_NAME"],
+                                 run_id=env["GITHUB_RUN_ID"], run_attempt=env["REPLY_RUN_ATTEMPT"],
                                  getter=getter, poster=poster)
     except Exception as error:
         # Never write credential-bearing HTTP error text to the public ledger.
