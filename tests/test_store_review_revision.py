@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 import sys
 import tempfile
@@ -40,6 +41,7 @@ def revision():
             "app_version": "2.5.5", "rating": 3,
             "expected_review_body": BODY, "expected_current_reply": ORIGINAL,
             "replacement_reply": REPLACEMENT, "status": "awaiting_owner_dispatch",
+            "expected_public_store_version": "2.5.5", "target_version_under_review": "2.5.6",
             "publication": {"attempts": 0, "store_observed_at": ""}}
 
 
@@ -129,9 +131,11 @@ class PublishedReplyRevisionTest(unittest.TestCase):
                 writer.writeheader()
                 writer.writerow(review())
             stores = root / "stores.csv"
-            stores.write_text("app_id,platform,store_url\n"
-                              "APP-0002,android,https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2\n",
-                              encoding="utf-8")
+            stores.write_text(
+                "app_id,platform,store_url,version,checked_at\n"
+                "APP-0002,android,https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2,2.5.5,"
+                + datetime.now(timezone.utc).isoformat() + "\n",
+                encoding="utf-8")
             revisions = root / "revisions.json"
             revisions.write_text(json.dumps({"schema_version": 1, "requests": [revision()]}))
             env = {"GITHUB_ACTOR": "onnellab", "GITHUB_REPOSITORY": "onnellab/onnel-content-engine",
