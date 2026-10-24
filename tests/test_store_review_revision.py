@@ -7,10 +7,12 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 from store_review_revision import apply_revision, process_revision, google_review_url
+from publish_store_review_reply import json_request
 
 
 ID = "10b4e93e-b9cd-4ef4-ad91-2726f5256651"
@@ -31,7 +33,7 @@ def live(reply=ORIGINAL, *, body=BODY, rating=3, version="2.5.5", rid=ID):
 
 def review():
     return {"review_id": ID, "app_id": "APP-0002", "app_slug": "tagweaver",
-            "platform": "android", "review_kind": "review", "body": BODY,
+            "platform": "android", "review_kind": "review", "title": "", "body": BODY,
             "rating": "3", "app_version": "2.5.5", "status": "replied",
             "developer_reply": ORIGINAL}
 
@@ -40,7 +42,8 @@ def revision():
     return {"revision_id": "revision-tagweaver-test", "review_id": ID,
             "app_id": "APP-0002", "app_slug": "tagweaver", "platform": "android",
             "app_version": "2.5.5", "rating": 3,
-            "expected_review_body": BODY, "expected_current_reply": ORIGINAL,
+            "expected_review_title": "", "expected_review_body": BODY,
+            "expected_current_reply": ORIGINAL,
             "replacement_reply": REPLACEMENT, "status": "awaiting_owner_dispatch",
             "expected_public_store_version": "2.5.5", "target_version_under_review": "2.5.6",
             "publication": {"attempts": 0, "store_observed_at": ""}}
@@ -162,6 +165,120 @@ class PublishedReplyRevisionTest(unittest.TestCase):
             self.assertEqual(saved["status"], "published_unverified")
             self.assertFalse(saved["publication"]["store_observed_at"])
             self.assertEqual(saved["publication"]["attempts"], 1)
+
+
+    def test_uses_canonical_original_text_when_google_returns_translation(self):
+        """The stored review sync prefers originalText over translated text."""
+        before = live()
+        before["comments"][0]["userComment"]["text"] = "Machine-translated replacement text"
+        before["comments"][0]["userComment"]["originalText"] = BODY
+        calls = []
+        responses = iter([before, live(REPLACEMENT)])
+        state = apply_revision(revision(), review(), package="com.onnellab.tagweaver2",
+                               google_token="private", getter=lambda *_: next(responses),
+                               poster=lambda *args: calls.append(args), **OWNER)
+        self.assertEqual(state, "store_verified")
+        self.assertEqual(len(calls), 1)
+
+    def test_canonical_tab_separated_title_and_body_are_compared_separately(self):
+        """A genuine title is not misidentified as a changed body."""
+        r = revision()
+        r["expected_review_title"] = "Title from reviewer"
+        saved = {**review(), "title": "Title from reviewer"}
+        before = live()
+        after = live(REPLACEMENT)
+        for raw in (before, after):
+            raw["comments"][0]["userComment"]["text"] = "Title from reviewer\t" + BODY
+        # Python source should have a tab escape, not a literal backslash+t.
+        calls = []
+        responses = iter([before, after])
+        state = apply_revision(r, saved, package="com.onnellab.tagweaver2",
+                               google_token="private", getter=lambda *_: next(responses),
+                               poster=lambda *args: calls.append(args), **OWNER)
+        self.assertEqual(state, "store_verified")
+        self.assertEqual(len(calls), 1)
+
+    def test_rejects_changed_title_and_original_review_without_post(self):
+        scenarios = [
+            ("live_review_title_mismatch", "Injected title\t" + BODY, None),
+            ("live_review_body_mismatch", "Altered user body", None),
+            ("live_review_body_mismatch", "Unrelated translation", "Changed original"),
+            ("live_review_rating_mismatch", BODY, None, 4),
+            ("live_review_version_mismatch", BODY, None, 3, "2.5.4"),
+        ]
+        for code, body, original, *optional in scenarios:
+            with self.subTest(code=code, original=original):
+                changed = live(body=body)
+                user = changed["comments"][0]["userComment"]
+                if original is not None:
+                    user["originalText"] = original
+                if optional:
+                    user["starRating"] = optional[0]
+                if len(optional) > 1:
+                    user["appVersionName"] = optional[1]
+                calls = []
+                with self.assertRaisesRegex(ValueError, "^" + code + "$"):
+                    apply_revision(revision(), review(), package="com.onnellab.tagweaver2",
+                                   google_token="private", getter=lambda *_: changed,
+                                   poster=lambda *args: calls.append(args), **OWNER)
+                self.assertEqual(calls, [])
+
+    def test_missing_google_version_is_distinct_and_fails_closed(self):
+        """Google documents appVersionName as optional; do not guess a version."""
+        payload = live()
+        payload["comments"][0]["userComment"].pop("appVersionName")
+        calls = []
+        with self.assertRaisesRegex(ValueError, "live_review_version_unavailable"):
+            apply_revision(revision(), review(), package="com.onnellab.tagweaver2",
+                           google_token="private", getter=lambda *_: payload,
+                           poster=lambda *args: calls.append(args), **OWNER)
+        self.assertEqual(calls, [])
+
+    def test_preflight_mismatch_records_only_constant_code_and_no_attempt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            reviews = root / "store_reviews.csv"
+            with reviews.open("w", encoding="utf-8", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=list(review().keys()))
+                writer.writeheader()
+                writer.writerow(review())
+            stores = root / "stores.csv"
+            stores.write_text(
+                "app_id,platform,store_url,version,checked_at\n"
+                "APP-0002,android,https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2,2.5.5,"
+                + datetime.now(timezone.utc).isoformat() + "\n",
+                encoding="utf-8")
+            path = root / "revisions.json"
+            path.write_text(json.dumps({"schema_version": 1, "requests": [revision()]}))
+            env = {"GITHUB_ACTOR": "onnellab", "GITHUB_REPOSITORY": "onnellab/onnel-content-engine",
+                   "GITHUB_EVENT_NAME": "workflow_dispatch", "GITHUB_RUN_ID": "99",
+                   "REPLY_TRIGGERING_ACTOR": "onnellab", "REPLY_RUN_ATTEMPT": "1"}
+            live_bad = live(body="VERY_PRIVATE_DIFFERENT_TEXT")
+            calls = []
+            with self.assertRaisesRegex(ValueError, "live_review_body_mismatch"):
+                process_revision("revision-tagweaver-test", reviews_path=reviews,
+                                 stores_path=stores, token="private",
+                                 poster=lambda *args: calls.append(args),
+                                 getter=lambda *_: live_bad,
+                                 revisions_path=path, environment=env)
+            audit = json.loads(path.read_text())["requests"][0]
+            self.assertEqual(audit["status"], "awaiting_owner_dispatch")
+            self.assertEqual(audit["publication"]["attempts"], 0)
+            self.assertEqual(audit["diagnostic"]["code"], "live_review_body_mismatch")
+            self.assertEqual(audit["diagnostic"]["workflow_run_id"], "99")
+            self.assertNotIn("VERY_PRIVATE", path.read_text())
+            self.assertEqual(calls, [])
+
+    def test_store_review_write_has_no_transient_transport_retry(self):
+        """An accepted-but-timed-out API POST cannot be attempted twice."""
+        with patch("publish_store_review_reply.urlopen_with_retry") as opener:
+            opener.return_value.__enter__.return_value.read.return_value = b'{"result": {}}'
+            json_request("https://example.test/reviews/uuid:reply", "private", "POST", {"replyText": REPLACEMENT})
+            self.assertEqual(opener.call_args.kwargs["max_attempts"], 1)
+        with patch("publish_store_review_reply.urlopen_with_retry") as opener:
+            opener.return_value.__enter__.return_value.read.return_value = b'{}'
+            json_request("https://example.test/reviews/uuid", "private", "GET", {})
+            self.assertEqual(opener.call_args.kwargs["max_attempts"], 5)
 
 
 if __name__ == "__main__":

@@ -126,6 +126,36 @@ no standing approval, no new store publisher, no token handling change, and
 no local command worker. A store synchronization report is not proof of
 an edit; only a current store-observed matching reply is proof.
 
+### Version-safe live identity and blocked corrections
+
+Google's `reviews.get` payload may contain a tab-separated title/body and
+the untranslated `originalText` alongside `text`. The **same** canonical
+`google_review_rows` parser used by store synchronization now extracts the
+original title/body for owner-only revision checks; comparing raw `text` to
+the stored body could falsely fail without any reviewer edit. Both original
+title **and** body are now bound to the registered revision, with unchanged
+review ID, star rating and exact prior developer reply checks.
+
+Google documents `appVersionName` as optional. The revision gate does **not**
+substitute the public store version, silently ignore the installed version, or
+treat a missing field as approval. A missing live version fails with
+`live_review_version_unavailable` and a changed one with
+`live_review_version_mismatch`. Title, body and rating failures have distinct
+constant-only codes; the public audit record stores the code, timestamp and
+workflow ID but never original/translated review text, reviewer identities,
+API response bodies or credentials. Only the code is safe to quote in reports.
+If version is genuinely unavailable, keep the revision blocked for explicit
+owner review rather than weakening the identity requirement.
+
+An existing Google Play `reviews.reply` POST now has **one** transport attempt:
+a transient response or timeout after an accepted write must not cause a hidden
+automatic re-POST. The durable `published_unverified` state still protects
+subsequent owner invocations; only a live GET with the exact replacement may
+mark `store_verified`. A `awaiting_owner_dispatch` record with zero attempts
+after a *preflight* mismatch has not modified the store and can be inspected
+and corrected before another explicit owner `REPLACE` dispatch. Never rerun
+an uncertain or accepted posting as a new write.
+
 ## Custom AI drafts
 
 Run `python3 scripts/generate_ai_review_drafts.py` to create a review packet,

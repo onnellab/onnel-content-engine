@@ -16,11 +16,21 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from store_review_approvals import read_reviews
-from sync_store_reviews import urlopen_with_retry
+from sync_store_reviews import google_review_rows, urlopen_with_retry
 
 REVISION_PATH = Path(__file__).resolve().parents[1] / "data/store_review_reply_revisions.json"
 UUID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\Z")
 VALID_STATES = {"awaiting_owner_dispatch", "published_unverified", "store_verified"}
+# These codes are safe for public CI logs and audit receipts. Never log review
+# content, user identifiers, API payloads or credential-bearing HTTP errors.
+IDENTITY_ERROR_CODES = frozenset({
+    "live_review_text_unavailable",
+    "live_review_title_mismatch",
+    "live_review_body_mismatch",
+    "live_review_rating_mismatch",
+    "live_review_version_unavailable",
+    "live_review_version_mismatch",
+})
 
 
 def observed_at() -> str:
@@ -80,6 +90,7 @@ def bind_current_review(record: dict, review: dict) -> None:
             or record.get("platform") != "android"
             or review.get("review_kind") != "review"
             or review.get("status") != "replied"
+            or record.get("expected_review_title") != review.get("title", "")
             or record.get("expected_review_body") != review.get("body")
             or str(record.get("rating")) != str(review.get("rating"))
             or record.get("app_version") != review.get("app_version")
@@ -97,10 +108,39 @@ def bind_current_review(record: dict, review: dict) -> None:
 
 
 def verify_live_identity(user: dict, record: dict) -> None:
-    if (user.get("text") != record["expected_review_body"]
-            or str(user.get("starRating")) != str(record["rating"])
-            or str(user.get("appVersionName")) != str(record["app_version"])):
-        raise ValueError("Live Google Play review content or version changed")
+    """Match the *same* Google review representation used in review sync.
+
+    Google may provide translated text alongside originalText, and joins an
+    optional title and body with a tab. The revision gate previously compared
+    raw `text` with the CSV's separated/possibly untranslated body, falsely
+    rejecting unchanged reviews. Reuse the canonical sync parser, but keep
+    exact title/body, rating and present app-version checks fail closed.
+    """
+    raw = user.get("originalText") or user.get("text")
+    if not isinstance(raw, str) or not raw.strip():
+        raise ValueError("live_review_text_unavailable")
+    parsed = google_review_rows(
+        {"reviews": [{"reviewId": record["review_id"],
+                      "comments": [{"userComment": user}]}]},
+        {"app_id": record["app_id"]}, "",
+    )
+    if len(parsed) != 1:
+        raise ValueError("live_review_text_unavailable")
+    # read_reviews strips surrounding CSV whitespace. Compare against exactly
+    # that normalized stored representation, not a translation or raw tab text.
+    if parsed[0]["title"].strip() != record["expected_review_title"]:
+        raise ValueError("live_review_title_mismatch")
+    if parsed[0]["body"].strip() != record["expected_review_body"]:
+        raise ValueError("live_review_body_mismatch")
+    if str(user.get("starRating", "")) != str(record["rating"]):
+        raise ValueError("live_review_rating_mismatch")
+    version = user.get("appVersionName")
+    # Google documents this field as optional. Missing is NOT proof of a match:
+    # never infer the installed version from the current public store version.
+    if not isinstance(version, str) or not version.strip():
+        raise ValueError("live_review_version_unavailable")
+    if version != record["app_version"]:
+        raise ValueError("live_review_version_mismatch")
 
 
 def apply_revision(record: dict, review: dict, *, package: str, google_token: str,
@@ -120,6 +160,7 @@ def apply_revision(record: dict, review: dict, *, package: str, google_token: st
     expected, replacement = record["expected_current_reply"], record["replacement_reply"]
     if observed == replacement:
         record["status"] = "store_verified"
+        record.pop("diagnostic", None)
         record.setdefault("publication", {})["store_observed_at"] = observed_at()
         record["publication"]["verification_source"] = "google_reviews_get"
         record["publication"]["error"] = ""
@@ -147,6 +188,7 @@ def apply_revision(record: dict, review: dict, *, package: str, google_token: st
     verify_live_identity(user_after, record)
     if observed_after == replacement:
         record["status"] = "store_verified"
+        record.pop("diagnostic", None)
         publication["store_observed_at"] = observed_at()
         publication["verification_source"] = "google_reviews_get"
         publication["error"] = ""
@@ -203,6 +245,15 @@ def process_revision(revision_id: str, *, reviews_path: Path, stores_path: Path,
                                  run_id=env["GITHUB_RUN_ID"], run_attempt=env["REPLY_RUN_ATTEMPT"],
                                  getter=getter, poster=poster)
     except Exception as error:
+        # Preflight mismatches remain eligible for an owner *new dispatch*
+        # after repair; no store write occurred. Persist only a constant code.
+        if record["status"] == "awaiting_owner_dispatch":
+            code = str(error)
+            record["diagnostic"] = {
+                "code": code if code in IDENTITY_ERROR_CODES else "preflight_validation_failed",
+                "checked_at": observed_at(),
+                "workflow_run_id": env["GITHUB_RUN_ID"],
+            }
         # Never write credential-bearing HTTP error text to the public ledger.
         if record["status"] == "published_unverified":
             record.setdefault("publication", {})["error"] = "publication_or_verification_uncertain"
