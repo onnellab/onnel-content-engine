@@ -335,5 +335,67 @@ class TagWeaverPreviewBundle(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "checksum"):
             self.validate(corrupt_checksum=True)
 
+class VaultXTPreviewBundle(unittest.TestCase):
+    add_file = ResearchPreviewBundle.add_file
+    replace_content = ResearchPreviewBundle.replace_content
+    write_bundle = ResearchPreviewBundle.write_bundle
+    validate = ResearchPreviewBundle.validate
+
+    def setUp(self):
+        slug = "make-long-plain-text-easier-to-navigate"
+        self.bundle = {"schema": 1, "state": "UNSCHEDULED_PREVIEW_ONLY",
+                       "slug": slug, "locales": list(LOCALES), "files": []}
+        for locale in LOCALES:
+            draft = json.loads((ROOT / "preview/vaultxt-text-navigation" / f"{locale}.json").read_text())
+            header = {
+                "title": draft["title"], "card_title": draft["title"],
+                "category": "reading", "language": locale, "slug": slug,
+                "status": "review", "related_apps": "VaultXT",
+                "canonical_url": f"https://onnellab.com/blog/{locale.lower()}/{slug}/",
+            }
+            markdown = "---\n" + "".join(f"{key}: {json.dumps(value, ensure_ascii=False)}\n"
+                                         for key, value in header.items()) + "---\n\n" + draft["body"]
+            markdown += f'\n![Workflow](/blog-assets/{locale}/{slug}/workflow-diagram.svg)\n'
+            self.add_file(f"generated/markdown/{locale}/reading/{slug}.md", markdown)
+            for kind in ("workflow-diagram", "social-card"):
+                self.add_file(f"generated/assets/blog/{locale}/{slug}/{kind}.svg",
+                              '<svg xmlns="http://www.w3.org/2000/svg"><title>Fixture only</title></svg>')
+
+    def test_nine_exact_reviewed_drafts_validate(self):
+        result, digest = self.validate()
+        self.assertEqual(result, self.bundle)
+        self.assertEqual(len(result["files"]), 27)
+        self.assertEqual(len(digest), 64)
+
+    def test_vaultxt_identity_cannot_be_substituted(self):
+        for app in ("", "Aligna", "VaultXT|Aligna"):
+            bundle = copy.deepcopy(self.bundle)
+            self.replace_content(bundle, 0, bundle["files"][0]["content"].replace(
+                'related_apps: "VaultXT"', "related_apps: " + json.dumps(app)))
+            with self.subTest(app=app), self.assertRaisesRegex(ValueError, "reviewed app"):
+                self.validate(bundle)
+        for link in ("https://example.invalid/", "/apps/aligna/",
+                     "https://play.google.com/store/apps/details?id=com.onnellab.aligna"):
+            bundle = copy.deepcopy(self.bundle)
+            bundle["store_urls"] = [link]
+            self.replace_content(bundle, 0, bundle["files"][0]["content"] + f"\n[Foreign]({link})\n")
+            with self.subTest(link=link), self.assertRaisesRegex(ValueError, "link/resource"):
+                self.validate(bundle)
+
+    def test_vaultxt_retains_dates_paths_and_hash_guards(self):
+        for key in ("published_at", "updated_at", "scheduled_at"):
+            bundle = copy.deepcopy(self.bundle)
+            self.replace_content(bundle, 0, bundle["files"][0]["content"].replace(
+                "---\n", f'---\n{key}: "2026-10-23"\n', 1))
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, "publication dates"):
+                self.validate(bundle)
+        bundle = copy.deepcopy(self.bundle)
+        bundle["files"][0]["path"] = bundle["files"][0]["path"].replace("/reading/", "/research/")
+        with self.assertRaises(ValueError):
+            self.validate(bundle)
+        with self.assertRaisesRegex(ValueError, "checksum"):
+            self.validate(corrupt_checksum=True)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -152,6 +152,8 @@ def validate_bundle(bundle_path):
                 raise ValueError('Metadata category mismatch')
             if profile['app_path'] is None and values.get('related_apps') != '':
                 raise ValueError('Product-neutral preview must not include related apps')
+            if slug == 'make-long-plain-text-easier-to-navigate' and values.get('related_apps') != 'VaultXT':
+                raise ValueError('VaultXT preview must retain its reviewed app')
             if slug == 'consistent-album-artist-names' and values.get('related_apps') != 'TagWeaver':
                 raise ValueError('TagWeaver preview must name exactly its reviewed app')
             if values.get('canonical_url') != f'https://onnellab.com/blog/{locale.lower()}/{slug}/':
