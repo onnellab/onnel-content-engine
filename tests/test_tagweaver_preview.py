@@ -255,7 +255,7 @@ class ExecutionBoundaries(unittest.TestCase):
 
     def test_worker_rejects_missing_marker_and_live_source_root(self):
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             with patch.object(preview, "ROOT", root), patch.object(preview, "stage_topics") as stage:
                 with self.assertRaisesRegex(ValueError, "marker"):
                     preview.stage_worker()
