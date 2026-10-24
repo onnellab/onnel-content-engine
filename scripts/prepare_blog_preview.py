@@ -53,6 +53,15 @@ def candidate_profile(slug):
             'related_slugs': ['keep-durable-research-reading-log'],
             'table_rows': {locale: 3 for locale in LOCALES},
         }
+    if slug == 'make-long-plain-text-easier-to-navigate':
+        return {
+            'category': 'reading', 'faq_count': 3,
+            'app_path': '/apps/vaultxt/',
+            'store_urls': ['https://play.google.com/store/apps/details?id=com.onnellab.vaultxt'],
+            'source_urls': [],
+            'related_slugs': ['read-large-txt-files-without-lag', 'inspect-large-log-file-without-altering-original'],
+            'table_rows': {locale: 0 for locale in LOCALES},
+        }
     raise ValueError('Unknown preview candidate')
 
 def allowed_candidate_links(slug, locale):
