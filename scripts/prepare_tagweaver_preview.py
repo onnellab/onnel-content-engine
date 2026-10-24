@@ -3,8 +3,10 @@
 from __future__ import annotations
 import argparse
 import json
+import math
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -30,6 +32,17 @@ GATES = (
     ("evaluate_all_articles.py",),
     ("check_nine_language_publication.py",),
     ("check_content_supply.py", "--require-healthy", "--minimum-ideas", "8"),
+)
+REVIEW_DIAGNOSTIC_PREFIX = "TAGWEAVER_REVIEW_DIAGNOSTIC "
+REVIEW_DIAGNOSTIC_UNAVAILABLE_PREFIX = "TAGWEAVER_REVIEW_DIAGNOSTIC_UNAVAILABLE "
+MAX_REVIEW_DIAGNOSTIC_BYTES = 65_536
+MAX_REVIEW_DIAGNOSTIC_LINE = 2_048
+REVIEW_DIAGNOSTIC_CHECK_NAMES = (
+    "metadata_complete", "card_title_consistent", "brand_spelling",
+    "required_sections", "short_answer_ready", "structured_answer",
+    "clear_definitions", "primary_keyword", "external_reference",
+    "product_after_education", "publish_ready_image", "social_card_source",
+    "image_quality", "internal_links", "readability_depth", "translation_quality",
 )
 REVIEWED_BLOBS = {
     "en": "af5023281da5168cedea7aecfef358dddf9534f1",
@@ -229,6 +242,59 @@ def materialize_candidates(stage, drafts, candidates, store):
         raise ValueError("Candidate must remain unscheduled review")
     return [final[r["id"]] for r in candidates]
 
+def review_diagnostic_summary(report, locale):
+    """Select only bounded native review facts, never article text or notes."""
+    if locale not in LOCALES or not isinstance(report, dict):
+        raise ValueError("Unsupported review diagnostic")
+    if (type(report.get("version")) is not int or report["version"] != 4 or
+            report.get("type") != "article_review"):
+        raise ValueError("Unsupported review diagnostic")
+    topic_id = report.get("topic_id")
+    score = report.get("score")
+    if (not isinstance(topic_id, str) or
+            re.fullmatch(r"TOPIC-[0-9]{4}", topic_id) is None or
+            type(report.get("passed")) is not bool or
+            type(score) not in (int, float) or not 0 <= score <= 10 or
+            not math.isfinite(score)):
+        raise ValueError("Unsupported review diagnostic")
+    checks = report.get("checks")
+    if not isinstance(checks, list) or len(checks) != len(REVIEW_DIAGNOSTIC_CHECK_NAMES):
+        raise ValueError("Unsupported review diagnostic")
+    statuses = {}
+    for check in checks:
+        if not isinstance(check, dict):
+            raise ValueError("Unsupported review diagnostic")
+        name = check.get("name")
+        if (not isinstance(name, str) or name not in REVIEW_DIAGNOSTIC_CHECK_NAMES or
+                name in statuses or type(check.get("passed")) is not bool):
+            raise ValueError("Unsupported review diagnostic")
+        statuses[name] = check["passed"]
+    return {
+        "locale": locale, "topic_id": topic_id, "passed": report["passed"], "score": score,
+        "checks": [{"name": name, "passed": statuses[name]}
+                   for name in REVIEW_DIAGNOSTIC_CHECK_NAMES],
+    }
+
+
+def emit_failed_review_diagnostics(stage):
+    """Best-effort, read-only summaries; no diagnostic can grant a gate pass."""
+    for locale in LOCALES:
+        try:
+            report = bounded_json(
+                stage, f"generated/reviews/{locale}/{CATEGORY}/{SLUG}/review.json",
+                limit=MAX_REVIEW_DIAGNOSTIC_BYTES,
+            )
+            summary = review_diagnostic_summary(report, locale)
+            line = REVIEW_DIAGNOSTIC_PREFIX + json.dumps(
+                summary, ensure_ascii=True, allow_nan=False, separators=(",", ":"))
+            if len(line.encode("utf-8")) > MAX_REVIEW_DIAGNOSTIC_LINE:
+                raise ValueError("Review diagnostic exceeds size limit")
+        except Exception:
+            # Never interpolate an exception or unsupported report field.
+            line = REVIEW_DIAGNOSTIC_UNAVAILABLE_PREFIX + locale
+        print(line, file=sys.stderr, flush=True)
+
+
 def run_gates(stage, output):
     for index, arguments in enumerate(GATES, 1):
         command = [sys.executable, str(stage / "scripts" / arguments[0]), *arguments[1:]]
@@ -236,14 +302,29 @@ def run_gates(stage, output):
                                 stderr=subprocess.STDOUT, timeout=180)
         (output / f"{index:02d}-{arguments[0]}.log").write_text(result.stdout, encoding="utf-8")
         if result.returncode:
-            diagnostics = output / "failed-candidate-reviews"
-            for locale in LOCALES:
-                review = stage / f"generated/reviews/{locale}/{CATEGORY}/{SLUG}/review.json"
-                if review.is_file() and not review.is_symlink():
-                    diagnostics.mkdir(exist_ok=True)
-                    (diagnostics / f"{locale}.json").write_bytes(review.read_bytes())
-            print(result.stdout, file=sys.stderr, flush=True)
-            raise ValueError(f"Native gate failed: {arguments[0]} (see retained log)")
+            try:
+                # Retain the existing JSON artifacts, but never print their raw content.
+                for locale in LOCALES:
+                    try:
+                        review = safe_native_path(
+                            stage, f"generated/reviews/{locale}/{CATEGORY}/{SLUG}/review.json",
+                            required=True,
+                        )
+                        raw = read_native_bytes(review, MAX_REVIEW_DIAGNOSTIC_BYTES)
+                        relative = f"failed-candidate-reviews/{locale}.json"
+                        target = safe_native_path(output, relative, absent=True)
+                        target.parent.mkdir(exist_ok=True)
+                        target = safe_native_path(output, relative, absent=True)
+                        with target.open("xb") as stream:
+                            stream.write(raw)
+                    except Exception:
+                        # Retention is best-effort and cannot replace the gate failure.
+                        continue
+                emit_failed_review_diagnostics(stage)
+                print(result.stdout, file=sys.stderr, flush=True)
+            finally:
+                # Diagnostic failures must not replace or suppress the native failure.
+                raise ValueError(f"Native gate failed: {arguments[0]} (see retained log)") from None
 
 
 def native_output_paths():

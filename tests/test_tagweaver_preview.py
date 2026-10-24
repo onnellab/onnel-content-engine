@@ -1,6 +1,7 @@
 """Fail-closed tests for the dedicated TagWeaver disposable preview adapter."""
 import copy
 import hashlib
+import io
 import json
 from pathlib import Path
 import sys
@@ -612,6 +613,339 @@ class ReviewedTagWeaverSectionHeadings(unittest.TestCase):
         )
         self.assertEqual(evaluate_article.DEFAULT_THRESHOLD, 9.0)
         self.assertEqual(evaluate_article.REVIEW_VERSION, 4)
+
+
+
+class BoundedReviewFailureDiagnostics(unittest.TestCase):
+    EXPECTED_CHECKS = (
+        "metadata_complete", "card_title_consistent", "brand_spelling",
+        "required_sections", "short_answer_ready", "structured_answer",
+        "clear_definitions", "primary_keyword", "external_reference",
+        "product_after_education", "publish_ready_image", "social_card_source",
+        "image_quality", "internal_links", "readability_depth", "translation_quality",
+    )
+
+    def native_report(self):
+        # Synthetic schema fixture; never depend on live generated review state.
+        return {
+            "version": 4, "type": "article_review", "topic_id": "TOPIC-0039",
+            "title": "Synthetic review fixture", "input_fingerprint": "0" * 64,
+            "score": 8.8, "threshold": 9.0, "passed": False,
+            "checks": [
+                {"name": name, "passed": name != "product_after_education",
+                 "points": 0.0 if name == "product_after_education" else 1.0,
+                 "max_points": 1.0, "note": "Synthetic test fixture only."}
+                for name in self.EXPECTED_CHECKS
+            ],
+        }
+
+    def review_path(self, stage, locale):
+        return stage / f"generated/reviews/{locale}/{preview.CATEGORY}/{preview.SLUG}/review.json"
+
+    def write_reviews(self, stage):
+        for index, locale in enumerate(preview.LOCALES):
+            report = self.native_report()
+            report["topic_id"] = preview.TOPIC_ID if locale == "en" else f"TOPIC-{100 + index:04d}"
+            report["passed"] = False
+            report["score"] = 9.26
+            report["title"] = "DO_NOT_LOG_TITLE_OR_SECRET"
+            report["body"] = "DO_NOT_LOG_ARTICLE_BODY"
+            report["checks"][9]["passed"] = False
+            for check in report["checks"]:
+                check["note"] = "DO_NOT_LOG_REVIEW_NOTE"
+            preview.write_json(self.review_path(stage, locale), report)
+
+    def diagnostic_lines(self, captured):
+        return [line for line in captured.getvalue().splitlines()
+                if line.startswith("TAGWEAVER_REVIEW_DIAGNOSTIC")]
+
+    def assert_unavailable(self, lines):
+        self.assertEqual(lines, [
+            preview.REVIEW_DIAGNOSTIC_UNAVAILABLE_PREFIX + locale
+            for locale in preview.LOCALES
+        ])
+
+    def test_native_schema_and_closed_check_whitelist_select_only_safe_fields(self):
+        self.assertEqual(preview.REVIEW_DIAGNOSTIC_CHECK_NAMES, self.EXPECTED_CHECKS)
+        report = self.native_report()
+        before = copy.deepcopy(report)
+        self.assertEqual({check["name"] for check in report["checks"]}, set(self.EXPECTED_CHECKS))
+        summary = preview.review_diagnostic_summary(report, "en")
+        self.assertEqual(set(summary), {"locale", "topic_id", "passed", "score", "checks"})
+        self.assertEqual(summary["topic_id"], report["topic_id"])
+        self.assertEqual(summary["score"], report["score"])
+        self.assertIs(summary["passed"], report["passed"])
+        self.assertEqual(summary["checks"], [
+            {"name": name, "passed": next(check["passed"] for check in report["checks"]
+                                        if check["name"] == name)}
+            for name in self.EXPECTED_CHECKS
+        ])
+        self.assertEqual(report, before)
+        for invalid in ("EN", "zh-hans", "en" + chr(10) + "SECRET", "", None):
+            with self.subTest(locale=invalid), self.assertRaises(ValueError):
+                preview.review_diagnostic_summary(report, invalid)
+
+    def test_all_nine_summaries_are_bounded_and_do_not_log_unused_report_fields(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            stage = Path(temporary)
+            self.write_reviews(stage)
+            before = {path: path.read_bytes() for path in stage.rglob("review.json")}
+            captured = io.StringIO()
+            with patch("sys.stderr", captured):
+                preview.emit_failed_review_diagnostics(stage)
+            lines = self.diagnostic_lines(captured)
+            self.assertEqual(len(lines), 9)
+            for locale, line in zip(preview.LOCALES, lines):
+                self.assertLessEqual(len(line.encode("utf-8")), 2_048)
+                summary = json.loads(line.removeprefix(preview.REVIEW_DIAGNOSTIC_PREFIX))
+                self.assertEqual(summary["locale"], locale)
+                self.assertIs(summary["passed"], False)
+                self.assertEqual(summary["score"], 9.26)
+                self.assertEqual([check["name"] for check in summary["checks"]], list(self.EXPECTED_CHECKS))
+                self.assertEqual([check for check in summary["checks"] if not check["passed"]],
+                                 [{"name": "product_after_education", "passed": False}])
+            self.assertNotIn("DO_NOT_LOG", captured.getvalue())
+            self.assertNotIn("note", captured.getvalue())
+            self.assertNotIn("title", captured.getvalue().replace("card_title_consistent", ""))
+            self.assertEqual({path: path.read_bytes() for path in stage.rglob("review.json")}, before)
+
+    def test_malformed_schema_emits_only_fixed_unavailable_markers(self):
+        reports = [None, [], {}]
+        for key, values in (
+            ("version", (True, 3, "4")),
+            ("type", ("article_review" + chr(10) + "SECRET", None)),
+            ("topic_id", ("TOPIC-1", "TOPIC-00000", "TOPIC-0039" + chr(10) + "SECRET", "TOPIC-１２３４", None)),
+            ("passed", (0, 1, "false", None)),
+            ("score", (True, "9.26", None, float("nan"), float("inf"), -1, 11)),
+        ):
+            for value in values:
+                report = self.native_report()
+                report[key] = value
+                reports.append(report)
+        for case in ("missing", "duplicate", "unknown", "non_dict", "non_bool", "many"):
+            report = self.native_report()
+            if case == "missing":
+                report["checks"].pop()
+            elif case == "duplicate":
+                report["checks"][1] = copy.deepcopy(report["checks"][0])
+            elif case == "unknown":
+                report["checks"][0]["name"] = "DO_NOT_LOG_ARBITRARY_NAME"
+            elif case == "non_dict":
+                report["checks"][0] = None
+            elif case == "non_bool":
+                report["checks"][0]["passed"] = 1
+            else:
+                report["checks"] *= 1000
+            reports.append(report)
+        for index, report in enumerate(reports):
+            captured = io.StringIO()
+            with self.subTest(case=index), patch.object(preview, "bounded_json", return_value=report), \
+                 patch("sys.stderr", captured):
+                preview.emit_failed_review_diagnostics(Path("unused-stage"))
+            self.assert_unavailable(self.diagnostic_lines(captured))
+            self.assertNotIn("SECRET", captured.getvalue())
+            self.assertNotIn("DO_NOT_LOG", captured.getvalue())
+
+    def test_bounded_reader_rejects_bad_bytes_missing_files_and_symlinks(self):
+        self.assertEqual(preview.MAX_REVIEW_DIAGNOSTIC_BYTES, 65_536)
+        self.assertEqual(preview.MAX_REVIEW_DIAGNOSTIC_LINE, 2_048)
+        cases = ("oversize", "invalid_utf8", "invalid_json", "duplicate_key",
+                 "deep_json", "missing", "file_symlink", "parent_symlink")
+        for case in cases:
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                stage = root / "stage"
+                stage.mkdir()
+                self.write_reviews(stage)
+                path = self.review_path(stage, "en")
+                if case == "oversize":
+                    path.write_bytes(b"x" * 65_537)
+                elif case == "invalid_utf8":
+                    path.write_bytes(bytes([0xFF]))
+                elif case == "invalid_json":
+                    path.write_text("DO_NOT_LOG_BROKEN_JSON")
+                elif case == "duplicate_key":
+                    raw = path.read_text()
+                    path.write_text(raw.replace("{", '{"score": 1,', 1))
+                elif case == "deep_json":
+                    path.write_text("[" * 2000 + "0" + "]" * 2000)
+                elif case == "missing":
+                    path.unlink()
+                elif case == "file_symlink":
+                    outside = root / "outside.json"
+                    outside.write_bytes(path.read_bytes())
+                    path.unlink()
+                    path.symlink_to(outside)
+                else:
+                    parent = path.parent
+                    outside = root / "outside"
+                    parent.rename(outside)
+                    parent.symlink_to(outside, target_is_directory=True)
+                captured = io.StringIO()
+                with patch.object(preview, "read_native_bytes", wraps=preview.read_native_bytes) as read, \
+                     patch("sys.stderr", captured):
+                    preview.emit_failed_review_diagnostics(stage)
+                lines = self.diagnostic_lines(captured)
+                self.assertEqual(len(lines), 9)
+                self.assertEqual(lines[0], preview.REVIEW_DIAGNOSTIC_UNAVAILABLE_PREFIX + "en")
+                self.assertTrue(all(line.startswith(preview.REVIEW_DIAGNOSTIC_PREFIX) for line in lines[1:]))
+                self.assertTrue(all(call.args[1] == 65_536 for call in read.call_args_list))
+                self.assertNotIn("DO_NOT_LOG", captured.getvalue())
+
+    def test_line_limit_and_read_error_never_expose_arbitrary_error_text(self):
+        for case in ("line_limit", "read_error"):
+            captured = io.StringIO()
+            kwargs = ({"return_value": self.native_report()} if case == "line_limit" else
+                      {"side_effect": OSError("DO_NOT_LOG_ERROR")})
+            with self.subTest(case=case), patch.object(preview, "bounded_json", **kwargs), \
+                 patch.object(preview, "MAX_REVIEW_DIAGNOSTIC_LINE", 1), patch("sys.stderr", captured):
+                preview.emit_failed_review_diagnostics(Path("unused-stage"))
+            self.assert_unavailable(self.diagnostic_lines(captured))
+            self.assertNotIn("DO_NOT_LOG", captured.getvalue())
+
+    def test_failed_gate_aborts_before_supply_without_topic_or_queue_writes(self):
+        from topic_management import TopicStore
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            stage, output = root / "stage", root / "output"
+            stage.mkdir()
+            output.mkdir()
+            make_stage(stage)
+            self.write_reviews(stage)
+            before = {path.relative_to(stage): path.read_bytes()
+                      for path in stage.rglob("*") if path.is_file()}
+            live_before = {relative: (ROOT / relative).read_bytes()
+                           for relative in ("data/topics.csv", "topics/topics.csv")}
+            results = [SimpleNamespace(returncode=0, stdout="passed") for _ in range(3)]
+            results.append(SimpleNamespace(returncode=1, stdout="persisted review did not pass"))
+            captured = io.StringIO()
+            with patch.object(preview.subprocess, "run", side_effect=results) as run, \
+                 patch.object(TopicStore, "write") as write, patch("sys.stderr", captured):
+                with self.assertRaisesRegex(ValueError, "^Native gate failed: check_nine_language_publication.py"):
+                    preview.run_gates(stage, output)
+                write.assert_not_called()
+            self.assertEqual(run.call_count, 4)
+            self.assertTrue(all(call.kwargs["timeout"] == 180 for call in run.call_args_list))
+            self.assertEqual({path.relative_to(stage): path.read_bytes()
+                              for path in stage.rglob("*") if path.is_file()}, before)
+            for relative, raw in live_before.items():
+                self.assertEqual((ROOT / relative).read_bytes(), raw)
+            self.assertEqual({path.name for path in output.iterdir()},
+                             {f"{index:02d}-{gate[0]}.log" for index, gate in enumerate(preview.GATES[:4], 1)}
+                             | {"failed-candidate-reviews"})
+            self.assertEqual((output / "04-check_nine_language_publication.py.log").read_text(),
+                             "persisted review did not pass")
+            self.assertEqual(len(self.diagnostic_lines(captured)), 9)
+            for locale in preview.LOCALES:
+                self.assertEqual((output / "failed-candidate-reviews" / f"{locale}.json").read_bytes(),
+                                 self.review_path(stage, locale).read_bytes())
+            self.assertNotIn("DO_NOT_LOG", captured.getvalue())
+
+    def test_artifact_retention_is_bounded_and_never_overwrites_or_follows_symlinks(self):
+        for case in ("existing", "file_symlink", "parent_symlink", "oversize", "malformed"):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                stage, output = root / "stage", root / "output"
+                stage.mkdir()
+                output.mkdir()
+                self.write_reviews(stage)
+                diagnostics = output / "failed-candidate-reviews"
+                outside = root / "outside"
+                outside.mkdir()
+                sentinel = outside / "en.json"
+                sentinel.write_bytes(b"existing evidence")
+                target = diagnostics / "en.json"
+                if case == "parent_symlink":
+                    diagnostics.symlink_to(outside, target_is_directory=True)
+                elif case in ("existing", "file_symlink"):
+                    diagnostics.mkdir()
+                    if case == "existing":
+                        target.write_bytes(b"existing evidence")
+                    else:
+                        target.symlink_to(sentinel)
+                elif case == "oversize":
+                    self.review_path(stage, "en").write_bytes(b"x" * 65_537)
+                else:
+                    self.review_path(stage, "en").write_bytes(b"DO_NOT_LOG_BROKEN_REPORT")
+                captured = io.StringIO()
+                with patch.object(preview.subprocess, "run",
+                                  return_value=SimpleNamespace(returncode=1, stdout="native failure")), \
+                     patch("sys.stderr", captured):
+                    with self.assertRaisesRegex(ValueError, "Native gate failed: validate_topics.py"):
+                        preview.run_gates(stage, output)
+                self.assertEqual(sentinel.read_bytes(), b"existing evidence")
+                self.assertEqual({path.name for path in outside.iterdir()}, {"en.json"})
+                if case in ("existing", "file_symlink", "parent_symlink"):
+                    self.assertEqual(target.read_bytes(), b"existing evidence")
+                elif case == "oversize":
+                    self.assertFalse(target.exists())
+                else:
+                    self.assertEqual(target.read_bytes(), b"DO_NOT_LOG_BROKEN_REPORT")
+                self.assertEqual(len(self.diagnostic_lines(captured)), 9)
+                self.assertNotIn("DO_NOT_LOG", captured.getvalue())
+
+    def test_malformed_reports_do_not_mask_original_gate_failure(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            captured = io.StringIO()
+            with patch.object(preview.subprocess, "run",
+                              return_value=SimpleNamespace(returncode=7, stdout="native failure")) as run, \
+                 patch.object(preview, "bounded_json", side_effect=ValueError("DO_NOT_LOG_ERROR")), \
+                 patch("sys.stderr", captured):
+                with self.assertRaisesRegex(ValueError, "^Native gate failed: validate_topics.py \\(see retained log\\)$"):
+                    preview.run_gates(root, root)
+            self.assertEqual(run.call_count, 1)
+            self.assert_unavailable(self.diagnostic_lines(captured))
+            self.assertNotIn("DO_NOT_LOG", captured.getvalue())
+
+    def test_unexpected_diagnostic_or_logging_exception_cannot_replace_native_failure(self):
+        for case in ("diagnostic_error", "stderr_error"):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                with patch.object(preview.subprocess, "run",
+                                  return_value=SimpleNamespace(returncode=2, stdout="native failure")), \
+                     patch.object(preview, "emit_failed_review_diagnostics") as diagnostics, \
+                     patch("sys.stderr") as stderr:
+                    if case == "diagnostic_error":
+                        diagnostics.side_effect = RuntimeError("DO_NOT_LOG_DIAGNOSTIC_ERROR")
+                    else:
+                        stderr.write.side_effect = OSError("DO_NOT_LOG_STDERR_ERROR")
+                    with self.assertRaisesRegex(ValueError, "^Native gate failed: validate_topics.py"):
+                        preview.run_gates(root, root)
+
+    def test_success_keeps_all_five_gates_and_never_reads_diagnostics(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            with patch.object(preview.subprocess, "run",
+                              return_value=SimpleNamespace(returncode=0, stdout="passed")) as run, \
+                 patch.object(preview, "emit_failed_review_diagnostics") as diagnostics:
+                preview.run_gates(root, root)
+            self.assertEqual(run.call_count, 5)
+            diagnostics.assert_not_called()
+            self.assertEqual(run.call_args_list[-1].args[0][-3:],
+                             ["--require-healthy", "--minimum-ideas", "8"])
+
+    def test_worker_never_collects_or_reserves_queue_after_native_failure(self):
+        from topic_management import TopicStore
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            stage, source = root / "stage", root / "source"
+            stage.mkdir()
+            source.mkdir()
+            output = source / "preview-evidence/tagweaver-album-artists"
+            output.mkdir(parents=True)
+            preview.write_json(stage / preview.MARKER, {"source": str(source), "output": str(output)})
+            with patch.object(preview, "ROOT", stage), patch.object(preview, "validate_drafts", return_value={}), \
+                 patch.object(preview, "stage_topics", return_value=(None, [], [])), \
+                 patch.object(preview, "materialize_candidates", return_value=[]), \
+                 patch.object(preview.subprocess, "run",
+                              return_value=SimpleNamespace(returncode=1, stdout="native failure")), \
+                 patch.object(TopicStore, "write") as write, patch.object(preview, "collect") as collect, \
+                 patch("sys.stderr"):
+                with self.assertRaisesRegex(ValueError, "Native gate failed"):
+                    preview.stage_worker()
+                write.assert_not_called()
+                collect.assert_not_called()
 
 
 if __name__ == "__main__":
