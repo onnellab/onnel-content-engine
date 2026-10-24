@@ -13,6 +13,16 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import publishing
 from topic_management import read_csv, TOPIC_HEADER
 
+def complete_wrapped_text(lines, source):
+    """Compare every character in order; wrapping may consume boundary whitespace."""
+    remaining = " ".join(source.split())
+    for line in lines:
+        value = " ".join(line.split())
+        if not value or not remaining.startswith(value):
+            return False
+        remaining = remaining[len(value):].lstrip()
+    return not remaining
+
 def main():
     before = {p: p.read_bytes() for p in (ROOT / "data" / "topics.csv",)}
     output = ROOT / "card-regression-evidence"
@@ -35,15 +45,22 @@ def main():
                                      meta["description"], "/unused.png", "https://onnellab.com/unused.png")
         record = {"locale": row["primary_language"], "topic_id": row["id"]}
         current = publishing.social_card_svg(article)
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        parsed = ET.fromstring(current)
+        for selector, expected_text in (("s:text[@font-weight='760']", article.title),
+                                        ("s:text[@fill='#5f5b54']", article.description)):
+            lines = [n.text or "" for n in parsed.find(selector, ns).findall("s:tspan", ns)]
+            if not complete_wrapped_text(lines, expected_text):
+                raise AssertionError("Rendered card text incomplete: " + row["primary_language"])
         try:
             previous = baseline.social_card_svg(article)
         except baseline.PublishingError:
             previous = None
             record["baseline"] = "overflow_refused"
         else:
-            if previous != current:
+            if previous != current and row["primary_language"] != "en":
                 raise AssertionError("Passing SVG unexpectedly changed: " + row["primary_language"])
-            record["baseline"] = "exact_svg_preserved"
+            record["baseline"] = "english_full_text_repaired" if row["primary_language"] == "en" else "exact_svg_preserved"
         for label, content in (("after", current), ("before", previous)):
             if content is None:
                 continue
