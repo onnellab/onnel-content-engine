@@ -7,11 +7,14 @@ on:
       - 'preview/clipnest/**'
       - 'preview/aligna/**'
       - 'preview/research-source-notes/**'
+      - 'preview/tagweaver-album-artists/**'
       - 'scripts/prepare_aligna_preview.py'
       - 'scripts/prepare_research_preview.py'
+      - 'scripts/prepare_tagweaver_preview.py'
       - 'scripts/evaluate_article.py'
       - 'tests/test_aligna_preview.py'
       - 'tests/test_research_preview.py'
+      - 'tests/test_tagweaver_preview.py'
       - 'tests/test_preview_candidate_profiles.py'
       - 'tests/test_conversational_korean_definitions.py'
       - 'scripts/prepare_blog_preview.py'
@@ -33,11 +36,11 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-      - name: Checkout exact nonpublishing blog metadata validation revision
+      - name: Checkout exact verified blog template revision for disposable preview
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: onnellab/onnellab.github.io
-          ref: 992753863934ce805e6aebcd7e147d3122d3bb55
+          ref: 85747fead19facb4414072370daacf6828617f4e
           path: .preview-homepage
           persist-credentials: false
       - name: Configure existing Node version
@@ -53,8 +56,10 @@ jobs:
           python3 -m unittest discover -s tests -p test_blog_preview.py -v
           python3 -m unittest discover -s tests -p test_preview_candidate_profiles.py -v
           python3 -m unittest discover -s tests -p test_conversational_korean_definitions.py -v
+          python3 -m unittest discover -s tests -p test_functional_field_definitions.py -v
           python3 -m unittest discover -s tests -p test_aligna_preview.py -v
           python3 -m unittest discover -s tests -p test_research_preview.py -v
+          python3 -m unittest discover -s tests -p test_tagweaver_preview.py -v
           python3 scripts/prepare_blog_preview.py --bundle preview/clipnest/candidate.json --validate-only
       - name: Install existing publisher renderer dependencies
         timeout-minutes: 8
@@ -62,8 +67,8 @@ jobs:
           printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt > /dev/null
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y librsvg2-bin fonts-noto-cjk
-      - name: Validate research source notes with actual native gates in a disposable engine copy
-        run: python3 scripts/prepare_research_preview.py
+      - name: Validate TagWeaver with actual native gates in a disposable engine copy
+        run: python3 scripts/prepare_tagweaver_preview.py
       - name: Verify tracked source remains unchanged
         run: git diff --exit-code
       - name: Audit locked homepage dependencies
@@ -80,7 +85,7 @@ jobs:
           npm run check:i18n-quality
       - name: Overlay candidate only in disposable checkout
         run: |
-          python3 scripts/prepare_blog_preview.py --bundle preview-evidence/research-source-notes/candidate.json --homepage .preview-homepage --evidence preview-evidence
+          python3 scripts/prepare_blog_preview.py --bundle preview-evidence/tagweaver-album-artists/candidate.json --homepage .preview-homepage --evidence preview-evidence
           test ! -e .preview-homepage/tests/blog-preview.spec.ts
           test ! -L .preview-homepage/tests/blog-preview.spec.ts
           cp tests/blog-preview.spec.ts .preview-homepage/tests/blog-preview.spec.ts
