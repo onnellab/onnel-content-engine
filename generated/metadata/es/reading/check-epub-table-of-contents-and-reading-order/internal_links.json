@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0113",
+        "title": "Cómo orientarte en un documento de texto largo",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "es",
+        "status": "review",
+        "url": "generated/markdown/es/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 13
+      },
+      {
         "topic_id": "TOPIC-0052",
         "title": "Cómo organizar música en Android para escucharla sin conexión",
         "slug": "organize-local-music-library-offline-android",
@@ -87,12 +102,12 @@
         "slug": "separate-source-notes-from-conclusions",
         "category": "research",
         "language": "es",
-        "status": "review",
-        "url": "generated/markdown/es/research/separate-source-notes-from-conclusions.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       }
     ],
     "related_apps": [

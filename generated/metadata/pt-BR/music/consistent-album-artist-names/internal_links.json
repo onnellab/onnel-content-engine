@@ -97,17 +97,17 @@
         "score": 6
       },
       {
-        "topic_id": "TOPIC-0092",
-        "title": "Como separar as anotações sobre fontes das suas conclusões",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
+        "topic_id": "TOPIC-0110",
+        "title": "Como facilitar a navegação em um documento de texto longo",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
         "language": "pt-BR",
-        "status": "published",
-        "url": "https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/",
-        "destination": "published_article",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 4
+        "score": 5
       }
     ],
     "related_apps": [

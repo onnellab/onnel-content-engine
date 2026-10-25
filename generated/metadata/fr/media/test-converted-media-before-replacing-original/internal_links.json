@@ -69,6 +69,19 @@
         "score": 5
       },
       {
+        "topic_id": "TOPIC-0094",
+        "title": "Comment séparer les notes de source de vos conclusions",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
         "topic_id": "TOPIC-0051",
         "title": "Organiser sa musique sur Android pour une écoute hors ligne",
         "slug": "organize-local-music-library-offline-android",
@@ -82,13 +95,13 @@
         "score": 4
       },
       {
-        "topic_id": "TOPIC-0094",
-        "title": "Comment séparer les notes de source de vos conclusions",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
+        "topic_id": "TOPIC-0103",
+        "title": "Des tags d’album et d’artiste cohérents, des crédits préservés",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
         "language": "fr",
         "status": "review",
-        "url": "generated/markdown/fr/research/separate-source-notes-from-conclusions.md",
+        "url": "generated/markdown/fr/music/consistent-album-artist-names.md",
         "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

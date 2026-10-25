@@ -105,17 +105,19 @@
         "score": 10
       },
       {
-        "topic_id": "TOPIC-0044",
-        "title": "Organize a Local Music Library for Offline Listening on Android",
-        "slug": "organize-local-music-library-offline-android",
-        "category": "music",
+        "topic_id": "TOPIC-0040",
+        "title": "How to Navigate a Long Plain-Text Document",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
         "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/organize-local-music-library-offline-android/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
+        "status": "review",
+        "url": "generated/markdown/en/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 10
       }
     ],
     "related_apps": [

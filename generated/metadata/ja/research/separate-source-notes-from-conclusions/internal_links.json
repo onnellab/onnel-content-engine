@@ -14,7 +14,7 @@
     "slug": "separate-source-notes-from-conclusions",
     "category": "research",
     "language": "ja",
-    "status": "review",
+    "status": "published",
     "topic_clusters": [
       "出典の内容と推論の違い",
       "研究メモの出典管理",
@@ -91,6 +91,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0098",
+        "title": "アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "ja",
+        "status": "review",
+        "url": "generated/markdown/ja/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 2
       }
     ],
     "related_apps": [],

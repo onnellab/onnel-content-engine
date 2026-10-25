@@ -75,6 +75,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0040",
+        "title": "How to Navigate a Long Plain-Text Document",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0033",
         "title": "How to Prepare a TXT Manuscript for Reliable EPUB Conversion",
         "slug": "prepare-txt-manuscript-for-epub",
@@ -103,19 +118,6 @@
           "reading"
         ],
         "score": 10
-      },
-      {
-        "topic_id": "TOPIC-0012",
-        "title": "How to Rename Files Safely With a Preview Workflow",
-        "slug": "rename-files-safely-preview-workflow",
-        "category": "productivity",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/rename-files-safely-preview-workflow/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
       }
     ],
     "related_apps": [

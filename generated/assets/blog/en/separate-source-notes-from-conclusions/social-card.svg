@@ -5,8 +5,8 @@
   <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
   <rect x="92" y="92" width="210" height="44" rx="22" fill="#e9f3f1" stroke="#b9d8d2" stroke-width="1.4"/>
   <text x="118" y="121" fill="#244f4a" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700">RESEARCH</text>
-  <text x="92" y="218" fill="#282723" font-family="Inter, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">How to Separate Source Notes from</tspan><tspan x="92" y="282">Your Conclusions</tspan></text>
-  <text fill="#5f5b54" font-family="Inter, system-ui, sans-serif" font-size="24"><tspan x="92" y="442">Keep quotations, paraphrases, and your own interpretations distinct with</tspan><tspan x="92" y="476">source locators, a practical comparison table, and a five-step</tspan></text>
+  <text x="92" y="218" fill="#282723" font-family="Inter, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">How to Separate Source</tspan><tspan x="92" y="282">Notes from Your</tspan><tspan x="92" y="346">Conclusions</tspan></text>
+  <text fill="#5f5b54" font-family="Inter, system-ui, sans-serif" font-size="24"><tspan x="92" y="410">Keep quotations, paraphrases, and your own interpretations</tspan><tspan x="92" y="444">distinct with source locators, a practical comparison</tspan><tspan x="92" y="478">table, and a five-step research-note workflow.</tspan></text>
   <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
   <text x="92" y="552" fill="#817c73" font-family="Inter, system-ui, sans-serif" font-size="19">RESEARCH · EN</text>
   <text x="1048" y="552" fill="#30302c" font-family="Inter, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>

@@ -77,6 +77,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0106",
+        "title": "긴 일반 텍스트 문서에서 필요한 부분을 쉽게 찾는 방법",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "ko",
+        "status": "review",
+        "url": "generated/markdown/ko/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0034",
         "title": "신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 방법",
         "slug": "prepare-txt-manuscript-for-epub",
@@ -105,19 +120,6 @@
           "reading"
         ],
         "score": 10
-      },
-      {
-        "topic_id": "TOPIC-0011",
-        "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
-        "slug": "convert-local-media-files-privately",
-        "category": "media",
-        "language": "ko",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ko/convert-local-media-files-privately/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
       }
     ],
     "related_apps": [

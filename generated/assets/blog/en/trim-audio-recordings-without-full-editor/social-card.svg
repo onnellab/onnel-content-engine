@@ -5,8 +5,8 @@
   <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
   <rect x="92" y="92" width="210" height="44" rx="22" fill="#fff0df" stroke="#edcda6" stroke-width="1.4"/>
   <text x="118" y="121" fill="#684621" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700">MEDIA</text>
-  <text x="92" y="218" fill="#282723" font-family="Inter, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">How to Trim Audio Recordings</tspan><tspan x="92" y="282">Without a Full Editor</tspan></text>
-  <text fill="#5f5b54" font-family="Inter, system-ui, sans-serif" font-size="24"><tspan x="92" y="442">Trim an audio recording safely with precise in and out points,</tspan><tspan x="92" y="476">click-free boundaries, deliberate export settings, and a verified local</tspan></text>
+  <text x="92" y="218" fill="#282723" font-family="Inter, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">How to Trim Audio</tspan><tspan x="92" y="282">Recordings Without a Full</tspan><tspan x="92" y="346">Editor</tspan></text>
+  <text fill="#5f5b54" font-family="Inter, system-ui, sans-serif" font-size="24"><tspan x="92" y="410">Trim an audio recording safely with precise in and out</tspan><tspan x="92" y="444">points, click-free boundaries, deliberate export settings,</tspan><tspan x="92" y="478">and a verified local copy.</tspan></text>
   <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
   <text x="92" y="552" fill="#817c73" font-family="Inter, system-ui, sans-serif" font-size="19">MEDIA · EN</text>
   <text x="1048" y="552" fill="#30302c" font-family="Inter, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>

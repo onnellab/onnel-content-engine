@@ -60,6 +60,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0097",
+        "title": "곡별 크레딧을 지키며 앨범과 아티스트 태그 정리하기",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "ko",
+        "status": "review",
+        "url": "generated/markdown/ko/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0005",
         "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
         "slug": "read-large-txt-files-without-lag",
@@ -93,19 +108,6 @@
         "language": "ko",
         "status": "published",
         "url": "https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0019",
-        "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
-        "slug": "rename-files-safely-preview-workflow",
-        "category": "productivity",
-        "language": "ko",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

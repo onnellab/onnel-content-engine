@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0098",
+        "title": "アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "ja",
+        "status": "review",
+        "url": "generated/markdown/ja/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0055",
         "title": "EPUBの目次リンクと章の順序を確認する方法",
         "slug": "check-epub-table-of-contents-and-reading-order",
@@ -87,12 +102,12 @@
         "slug": "separate-source-notes-from-conclusions",
         "category": "research",
         "language": "ja",
-        "status": "review",
-        "url": "generated/markdown/ja/research/separate-source-notes-from-conclusions.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ja/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 2
+        "score": 3
       }
     ],
     "related_apps": [

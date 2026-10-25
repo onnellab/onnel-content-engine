@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0112",
+        "title": "Se repérer plus facilement dans un long document texte",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "fr",
+        "status": "review",
+        "url": "generated/markdown/fr/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 13
+      },
+      {
         "topic_id": "TOPIC-0084",
         "title": "Créer une convention cohérente pour nommer ses fichiers",
         "slug": "design-consistent-file-naming-system",
@@ -37,6 +52,19 @@
         "language": "fr",
         "status": "published",
         "url": "https://onnellab.com/blog/fr/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
+        "topic_id": "TOPIC-0094",
+        "title": "Comment séparer les notes de source de vos conclusions",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
@@ -77,19 +105,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0094",
-        "title": "Comment séparer les notes de source de vos conclusions",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
-        "language": "fr",
-        "status": "review",
-        "url": "generated/markdown/fr/research/separate-source-notes-from-conclusions.md",
-        "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6

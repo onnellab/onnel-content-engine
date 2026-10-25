@@ -97,17 +97,17 @@
         "score": 5
       },
       {
-        "topic_id": "TOPIC-0085",
-        "title": "Cómo crear un sistema coherente para nombrar archivos",
-        "slug": "design-consistent-file-naming-system",
-        "category": "productivity",
+        "topic_id": "TOPIC-0113",
+        "title": "Cómo orientarte en un documento de texto largo",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
         "language": "es",
-        "status": "published",
-        "url": "https://onnellab.com/blog/es/design-consistent-file-naming-system/",
-        "destination": "published_article",
+        "status": "review",
+        "url": "generated/markdown/es/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 4
+        "score": 5
       }
     ],
     "related_apps": [

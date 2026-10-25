@@ -14,7 +14,7 @@
     "slug": "separate-source-notes-from-conclusions",
     "category": "research",
     "language": "es",
-    "status": "review",
+    "status": "published",
     "topic_clusters": [
       "fuente e inferencia",
       "procedencia de las notas de investigación",
@@ -91,6 +91,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0104",
+        "title": "Etiquetas de álbum y artista coherentes sin perder créditos",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "es",
+        "status": "review",
+        "url": "generated/markdown/es/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
       }
     ],
     "related_apps": [],

@@ -14,7 +14,7 @@
     "slug": "separate-source-notes-from-conclusions",
     "category": "research",
     "language": "de",
-    "status": "review",
+    "status": "published",
     "topic_clusters": [
       "Quelle und Schlussfolgerung",
       "Herkunft von Forschungsnotizen",
@@ -50,6 +50,19 @@
         "url": "https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/",
         "destination": "published_article",
         "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0111",
+        "title": "Lange Textdokumente leichter navigieren",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "de",
+        "status": "review",
+        "url": "generated/markdown/de/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6
       },
@@ -108,6 +121,14 @@
         "category": "research",
         "cluster": "Quelle und Schlussfolgerung",
         "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Einheitliche Album- und Künstler-Tags: Künstlerangaben erhalten",
+        "category": "music",
+        "cluster": "einheitliche Album- und Künstler-Tags",
+        "topic_id": "TOPIC-0102",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
   },

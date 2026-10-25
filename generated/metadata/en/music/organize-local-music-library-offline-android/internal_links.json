@@ -60,6 +60,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0039",
+        "title": "Consistent Album and Artist Tags Without Losing Track Credits",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0007",
         "title": "How to Convert Local Media Files Privately",
         "slug": "convert-local-media-files-privately",
@@ -97,19 +112,6 @@
         "relationship": "troubleshooting",
         "shared_clusters": [],
         "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0001",
-        "title": "How to Read Large TXT Files Without Lag",
-        "slug": "read-large-txt-files-without-lag",
-        "category": "reading",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/read-large-txt-files-without-lag/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
       }
     ],
     "related_apps": [

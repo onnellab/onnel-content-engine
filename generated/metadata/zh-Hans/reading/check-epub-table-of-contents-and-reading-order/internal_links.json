@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0108",
+        "title": "怎样在长篇纯文本文档中找回所需段落",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "zh-Hans",
+        "status": "review",
+        "url": "generated/markdown/zh-Hans/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0047",
         "title": "在 Android 上整理音乐文件，准备离线播放",
         "slug": "organize-local-music-library-offline-android",
@@ -87,12 +102,12 @@
         "slug": "separate-source-notes-from-conclusions",
         "category": "research",
         "language": "zh-Hans",
-        "status": "review",
-        "url": "generated/markdown/zh-Hans/research/separate-source-notes-from-conclusions.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 2
+        "score": 3
       }
     ],
     "related_apps": [

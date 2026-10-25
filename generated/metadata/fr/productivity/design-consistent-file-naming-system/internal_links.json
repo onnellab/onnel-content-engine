@@ -71,6 +71,32 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0094",
+        "title": "Comment séparer les notes de source de vos conclusions",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
+        "topic_id": "TOPIC-0103",
+        "title": "Des tags d’album et d’artiste cohérents, des crédits préservés",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "fr",
+        "status": "review",
+        "url": "generated/markdown/fr/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0068",
         "title": "Tester un fichier multimédia converti avant de remplacer l’original",
         "slug": "test-converted-media-before-replacing-original",
@@ -79,19 +105,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0094",
-        "title": "Comment séparer les notes de source de vos conclusions",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
-        "language": "fr",
-        "status": "review",
-        "url": "generated/markdown/fr/research/separate-source-notes-from-conclusions.md",
-        "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5

@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0101",
+        "title": "Tags de álbum e artista consistentes: preserve os créditos",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "pt-BR",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 11
+      },
+      {
         "topic_id": "TOPIC-0058",
         "title": "Como conferir o sumário e a ordem dos capítulos de um EPUB",
         "slug": "check-epub-table-of-contents-and-reading-order",
@@ -87,12 +102,12 @@
         "slug": "separate-source-notes-from-conclusions",
         "category": "research",
         "language": "pt-BR",
-        "status": "review",
-        "url": "generated/markdown/pt-BR/research/separate-source-notes-from-conclusions.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 3
+        "score": 4
       }
     ],
     "related_apps": [

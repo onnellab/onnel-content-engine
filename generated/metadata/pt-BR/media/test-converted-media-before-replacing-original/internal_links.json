@@ -82,17 +82,30 @@
         "score": 5
       },
       {
-        "topic_id": "TOPIC-0092",
-        "title": "Como separar as anotações sobre fontes das suas conclusões",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
+        "topic_id": "TOPIC-0101",
+        "title": "Tags de álbum e artista consistentes: preserve os créditos",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
         "language": "pt-BR",
         "status": "review",
-        "url": "generated/markdown/pt-BR/research/separate-source-notes-from-conclusions.md",
+        "url": "generated/markdown/pt-BR/music/consistent-album-artist-names.md",
         "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 3
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0110",
+        "title": "Como facilitar a navegação em um documento de texto longo",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "pt-BR",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
       }
     ],
     "related_apps": [

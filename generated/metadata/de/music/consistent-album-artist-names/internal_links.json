@@ -71,6 +71,19 @@
         "score": 6
       },
       {
+        "topic_id": "TOPIC-0111",
+        "title": "Lange Textdokumente leichter navigieren",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "de",
+        "status": "review",
+        "url": "generated/markdown/de/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0067",
         "title": "Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen",
         "slug": "test-converted-media-before-replacing-original",
@@ -91,19 +104,6 @@
         "language": "de",
         "status": "published",
         "url": "https://onnellab.com/blog/de/design-consistent-file-naming-system/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0093",
-        "title": "Quellennotizen und eigene Schlussfolgerungen klar trennen",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
-        "language": "de",
-        "status": "published",
-        "url": "https://onnellab.com/blog/de/separate-source-notes-from-conclusions/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

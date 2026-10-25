@@ -33,14 +33,14 @@
         "slug": "separate-source-notes-from-conclusions",
         "category": "research",
         "language": "en",
-        "status": "review",
-        "url": "generated/markdown/en/research/separate-source-notes-from-conclusions.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "research"
         ],
-        "score": 9
+        "score": 10
       },
       {
         "topic_id": "TOPIC-0003",

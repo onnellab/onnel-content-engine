@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0100",
+        "title": "統一專輯與藝人標籤，保留曲目署名",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "zh-Hant",
+        "status": "review",
+        "url": "generated/markdown/zh-Hant/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0057",
         "title": "檢查 EPUB 的目錄連結與章節順序",
         "slug": "check-epub-table-of-contents-and-reading-order",
@@ -87,12 +102,12 @@
         "slug": "separate-source-notes-from-conclusions",
         "category": "research",
         "language": "zh-Hant",
-        "status": "review",
-        "url": "generated/markdown/zh-Hant/research/separate-source-notes-from-conclusions.md",
-        "destination": "draft_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 2
+        "score": 3
       }
     ],
     "related_apps": [

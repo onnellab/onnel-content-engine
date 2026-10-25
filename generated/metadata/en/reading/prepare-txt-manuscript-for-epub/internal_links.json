@@ -105,17 +105,19 @@
         "score": 10
       },
       {
-        "topic_id": "TOPIC-0018",
-        "title": "How to Choose a Media Output Format Before Conversion",
-        "slug": "choose-media-output-format-before-conversion",
-        "category": "media",
+        "topic_id": "TOPIC-0040",
+        "title": "How to Navigate a Long Plain-Text Document",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
         "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/choose-media-output-format-before-conversion/",
-        "destination": "published_article",
-        "relationship": "comparison",
-        "shared_clusters": [],
-        "score": 4
+        "status": "review",
+        "url": "generated/markdown/en/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 9
       }
     ],
     "related_apps": [

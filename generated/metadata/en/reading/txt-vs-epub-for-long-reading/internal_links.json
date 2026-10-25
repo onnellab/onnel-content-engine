@@ -75,6 +75,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0040",
+        "title": "How to Navigate a Long Plain-Text Document",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 13
+      },
+      {
         "topic_id": "TOPIC-0033",
         "title": "How to Prepare a TXT Manuscript for Reliable EPUB Conversion",
         "slug": "prepare-txt-manuscript-for-epub",
@@ -103,19 +118,6 @@
           "reading"
         ],
         "score": 11
-      },
-      {
-        "topic_id": "TOPIC-0016",
-        "title": "How to Keep a Durable Research Reading Log",
-        "slug": "keep-durable-research-reading-log",
-        "category": "research",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/keep-durable-research-reading-log/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
       }
     ],
     "related_apps": [

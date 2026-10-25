@@ -46,6 +46,22 @@
         "score": 17
       },
       {
+        "topic_id": "TOPIC-0039",
+        "title": "Consistent Album and Artist Tags Without Losing Track Credits",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music",
+          "tagweaver"
+        ],
+        "score": 15
+      },
+      {
         "topic_id": "TOPIC-0044",
         "title": "Organize a Local Music Library for Offline Listening on Android",
         "slug": "organize-local-music-library-offline-android",
@@ -96,19 +112,6 @@
         "url": "https://onnellab.com/blog/en/choose-media-output-format-before-conversion/",
         "destination": "published_article",
         "relationship": "comparison",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0038",
-        "title": "How to Test a Converted Media File Before Replacing the Original",
-        "slug": "test-converted-media-before-replacing-original",
-        "category": "media",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/test-converted-media-before-replacing-original/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 4
       }

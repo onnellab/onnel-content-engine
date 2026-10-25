@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0111",
+        "title": "Lange Textdokumente leichter navigieren",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "de",
+        "status": "review",
+        "url": "generated/markdown/de/reading/make-long-plain-text-easier-to-navigate.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 11
+      },
+      {
         "topic_id": "TOPIC-0050",
         "title": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
         "slug": "organize-local-music-library-offline-android",
@@ -56,6 +71,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0093",
+        "title": "Quellennotizen und eigene Schlussfolgerungen klar trennen",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0075",
         "title": "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -69,30 +97,17 @@
         "score": 5
       },
       {
-        "topic_id": "TOPIC-0093",
-        "title": "Quellennotizen und eigene Schlussfolgerungen klar trennen",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
+        "topic_id": "TOPIC-0102",
+        "title": "Einheitliche Album- und Künstler-Tags: Künstlerangaben erhalten",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
         "language": "de",
         "status": "review",
-        "url": "generated/markdown/de/research/separate-source-notes-from-conclusions.md",
+        "url": "generated/markdown/de/music/consistent-album-artist-names.md",
         "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0083",
-        "title": "Einheitliche Dateinamen: eine einfache Konvention entwickeln",
-        "slug": "design-consistent-file-naming-system",
-        "category": "productivity",
-        "language": "de",
-        "status": "published",
-        "url": "https://onnellab.com/blog/de/design-consistent-file-naming-system/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
       }
     ],
     "related_apps": [

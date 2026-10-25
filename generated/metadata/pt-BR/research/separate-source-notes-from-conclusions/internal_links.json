@@ -14,7 +14,7 @@
     "slug": "separate-source-notes-from-conclusions",
     "category": "research",
     "language": "pt-BR",
-    "status": "review",
+    "status": "published",
     "topic_clusters": [
       "fonte e inferência",
       "origem das anotações de pesquisa",
@@ -91,6 +91,19 @@
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 4
+      },
+      {
+        "topic_id": "TOPIC-0101",
+        "title": "Tags de álbum e artista consistentes: preserve os créditos",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "pt-BR",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/music/consistent-album-artist-names.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
       }
     ],
     "related_apps": [],
