@@ -1,0 +1,203 @@
+{
+  "manifest_sha256": "7a356479110705063ff35a71d2ee0a73ceac487317e52faebc1dc75b1afa4c91",
+  "asset_hashes": {
+    "tagweaver-04.png": "5f4896d41baedcda7fac31082f9256c7617c51c3b35c90876665f5976a2b26b6"
+  },
+  "kind": "screenshot_guide",
+  "runtime_recording_attestation": false,
+  "upload_authorized_by_cli": false,
+  "video_file": "tagweaver-extra-tags-20261026.mp4",
+  "video_sha256": "a65a33c421cb42606dcaca73a6d4784555c48cc466ba62108e7d7fd58cac3c21",
+  "seconds": 15,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "audio": false,
+  "slide_sha256": {
+    "slide-1.png": "eae1d0c89e5044ad5011b39752a0335a8297aa56d374be66df29543368e84b36",
+    "slide-2.png": "c8767b94836a47a6d1374b90ebb44804494829c6d2396ca874147b285190fa1c",
+    "slide-3.png": "432c55acfd36a9784c8f3c2c1468068406f8048da1a3f3ebe728f3f6b27ced64"
+  },
+  "text_bounds": [
+    {
+      "slide": 1,
+      "text": "TAGWEAVER \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        249.5,
+        83,
+        830.5,
+        105
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Review extra tags",
+      "bbox": [
+        296.0,
+        175,
+        784.0,
+        221
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Read each field name and value.",
+      "bbox": [
+        277.0,
+        241,
+        803.0,
+        265
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Still-screen guide \u00b7 Demo metadata",
+      "bbox": [
+        265.0,
+        1726,
+        815.0,
+        1756
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "TagWeaver for Android \u00b7 Link in description",
+      "bbox": [
+        227.5,
+        1788,
+        850.5,
+        1816
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "TAGWEAVER \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        249.5,
+        83,
+        830.5,
+        105
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Check the example values",
+      "bbox": [
+        186.5,
+        175,
+        893.5,
+        221
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "BPM 124 \u00b7 Demo comment",
+      "bbox": [
+        326.0,
+        242,
+        754.0,
+        265
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Still-screen guide \u00b7 Demo metadata",
+      "bbox": [
+        265.0,
+        1726,
+        815.0,
+        1756
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "TagWeaver for Android \u00b7 Link in description",
+      "bbox": [
+        227.5,
+        1788,
+        850.5,
+        1816
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "TAGWEAVER \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        249.5,
+        83,
+        830.5,
+        105
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "A still-screen reference",
+      "bbox": [
+        223.5,
+        175,
+        856.5,
+        212
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "No edits or saving are shown.",
+      "bbox": [
+        302.5,
+        241,
+        777.5,
+        272
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Still-screen guide \u00b7 Demo metadata",
+      "bbox": [
+        265.0,
+        1726,
+        815.0,
+        1756
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "TagWeaver for Android \u00b7 Link in description",
+      "bbox": [
+        227.5,
+        1788,
+        850.5,
+        1816
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    }
+  ]
+}

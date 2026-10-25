@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "tagweaver-extra-tags-20261026",
+  "app_id": "APP-0002",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/tagweaver",
+    "commit": "8e813af546731dbcf893b4ca1d7f0b4c47faeff6",
+    "capture_source_commit": "826031a5d36044ba38b96c1a69807257682c5281",
+    "capture_source_version": "2.5.4+98",
+    "capture_manifest_path": "assets/store_promo/raw/en/android/04.capture.json",
+    "capture_type": "real_android_emulator_app_ui",
+    "source_parity": "Exact raw hash and native capture receipt retained. Independent reuse review for product source 0592417612d222306d37e374136e51706444fd46 version 2.5.6+100 confirms unchanged selected-screen design, context, dependencies and claims. Current main adds release evidence, not new product lib changes.",
+    "public_version_recorded": "2.5.6",
+    "public_listing_source": "https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2",
+    "public_listing_checked_at": "2026-10-25",
+    "public_listing_observation": "Live Google Play About UI showed ONNELLAB, public installation, version 2.5.6 and October 23 update.",
+    "rights": "ONNELLAB-owned app UI and repository-authored demonstration metadata. Demo ISRC, publisher and copyright fields are fixture values, not evidence of music rights. No audio, artwork or user files used.",
+    "signed_release_capture_attested": false,
+    "runtime_action_verified_by_video": false,
+    "limitations": [
+      "Still Extra Tags destination only; no navigation, edits, deletion, save result or speed demonstration."
+    ]
+  },
+  "assets": [
+    {
+      "local_name": "tagweaver-04.png",
+      "source_path": "assets/store_promo/raw/en/android/04.png",
+      "sha256": "5f4896d41baedcda7fac31082f9256c7617c51c3b35c90876665f5976a2b26b6",
+      "dimensions": [
+        1080,
+        2400
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Review extra tags",
+      "caption": "Read each field name and value.",
+      "asset": "tagweaver-04.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Check the example values",
+      "caption": "BPM 124 · Demo comment",
+      "asset": "tagweaver-04.png",
+      "seconds": 5
+    },
+    {
+      "heading": "A still-screen reference",
+      "caption": "No edits or saving are shown.",
+      "asset": "tagweaver-04.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "How to Review Extra Tags in TagWeaver | Android Screenshot Guide",
+    "description": "In TagWeaver’s Extra Tags screen, review a field name and its value, such as BPM or Comment.\n\nStill-screen guide using a real Android emulator screenshot with repository-authored demonstration metadata. No navigation, taps, edits, deletion, saved result, or speed demonstration is shown. The example ISRC and copyright fields are demo values, not evidence of rights to a music recording.\n\nExplore TagWeaver for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.tagweaver2\n\n#TagWeaver #AudioTags #Shorts",
+    "format_disclosure": "Still-screen guide · Demo metadata",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "TagWeaver for Android · Link in description",
+    "target_publish_at": "2026-10-26T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned app UI",
+    "scope": "English screenshot-based app guide on ONNELLAB YouTube; no simulated interaction; existing recording gate unchanged",
+    "execution_scope": "Owner approved free existing dot-cloud Python/Pillow/ffmpeg/ffprobe for October 26 and 28 Shorts source checks, tests, render, frame QA and Library only; no installs, paid services, separate Work/Codex or user computer. User message Sentinel_2ca0f146562c8191a2858e59b878ebdf."
+  }
+}

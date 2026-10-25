@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "vaultxt-snapshot-dates-20261028",
+  "app_id": "APP-0003",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/onnellab-text",
+    "commit": "e5909c0f81eb6072a6aa419d4d8c52f0938b20d4",
+    "capture_source_commit": "f17646a0a9452a3dd16510e42b1498db49e80a41",
+    "capture_source_version": "2.0.2+68",
+    "capture_manifest_path": "vaultxt/assets/store_promo/raw/en/android/04.capture.json",
+    "capture_type": "real_android_emulator_app_ui",
+    "source_parity": "Capture to reviewed main: all 128 vaultxt/lib files, Android runtime, pubspec.lock and capture test unchanged. Pubspec changes build 68 to 69. Shared paragraph_selection_chrome changes context-menu actions and positioning, not the displayed SnapshotListSheet (blob d3cbb51fdb919427c1425593afbb3e5def31e0a9); no context toolbar is shown. Screen-specific source parity only.",
+    "public_version_recorded": "2.0.2",
+    "public_listing_source": "https://play.google.com/store/apps/details?id=com.onnellab.vaultxt",
+    "public_listing_checked_at": "2026-10-25",
+    "public_listing_observation": "Live Google Play About UI showed ONNELLAB, public installation, version 2.0.2 and October 17 update; snapshot functionality is described.",
+    "rights": "ONNELLAB-owned app UI and in-repository English Weekend Trip Plan sample. Capture harness seeds the actual document repository and two snapshots. No user document, third-party art or audio used.",
+    "signed_release_capture_attested": false,
+    "runtime_action_verified_by_video": false,
+    "limitations": [
+      "Still snapshot-list metadata only, not preview of an older document or restore success.",
+      "Capture uses synthetic input; native IME unverified. Original green capture border retained."
+    ]
+  },
+  "assets": [
+    {
+      "local_name": "vaultxt-04.png",
+      "source_path": "vaultxt/assets/store_promo/raw/en/android/04.png",
+      "sha256": "59c0136bb3affd8f0f62cca64f81d73498bed3b41924ebfee0afbcaa905699bf",
+      "dimensions": [
+        1080,
+        2400
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Check snapshot dates",
+      "caption": "Look for Created at.",
+      "asset": "vaultxt-04.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Compare the listed times",
+      "caption": "Dates belong to this demo document.",
+      "asset": "vaultxt-04.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Before choosing Restore",
+      "caption": "No restoration is shown.",
+      "asset": "vaultxt-04.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "How to Check Snapshot Dates in VaultXT | Android Screenshot Guide",
+    "description": "In VaultXT’s Snapshots panel, check the creation date and time shown for each entry before choosing Restore.\n\nStill-screen guide using a real Android emulator screenshot with an original demonstration document and seeded snapshots. No taps, snapshot creation, preview of older document contents, restoration, or speed demonstration is shown. The green border is part of the original capture.\n\nExplore VaultXT for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.vaultxt\n\n#VaultXT #TextEditor #Shorts",
+    "format_disclosure": "Still-screen guide · Demo document",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "VaultXT for Android · Link in description",
+    "target_publish_at": "2026-10-28T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned app UI",
+    "scope": "English screenshot-based app guide on ONNELLAB YouTube; no simulated interaction; existing recording gate unchanged",
+    "execution_scope": "Owner approved free existing dot-cloud Python/Pillow/ffmpeg/ffprobe for October 26 and 28 Shorts source checks, tests, render, frame QA and Library only; no installs, paid services, separate Work/Codex or user computer. User message Sentinel_2ca0f146562c8191a2858e59b878ebdf."
+  }
+}

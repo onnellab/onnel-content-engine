@@ -540,8 +540,29 @@ PAPIRA_CONTRACT = {'schema_version': 1,
                                       'Python/ffmpeg/ffprobe production and tests; no separate '
                                       'Work/Codex, paid service or user computer.'}}
 
+
+TAGWEAVER_CONTRACT = json.loads("{\"schema_version\":1,\"kind\":\"screenshot_guide\",\"guide_id\":\"tagweaver-extra-tags-20261026\",\"app_id\":\"APP-0002\",\"locale\":\"en\",\"channel_id\":\"UCXyRedrldRBl9Y35nyWoTLg\",\"source\":{\"repository\":\"onnellab/tagweaver\",\"commit\":\"8e813af546731dbcf893b4ca1d7f0b4c47faeff6\",\"capture_source_commit\":\"826031a5d36044ba38b96c1a69807257682c5281\",\"capture_source_version\":\"2.5.4+98\",\"capture_manifest_path\":\"assets/store_promo/raw/en/android/04.capture.json\",\"capture_type\":\"real_android_emulator_app_ui\",\"source_parity\":\"Exact raw hash and native capture receipt retained. Independent reuse review for product source 0592417612d222306d37e374136e51706444fd46 version 2.5.6+100 confirms unchanged selected-screen design, context, dependencies and claims. Current main adds release evidence, not new product lib changes.\",\"public_version_recorded\":\"2.5.6\",\"public_listing_source\":\"https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2\",\"public_listing_checked_at\":\"2026-10-25\",\"public_listing_observation\":\"Live Google Play About UI showed ONNELLAB, public installation, version 2.5.6 and October 23 update.\",\"rights\":\"ONNELLAB-owned app UI and repository-authored demonstration metadata. Demo ISRC, publisher and copyright fields are fixture values, not evidence of music rights. No audio, artwork or user files used.\",\"signed_release_capture_attested\":false,\"runtime_action_verified_by_video\":false,\"limitations\":[\"Still Extra Tags destination only; no navigation, edits, deletion, save result or speed demonstration.\"]},\"assets\":[{\"local_name\":\"tagweaver-04.png\",\"source_path\":\"assets/store_promo/raw/en/android/04.png\",\"sha256\":\"5f4896d41baedcda7fac31082f9256c7617c51c3b35c90876665f5976a2b26b6\",\"dimensions\":[1080,2400]}],\"slides\":[{\"heading\":\"Review extra tags\",\"caption\":\"Read each field name and value.\",\"asset\":\"tagweaver-04.png\",\"seconds\":5},{\"heading\":\"Check the example values\",\"caption\":\"BPM 124 · Demo comment\",\"asset\":\"tagweaver-04.png\",\"seconds\":5},{\"heading\":\"A still-screen reference\",\"caption\":\"No edits or saving are shown.\",\"asset\":\"tagweaver-04.png\",\"seconds\":5}],\"metadata\":{\"title\":\"How to Review Extra Tags in TagWeaver | Android Screenshot Guide\",\"description\":\"In TagWeaver’s Extra Tags screen, review a field name and its value, such as BPM or Comment.\\n\\nStill-screen guide using a real Android emulator screenshot with repository-authored demonstration metadata. No navigation, taps, edits, deletion, saved result, or speed demonstration is shown. The example ISRC and copyright fields are demo values, not evidence of rights to a music recording.\\n\\nExplore TagWeaver for Android:\\nhttps://play.google.com/store/apps/details?id=com.onnellab.tagweaver2\\n\\n#TagWeaver #AudioTags #Shorts\",\"format_disclosure\":\"Still-screen guide · Demo metadata\",\"audio\":\"none\",\"made_for_kids\":false,\"synthetic_media\":false,\"category\":\"Education\",\"cta\":\"TagWeaver for Android · Link in description\",\"target_publish_at\":\"2026-10-26T09:00:00+09:00\",\"timezone\":\"Asia/Seoul\"},\"authorization\":{\"format_approved_on\":\"2026-10-08\",\"rights_basis\":\"ONNELLAB-owned app UI\",\"scope\":\"English screenshot-based app guide on ONNELLAB YouTube; no simulated interaction; existing recording gate unchanged\",\"execution_scope\":\"Owner approved free existing dot-cloud Python/Pillow/ffmpeg/ffprobe for October 26 and 28 Shorts source checks, tests, render, frame QA and Library only; no installs, paid services, separate Work/Codex or user computer. User message Sentinel_2ca0f146562c8191a2858e59b878ebdf.\"}}")
+VAULTXT_CONTRACT = json.loads("{\"schema_version\":1,\"kind\":\"screenshot_guide\",\"guide_id\":\"vaultxt-snapshot-dates-20261028\",\"app_id\":\"APP-0003\",\"locale\":\"en\",\"channel_id\":\"UCXyRedrldRBl9Y35nyWoTLg\",\"source\":{\"repository\":\"onnellab/onnellab-text\",\"commit\":\"e5909c0f81eb6072a6aa419d4d8c52f0938b20d4\",\"capture_source_commit\":\"f17646a0a9452a3dd16510e42b1498db49e80a41\",\"capture_source_version\":\"2.0.2+68\",\"capture_manifest_path\":\"vaultxt/assets/store_promo/raw/en/android/04.capture.json\",\"capture_type\":\"real_android_emulator_app_ui\",\"source_parity\":\"Capture to reviewed main: all 128 vaultxt/lib files, Android runtime, pubspec.lock and capture test unchanged. Pubspec changes build 68 to 69. Shared paragraph_selection_chrome changes context-menu actions and positioning, not the displayed SnapshotListSheet (blob d3cbb51fdb919427c1425593afbb3e5def31e0a9); no context toolbar is shown. Screen-specific source parity only.\",\"public_version_recorded\":\"2.0.2\",\"public_listing_source\":\"https://play.google.com/store/apps/details?id=com.onnellab.vaultxt\",\"public_listing_checked_at\":\"2026-10-25\",\"public_listing_observation\":\"Live Google Play About UI showed ONNELLAB, public installation, version 2.0.2 and October 17 update; snapshot functionality is described.\",\"rights\":\"ONNELLAB-owned app UI and in-repository English Weekend Trip Plan sample. Capture harness seeds the actual document repository and two snapshots. No user document, third-party art or audio used.\",\"signed_release_capture_attested\":false,\"runtime_action_verified_by_video\":false,\"limitations\":[\"Still snapshot-list metadata only, not preview of an older document or restore success.\",\"Capture uses synthetic input; native IME unverified. Original green capture border retained.\"]},\"assets\":[{\"local_name\":\"vaultxt-04.png\",\"source_path\":\"vaultxt/assets/store_promo/raw/en/android/04.png\",\"sha256\":\"59c0136bb3affd8f0f62cca64f81d73498bed3b41924ebfee0afbcaa905699bf\",\"dimensions\":[1080,2400]}],\"slides\":[{\"heading\":\"Check snapshot dates\",\"caption\":\"Look for Created at.\",\"asset\":\"vaultxt-04.png\",\"seconds\":5},{\"heading\":\"Compare the listed times\",\"caption\":\"Dates belong to this demo document.\",\"asset\":\"vaultxt-04.png\",\"seconds\":5},{\"heading\":\"Before choosing Restore\",\"caption\":\"No restoration is shown.\",\"asset\":\"vaultxt-04.png\",\"seconds\":5}],\"metadata\":{\"title\":\"How to Check Snapshot Dates in VaultXT | Android Screenshot Guide\",\"description\":\"In VaultXT’s Snapshots panel, check the creation date and time shown for each entry before choosing Restore.\\n\\nStill-screen guide using a real Android emulator screenshot with an original demonstration document and seeded snapshots. No taps, snapshot creation, preview of older document contents, restoration, or speed demonstration is shown. The green border is part of the original capture.\\n\\nExplore VaultXT for Android:\\nhttps://play.google.com/store/apps/details?id=com.onnellab.vaultxt\\n\\n#VaultXT #TextEditor #Shorts\",\"format_disclosure\":\"Still-screen guide · Demo document\",\"audio\":\"none\",\"made_for_kids\":false,\"synthetic_media\":false,\"category\":\"Education\",\"cta\":\"VaultXT for Android · Link in description\",\"target_publish_at\":\"2026-10-28T09:00:00+09:00\",\"timezone\":\"Asia/Seoul\"},\"authorization\":{\"format_approved_on\":\"2026-10-08\",\"rights_basis\":\"ONNELLAB-owned app UI\",\"scope\":\"English screenshot-based app guide on ONNELLAB YouTube; no simulated interaction; existing recording gate unchanged\",\"execution_scope\":\"Owner approved free existing dot-cloud Python/Pillow/ffmpeg/ffprobe for October 26 and 28 Shorts source checks, tests, render, frame QA and Library only; no installs, paid services, separate Work/Codex or user computer. User message Sentinel_2ca0f146562c8191a2858e59b878ebdf.\"}}")
+
 def validate(manifest, asset_root):
     """Dispatch only independently reviewed per-app still-screen contracts."""
+    if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0002', 'APP-0003'):
+        contract = TAGWEAVER_CONTRACT if manifest['app_id'] == 'APP-0002' else VAULTXT_CONTRACT
+        if canonical(manifest) != canonical(contract):
+            raise GuideError('guide_scope_new_manifest_requires_review')
+        root = Path(asset_root).resolve()
+        hashes = {}
+        for asset in contract['assets']:
+            name = asset['local_name']
+            path = root / name
+            if path.is_symlink() or not path.is_file() or path.resolve().parent != root:
+                raise GuideError('unsafe_asset_path')
+            if sha256(path) != asset['sha256']:
+                raise GuideError('asset_integrity')
+            hashes[name] = asset['sha256']
+        return {'manifest_sha256': hashlib.sha256(canonical(manifest)).hexdigest(),
+                'asset_hashes': hashes, 'kind': 'screenshot_guide',
+                'runtime_recording_attestation': False, 'upload_authorized_by_cli': False}
     if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0007', 'APP-0005', 'APP-0006', 'APP-0008'):
         clipnest = manifest['app_id'] == 'APP-0005'
         contract = PAPIRA_CONTRACT if manifest['app_id'] == 'APP-0008' else MELIVRA_ALBUMS_CONTRACT if manifest.get('guide_id') == 'melivra-albums-20261021' else ALIGNA_CONTRACT if manifest['app_id'] == 'APP-0006' else CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
@@ -565,6 +586,9 @@ def validate(manifest, asset_root):
 
 def render(manifest, asset_root, output):
     evidence = validate(manifest, asset_root)
+    tagweaver = manifest['app_id'] == 'APP-0002'
+    vaultxt = manifest['app_id'] == 'APP-0003'
+    new_guide = tagweaver or vaultxt
     papira = manifest['app_id'] == 'APP-0008'
     aligna = manifest['app_id'] == 'APP-0006'
     melivra = manifest['app_id'] == 'APP-0007'
@@ -597,20 +621,20 @@ def render(manifest, asset_root, output):
             text_bounds.append({'slide': index+1, 'text': text, 'bbox': list(bounds)})
             draw.text(position, text, font=font, fill=color)
         draw.rounded_rectangle((64,64,1016,126), radius=25, fill='#eae4f5')
-        center('PAPIRA · SCREENSHOT GUIDE' if papira else 'ALIGNA · SCREENSHOT GUIDE' if aligna else 'CLIPNEST · SCREENSHOT GUIDE' if clipnest else 'MELIVRA · SCREENSHOT GUIDE' if melivra else 'QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
+        center('TAGWEAVER · SCREENSHOT GUIDE' if tagweaver else 'VAULTXT · SCREENSHOT GUIDE' if vaultxt else 'PAPIRA · SCREENSHOT GUIDE' if papira else 'ALIGNA · SCREENSHOT GUIDE' if aligna else 'CLIPNEST · SCREENSHOT GUIDE' if clipnest else 'MELIVRA · SCREENSHOT GUIDE' if melivra else 'QUIVRA · SCREENSHOT GUIDE', 77, bold(30))
         center(slide['heading'], 166, bold(48))
         center(slide['caption'], 235, regular(32), '#645c74')
         source = Image.open(Path(asset_root) / slide['asset']).convert('RGB')
-        if source.size != ((1080,2160) if aligna else (1206,2622) if clipnest else (1080,2400) if melivra or papira else (1080,1920)):
+        if source.size != ((1080,2160) if aligna else (1206,2622) if clipnest else (1080,2400) if melivra or papira or new_guide else (1080,1920)):
             raise GuideError('source_geometry_changed')
         # Entire screenshot, uniformly scaled. No crop, synthetic taps or UI edits.
-        size = (675,1350) if aligna else (603,1311) if clipnest else (621,1380) if melivra or papira else (756,1344)
-        x, y = (202,320) if aligna else (238,330) if clipnest else (229,300) if melivra or papira else (162,320)
+        size = (675,1350) if aligna else (603,1311) if clipnest else (621,1380) if melivra or papira or new_guide else (756,1344)
+        x, y = (202,320) if aligna else (238,330) if clipnest else (229,300) if melivra or papira or new_guide else (162,320)
         source = source.resize(size, Image.Resampling.LANCZOS)
         canvas.paste(source,(x,y))
         draw.rounded_rectangle((x-3,y-3,x+size[0]+3,y+size[1]+3), radius=3, outline='#d8cdeb', width=3)
         center(manifest['metadata']['format_disclosure'], 1721, regular(31), '#645c74')
-        center(manifest['metadata']['cta'] if clipnest or aligna or papira else 'Melivra for Android · Link in description' if melivra else 'App Store & Google Play links in the description', 1783, regular(29))
+        center(manifest['metadata']['cta'] if clipnest or aligna or papira or new_guide else 'Melivra for Android · Link in description' if melivra else 'App Store & Google Play links in the description', 1783, regular(29))
         center('ONNELLAB', 1841, bold(26), '#8c839e')
         frame = output / f'slide-{index+1}.png'
         canvas.save(frame)
@@ -657,6 +681,7 @@ def main():
 
 if __name__=='__main__':
     raise SystemExit(main())
+
 
 
 

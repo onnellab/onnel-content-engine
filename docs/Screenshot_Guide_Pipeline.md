@@ -261,3 +261,45 @@ free cloud Python/Pillow/ffmpeg/ffprobe, two encoder threads and a 180-second
 encoder timeout. CLI validation does not authorize upload. Publication requires
 independent review, current duplicate reconciliation, durable intent, and a
 separate actual Studio scheduling receipt; a render is not a scheduled video.
+
+
+## Reviewed TagWeaver Extra Tags and VaultXT snapshot dates — 2026-10-25
+
+The owner approved existing free dot-cloud Python/Pillow/ffmpeg/ffprobe for the
+October 26 and 28 09:00 Asia/Seoul slots only. No installs, paid services,
+separate Work/Codex task, user computer or legacy publisher is involved.
+`tagweaver-extra-tags-20261026.json` and `vaultxt-snapshot-dates-20261028.json`
+are separate exact contracts with exhaustive leaf-mutation tests. Existing
+contracts, published media and managed-recording gates remain unchanged.
+
+TagWeaver uses actual Android Extra Tags raw 04 from capture source
+826031a5d36044ba38b96c1a69807257682c5281 (2.5.4+98), retained at reviewed
+8e813af546731dbcf893b4ca1d7f0b4c47faeff6. The independently reviewed unchanged-screen
+reuse record targets product source 0592417612d222306d37e374136e51706444fd46,
+2.5.6+100. Live Play About showed public 2.5.6 on October 25. Explain the
+field names and sample values only; demo ISRC/copyright values are not evidence
+of rights to a recording. No navigation, edits, deletion or saved result is shown.
+
+VaultXT uses actual Android raw 04 from capture source
+f17646a0a9452a3dd16510e42b1498db49e80a41 (2.0.2+68), retained at reviewed
+e5909c0f81eb6072a6aa419d4d8c52f0938b20d4. All 128 VaultXT lib files, Android
+runtime, dependency lock and capture test are unchanged. Shared text-engine
+context-menu code changed, but the selected SnapshotListSheet and its displayed
+state did not; no context toolbar is shown. This is independently reviewed
+screen-specific parity, not signed-release-binary equivalence. Live Play About
+showed public 2.0.2. The original repository sample and two seeded snapshots
+contain no user data. Explain creation-date metadata only, not a preview of
+older content or completed restoration. Preserve the original green border.
+
+Both original 1080x2400 images are uniformly fitted in full at 621x1380, with
+persistent still-screen/demo disclosure, no audio, synthetic taps or crop.
+Output remains 15 seconds, 450 frames, H.264/yuv420p, 1080x1920 at 30 fps.
+Two encoder threads and a 180-second timeout remain enforced. Actual decoded
+frames and source-region equality require checks in addition to independent
+visual/claims review. A preparation or render is never a publication receipt.
+Save final videos to Library, reconcile all target-channel content, durably
+record manifest/video hashes before a single browser upload, and separately
+read back channel, video ID and Seoul schedule. Uncertain outcomes must be
+reconciled before retry. No new login/security/external-link verification is
+included in this exception.
+

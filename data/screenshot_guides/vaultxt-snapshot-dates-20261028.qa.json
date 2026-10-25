@@ -1,0 +1,40 @@
+{
+  "app": "vaultxt",
+  "frames_checked": 450,
+  "full_source_region_pixel_equal_to_uncropped_uniform_resize": true,
+  "decoded_png_comparison": "Every frame compared to corresponding designed slide; H264 tolerance MAE<1.5/channel and max error<100/255, no automatic score substitutes visual review.",
+  "max_mae": 1.0971621013374486,
+  "max_pixel_difference": 69,
+  "unique_decoded_hashes_by_static_segment": [
+    24,
+    57,
+    24
+  ],
+  "audio_streams": 0,
+  "seconds": 15,
+  "size": [
+    1080,
+    1920
+  ],
+  "frame_rate": "30/1",
+  "video_sha256": "c8236356d79cc76b9ccf2e94bf578da7f616b8e02d0a85ef1b7094e73b80f971",
+  "owned_decoder_pid": 27,
+  "owned_decoder_exited": true,
+  "independent_review": {
+    "reviewer": "shorts_review",
+    "result": "PASS",
+    "scope": "source/contracts/copy and all six designed PNG visuals; not upload receipt",
+    "observed_at": "2026-10-25T10:46:55Z"
+  },
+  "tests": {
+    "passed": 78,
+    "skipped": 5,
+    "baseline_passed": 69,
+    "baseline_skipped": 5
+  },
+  "library": {
+    "library_file_id": "libfile_579f3b32b68881918f51bad8baac5a20",
+    "version": 0
+  },
+  "status": "rendered_reviewed_not_uploaded"
+}

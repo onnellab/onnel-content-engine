@@ -1,0 +1,203 @@
+{
+  "manifest_sha256": "7296ad5944cdf323c50e0e32ba1d7d15d9265815fae74542017de53e2574d3ef",
+  "asset_hashes": {
+    "vaultxt-04.png": "59c0136bb3affd8f0f62cca64f81d73498bed3b41924ebfee0afbcaa905699bf"
+  },
+  "kind": "screenshot_guide",
+  "runtime_recording_attestation": false,
+  "upload_authorized_by_cli": false,
+  "video_file": "vaultxt-snapshot-dates-20261028.mp4",
+  "video_sha256": "c8236356d79cc76b9ccf2e94bf578da7f616b8e02d0a85ef1b7094e73b80f971",
+  "seconds": 15,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "audio": false,
+  "slide_sha256": {
+    "slide-1.png": "8a42b23a1a5903b2baa9075a4bd0a9eca67b56157822fb4847fe14f98174310c",
+    "slide-2.png": "51d94b858cc1b0594a8758708604252e7aaee1e0596d78eacffe354412f3d93f",
+    "slide-3.png": "f490b69a30fe3e67d1f7c95cf132097eaf3ddac7e515d1930392175020a8195f"
+  },
+  "text_bounds": [
+    {
+      "slide": 1,
+      "text": "VAULTXT \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        280.0,
+        83,
+        800.0,
+        105
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Check snapshot dates",
+      "bbox": [
+        242.5,
+        175,
+        837.5,
+        221
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Look for Created at.",
+      "bbox": [
+        381.0,
+        241,
+        699.0,
+        265
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Still-screen guide \u00b7 Demo document",
+      "bbox": [
+        262.0,
+        1726,
+        818.0,
+        1756
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "VaultXT for Android \u00b7 Link in description",
+      "bbox": [
+        253.0,
+        1788,
+        827.0,
+        1816
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "VAULTXT \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        280.0,
+        83,
+        800.0,
+        105
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Compare the listed times",
+      "bbox": [
+        198.5,
+        175,
+        881.5,
+        221
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Dates belong to this demo document.",
+      "bbox": [
+        237.0,
+        241,
+        843.0,
+        272
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Still-screen guide \u00b7 Demo document",
+      "bbox": [
+        262.0,
+        1726,
+        818.0,
+        1756
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "VaultXT for Android \u00b7 Link in description",
+      "bbox": [
+        253.0,
+        1788,
+        827.0,
+        1816
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "VAULTXT \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        280.0,
+        83,
+        800.0,
+        105
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Before choosing Restore",
+      "bbox": [
+        207.5,
+        175,
+        872.5,
+        221
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "No restoration is shown.",
+      "bbox": [
+        346.0,
+        241,
+        734.0,
+        265
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Still-screen guide \u00b7 Demo document",
+      "bbox": [
+        262.0,
+        1726,
+        818.0,
+        1756
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "VaultXT for Android \u00b7 Link in description",
+      "bbox": [
+        253.0,
+        1788,
+        827.0,
+        1816
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    }
+  ]
+}
