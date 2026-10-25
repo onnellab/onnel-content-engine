@@ -839,6 +839,55 @@
       "browser_ui_timestamp": "방금",
       "observation_source": "Dot cloud browser verified authenticated ONNEL LAB, current ledgers and recent activity before posting. Public audience and complete body verified in composer. Success alert and exact permalink confirm author, complete body and canonical article-card destination. Article shortened to lnkd.in/gKJQ6waB. Server publication time unavailable; observed_at is verification time.",
       "processed_at": "2026-10-22T00:20:52+00:00"
+    },
+    {
+      "topic_id": "TOPIC-0037",
+      "language": "en",
+      "manual_key": "TOPIC-0037::x::en::x",
+      "platform": "x",
+      "template_id": "x",
+      "posted_url": "https://x.com/onnellab/status/2114162912138756366",
+      "post_id": "2114162912138756366",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-25T01:11:56.557Z",
+      "observed_at_precision": "millisecond",
+      "account": "@onnellab",
+      "draft_sha256": "892922becc4784182d56120648c81abb1e6db8a6435870666ffaed8175e9e5d5",
+      "posted_body_sha256": "7c97675e6d002e0e27d7fb026e791110648d336efbcc14e0611b85a85a6282ce",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "submitted_body": "How do you separate what a source says from what you conclude?\n\nRead the full article:\nhttps://onnellab.com/blog/en/separate-source-notes-from-conclusions/",
+      "submitted_source_characters": 155,
+      "source_draft_path": "generated/social/x/en/research/separate-source-notes-from-conclusions.txt",
+      "canonical_url": "https://onnellab.com/blog/en/separate-source-notes-from-conclusions/",
+      "copy_adjustment": "Routine question punctuation correction only: replaced the opening sentence's final period with a question mark; remaining draft unchanged.",
+      "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new",
+      "browser_ui_timestamp": "10:11 AM · Oct 25, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "Cloud browser verified signed-in @onnellab, current main receipts and recent profile history before publication. Canonical article was live and product-neutral. Exact wording checked in composer; X normalized blank-line presentation. Success toast and profile count 21 to 22 observed. Exact permalink confirms author, complete question, CTA and article card. Server UTC publication time unavailable; observed_at is verification time.",
+      "observations": [
+        {
+          "event": "publish_success_notification",
+          "observed_at": "2026-10-25T01:11:33.044Z",
+          "precision": "millisecond"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-25T01:11:56.557Z",
+          "precision": "millisecond"
+        },
+        {
+          "event": "posted_article_destination_verified",
+          "observed_at": "2026-10-25T01:12:37.946Z",
+          "precision": "millisecond"
+        }
+      ],
+      "observed_short_url": "https://t.co/Urgk6JcITN",
+      "canonical_destination_verified_at": "2026-10-25T01:12:37.946Z"
     }
   ]
 }
