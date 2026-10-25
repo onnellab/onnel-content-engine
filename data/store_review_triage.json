@@ -1,13 +1,29 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-25T21:24:01+00:00",
+  "generated_at": "2026-10-25T21:26:17+00:00",
   "items": [
+    {
+      "review_id": "00000194-562c-2203-6c68-87bc00000000",
+      "category": "general_feedback",
+      "risk_flags": [],
+      "similarity_key": "general_feedback",
+      "similar_reviews": 5,
+      "facts": [],
+      "requires_human_approval": true,
+      "actions": {
+        "reply": "recommended",
+        "github_issue": "not_needed",
+        "store_copy": "not_needed",
+        "code_change": "not_needed"
+      },
+      "issue_draft": ""
+    },
     {
       "review_id": "10b4e93e-b9cd-4ef4-ad91-2726f5256651",
       "category": "general_feedback",
       "risk_flags": [],
       "similarity_key": "general_feedback",
-      "similar_reviews": 4,
+      "similar_reviews": 5,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",
@@ -235,7 +251,7 @@
       "category": "general_feedback",
       "risk_flags": [],
       "similarity_key": "general_feedback",
-      "similar_reviews": 4,
+      "similar_reviews": 5,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",
@@ -383,7 +399,7 @@
       "category": "general_feedback",
       "risk_flags": [],
       "similarity_key": "general_feedback",
-      "similar_reviews": 4,
+      "similar_reviews": 5,
       "facts": [
         {
           "text": "TagWeaver is a focused editor for MP3 metadata.",
@@ -420,7 +436,7 @@
       "category": "general_feedback",
       "risk_flags": [],
       "similarity_key": "general_feedback",
-      "similar_reviews": 4,
+      "similar_reviews": 5,
       "facts": [
         {
           "text": "VaultXT is a text editor and viewer for plain-text files.",

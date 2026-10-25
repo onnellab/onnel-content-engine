@@ -4,15 +4,15 @@
       "platform": "android",
       "url": "https://developer.android.com/about/versions",
       "status": "changed",
-      "content_hash": "a36a13dd360491fc9f03d529f429125cffb03fd5c418f013ea2c97b4b9e9037f",
-      "checked_at": "2026-10-24T21:25:32+00:00"
+      "content_hash": "12993d31aa01faf35aeff90036c483f16dbde873f42fccaecad88443d04878e8",
+      "checked_at": "2026-10-25T21:26:13+00:00"
     },
     {
       "platform": "ios",
       "url": "https://developer.apple.com/documentation/ios-ipados-release-notes",
       "status": "unchanged",
       "content_hash": "bc2638e9426559f07e1fb88d40592898a8cfbbb048e8c5cfac0b0fd5ef4cbb40",
-      "checked_at": "2026-10-24T21:25:32+00:00"
+      "checked_at": "2026-10-25T21:26:13+00:00"
     }
   ]
 }
