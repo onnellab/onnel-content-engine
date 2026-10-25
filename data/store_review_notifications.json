@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "policy_changed_at": "2026-10-14T06:14:53+00:00",
-  "updated_at": "2026-10-25T21:27:08+00:00",
+  "updated_at": "2026-10-25T23:33:41.109096+00:00",
   "notifications": [
     {
       "review_id": "10b4e93e-b9cd-4ef4-ad91-2726f5256651",
@@ -38,10 +38,12 @@
       "reviewer_language": "",
       "territory": "",
       "notification_id": "store-review-c142dd438e9eb752ff0541e85b4eb06864e8e14b9be0915156ec093aba763730",
-      "status": "pending",
+      "status": "notified",
       "detected_at": "2026-10-25T21:27:08+00:00",
-      "delivery_reference": "",
-      "owner_approval_required": true
+      "delivery_reference": "Sentinel_b9c842570284819183063782418097bf",
+      "owner_approval_required": true,
+      "notified_at": "2026-10-25T23:33:41.109096+00:00",
+      "delivery_channel": "chatgpt"
     }
   ]
 }
