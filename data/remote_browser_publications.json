@@ -915,7 +915,7 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "방금",
       "browser_ui_timezone": "not_recorded",
       "observation_source": "Dot cloud browser verified ONNEL LAB identity, fresh main ledgers and recent activity. Public audience and complete wording verified in composer; platform normalized paragraph spacing. Success alert and exact permalink confirm author, full body and canonical article card. Canonical was live before posting. LinkedIn's external-link notice displayed the exact canonical destination for lnkd.in/gtnuuHYh; no warning was bypassed. Server publication time unavailable; observed_at is verification time.",
@@ -936,7 +936,8 @@
           "observed_at": "2026-10-25T03:26:04.023Z",
           "precision": "millisecond"
         }
-      ]
+      ],
+      "processed_at": "2026-10-25T03:27:53+00:00"
     }
   ]
 }
