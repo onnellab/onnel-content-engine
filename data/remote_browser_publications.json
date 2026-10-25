@@ -889,6 +889,54 @@
       "observed_short_url": "https://t.co/Urgk6JcITN",
       "canonical_destination_verified_at": "2026-10-25T01:12:37.946Z",
       "processed_at": "2026-10-25T01:23:14+00:00"
+    },
+    {
+      "topic_id": "TOPIC-0037",
+      "language": "en",
+      "manual_key": "TOPIC-0037::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "template_id": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7519962277396267008/",
+      "post_id": "urn:li:activity:7519962277396267008",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-25T03:25:42.678Z",
+      "observed_at_precision": "millisecond",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_sha256": "e7a5c9735baaea08fe5f3f1b4d95c108ace8f0db7a36ef75598b6c473f57cf53",
+      "posted_body_sha256": "1c747f90430a23071d01df68605f01505da2adf368af7af9d1d30f4d42212681",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "submitted_body": "Keep source quotations and paraphrases separate from your own interpretation, with a precise locator for each source note.\n\nGive every quotation or paraphrase a source and a precise locator. Write your interpretation separately, preserve the source’s limits, and record what needs checking before you strengthen a conclusion.\n\nBefore changing tools:\n- Capture the source and locator. Record a title, author or organization when available, and a link or file identifier. Add the page, section, paragraph, or timestamp needed to find the passage. For changing material, record the version or access date. A title alone may not identify the passage you used.\n\nRead the full article:\nhttps://onnellab.com/blog/en/separate-source-notes-from-conclusions/",
+      "submitted_source_characters": 748,
+      "source_draft_path": "generated/social/linkedin/en/research/separate-source-notes-from-conclusions.txt",
+      "canonical_url": "https://onnellab.com/blog/en/separate-source-notes-from-conclusions/",
+      "copy_adjustment": "Routine first-sentence direct answer preserving the approved article and remaining draft.",
+      "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new",
+      "browser_ui_timestamp": "방금",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "Dot cloud browser verified ONNEL LAB identity, fresh main ledgers and recent activity. Public audience and complete wording verified in composer; platform normalized paragraph spacing. Success alert and exact permalink confirm author, full body and canonical article card. Canonical was live before posting. LinkedIn's external-link notice displayed the exact canonical destination for lnkd.in/gtnuuHYh; no warning was bypassed. Server publication time unavailable; observed_at is verification time.",
+      "observed_short_url": "https://lnkd.in/gtnuuHYh",
+      "observations": [
+        {
+          "event": "publish_success_notification",
+          "observed_at": "2026-10-25T03:25:28.439Z",
+          "precision": "millisecond"
+        },
+        {
+          "event": "post_detail_verified",
+          "observed_at": "2026-10-25T03:25:42.678Z",
+          "precision": "millisecond"
+        },
+        {
+          "event": "shortlink_destination_displayed",
+          "observed_at": "2026-10-25T03:26:04.023Z",
+          "precision": "millisecond"
+        }
+      ]
     }
   ]
 }
