@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "guide_id": "tagweaver-extra-tags-20261026",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "status": "scheduled_verified",
+  "video_id": "mWiL_GJm-bY",
+  "video_url": "https://youtube.com/shorts/mWiL_GJm-bY",
+  "video_sha256": "a65a33c421cb42606dcaca73a6d4784555c48cc466ba62108e7d7fd58cac3c21",
+  "manifest_sha256": "7a356479110705063ff35a71d2ee0a73ceac487317e52faebc1dc75b1afa4c91",
+  "library_file_id": "libfile_d1f05bb8bd908191905abe86a958e42b",
+  "target_publish_at": "2026-10-26T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "scheduled_observed_at": "2026-10-25T10:53:09Z",
+  "server_scheduled_creation_timestamp": null,
+  "publication_verified": false,
+  "metadata": {
+    "title": "How to Review Extra Tags in TagWeaver | Android Screenshot Guide",
+    "description": "In TagWeaver’s Extra Tags screen, review a field name and its value, such as BPM or Comment.\n\nStill-screen guide using a real Android emulator screenshot with repository-authored demonstration metadata. No navigation, taps, edits, deletion, saved result, or speed demonstration is shown. The example ISRC and copyright fields are demo values, not evidence of rights to a music recording.\n\nExplore TagWeaver for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.tagweaver2\n\n#TagWeaver #AudioTags #Shorts",
+    "format_disclosure": "Still-screen guide · Demo metadata",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "TagWeaver for Android · Link in description",
+    "target_publish_at": "2026-10-26T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "actual_studio": {
+    "identity_verified": true,
+    "metadata_reloaded_matches": true,
+    "sd_processing": "complete",
+    "hd_processing": "complete",
+    "copyright_check": "no_issues_observed_not_future_guarantee",
+    "visibility": "scheduled",
+    "schedule_confirmation": "2026년 10월 26일 9:00 에 동영상이 공개 상태로 설정됩니다.",
+    "external_store_link": "text_only; one-time verification not initiated",
+    "thumbnail": {
+      "source": "reviewed slide-1.png",
+      "sha256": "eae1d0c89e5044ad5011b39752a0335a8297aa56d374be66df29543368e84b36",
+      "ui_upload_and_save": true,
+      "reloaded_uploaded_thumbnail_setting": true,
+      "actual_thumbnail_pixels": "not_verified; Studio image preview remained placeholder",
+      "note": "Video player first-frame visual matches reviewed media. Do not confuse this with thumbnail pixel verification."
+    }
+  },
+  "production_review": {
+    "tests_passed": 78,
+    "tests_skipped": 5,
+    "decoded_frames_checked": 450,
+    "independent_source_and_png_review": "PASS",
+    "owned_heavy_processes_remaining": 0
+  }
+}

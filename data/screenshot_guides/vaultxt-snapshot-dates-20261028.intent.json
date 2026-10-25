@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "vaultxt-snapshot-dates-20261028",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "uploaded_private_processing",
+  "status": "scheduled_verified",
   "video_sha256": "c8236356d79cc76b9ccf2e94bf578da7f616b8e02d0a85ef1b7094e73b80f971",
   "manifest_sha256": "7296ad5944cdf323c50e0e32ba1d7d15d9265815fae74542017de53e2574d3ef",
   "library_file_id": "libfile_579f3b32b68881918f51bad8baac5a20",
@@ -16,5 +16,12 @@
   "publication_verified": false,
   "production_commit": "f302ceae215d4f5f3100d7cd806a88cc1bc58c7e",
   "upload_attempt_started_at": "2026-10-25T10:54:08Z",
-  "upload_observed_at": "2026-10-25T10:54:25Z"
+  "upload_observed_at": "2026-10-25T10:54:25Z",
+  "scheduled_observed_at": "2026-10-25T10:55:54Z",
+  "receipt_path": "data/screenshot_guides/vaultxt-snapshot-dates-20261028.receipt.json",
+  "schedule_readback": {
+    "date": "2026. 10. 28.",
+    "time": "오전 9:00",
+    "timezone": "서울(GMT+09:00)"
+  }
 }

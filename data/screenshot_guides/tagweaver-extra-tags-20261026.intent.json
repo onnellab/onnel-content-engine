@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "tagweaver-extra-tags-20261026",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "uploaded_private_processing",
+  "status": "scheduled_verified",
   "video_sha256": "a65a33c421cb42606dcaca73a6d4784555c48cc466ba62108e7d7fd58cac3c21",
   "manifest_sha256": "7a356479110705063ff35a71d2ee0a73ceac487317e52faebc1dc75b1afa4c91",
   "library_file_id": "libfile_d1f05bb8bd908191905abe86a958e42b",
@@ -16,5 +16,12 @@
   "publication_verified": false,
   "production_commit": "f302ceae215d4f5f3100d7cd806a88cc1bc58c7e",
   "upload_attempt_started_at": "2026-10-25T10:51:08Z",
-  "upload_observed_at": "2026-10-25T10:51:21Z"
+  "upload_observed_at": "2026-10-25T10:51:21Z",
+  "scheduled_observed_at": "2026-10-25T10:53:09Z",
+  "receipt_path": "data/screenshot_guides/tagweaver-extra-tags-20261026.receipt.json",
+  "schedule_readback": {
+    "date": "2026. 10. 26.",
+    "time": "오전 9:00",
+    "timezone": "서울(GMT+09:00)"
+  }
 }

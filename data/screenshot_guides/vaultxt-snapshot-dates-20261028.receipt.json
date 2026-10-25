@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "guide_id": "vaultxt-snapshot-dates-20261028",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "status": "scheduled_verified",
+  "video_id": "hMKllzcEcYY",
+  "video_url": "https://youtube.com/shorts/hMKllzcEcYY",
+  "video_sha256": "c8236356d79cc76b9ccf2e94bf578da7f616b8e02d0a85ef1b7094e73b80f971",
+  "manifest_sha256": "7296ad5944cdf323c50e0e32ba1d7d15d9265815fae74542017de53e2574d3ef",
+  "library_file_id": "libfile_579f3b32b68881918f51bad8baac5a20",
+  "target_publish_at": "2026-10-28T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "scheduled_observed_at": "2026-10-25T10:55:54Z",
+  "server_scheduled_creation_timestamp": null,
+  "publication_verified": false,
+  "metadata": {
+    "title": "How to Check Snapshot Dates in VaultXT | Android Screenshot Guide",
+    "description": "In VaultXT’s Snapshots panel, check the creation date and time shown for each entry before choosing Restore.\n\nStill-screen guide using a real Android emulator screenshot with an original demonstration document and seeded snapshots. No taps, snapshot creation, preview of older document contents, restoration, or speed demonstration is shown. The green border is part of the original capture.\n\nExplore VaultXT for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.vaultxt\n\n#VaultXT #TextEditor #Shorts",
+    "format_disclosure": "Still-screen guide · Demo document",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "VaultXT for Android · Link in description",
+    "target_publish_at": "2026-10-28T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "actual_studio": {
+    "identity_verified": true,
+    "metadata_reloaded_matches": true,
+    "sd_processing": "complete",
+    "hd_processing": "complete",
+    "copyright_check": "no_issues_observed_not_future_guarantee",
+    "visibility": "scheduled",
+    "schedule_confirmation": "2026년 10월 28일 9:00 에 동영상이 공개 상태로 설정됩니다.",
+    "external_store_link": "text_only; one-time verification not initiated",
+    "thumbnail": {
+      "source": "reviewed slide-1.png",
+      "sha256": "8a42b23a1a5903b2baa9075a4bd0a9eca67b56157822fb4847fe14f98174310c",
+      "ui_upload_and_save": true,
+      "reloaded_uploaded_thumbnail_setting": true,
+      "actual_thumbnail_pixels": "not_verified; Studio image preview remained placeholder",
+      "note": "Video player first-frame visual matches reviewed media. Do not confuse this with thumbnail pixel verification."
+    }
+  },
+  "production_review": {
+    "tests_passed": 78,
+    "tests_skipped": 5,
+    "decoded_frames_checked": 450,
+    "independent_source_and_png_review": "PASS",
+    "owned_heavy_processes_remaining": 0
+  }
+}
