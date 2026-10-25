@@ -865,7 +865,7 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts and routine fact-preserving wording improvements.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "10:11 AM · Oct 25, 2026",
       "browser_ui_timezone": "not_recorded",
       "observation_source": "Cloud browser verified signed-in @onnellab, current main receipts and recent profile history before publication. Canonical article was live and product-neutral. Exact wording checked in composer; X normalized blank-line presentation. Success toast and profile count 21 to 22 observed. Exact permalink confirms author, complete question, CTA and article card. Server UTC publication time unavailable; observed_at is verification time.",
@@ -887,7 +887,8 @@
         }
       ],
       "observed_short_url": "https://t.co/Urgk6JcITN",
-      "canonical_destination_verified_at": "2026-10-25T01:12:37.946Z"
+      "canonical_destination_verified_at": "2026-10-25T01:12:37.946Z",
+      "processed_at": "2026-10-25T01:23:14+00:00"
     }
   ]
 }
