@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "policy_changed_at": "2026-10-14T06:14:53+00:00",
-  "updated_at": "2026-10-22T22:08:39.899Z",
+  "updated_at": "2026-10-25T21:27:08+00:00",
   "notifications": [
     {
       "review_id": "10b4e93e-b9cd-4ef4-ad91-2726f5256651",
@@ -23,6 +23,25 @@
       "owner_approval_required": true,
       "notified_at": "2026-10-22T22:07:23.122238+00:00",
       "delivery_channel": "chatgpt"
+    },
+    {
+      "review_id": "00000194-562c-2203-6c68-87bc00000000",
+      "app_id": "APP-0006",
+      "app_slug": "aligna",
+      "app_name": "Aligna",
+      "platform": "ios",
+      "rating": "1",
+      "title": "No Option to Change Alpha Numeric Text in A File Name",
+      "body": "Ridiculous!",
+      "created_at": "2026-10-23T19:40:06-07:00",
+      "updated_at": "2026-10-23T19:40:06-07:00",
+      "reviewer_language": "",
+      "territory": "",
+      "notification_id": "store-review-c142dd438e9eb752ff0541e85b4eb06864e8e14b9be0915156ec093aba763730",
+      "status": "pending",
+      "detected_at": "2026-10-25T21:27:08+00:00",
+      "delivery_reference": "",
+      "owner_approval_required": true
     }
   ]
 }
