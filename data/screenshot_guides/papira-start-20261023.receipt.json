@@ -3,7 +3,7 @@
   "guide_id": "papira-start-20261023",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
   "video_id": "X-G8oy1boSc",
-  "status": "scheduled_verified",
+  "status": "published",
   "video_sha256": "50980b84365aee047f5595ff092455e77d266b1904e6f17c93d8f656c69a5ecf",
   "manifest_sha256": "940390b163c08168c1ccb4c7dfff0d2aeed04ace5523b2936ed85eedaaa4b487",
   "library_file_id": "libfile_f28277f7dee081919d90436fcb5b71e8",
@@ -15,7 +15,7 @@
   "scheduled_for_utc": "2026-10-23T00:00:00Z",
   "observed_at": "2026-10-20T09:41:17Z",
   "server_publication_timestamp": null,
-  "publication_verified": false,
+  "publication_verified": true,
   "evidence": {
     "surface": "dot cloud browser, ONNELLAB Studio",
     "account": "onnellab.app@gmail.com",
@@ -105,5 +105,40 @@
     "upload_attempts": 1,
     "publication_verified": false,
     "notes": "Historical observation timeout no longer prevents Studio inventory/schedule readback. No new upload, schedule save, login, permission, or external-link verification."
+  },
+  "published_observed_at": "2026-10-25T09:40:55Z",
+  "publication_observation": {
+    "observed_at": "2026-10-25T09:40:55Z",
+    "surface": "dot cloud browser ONNELLAB YouTube Studio",
+    "source_url": "https://studio.youtube.com/video/X-G8oy1boSc/edit",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "video_id": "X-G8oy1boSc",
+    "visibility_label": "공개",
+    "title_matches": true,
+    "description_matches": true,
+    "inventory_publication_date": "2026. 10. 23.",
+    "server_publication_timestamp": null,
+    "processing_quality_badges": [
+      "표준 화질 완료",
+      "고화질 완료"
+    ],
+    "shorts_inventory": {
+      "total": 12,
+      "public": 12,
+      "scheduled": 0,
+      "draft": 0
+    },
+    "ordinary_video_inventory": {
+      "total": 6,
+      "public": 2,
+      "unlisted": 1,
+      "private": 3
+    },
+    "thumbnail_pixels_verified": false,
+    "uninterrupted_playback_verified": false,
+    "external_links_clickable": false,
+    "external_link_limit": "Studio still requests one-time verification for clickable external links. No verification initiated.",
+    "settings_changed": false,
+    "upload_attempts": 1
   }
 }
