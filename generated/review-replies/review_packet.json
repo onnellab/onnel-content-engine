@@ -1,4 +1,45 @@
 {
   "schema_version": 1,
-  "reviews": []
+  "reviews": [
+    {
+      "review": {
+        "review_id": "00000194-562c-2203-6c68-87bc00000000",
+        "app_id": "APP-0006",
+        "app_slug": "aligna",
+        "app_name": "Aligna",
+        "platform": "ios",
+        "rating": "1",
+        "review_kind": "review",
+        "title": "No Option to Change Alpha Numeric Text in A File Name",
+        "body": "Ridiculous!",
+        "reviewer_language": "",
+        "territory": "",
+        "app_version": "",
+        "created_at": "2026-10-23T19:40:06-07:00",
+        "updated_at": "2026-10-23T19:40:06-07:00",
+        "developer_reply": "",
+        "reply_updated_at": "",
+        "status": "pending",
+        "synced_at": "2026-10-25T21:26:37+00:00",
+        "verified_at": "2026-10-25T21:26:37+00:00",
+        "verification_source": "apple_complete_review_list"
+      },
+      "triage": {
+        "review_id": "00000194-562c-2203-6c68-87bc00000000",
+        "category": "general_feedback",
+        "risk_flags": [],
+        "similarity_key": "general_feedback",
+        "similar_reviews": 1,
+        "facts": [],
+        "requires_human_approval": true,
+        "actions": {
+          "reply": "recommended",
+          "github_issue": "not_needed",
+          "store_copy": "not_needed",
+          "code_change": "not_needed"
+        },
+        "issue_draft": ""
+      }
+    }
+  ]
 }
