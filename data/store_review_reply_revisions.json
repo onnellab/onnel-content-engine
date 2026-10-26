@@ -31,7 +31,30 @@
       },
       "expected_public_store_version": "2.5.5",
       "target_version_under_review": "2.5.6"
+    },
+    {
+      "revision_id": "revision-tagweaver-url-tag-save-public-version-20261027",
+      "review_id": "10b4e93e-b9cd-4ef4-ad91-2726f5256651",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "platform": "android",
+      "app_version": "2.5.5",
+      "rating": 3,
+      "expected_review_title": "",
+      "expected_review_body": "Some tags aren't removed correctly when the file is saved. When the X next to URL is pressed, for example, saving doesn't actually retain the change.",
+      "expected_current_reply": "Thank you for reporting this issue. We've prepared a fix for changes to URL and other tags not being saved correctly. It's included in Android version 2.5.6, which isn't publicly available on Google Play yet. Please update once it's available and let us know if the issue continues.",
+      "replacement_reply": "Thank you for reporting this issue. Android version 2.5.6 includes a fix for URL and other tag changes not being retained after saving. Please update to the latest version and let us know if the issue continues.",
+      "status": "awaiting_owner_dispatch",
+      "note": "Owner on 2026-10-27 requested correction if needed. Verified public Google Play version 2.5.6 while the store-observed reply still states the version is not public. This registered record is a proposal, not publication authorization. Exact owner-initiated GitHub workflow_dispatch REPLACE required; no scheduled or automated publish.",
+      "publication": {
+        "attempts": 0,
+        "published_at": "",
+        "store_observed_at": "",
+        "error": ""
+      },
+      "expected_public_store_version": "2.5.6",
+      "target_version_under_review": "2.5.6"
     }
   ],
-  "updated_at": "2026-10-26T21:26:33+00:00"
+  "updated_at": "2026-10-26T22:50:39.632Z"
 }
