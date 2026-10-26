@@ -98,9 +98,9 @@
         "slug": "consistent-album-artist-names",
         "category": "music",
         "language": "zh-Hans",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/zh-Hans/music/consistent-album-artist-names.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 2

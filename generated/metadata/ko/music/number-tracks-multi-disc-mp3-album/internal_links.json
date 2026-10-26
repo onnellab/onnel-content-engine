@@ -51,9 +51,9 @@
         "slug": "consistent-album-artist-names",
         "category": "music",
         "language": "ko",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/ko/music/consistent-album-artist-names.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "music",
