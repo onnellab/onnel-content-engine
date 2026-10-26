@@ -600,6 +600,18 @@ def render(manifest, asset_root, output):
         from PIL import Image, ImageDraw, ImageFont
     except ImportError:
         raise GuideError('pillow_render_dependency_missing') from None
+    # Source geometry is a read-only preflight: reject before allocating output,
+    # loading host-specific fonts or invoking any renderer/encoder.
+    expected_source_size = ((1080, 2160) if aligna else (1206, 2622) if clipnest
+                            else (1080, 2400) if melivra or papira or new_guide
+                            else (1080, 1920))
+    for slide in manifest['slides']:
+        try:
+            with Image.open(Path(asset_root) / slide['asset']) as source:
+                if source.size != expected_source_size:
+                    raise GuideError('source_geometry_changed')
+        except OSError as error:
+            raise GuideError('source_image_unreadable') from error
     output.mkdir(parents=True)
     font_root = Path('/usr/share/fonts/truetype/dejavu')
     regular = lambda size: ImageFont.truetype(str(font_root / 'DejaVuSans.ttf'), size)
@@ -625,7 +637,7 @@ def render(manifest, asset_root, output):
         center(slide['heading'], 166, bold(48))
         center(slide['caption'], 235, regular(32), '#645c74')
         source = Image.open(Path(asset_root) / slide['asset']).convert('RGB')
-        if source.size != ((1080,2160) if aligna else (1206,2622) if clipnest else (1080,2400) if melivra or papira or new_guide else (1080,1920)):
+        if source.size != expected_source_size:
             raise GuideError('source_geometry_changed')
         # Entire screenshot, uniformly scaled. No crop, synthetic taps or UI edits.
         size = (675,1350) if aligna else (603,1311) if clipnest else (621,1380) if melivra or papira or new_guide else (756,1344)
