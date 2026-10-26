@@ -612,8 +612,19 @@ def render(manifest, asset_root, output):
                     raise GuideError('source_geometry_changed')
         except OSError as error:
             raise GuideError('source_image_unreadable') from error
+    # Same approved DejaVu faces on Linux and macOS. Never silently use
+    # arbitrary platform fonts: changed metrics could invalidate visual QA.
+    font_locations = (
+        Path('/usr/share/fonts/truetype/dejavu'),
+        Path.home() / 'Library' / 'Fonts',
+        Path('/Library/Fonts'),
+    )
+    font_root = next((root for root in font_locations
+                      if (root / 'DejaVuSans.ttf').is_file()
+                      and (root / 'DejaVuSans-Bold.ttf').is_file()), None)
+    if font_root is None:
+        raise GuideError('approved_dejavu_fonts_missing')
     output.mkdir(parents=True)
-    font_root = Path('/usr/share/fonts/truetype/dejavu')
     regular = lambda size: ImageFont.truetype(str(font_root / 'DejaVuSans.ttf'), size)
     bold = lambda size: ImageFont.truetype(str(font_root / 'DejaVuSans-Bold.ttf'), size)
     frames = []
