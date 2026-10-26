@@ -13,22 +13,25 @@
       "expected_review_body": "Some tags aren't removed correctly when the file is saved. When the X next to URL is pressed, for example, saving doesn't actually retain the change.",
       "expected_current_reply": "Thank you for reporting this issue! We’ve fixed the problem where changes to URL and other tags weren’t retained after saving. The fix is included in version 2.5.6. Please try it once the update is available, and let us know if you still experience any issues.",
       "replacement_reply": "Thank you for reporting this issue. We've prepared a fix for changes to URL and other tags not being saved correctly. It's included in Android version 2.5.6, which isn't publicly available on Google Play yet. Please update once it's available and let us know if the issue continues.",
-      "status": "published_unverified",
+      "status": "store_verified",
       "note": "Owner's explicit 2026-10-24 instruction to REPLACE this existing TagWeaver Google Play reply. Android 2.5.6 fix is documented in the app's release/store_release_notes.json; publicly observed Play version 2.5.5 as of 2026-10-24 08:12 KST. Do not claim Google Play review approval, publication or store-observed replacement before authenticated owner workflow dispatch and live GET verification.",
       "publication": {
         "attempts": 1,
         "published_at": "2026-10-24T05:35:58+00:00",
-        "store_observed_at": "",
-        "error": "store_observation_not_yet_confirmed",
+        "store_observed_at": "2026-10-26T21:26:18+00:00",
+        "error": "",
         "last_attempt_at": "2026-10-24T05:35:57+00:00",
         "workflow_run_id": "40066870095",
         "workflow_run_attempt": "1",
         "approved_by": "onnellab",
-        "approval_channel": "github_owner_workflow_dispatch"
+        "approval_channel": "github_owner_workflow_dispatch",
+        "previous_verification_error": "store_observation_not_yet_confirmed",
+        "verification_source": "google_reviews_get",
+        "verification_snapshot_sha256": "710c566994ec0a5067957c1b72e2591997d331b7d064c63858d9b9b461f0b357"
       },
       "expected_public_store_version": "2.5.5",
       "target_version_under_review": "2.5.6"
     }
   ],
-  "updated_at": "2026-10-24T05:35:58+00:00"
+  "updated_at": "2026-10-26T21:26:33+00:00"
 }
