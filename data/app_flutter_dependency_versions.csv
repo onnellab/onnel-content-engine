@@ -1,6 +1,8 @@
 app_id,app_slug,package_type,package_name,declared_version,resolved_version,flutter_constraint,status,source
 APP-0006,aligna,app_version,aligna,1.1.1+27,1.1.1,,ok,github:onnellab/aligna/pubspec.yaml
+APP-0006,aligna,dependency,characters,^1.4.0,1.4.1,,ok,github:onnellab/aligna/pubspec.yaml
 APP-0006,aligna,dependency,cupertino_icons,^1.0.8,1.0.8,,ok,github:onnellab/aligna/pubspec.yaml
+APP-0006,aligna,dependency,ffi,^2.2.0,2.2.0,,ok,github:onnellab/aligna/pubspec.yaml
 APP-0006,aligna,dependency,file_picker,^10.3.10,10.3.10,,ok,github:onnellab/aligna/pubspec.yaml
 APP-0006,aligna,dependency,flutter,sdk:flutter,0.0.0,,ok,github:onnellab/aligna/pubspec.yaml
 APP-0006,aligna,dependency,flutter_localizations,sdk:flutter,0.0.0,,ok,github:onnellab/aligna/pubspec.yaml
