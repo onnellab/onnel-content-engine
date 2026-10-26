@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "tagweaver-extra-tags-20261026",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "scheduled_verified",
+  "status": "published",
   "video_id": "mWiL_GJm-bY",
   "video_url": "https://youtube.com/shorts/mWiL_GJm-bY",
   "video_sha256": "a65a33c421cb42606dcaca73a6d4784555c48cc466ba62108e7d7fd58cac3c21",
@@ -12,7 +12,7 @@
   "timezone": "Asia/Seoul",
   "scheduled_observed_at": "2026-10-25T10:53:09Z",
   "server_scheduled_creation_timestamp": null,
-  "publication_verified": false,
+  "publication_verified": true,
   "metadata": {
     "title": "How to Review Extra Tags in TagWeaver | Android Screenshot Guide",
     "description": "In TagWeaver’s Extra Tags screen, review a field name and its value, such as BPM or Comment.\n\nStill-screen guide using a real Android emulator screenshot with repository-authored demonstration metadata. No navigation, taps, edits, deletion, saved result, or speed demonstration is shown. The example ISRC and copyright fields are demo values, not evidence of rights to a music recording.\n\nExplore TagWeaver for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.tagweaver2\n\n#TagWeaver #AudioTags #Shorts",
@@ -31,7 +31,7 @@
     "sd_processing": "complete",
     "hd_processing": "complete",
     "copyright_check": "no_issues_observed_not_future_guarantee",
-    "visibility": "scheduled",
+    "visibility": "public",
     "schedule_confirmation": "2026년 10월 26일 9:00 에 동영상이 공개 상태로 설정됩니다.",
     "external_store_link": "text_only; one-time verification not initiated",
     "thumbnail": {
@@ -49,5 +49,56 @@
     "decoded_frames_checked": 450,
     "independent_source_and_png_review": "PASS",
     "owned_heavy_processes_remaining": 0
+  },
+  "published_observed_at": "2026-10-26T00:30:59Z",
+  "server_publication_timestamp": null,
+  "publication_observation": {
+    "observed_at": "2026-10-26T00:32:21Z",
+    "surface": "dot cloud browser YouTube Studio and public Shorts UI",
+    "source_url": "https://studio.youtube.com/video/mWiL_GJm-bY/edit",
+    "public_url": "https://www.youtube.com/shorts/mWiL_GJm-bY",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "public_channel_handle": "@ONNELLAB",
+    "video_id": "mWiL_GJm-bY",
+    "visibility_label": "공개",
+    "title_matches": true,
+    "description_matches": true,
+    "inventory_publication_date": "2026. 10. 26.",
+    "public_relative_age": "30분 전",
+    "server_publication_timestamp": null,
+    "processing_quality_badges": [
+      "표준 화질 완료",
+      "고화질 완료"
+    ],
+    "shorts_inventory": {
+      "total": 14,
+      "public": 13,
+      "scheduled": 1
+    },
+    "next_scheduled_video": {
+      "video_id": "hMKllzcEcYY",
+      "inventory_date": "2026. 10. 28.",
+      "status": "예약됨",
+      "schedule_changed": false
+    },
+    "playback": {
+      "studio_started_once": true,
+      "observed_progress": [
+        "0:00 / 0:16",
+        "0:05 / 0:16",
+        "0:13 / 0:16",
+        "0:16 / 0:16"
+      ],
+      "actual_frame_visible": true,
+      "frame_description": "Check the example values; BPM124 and Demo comment, full screenshot and static disclosure",
+      "every_frame_visual_review_this_run": false,
+      "public_player": "loading spinner observed; public playback not verified",
+      "note": "No playback loop or engagement action performed; original 15-second production decode evidence retained."
+    },
+    "thumbnail_pixels_verified": false,
+    "thumbnail_observation": "Saved uploaded-thumbnail setting remains; actual Studio thumbnail preview still gray placeholder.",
+    "external_links_clickable": false,
+    "settings_changed": false,
+    "upload_attempts": 1
   }
 }
