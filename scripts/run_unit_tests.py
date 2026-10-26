@@ -43,8 +43,10 @@ def main() -> int:
     parser.add_argument('--pattern', default='test_*.py')
     parser.add_argument('--verbosity', type=int, choices=(0, 1, 2), default=1)
     args = parser.parse_args()
-    if importlib.util.find_spec('yaml') is None:
-        print('Install test dependencies first: python -m pip install -r requirements-test.txt', file=sys.stderr)
+    missing = [name for name in ('yaml', 'PIL') if importlib.util.find_spec(name) is None]
+    if missing:
+        print(f'Missing offline test dependencies: {", ".join(missing)}; '
+              'install with python -m pip install -r requirements-test.txt', file=sys.stderr)
         return 2
     with offline_network() as attempts:
         suite = unittest.defaultTestLoader.discover(str(ROOT / 'tests'), pattern=args.pattern)
