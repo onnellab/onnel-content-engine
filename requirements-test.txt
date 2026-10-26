@@ -2,3 +2,5 @@
 -r requirements-short-video.txt
 # Workflow-YAML validation.
 PyYAML==6.0.3
+# Screenshot-guide geometry regression uses PIL on Python 3.12/3.14 and macOS.
+Pillow==12.0.0

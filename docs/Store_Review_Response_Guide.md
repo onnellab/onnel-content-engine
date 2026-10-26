@@ -126,6 +126,29 @@ no standing approval, no new store publisher, no token handling change, and
 no local command worker. A store synchronization report is not proof of
 an edit; only a current store-observed matching reply is proof.
 
+#### Resolving accepted edits after a delayed Google Play observation
+
+The existing **Sync Store Reviews** workflow runs a **ledger-only** revision
+reconciler immediately after a successful store synchronization. It never
+replies, dispatches the publisher, or creates an approval. A previously
+`published_unverified` owner-dispatched REPLACE may become `store_verified`
+only when a fresh (24-hour maximum) **complete and authenticated** Google Play
+snapshot contains the same real review ID, app, reviewer's title/body, rating
+and installed version, and the exact replacement developer reply. Both the
+Google `reviews.get` observation and the complete store's verified state must
+be recorded for the same snapshot timestamp. The reconciler checks the sync
+receipt's snapshot SHA-256 and requires observation after the original POST
+attempt. It preserves the durable workflow ID, attempt count, timestamps, and
+prior verification error for auditing. A partial, stale, synthetic, changed,
+unanswered, or CSV-report-only record cannot advance the state.
+
+This is **not** authority to publish another edit or send a new reply. In
+particular, the scheduled ChatGPT reporter and Mac LaunchAgent must not invoke
+the manual `REPLACE` path. An old store-observed reply whose public-version
+wording later became outdated requires a **new explicit owner correction
+approval**; reconciliation does not update its text.
+
+
 ### Version-safe live identity and blocked corrections
 
 Google's `reviews.get` payload may contain a tab-separated title/body and
