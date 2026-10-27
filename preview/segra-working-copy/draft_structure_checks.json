@@ -1,7 +1,7 @@
 {
   "schema": "onnellab.draft-structural-checks.v1",
   "method": "JavaScript object assertions, no shell/native test invocation",
-  "observed_at_utc": "2026-10-27T09:35:48Z",
+  "observed_at_utc": "2026-10-27T09:52:07Z",
   "results": [
     {
       "locale": "en",
@@ -15,7 +15,7 @@
       "apple_source": true,
       "no_dates": true,
       "faq_count": 3,
-      "body_chars": 3468
+      "body_chars": 3475
     },
     {
       "locale": "ko",
@@ -29,7 +29,7 @@
       "apple_source": true,
       "no_dates": true,
       "faq_count": 3,
-      "body_chars": 1960
+      "body_chars": 1972
     },
     {
       "locale": "de",
@@ -43,7 +43,7 @@
       "apple_source": true,
       "no_dates": true,
       "faq_count": 3,
-      "body_chars": 3762
+      "body_chars": 3803
     },
     {
       "locale": "fr",
@@ -57,7 +57,7 @@
       "apple_source": true,
       "no_dates": true,
       "faq_count": 3,
-      "body_chars": 3766
+      "body_chars": 3822
     },
     {
       "locale": "es",
@@ -71,7 +71,7 @@
       "apple_source": true,
       "no_dates": true,
       "faq_count": 3,
-      "body_chars": 3616
+      "body_chars": 3652
     },
     {
       "locale": "pt-BR",
@@ -85,7 +85,7 @@
       "apple_source": true,
       "no_dates": true,
       "faq_count": 3,
-      "body_chars": 3429
+      "body_chars": 3470
     },
     {
       "locale": "ja",

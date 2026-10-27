@@ -1,6 +1,6 @@
 {
   "schema": "onnellab.editorial-draft.v1",
-  "state": "DRAFT_NATIVE_RENDER_AND_PAGE_VALIDATION_PENDING_NOT_QUEUED",
+  "state": "TEXT_REVIEWED_NATIVE_RENDER_AND_PAGE_VALIDATION_PENDING_NOT_QUEUED",
   "slug": "choose-safe-audio-working-copy",
   "category": "media",
   "existing_english_topic_id": "TOPIC-0041",
@@ -50,7 +50,7 @@
   ],
   "verification": {
     "json_structural_checks": "Nine locale objects checked in tool-orchestration JavaScript; see draft_structure_checks.json. Not native repository tests.",
-    "independent_language_review": "JA/zh-Hans/zh-Hant final authored blobs independently read by prepare_blog_nine_language_buffer; no material semantic or source-claim defect found. EN/KO/DE/FR/ES/pt-BR separate review pending.",
+    "independent_language_review": "Final nine authored blobs independently text-reviewed: EN/KO/DE/FR/ES/pt-BR by localize_asian with final correction readback; JA/zh-Hans/zh-Hant by prepare_blog_nine_language_buffer. No remaining material text defect identified. See editorial_review.json. This is not native quality, image rendering, page or link approval.",
     "native_repository_validators": "NOT RUN",
     "quality_scores": "NOT GENERATED",
     "svg_png_rendering": "NOT RUN; localized image text only",
@@ -60,9 +60,9 @@
     "new_publication": "NONE"
   },
   "next_steps": [
-    "Complete independent language review of six authored blobs; bind final reviewed identities.",
     "Add and live-check two existing locale-correct related guides without changing existing pages.",
     "Extend exact candidate allowlist in existing nonpublishing preview adapter/workflow with boundary tests; do not create another publisher.",
+    "Before consuming TOPIC-0041, independently review one nonduplicate idea seed to preserve the current minimum-eight idea pool; do not invent or reserve IDs prematurely.",
     "Generate native Markdown/image specifications/internal-link/review files and SVG/PNG through existing gates; examine every actual image and desktop/mobile page.",
     "Re-read latest main and receipt state; only after all required gates pass integrate complete undated review bundle into existing queue."
   ],
@@ -70,37 +70,37 @@
     {
       "locale": "en",
       "file": "en.json",
-      "git_blob_sha1": "27999610c44ab0aaae4bf82107555b20eb2e883a",
+      "git_blob_sha1": "493aa728c0d916f263cec8ca37ce9cddf5ef6938",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "ko",
       "file": "ko.json",
-      "git_blob_sha1": "dda2edc81a1323a2f5b8072b9c395bdd11b70961",
+      "git_blob_sha1": "feaf86cc42ae5562c0851d397c4657b78f4bbe55",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "de",
       "file": "de.json",
-      "git_blob_sha1": "ed2fc7b1c2a08254806ddccdfd54ba9373c2854c",
+      "git_blob_sha1": "8be94e141cb5d5b4d31e6767b3a61c111e834929",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "fr",
       "file": "fr.json",
-      "git_blob_sha1": "ada4dacbdfe81240a05455d1fc75e1fc913c5256",
+      "git_blob_sha1": "28ae4720577d0cb89d191ce133283f5a7e4d1ade",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "es",
       "file": "es.json",
-      "git_blob_sha1": "9561dcd74e2a3e3b43bcfd255852daee258d3b3b",
+      "git_blob_sha1": "519610efcf319167067e05404e4cf53e937ea289",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "pt-BR",
       "file": "pt-BR.json",
-      "git_blob_sha1": "7ba84c8e3afec6b7a0e3babc1b96ec3aaa460921",
+      "git_blob_sha1": "5b7898011d083671dcb6b5e9f35a5ff177506a1d",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {

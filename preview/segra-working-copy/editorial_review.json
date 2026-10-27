@@ -1,0 +1,97 @@
+{
+  "schema": "onnellab.independent-editorial-review.v1",
+  "observed_at_utc": "2026-10-27T09:52:30Z",
+  "scope": "Actual final blob text only: semantic completeness, localized natural wording, terminology, product/source-claim limits, metadata/body/image-copy consistency.",
+  "result": "No remaining material text defect identified; NOT publication ready.",
+  "native_quality_score": null,
+  "rendered_images_reviewed": false,
+  "candidate_pages_reviewed": false,
+  "live_links_reviewed": false,
+  "corrections": [
+    "EN: Changed Copying a filename extension to Changing a filename extension.",
+    "KO/DE/FR/ES/pt-BR: Explicitly stop when prompted to overwrite.",
+    "DE/ES/pt-BR image copy: Prefer file over ambiguous input.",
+    "EN/KO/DE/FR/ES/pt-BR: Explicitly state the app was not executed or tested for this article."
+  ],
+  "locales": [
+    {
+      "locale": "en",
+      "git_blob_sha1": "493aa728c0d916f263cec8ca37ce9cddf5ef6938",
+      "author": "prepare_blog_nine_language_buffer",
+      "reviewer": "localize_asian",
+      "text_result": "No remaining material text defect identified",
+      "review_basis": "Full final blob read; not automated score"
+    },
+    {
+      "locale": "ko",
+      "git_blob_sha1": "feaf86cc42ae5562c0851d397c4657b78f4bbe55",
+      "author": "prepare_blog_nine_language_buffer",
+      "reviewer": "localize_asian",
+      "text_result": "No remaining material text defect identified",
+      "review_basis": "Full final blob read; not automated score"
+    },
+    {
+      "locale": "de",
+      "git_blob_sha1": "8be94e141cb5d5b4d31e6767b3a61c111e834929",
+      "author": "prepare_blog_nine_language_buffer",
+      "reviewer": "localize_asian",
+      "text_result": "No remaining material text defect identified",
+      "review_basis": "Full final blob read; not automated score"
+    },
+    {
+      "locale": "fr",
+      "git_blob_sha1": "28ae4720577d0cb89d191ce133283f5a7e4d1ade",
+      "author": "prepare_blog_nine_language_buffer",
+      "reviewer": "localize_asian",
+      "text_result": "No remaining material text defect identified",
+      "review_basis": "Full final blob read; not automated score"
+    },
+    {
+      "locale": "es",
+      "git_blob_sha1": "519610efcf319167067e05404e4cf53e937ea289",
+      "author": "prepare_blog_nine_language_buffer",
+      "reviewer": "localize_asian",
+      "text_result": "No remaining material text defect identified",
+      "review_basis": "Full final blob read; not automated score"
+    },
+    {
+      "locale": "pt-BR",
+      "git_blob_sha1": "5b7898011d083671dcb6b5e9f35a5ff177506a1d",
+      "author": "prepare_blog_nine_language_buffer",
+      "reviewer": "localize_asian",
+      "text_result": "No remaining material text defect identified",
+      "review_basis": "Full final blob read; not automated score"
+    },
+    {
+      "locale": "ja",
+      "git_blob_sha1": "e32ce63c1b65fab1aa94765d6122c7541507a2c6",
+      "author": "localize_asian",
+      "reviewer": "prepare_blog_nine_language_buffer",
+      "text_result": "No remaining material text defect identified",
+      "review_basis": "Full final blob read; not automated score"
+    },
+    {
+      "locale": "zh-Hans",
+      "git_blob_sha1": "1d75561f2efb9b7917202ec19299ad47b6165405",
+      "author": "localize_asian",
+      "reviewer": "prepare_blog_nine_language_buffer",
+      "text_result": "No remaining material text defect identified",
+      "review_basis": "Full final blob read; not automated score"
+    },
+    {
+      "locale": "zh-Hant",
+      "git_blob_sha1": "999b358736c422ec71a5336a4dd75c274ad5741f",
+      "author": "localize_asian",
+      "reviewer": "prepare_blog_nine_language_buffer",
+      "text_result": "No remaining material text defect identified",
+      "review_basis": "Full final blob read; not automated score"
+    }
+  ],
+  "remaining": [
+    "Native pipeline validation and true quality score not run.",
+    "SVG/PNG rendering and actual full-image inspection not run.",
+    "Related-guide links and native internal_links artifact not integrated or live-checked.",
+    "Desktop/mobile candidate page build and UI check not run.",
+    "Existing sole publishing pipeline must own scheduling; this bundle stays outside queue."
+  ]
+}
