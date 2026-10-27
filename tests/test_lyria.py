@@ -18,6 +18,7 @@ from short_video_credentials import CredentialError
 import lyria_config
 import lyria_connect
 import lyria_generate
+from test_aether_paid_boundary import fixture_environment, SLOT
 
 
 class LyriaConfigTests(unittest.TestCase):
@@ -137,15 +138,16 @@ class LyriaGenerationTests(unittest.TestCase):
             "project_id": "aether-music-123", "candidate_count": 1,
             "max_usd_per_run": 0.08, "enabled": True,
         }
-        with TemporaryDirectory() as temporary:
-            output = Path(temporary)
+        with TemporaryDirectory() as temporary, fixture_environment(Path(temporary) / "aether", "aether-music-123"):
+            output = Path(temporary) / "lyria"
             calls = []
-            def fake_song(project, prompt, *, token):
+            def fake_song(project, prompt, *, token, **binding):
                 calls.append((project, token))
                 manifests = list(output.glob("*/manifest.json"))
                 self.assertEqual(1, len(manifests))
                 intent = json.loads(manifests[0].read_text())
-                self.assertEqual("request_started", intent["state"])
+                self.assertEqual("prepared", intent["state"])
+                self.assertEqual(SLOT, binding["slot"])
                 self.assertEqual(0.08, intent["estimated_cost_usd"])
                 self.assertEqual(1, intent["candidate_count"])
                 self.assertEqual([], intent["candidates"])
@@ -154,7 +156,7 @@ class LyriaGenerationTests(unittest.TestCase):
             with patch.object(lyria_generate, "load_settings", return_value=settings), \
                  patch.object(lyria_generate, "access_token", return_value="fixture-token"), \
                  patch.object(lyria_generate, "request_song", side_effect=fake_song) as request:
-                result = lyria_generate.generate("A New Road", "Warm melodic travel", execute=True, output_root=output)
+                result = lyria_generate.generate("A New Road", "Warm melodic travel", execute=True, output_root=output, slot=SLOT)
             request.assert_called_once()
             self.assertEqual([("aether-music-123", "fixture-token")], calls)
             self.assertEqual("generated", result["state"])
@@ -183,18 +185,18 @@ class LyriaGenerationTests(unittest.TestCase):
             "project_id": "aether-music-123", "candidate_count": 1,
             "max_usd_per_run": 0.08, "enabled": True,
         }
-        with TemporaryDirectory() as temporary:
+        with TemporaryDirectory() as temporary, fixture_environment(Path(temporary) / "aether", "aether-music-123"):
             root = Path(temporary)
             (root / "lyria").mkdir()
             with patch.object(lyria_generate, "load_settings", return_value=settings), \
                  patch.object(lyria_generate, "access_token", return_value="fixture-token"), \
                  patch.object(lyria_generate, "request_song", side_effect=CredentialError("lyria_network_error")) as request:
                 with self.assertRaisesRegex(CredentialError, "lyria_network_error"):
-                    lyria_generate.generate("A New Road", "Warm melodic travel", execute=True, output_root=root / "lyria")
+                    lyria_generate.generate("A New Road", "Warm melodic travel", execute=True, output_root=root / "lyria", slot=SLOT)
             request.assert_called_once()
             with self.assertRaisesRegex(Exception, "aether_lyria_generation_uncertain"):
                 aether_single.recover_generated_result(root)
-            self.assertEqual("request_started", json.loads(next((root / "lyria").glob("*/manifest.json")).read_text())["state"])
+            self.assertEqual("prepared", json.loads(next((root / "lyria").glob("*/manifest.json")).read_text())["state"])
 
     def test_raw_lyria_request_requires_current_enabled_one_song_config(self):
         good = {

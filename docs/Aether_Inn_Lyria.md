@@ -1,9 +1,10 @@
 # Aether Inn — Lyria 3 Pro Production
 
-## Current scoped Lyria 3 Pro authorization (2026-10-10)
+## Current scoped Lyria 3 Pro authorization (2026-10-27 safety clarification)
 
-The owner explicitly authorized **one** Lyria 3 Pro music candidate at an
-estimated **$0.08** per eligible single. The Mac configuration already has
+The owner explicitly authorized **one** Lyria 3 Pro music candidate within
+**$0.08 total per eligible single, including taxes and all mandatory costs**.
+The base-price estimate is not proof of that total. The existing Mac configuration has
 `enabled=true`, `candidate_count=1`, and `max_usd_per_run=0.08`.
 Only `lyria-3-pro-preview` has a paid API exception, and a durable charge
 intent must be recorded before the call. The Gemini cover-image API,
@@ -42,7 +43,7 @@ Do not copy OAuth tokens, ADC JSON contents, or access tokens into Git, /ops/, p
     gcloud auth application-default login
     gcloud auth application-default set-quota-project PROJECT_ID
 
-Then open https://onnellab.com/ops/ and choose **Lyria 3 Pro 연결 · 자동화 설정**. Keep candidate count at exactly 1 and maximum estimated USD per run at $0.08; only the Tuesday/Saturday enable switch applies. Production work starts around 07:00–08:00 Asia/Seoul and uploads are scheduled private with YouTube `publishAt` for exactly 09:00 Asia/Seoul on each single day.
+Then open https://onnellab.com/ops/ and choose **Lyria 3 Pro 연결 · 자동화 설정**. Keep candidate count at exactly 1 and the existing USD cap at $0.08; only the Tuesday/Saturday enable switch applies. The sole producer remains the existing Mac `com.onnellab.aether-daily-local` at 06:20 Asia/Seoul. New Lyria calls must begin before 08:00 and uploads are scheduled private with YouTube `publishAt` for exactly 09:00 Asia/Seoul on each single day. Do not add a cloud producer, reset same-day records, or make catch-up posts.
 
 The local console checks ADC readiness without making a paid music-generation call.
 
@@ -51,21 +52,99 @@ The local console checks ADC readiness without making a paid music-generation ca
 Paid generation requires all of the following:
 1. Local Lyria configuration exists and automatic generation is explicitly enabled.
 2. ADC can produce a valid access token.
-3. The exact model is `lyria-3-pro-preview`, with **one** candidate and a $0.08 estimate.
-4. Both the local spending cap and the central Lyria-only owner budget gate permit the request.
+3. The exact model is `lyria-3-pro-preview`, with **one** candidate.
+4. Both the existing configuration/coarse allowance and the SHA-bound current gross-cost/rights proof described below permit the request. Missing proof means zero paid calls, not a presumed tax-free $0.08 total.
 5. The launchd-owned Aether worker has finished the WAV backlog, selected a fresh Tuesday/Saturday slot before 08:00, and verified a separately owner-approved local cover for this exact title; never spend only to discover a known downstream blocker.
-6. No existing uncertain paid request or active upload may be duplicated; a durable `request_started` manifest is written before the API call.
-7. The generator uses `--execute`. Without it, the generator returns a dry-run plan.
+6. No existing uncertain paid request or active upload may be duplicated. A durable `prepared` intent binds the slot, prompt, model and proof hash; `request_started` and a one-use dispatch claim are persisted before POST. All Aether single-job manifests, including stale/rejected jobs, and the legacy standalone Aether Lyria directory are checked. Unknown/malformed legacy manifests HOLD; they are not automatically deleted or declared charged.
+7. Only the existing durable single worker supplies the current slot for execution. Without execution, the generator returns a static base-price plan explicitly marked `paid_authorized=false`; it does not authenticate or verify billing. The old standalone `--execute` example is not an authorized alternate producer and now fails without a slot-bound request.
 
 Dry run:
 
     python3 -B scripts/lyria_generate.py --title "Beyond the Silent Stone Gate" --style "Warm guitar, gentle piano, nostalgic JRPG frontier theme"
 
-Paid run:
-
-    python3 -B scripts/lyria_generate.py --title "Beyond the Silent Stone Gate" --style "Warm guitar, gentle piano, nostalgic JRPG frontier theme" --execute
-
 Never retry a paid generation blindly after an uncertain network result. Preserve returned candidates and manifests.
+
+### Gross-cost and commercial-use evidence (no active proof supplied by code)
+
+`scripts/aether_paid_guard.py` reads only the separately reviewed private file:
+
+`~/Library/Application Support/ONNELLAB/content-engine/aether-inn/lyria-paid-evidence/proof.json`
+
+It never writes that proof, looks up credentials, accepts terms, changes billing,
+or invents an account's country/tax treatment. Keep its directory private and
+proof at mode 0600. Tests create clearly fictional temporary fixtures only.
+An evidence SHA proves file integrity, **not factual accuracy or owner approval**.
+The reviewer must verify the referenced source bytes and applicability first.
+
+Schema version 1 requires these exact sections (see the validator for types):
+
+- Identity: `profile=aether_inn`, `provider=google_cloud`, exact `project_id`,
+  `model=lyria-3-pro-preview`, `location=global`, integer `candidate_count=1`.
+- Review: UTC `checked_at` / `expires_at` ending in `Z`, at most 24 hours apart,
+  not future-dated or expired; `reviewer=dot` and a real `authority_reference`.
+  A trace key is not an authenticated owner-message ID. Do not record user
+  listening approval, exclusivity, originality or indemnity from these fields.
+- `pricing`: `unit=song`, three-letter `currency`, decimal-string `unit_price`,
+  and a hash-verified official current pricing `source`.
+- `billing`: two-letter billing `country`, matching `currency`, confirmed
+  decimal-string `tax_rate`, `mandatory_fee_per_song`,
+  `rounding_usd_upper_bound`, `usd_per_currency_upper_bound`,
+  `all_mandatory_costs_confirmed=true`, and redacted account-applicable `source`.
+  USD requires conversion 1 and `fx_source=null`; another currency requires
+  actual hash-verified `fx_source` supporting a conservative USD upper bound.
+- `rights`: verified `commercial_use_allowed`, `output_distribution_allowed`,
+  `existing_agreement_confirmed`, a traceable `agreement_reference`, plus
+  hash-verified official `model_source` and `terms_source`. This records review
+  of already applicable terms; it does not accept a new agreement.
+- Every source descriptor has only relative `path`, actual `sha256`, and
+  `reference` (official URL, or a private redacted billing/FX evidence reference).
+  No symlink, path traversal, account/card number, tax ID or credential belongs
+  in the proof. Do not commit private billing sources to Git.
+
+The exact, high-precision upper bound is
+`(unit_price + mandatory_fee_per_song) * (1 + tax_rate) * usd_per_currency_upper_bound + rounding_usd_upper_bound`.
+No rounding down, anticipated tax recovery, promotional credit, unknown tax or
+unverified conversion may make a request fit the $0.08 ceiling. Fees are
+conservatively included in the taxable base. A positive amount above the cap
+HOLDs; broad approval to fix blockers does not increase the spending limit.
+
+As checked 2026-10-27 UTC, the official
+[Cloud price page](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing?hl=en)
+lists Lyria 3 Pro at $0.08 per song; non-USD accounts use their currency SKU.
+[Cloud tax documentation](https://docs.cloud.google.com/billing/docs/resources/vat-overview)
+says SKU prices exclude tax and Korean customers are subject to 10% VAT.
+If applicable, $0.08 times 1.10 is $0.088 before any other costs and fails this
+cap. This is conditional, not a finding about this account's billing country.
+The current [model documentation](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/lyria/lyria-3)
+permits commercial/production use and third-party output disclosure subject to
+the applicable agreement. [Service terms](https://cloud.google.com/terms/service-terms)
+do not establish musical uniqueness or universal non-infringement. These dated
+research links alone are not an active per-account cost/rights proof.
+
+### Final request boundaries and reconciliation
+
+After token acquisition and intent fsync, the adapter rechecks current
+enabled/project/count/cap, the unchanged proof and source hashes, and the same
+Tuesday/Saturday slot before 08:00 KST immediately before its one paid POST.
+An exception after entering transport leaves `request_started` uncertain, even
+if the client did not receive audio. It cannot dispatch again. A process that
+fails a final preflight before entering transport records `not_sent` with
+`dispatch_started=false`; it preserves the intent/claim and does not retry it.
+
+Before generation and a first single upload, the verified owner's complete
+uploads playlist is read with the existing `youtube.readonly` scope. Public,
+private, scheduled, unlisted and processing title collisions HOLD for
+reconciliation; permission failure, missing videos or incomplete pagination
+are not proof of absence. The API does not supply the source WAV/MP4 SHA, so
+this check does not claim remote byte equality. Known upload sessions/IDs keep
+their existing local render-SHA and channel bindings and are never replaced.
+
+The Aether first-upload adapter rechecks its approved publish time after hash
+calculation and durable intent save, immediately before `videos.insert`.
+Existing session probes and accepted-ID observations remain possible after
+09:00; they are not new uploads. Neither the same-day guard nor launchd timing
+is changed. Newly prepared covers do not themselves mean generation, scheduling,
+or publication succeeded.
 
 ## Aether Inn prompt contract
 

@@ -25,6 +25,7 @@ from aether_cover import lane_direction
 from aether_existing_cover import ASSETS_ROOT, approved_cover, import_existing_cover
 from aether_planner import inspect_candidate, read_catalog
 from lyria_generate import generate as generate_music
+import aether_paid_guard as paid_guard
 from lyria_config import connection_status as lyria_connection_status
 from short_video_credentials import credential_status
 from short_video_pipeline import VideoError, atomic_json, digest, file_hash, load_json, run_process
@@ -240,6 +241,59 @@ def find_existing_public_video(api: YouTube, title: str) -> dict | None:
     return None
 
 
+def require_no_owned_title_match(api: YouTube, title: str) -> None:
+    """Read the verified owner's uploads, including non-public states, or HOLD.
+
+    Uses the existing youtube.readonly scope, never OAuth or a new upload. A
+    title collision is a conservative HOLD, not a claim of remote byte equality.
+    """
+    wanted = _normalized_title(_clean(title, "title", 60))
+    _, _, channels = api.request("GET", API + "channels?" + urlencode({
+        "part": "id,contentDetails", "mine": "true"}), headers=api.headers(), retry=True)
+    items = channels.get("items")
+    if not isinstance(items, list) or len(items) != 1 or items[0].get("id") != api.channel:
+        raise VideoError("aether_single_remote_inventory_unverified")
+    playlist = items[0].get("contentDetails", {}).get("relatedPlaylists", {}).get("uploads")
+    if not isinstance(playlist, str) or not re.fullmatch(r"UU[A-Za-z0-9_-]{22}", playlist):
+        raise VideoError("aether_single_remote_inventory_unverified")
+    token, visited, seen = None, set(), set()
+    for _ in range(100):  # bounded complete pagination, otherwise fail closed
+        query = {"part": "contentDetails", "playlistId": playlist, "maxResults": "50"}
+        if token:
+            query["pageToken"] = token
+        _, _, page = api.request("GET", API + "playlistItems?" + urlencode(query), headers=api.headers(), retry=True)
+        rows = page.get("items")
+        if not isinstance(rows, list):
+            raise VideoError("aether_single_remote_inventory_unverified")
+        ids = [row.get("contentDetails", {}).get("videoId") for row in rows if isinstance(row, dict)]
+        if (len(ids) != len(rows) or len(ids) != len(set(ids))
+                or any(not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]{11}", value) or value in seen for value in ids)):
+            raise VideoError("aether_single_remote_inventory_unverified")
+        seen.update(ids)
+        if ids:
+            _, _, videos = api.request("GET", API + "videos?" + urlencode({
+                "part": "snippet,status,processingDetails", "id": ",".join(ids)}), headers=api.headers(), retry=True)
+            found = videos.get("items")
+            if (not isinstance(found, list) or len(found) != len(ids)
+                    or {row.get("id") for row in found if isinstance(row, dict)} != set(ids)):
+                raise VideoError("aether_single_remote_inventory_unverified")
+            for row in found:
+                snippet, status = row.get("snippet", {}), row.get("status", {})
+                actual = snippet.get("title")
+                if (snippet.get("channelId") != api.channel or not isinstance(actual, str)
+                        or status.get("privacyStatus") not in {"public", "private", "unlisted"}):
+                    raise VideoError("aether_single_remote_inventory_unverified")
+                if re.match(rf"^{re.escape(wanted)}(?:$|\W)", _normalized_title(actual)):
+                    raise VideoError("aether_single_existing_remote_title_requires_reconcile")
+        token = page.get("nextPageToken")
+        if token is None:
+            return
+        if not isinstance(token, str) or not token or len(token) > 2048 or token in visited:
+            raise VideoError("aether_single_remote_inventory_unverified")
+        visited.add(token)
+    raise VideoError("aether_single_remote_inventory_incomplete")
+
+
 
 def _hydrate_dataless_backlog_wav(source: Path) -> None:
     """Read the entire MYBOX placeholder before copying its canonical WAV.
@@ -445,7 +499,7 @@ def recover_generated_result(folder: Path) -> dict | None:
             data = load_json(manifest, limit=2 * 1024 * 1024)
         except Exception:
             raise VideoError("aether_single_generation_manifest_invalid") from None
-        if data.get("state") == "request_started":
+        if data.get("state") in {"request_started", "prepared"}:
             raise VideoError("aether_lyria_generation_uncertain")
         if data.get("state") != "generated" or not isinstance(data.get("candidates"), list):
             raise VideoError("aether_single_generation_manifest_invalid")
@@ -631,6 +685,9 @@ def worker(
             # Tuesday/Saturday slot. Uploaded jobs always reconcile first.
             retired = []
             if publish and not pending:
+                # FINAL queue status must not bury an uncertain prior charge.
+                # Existing upload IDs/sessions above still reconcile normally.
+                paid_guard.require_no_unsettled_intents(single_root=q.root)
                 for prior in unfinished:
                     if prior.get("publish_requested") and publish_slot_stale(prior["slot"]):
                         prior.update(status="rejected", error="aether_single_publish_time_stale")
@@ -647,6 +704,8 @@ def worker(
                 return result
         else:
             job = (pending or same_slot or unfinished or [None])[0]
+            if not pending and source_kind != "backlog_wav" and not (job or {}).get("music"):
+                paid_guard.require_no_unsettled_intents(single_root=q.root)
         # Caller source bytes belong to one exact canonical title. Queue priority
         # may select another job; reject before stale retirement or any write.
         if source_kind == "backlog_wav" and not (job or {}).get("upload"):
@@ -742,12 +801,16 @@ def worker(
                     else:
                         generated = recover_generated_result(folder)
                         if generated is None:
+                            paid_guard.require_no_unsettled_intents(single_root=q.root)
                             # Do not spend for audio that cannot become a video.
                             # Owner-approved cover rights, quality, exact title
                             # and hash must already be valid before the API call.
                             if cover_generator is import_existing_cover:
                                 approved_cover(job["title"], ASSETS_ROOT)
-                            generated = music_generator(job["title"], job["style"], execute=True, output_root=folder / "lyria")
+                            if publish:
+                                require_no_owned_title_match(api, job["title"])
+                            generated = music_generator(job["title"], job["style"], execute=True,
+                                                        output_root=folder / "lyria", slot=job["slot"])
                         chosen = select_candidate(
                             generated, _history_hashes(state),
                             reviewer=lambda path: review_audio(path),
@@ -786,6 +849,13 @@ def worker(
                 # Existing uploads are reconciled with their same durable ID.
                 if not job.get("upload") and publish_slot_stale(job["slot"]):
                     raise VideoError("aether_single_publish_time_stale")
+                if not job.get("upload"):
+                    # Covers resumed, already-paid renders too. A remote title
+                    # collision never justifies another insert; known sessions
+                    # remain the uploader's reconciliation-only responsibility.
+                    if (folder / "youtube-session.json").exists():
+                        raise UploadError("manual_reconcile_required")
+                    require_no_owned_title_match(api, job["title"])
                 uploader = Uploader(q, partial(YouTube, profile="aether_inn"))
                 if not job.get("approval"):
                     publish_at = scheduled_publish_at(job["slot"])

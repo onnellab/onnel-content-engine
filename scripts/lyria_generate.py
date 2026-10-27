@@ -13,6 +13,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from short_video_credentials import CredentialError
+import aether_paid_guard as paid_guard
 from aether_cost_policy import ALLOWED_LYRIA_PURPOSE, require_paid_api_allowed
 from short_video_pipeline import atomic_json
 from lyria_config import (
@@ -103,7 +104,9 @@ def parse_audio_response(payload: bytes) -> tuple[bytes, str, dict]:
     return raw, mime, {"description": description}
 
 
-def request_song(project_id: str, prompt: str, *, token: str | None = None, timeout: int = 240) -> tuple[bytes, str, dict]:
+def request_song(project_id: str, prompt: str, *, token: str | None = None, timeout: int = 240,
+                 slot: str | None = None, intent_path: Path | None = None,
+                 intent_sha256: str | None = None, proof_sha256: str | None = None) -> tuple[bytes, str, dict]:
     require_paid_api_allowed(purpose=ALLOWED_LYRIA_PURPOSE, model=MODEL,
                              candidate_count=1, estimated_cost_usd=UNIT_PRICE_USD)
     settings = load_settings(CONFIG_PATH)
@@ -115,6 +118,19 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
             or settings["max_usd_per_run"] < UNIT_PRICE_USD - 1e-9
             or settings["max_usd_per_run"] > UNIT_PRICE_USD + 1e-9):
         raise CredentialError("lyria_owner_spend_limit")
+    paid_guard.require_generation_window(slot)
+    paid_guard.load_paid_proof(project_id, expected_sha256=proof_sha256)
+    if intent_path is None or not intent_sha256 or not proof_sha256:
+        raise CredentialError("aether_lyria_charge_intent_required")
+    raw = paid_guard._read(intent_path)
+    intent = paid_guard._json(raw)
+    if (hashlib.sha256(raw).hexdigest() != intent_sha256 or intent.get("state") != "prepared"
+            or intent.get("model") != MODEL or intent.get("project_id") != project_id
+            or intent.get("slot") != slot or intent.get("candidate_count") != 1
+            or not isinstance(intent.get("cost_proof"), dict)
+            or intent["cost_proof"].get("proof_sha256") != proof_sha256
+            or intent.get("prompt_sha256") != hashlib.sha256(prompt.encode("utf-8")).hexdigest()):
+        raise CredentialError("aether_lyria_charge_intent_invalid")
     token = token or access_token()
     body = json.dumps({"model": MODEL, "input": [{"type": "text", "text": prompt}]}, ensure_ascii=False).encode("utf-8")
     request = Request(
@@ -127,7 +143,36 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
             "X-Goog-User-Project": project_id,
         },
     )
+    # A second caller cannot dispatch the same prepared intent, even after an
+    # exception or lost response. The claim is retained, never automatically reset.
     try:
+        fd = os.open(Path(intent_path).with_name("dispatch.claim"), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    except FileExistsError:
+        raise CredentialError("aether_lyria_generation_uncertain") from None
+    os.close(fd)
+    dispatched = False
+    try:
+        # Persist BEFORE POST; then repeat all time/evidence checks after fsync.
+        intent.update(state="request_started", dispatch_started=True,
+                      request_started_at=paid_guard.utc_now().isoformat())
+        atomic_json(intent_path, intent)
+        paid_guard.require_no_unsettled_intents(extra_roots=(Path(intent_path).parent.parent,), current_intent=intent_path)
+        require_paid_api_allowed(purpose=ALLOWED_LYRIA_PURPOSE, model=MODEL,
+                                 candidate_count=1, estimated_cost_usd=UNIT_PRICE_USD)
+        current_settings = load_settings(CONFIG_PATH)
+        if (not current_settings or current_settings.get("enabled") is not True
+                or current_settings.get("project_id") != project_id
+                or current_settings.get("candidate_count") != 1
+                or current_settings.get("max_usd_per_run") != 0.08):
+            raise CredentialError("lyria_owner_spend_limit")
+        if paid_guard._json(paid_guard._read(intent_path)) != intent:
+            raise CredentialError("aether_lyria_charge_intent_invalid")
+        final_proof = paid_guard.load_paid_proof(project_id, expected_sha256=proof_sha256)
+        final_now = paid_guard.utc_now()
+        if not paid_guard._time(final_proof["checked_at"]) <= final_now < paid_guard._time(final_proof["expires_at"]):
+            raise CredentialError("aether_lyria_cost_proof_expired")
+        paid_guard.require_generation_window(slot, now=final_now)
+        dispatched = True
         with urlopen(request, timeout=timeout) as response:
             declared = response.headers.get("Content-Length")
             if declared and declared.isdigit() and int(declared) > MAX_RESPONSE_BYTES:
@@ -142,6 +187,16 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
         raise CredentialError("lyria_api_error") from None
     except (URLError, TimeoutError, OSError):
         raise CredentialError("lyria_network_error") from None
+    finally:
+        if not dispatched:
+            # This process knows it never entered transport. Preserve evidence;
+            # do not use this state for any exception after urlopen was entered.
+            try:
+                unchanged = paid_guard._json(paid_guard._read(intent_path)) == intent
+            except (CredentialError, OSError):
+                unchanged = False
+            if unchanged:
+                atomic_json(intent_path, {**intent, "state": "not_sent", "dispatch_started": False})
     if len(payload) > MAX_RESPONSE_BYTES:
         raise CredentialError("lyria_response_too_large")
     return parse_audio_response(payload)
@@ -152,7 +207,8 @@ def slug(value: str) -> str:
     return value[:72] or "aether-track"
 
 
-def generate(title: str, style: str, *, count: int | None = None, execute: bool = False, output_root: Path = PRIVATE_OUTPUT) -> dict:
+def generate(title: str, style: str, *, count: int | None = None, execute: bool = False,
+             output_root: Path = PRIVATE_OUTPUT, slot: str | None = None) -> dict:
     settings = load_settings(CONFIG_PATH)
     if not settings:
         raise CredentialError("lyria_not_configured")
@@ -177,8 +233,19 @@ def generate(title: str, style: str, *, count: int | None = None, execute: bool 
         "execute": execute,
     }
     if not execute:
-        return {**plan, "state": "planned", "prompt": prompt}
+        return {**plan, "state": "planned", "prompt": prompt, "paid_authorized": False,
+                "cost_basis": "static_base_estimate_not_gross_cost_proof"}
+    paid_guard.require_generation_window(slot)
+    proof = paid_guard.load_paid_proof(settings["project_id"])
+    with paid_guard.paid_request_lock():
+        paid_guard.require_no_unsettled_intents(extra_roots=(output_root,))
+        return _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof)
+
+
+def _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof):
     token = access_token()
+    paid_guard.load_paid_proof(settings["project_id"], expected_sha256=proof["proof_sha256"])
+    paid_guard.require_generation_window(slot)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run_dir = Path(output_root).expanduser() / (timestamp + "-" + slug(title))
     run_dir.mkdir(parents=True, exist_ok=False, mode=0o700)
@@ -188,17 +255,24 @@ def generate(title: str, style: str, *, count: int | None = None, execute: bool 
     manifest_path = run_dir / "manifest.json"
     manifest = {
         **plan,
-        "state": "request_started",
+        "state": "prepared",
+        "slot": slot,
+        "cost_proof": proof,
+        "dispatch_started": False,
         "title": clean_text(title, field="title", limit=160),
         "style": clean_text(style, field="style", limit=1800),
-        "request_started_at": datetime.now(timezone.utc).isoformat(),
+        "prepared_at": datetime.now(timezone.utc).isoformat(),
         "candidates": [],
     }
     atomic_json(manifest_path, manifest)
     os.chmod(manifest_path, 0o600)
     # This owner's authorization permits precisely one provider request per
     # single; it does not authorize retries or multi-candidate generation.
-    audio, mime, meta = request_song(settings["project_id"], prompt, token=token)
+    audio, mime, meta = request_song(settings["project_id"], prompt, token=token, slot=slot,
+                                   intent_path=manifest_path,
+                                   intent_sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
+                                   proof_sha256=proof["proof_sha256"])
+    manifest = paid_guard._json(paid_guard._read(manifest_path))
     ext = ".mp3" if mime == "audio/mpeg" else ".wav"
     path = run_dir / f"candidate-01{ext}"
     fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)

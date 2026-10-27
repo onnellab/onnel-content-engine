@@ -45,12 +45,17 @@ class Provider:
     def headers(self, **extra):
         return extra
     def request(self, method, url, *args, **kwargs):
+        if "channels?" in url:
+            return 200, {}, {"items": [{"id": self.channel,
+                "contentDetails": {"relatedPlaylists": {"uploads": "UU" + "x" * 22}}}]}
+        if "playlistItems?" in url:
+            return 200, {}, {"items": []}
         self.thumbnails += 1
         return 200, {}, {"items": [{}]}
 
 
 class SingleTests(unittest.TestCase):
-    def fake_music(self, title, style, *, execute, output_root):
+    def fake_music(self, title, style, *, execute, output_root, slot=None):
         output_root.mkdir(parents=True, exist_ok=True)
         audio = output_root / "candidate.mp3"
         audio.write_bytes(b"audio-fixture")

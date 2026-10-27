@@ -1,6 +1,8 @@
 """Strict owner-approved spending policy for Aether Inn provider APIs.
 
-Only a single Lyria 3 Pro song request (estimated $0.08) is authorized.
+Only a single Lyria 3 Pro song request fits the coarse $0.08 allowance.
+This is NOT gross-cost authorization: aether_paid_guard must additionally
+validate current account-specific all-in cost/rights evidence at paid dispatch.
 Gemini image/audio and every other paid provider remain fail-closed.
 There is no environment, credential, or generic API bypass.
 """

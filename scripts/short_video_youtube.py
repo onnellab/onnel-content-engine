@@ -306,6 +306,11 @@ class Uploader:
                     'size': path.stat().st_size, 'sha256': file_hash(path)}
                 job.update(status='uploading', error=None)
                 save()
+                if content_profile(job['brief']) == 'aether_inn':
+                    # Hashing/intent fsync may cross the exact 09:00 schedule.
+                    # Only a first insert is fenced here; known IDs/session
+                    # probes remain observations, never replacement inserts.
+                    metadata(job, approval['choices'], self.q.clock(), executing=True)
                 url = api.initiate(body, upload['size'])
                 atomic_json(session_path, {'url': url})  # 0600 + fsync before any bytes
                 upload['phase'] = 'session_ready'
