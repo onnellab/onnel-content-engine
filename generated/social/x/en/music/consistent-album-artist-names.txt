@@ -1,4 +1,4 @@
-Keep album and artist names consistent without overwriting correct track credits is easier when the process is clear before choosing an app.
+Choose one verified album title, preserve each track's credited artist, and test edits on copies before updating your library.
 
 Install TagWeaver:
 App Store: https://apps.apple.com/app/id6759609875

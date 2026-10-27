@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "manual_key": "TOPIC-0039::x::en::x",
+  "article_path": "generated/markdown/en/music/consistent-album-artist-names.md",
+  "article_sha256": "c2b90b184c479638778ef728f4468c6fd04ad2fd016d5108b96f6eb3b3e9c3f4",
+  "canonical_url": "https://onnellab.com/blog/en/consistent-album-artist-names/",
+  "original_draft": "Keep album and artist names consistent without overwriting correct track credits is easier when the process is clear before choosing an app.\n\nInstall TagWeaver:\nApp Store: https://apps.apple.com/app/id6759609875\nGoogle Play: https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2\n",
+  "original_draft_sha256": "996fdfd0de86fe43493d3b4f19a8ab0bed95ad9954a44be9910e2d4b1534f938",
+  "replacement_opening": "Choose one verified album title, preserve each track's credited artist, and test edits on copies before updating your library."
+}
