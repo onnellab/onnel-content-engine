@@ -1,0 +1,9 @@
+The clearest way to keep album and artist names consistent without overwriting correct track credits is to separate the decision from the tool.
+
+Identify the exact release, choose one verified album title, and preserve each track's credited artist. Edit working copies, apply shared values only to matching files, then reopen the saved result and test it in your player.
+
+- Keep untouched originals. Put a working copy of the album in a separate location. Confirm which files you selected before making any shared change.
+- Identify the release. Compare the files with the release booklet or the label's official track listing. Do not merge a live release, studio album and expanded edition merely because their names resemble one another.
+
+Read the full article:
+https://onnellab.com/blog/en/consistent-album-artist-names/

@@ -5,7 +5,7 @@ slug: "consistent-album-artist-names"
 category: "music"
 language: "ko"
 description: "작업용 복사본에서 앨범과 아티스트 태그를 정리하고 곡별 크레딧은 보존해요. 음악 보관함을 업데이트하기 전에 저장된 파일을 확인하는 방법을 알아봐요."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0097"
 search_intent: "workflow"
 primary_keyword: "앨범과 아티스트 태그"
@@ -14,6 +14,9 @@ tags: "앨범과 아티스트 태그"
 short_answer: "정확한 발매판을 확인하고 검증한 앨범 제목 하나를 선택하되, 각 곡에 표기된 아티스트는 보존해요. 작업용 복사본을 편집하고 공통값은 해당하는 파일에만 적용한 다음, 저장 결과를 다시 열고 사용하는 플레이어에서 확인해요."
 related_apps: "TagWeaver"
 canonical_url: "https://onnellab.com/blog/ko/consistent-album-artist-names/"
+published_at: "2026-10-27T09:00:00+09:00"
+updated_at: "2026-10-27T09:00:00+09:00"
+related_articles: "음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|여러 장으로 된 MP3 앨범의 트랙 번호를 매기는 방법 => https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/|Android에서 오프라인 감상을 위한 음악 파일 정리하기 => https://onnellab.com/blog/ko/organize-local-music-library-offline-android/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/"
 ---
 
 # 곡별 크레딧을 지키며 앨범과 아티스트 태그 정리하기

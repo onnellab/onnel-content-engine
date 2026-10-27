@@ -5,7 +5,7 @@ slug: "consistent-album-artist-names"
 category: "music"
 language: "zh-Hans"
 description: "在工作副本中修正不一致的专辑与艺人标签，保留每首曲目的独立署名，并在更新音乐资料库之前核对已保存的文件。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0099"
 search_intent: "workflow"
 primary_keyword: "统一专辑与艺人标签"
@@ -14,6 +14,9 @@ tags: "统一专辑与艺人标签"
 short_answer: "先确认具体发行版本，选用一个经过核实的专辑名称，并保留每首曲目原有的艺人署名。编辑工作副本，只对相符的文件应用共同值，然后重新打开保存结果，在实际使用的播放器中测试。"
 related_apps: "TagWeaver"
 canonical_url: "https://onnellab.com/blog/zh-hans/consistent-album-artist-names/"
+published_at: "2026-10-27T09:00:00+09:00"
+updated_at: "2026-10-27T09:00:00+09:00"
+related_articles: "在 Android 上整理音乐文件，准备离线播放 => https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/|检查 EPUB 的目录链接和章节顺序 => https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/|替换原文件前，如何检查转换后的媒体文件 => https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/|如何整理可重复使用的文本片段 => https://onnellab.com/blog/zh-hans/turn-repeated-text-into-reusable-snippets/|如何建立一致、好查找的文件命名规则 => https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/|如何区分资料笔记与自己的结论 => https://onnellab.com/blog/zh-hans/separate-source-notes-from-conclusions/"
 ---
 
 # 统一专辑与艺人标签，保留曲目署名

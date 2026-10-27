@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
-  <title id="title">统一名称，保留署名</title>
-  <desc id="desc">先确认具体发行版本，选用一个经过核实的专辑名称，并保留每首曲目原有的艺人署名。编辑工作副本，只对相符的文件应用共同值，然后重新打开保存结果，在实际使用的播放器中测试。</desc>
-  <rect width="1200" height="675" fill="#fbf7ef"/>
-  <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
-  <text fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="38" font-weight="680"><tspan x="92" y="100">统一名称，保留署名</tspan></text>
-  <text fill="#69645c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="19"><tspan x="92" y="134">编辑标签之前，先核对发行版本 · 统一专辑与艺人标签</tspan></text>
-  <g transform="translate(72 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">1. 识别</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">确认具体发行版本</tspan></text></g><g transform="translate(346 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">2. 比较</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">区分共同字段和独</tspan><tspan x="24" y="105">立字段</tspan></text></g><g transform="translate(620 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">3. 保存</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">先修改少量工作副</tspan><tspan x="24" y="105">本</tspan></text></g><g transform="translate(894 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">4. 验证</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">重新打开文件并测</tspan><tspan x="24" y="105">试播放器</tspan></text></g>
-  <path d="M280 237H328m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M554 237H602m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M828 237H876m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.6"/>
-  <text x="124" y="506" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650">共用专辑信息，保留曲目差异。</text>
-  <text x="92" y="588" fill="#817c73" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="14">ONNELLAB Blog · 流程图</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">统一专辑与艺人标签，保留曲目署名</title>
+  <desc id="desc">在工作副本中修正不一致的专辑与艺人标签，保留每首曲目的独立署名，并在更新音乐资料库之前核对已保存的文件。</desc>
+  <rect width="1200" height="630" fill="#f8f4ec"/>
+  <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
+  <rect x="92" y="92" width="210" height="44" rx="22" fill="#f3e9fb" stroke="#d8c3ec" stroke-width="1.4"/>
+  <text x="118" y="121" fill="#4e3568" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="18" font-weight="700">音乐</text>
+  <text x="92" y="218" fill="#282723" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">统一专辑与艺人标签，保留曲目署名</tspan></text>
+  <text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="24"><tspan x="92" y="410">在工作副本中修正不一致的专辑与艺人标签，保留每首曲目的独立署名，并在更新音乐资</tspan><tspan x="92" y="444">料库之前核对已保存的文件。</tspan></text>
+  <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
+  <text x="92" y="552" fill="#817c73" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="19">音乐 · ZH-HANS</text>
+  <text x="1048" y="552" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
 </svg>

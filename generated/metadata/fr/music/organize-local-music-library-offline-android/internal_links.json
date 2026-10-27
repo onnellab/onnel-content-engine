@@ -89,9 +89,9 @@
         "slug": "make-long-plain-text-easier-to-navigate",
         "category": "reading",
         "language": "fr",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/fr/reading/make-long-plain-text-easier-to-navigate.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5

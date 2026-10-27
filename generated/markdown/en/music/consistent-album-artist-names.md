@@ -5,7 +5,7 @@ slug: "consistent-album-artist-names"
 category: "music"
 language: "en"
 description: "Correct inconsistent album and artist tags on working copies, preserve track-specific credits, and verify saved files before updating a music library."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0039"
 search_intent: "workflow"
 primary_keyword: "consistent album and artist tags"
@@ -14,6 +14,9 @@ tags: "consistent album and artist tags"
 short_answer: "Identify the exact release, choose one verified album title, and preserve each track's credited artist. Edit working copies, apply shared values only to matching files, then reopen the saved result and test it in your player."
 related_apps: "TagWeaver"
 canonical_url: "https://onnellab.com/blog/en/consistent-album-artist-names/"
+published_at: "2026-10-27T09:00:00+09:00"
+updated_at: "2026-10-27T09:00:00+09:00"
+related_articles: "How to Number Tracks in a Multi-Disc MP3 Album => https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/|Organize a Local Music Library for Offline Listening on Android => https://onnellab.com/blog/en/organize-local-music-library-offline-android/|How to Reuse Copied Text Snippets on iPhone => https://onnellab.com/blog/en/reuse-copied-text-snippets-iphone/|How to Turn Rough Notes Into a Structured First Draft => https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/|How to Keep a Durable Research Reading Log => https://onnellab.com/blog/en/keep-durable-research-reading-log/"
 ---
 
 # Consistent Album and Artist Tags Without Losing Track Credits

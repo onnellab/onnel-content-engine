@@ -5,7 +5,7 @@ slug: "consistent-album-artist-names"
 category: "music"
 language: "pt-BR"
 description: "Corrija tags inconsistentes de álbum e artista em cópias de trabalho, preserve os créditos de cada faixa e confira os arquivos salvos antes de atualizar a biblioteca."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0101"
 search_intent: "workflow"
 primary_keyword: "tags de álbum e artista consistentes"
@@ -14,6 +14,9 @@ tags: "tags de álbum e artista consistentes"
 short_answer: "Identifique a edição exata, escolha um título de álbum verificado e preserve o artista creditado em cada faixa. Edite cópias de trabalho, aplique valores compartilhados apenas aos arquivos correspondentes e depois reabra o resultado salvo e teste-o no seu player."
 related_apps: "TagWeaver"
 canonical_url: "https://onnellab.com/blog/pt-br/consistent-album-artist-names/"
+published_at: "2026-10-27T09:00:00+09:00"
+updated_at: "2026-10-27T09:00:00+09:00"
+related_articles: "Como organizar músicas no Android para ouvir offline => https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/|Como transformar textos repetidos em trechos reutilizáveis => https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/|Como conferir o sumário e a ordem dos capítulos de um EPUB => https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/|Como testar um arquivo de mídia convertido antes de substituir o original => https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/|Como criar um padrão consistente para nomes de arquivos => https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/"
 ---
 
 # Tags de álbum e artista consistentes: preserve os créditos

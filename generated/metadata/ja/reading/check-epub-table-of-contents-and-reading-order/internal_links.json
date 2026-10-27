@@ -35,9 +35,9 @@
         "slug": "make-long-plain-text-easier-to-navigate",
         "category": "reading",
         "language": "ja",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/ja/reading/make-long-plain-text-easier-to-navigate.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "reading"

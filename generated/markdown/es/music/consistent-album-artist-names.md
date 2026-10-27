@@ -5,7 +5,7 @@ slug: "consistent-album-artist-names"
 category: "music"
 language: "es"
 description: "Corrige etiquetas de álbum y artista inconsistentes en copias de trabajo, conserva los créditos de cada pista y verifica los archivos guardados antes de actualizar la biblioteca."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0104"
 search_intent: "workflow"
 primary_keyword: "etiquetas de álbum y artista coherentes"
@@ -14,6 +14,9 @@ tags: "etiquetas de álbum y artista coherentes"
 short_answer: "Identifica la edición exacta, elige un título de álbum verificado y conserva el artista acreditado en cada pista. Edita copias de trabajo, aplica valores compartidos solo a los archivos correspondientes y después vuelve a abrir el resultado guardado y pruébalo en tu reproductor."
 related_apps: "TagWeaver"
 canonical_url: "https://onnellab.com/blog/es/consistent-album-artist-names/"
+published_at: "2026-10-27T09:00:00+09:00"
+updated_at: "2026-10-27T09:00:00+09:00"
+related_articles: "Cómo organizar música en Android para escucharla sin conexión => https://onnellab.com/blog/es/organize-local-music-library-offline-android/|Cómo convertir textos repetidos en fragmentos reutilizables => https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/|Cómo comprobar el índice y el orden de los capítulos de un EPUB => https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/|Cómo probar un archivo multimedia convertido antes de sustituir el original => https://onnellab.com/blog/es/test-converted-media-before-replacing-original/|Cómo separar las notas de las fuentes de tus conclusiones => https://onnellab.com/blog/es/separate-source-notes-from-conclusions/"
 ---
 
 # Etiquetas de álbum y artista coherentes sin perder créditos

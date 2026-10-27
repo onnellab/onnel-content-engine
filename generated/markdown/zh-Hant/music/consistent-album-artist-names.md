@@ -5,7 +5,7 @@ slug: "consistent-album-artist-names"
 category: "music"
 language: "zh-Hant"
 description: "在工作副本中修正不一致的專輯與藝人標籤，保留每首曲目的個別署名，並在更新音樂資料庫前核對已儲存的檔案。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0100"
 search_intent: "workflow"
 primary_keyword: "統一專輯與藝人標籤"
@@ -14,6 +14,9 @@ tags: "統一專輯與藝人標籤"
 short_answer: "先確認確切的發行版本，選用經過核實的專輯名稱，並保留每首曲目的藝人署名。編輯工作副本，只對相符的檔案套用共同值，接著重新開啟儲存結果，在實際使用的播放器中測試。"
 related_apps: "TagWeaver"
 canonical_url: "https://onnellab.com/blog/zh-hant/consistent-album-artist-names/"
+published_at: "2026-10-27T09:00:00+09:00"
+updated_at: "2026-10-27T09:00:00+09:00"
+related_articles: "在 Android 整理音樂檔案，準備離線播放 => https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/|檢查 EPUB 的目錄連結與章節順序 => https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/|取代原始檔案前，如何檢查轉檔後的媒體檔案 => https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/|如何整理可重複使用的文字片段 => https://onnellab.com/blog/zh-hant/turn-repeated-text-into-reusable-snippets/|如何建立一致又好找的檔案命名規則 => https://onnellab.com/blog/zh-hant/design-consistent-file-naming-system/|如何區分資料筆記與自己的結論 => https://onnellab.com/blog/zh-hant/separate-source-notes-from-conclusions/"
 ---
 
 # 統一專輯與藝人標籤，保留曲目署名

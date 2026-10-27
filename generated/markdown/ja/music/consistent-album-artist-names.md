@@ -5,7 +5,7 @@ slug: "consistent-album-artist-names"
 category: "music"
 language: "ja"
 description: "作業用コピーでアルバム名とアーティスト名のタグを整え、曲ごとのクレジットを保持します。音楽ライブラリを更新する前に保存済みファイルを確認しましょう。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0098"
 search_intent: "workflow"
 primary_keyword: "アルバム名とアーティスト名のタグを整える"
@@ -14,6 +14,9 @@ tags: "アルバム名とアーティスト名のタグを整える"
 short_answer: "対象のリリースを正確に特定し、確認済みのアルバム名にそろえつつ、各曲に記載されたアーティストは保持します。作業用コピーを編集し、共通の値は該当するファイルにだけ適用してから、保存結果を開き直し、使っているプレーヤーで確認します。"
 related_apps: "TagWeaver"
 canonical_url: "https://onnellab.com/blog/ja/consistent-album-artist-names/"
+published_at: "2026-10-27T09:00:00+09:00"
+updated_at: "2026-10-27T09:00:00+09:00"
+related_articles: "Androidの音楽ファイルをオフライン再生用に整理する方法 => https://onnellab.com/blog/ja/organize-local-music-library-offline-android/|EPUBの目次リンクと章の順序を確認する方法 => https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/|元ファイルを置き換える前に変換後のメディアを確認する方法 => https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/|繰り返し使う文章を再利用できる定型文に整理する方法 => https://onnellab.com/blog/ja/turn-repeated-text-into-reusable-snippets/|探しやすいファイル命名ルールの作り方 => https://onnellab.com/blog/ja/design-consistent-file-naming-system/|出典メモと自分の結論を分ける方法 => https://onnellab.com/blog/ja/separate-source-notes-from-conclusions/"
 ---
 
 # アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る

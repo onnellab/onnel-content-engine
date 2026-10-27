@@ -250,6 +250,13 @@
     <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
+    <title>Consistent Album and Artist Tags Without Losing Track Credits</title>
+    <link>https://onnellab.com/blog/en/consistent-album-artist-names/</link>
+    <guid>https://onnellab.com/blog/en/consistent-album-artist-names/</guid>
+    <description>Correct inconsistent album and artist tags on working copies, preserve track-specific credits, and verify saved files before updating a music library.</description>
+    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>How to Turn Repeated Text Into Reusable Snippets</title>
     <link>https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/</link>
     <guid>https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/</guid>
@@ -605,6 +612,62 @@
     <guid>https://onnellab.com/blog/es/separate-source-notes-from-conclusions/</guid>
     <description>Distingue las citas, las paráfrasis y tus propias interpretaciones con referencias precisas a los pasajes, una tabla comparativa práctica y un proceso de cinco pasos para tus notas de investigación.</description>
     <pubDate>Sat, 24 Oct 2026 03:18:54 GMT</pubDate>
+  </item>
+  <item>
+    <title>곡별 크레딧을 지키며 앨범과 아티스트 태그 정리하기</title>
+    <link>https://onnellab.com/blog/ko/consistent-album-artist-names/</link>
+    <guid>https://onnellab.com/blog/ko/consistent-album-artist-names/</guid>
+    <description>작업용 복사본에서 앨범과 아티스트 태그를 정리하고 곡별 크레딧은 보존해요. 음악 보관함을 업데이트하기 전에 저장된 파일을 확인하는 방법을 알아봐요.</description>
+    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る</title>
+    <link>https://onnellab.com/blog/ja/consistent-album-artist-names/</link>
+    <guid>https://onnellab.com/blog/ja/consistent-album-artist-names/</guid>
+    <description>作業用コピーでアルバム名とアーティスト名のタグを整え、曲ごとのクレジットを保持します。音楽ライブラリを更新する前に保存済みファイルを確認しましょう。</description>
+    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>统一专辑与艺人标签，保留曲目署名</title>
+    <link>https://onnellab.com/blog/zh-hans/consistent-album-artist-names/</link>
+    <guid>https://onnellab.com/blog/zh-hans/consistent-album-artist-names/</guid>
+    <description>在工作副本中修正不一致的专辑与艺人标签，保留每首曲目的独立署名，并在更新音乐资料库之前核对已保存的文件。</description>
+    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>統一專輯與藝人標籤，保留曲目署名</title>
+    <link>https://onnellab.com/blog/zh-hant/consistent-album-artist-names/</link>
+    <guid>https://onnellab.com/blog/zh-hant/consistent-album-artist-names/</guid>
+    <description>在工作副本中修正不一致的專輯與藝人標籤，保留每首曲目的個別署名，並在更新音樂資料庫前核對已儲存的檔案。</description>
+    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Tags de álbum e artista consistentes: preserve os créditos</title>
+    <link>https://onnellab.com/blog/pt-br/consistent-album-artist-names/</link>
+    <guid>https://onnellab.com/blog/pt-br/consistent-album-artist-names/</guid>
+    <description>Corrija tags inconsistentes de álbum e artista em cópias de trabalho, preserve os créditos de cada faixa e confira os arquivos salvos antes de atualizar a biblioteca.</description>
+    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Einheitliche Album- und Künstler-Tags: Künstlerangaben erhalten</title>
+    <link>https://onnellab.com/blog/de/consistent-album-artist-names/</link>
+    <guid>https://onnellab.com/blog/de/consistent-album-artist-names/</guid>
+    <description>Korrigiere uneinheitliche Album- und Künstler-Tags in Arbeitskopien, erhalte die Angaben pro Titel und prüfe gespeicherte Dateien vor dem Aktualisieren der Musikbibliothek.</description>
+    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Des tags d’album et d’artiste cohérents, des crédits préservés</title>
+    <link>https://onnellab.com/blog/fr/consistent-album-artist-names/</link>
+    <guid>https://onnellab.com/blog/fr/consistent-album-artist-names/</guid>
+    <description>Corrigez les tags d’album et d’artiste sur des copies de travail, préservez les crédits propres à chaque piste et vérifiez les fichiers enregistrés avant de mettre à jour la bibliothèque.</description>
+    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Etiquetas de álbum y artista coherentes sin perder créditos</title>
+    <link>https://onnellab.com/blog/es/consistent-album-artist-names/</link>
+    <guid>https://onnellab.com/blog/es/consistent-album-artist-names/</guid>
+    <description>Corrige etiquetas de álbum y artista inconsistentes en copias de trabajo, conserva los créditos de cada pista y verifica los archivos guardados antes de actualizar la biblioteca.</description>
+    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>

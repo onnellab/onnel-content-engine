@@ -5,7 +5,7 @@ slug: "consistent-album-artist-names"
 category: "music"
 language: "fr"
 description: "Corrigez les tags d’album et d’artiste sur des copies de travail, préservez les crédits propres à chaque piste et vérifiez les fichiers enregistrés avant de mettre à jour la bibliothèque."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0103"
 search_intent: "workflow"
 primary_keyword: "tags d’album et d’artiste cohérents"
@@ -14,6 +14,9 @@ tags: "tags d’album et d’artiste cohérents"
 short_answer: "Identifiez l’édition exacte, choisissez un titre d’album vérifié et préservez l’artiste crédité pour chaque piste. Modifiez des copies de travail, appliquez les valeurs communes uniquement aux fichiers correspondants, puis rouvrez le résultat enregistré et testez-le dans votre lecteur."
 related_apps: "TagWeaver"
 canonical_url: "https://onnellab.com/blog/fr/consistent-album-artist-names/"
+published_at: "2026-10-27T09:00:00+09:00"
+updated_at: "2026-10-27T09:00:00+09:00"
+related_articles: "Organiser sa musique sur Android pour une écoute hors ligne => https://onnellab.com/blog/fr/organize-local-music-library-offline-android/|Vérifier la table des matières et l’ordre des chapitres d’un EPUB => https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/|Créer une convention cohérente pour nommer ses fichiers => https://onnellab.com/blog/fr/design-consistent-file-naming-system/|Transformer les textes répétitifs en extraits réutilisables => https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/|Comment séparer les notes de source de vos conclusions => https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/|Tester un fichier multimédia converti avant de remplacer l’original => https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/"
 ---
 
 # Des tags d’album et d’artiste cohérents, des crédits préservés

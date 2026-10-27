@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0031",
   "title": "How to Inspect a Large Log File Without Altering the Original",
-  "input_fingerprint": "8f365ac16a9fede19abe093f37cf866ae27401b40c18a3112201d3ea6bba25a6",
+  "input_fingerprint": "9c318dbac05acc1f917cfe0da2b44846dbd67c9a0e3d5f634758237d9ed071bf",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

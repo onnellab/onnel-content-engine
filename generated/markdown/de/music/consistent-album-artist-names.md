@@ -5,7 +5,7 @@ slug: "consistent-album-artist-names"
 category: "music"
 language: "de"
 description: "Korrigiere uneinheitliche Album- und Künstler-Tags in Arbeitskopien, erhalte die Angaben pro Titel und prüfe gespeicherte Dateien vor dem Aktualisieren der Musikbibliothek."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0102"
 search_intent: "workflow"
 primary_keyword: "einheitliche Album- und Künstler-Tags"
@@ -14,6 +14,9 @@ tags: "einheitliche Album- und Künstler-Tags"
 short_answer: "Bestimme die genaue Veröffentlichung, wähle einen geprüften Albumtitel und erhalte die Künstlerangaben jedes einzelnen Titels. Bearbeite Arbeitskopien, übertrage gemeinsame Werte nur auf passende Dateien und öffne anschließend das gespeicherte Ergebnis erneut, um es im Player zu testen."
 related_apps: "TagWeaver"
 canonical_url: "https://onnellab.com/blog/de/consistent-album-artist-names/"
+published_at: "2026-10-27T09:00:00+09:00"
+updated_at: "2026-10-27T09:00:00+09:00"
+related_articles: "Musikdateien auf Android für die Offline-Wiedergabe ordnen => https://onnellab.com/blog/de/organize-local-music-library-offline-android/|Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln => https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/|Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen => https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/|Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen => https://onnellab.com/blog/de/test-converted-media-before-replacing-original/|Einheitliche Dateinamen: eine einfache Konvention entwickeln => https://onnellab.com/blog/de/design-consistent-file-naming-system/"
 ---
 
 # Einheitliche Album- und Künstler-Tags: Künstlerangaben erhalten
