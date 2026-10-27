@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-25T03:27:53+00:00",
+  "updated_at": "2026-10-27T07:00:06+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -1071,6 +1071,33 @@
       "source_draft_path": "generated/social/linkedin/en/research/separate-source-notes-from-conclusions.txt",
       "observed_short_url": "https://lnkd.in/gtnuuHYh",
       "canonical_url": "https://onnellab.com/blog/en/separate-source-notes-from-conclusions/"
+    },
+    "TOPIC-0039::x::en::x": {
+      "topic_id": "TOPIC-0039",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "marked_at": "2026-10-27T07:00:06+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://x.com/onnellab/status/2114974799051239504",
+      "verified_at": "2026-10-27T07:00:06+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "2026-10-27T06:57:41.000Z",
+      "published_at_precision": "second",
+      "observed_at": "2026-10-27T06:58:28Z",
+      "observed_at_precision": "second",
+      "observation_source": "Dot cloud browser verified signed-in @onnellab, fresh main ledgers and profile/search history before posting. Live canonical and complete corrected copy checked. One UI submit; profile count 22 to 23. Exact permalink verifies author, full body, store destinations and time datetime. X normalized blank-line presentation. observed_at records verification, separately from published_at.",
+      "browser_ui_timestamp": "3:57 PM · Oct 27, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "draft_sha256": "83e7bfcf40b860a47844a45a463bf9fb03f96b34025d2ac4cf27e0076689e23b",
+      "posted_body_sha256": "4eb819f0d4db83d42ecb038494c776c1bb4d0a084b70a8733433a2ac7573a11b",
+      "account": "@onnellab",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "post_id": "2114974799051239504",
+      "source_draft_path": "generated/social/x/en/music/consistent-album-artist-names.txt",
+      "canonical_url": "https://onnellab.com/blog/en/consistent-album-artist-names/"
     }
   }
 }
