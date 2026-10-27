@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "segra-file-order-20261030",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "uploaded_processing",
+  "status": "scheduled_verified",
   "created_at": "2026-10-27T09:56:30Z",
   "target_publish_at": "2026-10-30T09:00:00+09:00",
   "timezone": "Asia/Seoul",
@@ -21,5 +21,7 @@
     "existing_segra": "iCAzEHp1tLg trimming topic, distinct"
   },
   "retry_policy": "Never upload again until remote state is reconciled; preserve assigned video ID.",
-  "video_id_observed_at": "2026-10-27T09:57:19Z"
+  "video_id_observed_at": "2026-10-27T09:57:19Z",
+  "receipt_path": "data/screenshot_guides/segra-file-order-20261030.receipt.json",
+  "last_verified_at": "2026-10-27T10:00:29Z"
 }
