@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_preparation_not_render_contract",
+  "guide_id": "segra-file-order-20261030",
+  "status": "draft_preparation_only",
+  "prepared_at": "2026-10-27T09:19:55Z",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "target_publish_at": "2026-10-30T09:00:00+09:00",
+  "source": {
+    "repository": "onnellab/segra",
+    "asset_commit": "e1fdc2367255478eccba4da1f0aaefc1367e5719",
+    "capture_source_commit": "e62c96a3771f8f594414cc9839b5d81c745fdd27",
+    "capture_source_version": "1.0.6+76",
+    "reviewed_release_commit": "601f5e895be63917b29d28aa844b9a52e5fc751e",
+    "release_branch": "release/1.0.7-77",
+    "release_source_version": "1.0.7+77",
+    "asset_path": "assets/store_promo/raw/en/android_phone/merge.png",
+    "manifest_sha256": "967c8fbfddca79c12b5fa4aba2d7be3f477793b9a40b32545986d1ae35e409fa",
+    "sha256_recomputed_this_run": false,
+    "original_pixels_viewed": true,
+    "dimensions_reported": [
+      1080,
+      2400
+    ],
+    "native_manifest": "assets/store_promo/native_campaign_20261020.json",
+    "native_capture": "Android native Flutter Surface PixelCopy, capture-only debug app; not release-binary attestation",
+    "parity": {
+      "audio_merge_tree_sha": "290d6e1e88b2759ba05bbc93bfd7db25b906b251",
+      "identical_between_capture_and_release": [
+        "lib/features/audio_merge (complete subtree)",
+        "lib/core/constants/app_copy.dart",
+        "lib/core/l10n/l10n_x.dart",
+        "lib/core/theme/segra_colors.dart",
+        "lib/core/widgets/app_scaffold.dart",
+        "lib/l10n/app_localizations_en.dart",
+        "pubspec.lock"
+      ],
+      "limits": "Screen-specific source evidence only. Native media and audio-video processing changes exist; no execution/output or signed-binary equivalence claim."
+    },
+    "rights": "ONNELLAB app UI and repository-authored merge_sample_01.mp3, merge_sample_02.wav, merge_sample_03.mp3 fixture names. Harness creates artificial repeated-byte files, not licensed music or valid audio playback evidence. No audio included.",
+    "harness_path": "assets/store_promo/capture_evidence/harnesses/fef13a1b5cd933f3766b844f824d200fb2e1bbe7b47e7fcd2e3558b4b86e74f5.dart.txt"
+  },
+  "store": {
+    "url": "https://play.google.com/store/apps/details?id=com.onnellab.segra",
+    "surface": "live dot cloud browser Play About dialog",
+    "observed_at": "2026-10-27T09:18:41Z",
+    "developer": "ONNELLAB",
+    "public_version": "1.0.7",
+    "updated_date": "2026. 10. 23.",
+    "feature_support": "MP3/WAV files can be joined in desired order.",
+    "platform_promoted": "Android only",
+    "price_claim_in_draft": false
+  },
+  "draft": {
+    "title": "How to Check File Order in Segra | Android Screenshot Guide",
+    "description": "In Segra’s Audio Merge screen, check the numbered File order list before choosing Merge and save.\n\nStill-screen guide using a real Android native capture with repository-authored demonstration filenames. No file selection, reordering, playback, merging, saved result, or speed demonstration is shown. The sample files are capture fixtures, not music recordings.\n\nExplore Segra for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.segra\n\n#Segra #AudioMerge #Shorts",
+    "format_disclosure": "Still-screen guide · Demo filenames",
+    "audio": "none",
+    "slides": [
+      {
+        "seconds": 5,
+        "heading": "Check the file order",
+        "caption": "Read the numbered list."
+      },
+      {
+        "seconds": 5,
+        "heading": "Match each number to a file",
+        "caption": "This example contains three demo files."
+      },
+      {
+        "seconds": 5,
+        "heading": "Before merging",
+        "caption": "No merge or saved result is shown."
+      }
+    ],
+    "geometry_plan": "Full source uniformly contained, no crop or retouch, persistent disclosure; final fit/readability must be reviewed.",
+    "planned_output": "15 seconds, 450 frames, 1080x1920, 30fps H.264/yuv420p, no audio"
+  },
+  "remaining_gates": [
+    "Independent source/copy review",
+    "Recompute actual downloaded PNG SHA-256 and source dimensions",
+    "Add distinct immutable renderer contract and exhaustive reject/mutation tests without weakening prior gates",
+    "Render only after exact free cloud Python/Pillow/ffmpeg/ffprobe execution exception is confirmed",
+    "Inspect all 450 decoded frames and original/final visuals, verify no audio, preserve Library output",
+    "Reconcile complete Shorts and ordinary video inventory before durable upload intent and single browser schedule"
+  ],
+  "execution_exception_needed": {
+    "scope": "Only one Segra file-order screenshot guide for October 30: existing free dot-cloud Python/Pillow/ffmpeg/ffprobe for source SHA, contract tests, bounded render and full-frame QA, Library preservation.",
+    "bounds": "No installs, no paid API/credits, no separate Work/Codex task, no Mac/Windows execution. Two encoder threads, 180-second encoder timeout; terminate and verify only owned heavy processes.",
+    "authorized_by_this_file": false
+  },
+  "actions": {
+    "cli": false,
+    "render": false,
+    "upload": false,
+    "schedule": false,
+    "app_or_store_change": false
+  }
+}
