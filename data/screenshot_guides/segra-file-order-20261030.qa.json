@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "guide_id": "segra-file-order-20261030",
+  "reviewed_at": "2026-10-27T09:55:00Z",
+  "render": {
+    "manifest_sha256": "05efea6ca22c99959d4579e56a59c46aab769537003288cec28756f7e6c6b0c9",
+    "asset_hashes": {
+      "segra-merge.png": "967c8fbfddca79c12b5fa4aba2d7be3f477793b9a40b32545986d1ae35e409fa"
+    },
+    "kind": "screenshot_guide",
+    "runtime_recording_attestation": false,
+    "upload_authorized_by_cli": false,
+    "video_file": "segra-file-order-20261030.mp4",
+    "video_sha256": "9ffbef0e65c6a5f76239cf76e983ec8ab1916cab2b65e5a37a8094c3d55dde16",
+    "seconds": 15,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "audio": false,
+    "slide_sha256": {
+      "slide-1.png": "ea137026c9d4ad405bbbb2f874f151d9fa0c8da6af22037081cb6d541d1f43dc",
+      "slide-2.png": "0817201fba706281b0e8ae594c2b06bc076607f912b077256c7cdfab069ee256",
+      "slide-3.png": "363eb719e3b711e83587873a70416f9505b10b19f7a3ee352aa7a4fa3c4bb11e"
+    },
+    "text_bounds": [
+      {
+        "slide": 1,
+        "text": "SEGRA · SCREENSHOT GUIDE",
+        "bbox": [
+          296.5,
+          83,
+          783.5,
+          105
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Check the file order",
+        "bbox": [
+          273,
+          175,
+          807,
+          212
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Read the numbered list.",
+        "bbox": [
+          347.5,
+          241,
+          732.5,
+          265
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Still-screen guide · Demo filenames",
+        "bbox": [
+          264.5,
+          1726,
+          815.5,
+          1756
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Segra for Android · Link in description",
+        "bbox": [
+          266,
+          1788,
+          814,
+          1816
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "ONNELLAB",
+        "bbox": [
+          462,
+          1847,
+          618,
+          1866
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "SEGRA · SCREENSHOT GUIDE",
+        "bbox": [
+          296.5,
+          83,
+          783.5,
+          105
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Match each number to a file",
+        "bbox": [
+          160.5,
+          175,
+          919.5,
+          212
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "This example contains three demo files.",
+        "bbox": [
+          218.5,
+          241,
+          859.5,
+          272
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Still-screen guide · Demo filenames",
+        "bbox": [
+          264.5,
+          1726,
+          815.5,
+          1756
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Segra for Android · Link in description",
+        "bbox": [
+          266,
+          1788,
+          814,
+          1816
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "ONNELLAB",
+        "bbox": [
+          462,
+          1847,
+          618,
+          1866
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "SEGRA · SCREENSHOT GUIDE",
+        "bbox": [
+          296.5,
+          83,
+          783.5,
+          105
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Before merging",
+        "bbox": [
+          329,
+          175,
+          751,
+          221
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "No merge or saved result is shown.",
+        "bbox": [
+          257.5,
+          241,
+          822.5,
+          272
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Still-screen guide · Demo filenames",
+        "bbox": [
+          264.5,
+          1726,
+          815.5,
+          1756
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Segra for Android · Link in description",
+        "bbox": [
+          266,
+          1788,
+          814,
+          1816
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "ONNELLAB",
+        "bbox": [
+          462,
+          1847,
+          618,
+          1866
+        ]
+      }
+    ]
+  },
+  "full_frame": {
+    "app": "segra",
+    "frames_checked": 450,
+    "full_source_region_pixel_equal_to_uncropped_uniform_resize": true,
+    "decoded_png_comparison": "Every frame compared to corresponding designed slide; H264 tolerance MAE<1.5/channel and max error<100/255, no automatic score substitutes visual review.",
+    "max_mae": 0.8189678176440329,
+    "max_pixel_difference": 58,
+    "unique_decoded_hashes_by_static_segment": [
+      46,
+      62,
+      47
+    ],
+    "audio_streams": 0,
+    "seconds": 15,
+    "size": [
+      1080,
+      1920
+    ],
+    "frame_rate": "30/1",
+    "video_sha256": "9ffbef0e65c6a5f76239cf76e983ec8ab1916cab2b65e5a37a8094c3d55dde16",
+    "owned_decoder_pid": 15,
+    "owned_decoder_exited": true
+  },
+  "tests": {
+    "run": 92,
+    "passed": 87,
+    "skipped": 5,
+    "failed": 0,
+    "segra_focused_passed": 9
+  },
+  "independent_review": {
+    "reviewer": "native subagent segra_review",
+    "result": "PASS",
+    "scope": "Original and all three slides inspected; full uncropped source-region equality, readability, still/demo disclosure, fixture rights limits, no execution/result/speed claims. Independent ffprobe and 9 tests."
+  },
+  "library": {
+    "operation": "create_library_file",
+    "status": "succeeded",
+    "path": "/segra-file-order-20261030.mp4",
+    "file_id": "file_00000000539481f59d00046ebbc9048d",
+    "library_file_id": "libfile_542c2df179e88191b5035caaabfacbb4",
+    "file_name": "segra-file-order-20261030.mp4",
+    "current_version_number": 0,
+    "restored_from_version_number": null,
+    "xattrs": [
+      {
+        "name": "user.library-file-version",
+        "value": "0"
+      }
+    ],
+    "directory_id": "libdir_5761fccd526c8191b06298deb005eb0c",
+    "mime_type": "video/mp4",
+    "library_artifact_type": "other",
+    "file_size_bytes": 219876,
+    "external_connectors_accessed": false
+  },
+  "studio_inventory": {
+    "observed_at": "2026-10-27T09:54:17Z",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "shorts_count": 14,
+    "ordinary_video_count": 6,
+    "matching_title_or_topic_found": false,
+    "existing_segra": "iCAzEHp1tLg trimming topic, distinct"
+  },
+  "processes": {
+    "owned_encoder_and_decoder_exited": true
+  },
+  "publication_status": "not_uploaded"
+}

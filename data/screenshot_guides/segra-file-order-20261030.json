@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "segra-file-order-20261030",
+  "app_id": "APP-0004",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/segra",
+    "commit": "e1fdc2367255478eccba4da1f0aaefc1367e5719",
+    "capture_source_commit": "e62c96a3771f8f594414cc9839b5d81c745fdd27",
+    "capture_source_version": "1.0.6+76",
+    "capture_manifest_path": "assets/store_promo/native_campaign_20261020.json",
+    "capture_type": "real_android_native_pixelcopy_app_ui",
+    "source_parity": "{\"audio_merge_tree_sha\":\"290d6e1e88b2759ba05bbc93bfd7db25b906b251\",\"identical_between_capture_and_release\":[\"lib/features/audio_merge (complete subtree)\",\"lib/core/constants/app_copy.dart\",\"lib/core/l10n/l10n_x.dart\",\"lib/core/theme/segra_colors.dart\",\"lib/core/widgets/app_scaffold.dart\",\"lib/l10n/app_localizations_en.dart\",\"pubspec.lock\"],\"limits\":\"Screen-specific source evidence only. Native media and audio-video processing changes exist; no execution/output or signed-binary equivalence claim.\"}",
+    "reviewed_release_commit": "601f5e895be63917b29d28aa844b9a52e5fc751e",
+    "public_version_recorded": "1.0.7",
+    "public_listing_source": "https://play.google.com/store/apps/details?id=com.onnellab.segra",
+    "public_listing_checked_at": "2026-10-27T09:18:41Z",
+    "public_listing_observation": "Live Play About showed public Android 1.0.7, ONNELLAB and October 23 update.",
+    "rights": "ONNELLAB app UI and repository-authored merge_sample_01.mp3, merge_sample_02.wav, merge_sample_03.mp3 fixture names. Harness creates artificial repeated-byte files, not licensed music or valid audio playback evidence. No audio included.",
+    "signed_release_capture_attested": false,
+    "runtime_action_verified_by_video": false,
+    "limitations": [
+      "Native capture-only debug app, source 1.0.6+76; screen-specific source parity to release/1.0.7-77 only.",
+      "Still numbered File order list; no selection, reorder, playback, merge, save or speed demonstration."
+    ]
+  },
+  "assets": [
+    {
+      "local_name": "segra-merge.png",
+      "source_path": "assets/store_promo/raw/en/android_phone/merge.png",
+      "sha256": "967c8fbfddca79c12b5fa4aba2d7be3f477793b9a40b32545986d1ae35e409fa",
+      "dimensions": [
+        1080,
+        2400
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "seconds": 5,
+      "heading": "Check the file order",
+      "caption": "Read the numbered list.",
+      "asset": "segra-merge.png"
+    },
+    {
+      "seconds": 5,
+      "heading": "Match each number to a file",
+      "caption": "This example contains three demo files.",
+      "asset": "segra-merge.png"
+    },
+    {
+      "seconds": 5,
+      "heading": "Before merging",
+      "caption": "No merge or saved result is shown.",
+      "asset": "segra-merge.png"
+    }
+  ],
+  "metadata": {
+    "title": "How to Check File Order in Segra | Android Screenshot Guide",
+    "description": "In Segra’s Audio Merge screen, check the numbered File order list before choosing Merge and save.\n\nStill-screen guide using a real Android native capture with repository-authored demonstration filenames. No file selection, reordering, playback, merging, saved result, or speed demonstration is shown. The sample files are capture fixtures, not music recordings.\n\nExplore Segra for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.segra\n\n#Segra #AudioMerge #Shorts",
+    "format_disclosure": "Still-screen guide · Demo filenames",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "Segra for Android · Link in description",
+    "target_publish_at": "2026-10-30T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned app UI",
+    "scope": "English screenshot-based app guide on ONNELLAB YouTube; no simulated interaction; existing recording gate unchanged",
+    "execution_scope": "One Segra file-order guide only: existing free dot-cloud Python/Pillow/ffmpeg/ffprobe, tests, render, QA and Library. User approval Sentinel_de168794344c8191a5249929568e2dd8 at 2026-10-27T09:50:40Z to specific request Sentinel_2f0ed59e4ea48191848bfb744feab0f0. No installs, paid services, separate Work/Codex or user computer."
+  }
+}

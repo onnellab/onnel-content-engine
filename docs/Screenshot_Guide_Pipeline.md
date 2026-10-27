@@ -303,3 +303,9 @@ read back channel, video ID and Seoul schedule. Uncertain outcomes must be
 reconciled before retry. No new login/security/external-link verification is
 included in this exception.
 
+
+## Reviewed Segra file-order guide — 2026-10-27
+
+The owner explicitly approved this one October 30 guide's existing free dot-cloud Python/Pillow/ffmpeg/ffprobe execution in Sentinel_de168794344c8191a5249929568e2dd8. No installs, paid tools, Work/Codex or user computer. `segra-file-order-20261030.json` and SEGRA_CONTRACT pin every field and native Android PixelCopy raw merge screenshot SHA. Capture source 1.0.6+76 differs from public Play 1.0.7: the complete audio_merge subtree and listed rendering dependencies match release/1.0.7-77. This is selected-screen parity, not signed-release attestation. Native campaign 20261020 supersedes earlier Segra host-render-only evidence for this selected image.
+
+Repository demo filenames refer to artificial byte fixtures, not valid music. Explain only the numbered list; no selection, reorder, playback, merge, saved-result or speed claim. Full native source is fitted without crop/retouch. Persistent still-screen/demo disclosure; no audio. Existing exact contracts and managed-recording gates unchanged. Two threads/180-second encoding, 15 seconds/450 frames, actual full-frame comparison plus separate visual review. Library and QA are not upload receipts; reconcile all Shorts and ordinary videos, persist intent, upload once and read back actual Seoul schedule.
