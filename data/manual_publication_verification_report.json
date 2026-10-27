@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-26T12:15:30+09:00",
+  "checked_at": "2026-10-27T12:48:45+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 88,
-    "already_done": 87,
+    "checked": 92,
+    "already_done": 88,
     "verified": 0,
-    "pending": 1
+    "pending": 4
   },
   "items": [
     {
@@ -1006,6 +1006,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0037::devto::en::markdown",
+      "topic_id": "TOPIC-0037",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/how-to-separate-source-notes-from-your-conclusions-n2e",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0038::devto::en::markdown",
       "topic_id": "TOPIC-0038",
       "platform": "devto",
@@ -1054,8 +1066,44 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0037::devto::en::markdown",
-      "topic_id": "TOPIC-0037",
+      "manual_key": "TOPIC-0039::x::en::x",
+      "topic_id": "TOPIC-0039",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0039::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0039",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0039::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0039",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0039::devto::en::markdown",
+      "topic_id": "TOPIC-0039",
       "platform": "devto",
       "language": "en",
       "template_id": "markdown",
