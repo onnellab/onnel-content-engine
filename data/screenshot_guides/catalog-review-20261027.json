@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_candidate_review",
+  "reviewed_at": "2026-10-27T09:16:05Z",
+  "repository_commit_read": "626942d08ec3930cc94de0f64000f2d550c1f253",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "studio_reconciliation": {
+    "surface": "dot cloud browser",
+    "observed_at": "2026-10-27T09:15:04Z",
+    "channel_name": "ONNELLAB",
+    "shorts_count": 14,
+    "public_shorts": 13,
+    "scheduled_shorts": 1,
+    "public_ids_rechecked": [
+      "sG-RwU-Z65s",
+      "mWiL_GJm-bY"
+    ],
+    "scheduled_video": {
+      "id": "hMKllzcEcYY",
+      "date": "2026. 10. 28.",
+      "time": "오전 9:00",
+      "timezone_readback": "현지 시간대(GMT+0900)",
+      "equivalent_target": "2026-10-28T09:00:00+09:00",
+      "metadata_matches": true,
+      "sd_processing": "complete",
+      "hd_processing": "complete",
+      "publication_verified": false
+    },
+    "settings_changed": false,
+    "uploads": 0,
+    "thumbnail_pixels_verified": false,
+    "external_links": "text only; one-time verification not initiated",
+    "ordinary_video_inventory_checked_this_run": false
+  },
+  "next_slots": [
+    {
+      "at": "2026-10-28T09:00:00+09:00",
+      "status": "existing_schedule_reverified",
+      "video_id": "hMKllzcEcYY"
+    },
+    {
+      "at": "2026-10-30T09:00:00+09:00",
+      "status": "candidate_research_only_no_render_or_intent",
+      "candidate": "Segra merge-list still-screen guide"
+    }
+  ],
+  "candidate_evidence": {
+    "repository": "onnellab/segra",
+    "reviewed_head": "e1fdc2367255478eccba4da1f0aaefc1367e5719",
+    "manifest": "assets/store_promo/native_campaign_20261020.json",
+    "capture_source_head": "e62c96a3771f8f594414cc9839b5d81c745fdd27",
+    "reported_capture_method": "native_platform_screenshot",
+    "candidate_asset": "assets/store_promo/raw/en/android_phone/merge.png",
+    "manifest_reported_sha256": "967c8fbfddca79c12b5fa4aba2d7be3f477793b9a40b32545986d1ae35e409fa",
+    "new_evidence": "Current native campaign supersedes historical host-only exclusion as a candidate source; this is not publication approval.",
+    "remaining": [
+      "Actual source pixels and bytes/hash verification",
+      "Released-screen parity and live store fact check",
+      "Fixture and rights inspection",
+      "Distinct topic duplicate check against ordinary videos too",
+      "New exact renderer contract and independent review",
+      "Authorized free production execution scope; latest task prohibits CLI",
+      "Full decoded-frame QA, Library, durable intent and browser scheduling"
+    ]
+  },
+  "constraints": {
+    "cli_used": false,
+    "desktop_used": false,
+    "new_work_or_codex_task_started": false,
+    "paid_tools_used": false,
+    "legacy_publishers_started": false,
+    "rendered": false,
+    "uploaded": false,
+    "schedule_changed": false
+  }
+}
