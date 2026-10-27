@@ -53,8 +53,13 @@
         "error": ""
       },
       "expected_public_store_version": "2.5.6",
-      "target_version_under_review": "2.5.6"
+      "target_version_under_review": "2.5.6",
+      "diagnostic": {
+        "code": "live_review_body_mismatch",
+        "checked_at": "2026-10-27T01:11:44+00:00",
+        "workflow_run_id": "40431106948"
+      }
     }
   ],
-  "updated_at": "2026-10-26T22:50:39.632Z"
+  "updated_at": "2026-10-27T01:11:44+00:00"
 }
