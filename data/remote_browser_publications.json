@@ -938,6 +938,38 @@
         }
       ],
       "processed_at": "2026-10-25T03:27:53+00:00"
+    },
+    {
+      "topic_id": "TOPIC-0039",
+      "language": "en",
+      "manual_key": "TOPIC-0039::x::en::x",
+      "platform": "x",
+      "template_id": "x",
+      "posted_url": "https://x.com/onnellab/status/2114974799051239504",
+      "post_id": "2114974799051239504",
+      "published_at": "2026-10-27T06:57:41.000Z",
+      "published_at_precision": "second",
+      "published_at_source": "Published post UI time element datetime attribute.",
+      "observed_at": "2026-10-27T06:58:28Z",
+      "observed_at_precision": "second",
+      "account": "@onnellab",
+      "draft_sha256": "83e7bfcf40b860a47844a45a463bf9fb03f96b34025d2ac4cf27e0076689e23b",
+      "posted_body_sha256": "4eb819f0d4db83d42ecb038494c776c1bb4d0a084b70a8733433a2ac7573a11b",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "submitted_body": "Choose one verified album title, preserve each track's credited artist, and test edits on copies before updating your library.\n\nInstall TagWeaver:\nApp Store: https://apps.apple.com/app/id6759609875\nGoogle Play: https://play.google.com/store/apps/details?id=com.onnellab.tagweaver2",
+      "submitted_source_characters": 280,
+      "source_draft_path": "generated/social/x/en/music/consistent-album-artist-names.txt",
+      "canonical_url": "https://onnellab.com/blog/en/consistent-album-artist-names/",
+      "source_correction_commit": "75e9d48706a2dea935663f239aa3759414f90ac2",
+      "copy_adjustment": "Hash-bound single-X correction regenerated the opening from the published article; CTA and store URLs unchanged.",
+      "approval_source": "Owner automation and Sentinel_46cafe60bb708191b8b01b90c92206e9 responding to Sentinel_dfc88f77a4388191843ca40b300f66a9.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new",
+      "browser_ui_timestamp": "3:57 PM · Oct 27, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "observation_source": "Dot cloud browser verified signed-in @onnellab, fresh main ledgers and profile/search history before posting. Live canonical and complete corrected copy checked. One UI submit; profile count 22 to 23. Exact permalink verifies author, full body, store destinations and time datetime. X normalized blank-line presentation. observed_at records verification, separately from published_at."
     }
   ]
 }
