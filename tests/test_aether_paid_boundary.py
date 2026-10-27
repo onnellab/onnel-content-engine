@@ -337,11 +337,13 @@ class PaidBoundaryTests(unittest.TestCase):
     def test_rejected_uncertain_intent_does_not_modify_existing_public_ids_or_queue(self):
         from test_aether_single import SingleTests
         fixture = SingleTests()
-        with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)), \
+        with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary).resolve()), \
              patch.object(aether_single, "select_candidate", return_value={
                  "candidate_index": 1, "path": str(Path(temporary) / "audio.mp3"),
                  "duration_seconds": 184, "sha256": "a" * 64}):
-            root = Path(temporary) / "singles"
+            # macOS tempfile paths may start with /var -> /private/var. Use the
+            # canonical owned fixture, never weaken the production symlink gate.
+            root = Path(temporary).resolve() / "singles"
             created = aether_single.worker(root, slot="2026-09-26", title="Fixture Old Road",
                 style="Warm fantasy travel", lane="skybound_flight", execute=True,
                 music_generator=fixture.fake_music, cover_generator=fixture.fake_cover, renderer=fixture.fake_renderer)
@@ -363,6 +365,17 @@ class PaidBoundaryTests(unittest.TestCase):
                         api_factory=Mock(side_effect=AssertionError("no provider access")))
                 self.assertEqual(before, (root / "queue.json").read_bytes())
             self.assertEqual("abcdefghijk", json.loads(before)["jobs"][created["job_id"]]["upload"]["video_id"])
+
+    def test_canonical_fixture_path_does_not_relax_queue_symlink_rejection(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            target, alias = root / "canonical", root / "alias"
+            target.mkdir(mode=0o700)
+            alias.symlink_to(target, target_is_directory=True)
+            with self.assertRaisesRegex(Exception, "unsafe_report_directory"):
+                aether_single.SingleQueue(alias / "singles")
+            queue = aether_single.SingleQueue(alias.resolve() / "singles")
+            self.assertEqual(target / "singles", queue.root)
 
 
 class OwnedInventoryTests(unittest.TestCase):
