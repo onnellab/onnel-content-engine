@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "kind": "aether_read_only_publication_audit",
+  "profile": "aether_inn",
+  "automation_run_at": "2026-10-27T22:00:00+00:00",
+  "observed_at_start_utc": "2026-10-27T22:47:42Z",
+  "observed_at_end_utc": "2026-10-27T22:48:32Z",
+  "observer": "dot",
+  "observation_basis": "Parent dot's direct cloud-browser YouTube Studio inspection, supplied to the receipt writer; not an API publication receipt.",
+  "repository_evidence_commit": "5327cc4b7bcfa71e1e0d436f85797598ec87f419",
+  "channel": {
+    "id": "UCNRRsPiv6KDJmcFtDbZvq2w",
+    "title": "Aether Inn",
+    "studio_url": "https://studio.youtube.com/channel/UCNRRsPiv6KDJmcFtDbZvq2w",
+    "identity_verified": true
+  },
+  "inventory_observation": {
+    "view": "Unfiltered Videos / Uploads sorted by date descending",
+    "pages_observed": [
+      "1-30",
+      "31-60",
+      "61-67"
+    ],
+    "total_rows": 67,
+    "public_rows": 67,
+    "scheduled_rows": 0,
+    "private_rows": 0,
+    "processing_rows": 0,
+    "latest_video_id": "gk9oFv-Wi4g",
+    "latest_published_date_displayed": "2026-10-24",
+    "new_publication_for_2026_10_27_observed": false,
+    "scope_limit": "Observed Studio upload inventory at this time, not future status or exhaustive content types."
+  },
+  "canonical_backlog": [
+    {
+      "title": "Beyond the Road of Falling Petals",
+      "video_id": "ISF6CqMPh5c",
+      "url": "https://www.youtube.com/watch?v=ISF6CqMPh5c",
+      "visibility_observed": "public",
+      "published_date_displayed": "2026-09-29",
+      "exact_server_published_at": null
+    },
+    {
+      "title": "The First Lantern of Autumn",
+      "video_id": "z4qgUiDHYZI",
+      "url": "https://www.youtube.com/watch?v=z4qgUiDHYZI",
+      "visibility_observed": "public",
+      "published_date_displayed": "2026-10-03",
+      "exact_server_published_at": null
+    },
+    {
+      "title": "Beyond the Silent Stone Gate",
+      "video_id": "S-pou4ip268",
+      "url": "https://www.youtube.com/watch?v=S-pou4ip268",
+      "visibility_observed": "public",
+      "published_date_displayed": "2026-10-06",
+      "exact_server_published_at": null
+    },
+    {
+      "title": "The Meadow Where Skylarks Sing",
+      "video_id": "UUb9LZjrEFk",
+      "url": "https://www.youtube.com/watch?v=UUb9LZjrEFk",
+      "visibility_observed": "public",
+      "published_date_displayed": "2026-10-17",
+      "exact_server_published_at": null
+    },
+    {
+      "title": "The Old Library of Everlight",
+      "video_id": "lYf_988zxOg",
+      "url": "https://www.youtube.com/watch?v=lYf_988zxOg",
+      "visibility_observed": "public",
+      "published_date_displayed": "2026-10-20",
+      "exact_server_published_at": null
+    },
+    {
+      "title": "When the Northern Lights Returned",
+      "video_id": "gk9oFv-Wi4g",
+      "url": "https://www.youtube.com/watch?v=gk9oFv-Wi4g",
+      "visibility_observed": "public",
+      "published_date_displayed": "2026-10-24",
+      "exact_server_published_at": null
+    }
+  ],
+  "next_single_slots": [
+    {
+      "slot": "2026-10-31T09:00:00+09:00",
+      "reservation_observed": false,
+      "production_readiness": "unverified"
+    },
+    {
+      "slot": "2026-11-03T09:00:00+09:00",
+      "reservation_observed": false,
+      "production_readiness": "unverified"
+    }
+  ],
+  "next_compilation": {
+    "date_kst": "2026-11-08",
+    "theme": "starlit_rest",
+    "basis": "scripts/aether_daily_local.py Sep27 anchor and 14-day theme rotation",
+    "publication_mode": "Canonical compilation worker public upload, not single 09:00 publishAt",
+    "production_readiness": "unverified"
+  },
+  "verification_limits": {
+    "thumbnail_setting": "not_rechecked",
+    "full_media_quality": "not_rechecked",
+    "source_audio_video_hashes": "not_rechecked",
+    "private_mac_daily_result": "not_read",
+    "private_mac_queue_intents_sessions": "not_read",
+    "private_gross_cost_rights_proof": "not_read",
+    "runtime_handoff": "not_performed_or_claimed",
+    "paid_generation": "not_performed",
+    "upload": "not_performed",
+    "production_queue_mutation": "not_performed",
+    "exact_server_publication_times": "unavailable_in_observation"
+  },
+  "notes": [
+    "All six canonical backlog titles were observed public; this audit does not certify thumbnail setting, source-byte equality or publication_complete under the canonical worker contract.",
+    "Displayed publication dates and observation UTC timestamps are distinct. No exact server publication timestamp is inferred.",
+    "The refreshed repository snapshot video-count change from66 to67 is not treated as proof of a new October27 publication.",
+    "No repeated upload, catch-up publication, production ownership transition or additional producer was started.",
+    "Private dashboard analytics and billing/account evidence are intentionally excluded from this public-safe receipt."
+  ]
+}
