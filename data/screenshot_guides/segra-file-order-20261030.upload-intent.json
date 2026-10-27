@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "guide_id": "segra-file-order-20261030",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "status": "prepared_for_single_browser_upload",
+  "created_at": "2026-10-27T09:56:30Z",
+  "target_publish_at": "2026-10-30T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "manifest_sha256": "05efea6ca22c99959d4579e56a59c46aab769537003288cec28756f7e6c6b0c9",
+  "video_sha256": "9ffbef0e65c6a5f76239cf76e983ec8ab1916cab2b65e5a37a8094c3d55dde16",
+  "library_file_id": "libfile_542c2df179e88191b5035caaabfacbb4",
+  "production_commit": "f200ebd660665a1e7e0f7a58fd937cb593881b49",
+  "upload_attempt": 1,
+  "video_id": null,
+  "inventory": {
+    "observed_at": "2026-10-27T09:54:17Z",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "shorts_count": 14,
+    "ordinary_video_count": 6,
+    "matching_title_or_topic_found": false,
+    "existing_segra": "iCAzEHp1tLg trimming topic, distinct"
+  },
+  "retry_policy": "Never upload again until remote state is reconciled; preserve assigned video ID."
+}
