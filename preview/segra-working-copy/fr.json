@@ -1,0 +1,33 @@
+{
+  "locale": "fr",
+  "title": "Préparer une copie de travail avant de modifier un fichier audio",
+  "description": "Distinguez l’original de la copie de travail, enregistrez un résultat séparé et écoutez-le avant de supprimer des fichiers.",
+  "question": "Comment choisir une copie de travail avant de modifier un fichier audio ?",
+  "primary_keyword": "copie de travail audio",
+  "secondary_keywords": "conserver l’original audio|nommer les fichiers audio|vérifier un export audio",
+  "short_answer": "Identifiez et conservez l’original, créez une copie distincte au nom explicite, puis vérifiez que vous ouvrez bien cette copie. Enregistrez le résultat dans un nouveau fichier et écoutez-le avant toute suppression. Deux fichiers sur le même appareil ne constituent pas une sauvegarde indépendante.",
+  "image": {
+    "title": "Gardez l’original à part",
+    "subtitle": "Identifier → copier → modifier → vérifier",
+    "message": "Renommer ne remplace pas une sauvegarde.",
+    "steps": [
+      [
+        "1. Identifier",
+        "Repérer l’original"
+      ],
+      [
+        "2. Copier",
+        "Nommer la copie"
+      ],
+      [
+        "3. Confirmer",
+        "Ouvrir le bon fichier"
+      ],
+      [
+        "4. Écouter",
+        "Vérifier le résultat"
+      ]
+    ]
+  },
+  "body": "# Préparer une copie de travail avant de modifier un fichier audio\n\nDes fichiers aux noms proches peuvent facilement être confondus. Avant de raccourcir un entretien ou d’assembler des enregistrements, déterminez quel fichier doit rester intact et lequel servira au travail.\n\n## Question\n\nComment choisir une copie de travail avant de modifier un fichier audio ?\n\n## Réponse courte\n\nIdentifiez et conservez l’original, créez une copie distincte au nom explicite, puis vérifiez que vous ouvrez bien cette copie. Enregistrez le résultat dans un nouveau fichier et écoutez-le avant toute suppression. Deux fichiers sur le même appareil ne constituent pas une sauvegarde indépendante.\n\n## Qu’est-ce qu’une copie de travail ?\n\nC’est un fichier distinct utilisé pour les modifications, tandis que l’original est conservé. Renommer l’original ou créer un raccourci vers celui-ci ne suffit pas. Une sauvegarde sert à récupérer des données après une perte. Si l’appareil tombe en panne, les deux fichiers qui s’y trouvent peuvent être perdus ensemble.\n\n## Une méthode pratique\n\n1. **Identifiez l’original.** Notez son emplacement, son nom, sa taille et sa durée. Écoutez un passage reconnaissable. Ces indices aident à distinguer les fichiers, mais des valeurs identiques ne prouvent pas que leur contenu est identique.\n2. **Créez une copie distincte.** Utilisez la fonction de copie ou de duplication du gestionnaire de fichiers, pas uniquement le renommage. Choisissez un nom explicite, comme `interview_work_01.wav`. Conservez l’original à un emplacement bien identifié, sans l’écraser.\n3. **Confirmez le fichier d’entrée.** Vérifiez le nom et l’emplacement dans le sélecteur de fichiers. En cas de doute, réécoutez avant de modifier. La présence d’un fichier dans la liste des éléments récents ne prouve pas son identité.\n4. **Enregistrez un nouveau résultat.** Un nom comme `interview_trim_01.wav` permet de le distinguer. Si l’application propose de remplacer un fichier, vérifiez d’abord la destination. Changer l’extension ne convertit pas le format audio.\n5. **Rouvrez et écoutez.** Vérifiez le début, les raccords, la fin et la durée attendue. Un message de réussite ne prouve pas que le contenu souhaité est complet. Gardez l’original jusqu’à la vérification du résultat et de la sauvegarde nécessaire.\n\n## Limites et outils possibles\n\nUne copie de travail réduit les confusions, sans garantir la récupération, la qualité audio ni les droits de modification ou de partage. Un original important mérite une sauvegarde séparée et vérifiée. Lorsque la source est disponible, évitez de réexporter successivement des résultats déjà compressés.\n\nSegra peut servir à découper ou à assembler des fichiers. Sa [description sur l’App Store](https://apps.apple.com/us/app/segra-audio-cutter-merger/id6779433972) indique la découpe de MP3/WAV dans un nouveau fichier et l’assemblage dans l’ordre choisi, sans modifier les originaux. Cette présentation s’appuie sur la fiche du magasin, pas sur un test de chaque fichier. Elle ne décrit ni un éditeur complet ni une sauvegarde automatique.\n\n## Conclusion\n\nSéparez un original identifié, une copie de travail et un résultat. Écoutez le fichier réellement enregistré avant de considérer le travail comme terminé.\n\n## Questions fréquentes\n\n### Suffit-il de renommer l’original ?\n\nNon. Un nouveau nom ne crée pas un fichier supplémentaire.\n\n### La copie de travail est-elle une sauvegarde ?\n\nPas nécessairement. Deux fichiers sur le même appareil partagent certains risques. Vérifiez une sauvegarde séparée si la conservation est importante.\n\n### Puis-je supprimer l’original après l’export ?\n\nNe vous fiez pas au seul message de réussite. Écoutez le résultat et envisagez les modifications futures et les besoins de récupération.\n"
+}

@@ -1,0 +1,125 @@
+{
+  "schema": "onnellab.editorial-draft.v1",
+  "state": "DRAFT_NATIVE_RENDER_AND_PAGE_VALIDATION_PENDING_NOT_QUEUED",
+  "slug": "choose-safe-audio-working-copy",
+  "category": "media",
+  "existing_english_topic_id": "TOPIC-0041",
+  "locales": [
+    "en",
+    "ko",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "pt-BR",
+    "de",
+    "fr",
+    "es"
+  ],
+  "related_apps": [
+    "Segra"
+  ],
+  "source_engine_sha": "21cd61ee01b07ced72737de647af7242e95b3600",
+  "source_homepage_sha": "c74d7090c8977e4ca67a86a052100dbe4373810b",
+  "planning_target_only": "2026-11-02T09:00:00+09:00: next three-day cadence after scheduled 2026-10-30 bundle; not assigned or reserved",
+  "queue_modified": false,
+  "counterpart_topic_ids_reserved": false,
+  "scheduled_at": null,
+  "published_at": null,
+  "publication_receipt": false,
+  "keyword_evidence": "Editorial hypotheses; no measured search volume, ranking, conversion or installation evidence.",
+  "scope": "Identify and preserve original; manually create distinguishable working copy; check input identity; export separate output; listen and verify. Working copy is not independent backup. No automatic backup, universal editor, lossless, price, current-version or app-execution claim.",
+  "sources": [
+    {
+      "url": "https://apps.apple.com/us/app/segra-audio-cutter-merger/id6779433972",
+      "observed_at_utc": "2026-10-27T09:29:51Z",
+      "method": "Official App Store text returned by web open; cache age reported two weeks. Supports listed behavior only, not current runtime validation.",
+      "supports": [
+        "MP3/WAV trimming to new file",
+        "Joining audio in chosen order",
+        "Original files unchanged"
+      ],
+      "limits": "No version or price claim is made; live UI availability and candidate app execution not tested."
+    },
+    {
+      "url": "https://play.google.com/store/apps/details?id=com.onnellab.segra",
+      "observed_at_utc": "2026-10-27T09:29:51Z",
+      "method": "web open failed: URL not accessible via this tool",
+      "supports": [],
+      "limits": "Not used as a verified source or CTA in draft prose."
+    }
+  ],
+  "verification": {
+    "json_structural_checks": "Nine locale objects checked in tool-orchestration JavaScript; see draft_structure_checks.json. Not native repository tests.",
+    "independent_language_review": "JA/zh-Hans/zh-Hant final authored blobs independently read by prepare_blog_nine_language_buffer; no material semantic or source-claim defect found. EN/KO/DE/FR/ES/pt-BR separate review pending.",
+    "native_repository_validators": "NOT RUN",
+    "quality_scores": "NOT GENERATED",
+    "svg_png_rendering": "NOT RUN; localized image text only",
+    "internal_links": "Candidate internal links not yet added; existing related-article paths confirmed in all nine homepage locales at source_homepage_sha, not live link test.",
+    "astro_browser_preview": "NOT RUN",
+    "candidate_page_checks": "NOT RUN; candidate not deployed",
+    "new_publication": "NONE"
+  },
+  "next_steps": [
+    "Complete independent language review of six authored blobs; bind final reviewed identities.",
+    "Add and live-check two existing locale-correct related guides without changing existing pages.",
+    "Extend exact candidate allowlist in existing nonpublishing preview adapter/workflow with boundary tests; do not create another publisher.",
+    "Generate native Markdown/image specifications/internal-link/review files and SVG/PNG through existing gates; examine every actual image and desktop/mobile page.",
+    "Re-read latest main and receipt state; only after all required gates pass integrate complete undated review bundle into existing queue."
+  ],
+  "artifacts": [
+    {
+      "locale": "en",
+      "file": "en.json",
+      "git_blob_sha1": "27999610c44ab0aaae4bf82107555b20eb2e883a",
+      "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
+    },
+    {
+      "locale": "ko",
+      "file": "ko.json",
+      "git_blob_sha1": "dda2edc81a1323a2f5b8072b9c395bdd11b70961",
+      "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
+    },
+    {
+      "locale": "de",
+      "file": "de.json",
+      "git_blob_sha1": "ed2fc7b1c2a08254806ddccdfd54ba9373c2854c",
+      "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
+    },
+    {
+      "locale": "fr",
+      "file": "fr.json",
+      "git_blob_sha1": "ada4dacbdfe81240a05455d1fc75e1fc913c5256",
+      "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
+    },
+    {
+      "locale": "es",
+      "file": "es.json",
+      "git_blob_sha1": "9561dcd74e2a3e3b43bcfd255852daee258d3b3b",
+      "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
+    },
+    {
+      "locale": "pt-BR",
+      "file": "pt-BR.json",
+      "git_blob_sha1": "7ba84c8e3afec6b7a0e3babc1b96ec3aaa460921",
+      "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
+    },
+    {
+      "locale": "ja",
+      "file": "ja.json",
+      "git_blob_sha1": "e32ce63c1b65fab1aa94765d6122c7541507a2c6",
+      "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
+    },
+    {
+      "locale": "zh-Hans",
+      "file": "zh-Hans.json",
+      "git_blob_sha1": "1d75561f2efb9b7917202ec19299ad47b6165405",
+      "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
+    },
+    {
+      "locale": "zh-Hant",
+      "file": "zh-Hant.json",
+      "git_blob_sha1": "999b358736c422ec71a5336a4dd75c274ad5741f",
+      "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
+    }
+  ]
+}
