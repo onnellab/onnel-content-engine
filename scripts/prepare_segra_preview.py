@@ -45,15 +45,15 @@ REVIEW_DIAGNOSTIC_CHECK_NAMES = (
     "image_quality", "internal_links", "readability_depth", "translation_quality",
 )
 REVIEWED_BLOBS = {
-    "en": "5f90cfc85c682b2b9f7552d7eb5d80b53ddc33e2",
-    "ko": "7646a13f1a746a0e148bfff019927cfafc109f94",
-    "ja": "37435c101f2a2dfc1c4697d468b647e50a77c0f7",
+    "en": "ef63fee551a8414ff5df715906e4de1ae2965ab3",
+    "ko": "e17679a85f45c467a9fb11418ec3fd2642014931",
+    "ja": "01deb67e16d76315c81a59db6f95a8c6f6c71114",
     "zh-Hans": "be26f6387df6b2e1206a25d06769327f839edecc",
     "zh-Hant": "2ef9b9d31805f305c5f79a0afbf010f114d12874",
-    "pt-BR": "39c9c78fa28d87a420049abaf7076c1d33b41906",
-    "de": "27d0170898485b2860382e7cdae369b12e929f7e",
-    "fr": "9754512642260920e7059edf8d52c83c625fbaba",
-    "es": "1fdc9d631e0e161a625bf9eb5162765671b2bf09"
+    "pt-BR": "e45279739b6cecccc7e77b2b157c5f121aabcf8a",
+    "de": "b42f3bbfc801ab87e207fae301dab5b39fbee97d",
+    "fr": "f042341f0b9cc58861369105630d7f35519f5b70",
+    "es": "ea9aedc477769cd44b0a3eac0e8c582d97e04c44"
 }
 
 

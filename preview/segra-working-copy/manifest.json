@@ -80,43 +80,43 @@
     {
       "locale": "en",
       "file": "en.json",
-      "git_blob_sha1": "5f90cfc85c682b2b9f7552d7eb5d80b53ddc33e2",
+      "git_blob_sha1": "ef63fee551a8414ff5df715906e4de1ae2965ab3",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "ko",
       "file": "ko.json",
-      "git_blob_sha1": "7646a13f1a746a0e148bfff019927cfafc109f94",
+      "git_blob_sha1": "e17679a85f45c467a9fb11418ec3fd2642014931",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "de",
       "file": "de.json",
-      "git_blob_sha1": "27d0170898485b2860382e7cdae369b12e929f7e",
+      "git_blob_sha1": "b42f3bbfc801ab87e207fae301dab5b39fbee97d",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "fr",
       "file": "fr.json",
-      "git_blob_sha1": "9754512642260920e7059edf8d52c83c625fbaba",
+      "git_blob_sha1": "f042341f0b9cc58861369105630d7f35519f5b70",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "es",
       "file": "es.json",
-      "git_blob_sha1": "1fdc9d631e0e161a625bf9eb5162765671b2bf09",
+      "git_blob_sha1": "ea9aedc477769cd44b0a3eac0e8c582d97e04c44",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "pt-BR",
       "file": "pt-BR.json",
-      "git_blob_sha1": "39c9c78fa28d87a420049abaf7076c1d33b41906",
+      "git_blob_sha1": "e45279739b6cecccc7e77b2b157c5f121aabcf8a",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "ja",
       "file": "ja.json",
-      "git_blob_sha1": "37435c101f2a2dfc1c4697d468b647e50a77c0f7",
+      "git_blob_sha1": "01deb67e16d76315c81a59db6f95a8c6f6c71114",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
@@ -132,5 +132,5 @@
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     }
   ],
-  "last_editorial_update_utc": "2026-10-28T17:34:44Z"
+  "last_editorial_update_utc": "2026-10-28T17:44:43Z"
 }
