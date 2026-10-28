@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "vaultxt-snapshot-dates-20261028",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "scheduled_verified",
+  "status": "published",
   "video_sha256": "c8236356d79cc76b9ccf2e94bf578da7f616b8e02d0a85ef1b7094e73b80f971",
   "manifest_sha256": "7296ad5944cdf323c50e0e32ba1d7d15d9265815fae74542017de53e2574d3ef",
   "library_file_id": "libfile_579f3b32b68881918f51bad8baac5a20",
@@ -13,7 +13,7 @@
   "created_at": "2026-10-25T10:49:48Z",
   "deduplication": "2026-10-25 10:48 UTC actual Studio: all 12 Shorts public, ordinary 6 videos (2 public, 1 unlisted, 3 private), no candidate title/topic or pending upload. Old TagWeaver broad overview and VaultXT log search are distinct. Reconcile remote before any retry.",
   "source_scope": "Reviewed real full Android screenshot guide; static demo disclosure, no audio or synthetic interaction; Android store link only. See immutable manifest and QA.",
-  "publication_verified": false,
+  "publication_verified": true,
   "production_commit": "f302ceae215d4f5f3100d7cd806a88cc1bc58c7e",
   "upload_attempt_started_at": "2026-10-25T10:54:08Z",
   "upload_observed_at": "2026-10-25T10:54:25Z",
@@ -23,5 +23,8 @@
     "date": "2026. 10. 28.",
     "time": "오전 9:00",
     "timezone": "서울(GMT+09:00)"
-  }
+  },
+  "published_observed_at": "2026-10-28T00:04:27Z",
+  "server_publication_timestamp": null,
+  "public_video_url": "https://www.youtube.com/shorts/hMKllzcEcYY"
 }

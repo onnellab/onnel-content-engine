@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "vaultxt-snapshot-dates-20261028",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "scheduled_verified",
+  "status": "published",
   "video_id": "hMKllzcEcYY",
   "video_url": "https://youtube.com/shorts/hMKllzcEcYY",
   "video_sha256": "c8236356d79cc76b9ccf2e94bf578da7f616b8e02d0a85ef1b7094e73b80f971",
@@ -12,7 +12,7 @@
   "timezone": "Asia/Seoul",
   "scheduled_observed_at": "2026-10-25T10:55:54Z",
   "server_scheduled_creation_timestamp": null,
-  "publication_verified": false,
+  "publication_verified": true,
   "metadata": {
     "title": "How to Check Snapshot Dates in VaultXT | Android Screenshot Guide",
     "description": "In VaultXT’s Snapshots panel, check the creation date and time shown for each entry before choosing Restore.\n\nStill-screen guide using a real Android emulator screenshot with an original demonstration document and seeded snapshots. No taps, snapshot creation, preview of older document contents, restoration, or speed demonstration is shown. The green border is part of the original capture.\n\nExplore VaultXT for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.vaultxt\n\n#VaultXT #TextEditor #Shorts",
@@ -31,7 +31,7 @@
     "sd_processing": "complete",
     "hd_processing": "complete",
     "copyright_check": "no_issues_observed_not_future_guarantee",
-    "visibility": "scheduled",
+    "visibility": "public",
     "schedule_confirmation": "2026년 10월 28일 9:00 에 동영상이 공개 상태로 설정됩니다.",
     "external_store_link": "text_only; one-time verification not initiated",
     "thumbnail": {
@@ -49,5 +49,29 @@
     "decoded_frames_checked": 450,
     "independent_source_and_png_review": "PASS",
     "owned_heavy_processes_remaining": 0
+  },
+  "published_observed_at": "2026-10-28T00:04:27Z",
+  "server_publication_timestamp": null,
+  "publication_observation": {
+    "observed_at": "2026-10-28T00:05:25Z",
+    "surface": "dot cloud browser YouTube Studio and public Shorts UI",
+    "source_url": "https://studio.youtube.com/video/hMKllzcEcYY/edit",
+    "public_url": "https://www.youtube.com/shorts/hMKllzcEcYY",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "public_channel_handle": "@ONNELLAB",
+    "video_id": "hMKllzcEcYY",
+    "visibility_label": "공개",
+    "title_matches": true,
+    "inventory_publication_date": "2026. 10. 28.",
+    "server_publication_timestamp": null,
+    "processing_quality_badges": [
+      "표준 화질 완료",
+      "고화질 완료"
+    ],
+    "thumbnail_pixels_verified": false,
+    "external_links_clickable": false,
+    "settings_changed": false,
+    "upload_attempts": 1,
+    "note": "Public UI title and author verified. Exact server publication time not exposed; target_publish_at remains the historical scheduled time. No new playback quality or thumbnail pixel verification claimed."
   }
 }
