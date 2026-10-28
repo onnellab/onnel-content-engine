@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-10-29T06:21:13+09:00
+Generated: 2026-10-29T06:22:17+09:00
 
 ## Summary
 
@@ -9,15 +9,15 @@ Generated: 2026-10-29T06:21:13+09:00
 | Store | in_review | 1 |
 | Store | unchanged | 14 |
 | GitHub Release | archived | 2 |
-| GitHub Release | planned | 2 |
-| GitHub Release | released | 9 |
+| GitHub Release | planned | 1 |
+| GitHub Release | released | 10 |
 
 ## Store Snapshots
 
 | App | Platform | Store version/package | Repository version | Comparison | Store | Release | Repository | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Aligna | android | 1.1.2 | 1.1.2 | same | unchanged | planned | onnellab/aligna | Confirm matching public store version; auto-publish GitHub Release notes |
-| Aligna | ios | 1.1.1 | 1.1.2 | local_ahead | unchanged | archived | onnellab/aligna | Confirm matching public store version; auto-publish GitHub Release notes |
+| Aligna | android | 1.1.2 | 1.1.2 | same | unchanged | released | onnellab/aligna | No action |
+| Aligna | ios | 1.1.1 | 1.1.2 | local_ahead | unchanged | archived | onnellab/aligna | Platform rollout not public |
 | ClipNest | ios | 1.0.5 | 1.0.5 | same | unchanged | released | onnellab/clipnest | No action |
 | Melivra | android | 1.0.8 | 1.0.9 | local_ahead | unchanged | planned | onnellab/melivra | Private test only; do not publish public GitHub Release |
 | Melivra | ios | 6783644955 | 1.0.9 | unknown | in_review | - | onnellab/melivra | Review status |
@@ -44,7 +44,7 @@ Generated: 2026-10-29T06:21:13+09:00
 | REL-0024 | Quivra | ios | public | v1.0.10 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.10 | - | 변환 전과 변환 중에도 파일 목록의 위치와 높이가 안정적으로 유지되도록 화면을 다듬었어요. | No action |
 | REL-0019 | Quivra | android | public | v1.0.9 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.9 | - | - | No action |
 | REL-0031 | VaultXT | android | public | v2.0.2 | released | Public GitHub Release published | https://github.com/onnellab/onnellab-text/releases/tag/v2.0.2 | - | - | No action |
-| REL-0038 | Aligna | android | public | v1.1.2 | planned | Public store confirmed; preparing automatic release | - | - | - | Confirm matching public store version; auto-publish GitHub Release notes |
+| REL-0038 | Aligna | android | public | v1.1.2 | released | Public GitHub Release published | https://github.com/onnellab/aligna/releases/tag/v1.1.2 | - | - | No action |
 | REL-0037 | Melivra | android | private_test | v1.0.9 | planned | Private test; public GitHub Release disabled | - | - | - | Private test only; do not publish public GitHub Release |
 | REL-0026 | Aligna | ios | private_test | v1.0.9 | archived | Private test; public GitHub Release disabled | - | - | - 앱을 다시 열었을 때 Pro 구매가 복원되도록 개선했어요. - 스토어 스크린샷과 소개 이미지를 새로 업데이트했어요. | Private test only; do not publish public GitHub Release |
 | REL-0032 | Papira | android | public | v2.0.3 | released | Public GitHub Release published | https://github.com/onnellab/papira/releases/tag/v2.0.3 | - | - | No action |
@@ -57,6 +57,5 @@ Generated: 2026-10-29T06:21:13+09:00
 | VaultXT | ios | unchanged | Platform rollout not public | - |
 | Segra | ios | unchanged | Sync local metadata | - |
 | Segra | android | unchanged | Sync local metadata | Version/update date read from Google Play public page; Android snapshot version 1.0.6 is stale for public version 1.0.7 and was not merged. |
-| Aligna | ios | unchanged | Confirm matching public store version; auto-publish GitHub Release notes | - |
-| Aligna | android | planned | Confirm matching public store version; auto-publish GitHub Release notes | Updated from repository-ahead metadata after the same version was confirmed on the public store. Add release artifact, checksum, and set status=ready after verifying the release build. |
+| Aligna | ios | unchanged | Platform rollout not public | - |
 | Melivra | android | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.8. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
