@@ -1,5 +1,5 @@
-from segra_preview_contract import section_aliases as segra_section_aliases
 """Localized article structure; these checks do not replace editorial review."""
+from segra_preview_contract import section_aliases as segra_section_aliases
 
 LOCALIZED_SECTIONS = {
     "ja": ("質問", "短い回答", "推奨ワークフロー", "ONNELLAB の活用", "参考資料", "結論", "よくある質問"),
