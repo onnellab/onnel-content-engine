@@ -997,11 +997,12 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "방금",
       "browser_ui_timezone": "not_recorded",
       "observed_short_url": "https://lnkd.in/gWzVmYnk",
-      "observation_source": "Dot cloud browser verified signed-in ONNEL LAB, fresh main ledgers, recent activity, live canonical and due schedule. Public audience and complete primary draft checked before one UI submit. Success alert and exact permalink confirm author, full body and canonical article-card destination. LinkedIn normalized paragraph spacing and shortened the link. Server publication time unavailable; observed_at is post-detail verification time."
+      "observation_source": "Dot cloud browser verified signed-in ONNEL LAB, fresh main ledgers, recent activity, live canonical and due schedule. Public audience and complete primary draft checked before one UI submit. Success alert and exact permalink confirm author, full body and canonical article-card destination. LinkedIn normalized paragraph spacing and shortened the link. Server publication time unavailable; observed_at is post-detail verification time.",
+      "processed_at": "2026-10-28T00:40:55+00:00"
     }
   ]
 }

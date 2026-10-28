@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-27T07:00:06+00:00",
+  "updated_at": "2026-10-28T00:40:55+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -1097,6 +1097,34 @@
       "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
       "post_id": "2114974799051239504",
       "source_draft_path": "generated/social/x/en/music/consistent-album-artist-names.txt",
+      "canonical_url": "https://onnellab.com/blog/en/consistent-album-artist-names/"
+    },
+    "TOPIC-0039::linkedin::en::linkedin": {
+      "topic_id": "TOPIC-0039",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "marked_at": "2026-10-28T00:40:55+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7521007297012170753/",
+      "verified_at": "2026-10-28T00:40:55+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-28T00:38:09Z",
+      "observed_at_precision": "second",
+      "observation_source": "Dot cloud browser verified signed-in ONNEL LAB, fresh main ledgers, recent activity, live canonical and due schedule. Public audience and complete primary draft checked before one UI submit. Success alert and exact permalink confirm author, full body and canonical article-card destination. LinkedIn normalized paragraph spacing and shortened the link. Server publication time unavailable; observed_at is post-detail verification time.",
+      "browser_ui_timestamp": "방금",
+      "browser_ui_timezone": "not_recorded",
+      "draft_sha256": "cb5173c533de64639775430ae778da86e3edc60b8464b0f8624348f5802e23a5",
+      "posted_body_sha256": "9bab4b14e24e7278196fffa604d7a00b06fe2be932835767722d1375cf68afdc",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "post_id": "urn:li:activity:7521007297012170753",
+      "source_draft_path": "generated/social/linkedin/en/music/consistent-album-artist-names.txt",
+      "observed_short_url": "https://lnkd.in/gWzVmYnk",
       "canonical_url": "https://onnellab.com/blog/en/consistent-album-artist-names/"
     }
   }
