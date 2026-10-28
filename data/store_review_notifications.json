@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "policy_changed_at": "2026-10-14T06:14:53+00:00",
-  "updated_at": "2026-10-25T23:33:41.109096+00:00",
+  "updated_at": "2026-10-28T17:45:52+00:00",
   "notifications": [
     {
       "review_id": "10b4e93e-b9cd-4ef4-ad91-2726f5256651",
@@ -43,6 +43,27 @@
       "delivery_reference": "Sentinel_b9c842570284819183063782418097bf",
       "owner_approval_required": true,
       "notified_at": "2026-10-25T23:33:41.109096+00:00",
+      "delivery_channel": "chatgpt"
+    },
+    {
+      "review_id": "10b4e93e-b9cd-4ef4-ad91-2726f5256651",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "platform": "android",
+      "rating": "3",
+      "title": "",
+      "body": "Some tags aren't removed correctly when the file is saved. When the X next to URL is pressed, for example, saving doesn't actually retain the change. EDIT: Partially fixed with update. At least some custom tags still reappear after removal, though.",
+      "created_at": "2026-10-22T14:04:27Z",
+      "updated_at": "2026-10-26T23:35:39+00:00",
+      "reviewer_language": "en",
+      "territory": "",
+      "notification_id": "store-review-5b200e85348f2a4c533c9aaa05e97bfcc6c13840e1d5e2c040edebc93a42bd36",
+      "status": "notified",
+      "detected_at": "2026-10-27T23:27:36.332666+00:00",
+      "delivery_reference": "Sentinel_8def8c5ea3e081918babedcc1df46042",
+      "owner_approval_required": true,
+      "notified_at": "2026-10-27T23:27:36.332666+00:00",
       "delivery_channel": "chatgpt"
     }
   ]
