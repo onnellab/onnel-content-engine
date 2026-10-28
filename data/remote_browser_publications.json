@@ -971,6 +971,37 @@
       "browser_ui_timezone": "not_recorded",
       "observation_source": "Dot cloud browser verified signed-in @onnellab, fresh main ledgers and profile/search history before posting. Live canonical and complete corrected copy checked. One UI submit; profile count 22 to 23. Exact permalink verifies author, full body, store destinations and time datetime. X normalized blank-line presentation. observed_at records verification, separately from published_at.",
       "processed_at": "2026-10-27T07:00:06+00:00"
+    },
+    {
+      "topic_id": "TOPIC-0039",
+      "language": "en",
+      "manual_key": "TOPIC-0039::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "template_id": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7521007297012170753/",
+      "post_id": "urn:li:activity:7521007297012170753",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "observed_at": "2026-10-28T00:38:09Z",
+      "observed_at_precision": "second",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_sha256": "cb5173c533de64639775430ae778da86e3edc60b8464b0f8624348f5802e23a5",
+      "posted_body_sha256": "9bab4b14e24e7278196fffa604d7a00b06fe2be932835767722d1375cf68afdc",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "submitted_body": "A reliable plan for how to keep album and artist names consistent without overwriting correct track credits starts with the result and constraints.\n\nIdentify the exact release, choose one verified album title, and preserve each track's credited artist. Edit working copies, apply shared values only to matching files, then reopen the saved result and test it in your player.\n\nBefore changing tools:\n- Keep untouched originals. Put a working copy of the album in a separate location. Confirm which files you selected before making any shared change.\n- Identify the release. Compare the files with the release booklet or the label's official track listing. Do not merge a live release, studio album and expanded edition merely because their names resemble one another.\n\nRead the full article:\nhttps://onnellab.com/blog/en/consistent-album-artist-names/",
+      "submitted_source_characters": 850,
+      "source_draft_path": "generated/social/linkedin/en/music/consistent-album-artist-names.txt",
+      "canonical_url": "https://onnellab.com/blog/en/consistent-album-artist-names/",
+      "copy_adjustment": "None; approved primary draft preserved.",
+      "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new",
+      "browser_ui_timestamp": "방금",
+      "browser_ui_timezone": "not_recorded",
+      "observed_short_url": "https://lnkd.in/gWzVmYnk",
+      "observation_source": "Dot cloud browser verified signed-in ONNEL LAB and recent activity, fresh main completion and receipt ledgers, live canonical article, and source schedule code (LinkedIn canonical date plus one day). Full primary draft and public audience checked in composer. One UI submit, success notification and exact public permalink verify author, complete body and canonical article card destination. Platform normalized paragraph spacing and shortened link. Server publication time unavailable; observed_at is post-detail verification time."
     }
   ]
 }
