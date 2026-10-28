@@ -50,10 +50,10 @@ REVIEWED_BLOBS = {
     "ja": "37435c101f2a2dfc1c4697d468b647e50a77c0f7",
     "zh-Hans": "be26f6387df6b2e1206a25d06769327f839edecc",
     "zh-Hant": "2ef9b9d31805f305c5f79a0afbf010f114d12874",
-    "pt-BR": "1e9a91f278da2c6ad96cabae34ead6f486eaad66",
+    "pt-BR": "39c9c78fa28d87a420049abaf7076c1d33b41906",
     "de": "27d0170898485b2860382e7cdae369b12e929f7e",
-    "fr": "c7dd665bddd3dbbc6c7e8991d4488249b535ed36",
-    "es": "0b8d3eff12e113cb3f94d3d9f02b5ed35f0e0ce1"
+    "fr": "9754512642260920e7059edf8d52c83c625fbaba",
+    "es": "1fdc9d631e0e161a625bf9eb5162765671b2bf09"
 }
 
 

@@ -12,7 +12,7 @@
     "message": "Renommer ne remplace pas une sauvegarde.",
     "steps": [
       [
-        "1. Identifier",
+        "1. Repérer",
         "Repérer l’original"
       ],
       [
@@ -20,7 +20,7 @@
         "Nommer la copie"
       ],
       [
-        "3. Confirmer",
+        "3. Vérifier",
         "Ouvrir le bon fichier"
       ],
       [

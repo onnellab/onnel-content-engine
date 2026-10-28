@@ -98,19 +98,19 @@
     {
       "locale": "fr",
       "file": "fr.json",
-      "git_blob_sha1": "c7dd665bddd3dbbc6c7e8991d4488249b535ed36",
+      "git_blob_sha1": "9754512642260920e7059edf8d52c83c625fbaba",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "es",
       "file": "es.json",
-      "git_blob_sha1": "0b8d3eff12e113cb3f94d3d9f02b5ed35f0e0ce1",
+      "git_blob_sha1": "1fdc9d631e0e161a625bf9eb5162765671b2bf09",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "pt-BR",
       "file": "pt-BR.json",
-      "git_blob_sha1": "1e9a91f278da2c6ad96cabae34ead6f486eaad66",
+      "git_blob_sha1": "39c9c78fa28d87a420049abaf7076c1d33b41906",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {

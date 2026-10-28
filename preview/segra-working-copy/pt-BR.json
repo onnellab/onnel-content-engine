@@ -12,7 +12,7 @@
     "message": "Outro nome não substitui um backup.",
     "steps": [
       [
-        "1. Identifique",
+        "1. Original",
         "Localize o original"
       ],
       [
@@ -20,7 +20,7 @@
         "Nomeie a cópia"
       ],
       [
-        "3. Confirme",
+        "3. Confira",
         "Abra o arquivo certo"
       ],
       [

@@ -46,7 +46,7 @@
     },
     {
       "locale": "pt-BR",
-      "git_blob_sha1": "1e9a91f278da2c6ad96cabae34ead6f486eaad66",
+      "git_blob_sha1": "39c9c78fa28d87a420049abaf7076c1d33b41906",
       "table_rows": 4,
       "ordered_steps": 5,
       "faq_count": 3
@@ -60,18 +60,24 @@
     },
     {
       "locale": "fr",
-      "git_blob_sha1": "c7dd665bddd3dbbc6c7e8991d4488249b535ed36",
+      "git_blob_sha1": "9754512642260920e7059edf8d52c83c625fbaba",
       "table_rows": 4,
       "ordered_steps": 5,
       "faq_count": 3
     },
     {
       "locale": "es",
-      "git_blob_sha1": "0b8d3eff12e113cb3f94d3d9f02b5ed35f0e0ce1",
+      "git_blob_sha1": "1fdc9d631e0e161a625bf9eb5162765671b2bf09",
       "table_rows": 4,
       "ordered_steps": 5,
       "faq_count": 3
     }
   ],
-  "idea_seed_review": "check-audio-export-settings-before-sharing: independently reviewed by review_segra_adapter_contract; no duplicate slug in main4ab372e; no ID reserved"
+  "idea_seed_review": "check-audio-export-settings-before-sharing: independently reviewed by review_segra_adapter_contract; no duplicate slug in main4ab372e; no ID reserved",
+  "image_label_correction": {
+    "observed_at_utc": "2026-10-28T17:38:50Z",
+    "reviewer": "review_segra_adapter_contract",
+    "reason": "Actual layout guard failed PT/FR/ES card headings in run40737484347; shorten labels only, preserve details and layout limits.",
+    "result": "Language and step meaning reviewed; render rerun pending"
+  }
 }
