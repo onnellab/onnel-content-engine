@@ -46,22 +46,32 @@
       "method": "web open failed: URL not accessible via this tool",
       "supports": [],
       "limits": "Not used as a verified source or CTA in draft prose."
+    },
+    {
+      "url": "https://apps.apple.com/us/app/segra-audio-cutter-merger/id6779433972",
+      "observed_at_utc": "2026-10-28T09:22:07Z",
+      "method": "Live official App Store page in dot cloud browser",
+      "supports": [
+        "MP3/WAV trimming to new file",
+        "Joining audio in chosen order",
+        "Original files unchanged"
+      ],
+      "limits": "Listing text only; no app runtime test. No version/price claim added."
     }
   ],
   "verification": {
     "json_structural_checks": "Nine locale objects checked in tool-orchestration JavaScript; see draft_structure_checks.json. Not native repository tests.",
-    "independent_language_review": "Final nine authored blobs independently text-reviewed: EN/KO/DE/FR/ES/pt-BR by localize_asian with final correction readback; JA/zh-Hans/zh-Hant by prepare_blog_nine_language_buffer. No remaining material text defect identified. See editorial_review.json. This is not native quality, image rendering, page or link approval.",
+    "independent_language_review": "All nine full draft bodies independently text-reviewed by review_segra_related_links on 2026-10-28; localized link headings/labels reviewed and DE Schnittstellen corrected to Schnittpunkte. See editorial_review.json and followup_20261028.json. Not a native quality or publication pass.",
     "native_repository_validators": "NOT RUN",
     "quality_scores": "NOT GENERATED",
     "svg_png_rendering": "NOT RUN; localized image text only",
-    "internal_links": "Candidate internal links not yet added; existing related-article paths confirmed in all nine homepage locales at source_homepage_sha, not live link test.",
+    "internal_links": "Two locale-correct related guides added per draft; all 18 destination pages visited in dot cloud browser 2026-10-28T09:21:35Z–09:21:39Z. Substantive article text, locale and self-canonical checked. Native internal_links artifact and candidate page rendering remain NOT RUN.",
     "astro_browser_preview": "NOT RUN",
     "candidate_page_checks": "NOT RUN; candidate not deployed",
     "new_publication": "NONE"
   },
   "next_steps": [
-    "Add and live-check two existing locale-correct related guides without changing existing pages.",
-    "Extend exact candidate allowlist in existing nonpublishing preview adapter/workflow with boundary tests; do not create another publisher.",
+    "Pending separate scope approval: minimally add Segra candidate to existing nonpublishing preview adapter/workflow with boundary tests. Do not change publisher, deployment, cadence, security or queue gates.",
     "Before consuming TOPIC-0041, independently review one nonduplicate idea seed to preserve the current minimum-eight idea pool; do not invent or reserve IDs prematurely.",
     "Generate native Markdown/image specifications/internal-link/review files and SVG/PNG through existing gates; examine every actual image and desktop/mobile page.",
     "Re-read latest main and receipt state; only after all required gates pass integrate complete undated review bundle into existing queue."
@@ -70,56 +80,57 @@
     {
       "locale": "en",
       "file": "en.json",
-      "git_blob_sha1": "493aa728c0d916f263cec8ca37ce9cddf5ef6938",
+      "git_blob_sha1": "70e2c3e767b89eae0cab3be4a9c1c8039452df9d",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "ko",
       "file": "ko.json",
-      "git_blob_sha1": "feaf86cc42ae5562c0851d397c4657b78f4bbe55",
+      "git_blob_sha1": "a97fe746cd974185b47bd24626c0f6835d990a97",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "de",
       "file": "de.json",
-      "git_blob_sha1": "8be94e141cb5d5b4d31e6767b3a61c111e834929",
+      "git_blob_sha1": "84f9aa779184881a3dc2bee63b504f387c0f07b7",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "fr",
       "file": "fr.json",
-      "git_blob_sha1": "28ae4720577d0cb89d191ce133283f5a7e4d1ade",
+      "git_blob_sha1": "9fff11c21b221b634cc538bacdb45c39c3f07612",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "es",
       "file": "es.json",
-      "git_blob_sha1": "519610efcf319167067e05404e4cf53e937ea289",
+      "git_blob_sha1": "82fcb07bdf9cbadff4ca5e78315441d1411efe30",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "pt-BR",
       "file": "pt-BR.json",
-      "git_blob_sha1": "5b7898011d083671dcb6b5e9f35a5ff177506a1d",
+      "git_blob_sha1": "c9cc4528bbbf380762fc22fe80274f02d59c90c9",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "ja",
       "file": "ja.json",
-      "git_blob_sha1": "e32ce63c1b65fab1aa94765d6122c7541507a2c6",
+      "git_blob_sha1": "ac27b4ce379327b45688c1e8782f52fa128dd7f4",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "zh-Hans",
       "file": "zh-Hans.json",
-      "git_blob_sha1": "1d75561f2efb9b7917202ec19299ad47b6165405",
+      "git_blob_sha1": "a7ba01ba7075afa47d627268255e6452055f9f73",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "zh-Hant",
       "file": "zh-Hant.json",
-      "git_blob_sha1": "999b358736c422ec71a5336a4dd75c274ad5741f",
+      "git_blob_sha1": "e4c93012245b213dc832c78332387ce5175f4f9a",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     }
-  ]
+  ],
+  "last_editorial_update_utc": "2026-10-28T09:26:10Z"
 }

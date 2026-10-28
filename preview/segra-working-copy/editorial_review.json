@@ -93,5 +93,51 @@
     "Related-guide links and native internal_links artifact not integrated or live-checked.",
     "Desktop/mobile candidate page build and UI check not run.",
     "Existing sole publishing pipeline must own scheduling; this bundle stays outside queue."
-  ]
+  ],
+  "followup_20261028": {
+    "observed_at_utc": "2026-10-28T09:26:10Z",
+    "reviewer": "review_segra_related_links",
+    "basis": "Independent actual full nine JSON bodies read, proposed localized related-guide headings/labels and German correction reviewed; final edit restricted by JavaScript equality assertions to those exact changes.",
+    "result": "No remaining material semantic defect identified; native gates still pending.",
+    "live_related_destinations_reviewed": 18,
+    "details": "followup_20261028.json",
+    "artifacts": [
+      {
+        "locale": "en",
+        "git_blob_sha1": "70e2c3e767b89eae0cab3be4a9c1c8039452df9d"
+      },
+      {
+        "locale": "ko",
+        "git_blob_sha1": "a97fe746cd974185b47bd24626c0f6835d990a97"
+      },
+      {
+        "locale": "ja",
+        "git_blob_sha1": "ac27b4ce379327b45688c1e8782f52fa128dd7f4"
+      },
+      {
+        "locale": "zh-Hans",
+        "git_blob_sha1": "a7ba01ba7075afa47d627268255e6452055f9f73"
+      },
+      {
+        "locale": "zh-Hant",
+        "git_blob_sha1": "e4c93012245b213dc832c78332387ce5175f4f9a"
+      },
+      {
+        "locale": "pt-BR",
+        "git_blob_sha1": "c9cc4528bbbf380762fc22fe80274f02d59c90c9"
+      },
+      {
+        "locale": "de",
+        "git_blob_sha1": "84f9aa779184881a3dc2bee63b504f387c0f07b7"
+      },
+      {
+        "locale": "fr",
+        "git_blob_sha1": "9fff11c21b221b634cc538bacdb45c39c3f07612"
+      },
+      {
+        "locale": "es",
+        "git_blob_sha1": "82fcb07bdf9cbadff4ca5e78315441d1411efe30"
+      }
+    ]
+  }
 }

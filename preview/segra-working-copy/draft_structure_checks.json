@@ -130,5 +130,93 @@
       "body_chars": 1557
     }
   ],
-  "native_quality_pass": false
+  "native_quality_pass": false,
+  "followup_20261028": {
+    "observed_at_utc": "2026-10-28T09:26:10Z",
+    "method": "JavaScript JSON parse and exact body-delta / metadata-preservation assertions; not native repository tests",
+    "results": [
+      {
+        "locale": "en",
+        "valid_json": true,
+        "only_reviewed_body_changes": true,
+        "metadata_preserved": true,
+        "related_link_count": 2,
+        "related_links_locale_correct": true,
+        "body_chars": 3727
+      },
+      {
+        "locale": "ko",
+        "valid_json": true,
+        "only_reviewed_body_changes": true,
+        "metadata_preserved": true,
+        "related_link_count": 2,
+        "related_links_locale_correct": true,
+        "body_chars": 2173
+      },
+      {
+        "locale": "ja",
+        "valid_json": true,
+        "only_reviewed_body_changes": true,
+        "metadata_preserved": true,
+        "related_link_count": 2,
+        "related_links_locale_correct": true,
+        "body_chars": 2244
+      },
+      {
+        "locale": "zh-Hans",
+        "valid_json": true,
+        "only_reviewed_body_changes": true,
+        "metadata_preserved": true,
+        "related_link_count": 2,
+        "related_links_locale_correct": true,
+        "body_chars": 1755
+      },
+      {
+        "locale": "zh-Hant",
+        "valid_json": true,
+        "only_reviewed_body_changes": true,
+        "metadata_preserved": true,
+        "related_link_count": 2,
+        "related_links_locale_correct": true,
+        "body_chars": 1755
+      },
+      {
+        "locale": "pt-BR",
+        "valid_json": true,
+        "only_reviewed_body_changes": true,
+        "metadata_preserved": true,
+        "related_link_count": 2,
+        "related_links_locale_correct": true,
+        "body_chars": 3733
+      },
+      {
+        "locale": "de",
+        "valid_json": true,
+        "only_reviewed_body_changes": true,
+        "metadata_preserved": true,
+        "related_link_count": 2,
+        "related_links_locale_correct": true,
+        "body_chars": 4070
+      },
+      {
+        "locale": "fr",
+        "valid_json": true,
+        "only_reviewed_body_changes": true,
+        "metadata_preserved": true,
+        "related_link_count": 2,
+        "related_links_locale_correct": true,
+        "body_chars": 4094
+      },
+      {
+        "locale": "es",
+        "valid_json": true,
+        "only_reviewed_body_changes": true,
+        "metadata_preserved": true,
+        "related_link_count": 2,
+        "related_links_locale_correct": true,
+        "body_chars": 3908
+      }
+    ],
+    "native_quality_pass": false
+  }
 }

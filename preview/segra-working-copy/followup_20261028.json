@@ -1,0 +1,253 @@
+{
+  "schema": "onnellab.editorial-followup.v1",
+  "observed_at_utc": "2026-10-28T09:26:10Z",
+  "base_engine_commit": "58e4f19a2b76dd6b24f7fb9ead83387d66c819c1",
+  "base_homepage_commit": "79c2eeac97a3b444111addc9492b1a8bcea5ba95",
+  "changes": [
+    "Add two reviewed same-language related-guide links to nine drafts",
+    "DE Schnittstellen -> Schnittpunkte"
+  ],
+  "independent_review": {
+    "reviewer": "review_segra_related_links",
+    "observed_at_utc": "2026-10-28T09:24:50Z",
+    "scope": "All nine actual JSON bodies and proposed localized links",
+    "result": "No material fact/meaning conflict; one German ambiguity corrected"
+  },
+  "checks": [
+    {
+      "locale": "en",
+      "valid_json": true,
+      "only_reviewed_body_changes": true,
+      "metadata_preserved": true,
+      "related_link_count": 2,
+      "related_links_locale_correct": true,
+      "body_chars": 3727
+    },
+    {
+      "locale": "ko",
+      "valid_json": true,
+      "only_reviewed_body_changes": true,
+      "metadata_preserved": true,
+      "related_link_count": 2,
+      "related_links_locale_correct": true,
+      "body_chars": 2173
+    },
+    {
+      "locale": "ja",
+      "valid_json": true,
+      "only_reviewed_body_changes": true,
+      "metadata_preserved": true,
+      "related_link_count": 2,
+      "related_links_locale_correct": true,
+      "body_chars": 2244
+    },
+    {
+      "locale": "zh-Hans",
+      "valid_json": true,
+      "only_reviewed_body_changes": true,
+      "metadata_preserved": true,
+      "related_link_count": 2,
+      "related_links_locale_correct": true,
+      "body_chars": 1755
+    },
+    {
+      "locale": "zh-Hant",
+      "valid_json": true,
+      "only_reviewed_body_changes": true,
+      "metadata_preserved": true,
+      "related_link_count": 2,
+      "related_links_locale_correct": true,
+      "body_chars": 1755
+    },
+    {
+      "locale": "pt-BR",
+      "valid_json": true,
+      "only_reviewed_body_changes": true,
+      "metadata_preserved": true,
+      "related_link_count": 2,
+      "related_links_locale_correct": true,
+      "body_chars": 3733
+    },
+    {
+      "locale": "de",
+      "valid_json": true,
+      "only_reviewed_body_changes": true,
+      "metadata_preserved": true,
+      "related_link_count": 2,
+      "related_links_locale_correct": true,
+      "body_chars": 4070
+    },
+    {
+      "locale": "fr",
+      "valid_json": true,
+      "only_reviewed_body_changes": true,
+      "metadata_preserved": true,
+      "related_link_count": 2,
+      "related_links_locale_correct": true,
+      "body_chars": 4094
+    },
+    {
+      "locale": "es",
+      "valid_json": true,
+      "only_reviewed_body_changes": true,
+      "metadata_preserved": true,
+      "related_link_count": 2,
+      "related_links_locale_correct": true,
+      "body_chars": 3908
+    }
+  ],
+  "live_browser_checks": {
+    "method": "Actual page navigation and read-only DOM/text inspection; not screenshot or full image review",
+    "related_pages_observed_utc": "2026-10-28T09:21:35Z–2026-10-28T09:21:39Z",
+    "related_pages": [
+      {
+        "url": "https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/en/verify-audio-clips-before-combining/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/ko/trim-audio-recordings-without-full-editor/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/ko/verify-audio-clips-before-combining/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/ja/trim-audio-recordings-without-full-editor/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/ja/verify-audio-clips-before-combining/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/zh-hans/trim-audio-recordings-without-full-editor/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/zh-hans/verify-audio-clips-before-combining/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/zh-hant/trim-audio-recordings-without-full-editor/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/zh-hant/verify-audio-clips-before-combining/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/pt-br/trim-audio-recordings-without-full-editor/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/pt-br/verify-audio-clips-before-combining/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/de/trim-audio-recordings-without-full-editor/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/de/verify-audio-clips-before-combining/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/fr/trim-audio-recordings-without-full-editor/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/fr/verify-audio-clips-before-combining/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/es/trim-audio-recordings-without-full-editor/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      },
+      {
+        "url": "https://onnellab.com/blog/es/verify-audio-clips-before-combining/",
+        "substantive_article": true,
+        "locale_matches": true,
+        "self_canonical_matches": true
+      }
+    ],
+    "latest_publication": {
+      "slug": "consistent-album-artist-names",
+      "observed_utc": "2026-10-28T09:21:18Z–2026-10-28T09:21:27Z",
+      "locales": [
+        "en",
+        "ko",
+        "ja",
+        "zh-Hans",
+        "zh-Hant",
+        "pt-BR",
+        "de",
+        "fr",
+        "es"
+      ],
+      "all_nine_substantive_articles": true,
+      "self_canonicals": true,
+      "alternate_links_per_page": 10
+    },
+    "matrix": {
+      "source_articles": 23,
+      "source_locale_pages": 207,
+      "missing_source_locales": 0,
+      "all_207_pages_browser_checked": false
+    }
+  },
+  "queue": {
+    "changed": false,
+    "next_scheduled": "2026-10-30T09:00:00+09:00",
+    "next_scheduled_slug": "make-long-plain-text-easier-to-navigate",
+    "second_planning_target": "2026-11-02T09:00:00+09:00",
+    "second_scheduled": false,
+    "second_ready": false
+  },
+  "gates": {
+    "native_validators": "NOT RUN",
+    "native_quality_score": null,
+    "svg_png_render": "NOT RUN",
+    "candidate_desktop_mobile_pages": "NOT RUN",
+    "publication": "NONE",
+    "blocking_reason": "Current nonpublishing blog-preview workflow exposes only research-source-notes, vaultxt-text-navigation, tagweaver-album-artists; no supported Segra adapter. CLI forbidden; no equivalent native browser renderer available. Workflow changes not included in this run."
+  }
+}
