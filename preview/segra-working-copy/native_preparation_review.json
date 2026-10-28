@@ -1,0 +1,77 @@
+{
+  "schema": "onnellab.independent-editorial-review.v1",
+  "observed_at_utc": "2026-10-28T17:34:44Z",
+  "author": "review_segra_adapter_contract",
+  "reviewer": "manage_oct28_blog_queue",
+  "scope": "Nine locale four-row original/working-copy/output/independent-backup comparison tables and explicit concept definitions; no new product/version/platform/price claims.",
+  "result": "Meaning, terminology, distinction from independent backup, native heading order and existing source limits preserved. No material text defect identified.",
+  "native_validation_pass": false,
+  "rendered_images_reviewed": false,
+  "candidate_pages_reviewed": false,
+  "artifacts": [
+    {
+      "locale": "en",
+      "git_blob_sha1": "5f90cfc85c682b2b9f7552d7eb5d80b53ddc33e2",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "ko",
+      "git_blob_sha1": "7646a13f1a746a0e148bfff019927cfafc109f94",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "ja",
+      "git_blob_sha1": "37435c101f2a2dfc1c4697d468b647e50a77c0f7",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "zh-Hans",
+      "git_blob_sha1": "be26f6387df6b2e1206a25d06769327f839edecc",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "zh-Hant",
+      "git_blob_sha1": "2ef9b9d31805f305c5f79a0afbf010f114d12874",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "pt-BR",
+      "git_blob_sha1": "1e9a91f278da2c6ad96cabae34ead6f486eaad66",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "de",
+      "git_blob_sha1": "27d0170898485b2860382e7cdae369b12e929f7e",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "fr",
+      "git_blob_sha1": "c7dd665bddd3dbbc6c7e8991d4488249b535ed36",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "es",
+      "git_blob_sha1": "0b8d3eff12e113cb3f94d3d9f02b5ed35f0e0ce1",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    }
+  ],
+  "idea_seed_review": "check-audio-export-settings-before-sharing: independently reviewed by review_segra_adapter_contract; no duplicate slug in main4ab372e; no ID reserved"
+}

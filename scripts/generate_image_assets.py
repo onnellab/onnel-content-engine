@@ -267,6 +267,7 @@ def markdown_image_line(language: str, slug: str, title: str) -> str:
     return f'![{alt}](/blog-assets/{language}/{slug}/workflow-diagram.svg "{title}")'
 
 
+from segra_preview_contract import SLUG as SEGRA_SLUG, section_aliases as segra_section_aliases
 from vaultxt_preview_contract import SLUG as VAULTXT_SLUG, section_aliases as vaultxt_section_aliases
 
 
@@ -285,6 +286,8 @@ def ensure_markdown_references_asset(markdown_path: Path, language: str, slug: s
         aliases = aliases | tagweaver_section_aliases(language)["recommended_workflow"]
     if slug == VAULTXT_SLUG:
         aliases = vaultxt_section_aliases(language)["recommended_workflow"]
+    if slug == SEGRA_SLUG:
+        aliases = segra_section_aliases(language)["recommended_workflow"]
     headings = []
     offset = 0
     fence = None
@@ -303,7 +306,7 @@ def ensure_markdown_references_asset(markdown_path: Path, language: str, slug: s
                 headings.append((heading.group(1).strip().lower(), offset))
         offset += len(line)
     matching = [position for heading, position in headings if heading in aliases]
-    if slug in {TAGWEAVER_REVIEWED_SLUG, VAULTXT_SLUG} and len(matching) != 1:
+    if slug in {TAGWEAVER_REVIEWED_SLUG, VAULTXT_SLUG, SEGRA_SLUG} and len(matching) != 1:
         raise ImageAssetError(f"exactly one reviewed workflow heading required in {markdown_path}")
     marker_index = matching[0] if matching else -1
     if marker_index == -1:

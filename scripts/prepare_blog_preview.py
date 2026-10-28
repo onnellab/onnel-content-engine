@@ -78,6 +78,15 @@ def candidate_profile(slug):
             'related_slugs': ['read-large-txt-files-without-lag', 'inspect-large-log-file-without-altering-original'],
             'table_rows': {locale: 3 for locale in LOCALES},
         }
+    if slug == 'choose-safe-audio-working-copy':
+        return {
+            'category': 'media', 'faq_count': 3,
+            'app_path': '/apps/segra/',
+            'store_urls': ['https://apps.apple.com/us/app/segra-audio-cutter-merger/id6779433972'],
+            'source_urls': [],
+            'related_slugs': ['trim-audio-recordings-without-full-editor', 'verify-audio-clips-before-combining'],
+            'table_rows': {locale: 4 for locale in LOCALES},
+        }
     raise ValueError('Unknown preview candidate')
 
 def allowed_candidate_links(slug, locale):
@@ -156,6 +165,8 @@ def validate_bundle(bundle_path):
                 raise ValueError('VaultXT preview must retain its reviewed app')
             if slug == 'consistent-album-artist-names' and values.get('related_apps') != 'TagWeaver':
                 raise ValueError('TagWeaver preview must name exactly its reviewed app')
+            if slug == 'choose-safe-audio-working-copy' and values.get('related_apps') != 'Segra':
+                raise ValueError('Segra preview must name exactly its reviewed app')
             if values.get('canonical_url') != f'https://onnellab.com/blog/{locale.lower()}/{slug}/':
                 raise ValueError('Canonical URL mismatch')
             if values.get('title') != values.get('card_title') or not body.lstrip().startswith('# ' + values['title'] + '\n'):
