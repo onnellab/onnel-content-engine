@@ -97,17 +97,17 @@
         "score": 6
       },
       {
-        "topic_id": "TOPIC-0095",
-        "title": "Cómo separar las notas de las fuentes de tus conclusiones",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
+        "topic_id": "TOPIC-0104",
+        "title": "Etiquetas de álbum y artista coherentes sin perder créditos",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
         "language": "es",
         "status": "published",
-        "url": "https://onnellab.com/blog/es/separate-source-notes-from-conclusions/",
+        "url": "https://onnellab.com/blog/es/consistent-album-artist-names/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       }
     ],
     "related_apps": [

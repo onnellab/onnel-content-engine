@@ -82,6 +82,19 @@
         "score": 5
       },
       {
+        "topic_id": "TOPIC-0103",
+        "title": "Des tags d’album et d’artiste cohérents, des crédits préservés",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/consistent-album-artist-names/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
         "topic_id": "TOPIC-0051",
         "title": "Organiser sa musique sur Android pour une écoute hors ligne",
         "slug": "organize-local-music-library-offline-android",
@@ -90,19 +103,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/fr/organize-local-music-library-offline-android/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0103",
-        "title": "Des tags d’album et d’artiste cohérents, des crédits préservés",
-        "slug": "consistent-album-artist-names",
-        "category": "music",
-        "language": "fr",
-        "status": "scheduled",
-        "url": "generated/markdown/fr/music/consistent-album-artist-names.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 4

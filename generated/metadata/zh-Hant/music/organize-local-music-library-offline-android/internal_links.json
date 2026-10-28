@@ -35,14 +35,14 @@
         "slug": "consistent-album-artist-names",
         "category": "music",
         "language": "zh-Hant",
-        "status": "scheduled",
-        "url": "generated/markdown/zh-Hant/music/consistent-album-artist-names.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/consistent-album-artist-names/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "music"
         ],
-        "score": 9
+        "score": 10
       },
       {
         "topic_id": "TOPIC-0057",

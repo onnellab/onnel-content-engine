@@ -71,6 +71,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0103",
+        "title": "Des tags d’album et d’artiste cohérents, des crédits préservés",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/consistent-album-artist-names/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0051",
         "title": "Organiser sa musique sur Android pour une écoute hors ligne",
         "slug": "organize-local-music-library-offline-android",
@@ -91,19 +104,6 @@
         "language": "fr",
         "status": "published",
         "url": "https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0076",
-        "title": "Transformer les textes répétitifs en extraits réutilisables",
-        "slug": "turn-repeated-text-into-reusable-snippets",
-        "category": "productivity",
-        "language": "fr",
-        "status": "published",
-        "url": "https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

@@ -71,6 +71,19 @@
         "score": 6
       },
       {
+        "topic_id": "TOPIC-0103",
+        "title": "Des tags d’album et d’artiste cohérents, des crédits préservés",
+        "slug": "consistent-album-artist-names",
+        "category": "music",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/consistent-album-artist-names/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0112",
         "title": "Se repérer plus facilement dans un long document texte",
         "slug": "make-long-plain-text-easier-to-navigate",
@@ -92,19 +105,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0103",
-        "title": "Des tags d’album et d’artiste cohérents, des crédits préservés",
-        "slug": "consistent-album-artist-names",
-        "category": "music",
-        "language": "fr",
-        "status": "scheduled",
-        "url": "generated/markdown/fr/music/consistent-album-artist-names.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5

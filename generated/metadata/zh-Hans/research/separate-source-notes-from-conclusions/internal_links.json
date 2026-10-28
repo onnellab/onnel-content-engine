@@ -98,12 +98,12 @@
         "slug": "consistent-album-artist-names",
         "category": "music",
         "language": "zh-Hans",
-        "status": "scheduled",
-        "url": "generated/markdown/zh-Hans/music/consistent-album-artist-names.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hans/consistent-album-artist-names/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 2
+        "score": 3
       }
     ],
     "related_apps": [],

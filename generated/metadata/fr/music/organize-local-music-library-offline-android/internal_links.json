@@ -35,14 +35,14 @@
         "slug": "consistent-album-artist-names",
         "category": "music",
         "language": "fr",
-        "status": "scheduled",
-        "url": "generated/markdown/fr/music/consistent-album-artist-names.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/consistent-album-artist-names/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "music"
         ],
-        "score": 11
+        "score": 12
       },
       {
         "topic_id": "TOPIC-0084",
