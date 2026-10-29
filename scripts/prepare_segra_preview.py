@@ -51,7 +51,7 @@ REVIEWED_BLOBS = {
     "zh-Hans": "be26f6387df6b2e1206a25d06769327f839edecc",
     "zh-Hant": "2ef9b9d31805f305c5f79a0afbf010f114d12874",
     "pt-BR": "e45279739b6cecccc7e77b2b157c5f121aabcf8a",
-    "de": "b42f3bbfc801ab87e207fae301dab5b39fbee97d",
+    "de": "5b149c96875547d0b2abbbed1af3bd2f40617998",
     "fr": "f042341f0b9cc58861369105630d7f35519f5b70",
     "es": "ea9aedc477769cd44b0a3eac0e8c582d97e04c44"
 }
