@@ -222,10 +222,19 @@ class RoutinePushLifecycle(unittest.TestCase):
                 self.result(rows)
 
     def test_workflow_gates_all_render_steps_but_retains_boundary_tests(self):
-        import yaml
-        workflow = yaml.load((ROOT / ".github/workflows/blog-preview.yml").read_text(),
-                             Loader=yaml.BaseLoader)
-        steps = {step["name"]: step for step in workflow["jobs"]["preview"]["steps"]}
+        # Keep the minimal preview lane dependency-free. Workflow syntax itself
+        # is checked by the separate GitHub workflow validation job.
+        workflow = (ROOT / ".github/workflows/blog-preview.yml").read_text(encoding="utf-8")
+        steps = {}
+        for block in workflow.split("      - name: ")[1:]:
+            name, _, body = block.partition("\n")
+            self.assertNotIn(name, steps)
+            steps[name] = {"run": body}
+            conditions = [line.removeprefix("        if: ") for line in body.splitlines()
+                          if line.startswith("        if: ")]
+            self.assertLessEqual(len(conditions), 1)
+            if conditions:
+                steps[name]["if"] = conditions[0]
         guarded = (
             "Install existing publisher renderer dependencies",
             "Validate research source notes with actual native gates in a disposable engine copy",
