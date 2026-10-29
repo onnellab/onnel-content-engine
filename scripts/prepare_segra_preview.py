@@ -646,8 +646,12 @@ def stage_worker():
         before = source_inventory(ROOT)
         run_registered_gates(ROOT, output)
         collect(ROOT, output, candidates, [])
-        if verified_native_manifest(output) != manifest or source_inventory(ROOT) != before:
+        if verified_native_manifest(output) != manifest:
             raise ValueError("Registered Segra collection changed persisted evidence")
+        after = source_inventory(ROOT)
+        if after != before:
+            changed = sorted(k for k in set(before) | set(after) if before.get(k) != after.get(k))
+            raise ValueError("Registered Segra collection changed stage paths: " + ", ".join(changed[:12]))
     else:
         drafts = validate_drafts(ROOT / "preview/segra-working-copy")
         store, candidates, seeds = stage_topics(ROOT, drafts)
@@ -671,7 +675,7 @@ def prepare(source=ROOT):
             stage = Path(temporary)
             copy_source(source, stage, before)
             write_json(stage / MARKER, {"source": str(source), "output": str(output)})
-            result = subprocess.run([sys.executable, str(stage / "scripts/prepare_segra_preview.py"),
+            result = subprocess.run([sys.executable, "-B", str(stage / "scripts/prepare_segra_preview.py"),
                                      "--stage-worker"], cwd=stage, text=True,
                                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=600)
             (output / "generation.log").write_text(result.stdout, encoding="utf-8")

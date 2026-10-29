@@ -259,6 +259,7 @@ class ExecutionBoundaries(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "Source checkout changed"):
                     preview.prepare(source)
                 self.assertEqual(run.call_args.kwargs["timeout"], 600)
+                self.assertEqual(run.call_args.args[0][:2], [sys.executable, "-B"])
                 verify.assert_not_called()
                 emit.assert_not_called()
             record = json.loads((source / "preview-evidence/segra-working-copy/source-integrity.json").read_text())
