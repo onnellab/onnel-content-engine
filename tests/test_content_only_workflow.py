@@ -20,13 +20,25 @@ class ContentOnlyWorkflowTest(unittest.TestCase):
     def test_all_live_app_mutation_steps_skip_content_only(self):
         for name in ("Check App Store Versions", "Prepare App Release Candidates", "Create GitHub App Releases", "Generate App Release Report", "Sync App Release Attention Issue"):
             with self.subTest(name=name):
-                self.assertEqual(self.steps[name]["if"], "env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'")
-                self.assertEqual(self.steps[name + " Dry Run"]["if"], "env.DRY_RUN == 'true'")
+                for historical in (False, True):
+                    for dry in (False, True):
+                        for content in (False, True):
+                            self.assertEqual(self.condition(name, historical, dry, content), not historical and not dry and not content)
+                            self.assertEqual(self.condition(name + " Dry Run", historical, dry, content), not historical and dry)
 
     def test_content_publish_and_deploy_remain_live(self):
         for name in ("Generate Markdown", "Publish Due Articles", "Generate Distribution Drafts", "Deploy", "Post Due Core Distribution"):
             with self.subTest(name=name):
-                self.assertEqual(self.steps[name]["if"], "env.DRY_RUN != 'true'")
+                for historical in (False, True):
+                    for dry in (False, True):
+                        for content in (False, True):
+                            self.assertEqual(self.condition(name, historical, dry, content), not historical and not dry)
+
+    def condition(self, name, historical, dry, content):
+        expression = self.steps[name]["if"]
+        for key, value in (("HISTORICAL_CORRECTIONS_ONLY", historical), ("DRY_RUN", dry), ("CONTENT_ONLY", content)):
+            expression = expression.replace("env." + key, repr("true" if value else "false"))
+        return eval(expression.replace("&&", " and ").replace("||", " or "), {"__builtins__": {}}, {})
 
     def test_content_commit_stages_app_files_only_outside_content_only(self):
         script = self.steps["Commit Content Engine Outputs"]["run"]

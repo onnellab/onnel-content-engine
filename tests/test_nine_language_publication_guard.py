@@ -82,7 +82,8 @@ class NineLanguagePublicationGuardTest(unittest.TestCase):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/publishing.yml").read_text()
         for name, next_name, command in (("Schedule Ready Articles", "Schedule Ready Articles Dry Run", "schedule_ready_articles.py"), ("Publish Due Articles", "Publish Due Articles Dry Run", "publish_due_articles.py")):
             block = workflow.split(f"- name: {name}\n", 1)[1].split(f"- name: {next_name}\n", 1)[0]
-            self.assertIn("if: env.DRY_RUN != 'true'", block)
+            self.assertIn("env.DRY_RUN != 'true'", block)
+            self.assertIn("env.HISTORICAL_CORRECTIONS_ONLY != 'true'", block)
             self.assertLess(block.index("check_nine_language_publication.py"), block.index(command))
 
 
