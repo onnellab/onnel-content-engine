@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "guide_id": "melivra-equalizer-location-20261102",
+  "status": "prepared_upload_intent",
+  "created_at": "2026-10-29T09:57:10Z",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "target_publish_at": "2026-11-02T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "video_sha256": "8d72915030c002a9282c48054d4df76c28a356ce0e38a881552260ff5300c7f9",
+  "manifest_sha256": "13a0f24f18bc9f5cc14369832ff40fd51e136e6eb86a3d9735f92838750b6005",
+  "library_file_id": "libfile_9b4685e2dae48191b20d068b17e3ee60",
+  "title": "Where Is the Equalizer in Melivra? | Android Screenshot Guide",
+  "video_id": null,
+  "upload_attempts": 0,
+  "duplicate_reconciliation": {
+    "observed_at": "2026-10-29T09:49:38Z",
+    "shorts_count": 15,
+    "public_shorts": 14,
+    "scheduled_shorts": 1,
+    "ordinary_video_count": 6,
+    "topic_or_title_duplicate": false,
+    "existing_schedule": {
+      "video_id": "T6JDb03YW7A",
+      "target": "2026-10-30T09:00:00+09:00",
+      "timezone_ui": "현지 시간대(GMT+0900)"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "guide_id": "melivra-equalizer-location-20261102",
+  "reviewed_at": "2026-10-29T09:57:10Z",
+  "producer": "dot cloud",
+  "independent_reviewer": "root",
+  "source_pixels_reviewed": true,
+  "final_slides_reviewed": 3,
+  "independent_result": "PASS after CTA editorial revision",
+  "tests": {
+    "run": 98,
+    "passed": 93,
+    "skipped": 5,
+    "skip_reason": "Optional production source files for other guide contracts not materialized"
+  },
+  "decoded_frames": 450,
+  "worst_full_frame_mae": 1.3605023469650206,
+  "threshold": 4,
+  "full_source_region_exact_before_encoding": true,
+  "video_sha256": "8d72915030c002a9282c48054d4df76c28a356ce0e38a881552260ff5300c7f9",
+  "manifest_sha256": "13a0f24f18bc9f5cc14369832ff40fd51e136e6eb86a3d9735f92838750b6005",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "seconds": 15,
+    "frames": 450,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "audio": false
+  },
+  "library_file_id": "libfile_9b4685e2dae48191b20d068b17e3ee60",
+  "claims_limit": "Location only, no taps/preset changes/audio effects/purchase/runtime results; debug native capture 1.0.8+145 not signed-public-binary attestation",
+  "store_observation": {
+    "version": "1.0.8",
+    "updated": "2026-10-21",
+    "checked_at": "2026-10-29T09:51:27Z",
+    "url": "https://play.google.com/store/apps/details?id=com.onnellab.melivra"
+  }
+}

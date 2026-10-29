@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "melivra-equalizer-location-20261102",
+  "app_id": "APP-0007",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/melivra",
+    "commit": "d2d1a281ecae94afd78e184c24419ac15bce6e2c",
+    "capture_source_commit": "d110bb09dd31395f7c20447eaf29f6d270a90a5d",
+    "capture_version": "1.0.8+145",
+    "capture_variant": "integration-test-debug-production-id",
+    "capture_receipt_path": "assets/store_promo/raw/en/android/05.capture.json",
+    "capture_receipt_git_blob_sha": "c7bd52b968a8162232e14a90f8cd62d2faf92a8f",
+    "capture_method": "adb native Android emulator capture",
+    "device_id": "emulator-5570",
+    "public_version_observed": "1.0.8",
+    "public_version_checked_at": "2026-10-29T09:51:27Z",
+    "public_version_source": "https://play.google.com/store/apps/details?id=com.onnellab.melivra",
+    "rights_review": "Repository-authored demo metadata and original procedural cover art; silent WAV fixtures. No third-party music or artwork. No soundtrack in guide.",
+    "limitations": [
+      "Capture is integration-test debug production-ID build 1.0.8+145, not signed-public-binary attestation.",
+      "Static setting location only; no taps, preset changes, playback, sound quality, purchases or performance demonstrated.",
+      "Flat is the demonstration state, not a current user setting."
+    ]
+  },
+  "assets": [
+    {
+      "local_name": "05.png",
+      "source_path": "assets/store_promo/raw/en/android/05.png",
+      "sha256": "27bf17b69677932ae8e758e2f67586cab50e560f4ecd8ca6557ca38724c3f62b",
+      "dimensions": [
+        1080,
+        2400
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Find the equalizer setting",
+      "caption": "In Settings, look under Playback.",
+      "asset": "05.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Look for Equalizer Preset",
+      "caption": "The example shows Flat beneath it.",
+      "asset": "05.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Melivra for Android",
+      "caption": "Find the app link in the description.",
+      "asset": "05.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "Where Is the Equalizer in Melivra? | Android Screenshot Guide",
+    "description": "In Melivra Settings, find Equalizer Preset under Playback. The still-screen example shows Flat beneath the setting.\n\nStill-screen guide using a real Android emulator capture of Melivra 1.0.8+145 with an original demonstration library. No taps, preset changes, playback, audio effect, purchase, or speed demonstration is shown. Flat is the captured example state, not a recommendation or a current user setting. The video has no audio.\n\nExplore Melivra for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.melivra\n\n#Melivra #Equalizer #OfflineMusicPlayer #Shorts",
+    "format_disclosure": "Still-screen guide · Demo library",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "Melivra for Android · Link in description",
+    "target_publish_at": "2026-11-02T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned UI and repository-authored fixtures",
+    "scope": "English still-screen guide on approved ONNELLAB channel only",
+    "execution_scope": "Explicit Melivra-only free dot cloud Python/ffmpeg/ffprobe exception; no other app execution, paid service, Work/Codex, or user computer."
+  }
+}
