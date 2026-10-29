@@ -1,0 +1,135 @@
+{
+  "schema": "onnellab.historical-blog-correction-publication-receipt.v1",
+  "correction_id": "tagweaver-multidisc-ios-save-251",
+  "state": "PUBLISHED_NINE_LOCALE_CORRECTION_VERIFIED",
+  "recorded_at_utc": "2026-10-29T11:36:31Z",
+  "scope": "One approved iOS save-guidance paragraph replacement in each of nine existing historical TagWeaver articles; not a new article or publication slot.",
+  "engine_commit": "a36a1e0311c44ec5098eec94b4f46f1bd1330b31",
+  "homepage_before_commit": "8b7c511662e4596c8e0b24b23994307d80328435",
+  "homepage_commit": "a022ad92aa7c9d985388e1873db6ef83dfc51d30",
+  "homepage_commit_time_utc": "2026-10-29T11:24:11Z",
+  "canonical_publisher": {
+    "dry_run": {
+      "run_id": 40862100970,
+      "result": "success",
+      "dry_run": true,
+      "historical_corrections_only": true
+    },
+    "live": {
+      "run_id": 40865032807,
+      "url": "https://github.com/onnellab/onnel-content-engine/actions/runs/40865032807",
+      "event": "workflow_dispatch",
+      "started_at_utc": "2026-10-29T11:23:34Z",
+      "last_updated_at_utc": "2026-10-29T11:28:53Z",
+      "result": "success",
+      "dry_run": false,
+      "historical_corrections_only": true,
+      "tests_passed": 26,
+      "astro_pages_built": 763,
+      "other_business_steps": "skipped",
+      "pages_live_confirmed_in_log_at_utc": "2026-10-29T11:28:49.9851911Z"
+    }
+  },
+  "homepage_checks": {
+    "deploy": {
+      "run_id": 40865122564,
+      "result": "success",
+      "url": "https://github.com/onnellab/onnellab.github.io/actions/runs/40865122564"
+    },
+    "nine_language_site": {
+      "run_id": 40865122792,
+      "result": "success",
+      "last_updated_at_utc": "2026-10-29T11:33:16Z",
+      "url": "https://github.com/onnellab/onnellab.github.io/actions/runs/40865122792"
+    }
+  },
+  "source_verification": {
+    "method": "Read-only GitHub exact commit diff and tree; deployed blobs equal approved manuscript blobs.",
+    "changed_files": 9,
+    "changed_lines_per_file": 2,
+    "frontmatter_dates_urls_headings_images_other_text": "unchanged by commit diff",
+    "engine_en_ko_blobs_match": true,
+    "queue_and_mirror_blob_sha": "ea8a377988524891a40559ca7921dfd2f79f6be6"
+  },
+  "published_files": [
+    {
+      "locale": "de",
+      "path": "src/content/blog/de/number-tracks-multi-disc-mp3-album.md",
+      "git_blob_sha": "fa0e806431a0de3705ff7c95f53ede32d5e849ef",
+      "url": "https://onnellab.com/blog/de/number-tracks-multi-disc-mp3-album/"
+    },
+    {
+      "locale": "en",
+      "path": "src/content/blog/en/number-tracks-multi-disc-mp3-album.md",
+      "git_blob_sha": "8bf582054335a4a907b4f7def5e08a78d6707a78",
+      "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/"
+    },
+    {
+      "locale": "es",
+      "path": "src/content/blog/es/number-tracks-multi-disc-mp3-album.md",
+      "git_blob_sha": "247779a565b1c99845de5bd733173c71b7b5c91d",
+      "url": "https://onnellab.com/blog/es/number-tracks-multi-disc-mp3-album/"
+    },
+    {
+      "locale": "fr",
+      "path": "src/content/blog/fr/number-tracks-multi-disc-mp3-album.md",
+      "git_blob_sha": "fac6a8e43341ed082dfca88dfd5dc902c7a1f6a8",
+      "url": "https://onnellab.com/blog/fr/number-tracks-multi-disc-mp3-album/"
+    },
+    {
+      "locale": "ja",
+      "path": "src/content/blog/ja/number-tracks-multi-disc-mp3-album.md",
+      "git_blob_sha": "d31b84cb1b520b056496129c14177afc0140e27c",
+      "url": "https://onnellab.com/blog/ja/number-tracks-multi-disc-mp3-album/"
+    },
+    {
+      "locale": "ko",
+      "path": "src/content/blog/ko/number-tracks-multi-disc-mp3-album.md",
+      "git_blob_sha": "77222fc629bcc61eaa5933dc84b72973280ab1ff",
+      "url": "https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/"
+    },
+    {
+      "locale": "pt-BR",
+      "path": "src/content/blog/pt-BR/number-tracks-multi-disc-mp3-album.md",
+      "git_blob_sha": "b0f9b24c36aadd24a94ef854bf06e592ac67461f",
+      "url": "https://onnellab.com/blog/pt-br/number-tracks-multi-disc-mp3-album/"
+    },
+    {
+      "locale": "zh-Hans",
+      "path": "src/content/blog/zh-Hans/number-tracks-multi-disc-mp3-album.md",
+      "git_blob_sha": "d8791aecc9f6331b7d01986aa9582dccca6022c2",
+      "url": "https://onnellab.com/blog/zh-hans/number-tracks-multi-disc-mp3-album/"
+    },
+    {
+      "locale": "zh-Hant",
+      "path": "src/content/blog/zh-Hant/number-tracks-multi-disc-mp3-album.md",
+      "git_blob_sha": "4054332b7de3d99353417258d9889003c91f0a2f",
+      "url": "https://onnellab.com/blog/zh-hant/number-tracks-multi-disc-mp3-album/"
+    }
+  ],
+  "browser_verification": {
+    "source": "dot browser visual review reported to coordinator",
+    "observation_window_utc": "2026-10-29 11:29–11:31 UTC (minute precision)",
+    "pages_checked": 9,
+    "scope_limit": "The nine corrected article pages only; not all 207 blog pages.",
+    "corrected_paragraphs_present": 9,
+    "self_canonical_verified": 9,
+    "alternate_links_per_page": 10,
+    "broken_in_page_anchors": 0,
+    "localized_svg_images_loaded": 9,
+    "svg_natural_width": 1200,
+    "existing_store_links_per_page": 2,
+    "original_dates_preserved": true
+  },
+  "queue_preservation": {
+    "changed": false,
+    "vaultxt_slot": "2026-10-30T09:00:00+09:00",
+    "segra_slot": "2026-11-02T09:00:00+09:00"
+  },
+  "history_note": "Existing preparation manifest and editorial review are retained as historical evidence. This receipt records later deployment and supersedes their NOT_APPLIED status only for this correction.",
+  "limits": [
+    "No local CLI was run by the connector verification worker.",
+    "Historical article publication date is not replaced by correction observation time.",
+    "No app release, privacy policy, social distribution, security or payment state was changed by this correction."
+  ]
+}
