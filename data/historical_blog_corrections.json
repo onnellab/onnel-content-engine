@@ -1,0 +1,27 @@
+{
+  "schema": "onnellab.historical-blog-corrections.v1",
+  "corrections": [
+    {
+      "id": "tagweaver-multidisc-ios-save-251",
+      "state": "approved",
+      "approval_reference": "Sentinel_ac84c2183a70819187456aadfc495b5f",
+      "approved_at": "2026-10-29T10:12:17Z",
+      "slug": "number-tracks-multi-disc-mp3-album",
+      "category": "music",
+      "proposal_path": "preview/tagweaver-album-artists/multidisc-ios-save-correction.proposed.json",
+      "proposal_blob_sha": "912a25c5fd07199d02919c791d3d5eabe21f4b83",
+      "manuscript_directory": "preview/tagweaver-multidisc-ios-save",
+      "manuscript_blob_shas": {
+        "ko": "77222fc629bcc61eaa5933dc84b72973280ab1ff",
+        "en": "8bf582054335a4a907b4f7def5e08a78d6707a78",
+        "ja": "d31b84cb1b520b056496129c14177afc0140e27c",
+        "zh-Hans": "d8791aecc9f6331b7d01986aa9582dccca6022c2",
+        "zh-Hant": "4054332b7de3d99353417258d9889003c91f0a2f",
+        "pt-BR": "b0f9b24c36aadd24a94ef854bf06e592ac67461f",
+        "de": "fa0e806431a0de3705ff7c95f53ede32d5e849ef",
+        "fr": "fac6a8e43341ed082dfca88dfd5dc902c7a1f6a8",
+        "es": "247779a565b1c99845de5bd733173c71b7b5c91d"
+      }
+    }
+  ]
+}

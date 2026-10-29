@@ -1947,10 +1947,20 @@ def prepare_blog_asset_updates(markdown: str, homepage_repo: Path, project_root:
     return updates
 
 
-def commit_homepage_updates(homepage_repo: Path, updates: dict[Path, bytes]) -> None:
+def commit_homepage_updates(homepage_repo: Path, updates: dict[Path, bytes], expected: dict[Path, bytes] | None = None) -> None:
     from publication_transaction import publication_guard, atomic_replace_files
     if updates:
         with publication_guard(homepage_repo):
+            # Recheck correction targets after acquiring the transaction lock.
+            # Never overwrite a concurrent edit or publish a partial locale set.
+            for path, observed in (expected or {}).items():
+                from historical_blog_corrections import safe_file, CorrectionError
+                try:
+                    safe_file(homepage_repo, str(path.relative_to(homepage_repo.resolve())))
+                except (CorrectionError, ValueError) as error:
+                    raise PublishingError(f"unsafe correction target during export: {path}") from error
+                if path.read_bytes() != observed:
+                    raise PublishingError(f"correction target changed during export: {path}")
             atomic_replace_files(homepage_repo, updates)
 
 
@@ -2034,8 +2044,14 @@ def export_markdown_to_homepage(
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPOSITORY_PATH,
     dry_run: bool = False,
 ) -> list[HomepageExport]:
+    homepage_repo = homepage_repo.resolve()
     validate_homepage_repository(homepage_repo)
     project_root = topics_path.parent.parent
+    from historical_blog_corrections import prepare_historical_corrections, CorrectionError
+    try:
+        corrections, correction_expected = prepare_historical_corrections(project_root, homepage_repo, ROOT)
+    except (CorrectionError, KeyError, TypeError, ValueError) as error:
+        raise PublishingError(f"historical correction preflight failed: {error}") from error
     updates = prepare_site_icon_updates(homepage_repo, dry_run, project_root)
     articles = load_publishable_articles(topics_path, ROOT / ".homepage-export-check", DEFAULT_SITE_URL)
     exports: list[HomepageExport] = []
@@ -2071,8 +2087,15 @@ def export_markdown_to_homepage(
                     article_updates[social_destination] = raster.read_bytes()
             article_updates[destination] = markdown.encode("utf-8")
             updates.update(article_updates)
+    for destination, content in corrections.items():
+        if destination in updates and updates[destination] != content:
+            raise PublishingError(f"canonical export conflicts with correction: {destination}")
+        if not any(item.destination == destination for item in exports):
+            exports.append(HomepageExport("historical-correction", destination, destination,
+                "unchanged" if correction_expected[destination] == content else "overwrite"))
+        updates[destination] = content
     if not dry_run:
-        commit_homepage_updates(homepage_repo, updates)
+        commit_homepage_updates(homepage_repo, updates, correction_expected)
 
     return exports
 
@@ -2089,9 +2112,12 @@ def deploy_github_pages(
     topics_path: Path = DEFAULT_TOPICS_PATH,
     homepage_repo: Path = DEFAULT_HOMEPAGE_REPOSITORY_PATH,
     dry_run: bool = False,
+    historical_corrections_only: bool = False,
 ) -> list[HomepageExport]:
     _ = repository
     _ = deploy_dir
+    if historical_corrections_only:
+        return deploy_historical_corrections(topics_path, homepage_repo, branch, dry_run)
     if dry_run and not homepage_repo.is_dir():
         return []
     validate_homepage_repository(homepage_repo)
@@ -2118,6 +2144,67 @@ def deploy_github_pages(
         return exports
     run_homepage_command(["git", "commit", "-m", "Publish ONNELLAB blog content"], homepage_repo)
     run_homepage_command(["git", "pull", "--rebase", "origin", branch], homepage_repo)
+    run_homepage_command(["git", "push", "origin", branch], homepage_repo)
+    return exports
+
+
+def deploy_historical_corrections(topics_path: Path, homepage_repo: Path, branch: str, dry_run: bool) -> list[HomepageExport]:
+    """Existing publisher's bounded correction branch; no queue/privacy/social work.
+
+    Dry run stages exactly the same nine corrections and runs the same site
+    checks, then restores the originals. It cannot reach Git add/commit/push.
+    Engine/site commits are NOT a cross-repository atomic transaction.
+    """
+    from historical_blog_corrections import prepare_historical_corrections, CorrectionError
+    homepage_repo = homepage_repo.resolve()
+    validate_homepage_repository(homepage_repo)
+    if branch != "main":
+        raise PublishingError("historical corrections target canonical main only")
+    # Preserve other workers: refuse a dirty/staged checkout and never rebase a
+    # correction over new remote work after its preflight/build.
+    run_homepage_command(["git", "diff", "--quiet"], homepage_repo)
+    run_homepage_command(["git", "diff", "--cached", "--quiet"], homepage_repo)
+    if not dry_run:
+        run_homepage_command(["git", "pull", "--ff-only", "origin", branch], homepage_repo)
+    try:
+        updates, expected = prepare_historical_corrections(topics_path.parent.parent, homepage_repo, ROOT)
+    except (CorrectionError, KeyError, TypeError, ValueError) as error:
+        raise PublishingError(f"historical correction preflight failed: {error}") from error
+    if len(updates) != 9:
+        raise PublishingError("correction-only route requires exactly nine targets")
+    exports = [HomepageExport("historical-correction", p, p, "unchanged" if expected[p] == data else "overwrite")
+               for p, data in updates.items()]
+    commit_homepage_updates(homepage_repo, updates, expected)
+    checked = False
+    try:
+        package = json.loads((homepage_repo / "package.json").read_text())
+        if not package.get("scripts", {}).get("check:i18n-quality"):
+            raise PublishingError("canonical localization check missing")
+        run_homepage_command(["npm", "run", "check:i18n-quality"], homepage_repo)
+        run_homepage_command(["npm", "run", "build"], homepage_repo)
+        from historical_blog_corrections import safe_file
+        for path, corrected in updates.items():
+            if safe_file(homepage_repo, str(path.relative_to(homepage_repo))).read_bytes() != corrected:
+                raise PublishingError(f"correction target changed during build: {path}")
+        checked = True
+    finally:
+        if dry_run or not checked:
+            commit_homepage_updates(homepage_repo, expected, updates)
+    if dry_run:
+        return exports
+    if all(item.action == "unchanged" for item in exports):
+        return exports
+    paths = sorted(str(path.relative_to(homepage_repo.resolve())) for path in updates)
+    run_homepage_command(["git", "diff", "--cached", "--quiet"], homepage_repo)
+    run_homepage_command(["git", "add", "--", *paths], homepage_repo)
+    staged = subprocess.run(["git", "diff", "--cached", "--name-only", "-z"], cwd=homepage_repo,
+                            check=True, capture_output=True).stdout
+    staged_paths = set(staged.decode("utf-8").rstrip("\0").split("\0")) if staged else set()
+    changed_paths = {str(path.relative_to(homepage_repo)) for path in updates if expected[path] != updates[path]}
+    if staged_paths != changed_paths:
+        raise PublishingError("staged correction paths differ from approved changed destinations")
+    run_homepage_command(["git", "commit", "-m", "Correct historical TagWeaver iOS save guidance in nine locales"], homepage_repo)
+    # Fast-forward push rejection is safe. Do not rebase/retry an uncertain push.
     run_homepage_command(["git", "push", "origin", branch], homepage_repo)
     return exports
 
@@ -2168,4 +2255,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
 

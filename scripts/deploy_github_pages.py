@@ -27,6 +27,7 @@ def main() -> int:
     parser.add_argument("--branch", default=DEFAULT_PAGES_BRANCH)
     parser.add_argument("--homepage-repo", type=Path, default=DEFAULT_HOMEPAGE_REPOSITORY_PATH)
     parser.add_argument("--dry-run", action="store_true", help="Preview homepage Markdown export without copying or deploying")
+    parser.add_argument("--historical-corrections-only", action="store_true", help="Apply only approved historical prose corrections; dry-run builds then restores without committing")
     args = parser.parse_args()
     try:
         exports = deploy_github_pages(
@@ -36,6 +37,7 @@ def main() -> int:
             topics_path=args.topics,
             homepage_repo=args.homepage_repo,
             dry_run=args.dry_run,
+            historical_corrections_only=args.historical_corrections_only,
         )
     except (PublishingError, OSError, subprocess.CalledProcessError) as error:
         print(f"github pages deployment failed: {error}", file=sys.stderr)

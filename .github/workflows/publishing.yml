@@ -11,6 +11,11 @@ on:
         options:
           - "true"
           - "false"
+      historical_corrections_only:
+        description: "Apply the approved nine-locale historical correction only; preserve queues and other media"
+        required: false
+        default: false
+        type: boolean
       content_only:
         description: "Publish content without app store checks, app releases, or release issue updates"
         required: false
@@ -31,6 +36,7 @@ jobs:
 
     env:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || github.event_name == 'push' && 'true' || 'false' }}
+      HISTORICAL_CORRECTIONS_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.historical_corrections_only == true && 'true' || 'false' }}
       CONTENT_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.content_only == true && 'true' || 'false' }}
       SITE_URL: https://onnellab.com/
       HOMEPAGE_REPO_PATH: .homepage
@@ -72,7 +78,29 @@ jobs:
           set -euo pipefail
           npm ci
 
+      - name: Validate Historical Correction Route
+        if: env.HISTORICAL_CORRECTIONS_ONLY == 'true'
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_historical_blog_corrections.py' -v
+          python3 -m unittest discover -s tests -p 'test_historical_correction_workflow.py' -v
+
+      - name: Deploy Historical Corrections Through Canonical Publisher
+        if: env.HISTORICAL_CORRECTIONS_ONLY == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$HOMEPAGE_REPO_PATH" config user.name "github-actions[bot]"
+          git -C "$HOMEPAGE_REPO_PATH" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "$DRY_RUN" = "true" ]; then
+            python3 scripts/deploy_github_pages.py --homepage-repo "$HOMEPAGE_REPO_PATH" --historical-corrections-only --dry-run
+          else
+            python3 scripts/deploy_github_pages.py --homepage-repo "$HOMEPAGE_REPO_PATH" --historical-corrections-only
+          fi
+
       - name: Validate
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true'
         run: |
           set -euo pipefail
           python3 scripts/validate_topics.py
@@ -85,19 +113,19 @@ jobs:
           python3 scripts/validate_foundation.py
 
       - name: Check App Store Versions
-        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true')
         run: |
           set -euo pipefail
           python3 scripts/check_store_versions.py
 
       - name: Check App Store Versions Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/check_store_versions.py --dry-run
 
       - name: Prepare App Release Candidates
-        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true')
         env:
           CODEMAGIC_API_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
         run: |
@@ -110,7 +138,7 @@ jobs:
           python3 scripts/validate_app_releases.py
 
       - name: Prepare App Release Candidates Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/prepare_app_release_rows.py --dry-run
@@ -120,7 +148,7 @@ jobs:
           python3 scripts/fill_ready_app_releases.py --dry-run
 
       - name: Create GitHub App Releases
-        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true')
         env:
           GITHUB_TOKEN: ${{ github.token }}
           ONNELLAB_RELEASE_TOKEN: ${{ secrets.ONNELLAB_RELEASE_TOKEN }}
@@ -129,25 +157,25 @@ jobs:
           python3 scripts/create_github_releases.py --publish
 
       - name: Create GitHub App Releases Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/create_github_releases.py --dry-run
 
       - name: Generate App Release Report
-        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_app_release_report.py
 
       - name: Generate App Release Report Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_app_release_report.py --output /tmp/onnel-content-engine-app-releases.md
 
       - name: Sync App Release Attention Issue
-        if: env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true' && env.CONTENT_ONLY != 'true')
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN || github.token }}
@@ -156,13 +184,13 @@ jobs:
           python3 scripts/sync_app_release_issue.py
 
       - name: Sync App Release Attention Issue Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/sync_app_release_issue.py --report /tmp/onnel-content-engine-app-releases.md --dry-run
 
       - name: Prepare Dry Run Workspace
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           rm -rf /tmp/onnel-content-engine-dry-run
@@ -170,13 +198,13 @@ jobs:
           cp -R data topics templates generated /tmp/onnel-content-engine-dry-run/
 
       - name: Generate Markdown
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_all_markdown.py
 
       - name: Generate Markdown Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_all_markdown.py \
@@ -186,13 +214,13 @@ jobs:
             --legacy-topics /tmp/onnel-content-engine-dry-run/topics/topics.csv
 
       - name: Generate Image Specifications
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_all_image_specs.py
 
       - name: Generate Image Specifications Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_all_image_specs.py \
@@ -202,13 +230,13 @@ jobs:
             --legacy-topics /tmp/onnel-content-engine-dry-run/topics/topics.csv
 
       - name: Generate Image Assets
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_all_image_assets.py
 
       - name: Generate Image Assets Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_all_image_assets.py \
@@ -218,13 +246,13 @@ jobs:
             --legacy-topics /tmp/onnel-content-engine-dry-run/topics/topics.csv
 
       - name: Generate Internal Links
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_all_internal_links.py
 
       - name: Generate Internal Links Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_all_internal_links.py \
@@ -233,13 +261,13 @@ jobs:
             --output-root /tmp/onnel-content-engine-dry-run/generated/metadata
 
       - name: Evaluate Articles
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/evaluate_all_articles.py
 
       - name: Evaluate Articles Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/evaluate_all_articles.py \
@@ -249,14 +277,14 @@ jobs:
             --review-root /tmp/onnel-content-engine-dry-run/generated/reviews
 
       - name: Schedule Ready Articles
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/check_nine_language_publication.py
           python3 scripts/schedule_ready_articles.py --threshold 9.0 --interval-days 3 --publication-time 09:00 --require-ready-when-due
 
       - name: Schedule Ready Articles Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/schedule_ready_articles.py \
@@ -268,14 +296,14 @@ jobs:
             --publication-time 09:00
 
       - name: Publish Due Articles
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/check_nine_language_publication.py
           python3 scripts/publish_due_articles.py --threshold 9.0 --site-url "$SITE_URL" --limit 1
 
       - name: Publish Due Articles Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/publish_due_articles.py \
@@ -287,13 +315,13 @@ jobs:
             --limit 1
 
       - name: Build
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/build_site.py --site-url "$SITE_URL"
 
       - name: Build Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/build_site.py \
@@ -304,14 +332,14 @@ jobs:
             --site-url "$SITE_URL"
 
       - name: Generate Distribution Drafts
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_social_posts.py --site-url "$SITE_URL"
           python3 scripts/generate_syndication_drafts.py --site-url "$SITE_URL"
 
       - name: Generate Distribution Drafts Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/generate_social_posts.py \
@@ -324,13 +352,13 @@ jobs:
             --site-url "$SITE_URL"
 
       - name: Validate Distribution Supply
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/check_distribution_supply.py --minimum-score 9.5
 
       - name: Validate Distribution Supply Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/check_distribution_supply.py \
@@ -341,13 +369,13 @@ jobs:
             --minimum-score 9.5
 
       - name: Approve Due Core Distribution
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           python3 scripts/approve_due_distribution.py --approved-by github-actions
 
       - name: Approve Due Core Distribution Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/approve_due_distribution.py \
@@ -358,7 +386,7 @@ jobs:
             --dry-run
 
       - name: Deploy Dry Run
-        if: env.DRY_RUN == 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN == 'true')
         run: |
           set -euo pipefail
           python3 scripts/deploy_github_pages.py \
@@ -368,7 +396,7 @@ jobs:
             --dry-run
 
       - name: Deploy
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         env:
           PAGES_TOKEN: ${{ secrets.ONNELLAB_GITHUB_PAGES_TOKEN }}
         run: |
@@ -407,7 +435,7 @@ jobs:
           exit 1
 
       - name: Commit Content Engine Outputs
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -427,7 +455,7 @@ jobs:
 
       - name: Post Due Core Distribution
         id: post_core_distribution
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         continue-on-error: true
         env:
           BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
@@ -438,7 +466,7 @@ jobs:
           python3 scripts/post_core_distribution.py
 
       - name: Verify Manual Publication Completion
-        if: env.DRY_RUN != 'true'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true')
         env:
           BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
           DEVTO_USERNAME: ${{ secrets.DEVTO_USERNAME }}
@@ -455,7 +483,7 @@ jobs:
           python3 scripts/verify_manual_publications.py --visual-public-pages
 
       - name: Commit Distribution Posting Status
-        if: env.DRY_RUN != 'true' && always()
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true' && always())
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -470,7 +498,7 @@ jobs:
           fi
 
       - name: Fail On Core Distribution Posting Error
-        if: env.DRY_RUN != 'true' && steps.post_core_distribution.outcome == 'failure'
+        if: env.HISTORICAL_CORRECTIONS_ONLY != 'true' && (env.DRY_RUN != 'true' && steps.post_core_distribution.outcome == 'failure')
         run: |
           set -euo pipefail
           echo "Core distribution posting failed; manifest status was committed when possible" >&2

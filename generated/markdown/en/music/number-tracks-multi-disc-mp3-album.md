@@ -107,7 +107,7 @@ Check the first and last track of every disc, transitions between discs, and any
 
 [TagWeaver](/apps/tagweaver/) is a focused local MP3 metadata editor that can be used to apply a reviewed track-and-disc field map to selected files. Repository-maintained app facts describe single-track editing in the free experience and batch editing as part of the optional Pro one-time purchase. Its official store listings document track and disc values among the editable metadata; platform details should be checked in the listing for the device being used.
 
-The app does not determine the correct edition or invent trustworthy positions. Use it after the track list and conventions are settled, keep the backup outside the working selection, save explicitly, and verify a small result. On iOS, follow the app's documented copy-save behavior rather than assuming the original file is replaced in place.
+The app does not determine the correct edition or invent trustworthy positions. Use it after the track list and conventions are settled, keep the backup outside the working selection, save explicitly, and verify a small result. According to the App Store release notes for version 2.5.1, saving on iOS updates the selected original when its location is writable; otherwise, TagWeaver asks where to save a copy. Make a separate backup before editing and verify the saved file’s location.
 
 ## References
 
