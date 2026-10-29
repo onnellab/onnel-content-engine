@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/media/choose-safe-audio-working-copy.md",
+  "topic": {
+    "id": "TOPIC-0116",
+    "title": "音声を編集する前に作業用コピーを選ぶ方法",
+    "slug": "choose-safe-audio-working-copy",
+    "category": "media",
+    "language": "ja",
+    "primary_keyword": "音声の作業用コピー",
+    "related_apps": [
+      "Segra"
+    ]
+  },
+  "article_sections_detected": [
+    "音声を編集する前に作業用コピーを選ぶ方法",
+    "質問",
+    "短い答え",
+    "作業用コピーとバックアップの違い",
+    "編集前後の手順",
+    "確認できることと限界",
+    "Segraを使う場合",
+    "関連ガイド",
+    "まとめ",
+    "FAQ",
+    "同じ端末にコピーがあればバックアップは不要ですか？",
+    "容量と再生時間が同じなら同じ音声ですか？",
+    "書き出しが終わったら元ファイルを削除してよいですか？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "音声ファイルを編集する前に、どのコピーを作業に使えばよいですか？",
+      "structure": [
+        "1. 残す",
+        "2. 分ける",
+        "3. 確認",
+        "4. 試聴"
+      ],
+      "notes": "Explain original, separate working file, input identity and output verification; not an application screenshot, backup guarantee or lossless claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial audio preservation workflow, not an application interface.",
+    "applications": [
+      "Segra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "音声編集はコピーから",
+      "steps": [
+        "1. 残す",
+        "2. 分ける",
+        "3. 確認",
+        "4. 試聴"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "元ファイルと作業用を区別",
+    "message": "保存できたら、内容も確認",
+    "description": "元ファイルを残したまま、名前と保存場所を区別した作業用コピーを用意します。ファイル名、場所、容量、再生時間を照合して入力を選び、編集結果は別ファイルとして保存します。書き出した音声の冒頭、編集箇所、末尾を聴くまで、元ファイルを削除しないでください。",
+    "steps": [
+      [
+        "1. 残す",
+        "元ファイルを保管"
+      ],
+      [
+        "2. 分ける",
+        "作業用コピーを作成"
+      ],
+      [
+        "3. 確認",
+        "入力ファイルを照合"
+      ],
+      [
+        "4. 試聴",
+        "書き出し結果を確認"
+      ]
+    ]
+  }
+}

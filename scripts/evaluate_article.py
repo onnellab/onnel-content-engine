@@ -155,6 +155,7 @@ def _article_input_fingerprint(
     return hashlib.sha256(canonical).hexdigest()
 
 
+from segra_preview_contract import HEADINGS as SEGRA_HEADINGS, section_aliases as segra_section_aliases
 from vaultxt_preview_contract import HEADINGS as VAULTXT_HEADINGS, section_aliases as vaultxt_section_aliases
 
 SECTION_ALIASES = {
@@ -181,6 +182,10 @@ for _language in ("en", "ko"):
 
 for _language in VAULTXT_HEADINGS:
     for _key, _aliases in vaultxt_section_aliases(_language).items():
+        SECTION_ALIASES[_key].update(_aliases)
+
+for _language in SEGRA_HEADINGS:
+    for _key, _aliases in segra_section_aliases(_language).items():
         SECTION_ALIASES[_key].update(_aliases)
 
 

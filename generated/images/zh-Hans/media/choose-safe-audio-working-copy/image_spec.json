@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hans/media/choose-safe-audio-working-copy.md",
+  "topic": {
+    "id": "TOPIC-0117",
+    "title": "编辑音频前，怎样准备可辨认的工作副本",
+    "slug": "choose-safe-audio-working-copy",
+    "category": "media",
+    "language": "zh-Hans",
+    "primary_keyword": "音频工作副本",
+    "related_apps": [
+      "Segra"
+    ]
+  },
+  "article_sections_detected": [
+    "编辑音频前，怎样准备可辨认的工作副本",
+    "问题",
+    "简短回答",
+    "工作副本不等于独立备份",
+    "建议的操作顺序",
+    "检查范围和局限",
+    "Segra可以用在哪一步？",
+    "相关指南",
+    "总结",
+    "常见问题",
+    "同一设备上有副本，就不需要备份了吗？",
+    "文件大小和时长相同，就说明内容相同吗？",
+    "导出完成后可以马上删除原文件吗？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "编辑音频前，怎样确认自己使用的是合适的工作副本？",
+      "structure": [
+        "1. 保留",
+        "2. 复制",
+        "3. 核对",
+        "4. 试听"
+      ],
+      "notes": "Explain original, separate working file, input identity and output verification; not an application screenshot, backup guarantee or lossless claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial audio preservation workflow, not an application interface.",
+    "applications": [
+      "Segra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "先准备音频工作副本",
+      "steps": [
+        "1. 保留",
+        "2. 复制",
+        "3. 核对",
+        "4. 试听"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "区分原文件与编辑用副本",
+    "message": "保存之后，还要试听",
+    "description": "保留原文件，手动创建名称和位置都容易区分的工作副本。用文件名、路径、大小和时长核对输入，把编辑结果另存为新文件。重新打开输出文件，试听开头、编辑交界处和结尾，确认前不要删除原文件。",
+    "steps": [
+      [
+        "1. 保留",
+        "保存原始文件"
+      ],
+      [
+        "2. 复制",
+        "建立工作副本"
+      ],
+      [
+        "3. 核对",
+        "确认输入文件"
+      ],
+      [
+        "4. 试听",
+        "检查导出结果"
+      ]
+    ]
+  }
+}

@@ -71,7 +71,7 @@
     "new_publication": "NONE"
   },
   "next_steps": [
-    "Pending separate scope approval: minimally add Segra candidate to existing nonpublishing preview adapter/workflow with boundary tests. Do not change publisher, deployment, cadence, security or queue gates.",
+    "Approved bounded Segra adapter/profile and boundary-test extension is implemented for nonpublishing preview; native gates must pass before any queue integration.",
     "Before consuming TOPIC-0041, independently review one nonduplicate idea seed to preserve the current minimum-eight idea pool; do not invent or reserve IDs prematurely.",
     "Generate native Markdown/image specifications/internal-link/review files and SVG/PNG through existing gates; examine every actual image and desktop/mobile page.",
     "Re-read latest main and receipt state; only after all required gates pass integrate complete undated review bundle into existing queue."
@@ -80,57 +80,57 @@
     {
       "locale": "en",
       "file": "en.json",
-      "git_blob_sha1": "70e2c3e767b89eae0cab3be4a9c1c8039452df9d",
+      "git_blob_sha1": "ef63fee551a8414ff5df715906e4de1ae2965ab3",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "ko",
       "file": "ko.json",
-      "git_blob_sha1": "a97fe746cd974185b47bd24626c0f6835d990a97",
+      "git_blob_sha1": "e17679a85f45c467a9fb11418ec3fd2642014931",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "de",
       "file": "de.json",
-      "git_blob_sha1": "84f9aa779184881a3dc2bee63b504f387c0f07b7",
+      "git_blob_sha1": "5b149c96875547d0b2abbbed1af3bd2f40617998",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "fr",
       "file": "fr.json",
-      "git_blob_sha1": "9fff11c21b221b634cc538bacdb45c39c3f07612",
+      "git_blob_sha1": "f042341f0b9cc58861369105630d7f35519f5b70",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "es",
       "file": "es.json",
-      "git_blob_sha1": "82fcb07bdf9cbadff4ca5e78315441d1411efe30",
+      "git_blob_sha1": "ea9aedc477769cd44b0a3eac0e8c582d97e04c44",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "pt-BR",
       "file": "pt-BR.json",
-      "git_blob_sha1": "c9cc4528bbbf380762fc22fe80274f02d59c90c9",
+      "git_blob_sha1": "e45279739b6cecccc7e77b2b157c5f121aabcf8a",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "ja",
       "file": "ja.json",
-      "git_blob_sha1": "ac27b4ce379327b45688c1e8782f52fa128dd7f4",
+      "git_blob_sha1": "01deb67e16d76315c81a59db6f95a8c6f6c71114",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "zh-Hans",
       "file": "zh-Hans.json",
-      "git_blob_sha1": "a7ba01ba7075afa47d627268255e6452055f9f73",
+      "git_blob_sha1": "be26f6387df6b2e1206a25d06769327f839edecc",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     },
     {
       "locale": "zh-Hant",
       "file": "zh-Hant.json",
-      "git_blob_sha1": "e4c93012245b213dc832c78332387ce5175f4f9a",
+      "git_blob_sha1": "2ef9b9d31805f305c5f79a0afbf010f114d12874",
       "format": "Localized full Markdown body, metadata and image copy; no rendered assets"
     }
   ],
-  "last_editorial_update_utc": "2026-10-28T09:26:10Z"
+  "last_editorial_update_utc": "2026-10-28T17:44:43Z"
 }

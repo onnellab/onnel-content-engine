@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/fr/media/choose-safe-audio-working-copy.md",
+  "topic": {
+    "id": "TOPIC-0121",
+    "title": "Préparer une copie de travail avant de modifier un fichier audio",
+    "slug": "choose-safe-audio-working-copy",
+    "category": "media",
+    "language": "fr",
+    "primary_keyword": "copie de travail audio",
+    "related_apps": [
+      "Segra"
+    ]
+  },
+  "article_sections_detected": [
+    "Préparer une copie de travail avant de modifier un fichier audio",
+    "Question",
+    "Réponse courte",
+    "Qu’est-ce qu’une copie de travail ?",
+    "Une méthode pratique",
+    "Limites et outils possibles",
+    "Guides connexes",
+    "Conclusion",
+    "Questions fréquentes",
+    "Suffit-il de renommer l’original ?",
+    "La copie de travail est-elle une sauvegarde ?",
+    "Puis-je supprimer l’original après l’export ?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Comment choisir une copie de travail avant de modifier un fichier audio ?",
+      "structure": [
+        "1. Repérer",
+        "2. Copier",
+        "3. Vérifier",
+        "4. Écouter"
+      ],
+      "notes": "Explain original, separate working file, input identity and output verification; not an application screenshot, backup guarantee or lossless claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial audio preservation workflow, not an application interface.",
+    "applications": [
+      "Segra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Gardez l’original à part",
+      "steps": [
+        "1. Repérer",
+        "2. Copier",
+        "3. Vérifier",
+        "4. Écouter"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Identifier → copier → modifier → vérifier",
+    "message": "Renommer ne remplace pas une sauvegarde.",
+    "description": "Identifiez et conservez l’original, créez une copie distincte au nom explicite, puis vérifiez que vous ouvrez bien cette copie. Enregistrez le résultat dans un nouveau fichier et écoutez-le avant toute suppression. Deux fichiers sur le même appareil ne constituent pas une sauvegarde indépendante.",
+    "steps": [
+      [
+        "1. Repérer",
+        "Repérer l’original"
+      ],
+      [
+        "2. Copier",
+        "Nommer la copie"
+      ],
+      [
+        "3. Vérifier",
+        "Ouvrir le bon fichier"
+      ],
+      [
+        "4. Écouter",
+        "Vérifier le résultat"
+      ]
+    ]
+  }
+}

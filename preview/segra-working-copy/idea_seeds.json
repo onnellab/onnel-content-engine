@@ -1,0 +1,19 @@
+[
+  {
+    "status": "idea",
+    "category": "media",
+    "primary_language": "en",
+    "slug": "check-audio-export-settings-before-sharing",
+    "primary_question": "What should I check in audio export settings before sharing a file?",
+    "working_title": "Check Audio Export Settings Before Sharing",
+    "priority": "normal",
+    "search_intent": "workflow",
+    "related_apps": "",
+    "primary_keyword": "audio export settings",
+    "secondary_keywords": "sample rate|bit depth|format compatibility",
+    "evergreen": "true",
+    "source_type": "editorial",
+    "review_required": "true",
+    "notes": "Independently reviewed product-neutral editorial hypothesis: check recipient accepted formats, preserve source settings and test a small output. No universal optimal values, lossless guarantee, app-capability or measured search-demand claim. Distinct from working-copy preservation and clip combining. ID remains unassigned until normal allocation."
+  }
+]

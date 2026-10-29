@@ -1,0 +1,97 @@
+{
+  "schema": "onnellab.independent-editorial-review.v1",
+  "observed_at_utc": "2026-10-28T17:34:44Z",
+  "author": "review_segra_adapter_contract",
+  "reviewer": "manage_oct28_blog_queue",
+  "scope": "Nine locale four-row original/working-copy/output/independent-backup comparison tables and explicit concept definitions; no new product/version/platform/price claims.",
+  "result": "Meaning, terminology, distinction from independent backup, native heading order and existing source limits preserved. No material text defect identified.",
+  "native_validation_pass": false,
+  "rendered_images_reviewed": false,
+  "candidate_pages_reviewed": false,
+  "artifacts": [
+    {
+      "locale": "en",
+      "git_blob_sha1": "ef63fee551a8414ff5df715906e4de1ae2965ab3",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "ko",
+      "git_blob_sha1": "e17679a85f45c467a9fb11418ec3fd2642014931",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "ja",
+      "git_blob_sha1": "01deb67e16d76315c81a59db6f95a8c6f6c71114",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "zh-Hans",
+      "git_blob_sha1": "be26f6387df6b2e1206a25d06769327f839edecc",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "zh-Hant",
+      "git_blob_sha1": "2ef9b9d31805f305c5f79a0afbf010f114d12874",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "pt-BR",
+      "git_blob_sha1": "e45279739b6cecccc7e77b2b157c5f121aabcf8a",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "de",
+      "git_blob_sha1": "5b149c96875547d0b2abbbed1af3bd2f40617998",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "fr",
+      "git_blob_sha1": "f042341f0b9cc58861369105630d7f35519f5b70",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    },
+    {
+      "locale": "es",
+      "git_blob_sha1": "ea9aedc477769cd44b0a3eac0e8c582d97e04c44",
+      "table_rows": 4,
+      "ordered_steps": 5,
+      "faq_count": 3
+    }
+  ],
+  "idea_seed_review": "check-audio-export-settings-before-sharing: independently reviewed by review_segra_adapter_contract; no duplicate slug in main4ab372e; no ID reserved",
+  "image_label_correction": {
+    "observed_at_utc": "2026-10-28T17:38:50Z",
+    "reviewer": "review_segra_adapter_contract",
+    "reason": "Actual layout guard failed PT/FR/ES card headings in run40737484347; shorten labels only, preserve details and layout limits.",
+    "result": "Language and step meaning reviewed; render rerun pending"
+  },
+  "keyword_definition_correction": {
+    "observed_at_utc": "2026-10-28T17:44:43Z",
+    "reviewer": "/root",
+    "scope": "Exact introductory phrases in en/ko/ja/pt-BR/fr/es plus full German definition sentence and paired Audio-Arbeitskopie editorial keyword; no claim of full article rereview.",
+    "reason": "Run40737829800 passed211 boundary tests but exact keyword absent in7 body texts. Natural definition clarifies audio subject; German keyword corrected for naturalness. Search volume unmeasured; unchanged evaluation gates.",
+    "native_rerun": "pending"
+  },
+  "visual_correction": {
+    "observed_at_utc": "2026-10-29T00:28:50Z",
+    "artifact_id": 12838008338,
+    "reviewer": "/root",
+    "change": "DE fourth image step detail: Ergebnis kontrollieren -> Ergebnis prüfen",
+    "reason": "Actual PNG inspection found awkward single trailing n wrapping; shorter natural same-meaning instruction independently reviewed. All gates and image rereview pending."
+  }
+}

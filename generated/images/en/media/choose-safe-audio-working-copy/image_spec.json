@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/media/choose-safe-audio-working-copy.md",
+  "topic": {
+    "id": "TOPIC-0041",
+    "title": "Choose a Working Copy Before Editing Audio",
+    "slug": "choose-safe-audio-working-copy",
+    "category": "media",
+    "language": "en",
+    "primary_keyword": "audio working copy",
+    "related_apps": [
+      "Segra"
+    ]
+  },
+  "article_sections_detected": [
+    "Choose a Working Copy Before Editing Audio",
+    "Question",
+    "Short Answer",
+    "What Is a Working Copy?",
+    "A Practical Workflow",
+    "Limits and Optional Tools",
+    "Related Guides",
+    "Conclusion",
+    "FAQ",
+    "Is renaming the original enough?",
+    "Is a working copy also a backup?",
+    "Can I delete the original after exporting?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "How can I choose a safe working copy before editing an audio file?",
+      "structure": [
+        "1. Identify",
+        "2. Copy",
+        "3. Confirm",
+        "4. Check"
+      ],
+      "notes": "Explain original, separate working file, input identity and output verification; not an application screenshot, backup guarantee or lossless claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial audio preservation workflow, not an application interface.",
+    "applications": [
+      "Segra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Keep the original separate",
+      "steps": [
+        "1. Identify",
+        "2. Copy",
+        "3. Confirm",
+        "4. Check"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Identify → copy → edit → check",
+    "message": "A new filename is not a backup plan.",
+    "description": "Identify and keep the original, create a separate working copy with a clear name, and confirm that copy is the file you open. Export to a new file and listen to the result before removing anything. A second file on the same device is not an independent backup.",
+    "steps": [
+      [
+        "1. Identify",
+        "Find the original"
+      ],
+      [
+        "2. Copy",
+        "Name the working file"
+      ],
+      [
+        "3. Confirm",
+        "Open the intended input"
+      ],
+      [
+        "4. Check",
+        "Listen to the output"
+      ]
+    ]
+  }
+}

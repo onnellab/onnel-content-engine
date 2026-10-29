@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/media/choose-safe-audio-working-copy.md",
+  "topic": {
+    "id": "TOPIC-0115",
+    "title": "오디오 편집 전에 작업용 복사본을 구분하는 방법",
+    "slug": "choose-safe-audio-working-copy",
+    "category": "media",
+    "language": "ko",
+    "primary_keyword": "오디오 작업용 복사본",
+    "related_apps": [
+      "Segra"
+    ]
+  },
+  "article_sections_detected": [
+    "오디오 편집 전에 작업용 복사본을 구분하는 방법",
+    "질문",
+    "짧은 답변",
+    "작업용 복사본이란 무엇인가요?",
+    "작업 순서",
+    "한계와 선택 가능한 도구",
+    "관련 안내",
+    "정리",
+    "자주 묻는 질문",
+    "원본 이름만 바꿔도 되나요?",
+    "작업용 복사본이 있으면 백업도 된 건가요?",
+    "내보내기가 끝나면 원본을 지워도 되나요?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "오디오 파일을 편집하기 전에 작업용 복사본은 어떻게 정하면 좋을까요?",
+      "structure": [
+        "1. 원본 확인",
+        "2. 복사",
+        "3. 입력 확인",
+        "4. 결과 확인"
+      ],
+      "notes": "Explain original, separate working file, input identity and output verification; not an application screenshot, backup guarantee or lossless claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial audio preservation workflow, not an application interface.",
+    "applications": [
+      "Segra"
+    ],
+    "rules": [
+      "실제 기능을 설명할 때에만 스크린샷을 사용합니다.",
+      "불필요한 UI는 잘라냅니다.",
+      "관련 컨트롤이나 워크플로 영역만 강조합니다.",
+      "높은 해상도를 유지합니다.",
+      "스크린샷을 장식으로 사용하지 않습니다."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "원본과 작업 파일을 구분해요",
+      "steps": [
+        "1. 원본 확인",
+        "2. 복사",
+        "3. 입력 확인",
+        "4. 결과 확인"
+      ],
+      "layout": "세로 또는 좌우 순서형"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+    "이 단계에서는 스크린샷을 만들지 않습니다.",
+    "이 단계에서는 에셋을 게시하지 않습니다.",
+    "설명 목적이 없는 장식용 이미지는 사용하지 않습니다."
+  ],
+  "editorial_workflow": {
+    "subtitle": "확인 → 복사 → 편집 → 점검",
+    "message": "이름을 바꾸는 것만으로 백업이 되지는 않아요.",
+    "description": "원본의 위치와 내용을 확인해 보관하고, 이름이 분명한 별도 복사본을 만든 뒤 그 파일을 열었는지 확인하세요. 결과는 새 파일로 저장하고 실제로 들어본 후 정리하세요. 같은 기기에 있는 두 파일을 독립적인 백업으로 볼 수는 없어요.",
+    "steps": [
+      [
+        "1. 원본 확인",
+        "보존할 파일 찾기"
+      ],
+      [
+        "2. 복사",
+        "작업용 이름 붙이기"
+      ],
+      [
+        "3. 입력 확인",
+        "선택한 파일 점검"
+      ],
+      [
+        "4. 결과 확인",
+        "저장한 소리 듣기"
+      ]
+    ]
+  }
+}

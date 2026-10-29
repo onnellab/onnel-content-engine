@@ -1,0 +1,628 @@
+{
+  "schema": "onnellab.blog.integration-review.v1",
+  "observed_at_utc": "2026-10-29T00:41:42Z",
+  "state": "COMPLETE_NINE_LANGUAGE_BUNDLE_READY_FOR_CANONICAL_REVIEW_QUEUE",
+  "slug": "choose-safe-audio-working-copy",
+  "category": "media",
+  "source_head": "92bda39d4c13bb2838e1cbaae184bfae6c81c4a1",
+  "base_main": "807d04d92fdb67d2e3c6119c6af45932b8e97d3f",
+  "artifact": {
+    "id": 12863885227,
+    "node_id": "MDg6QXJ0aWZhY3QxMjg2Mzg4NTIyNw==",
+    "name": "blog-preview-92bda39d4c13bb2838e1cbaae184bfae6c81c4a1",
+    "size_in_bytes": 23493171,
+    "url": "https://api.github.com/repos/onnellab/onnel-content-engine/actions/artifacts/12863885227",
+    "archive_download_url": "https://api.github.com/repos/onnellab/onnel-content-engine/actions/artifacts/12863885227/zip",
+    "expired": false,
+    "digest": "sha256:0e8404f1f6780e495b3f12ca8a03e37497b977068715372472650b511b6ff59d",
+    "created_at": "2026-10-29T00:31:55Z",
+    "updated_at": "2026-10-29T00:31:55Z",
+    "expires_at": "2026-10-30T00:31:53Z",
+    "workflow_run": {
+      "id": 40794388746,
+      "repository_id": 1296466982,
+      "head_repository_id": 1296466982,
+      "head_branch": "verify/segra-working-copy-20261028",
+      "head_sha": "92bda39d4c13bb2838e1cbaae184bfae6c81c4a1"
+    },
+    "backing_file_id": "file_00000000859c81f683e9e22bb35dfe4c"
+  },
+  "automated": {
+    "run_url": "https://github.com/onnellab/onnel-content-engine/actions/runs/40794388746",
+    "status": "success",
+    "python_boundary_regression_tests": 211,
+    "summary_tests": 7,
+    "template_tests": 4,
+    "playwright_tests": 56,
+    "localization_source_files": 339,
+    "native_gates": 5,
+    "native_output_files": 72,
+    "native_manifest": {
+      "schema": 1,
+      "slug": "choose-safe-audio-working-copy",
+      "locales": [
+        "en",
+        "ko",
+        "ja",
+        "zh-Hans",
+        "zh-Hant",
+        "pt-BR",
+        "de",
+        "fr",
+        "es"
+      ],
+      "files": [
+        {
+          "path": "generated/markdown/en/media/choose-safe-audio-working-copy.md",
+          "byte_length": 5222,
+          "sha256": "cc3eeaedafe6ab710ff2da149425d564fd7f3b12e82f9b67ab0efa288e1ed889",
+          "git_blob_sha1": "4d539740a972eb68e4cf91cd0ce70cb5647a214e"
+        },
+        {
+          "path": "generated/images/en/media/choose-safe-audio-working-copy/image_spec.json",
+          "byte_length": 3707,
+          "sha256": "eff41a537dfa227477ddf631d62b31b4dce2557c113d75e8b5c47a432308b734",
+          "git_blob_sha1": "7bcd07b96500dbdb6af789592bd10956f6317831"
+        },
+        {
+          "path": "generated/metadata/en/media/choose-safe-audio-working-copy/internal_links.json",
+          "byte_length": 5251,
+          "sha256": "0d65c9e9b08cd949fe116354c61ea7c0abc0541f7ad7d80d7616e01a1af72cbe",
+          "git_blob_sha1": "3a13d5312c58558415bffd3e30738f5b0ccc8ca8"
+        },
+        {
+          "path": "generated/reviews/en/media/choose-safe-audio-working-copy/review.json",
+          "byte_length": 3579,
+          "sha256": "41415dc5bfd3e5fabc7f612245434bae34cef80039eaef1673ce9ec9b306beb7",
+          "git_blob_sha1": "1f645b26ee131102cd9b748ea1ded10ff3443586"
+        },
+        {
+          "path": "generated/assets/blog/en/choose-safe-audio-working-copy/workflow-diagram.svg",
+          "byte_length": 4322,
+          "sha256": "4cafb8bee7cbe5e8109ff3e01fddd3eed08c0b2ae657c8ae693224b91a4654dc",
+          "git_blob_sha1": "967ff11da475c2d0429565237ee118c7e2d1ebc2"
+        },
+        {
+          "path": "generated/assets/blog/en/choose-safe-audio-working-copy/workflow-diagram.png",
+          "byte_length": 61598,
+          "sha256": "9e90a2e54db0ccda4f75ee5b65d1b676e4ab253c106465833dabd68bd2e97459",
+          "git_blob_sha1": "e15a1c651c798899749628bd08eaa741b0663edb"
+        },
+        {
+          "path": "generated/assets/blog/en/choose-safe-audio-working-copy/social-card.svg",
+          "byte_length": 4322,
+          "sha256": "4cafb8bee7cbe5e8109ff3e01fddd3eed08c0b2ae657c8ae693224b91a4654dc",
+          "git_blob_sha1": "967ff11da475c2d0429565237ee118c7e2d1ebc2"
+        },
+        {
+          "path": "generated/assets/blog/en/choose-safe-audio-working-copy/social-card.png",
+          "byte_length": 61598,
+          "sha256": "9e90a2e54db0ccda4f75ee5b65d1b676e4ab253c106465833dabd68bd2e97459",
+          "git_blob_sha1": "e15a1c651c798899749628bd08eaa741b0663edb"
+        },
+        {
+          "path": "generated/markdown/ko/media/choose-safe-audio-working-copy.md",
+          "byte_length": 6564,
+          "sha256": "d7abde62b5711178c1f0a6759c8f5ae1968e3122e71d815ceedc1cca6aff9674",
+          "git_blob_sha1": "27a8344864b2a33ac914ab35079e1837c2c91ad6"
+        },
+        {
+          "path": "generated/images/ko/media/choose-safe-audio-working-copy/image_spec.json",
+          "byte_length": 4191,
+          "sha256": "7c4218f4d1151fbfb60e56e9a7076b03ffb5d0b201baec6ce1e0bf3d8b57390f",
+          "git_blob_sha1": "f52215ba4c8d489e1b358846b1ba244c1f6dbd7c"
+        },
+        {
+          "path": "generated/metadata/ko/media/choose-safe-audio-working-copy/internal_links.json",
+          "byte_length": 5360,
+          "sha256": "abcf74a14578029870e82fe39929f5bb01442f7b84fdf10bad586fef359e84be",
+          "git_blob_sha1": "22804a0b51b017dcafbfa2245da7ce8f8ca9710d"
+        },
+        {
+          "path": "generated/reviews/ko/media/choose-safe-audio-working-copy/review.json",
+          "byte_length": 3603,
+          "sha256": "5fee0ff6c7ca23212a4fcf2b4ec462c83a5c83fdc6299c234ab7cdab5e0ac963",
+          "git_blob_sha1": "9beb12a32637f4496e2fd25b8d2d52a4ab1764e3"
+        },
+        {
+          "path": "generated/assets/blog/ko/choose-safe-audio-working-copy/workflow-diagram.svg",
+          "byte_length": 4270,
+          "sha256": "710d4e2c61656e0af6c3b45d7c95e76c6623858d96e9ffbddd4d4d9b8042e504",
+          "git_blob_sha1": "9742fcab2d62b89ec1051650a416e10b32ad68d4"
+        },
+        {
+          "path": "generated/assets/blog/ko/choose-safe-audio-working-copy/workflow-diagram.png",
+          "byte_length": 48409,
+          "sha256": "121c42b4c52eb409593436ddbbde0fac6cd9e42d9abb3306c472a9f2478406e0",
+          "git_blob_sha1": "8b50a27eb3dc606e8219f2a1c057dc6112573f2f"
+        },
+        {
+          "path": "generated/assets/blog/ko/choose-safe-audio-working-copy/social-card.svg",
+          "byte_length": 4270,
+          "sha256": "710d4e2c61656e0af6c3b45d7c95e76c6623858d96e9ffbddd4d4d9b8042e504",
+          "git_blob_sha1": "9742fcab2d62b89ec1051650a416e10b32ad68d4"
+        },
+        {
+          "path": "generated/assets/blog/ko/choose-safe-audio-working-copy/social-card.png",
+          "byte_length": 48409,
+          "sha256": "121c42b4c52eb409593436ddbbde0fac6cd9e42d9abb3306c472a9f2478406e0",
+          "git_blob_sha1": "8b50a27eb3dc606e8219f2a1c057dc6112573f2f"
+        },
+        {
+          "path": "generated/markdown/ja/media/choose-safe-audio-working-copy.md",
+          "byte_length": 7801,
+          "sha256": "d8153746aa9cd8e049314f0d8efff7368b0f93880241683e81711ed3d7a3e02d",
+          "git_blob_sha1": "7d512ee230966fb26a6d3dc80e2c98de4f1e0cd9"
+        },
+        {
+          "path": "generated/images/ja/media/choose-safe-audio-working-copy/image_spec.json",
+          "byte_length": 4095,
+          "sha256": "1adc412d142974c6a6db2a074137e145bc89aa1c346659c7c638b666e1a1f595",
+          "git_blob_sha1": "161175ce770ad372583aed4434ad84c54de5de6e"
+        },
+        {
+          "path": "generated/metadata/ja/media/choose-safe-audio-working-copy/internal_links.json",
+          "byte_length": 5410,
+          "sha256": "ffc42f1ae0866e8d9d6dc791c83b31eba2fbe6b5c166b253300a95072d37127e",
+          "git_blob_sha1": "06dc0944b7d56c0fd86906078dbf9d543d339bfd"
+        },
+        {
+          "path": "generated/reviews/ja/media/choose-safe-audio-working-copy/review.json",
+          "byte_length": 3597,
+          "sha256": "0c7cae5a2eac101b8b659c0592578e7f9006f636224c54637877f7eefaf69468",
+          "git_blob_sha1": "0f88aebb05480b3d96440e51e7d0579f6f1de0f4"
+        },
+        {
+          "path": "generated/assets/blog/ja/choose-safe-audio-working-copy/workflow-diagram.svg",
+          "byte_length": 3848,
+          "sha256": "56fc292d0bfe829601a9ba47c12470cda186588af7431cb17cfa976b45fb4b84",
+          "git_blob_sha1": "bc778911c150444cf4f40ecd6e0f5500bbe54606"
+        },
+        {
+          "path": "generated/assets/blog/ja/choose-safe-audio-working-copy/workflow-diagram.png",
+          "byte_length": 54419,
+          "sha256": "a07b91e6aceeaad9c8b7a996c5e198516f257bdd1402c3874659163161c21543",
+          "git_blob_sha1": "846abedebcccb73b16144d286c5c2f77d486f310"
+        },
+        {
+          "path": "generated/assets/blog/ja/choose-safe-audio-working-copy/social-card.svg",
+          "byte_length": 3848,
+          "sha256": "56fc292d0bfe829601a9ba47c12470cda186588af7431cb17cfa976b45fb4b84",
+          "git_blob_sha1": "bc778911c150444cf4f40ecd6e0f5500bbe54606"
+        },
+        {
+          "path": "generated/assets/blog/ja/choose-safe-audio-working-copy/social-card.png",
+          "byte_length": 54419,
+          "sha256": "a07b91e6aceeaad9c8b7a996c5e198516f257bdd1402c3874659163161c21543",
+          "git_blob_sha1": "846abedebcccb73b16144d286c5c2f77d486f310"
+        },
+        {
+          "path": "generated/markdown/zh-Hans/media/choose-safe-audio-working-copy.md",
+          "byte_length": 5980,
+          "sha256": "d849465d4be079ed918bd3d749a119b94af1ac129fd4788df62051b8948b4d38",
+          "git_blob_sha1": "f7571e22a3d151e1d17665c9d2a173ba95cf07d7"
+        },
+        {
+          "path": "generated/images/zh-Hans/media/choose-safe-audio-working-copy/image_spec.json",
+          "byte_length": 3835,
+          "sha256": "155ea765c32847dace51cf0f1d22612528e06cc86b98ae90ec4141f064813ea9",
+          "git_blob_sha1": "2dad22f6379cb4a9cc640def99250aa80d31bae8"
+        },
+        {
+          "path": "generated/metadata/zh-Hans/media/choose-safe-audio-working-copy/internal_links.json",
+          "byte_length": 5296,
+          "sha256": "de8153015c4dfbcca57634774c8f12f872cb2ab0875c8197382fe9f221a6bb43",
+          "git_blob_sha1": "67b3a56827f2ffc9ffa8572e7423467c79e01dce"
+        },
+        {
+          "path": "generated/reviews/zh-Hans/media/choose-safe-audio-working-copy/review.json",
+          "byte_length": 3591,
+          "sha256": "3c1997f3d544a908c9b7dc1b038bb1d9507e4f1ad8431522c7357edb3cb4359f",
+          "git_blob_sha1": "ad8c631c952e925421d6e55be3a5d74d1a4cfc2f"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/choose-safe-audio-working-copy/workflow-diagram.svg",
+          "byte_length": 3593,
+          "sha256": "17ae3ab776b695cbc395dfe359a9d869d0a952c56db6466cc36361243a472055",
+          "git_blob_sha1": "2026a81db5ac6054180852a04072a357226e8270"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/choose-safe-audio-working-copy/workflow-diagram.png",
+          "byte_length": 50250,
+          "sha256": "513728692934b8340b71a0ba9e50c25dcff59456f65f2d6bd1b8fdff74621720",
+          "git_blob_sha1": "3fff14d1d345e5a29fa7a25e01d5ff984fc3bf7f"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/choose-safe-audio-working-copy/social-card.svg",
+          "byte_length": 3593,
+          "sha256": "17ae3ab776b695cbc395dfe359a9d869d0a952c56db6466cc36361243a472055",
+          "git_blob_sha1": "2026a81db5ac6054180852a04072a357226e8270"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hans/choose-safe-audio-working-copy/social-card.png",
+          "byte_length": 50250,
+          "sha256": "513728692934b8340b71a0ba9e50c25dcff59456f65f2d6bd1b8fdff74621720",
+          "git_blob_sha1": "3fff14d1d345e5a29fa7a25e01d5ff984fc3bf7f"
+        },
+        {
+          "path": "generated/markdown/zh-Hant/media/choose-safe-audio-working-copy.md",
+          "byte_length": 5974,
+          "sha256": "80d7847cd4d7e9427165071204fb522b3ce6c0507b9cee6b56b8d82075726ba7",
+          "git_blob_sha1": "ba1e456d4cdbff5f2a18e2ab59618e6badbebdcb"
+        },
+        {
+          "path": "generated/images/zh-Hant/media/choose-safe-audio-working-copy/image_spec.json",
+          "byte_length": 3847,
+          "sha256": "bebe14d9addf2da877a426b65bc022f6d1c9e6c6e4afca66e980d4ab876df420",
+          "git_blob_sha1": "d3460f7af09e76c261538687aed7b1100ba42483"
+        },
+        {
+          "path": "generated/metadata/zh-Hant/media/choose-safe-audio-working-copy/internal_links.json",
+          "byte_length": 5296,
+          "sha256": "17403017568202ecdcf89f925f9dff04e353f9b47fd27431da74c3d213deee2a",
+          "git_blob_sha1": "931e9d1a45d13a31617a455686709a4cb3b0124f"
+        },
+        {
+          "path": "generated/reviews/zh-Hant/media/choose-safe-audio-working-copy/review.json",
+          "byte_length": 3594,
+          "sha256": "176fe45eef5b61503faf57d9b875c54fb323f2b596fc8433ad1e004932ebb043",
+          "git_blob_sha1": "d3bf0acadf66747d299e36091d838853a2a66e64"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/choose-safe-audio-working-copy/workflow-diagram.svg",
+          "byte_length": 3590,
+          "sha256": "3a94fc9af00bda7be902dce6b05264d992eba161c981435ae12d8fb86016c093",
+          "git_blob_sha1": "c95f58bbddc8e59264d70438b77276c932f747dc"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/choose-safe-audio-working-copy/workflow-diagram.png",
+          "byte_length": 53066,
+          "sha256": "ca85701f9f554db7124a1ddb6ceae4e7a86e3ffa95e1c708adbb3fb4a8ac275f",
+          "git_blob_sha1": "8b2b9d3b522837d323068e3223d19491cc3a16d0"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/choose-safe-audio-working-copy/social-card.svg",
+          "byte_length": 3590,
+          "sha256": "3a94fc9af00bda7be902dce6b05264d992eba161c981435ae12d8fb86016c093",
+          "git_blob_sha1": "c95f58bbddc8e59264d70438b77276c932f747dc"
+        },
+        {
+          "path": "generated/assets/blog/zh-Hant/choose-safe-audio-working-copy/social-card.png",
+          "byte_length": 53066,
+          "sha256": "ca85701f9f554db7124a1ddb6ceae4e7a86e3ffa95e1c708adbb3fb4a8ac275f",
+          "git_blob_sha1": "8b2b9d3b522837d323068e3223d19491cc3a16d0"
+        },
+        {
+          "path": "generated/markdown/pt-BR/media/choose-safe-audio-working-copy.md",
+          "byte_length": 5537,
+          "sha256": "25f43aeaf92d309450249214557668b7b6cdd34e35934b3533d211c9334f45cb",
+          "git_blob_sha1": "8d258d4c1237ec57f4ce77745af9b27dbef1edcc"
+        },
+        {
+          "path": "generated/images/pt-BR/media/choose-safe-audio-working-copy/image_spec.json",
+          "byte_length": 3796,
+          "sha256": "09c6f52adfc1b3db69de377dc9e8d655e9ba63f5e66dce45af0b8f43f82d0482",
+          "git_blob_sha1": "a87d906618de1aedf0365e399302af4ade914be5"
+        },
+        {
+          "path": "generated/metadata/pt-BR/media/choose-safe-audio-working-copy/internal_links.json",
+          "byte_length": 5701,
+          "sha256": "12695b045e6035dc58dd9eb6e6e7a881fb56afc6c3fb04ba4de5ab016c683b6c",
+          "git_blob_sha1": "75bcaca4d21e1922f37a796bf4eb5d5fe15fa9ae"
+        },
+        {
+          "path": "generated/reviews/pt-BR/media/choose-safe-audio-working-copy/review.json",
+          "byte_length": 3590,
+          "sha256": "cfd785a583708e48a4fe250ddf92089cf477894b2fae08b43d074676ed7f806e",
+          "git_blob_sha1": "eb30972c08407ccdd1cb22d9e19ce5c400edd924"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/choose-safe-audio-working-copy/workflow-diagram.svg",
+          "byte_length": 4295,
+          "sha256": "1b95119f842078040077867c1170a9b0bf715ff8f060121593b9919841a3a28a",
+          "git_blob_sha1": "3a375baadd86b6bb87dc6662b2bbb8917e2c200b"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/choose-safe-audio-working-copy/workflow-diagram.png",
+          "byte_length": 63986,
+          "sha256": "b12b7575eec54c790230ec8d7877438d1f9d99cb1e90b1de1d370f19ad3cd50a",
+          "git_blob_sha1": "e814d1a5b10bef3338f6da45fbd552635e9dc326"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/choose-safe-audio-working-copy/social-card.svg",
+          "byte_length": 4295,
+          "sha256": "1b95119f842078040077867c1170a9b0bf715ff8f060121593b9919841a3a28a",
+          "git_blob_sha1": "3a375baadd86b6bb87dc6662b2bbb8917e2c200b"
+        },
+        {
+          "path": "generated/assets/blog/pt-BR/choose-safe-audio-working-copy/social-card.png",
+          "byte_length": 63986,
+          "sha256": "b12b7575eec54c790230ec8d7877438d1f9d99cb1e90b1de1d370f19ad3cd50a",
+          "git_blob_sha1": "e814d1a5b10bef3338f6da45fbd552635e9dc326"
+        },
+        {
+          "path": "generated/markdown/de/media/choose-safe-audio-working-copy.md",
+          "byte_length": 5838,
+          "sha256": "49ea2188be60a892ca5d586f0bd9b2fd72000fe8438e7660933092de5ed0a24c",
+          "git_blob_sha1": "9a3a0b2602de12ed58a9f5f83f159f81560d68e2"
+        },
+        {
+          "path": "generated/images/de/media/choose-safe-audio-working-copy/image_spec.json",
+          "byte_length": 3842,
+          "sha256": "13473dc703a7222823b17f866377ef878eacccd889fcbbe34d53f601fd6d2749",
+          "git_blob_sha1": "25f8bcc6c74a1301db4bf6843b4a352dfaab8a1a"
+        },
+        {
+          "path": "generated/metadata/de/media/choose-safe-audio-working-copy/internal_links.json",
+          "byte_length": 5285,
+          "sha256": "cabf97c728ebb01c677c5020e896c3dc773613d716b3dd1c91ff00bd287a8bc5",
+          "git_blob_sha1": "95de9a27637a7c5a5c5ffdade4c46520e85fc1bf"
+        },
+        {
+          "path": "generated/reviews/de/media/choose-safe-audio-working-copy/review.json",
+          "byte_length": 3587,
+          "sha256": "6d72d4277e1d2c58caad5edccd6fb5d20928dc81c4c7f577b87c2266a24cf5a9",
+          "git_blob_sha1": "2f05863ebd4c5a6b04d38d6bb173a6ae3e28b8dd"
+        },
+        {
+          "path": "generated/assets/blog/de/choose-safe-audio-working-copy/workflow-diagram.svg",
+          "byte_length": 4363,
+          "sha256": "734fe1ad069a68d061b5aa46b77cbbc69bd3eb2826292a7a3f99040b427f3e8a",
+          "git_blob_sha1": "e22e001222aef81bbdfcfd421d41cfbb37a12d3a"
+        },
+        {
+          "path": "generated/assets/blog/de/choose-safe-audio-working-copy/workflow-diagram.png",
+          "byte_length": 62426,
+          "sha256": "ae165d298740c6da3509b9f564204e53cbbd99529950c8bb281f99bc007fa541",
+          "git_blob_sha1": "b611a1fe3dcba1e126ee81d10f5f6d9eb18911f0"
+        },
+        {
+          "path": "generated/assets/blog/de/choose-safe-audio-working-copy/social-card.svg",
+          "byte_length": 4363,
+          "sha256": "734fe1ad069a68d061b5aa46b77cbbc69bd3eb2826292a7a3f99040b427f3e8a",
+          "git_blob_sha1": "e22e001222aef81bbdfcfd421d41cfbb37a12d3a"
+        },
+        {
+          "path": "generated/assets/blog/de/choose-safe-audio-working-copy/social-card.png",
+          "byte_length": 62426,
+          "sha256": "ae165d298740c6da3509b9f564204e53cbbd99529950c8bb281f99bc007fa541",
+          "git_blob_sha1": "b611a1fe3dcba1e126ee81d10f5f6d9eb18911f0"
+        },
+        {
+          "path": "generated/markdown/fr/media/choose-safe-audio-working-copy.md",
+          "byte_length": 6047,
+          "sha256": "3f211c78107b41b287c0e4b91cc60fbed0d3ff0c710de8d38eac4752bc619ce2",
+          "git_blob_sha1": "3a44d1770ecf417e72ad54df919f544d1a04c4a6"
+        },
+        {
+          "path": "generated/images/fr/media/choose-safe-audio-working-copy/image_spec.json",
+          "byte_length": 3911,
+          "sha256": "112cb56386ff2e000bf93d41755376fd04b2b9ab81486b0a9f5da45906d460c8",
+          "git_blob_sha1": "0a812e5338b9c5ac46528b550cbe689730653750"
+        },
+        {
+          "path": "generated/metadata/fr/media/choose-safe-audio-working-copy/internal_links.json",
+          "byte_length": 5664,
+          "sha256": "46be864ad3a65f2adbac82f5d1519a2d02601f35ac408cd31f1c2b06805a7fdb",
+          "git_blob_sha1": "a2b5007d6bdb590bc9df350b5ddb430017173186"
+        },
+        {
+          "path": "generated/reviews/fr/media/choose-safe-audio-working-copy/review.json",
+          "byte_length": 3602,
+          "sha256": "59913261cedf2738b4ab6893fce6293e888514de2992bdad335413d81451779e",
+          "git_blob_sha1": "418001deb5bf12c95cc46617b1c24980aaf1d32f"
+        },
+        {
+          "path": "generated/assets/blog/fr/choose-safe-audio-working-copy/workflow-diagram.svg",
+          "byte_length": 4391,
+          "sha256": "4f11ea9d0faa531232e7093b489f996ff871f47cb1eb373eae04050c7e98e3fd",
+          "git_blob_sha1": "326983ffd0a8c4b31f7e0208e850a3b0e1f2581e"
+        },
+        {
+          "path": "generated/assets/blog/fr/choose-safe-audio-working-copy/workflow-diagram.png",
+          "byte_length": 61141,
+          "sha256": "0dacc07a65afd240b1f7b3264814daf452239d4338fb0503f0c07004bac184d4",
+          "git_blob_sha1": "a9d2e0baf2c11bf7f7ad09478f66ba57eda9f28b"
+        },
+        {
+          "path": "generated/assets/blog/fr/choose-safe-audio-working-copy/social-card.svg",
+          "byte_length": 4391,
+          "sha256": "4f11ea9d0faa531232e7093b489f996ff871f47cb1eb373eae04050c7e98e3fd",
+          "git_blob_sha1": "326983ffd0a8c4b31f7e0208e850a3b0e1f2581e"
+        },
+        {
+          "path": "generated/assets/blog/fr/choose-safe-audio-working-copy/social-card.png",
+          "byte_length": 61141,
+          "sha256": "0dacc07a65afd240b1f7b3264814daf452239d4338fb0503f0c07004bac184d4",
+          "git_blob_sha1": "a9d2e0baf2c11bf7f7ad09478f66ba57eda9f28b"
+        },
+        {
+          "path": "generated/markdown/es/media/choose-safe-audio-working-copy.md",
+          "byte_length": 5656,
+          "sha256": "af7153801a2b608767cfc72242b28cb97a98e14994d59ae5266c80fc2e8fd598",
+          "git_blob_sha1": "511c4079dbe2138afd024483b7cc52e19e32e93d"
+        },
+        {
+          "path": "generated/images/es/media/choose-safe-audio-working-copy/image_spec.json",
+          "byte_length": 3849,
+          "sha256": "401e84f7984b2e6ff0973997fe83a6d65e4fa2e0db3dfc2c2c6591d58a5b0e04",
+          "git_blob_sha1": "6b1b33b7c132e1a044111980fb98959be3916547"
+        },
+        {
+          "path": "generated/metadata/es/media/choose-safe-audio-working-copy/internal_links.json",
+          "byte_length": 5639,
+          "sha256": "5409ac4e693ff844a362e20259bc033eee69ec03146c02c87272a3a1bd82f996",
+          "git_blob_sha1": "e7688ccff558453c02f617bd197529e26e50cd1f"
+        },
+        {
+          "path": "generated/reviews/es/media/choose-safe-audio-working-copy/review.json",
+          "byte_length": 3587,
+          "sha256": "14eb7da9bdb271fc8c4ac5b687c38dc693693c619bf1b8c17f79266245d2694a",
+          "git_blob_sha1": "e7e1f69e300a39cc687e9227833fdec444977f43"
+        },
+        {
+          "path": "generated/assets/blog/es/choose-safe-audio-working-copy/workflow-diagram.svg",
+          "byte_length": 4326,
+          "sha256": "715fd54f94fcb4a8f80c49fb5b460c7b8bb97e98403cc39fa1fd8cb30b45ed05",
+          "git_blob_sha1": "59d87dff5db5f382f5b887cf143da09c121e7492"
+        },
+        {
+          "path": "generated/assets/blog/es/choose-safe-audio-working-copy/workflow-diagram.png",
+          "byte_length": 67329,
+          "sha256": "421132361b64e5283bdd9ded08b354f056371af53bf064199605b599eca03bd5",
+          "git_blob_sha1": "53893c44c647addfe3c880c4bc9dacb02610d50d"
+        },
+        {
+          "path": "generated/assets/blog/es/choose-safe-audio-working-copy/social-card.svg",
+          "byte_length": 4326,
+          "sha256": "715fd54f94fcb4a8f80c49fb5b460c7b8bb97e98403cc39fa1fd8cb30b45ed05",
+          "git_blob_sha1": "59d87dff5db5f382f5b887cf143da09c121e7492"
+        },
+        {
+          "path": "generated/assets/blog/es/choose-safe-audio-working-copy/social-card.png",
+          "byte_length": 67329,
+          "sha256": "421132361b64e5283bdd9ded08b354f056371af53bf064199605b599eca03bd5",
+          "git_blob_sha1": "53893c44c647addfe3c880c4bc9dacb02610d50d"
+        }
+      ]
+    }
+  },
+  "actual_visual_review": {
+    "reviewer": "manage_oct28_blog_queue",
+    "completed_at_utc": "2026-10-29T00:32:59Z",
+    "scope": "All nine locale workflow/social PNGs and all nine desktop/mobile full-page captures directly inspected. DE modified image and desktop/mobile/fullsize viewers re-inspected after correction. Other eight locales exact PNG/capture hash unchanged from artifact12838008338; actual reviews reused.",
+    "result": "PASS; no remaining clipping, overlap or content-loss defect found in inspected assets/pages. Narrow Japanese card wrapping is legible. Not a live production deployment or app runtime test.",
+    "independent_review": {
+      "reviewer": "/root",
+      "scope": "German Ergebnis prüfen wording and new DE workflow PNG",
+      "result": "PASS"
+    },
+    "corrected_defect": "DE trailing single-letter wrapping in Ergebnis kontrollieren replaced by semantically equivalent Ergebnis prüfen; no layout/quality gate relaxation.",
+    "capture_sha256": {
+      ".preview-homepage/preview-screenshots/fr-mobile.png": "0e4f9e510a0a98ba4ee4c6d99883b1a3aa45c2fe8b32b4466704397d68dfd372",
+      ".preview-homepage/preview-screenshots/pt-BR-mobile-original-start.png": "508427d2648a35481a7aac72df864cd81f305243c235edd98d584ea06c92976b",
+      ".preview-homepage/preview-screenshots/ko-mobile.png": "c52ecde72bd6f861c0d2a744bc6eb7a3763124d70a4991656a6c41a9c3e422d4",
+      ".preview-homepage/preview-screenshots/zh-Hant-desktop-original-start.png": "39f5051f2857a4babf0023caedee7ad3a9021122c64be8c23ea057d26066a9b9",
+      ".preview-homepage/preview-screenshots/en-desktop-viewer.png": "234f809897292bab02c55f56e9a441a00753d8f19191e36cb880e558ffbd0029",
+      ".preview-homepage/preview-screenshots/en-mobile-original-end.png": "c17bc4c4fa40e06666a3c9022d2f71dccf66340e77ae0917f25de41c255ffcbe",
+      ".preview-homepage/preview-screenshots/ko-mobile-original-start.png": "e29cd08839cef1e709bbd9879c0f376da5069b08d0f6f76a5e15cace39c5cd42",
+      ".preview-homepage/preview-screenshots/de-desktop.png": "f356bf5e52fa09b47f965d59facc5849df0ebc682f3490be4aa35346e4f6be83",
+      ".preview-homepage/preview-screenshots/fr-desktop-viewer.png": "29fba4ea0945bbbaf4fc3bae17150feb77bb5ed3be1aa0f68855765311a38a96",
+      ".preview-homepage/preview-screenshots/es-desktop.png": "7861edd83883ba6774f881044f9b54b48ded635323e547b55282945be85b0524",
+      ".preview-homepage/preview-screenshots/zh-Hant-mobile-original-end.png": "045d2e3766856941f5846c15bde448c6fdc13af75c0f2f890fbdaadb28708742",
+      ".preview-homepage/preview-screenshots/es-mobile.png": "dfad49cc7053cc24ef70d2b9a788f6b49abb121dd3fcf14b88654bea98e5aa67",
+      ".preview-homepage/preview-screenshots/ko-mobile-viewer.png": "edcf0deb9e0a33a31f7abb45885b6bd93384d798dd0d684fcd7aca2afd591ce2",
+      ".preview-homepage/preview-screenshots/ja-desktop-original-end.png": "7397dd438dc4362dac353d3100a314d6acb3cd3019dca6c4ec85210d452ec7b0",
+      ".preview-homepage/preview-screenshots/ja-mobile.png": "e21fda47f49823745da2bfda826fb35219578cce4f5e1af7202fa1588f699512",
+      ".preview-homepage/preview-screenshots/de-mobile-original-start.png": "3d13d374fdd445cf0f19bc532814da50ac05c4d067e842e8f4f30cc5e1fcd59b",
+      ".preview-homepage/preview-screenshots/en-mobile.png": "093b45362e8fdd34f9e5f2efbc2607ffa553db0364040acb7079ec833b93d1b2",
+      ".preview-homepage/preview-screenshots/de-desktop-original-end.png": "11568ce0a5b07ab2950f106d3407843fb2966ab0bfb962fd80407996717e38ba",
+      ".preview-homepage/preview-screenshots/zh-Hant-mobile-viewer.png": "a16feb65fa0f0a5dc131a7184057ba71f8331ec5de48286426efa7a343ed6bae",
+      ".preview-homepage/preview-screenshots/es-mobile-viewer.png": "abdd926729f9ab65e9e8333f5edb878e117ae4268b3a91585f0684f927c11759",
+      ".preview-homepage/preview-screenshots/zh-Hans-mobile-viewer.png": "8ea14c465d48123b2abd7d32a7b7d9471ba8fc9752bf4b61e5f592abd27cbc87",
+      ".preview-homepage/preview-screenshots/pt-BR-desktop-viewer.png": "41611022b2540594cde762ccfb6e12aaa49b2580db0e3dbac89d85a3744ba4f4",
+      ".preview-homepage/preview-screenshots/pt-BR-mobile-viewer.png": "449c5d07a7c9002d2872625e172a7d5a2c0339be463fc12d6d8ebd7faadcd65c",
+      ".preview-homepage/preview-screenshots/fr-desktop.png": "ea15aca994518a4ea90fd42493d192704ae085da6596b5b105f78a6b2eec6a09",
+      ".preview-homepage/preview-screenshots/es-mobile-original-start.png": "f56fe655c267125d8ae3295de603b226b30b3503b65558cd75d1fb475168d85a",
+      ".preview-homepage/preview-screenshots/de-desktop-viewer.png": "6aeb1dd186102b63242de996109ca2346d84fda3c3f889d20c05eda72a6faf27",
+      ".preview-homepage/preview-screenshots/zh-Hans-mobile.png": "2bb77161c60ae4b7c66371fa2cd06f250de5c1d17388e849c34b3bcdd235861f",
+      ".preview-homepage/preview-screenshots/fr-desktop-original-end.png": "3bd2aa0626f05fde1963c07a73d07eeb84ae500ff3972591fb073a58d9c4decf",
+      ".preview-homepage/preview-screenshots/de-mobile-original-end.png": "190e22a7d9ec96192b286e5822693b745e22106ca8b4b09466dc7c3759680cda",
+      ".preview-homepage/preview-screenshots/fr-mobile-original-end.png": "357a5909e28982b87435b182d2cee187506924d2d1184af7ee1c295dba4c6a6a",
+      ".preview-homepage/preview-screenshots/ja-mobile-original-start.png": "3723d38270208d4b95dbfd95205cf9afe2ce18dfe0f183b8761561be96e4d1b8",
+      ".preview-homepage/preview-screenshots/zh-Hans-mobile-original-end.png": "fdb204c1437a7e41f395eb9f4936379957e527ca29ee0985d2dcd31e67b5dadf",
+      ".preview-homepage/preview-screenshots/zh-Hans-desktop-original-start.png": "af1cdbe2917625ebba45a7ddb16159859384a14b8b4d7ee46c31d011b2ac9834",
+      ".preview-homepage/preview-screenshots/pt-BR-desktop.png": "e5312ac1c087fb5804e4dc24cdd2cc125d27329ba3eec5d1f8805339234fb3aa",
+      ".preview-homepage/preview-screenshots/zh-Hant-desktop-original-end.png": "d64b95607932594fe898fbac3ff14957cbd7924322a090fb2447a1fb0251172d",
+      ".preview-homepage/preview-screenshots/es-desktop-original-start.png": "171b9f047d19c4c67d86318b2fb08f53d101136338ceeef8f403e90cbf8cbd7b",
+      ".preview-homepage/preview-screenshots/en-desktop.png": "e8f6cf4265a45672c7276714530a686bc47616f6a5c33973f40cfb8c3b17807b",
+      ".preview-homepage/preview-screenshots/ko-desktop-original-end.png": "f84476cf327fe22a1fbf3ff1aae66f0834ee36d1714a452eab3bf18a16711eba",
+      ".preview-homepage/preview-screenshots/de-mobile-viewer.png": "3120e50902822809921ee80f9907fbd83147b3e3f690c57578863c14049af64b",
+      ".preview-homepage/preview-screenshots/fr-desktop-original-start.png": "05be51991909d71e6974935ef7670175c8c4bc0860a20533177ecaf4c80cda9b",
+      ".preview-homepage/preview-screenshots/en-desktop-original-start.png": "7262756eff06a76eb2c3a3e6a22dbe7fd51e46e6a6948b55c356944400de189a",
+      ".preview-homepage/preview-screenshots/zh-Hans-desktop-viewer.png": "1feea3ad2a193d2d2168a071bc671809ba69cd6cdb9d1a68598aa2a053c367b5",
+      ".preview-homepage/preview-screenshots/pt-BR-desktop-original-start.png": "3670f9cb7adc1d78fb669348ce2671d49b0005560dc36607e8e73514ee6d46e7",
+      ".preview-homepage/preview-screenshots/ko-desktop-original-start.png": "52035bc21a79a184145adeea84d419c47dc7f0e82f9247e0a1e7653a9db7c538",
+      ".preview-homepage/preview-screenshots/zh-Hant-mobile-original-start.png": "48ef430a37b696523cece2d75290299534614a977f407830ce5533bbbd4bc9ba",
+      ".preview-homepage/preview-screenshots/ja-desktop-original-start.png": "0722910c44584ab0a1063d2dc8928009d5b621f77d2d3ac6e42eca37c8e62a6c",
+      ".preview-homepage/preview-screenshots/fr-mobile-original-start.png": "181bed4ca91449251abc5f7d6705596c6b5eec435dc229de5ae8c859dc25208b",
+      ".preview-homepage/preview-screenshots/de-mobile.png": "a1d1900e45500d82802ba24d5785f818dfdceabd142cd0afc835e01483b9b8c8",
+      ".preview-homepage/preview-screenshots/ja-mobile-viewer.png": "8e68f3eaec7e411cb6a5b62157c8b8d7ee6a1c1b88f3d20f65dba83f145a5d76",
+      ".preview-homepage/preview-screenshots/ko-mobile-original-end.png": "b8f7ca077a2204a95abb8bdd46703d813e338e813b088083654941ce1d4fc1d0",
+      ".preview-homepage/preview-screenshots/zh-Hans-mobile-original-start.png": "9a1317e2969f13b502076a0da140a40c498c13b90ac1b319ce51cb5416597915",
+      ".preview-homepage/preview-screenshots/ja-mobile-original-end.png": "4854074195bdd3cc3b18e1bbf9bc71cd201c2e8d481b04ff29ead033f098b3dc",
+      ".preview-homepage/preview-screenshots/pt-BR-mobile.png": "54a738709587237d56307b55a4a8458be1ba90a771b0f3f412280f47df33bfe1",
+      ".preview-homepage/preview-screenshots/en-desktop-original-end.png": "5b378323b3f8b5822359adda3588a0c5d2afb0d11b28aa4d2700ee34530ae5a7",
+      ".preview-homepage/preview-screenshots/en-mobile-viewer.png": "c54c7b8af1dec09e74bcf037db9694f983b2d261a2df680a07609aa992888e2b",
+      ".preview-homepage/preview-screenshots/es-desktop-original-end.png": "436f3ce871bc746da24669fc5356453295b0bdb717504199e70ccaffe35d5f1c",
+      ".preview-homepage/preview-screenshots/es-mobile-original-end.png": "5ef2e57ec4faf76cb5ed3911ccdbcdd9b6bfbedd40da0333eb11efa5dc95591c",
+      ".preview-homepage/preview-screenshots/zh-Hans-desktop-original-end.png": "82d34b937fd43edd11a0ff7547d0260739ef754bf5aeacd91cb4c8d4c0557970",
+      ".preview-homepage/preview-screenshots/de-desktop-original-start.png": "bae94da0b71e5c27e7739f5f48f083ec3fa42ba7e939069643d912a5389f2a94",
+      ".preview-homepage/preview-screenshots/fr-mobile-viewer.png": "78979f89042944b3a6ae4100aa075ed7042579b7af6e71494201ecef5c7b89d6",
+      ".preview-homepage/preview-screenshots/zh-Hant-desktop.png": "5f8d77affc2f8f345eb0ff74caae9db35a522f0515c97214a2d7623f50c99c00",
+      ".preview-homepage/preview-screenshots/en-mobile-original-start.png": "e7a8d63bd359f03b93782c12d74a41b4f52d76ea853d111c59dae4fff6317b7d",
+      ".preview-homepage/preview-screenshots/pt-BR-mobile-original-end.png": "99a02018cb964617ed3e2fae0cf46c78da92f431fe3c185fb175b3c2a3c5a395",
+      ".preview-homepage/preview-screenshots/ko-desktop.png": "d0ecef3eb003219d31231887bdbff946c67a53f362860ceba06bd16e7132bfa9",
+      ".preview-homepage/preview-screenshots/zh-Hant-mobile.png": "d49407bff0bb3a527eb3422c20ae18cdb402a03ebf12ed4a88e1c25205cc460c",
+      ".preview-homepage/preview-screenshots/zh-Hans-desktop.png": "752990c7a71499fac0511e645f8d2db7761f4b34197054e935923ae6fba75eee",
+      ".preview-homepage/preview-screenshots/zh-Hant-desktop-viewer.png": "4385351e0d58b3bad1e893da7f8f0520c209b4052a27245ca659baf72da1ffac",
+      ".preview-homepage/preview-screenshots/pt-BR-desktop-original-end.png": "382b068ad7e0886ba8f0ddc064cdfa0804ff39f57ef77ecdcb4694637cfa798d",
+      ".preview-homepage/preview-screenshots/ko-desktop-viewer.png": "3de1eb6253ee298b6f24dbd787730042fade688817ce2731c837c02047f60ca4",
+      ".preview-homepage/preview-screenshots/es-desktop-viewer.png": "27e879d1c26787fdebd48b43107126391703178c2690a4be7f3d9200abd0e7b2",
+      ".preview-homepage/preview-screenshots/ja-desktop.png": "82af7e519cd3959980dfbc615c61bd96708389e83bd0e10f05809eebd3f9b460",
+      ".preview-homepage/preview-screenshots/ja-desktop-viewer.png": "0fe921379009a48be2156b76930f8aee7647df7a9e0ffa26c347ef21b8c27002"
+    }
+  },
+  "queue_contract": {
+    "status": "review",
+    "scheduled_at": null,
+    "published_at": null,
+    "publication_receipt": false,
+    "publisher": "existing GitHub Publishing Pipeline only",
+    "next_existing_slot": "2026-10-30T09:00:00+09:00",
+    "second_intended_slot_not_reserved": "2026-11-02T09:00:00+09:00",
+    "note": "Canonical publisher assigns dates. Frozen preview manifest describes historical pre-integration source state; this receipt records later verification/integration."
+  },
+  "ids": {
+    "candidates": [
+      {
+        "id": "TOPIC-0041",
+        "locale": "en"
+      },
+      {
+        "id": "TOPIC-0115",
+        "locale": "ko"
+      },
+      {
+        "id": "TOPIC-0116",
+        "locale": "ja"
+      },
+      {
+        "id": "TOPIC-0117",
+        "locale": "zh-Hans"
+      },
+      {
+        "id": "TOPIC-0118",
+        "locale": "zh-Hant"
+      },
+      {
+        "id": "TOPIC-0119",
+        "locale": "pt-BR"
+      },
+      {
+        "id": "TOPIC-0120",
+        "locale": "de"
+      },
+      {
+        "id": "TOPIC-0121",
+        "locale": "fr"
+      },
+      {
+        "id": "TOPIC-0122",
+        "locale": "es"
+      }
+    ],
+    "idea_seed": "TOPIC-0123"
+  },
+  "preserved": "All other main changes, published URLs/dates, timing, permissions, homepage templates, and other media queues preserved."
+}

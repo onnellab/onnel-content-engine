@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/media/choose-safe-audio-working-copy.md",
+  "topic": {
+    "id": "TOPIC-0118",
+    "title": "編輯音訊前，如何準備容易辨認的工作副本",
+    "slug": "choose-safe-audio-working-copy",
+    "category": "media",
+    "language": "zh-Hant",
+    "primary_keyword": "音訊工作副本",
+    "related_apps": [
+      "Segra"
+    ]
+  },
+  "article_sections_detected": [
+    "編輯音訊前，如何準備容易辨認的工作副本",
+    "問題",
+    "簡短回答",
+    "工作副本不等於獨立備份",
+    "建議的操作順序",
+    "檢查範圍與限制",
+    "Segra可以用在哪一步？",
+    "相關指南",
+    "總結",
+    "常見問題",
+    "同一台裝置上有副本，就不需要備份了嗎？",
+    "檔案大小與播放長度相同，就表示內容相同嗎？",
+    "匯出完成後可以馬上刪除原始檔嗎？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "編輯音訊前，如何確認自己使用的是合適的工作副本？",
+      "structure": [
+        "1. 保留",
+        "2. 複製",
+        "3. 核對",
+        "4. 試聽"
+      ],
+      "notes": "Explain original, separate working file, input identity and output verification; not an application screenshot, backup guarantee or lossless claim."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains an editorial audio preservation workflow, not an application interface.",
+    "applications": [
+      "Segra"
+    ],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "先準備音訊工作副本",
+      "steps": [
+        "1. 保留",
+        "2. 複製",
+        "3. 核對",
+        "4. 試聽"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "區分原始檔與編輯用副本",
+    "message": "儲存之後，還要試聽",
+    "description": "保留原始檔，手動建立名稱和位置都容易區分的工作副本。利用檔名、路徑、大小與長度核對輸入，將編輯結果另存為新檔案。重新開啟輸出檔，試聽開頭、編輯交界處及結尾，確認前不要刪除原始檔。",
+    "steps": [
+      [
+        "1. 保留",
+        "保存原始檔案"
+      ],
+      [
+        "2. 複製",
+        "建立工作副本"
+      ],
+      [
+        "3. 核對",
+        "確認輸入檔案"
+      ],
+      [
+        "4. 試聽",
+        "檢查匯出結果"
+      ]
+    ]
+  }
+}
