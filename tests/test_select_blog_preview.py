@@ -67,7 +67,7 @@ class RegisteredSegra(unittest.TestCase):
             before = {str(p.relative_to(root)):p.read_bytes() for p in root.rglob("*") if p.is_file()}
             with patch("check_nine_language_publication.check_reviewed_candidates") as gate:
                 rows, manifest = segra.validate_registered_candidates(root)
-                gate.assert_called_once_with(root / "data/topics.csv")
+                gate.assert_called_once_with((root / "data/topics.csv").resolve())
             self.assertEqual(len(rows), 9); self.assertEqual(len(manifest["files"]), 72)
             self.assertEqual(before, {str(p.relative_to(root)):p.read_bytes() for p in root.rglob("*") if p.is_file()})
     def test_scheduled_and_published_are_rejected_without_reset(self):
