@@ -1,6 +1,6 @@
 # App Release Status
 
-Generated: 2026-10-29T06:22:17+09:00
+Generated: 2026-10-29T13:24:31+09:00
 
 ## Summary
 
@@ -17,7 +17,7 @@ Generated: 2026-10-29T06:22:17+09:00
 | App | Platform | Store version/package | Repository version | Comparison | Store | Release | Repository | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Aligna | android | 1.1.2 | 1.1.2 | same | unchanged | released | onnellab/aligna | No action |
-| Aligna | ios | 1.1.1 | 1.1.2 | local_ahead | unchanged | archived | onnellab/aligna | Platform rollout not public |
+| Aligna | ios | 1.1.2 | 1.1.2 | same | unchanged | archived | onnellab/aligna | No action |
 | ClipNest | ios | 1.0.5 | 1.0.5 | same | unchanged | released | onnellab/clipnest | No action |
 | Melivra | android | 1.0.8 | 1.0.9 | local_ahead | unchanged | planned | onnellab/melivra | Private test only; do not publish public GitHub Release |
 | Melivra | ios | 6783644955 | 1.0.9 | unknown | in_review | - | onnellab/melivra | Review status |
@@ -46,7 +46,7 @@ Generated: 2026-10-29T06:22:17+09:00
 | REL-0031 | VaultXT | android | public | v2.0.2 | released | Public GitHub Release published | https://github.com/onnellab/onnellab-text/releases/tag/v2.0.2 | - | - | No action |
 | REL-0038 | Aligna | android | public | v1.1.2 | released | Public GitHub Release published | https://github.com/onnellab/aligna/releases/tag/v1.1.2 | - | - | No action |
 | REL-0037 | Melivra | android | private_test | v1.0.9 | planned | Private test; public GitHub Release disabled | - | - | - | Private test only; do not publish public GitHub Release |
-| REL-0026 | Aligna | ios | private_test | v1.0.9 | archived | Private test; public GitHub Release disabled | - | - | - 앱을 다시 열었을 때 Pro 구매가 복원되도록 개선했어요. - 스토어 스크린샷과 소개 이미지를 새로 업데이트했어요. | Private test only; do not publish public GitHub Release |
+| REL-0026 | Aligna | ios | private_test | v1.0.9 | archived | Private test; public GitHub Release disabled | - | - | - 파일명의 글자와 숫자를 찾아 한 번에 바꿀 수 있어요. - 파일명 앞이나 뒤에 원하는 글자를 붙일 수 있어요. - 작은 화면이나 키보드가 열린 상태에서 옵션과 결과를 더 편하게 확인할 수 있어요. | Private test only; do not publish public GitHub Release |
 | REL-0032 | Papira | android | public | v2.0.3 | released | Public GitHub Release published | https://github.com/onnellab/papira/releases/tag/v2.0.3 | - | - | No action |
 | REL-0036 | Segra | ios | public | v1.0.7 | released | Public GitHub Release published | https://github.com/onnellab/segra/releases/tag/v1.0.7 | - | - 설정에서 선택한 언어의 개인정보 처리방침을 바로 열 수 있어요. - Pro 구매 버튼에 스토어 가격을 함께 표시해요. - 영상 준비와 자막 설정 화면의 사용성을 개선했어요. | No action |
 
@@ -57,5 +57,4 @@ Generated: 2026-10-29T06:22:17+09:00
 | VaultXT | ios | unchanged | Platform rollout not public | - |
 | Segra | ios | unchanged | Sync local metadata | - |
 | Segra | android | unchanged | Sync local metadata | Version/update date read from Google Play public page; Android snapshot version 1.0.6 is stale for public version 1.0.7 and was not merged. |
-| Aligna | ios | unchanged | Platform rollout not public | - |
 | Melivra | android | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.8. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |

@@ -80,6 +80,19 @@
         "score": 6
       },
       {
+        "topic_id": "TOPIC-0121",
+        "title": "Préparer une copie de travail avant de modifier un fichier audio",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
+        "language": "fr",
+        "status": "review",
+        "url": "generated/markdown/fr/media/choose-safe-audio-working-copy.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0051",
         "title": "Organiser sa musique sur Android pour une écoute hors ligne",
         "slug": "organize-local-music-library-offline-android",
@@ -87,19 +100,6 @@
         "language": "fr",
         "status": "published",
         "url": "https://onnellab.com/blog/fr/organize-local-music-library-offline-android/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0068",
-        "title": "Tester un fichier multimédia converti avant de remplacer l’original",
-        "slug": "test-converted-media-before-replacing-original",
-        "category": "media",
-        "language": "fr",
-        "status": "published",
-        "url": "https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

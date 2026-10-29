@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0119",
+        "title": "Prepare uma cópia de trabalho antes de editar áudio",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
+        "language": "pt-BR",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/media/choose-safe-audio-working-copy.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 13
+      },
+      {
         "topic_id": "TOPIC-0058",
         "title": "Como conferir o sumário e a ordem dos capítulos de um EPUB",
         "slug": "check-epub-table-of-contents-and-reading-order",
@@ -90,19 +105,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0110",
-        "title": "Como facilitar a navegação em um documento de texto longo",
-        "slug": "make-long-plain-text-easier-to-navigate",
-        "category": "reading",
-        "language": "pt-BR",
-        "status": "scheduled",
-        "url": "generated/markdown/pt-BR/reading/make-long-plain-text-easier-to-navigate.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5

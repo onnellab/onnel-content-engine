@@ -97,17 +97,17 @@
         "score": 5
       },
       {
-        "topic_id": "TOPIC-0092",
-        "title": "Como separar as anotações sobre fontes das suas conclusões",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
+        "topic_id": "TOPIC-0119",
+        "title": "Prepare uma cópia de trabalho antes de editar áudio",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
         "language": "pt-BR",
-        "status": "published",
-        "url": "https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/",
-        "destination": "published_article",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/media/choose-safe-audio-working-copy.md",
+        "destination": "draft_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 4
+        "score": 5
       }
     ],
     "related_apps": [

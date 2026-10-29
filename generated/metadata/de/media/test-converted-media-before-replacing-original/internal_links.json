@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0120",
+        "title": "Vor der Audiobearbeitung eine Arbeitskopie anlegen",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
+        "language": "de",
+        "status": "review",
+        "url": "generated/markdown/de/media/choose-safe-audio-working-copy.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0050",
         "title": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
         "slug": "organize-local-music-library-offline-android",
@@ -89,19 +104,6 @@
         "language": "de",
         "status": "published",
         "url": "https://onnellab.com/blog/de/separate-source-notes-from-conclusions/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0102",
-        "title": "Einheitliche Album- und Künstler-Tags: Künstlerangaben erhalten",
-        "slug": "consistent-album-artist-names",
-        "category": "music",
-        "language": "de",
-        "status": "published",
-        "url": "https://onnellab.com/blog/de/consistent-album-artist-names/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0116",
+        "title": "音声を編集する前に作業用コピーを選ぶ方法",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
+        "language": "ja",
+        "status": "review",
+        "url": "generated/markdown/ja/media/choose-safe-audio-working-copy.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0046",
         "title": "Androidの音楽ファイルをオフライン再生用に整理する方法",
         "slug": "organize-local-music-library-offline-android",
@@ -89,19 +104,6 @@
         "language": "ja",
         "status": "published",
         "url": "https://onnellab.com/blog/ja/separate-source-notes-from-conclusions/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0098",
-        "title": "アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る",
-        "slug": "consistent-album-artist-names",
-        "category": "music",
-        "language": "ja",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ja/consistent-album-artist-names/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

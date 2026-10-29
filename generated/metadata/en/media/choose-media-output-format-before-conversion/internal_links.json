@@ -75,6 +75,21 @@
         "score": 12
       },
       {
+        "topic_id": "TOPIC-0041",
+        "title": "Choose a Working Copy Before Editing Audio",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/media/choose-safe-audio-working-copy.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0009",
         "title": "How to Trim Audio Recordings Without a Full Editor",
         "slug": "trim-audio-recordings-without-full-editor",
@@ -97,19 +112,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/read-large-txt-files-without-lag/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0004",
-        "title": "What Makes Large Text Files Slow to Open",
-        "slug": "large-text-file-slow-to-open",
-        "category": "reading",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/large-text-file-slow-to-open/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
