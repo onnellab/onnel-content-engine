@@ -74,7 +74,11 @@ jobs:
       - name: Select eligible nonpublishing preview candidate
         env:
           REQUESTED_CANDIDATE: ${{ inputs.candidate || 'auto' }}
-        run: python3 scripts/select_blog_preview.py --candidate "$REQUESTED_CANDIDATE" --ref "$GITHUB_REF" >> "$GITHUB_ENV"
+        run: python3 scripts/select_blog_preview.py --candidate "$REQUESTED_CANDIDATE" --ref "$GITHUB_REF" --event "$GITHUB_EVENT_NAME" >> "$GITHUB_ENV"
+      - name: Record explicit no-preview result
+        if: env.PREVIEW_RESULT == 'no_work'
+        run: |
+          printf '%s\n' 'No preview rendered: all registered automatic bundles are already scheduled or published. This is not a render or page-validation pass.' >> "$GITHUB_STEP_SUMMARY"
       - name: Validate overlay boundaries and source checksums
         run: |
           python3 -m unittest discover -s tests -p test_blog_preview.py -v
@@ -89,38 +93,43 @@ jobs:
           python3 -m unittest discover -s tests -p test_functional_field_definitions.py -v
           python3 scripts/prepare_blog_preview.py --bundle preview/clipnest/candidate.json --validate-only
       - name: Install existing publisher renderer dependencies
+        if: env.PREVIEW_REQUIRED == 'true'
         timeout-minutes: 8
         run: |
           printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt > /dev/null
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y librsvg2-bin fonts-noto-cjk
       - name: Validate research source notes with actual native gates in a disposable engine copy
-        if: env.VAULTXT_PREVIEW != 'true' && env.TAGWEAVER_PREVIEW != 'true' && env.SEGRA_PREVIEW != 'true'
+        if: env.PREVIEW_REQUIRED == 'true' && env.VAULTXT_PREVIEW != 'true' && env.TAGWEAVER_PREVIEW != 'true' && env.SEGRA_PREVIEW != 'true'
         run: python3 scripts/prepare_research_preview.py
       - name: Validate VaultXT with actual native gates in a disposable engine copy
-        if: env.VAULTXT_PREVIEW == 'true'
+        if: env.PREVIEW_REQUIRED == 'true' && env.VAULTXT_PREVIEW == 'true'
         run: python3 scripts/prepare_vaultxt_preview.py
       - name: Validate TagWeaver with actual native gates in a disposable engine copy
-        if: env.TAGWEAVER_PREVIEW == 'true'
+        if: env.PREVIEW_REQUIRED == 'true' && env.TAGWEAVER_PREVIEW == 'true'
         run: python3 scripts/prepare_tagweaver_preview.py
       - name: Validate Segra with actual native gates in a disposable engine copy
-        if: env.SEGRA_PREVIEW == 'true'
+        if: env.PREVIEW_REQUIRED == 'true' && env.SEGRA_PREVIEW == 'true'
         run: python3 scripts/prepare_segra_preview.py
       - name: Verify tracked source remains unchanged
         run: git diff --exit-code
       - name: Audit locked homepage dependencies
+        if: env.PREVIEW_REQUIRED == 'true'
         working-directory: .preview-homepage
         run: npm audit --package-lock-only --include=dev --audit-level=high
       - name: Install locked homepage dependencies
+        if: env.PREVIEW_REQUIRED == 'true'
         working-directory: .preview-homepage
         run: npm ci
       - name: Verify summary content preservation and existing Astro template contracts
+        if: env.PREVIEW_REQUIRED == 'true'
         working-directory: .preview-homepage
         run: |
           node --test scripts/blog-summary-blocks-contract.mjs
           npm run test:blog-template
           npm run check:i18n-quality
       - name: Overlay candidate only in disposable checkout
+        if: env.PREVIEW_REQUIRED == 'true'
         run: |
           if [ "$SEGRA_PREVIEW" = "true" ]; then
             python3 scripts/prepare_blog_preview.py --bundle preview-evidence/segra-working-copy/candidate.json --homepage .preview-homepage --evidence preview-evidence
@@ -135,18 +144,21 @@ jobs:
           test ! -L .preview-homepage/tests/blog-preview.spec.ts
           cp tests/blog-preview.spec.ts .preview-homepage/tests/blog-preview.spec.ts
       - name: Build pinned Astro templates and styles
+        if: env.PREVIEW_REQUIRED == 'true'
         working-directory: .preview-homepage
         run: npm run build
       - name: Install existing homepage test browser
+        if: env.PREVIEW_REQUIRED == 'true'
         working-directory: .preview-homepage
         run: npx playwright install --with-deps chromium
       - name: Check desktop and mobile and capture every page
+        if: env.PREVIEW_REQUIRED == 'true'
         working-directory: .preview-homepage
         run: npx playwright test tests/blog-preview.spec.ts tests/blog-header-responsive.spec.ts --project=desktop --project=mobile --workers=1 --reporter=line,json
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: ../preview-evidence/playwright-results.json
       - name: Retain bounded preview evidence
-        if: always()
+        if: always() && env.PREVIEW_REQUIRED == 'true'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: blog-preview-${{ github.sha }}
