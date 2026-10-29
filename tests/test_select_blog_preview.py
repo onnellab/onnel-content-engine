@@ -53,6 +53,9 @@ class Selection(unittest.TestCase):
 
 class RegisteredSegra(unittest.TestCase):
     def fixture(self, root):
+        # Only synthesize a historical review state inside an isolated fixture.
+        self.assertNotEqual(root.resolve(), ROOT)
+        self.assertNotIn(ROOT, root.resolve().parents)
         paths = ["data/topics.csv", "topics/topics.csv", segra.REGISTERED_AUDIT,
                  segra.PREVIEW_DIRECTORY + "/manifest.json",
                  *[segra.PREVIEW_DIRECTORY + "/" + l + ".json" for l in segra.LOCALES],
@@ -61,6 +64,23 @@ class RegisteredSegra(unittest.TestCase):
             p = root / relative
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_bytes((ROOT / relative).read_bytes())
+        # The real queue may legitimately advance to scheduled or published.
+        # Keep this unit fixture deterministic without resetting operational data.
+        with (root / "data/topics.csv").open(encoding="utf-8", newline="") as source:
+            reader = csv.DictReader(source)
+            header, rows = reader.fieldnames, list(reader)
+        candidates = [row for row in rows if row["slug"] == segra.SLUG
+                      or row["id"] in segra.REGISTERED_IDS.values()]
+        self.assertEqual(len(candidates), 9)
+        self.assertEqual({(row["primary_language"], row["id"]) for row in candidates},
+                         set(segra.REGISTERED_IDS.items()))
+        for row in candidates:
+            row.update(status="review", scheduled_at="", published_at="", published_url="")
+        for relative in ("data/topics.csv", "topics/topics.csv"):
+            with (root / relative).open("w", encoding="utf-8", newline="") as target:
+                writer = csv.DictWriter(target, fieldnames=header)
+                writer.writeheader()
+                writer.writerows(rows)
     def test_registered_read_only_path_keeps_all_bytes_and_calls_native_gate(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); self.fixture(root)
@@ -70,19 +90,30 @@ class RegisteredSegra(unittest.TestCase):
                 gate.assert_called_once_with((root / "data/topics.csv").resolve())
             self.assertEqual(len(rows), 9); self.assertEqual(len(manifest["files"]), 72)
             self.assertEqual(before, {str(p.relative_to(root)):p.read_bytes() for p in root.rglob("*") if p.is_file()})
-    def test_scheduled_and_published_are_rejected_without_reset(self):
-        for state in ("scheduled", "published"):
+    def test_dated_review_scheduled_and_published_are_rejected_without_reset(self):
+        for state in ("review", "scheduled", "published"):
             with self.subTest(state=state), tempfile.TemporaryDirectory() as tmp:
                 root=Path(tmp); self.fixture(root)
-                with (root/"data/topics.csv").open(newline="") as f:
+                with (root/"data/topics.csv").open(encoding="utf-8", newline="") as f:
                     reader=csv.DictReader(f); header=reader.fieldnames; rows=list(reader)
                 for row in rows:
-                    if row["slug"] == segra.SLUG: row["status"]=state
+                    if row["slug"] == segra.SLUG:
+                        row["status"] = state
+                        row["scheduled_at"] = "2026-11-02T09:00:00+09:00"
+                        if state == "published":
+                            row["published_at"] = "2026-11-02T09:00:00+09:00"
+                            row["published_url"] = (
+                                f"https://onnellab.com/blog/{row['primary_language'].lower()}/{segra.SLUG}/")
+
                 for path in ("data/topics.csv", "topics/topics.csv"):
-                    with (root/path).open("w",newline="") as f:
+                    with (root/path).open("w",encoding="utf-8",newline="") as f:
                         writer=csv.DictWriter(f,fieldnames=header); writer.writeheader();writer.writerows(rows)
+                before = {str(p.relative_to(root)): p.read_bytes()
+                          for p in root.rglob("*") if p.is_file()}
                 with self.assertRaisesRegex(ValueError,"unscheduled review"):
                     segra.validate_registered_candidates(root)
+                self.assertEqual(before, {str(p.relative_to(root)): p.read_bytes()
+                                          for p in root.rglob("*") if p.is_file()})
     def test_mutated_artifact_and_mirror_are_rejected(self):
         for relative in (segra.native_output_paths()[0], "topics/topics.csv"):
             with self.subTest(path=relative), tempfile.TemporaryDirectory() as tmp:
