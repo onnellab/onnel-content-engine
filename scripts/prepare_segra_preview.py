@@ -569,6 +569,66 @@ def collect(stage, output, candidates, seeds):
     write_json(output / NATIVE_MANIFEST, manifest)
     verified_native_manifest(output)
 
+
+REGISTERED_AUDIT = "preview/segra-working-copy/integration_review.json"
+REGISTERED_IDS = dict(zip(LOCALES, ("TOPIC-0041", "TOPIC-0115", "TOPIC-0116", "TOPIC-0117",
+                                   "TOPIC-0118", "TOPIC-0119", "TOPIC-0120", "TOPIC-0121",
+                                   "TOPIC-0122")))
+
+def validate_registered_candidates(stage):
+    """Validate persisted review supply without resetting any lifecycle state."""
+    from topic_management import TOPIC_HEADER, read_csv
+    from check_nine_language_publication import check_reviewed_candidates
+    validate_drafts(stage / PREVIEW_DIRECTORY)
+    audit = bounded_json(stage, REGISTERED_AUDIT, 200_000)
+    if (audit.get("schema") != "onnellab.blog.integration-review.v1" or
+            audit.get("state") != "COMPLETE_NINE_LANGUAGE_BUNDLE_READY_FOR_CANONICAL_REVIEW_QUEUE" or
+            audit.get("slug") != SLUG or audit.get("category") != CATEGORY or
+            audit.get("queue_contract", {}).get("status") != "review" or
+            any(k not in audit.get("queue_contract", {}) or audit.get("queue_contract", {}).get(k) is not None
+                for k in ("scheduled_at", "published_at")) or
+            audit.get("queue_contract", {}).get("publication_receipt") is not False or
+            audit.get("ids", {}).get("candidates") !=
+                [{"id": REGISTERED_IDS[locale], "locale": locale} for locale in LOCALES]):
+        raise ValueError("Invalid Segra registered review identity")
+    manifest = validate_native_manifest(audit.get("automated", {}).get("native_manifest"))
+    topics = safe_native_path(stage, "data/topics.csv", required=True)
+    mirror = safe_native_path(stage, "topics/topics.csv", required=True)
+    if read_native_bytes(topics) != read_native_bytes(mirror):
+        raise ValueError("Registered topic mirror mismatch")
+    selected = [r for r in read_csv(topics, TOPIC_HEADER)
+                if r["slug"] == SLUG or r["id"] in REGISTERED_IDS.values()]
+    if (len(selected) != 9 or
+            {(r["primary_language"], r["id"]) for r in selected} != set(REGISTERED_IDS.items())):
+        raise ValueError("Exactly nine registered Segra identities required")
+    candidates = [{r["primary_language"]: r for r in selected}[locale] for locale in LOCALES]
+    for row in candidates:
+        if (row["slug"] != SLUG or row["category"] != CATEGORY or row["status"] != "review" or
+                row["related_apps"] != RELATED_APP or row["review_required"] != "true" or
+                row["canonical_path"] != f"generated/markdown/{row['primary_language']}/{CATEGORY}/{SLUG}.md" or
+                any(row[key] for key in ("scheduled_at", "published_at", "published_url"))):
+            raise ValueError("Registered Segra must remain unscheduled review")
+    for entry in manifest["files"]:
+        raw = read_native_bytes(safe_native_path(stage, entry["path"], required=True))
+        if native_entry(entry["path"], raw) != entry:
+            raise ValueError("Registered Segra artifact fingerprint mismatch")
+    for row in candidates:
+        report = bounded_json(stage, f"generated/reviews/{row['primary_language']}/{CATEGORY}/{SLUG}/review.json")
+        if report.get("version") != 4 or report.get("topic_id") != row["id"]:
+            raise ValueError("Registered Segra requires matching version 4 review")
+    check_reviewed_candidates(topics)
+    return candidates, manifest
+
+def run_registered_gates(stage, output):
+    before = source_inventory(stage)
+    with tempfile.TemporaryDirectory(prefix="onnellab-registered-segra-gates-") as temporary:
+        gate_stage = Path(temporary)
+        copy_source(stage, gate_stage, before)
+        run_gates(gate_stage, output)
+    if source_inventory(stage) != before:
+        raise ValueError("Registered Segra stage changed during gates")
+    validate_registered_candidates(stage)
+
 def stage_worker():
     marker = ROOT / MARKER
     if not marker.is_file() or marker.is_symlink():
@@ -580,11 +640,20 @@ def stage_worker():
     output = Path(settings["output"])
     if output.resolve() != original / "preview-evidence/segra-working-copy":
         raise ValueError("Unexpected evidence destination")
-    drafts = validate_drafts(ROOT / "preview/segra-working-copy")
-    store, candidates, seeds = stage_topics(ROOT, drafts)
-    candidates = materialize_candidates(ROOT, drafts, candidates, store)
-    run_gates(ROOT, output)
-    collect(ROOT, output, candidates, seeds)
+    audit = safe_native_path(ROOT, REGISTERED_AUDIT)
+    if audit.exists():
+        candidates, manifest = validate_registered_candidates(ROOT)
+        before = source_inventory(ROOT)
+        run_registered_gates(ROOT, output)
+        collect(ROOT, output, candidates, [])
+        if verified_native_manifest(output) != manifest or source_inventory(ROOT) != before:
+            raise ValueError("Registered Segra collection changed persisted evidence")
+    else:
+        drafts = validate_drafts(ROOT / "preview/segra-working-copy")
+        store, candidates, seeds = stage_topics(ROOT, drafts)
+        candidates = materialize_candidates(ROOT, drafts, candidates, store)
+        run_gates(ROOT, output)
+        collect(ROOT, output, candidates, seeds)
 
 def prepare(source=ROOT):
     if source.is_symlink():

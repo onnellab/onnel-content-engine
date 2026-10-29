@@ -10,6 +10,8 @@ on:
       - 'preview/vaultxt-text-navigation/**'
       - 'preview/segra-working-copy/**'
       - 'scripts/prepare_segra_preview.py'
+      - 'scripts/select_blog_preview.py'
+      - 'tests/test_select_blog_preview.py'
       - 'scripts/segra_preview_contract.py'
       - 'tests/test_segra_preview.py'
       - 'scripts/prepare_vaultxt_preview.py'
@@ -33,8 +35,8 @@ on:
       candidate:
         description: Nonpublishing candidate
         type: choice
-        default: research-source-notes
-        options: [research-source-notes, vaultxt-text-navigation, tagweaver-album-artists, segra-working-copy]
+        default: auto
+        options: [auto, research-source-notes, vaultxt-text-navigation, tagweaver-album-artists, segra-working-copy]
 permissions:
   contents: read
 concurrency:
@@ -69,6 +71,10 @@ jobs:
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.x'
+      - name: Select eligible nonpublishing preview candidate
+        env:
+          REQUESTED_CANDIDATE: ${{ inputs.candidate || 'auto' }}
+        run: python3 scripts/select_blog_preview.py --candidate "$REQUESTED_CANDIDATE" --ref "$GITHUB_REF" >> "$GITHUB_ENV"
       - name: Validate overlay boundaries and source checksums
         run: |
           python3 -m unittest discover -s tests -p test_blog_preview.py -v
@@ -78,6 +84,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_research_preview.py -v
           python3 -m unittest discover -s tests -p test_vaultxt_preview.py -v
           python3 -m unittest discover -s tests -p test_segra_preview.py -v
+          python3 -m unittest discover -s tests -p test_select_blog_preview.py -v
           python3 -m unittest discover -s tests -p test_tagweaver_preview.py -v
           python3 -m unittest discover -s tests -p test_functional_field_definitions.py -v
           python3 scripts/prepare_blog_preview.py --bundle preview/clipnest/candidate.json --validate-only
