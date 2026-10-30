@@ -1,0 +1,8 @@
+The clearest way to find my way around a long plain-text document without losing my place is to separate the decision from the tool.
+
+Keep the original unchanged, make a short map of meaningful sections, and save distinctive phrases you can search for again. Keep an external locator note with the filename, version and surrounding context.
+
+- Preserve the original and choose your mode. For logs, evidence, or a document you must preserve, use read-only access where available and keep navigation notes separately. If editing is appropriate, work on an identified copy. Do not insert headings into an original merely to make it easier to browse.
+
+Read the full article:
+https://onnellab.com/blog/en/make-long-plain-text-easier-to-navigate/

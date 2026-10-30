@@ -5,7 +5,7 @@ slug: "make-long-plain-text-easier-to-navigate"
 category: "reading"
 language: "es"
 description: "Encuentra pasajes con una lista de títulos existentes, frases específicas y una prueba de regreso al texto, sin modificar el archivo original."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0113"
 search_intent: "workflow"
 primary_keyword: "orientarte en un documento de texto largo"
@@ -14,6 +14,9 @@ tags: "orientarte en un documento de texto largo"
 short_answer: "Conserva el original, anota los títulos existentes y elige frases distintivas para buscarlas. Guarda las referencias en una nota separada. Cierra y vuelve a abrir la misma versión para comprobar que puedes regresar al pasaje."
 related_apps: "VaultXT"
 canonical_url: "https://onnellab.com/blog/es/make-long-plain-text-easier-to-navigate/"
+published_at: "2026-10-30T09:00:00+09:00"
+updated_at: "2026-10-30T09:00:00+09:00"
+related_articles: "Cómo comprobar el índice y el orden de los capítulos de un EPUB => https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/|Cómo organizar música en Android para escucharla sin conexión => https://onnellab.com/blog/es/organize-local-music-library-offline-android/|Cómo probar un archivo multimedia convertido antes de sustituir el original => https://onnellab.com/blog/es/test-converted-media-before-replacing-original/|Cómo convertir textos repetidos en fragmentos reutilizables => https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/|Cómo crear un sistema coherente para nombrar archivos => https://onnellab.com/blog/es/design-consistent-file-naming-system/|Etiquetas de álbum y artista coherentes sin perder créditos => https://onnellab.com/blog/es/consistent-album-artist-names/"
 ---
 
 # Cómo orientarte en un documento de texto largo

@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
-  <title id="title">为长文档留下查找线索</title>
-  <desc id="desc">先保留原始文件，决定只读查看还是使用工作副本。在单独的笔记中整理现有标题，搜索有辨识度的短语并核对上下文。用外部位置笔记留下查找路径，再重新打开同一版本验证。</desc>
-  <rect width="1200" height="675" fill="#fbf7ef"/>
-  <rect x="54" y="48" width="1092" height="579" rx="28" fill="#f7f2e9" stroke="#ded7ca" stroke-width="1.8"/>
-  <text fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="38" font-weight="680"><tspan x="92" y="100">为长文档留下查找线索</tspan></text>
-  <text fill="#69645c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="19"><tspan x="92" y="134">不修改原件的导航方法 · 长篇纯文本文档</tspan></text>
-  <g transform="translate(72 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">保留</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">区分原件和工作副</tspan><tspan x="24" y="105">本</tspan></text></g><g transform="translate(346 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">梳理</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">另行记录现有标题</tspan></text></g><g transform="translate(620 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">查找</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">核对搜索词和上下</tspan><tspan x="24" y="105">文</tspan></text></g><g transform="translate(894 162)"><rect width="190" height="150" rx="18" fill="#fffdf8" stroke="#d8d0c3" stroke-width="1.6"/><text x="24" y="48" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650"><tspan x="24" y="48">验证</tspan></text><text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="15"><tspan x="24" y="84">重新打开并检查路</tspan><tspan x="24" y="105">径</tspan></text></g>
-  <path d="M280 237H328m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M554 237H602m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M828 237H876m-10-11 12 11-12 11" fill="none" stroke="#8c867b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="92" y="456" width="1016" height="82" rx="18" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.6"/>
-  <text x="124" y="506" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="20" font-weight="650">重新打开同一版本，验证路径。</text>
-  <text x="92" y="588" fill="#817c73" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="14">ONNELLAB Blog · 流程图</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">怎样在长篇纯文本文档中找回所需段落</title>
+  <desc id="desc">不修改原始文件，利用现有标题、搜索词和位置笔记，按五个步骤找回长篇TXT文档中的内容。</desc>
+  <rect width="1200" height="630" fill="#f8f4ec"/>
+  <rect x="58" y="54" width="1084" height="522" rx="30" fill="#fffdf8" stroke="#d8d0c3" stroke-width="2"/>
+  <rect x="92" y="92" width="210" height="44" rx="22" fill="#e7f2fb" stroke="#b9d7ea" stroke-width="1.4"/>
+  <text x="118" y="121" fill="#24465c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="18" font-weight="700">阅读</text>
+  <text x="92" y="218" fill="#282723" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="54" font-weight="760"><tspan x="92" y="218">怎样在长篇纯文本文档中找回所需段落</tspan></text>
+  <text fill="#5f5b54" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="24"><tspan x="92" y="410">不修改原始文件，利用现有标题、搜索词和位置笔记，按五个步骤找回长篇TXT文档中</tspan><tspan x="92" y="444">的内容。</tspan></text>
+  <path d="M92 518H1108" stroke="#ded7ca" stroke-width="2"/>
+  <text x="92" y="552" fill="#817c73" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="19">阅读 · ZH-HANS</text>
+  <text x="1048" y="552" fill="#30302c" font-family="Noto Sans CJK SC, system-ui, sans-serif" font-size="19" font-weight="800" text-anchor="end">ONNELLAB</text>
 </svg>

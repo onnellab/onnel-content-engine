@@ -51,9 +51,9 @@
         "slug": "choose-safe-audio-working-copy",
         "category": "media",
         "language": "en",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/en/media/choose-safe-audio-working-copy.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "media"

@@ -5,7 +5,7 @@ slug: "make-long-plain-text-easier-to-navigate"
 category: "reading"
 language: "en"
 description: "Build a small navigation map with existing headings, distinctive search phrases and version-aware notes without changing the original text."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0040"
 search_intent: "workflow"
 primary_keyword: "navigate a long plain-text document"
@@ -14,6 +14,9 @@ tags: "navigate a long plain-text document"
 short_answer: "Keep the original unchanged, make a short map of meaningful sections, and save distinctive phrases you can search for again. Keep an external locator note with the filename, version and surrounding context. Reopen the same file version and confirm each route before relying on it."
 related_apps: "VaultXT"
 canonical_url: "https://onnellab.com/blog/en/make-long-plain-text-easier-to-navigate/"
+published_at: "2026-10-30T09:00:00+09:00"
+updated_at: "2026-10-30T09:00:00+09:00"
+related_articles: "TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/|What Makes Large Text Files Slow to Open => https://onnellab.com/blog/en/large-text-file-slow-to-open/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|How to Inspect a Large Log File Without Altering the Original => https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/|Check an EPUB’s Table of Contents and Chapter Order => https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/|How to Prepare a TXT Manuscript for Reliable EPUB Conversion => https://onnellab.com/blog/en/prepare-txt-manuscript-for-epub/"
 ---
 
 # How to Navigate a Long Plain-Text Document

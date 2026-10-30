@@ -5,7 +5,7 @@ slug: "make-long-plain-text-easier-to-navigate"
 category: "reading"
 language: "zh-Hans"
 description: "不修改原始文件，利用现有标题、搜索词和位置笔记，按五个步骤找回长篇TXT文档中的内容。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0108"
 search_intent: "workflow"
 primary_keyword: "长篇纯文本文档"
@@ -14,6 +14,9 @@ tags: "长篇纯文本文档"
 short_answer: "先保留原始文件，决定只读查看还是使用工作副本。在单独的笔记中整理现有标题，搜索有辨识度的短语并核对上下文。用外部位置笔记留下查找路径，再重新打开同一版本验证。"
 related_apps: "VaultXT"
 canonical_url: "https://onnellab.com/blog/zh-hans/make-long-plain-text-easier-to-navigate/"
+published_at: "2026-10-30T09:00:00+09:00"
+updated_at: "2026-10-30T09:00:00+09:00"
+related_articles: "检查 EPUB 的目录链接和章节顺序 => https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/|在 Android 上整理音乐文件，准备离线播放 => https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/|替换原文件前，如何检查转换后的媒体文件 => https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/|如何整理可重复使用的文本片段 => https://onnellab.com/blog/zh-hans/turn-repeated-text-into-reusable-snippets/|如何建立一致、好查找的文件命名规则 => https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/|如何区分资料笔记与自己的结论 => https://onnellab.com/blog/zh-hans/separate-source-notes-from-conclusions/"
 ---
 
 # 怎样在长篇纯文本文档中找回所需段落

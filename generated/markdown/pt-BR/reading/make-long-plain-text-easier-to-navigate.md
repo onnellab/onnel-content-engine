@@ -5,7 +5,7 @@ slug: "make-long-plain-text-easier-to-navigate"
 category: "reading"
 language: "pt-BR"
 description: "Use uma nota com os títulos existentes, frases específicas e um teste de retomada para encontrar passagens em textos longos sem modificar o original."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0110"
 search_intent: "workflow"
 primary_keyword: "navegação em um documento de texto longo"
@@ -14,6 +14,9 @@ tags: "navegação em um documento de texto longo"
 short_answer: "Preserve o original, anote os títulos existentes e escolha frases específicas para pesquisar. Guarde as referências em uma nota separada. Feche e reabra a mesma versão para testar se consegue voltar ao lugar certo."
 related_apps: "VaultXT"
 canonical_url: "https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/"
+published_at: "2026-10-30T09:00:00+09:00"
+updated_at: "2026-10-30T09:00:00+09:00"
+related_articles: "Como conferir o sumário e a ordem dos capítulos de um EPUB => https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/|Como transformar textos repetidos em trechos reutilizáveis => https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/|Como testar um arquivo de mídia convertido antes de substituir o original => https://onnellab.com/blog/pt-br/test-converted-media-before-replacing-original/|Como criar um padrão consistente para nomes de arquivos => https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/|Tags de álbum e artista consistentes: preserve os créditos => https://onnellab.com/blog/pt-br/consistent-album-artist-names/|Como organizar músicas no Android para ouvir offline => https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/"
 ---
 
 # Como facilitar a navegação em um documento de texto longo

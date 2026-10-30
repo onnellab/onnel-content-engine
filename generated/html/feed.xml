@@ -257,6 +257,13 @@
     <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
+    <title>How to Navigate a Long Plain-Text Document</title>
+    <link>https://onnellab.com/blog/en/make-long-plain-text-easier-to-navigate/</link>
+    <guid>https://onnellab.com/blog/en/make-long-plain-text-easier-to-navigate/</guid>
+    <description>Build a small navigation map with existing headings, distinctive search phrases and version-aware notes without changing the original text.</description>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>How to Turn Repeated Text Into Reusable Snippets</title>
     <link>https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/</link>
     <guid>https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/</guid>
@@ -668,6 +675,62 @@
     <guid>https://onnellab.com/blog/es/consistent-album-artist-names/</guid>
     <description>Corrige etiquetas de álbum y artista inconsistentes en copias de trabajo, conserva los créditos de cada pista y verifica los archivos guardados antes de actualizar la biblioteca.</description>
     <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>긴 일반 텍스트 문서에서 필요한 부분을 쉽게 찾는 방법</title>
+    <link>https://onnellab.com/blog/ko/make-long-plain-text-easier-to-navigate/</link>
+    <guid>https://onnellab.com/blog/ko/make-long-plain-text-easier-to-navigate/</guid>
+    <description>원본을 바꾸지 않고 기존 제목, 검색어, 위치 메모를 활용해 긴 TXT 문서의 필요한 부분으로 돌아가는 다섯 단계 방법을 설명합니다.</description>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>長いプレーンテキスト文書で必要な箇所を見つける方法</title>
+    <link>https://onnellab.com/blog/ja/make-long-plain-text-easier-to-navigate/</link>
+    <guid>https://onnellab.com/blog/ja/make-long-plain-text-easier-to-navigate/</guid>
+    <description>原本を変えずに、既存の見出し、検索語、位置メモを使い、長いTXT文書の必要な箇所に戻る五つの手順を紹介します。</description>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>怎样在长篇纯文本文档中找回所需段落</title>
+    <link>https://onnellab.com/blog/zh-hans/make-long-plain-text-easier-to-navigate/</link>
+    <guid>https://onnellab.com/blog/zh-hans/make-long-plain-text-easier-to-navigate/</guid>
+    <description>不修改原始文件，利用现有标题、搜索词和位置笔记，按五个步骤找回长篇TXT文档中的内容。</description>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>如何在長篇純文字文件中找回需要的段落</title>
+    <link>https://onnellab.com/blog/zh-hant/make-long-plain-text-easier-to-navigate/</link>
+    <guid>https://onnellab.com/blog/zh-hant/make-long-plain-text-easier-to-navigate/</guid>
+    <description>不修改原始檔案，運用現有標題、搜尋詞與位置筆記，依五個步驟找回長篇TXT文件中的內容。</description>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Como facilitar a navegação em um documento de texto longo</title>
+    <link>https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/</link>
+    <guid>https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/</guid>
+    <description>Use uma nota com os títulos existentes, frases específicas e um teste de retomada para encontrar passagens em textos longos sem modificar o original.</description>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Lange Textdokumente leichter navigieren</title>
+    <link>https://onnellab.com/blog/de/make-long-plain-text-easier-to-navigate/</link>
+    <guid>https://onnellab.com/blog/de/make-long-plain-text-easier-to-navigate/</guid>
+    <description>Mit einer Übersicht vorhandener Überschriften, gezielten Suchstellen und einer Prüfung nach erneutem Öffnen finden Sie Passagen wieder, ohne das Original zu verändern.</description>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Se repérer plus facilement dans un long document texte</title>
+    <link>https://onnellab.com/blog/fr/make-long-plain-text-easier-to-navigate/</link>
+    <guid>https://onnellab.com/blog/fr/make-long-plain-text-easier-to-navigate/</guid>
+    <description>Retrouvez vos passages avec une liste des titres existants, des expressions précises et un test de reprise, tout en préservant le fichier original.</description>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Cómo orientarte en un documento de texto largo</title>
+    <link>https://onnellab.com/blog/es/make-long-plain-text-easier-to-navigate/</link>
+    <guid>https://onnellab.com/blog/es/make-long-plain-text-easier-to-navigate/</guid>
+    <description>Encuentra pasajes con una lista de títulos existentes, frases específicas y una prueba de regreso al texto, sin modificar el archivo original.</description>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>

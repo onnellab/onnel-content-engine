@@ -5,7 +5,7 @@ slug: "make-long-plain-text-easier-to-navigate"
 category: "reading"
 language: "ko"
 description: "원본을 바꾸지 않고 기존 제목, 검색어, 위치 메모를 활용해 긴 TXT 문서의 필요한 부분으로 돌아가는 다섯 단계 방법을 설명합니다."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0106"
 search_intent: "workflow"
 primary_keyword: "일반 텍스트 문서"
@@ -14,6 +14,9 @@ tags: "일반 텍스트 문서"
 short_answer: "원본을 보존하고 읽기 전용으로 볼지 별도 작업본을 쓸지 먼저 정하세요. 기존 제목을 별도 메모에 정리하고, 특징적인 문구를 검색해 문맥을 확인하세요. 외부 위치 메모로 경로를 남긴 뒤 같은 버전을 다시 열어 확인하세요."
 related_apps: "VaultXT"
 canonical_url: "https://onnellab.com/blog/ko/make-long-plain-text-easier-to-navigate/"
+published_at: "2026-10-30T09:00:00+09:00"
+updated_at: "2026-10-30T09:00:00+09:00"
+related_articles: "대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|긴 글 읽기를 위한 TXT와 EPUB 비교 => https://onnellab.com/blog/ko/txt-vs-epub-for-long-reading/|대용량 텍스트 파일이 느리게 열리는 이유 => https://onnellab.com/blog/ko/large-text-file-slow-to-open/|원본을 바꾸지 않고 대용량 로그 파일을 검토하는 방법 => https://onnellab.com/blog/ko/inspect-large-log-file-without-altering-original/|신뢰할 수 있는 EPUB 변환을 위해 TXT 원고를 준비하는 방법 => https://onnellab.com/blog/ko/prepare-txt-manuscript-for-epub/|EPUB 목차 링크와 장 순서 확인하기 => https://onnellab.com/blog/ko/check-epub-table-of-contents-and-reading-order/"
 ---
 
 # 긴 일반 텍스트 문서에서 필요한 부분을 쉽게 찾는 방법

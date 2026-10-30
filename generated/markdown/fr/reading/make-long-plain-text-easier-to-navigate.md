@@ -5,7 +5,7 @@ slug: "make-long-plain-text-easier-to-navigate"
 category: "reading"
 language: "fr"
 description: "Retrouvez vos passages avec une liste des titres existants, des expressions précises et un test de reprise, tout en préservant le fichier original."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0112"
 search_intent: "workflow"
 primary_keyword: "Se repérer plus facilement"
@@ -14,6 +14,9 @@ tags: "Se repérer plus facilement"
 short_answer: "Préservez l’original, notez les titres existants et choisissez des expressions distinctives à rechercher. Conservez les références dans une note séparée. Fermez puis rouvrez la même version pour vérifier que vous retrouvez le passage."
 related_apps: "VaultXT"
 canonical_url: "https://onnellab.com/blog/fr/make-long-plain-text-easier-to-navigate/"
+published_at: "2026-10-30T09:00:00+09:00"
+updated_at: "2026-10-30T09:00:00+09:00"
+related_articles: "Vérifier la table des matières et l’ordre des chapitres d’un EPUB => https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/|Transformer les textes répétitifs en extraits réutilisables => https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/|Organiser sa musique sur Android pour une écoute hors ligne => https://onnellab.com/blog/fr/organize-local-music-library-offline-android/|Des tags d’album et d’artiste cohérents, des crédits préservés => https://onnellab.com/blog/fr/consistent-album-artist-names/|Tester un fichier multimédia converti avant de remplacer l’original => https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/|Créer une convention cohérente pour nommer ses fichiers => https://onnellab.com/blog/fr/design-consistent-file-naming-system/"
 ---
 
 # Se repérer plus facilement dans un long document texte

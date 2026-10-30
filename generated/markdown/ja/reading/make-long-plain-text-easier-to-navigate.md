@@ -5,7 +5,7 @@ slug: "make-long-plain-text-easier-to-navigate"
 category: "reading"
 language: "ja"
 description: "原本を変えずに、既存の見出し、検索語、位置メモを使い、長いTXT文書の必要な箇所に戻る五つの手順を紹介します。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0107"
 search_intent: "workflow"
 primary_keyword: "長いプレーンテキスト文書"
@@ -14,6 +14,9 @@ tags: "長いプレーンテキスト文書"
 short_answer: "原本を保ち、読み取り専用で見るか作業用コピーを使うかを決めます。既存の見出しを別のメモに整理し、特徴的な語句を検索して文脈を確認します。外部の位置メモに経路を残し、同じ版を開き直して確かめましょう。"
 related_apps: "VaultXT"
 canonical_url: "https://onnellab.com/blog/ja/make-long-plain-text-easier-to-navigate/"
+published_at: "2026-10-30T09:00:00+09:00"
+updated_at: "2026-10-30T09:00:00+09:00"
+related_articles: "EPUBの目次リンクと章の順序を確認する方法 => https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/|Androidの音楽ファイルをオフライン再生用に整理する方法 => https://onnellab.com/blog/ja/organize-local-music-library-offline-android/|元ファイルを置き換える前に変換後のメディアを確認する方法 => https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/|繰り返し使う文章を再利用できる定型文に整理する方法 => https://onnellab.com/blog/ja/turn-repeated-text-into-reusable-snippets/|探しやすいファイル命名ルールの作り方 => https://onnellab.com/blog/ja/design-consistent-file-naming-system/|出典メモと自分の結論を分ける方法 => https://onnellab.com/blog/ja/separate-source-notes-from-conclusions/"
 ---
 
 # 長いプレーンテキスト文書で必要な箇所を見つける方法

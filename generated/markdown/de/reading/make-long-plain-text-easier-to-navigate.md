@@ -5,7 +5,7 @@ slug: "make-long-plain-text-easier-to-navigate"
 category: "reading"
 language: "de"
 description: "Mit einer Übersicht vorhandener Überschriften, gezielten Suchstellen und einer Prüfung nach erneutem Öffnen finden Sie Passagen wieder, ohne das Original zu verändern."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0111"
 search_intent: "workflow"
 primary_keyword: "Textdokumente leichter navigieren"
@@ -14,6 +14,9 @@ tags: "Textdokumente leichter navigieren"
 short_answer: "Bewahren Sie das Original auf, notieren Sie vorhandene Überschriften und wählen Sie eindeutige Suchformulierungen. Halten Sie die Fundstelle in einer separaten Notiz fest. Schließen und öffnen Sie dieselbe Version erneut, um den Rückweg zu prüfen."
 related_apps: "VaultXT"
 canonical_url: "https://onnellab.com/blog/de/make-long-plain-text-easier-to-navigate/"
+published_at: "2026-10-30T09:00:00+09:00"
+updated_at: "2026-10-30T09:00:00+09:00"
+related_articles: "Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen => https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/|Musikdateien auf Android für die Offline-Wiedergabe ordnen => https://onnellab.com/blog/de/organize-local-music-library-offline-android/|Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln => https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/|Quellennotizen und eigene Schlussfolgerungen klar trennen => https://onnellab.com/blog/de/separate-source-notes-from-conclusions/|Einheitliche Album- und Künstler-Tags: Künstlerangaben erhalten => https://onnellab.com/blog/de/consistent-album-artist-names/|Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen => https://onnellab.com/blog/de/test-converted-media-before-replacing-original/"
 ---
 
 # Lange Textdokumente leichter navigieren
