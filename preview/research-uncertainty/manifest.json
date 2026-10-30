@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "status": "text_reviewed_unscheduled_draft",
+  "slug": "mark-uncertainty-clearly-in-research-notes",
+  "category": "research",
+  "existing_idea_topic_id": "TOPIC-0086",
+  "topic_id_reserved": false,
+  "planned_slot": "2026-11-05T09:00:00+09:00",
+  "planned_slot_is_reservation": false,
+  "scheduled_at": null,
+  "queue_modified": false,
+  "source_engine_commit": "a71158b1866ee16d015ed9274779ef6f07b00dfd",
+  "locale_order": [
+    "en",
+    "ko",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "pt-BR",
+    "de",
+    "fr",
+    "es"
+  ],
+  "files": [
+    {
+      "locale": "en",
+      "path": "preview/research-uncertainty/en.json",
+      "git_blob_sha": "f91d27ab8480dd1b54cbe2d3339d760d4cebd6be"
+    },
+    {
+      "locale": "ko",
+      "path": "preview/research-uncertainty/ko.json",
+      "git_blob_sha": "258cb1a76226ecdcd5e9451da5fce2392e9fe600"
+    },
+    {
+      "locale": "de",
+      "path": "preview/research-uncertainty/de.json",
+      "git_blob_sha": "96bc549f62b4c2c473be11bab7855c492aa19e1e"
+    },
+    {
+      "locale": "pt-BR",
+      "path": "preview/research-uncertainty/pt-BR.json",
+      "git_blob_sha": "042090a414aa8b19e5e1d821fee16a62af235970"
+    },
+    {
+      "locale": "fr",
+      "path": "preview/research-uncertainty/fr.json",
+      "git_blob_sha": "84efa01fe23a0bb0410c2554fb4f256169495c80"
+    },
+    {
+      "locale": "es",
+      "path": "preview/research-uncertainty/es.json",
+      "git_blob_sha": "e773d6ee8c2042d8a21688afbf9d3368f3df6ac3"
+    },
+    {
+      "locale": "ja",
+      "path": "preview/research-uncertainty/ja.json",
+      "git_blob_sha": "f985007a436ea0e4eb65d45e7e6a115e812b4efa"
+    },
+    {
+      "locale": "zh-Hans",
+      "path": "preview/research-uncertainty/zh-Hans.json",
+      "git_blob_sha": "e29208d894c302bacb89791409b91d81045f9fc0"
+    },
+    {
+      "locale": "zh-Hant",
+      "path": "preview/research-uncertainty/zh-Hant.json",
+      "git_blob_sha": "9497f71dab59c47108c56d5ad77708f4a486acbd"
+    }
+  ],
+  "search_intent_basis": "Editorial hypotheses, not measured search demand.",
+  "publishing_owner": "Existing GitHub Publishing Pipeline only",
+  "ready_to_schedule": false,
+  "blocking_gates": [
+    "Current preview selector and adapters bind existing slugs, topic IDs and paths; no adapter for this draft.",
+    "Native article score, native mandatory gates, image render, desktop/mobile page and link checks have not run for this bundle."
+  ],
+  "non_goals": [
+    "No pipeline, registry, scheduling, website, privacy, account or app changes.",
+    "No partial EN/KO publication; all nine must pass before queue entry."
+  ]
+}

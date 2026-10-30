@@ -1,0 +1,33 @@
+{
+  "locale": "pt-BR",
+  "title": "Como sinalizar incertezas em notas de pesquisa",
+  "description": "Diferencie informações desconhecidas, conflitantes e provisórias sem perder a fonte, o contexto ou o histórico de verificação.",
+  "question": "Como registrar uma informação incerta nas notas de pesquisa?",
+  "primary_keyword": "incerteza em notas de pesquisa",
+  "secondary_keywords": "verificação de fontes|informações conflitantes|registro de pesquisa",
+  "short_answer": "Indique o tipo de incerteza, preserve o trecho original com URL, versão e data e separe o que a fonte afirma da sua interpretação. Explique por que a informação ainda precisa de verificação e registre a próxima pergunta a investigar.",
+  "image": {
+    "title": "Deixe a incerteza visível",
+    "subtitle": "Uma nota útil não esconde dúvidas",
+    "message": "Preserve a fonte. Explique o que falta.",
+    "steps": [
+      [
+        "Preserve",
+        "Trecho, URL, versão e data"
+      ],
+      [
+        "Classifique",
+        "Desconhecido, conflitante ou provisório"
+      ],
+      [
+        "Explique",
+        "Por que ainda há dúvida?"
+      ],
+      [
+        "Verifique",
+        "Próxima pergunta e histórico"
+      ]
+    ]
+  },
+  "body": "# Como sinalizar incertezas em notas de pesquisa\n\nUma nota de pesquisa pode ser útil mesmo sem resposta definitiva. Ela deve mostrar o que foi encontrado, o que continua em aberto e por quê. Sem essa distinção, uma interpretação provisória pode acabar reutilizada como fato estabelecido.\n\n## Pergunta\n\nComo registrar uma informação incerta nas notas de pesquisa?\n\n## Resposta curta\n\nIndique o tipo de incerteza, preserve o trecho original com URL, versão e data e separe o que a fonte afirma da sua interpretação. Explique por que a informação ainda precisa de verificação e registre a próxima pergunta a investigar.\n\n## O que cada rótulo significa\n\n**Desconhecido** indica que falta uma informação necessária; não prova que ela não exista. **Conflitante** descreve afirmações aparentemente incompatíveis. **Provisório** identifica uma interpretação de trabalho ainda dependente de confirmação.\n\nSão rótulos práticos de organização, não medidas científicas de confiança. Uma mesma nota pode combinar mais de um deles.\n\n| Tipo de registro | Significado | Como registrar | Próxima pergunta |\n|---|---|---|---|\n| Afirmação da fonte | O documento diz algo específico | Preserve o trecho e sua referência | A afirmação responde à pergunta pesquisada? |\n| Desconhecido | Falta informação necessária | Diga exatamente o que não foi encontrado | Qual fonte pode preencher a lacuna? |\n| Conflitante | Há afirmações aparentemente incompatíveis | Guarde os dois trechos e contextos | Tratam do mesmo evento e período? |\n| Provisório | A interpretação depende de confirmação | Explique a hipótese e sua limitação | Que evidência poderia confirmá-la ou refutá-la? |\n\nRegistrar o que uma fonte afirma não comprova, por si só, que o acontecimento ocorreu.\n\n## Cinco passos para uma nota verificável\n\n1. **Preserve a fonte.** Registre o título, a URL ou uma localização estável, o trecho relevante ou uma paráfrase claramente identificada, e a versão ou data de publicação, quando disponíveis. Mantenha a data de acesso separada. Se algum dado não estiver disponível, indique a ausência em vez de inventá-lo.\n\n2. **Classifique a incerteza.** Evite escrever apenas “talvez”. Prefira “datas conflitantes entre duas versões” ou “data de início não encontrada”. O rótulo deve explicar o problema, não apenas expressar hesitação.\n\n3. **Separe observação, inferência e pergunta.** Registre primeiro o que está documentado, depois sua interpretação e, por fim, o que falta esclarecer. Mantenha a citação original separada do comentário para que outra pessoa consiga refazer o raciocínio.\n\n4. **Explique o motivo da dúvida.** Escreva, por exemplo, “a atualização não esclarece se junho substitui maio”. Não atribua um percentual de confiança sem método que o sustente. Um número inventado parece preciso, mas não ajuda a verificar a afirmação.\n\n5. **Defina a próxima verificação.** Formule uma pergunta concreta e identifique a fonte a consultar. Acrescente o resultado ao histórico, distinguindo a nova conclusão do registro anterior, sem reescrever a passagem citada.\n\n## Exemplo fictício: maio ou junho?\n\nNeste exemplo inventado, uma nota anterior anuncia o lançamento em maio; uma atualização oficial informa junho. Guarde as duas versões com suas datas e referências.\n\n**Observação:** os registros apresentam meses diferentes. **Inferência provisória:** o cronograma pode ter mudado. **Pergunta em aberto:** a atualização trata do mesmo lançamento e substitui explicitamente a previsão anterior?\n\nNão escolha um mês de memória. A fonte recente pode se referir a outra etapa ou região. Se a verificação confirmar a mudança, registre a conclusão e sua justificativa no histórico.\n\n## Cuidados ao reutilizar a nota\n\nEsses rótulos organizam o raciocínio; não verificam a fonte nem certificam a conclusão. Duas páginas que repetem o mesmo anúncio não constituem necessariamente evidências independentes. Registrar o que uma fonte afirma não comprova, por si só, que a afirmação esteja correta.\n\nMantenha o aviso de incerteza perto da afirmação, inclusive em resumos. Preserve qualificadores como “previsto”. A falta de confirmação não demonstra falsidade.\n\nAntes de uma decisão com consequências importantes, verifique as informações relevantes em fontes adequadas. Respeite permissões de acesso, privacidade e regras de retenção: não copie dados sensíveis desnecessários. Preservar o histórico não significa manter informações cuja exclusão seja necessária.\n\nVeja também [como separar notas de fontes e conclusões](https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/) e [como manter um registro duradouro de leituras de pesquisa](https://onnellab.com/blog/pt-br/keep-durable-research-reading-log/).\n\n## Conclusão\n\nUma boa nota não elimina toda dúvida. Ela torna a dúvida compreensível e permite retomar a verificação sem reconstruir o caminho do zero.\n\n## Perguntas frequentes\n\n### “Provavelmente” é suficiente?\nNão. Acrescente o motivo da ressalva e a pergunta que continua sem resposta.\n\n### Devo apagar informações desatualizadas?\nQuando permitido, mantenha o registro marcado como substituído e vincule a atualização. Respeite exigências de privacidade e exclusão.\n\n### Uma fonte mais recente sempre resolve um conflito?\nNão. Verifique o escopo e se ela realmente atualiza a mesma afirmação. Uma data mais recente, por si só, não garante precisão."
+}

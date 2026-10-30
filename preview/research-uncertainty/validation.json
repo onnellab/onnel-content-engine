@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-30T09:36:00Z",
+  "method": "In-memory JavaScript structural checks of exact authored JSON; not repository native test runner.",
+  "draft_blob_sha": {
+    "en": "f91d27ab8480dd1b54cbe2d3339d760d4cebd6be",
+    "ko": "258cb1a76226ecdcd5e9451da5fce2392e9fe600",
+    "de": "96bc549f62b4c2c473be11bab7855c492aa19e1e",
+    "pt-BR": "042090a414aa8b19e5e1d821fee16a62af235970",
+    "fr": "84efa01fe23a0bb0410c2554fb4f256169495c80",
+    "es": "e773d6ee8c2042d8a21688afbf9d3368f3df6ac3",
+    "ja": "f985007a436ea0e4eb65d45e7e6a115e812b4efa",
+    "zh-Hans": "e29208d894c302bacb89791409b91d81045f9fc0",
+    "zh-Hant": "9497f71dab59c47108c56d5ad77708f4a486acbd"
+  },
+  "structural_checks": [
+    {
+      "locale": "en",
+      "locale_exact": true,
+      "h1": true,
+      "question": true,
+      "answer": true,
+      "steps": 5,
+      "faq": 3,
+      "links": [
+        "https://onnellab.com/blog/en/separate-source-notes-from-conclusions/",
+        "https://onnellab.com/blog/en/keep-durable-research-reading-log/"
+      ],
+      "image_steps": 4
+    },
+    {
+      "locale": "ko",
+      "locale_exact": true,
+      "h1": true,
+      "question": true,
+      "answer": true,
+      "steps": 5,
+      "faq": 3,
+      "links": [
+        "https://onnellab.com/blog/ko/separate-source-notes-from-conclusions/",
+        "https://onnellab.com/blog/ko/keep-durable-research-reading-log/"
+      ],
+      "image_steps": 4
+    },
+    {
+      "locale": "de",
+      "locale_exact": true,
+      "h1": true,
+      "question": true,
+      "answer": true,
+      "steps": 5,
+      "faq": 3,
+      "links": [
+        "https://onnellab.com/blog/de/separate-source-notes-from-conclusions/",
+        "https://onnellab.com/blog/de/keep-durable-research-reading-log/"
+      ],
+      "image_steps": 4
+    },
+    {
+      "locale": "pt-BR",
+      "locale_exact": true,
+      "h1": true,
+      "question": true,
+      "answer": true,
+      "steps": 5,
+      "faq": 3,
+      "links": [
+        "https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/",
+        "https://onnellab.com/blog/pt-br/keep-durable-research-reading-log/"
+      ],
+      "image_steps": 4
+    },
+    {
+      "locale": "fr",
+      "locale_exact": true,
+      "h1": true,
+      "question": true,
+      "answer": true,
+      "steps": 5,
+      "faq": 3,
+      "links": [
+        "https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/",
+        "https://onnellab.com/blog/fr/keep-durable-research-reading-log/"
+      ],
+      "image_steps": 4
+    },
+    {
+      "locale": "es",
+      "locale_exact": true,
+      "h1": true,
+      "question": true,
+      "answer": true,
+      "steps": 5,
+      "faq": 3,
+      "links": [
+        "https://onnellab.com/blog/es/separate-source-notes-from-conclusions/",
+        "https://onnellab.com/blog/es/keep-durable-research-reading-log/"
+      ],
+      "image_steps": 4
+    },
+    {
+      "locale": "ja",
+      "locale_exact": true,
+      "h1": true,
+      "question": true,
+      "answer": true,
+      "steps": 5,
+      "faq": 3,
+      "links": [
+        "https://onnellab.com/blog/ja/separate-source-notes-from-conclusions/",
+        "https://onnellab.com/blog/ja/keep-durable-research-reading-log/"
+      ],
+      "image_steps": 4
+    },
+    {
+      "locale": "zh-Hans",
+      "locale_exact": true,
+      "h1": true,
+      "question": true,
+      "answer": true,
+      "steps": 5,
+      "faq": 3,
+      "links": [
+        "https://onnellab.com/blog/zh-hans/separate-source-notes-from-conclusions/",
+        "https://onnellab.com/blog/zh-hans/keep-durable-research-reading-log/"
+      ],
+      "image_steps": 4
+    },
+    {
+      "locale": "zh-Hant",
+      "locale_exact": true,
+      "h1": true,
+      "question": true,
+      "answer": true,
+      "steps": 5,
+      "faq": 3,
+      "links": [
+        "https://onnellab.com/blog/zh-hant/separate-source-notes-from-conclusions/",
+        "https://onnellab.com/blog/zh-hant/keep-durable-research-reading-log/"
+      ],
+      "image_steps": 4
+    }
+  ],
+  "structural_result": "PASS",
+  "native_evaluation": "NOT_RUN",
+  "native_score": null,
+  "rendered_images": "NOT_RUN",
+  "desktop_mobile_page_checks": "NOT_RUN",
+  "current_public_link_checks": "PARTIAL_ONLY",
+  "schedule_eligible": false,
+  "preview_contract_evidence": {
+    "engine_commit": "a71158b1866ee16d015ed9274779ef6f07b00dfd",
+    "paths": [
+      ".github/workflows/blog-preview.yml",
+      "scripts/select_blog_preview.py",
+      "scripts/prepare_research_preview.py"
+    ],
+    "reason": "Registered profiles are exact existing bundles; research source notes hardcodes separate-source-notes-from-conclusions. Reusing it would not validate this candidate."
+  },
+  "existing_publication_audit": {
+    "website_commit": "bd49caec8e6bb56eb89caaa977629ace64066c4b",
+    "source_article_groups": 24,
+    "source_locale_pages": 216,
+    "missing_source_translations": 0,
+    "source_matrix_is_not_full_live_render_verification": true,
+    "browser_observed": "https://onnellab.com/blog/en/ rendered 24 article links. Individual article navigation subsequently hit browser protocol timeouts; no claim of current 216-page rendered validation.",
+    "latest_slug": "make-long-plain-text-easier-to-navigate",
+    "pipeline_run_id": 41002675191,
+    "publication_commit": "29e1282ab1ac2d9a6e9b3de265c2596073e54608",
+    "website_publication_commit": "4960929d842a7aed3268e1222977d933e634ea19",
+    "nominal_published_at": "2026-10-30T09:00:00+09:00",
+    "pipeline_published_nine_at": "2026-10-30T04:24:38.537600Z",
+    "pipeline_confirmed_live_at": "2026-10-30T04:28:57.182953Z",
+    "on_time_publication_not_confirmed": true
+  },
+  "next_slots": [
+    {
+      "slot": "2026-11-02T09:00:00+09:00",
+      "slug": "choose-safe-audio-working-copy",
+      "status": "scheduled",
+      "locale_count": 9
+    },
+    {
+      "slot": "2026-11-05T09:00:00+09:00",
+      "slug": "mark-uncertainty-clearly-in-research-notes",
+      "status": "unreserved_draft_blocked_on_native_and_render_gates",
+      "locale_count": 9
+    }
+  ]
+}

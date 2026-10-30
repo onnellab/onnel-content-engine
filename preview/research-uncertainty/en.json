@@ -1,0 +1,33 @@
+{
+  "locale": "en",
+  "title": "Mark Uncertainty Clearly in Research Notes",
+  "description": "Separate missing information, conflicting sources and provisional explanations so that a useful research note does not turn a guess into a fact.",
+  "question": "How can I record uncertainty without making a guess look like a fact?",
+  "primary_keyword": "uncertainty in research notes",
+  "secondary_keywords": "conflicting sources|provisional explanation|evidence gaps",
+  "short_answer": "Keep the source wording and its version, label what is unknown or conflicting, and separate your explanation from what the source actually says. Record why a conclusion is provisional and the next question that could change it.",
+  "image": {
+    "title": "Keep uncertainty visible",
+    "subtitle": "Source → status → reason → next check",
+    "message": "An unanswered question is not a fact.",
+    "steps": [
+      [
+        "1. Preserve",
+        "Keep the source"
+      ],
+      [
+        "2. Label",
+        "Name the uncertainty"
+      ],
+      [
+        "3. Explain",
+        "State the reason"
+      ],
+      [
+        "4. Recheck",
+        "Add the next question"
+      ]
+    ]
+  },
+  "body": "# Mark Uncertainty Clearly in Research Notes\n\nA short note can sound more certain each time it is copied. “Possibly delayed” becomes “delayed,” and the reason for the original caution disappears. A useful note keeps that distinction visible without turning every sentence into a warning.\n\n## Question\n\nHow can I record uncertainty without making a guess look like a fact?\n\n## Short Answer\n\nKeep the source wording and its version, label what is unknown or conflicting, and separate your explanation from what the source actually says. Record why a conclusion is provisional and the next question that could change it.\n\n## What Kind of Uncertainty Is This?\n\n“Unknown,” “conflicting” and “provisional” describe different problems. These are practical note labels, not a scientific confidence scale. A source statement is evidence of what that source says; it does not by itself establish that the statement is correct.\n\n| Note type | What it means | Useful entry |\n| --- | --- | --- |\n| Source statement | A specified source makes a claim | Passage, location, version and date |\n| Unknown | Needed information has not been found | The missing detail and where you checked |\n| Conflicting | Sources appear to disagree | Both claims and their respective contexts |\n| Provisional | Your explanation remains open to revision | Reasoning, assumptions and next check |\n\n## A Five-Step Workflow\n\n1. **Preserve the source.** Record its title, URL or stable location, relevant passage or clearly marked paraphrase, and version or publication date where available. Keep the date you consulted it separate. If a version is unavailable, say so rather than inventing one.\n2. **Name the specific gap.** Write “launch month not verified,” not simply “uncertain.” If two sources disagree, retain both statements. Check whether they concern the same product, event or period before calling the difference a contradiction.\n3. **Separate observation from explanation.** Use distinct lines for “source says,” “my interpretation” and “still unresolved.” A plausible explanation does not become a source quotation because it fits the story.\n4. **Explain your confidence in words.** Note a concrete reason such as “only an undated summary found” or “later notice may revise the earlier plan.” Do not attach a percentage without a defined basis. “Probably” alone tells a future reader very little.\n5. **Set the next check and preserve the revision.** Ask a question that can be investigated: “Does the later notice explicitly replace the earlier date?” When new evidence arrives, append the update and explain which conclusion changed. Do not silently rewrite the old source passage.\n\n## A Small Example\n\nConsider an invented case: an earlier note says a launch is in May, while an official update says June. Record each document's wording and date first. “The plan changed” is a possible explanation, not yet a verified fact. Check whether both dates describe the same launch and whether the update supersedes the earlier announcement. Until then, keep the conflict visible rather than choosing a month from memory.\n\n## Limits and Cautions\n\nThese labels organize your reasoning; they do not verify a source or certify a conclusion. Two pages repeating one announcement are not necessarily independent evidence. Preserve only material you are permitted to keep, and avoid copying private details into a shared note. If a consequential decision depends on the answer, leave the unresolved issue explicit and obtain appropriate verification before acting.\n\n## Related Guides\n\n- [Separate Source Notes from Conclusions](https://onnellab.com/blog/en/separate-source-notes-from-conclusions/)\n- [Keep a Durable Research Reading Log](https://onnellab.com/blog/en/keep-durable-research-reading-log/)\n\n## Conclusion\n\nA good uncertainty note identifies the missing answer, not just a vague feeling of doubt. Keep the source, your interpretation and the next check separate so that later revision has a clear trail.\n\n## FAQ\n\n### Is “probably” enough?\n\nNo. Add the reason for the qualification and the question that remains unanswered.\n\n### Should I delete an interpretation that proved wrong?\n\nPreserve a clearly marked revision trail when useful. Label the earlier interpretation as superseded so it is not mistaken for your current conclusion.\n\n### Does a newer source always settle a conflict?\n\nNo. Check scope and whether it actually updates the same claim. A newer date alone does not establish accuracy.\n"
+}

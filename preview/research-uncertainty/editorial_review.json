@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-30T09:36:30Z",
+  "result": "PASS_TEXT_ONLY",
+  "draft_blob_sha": {
+    "en": "f91d27ab8480dd1b54cbe2d3339d760d4cebd6be",
+    "ko": "258cb1a76226ecdcd5e9451da5fce2392e9fe600",
+    "de": "96bc549f62b4c2c473be11bab7855c492aa19e1e",
+    "pt-BR": "042090a414aa8b19e5e1d821fee16a62af235970",
+    "fr": "84efa01fe23a0bb0410c2554fb4f256169495c80",
+    "es": "e773d6ee8c2042d8a21688afbf9d3368f3df6ac3",
+    "ja": "f985007a436ea0e4eb65d45e7e6a115e812b4efa",
+    "zh-Hans": "e29208d894c302bacb89791409b91d81045f9fc0",
+    "zh-Hant": "9497f71dab59c47108c56d5ad77708f4a486acbd"
+  },
+  "review_method": "Independent AI reviewers fetched and read exact GitHub blobs, compared against English factual brief, metadata and image text. Authors corrected findings and reviewers reread final blobs.",
+  "groups": [
+    {
+      "locales": [
+        "en",
+        "ko",
+        "de"
+      ],
+      "reviewer": "review_uncertainty_english_korean_german",
+      "result": "PASS_TEXT_ONLY",
+      "corrected": [
+        "German quote terminology and non-calibrated scale wording",
+        "Korean superseded-judgment label and uncertainty-type image wording"
+      ]
+    },
+    {
+      "locales": [
+        "ja",
+        "zh-Hans",
+        "zh-Hant"
+      ],
+      "reviewer": "review_uncertainty_asian",
+      "result": "PASS_TEXT_ONLY",
+      "corrected": [
+        "Source title and stable location",
+        "Access date separate from source date",
+        "Repeated announcement is not independent evidence",
+        "Superseded judgment explicitly labeled"
+      ]
+    },
+    {
+      "locales": [
+        "pt-BR",
+        "fr",
+        "es"
+      ],
+      "reviewer": "review_uncertainty_romance",
+      "result": "PASS_TEXT_ONLY",
+      "corrected": [
+        "Complete source-preservation fields",
+        "Independent evidence and claim accuracy caveats",
+        "Probably and newer-source FAQ scope",
+        "French inference terminology"
+      ]
+    }
+  ],
+  "coverage": [
+    "Meaning and material omissions",
+    "Natural language and terminology consistency",
+    "Factual and privacy/retention limitations",
+    "H1, question and short-answer exact-match structure",
+    "Localized internal-link route casing",
+    "Metadata and four-step image copy"
+  ],
+  "unverified": [
+    "Native-speaker certification",
+    "Measured search demand or SEO outcome",
+    "Native engine scoring and mandatory gates",
+    "Rendered images and desktop/mobile pages",
+    "Destination availability and current live canonical/hreflang"
+  ],
+  "remaining_material_text_findings": [],
+  "schedule_approval": false,
+  "publication_approval": false
+}
