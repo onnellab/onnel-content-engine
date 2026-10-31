@@ -313,10 +313,10 @@ def require_no_owned_title_match(api: YouTube, title: str) -> None:
             if isinstance(row.get("contentDetails"), dict) else None
             for row in rows
         ]
-        if (len(ids) != len(set(ids))
-                or any(not isinstance(value, str)
-                       or not re.fullmatch(r"[A-Za-z0-9_-]{11}", value)
-                       or value in seen for value in ids)):
+        if (any(not isinstance(value, str)
+                or not re.fullmatch(r"[A-Za-z0-9_-]{11}", value)
+                or value in seen for value in ids)
+                or len(ids) != len(set(ids))):
             hold("uploads_ids_invalid_or_duplicate")
         seen.update(ids)
         if ids:
