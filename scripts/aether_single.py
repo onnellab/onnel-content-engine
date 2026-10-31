@@ -241,55 +241,131 @@ def find_existing_public_video(api: YouTube, title: str) -> dict | None:
     return None
 
 
-def require_no_owned_title_match(api: YouTube, title: str) -> None:
-    """Read the verified owner's uploads, including non-public states, or HOLD.
+class RemoteInventoryUnverified(VideoError):
+    """Private, bounded diagnostics for a failed owned-uploads preflight.
 
-    Uses the existing youtube.readonly scope, never OAuth or a new upload. A
-    title collision is a conservative HOLD, not a claim of remote byte equality.
+    The original blocker remains stable for existing callers. Do not record
+    video titles, video IDs, OAuth material, request URLs or provider payloads.
+    """
+    def __init__(self, stage: str, *, pages_checked: int, videos_seen: int,
+                 missing_details: int = 0):
+        self.diagnostic = {
+            "stage": stage,
+            "pages_checked": pages_checked,
+            "videos_seen": videos_seen,
+            "missing_details": missing_details,
+        }
+        super().__init__("aether_single_remote_inventory_unverified")
+
+
+def require_no_owned_title_match(api: YouTube, title: str) -> None:
+    """Verify every owned upload, including private/scheduled videos, before spend.
+
+    An incomplete or ambiguous owner inventory is a HOLD. Use only the API
+    fields needed for the comparison (no privileged processingDetails or large
+    video descriptions). A bounded, READ-ONLY second lookup may recover an
+    omitted item from the first bulk response, but never treats an unobserved
+    video as absent. No external write or job creation occurs here.
     """
     wanted = _normalized_title(_clean(title, "title", 60))
+    pages_checked, seen = 0, set()
+
+    def hold(stage: str, *, missing_details: int = 0):
+        raise RemoteInventoryUnverified(stage, pages_checked=pages_checked,
+                                        videos_seen=len(seen),
+                                        missing_details=missing_details)
+
     _, _, channels = api.request("GET", API + "channels?" + urlencode({
-        "part": "id,contentDetails", "mine": "true"}), headers=api.headers(), retry=True)
+        "part": "id,contentDetails,statistics", "mine": "true",
+        "fields": "items(id,contentDetails(relatedPlaylists(uploads)),statistics(videoCount))",
+    }), headers=api.headers(), retry=True)
     items = channels.get("items")
-    if not isinstance(items, list) or len(items) != 1 or items[0].get("id") != api.channel:
-        raise VideoError("aether_single_remote_inventory_unverified")
-    playlist = items[0].get("contentDetails", {}).get("relatedPlaylists", {}).get("uploads")
+    if (not isinstance(items, list) or len(items) != 1
+            or not isinstance(items[0], dict) or items[0].get("id") != api.channel):
+        hold("owner_channel_mismatch")
+    owner = items[0]
+    details = owner.get("contentDetails")
+    related = details.get("relatedPlaylists") if isinstance(details, dict) else None
+    playlist = related.get("uploads") if isinstance(related, dict) else None
     if not isinstance(playlist, str) or not re.fullmatch(r"UU[A-Za-z0-9_-]{22}", playlist):
-        raise VideoError("aether_single_remote_inventory_unverified")
-    token, visited, seen = None, set(), set()
-    for _ in range(100):  # bounded complete pagination, otherwise fail closed
-        query = {"part": "contentDetails", "playlistId": playlist, "maxResults": "50"}
+        hold("owner_uploads_playlist_invalid")
+    stats = owner.get("statistics") or {}
+    public_count = stats.get("videoCount") if isinstance(stats, dict) else None
+    if public_count is not None and (not isinstance(public_count, str) or not public_count.isdigit()):
+        hold("owner_public_count_invalid")
+
+    token, visited = None, set()
+    for _ in range(100):  # Bounded complete pagination. Never accept partial pages.
+        pages_checked += 1
+        query = {
+            "part": "contentDetails", "playlistId": playlist, "maxResults": "50",
+            "fields": "items(contentDetails(videoId)),nextPageToken",
+        }
         if token:
             query["pageToken"] = token
-        _, _, page = api.request("GET", API + "playlistItems?" + urlencode(query), headers=api.headers(), retry=True)
+        _, _, page = api.request("GET", API + "playlistItems?" + urlencode(query),
+                                 headers=api.headers(), retry=True)
         rows = page.get("items")
-        if not isinstance(rows, list):
-            raise VideoError("aether_single_remote_inventory_unverified")
-        ids = [row.get("contentDetails", {}).get("videoId") for row in rows if isinstance(row, dict)]
-        if (len(ids) != len(rows) or len(ids) != len(set(ids))
-                or any(not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]{11}", value) or value in seen for value in ids)):
-            raise VideoError("aether_single_remote_inventory_unverified")
+        if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+            hold("uploads_page_invalid")
+        ids = [
+            row.get("contentDetails", {}).get("videoId")
+            if isinstance(row.get("contentDetails"), dict) else None
+            for row in rows
+        ]
+        if (any(not isinstance(value, str)
+                or not re.fullmatch(r"[A-Za-z0-9_-]{11}", value)
+                or value in seen for value in ids)
+                or len(ids) != len(set(ids))):
+            hold("uploads_ids_invalid_or_duplicate")
         seen.update(ids)
         if ids:
-            _, _, videos = api.request("GET", API + "videos?" + urlencode({
-                "part": "snippet,status,processingDetails", "id": ",".join(ids)}), headers=api.headers(), retry=True)
-            found = videos.get("items")
-            if (not isinstance(found, list) or len(found) != len(ids)
-                    or {row.get("id") for row in found if isinstance(row, dict)} != set(ids)):
-                raise VideoError("aether_single_remote_inventory_unverified")
-            for row in found:
-                snippet, status = row.get("snippet", {}), row.get("status", {})
+            # fields keeps the response small and avoids an unnecessary,
+            # owner-only processingDetails permission surface.
+            def details_for(video_ids):
+                _, _, response = api.request("GET", API + "videos?" + urlencode({
+                    "part": "snippet,status", "id": ",".join(video_ids),
+                    "fields": "items(id,snippet(channelId,title),status(privacyStatus))",
+                }), headers=api.headers(), retry=True)
+                found = response.get("items")
+                if not isinstance(found, list) or any(not isinstance(item, dict) for item in found):
+                    hold("video_details_invalid")
+                keys = [item.get("id") for item in found]
+                if (any(not isinstance(key, str) for key in keys)
+                        or len(keys) != len(set(keys))
+                        or not set(keys).issubset(video_ids)):
+                    hold("video_details_ids_mismatch")
+                return {item["id"]: item for item in found}
+
+            found = details_for(ids)
+            missing = [id_ for id_ in ids if id_ not in found]
+            if missing:
+                # An inconsistent bulk GET may be transient. A second bounded
+                # GET is read-only; a second missing result is a hard HOLD.
+                found.update(details_for(missing))
+                missing = [id_ for id_ in ids if id_ not in found]
+            if missing:
+                hold("video_details_missing_after_second_read",
+                     missing_details=len(missing))
+            for row in found.values():
+                snippet, status = row.get("snippet"), row.get("status")
+                if (not isinstance(snippet, dict) or not isinstance(status, dict)
+                        or snippet.get("channelId") != api.channel):
+                    hold("video_owner_or_metadata_mismatch")
                 actual = snippet.get("title")
-                if (snippet.get("channelId") != api.channel or not isinstance(actual, str)
+                if (not isinstance(actual, str) or not actual.strip()
                         or status.get("privacyStatus") not in {"public", "private", "unlisted"}):
-                    raise VideoError("aether_single_remote_inventory_unverified")
+                    hold("video_title_or_privacy_invalid")
                 if re.match(rf"^{re.escape(wanted)}(?:$|\W)", _normalized_title(actual)):
                     raise VideoError("aether_single_existing_remote_title_requires_reconcile")
         token = page.get("nextPageToken")
         if token is None:
+            if public_count is not None and len(seen) < int(public_count):
+                hold("uploads_less_than_public_count",
+                     missing_details=int(public_count) - len(seen))
             return
         if not isinstance(token, str) or not token or len(token) > 2048 or token in visited:
-            raise VideoError("aether_single_remote_inventory_unverified")
+            hold("uploads_page_token_invalid_or_repeated")
         visited.add(token)
     raise VideoError("aether_single_remote_inventory_incomplete")
 
@@ -902,6 +978,8 @@ def worker(
                 status="reconcile_required" if job.get("upload") else "blocked",
                 error=str(error) if isinstance(error, VideoError) else "aether_single_storage_error",
             )
+            if isinstance(error, RemoteInventoryUnverified):
+                job["remote_inventory_diagnostic"] = error.diagnostic
             atomic_json(q.state_path, state)
             raise
 
@@ -984,7 +1062,10 @@ def main() -> int:
         return 2 if result.get("status") in {"blocked", "reconcile_required", "rejected"} else 0
     except Exception as error:
         reason = str(error) if isinstance(error, VideoError) and re.fullmatch(r"[a-z_]{1,100}", str(error)) else "aether_single_operation_failed"
-        print(json.dumps({"profile": "aether_inn", "status": "blocked", "error": reason}))
+        payload = {"profile": "aether_inn", "status": "blocked", "error": reason}
+        if isinstance(error, RemoteInventoryUnverified):
+            payload["remote_inventory_diagnostic"] = error.diagnostic
+        print(json.dumps(payload))
         return 2
 
 
