@@ -12,6 +12,33 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import select_blog_preview as selector
 import prepare_segra_preview as segra
 
+REGISTERED_FIXTURE = ROOT / "tests/fixtures/segra_registered_review"
+REGISTERED_FIXTURE_COMMIT = "b1fc561ae95c059180b893cfd32aa7bc56eb5609"
+
+def registered_review_snapshot(fixture=REGISTERED_FIXTURE):
+    """Read exact historical derivatives; never rewrite production evidence."""
+    audit = json.loads((ROOT / segra.REGISTERED_AUDIT).read_text(encoding="utf-8"))
+    expected_paths = {
+        f"generated/{kind}/{locale}/{segra.CATEGORY}/{segra.SLUG}/{name}"
+        for locale in segra.LOCALES
+        for kind, name in (("metadata", "internal_links.json"), ("reviews", "review.json"))
+    }
+    entries = [entry for entry in audit["automated"]["native_manifest"]["files"]
+               if entry["path"] in expected_paths]
+    provenance = json.loads((fixture / "provenance.json").read_text(encoding="utf-8"))
+    if (provenance.get("schema") != 1 or provenance.get("source_commit") != REGISTERED_FIXTURE_COMMIT
+            or provenance.get("source_audit") != segra.REGISTERED_AUDIT
+            or len(entries) != 18 or {entry["path"] for entry in entries} != expected_paths
+            or provenance.get("files") != entries):
+        raise ValueError("Historical Segra fixture provenance mismatch")
+    snapshot = {}
+    for entry in entries:
+        raw = segra.read_native_bytes(segra.safe_native_path(fixture, entry["path"], required=True))
+        if segra.native_entry(entry["path"], raw) != entry:
+            raise ValueError("Historical Segra fixture fingerprint mismatch")
+        snapshot[entry["path"]] = raw
+    return snapshot
+
 def bundle(name, status="review"):
     category, slug = selector.PROFILES[name]
     return [dict(id=f"T-{name}-{i}", slug=slug, category=category, primary_language=l,
@@ -56,6 +83,10 @@ class RegisteredSegra(unittest.TestCase):
         # Only synthesize a historical review state inside an isolated fixture.
         self.assertNotEqual(root.resolve(), ROOT)
         self.assertNotIn(ROOT, root.resolve().parents)
+        # Queue scheduling legitimately regenerates link metadata and review
+        # fingerprints. Restore only these fixture inputs from the exact
+        # historical integration snapshot, not by blessing current bytes.
+        historical = registered_review_snapshot()
         paths = ["data/topics.csv", "topics/topics.csv", segra.REGISTERED_AUDIT,
                  segra.PREVIEW_DIRECTORY + "/manifest.json",
                  *[segra.PREVIEW_DIRECTORY + "/" + l + ".json" for l in segra.LOCALES],
@@ -63,7 +94,7 @@ class RegisteredSegra(unittest.TestCase):
         for relative in paths:
             p = root / relative
             p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_bytes((ROOT / relative).read_bytes())
+            p.write_bytes(historical[relative] if relative in historical else (ROOT / relative).read_bytes())
         # The real queue may legitimately advance to scheduled or published.
         # Keep this unit fixture deterministic without resetting operational data.
         with (root / "data/topics.csv").open(encoding="utf-8", newline="") as source:
@@ -81,6 +112,37 @@ class RegisteredSegra(unittest.TestCase):
                 writer = csv.DictWriter(target, fieldnames=header)
                 writer.writeheader()
                 writer.writerows(rows)
+    def test_historical_snapshot_matches_frozen_audit(self):
+        snapshot = registered_review_snapshot()
+        self.assertEqual(len(snapshot), 18)
+        self.assertEqual(sum(map(len, snapshot.values())), 81232)
+        for relative, raw in snapshot.items():
+            if relative.endswith("internal_links.json"):
+                self.assertEqual(json.loads(raw)["topic"]["status"], "review")
+
+    def test_tampered_historical_snapshot_is_rejected(self):
+        snapshot = registered_review_snapshot()
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture = Path(tmp)
+            (fixture / "provenance.json").write_bytes((REGISTERED_FIXTURE / "provenance.json").read_bytes())
+            for relative, raw in snapshot.items():
+                destination = fixture / relative
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(raw)
+            target = fixture / next(iter(snapshot))
+            target.write_bytes(target.read_bytes() + b"\n")
+            with self.assertRaisesRegex(ValueError, "fixture fingerprint mismatch"):
+                registered_review_snapshot(fixture)
+
+    def test_tampered_historical_provenance_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture = Path(tmp)
+            provenance = json.loads((REGISTERED_FIXTURE / "provenance.json").read_text())
+            provenance["source_commit"] = "0" * 40
+            (fixture / "provenance.json").write_text(json.dumps(provenance))
+            with self.assertRaisesRegex(ValueError, "fixture provenance mismatch"):
+                registered_review_snapshot(fixture)
+
     def test_registered_read_only_path_keeps_all_bytes_and_calls_native_gate(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); self.fixture(root)

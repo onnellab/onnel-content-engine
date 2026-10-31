@@ -1,0 +1,157 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0118",
+    "title": "編輯音訊前，如何準備容易辨認的工作副本",
+    "slug": "choose-safe-audio-working-copy",
+    "category": "media",
+    "language": "zh-Hant",
+    "status": "review",
+    "topic_clusters": [
+      "保留原始音訊",
+      "音訊編輯副本",
+      "音訊檔案命名",
+      "匯出後檢查",
+      "音訊工作副本",
+      "media"
+    ],
+    "related_app_names": [
+      "Segra"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0065",
+        "title": "取代原始檔案前，如何檢查轉檔後的媒體檔案",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "zh-Hant",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0048",
+        "title": "在 Android 整理音樂檔案，準備離線播放",
+        "slug": "organize-local-music-library-offline-android",
+        "category": "music",
+        "language": "zh-Hant",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0057",
+        "title": "檢查 EPUB 的目錄連結與章節順序",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "zh-Hant",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0073",
+        "title": "如何整理可重複使用的文字片段",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "zh-Hant",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0081",
+        "title": "如何建立一致又好找的檔案命名規則",
+        "slug": "design-consistent-file-naming-system",
+        "category": "productivity",
+        "language": "zh-Hant",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/design-consistent-file-naming-system/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0091",
+        "title": "如何區分資料筆記與自己的結論",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "zh-Hant",
+        "status": "published",
+        "url": "https://onnellab.com/blog/zh-hant/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0004",
+        "app_name": "Segra",
+        "slug": "segra",
+        "category": "media",
+        "url": "/apps/segra/",
+        "description": "A focused audio utility for trimming and organizing audio segments.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Media guide",
+        "category": "media",
+        "cluster": "media",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "保留原始音訊 cluster",
+        "category": "media",
+        "cluster": "保留原始音訊",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}
