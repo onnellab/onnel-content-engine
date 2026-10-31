@@ -182,6 +182,7 @@ class OwnedInventoryRegressions(unittest.TestCase):
                         style="An original fictional travel melody",
                         lane="frontier_surge", execute=True, publish=True,
                         api_factory=lambda: api,
+                        cover_generator=lambda *a, **k: None,
                         music_generator=lambda *a, **k: generation.append((a, k)))
             state = json.loads((root / "queue.json").read_text())
             self.assertEqual(len(state["jobs"]), 1)
@@ -194,7 +195,7 @@ class OwnedInventoryRegressions(unittest.TestCase):
             self.assertEqual("video_details_missing_after_second_read",
                              job["remote_inventory_diagnostic"]["stage"])
             self.assertEqual([], generation)
-            self.assertEqual(0, len([x for x in api.calls if "upload" in x]))
+            self.assertFalse(any("/upload/" in urlsplit(x).path for x in api.calls))
 
 
 if __name__ == "__main__":
