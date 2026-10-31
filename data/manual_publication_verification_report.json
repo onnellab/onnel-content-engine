@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-10-30T13:29:00+09:00",
+  "checked_at": "2026-10-31T13:05:10+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 96,
-    "already_done": 92,
+    "already_done": 95,
     "verified": 0,
-    "pending": 4
+    "pending": 1
   },
   "items": [
     {
@@ -730,6 +730,42 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0040::x::en::x",
+      "topic_id": "TOPIC-0040",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2116357637554254325",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
+      "manual_key": "TOPIC-0040::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0040",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mz5g4go7lm2d",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0040::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0040",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7522124474293346304/",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0042::x::en::x",
       "topic_id": "TOPIC-0042",
       "platform": "x",
@@ -1110,42 +1146,6 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://dev.to/onnellab/check-an-epubs-table-of-contents-and-chapter-order-25g6",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0040::x::en::x",
-      "topic_id": "TOPIC-0040",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0040::bluesky::en::bluesky",
-      "topic_id": "TOPIC-0040",
-      "platform": "bluesky",
-      "language": "en",
-      "template_id": "bluesky",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0040::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0040",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
     },
