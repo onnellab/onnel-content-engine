@@ -46,6 +46,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 | dependency | crypto | ^3.0.7 | 3.0.7 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.9 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | dart_tags | ^0.4.1 | 0.4.1 | - | ok | github:onnellab/melivra/pubspec.yaml |
+| dependency | ffi | 2.2.0 # Already locked; explicit native model-buffer ownership. | 2.2.0 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | ffmpeg_kit_flutter_new_audio | ref:bf0ffe958d518ad3a46009fad05bf5080fba966b | 2.5.2 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | file_picker | ^12.0.0 | 12.0.0 | - | ok | github:onnellab/melivra/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/melivra/pubspec.yaml |
