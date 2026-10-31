@@ -297,3 +297,46 @@ rights, regular local files, symlinks, SHA and conflicting retained masters. It
 then applies the usual duration and offline-audio review on import. This mapping
 does not change existing quality approval, attest human listening, authorize a
 new music charge, or complete an upload.
+
+## 2026-10-31 Aether single owner-inventory preflight hardening
+
+The 2026-10-31 06:33 KST local job for **Across the Frontier Before Sunrise**
+was blocked at **`aether_single_remote_inventory_unverified`** *before* the
+Lyria request, with no audio, upload, video ID, thumbnail or publishAt. The job
+remains under its existing durable ID `12f0b00ce03459ffa4e0c63e` in the
+same Mac single queue. The then-current exception collapsed multiple YouTube
+API response mismatches into that one code, so the exact failing response
+condition **cannot be reconstructed** from the saved 2026-10-31 receipt.
+A successful six-playlist sync (67 videos considered) is *not* proof that the
+stricter owner-only title-inventory preflight saw every public/private/unlisted
+upload or matched all its `videos.list` details.
+
+The canonical single worker now uses a bounded read-only enumeration of the
+authenticated owner's uploads: `channels.list(mine=true)`, complete uploads
+`playlistItems.list` pagination, then `videos.list` per page. It requests
+only `id`, `snippet.channelId/title` and `status.privacyStatus` plus
+upload/video IDs; the unused, privileged `processingDetails` data and
+bulky descriptions/tags are omitted using Google API `fields` filtering.
+If a bulk `videos.list` response omits records, the worker performs at most
+one additional read of only those missing IDs, then **fails closed** unless
+every ID is observed with exact owner/title/privacy information. Other holds
+cover wrong channel, invalid uploads playlist, malformed/duplicate IDs,
+unknown ownership/privacy, pagination anomalies, and a playlist inventory
+smaller than the supplied public video count. Existing title collisions
+(including private and scheduled videos) still block immediately.
+
+The original blocker `aether_single_remote_inventory_unverified` remains
+stable. New subreasons and bounded counts are recorded in
+`remote_inventory_diagnostic` both in the private queue and in the local
+daily-result step; no private video IDs, channel search results, token values,
+credentials, or raw provider payloads are recorded. The next *ordinary*
+Tuesday/Saturday LaunchAgent run may classify an intermittent API omission and
+continue only after full verification. Persistent inaccessible/ambiguous
+remote videos still HOLD. No manual/ChatGPT fallback, no duplicate upload,
+no paid generation before inventory verification and no 09:00 catch-up.
+
+**Do not rerun the 2026-10-31 production slot.** It is already stale after
+09:00 KST. Deploying repository code does not change the installed LaunchAgent
+or start a worker; its existing scheduled owner will fetch main on the next run.
+Any exact root-cause subtype can only be confirmed on fresh worker evidence,
+not inferred retroactively from the old generic exception.
