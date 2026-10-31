@@ -354,7 +354,7 @@ def require_no_owned_title_match(api: YouTube, title: str) -> None:
                     hold("video_owner_or_metadata_mismatch")
                 actual = snippet.get("title")
                 if (not isinstance(actual, str) or not actual.strip()
-                        or status.get("privacyStatus") not in {"public", "private", "unlisted"}):
+                        or status.get("privacyStatus") not in ("public", "private", "unlisted")):
                     hold("video_title_or_privacy_invalid")
                 if re.match(rf"^{re.escape(wanted)}(?:$|\W)", _normalized_title(actual)):
                     raise VideoError("aether_single_existing_remote_title_requires_reconcile")
@@ -1071,4 +1071,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
 

@@ -150,6 +150,36 @@ class OwnedInventoryRegressions(unittest.TestCase):
                     aether_single.require_no_owned_title_match(api, TARGET)
                 self.assertEqual(stage, caught.exception.diagnostic["stage"])
 
+    def test_unhashable_privacy_fails_closed_with_safe_diagnostic(self):
+        for privacy in ([], {}):
+            with self.subTest(privacy=privacy):
+                api = InventoryFixture(privacy=privacy)
+                with self.assertRaises(aether_single.RemoteInventoryUnverified) as caught:
+                    aether_single.require_no_owned_title_match(api, TARGET)
+                self.assertEqual("aether_single_remote_inventory_unverified", str(caught.exception))
+                self.assertEqual("video_title_or_privacy_invalid", caught.exception.diagnostic["stage"])
+                self.assertNotIn(TARGET, json.dumps(caught.exception.diagnostic))
+
+    def test_repeated_token_with_empty_pages_reaches_token_guard(self):
+        api = InventoryFixture()
+        original_request = api.request
+
+        def empty_page_request(method, url, **kwargs):
+            if "playlistItems?" in url:
+                self.assertEqual("GET", method)
+                api.calls.append(url)
+                return 200, {}, {"items": [], "nextPageToken": "repeated"}
+            return original_request(method, url, **kwargs)
+
+        api.request = empty_page_request
+        with self.assertRaises(aether_single.RemoteInventoryUnverified) as caught:
+            aether_single.require_no_owned_title_match(api, TARGET)
+        self.assertEqual("uploads_page_token_invalid_or_repeated", caught.exception.diagnostic["stage"])
+        self.assertEqual(2, caught.exception.diagnostic["pages_checked"])
+        self.assertEqual(0, caught.exception.diagnostic["videos_seen"])
+        self.assertEqual(0, api.video_calls)
+        self.assertEqual(3, len(api.calls))
+
     def test_cli_reports_only_safe_reason_and_counts(self):
         failure = aether_single.RemoteInventoryUnverified(
             "video_details_missing_after_second_read", pages_checked=2,
@@ -200,3 +230,4 @@ class OwnedInventoryRegressions(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
