@@ -1014,7 +1014,7 @@
       "approval_source": "Owner's browser publication automation and subsequent approval of Mac browser execution.",
       "verification_method": "mac_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "observed_at_precision": "millisecond",
       "browser_ui_timezone": "not_recorded",
       "manual_key": "TOPIC-0040::x::en::x",
@@ -1032,7 +1032,8 @@
       "submitted_body": "Keep a version-aware note with useful headings and distinctive search phrases. Reopen the same file and check the surrounding text.\n\nInstall VaultXT:\nApp Store: https://apps.apple.com/app/id6760122045\nGoogle Play: https://play.google.com/store/apps/details?id=com.onnellab.vaultxt",
       "submitted_source_characters": 280,
       "source_draft_path": "generated/social/x/en/reading/make-long-plain-text-easier-to-navigate.txt",
-      "observation_source": "Mac Chrome UI through Desktop Commander AppleScript verified @onnellab, the exact permalink and complete improved body. Canonical article and store destinations were verified before posting. Published time came from the post UI time datetime attribute; observed_at is the separate permalink verification time. This was not dot cloud browser verification."
+      "observation_source": "Mac Chrome UI through Desktop Commander AppleScript verified @onnellab, the exact permalink and complete improved body. Canonical article and store destinations were verified before posting. Published time came from the post UI time datetime attribute; observed_at is the separate permalink verification time. This was not dot cloud browser verification.",
+      "processed_at": "2026-10-31T02:39:13+00:00"
     },
     {
       "topic_id": "TOPIC-0040",
@@ -1044,7 +1045,7 @@
       "approval_source": "Owner's browser publication automation and subsequent approval of Mac browser execution.",
       "verification_method": "mac_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "observed_at_precision": "millisecond",
       "browser_ui_timezone": "not_recorded",
       "manual_key": "TOPIC-0040::linkedin::en::linkedin",
@@ -1075,7 +1076,8 @@
           "precision": "millisecond"
         }
       ],
-      "observation_source": "Mac Chrome UI through Desktop Commander AppleScript verified ONNEL LAB and exact editor text before one publish click. The permalink confirmed author and paragraphs, with the canonical link shortened to lnkd.in/gx9ZKTCE. Canonical article was live before posting. UI showed only 방금; server publication time is unknown and observed_at is verification time. This was not dot cloud browser verification."
+      "observation_source": "Mac Chrome UI through Desktop Commander AppleScript verified ONNEL LAB and exact editor text before one publish click. The permalink confirmed author and paragraphs, with the canonical link shortened to lnkd.in/gx9ZKTCE. Canonical article was live before posting. UI showed only 방금; server publication time is unknown and observed_at is verification time. This was not dot cloud browser verification.",
+      "processed_at": "2026-10-31T02:39:13+00:00"
     }
   ]
 }
