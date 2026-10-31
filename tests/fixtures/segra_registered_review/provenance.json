@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "source_commit": "b1fc561ae95c059180b893cfd32aa7bc56eb5609",
+  "source_audit": "preview/segra-working-copy/integration_review.json",
+  "purpose": "Frozen historical review-state test inputs only; never restore operational lifecycle or alter production fingerprints.",
+  "files": [
+    {
+      "path": "generated/metadata/en/media/choose-safe-audio-working-copy/internal_links.json",
+      "byte_length": 5251,
+      "sha256": "0d65c9e9b08cd949fe116354c61ea7c0abc0541f7ad7d80d7616e01a1af72cbe",
+      "git_blob_sha1": "3a13d5312c58558415bffd3e30738f5b0ccc8ca8"
+    },
+    {
+      "path": "generated/reviews/en/media/choose-safe-audio-working-copy/review.json",
+      "byte_length": 3579,
+      "sha256": "41415dc5bfd3e5fabc7f612245434bae34cef80039eaef1673ce9ec9b306beb7",
+      "git_blob_sha1": "1f645b26ee131102cd9b748ea1ded10ff3443586"
+    },
+    {
+      "path": "generated/metadata/ko/media/choose-safe-audio-working-copy/internal_links.json",
+      "byte_length": 5360,
+      "sha256": "abcf74a14578029870e82fe39929f5bb01442f7b84fdf10bad586fef359e84be",
+      "git_blob_sha1": "22804a0b51b017dcafbfa2245da7ce8f8ca9710d"
+    },
+    {
+      "path": "generated/reviews/ko/media/choose-safe-audio-working-copy/review.json",
+      "byte_length": 3603,
+      "sha256": "5fee0ff6c7ca23212a4fcf2b4ec462c83a5c83fdc6299c234ab7cdab5e0ac963",
+      "git_blob_sha1": "9beb12a32637f4496e2fd25b8d2d52a4ab1764e3"
+    },
+    {
+      "path": "generated/metadata/ja/media/choose-safe-audio-working-copy/internal_links.json",
+      "byte_length": 5410,
+      "sha256": "ffc42f1ae0866e8d9d6dc791c83b31eba2fbe6b5c166b253300a95072d37127e",
+      "git_blob_sha1": "06dc0944b7d56c0fd86906078dbf9d543d339bfd"
+    },
+    {
+      "path": "generated/reviews/ja/media/choose-safe-audio-working-copy/review.json",
+      "byte_length": 3597,
+      "sha256": "0c7cae5a2eac101b8b659c0592578e7f9006f636224c54637877f7eefaf69468",
+      "git_blob_sha1": "0f88aebb05480b3d96440e51e7d0579f6f1de0f4"
+    },
+    {
+      "path": "generated/metadata/zh-Hans/media/choose-safe-audio-working-copy/internal_links.json",
+      "byte_length": 5296,
+      "sha256": "de8153015c4dfbcca57634774c8f12f872cb2ab0875c8197382fe9f221a6bb43",
+      "git_blob_sha1": "67b3a56827f2ffc9ffa8572e7423467c79e01dce"
+    },
+    {
+      "path": "generated/reviews/zh-Hans/media/choose-safe-audio-working-copy/review.json",
+      "byte_length": 3591,
+      "sha256": "3c1997f3d544a908c9b7dc1b038bb1d9507e4f1ad8431522c7357edb3cb4359f",
+      "git_blob_sha1": "ad8c631c952e925421d6e55be3a5d74d1a4cfc2f"
+    },
+    {
+      "path": "generated/metadata/zh-Hant/media/choose-safe-audio-working-copy/internal_links.json",
+      "byte_length": 5296,
+      "sha256": "17403017568202ecdcf89f925f9dff04e353f9b47fd27431da74c3d213deee2a",
+      "git_blob_sha1": "931e9d1a45d13a31617a455686709a4cb3b0124f"
+    },
+    {
+      "path": "generated/reviews/zh-Hant/media/choose-safe-audio-working-copy/review.json",
+      "byte_length": 3594,
+      "sha256": "176fe45eef5b61503faf57d9b875c54fb323f2b596fc8433ad1e004932ebb043",
+      "git_blob_sha1": "d3bf0acadf66747d299e36091d838853a2a66e64"
+    },
+    {
+      "path": "generated/metadata/pt-BR/media/choose-safe-audio-working-copy/internal_links.json",
+      "byte_length": 5701,
+      "sha256": "12695b045e6035dc58dd9eb6e6e7a881fb56afc6c3fb04ba4de5ab016c683b6c",
+      "git_blob_sha1": "75bcaca4d21e1922f37a796bf4eb5d5fe15fa9ae"
+    },
+    {
+      "path": "generated/reviews/pt-BR/media/choose-safe-audio-working-copy/review.json",
+      "byte_length": 3590,
+      "sha256": "cfd785a583708e48a4fe250ddf92089cf477894b2fae08b43d074676ed7f806e",
+      "git_blob_sha1": "eb30972c08407ccdd1cb22d9e19ce5c400edd924"
+    },
+    {
+      "path": "generated/metadata/de/media/choose-safe-audio-working-copy/internal_links.json",
+      "byte_length": 5285,
+      "sha256": "cabf97c728ebb01c677c5020e896c3dc773613d716b3dd1c91ff00bd287a8bc5",
+      "git_blob_sha1": "95de9a27637a7c5a5c5ffdade4c46520e85fc1bf"
+    },
+    {
+      "path": "generated/reviews/de/media/choose-safe-audio-working-copy/review.json",
+      "byte_length": 3587,
+      "sha256": "6d72d4277e1d2c58caad5edccd6fb5d20928dc81c4c7f577b87c2266a24cf5a9",
+      "git_blob_sha1": "2f05863ebd4c5a6b04d38d6bb173a6ae3e28b8dd"
+    },
+    {
+      "path": "generated/metadata/fr/media/choose-safe-audio-working-copy/internal_links.json",
+      "byte_length": 5664,
+      "sha256": "46be864ad3a65f2adbac82f5d1519a2d02601f35ac408cd31f1c2b06805a7fdb",
+      "git_blob_sha1": "a2b5007d6bdb590bc9df350b5ddb430017173186"
+    },
+    {
+      "path": "generated/reviews/fr/media/choose-safe-audio-working-copy/review.json",
+      "byte_length": 3602,
+      "sha256": "59913261cedf2738b4ab6893fce6293e888514de2992bdad335413d81451779e",
+      "git_blob_sha1": "418001deb5bf12c95cc46617b1c24980aaf1d32f"
+    },
+    {
+      "path": "generated/metadata/es/media/choose-safe-audio-working-copy/internal_links.json",
+      "byte_length": 5639,
+      "sha256": "5409ac4e693ff844a362e20259bc033eee69ec03146c02c87272a3a1bd82f996",
+      "git_blob_sha1": "e7688ccff558453c02f617bd197529e26e50cd1f"
+    },
+    {
+      "path": "generated/reviews/es/media/choose-safe-audio-working-copy/review.json",
+      "byte_length": 3587,
+      "sha256": "14eb7da9bdb271fc8c4ac5b687c38dc693693c619bf1b8c17f79266245d2694a",
+      "git_blob_sha1": "e7e1f69e300a39cc687e9227833fdec444977f43"
+    }
+  ]
+}

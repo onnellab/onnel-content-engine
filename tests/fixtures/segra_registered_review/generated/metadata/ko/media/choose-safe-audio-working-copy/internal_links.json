@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0115",
+    "title": "오디오 편집 전에 작업용 복사본을 구분하는 방법",
+    "slug": "choose-safe-audio-working-copy",
+    "category": "media",
+    "language": "ko",
+    "status": "review",
+    "topic_clusters": [
+      "오디오 원본 보존",
+      "오디오 파일 이름",
+      "내보낸 오디오 확인",
+      "오디오 작업용 복사본",
+      "media"
+    ],
+    "related_app_names": [
+      "Segra"
+    ]
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0023",
+        "title": "전문 편집기 없이 오디오 녹음을 자르는 방법",
+        "slug": "trim-audio-recordings-without-full-editor",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/trim-audio-recordings-without-full-editor/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 13
+      },
+      {
+        "topic_id": "TOPIC-0025",
+        "title": "오디오 클립을 합치기 전에 확인하는 방법",
+        "slug": "verify-audio-clips-before-combining",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/verify-audio-clips-before-combining/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 13
+      },
+      {
+        "topic_id": "TOPIC-0011",
+        "title": "로컬 미디어 파일을 비공개로 변환하는 방법",
+        "slug": "convert-local-media-files-privately",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/convert-local-media-files-privately/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0027",
+        "title": "미디어 변환 전에 출력 형식을 선택하는 방법",
+        "slug": "choose-media-output-format-before-conversion",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/choose-media-output-format-before-conversion/",
+        "destination": "published_article",
+        "relationship": "comparison",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0062",
+        "title": "원본을 교체하기 전에 변환한 미디어 파일 확인하기",
+        "slug": "test-converted-media-before-replacing-original",
+        "category": "media",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/test-converted-media-before-replacing-original/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "media"
+        ],
+        "score": 10
+      },
+      {
+        "topic_id": "TOPIC-0005",
+        "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "ko",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [
+      {
+        "app_id": "APP-0004",
+        "app_name": "Segra",
+        "slug": "segra",
+        "category": "media",
+        "url": "/apps/segra/",
+        "description": "A focused audio utility for trimming and organizing audio segments.",
+        "relationship": "solution",
+        "priority": 1
+      }
+    ],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Media guide",
+        "category": "media",
+        "cluster": "media",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "오디오 원본 보존 cluster",
+        "category": "media",
+        "cluster": "오디오 원본 보존",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}
