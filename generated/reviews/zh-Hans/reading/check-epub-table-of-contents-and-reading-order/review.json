@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0056",
   "title": "检查 EPUB 的目录链接和章节顺序",
-  "input_fingerprint": "4a9d6ca7f7f67554b26481a062b4a8f703e7dd51432c8bcf5ce044f86686ed8b",
+  "input_fingerprint": "7bc5114bfbc90c392243d6b9a3053cfbbdee226c8756f02e9836b53f87f56753",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

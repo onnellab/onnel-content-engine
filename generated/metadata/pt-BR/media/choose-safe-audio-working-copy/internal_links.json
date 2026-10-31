@@ -83,6 +83,19 @@
         "score": 6
       },
       {
+        "topic_id": "TOPIC-0110",
+        "title": "Como facilitar a navegação em um documento de texto longo",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0074",
         "title": "Como transformar textos repetidos em trechos reutilizáveis",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -90,19 +103,6 @@
         "language": "pt-BR",
         "status": "published",
         "url": "https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0092",
-        "title": "Como separar as anotações sobre fontes das suas conclusões",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
-        "language": "pt-BR",
-        "status": "published",
-        "url": "https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

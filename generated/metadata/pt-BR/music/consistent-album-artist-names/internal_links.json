@@ -102,12 +102,12 @@
         "slug": "make-long-plain-text-easier-to-navigate",
         "category": "reading",
         "language": "pt-BR",
-        "status": "scheduled",
-        "url": "generated/markdown/pt-BR/reading/make-long-plain-text-easier-to-navigate.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       }
     ],
     "related_apps": [

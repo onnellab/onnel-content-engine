@@ -97,14 +97,14 @@
         "score": 5
       },
       {
-        "topic_id": "TOPIC-0119",
-        "title": "Prepare uma cópia de trabalho antes de editar áudio",
-        "slug": "choose-safe-audio-working-copy",
-        "category": "media",
+        "topic_id": "TOPIC-0110",
+        "title": "Como facilitar a navegação em um documento de texto longo",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
         "language": "pt-BR",
-        "status": "scheduled",
-        "url": "generated/markdown/pt-BR/media/choose-safe-audio-working-copy.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5

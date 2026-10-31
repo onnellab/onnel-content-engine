@@ -58,6 +58,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0110",
+        "title": "Como facilitar a navegação em um documento de texto longo",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0049",
         "title": "Como organizar músicas no Android para ouvir offline",
         "slug": "organize-local-music-library-offline-android",
@@ -80,19 +93,6 @@
         "url": "https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/",
         "destination": "published_article",
         "relationship": "troubleshooting",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0110",
-        "title": "Como facilitar a navegação em um documento de texto longo",
-        "slug": "make-long-plain-text-easier-to-navigate",
-        "category": "reading",
-        "language": "pt-BR",
-        "status": "scheduled",
-        "url": "generated/markdown/pt-BR/reading/make-long-plain-text-easier-to-navigate.md",
-        "destination": "scheduled_article",
-        "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6
       },

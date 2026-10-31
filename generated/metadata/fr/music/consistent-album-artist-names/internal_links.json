@@ -97,17 +97,17 @@
         "score": 6
       },
       {
-        "topic_id": "TOPIC-0068",
-        "title": "Tester un fichier multimédia converti avant de remplacer l’original",
-        "slug": "test-converted-media-before-replacing-original",
-        "category": "media",
+        "topic_id": "TOPIC-0112",
+        "title": "Se repérer plus facilement dans un long document texte",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
         "language": "fr",
         "status": "published",
-        "url": "https://onnellab.com/blog/fr/test-converted-media-before-replacing-original/",
+        "url": "https://onnellab.com/blog/fr/make-long-plain-text-easier-to-navigate/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       }
     ],
     "related_apps": [

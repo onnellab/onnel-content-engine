@@ -71,6 +71,19 @@
         "score": 6
       },
       {
+        "topic_id": "TOPIC-0112",
+        "title": "Se repérer plus facilement dans un long document texte",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/make-long-plain-text-easier-to-navigate/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0094",
         "title": "Comment séparer les notes de source de vos conclusions",
         "slug": "separate-source-notes-from-conclusions",
@@ -79,19 +92,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0112",
-        "title": "Se repérer plus facilement dans un long document texte",
-        "slug": "make-long-plain-text-easier-to-navigate",
-        "category": "reading",
-        "language": "fr",
-        "status": "scheduled",
-        "url": "generated/markdown/fr/reading/make-long-plain-text-easier-to-navigate.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5

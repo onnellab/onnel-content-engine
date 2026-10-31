@@ -60,6 +60,21 @@
         "score": 11
       },
       {
+        "topic_id": "TOPIC-0040",
+        "title": "How to Navigate a Long Plain-Text Document",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/make-long-plain-text-easier-to-navigate/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 11
+      },
+      {
         "topic_id": "TOPIC-0001",
         "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
@@ -98,21 +113,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/en/inspect-large-log-file-without-altering-original/",
         "destination": "published_article",
-        "relationship": "deeper",
-        "shared_clusters": [
-          "reading"
-        ],
-        "score": 10
-      },
-      {
-        "topic_id": "TOPIC-0040",
-        "title": "How to Navigate a Long Plain-Text Document",
-        "slug": "make-long-plain-text-easier-to-navigate",
-        "category": "reading",
-        "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/reading/make-long-plain-text-easier-to-navigate.md",
-        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "reading"

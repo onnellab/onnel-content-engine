@@ -80,14 +80,14 @@
         "slug": "make-long-plain-text-easier-to-navigate",
         "category": "reading",
         "language": "ko",
-        "status": "scheduled",
-        "url": "generated/markdown/ko/reading/make-long-plain-text-easier-to-navigate.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ko/make-long-plain-text-easier-to-navigate/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "reading"
         ],
-        "score": 12
+        "score": 13
       },
       {
         "topic_id": "TOPIC-0034",

@@ -96,17 +96,17 @@
         "score": 6
       },
       {
-        "topic_id": "TOPIC-0104",
-        "title": "Etiquetas de álbum y artista coherentes sin perder créditos",
-        "slug": "consistent-album-artist-names",
-        "category": "music",
+        "topic_id": "TOPIC-0113",
+        "title": "Cómo orientarte en un documento de texto largo",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
         "language": "es",
         "status": "published",
-        "url": "https://onnellab.com/blog/es/consistent-album-artist-names/",
+        "url": "https://onnellab.com/blog/es/make-long-plain-text-easier-to-navigate/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       }
     ],
     "related_apps": [

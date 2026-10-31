@@ -58,6 +58,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0111",
+        "title": "Lange Textdokumente leichter navigieren",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/make-long-plain-text-easier-to-navigate/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0059",
         "title": "Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen",
         "slug": "check-epub-table-of-contents-and-reading-order",
@@ -67,19 +80,6 @@
         "url": "https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/",
         "destination": "published_article",
         "relationship": "troubleshooting",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0111",
-        "title": "Lange Textdokumente leichter navigieren",
-        "slug": "make-long-plain-text-easier-to-navigate",
-        "category": "reading",
-        "language": "de",
-        "status": "scheduled",
-        "url": "generated/markdown/de/reading/make-long-plain-text-easier-to-navigate.md",
-        "destination": "scheduled_article",
-        "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6
       },
