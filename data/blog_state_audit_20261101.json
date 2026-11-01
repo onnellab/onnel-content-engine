@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "kind": "read_only_blog_state_audit",
+  "observed_at": "2026-11-01T09:37:08.134Z",
+  "engine_commit": "6785d50a999e7ee81f1597699fefd68d50a32925",
+  "homepage_commit": "42a692f2627e1f8b15c160f7879735ac7b962e26",
+  "source_matrix": {
+    "identities": 24,
+    "locales_per_identity": 9,
+    "pages": 216,
+    "missing_translations": [],
+    "evidence": "Recursive homepage main tree; source presence is not proof of live rendering."
+  },
+  "latest_public_observation": {
+    "slug": "make-long-plain-text-easier-to-navigate",
+    "locales": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ],
+    "observed_window_utc": [
+      "2026-11-01T09:30:00Z",
+      "2026-11-01T09:31:59Z"
+    ],
+    "method": "Independent native subagent cloud browser UI and DOM inspection",
+    "displayed_publication_date": "2026-10-30",
+    "all_nine_title_and_body_rendered": true,
+    "self_canonicals": true,
+    "hreflang_count_per_page": 10,
+    "store_and_related_links_present": true,
+    "limits": [
+      "Not all216pages inspected",
+      "Not alllinkdestinations clicked",
+      "CollapsedFAQanswers and image details not inspected"
+    ],
+    "low_priority_editorial_note": "German related-guide introduction has awkward wording; no published source was changed."
+  },
+  "next_slots": [
+    {
+      "slot_kst": "2026-11-02T09:00:00+09:00",
+      "slug": "choose-safe-audio-working-copy",
+      "status": "scheduled",
+      "locale_count": 9,
+      "stored_native_reviews": [
+        {
+          "locale": "en",
+          "blob": "52ef96cbeedb7d3b0a10be8d05de652c8efb36d1",
+          "score": 10,
+          "passed": true,
+          "failed": [],
+          "fingerprint": "4340322980da9f9dcf3353441bd5c786ad42f6ff94b4d4d8f932b656ae01f780"
+        },
+        {
+          "locale": "ko",
+          "blob": "ecdbf26f3f9285674ce6ac6caf116293502bf365",
+          "score": 10,
+          "passed": true,
+          "failed": [],
+          "fingerprint": "ee86324e9ab8d6edce0c0c54f73372b14814ce43b66671ccc3814d6489c01a08"
+        },
+        {
+          "locale": "ja",
+          "blob": "f7c87e179d68d7258befbb140bce415ec0cd0dfc",
+          "score": 10,
+          "passed": true,
+          "failed": [],
+          "fingerprint": "dc209b063bfe9245777f38db09bb02c814a6798fb925dfc954613d9893d6bb9d"
+        },
+        {
+          "locale": "zh-Hans",
+          "blob": "bc40938039b78911760a1843ae83fb4b13210fb5",
+          "score": 10,
+          "passed": true,
+          "failed": [],
+          "fingerprint": "140af371a5aaf97fc95051818f750ee3eff345071b6e841dc16de0918c48ebb7"
+        },
+        {
+          "locale": "zh-Hant",
+          "blob": "38035b9df489b77a172aea990b2a68864feafb20",
+          "score": 10,
+          "passed": true,
+          "failed": [],
+          "fingerprint": "925293be66e67c323b20508d3e61683dcd52b533f1333bdf4eed15d633be5ae6"
+        },
+        {
+          "locale": "pt-BR",
+          "blob": "f8c3905b1dc3a5411cb3910689d6da3418253849",
+          "score": 10,
+          "passed": true,
+          "failed": [],
+          "fingerprint": "e719ea35af3bf3b100a828b976c3d3464613e5b4a385e5ab815b083be3a7f089"
+        },
+        {
+          "locale": "de",
+          "blob": "67371b838390f933f7bfbf79e6542830a0cf9774",
+          "score": 10,
+          "passed": true,
+          "failed": [],
+          "fingerprint": "d8e1df810e6bda5f05f91c50a0a98f6d334ee96c20d74bd92e8cc1f5425c8689"
+        },
+        {
+          "locale": "fr",
+          "blob": "f3a80de0be51ea13ddb78e4d5b5da13265c5d44b",
+          "score": 10,
+          "passed": true,
+          "failed": [],
+          "fingerprint": "a2f7aec82a6e86b618e66124fc10153c55fb5f73a25b16d11497368af50e4cc1"
+        },
+        {
+          "locale": "es",
+          "blob": "3faded21a35ce0db680cff3143cc05fe2a7542e6",
+          "score": 10,
+          "passed": true,
+          "failed": [],
+          "fingerprint": "88e13bc2677b7d81b64ae0f90e4f9200ab24508071ef4a0f35b56e4344014877"
+        }
+      ],
+      "independent_body_review": {
+        "observed_at": "2026-11-01T09:33:00Z",
+        "locales": [
+          "en",
+          "ko",
+          "ja",
+          "zh-Hans",
+          "zh-Hant",
+          "pt-BR",
+          "de",
+          "fr",
+          "es"
+        ],
+        "method": "All nine actual Markdown bodies compared independently",
+        "required_fixes": [],
+        "scope_excludes": [
+          "store recheck",
+          "image inspection",
+          "native fingerprint recomputation"
+        ]
+      }
+    },
+    {
+      "slot_kst": "2026-11-05T09:00:00+09:00",
+      "status": "cadence-derived slot; no ready bundle registered",
+      "candidate_slug": "mark-uncertainty-clearly-in-research-notes",
+      "candidate_state": "draft_not_ready"
+    }
+  ],
+  "latest_pipeline": {
+    "run_id": 41291801201,
+    "url": "https://github.com/onnellab/onnel-content-engine/actions/runs/41291801201",
+    "head_sha": "6785d50a999e7ee81f1597699fefd68d50a32925",
+    "event": "push",
+    "conclusion": "success",
+    "validation_evaluation_build": "success",
+    "deployment": "skipped; dry run",
+    "note": "This run predates these new drafts and does not validate them."
+  },
+  "writes_performed_by_audit": false
+}

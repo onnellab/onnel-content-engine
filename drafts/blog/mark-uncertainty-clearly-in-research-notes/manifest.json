@@ -1,0 +1,234 @@
+{
+  "schema": 1,
+  "kind": "nine_locale_editorial_draft_not_publication_receipt",
+  "slug": "mark-uncertainty-clearly-in-research-notes",
+  "category": "research",
+  "state": "draft_not_ready",
+  "source_idea_id": "TOPIC-0086",
+  "new_topic_ids_allocated": false,
+  "queue_modified": false,
+  "scheduled_at": null,
+  "published_at": null,
+  "created_at": "2026-11-01T09:37:08.133Z",
+  "source_engine_commit": "6785d50a999e7ee81f1597699fefd68d50a32925",
+  "source_homepage_commit": "42a692f2627e1f8b15c160f7879735ac7b962e26",
+  "manuscripts": [
+    {
+      "locale": "en",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/en.md",
+      "git_blob_sha": "77ba4822ea6c272eda721e28d75e64e74dccf337"
+    },
+    {
+      "locale": "ko",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/ko.md",
+      "git_blob_sha": "bc278fbbf8c8f16e91047b8e59735b6b9b3ee99f"
+    },
+    {
+      "locale": "ja",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/ja.md",
+      "git_blob_sha": "2853dec08fb69f3e8f9a807b9c0ee4663f60e842"
+    },
+    {
+      "locale": "zh-Hans",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/zh-Hans.md",
+      "git_blob_sha": "0f91858a9aff6c29b5924163e514f5293f7187d1"
+    },
+    {
+      "locale": "zh-Hant",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/zh-Hant.md",
+      "git_blob_sha": "a2fbefcf0cdeaa9559a00a6c7f217f534ec1198a"
+    },
+    {
+      "locale": "pt-BR",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/pt-BR.md",
+      "git_blob_sha": "334de82bf999456d4920450d6dcf11357a30a16c"
+    },
+    {
+      "locale": "de",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/de.md",
+      "git_blob_sha": "086356c0b46e684182857f70f6d641ab02b06a6d"
+    },
+    {
+      "locale": "fr",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/fr.md",
+      "git_blob_sha": "175fd5e07a70645cb5b43009b358e27c26f04863"
+    },
+    {
+      "locale": "es",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/es.md",
+      "git_blob_sha": "db98c23e143da1d9331df9f43e683d87ca6d8fdb"
+    }
+  ],
+  "independent_editorial_review": {
+    "author": "native draft_bundle subagent",
+    "reviewer": "native maintain_nine_language_blog parent agent",
+    "method": "Full text of all nine manuscripts read and compared, distinct from automated/native quality gates",
+    "meaning_checks": [
+      "unknown does not mean false",
+      "search failure is not proof of absence",
+      "disputed accounts may concern different versions or periods",
+      "provisional interpretations may overlap with unknown details",
+      "specific next evidence check instead of vague further research",
+      "retain revision reasoning",
+      "no invented numeric confidence or official taxonomy attribution",
+      "same facts, source and locale-specific related links"
+    ],
+    "required_defects_remaining": [],
+    "corrections": [
+      {
+        "locale": "pt-BR",
+        "change": "Replaced awkward short-answer phrase in metadata and body with natural phrasing; meaning preserved."
+      }
+    ]
+  },
+  "static_checks": {
+    "method": "JavaScript assertions against actual fetched Markdown blobs; not repository native evaluator",
+    "results": [
+      {
+        "locale": "fr",
+        "title_matches": true,
+        "locale_matches": true,
+        "draft": true,
+        "no_dates": true,
+        "steps": 5,
+        "faq": 3,
+        "image": 1,
+        "links_ok": true,
+        "product_neutral": true,
+        "schema_present": 14,
+        "canonical": true
+      },
+      {
+        "locale": "ja",
+        "title_matches": true,
+        "locale_matches": true,
+        "draft": true,
+        "no_dates": true,
+        "steps": 5,
+        "faq": 3,
+        "image": 1,
+        "links_ok": true,
+        "product_neutral": true,
+        "schema_present": 14,
+        "canonical": true
+      },
+      {
+        "locale": "es",
+        "title_matches": true,
+        "locale_matches": true,
+        "draft": true,
+        "no_dates": true,
+        "steps": 5,
+        "faq": 3,
+        "image": 1,
+        "links_ok": true,
+        "product_neutral": true,
+        "schema_present": 14,
+        "canonical": true
+      },
+      {
+        "locale": "zh-Hant",
+        "title_matches": true,
+        "locale_matches": true,
+        "draft": true,
+        "no_dates": true,
+        "steps": 5,
+        "faq": 3,
+        "image": 1,
+        "links_ok": true,
+        "product_neutral": true,
+        "schema_present": 14,
+        "canonical": true
+      },
+      {
+        "locale": "ko",
+        "title_matches": true,
+        "locale_matches": true,
+        "draft": true,
+        "no_dates": true,
+        "steps": 5,
+        "faq": 3,
+        "image": 1,
+        "links_ok": true,
+        "product_neutral": true,
+        "schema_present": 14,
+        "canonical": true
+      },
+      {
+        "locale": "en",
+        "title_matches": true,
+        "locale_matches": true,
+        "draft": true,
+        "no_dates": true,
+        "steps": 5,
+        "faq": 3,
+        "image": 1,
+        "links_ok": true,
+        "product_neutral": true,
+        "schema_present": 14,
+        "canonical": true
+      },
+      {
+        "locale": "de",
+        "title_matches": true,
+        "locale_matches": true,
+        "draft": true,
+        "no_dates": true,
+        "steps": 5,
+        "faq": 3,
+        "image": 1,
+        "links_ok": true,
+        "product_neutral": true,
+        "schema_present": 14,
+        "canonical": true
+      },
+      {
+        "locale": "zh-Hans",
+        "title_matches": true,
+        "locale_matches": true,
+        "draft": true,
+        "no_dates": true,
+        "steps": 5,
+        "faq": 3,
+        "image": 1,
+        "links_ok": true,
+        "product_neutral": true,
+        "schema_present": 14,
+        "canonical": true
+      },
+      {
+        "locale": "pt-BR",
+        "title_matches": true,
+        "locale_matches": true,
+        "draft": true,
+        "no_dates": true,
+        "steps": 5,
+        "faq": 3,
+        "image": 1,
+        "links_ok": true,
+        "product_neutral": true,
+        "schema_present": 14,
+        "canonical": true
+      }
+    ]
+  },
+  "external_source": {
+    "url": "https://library.leeds.ac.uk/info/1401/academic-skills/85/note-making",
+    "read_at": "2026-11-01T09:30:59Z",
+    "scope": "General note organization and source information. Three-label convention is explicitly editorial, not attributed to Leeds."
+  },
+  "pending": [
+    "Create and inspect nine localized workflow image assets; current image references are placeholders.",
+    "Register candidate in an approved nonpublishing preview path without weakening closed link/profile validation.",
+    "Run repository native completeness, link, image, fingerprint and quality gates.",
+    "Verify rendered desktop/mobile pages and actual link destinations.",
+    "Only after all gates pass, register the complete nine-locale review bundle for the existing canonical publisher; no manual schedule assignment."
+  ],
+  "ready_bundle_count_contribution": 0,
+  "policy": {
+    "publisher": "existing GitHub Publishing Pipeline",
+    "cadence_changed": false,
+    "other_media_changed": false,
+    "privacy_app_release_security_billing_changed": false
+  }
+}
