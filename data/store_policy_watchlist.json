@@ -4,23 +4,23 @@
       "store": "google_play",
       "url": "https://support.google.com/googleplay/android-developer/table/12921780?hl=en",
       "status": "changed",
-      "content_hash": "57d2c6d87ca8fbf10f4a7c7ca26bcba17a90d3887101989fcc193bd6f36277a5",
-      "checked_at": "2026-10-31T21:24:28+00:00",
+      "content_hash": "bc9150d5842fdec6287e2f1b5293f36db9787936f114bc2ae3fcc5f8620c025d",
+      "checked_at": "2026-11-01T21:24:14+00:00",
       "error": "The read operation timed out"
     },
     {
       "store": "google_play",
       "url": "https://support.google.com/googleplay/android-developer/answer/9842754?hl=en",
       "status": "changed",
-      "content_hash": "9b79f1cc4de26c121b5fe68c11db551faafe43e6fe305f88f1479722db8f0e9b",
-      "checked_at": "2026-10-31T21:24:28+00:00"
+      "content_hash": "0f58d0a06e4d743d3e9f8535f9caee244c0e3f324d0fb1ff31a3220de6068939",
+      "checked_at": "2026-11-01T21:24:14+00:00"
     },
     {
       "store": "app_store",
       "url": "https://developer.apple.com/app-store/review/guidelines/",
       "status": "changed",
-      "content_hash": "5916424a99ac7a0f349cc3c98ffcdfb15867765c8cf02378c84bfdc97bf7adab",
-      "checked_at": "2026-10-31T21:24:28+00:00"
+      "content_hash": "1bc315534df5528a6b44c1d20a002b8b411c03fdc9252f5b2e6c8ef788f4fec9",
+      "checked_at": "2026-11-01T21:24:14+00:00"
     }
   ]
 }
