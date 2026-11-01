@@ -33,11 +33,14 @@
   "visibility_observed": "private_saved",
   "schedule_confirmed": false,
   "disclosure_confirmation": {
-    "status": "pending_user",
+    "status": "user_confirmed_pending_ui",
     "auto_review_denied_before_execution": true,
     "ai_selection": null,
     "paid_promotion_selection": null,
-    "reason": "Trusted factual confirmation required for AI and paid-promotion disclosures; neither selection was executed."
+    "reason": "Trusted factual confirmation required for AI and paid-promotion disclosures; neither selection was executed.",
+    "confirmation_message_id": "Sentinel_dbaea76c84cc8191914c428f0f54f805",
+    "confirmation_at_utc": "2026-11-01T12:14:19Z",
+    "confirmed_scope": "Both videos: no realistic AI alteration and no third-party sponsorship/paid promotion; select No to both and schedule."
   },
   "external_link_clickability": "Studio requires one-time verification; text URL saved; no verification initiated."
 }
