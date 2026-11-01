@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "guide_id": "segra-file-order-20261030",
-  "status": "scheduled_verified",
+  "status": "public_verified_in_studio",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
   "video_id": "T6JDb03YW7A",
   "video_url": "https://youtube.com/shorts/T6JDb03YW7A",
@@ -30,7 +30,17 @@
     "limitation": "Thumbnail slot remained a blank placeholder in Studio; no repeat upload. Uploaded video player shows correct first frame."
   },
   "external_link_status": "Correct Play URL saved as text; Studio requires one-time verification to make external links clickable; not initiated.",
-  "public_verified": false,
+  "public_verified": true,
   "qa_path": "data/screenshot_guides/segra-file-order-20261030.qa.json",
-  "production_commit": "f200ebd660665a1e7e0f7a58fd937cb593881b49"
+  "production_commit": "f200ebd660665a1e7e0f7a58fd937cb593881b49",
+  "public_observation": {
+    "observed_at_utc": "2026-11-01T10:48:16Z",
+    "source": "Authenticated ONNELLAB YouTube Studio Shorts content list",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "video_id": "T6JDb03YW7A",
+    "visibility_ui": "공개",
+    "date_ui": "2026. 10. 30. 게시일",
+    "exact_server_publication_time_available": false,
+    "public_watch_page_checked": false
+  }
 }
