@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "guide_id": "aligna-date-number-options-20261106",
+  "status": "scheduled_verified",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "video_id": "P-auyGH76a0",
+  "video_url": "https://youtube.com/shorts/P-auyGH76a0",
+  "title": "Where Are Aligna’s Date and Numbering Options? | Screenshot Guide",
+  "target_publish_at": "2026-11-06T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "timezone_ui": "현지 시간대(GMT+0900)",
+  "scheduled_confirmation_observed_at": "2026-11-01T12:26:07Z",
+  "persisted_schedule_readback_at": "2026-11-01T12:26:24Z",
+  "server_event_time_available": false,
+  "video_sha256": "705c880bf7382aaa8cb8952a3d1ef46d397b0c9777725679e31d993d2c83a03b",
+  "manifest_sha256": "2dc4e0582d9dfc21f12bad0f9fe57a147b85834c2a31f642ca66835955f1d0bf",
+  "library_file_id": "libfile_d752910aa38481919159e954567b69a2",
+  "upload_attempt": 1,
+  "processing": "SD and HD complete",
+  "copyright_check": "No issues at observation; not permanent guarantee",
+  "made_for_kids": false,
+  "synthetic_realistic_media": false,
+  "paid_promotion": false,
+  "disclosure_confirmation_message_id": "Sentinel_dbaea76c84cc8191914c428f0f54f805",
+  "thumbnail": {
+    "selection": "No custom thumbnail upload",
+    "actual_thumbnail_pixels_verified": false,
+    "video_first_frame_verified": true
+  },
+  "external_link_status": "Correct store URL saved as text; Studio requires one-time verification to make links clickable; not initiated.",
+  "public_verified": false,
+  "production_commit": "7caeadf6b3a8037224f7958d64ca3a8678e78b24"
+}
