@@ -21,7 +21,7 @@ canonical_url: "https://onnellab.com/blog/ja/mark-uncertainty-clearly-in-researc
 
 ## 質問
 
-曖昧な記述や根拠のない断定を避けながら、不確実な点をどう記録すればよいでしょうか。
+曖昧な記述や根拠のない断定を避けながら、不確実な点をどう記録すればよいでしょうか？
 
 ## 短い答え
 

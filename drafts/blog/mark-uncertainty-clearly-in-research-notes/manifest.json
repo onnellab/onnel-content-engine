@@ -26,7 +26,7 @@
     {
       "locale": "ja",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/ja.md",
-      "git_blob_sha": "3b688f4178c515fbdb9a1c80006c0dad7be57bdf"
+      "git_blob_sha": "8894f625f9002396d32bcf351862085f6f36843d"
     },
     {
       "locale": "zh-Hans",
@@ -398,6 +398,11 @@
       "Preserve original nine 800x1100 SVGs; derive a separately validated canonical 1200x675 diagram through the existing renderer."
     ],
     "independent_review": "pending for adapter revision",
-    "native_status": "not yet executed"
+    "native_status": "not yet executed",
+    "prior_failed_run": {
+      "run_id": 41297211175,
+      "cause": "Japanese question ended with 。 instead of required question punctuation",
+      "fix": "Correct source question to ？; preserve validator"
+    }
   }
 }

@@ -31,6 +31,7 @@ class DraftContract(unittest.TestCase):
                 self.assertTrue(evaluator.has_required_sections(evaluator.sections(draft["body"])))
                 self.assertTrue(evaluator.has_clear_definitions(draft["body"], locale))
                 self.assertIn(draft["primary_keyword"].lower(), draft["body"].lower())
+                self.assertTrue(draft["question"].endswith(("?", "？")))
                 self.assertEqual(len(draft["image"]["steps"]), 4)
                 svg = workflow_svg(draft["image"]["title"], draft["primary_keyword"], locale,
                     dict(subtitle=draft["image"]["subtitle"], message=draft["image"]["message"],

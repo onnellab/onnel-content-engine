@@ -93,7 +93,7 @@ DRAFT_DIRECTORY = "drafts/blog/mark-uncertainty-clearly-in-research-notes"
 REVIEWED_BLOBS = {
     "fr": "3e8b5725b17d5995277d6b0515351f0fa2b68529",
     "en": "6c2e295cc9f2be82d7857dcd6c81cb3275bd58c3",
-    "ja": "3b688f4178c515fbdb9a1c80006c0dad7be57bdf",
+    "ja": "8894f625f9002396d32bcf351862085f6f36843d",
     "es": "1f76aadc427a116997c5fa8f65a2e34f3e8ef391",
     "zh-Hans": "7963bc8eaacea65981511b2aeb30e0f44f83c413",
     "zh-Hant": "d9ca7e7899393056f7c08b6a1661fab831f03a7e",
