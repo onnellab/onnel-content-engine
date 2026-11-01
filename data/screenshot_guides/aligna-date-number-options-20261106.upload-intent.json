@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "guide_id": "aligna-date-number-options-20261106",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "status": "intent_recorded_before_upload",
+  "created_at_utc": "2026-11-01T10:43:55Z",
+  "video_sha256": "705c880bf7382aaa8cb8952a3d1ef46d397b0c9777725679e31d993d2c83a03b",
+  "manifest_sha256": "2dc4e0582d9dfc21f12bad0f9fe57a147b85834c2a31f642ca66835955f1d0bf",
+  "library_file_id": "libfile_d752910aa38481919159e954567b69a2",
+  "target_publish_at": "2026-11-06T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "duplicate_check": {
+    "observed_at_utc": "2026-11-01T10:43:44Z",
+    "studio_channel_verified": true,
+    "ordinary_videos": 6,
+    "shorts": 16,
+    "pagination_complete": true,
+    "matching_topic_or_title_found": false,
+    "remote_hash_comparison": "Studio does not expose original SHA; all source intents/receipts and video IDs reconciled, no matching new guide intents present.",
+    "preserved_existing": [
+      "-AzOvvP--6Y",
+      "T6JDb03YW7A",
+      "sG-RwU-Z65s"
+    ]
+  },
+  "video_id": null,
+  "upload_attempts": 0,
+  "uncertain_upload": false
+}
