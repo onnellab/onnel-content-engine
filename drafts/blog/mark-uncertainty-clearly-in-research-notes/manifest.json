@@ -218,7 +218,7 @@
     "scope": "General note organization and source information. Three-label convention is explicitly editorial, not attributed to Leeds."
   },
   "pending": [
-    "Create and inspect nine localized workflow image assets; current image references are placeholders.",
+    "Inspect nine prepared localized draft SVG assets in an authorized renderer and validate against the canonical image/branding contract; source preparation is complete, rendering is not.",
     "Register candidate in an approved nonpublishing preview path without weakening closed link/profile validation.",
     "Run repository native completeness, link, image, fingerprint and quality gates.",
     "Verify rendered desktop/mobile pages and actual link destinations.",
@@ -230,5 +230,162 @@
     "cadence_changed": false,
     "other_media_changed": false,
     "privacy_app_release_security_billing_changed": false
+  },
+  "draft_assets": [
+    {
+      "locale": "en",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/assets/en/workflow-diagram.svg",
+      "git_blob_sha": "fd6b053eddb384fcfd384349fd55e552f13c09b7"
+    },
+    {
+      "locale": "ko",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/assets/ko/workflow-diagram.svg",
+      "git_blob_sha": "7a23cbc2bc261da87e9c3064870354002260d1c2"
+    },
+    {
+      "locale": "ja",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/assets/ja/workflow-diagram.svg",
+      "git_blob_sha": "722088383ae6151295a8bda8c4e4e673d9887ad9"
+    },
+    {
+      "locale": "zh-Hans",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/assets/zh-Hans/workflow-diagram.svg",
+      "git_blob_sha": "249a2aca68ccc63dc5fa89d606e4697264f8e609"
+    },
+    {
+      "locale": "zh-Hant",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/assets/zh-Hant/workflow-diagram.svg",
+      "git_blob_sha": "0e9d271396da3b6686dec24494be3ff94e5f2516"
+    },
+    {
+      "locale": "pt-BR",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/assets/pt-BR/workflow-diagram.svg",
+      "git_blob_sha": "f38dbca056e8657192ad50717df3feaf334bfafb"
+    },
+    {
+      "locale": "de",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/assets/de/workflow-diagram.svg",
+      "git_blob_sha": "f851fc6df51833c1100a6117366d5077eb9ab335"
+    },
+    {
+      "locale": "fr",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/assets/fr/workflow-diagram.svg",
+      "git_blob_sha": "2af9135ddbcd00cb882322aa7c23aa01c2d3b148"
+    },
+    {
+      "locale": "es",
+      "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/assets/es/workflow-diagram.svg",
+      "git_blob_sha": "0200209d14d8cf13e270a5502eb0b81c16fd607f"
+    }
+  ],
+  "asset_review": {
+    "observed_at": "2026-11-01T09:41:39.227Z",
+    "method": "Independent source-text review plus JavaScript structural assertions; no actual renderer pass claimed",
+    "checks": [
+      {
+        "locale": "pt-BR",
+        "viewbox": true,
+        "accessible": true,
+        "language": true,
+        "no_external_or_active": true,
+        "text_steps": true,
+        "arrows": true,
+        "manually_reviewed_text": true
+      },
+      {
+        "locale": "ko",
+        "viewbox": true,
+        "accessible": true,
+        "language": true,
+        "no_external_or_active": true,
+        "text_steps": true,
+        "arrows": true,
+        "manually_reviewed_text": true
+      },
+      {
+        "locale": "en",
+        "viewbox": true,
+        "accessible": true,
+        "language": true,
+        "no_external_or_active": true,
+        "text_steps": true,
+        "arrows": true,
+        "manually_reviewed_text": true
+      },
+      {
+        "locale": "zh-Hant",
+        "viewbox": true,
+        "accessible": true,
+        "language": true,
+        "no_external_or_active": true,
+        "text_steps": true,
+        "arrows": true,
+        "manually_reviewed_text": true
+      },
+      {
+        "locale": "de",
+        "viewbox": true,
+        "accessible": true,
+        "language": true,
+        "no_external_or_active": true,
+        "text_steps": true,
+        "arrows": true,
+        "manually_reviewed_text": true
+      },
+      {
+        "locale": "es",
+        "viewbox": true,
+        "accessible": true,
+        "language": true,
+        "no_external_or_active": true,
+        "text_steps": true,
+        "arrows": true,
+        "manually_reviewed_text": true
+      },
+      {
+        "locale": "zh-Hans",
+        "viewbox": true,
+        "accessible": true,
+        "language": true,
+        "no_external_or_active": true,
+        "text_steps": true,
+        "arrows": true,
+        "manually_reviewed_text": true
+      },
+      {
+        "locale": "fr",
+        "viewbox": true,
+        "accessible": true,
+        "language": true,
+        "no_external_or_active": true,
+        "text_steps": true,
+        "arrows": true,
+        "manually_reviewed_text": true
+      },
+      {
+        "locale": "ja",
+        "viewbox": true,
+        "accessible": true,
+        "language": true,
+        "no_external_or_active": true,
+        "text_steps": true,
+        "arrows": true,
+        "manually_reviewed_text": true
+      }
+    ],
+    "visual_rendering": "pending",
+    "blocked_preview": {
+      "action": "cloud browser data:image/svg+xml navigation",
+      "result": "denied before rendering",
+      "reason": "Only http and https protocols allowed",
+      "retry": false
+    },
+    "publisher_image_contract": "not yet tested; draft assets are not canonical exported assets",
+    "prior_draft_ci": {
+      "commit": "779ceb8cb3ff7d267447656bf4d48d79526a4d7c",
+      "run_id": 41293971005,
+      "conclusion": "success",
+      "scope": "existing pipeline regression, not native candidate validation"
+    }
   }
 }

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1100" viewBox="0 0 800 1100" role="img" aria-labelledby="diagram-title diagram-desc" xml:lang="ko">
+<title id="diagram-title">불확실성을 분명하게</title>
+<desc id="diagram-desc">연구 노트에 주장, 근거, 불확실한 이유, 다음 확인 행동을 차례로 기록해요.</desc>
+<rect width="800" height="1100" fill="#f6f8fb"/>
+<g font-family="sans-serif">
+<text x="60" y="94" font-size="40" font-weight="700" fill="#14263d">불확실성을 분명하게</text>
+<rect x="60" y="170" width="680" height="170" rx="20" fill="#ffffff" stroke="#91a5bc" stroke-width="2"/>
+<rect x="88" y="196" width="52" height="52" rx="12" fill="#244e73"/>
+<text x="114" y="233" text-anchor="middle" font-size="32" font-weight="700" fill="#ffffff">1</text>
+<text x="160" y="229" font-size="34" font-weight="700" fill="#14263d">주장</text>
+<text x="160" y="275" font-size="28" fill="#33485f"><tspan x="160" dy="0">확인할 수 있는 문장</tspan><tspan x="160" dy="36">하나를 적어요.</tspan></text>
+<path d="M400 354 V384 M388 372 L400 384 L412 372" fill="none" stroke="#244e73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="60" y="400" width="680" height="170" rx="20" fill="#ffffff" stroke="#91a5bc" stroke-width="2"/>
+<rect x="88" y="426" width="52" height="52" rx="12" fill="#244e73"/>
+<text x="114" y="463" text-anchor="middle" font-size="32" font-weight="700" fill="#ffffff">2</text>
+<text x="160" y="459" font-size="34" font-weight="700" fill="#14263d">근거</text>
+<text x="160" y="505" font-size="28" fill="#33485f"><tspan x="160" dy="0">실제로 읽은 구절의</tspan><tspan x="160" dy="36">출처를 연결해요.</tspan></text>
+<path d="M400 584 V614 M388 602 L400 614 L412 602" fill="none" stroke="#244e73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="60" y="630" width="680" height="170" rx="20" fill="#ffffff" stroke="#91a5bc" stroke-width="2"/>
+<rect x="88" y="656" width="52" height="52" rx="12" fill="#244e73"/>
+<text x="114" y="693" text-anchor="middle" font-size="32" font-weight="700" fill="#ffffff">3</text>
+<text x="160" y="689" font-size="34" font-weight="700" fill="#14263d">이유</text>
+<text x="160" y="735" font-size="28" fill="#33485f"><tspan x="160" dy="0">무엇이 왜 불확실한지</tspan><tspan x="160" dy="36">설명해요.</tspan></text>
+<path d="M400 814 V844 M388 832 L400 844 L412 832" fill="none" stroke="#244e73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="60" y="860" width="680" height="170" rx="20" fill="#ffffff" stroke="#91a5bc" stroke-width="2"/>
+<rect x="88" y="886" width="52" height="52" rx="12" fill="#244e73"/>
+<text x="114" y="923" text-anchor="middle" font-size="32" font-weight="700" fill="#ffffff">4</text>
+<text x="160" y="919" font-size="34" font-weight="700" fill="#14263d">다음 확인</text>
+<text x="160" y="965" font-size="28" fill="#33485f"><tspan x="160" dy="0">노트를 바꿀 수 있는</tspan><tspan x="160" dy="36">구체적인 행동을 적어요.</tspan></text>
+</g>
+</svg>

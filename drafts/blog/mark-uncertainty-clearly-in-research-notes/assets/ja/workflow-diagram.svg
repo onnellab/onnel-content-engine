@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1100" viewBox="0 0 800 1100" role="img" aria-labelledby="diagram-title diagram-desc" xml:lang="ja">
+<title id="diagram-title">不確実な点を明確に</title>
+<desc id="diagram-desc">調査ノートに、主張、根拠、不確実な理由、次の確認事項を順に記録します。</desc>
+<rect width="800" height="1100" fill="#f6f8fb"/>
+<g font-family="sans-serif">
+<text x="60" y="94" font-size="40" font-weight="700" fill="#14263d">不確実な点を明確に</text>
+<rect x="60" y="170" width="680" height="170" rx="20" fill="#ffffff" stroke="#91a5bc" stroke-width="2"/>
+<rect x="88" y="196" width="52" height="52" rx="12" fill="#244e73"/>
+<text x="114" y="233" text-anchor="middle" font-size="32" font-weight="700" fill="#ffffff">1</text>
+<text x="160" y="229" font-size="34" font-weight="700" fill="#14263d">主張</text>
+<text x="160" y="275" font-size="28" fill="#33485f"><tspan x="160" dy="0">確認できる文を</tspan><tspan x="160" dy="36">一つ書きます。</tspan></text>
+<path d="M400 354 V384 M388 372 L400 384 L412 372" fill="none" stroke="#244e73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="60" y="400" width="680" height="170" rx="20" fill="#ffffff" stroke="#91a5bc" stroke-width="2"/>
+<rect x="88" y="426" width="52" height="52" rx="12" fill="#244e73"/>
+<text x="114" y="463" text-anchor="middle" font-size="32" font-weight="700" fill="#ffffff">2</text>
+<text x="160" y="459" font-size="34" font-weight="700" fill="#14263d">根拠</text>
+<text x="160" y="505" font-size="28" fill="#33485f"><tspan x="160" dy="0">実際に読んだ箇所の</tspan><tspan x="160" dy="36">出典を添えます。</tspan></text>
+<path d="M400 584 V614 M388 602 L400 614 L412 602" fill="none" stroke="#244e73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="60" y="630" width="680" height="170" rx="20" fill="#ffffff" stroke="#91a5bc" stroke-width="2"/>
+<rect x="88" y="656" width="52" height="52" rx="12" fill="#244e73"/>
+<text x="114" y="693" text-anchor="middle" font-size="32" font-weight="700" fill="#ffffff">3</text>
+<text x="160" y="689" font-size="34" font-weight="700" fill="#14263d">理由</text>
+<text x="160" y="735" font-size="28" fill="#33485f"><tspan x="160" dy="0">何が、なぜ不確実なのか</tspan><tspan x="160" dy="36">説明します。</tspan></text>
+<path d="M400 814 V844 M388 832 L400 844 L412 832" fill="none" stroke="#244e73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="60" y="860" width="680" height="170" rx="20" fill="#ffffff" stroke="#91a5bc" stroke-width="2"/>
+<rect x="88" y="886" width="52" height="52" rx="12" fill="#244e73"/>
+<text x="114" y="923" text-anchor="middle" font-size="32" font-weight="700" fill="#ffffff">4</text>
+<text x="160" y="919" font-size="34" font-weight="700" fill="#14263d">次の確認</text>
+<text x="160" y="965" font-size="28" fill="#33485f"><tspan x="160" dy="0">ノートの修正につながる</tspan><tspan x="160" dy="36">具体的な行動を書きます。</tspan></text>
+</g>
+</svg>
