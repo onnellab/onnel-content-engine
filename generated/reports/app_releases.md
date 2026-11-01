@@ -1,14 +1,13 @@
 # App Release Status
 
-Generated: 2026-11-01T06:22:03+09:00
+Generated: 2026-11-01T13:26:30+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
 | Store | in_review | 1 |
-| Store | unchanged | 13 |
-| Store | updated | 1 |
+| Store | unchanged | 14 |
 | GitHub Release | archived | 2 |
 | GitHub Release | planned | 1 |
 | GitHub Release | released | 10 |
@@ -31,7 +30,7 @@ Generated: 2026-11-01T06:22:03+09:00
 | TagWeaver | android | 2.5.6 | 2.5.6 | same | unchanged | released | onnellab/tagweaver | No action |
 | TagWeaver | ios | 2.5.6 | 2.5.6 | same | unchanged | released | onnellab/tagweaver | No action |
 | VaultXT | android | 2.0.2 | 2.0.2 | same | unchanged | released | onnellab/onnellab-text | No action |
-| VaultXT | ios | 2.0.2 | 2.0.2 | same | updated | archived | onnellab/onnellab-text | Create or verify release candidate |
+| VaultXT | ios | 2.0.2 | 2.0.2 | same | unchanged | archived | onnellab/onnellab-text | No action |
 
 ## Release Candidates
 
@@ -55,7 +54,6 @@ Generated: 2026-11-01T06:22:03+09:00
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| VaultXT | ios | updated | Create or verify release candidate | - |
 | Segra | ios | unchanged | Sync local metadata | - |
 | Segra | android | unchanged | Sync local metadata | Version/update date read from Google Play public page; Android snapshot version 1.0.6 is stale for public version 1.0.7 and was not merged. |
 | Melivra | android | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.8. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
