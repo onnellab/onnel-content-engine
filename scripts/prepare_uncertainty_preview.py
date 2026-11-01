@@ -234,7 +234,7 @@ IMAGE_COPY = {
         "message": "Deixe visíveis as questões não resolvidas.",
         "steps": [
             [
-                "Afirmação",
+                "Frase",
                 "Uma afirmação verificável"
             ],
             [
@@ -246,7 +246,7 @@ IMAGE_COPY = {
                 "O que é incerto e por quê"
             ],
             [
-                "Verificação",
+                "Checar",
                 "Uma verificação concreta"
             ]
         ]
@@ -280,7 +280,7 @@ IMAGE_COPY = {
         "message": "Gardez les questions non résolues visibles.",
         "steps": [
             [
-                "Affirmation",
+                "Énoncé",
                 "Un énoncé vérifiable"
             ],
             [
@@ -292,7 +292,7 @@ IMAGE_COPY = {
                 "L’incertitude et sa raison"
             ],
             [
-                "Vérification",
+                "Vérifier",
                 "Une vérification précise"
             ]
         ]
@@ -303,7 +303,7 @@ IMAGE_COPY = {
         "message": "Mantén visibles las cuestiones pendientes.",
         "steps": [
             [
-                "Afirmación",
+                "Frase",
                 "Un enunciado comprobable"
             ],
             [
@@ -315,7 +315,7 @@ IMAGE_COPY = {
                 "La duda y su motivo"
             ],
             [
-                "Comprobación",
+                "Revisar",
                 "Una comprobación concreta"
             ]
         ]
