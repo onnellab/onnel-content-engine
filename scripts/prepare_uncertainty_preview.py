@@ -289,7 +289,7 @@ IMAGE_COPY = {
             ],
             [
                 "Raison",
-                "L’incertitude et sa raison"
+                "Le doute et sa raison"
             ],
             [
                 "Vérifier",
