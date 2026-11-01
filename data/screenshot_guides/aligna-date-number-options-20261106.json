@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "aligna-date-number-options-20261106",
+  "app_id": "APP-0006",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/aligna",
+    "commit": "fb23d13b512a953bf1897425300cb42c06f91954",
+    "capture_receipt_path": "assets/store_promo/evidence/capture_android.json",
+    "public_version_recorded": "1.1.2",
+    "public_version_evidence": "data/store_versions.csv checked 2026-11-01T15:21:01+09:00; not a fresh live version observation",
+    "capture_method": "native adb screenshot",
+    "rights_review": "ONNELLAB-owned app UI with repository demonstration state; no third-party artwork, user personal data or soundtrack identified in full-source pixel review.",
+    "limitations": [
+      "20261027 is capture example, not November6 today.",
+      "1.1.1+27 capture source reuse review to1.1.2 is not a new capture or signed-binary attestation.",
+      "Final fitted-frame readability unverified until authorized rendering."
+    ],
+    "capture_version": "1.1.1+27",
+    "reuse_review": "release/artwork-reuse-review.json",
+    "reuse_target_commit": "781684d3d403e1b0c78e6a9552eb1c7a3ff826c7"
+  },
+  "assets": [
+    {
+      "local_name": "02.png",
+      "source_path": "assets/store_promo/raw/android/en/02.png",
+      "sha256": "84d6b19880dc0ef435a653c39a9ff459b05fbdd20fcb3602d10d6c1361958b12",
+      "dimensions": [
+        1080,
+        2160
+      ]
+    },
+    {
+      "local_name": "03.png",
+      "source_path": "assets/store_promo/raw/android/en/03.png",
+      "sha256": "b816815b54ea7b8fa222c9864ba7a68686e25e12865455d9a78d0831a649b8f3",
+      "dimensions": [
+        1080,
+        2160
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Find date and numbering options",
+      "caption": "Look below the preset choices.",
+      "asset": "02.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Check the date format",
+      "caption": "The example uses yyyyMMdd.",
+      "asset": "02.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Check the sequence start",
+      "caption": "Starting number is set to 1.",
+      "asset": "03.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "Where Are Aligna’s Date and Numbering Options? | Screenshot Guide",
+    "description": "Aligna’s rename presets include date-format and sequence-start options. The captured examples show yyyyMMdd and a starting number of 1.\n\nStill screenshot guide using real Android emulator captures and demonstration files. No taps, edits, Apply operation, completed rename or speed demonstration is shown. The date example belongs to the capture, not the publication date. This is not a live recording, and the video has no audio.\n\nAligna for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.aligna\n\n#Aligna #FileRenaming #Shorts",
+    "format_disclosure": "Still-screen guide · Demo files",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "Aligna for Android · Link in description",
+    "target_publish_at": "2026-11-06T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned UI and repository-authored demonstration states",
+    "scope": "English still-screen guide on approved ONNELLAB channel only",
+    "execution_scope": "User Sentinel_551f9238246c81919b45d803ed4e1684 at 2026-11-01T10:12:20Z approved Nov4 ClipNest and Nov6 Aligna existing free dot-cloud Python/Pillow/ffmpeg/ffprobe preparation, tests and QA. No installs, paid API, separate Work/Codex or user computer. Studio authorization and duplicate reconciliation remain separate gates."
+  }
+}

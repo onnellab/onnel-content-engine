@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "guide_id": "clipnest-language-settings-20261104",
+  "status": "rendered_verified_not_uploaded",
+  "checked_at_utc": "2026-11-01T10:20:29Z",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "library_file_id": "libfile_b0750e8c5eac8191ad67dc4dd43844eb",
+  "render": {
+    "manifest_sha256": "3f249c3a2ad96bca37d2739eb68ffe27162665940e01bdf684f03328435b6265",
+    "asset_hashes": {
+      "03.png": "ce74e4cc71c7357ed80217e647bddc89ad2555b668277412024ed9797df48283"
+    },
+    "kind": "screenshot_guide",
+    "runtime_recording_attestation": false,
+    "upload_authorized_by_cli": false,
+    "video_file": "clipnest-language-settings-20261104.mp4",
+    "video_sha256": "9864d0838f534f2d526f7bc45c4c1ad3d8665dd1fcde00dd0e4f67c4cd6e4b2c",
+    "seconds": 15,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "audio": false,
+    "slide_sha256": {
+      "slide-1.png": "55539b8e0eeb4b8491ae184ff864bb693901c6efa11ce740d5e913728ed1947f",
+      "slide-2.png": "d7354b720047d905d422b4b27b319c58b5a2ba75e3cdcf270e8d843562bc71e7",
+      "slide-3.png": "53ed8cf696452294c522440e9607d9198ea249f704aa9a0df6b67557c57a13b6"
+    },
+    "text_bounds": [
+      {
+        "slide": 1,
+        "text": "CLIPNEST · SCREENSHOT GUIDE",
+        "bbox": [
+          272.0,
+          83,
+          808.0,
+          105
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Find the language setting",
+        "bbox": [
+          189.5,
+          175,
+          890.5,
+          221
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Find Language in Settings.",
+        "bbox": [
+          327.5,
+          241,
+          752.5,
+          272
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Still-screen guide · No taps shown",
+        "bbox": [
+          276.5,
+          1726,
+          803.5,
+          1756
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "ClipNest for iPhone · Link in description",
+        "bbox": [
+          255.0,
+          1788,
+          825.0,
+          1816
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "ONNELLAB",
+        "bbox": [
+          462.0,
+          1847,
+          618.0,
+          1866
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "CLIPNEST · SCREENSHOT GUIDE",
+        "bbox": [
+          272.0,
+          83,
+          808.0,
+          105
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Check the example selection",
+        "bbox": [
+          151.5,
+          175,
+          928.5,
+          221
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "The example has English selected.",
+        "bbox": [
+          261.0,
+          241,
+          817.0,
+          272
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Still-screen guide · No taps shown",
+        "bbox": [
+          276.5,
+          1726,
+          803.5,
+          1756
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "ClipNest for iPhone · Link in description",
+        "bbox": [
+          255.0,
+          1788,
+          825.0,
+          1816
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "ONNELLAB",
+        "bbox": [
+          462.0,
+          1847,
+          618.0,
+          1866
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "CLIPNEST · SCREENSHOT GUIDE",
+        "bbox": [
+          272.0,
+          83,
+          808.0,
+          105
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "ClipNest for iPhone",
+        "bbox": [
+          278.5,
+          175,
+          801.5,
+          221
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Find the app link in the description.",
+        "bbox": [
+          257.0,
+          241,
+          823.0,
+          272
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Still-screen guide · No taps shown",
+        "bbox": [
+          276.5,
+          1726,
+          803.5,
+          1756
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "ClipNest for iPhone · Link in description",
+        "bbox": [
+          255.0,
+          1788,
+          825.0,
+          1816
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "ONNELLAB",
+        "bbox": [
+          462.0,
+          1847,
+          618.0,
+          1866
+        ]
+      }
+    ]
+  },
+  "full_frame_validation": {
+    "guide_id": "clipnest-language-settings-20261104",
+    "video_sha256": "9864d0838f534f2d526f7bc45c4c1ad3d8665dd1fcde00dd0e4f67c4cd6e4b2c",
+    "decoded_frames": 450,
+    "source_regions_exact": true,
+    "maximum_full_frame_mean_absolute_rgb_error": 1.1524230002572018,
+    "error_threshold": 3.0,
+    "decoder_returncode": 0,
+    "audio_streams": 0,
+    "seconds": 15,
+    "independent_visual_review": {
+      "reviewer": "parent agent /root",
+      "checked_at_utc": "2026-11-01T10:19:29Z",
+      "scope": "Six full-size slides, claims, provenance, exact-contract dispatch reviewed; no blocker. Reviewer did not rerun tests.",
+      "limitations": [
+        "Actual mobile YouTube overlays not verified.",
+        "ClipNest Language section is low in the full frame; small-screen readability remains limited."
+      ]
+    }
+  },
+  "tests": {
+    "run": 98,
+    "passed": 93,
+    "skipped": 5,
+    "skip_reason": "Existing optional historical production screenshots/candidate review not materialized; all six new tests executed and passed."
+  },
+  "store_live_check": {
+    "observed_at_utc": "2026-11-01T10:19:29Z",
+    "url": "https://apps.apple.com/app/id6779928552",
+    "version": "1.0.5"
+  },
+  "process_cleanup": "Owned renderer and decoder exited normally; no ffmpeg or guide/QA process remained at 10:20:29Z. Other processes untouched.",
+  "upload_intent_created": false,
+  "uploaded": false,
+  "scheduled": false,
+  "public_verified": false,
+  "blocker": "Target Studio authorization absent; only unrelated Akin account visible. Additional ONNELLAB login requires pending specific user confirmation. Do not substitute channel or reupload historical videos."
+}

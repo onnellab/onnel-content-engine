@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "clipnest-language-settings-20261104",
+  "app_id": "APP-0005",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/clipnest",
+    "commit": "47d81ffbaa7cda89812264824cb9fc6478751a09",
+    "capture_receipt_path": "assets/store_promo/raw/en/iphone_medium/03.capture.json",
+    "public_version_recorded": "1.0.5",
+    "public_version_evidence": "data/store_versions.csv checked 2026-11-01T15:21:01+09:00; not a fresh live version observation",
+    "capture_method": "native iPhone simulator screenshot",
+    "rights_review": "ONNELLAB-owned app UI with repository demonstration state; no third-party artwork, user personal data or soundtrack identified in full-source pixel review.",
+    "limitations": [
+      "Current visible strings and proPinLimit20 match source; not an independent privacy/network audit.",
+      "Do not claim all9language choices visible; lower choices lie below scroll.",
+      "Capture not attested as signed-public-binary."
+    ]
+  },
+  "assets": [
+    {
+      "local_name": "03.png",
+      "source_path": "assets/store_promo/raw/en/iphone_medium/03.png",
+      "sha256": "ce74e4cc71c7357ed80217e647bddc89ad2555b668277412024ed9797df48283",
+      "dimensions": [
+        1206,
+        2622
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Find the language setting",
+      "caption": "Find Language in Settings.",
+      "asset": "03.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Check the example selection",
+      "caption": "The example has English selected.",
+      "asset": "03.png",
+      "seconds": 5
+    },
+    {
+      "heading": "ClipNest for iPhone",
+      "caption": "Find the app link in the description.",
+      "asset": "03.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "Where Is the Language Setting in ClipNest? | iPhone Screenshot Guide",
+    "description": "In ClipNest Settings, find the Language section. This captured example has English selected.\n\nStill screenshot guide using a real iPhone simulator capture. No taps, language change, purchase, keyboard operation or performance demonstration is shown. This is not a live recording, and the video has no audio.\n\nClipNest for iPhone:\nhttps://apps.apple.com/app/id6779928552\n\n#ClipNest #iPhone #Shorts",
+    "format_disclosure": "Still-screen guide · No taps shown",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "ClipNest for iPhone · Link in description",
+    "target_publish_at": "2026-11-04T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned UI and repository-authored demonstration states",
+    "scope": "English still-screen guide on approved ONNELLAB channel only",
+    "execution_scope": "User Sentinel_551f9238246c81919b45d803ed4e1684 at 2026-11-01T10:12:20Z approved Nov4 ClipNest and Nov6 Aligna existing free dot-cloud Python/Pillow/ffmpeg/ffprobe preparation, tests and QA. No installs, paid API, separate Work/Codex or user computer. Studio authorization and duplicate reconciliation remain separate gates."
+  }
+}

@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "guide_id": "aligna-date-number-options-20261106",
+  "status": "rendered_verified_not_uploaded",
+  "checked_at_utc": "2026-11-01T10:20:29Z",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "library_file_id": "libfile_d752910aa38481919159e954567b69a2",
+  "render": {
+    "manifest_sha256": "2dc4e0582d9dfc21f12bad0f9fe57a147b85834c2a31f642ca66835955f1d0bf",
+    "asset_hashes": {
+      "02.png": "84d6b19880dc0ef435a653c39a9ff459b05fbdd20fcb3602d10d6c1361958b12",
+      "03.png": "b816815b54ea7b8fa222c9864ba7a68686e25e12865455d9a78d0831a649b8f3"
+    },
+    "kind": "screenshot_guide",
+    "runtime_recording_attestation": false,
+    "upload_authorized_by_cli": false,
+    "video_file": "aligna-date-number-options-20261106.mp4",
+    "video_sha256": "705c880bf7382aaa8cb8952a3d1ef46d397b0c9777725679e31d993d2c83a03b",
+    "seconds": 15,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "audio": false,
+    "slide_sha256": {
+      "slide-1.png": "29dffe4abf15117c8bd01d07d7dd2820c812f102101ed96f19bc7bd367f54f55",
+      "slide-2.png": "482a9ee0aae0023b3db3b7d40471ac1f22ae8f63c047bc7b700a460790383be6",
+      "slide-3.png": "53d07a183c3bc749025c23249e6b9dd4945c3813780bfd4c3f058c4550583bc6"
+    },
+    "text_bounds": [
+      {
+        "slide": 1,
+        "text": "ALIGNA · SCREENSHOT GUIDE",
+        "bbox": [
+          290.0,
+          83,
+          790.0,
+          105
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Find date and numbering options",
+        "bbox": [
+          88.0,
+          175,
+          992.0,
+          221
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Look below the preset choices.",
+        "bbox": [
+          292.5,
+          241,
+          787.5,
+          272
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Still-screen guide · Demo files",
+        "bbox": [
+          308.5,
+          1726,
+          771.5,
+          1756
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "Aligna for Android · Link in description",
+        "bbox": [
+          263.0,
+          1788,
+          817.0,
+          1816
+        ]
+      },
+      {
+        "slide": 1,
+        "text": "ONNELLAB",
+        "bbox": [
+          462.0,
+          1847,
+          618.0,
+          1866
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "ALIGNA · SCREENSHOT GUIDE",
+        "bbox": [
+          290.0,
+          83,
+          790.0,
+          105
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Check the date format",
+        "bbox": [
+          236.5,
+          175,
+          843.5,
+          212
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "The example uses yyyyMMdd.",
+        "bbox": [
+          297.0,
+          241,
+          781.0,
+          272
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Still-screen guide · Demo files",
+        "bbox": [
+          308.5,
+          1726,
+          771.5,
+          1756
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "Aligna for Android · Link in description",
+        "bbox": [
+          263.0,
+          1788,
+          817.0,
+          1816
+        ]
+      },
+      {
+        "slide": 2,
+        "text": "ONNELLAB",
+        "bbox": [
+          462.0,
+          1847,
+          618.0,
+          1866
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "ALIGNA · SCREENSHOT GUIDE",
+        "bbox": [
+          290.0,
+          83,
+          790.0,
+          105
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Check the sequence start",
+        "bbox": [
+          195.0,
+          175,
+          885.0,
+          221
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Starting number is set to 1.",
+        "bbox": [
+          319.5,
+          241,
+          760.5,
+          272
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Still-screen guide · Demo files",
+        "bbox": [
+          308.5,
+          1726,
+          771.5,
+          1756
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "Aligna for Android · Link in description",
+        "bbox": [
+          263.0,
+          1788,
+          817.0,
+          1816
+        ]
+      },
+      {
+        "slide": 3,
+        "text": "ONNELLAB",
+        "bbox": [
+          462.0,
+          1847,
+          618.0,
+          1866
+        ]
+      }
+    ]
+  },
+  "full_frame_validation": {
+    "guide_id": "aligna-date-number-options-20261106",
+    "video_sha256": "705c880bf7382aaa8cb8952a3d1ef46d397b0c9777725679e31d993d2c83a03b",
+    "decoded_frames": 450,
+    "source_regions_exact": true,
+    "maximum_full_frame_mean_absolute_rgb_error": 0.7727957818930041,
+    "error_threshold": 3.0,
+    "decoder_returncode": 0,
+    "audio_streams": 0,
+    "seconds": 15,
+    "independent_visual_review": {
+      "reviewer": "parent agent /root",
+      "checked_at_utc": "2026-11-01T10:19:29Z",
+      "scope": "Six full-size slides, claims, provenance, exact-contract dispatch reviewed; no blocker. Reviewer did not rerun tests.",
+      "limitations": [
+        "Actual mobile YouTube overlays not verified.",
+        "ClipNest Language section is low in the full frame; small-screen readability remains limited."
+      ]
+    }
+  },
+  "tests": {
+    "run": 98,
+    "passed": 93,
+    "skipped": 5,
+    "skip_reason": "Existing optional historical production screenshots/candidate review not materialized; all six new tests executed and passed."
+  },
+  "store_live_check": {
+    "observed_at_utc": "2026-11-01T10:20:02Z",
+    "url": "https://play.google.com/store/apps/details?id=com.onnellab.aligna",
+    "version": "1.1.2"
+  },
+  "process_cleanup": "Owned renderer and decoder exited normally; no ffmpeg or guide/QA process remained at 10:20:29Z. Other processes untouched.",
+  "upload_intent_created": false,
+  "uploaded": false,
+  "scheduled": false,
+  "public_verified": false,
+  "blocker": "Target Studio authorization absent; only unrelated Akin account visible. Additional ONNELLAB login requires pending specific user confirmation. Do not substitute channel or reupload historical videos."
+}

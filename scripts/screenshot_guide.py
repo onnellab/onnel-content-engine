@@ -548,6 +548,152 @@ SEGRA_CONTRACT = json.loads("{\"schema_version\":1,\"kind\":\"screenshot_guide\"
 
 MELIVRA_EQUALIZER_CONTRACT = json.loads("{\"schema_version\":1,\"kind\":\"screenshot_guide\",\"guide_id\":\"melivra-equalizer-location-20261102\",\"app_id\":\"APP-0007\",\"locale\":\"en\",\"channel_id\":\"UCXyRedrldRBl9Y35nyWoTLg\",\"source\":{\"repository\":\"onnellab/melivra\",\"commit\":\"d2d1a281ecae94afd78e184c24419ac15bce6e2c\",\"capture_source_commit\":\"d110bb09dd31395f7c20447eaf29f6d270a90a5d\",\"capture_version\":\"1.0.8+145\",\"capture_variant\":\"integration-test-debug-production-id\",\"capture_receipt_path\":\"assets/store_promo/raw/en/android/05.capture.json\",\"capture_receipt_git_blob_sha\":\"c7bd52b968a8162232e14a90f8cd62d2faf92a8f\",\"capture_method\":\"adb native Android emulator capture\",\"device_id\":\"emulator-5570\",\"public_version_observed\":\"1.0.8\",\"public_version_checked_at\":\"2026-10-29T09:51:27Z\",\"public_version_source\":\"https://play.google.com/store/apps/details?id=com.onnellab.melivra\",\"rights_review\":\"Repository-authored demo metadata and original procedural cover art; silent WAV fixtures. No third-party music or artwork. No soundtrack in guide.\",\"limitations\":[\"Capture is integration-test debug production-ID build 1.0.8+145, not signed-public-binary attestation.\",\"Static setting location only; no taps, preset changes, playback, sound quality, purchases or performance demonstrated.\",\"Flat is the demonstration state, not a current user setting.\"]},\"assets\":[{\"local_name\":\"05.png\",\"source_path\":\"assets/store_promo/raw/en/android/05.png\",\"sha256\":\"27bf17b69677932ae8e758e2f67586cab50e560f4ecd8ca6557ca38724c3f62b\",\"dimensions\":[1080,2400]}],\"slides\":[{\"heading\":\"Find the equalizer setting\",\"caption\":\"In Settings, look under Playback.\",\"asset\":\"05.png\",\"seconds\":5},{\"heading\":\"Look for Equalizer Preset\",\"caption\":\"The example shows Flat beneath it.\",\"asset\":\"05.png\",\"seconds\":5},{\"heading\":\"Melivra for Android\",\"caption\":\"Find the app link in the description.\",\"asset\":\"05.png\",\"seconds\":5}],\"metadata\":{\"title\":\"Where Is the Equalizer in Melivra? | Android Screenshot Guide\",\"description\":\"In Melivra Settings, find Equalizer Preset under Playback. The still-screen example shows Flat beneath the setting.\\n\\nStill-screen guide using a real Android emulator capture of Melivra 1.0.8+145 with an original demonstration library. No taps, preset changes, playback, audio effect, purchase, or speed demonstration is shown. Flat is the captured example state, not a recommendation or a current user setting. The video has no audio.\\n\\nExplore Melivra for Android:\\nhttps://play.google.com/store/apps/details?id=com.onnellab.melivra\\n\\n#Melivra #Equalizer #OfflineMusicPlayer #Shorts\",\"format_disclosure\":\"Still-screen guide · Demo library\",\"audio\":\"none\",\"made_for_kids\":false,\"synthetic_media\":false,\"category\":\"Education\",\"cta\":\"Melivra for Android · Link in description\",\"target_publish_at\":\"2026-11-02T09:00:00+09:00\",\"timezone\":\"Asia/Seoul\"},\"authorization\":{\"format_approved_on\":\"2026-10-08\",\"rights_basis\":\"ONNELLAB-owned UI and repository-authored fixtures\",\"scope\":\"English still-screen guide on approved ONNELLAB channel only\",\"execution_scope\":\"Explicit Melivra-only free dot cloud Python/ffmpeg/ffprobe exception; no other app execution, paid service, Work/Codex, or user computer.\"}}")
 
+
+# Reviewed November 4/6 static-guide contracts; existing contracts remain unchanged.
+CLIPNEST_LANGUAGE_CONTRACT = {'schema_version': 1,
+ 'kind': 'screenshot_guide',
+ 'guide_id': 'clipnest-language-settings-20261104',
+ 'app_id': 'APP-0005',
+ 'locale': 'en',
+ 'channel_id': 'UCXyRedrldRBl9Y35nyWoTLg',
+ 'source': {'repository': 'onnellab/clipnest',
+            'commit': '47d81ffbaa7cda89812264824cb9fc6478751a09',
+            'capture_receipt_path': 'assets/store_promo/raw/en/iphone_medium/03.capture.json',
+            'public_version_recorded': '1.0.5',
+            'public_version_evidence': 'data/store_versions.csv checked 2026-11-01T15:21:01+09:00; '
+                                       'not a fresh live version observation',
+            'capture_method': 'native iPhone simulator screenshot',
+            'rights_review': 'ONNELLAB-owned app UI with repository demonstration state; no '
+                             'third-party artwork, user personal data or soundtrack identified in '
+                             'full-source pixel review.',
+            'limitations': ['Current visible strings and proPinLimit20 match source; not an '
+                            'independent privacy/network audit.',
+                            'Do not claim all9language choices visible; lower choices lie below '
+                            'scroll.',
+                            'Capture not attested as signed-public-binary.']},
+ 'assets': [{'local_name': '03.png',
+             'source_path': 'assets/store_promo/raw/en/iphone_medium/03.png',
+             'sha256': 'ce74e4cc71c7357ed80217e647bddc89ad2555b668277412024ed9797df48283',
+             'dimensions': [1206, 2622]}],
+ 'slides': [{'heading': 'Find the language setting',
+             'caption': 'Find Language in Settings.',
+             'asset': '03.png',
+             'seconds': 5},
+            {'heading': 'Check the example selection',
+             'caption': 'The example has English selected.',
+             'asset': '03.png',
+             'seconds': 5},
+            {'heading': 'ClipNest for iPhone',
+             'caption': 'Find the app link in the description.',
+             'asset': '03.png',
+             'seconds': 5}],
+ 'metadata': {'title': 'Where Is the Language Setting in ClipNest? | iPhone Screenshot Guide',
+              'description': 'In ClipNest Settings, find the Language section. This captured '
+                             'example has English selected.\n'
+                             '\n'
+                             'Still screenshot guide using a real iPhone simulator capture. No '
+                             'taps, language change, purchase, keyboard operation or performance '
+                             'demonstration is shown. This is not a live recording, and the video '
+                             'has no audio.\n'
+                             '\n'
+                             'ClipNest for iPhone:\n'
+                             'https://apps.apple.com/app/id6779928552\n'
+                             '\n'
+                             '#ClipNest #iPhone #Shorts',
+              'format_disclosure': 'Still-screen guide · No taps shown',
+              'audio': 'none',
+              'made_for_kids': False,
+              'synthetic_media': False,
+              'category': 'Education',
+              'cta': 'ClipNest for iPhone · Link in description',
+              'target_publish_at': '2026-11-04T09:00:00+09:00',
+              'timezone': 'Asia/Seoul'},
+ 'authorization': {'format_approved_on': '2026-10-08',
+                   'rights_basis': 'ONNELLAB-owned UI and repository-authored demonstration states',
+                   'scope': 'English still-screen guide on approved ONNELLAB channel only',
+                   'execution_scope': 'User Sentinel_551f9238246c81919b45d803ed4e1684 at '
+                                      '2026-11-01T10:12:20Z approved Nov4 ClipNest and Nov6 Aligna '
+                                      'existing free dot-cloud Python/Pillow/ffmpeg/ffprobe '
+                                      'preparation, tests and QA. No installs, paid API, separate '
+                                      'Work/Codex or user computer. Studio authorization and '
+                                      'duplicate reconciliation remain separate gates.'}}
+ALIGNA_OPTIONS_CONTRACT = {'schema_version': 1,
+ 'kind': 'screenshot_guide',
+ 'guide_id': 'aligna-date-number-options-20261106',
+ 'app_id': 'APP-0006',
+ 'locale': 'en',
+ 'channel_id': 'UCXyRedrldRBl9Y35nyWoTLg',
+ 'source': {'repository': 'onnellab/aligna',
+            'commit': 'fb23d13b512a953bf1897425300cb42c06f91954',
+            'capture_receipt_path': 'assets/store_promo/evidence/capture_android.json',
+            'public_version_recorded': '1.1.2',
+            'public_version_evidence': 'data/store_versions.csv checked 2026-11-01T15:21:01+09:00; '
+                                       'not a fresh live version observation',
+            'capture_method': 'native adb screenshot',
+            'rights_review': 'ONNELLAB-owned app UI with repository demonstration state; no '
+                             'third-party artwork, user personal data or soundtrack identified in '
+                             'full-source pixel review.',
+            'limitations': ['20261027 is capture example, not November6 today.',
+                            '1.1.1+27 capture source reuse review to1.1.2 is not a new capture or '
+                            'signed-binary attestation.',
+                            'Final fitted-frame readability unverified until authorized '
+                            'rendering.'],
+            'capture_version': '1.1.1+27',
+            'reuse_review': 'release/artwork-reuse-review.json',
+            'reuse_target_commit': '781684d3d403e1b0c78e6a9552eb1c7a3ff826c7'},
+ 'assets': [{'local_name': '02.png',
+             'source_path': 'assets/store_promo/raw/android/en/02.png',
+             'sha256': '84d6b19880dc0ef435a653c39a9ff459b05fbdd20fcb3602d10d6c1361958b12',
+             'dimensions': [1080, 2160]},
+            {'local_name': '03.png',
+             'source_path': 'assets/store_promo/raw/android/en/03.png',
+             'sha256': 'b816815b54ea7b8fa222c9864ba7a68686e25e12865455d9a78d0831a649b8f3',
+             'dimensions': [1080, 2160]}],
+ 'slides': [{'heading': 'Find date and numbering options',
+             'caption': 'Look below the preset choices.',
+             'asset': '02.png',
+             'seconds': 5},
+            {'heading': 'Check the date format',
+             'caption': 'The example uses yyyyMMdd.',
+             'asset': '02.png',
+             'seconds': 5},
+            {'heading': 'Check the sequence start',
+             'caption': 'Starting number is set to 1.',
+             'asset': '03.png',
+             'seconds': 5}],
+ 'metadata': {'title': 'Where Are Aligna’s Date and Numbering Options? | Screenshot Guide',
+              'description': 'Aligna’s rename presets include date-format and sequence-start '
+                             'options. The captured examples show yyyyMMdd and a starting number '
+                             'of 1.\n'
+                             '\n'
+                             'Still screenshot guide using real Android emulator captures and '
+                             'demonstration files. No taps, edits, Apply operation, completed '
+                             'rename or speed demonstration is shown. The date example belongs to '
+                             'the capture, not the publication date. This is not a live recording, '
+                             'and the video has no audio.\n'
+                             '\n'
+                             'Aligna for Android:\n'
+                             'https://play.google.com/store/apps/details?id=com.onnellab.aligna\n'
+                             '\n'
+                             '#Aligna #FileRenaming #Shorts',
+              'format_disclosure': 'Still-screen guide · Demo files',
+              'audio': 'none',
+              'made_for_kids': False,
+              'synthetic_media': False,
+              'category': 'Education',
+              'cta': 'Aligna for Android · Link in description',
+              'target_publish_at': '2026-11-06T09:00:00+09:00',
+              'timezone': 'Asia/Seoul'},
+ 'authorization': {'format_approved_on': '2026-10-08',
+                   'rights_basis': 'ONNELLAB-owned UI and repository-authored demonstration states',
+                   'scope': 'English still-screen guide on approved ONNELLAB channel only',
+                   'execution_scope': 'User Sentinel_551f9238246c81919b45d803ed4e1684 at '
+                                      '2026-11-01T10:12:20Z approved Nov4 ClipNest and Nov6 Aligna '
+                                      'existing free dot-cloud Python/Pillow/ffmpeg/ffprobe '
+                                      'preparation, tests and QA. No installs, paid API, separate '
+                                      'Work/Codex or user computer. Studio authorization and '
+                                      'duplicate reconciliation remain separate gates.'}}
+
 def validate(manifest, asset_root):
     """Dispatch only independently reviewed per-app still-screen contracts."""
     if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0002', 'APP-0003', 'APP-0004'):
@@ -569,7 +715,7 @@ def validate(manifest, asset_root):
                 'runtime_recording_attestation': False, 'upload_authorized_by_cli': False}
     if isinstance(manifest, dict) and manifest.get('app_id') in ('APP-0007', 'APP-0005', 'APP-0006', 'APP-0008'):
         clipnest = manifest['app_id'] == 'APP-0005'
-        contract = MELIVRA_EQUALIZER_CONTRACT if manifest.get('guide_id') == 'melivra-equalizer-location-20261102' else PAPIRA_CONTRACT if manifest['app_id'] == 'APP-0008' else MELIVRA_ALBUMS_CONTRACT if manifest.get('guide_id') == 'melivra-albums-20261021' else ALIGNA_CONTRACT if manifest['app_id'] == 'APP-0006' else CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
+        contract = CLIPNEST_LANGUAGE_CONTRACT if manifest.get('guide_id') == 'clipnest-language-settings-20261104' else ALIGNA_OPTIONS_CONTRACT if manifest.get('guide_id') == 'aligna-date-number-options-20261106' else MELIVRA_EQUALIZER_CONTRACT if manifest.get('guide_id') == 'melivra-equalizer-location-20261102' else PAPIRA_CONTRACT if manifest['app_id'] == 'APP-0008' else MELIVRA_ALBUMS_CONTRACT if manifest.get('guide_id') == 'melivra-albums-20261021' else ALIGNA_CONTRACT if manifest['app_id'] == 'APP-0006' else CLIPNEST_CONTRACT if clipnest else MELIVRA_CONTRACT
         if canonical(manifest) != canonical(contract):
             raise GuideError('papira_manifest_requires_review' if manifest['app_id'] == 'APP-0008' else 'aligna_manifest_requires_review' if manifest['app_id'] == 'APP-0006' else 'clipnest_manifest_requires_review' if clipnest else 'melivra_manifest_requires_review')
         root = Path(asset_root).resolve()
@@ -709,6 +855,7 @@ def main():
 
 if __name__=='__main__':
     raise SystemExit(main())
+
 
 
 
