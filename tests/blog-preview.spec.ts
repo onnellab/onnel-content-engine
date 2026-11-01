@@ -55,7 +55,7 @@ for (const locale of candidate.locales as string[]) {
             return result;
           });
         }));
-      const expectedNumbers = ['make-long-plain-text-easier-to-navigate', 'choose-safe-audio-working-copy'].includes(candidate.slug) ? [1, 2, 3, 4, 5] : candidate.slug === 'consistent-album-artist-names' ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5, 6];
+      const expectedNumbers = ['make-long-plain-text-easier-to-navigate', 'choose-safe-audio-working-copy', 'mark-uncertainty-clearly-in-research-notes'].includes(candidate.slug) ? [1, 2, 3, 4, 5] : candidate.slug === 'consistent-album-artist-names' ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5, 6];
       expect(renderedNumbers).toEqual(expectedNumbers.map(number => ({
         number, display: 'list-item', type: 'decimal',
       })));
