@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "guide_id": "clipnest-language-settings-20261104",
+  "status": "scheduled_verified",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "video_id": "bnf7KpJO_ts",
+  "video_url": "https://youtube.com/shorts/bnf7KpJO_ts",
+  "title": "Where Is the Language Setting in ClipNest? | iPhone Screenshot Guide",
+  "target_publish_at": "2026-11-04T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "timezone_ui": "현지 시간대(GMT+0900)",
+  "scheduled_confirmation_observed_at": "2026-11-01T12:21:25Z",
+  "persisted_schedule_readback_at": "2026-11-01T12:21:51Z",
+  "server_event_time_available": false,
+  "video_sha256": "9864d0838f534f2d526f7bc45c4c1ad3d8665dd1fcde00dd0e4f67c4cd6e4b2c",
+  "manifest_sha256": "3f249c3a2ad96bca37d2739eb68ffe27162665940e01bdf684f03328435b6265",
+  "library_file_id": "libfile_b0750e8c5eac8191ad67dc4dd43844eb",
+  "upload_attempt": 1,
+  "processing": "SD and HD complete",
+  "copyright_check": "No issues at observation; not permanent guarantee",
+  "made_for_kids": false,
+  "synthetic_realistic_media": false,
+  "paid_promotion": false,
+  "disclosure_confirmation_message_id": "Sentinel_dbaea76c84cc8191914c428f0f54f805",
+  "thumbnail": {
+    "selection": "No custom thumbnail upload",
+    "actual_thumbnail_pixels_verified": false,
+    "video_first_frame_verified": true
+  },
+  "external_link_status": "Studio requires one-time verification; text URL saved; no verification initiated.",
+  "public_verified": false,
+  "production_commit": "7caeadf6b3a8037224f7958d64ca3a8678e78b24"
+}
