@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "aligna-date-number-options-20261106",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "uploaded_private_processing",
+  "status": "scheduled_verified",
   "created_at_utc": "2026-11-01T10:43:55Z",
   "video_sha256": "705c880bf7382aaa8cb8952a3d1ef46d397b0c9777725679e31d993d2c83a03b",
   "manifest_sha256": "2dc4e0582d9dfc21f12bad0f9fe57a147b85834c2a31f642ca66835955f1d0bf",
@@ -30,7 +30,12 @@
   "video_url": "https://youtube.com/shorts/P-auyGH76a0",
   "video_id_observed_at_utc": "2026-11-01T12:23:15Z",
   "disclosure_confirmation": {
-    "status": "user_confirmed_pending_ui",
-    "confirmation_message_id": "Sentinel_dbaea76c84cc8191914c428f0f54f805"
-  }
+    "status": "applied",
+    "confirmation_message_id": "Sentinel_dbaea76c84cc8191914c428f0f54f805",
+    "ai_selection": false,
+    "paid_promotion_selection": false
+  },
+  "schedule_confirmed": true,
+  "last_observed_at_utc": "2026-11-01T12:26:24Z",
+  "visibility_observed": "scheduled"
 }
