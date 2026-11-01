@@ -37,7 +37,7 @@ Unsicherheit in Recherchenotizen ist die Lücke zwischen einer Aussage und dem, 
 | Widersprüchlich | Quellen scheinen unvereinbare Darstellungen zu liefern. | Wortlaut, Geltungsbereich, Daten und Versionen vergleichen. |
 | Vorläufig | Eine Deutung wird verwendet, obwohl wichtige Prüfungen ausstehen. | Belege benennen, die sie stützen oder infrage stellen könnten. |
 
-## Ein praktisches Vorgehen
+## Empfohlener Arbeitsablauf
 
 1. **Die Aussage abgrenzen.** Schreiben Sie eine überprüfbare Aussage auf. Trennen Sie das Datum eines Ereignisses von Ihrer Erklärung seiner Ursache. Dafür können unterschiedliche Belege nötig sein.
 2. **Unsicherheit und Grund benennen.** Schreiben Sie statt „vielleicht“ etwa „ungeklärt: keine datierte Aufzeichnung gefunden“. Eine erfolglose Suche beweist nicht, dass keine Aufzeichnung existiert.
@@ -47,7 +47,7 @@ Unsicherheit in Recherchenotizen ist die Lücke zwischen einer Aussage und dem, 
 
 ![Ablauf der Prüfung](/blog-assets/de/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg "Aussage, Beleg, Grund und nächster Prüfschritt")
 
-## Grenzen und weiterführende Informationen
+## Quellen
 
 Machen Sie aus einem Eindruck keinen prozentualen Vertrauenswert. Die Kennzeichnungen bestätigen weder die Verlässlichkeit einer Quelle noch lösen sie Widersprüche. Eine Frist macht eine vorläufige Aussage nicht zu einer gesicherten Erkenntnis.
 

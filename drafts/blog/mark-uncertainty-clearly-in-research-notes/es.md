@@ -37,7 +37,7 @@ La incertidumbre en las notas de investigación es la distancia entre una afirma
 | Con discrepancias | Las fuentes parecen ofrecer versiones incompatibles. | Comparar la redacción, el alcance, las fechas y las versiones. |
 | Provisional | Se utiliza una interpretación aunque quedan comprobaciones importantes. | Identificar pruebas que puedan respaldarla o cuestionarla. |
 
-## Un procedimiento práctico
+## Flujo de trabajo recomendado
 
 1. **Aísla la afirmación.** Escribe un enunciado comprobable. Separa la fecha de un suceso de tu explicación de su causa: pueden requerir pruebas distintas.
 2. **Nombra la incertidumbre y el motivo.** En lugar de «quizá», escribe «sin confirmar: no he encontrado un registro fechado». Una búsqueda sin resultados no demuestra que el registro no exista.
@@ -47,7 +47,7 @@ La incertidumbre en las notas de investigación es la distancia entre una afirma
 
 ![Proceso de comprobación](/blog-assets/es/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg "Afirmación, prueba, motivo y siguiente comprobación")
 
-## Límites y lectura adicional
+## Referencias
 
 No conviertas una impresión en un porcentaje de confianza. Estas etiquetas no validan una fuente ni resuelven una discrepancia. Una fecha límite no convierte una afirmación provisional en un hecho establecido.
 

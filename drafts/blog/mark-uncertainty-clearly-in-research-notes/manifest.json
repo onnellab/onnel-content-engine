@@ -16,47 +16,47 @@
     {
       "locale": "en",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/en.md",
-      "git_blob_sha": "77ba4822ea6c272eda721e28d75e64e74dccf337"
+      "git_blob_sha": "6c2e295cc9f2be82d7857dcd6c81cb3275bd58c3"
     },
     {
       "locale": "ko",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/ko.md",
-      "git_blob_sha": "bc278fbbf8c8f16e91047b8e59735b6b9b3ee99f"
+      "git_blob_sha": "bd8ec694ef6456c0e10374b2679a811bf01033ac"
     },
     {
       "locale": "ja",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/ja.md",
-      "git_blob_sha": "2853dec08fb69f3e8f9a807b9c0ee4663f60e842"
+      "git_blob_sha": "3b688f4178c515fbdb9a1c80006c0dad7be57bdf"
     },
     {
       "locale": "zh-Hans",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/zh-Hans.md",
-      "git_blob_sha": "0f91858a9aff6c29b5924163e514f5293f7187d1"
+      "git_blob_sha": "7963bc8eaacea65981511b2aeb30e0f44f83c413"
     },
     {
       "locale": "zh-Hant",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/zh-Hant.md",
-      "git_blob_sha": "a2fbefcf0cdeaa9559a00a6c7f217f534ec1198a"
+      "git_blob_sha": "d9ca7e7899393056f7c08b6a1661fab831f03a7e"
     },
     {
       "locale": "pt-BR",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/pt-BR.md",
-      "git_blob_sha": "334de82bf999456d4920450d6dcf11357a30a16c"
+      "git_blob_sha": "e952058e39d0286fa58ffa70b5e82332b8cc567f"
     },
     {
       "locale": "de",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/de.md",
-      "git_blob_sha": "086356c0b46e684182857f70f6d641ab02b06a6d"
+      "git_blob_sha": "c49ef3085959abd8d7fad0c0fe80a52b334fb0b8"
     },
     {
       "locale": "fr",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/fr.md",
-      "git_blob_sha": "175fd5e07a70645cb5b43009b358e27c26f04863"
+      "git_blob_sha": "3e8b5725b17d5995277d6b0515351f0fa2b68529"
     },
     {
       "locale": "es",
       "path": "drafts/blog/mark-uncertainty-clearly-in-research-notes/es.md",
-      "git_blob_sha": "db98c23e143da1d9331df9f43e683d87ca6d8fdb"
+      "git_blob_sha": "1f76aadc427a116997c5fa8f65a2e34f3e8ef391"
     }
   ],
   "independent_editorial_review": {
@@ -387,5 +387,17 @@
       "conclusion": "success",
       "scope": "existing pipeline regression, not native candidate validation"
     }
+  },
+  "preview_extension": {
+    "state": "implementation_and_native_verification_in_progress",
+    "approved_at": "2026-11-01T10:12:20Z",
+    "scope": "Add exactly this draft to the existing nonpublishing native preview path; preserve gates and publisher",
+    "source_edits": [
+      "Use existing localized canonical section headings without changing evaluator aliases.",
+      "Make Korean and Chinese definition sentences explicit without weakening definition recognition.",
+      "Preserve original nine 800x1100 SVGs; derive a separately validated canonical 1200x675 diagram through the existing renderer."
+    ],
+    "independent_review": "pending for adapter revision",
+    "native_status": "not yet executed"
   }
 }

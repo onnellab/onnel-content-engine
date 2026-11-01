@@ -37,7 +37,7 @@ A incerteza nas notas de pesquisa é a distância entre uma afirmação e aquilo
 | Em divergência | As fontes parecem apresentar relatos incompatíveis. | Comparar a redação, o escopo, as datas e as versões. |
 | Provisório | Uma interpretação está sendo usada enquanto faltam verificações importantes. | Identificar evidências que possam sustentá-la ou contestá-la. |
 
-## Um procedimento prático
+## Fluxo de trabalho recomendado
 
 1. **Isole a afirmação.** Escreva uma declaração verificável. Separe a data de um evento da sua explicação sobre a causa dele: podem exigir evidências diferentes.
 2. **Nomeie a incerteza e o motivo.** Em vez de apenas “talvez”, escreva “não confirmado: não encontrei um registro datado”. Uma busca sem resultados não prova que o registro não existe.
@@ -47,7 +47,7 @@ A incerteza nas notas de pesquisa é a distância entre uma afirmação e aquilo
 
 ![Fluxo de verificação](/blog-assets/pt-BR/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg "Afirmação, evidência, motivo e próxima verificação")
 
-## Limites e leitura complementar
+## Referências
 
 Não transforme uma impressão em uma porcentagem de confiança. Os rótulos não validam uma fonte nem resolvem divergências. Um prazo não torna estabelecida uma afirmação provisória.
 

@@ -1,0 +1,19 @@
+[
+  {
+    "status": "idea",
+    "category": "research",
+    "primary_language": "en",
+    "slug": "distinguish-source-publication-date-from-access-date",
+    "primary_question": "How should I distinguish a source publication date from the date I accessed it?",
+    "working_title": "Distinguish a Source Publication Date from Its Access Date",
+    "priority": "normal",
+    "search_intent": "workflow",
+    "related_apps": "",
+    "primary_keyword": "publication date and access date",
+    "secondary_keywords": "source citation|undated source|access date",
+    "evergreen": "true",
+    "source_type": "editorial",
+    "review_required": "true",
+    "notes": "Product-neutral editorial hypothesis: record displayed publication or revision dates separately from the actual access date; leave unavailable dates unknown. No product or search-demand claims. Distinct from uncertainty labels and source-version tracking."
+  }
+]
