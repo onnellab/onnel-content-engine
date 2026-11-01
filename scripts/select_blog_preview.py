@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 LOCALES = {"en", "ko", "ja", "zh-Hans", "zh-Hant", "pt-BR", "de", "fr", "es"}
 PROFILES = {
+    "research-uncertainty": ("research", "mark-uncertainty-clearly-in-research-notes"),
     "research-source-notes": ("research", "separate-source-notes-from-conclusions"),
     "vaultxt-text-navigation": ("reading", "make-long-plain-text-easier-to-navigate"),
     "tagweaver-album-artists": ("music", "consistent-album-artist-names"),
@@ -14,6 +15,7 @@ PROFILES = {
 # Only adapters with a persisted, read-only registration path can be selected automatically.
 AUTO_PROFILES = ("segra-working-copy", "research-source-notes")
 REFS = {
+    "refs/heads/verify/research-uncertainty-20261101": "research-uncertainty",
     "refs/heads/verify/vaultxt-text-navigation-20261024": "vaultxt-text-navigation",
     "refs/heads/verify/tagweaver-caption-20261024": "tagweaver-album-artists",
     "refs/heads/verify/segra-working-copy-20261028": "segra-working-copy",
@@ -36,11 +38,15 @@ def select_candidate(rows, requested="auto", ref=""):
                         and not any(r.get(k) for k in ("scheduled_at", "published_at", "published_url"))
                         for r in bundle)):
             return name
+    if uncertainty_state(rows) in {"draft", "review"}:
+        return "research-uncertainty"
     raise ValueError("No eligible registered unscheduled nine-language review candidate")
 
 def environment_lines(name):
     if name not in PROFILES:
         raise ValueError("Unknown candidate")
+    if name == "research-uncertainty":
+        return "UNCERTAINTY_PREVIEW=true\nSEGRA_PREVIEW=false\nVAULTXT_PREVIEW=false\nTAGWEAVER_PREVIEW=false"
     return "\n".join(f"{key}={'true' if name == value else 'false'}" for key, value in (
         ("SEGRA_PREVIEW", "segra-working-copy"),
         ("VAULTXT_PREVIEW", "vaultxt-text-navigation"),
@@ -48,6 +54,7 @@ def environment_lines(name):
 
 # Registered identities are immutable; an absent bundle is not a no-work result.
 REGISTERED_IDS = {
+    "research-uncertainty": dict(zip(("en", "ko", "ja", "zh-Hans", "zh-Hant", "pt-BR", "de", "fr", "es"), ("TOPIC-0086", "TOPIC-0124", "TOPIC-0125", "TOPIC-0126", "TOPIC-0127", "TOPIC-0128", "TOPIC-0129", "TOPIC-0130", "TOPIC-0131"))),
     "segra-working-copy": dict(zip(
         ("en", "ko", "ja", "zh-Hans", "zh-Hant", "pt-BR", "de", "fr", "es"),
         ("TOPIC-0041", "TOPIC-0115", "TOPIC-0116", "TOPIC-0117", "TOPIC-0118",
@@ -100,10 +107,29 @@ def registered_lifecycle(rows, name):
             raise ValueError("Published preview URL mismatch")
     return state
 
+def uncertainty_state(rows):
+    name = "research-uncertainty"
+    category, slug = PROFILES[name]
+    group = [r for r in rows if r.get("slug") == slug or r.get("id") in REGISTERED_IDS[name].values()]
+    if not group:
+        return None
+    if len(group) == 1:
+        row = group[0]
+        if (row.get("id") != "TOPIC-0086" or row.get("slug") != slug
+                or row.get("primary_language") != "en" or row.get("category") != category
+                or row.get("status") != "idea" or row.get("review_required") != "true"
+                or any(row.get(k) for k in ("scheduled_at", "published_at", "published_url"))):
+            raise ValueError("Invalid uncertainty draft identity")
+        return "draft"
+    return registered_lifecycle(rows, name)
+
 def selection_environment(rows, requested="auto", ref="", event=""):
     # Only routine main pushes may report no work; manual/verification runs stay strict.
     if event == "push" and ref == "refs/heads/main" and requested == "auto":
         states = [registered_lifecycle(rows, name) for name in AUTO_PROFILES]
+        uncertainty = uncertainty_state(rows)
+        if uncertainty in {"draft", "review"}:
+            return "PREVIEW_REQUIRED=true\nPREVIEW_RESULT=selected\n" + environment_lines("research-uncertainty")
         if "review" not in states:
             return "PREVIEW_REQUIRED=false\nPREVIEW_RESULT=no_work\n" + "\n".join(
                 f"{key}=false" for key in ("SEGRA_PREVIEW", "VAULTXT_PREVIEW", "TAGWEAVER_PREVIEW"))

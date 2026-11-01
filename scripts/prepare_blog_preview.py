@@ -87,6 +87,14 @@ def candidate_profile(slug):
             'related_slugs': ['trim-audio-recordings-without-full-editor', 'verify-audio-clips-before-combining'],
             'table_rows': {locale: 4 for locale in LOCALES},
         }
+    if slug == 'mark-uncertainty-clearly-in-research-notes':
+        return {
+            'category': 'research', 'faq_count': 3, 'app_path': None,
+            'store_urls': [],
+            'source_urls': ['https://library.leeds.ac.uk/info/1401/academic-skills/85/note-making'],
+            'related_slugs': ['separate-source-notes-from-conclusions', 'keep-durable-research-reading-log'],
+            'table_rows': {locale: 3 for locale in LOCALES},
+        }
     raise ValueError('Unknown preview candidate')
 
 def allowed_candidate_links(slug, locale):

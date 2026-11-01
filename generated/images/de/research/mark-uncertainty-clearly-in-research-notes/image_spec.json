@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/de/research/mark-uncertainty-clearly-in-research-notes.md",
+  "topic": {
+    "id": "TOPIC-0129",
+    "title": "Unsicherheit in Recherchenotizen klar kennzeichnen",
+    "slug": "mark-uncertainty-clearly-in-research-notes",
+    "category": "research",
+    "language": "de",
+    "primary_keyword": "Unsicherheit in Recherchenotizen",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Unsicherheit in Recherchenotizen klar kennzeichnen",
+    "Frage",
+    "Kurzantwort",
+    "Was bedeuten die Kennzeichnungen?",
+    "Empfohlener Arbeitsablauf",
+    "Quellen",
+    "Verwandte Anleitungen",
+    "Häufige Fragen",
+    "Bedeutet „ungeklärt“ falsch?",
+    "Sind zwei verschiedene Daten automatisch ein Widerspruch?",
+    "Darf die Kennzeichnung nach dem Fund einer Quelle entfallen?",
+    "Fazit"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Wie lässt sich Unsicherheit festhalten, ohne vage zu bleiben oder unbegründete Gewissheit zu vermitteln?",
+      "structure": [
+        "Aussage",
+        "Beleg",
+        "Grund",
+        "Nächste Prüfung"
+      ],
+      "notes": "Explain claim, evidence, reason and next check; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains uncertainty and verification steps, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Unsicherheit klären",
+      "steps": [
+        "Aussage",
+        "Beleg",
+        "Grund",
+        "Nächste Prüfung"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Aussage, Beleg, Grund und nächste Prüfung",
+    "message": "Offene Fragen bleiben sichtbar.",
+    "description": "Kennzeichnen Sie Ungeklärtes, widersprüchliche Angaben und vorläufige Deutungen. Notieren Sie den Grund, die Belege und den nächsten konkreten Prüfschritt. Bewahren Sie bei Änderungen die frühere Begründung. Diese Kennzeichnungen beschreiben den Recherchestand, keine gemessene Wahrscheinlichkeit.",
+    "steps": [
+      [
+        "Aussage",
+        "Eine prüfbare Aussage"
+      ],
+      [
+        "Beleg",
+        "Die gelesene Fundstelle"
+      ],
+      [
+        "Grund",
+        "Unklarheit und Grund"
+      ],
+      [
+        "Nächste Prüfung",
+        "Ein konkreter Prüfschritt"
+      ]
+    ]
+  }
+}

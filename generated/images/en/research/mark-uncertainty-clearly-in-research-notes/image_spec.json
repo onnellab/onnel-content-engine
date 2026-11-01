@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/en/research/mark-uncertainty-clearly-in-research-notes.md",
+  "topic": {
+    "id": "TOPIC-0086",
+    "title": "Mark Uncertainty Clearly in Research Notes",
+    "slug": "mark-uncertainty-clearly-in-research-notes",
+    "category": "research",
+    "language": "en",
+    "primary_keyword": "uncertainty in research notes",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Mark Uncertainty Clearly in Research Notes",
+    "Question",
+    "Short Answer",
+    "What Do the Labels Mean?",
+    "Recommended Workflow",
+    "References",
+    "Related Guides",
+    "FAQ",
+    "Does “unknown” mean false?",
+    "Are two different dates automatically a dispute?",
+    "Can I remove the label after finding one source?",
+    "Conclusion"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "How can I record uncertainty without making a research note vague or falsely confident?",
+      "structure": [
+        "Claim",
+        "Evidence",
+        "Reason",
+        "Next check"
+      ],
+      "notes": "Explain claim, evidence, reason and next check; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains uncertainty and verification steps, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Clarify uncertainty",
+      "steps": [
+        "Claim",
+        "Evidence",
+        "Reason",
+        "Next check"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Claim, evidence, reason, next check",
+    "message": "Keep unresolved questions visible.",
+    "description": "Mark what is unknown, disputed or provisional; explain why, link the evidence and write a specific next check. Keep earlier reasoning when updating the note. These labels describe the state of your investigation, not a measured probability.",
+    "steps": [
+      [
+        "Claim",
+        "One checkable statement."
+      ],
+      [
+        "Evidence",
+        "A passage actually read."
+      ],
+      [
+        "Reason",
+        "What is uncertain and why."
+      ],
+      [
+        "Next check",
+        "A concrete next action."
+      ]
+    ]
+  }
+}

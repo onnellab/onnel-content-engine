@@ -37,7 +37,7 @@ L'incertitude dans les notes de recherche désigne l'écart entre une affirmatio
 | Contradictoire | Les sources semblent présenter des récits incompatibles. | Comparer les formulations, le périmètre, les dates et les versions. |
 | Provisoire | Une interprétation est utilisée alors que des vérifications importantes restent à faire. | Identifier les éléments qui pourraient l'appuyer ou la remettre en cause. |
 
-## Une méthode pratique
+## Méthode recommandée
 
 1. **Isolez l'affirmation.** Écrivez un énoncé vérifiable. Séparez la date d'un événement de votre explication de sa cause : les preuves nécessaires peuvent différer.
 2. **Nommez l'incertitude et sa raison.** Écrivez « non établi : aucun document daté trouvé » plutôt que « peut-être ». Une recherche infructueuse ne prouve pas qu'aucun document n'existe.
@@ -47,7 +47,7 @@ L'incertitude dans les notes de recherche désigne l'écart entre une affirmatio
 
 ![Parcours de vérification](/blog-assets/fr/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg "Affirmation, preuve, raison et prochaine vérification")
 
-## Limites et lecture complémentaire
+## Références
 
 Ne transformez pas une impression en pourcentage de confiance. Ces mentions ne valident pas une source et ne règlent pas un désaccord. Une échéance ne rend pas établie une affirmation provisoire.
 

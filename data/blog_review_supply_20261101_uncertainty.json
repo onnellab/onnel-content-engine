@@ -1,0 +1,593 @@
+{
+  "schema": 1,
+  "kind": "review_supply_audit_not_publication_receipt",
+  "slug": "mark-uncertainty-clearly-in-research-notes",
+  "category": "research",
+  "stage": "review",
+  "scheduled_at": null,
+  "published_at": null,
+  "published_url": null,
+  "queue_ids": [
+    "TOPIC-0086",
+    "TOPIC-0124",
+    "TOPIC-0125",
+    "TOPIC-0126",
+    "TOPIC-0127",
+    "TOPIC-0128",
+    "TOPIC-0129",
+    "TOPIC-0130",
+    "TOPIC-0131"
+  ],
+  "reviewed_files": [
+    {
+      "path": "generated/markdown/en/research/mark-uncertainty-clearly-in-research-notes.md",
+      "byte_length": 4784,
+      "sha256": "f74d7c4ffbf90f6f2050e505d74621d5ec1174c4ae62a28d09b528a5480ee9f1",
+      "git_blob_sha1": "db82b2b0376c77c7c0a30bc6e3fe3ac7c60b9351"
+    },
+    {
+      "path": "generated/images/en/research/mark-uncertainty-clearly-in-research-notes/image_spec.json",
+      "byte_length": 3658,
+      "sha256": "b58a12a3ac46e970e558fa73b22c50f09abe6a4e5c3601dcf2e964117140d290",
+      "git_blob_sha1": "688674343126d49ea66c6de784ca53f048ae39e6"
+    },
+    {
+      "path": "generated/metadata/en/research/mark-uncertainty-clearly-in-research-notes/internal_links.json",
+      "byte_length": 5061,
+      "sha256": "9b1df3c6455e1cf8e3ad1162661de2ada9dfc844be0017a36d309a4f9dc5918b",
+      "git_blob_sha1": "528ca57a06941dc5d419b0669d35a3be6bbd4d76"
+    },
+    {
+      "path": "generated/reviews/en/research/mark-uncertainty-clearly-in-research-notes/review.json",
+      "byte_length": 3579,
+      "sha256": "b5648945eea535bdc0a4a2b3c55731895457976c4782c72036ce41f8376f5d93",
+      "git_blob_sha1": "932b96becbebf531d4719bd320492a1046f7e125"
+    },
+    {
+      "path": "generated/assets/blog/en/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg",
+      "byte_length": 4335,
+      "sha256": "8ff68010e3c49f10daeddeb4e785719bd1766ab247147b93e7c46e0e73f30a11",
+      "git_blob_sha1": "7ad255c460bd90ba7e6a3cb8f2f3bebcac677ac1"
+    },
+    {
+      "path": "generated/assets/blog/en/mark-uncertainty-clearly-in-research-notes/workflow-diagram.png",
+      "byte_length": 63566,
+      "sha256": "91fef605a633c39a4563579512f5f1539fc8ed948c963284fc95160dd97fc5e3",
+      "git_blob_sha1": "8880fa1aebaf7ffe3677463cab2da2778c1058a1"
+    },
+    {
+      "path": "generated/assets/blog/en/mark-uncertainty-clearly-in-research-notes/social-card.svg",
+      "byte_length": 4335,
+      "sha256": "8ff68010e3c49f10daeddeb4e785719bd1766ab247147b93e7c46e0e73f30a11",
+      "git_blob_sha1": "7ad255c460bd90ba7e6a3cb8f2f3bebcac677ac1"
+    },
+    {
+      "path": "generated/assets/blog/en/mark-uncertainty-clearly-in-research-notes/social-card.png",
+      "byte_length": 63566,
+      "sha256": "91fef605a633c39a4563579512f5f1539fc8ed948c963284fc95160dd97fc5e3",
+      "git_blob_sha1": "8880fa1aebaf7ffe3677463cab2da2778c1058a1"
+    },
+    {
+      "path": "generated/markdown/ko/research/mark-uncertainty-clearly-in-research-notes.md",
+      "byte_length": 5715,
+      "sha256": "032cc04b8d318155c6500e85408910e7999e7111e634434d0313c85f71b82eef",
+      "git_blob_sha1": "d82d8bf75eefdca49ba1f57f7e3a7ad8270dd477"
+    },
+    {
+      "path": "generated/images/ko/research/mark-uncertainty-clearly-in-research-notes/image_spec.json",
+      "byte_length": 4027,
+      "sha256": "885352e939a1fba20f69ee2dd0e805deaaddab4781ecb40c084ddd6105223a2b",
+      "git_blob_sha1": "c199eaac097939755bdb980bd25cbab0bc93c35d"
+    },
+    {
+      "path": "generated/metadata/ko/research/mark-uncertainty-clearly-in-research-notes/internal_links.json",
+      "byte_length": 4889,
+      "sha256": "53d283fc90b42d19b81b2c52978798c938ca4b482ea9ef03c49ec854f84a842d",
+      "git_blob_sha1": "c8728c732a1e0f67f761ab4ca0105786174ffa16"
+    },
+    {
+      "path": "generated/reviews/ko/research/mark-uncertainty-clearly-in-research-notes/review.json",
+      "byte_length": 3602,
+      "sha256": "c0f27ae74f8ed4533f3e12dfff07f25075f66094dc04cddf1d22f6fbf9884838",
+      "git_blob_sha1": "91cb897c568ce49c8e95bdaf539a6fc78c502a38"
+    },
+    {
+      "path": "generated/assets/blog/ko/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg",
+      "byte_length": 4283,
+      "sha256": "a2a4f72ad783fdd44400277232a5885142bf46d32a6418625f2309a6de04042e",
+      "git_blob_sha1": "564cc1a30197c4b887f88d568756b118cb9ae859"
+    },
+    {
+      "path": "generated/assets/blog/ko/mark-uncertainty-clearly-in-research-notes/workflow-diagram.png",
+      "byte_length": 48604,
+      "sha256": "fc97b35a9e94d0bf7861b8965d6ca1885fb1c96828a925b2307bd743e0617900",
+      "git_blob_sha1": "9680a6a7372ca64acb5e585b5f9da2c447c779c2"
+    },
+    {
+      "path": "generated/assets/blog/ko/mark-uncertainty-clearly-in-research-notes/social-card.svg",
+      "byte_length": 4283,
+      "sha256": "a2a4f72ad783fdd44400277232a5885142bf46d32a6418625f2309a6de04042e",
+      "git_blob_sha1": "564cc1a30197c4b887f88d568756b118cb9ae859"
+    },
+    {
+      "path": "generated/assets/blog/ko/mark-uncertainty-clearly-in-research-notes/social-card.png",
+      "byte_length": 48604,
+      "sha256": "fc97b35a9e94d0bf7861b8965d6ca1885fb1c96828a925b2307bd743e0617900",
+      "git_blob_sha1": "9680a6a7372ca64acb5e585b5f9da2c447c779c2"
+    },
+    {
+      "path": "generated/markdown/ja/research/mark-uncertainty-clearly-in-research-notes.md",
+      "byte_length": 5748,
+      "sha256": "8f06a46fe03c0623a2118b5e2de7e712ad8a4e598d7b00863294a1a66c246fdc",
+      "git_blob_sha1": "3a4067f9c011b6a76a1711685e85b1a2bc25ba11"
+    },
+    {
+      "path": "generated/images/ja/research/mark-uncertainty-clearly-in-research-notes/image_spec.json",
+      "byte_length": 3847,
+      "sha256": "9978263bbd3df2f7dfed6e40a088d4336d16299601418c92a883d6c022b2cbf0",
+      "git_blob_sha1": "c6122be2703e95a7906fd36f952825c0b01b5321"
+    },
+    {
+      "path": "generated/metadata/ja/research/mark-uncertainty-clearly-in-research-notes/internal_links.json",
+      "byte_length": 4959,
+      "sha256": "c44216f09fc0273eec85822334dbb23f87097e5c8ac72c923ea3d10ac9bda616",
+      "git_blob_sha1": "4d2ce10a12ebe0cfabf29f8248c9be4e81e6f545"
+    },
+    {
+      "path": "generated/reviews/ja/research/mark-uncertainty-clearly-in-research-notes/review.json",
+      "byte_length": 3588,
+      "sha256": "6734c70971d2c2037dd1cc73a85a2521c84c957c6f4bed5e7503a125f84fe445",
+      "git_blob_sha1": "f6002a4a2b2cacc9e538981fb95019e71a5b0b45"
+    },
+    {
+      "path": "generated/assets/blog/ja/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg",
+      "byte_length": 3701,
+      "sha256": "3c5e283c1ae647dfa7a5c4556e4ab34a08076aa4e48f27fbf4fde6709b42ad9c",
+      "git_blob_sha1": "9bd901738766488c83d6a32b59d53e6ed6886791"
+    },
+    {
+      "path": "generated/assets/blog/ja/mark-uncertainty-clearly-in-research-notes/workflow-diagram.png",
+      "byte_length": 58774,
+      "sha256": "886d69f2edaef7b060fba3cd6340e4f0462760a05050555354d3b5d72e290511",
+      "git_blob_sha1": "bd2b22e2f82f6e6d1be220c44b992f50e17dc087"
+    },
+    {
+      "path": "generated/assets/blog/ja/mark-uncertainty-clearly-in-research-notes/social-card.svg",
+      "byte_length": 3701,
+      "sha256": "3c5e283c1ae647dfa7a5c4556e4ab34a08076aa4e48f27fbf4fde6709b42ad9c",
+      "git_blob_sha1": "9bd901738766488c83d6a32b59d53e6ed6886791"
+    },
+    {
+      "path": "generated/assets/blog/ja/mark-uncertainty-clearly-in-research-notes/social-card.png",
+      "byte_length": 58774,
+      "sha256": "886d69f2edaef7b060fba3cd6340e4f0462760a05050555354d3b5d72e290511",
+      "git_blob_sha1": "bd2b22e2f82f6e6d1be220c44b992f50e17dc087"
+    },
+    {
+      "path": "generated/markdown/zh-Hans/research/mark-uncertainty-clearly-in-research-notes.md",
+      "byte_length": 4599,
+      "sha256": "9d7d23c32cb5f8e555af9b5f8c51bf7b4e38b090ab3c297d1e468a3af4ae8d3e",
+      "git_blob_sha1": "2030614348f2d52a6e710b241f2280e30cf93d5a"
+    },
+    {
+      "path": "generated/images/zh-Hans/research/mark-uncertainty-clearly-in-research-notes/image_spec.json",
+      "byte_length": 3665,
+      "sha256": "8096b4a384d40538b9e4ce81cdcc3c6b1c3911d5c6b4e792b254f01e2a53ad66",
+      "git_blob_sha1": "08aea5468b5a72c0fcd2dcec92e34f3a62842745"
+    },
+    {
+      "path": "generated/metadata/zh-Hans/research/mark-uncertainty-clearly-in-research-notes/internal_links.json",
+      "byte_length": 4911,
+      "sha256": "fb34ae9f589da3e3fd12f7f4917e837faeb9dc7b1a8e1acc14ab59276966ba69",
+      "git_blob_sha1": "bcd9cb8f3d595b9c3f74ca268f373f6d155f07b0"
+    },
+    {
+      "path": "generated/reviews/zh-Hans/research/mark-uncertainty-clearly-in-research-notes/review.json",
+      "byte_length": 3582,
+      "sha256": "d0f0a2d76bf9fec3915023c6b79a189a37c01c32eb00fa6f47e4e48220a97684",
+      "git_blob_sha1": "7b88dca1811cb4cd8a26339656632734f7055fd1"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg",
+      "byte_length": 3569,
+      "sha256": "4d5780c85c8a8710951bf7daafbe0750dd8fa007168a330234c7e594e125ac0f",
+      "git_blob_sha1": "fafdc0424e6bd8fa0695cd42864e1cf052238a2c"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/mark-uncertainty-clearly-in-research-notes/workflow-diagram.png",
+      "byte_length": 52964,
+      "sha256": "19d8d8828f05e07bd4faeee3e7a5787817f89e89fa741707627bac7458d3fb88",
+      "git_blob_sha1": "b6ee5d1ab7189e2123ed98f1240043665e2e7dbe"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/mark-uncertainty-clearly-in-research-notes/social-card.svg",
+      "byte_length": 3569,
+      "sha256": "4d5780c85c8a8710951bf7daafbe0750dd8fa007168a330234c7e594e125ac0f",
+      "git_blob_sha1": "fafdc0424e6bd8fa0695cd42864e1cf052238a2c"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/mark-uncertainty-clearly-in-research-notes/social-card.png",
+      "byte_length": 52964,
+      "sha256": "19d8d8828f05e07bd4faeee3e7a5787817f89e89fa741707627bac7458d3fb88",
+      "git_blob_sha1": "b6ee5d1ab7189e2123ed98f1240043665e2e7dbe"
+    },
+    {
+      "path": "generated/markdown/zh-Hant/research/mark-uncertainty-clearly-in-research-notes.md",
+      "byte_length": 4557,
+      "sha256": "3146c15dae262832c1b54ad2b4bc3c2dee928facf78ea648caf759d5f303a179",
+      "git_blob_sha1": "c0abd83ee143e6f8edca501f4aaf483e874f14e4"
+    },
+    {
+      "path": "generated/images/zh-Hant/research/mark-uncertainty-clearly-in-research-notes/image_spec.json",
+      "byte_length": 3650,
+      "sha256": "a5d716de6582f58460fb338a8a46a92892505b1d5e948220e3a71e0ec0ecee27",
+      "git_blob_sha1": "47d3030c17a1f3b708cffad2d853e65f065b024c"
+    },
+    {
+      "path": "generated/metadata/zh-Hant/research/mark-uncertainty-clearly-in-research-notes/internal_links.json",
+      "byte_length": 4908,
+      "sha256": "8689b3150364374fd3e5bba29fdc5f1541107111c5a40497e30ae5802bd20253",
+      "git_blob_sha1": "27de947ce7d723da021784d4c95b6437397958e2"
+    },
+    {
+      "path": "generated/reviews/zh-Hant/research/mark-uncertainty-clearly-in-research-notes/review.json",
+      "byte_length": 3582,
+      "sha256": "172943b838f123e73b664c84015818fe9d156ea6cacb8350ec5d2debc4ecbcf5",
+      "git_blob_sha1": "26536910a6f1a20e1ce7c130c56c786b6d4bded1"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hant/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg",
+      "byte_length": 3566,
+      "sha256": "1255377665027f65f17d13affc961403a6c953f9cedc878b62a3bb533480bcaf",
+      "git_blob_sha1": "0e9c8e3bde72b3d30609317753b340c13b244d7d"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hant/mark-uncertainty-clearly-in-research-notes/workflow-diagram.png",
+      "byte_length": 55085,
+      "sha256": "1504d8fe9507db6bc53b23d5f905f173f5ebe7bcb18067a63d3b1bac295436b7",
+      "git_blob_sha1": "42a8981cc0f28ac042d4fd1b1d60567857bc989d"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hant/mark-uncertainty-clearly-in-research-notes/social-card.svg",
+      "byte_length": 3566,
+      "sha256": "1255377665027f65f17d13affc961403a6c953f9cedc878b62a3bb533480bcaf",
+      "git_blob_sha1": "0e9c8e3bde72b3d30609317753b340c13b244d7d"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hant/mark-uncertainty-clearly-in-research-notes/social-card.png",
+      "byte_length": 55085,
+      "sha256": "1504d8fe9507db6bc53b23d5f905f173f5ebe7bcb18067a63d3b1bac295436b7",
+      "git_blob_sha1": "42a8981cc0f28ac042d4fd1b1d60567857bc989d"
+    },
+    {
+      "path": "generated/markdown/pt-BR/research/mark-uncertainty-clearly-in-research-notes.md",
+      "byte_length": 5313,
+      "sha256": "4cd6b64b6f87669e4a85677357ec787ae74a5dde1c17541b4345b2814f0b5147",
+      "git_blob_sha1": "ef7f352734e43a71fadcce5833ee0bd78b351130"
+    },
+    {
+      "path": "generated/images/pt-BR/research/mark-uncertainty-clearly-in-research-notes/image_spec.json",
+      "byte_length": 3808,
+      "sha256": "d04bbc4b62faeebeca1703b6c020fa23980cbb5363bf970dc247cc223e1ac7d1",
+      "git_blob_sha1": "aa72ac45f2d9091034a271ed62dabded77f36ae8"
+    },
+    {
+      "path": "generated/metadata/pt-BR/research/mark-uncertainty-clearly-in-research-notes/internal_links.json",
+      "byte_length": 5254,
+      "sha256": "fe09c72ecb5051cdfd8db457aa0a82d585a75e77077bf7719a80495c1164970f",
+      "git_blob_sha1": "8b54f0360776909b89f284274d82fbd8748f45c1"
+    },
+    {
+      "path": "generated/reviews/pt-BR/research/mark-uncertainty-clearly-in-research-notes/review.json",
+      "byte_length": 3582,
+      "sha256": "04ac4717a33135f4d965ff603d2d00343196a5c03c84f5e8d7d47fd0ab2c5a37",
+      "git_blob_sha1": "b4a09d0375779bbe1213764d6742e1af04695f25"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg",
+      "byte_length": 4453,
+      "sha256": "f052d35a1bba7abf8a99ce3931c4af6d1da6009978ccc311565c2c45538aeff0",
+      "git_blob_sha1": "4232a6a5a8740420405fe7750de19d7038914764"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/mark-uncertainty-clearly-in-research-notes/workflow-diagram.png",
+      "byte_length": 67763,
+      "sha256": "82da56a623f623726af0c42cda135ff9c305253e4c8db9ce2f6c5b76e62e0f34",
+      "git_blob_sha1": "4fcff910ff8e3aa7a0424a6c85379d9468d777d7"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/mark-uncertainty-clearly-in-research-notes/social-card.svg",
+      "byte_length": 4453,
+      "sha256": "f052d35a1bba7abf8a99ce3931c4af6d1da6009978ccc311565c2c45538aeff0",
+      "git_blob_sha1": "4232a6a5a8740420405fe7750de19d7038914764"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/mark-uncertainty-clearly-in-research-notes/social-card.png",
+      "byte_length": 67763,
+      "sha256": "82da56a623f623726af0c42cda135ff9c305253e4c8db9ce2f6c5b76e62e0f34",
+      "git_blob_sha1": "4fcff910ff8e3aa7a0424a6c85379d9468d777d7"
+    },
+    {
+      "path": "generated/markdown/de/research/mark-uncertainty-clearly-in-research-notes.md",
+      "byte_length": 5634,
+      "sha256": "f1f417028ac5cfb5d4f375b5846fc582c13c1a340fb2d1bc506ea0bd0c41c035",
+      "git_blob_sha1": "57eec3019c78e66593d40744884b3bdf22accdc2"
+    },
+    {
+      "path": "generated/images/de/research/mark-uncertainty-clearly-in-research-notes/image_spec.json",
+      "byte_length": 3821,
+      "sha256": "abcce570998840407aba98ade3ede472d03c8278905862b1d86e3fe85bf6b539",
+      "git_blob_sha1": "f3b5a81c3e6499ecda7334eeaa763f5241a767f5"
+    },
+    {
+      "path": "generated/metadata/de/research/mark-uncertainty-clearly-in-research-notes/internal_links.json",
+      "byte_length": 5202,
+      "sha256": "1bb8f16e3a7967cdb9631ece2fa2670caf99468900846df4220986e525fc06c3",
+      "git_blob_sha1": "97d67e8f914b8a1524c2d98d369d08908955cdc1"
+    },
+    {
+      "path": "generated/reviews/de/research/mark-uncertainty-clearly-in-research-notes/review.json",
+      "byte_length": 3587,
+      "sha256": "ab9c513d8f1fcbc62677cb6672cf3e637e01c9c5bca91e24d1b747ed7133039f",
+      "git_blob_sha1": "74847f179c4ff7678dbf98cbd3ad645b66c60a7b"
+    },
+    {
+      "path": "generated/assets/blog/de/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg",
+      "byte_length": 4399,
+      "sha256": "f7c5041e468c58ec153b72d33e1eb174daf38f93b7a830d58500d80367c593c1",
+      "git_blob_sha1": "1a7fab0eedb1e07e6c80e8c9bce216b4fc25c3ce"
+    },
+    {
+      "path": "generated/assets/blog/de/mark-uncertainty-clearly-in-research-notes/workflow-diagram.png",
+      "byte_length": 64007,
+      "sha256": "1a0b54cfdd0adee15c8f15d3eac679a8a654fdcb44bfbcd8da4af47d60852602",
+      "git_blob_sha1": "e9b6b33bab056cc4ec4c5cbe691e1c5bd5510f21"
+    },
+    {
+      "path": "generated/assets/blog/de/mark-uncertainty-clearly-in-research-notes/social-card.svg",
+      "byte_length": 4399,
+      "sha256": "f7c5041e468c58ec153b72d33e1eb174daf38f93b7a830d58500d80367c593c1",
+      "git_blob_sha1": "1a7fab0eedb1e07e6c80e8c9bce216b4fc25c3ce"
+    },
+    {
+      "path": "generated/assets/blog/de/mark-uncertainty-clearly-in-research-notes/social-card.png",
+      "byte_length": 64007,
+      "sha256": "1a0b54cfdd0adee15c8f15d3eac679a8a654fdcb44bfbcd8da4af47d60852602",
+      "git_blob_sha1": "e9b6b33bab056cc4ec4c5cbe691e1c5bd5510f21"
+    },
+    {
+      "path": "generated/markdown/fr/research/mark-uncertainty-clearly-in-research-notes.md",
+      "byte_length": 5583,
+      "sha256": "34b41625da774c33732df58c379351e14581680214cda8ecd02d8e8838f9fd74",
+      "git_blob_sha1": "4dd11ff4f0929a159a3c428d2551ffd185d055a7"
+    },
+    {
+      "path": "generated/images/fr/research/mark-uncertainty-clearly-in-research-notes/image_spec.json",
+      "byte_length": 3855,
+      "sha256": "497fbf21142703f80be29532b5368f18327d928dd503f993d650a96f5e43d653",
+      "git_blob_sha1": "b3467d108148349ffc34aaa5eb6f275f71d3aafa"
+    },
+    {
+      "path": "generated/metadata/fr/research/mark-uncertainty-clearly-in-research-notes/internal_links.json",
+      "byte_length": 5262,
+      "sha256": "6b97b30476076c51922b95efa1dfddf515090aa78f50272299c7570eaf7209d4",
+      "git_blob_sha1": "6c308a1c27cb5cff7b33d4c88079aa2c5b2abbb0"
+    },
+    {
+      "path": "generated/reviews/fr/research/mark-uncertainty-clearly-in-research-notes/review.json",
+      "byte_length": 3601,
+      "sha256": "ec3543c30cc9e60fd18b292e7f014f8a9f58778217acf0734549663a596fce4a",
+      "git_blob_sha1": "056552e88374e95deb2eeaa9ec396a48c35f43a9"
+    },
+    {
+      "path": "generated/assets/blog/fr/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg",
+      "byte_length": 4388,
+      "sha256": "d82a4552ac7a81f7e11e717dcdf892f880a4480acbf5abcc0ae096008c8edf70",
+      "git_blob_sha1": "cf9d285f7298ac2461ccca30bed0cb98cacfc048"
+    },
+    {
+      "path": "generated/assets/blog/fr/mark-uncertainty-clearly-in-research-notes/workflow-diagram.png",
+      "byte_length": 64268,
+      "sha256": "882ac6b40da603192f6c64939b6a2b538e0aacdfa232efbd47d8af8fb342217f",
+      "git_blob_sha1": "caa293bac2c33ccd8eebf81cab83970ae69383fb"
+    },
+    {
+      "path": "generated/assets/blog/fr/mark-uncertainty-clearly-in-research-notes/social-card.svg",
+      "byte_length": 4388,
+      "sha256": "d82a4552ac7a81f7e11e717dcdf892f880a4480acbf5abcc0ae096008c8edf70",
+      "git_blob_sha1": "cf9d285f7298ac2461ccca30bed0cb98cacfc048"
+    },
+    {
+      "path": "generated/assets/blog/fr/mark-uncertainty-clearly-in-research-notes/social-card.png",
+      "byte_length": 64268,
+      "sha256": "882ac6b40da603192f6c64939b6a2b538e0aacdfa232efbd47d8af8fb342217f",
+      "git_blob_sha1": "caa293bac2c33ccd8eebf81cab83970ae69383fb"
+    },
+    {
+      "path": "generated/markdown/es/research/mark-uncertainty-clearly-in-research-notes.md",
+      "byte_length": 5466,
+      "sha256": "ac5aabf9162347aca9a365548157a444e7e371635144501b153446e9ee743fd0",
+      "git_blob_sha1": "0119d57daf4afcfaa6f5e7a9cce250fddad3be7b"
+    },
+    {
+      "path": "generated/images/es/research/mark-uncertainty-clearly-in-research-notes/image_spec.json",
+      "byte_length": 3839,
+      "sha256": "29090b780d643867cbb61ba037dfaa70b616b7be6c1665b7afa17b479436c072",
+      "git_blob_sha1": "bf93be5232a5b607ab92ee5982d12032ced624de"
+    },
+    {
+      "path": "generated/metadata/es/research/mark-uncertainty-clearly-in-research-notes/internal_links.json",
+      "byte_length": 5268,
+      "sha256": "453a871f408ca895f5bc7dbfdace0d93bb8fbb728a1ab87599690a0d641c1de0",
+      "git_blob_sha1": "e3c45ffb8548c7f33fbc619f908a00f4afa60d3f"
+    },
+    {
+      "path": "generated/reviews/es/research/mark-uncertainty-clearly-in-research-notes/review.json",
+      "byte_length": 3599,
+      "sha256": "41184e11271e00dbde2094b103a0d43492e201e6dca589085e28bb3b3156e718",
+      "git_blob_sha1": "f8b4dab3e141d7c62a05159850a46c3be5d445d0"
+    },
+    {
+      "path": "generated/assets/blog/es/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg",
+      "byte_length": 4376,
+      "sha256": "b0ee3741dc57c01dafb649eb00115e64fa2c104221a3934a13b767d745024b16",
+      "git_blob_sha1": "67a372a64c14e8ad19a0c70a2aea5a3cf160c069"
+    },
+    {
+      "path": "generated/assets/blog/es/mark-uncertainty-clearly-in-research-notes/workflow-diagram.png",
+      "byte_length": 67235,
+      "sha256": "a86012e4a21d974a19cfeddc37f1dda29b4e0a9e2334780966967659d4da24cc",
+      "git_blob_sha1": "f15732a5cf5f2db909de23dfcc67999273094506"
+    },
+    {
+      "path": "generated/assets/blog/es/mark-uncertainty-clearly-in-research-notes/social-card.svg",
+      "byte_length": 4376,
+      "sha256": "b0ee3741dc57c01dafb649eb00115e64fa2c104221a3934a13b767d745024b16",
+      "git_blob_sha1": "67a372a64c14e8ad19a0c70a2aea5a3cf160c069"
+    },
+    {
+      "path": "generated/assets/blog/es/mark-uncertainty-clearly-in-research-notes/social-card.png",
+      "byte_length": 67235,
+      "sha256": "a86012e4a21d974a19cfeddc37f1dda29b4e0a9e2334780966967659d4da24cc",
+      "git_blob_sha1": "f15732a5cf5f2db909de23dfcc67999273094506"
+    }
+  ],
+  "reviewed_source_git_blobs": {
+    "fr": "3e8b5725b17d5995277d6b0515351f0fa2b68529",
+    "en": "6c2e295cc9f2be82d7857dcd6c81cb3275bd58c3",
+    "ja": "8894f625f9002396d32bcf351862085f6f36843d",
+    "es": "1f76aadc427a116997c5fa8f65a2e34f3e8ef391",
+    "zh-Hans": "7963bc8eaacea65981511b2aeb30e0f44f83c413",
+    "zh-Hant": "d9ca7e7899393056f7c08b6a1661fab831f03a7e",
+    "ko": "bd8ec694ef6456c0e10374b2679a811bf01033ac",
+    "pt-BR": "e952058e39d0286fa58ffa70b5e82332b8cc567f",
+    "de": "c49ef3085959abd8d7fad0c0fe80a52b334fb0b8"
+  },
+  "reviewed_svg_git_blobs": {
+    "en": "fd6b053eddb384fcfd384349fd55e552f13c09b7",
+    "ko": "7a23cbc2bc261da87e9c3064870354002260d1c2",
+    "ja": "722088383ae6151295a8bda8c4e4e673d9887ad9",
+    "zh-Hans": "249a2aca68ccc63dc5fa89d606e4697264f8e609",
+    "zh-Hant": "0e9d271396da3b6686dec24494be3ff94e5f2516",
+    "pt-BR": "f38dbca056e8657192ad50717df3feaf334bfafb",
+    "de": "f851fc6df51833c1100a6117366d5077eb9ab335",
+    "fr": "2af9135ddbcd00cb882322aa7c23aa01c2d3b148",
+    "es": "0200209d14d8cf13e270a5502eb0b81c16fd607f"
+  },
+  "verified_at": "2026-11-01T12:33:40.279Z",
+  "source_commit": "4e31c3335d5f9a960d2ec0204bcaf6df4abc5af6",
+  "native_run": {
+    "id": 41306096926,
+    "url": "https://github.com/onnellab/onnel-content-engine/actions/runs/41306096926",
+    "conclusion": "success",
+    "python_tests": 247,
+    "browser_tests": 56,
+    "mandatory_gates": "all passed; criteria unchanged"
+  },
+  "artifact": {
+    "id": 13083640540,
+    "sha256": "4d5aa36c1a367cc57cce30e051ce1532d74e2b05db83e00b4927da357e94372e",
+    "byte_length": 20908338,
+    "native_files": 72,
+    "hashes_verified": true
+  },
+  "editorial_review": {
+    "independent_agent": "research_singing_data_rights",
+    "all_nine_manuscripts_read": true,
+    "result": "pass",
+    "compact_diagram_labels_independently_reviewed_by": "root",
+    "compact_labels_result": "pass",
+    "fr_reason_description": "Le doute et sa raison",
+    "fr_reason_review": "root semantic pass"
+  },
+  "visual_review": {
+    "method": "Actual downloaded final-run PNGs viewed, not inferred from test success",
+    "desktop_locales": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ],
+    "mobile_locales": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ],
+    "result": "pass",
+    "fixed_defects": [
+      "PT-BR/FR/ES diagram labels split inside words",
+      "French reason description split inside uncertainty word"
+    ],
+    "final_fr_original_diagram_viewed": true
+  },
+  "preserved_failures": [
+    {
+      "run": 41297211175,
+      "cause": "Japanese question punctuation",
+      "fixed": true
+    },
+    {
+      "run": 41297482030,
+      "cause": "New five-step topic fell through six-step test oracle",
+      "fixed": true
+    },
+    {
+      "run": 41297761654,
+      "automation": "pass",
+      "visual": "PT/FR/ES midword diagram label wrapping; corrected"
+    },
+    {
+      "run": 41305731648,
+      "automation": "pass",
+      "visual": "FR reason description midword wrap; corrected"
+    }
+  ],
+  "supply": {
+    "state": "ready_review_buffer_canonical_assignment_pending",
+    "intended_slot": "2026-11-05T09:00:00+09:00",
+    "actual_schedule_assigned": false,
+    "previous_slot": "2026-11-02T09:00:00+09:00",
+    "publisher": "existing GitHub Publishing Pipeline",
+    "manual_non_dry_dispatch": false
+  },
+  "integration_base": "67b81a32f9ff0151fd449d077fcfccd44ba8545a",
+  "concurrent_changes_preserved": [
+    "data/screenshot_guides/aligna-date-number-options-20261106.json",
+    "data/screenshot_guides/aligna-date-number-options-20261106.preparation.json",
+    "data/screenshot_guides/aligna-date-number-options-20261106.receipt.json",
+    "data/screenshot_guides/aligna-date-number-options-20261106.upload-intent.json",
+    "data/screenshot_guides/clipnest-language-settings-20261104.json",
+    "data/screenshot_guides/clipnest-language-settings-20261104.preparation.json",
+    "data/screenshot_guides/clipnest-language-settings-20261104.receipt.json",
+    "data/screenshot_guides/clipnest-language-settings-20261104.upload-intent.json",
+    "data/screenshot_guides/segra-file-order-20261030.receipt.json",
+    "docs/Screenshot_Guide_Pipeline.md",
+    "scripts/screenshot_guide.py",
+    "tests/test_screenshot_guide_november.py"
+  ],
+  "source_integrity": {
+    "source_unchanged": true,
+    "topics_before": "de8beaa1fb9210d6ff3d2d1aec40d028d36744570e4a8be469a60a8d3349627f",
+    "topics_after": "de8beaa1fb9210d6ff3d2d1aec40d028d36744570e4a8be469a60a8d3349627f",
+    "mirror_before": "de8beaa1fb9210d6ff3d2d1aec40d028d36744570e4a8be469a60a8d3349627f",
+    "mirror_after": "de8beaa1fb9210d6ff3d2d1aec40d028d36744570e4a8be469a60a8d3349627f",
+    "source_commit": "4e31c3335d5f9a960d2ec0204bcaf6df4abc5af6",
+    "publication_dates_assigned": false
+  },
+  "limitations": [
+    "Not a publication or scheduled receipt.",
+    "Source draft SVGs are provenance; canonical native PNG/SVG artifacts were separately rendered and reviewed.",
+    "No new publisher or cadence change."
+  ]
+}

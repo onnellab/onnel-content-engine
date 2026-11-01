@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/fr/research/mark-uncertainty-clearly-in-research-notes.md",
+  "topic": {
+    "id": "TOPIC-0130",
+    "title": "Indiquer clairement les incertitudes dans ses notes de recherche",
+    "slug": "mark-uncertainty-clearly-in-research-notes",
+    "category": "research",
+    "language": "fr",
+    "primary_keyword": "incertitude dans les notes de recherche",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Indiquer clairement les incertitudes dans ses notes de recherche",
+    "Question",
+    "Réponse courte",
+    "Que signifient ces mentions ?",
+    "Méthode recommandée",
+    "Références",
+    "Guides associés",
+    "Questions fréquentes",
+    "« Non établi » signifie-t-il faux ?",
+    "Deux dates différentes constituent-elles forcément une contradiction ?",
+    "Puis-je retirer la mention après avoir trouvé une source ?",
+    "Conclusion"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Comment noter une incertitude sans rester vague ni afficher une assurance injustifiée ?",
+      "structure": [
+        "Énoncé",
+        "Preuve",
+        "Raison",
+        "Vérifier"
+      ],
+      "notes": "Explain claim, evidence, reason and next check; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains uncertainty and verification steps, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Clarifier l’incertitude",
+      "steps": [
+        "Énoncé",
+        "Preuve",
+        "Raison",
+        "Vérifier"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Affirmation, preuve, raison et vérification",
+    "message": "Gardez les questions non résolues visibles.",
+    "description": "Indiquez ce qui est non établi, contradictoire ou provisoire ; expliquez pourquoi, reliez les preuves et précisez la prochaine vérification. Conservez le raisonnement antérieur lors des mises à jour. Ces mentions décrivent l'état de la recherche, pas une probabilité mesurée.",
+    "steps": [
+      [
+        "Énoncé",
+        "Un énoncé vérifiable"
+      ],
+      [
+        "Preuve",
+        "Un passage réellement lu"
+      ],
+      [
+        "Raison",
+        "Le doute et sa raison"
+      ],
+      [
+        "Vérifier",
+        "Une vérification précise"
+      ]
+    ]
+  }
+}

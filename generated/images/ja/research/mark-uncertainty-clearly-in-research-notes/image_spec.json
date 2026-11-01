@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/research/mark-uncertainty-clearly-in-research-notes.md",
+  "topic": {
+    "id": "TOPIC-0125",
+    "title": "調査ノートの不確実な点を明確にする",
+    "slug": "mark-uncertainty-clearly-in-research-notes",
+    "category": "research",
+    "language": "ja",
+    "primary_keyword": "調査ノートの不確実性",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "調査ノートの不確実な点を明確にする",
+    "質問",
+    "短い答え",
+    "表示の意味",
+    "推奨ワークフロー",
+    "参考資料",
+    "関連ガイド",
+    "よくある質問",
+    "「未確認」は誤りという意味ですか？",
+    "日付が二つあれば必ず説明の不一致ですか？",
+    "資料が一つ見つかったら表示を外せますか？",
+    "まとめ"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "曖昧な記述や根拠のない断定を避けながら、不確実な点をどう記録すればよいでしょうか？",
+      "structure": [
+        "主張",
+        "根拠",
+        "理由",
+        "次の確認"
+      ],
+      "notes": "Explain claim, evidence, reason and next check; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains uncertainty and verification steps, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "不確実な点を明確に",
+      "steps": [
+        "主張",
+        "根拠",
+        "理由",
+        "次の確認"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "主張・根拠・理由・次の確認",
+    "message": "未解決の問いを見える状態にします。",
+    "description": "未確認・説明の不一致・暫定的な解釈を区別し、理由、根拠となる資料、次の確認事項を書きます。更新時には以前の判断理由も残します。この表示は調査の状態を表すもので、測定された確率ではありません。",
+    "steps": [
+      [
+        "主張",
+        "確認できる文を一つ"
+      ],
+      [
+        "根拠",
+        "実際に読んだ根拠"
+      ],
+      [
+        "理由",
+        "不確実な点と理由"
+      ],
+      [
+        "次の確認",
+        "具体的な次の確認"
+      ]
+    ]
+  }
+}

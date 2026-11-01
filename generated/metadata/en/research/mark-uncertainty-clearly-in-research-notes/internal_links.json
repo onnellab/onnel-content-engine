@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0086",
+    "title": "Mark Uncertainty Clearly in Research Notes",
+    "slug": "mark-uncertainty-clearly-in-research-notes",
+    "category": "research",
+    "language": "en",
+    "status": "review",
+    "topic_clusters": [
+      "uncertainty in research notes",
+      "research"
+    ],
+    "related_app_names": []
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0016",
+        "title": "How to Keep a Durable Research Reading Log",
+        "slug": "keep-durable-research-reading-log",
+        "category": "research",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/keep-durable-research-reading-log/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "research"
+        ],
+        "score": 11
+      },
+      {
+        "topic_id": "TOPIC-0037",
+        "title": "How to Separate Source Notes from Your Conclusions",
+        "slug": "separate-source-notes-from-conclusions",
+        "category": "research",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/separate-source-notes-from-conclusions/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "research"
+        ],
+        "score": 11
+      },
+      {
+        "topic_id": "TOPIC-0014",
+        "title": "How to Turn Rough Notes Into a Structured First Draft",
+        "slug": "turn-rough-notes-into-structured-first-draft",
+        "category": "productivity",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
+        "topic_id": "TOPIC-0029",
+        "title": "How to Number Tracks in a Multi-Disc MP3 Album",
+        "slug": "number-tracks-multi-disc-mp3-album",
+        "category": "music",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
+        "topic_id": "TOPIC-0001",
+        "title": "How to Read Large TXT Files Without Lag",
+        "slug": "read-large-txt-files-without-lag",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/read-large-txt-files-without-lag/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 3
+      },
+      {
+        "topic_id": "TOPIC-0003",
+        "title": "TXT vs EPUB for Long Reading",
+        "slug": "txt-vs-epub-for-long-reading",
+        "category": "reading",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/",
+        "destination": "published_article",
+        "relationship": "comparison",
+        "shared_clusters": [],
+        "score": 3
+      }
+    ],
+    "related_apps": [],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Research guide",
+        "category": "research",
+        "cluster": "research",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "uncertainty in research notes cluster",
+        "category": "research",
+        "cluster": "uncertainty in research notes",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "How to Turn Rough Notes Into a Structured First Draft",
+        "category": "productivity",
+        "cluster": "structure rough notes",
+        "topic_id": "TOPIC-0014",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/pt-BR/research/mark-uncertainty-clearly-in-research-notes.md",
+  "topic": {
+    "id": "TOPIC-0128",
+    "title": "Como indicar incertezas nas notas de pesquisa",
+    "slug": "mark-uncertainty-clearly-in-research-notes",
+    "category": "research",
+    "language": "pt-BR",
+    "primary_keyword": "incerteza nas notas de pesquisa",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Como indicar incertezas nas notas de pesquisa",
+    "Pergunta",
+    "Resposta curta",
+    "O que significam os rótulos?",
+    "Fluxo de trabalho recomendado",
+    "Referências",
+    "Guias relacionados",
+    "Perguntas frequentes",
+    "“Não confirmado” significa falso?",
+    "Duas datas diferentes sempre indicam divergência?",
+    "Posso retirar o rótulo ao encontrar uma fonte?",
+    "Conclusão"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Como registrar incertezas sem deixar a nota vaga ou transmitir uma certeza sem fundamento?",
+      "structure": [
+        "Frase",
+        "Evidência",
+        "Motivo",
+        "Checar"
+      ],
+      "notes": "Explain claim, evidence, reason and next check; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains uncertainty and verification steps, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Registre a incerteza",
+      "steps": [
+        "Frase",
+        "Evidência",
+        "Motivo",
+        "Checar"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Afirmação, evidência, motivo e verificação",
+    "message": "Deixe visíveis as questões não resolvidas.",
+    "description": "Indique o que ainda não foi confirmado, o que apresenta divergências e o que é provisório; explique o motivo, vincule as evidências e defina a próxima verificação. Ao atualizar a nota, preserve o raciocínio anterior. Esses rótulos descrevem a investigação, não uma probabilidade medida.",
+    "steps": [
+      [
+        "Frase",
+        "Uma afirmação verificável"
+      ],
+      [
+        "Evidência",
+        "Um trecho realmente lido"
+      ],
+      [
+        "Motivo",
+        "O que é incerto e por quê"
+      ],
+      [
+        "Checar",
+        "Uma verificação concreta"
+      ]
+    ]
+  }
+}

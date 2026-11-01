@@ -37,7 +37,7 @@ Uncertainty in research notes is a gap between a claim and what the available ev
 | Disputed | Sources appear to give incompatible accounts. | Compare their wording, scope, dates and versions. |
 | Provisional | An interpretation is being used while important checks remain. | Identify evidence that would support or challenge it. |
 
-## A Practical Workflow
+## Recommended Workflow
 
 1. **Isolate the claim.** Write one checkable statement. Separate an event's date from your explanation of why it happened; they may need different evidence.
 2. **Name the uncertainty and its reason.** Write “unknown: no dated record found,” not simply “maybe.” A search that found nothing does not prove that no record exists.
@@ -47,7 +47,7 @@ Uncertainty in research notes is a gap between a claim and what the available ev
 
 ![Workflow diagram](/blog-assets/en/mark-uncertainty-clearly-in-research-notes/workflow-diagram.svg "Claim, evidence, reason and next check")
 
-## Limits and Further Reading
+## References
 
 Do not turn an impression into a confidence percentage. These labels do not validate a source or settle a disagreement. A deadline does not make a provisional claim established.
 

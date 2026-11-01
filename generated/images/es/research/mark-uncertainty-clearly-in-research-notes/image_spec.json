@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/research/mark-uncertainty-clearly-in-research-notes.md",
+  "topic": {
+    "id": "TOPIC-0131",
+    "title": "Cómo señalar la incertidumbre en las notas de investigación",
+    "slug": "mark-uncertainty-clearly-in-research-notes",
+    "category": "research",
+    "language": "es",
+    "primary_keyword": "incertidumbre en las notas de investigación",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Cómo señalar la incertidumbre en las notas de investigación",
+    "Pregunta",
+    "Respuesta breve",
+    "¿Qué significan las etiquetas?",
+    "Flujo de trabajo recomendado",
+    "Referencias",
+    "Guías relacionadas",
+    "Preguntas frecuentes",
+    "¿«Sin confirmar» significa falso?",
+    "¿Dos fechas distintas implican necesariamente una discrepancia?",
+    "¿Puedo quitar la etiqueta al encontrar una fuente?",
+    "Conclusión"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "¿Cómo registrar la incertidumbre sin dejar una nota vaga ni transmitir una seguridad injustificada?",
+      "structure": [
+        "Frase",
+        "Prueba",
+        "Motivo",
+        "Revisar"
+      ],
+      "notes": "Explain claim, evidence, reason and next check; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains uncertainty and verification steps, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Aclara la incertidumbre",
+      "steps": [
+        "Frase",
+        "Prueba",
+        "Motivo",
+        "Revisar"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Afirmación, prueba, motivo y comprobación",
+    "message": "Mantén visibles las cuestiones pendientes.",
+    "description": "Indica qué está sin confirmar, presenta discrepancias o es provisional; explica el motivo, enlaza las pruebas y concreta la siguiente comprobación. Conserva el razonamiento anterior al actualizar la nota. Estas etiquetas describen la investigación, no una probabilidad medida.",
+    "steps": [
+      [
+        "Frase",
+        "Un enunciado comprobable"
+      ],
+      [
+        "Prueba",
+        "Un pasaje realmente leído"
+      ],
+      [
+        "Motivo",
+        "La duda y su motivo"
+      ],
+      [
+        "Revisar",
+        "Una comprobación concreta"
+      ]
+    ]
+  }
+}

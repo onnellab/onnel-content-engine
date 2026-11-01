@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hans/research/mark-uncertainty-clearly-in-research-notes.md",
+  "topic": {
+    "id": "TOPIC-0126",
+    "title": "在研究笔记中清楚标注不确定之处",
+    "slug": "mark-uncertainty-clearly-in-research-notes",
+    "category": "research",
+    "language": "zh-Hans",
+    "primary_keyword": "研究笔记中的不确定性",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "在研究笔记中清楚标注不确定之处",
+    "问题",
+    "简短回答",
+    "标签是什么意思？",
+    "推荐流程",
+    "参考资料",
+    "相关指南",
+    "常见问题",
+    "“未确认”是否意味着错误？",
+    "两个不同日期一定意味着说法冲突吗？",
+    "找到一个来源后，就能删除标签吗？",
+    "结论"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "怎样记录不确定性，才能避免笔记含糊不清或显得过于肯定？",
+      "structure": [
+        "主张",
+        "证据",
+        "原因",
+        "下一步核查"
+      ],
+      "notes": "Explain claim, evidence, reason and next check; this is not an application screenshot or a real study result."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains uncertainty and verification steps, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "明确不确定之处",
+      "steps": [
+        "主张",
+        "证据",
+        "原因",
+        "下一步核查"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "主张、证据、原因、下一步核查",
+    "message": "让尚未解决的问题清晰可见。",
+    "description": "标明未确认、说法不一致或暂定解释，写清原因、证据来源和下一步核查。更新笔记时保留先前判断的理由。这些标签描述调查状态，并不代表测量得到的概率。",
+    "steps": [
+      [
+        "主张",
+        "可以核查的陈述"
+      ],
+      [
+        "证据",
+        "实际读过的证据"
+      ],
+      [
+        "原因",
+        "不确定之处及原因"
+      ],
+      [
+        "下一步核查",
+        "具体的核查行动"
+      ]
+    ]
+  }
+}
