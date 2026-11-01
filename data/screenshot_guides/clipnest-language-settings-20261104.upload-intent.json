@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "guide_id": "clipnest-language-settings-20261104",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "status": "intent_recorded_before_upload",
+  "created_at_utc": "2026-11-01T10:43:55Z",
+  "video_sha256": "9864d0838f534f2d526f7bc45c4c1ad3d8665dd1fcde00dd0e4f67c4cd6e4b2c",
+  "manifest_sha256": "3f249c3a2ad96bca37d2739eb68ffe27162665940e01bdf684f03328435b6265",
+  "library_file_id": "libfile_b0750e8c5eac8191ad67dc4dd43844eb",
+  "target_publish_at": "2026-11-04T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "duplicate_check": {
+    "observed_at_utc": "2026-11-01T10:43:44Z",
+    "studio_channel_verified": true,
+    "ordinary_videos": 6,
+    "shorts": 16,
+    "pagination_complete": true,
+    "matching_topic_or_title_found": false,
+    "remote_hash_comparison": "Studio does not expose original SHA; all source intents/receipts and video IDs reconciled, no matching new guide intents present.",
+    "preserved_existing": [
+      "-AzOvvP--6Y",
+      "T6JDb03YW7A",
+      "sG-RwU-Z65s"
+    ]
+  },
+  "video_id": null,
+  "upload_attempts": 0,
+  "uncertain_upload": false
+}
