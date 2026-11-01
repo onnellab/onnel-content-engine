@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "clipnest-language-settings-20261104",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "uploaded_private_processing",
+  "status": "uploaded_private_awaiting_disclosure_confirmation",
   "created_at_utc": "2026-11-01T10:43:55Z",
   "video_sha256": "9864d0838f534f2d526f7bc45c4c1ad3d8665dd1fcde00dd0e4f67c4cd6e4b2c",
   "manifest_sha256": "3f249c3a2ad96bca37d2739eb68ffe27162665940e01bdf684f03328435b6265",
@@ -27,5 +27,17 @@
   "upload_attempts": 1,
   "uncertain_upload": false,
   "video_id_observed_at_utc": "2026-11-01T10:44:59Z",
-  "video_url": "https://youtube.com/shorts/bnf7KpJO_ts"
+  "video_url": "https://youtube.com/shorts/bnf7KpJO_ts",
+  "last_observed_at_utc": "2026-11-01T10:47:32Z",
+  "studio_copyright_check": "complete_no_issues",
+  "visibility_observed": "private_saved",
+  "schedule_confirmed": false,
+  "disclosure_confirmation": {
+    "status": "pending_user",
+    "auto_review_denied_before_execution": true,
+    "ai_selection": null,
+    "paid_promotion_selection": null,
+    "reason": "Trusted factual confirmation required for AI and paid-promotion disclosures; neither selection was executed."
+  },
+  "external_link_clickability": "Studio requires one-time verification; text URL saved; no verification initiated."
 }
