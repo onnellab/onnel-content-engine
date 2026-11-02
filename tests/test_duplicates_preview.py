@@ -202,12 +202,32 @@ class StagingAndRegistration(unittest.TestCase):
             before={str(p.relative_to(root)):p.read_bytes() for p in root.rglob('*') if p.is_file()}
             with patch.object(preview,'validate_drafts'),patch('check_nine_language_publication.check_reviewed_candidates') as gate:
                 candidates,manifest=preview.validate_registered_candidates(root)
-            gate.assert_called_once_with(root/'data/topics.csv')
+            # macOS may spell TemporaryDirectory under /var, while the
+            # guarded reader canonicalizes that OS alias to /private/var.
+            gate.assert_called_once_with((root/'data/topics.csv').resolve())
             self.assertEqual(len(candidates),9);self.assertEqual(len(manifest['files']),72)
             self.assertEqual(before,{str(p.relative_to(root)):p.read_bytes() for p in root.rglob('*') if p.is_file()})
             p=root/manifest['files'][0]['path'];p.write_bytes(p.read_bytes()+b'changed')
             with patch.object(preview,'validate_drafts'),self.assertRaisesRegex(ValueError,'fingerprint mismatch'):
                 preview.validate_registered_candidates(root)
+
+    def test_ancestor_alias_uses_canonical_path_without_rewriting_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp)
+            real=base/'real';root=real/'stage';root.mkdir(parents=True)
+            self.registered_fixture(root)
+            alias=base/'alias'
+            try:
+                alias.symlink_to(real,target_is_directory=True)
+            except (OSError,NotImplementedError) as error:
+                self.skipTest(f'Platform does not support directory symlinks: {error}')
+            aliased_root=alias/'stage'
+            before={str(p.relative_to(root)):p.read_bytes() for p in root.rglob('*') if p.is_file()}
+            with patch.object(preview,'validate_drafts'),patch('check_nine_language_publication.check_reviewed_candidates') as gate:
+                candidates,manifest=preview.validate_registered_candidates(aliased_root)
+            gate.assert_called_once_with((root/'data/topics.csv').resolve())
+            self.assertEqual(len(candidates),9);self.assertEqual(len(manifest['files']),72)
+            self.assertEqual(before,{str(p.relative_to(root)):p.read_bytes() for p in root.rglob('*') if p.is_file()})
 
 
 class ReviewedSource(unittest.TestCase):

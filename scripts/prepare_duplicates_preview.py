@@ -53,7 +53,7 @@ REVIEWED_SVG_BLOBS = {
     "zh-Hans": "6c2469dd43a7e58c39d39152aaada1a0d3883142",
     "zh-Hant": "3e959a50c3d0a8c165ceb9948d0e6c076bbf59b9",
     "pt-BR": "1478a4e9ae001e765d9cfb7eb1773577315c447e",
-    "de": "7e8f0cabdfd0ad4c70473271220497a07529c47e",
+    "de": "043b4c987af25d79d07249b9c3cdc925b887c023",
     "fr": "e5846d8fa19513dfb1b74d011988b0c67ba3ac72",
     "es": "643a4fe93687c9e7b6e3045cad31380fc856fa4a"
 }
@@ -206,7 +206,7 @@ IMAGE_COPY = {
                 "Originale aufbewahren."
             ],
             [
-                "Vergleichen",
+                "Abgleich",
                 "Ausgabe und Quelle prüfen."
             ],
             [

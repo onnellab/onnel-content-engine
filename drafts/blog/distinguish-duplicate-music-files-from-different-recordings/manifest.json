@@ -107,5 +107,14 @@
     "Native evaluator and fingerprint gates",
     "Rendered desktop/mobile pages and localized assets",
     "Canonical review queue integration after gates; publisher owns scheduling"
-  ]
+  ],
+  "visual_correction": {
+    "observed_preview_commit": "5c267c2daf85c04e1c40f7ff42fe7706be17799f",
+    "observed_defect": "German native diagram card split Vergleichen inside the word",
+    "correction": "Abgleich: same comparison step, shorter noun label",
+    "source_svg_git_blob_sha": "043b4c987af25d79d07249b9c3cdc925b887c023",
+    "source_svg_sha256": "e004665e5ecc0e7a071475befbe8de1c86a877e30489017b4d0c49dd9afab1ed",
+    "reviewed_at": "2026-11-02T09:52:40.698866+00:00",
+    "native_rerender_verified": false
+  }
 }

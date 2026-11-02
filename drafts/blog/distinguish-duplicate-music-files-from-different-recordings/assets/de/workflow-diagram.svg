@@ -9,7 +9,7 @@
 <text x="80" y="280" font-size="23" fill="#4a5550">Originale aufbewahren.</text>
 <path d="M400 330 v30 m-9 -9 l9 9 9 -9" fill="none" stroke="#486b58" stroke-width="3"/>
 <rect x="50" y="375" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
-<text x="80" y="425" font-size="27" fill="#252d29">2. Vergleichen</text>
+<text x="80" y="425" font-size="27" fill="#252d29">2. Abgleich</text>
 <text x="80" y="475" font-size="23" fill="#4a5550">Ausgabe und Quelle prüfen.</text>
 <path d="M400 525 v30 m-9 -9 l9 9 9 -9" fill="none" stroke="#486b58" stroke-width="3"/>
 <rect x="50" y="570" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
