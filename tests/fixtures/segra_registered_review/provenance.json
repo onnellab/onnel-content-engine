@@ -5,6 +5,12 @@
   "purpose": "Frozen historical review-state test inputs only; never restore operational lifecycle or alter production fingerprints.",
   "files": [
     {
+      "path": "generated/markdown/en/media/choose-safe-audio-working-copy.md",
+      "byte_length": 5222,
+      "sha256": "cc3eeaedafe6ab710ff2da149425d564fd7f3b12e82f9b67ab0efa288e1ed889",
+      "git_blob_sha1": "4d539740a972eb68e4cf91cd0ce70cb5647a214e"
+    },
+    {
       "path": "generated/metadata/en/media/choose-safe-audio-working-copy/internal_links.json",
       "byte_length": 5251,
       "sha256": "0d65c9e9b08cd949fe116354c61ea7c0abc0541f7ad7d80d7616e01a1af72cbe",
@@ -15,6 +21,12 @@
       "byte_length": 3579,
       "sha256": "41415dc5bfd3e5fabc7f612245434bae34cef80039eaef1673ce9ec9b306beb7",
       "git_blob_sha1": "1f645b26ee131102cd9b748ea1ded10ff3443586"
+    },
+    {
+      "path": "generated/markdown/ko/media/choose-safe-audio-working-copy.md",
+      "byte_length": 6564,
+      "sha256": "d7abde62b5711178c1f0a6759c8f5ae1968e3122e71d815ceedc1cca6aff9674",
+      "git_blob_sha1": "27a8344864b2a33ac914ab35079e1837c2c91ad6"
     },
     {
       "path": "generated/metadata/ko/media/choose-safe-audio-working-copy/internal_links.json",
@@ -29,6 +41,12 @@
       "git_blob_sha1": "9beb12a32637f4496e2fd25b8d2d52a4ab1764e3"
     },
     {
+      "path": "generated/markdown/ja/media/choose-safe-audio-working-copy.md",
+      "byte_length": 7801,
+      "sha256": "d8153746aa9cd8e049314f0d8efff7368b0f93880241683e81711ed3d7a3e02d",
+      "git_blob_sha1": "7d512ee230966fb26a6d3dc80e2c98de4f1e0cd9"
+    },
+    {
       "path": "generated/metadata/ja/media/choose-safe-audio-working-copy/internal_links.json",
       "byte_length": 5410,
       "sha256": "ffc42f1ae0866e8d9d6dc791c83b31eba2fbe6b5c166b253300a95072d37127e",
@@ -39,6 +57,12 @@
       "byte_length": 3597,
       "sha256": "0c7cae5a2eac101b8b659c0592578e7f9006f636224c54637877f7eefaf69468",
       "git_blob_sha1": "0f88aebb05480b3d96440e51e7d0579f6f1de0f4"
+    },
+    {
+      "path": "generated/markdown/zh-Hans/media/choose-safe-audio-working-copy.md",
+      "byte_length": 5980,
+      "sha256": "d849465d4be079ed918bd3d749a119b94af1ac129fd4788df62051b8948b4d38",
+      "git_blob_sha1": "f7571e22a3d151e1d17665c9d2a173ba95cf07d7"
     },
     {
       "path": "generated/metadata/zh-Hans/media/choose-safe-audio-working-copy/internal_links.json",
@@ -53,6 +77,12 @@
       "git_blob_sha1": "ad8c631c952e925421d6e55be3a5d74d1a4cfc2f"
     },
     {
+      "path": "generated/markdown/zh-Hant/media/choose-safe-audio-working-copy.md",
+      "byte_length": 5974,
+      "sha256": "80d7847cd4d7e9427165071204fb522b3ce6c0507b9cee6b56b8d82075726ba7",
+      "git_blob_sha1": "ba1e456d4cdbff5f2a18e2ab59618e6badbebdcb"
+    },
+    {
       "path": "generated/metadata/zh-Hant/media/choose-safe-audio-working-copy/internal_links.json",
       "byte_length": 5296,
       "sha256": "17403017568202ecdcf89f925f9dff04e353f9b47fd27431da74c3d213deee2a",
@@ -63,6 +93,12 @@
       "byte_length": 3594,
       "sha256": "176fe45eef5b61503faf57d9b875c54fb323f2b596fc8433ad1e004932ebb043",
       "git_blob_sha1": "d3bf0acadf66747d299e36091d838853a2a66e64"
+    },
+    {
+      "path": "generated/markdown/pt-BR/media/choose-safe-audio-working-copy.md",
+      "byte_length": 5537,
+      "sha256": "25f43aeaf92d309450249214557668b7b6cdd34e35934b3533d211c9334f45cb",
+      "git_blob_sha1": "8d258d4c1237ec57f4ce77745af9b27dbef1edcc"
     },
     {
       "path": "generated/metadata/pt-BR/media/choose-safe-audio-working-copy/internal_links.json",
@@ -77,6 +113,12 @@
       "git_blob_sha1": "eb30972c08407ccdd1cb22d9e19ce5c400edd924"
     },
     {
+      "path": "generated/markdown/de/media/choose-safe-audio-working-copy.md",
+      "byte_length": 5838,
+      "sha256": "49ea2188be60a892ca5d586f0bd9b2fd72000fe8438e7660933092de5ed0a24c",
+      "git_blob_sha1": "9a3a0b2602de12ed58a9f5f83f159f81560d68e2"
+    },
+    {
       "path": "generated/metadata/de/media/choose-safe-audio-working-copy/internal_links.json",
       "byte_length": 5285,
       "sha256": "cabf97c728ebb01c677c5020e896c3dc773613d716b3dd1c91ff00bd287a8bc5",
@@ -89,6 +131,12 @@
       "git_blob_sha1": "2f05863ebd4c5a6b04d38d6bb173a6ae3e28b8dd"
     },
     {
+      "path": "generated/markdown/fr/media/choose-safe-audio-working-copy.md",
+      "byte_length": 6047,
+      "sha256": "3f211c78107b41b287c0e4b91cc60fbed0d3ff0c710de8d38eac4752bc619ce2",
+      "git_blob_sha1": "3a44d1770ecf417e72ad54df919f544d1a04c4a6"
+    },
+    {
       "path": "generated/metadata/fr/media/choose-safe-audio-working-copy/internal_links.json",
       "byte_length": 5664,
       "sha256": "46be864ad3a65f2adbac82f5d1519a2d02601f35ac408cd31f1c2b06805a7fdb",
@@ -99,6 +147,12 @@
       "byte_length": 3602,
       "sha256": "59913261cedf2738b4ab6893fce6293e888514de2992bdad335413d81451779e",
       "git_blob_sha1": "418001deb5bf12c95cc46617b1c24980aaf1d32f"
+    },
+    {
+      "path": "generated/markdown/es/media/choose-safe-audio-working-copy.md",
+      "byte_length": 5656,
+      "sha256": "af7153801a2b608767cfc72242b28cb97a98e14994d59ae5266c80fc2e8fd598",
+      "git_blob_sha1": "511c4079dbe2138afd024483b7cc52e19e32e93d"
     },
     {
       "path": "generated/metadata/es/media/choose-safe-audio-working-copy/internal_links.json",
