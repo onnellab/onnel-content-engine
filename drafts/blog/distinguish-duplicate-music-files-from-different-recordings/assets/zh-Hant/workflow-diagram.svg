@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1100" role="img" aria-labelledby="title desc" lang="zh-Hant">
+<title id="title">刪除之前先比較</title>
+<desc id="desc">檔案、發行版本與錄音並不相同. 保留無法確定的副本。</desc>
+<rect width="800" height="1100" fill="#faf8f3"/>
+<text x="50" y="80" font-size="30" fill="#252d29">刪除之前先比較</text>
+<text x="50" y="125" font-size="20" fill="#4a5550">檔案、發行版本與錄音並不相同</text>
+<rect x="50" y="180" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
+<text x="80" y="230" font-size="27" fill="#252d29">1. 保留</text>
+<text x="80" y="280" font-size="23" fill="#4a5550">保存原檔與備份</text>
+<path d="M400 330 v30 m-9 -9 l9 9 9 -9" fill="none" stroke="#486b58" stroke-width="3"/>
+<rect x="50" y="375" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
+<text x="80" y="425" font-size="27" fill="#252d29">2. 比較</text>
+<text x="80" y="475" font-size="23" fill="#4a5550">核對版本與來源</text>
+<path d="M400 525 v30 m-9 -9 l9 9 9 -9" fill="none" stroke="#486b58" stroke-width="3"/>
+<rect x="50" y="570" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
+<text x="80" y="620" font-size="27" fill="#252d29">3. 試聽</text>
+<text x="80" y="670" font-size="23" fill="#4a5550">比較相同片段</text>
+<path d="M400 720 v30 m-9 -9 l9 9 9 -9" fill="none" stroke="#486b58" stroke-width="3"/>
+<rect x="50" y="765" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
+<text x="80" y="815" font-size="27" fill="#252d29">4. 記錄</text>
+<text x="80" y="865" font-size="23" fill="#4a5550">保留依據與疑問</text>
+<text x="50" y="1045" font-size="24" fill="#252d29">保留無法確定的副本。</text>
+</svg>

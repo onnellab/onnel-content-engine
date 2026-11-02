@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 LOCALES = {"en", "ko", "ja", "zh-Hans", "zh-Hant", "pt-BR", "de", "fr", "es"}
 PROFILES = {
+    "music-duplicates": ("music", "distinguish-duplicate-music-files-from-different-recordings"),
     "research-uncertainty": ("research", "mark-uncertainty-clearly-in-research-notes"),
     "research-source-notes": ("research", "separate-source-notes-from-conclusions"),
     "vaultxt-text-navigation": ("reading", "make-long-plain-text-easier-to-navigate"),
@@ -45,15 +46,18 @@ def select_candidate(rows, requested="auto", ref=""):
 def environment_lines(name):
     if name not in PROFILES:
         raise ValueError("Unknown candidate")
+    if name == "music-duplicates":
+        return "DUPLICATES_PREVIEW=true\nUNCERTAINTY_PREVIEW=false\nSEGRA_PREVIEW=false\nVAULTXT_PREVIEW=false\nTAGWEAVER_PREVIEW=false"
     if name == "research-uncertainty":
-        return "UNCERTAINTY_PREVIEW=true\nSEGRA_PREVIEW=false\nVAULTXT_PREVIEW=false\nTAGWEAVER_PREVIEW=false"
-    return "\n".join(f"{key}={'true' if name == value else 'false'}" for key, value in (
+        return "DUPLICATES_PREVIEW=false\nUNCERTAINTY_PREVIEW=true\nSEGRA_PREVIEW=false\nVAULTXT_PREVIEW=false\nTAGWEAVER_PREVIEW=false"
+    return "DUPLICATES_PREVIEW=false\nUNCERTAINTY_PREVIEW=false\n" + "\n".join(f"{key}={'true' if name == value else 'false'}" for key, value in (
         ("SEGRA_PREVIEW", "segra-working-copy"),
         ("VAULTXT_PREVIEW", "vaultxt-text-navigation"),
         ("TAGWEAVER_PREVIEW", "tagweaver-album-artists")))
 
 # Registered identities are immutable; an absent bundle is not a no-work result.
 REGISTERED_IDS = {
+    "music-duplicates": dict(zip(("en", "ko", "ja", "zh-Hans", "zh-Hant", "pt-BR", "de", "fr", "es"), ("TOPIC-0087", "TOPIC-0133", "TOPIC-0134", "TOPIC-0135", "TOPIC-0136", "TOPIC-0137", "TOPIC-0138", "TOPIC-0139", "TOPIC-0140"))),
     "research-uncertainty": dict(zip(("en", "ko", "ja", "zh-Hans", "zh-Hant", "pt-BR", "de", "fr", "es"), ("TOPIC-0086", "TOPIC-0124", "TOPIC-0125", "TOPIC-0126", "TOPIC-0127", "TOPIC-0128", "TOPIC-0129", "TOPIC-0130", "TOPIC-0131"))),
     "segra-working-copy": dict(zip(
         ("en", "ko", "ja", "zh-Hans", "zh-Hant", "pt-BR", "de", "fr", "es"),
@@ -123,7 +127,27 @@ def uncertainty_state(rows):
         return "draft"
     return registered_lifecycle(rows, name)
 
-def selection_environment(rows, requested="auto", ref="", event=""):
+def duplicates_state(rows):
+    name = "music-duplicates"
+    category, slug = PROFILES[name]
+    group = [r for r in rows if r.get("slug") == slug or r.get("id") in REGISTERED_IDS[name].values()]
+    if len(group) == 1:
+        row = group[0]
+        if (row.get("id") != "TOPIC-0087" or row.get("slug") != slug
+                or row.get("primary_language") != "en" or row.get("category") != category
+                or row.get("status") != "idea" or row.get("review_required") != "true"
+                or any(row.get(k) for k in ("scheduled_at", "published_at", "published_url"))):
+            raise ValueError("Invalid music comparison draft identity")
+        return "draft"
+    if not group:
+        return None
+    return registered_lifecycle(rows, name)
+
+def selection_environment(rows, requested="auto", ref="", event="", *, duplicates_available=False):
+    if requested == "auto" and duplicates_available and event == "push" and ref == "refs/heads/main":
+        state = duplicates_state(rows)
+        if state in {"draft", "review"}:
+            return "PREVIEW_REQUIRED=true\nPREVIEW_RESULT=selected\n" + environment_lines("music-duplicates")
     # Only routine main pushes may report no work; manual/verification runs stay strict.
     if event == "push" and ref == "refs/heads/main" and requested == "auto":
         states = [registered_lifecycle(rows, name) for name in AUTO_PROFILES]
@@ -132,7 +156,7 @@ def selection_environment(rows, requested="auto", ref="", event=""):
             return "PREVIEW_REQUIRED=true\nPREVIEW_RESULT=selected\n" + environment_lines("research-uncertainty")
         if "review" not in states:
             return "PREVIEW_REQUIRED=false\nPREVIEW_RESULT=no_work\n" + "\n".join(
-                f"{key}=false" for key in ("SEGRA_PREVIEW", "VAULTXT_PREVIEW", "TAGWEAVER_PREVIEW"))
+                f"{key}=false" for key in ("DUPLICATES_PREVIEW", "UNCERTAINTY_PREVIEW", "SEGRA_PREVIEW", "VAULTXT_PREVIEW", "TAGWEAVER_PREVIEW"))
     return "PREVIEW_REQUIRED=true\nPREVIEW_RESULT=selected\n" + environment_lines(
         select_candidate(rows, requested, ref))
 
@@ -147,7 +171,8 @@ def main():
     if args.event == "push" and args.ref == "refs/heads/main" and args.candidate == "auto":
         if (ROOT / "data/topics.csv").read_bytes() != (ROOT / "topics/topics.csv").read_bytes():
             raise ValueError("Registered topic mirror mismatch")
-    print(selection_environment(rows, args.candidate, args.ref, args.event))
+    print(selection_environment(rows, args.candidate, args.ref, args.event,
+          duplicates_available=(ROOT / "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/manifest.json").is_file()))
 
 if __name__ == "__main__":
     main()

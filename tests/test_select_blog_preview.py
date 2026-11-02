@@ -79,7 +79,7 @@ class Selection(unittest.TestCase):
             with self.assertRaises(ValueError): selector.environment_lines(name)
     def test_closed_environment_flag_output(self):
         self.assertEqual(selector.environment_lines("segra-working-copy"),
-                         "SEGRA_PREVIEW=true\nVAULTXT_PREVIEW=false\nTAGWEAVER_PREVIEW=false")
+                         "DUPLICATES_PREVIEW=false\nUNCERTAINTY_PREVIEW=false\nSEGRA_PREVIEW=true\nVAULTXT_PREVIEW=false\nTAGWEAVER_PREVIEW=false")
 
 class RegisteredSegra(unittest.TestCase):
     def fixture(self, root):
@@ -236,6 +236,7 @@ class RoutinePushLifecycle(unittest.TestCase):
         before = copy.deepcopy(rows)
         self.assertEqual(self.result(rows),
                          "PREVIEW_REQUIRED=false\nPREVIEW_RESULT=no_work\n"
+                         "DUPLICATES_PREVIEW=false\nUNCERTAINTY_PREVIEW=false\n"
                          "SEGRA_PREVIEW=false\nVAULTXT_PREVIEW=false\nTAGWEAVER_PREVIEW=false")
         self.assertEqual(rows, before)
 

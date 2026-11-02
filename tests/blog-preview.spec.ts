@@ -41,7 +41,7 @@ for (const locale of candidate.locales as string[]) {
 
     // Check the browser's actual native list-marker inputs and computed style.
     // Blank-separated workflow steps must keep their authored start numbers.
-    if (['design-consistent-file-naming-system', 'consistent-album-artist-names', 'make-long-plain-text-easier-to-navigate', 'choose-safe-audio-working-copy', 'mark-uncertainty-clearly-in-research-notes'].includes(candidate.slug)) {
+    if (['design-consistent-file-naming-system', 'consistent-album-artist-names', 'make-long-plain-text-easier-to-navigate', 'choose-safe-audio-working-copy', 'mark-uncertainty-clearly-in-research-notes', 'distinguish-duplicate-music-files-from-different-recordings'].includes(candidate.slug)) {
       const renderedNumbers = await page.locator('.article-body ol').evaluateAll(lists =>
         lists.flatMap(list => {
           const ol = list as HTMLOListElement;
@@ -55,7 +55,7 @@ for (const locale of candidate.locales as string[]) {
             return result;
           });
         }));
-      const expectedNumbers = ['make-long-plain-text-easier-to-navigate', 'choose-safe-audio-working-copy', 'mark-uncertainty-clearly-in-research-notes'].includes(candidate.slug) ? [1, 2, 3, 4, 5] : candidate.slug === 'consistent-album-artist-names' ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5, 6];
+      const expectedNumbers = ['make-long-plain-text-easier-to-navigate', 'choose-safe-audio-working-copy', 'mark-uncertainty-clearly-in-research-notes', 'distinguish-duplicate-music-files-from-different-recordings'].includes(candidate.slug) ? [1, 2, 3, 4, 5] : candidate.slug === 'consistent-album-artist-names' ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5, 6];
       expect(renderedNumbers).toEqual(expectedNumbers.map(number => ({
         number, display: 'list-item', type: 'decimal',
       })));
@@ -66,8 +66,11 @@ for (const locale of candidate.locales as string[]) {
     for (const storeUrl of candidate.store_urls as string[]) {
       await expect(page.locator(`article a[href="${storeUrl}"]`).first()).toBeVisible();
     }
-    if (['separate-source-notes-from-conclusions', 'mark-uncertainty-clearly-in-research-notes'].includes(candidate.slug)) {
+    if (['separate-source-notes-from-conclusions', 'mark-uncertainty-clearly-in-research-notes', 'distinguish-duplicate-music-files-from-different-recordings'].includes(candidate.slug)) {
       await expect(page.locator('article a[href^="/apps/"], article a[href^="https://onnellab.com/apps/"], article a[href*="apps.apple.com"], article a[href*="play.google.com"]')).toHaveCount(0);
+    }
+    if (candidate.slug === 'distinguish-duplicate-music-files-from-different-recordings') {
+      await expect(page.locator('article a[href="https://musicbrainz.org/doc/Recording"]')).toBeVisible();
     }
     if (candidate.slug === 'mark-uncertainty-clearly-in-research-notes') {
       await expect(page.locator('article a[href="https://library.leeds.ac.uk/info/1401/academic-skills/85/note-making"]')).toBeVisible();

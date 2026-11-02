@@ -12,6 +12,10 @@ on:
       - 'scripts/prepare_segra_preview.py'
       - 'scripts/select_blog_preview.py'
       - 'scripts/prepare_uncertainty_preview.py'
+      - 'scripts/prepare_duplicates_preview.py'
+      - 'tests/test_duplicates_preview.py'
+      - 'drafts/blog/distinguish-duplicate-music-files-from-different-recordings/**'
+      - 'preview/music-duplicates/**'
       - 'tests/test_uncertainty_preview.py'
       - 'drafts/blog/mark-uncertainty-clearly-in-research-notes/**'
       - 'preview/research-uncertainty/**'
@@ -40,7 +44,7 @@ on:
         description: Nonpublishing candidate
         type: choice
         default: auto
-        options: [auto, research-uncertainty, research-source-notes, vaultxt-text-navigation, tagweaver-album-artists, segra-working-copy]
+        options: [auto, music-duplicates, research-uncertainty, research-source-notes, vaultxt-text-navigation, tagweaver-album-artists, segra-working-copy]
 permissions:
   contents: read
 concurrency:
@@ -52,6 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
+      DUPLICATES_PREVIEW: ${{ inputs.candidate == 'music-duplicates' }}
       UNCERTAINTY_PREVIEW: ${{ inputs.candidate == 'research-uncertainty' }}
       SEGRA_PREVIEW: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/verify/segra-working-copy-20261028') || inputs.candidate == 'segra-working-copy' }}
       VAULTXT_PREVIEW: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/verify/vaultxt-text-navigation-20261024') || inputs.candidate == 'vaultxt-text-navigation' }}
@@ -65,7 +70,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: onnellab/onnellab.github.io
-          ref: fd8f97cbb1af94bdb42f25be28aa88d322bc3ec1
+          ref: 55c8f31f427c0299eadffb1650a0ded19683d41b
           path: .preview-homepage
           persist-credentials: false
       - name: Configure existing Node version
@@ -88,6 +93,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_blog_preview.py -v
           python3 -m unittest discover -s tests -p test_uncertainty_preview.py -v
+          python3 -m unittest discover -s tests -p test_duplicates_preview.py -v
           python3 -m unittest discover -s tests -p test_preview_candidate_profiles.py -v
           python3 -m unittest discover -s tests -p test_conversational_korean_definitions.py -v
           python3 -m unittest discover -s tests -p test_aligna_preview.py -v
@@ -106,8 +112,11 @@ jobs:
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y librsvg2-bin fonts-noto-cjk
       - name: Validate research source notes with actual native gates in a disposable engine copy
-        if: env.PREVIEW_REQUIRED == 'true' && env.VAULTXT_PREVIEW != 'true' && env.TAGWEAVER_PREVIEW != 'true' && env.SEGRA_PREVIEW != 'true' && env.UNCERTAINTY_PREVIEW != 'true'
+        if: env.PREVIEW_REQUIRED == 'true' && env.VAULTXT_PREVIEW != 'true' && env.TAGWEAVER_PREVIEW != 'true' && env.SEGRA_PREVIEW != 'true' && env.UNCERTAINTY_PREVIEW != 'true' && env.DUPLICATES_PREVIEW != 'true'
         run: python3 scripts/prepare_research_preview.py
+      - name: Validate manual music comparison with actual native gates in a disposable engine copy
+        if: env.PREVIEW_REQUIRED == 'true' && env.DUPLICATES_PREVIEW == 'true'
+        run: python3 scripts/prepare_duplicates_preview.py
       - name: Validate uncertainty notes with actual native gates in a disposable engine copy
         if: env.PREVIEW_REQUIRED == 'true' && env.UNCERTAINTY_PREVIEW == 'true'
         run: python3 scripts/prepare_uncertainty_preview.py
@@ -140,7 +149,9 @@ jobs:
       - name: Overlay candidate only in disposable checkout
         if: env.PREVIEW_REQUIRED == 'true'
         run: |
-          if [ "$UNCERTAINTY_PREVIEW" = "true" ]; then
+          if [ "$DUPLICATES_PREVIEW" = "true" ]; then
+            python3 scripts/prepare_blog_preview.py --bundle preview-evidence/music-duplicates/candidate.json --homepage .preview-homepage --evidence preview-evidence
+          elif [ "$UNCERTAINTY_PREVIEW" = "true" ]; then
             python3 scripts/prepare_blog_preview.py --bundle preview-evidence/research-uncertainty/candidate.json --homepage .preview-homepage --evidence preview-evidence
           elif [ "$SEGRA_PREVIEW" = "true" ]; then
             python3 scripts/prepare_blog_preview.py --bundle preview-evidence/segra-working-copy/candidate.json --homepage .preview-homepage --evidence preview-evidence

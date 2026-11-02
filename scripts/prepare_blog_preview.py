@@ -95,6 +95,14 @@ def candidate_profile(slug):
             'related_slugs': ['separate-source-notes-from-conclusions', 'keep-durable-research-reading-log'],
             'table_rows': {locale: 3 for locale in LOCALES},
         }
+    if slug == 'distinguish-duplicate-music-files-from-different-recordings':
+        return {
+            'category': 'music', 'faq_count': 3, 'app_path': None,
+            'store_urls': [],
+            'source_urls': ['https://musicbrainz.org/doc/Recording'],
+            'related_slugs': ['consistent-album-artist-names', 'organize-local-music-library-offline-android'],
+            'table_rows': {locale: 3 for locale in LOCALES},
+        }
     raise ValueError('Unknown preview candidate')
 
 def allowed_candidate_links(slug, locale):

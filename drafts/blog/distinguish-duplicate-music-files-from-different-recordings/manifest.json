@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "kind": "nine_locale_editorial_draft_not_publication_receipt",
+  "slug": "distinguish-duplicate-music-files-from-different-recordings",
+  "category": "music",
+  "state": "draft_not_ready",
+  "source_idea_id": "TOPIC-0087",
+  "new_topic_ids_allocated": false,
+  "queue_modified": false,
+  "scheduled_at": null,
+  "published_at": null,
+  "created_at": "2026-11-02T09:38:49.376147+00:00",
+  "source_engine_commit": "3867dc67b54e6b4bc0d6fc84ee1eb137a1a76ee4",
+  "source_homepage_commit": "55c8f31f427c0299eadffb1650a0ded19683d41b",
+  "manuscripts": [
+    {
+      "locale": "en",
+      "path": "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/en.md",
+      "git_blob_sha": "cdfc100bbf2e96556a5f53bad2f8c9f1addd22e1",
+      "sha256": "69f7ae4d202ebbb9ce554a8319688edbb595a65dd122706b4c3747e63234c3b2"
+    },
+    {
+      "locale": "ko",
+      "path": "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/ko.md",
+      "git_blob_sha": "0f7fd36a6158e795702dbca9bc65faad98200a5f",
+      "sha256": "8097093a888d05f5aafab6ff799523c1bc5584fb5e5a2fcb976f4c852d814e6e"
+    },
+    {
+      "locale": "ja",
+      "path": "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/ja.md",
+      "git_blob_sha": "1bcf25eb70ceaeb65d541f8246c56d5916694c8c",
+      "sha256": "b7162782418fd792b10403f3c8c69b2e23ff6a459085526831b9bd9a6510a305"
+    },
+    {
+      "locale": "zh-Hans",
+      "path": "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/zh-Hans.md",
+      "git_blob_sha": "760180ddb18f4aa52726203d5555e57c9112e6fa",
+      "sha256": "07b9a90cf2ebe19045b3f5a19a4e63eb4c7b6496abfb6e12e3d2b8dac7e74db2"
+    },
+    {
+      "locale": "zh-Hant",
+      "path": "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/zh-Hant.md",
+      "git_blob_sha": "6e200b6f0c3fabae5f6f0c7e273fb5c57653689b",
+      "sha256": "3c26b4abc3a185ca6c3b0f99b6305b09544fd575286c83f35707caa2aec4e554"
+    },
+    {
+      "locale": "pt-BR",
+      "path": "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/pt-BR.md",
+      "git_blob_sha": "dfefb98fb18afe1c31241800618f3a58d5acd7b2",
+      "sha256": "f7bbaad40e02195d976d76f6bf60845babdc5c079d357c1056ed4c08b5a39f6f"
+    },
+    {
+      "locale": "de",
+      "path": "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/de.md",
+      "git_blob_sha": "b450031a80df60c38841abbfecd7e1436730ef3e",
+      "sha256": "98bbd2eecdbe6f1a4b9d3b1565a700b3a3f270c45d1378a1c8e84ccadc6ced5f"
+    },
+    {
+      "locale": "fr",
+      "path": "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/fr.md",
+      "git_blob_sha": "005173c417bec0db50233111c116ec4e5d85ac8b",
+      "sha256": "23153e8482447f3876cb05889793bc5237fa16040ce2b3611a73f6bf4f12aeb0"
+    },
+    {
+      "locale": "es",
+      "path": "drafts/blog/distinguish-duplicate-music-files-from-different-recordings/es.md",
+      "git_blob_sha": "e1522ae4ef5274e248d3acefe91a623f76288837",
+      "sha256": "3edf45f78240ab399fa73e8deaa422baccd534570674b5a598cae6ccb853d4f9"
+    }
+  ],
+  "independent_editorial_review": {
+    "author": "draft_duplicate_music",
+    "reviewer": "verify_scheduled_publications",
+    "method": "All nine actual bodies read and compared; native and visual gates remain separate",
+    "required_defects_remaining": [],
+    "corrections": [
+      "Clarify hash examples as SHA-256 in all locales without absolute identity or deletion permission claims",
+      "French possibly remains peut-être, not probably",
+      "Spanish hash match is an indicio, not proof",
+      "Natural explicit definition and canonical localized headings retained without evaluator changes"
+    ],
+    "claims": [
+      "No file modification or automatic deletion",
+      "Same filename, duration or metadata does not prove a duplicate",
+      "Different file hashes do not prove different recordings",
+      "Sample listening does not establish complete identity",
+      "No app feature, platform, price, ranking or measured search-demand claim"
+    ]
+  },
+  "source_evidence": {
+    "kind": "editorial_source_observation",
+    "observed_at": "2026-11-02T09:29:44+00:00",
+    "source": "https://musicbrainz.org/doc/Recording",
+    "revision_displayed": "76395",
+    "scope": "Recording versus release-track terminology only. No copied examples, images or lengthy source prose.",
+    "additional_requested_source": {
+      "url": "https://musicbrainz.org/doc/Style/Recording",
+      "result": "429 Too Many Requests",
+      "read": false,
+      "retry_or_bypass": false
+    },
+    "authoring": "Original editorial workflow, nine localized drafts; no destructive instructions, no app claims.",
+    "verification": "5 numbered steps, 3 table data rows, 3 FAQs and one official source link per locale checked; native gates, independent review and visual render pending."
+  },
+  "search_demand": "Editorial hypothesis, not measured",
+  "pending": [
+    "Native evaluator and fingerprint gates",
+    "Rendered desktop/mobile pages and localized assets",
+    "Canonical review queue integration after gates; publisher owns scheduling"
+  ]
+}

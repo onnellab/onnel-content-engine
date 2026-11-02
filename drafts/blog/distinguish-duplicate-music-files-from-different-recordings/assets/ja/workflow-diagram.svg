@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1100" role="img" aria-labelledby="title desc" lang="ja">
+<title id="title">削除する前に比較</title>
+<desc id="desc">ファイル・発売版・録音は別のもの. 判断できないコピーは残します。</desc>
+<rect width="800" height="1100" fill="#faf8f3"/>
+<text x="50" y="80" font-size="30" fill="#252d29">削除する前に比較</text>
+<text x="50" y="125" font-size="20" fill="#4a5550">ファイル・発売版・録音は別のもの</text>
+<rect x="50" y="180" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
+<text x="80" y="230" font-size="27" fill="#252d29">1. 保存</text>
+<text x="80" y="280" font-size="23" fill="#4a5550">元ファイルを保管</text>
+<path d="M400 330 v30 m-9 -9 l9 9 9 -9" fill="none" stroke="#486b58" stroke-width="3"/>
+<rect x="50" y="375" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
+<text x="80" y="425" font-size="27" fill="#252d29">2. 比較</text>
+<text x="80" y="475" font-size="23" fill="#4a5550">発売版と出所を確認</text>
+<path d="M400 525 v30 m-9 -9 l9 9 9 -9" fill="none" stroke="#486b58" stroke-width="3"/>
+<rect x="50" y="570" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
+<text x="80" y="620" font-size="27" fill="#252d29">3. 試聴</text>
+<text x="80" y="670" font-size="23" fill="#4a5550">同じ箇所を聴き比べる</text>
+<path d="M400 720 v30 m-9 -9 l9 9 9 -9" fill="none" stroke="#486b58" stroke-width="3"/>
+<rect x="50" y="765" width="700" height="145" rx="14" fill="#ffffff" stroke="#9aafa3"/>
+<text x="80" y="815" font-size="27" fill="#252d29">4. 記録</text>
+<text x="80" y="865" font-size="23" fill="#4a5550">根拠と不明点を残す</text>
+<text x="50" y="1045" font-size="24" fill="#252d29">判断できないコピーは残します。</text>
+</svg>

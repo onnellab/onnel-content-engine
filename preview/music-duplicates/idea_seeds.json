@@ -1,0 +1,19 @@
+[
+  {
+    "status": "idea",
+    "category": "music",
+    "primary_question": "What should I check in playlist file references before moving music files?",
+    "working_title": "Check Playlist References Before Moving Music Files",
+    "slug": "compare-playlist-reference-paths-before-moving-files",
+    "primary_language": "en",
+    "priority": "normal",
+    "search_intent": "workflow",
+    "related_apps": "",
+    "primary_keyword": "playlist file references",
+    "secondary_keywords": "relative paths|absolute paths|playlist backup|missing tracks",
+    "evergreen": "true",
+    "source_type": "editorial",
+    "review_required": "true",
+    "notes": "Product-neutral editorial hypothesis: distinguish playlist references from media files, preserve backups and test a copied playlist before considering a user-chosen move. Verify the actual format and player behavior; do not promise automatic relinking or modify files. Distinct from recording identity and manual duplicate comparison. No app-capability or measured demand claim."
+  }
+]
