@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "kind": "verified_publication_ledger_recovery",
+  "slug": "choose-safe-audio-working-copy",
+  "category": "media",
+  "prepared_at": "2026-11-02T05:04:49Z",
+  "observed_window_utc": [
+    "2026-11-02T05:00:46Z",
+    "2026-11-02T05:01:17Z"
+  ],
+  "observation_method": "dot cloud browser actual page body and read-only DOM inspection",
+  "all_nine_public": true,
+  "self_canonical_verified": true,
+  "hreflang_nine_plus_x_default_verified": true,
+  "html_language_verified": true,
+  "http_status_codes_directly_observed": false,
+  "server_published_at": null,
+  "publication_metadata_at": "2026-11-02T09:00:00+09:00",
+  "publication_time_semantics": "Preserved existing homepage published_at editorial/scheduled metadata, not proof of server publication at 09:00 KST. updated_at is this ledger recovery preparation time, not a new publication time.",
+  "homepage_commit": "603c1b4fef6987d3b6591582689f92ed4f1e137b",
+  "homepage_deployment_run": 41388693400,
+  "homepage_nine_language_verification_run": 41388693370,
+  "homepage_runs_conclusion": "success",
+  "engine_base_commit": "8b64624eab2b002c41e10d6dbe01805ccd314ede",
+  "engine_run": 41388577932,
+  "engine_run_conclusion": "failure",
+  "engine_failure_scope": "Deploy success; Wait For Pages Deployment failure; Commit Content Engine Outputs skipped; Commit Distribution Posting Status failure. Log-level root cause unverified; logs endpoint unsupported.",
+  "restoration_scope": "Only nine topic rows in canonical and legacy mirror plus publication frontmatter in those nine manuscripts. Bodies and other rows preserved. No dispatch, republication, homepage or workflow changes.",
+  "owner_notification_message_id": "Sentinel_608f5fd240108191b80d74b36cf38be5",
+  "pages": [
+    {
+      "topic_id": "TOPIC-0041",
+      "locale": "en",
+      "url": "https://onnellab.com/blog/en/choose-safe-audio-working-copy/",
+      "source_path": "generated/markdown/en/media/choose-safe-audio-working-copy.md",
+      "body_sha256": "3f31e49d2f927cb5a43e2b5f26a9b1a2791f2c26040d91dcdacc2366597a35f2",
+      "before_source_blob": "4d539740a972eb68e4cf91cd0ce70cb5647a214e"
+    },
+    {
+      "topic_id": "TOPIC-0115",
+      "locale": "ko",
+      "url": "https://onnellab.com/blog/ko/choose-safe-audio-working-copy/",
+      "source_path": "generated/markdown/ko/media/choose-safe-audio-working-copy.md",
+      "body_sha256": "2f725522494359ebe7de8c8602a3c85c29b27b556b4b4e3ae2bdb13519227236",
+      "before_source_blob": "27a8344864b2a33ac914ab35079e1837c2c91ad6"
+    },
+    {
+      "topic_id": "TOPIC-0116",
+      "locale": "ja",
+      "url": "https://onnellab.com/blog/ja/choose-safe-audio-working-copy/",
+      "source_path": "generated/markdown/ja/media/choose-safe-audio-working-copy.md",
+      "body_sha256": "76ce3e0429b14dff78a1ea8ba243454b87550a08557bae9ae505578f616cd341",
+      "before_source_blob": "7d512ee230966fb26a6d3dc80e2c98de4f1e0cd9"
+    },
+    {
+      "topic_id": "TOPIC-0117",
+      "locale": "zh-Hans",
+      "url": "https://onnellab.com/blog/zh-hans/choose-safe-audio-working-copy/",
+      "source_path": "generated/markdown/zh-Hans/media/choose-safe-audio-working-copy.md",
+      "body_sha256": "9d13a3cb1c06ac150092953f281c2d3c834edcd64b79a50b1401ef253987732d",
+      "before_source_blob": "f7571e22a3d151e1d17665c9d2a173ba95cf07d7"
+    },
+    {
+      "topic_id": "TOPIC-0118",
+      "locale": "zh-Hant",
+      "url": "https://onnellab.com/blog/zh-hant/choose-safe-audio-working-copy/",
+      "source_path": "generated/markdown/zh-Hant/media/choose-safe-audio-working-copy.md",
+      "body_sha256": "010673d3b2718287dee2509de0aecab0f0581ab7512bf99848ae09c9fbd26f37",
+      "before_source_blob": "ba1e456d4cdbff5f2a18e2ab59618e6badbebdcb"
+    },
+    {
+      "topic_id": "TOPIC-0119",
+      "locale": "pt-BR",
+      "url": "https://onnellab.com/blog/pt-br/choose-safe-audio-working-copy/",
+      "source_path": "generated/markdown/pt-BR/media/choose-safe-audio-working-copy.md",
+      "body_sha256": "82f3d75e1b33835e1ed3030d2d5fbf6428cdb521a62cc176e6209f3cbf0694a7",
+      "before_source_blob": "8d258d4c1237ec57f4ce77745af9b27dbef1edcc"
+    },
+    {
+      "topic_id": "TOPIC-0120",
+      "locale": "de",
+      "url": "https://onnellab.com/blog/de/choose-safe-audio-working-copy/",
+      "source_path": "generated/markdown/de/media/choose-safe-audio-working-copy.md",
+      "body_sha256": "7dba7a177e3ca48b9ba0a8d986f1cb806bd7db7b85463c633c6a404ade111317",
+      "before_source_blob": "9a3a0b2602de12ed58a9f5f83f159f81560d68e2"
+    },
+    {
+      "topic_id": "TOPIC-0121",
+      "locale": "fr",
+      "url": "https://onnellab.com/blog/fr/choose-safe-audio-working-copy/",
+      "source_path": "generated/markdown/fr/media/choose-safe-audio-working-copy.md",
+      "body_sha256": "4bc3ba40ddcdcdf891b1de3d5ed28821fb13c5f5184883847cf3222509d198d2",
+      "before_source_blob": "3a44d1770ecf417e72ad54df919f544d1a04c4a6"
+    },
+    {
+      "topic_id": "TOPIC-0122",
+      "locale": "es",
+      "url": "https://onnellab.com/blog/es/choose-safe-audio-working-copy/",
+      "source_path": "generated/markdown/es/media/choose-safe-audio-working-copy.md",
+      "body_sha256": "ca6d88cf246619dad29f5393dd5257a10bb8aee115275befca79cf21e03b7a75",
+      "before_source_blob": "511c4079dbe2138afd024483b7cc52e19e32e93d"
+    }
+  ],
+  "limitations": [
+    "No server publication timestamp recovered",
+    "Not a new translation-quality review",
+    "Not all linked destinations or image pixels inspected"
+  ]
+}

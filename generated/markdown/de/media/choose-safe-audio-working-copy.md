@@ -5,7 +5,7 @@ slug: "choose-safe-audio-working-copy"
 category: "media"
 language: "de"
 description: "Original und Arbeitskopie eindeutig unterscheiden, das Ergebnis separat speichern und vor dem Aufräumen tatsächlich anhören."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0120"
 search_intent: "workflow"
 primary_keyword: "Audio-Arbeitskopie"
@@ -14,6 +14,8 @@ tags: "Audio-Arbeitskopie"
 short_answer: "Identifizieren und behalten Sie das Original. Erstellen Sie eine separate, eindeutig benannte Kopie und prüfen Sie, ob Sie genau diese öffnen. Speichern Sie das Ergebnis als neue Datei und hören Sie es vor dem Löschen an. Zwei Dateien auf demselben Gerät sind keine unabhängige Sicherung."
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/de/choose-safe-audio-working-copy/"
+published_at: "2026-11-02T09:00:00+09:00"
+updated_at: "2026-11-02T05:04:49Z"
 ---
 
 # Vor der Audiobearbeitung eine Arbeitskopie anlegen

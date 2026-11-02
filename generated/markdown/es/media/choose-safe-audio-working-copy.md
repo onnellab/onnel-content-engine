@@ -5,7 +5,7 @@ slug: "choose-safe-audio-working-copy"
 category: "media"
 language: "es"
 description: "Distingue el original de la copia de trabajo, guarda un resultado separado y escúchalo antes de eliminar archivos."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0122"
 search_intent: "workflow"
 primary_keyword: "copia de trabajo de audio"
@@ -14,6 +14,8 @@ tags: "copia de trabajo de audio"
 short_answer: "Identifica y conserva el original, crea una copia separada con un nombre claro y comprueba que abres esa copia. Guarda el resultado en un archivo nuevo y escúchalo antes de borrar nada. Dos archivos en el mismo dispositivo no son una copia de seguridad independiente."
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/es/choose-safe-audio-working-copy/"
+published_at: "2026-11-02T09:00:00+09:00"
+updated_at: "2026-11-02T05:04:49Z"
 ---
 
 # Prepara una copia de trabajo antes de editar audio

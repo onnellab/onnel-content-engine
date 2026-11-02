@@ -5,7 +5,7 @@ slug: "choose-safe-audio-working-copy"
 category: "media"
 language: "zh-Hant"
 description: "保留原始音訊，為工作副本設定清楚的檔名和儲存位置。編輯前核對輸入，匯出後試聽，再決定如何整理檔案。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0118"
 search_intent: "workflow"
 primary_keyword: "音訊工作副本"
@@ -14,6 +14,8 @@ tags: "音訊工作副本"
 short_answer: "保留原始檔，手動建立名稱和位置都容易區分的工作副本。利用檔名、路徑、大小與長度核對輸入，將編輯結果另存為新檔案。重新開啟輸出檔，試聽開頭、編輯交界處及結尾，確認前不要刪除原始檔。"
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/zh-hant/choose-safe-audio-working-copy/"
+published_at: "2026-11-02T09:00:00+09:00"
+updated_at: "2026-11-02T05:04:49Z"
 ---
 
 # 編輯音訊前，如何準備容易辨認的工作副本

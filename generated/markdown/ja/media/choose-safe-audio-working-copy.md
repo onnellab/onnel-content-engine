@@ -5,7 +5,7 @@ slug: "choose-safe-audio-working-copy"
 category: "media"
 language: "ja"
 description: "元の音声を残し、名前と保存場所で区別できる作業用コピーを用意しましょう。編集前の入力確認と、書き出し後の試聴までを整理します。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0116"
 search_intent: "workflow"
 primary_keyword: "音声の作業用コピー"
@@ -14,6 +14,8 @@ tags: "音声の作業用コピー"
 short_answer: "元ファイルを残したまま、名前と保存場所を区別した作業用コピーを用意します。ファイル名、場所、容量、再生時間を照合して入力を選び、編集結果は別ファイルとして保存します。書き出した音声の冒頭、編集箇所、末尾を聴くまで、元ファイルを削除しないでください。"
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/ja/choose-safe-audio-working-copy/"
+published_at: "2026-11-02T09:00:00+09:00"
+updated_at: "2026-11-02T05:04:49Z"
 ---
 
 # 音声を編集する前に作業用コピーを選ぶ方法

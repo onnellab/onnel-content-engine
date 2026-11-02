@@ -5,7 +5,7 @@ slug: "choose-safe-audio-working-copy"
 category: "media"
 language: "en"
 description: "Keep an identifiable original, make a separate working copy and check the exported audio before deciding what to keep or remove."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0041"
 search_intent: "workflow"
 primary_keyword: "audio working copy"
@@ -14,6 +14,8 @@ tags: "audio working copy"
 short_answer: "Identify and keep the original, create a separate working copy with a clear name, and confirm that copy is the file you open. Export to a new file and listen to the result before removing anything. A second file on the same device is not an independent backup."
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/en/choose-safe-audio-working-copy/"
+published_at: "2026-11-02T09:00:00+09:00"
+updated_at: "2026-11-02T05:04:49Z"
 ---
 
 # Choose a Working Copy Before Editing Audio

@@ -5,7 +5,7 @@ slug: "choose-safe-audio-working-copy"
 category: "media"
 language: "ko"
 description: "보존할 원본과 작업용 복사본을 구분하고, 새 파일로 저장한 결과를 들어본 뒤 정리하는 오디오 파일 관리 방법이에요."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0115"
 search_intent: "workflow"
 primary_keyword: "오디오 작업용 복사본"
@@ -14,6 +14,8 @@ tags: "오디오 작업용 복사본"
 short_answer: "원본의 위치와 내용을 확인해 보관하고, 이름이 분명한 별도 복사본을 만든 뒤 그 파일을 열었는지 확인하세요. 결과는 새 파일로 저장하고 실제로 들어본 후 정리하세요. 같은 기기에 있는 두 파일을 독립적인 백업으로 볼 수는 없어요."
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/ko/choose-safe-audio-working-copy/"
+published_at: "2026-11-02T09:00:00+09:00"
+updated_at: "2026-11-02T05:04:49Z"
 ---
 
 # 오디오 편집 전에 작업용 복사본을 구분하는 방법
