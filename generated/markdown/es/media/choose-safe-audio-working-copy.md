@@ -15,7 +15,7 @@ short_answer: "Identifica y conserva el original, crea una copia separada con un
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/es/choose-safe-audio-working-copy/"
 published_at: "2026-11-02T09:00:00+09:00"
-updated_at: "2026-11-02T05:04:49Z"
+updated_at: "2026-11-02T05:04:49+00:00"
 ---
 
 # Prepara una copia de trabajo antes de editar audio

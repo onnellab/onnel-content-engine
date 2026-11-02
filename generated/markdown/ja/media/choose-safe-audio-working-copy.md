@@ -15,7 +15,7 @@ short_answer: "元ファイルを残したまま、名前と保存場所を区�
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/ja/choose-safe-audio-working-copy/"
 published_at: "2026-11-02T09:00:00+09:00"
-updated_at: "2026-11-02T05:04:49Z"
+updated_at: "2026-11-02T05:04:49+00:00"
 ---
 
 # 音声を編集する前に作業用コピーを選ぶ方法

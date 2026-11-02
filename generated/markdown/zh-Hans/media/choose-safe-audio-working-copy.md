@@ -15,7 +15,7 @@ short_answer: "保留原文件，手动创建名称和位置都容易区分的�
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/zh-hans/choose-safe-audio-working-copy/"
 published_at: "2026-11-02T09:00:00+09:00"
-updated_at: "2026-11-02T05:04:49Z"
+updated_at: "2026-11-02T05:04:49+00:00"
 ---
 
 # 编辑音频前，怎样准备可辨认的工作副本

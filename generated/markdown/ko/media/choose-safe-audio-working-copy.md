@@ -15,7 +15,7 @@ short_answer: "원본의 위치와 내용을 확인해 보관하고, 이름이 �
 related_apps: "Segra"
 canonical_url: "https://onnellab.com/blog/ko/choose-safe-audio-working-copy/"
 published_at: "2026-11-02T09:00:00+09:00"
-updated_at: "2026-11-02T05:04:49Z"
+updated_at: "2026-11-02T05:04:49+00:00"
 ---
 
 # 오디오 편집 전에 작업용 복사본을 구분하는 방법
