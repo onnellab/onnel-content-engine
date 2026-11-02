@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "guide_id": "melivra-equalizer-location-20261102",
-  "status": "scheduled_verified",
+  "status": "published",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
   "video_id": "-AzOvvP--6Y",
   "video_url": "https://youtube.com/shorts/-AzOvvP--6Y",
@@ -32,7 +32,49 @@
     "limitation": "Studio thumbnail remained gray placeholder. Single upload saved; no retry."
   },
   "external_link_status": "Correct Play URL saved as text; Studio requires one-time verification to make external links clickable; not initiated.",
-  "public_verified": false,
+  "public_verified": true,
   "qa_path": "data/screenshot_guides/melivra-equalizer-location-20261102.qa.json",
-  "production_commit": "6be2819ff728bb2bbef049d9455e89bbd893f568"
+  "production_commit": "6be2819ff728bb2bbef049d9455e89bbd893f568",
+  "observed_privacy": "public",
+  "published_observed_at": "2026-11-02T00:02:04Z",
+  "published_at": null,
+  "publication_observation": {
+    "observed_at": "2026-11-02T00:02:04Z",
+    "surface": "Signed-in ONNELLAB YouTube Studio exact-video details in dot cloud browser",
+    "source_url": "https://studio.youtube.com/video/-AzOvvP--6Y/edit",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "channel_name": "ONNELLAB",
+    "video_id": "-AzOvvP--6Y",
+    "video_url": "https://youtube.com/shorts/-AzOvvP--6Y",
+    "title": "Where Is the Equalizer in Melivra? | Android Screenshot Guide",
+    "visibility_label": "공개",
+    "observed_privacy": "public",
+    "duration": "0:15",
+    "processing_quality_badges": [
+      "표준 화질 완료",
+      "고화질 완료"
+    ],
+    "channel_identity_evidence": "Studio dashboard and channel-content links contained channel UCXyRedrldRBl9Y35nyWoTLg; exact video ID and title matched.",
+    "server_published_at": null,
+    "scheduled_publish_at": "2026-11-02T09:00:00+09:00",
+    "schedule_evidence": "Original target, scheduled_confirmation_observed_at and persisted_schedule_readback_at preserved. Observation time is not server publication time.",
+    "watch_page_observation": {
+      "observed_at": "2026-11-02T00:01:43Z",
+      "source_url": "https://www.youtube.com/watch?v=-AzOvvP--6Y",
+      "author": "ONNELLAB",
+      "title_matches": true,
+      "displayed_age": "49초 전",
+      "duration": "0:15",
+      "player_state": "Pause control and 0:00/0:15 shown; advancing playhead and rendered frames were not verified.",
+      "signed_in_owner_view": true
+    },
+    "thumbnail_observation": "Studio showed uploaded thumbnail control; actual thumbnail pixels were not verified.",
+    "playback_verification": "Not verified beyond public watch-page player presence and displayed duration.",
+    "write_actions_performed": false
+  },
+  "owner_notification": {
+    "channel": "chatgpt",
+    "message_id": "Sentinel_41116237fd60819193b629a7c42f6a86",
+    "purpose": "Parent reported newly verified actual-public status to the owner; delivery reference supplied by parent."
+  }
 }
