@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ko/music/distinguish-duplicate-music-files-from-different-recordings.md",
+  "topic": {
+    "id": "TOPIC-0133",
+    "title": "중복 음악 파일과 서로 다른 녹음을 구분하는 방법",
+    "slug": "distinguish-duplicate-music-files-from-different-recordings",
+    "category": "music",
+    "language": "ko",
+    "primary_keyword": "중복 음악 파일",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "중복 음악 파일과 서로 다른 녹음을 구분하는 방법",
+    "질문",
+    "짧은 답변",
+    "서로 다른 세 가지 비교",
+    "권장 작업 순서",
+    "불확실하면 둘 다 남겨 두세요",
+    "주의할 점",
+    "관련 안내",
+    "참고 자료",
+    "결론",
+    "자주 묻는 질문",
+    "제목과 길이가 같으면 중복인가요?",
+    "해시가 다르면 다른 녹음인가요?",
+    "차이를 못 듣겠으면 하나를 지워도 되나요?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "서로 다른 녹음을 잘못 없애지 않고 음악 파일 두 개를 비교하려면 어떻게 해야 하나요?",
+      "structure": [
+        "보존",
+        "비교",
+        "듣기",
+        "기록"
+      ],
+      "notes": "Compare file identity, release context and matching passages; this is not an application screenshot or an automatic duplicate verdict."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains cautious manual music-file comparison, not an application interface.",
+    "applications": [],
+    "rules": [
+      "실제 기능을 설명할 때에만 스크린샷을 사용합니다.",
+      "불필요한 UI는 잘라냅니다.",
+      "관련 컨트롤이나 워크플로 영역만 강조합니다.",
+      "높은 해상도를 유지합니다.",
+      "스크린샷을 장식으로 사용하지 않습니다."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "지우기 전에 비교해요",
+      "steps": [
+        "보존",
+        "비교",
+        "듣기",
+        "기록"
+      ],
+      "layout": "세로 또는 좌우 순서형"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "이 단계에서는 이미지 파일을 생성하지 않습니다.",
+    "이 단계에서는 스크린샷을 만들지 않습니다.",
+    "이 단계에서는 에셋을 게시하지 않습니다.",
+    "설명 목적이 없는 장식용 이미지는 사용하지 않습니다."
+  ],
+  "editorial_workflow": {
+    "subtitle": "파일·발매판·녹음은 서로 달라요",
+    "message": "확실하지 않은 복사본은 보존해요.",
+    "description": "먼저 두 파일을 모두 보존하세요. 출처와 버전 표기를 확인하고 같은 구간의 소리를 비교해요. 파일 자체가 같은지와 녹음이 같은지를 구분하고, 제목·재생 시간·태그 하나만으로 판단하기 어려운 파일은 그대로 남겨 두세요.",
+    "steps": [
+      [
+        "보존",
+        "원본과 백업을 남겨요."
+      ],
+      [
+        "비교",
+        "발매판과 출처를 확인해요."
+      ],
+      [
+        "듣기",
+        "같은 구간을 비교해요."
+      ],
+      [
+        "기록",
+        "근거와 의문을 남겨요."
+      ]
+    ]
+  }
+}

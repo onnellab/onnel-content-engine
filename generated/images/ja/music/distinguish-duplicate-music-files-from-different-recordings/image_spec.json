@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/music/distinguish-duplicate-music-files-from-different-recordings.md",
+  "topic": {
+    "id": "TOPIC-0134",
+    "title": "重複した音楽ファイルと異なる録音を見分ける",
+    "slug": "distinguish-duplicate-music-files-from-different-recordings",
+    "category": "music",
+    "language": "ja",
+    "primary_keyword": "音楽ファイル",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "重複した音楽ファイルと異なる録音を見分ける",
+    "質問",
+    "短い回答",
+    "三つの比較を区別する",
+    "推奨する作業手順",
+    "不明な組み合わせは残す",
+    "注意点",
+    "関連ガイド",
+    "参考資料",
+    "まとめ",
+    "よくある質問",
+    "曲名と長さが同じなら重複ですか？",
+    "ハッシュが違えば別の録音ですか？",
+    "違いが聴こえなければ片方を消してよいですか？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "別の録音を誤って捨てずに、二つの音楽ファイルを比較するにはどうすればよいですか？",
+      "structure": [
+        "保存",
+        "比較",
+        "試聴",
+        "記録"
+      ],
+      "notes": "Compare file identity, release context and matching passages; this is not an application screenshot or an automatic duplicate verdict."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains cautious manual music-file comparison, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "削除する前に比較",
+      "steps": [
+        "保存",
+        "比較",
+        "試聴",
+        "記録"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "ファイル・発売版・録音は別のもの",
+    "message": "判断できないコピーは残します。",
+    "description": "まず両方を保存します。入手元とバージョン表記を調べ、同じ箇所の音を聴き比べます。ファイルの同一性と録音の同一性を分け、曲名・長さ・タグだけでは判断できない組み合わせは残してください。",
+    "steps": [
+      [
+        "保存",
+        "元ファイルを保管"
+      ],
+      [
+        "比較",
+        "発売版と出所を確認"
+      ],
+      [
+        "試聴",
+        "同じ箇所を聴き比べる"
+      ],
+      [
+        "記録",
+        "根拠と不明点を残す"
+      ]
+    ]
+  }
+}

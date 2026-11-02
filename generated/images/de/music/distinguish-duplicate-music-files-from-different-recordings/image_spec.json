@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/de/music/distinguish-duplicate-music-files-from-different-recordings.md",
+  "topic": {
+    "id": "TOPIC-0138",
+    "title": "Doppelte Musikdateien von unterschiedlichen Aufnahmen unterscheiden",
+    "slug": "distinguish-duplicate-music-files-from-different-recordings",
+    "category": "music",
+    "language": "de",
+    "primary_keyword": "Musikdateien",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Doppelte Musikdateien von unterschiedlichen Aufnahmen unterscheiden",
+    "Frage",
+    "Kurzantwort",
+    "Drei verschiedene Vergleiche",
+    "Empfohlener Ablauf",
+    "Unklare Paare behalten",
+    "Grenzen",
+    "Weiterführende Anleitungen",
+    "Quellen",
+    "Fazit",
+    "Häufige Fragen",
+    "Beweisen gleicher Titel und gleiche Dauer ein Duplikat?",
+    "Beweisen unterschiedliche Hashes unterschiedliche Aufnahmen?",
+    "Darf ich eine Datei löschen, wenn ich keinen Unterschied höre?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Wie vergleiche ich zwei Musikdateien, ohne versehentlich eine andere Aufnahme auszusortieren?",
+      "structure": [
+        "Sichern",
+        "Abgleich",
+        "Anhören",
+        "Notieren"
+      ],
+      "notes": "Compare file identity, release context and matching passages; this is not an application screenshot or an automatic duplicate verdict."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains cautious manual music-file comparison, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Vor dem Löschen vergleichen",
+      "steps": [
+        "Sichern",
+        "Abgleich",
+        "Anhören",
+        "Notieren"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Datei, Ausgabe und Aufnahme unterscheiden",
+    "message": "Unklare Kopien behalten.",
+    "description": "Bewahren Sie zunächst beide Dateien auf. Prüfen Sie Herkunft und Versionsangaben und hören Sie entsprechende Stellen an. Unterscheiden Sie Dateiidentität von Aufnahmeidentität. Bleibt die Zuordnung anhand von Titel, Dauer oder Tags unklar, behalten Sie beide und notieren Sie die offene Frage.",
+    "steps": [
+      [
+        "Sichern",
+        "Originale aufbewahren."
+      ],
+      [
+        "Abgleich",
+        "Ausgabe und Quelle prüfen."
+      ],
+      [
+        "Anhören",
+        "Gleiche Passagen prüfen."
+      ],
+      [
+        "Notieren",
+        "Belege und Zweifel sichern."
+      ]
+    ]
+  }
+}

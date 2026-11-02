@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/music/distinguish-duplicate-music-files-from-different-recordings.md",
+  "topic": {
+    "id": "TOPIC-0140",
+    "title": "Distingue archivos de música duplicados de grabaciones diferentes",
+    "slug": "distinguish-duplicate-music-files-from-different-recordings",
+    "category": "music",
+    "language": "es",
+    "primary_keyword": "archivos de música",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Distingue archivos de música duplicados de grabaciones diferentes",
+    "Pregunta",
+    "Respuesta breve",
+    "Tres comparaciones distintas",
+    "Flujo recomendado",
+    "Conserva una pareja dudosa",
+    "Límites",
+    "Guías relacionadas",
+    "Referencias",
+    "Conclusión",
+    "Preguntas frecuentes",
+    "¿Un título y una duración iguales demuestran un duplicado?",
+    "¿Hashes distintos demuestran grabaciones diferentes?",
+    "¿Puedo borrar uno si no oigo diferencias?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "¿Cómo comparo dos archivos de música sin descartar por error una grabación diferente?",
+      "structure": [
+        "Guardar",
+        "Comparar",
+        "Escuchar",
+        "Anotar"
+      ],
+      "notes": "Compare file identity, release context and matching passages; this is not an application screenshot or an automatic duplicate verdict."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "The visual explains cautious manual music-file comparison, not an application interface.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Compara antes de borrar",
+      "steps": [
+        "Guardar",
+        "Comparar",
+        "Escuchar",
+        "Anotar"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Archivo, edición y grabación son distintos",
+    "message": "Conserva las copias dudosas.",
+    "description": "Conserva primero ambos archivos. Revisa su procedencia y las indicaciones de versión, y escucha pasajes correspondientes. Separa la identidad del archivo de la identidad de la grabación. Si el título, la duración o las etiquetas no bastan, conserva ambos y anota la duda.",
+    "steps": [
+      [
+        "Guardar",
+        "Conserva los originales."
+      ],
+      [
+        "Comparar",
+        "Revisa edición y origen."
+      ],
+      [
+        "Escuchar",
+        "Compara el mismo pasaje."
+      ],
+      [
+        "Anotar",
+        "Guarda pruebas y dudas."
+      ]
+    ]
+  }
+}

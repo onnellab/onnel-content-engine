@@ -1,0 +1,550 @@
+{
+  "schema": 1,
+  "kind": "review_supply_audit_not_publication_receipt",
+  "slug": "distinguish-duplicate-music-files-from-different-recordings",
+  "category": "music",
+  "stage": "review",
+  "scheduled_at": null,
+  "published_at": null,
+  "published_url": null,
+  "queue_ids": [
+    "TOPIC-0087",
+    "TOPIC-0133",
+    "TOPIC-0134",
+    "TOPIC-0135",
+    "TOPIC-0136",
+    "TOPIC-0137",
+    "TOPIC-0138",
+    "TOPIC-0139",
+    "TOPIC-0140"
+  ],
+  "reviewed_files": [
+    {
+      "path": "generated/markdown/en/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "byte_length": 6052,
+      "sha256": "0705c6c5a3553ec6415b42f7dd8359f5051efd02ee8f445ca38545e02e515d99",
+      "git_blob_sha1": "7f7e10b052a5307f3c4c112c84806bef0810730d"
+    },
+    {
+      "path": "generated/images/en/music/distinguish-duplicate-music-files-from-different-recordings/image_spec.json",
+      "byte_length": 3818,
+      "sha256": "3621817eed2ecbcf1915e0e6080eaa9a346c2bb7b71443ee817dde4365ff7160",
+      "git_blob_sha1": "f2fae03c13e3ffd1bef5716e3176a6ce9bd1f8a5"
+    },
+    {
+      "path": "generated/metadata/en/music/distinguish-duplicate-music-files-from-different-recordings/internal_links.json",
+      "byte_length": 5236,
+      "sha256": "49026720702470acedc35d042c52285cfa9fe51f8bae2cc185ee81253d0a1303",
+      "git_blob_sha1": "f2002dd75497c45ebed6b7938540703660d8b461"
+    },
+    {
+      "path": "generated/reviews/en/music/distinguish-duplicate-music-files-from-different-recordings/review.json",
+      "byte_length": 3589,
+      "sha256": "775b867e50f67ba72d2d2197bcba0d1fc850fa088724797827017d67d5406c9a",
+      "git_blob_sha1": "8910ec09f39e53347f0e4bb677bb19655f05fd80"
+    },
+    {
+      "path": "generated/assets/blog/en/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg",
+      "byte_length": 4346,
+      "sha256": "befc43944a28696b950632ad35321bc57cb16f6f6b59f42d88dd33ceb86496fb",
+      "git_blob_sha1": "d0df434c0ea50f3bf1273aab84cc7e89d9f65e02"
+    },
+    {
+      "path": "generated/assets/blog/en/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.png",
+      "byte_length": 64911,
+      "sha256": "feae2a2c1b1f1da819d3d1043ff8b95ce8e4185d71a656e6ee084dafc4c64386",
+      "git_blob_sha1": "36ef44f51dc45bda17d2265843c9f1a3a2fa3223"
+    },
+    {
+      "path": "generated/assets/blog/en/distinguish-duplicate-music-files-from-different-recordings/social-card.svg",
+      "byte_length": 4346,
+      "sha256": "befc43944a28696b950632ad35321bc57cb16f6f6b59f42d88dd33ceb86496fb",
+      "git_blob_sha1": "d0df434c0ea50f3bf1273aab84cc7e89d9f65e02"
+    },
+    {
+      "path": "generated/assets/blog/en/distinguish-duplicate-music-files-from-different-recordings/social-card.png",
+      "byte_length": 64911,
+      "sha256": "feae2a2c1b1f1da819d3d1043ff8b95ce8e4185d71a656e6ee084dafc4c64386",
+      "git_blob_sha1": "36ef44f51dc45bda17d2265843c9f1a3a2fa3223"
+    },
+    {
+      "path": "generated/markdown/ko/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "byte_length": 6842,
+      "sha256": "1945f34d3d8957d96174ab212362bd9c89e26e07fedfc88f4670e1f6a58c15ce",
+      "git_blob_sha1": "b9fe44b4fc1421645f71a427fb08a1d7983aeee2"
+    },
+    {
+      "path": "generated/images/ko/music/distinguish-duplicate-music-files-from-different-recordings/image_spec.json",
+      "byte_length": 4147,
+      "sha256": "a59f536e1b67e6b13b250f69d87ebadac970b2ad379afd0b7c8d81bce4b04951",
+      "git_blob_sha1": "8ea69e23b8381db4e1fcfa6aa6da26186cae8f38"
+    },
+    {
+      "path": "generated/metadata/ko/music/distinguish-duplicate-music-files-from-different-recordings/internal_links.json",
+      "byte_length": 4973,
+      "sha256": "52e6dd4de406be4472c51b851357c866b24ffe4500644c62a8816ba3e6bca484",
+      "git_blob_sha1": "3dc2a0383a14ea7019c7b91f271abf733a9f4aad"
+    },
+    {
+      "path": "generated/reviews/ko/music/distinguish-duplicate-music-files-from-different-recordings/review.json",
+      "byte_length": 3604,
+      "sha256": "2e1f0800777e3a18fb455d81755871f9674416cc68df2fe416d4fc3d43af82ff",
+      "git_blob_sha1": "ead32838d7d529b077120b6bdcc2eedb99a567c4"
+    },
+    {
+      "path": "generated/assets/blog/ko/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg",
+      "byte_length": 4331,
+      "sha256": "bccedb3c9d557855c1c8e26f17fa64b06f259c9d802d5527e3e2367d225315aa",
+      "git_blob_sha1": "24d31c842cec95f4e595fff8d596d96772a0f8aa"
+    },
+    {
+      "path": "generated/assets/blog/ko/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.png",
+      "byte_length": 44281,
+      "sha256": "f08ce5474cf4f38d986a7119ab406e29ad8b425efe2b1704ab12634a7a4b3bc4",
+      "git_blob_sha1": "96c0d339e36faa1b5b49de1b18e57b84b5a2e3bd"
+    },
+    {
+      "path": "generated/assets/blog/ko/distinguish-duplicate-music-files-from-different-recordings/social-card.svg",
+      "byte_length": 4331,
+      "sha256": "bccedb3c9d557855c1c8e26f17fa64b06f259c9d802d5527e3e2367d225315aa",
+      "git_blob_sha1": "24d31c842cec95f4e595fff8d596d96772a0f8aa"
+    },
+    {
+      "path": "generated/assets/blog/ko/distinguish-duplicate-music-files-from-different-recordings/social-card.png",
+      "byte_length": 44281,
+      "sha256": "f08ce5474cf4f38d986a7119ab406e29ad8b425efe2b1704ab12634a7a4b3bc4",
+      "git_blob_sha1": "96c0d339e36faa1b5b49de1b18e57b84b5a2e3bd"
+    },
+    {
+      "path": "generated/markdown/ja/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "byte_length": 6749,
+      "sha256": "a92e48fed38dba51550d2269b9bf05b4ceb7ad2fc810eb99342257e9b01325ce",
+      "git_blob_sha1": "a4b936b5ea3f4395f2908b3339dfd6f2b4cb2346"
+    },
+    {
+      "path": "generated/images/ja/music/distinguish-duplicate-music-files-from-different-recordings/image_spec.json",
+      "byte_length": 3955,
+      "sha256": "6c5c83ba47052580530b498b3067aab6f52963cfe650c48af30cc1e5adba8d84",
+      "git_blob_sha1": "fff6bdd37acd16cbc7cc55c34b328792c9f1510c"
+    },
+    {
+      "path": "generated/metadata/ja/music/distinguish-duplicate-music-files-from-different-recordings/internal_links.json",
+      "byte_length": 5076,
+      "sha256": "71b7c75f0bfa5ea3c8dca4c11b33e06d896657aa0cabe308cf3a74e31cda06e9",
+      "git_blob_sha1": "94ac24fe2390078621306dc7e02c2c7bf1409176"
+    },
+    {
+      "path": "generated/reviews/ja/music/distinguish-duplicate-music-files-from-different-recordings/review.json",
+      "byte_length": 3600,
+      "sha256": "04bdf452f5a373b728a398b42490ac819583a468647de136fd7664e94c574ea0",
+      "git_blob_sha1": "67203601eecd48e35a408911ef39f632b1b89e15"
+    },
+    {
+      "path": "generated/assets/blog/ja/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg",
+      "byte_length": 3737,
+      "sha256": "2f19c5475c888ebc6779090cbe68c7497d6a3293c0e08d097aef125456dfc9e9",
+      "git_blob_sha1": "8db91a10b29bd4dc4c9c13485f9af064b11ff013"
+    },
+    {
+      "path": "generated/assets/blog/ja/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.png",
+      "byte_length": 55547,
+      "sha256": "1efd9156e47586cf7422a04d3af24c546396d41bbe43aa2b0853bd3422467555",
+      "git_blob_sha1": "3c64feb1d9f4f54b95b80e8196f21e2d95904469"
+    },
+    {
+      "path": "generated/assets/blog/ja/distinguish-duplicate-music-files-from-different-recordings/social-card.svg",
+      "byte_length": 3737,
+      "sha256": "2f19c5475c888ebc6779090cbe68c7497d6a3293c0e08d097aef125456dfc9e9",
+      "git_blob_sha1": "8db91a10b29bd4dc4c9c13485f9af064b11ff013"
+    },
+    {
+      "path": "generated/assets/blog/ja/distinguish-duplicate-music-files-from-different-recordings/social-card.png",
+      "byte_length": 55547,
+      "sha256": "1efd9156e47586cf7422a04d3af24c546396d41bbe43aa2b0853bd3422467555",
+      "git_blob_sha1": "3c64feb1d9f4f54b95b80e8196f21e2d95904469"
+    },
+    {
+      "path": "generated/markdown/zh-Hans/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "byte_length": 5266,
+      "sha256": "ac37bdf055f5007a83ba2c10371319ed361d199935c6607414f292132229c970",
+      "git_blob_sha1": "ccaa5f8051c73782c884ac424f3dae89c84c2d70"
+    },
+    {
+      "path": "generated/images/zh-Hans/music/distinguish-duplicate-music-files-from-different-recordings/image_spec.json",
+      "byte_length": 3674,
+      "sha256": "eb450e710eafacf30a27531f64a9b5d41eb3293975981586cced4cbe992fdac9",
+      "git_blob_sha1": "5f95dce3b93e935a4a9f0cccc78fd3112fd3a20e"
+    },
+    {
+      "path": "generated/metadata/zh-Hans/music/distinguish-duplicate-music-files-from-different-recordings/internal_links.json",
+      "byte_length": 4923,
+      "sha256": "70be0b56045403365b85187e0a8671ada3dee9200b2807c7cf8a24b0c49c6a26",
+      "git_blob_sha1": "08f4fdb96f1d83b864c04f108a195a3d1a1bdca2"
+    },
+    {
+      "path": "generated/reviews/zh-Hans/music/distinguish-duplicate-music-files-from-different-recordings/review.json",
+      "byte_length": 3576,
+      "sha256": "766f5cb092281600143be4819ca6af0b2e28fb6fa13941f130afee2f6fbaa0ca",
+      "git_blob_sha1": "313489cf21138a7dd1c0b71535c6670805965fec"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg",
+      "byte_length": 3533,
+      "sha256": "c9e4882c01c91b633055e088aade0ec7b99bfd72106550b8acef783bb574e163",
+      "git_blob_sha1": "21ffb24a24ee9be364ba3517840f419901559263"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.png",
+      "byte_length": 51430,
+      "sha256": "4f62fcf095698dded76c9b7eac9c343be9fb11578a57ab975c846d0d5cda2bdc",
+      "git_blob_sha1": "e719c916e0420cfa6387656df4cd328c86add7e9"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/social-card.svg",
+      "byte_length": 3533,
+      "sha256": "c9e4882c01c91b633055e088aade0ec7b99bfd72106550b8acef783bb574e163",
+      "git_blob_sha1": "21ffb24a24ee9be364ba3517840f419901559263"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/social-card.png",
+      "byte_length": 51430,
+      "sha256": "4f62fcf095698dded76c9b7eac9c343be9fb11578a57ab975c846d0d5cda2bdc",
+      "git_blob_sha1": "e719c916e0420cfa6387656df4cd328c86add7e9"
+    },
+    {
+      "path": "generated/markdown/zh-Hant/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "byte_length": 5278,
+      "sha256": "7b540ada0cfc6e2c7fc9c3cf5dc0ca54038e7730e0bb297ae7f0ce251aab2e2c",
+      "git_blob_sha1": "b5e950ece0b2380b6ef8906e6dd380f27780eadc"
+    },
+    {
+      "path": "generated/images/zh-Hant/music/distinguish-duplicate-music-files-from-different-recordings/image_spec.json",
+      "byte_length": 3674,
+      "sha256": "990b0d2dcb9e1838c877fa1a950cabb616abc5ab3eb5946023de3225d6fcf8be",
+      "git_blob_sha1": "b555a8bc58e0bbea8191ffc6c0adfc917fd8885d"
+    },
+    {
+      "path": "generated/metadata/zh-Hant/music/distinguish-duplicate-music-files-from-different-recordings/internal_links.json",
+      "byte_length": 4920,
+      "sha256": "fa28a369fb7b048614dfcdab43c11f21f8d7283ed4d7aced9015f709bdd8efdb",
+      "git_blob_sha1": "d4c0e72a60ebca740e4b2f6d7089989da4ebe822"
+    },
+    {
+      "path": "generated/reviews/zh-Hant/music/distinguish-duplicate-music-files-from-different-recordings/review.json",
+      "byte_length": 3576,
+      "sha256": "f9e36b1013ef4770a3a0b8af889146ecc3a327cb2d8bf01e71463e09ca536f0f",
+      "git_blob_sha1": "04fee2330996768e1f20d179cb06f4fe5a611136"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hant/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg",
+      "byte_length": 3530,
+      "sha256": "283c7ede7b1a87d2b71961f30c9916ef078e88dac6cc30c25c2e12c83b090ed1",
+      "git_blob_sha1": "dbd496112613fa7dc2a060667faf444ce782758a"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hant/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.png",
+      "byte_length": 53314,
+      "sha256": "bfe628a35a3d3a40843bebe97616b27088affd0a29ddbf1114a9a0e14812cd91",
+      "git_blob_sha1": "b21b26cee32c99d2c7769f67b534e336b5d865f5"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hant/distinguish-duplicate-music-files-from-different-recordings/social-card.svg",
+      "byte_length": 3530,
+      "sha256": "283c7ede7b1a87d2b71961f30c9916ef078e88dac6cc30c25c2e12c83b090ed1",
+      "git_blob_sha1": "dbd496112613fa7dc2a060667faf444ce782758a"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hant/distinguish-duplicate-music-files-from-different-recordings/social-card.png",
+      "byte_length": 53314,
+      "sha256": "bfe628a35a3d3a40843bebe97616b27088affd0a29ddbf1114a9a0e14812cd91",
+      "git_blob_sha1": "b21b26cee32c99d2c7769f67b534e336b5d865f5"
+    },
+    {
+      "path": "generated/markdown/pt-BR/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "byte_length": 6344,
+      "sha256": "526b7aec7024ff540d0e6628e03e7549d75b49998d2cc2636cfbc60e3aa3accf",
+      "git_blob_sha1": "7add752df7a78a061e423df42028b6b9dcaa7c86"
+    },
+    {
+      "path": "generated/images/pt-BR/music/distinguish-duplicate-music-files-from-different-recordings/image_spec.json",
+      "byte_length": 3900,
+      "sha256": "dc41d38ae9d9a10aeca2d1c5369d32cb452c17af03e9ad04eb81175c77fba1a8",
+      "git_blob_sha1": "ac6973d88fb0f46ec885038059616cb6b82d7cc4"
+    },
+    {
+      "path": "generated/metadata/pt-BR/music/distinguish-duplicate-music-files-from-different-recordings/internal_links.json",
+      "byte_length": 5334,
+      "sha256": "4585e4d3ecded6781164d06edfa550afc0b6ae95d95d9883609c4c1c3bfd141b",
+      "git_blob_sha1": "02e053ad7aedddf3febc498d031e5b287a2d8a6d"
+    },
+    {
+      "path": "generated/reviews/pt-BR/music/distinguish-duplicate-music-files-from-different-recordings/review.json",
+      "byte_length": 3603,
+      "sha256": "d96eb9d86f9b37af0f9a48b0eebf1d8590076095a4f70a790675e3dc694ade67",
+      "git_blob_sha1": "79bfc67e7d78de36b288183f0c18a326c45e0883"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg",
+      "byte_length": 4329,
+      "sha256": "c919bac10c095fadc454e341525323bc20e2ba45d10241d6026e0ddbc3300953",
+      "git_blob_sha1": "3a2a82028091189ec0bd41d60248681892ce489c"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.png",
+      "byte_length": 65527,
+      "sha256": "bd2a4ad08a7b5185be843c657ad829c8df87015674965969b6eb000d6640e764",
+      "git_blob_sha1": "d4ddb7a24a8ad78ff09c515f8510dfefbefbec66"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/distinguish-duplicate-music-files-from-different-recordings/social-card.svg",
+      "byte_length": 4329,
+      "sha256": "c919bac10c095fadc454e341525323bc20e2ba45d10241d6026e0ddbc3300953",
+      "git_blob_sha1": "3a2a82028091189ec0bd41d60248681892ce489c"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/distinguish-duplicate-music-files-from-different-recordings/social-card.png",
+      "byte_length": 65527,
+      "sha256": "bd2a4ad08a7b5185be843c657ad829c8df87015674965969b6eb000d6640e764",
+      "git_blob_sha1": "d4ddb7a24a8ad78ff09c515f8510dfefbefbec66"
+    },
+    {
+      "path": "generated/markdown/de/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "byte_length": 6505,
+      "sha256": "6601f87863a4fc6aa26f27118873ea27c094b62a3149cffe40a1e7e0ae698f11",
+      "git_blob_sha1": "28cd19437ced53f192bf48ea5a25ba08f40f33ef"
+    },
+    {
+      "path": "generated/images/de/music/distinguish-duplicate-music-files-from-different-recordings/image_spec.json",
+      "byte_length": 3939,
+      "sha256": "0795bee820f100869ad82cc2be5b5fbc550e8a712b82f5fcbf50758f3be8a880",
+      "git_blob_sha1": "bc6c5aaaf82ab4fcef7375c5f8a1b8aafb09f995"
+    },
+    {
+      "path": "generated/metadata/de/music/distinguish-duplicate-music-files-from-different-recordings/internal_links.json",
+      "byte_length": 4942,
+      "sha256": "5aee0a4f00154440222c9dce67183e60e5bfa8c7e35581b759ba91afb9820c8a",
+      "git_blob_sha1": "5162d7e740b86a1a36f4567d31175b298940b030"
+    },
+    {
+      "path": "generated/reviews/de/music/distinguish-duplicate-music-files-from-different-recordings/review.json",
+      "byte_length": 3604,
+      "sha256": "cabd9b46c565022e97b99cb79363d9f1308af237bfb1bc4ff08f5086969b5ce8",
+      "git_blob_sha1": "5caa665264f07ad403c03f4bb3fc7112da7f9067"
+    },
+    {
+      "path": "generated/assets/blog/de/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg",
+      "byte_length": 4358,
+      "sha256": "96730e8ae5360f3938fbd497662cf172b03b44a8b1e0e9341a27c2ee86855973",
+      "git_blob_sha1": "a1e6d00496492122084f325e7135ae31d2eb1f63"
+    },
+    {
+      "path": "generated/assets/blog/de/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.png",
+      "byte_length": 62567,
+      "sha256": "4c3a6203bfb526b79151c48824f27b0a7325d63f57ee2d3239d862fc98f3a6aa",
+      "git_blob_sha1": "ec05151edb435f19de0d183130dcd48aa55d1613"
+    },
+    {
+      "path": "generated/assets/blog/de/distinguish-duplicate-music-files-from-different-recordings/social-card.svg",
+      "byte_length": 4358,
+      "sha256": "96730e8ae5360f3938fbd497662cf172b03b44a8b1e0e9341a27c2ee86855973",
+      "git_blob_sha1": "a1e6d00496492122084f325e7135ae31d2eb1f63"
+    },
+    {
+      "path": "generated/assets/blog/de/distinguish-duplicate-music-files-from-different-recordings/social-card.png",
+      "byte_length": 62567,
+      "sha256": "4c3a6203bfb526b79151c48824f27b0a7325d63f57ee2d3239d862fc98f3a6aa",
+      "git_blob_sha1": "ec05151edb435f19de0d183130dcd48aa55d1613"
+    },
+    {
+      "path": "generated/markdown/fr/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "byte_length": 6864,
+      "sha256": "ab4b457d3af6c24905e83a315f53bde13f5e444b4a32ef2d04d65514395f2c45",
+      "git_blob_sha1": "3b8f9e129d5117e6d34791fcad8b9abf7357ff18"
+    },
+    {
+      "path": "generated/images/fr/music/distinguish-duplicate-music-files-from-different-recordings/image_spec.json",
+      "byte_length": 4012,
+      "sha256": "d5ec72cc1c0932a0bae05f04e9178d56a2ab662bc82c09d0d5cc4733e7359c07",
+      "git_blob_sha1": "35352a2eeef3c6e84f94ed6b4a9cc264a6f04fbc"
+    },
+    {
+      "path": "generated/metadata/fr/music/distinguish-duplicate-music-files-from-different-recordings/internal_links.json",
+      "byte_length": 5373,
+      "sha256": "81242fa957f268b8a89e2b98fb7b547faf932a1cfce2955defc284ec86bc5bfe",
+      "git_blob_sha1": "541f378c8ab44c95c47e8edd44799823e64954bb"
+    },
+    {
+      "path": "generated/reviews/fr/music/distinguish-duplicate-music-files-from-different-recordings/review.json",
+      "byte_length": 3611,
+      "sha256": "3adbecc9c0e0bb655e08c38ff5d4d6c892f806c8208d0f3229ee4d2c1b4a54dc",
+      "git_blob_sha1": "c136ff744a75791123a0b9e2099891be4a126969"
+    },
+    {
+      "path": "generated/assets/blog/fr/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg",
+      "byte_length": 4420,
+      "sha256": "e9d13316dc7bcef89623796bb5f377a0c6212296d148c43d9708fc2d0b7c13c3",
+      "git_blob_sha1": "7cc43b62e98ddb5f42c2fef06e373421a4e0c69d"
+    },
+    {
+      "path": "generated/assets/blog/fr/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.png",
+      "byte_length": 65895,
+      "sha256": "e2458f420cd25d9f829fe8c27b61cc4ac30850e7e76fa91ebf1eb0cfe59f5698",
+      "git_blob_sha1": "bd0c836636296422c864fc54d2e0880e8c27a64c"
+    },
+    {
+      "path": "generated/assets/blog/fr/distinguish-duplicate-music-files-from-different-recordings/social-card.svg",
+      "byte_length": 4420,
+      "sha256": "e9d13316dc7bcef89623796bb5f377a0c6212296d148c43d9708fc2d0b7c13c3",
+      "git_blob_sha1": "7cc43b62e98ddb5f42c2fef06e373421a4e0c69d"
+    },
+    {
+      "path": "generated/assets/blog/fr/distinguish-duplicate-music-files-from-different-recordings/social-card.png",
+      "byte_length": 65895,
+      "sha256": "e2458f420cd25d9f829fe8c27b61cc4ac30850e7e76fa91ebf1eb0cfe59f5698",
+      "git_blob_sha1": "bd0c836636296422c864fc54d2e0880e8c27a64c"
+    },
+    {
+      "path": "generated/markdown/es/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "byte_length": 6376,
+      "sha256": "8992a0cf8b293e46057fb93852670b84bbdecdaca6a4c1b262f99c2e6fd43fa9",
+      "git_blob_sha1": "17a21a9ee2d3b949d928d593256df93cddd14db1"
+    },
+    {
+      "path": "generated/images/es/music/distinguish-duplicate-music-files-from-different-recordings/image_spec.json",
+      "byte_length": 3903,
+      "sha256": "51825adfbb69d4482c371811bf437a5446a26aa182d5010be0734e727add7711",
+      "git_blob_sha1": "0611d8194631f5167160e7da9e8da19726a5e38a"
+    },
+    {
+      "path": "generated/metadata/es/music/distinguish-duplicate-music-files-from-different-recordings/internal_links.json",
+      "byte_length": 5255,
+      "sha256": "0a501debc2070e2d093974e5b96fcbbfa84404f570ff346bf7cf713f8b595701",
+      "git_blob_sha1": "de855b473a7506b3f2cc486433b3a0156b1cb4c3"
+    },
+    {
+      "path": "generated/reviews/es/music/distinguish-duplicate-music-files-from-different-recordings/review.json",
+      "byte_length": 3603,
+      "sha256": "b5e4e86a6bc3821bfe7cc0c2aed29be1b82cd7ea0aed255425e29a379a9a8ada",
+      "git_blob_sha1": "1812e005a931762368dac4d910430826d5731b91"
+    },
+    {
+      "path": "generated/assets/blog/es/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg",
+      "byte_length": 4338,
+      "sha256": "c5a65499b3199d93fb6fc15f3743c6c1be53e37927c9d564e6b496b06ce4128d",
+      "git_blob_sha1": "2839276cd1e147c4d5cd53955e2ab879eed0a5fb"
+    },
+    {
+      "path": "generated/assets/blog/es/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.png",
+      "byte_length": 65092,
+      "sha256": "63537dbf827fb84b04f14016e9bab27ebcd6fd6d9a037f8e969366561aedf265",
+      "git_blob_sha1": "d2103b02f658af42d9e00ca4281ea0a0d73f6519"
+    },
+    {
+      "path": "generated/assets/blog/es/distinguish-duplicate-music-files-from-different-recordings/social-card.svg",
+      "byte_length": 4338,
+      "sha256": "c5a65499b3199d93fb6fc15f3743c6c1be53e37927c9d564e6b496b06ce4128d",
+      "git_blob_sha1": "2839276cd1e147c4d5cd53955e2ab879eed0a5fb"
+    },
+    {
+      "path": "generated/assets/blog/es/distinguish-duplicate-music-files-from-different-recordings/social-card.png",
+      "byte_length": 65092,
+      "sha256": "63537dbf827fb84b04f14016e9bab27ebcd6fd6d9a037f8e969366561aedf265",
+      "git_blob_sha1": "d2103b02f658af42d9e00ca4281ea0a0d73f6519"
+    }
+  ],
+  "reviewed_source_git_blobs": {
+    "en": "cdfc100bbf2e96556a5f53bad2f8c9f1addd22e1",
+    "ko": "0f7fd36a6158e795702dbca9bc65faad98200a5f",
+    "ja": "1bcf25eb70ceaeb65d541f8246c56d5916694c8c",
+    "zh-Hans": "760180ddb18f4aa52726203d5555e57c9112e6fa",
+    "zh-Hant": "6e200b6f0c3fabae5f6f0c7e273fb5c57653689b",
+    "pt-BR": "dfefb98fb18afe1c31241800618f3a58d5acd7b2",
+    "de": "b450031a80df60c38841abbfecd7e1436730ef3e",
+    "fr": "005173c417bec0db50233111c116ec4e5d85ac8b",
+    "es": "e1522ae4ef5274e248d3acefe91a623f76288837"
+  },
+  "reviewed_svg_git_blobs": {
+    "en": "bb3484c8963528963d04e57d913680b16d6950a4",
+    "ko": "52f84698a199f489ab4391d953d024f0422b1bb8",
+    "ja": "41783a8cd1b8ec9f24e340eb11017a5b83a2ee71",
+    "zh-Hans": "6c2469dd43a7e58c39d39152aaada1a0d3883142",
+    "zh-Hant": "3e959a50c3d0a8c165ceb9948d0e6c076bbf59b9",
+    "pt-BR": "1478a4e9ae001e765d9cfb7eb1773577315c447e",
+    "de": "043b4c987af25d79d07249b9c3cdc925b887c023",
+    "fr": "e5846d8fa19513dfb1b74d011988b0c67ba3ac72",
+    "es": "643a4fe93687c9e7b6e3045cad31380fc856fa4a"
+  },
+  "verified_at": "2026-11-02T10:00:37.140236+00:00",
+  "source_commit": "d6d8771ddf2b36f4f21dc58483e0b265a1e0be03",
+  "native_run": {
+    "id": 41424479483,
+    "conclusion": "success",
+    "url": "https://github.com/onnellab/onnel-content-engine/actions/runs/41424479483",
+    "browser_tests": 56
+  },
+  "artifact": {
+    "sha256": "66ab943e5387d55b39dd924275c83f6a029ad5610428ccd48fede90e483de2a0",
+    "manifest_sha256": "a9ba340d57cfe24f20bae9cfe473c411c4ea4d3fd7f3184f7752a6399d21eec8"
+  },
+  "editorial_review": {
+    "all_nine_manuscripts_read": true,
+    "result": "pass",
+    "reviewer": "verify_scheduled_publications independent of draft_duplicate_music author",
+    "scope": "Meaning, terminology, unverified-copy preservation, SHA-256 evidence limits, source and links; all nine actual manuscripts read"
+  },
+  "visual_review": {
+    "result": "pass",
+    "desktop_locales": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ],
+    "mobile_locales": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ],
+    "german_abgleich_final_pixels_reviewed": true,
+    "author_review": "draft_duplicate_music: 18 actual pages, nine diagrams; final eight unchanged locales reused after exact SHA256 equality",
+    "independent_review": "verify_scheduled_publications: nine actual native diagrams, Korean mobile and corrected German mobile/original; unchanged eight native image sets byte verified",
+    "observed_at": "2026-11-02T10:00:26.787103+00:00",
+    "limit": "No real-device test; viewport screenshots and browser tests only"
+  },
+  "integration_base": "d6d8771ddf2b36f4f21dc58483e0b265a1e0be03",
+  "source_integrity": {
+    "source_unchanged": true,
+    "topics_before": "ad75823739649cfcd5c0accdee2c68d425de92a60c39776539659d5b1453945a",
+    "topics_after": "ad75823739649cfcd5c0accdee2c68d425de92a60c39776539659d5b1453945a",
+    "mirror_before": "ad75823739649cfcd5c0accdee2c68d425de92a60c39776539659d5b1453945a",
+    "mirror_after": "ad75823739649cfcd5c0accdee2c68d425de92a60c39776539659d5b1453945a",
+    "source_commit": "d6d8771ddf2b36f4f21dc58483e0b265a1e0be03",
+    "publication_dates_assigned": false
+  },
+  "supply": {
+    "state": "ready_review_buffer_canonical_assignment_pending",
+    "intended_slot": "2026-11-08T09:00:00+09:00",
+    "actual_schedule_assigned": false,
+    "publisher": "existing GitHub Publishing Pipeline"
+  },
+  "notes_only_change": {
+    "value": "Reviewed native supply; unscheduled; canonical publisher assigns slot.",
+    "native_topic_fingerprints_unchanged": true
+  },
+  "limitations": [
+    "Not a scheduled or publication receipt.",
+    "Actual rendering evidence is separate from source SVG provenance.",
+    "No new publisher, dispatch or cadence change."
+  ]
+}
