@@ -45,6 +45,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0135",
+        "title": "区分重复音乐文件与不同录音",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "zh-Hans",
+        "status": "review",
+        "url": "generated/markdown/zh-Hans/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0056",
         "title": "检查 EPUB 的目录链接和章节顺序",
         "slug": "check-epub-table-of-contents-and-reading-order",
@@ -91,19 +106,6 @@
         "language": "zh-Hans",
         "status": "published",
         "url": "https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0090",
-        "title": "如何区分资料笔记与自己的结论",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
-        "language": "zh-Hans",
-        "status": "published",
-        "url": "https://onnellab.com/blog/zh-hans/separate-source-notes-from-conclusions/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

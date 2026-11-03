@@ -91,17 +91,17 @@
         "score": 6
       },
       {
-        "topic_id": "TOPIC-0061",
-        "title": "Cómo comprobar el índice y el orden de los capítulos de un EPUB",
-        "slug": "check-epub-table-of-contents-and-reading-order",
-        "category": "reading",
+        "topic_id": "TOPIC-0122",
+        "title": "Prepara una copia de trabajo antes de editar audio",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
         "language": "es",
         "status": "published",
-        "url": "https://onnellab.com/blog/es/check-epub-table-of-contents-and-reading-order/",
+        "url": "https://onnellab.com/blog/es/choose-safe-audio-working-copy/",
         "destination": "published_article",
-        "relationship": "troubleshooting",
+        "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       }
     ],
     "related_apps": [],

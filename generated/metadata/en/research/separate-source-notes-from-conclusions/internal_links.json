@@ -43,6 +43,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0086",
+        "title": "Mark Uncertainty Clearly in Research Notes",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/research/mark-uncertainty-clearly-in-research-notes.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "research"
+        ],
+        "score": 10
+      },
+      {
         "topic_id": "TOPIC-0014",
         "title": "How to Turn Rough Notes Into a Structured First Draft",
         "slug": "turn-rough-notes-into-structured-first-draft",
@@ -91,19 +106,6 @@
         "url": "https://onnellab.com/blog/en/large-text-file-slow-to-open/",
         "destination": "published_article",
         "relationship": "prerequisite",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0007",
-        "title": "How to Convert Local Media Files Privately",
-        "slug": "convert-local-media-files-privately",
-        "category": "media",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/convert-local-media-files-privately/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 3
       }

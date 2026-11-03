@@ -43,6 +43,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0124",
+        "title": "연구 노트의 불확실성을 분명하게 표시하는 방법",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "ko",
+        "status": "review",
+        "url": "generated/markdown/ko/research/mark-uncertainty-clearly-in-research-notes.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "research"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0005",
         "title": "대용량 TXT 파일을 지연 없이 읽는 방법",
         "slug": "read-large-txt-files-without-lag",
@@ -89,19 +104,6 @@
         "language": "ko",
         "status": "published",
         "url": "https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0019",
-        "title": "미리보기로 여러 파일의 이름을 안전하게 바꾸는 방법",
-        "slug": "rename-files-safely-preview-workflow",
-        "category": "productivity",
-        "language": "ko",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ko/rename-files-safely-preview-workflow/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

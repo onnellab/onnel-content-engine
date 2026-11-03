@@ -264,6 +264,13 @@
     <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
+    <title>Choose a Working Copy Before Editing Audio</title>
+    <link>https://onnellab.com/blog/en/choose-safe-audio-working-copy/</link>
+    <guid>https://onnellab.com/blog/en/choose-safe-audio-working-copy/</guid>
+    <description>Keep an identifiable original, make a separate working copy and check the exported audio before deciding what to keep or remove.</description>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>How to Turn Repeated Text Into Reusable Snippets</title>
     <link>https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/</link>
     <guid>https://onnellab.com/blog/en/turn-repeated-text-into-reusable-snippets/</guid>
@@ -731,6 +738,62 @@
     <guid>https://onnellab.com/blog/es/make-long-plain-text-easier-to-navigate/</guid>
     <description>Encuentra pasajes con una lista de títulos existentes, frases específicas y una prueba de regreso al texto, sin modificar el archivo original.</description>
     <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>오디오 편집 전에 작업용 복사본을 구분하는 방법</title>
+    <link>https://onnellab.com/blog/ko/choose-safe-audio-working-copy/</link>
+    <guid>https://onnellab.com/blog/ko/choose-safe-audio-working-copy/</guid>
+    <description>보존할 원본과 작업용 복사본을 구분하고, 새 파일로 저장한 결과를 들어본 뒤 정리하는 오디오 파일 관리 방법이에요.</description>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>音声を編集する前に作業用コピーを選ぶ方法</title>
+    <link>https://onnellab.com/blog/ja/choose-safe-audio-working-copy/</link>
+    <guid>https://onnellab.com/blog/ja/choose-safe-audio-working-copy/</guid>
+    <description>元の音声を残し、名前と保存場所で区別できる作業用コピーを用意しましょう。編集前の入力確認と、書き出し後の試聴までを整理します。</description>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>编辑音频前，怎样准备可辨认的工作副本</title>
+    <link>https://onnellab.com/blog/zh-hans/choose-safe-audio-working-copy/</link>
+    <guid>https://onnellab.com/blog/zh-hans/choose-safe-audio-working-copy/</guid>
+    <description>保留原始音频，为工作副本设置清楚的文件名和保存位置。编辑前核对输入，导出后试听，再决定如何整理文件。</description>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>編輯音訊前，如何準備容易辨認的工作副本</title>
+    <link>https://onnellab.com/blog/zh-hant/choose-safe-audio-working-copy/</link>
+    <guid>https://onnellab.com/blog/zh-hant/choose-safe-audio-working-copy/</guid>
+    <description>保留原始音訊，為工作副本設定清楚的檔名和儲存位置。編輯前核對輸入，匯出後試聽，再決定如何整理檔案。</description>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Prepare uma cópia de trabalho antes de editar áudio</title>
+    <link>https://onnellab.com/blog/pt-br/choose-safe-audio-working-copy/</link>
+    <guid>https://onnellab.com/blog/pt-br/choose-safe-audio-working-copy/</guid>
+    <description>Separe o original da cópia de trabalho, salve o resultado em outro arquivo e ouça o áudio antes de apagar qualquer versão.</description>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Vor der Audiobearbeitung eine Arbeitskopie anlegen</title>
+    <link>https://onnellab.com/blog/de/choose-safe-audio-working-copy/</link>
+    <guid>https://onnellab.com/blog/de/choose-safe-audio-working-copy/</guid>
+    <description>Original und Arbeitskopie eindeutig unterscheiden, das Ergebnis separat speichern und vor dem Aufräumen tatsächlich anhören.</description>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Préparer une copie de travail avant de modifier un fichier audio</title>
+    <link>https://onnellab.com/blog/fr/choose-safe-audio-working-copy/</link>
+    <guid>https://onnellab.com/blog/fr/choose-safe-audio-working-copy/</guid>
+    <description>Distinguez l’original de la copie de travail, enregistrez un résultat séparé et écoutez-le avant de supprimer des fichiers.</description>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Prepara una copia de trabajo antes de editar audio</title>
+    <link>https://onnellab.com/blog/es/choose-safe-audio-working-copy/</link>
+    <guid>https://onnellab.com/blog/es/choose-safe-audio-working-copy/</guid>
+    <description>Distingue el original de la copia de trabajo, guarda un resultado separado y escúchalo antes de eliminar archivos.</description>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>

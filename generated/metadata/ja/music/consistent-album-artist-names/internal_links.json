@@ -45,6 +45,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0134",
+        "title": "重複した音楽ファイルと異なる録音を見分ける",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "ja",
+        "status": "review",
+        "url": "generated/markdown/ja/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0055",
         "title": "EPUBの目次リンクと章の順序を確認する方法",
         "slug": "check-epub-table-of-contents-and-reading-order",
@@ -91,19 +106,6 @@
         "language": "ja",
         "status": "published",
         "url": "https://onnellab.com/blog/ja/design-consistent-file-naming-system/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0089",
-        "title": "出典メモと自分の結論を分ける方法",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
-        "language": "ja",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ja/separate-source-notes-from-conclusions/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

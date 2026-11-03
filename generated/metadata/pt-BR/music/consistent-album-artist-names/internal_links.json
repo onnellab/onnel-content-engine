@@ -45,6 +45,21 @@
         "score": 12
       },
       {
+        "topic_id": "TOPIC-0137",
+        "title": "Diferencie arquivos de música duplicados de gravações distintas",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "pt-BR",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0074",
         "title": "Como transformar textos repetidos em trechos reutilizáveis",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -91,19 +106,6 @@
         "language": "pt-BR",
         "status": "published",
         "url": "https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0110",
-        "title": "Como facilitar a navegação em um documento de texto longo",
-        "slug": "make-long-plain-text-easier-to-navigate",
-        "category": "reading",
-        "language": "pt-BR",
-        "status": "published",
-        "url": "https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

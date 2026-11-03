@@ -78,30 +78,30 @@
         "score": 6
       },
       {
-        "topic_id": "TOPIC-0049",
-        "title": "Como organizar músicas no Android para ouvir offline",
-        "slug": "organize-local-music-library-offline-android",
-        "category": "music",
+        "topic_id": "TOPIC-0119",
+        "title": "Prepare uma cópia de trabalho antes de editar áudio",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
         "language": "pt-BR",
         "status": "published",
-        "url": "https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/",
+        "url": "https://onnellab.com/blog/pt-br/choose-safe-audio-working-copy/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       },
       {
-        "topic_id": "TOPIC-0058",
-        "title": "Como conferir o sumário e a ordem dos capítulos de um EPUB",
-        "slug": "check-epub-table-of-contents-and-reading-order",
-        "category": "reading",
+        "topic_id": "TOPIC-0137",
+        "title": "Diferencie arquivos de música duplicados de gravações distintas",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
         "language": "pt-BR",
-        "status": "published",
-        "url": "https://onnellab.com/blog/pt-br/check-epub-table-of-contents-and-reading-order/",
-        "destination": "published_article",
-        "relationship": "troubleshooting",
+        "status": "review",
+        "url": "generated/markdown/pt-BR/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       }
     ],
     "related_apps": [],

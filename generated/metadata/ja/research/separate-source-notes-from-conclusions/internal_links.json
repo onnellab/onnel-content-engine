@@ -28,6 +28,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0125",
+        "title": "調査ノートの不確実な点を明確にする",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "ja",
+        "status": "review",
+        "url": "generated/markdown/ja/research/mark-uncertainty-clearly-in-research-notes.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "research"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0046",
         "title": "Androidの音楽ファイルをオフライン再生用に整理する方法",
         "slug": "organize-local-music-library-offline-android",
@@ -87,19 +102,6 @@
         "language": "ja",
         "status": "published",
         "url": "https://onnellab.com/blog/ja/design-consistent-file-naming-system/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0098",
-        "title": "アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る",
-        "slug": "consistent-album-artist-names",
-        "category": "music",
-        "language": "ja",
-        "status": "published",
-        "url": "https://onnellab.com/blog/ja/consistent-album-artist-names/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

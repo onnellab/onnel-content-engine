@@ -45,6 +45,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0140",
+        "title": "Distingue archivos de música duplicados de grabaciones diferentes",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "es",
+        "status": "review",
+        "url": "generated/markdown/es/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0077",
         "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -91,19 +106,6 @@
         "language": "es",
         "status": "published",
         "url": "https://onnellab.com/blog/es/test-converted-media-before-replacing-original/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0095",
-        "title": "Cómo separar las notas de las fuentes de tus conclusiones",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
-        "language": "es",
-        "status": "published",
-        "url": "https://onnellab.com/blog/es/separate-source-notes-from-conclusions/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

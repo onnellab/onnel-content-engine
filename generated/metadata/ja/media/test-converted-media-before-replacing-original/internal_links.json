@@ -35,14 +35,14 @@
         "slug": "choose-safe-audio-working-copy",
         "category": "media",
         "language": "ja",
-        "status": "scheduled",
-        "url": "generated/markdown/ja/media/choose-safe-audio-working-copy.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/ja/choose-safe-audio-working-copy/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "media"
         ],
-        "score": 9
+        "score": 10
       },
       {
         "topic_id": "TOPIC-0046",

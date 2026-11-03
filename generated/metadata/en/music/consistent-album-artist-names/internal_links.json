@@ -77,6 +77,21 @@
         "score": 10
       },
       {
+        "topic_id": "TOPIC-0087",
+        "title": "Tell Duplicate Music Files from Different Recordings",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 9
+      },
+      {
         "topic_id": "TOPIC-0010",
         "title": "How to Reuse Copied Text Snippets on iPhone",
         "slug": "reuse-copied-text-snippets-iphone",
@@ -97,19 +112,6 @@
         "language": "en",
         "status": "published",
         "url": "https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0016",
-        "title": "How to Keep a Durable Research Reading Log",
-        "slug": "keep-durable-research-reading-log",
-        "category": "research",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/keep-durable-research-reading-log/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

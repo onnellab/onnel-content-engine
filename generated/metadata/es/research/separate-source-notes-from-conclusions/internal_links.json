@@ -28,6 +28,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0131",
+        "title": "Cómo señalar la incertidumbre en las notas de investigación",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "es",
+        "status": "review",
+        "url": "generated/markdown/es/research/mark-uncertainty-clearly-in-research-notes.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "research"
+        ],
+        "score": 13
+      },
+      {
         "topic_id": "TOPIC-0052",
         "title": "Cómo organizar música en Android para escucharla sin conexión",
         "slug": "organize-local-music-library-offline-android",
@@ -67,6 +82,19 @@
         "score": 6
       },
       {
+        "topic_id": "TOPIC-0122",
+        "title": "Prepara una copia de trabajo antes de editar audio",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/choose-safe-audio-working-copy/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0069",
         "title": "Cómo probar un archivo multimedia convertido antes de sustituir el original",
         "slug": "test-converted-media-before-replacing-original",
@@ -74,32 +102,6 @@
         "language": "es",
         "status": "published",
         "url": "https://onnellab.com/blog/es/test-converted-media-before-replacing-original/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0077",
-        "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
-        "slug": "turn-repeated-text-into-reusable-snippets",
-        "category": "productivity",
-        "language": "es",
-        "status": "published",
-        "url": "https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0104",
-        "title": "Etiquetas de álbum y artista coherentes sin perder créditos",
-        "slug": "consistent-album-artist-names",
-        "category": "music",
-        "language": "es",
-        "status": "published",
-        "url": "https://onnellab.com/blog/es/consistent-album-artist-names/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

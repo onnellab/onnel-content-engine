@@ -45,6 +45,21 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0138",
+        "title": "Doppelte Musikdateien von unterschiedlichen Aufnahmen unterscheiden",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "de",
+        "status": "review",
+        "url": "generated/markdown/de/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 12
+      },
+      {
         "topic_id": "TOPIC-0075",
         "title": "Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -91,19 +106,6 @@
         "language": "de",
         "status": "published",
         "url": "https://onnellab.com/blog/de/test-converted-media-before-replacing-original/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0083",
-        "title": "Einheitliche Dateinamen: eine einfache Konvention entwickeln",
-        "slug": "design-consistent-file-naming-system",
-        "category": "productivity",
-        "language": "de",
-        "status": "published",
-        "url": "https://onnellab.com/blog/de/design-consistent-file-naming-system/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

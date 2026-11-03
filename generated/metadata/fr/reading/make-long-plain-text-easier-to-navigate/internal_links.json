@@ -97,17 +97,17 @@
         "score": 5
       },
       {
-        "topic_id": "TOPIC-0084",
-        "title": "Créer une convention cohérente pour nommer ses fichiers",
-        "slug": "design-consistent-file-naming-system",
-        "category": "productivity",
+        "topic_id": "TOPIC-0121",
+        "title": "Préparer une copie de travail avant de modifier un fichier audio",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
         "language": "fr",
         "status": "published",
-        "url": "https://onnellab.com/blog/fr/design-consistent-file-naming-system/",
+        "url": "https://onnellab.com/blog/fr/choose-safe-audio-working-copy/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 4
+        "score": 5
       }
     ],
     "related_apps": [

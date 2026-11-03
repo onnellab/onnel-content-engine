@@ -77,6 +77,21 @@
         "score": 12
       },
       {
+        "topic_id": "TOPIC-0087",
+        "title": "Tell Duplicate Music Files from Different Recordings",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 10
+      },
+      {
         "topic_id": "TOPIC-0009",
         "title": "How to Trim Audio Recordings Without a Full Editor",
         "slug": "trim-audio-recordings-without-full-editor",
@@ -99,19 +114,6 @@
         "url": "https://onnellab.com/blog/en/verify-audio-clips-before-combining/",
         "destination": "published_article",
         "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0018",
-        "title": "How to Choose a Media Output Format Before Conversion",
-        "slug": "choose-media-output-format-before-conversion",
-        "category": "media",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/choose-media-output-format-before-conversion/",
-        "destination": "published_article",
-        "relationship": "comparison",
         "shared_clusters": [],
         "score": 4
       }

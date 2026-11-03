@@ -136,6 +136,14 @@
         "category": "productivity",
         "cluster": "nombres de archivo coherentes",
         "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Distingue archivos de música duplicados de grabaciones diferentes",
+        "category": "music",
+        "cluster": "archivos de música",
+        "topic_id": "TOPIC-0140",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
       }
     ]
   },

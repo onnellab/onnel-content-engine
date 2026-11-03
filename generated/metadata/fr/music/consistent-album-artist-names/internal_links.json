@@ -30,6 +30,21 @@
   "recommendations": {
     "related_articles": [
       {
+        "topic_id": "TOPIC-0139",
+        "title": "Distinguer les fichiers musicaux en double des enregistrements différents",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "fr",
+        "status": "review",
+        "url": "generated/markdown/fr/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 13
+      },
+      {
         "topic_id": "TOPIC-0051",
         "title": "Organiser sa musique sur Android pour une écoute hors ligne",
         "slug": "organize-local-music-library-offline-android",
@@ -91,19 +106,6 @@
         "language": "fr",
         "status": "published",
         "url": "https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0112",
-        "title": "Se repérer plus facilement dans un long document texte",
-        "slug": "make-long-plain-text-easier-to-navigate",
-        "category": "reading",
-        "language": "fr",
-        "status": "published",
-        "url": "https://onnellab.com/blog/fr/make-long-plain-text-easier-to-navigate/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

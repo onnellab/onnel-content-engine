@@ -45,6 +45,21 @@
         "score": 12
       },
       {
+        "topic_id": "TOPIC-0087",
+        "title": "Tell Duplicate Music Files from Different Recordings",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "en",
+        "status": "review",
+        "url": "generated/markdown/en/music/distinguish-duplicate-music-files-from-different-recordings.md",
+        "destination": "draft_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "music"
+        ],
+        "score": 11
+      },
+      {
         "topic_id": "TOPIC-0029",
         "title": "How to Number Tracks in a Multi-Disc MP3 Album",
         "slug": "number-tracks-multi-disc-mp3-album",
@@ -97,19 +112,6 @@
         "url": "https://onnellab.com/blog/en/organize-downloads-small-folder-system/",
         "destination": "published_article",
         "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0053",
-        "title": "Check an EPUB’s Table of Contents and Chapter Order",
-        "slug": "check-epub-table-of-contents-and-reading-order",
-        "category": "reading",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
-        "destination": "published_article",
-        "relationship": "troubleshooting",
         "shared_clusters": [],
         "score": 5
       }
