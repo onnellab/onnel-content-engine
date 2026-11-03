@@ -26,12 +26,16 @@ def registered_review_snapshot(fixture=REGISTERED_FIXTURE):
         f"generated/markdown/{locale}/{segra.CATEGORY}/{segra.SLUG}.md"
         for locale in segra.LOCALES
     }
+    expected_paths |= {
+        f"generated/assets/blog/{locale}/{segra.SLUG}/social-card.{suffix}"
+        for locale in segra.LOCALES for suffix in ("svg", "png")
+    }
     entries = [entry for entry in audit["automated"]["native_manifest"]["files"]
                if entry["path"] in expected_paths]
     provenance = json.loads((fixture / "provenance.json").read_text(encoding="utf-8"))
     if (provenance.get("schema") != 1 or provenance.get("source_commit") != REGISTERED_FIXTURE_COMMIT
             or provenance.get("source_audit") != segra.REGISTERED_AUDIT
-            or len(entries) != 27 or {entry["path"] for entry in entries} != expected_paths
+            or len(entries) != 45 or {entry["path"] for entry in entries} != expected_paths
             or provenance.get("files") != entries):
         raise ValueError("Historical Segra fixture provenance mismatch")
     snapshot = {}
@@ -117,8 +121,8 @@ class RegisteredSegra(unittest.TestCase):
                 writer.writerows(rows)
     def test_historical_snapshot_matches_frozen_audit(self):
         snapshot = registered_review_snapshot()
-        self.assertEqual(len(snapshot), 27)
-        self.assertEqual(sum(map(len, snapshot.values())), 135851)
+        self.assertEqual(len(snapshot), 45)
+        self.assertEqual(sum(map(len, snapshot.values())), 695473)
         for relative, raw in snapshot.items():
             if relative.endswith("internal_links.json"):
                 self.assertEqual(json.loads(raw)["topic"]["status"], "review")
@@ -134,6 +138,21 @@ class RegisteredSegra(unittest.TestCase):
                 destination.write_bytes(raw)
             target = fixture / next(iter(snapshot))
             target.write_bytes(target.read_bytes() + b"\n")
+            with self.assertRaisesRegex(ValueError, "fixture fingerprint mismatch"):
+                registered_review_snapshot(fixture)
+
+    def test_tampered_historical_social_card_is_rejected(self):
+        snapshot = registered_review_snapshot()
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture = Path(tmp)
+            (fixture / "provenance.json").write_bytes((REGISTERED_FIXTURE / "provenance.json").read_bytes())
+            for relative, raw in snapshot.items():
+                destination = fixture / relative
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(raw)
+            relative = f"generated/assets/blog/en/{segra.SLUG}/social-card.png"
+            with (fixture / relative).open("ab") as target:
+                target.write(b"\n")
             with self.assertRaisesRegex(ValueError, "fixture fingerprint mismatch"):
                 registered_review_snapshot(fixture)
 

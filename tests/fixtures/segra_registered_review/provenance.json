@@ -23,6 +23,18 @@
       "git_blob_sha1": "1f645b26ee131102cd9b748ea1ded10ff3443586"
     },
     {
+      "path": "generated/assets/blog/en/choose-safe-audio-working-copy/social-card.svg",
+      "byte_length": 4322,
+      "sha256": "4cafb8bee7cbe5e8109ff3e01fddd3eed08c0b2ae657c8ae693224b91a4654dc",
+      "git_blob_sha1": "967ff11da475c2d0429565237ee118c7e2d1ebc2"
+    },
+    {
+      "path": "generated/assets/blog/en/choose-safe-audio-working-copy/social-card.png",
+      "byte_length": 61598,
+      "sha256": "9e90a2e54db0ccda4f75ee5b65d1b676e4ab253c106465833dabd68bd2e97459",
+      "git_blob_sha1": "e15a1c651c798899749628bd08eaa741b0663edb"
+    },
+    {
       "path": "generated/markdown/ko/media/choose-safe-audio-working-copy.md",
       "byte_length": 6564,
       "sha256": "d7abde62b5711178c1f0a6759c8f5ae1968e3122e71d815ceedc1cca6aff9674",
@@ -39,6 +51,18 @@
       "byte_length": 3603,
       "sha256": "5fee0ff6c7ca23212a4fcf2b4ec462c83a5c83fdc6299c234ab7cdab5e0ac963",
       "git_blob_sha1": "9beb12a32637f4496e2fd25b8d2d52a4ab1764e3"
+    },
+    {
+      "path": "generated/assets/blog/ko/choose-safe-audio-working-copy/social-card.svg",
+      "byte_length": 4270,
+      "sha256": "710d4e2c61656e0af6c3b45d7c95e76c6623858d96e9ffbddd4d4d9b8042e504",
+      "git_blob_sha1": "9742fcab2d62b89ec1051650a416e10b32ad68d4"
+    },
+    {
+      "path": "generated/assets/blog/ko/choose-safe-audio-working-copy/social-card.png",
+      "byte_length": 48409,
+      "sha256": "121c42b4c52eb409593436ddbbde0fac6cd9e42d9abb3306c472a9f2478406e0",
+      "git_blob_sha1": "8b50a27eb3dc606e8219f2a1c057dc6112573f2f"
     },
     {
       "path": "generated/markdown/ja/media/choose-safe-audio-working-copy.md",
@@ -59,6 +83,18 @@
       "git_blob_sha1": "0f88aebb05480b3d96440e51e7d0579f6f1de0f4"
     },
     {
+      "path": "generated/assets/blog/ja/choose-safe-audio-working-copy/social-card.svg",
+      "byte_length": 3848,
+      "sha256": "56fc292d0bfe829601a9ba47c12470cda186588af7431cb17cfa976b45fb4b84",
+      "git_blob_sha1": "bc778911c150444cf4f40ecd6e0f5500bbe54606"
+    },
+    {
+      "path": "generated/assets/blog/ja/choose-safe-audio-working-copy/social-card.png",
+      "byte_length": 54419,
+      "sha256": "a07b91e6aceeaad9c8b7a996c5e198516f257bdd1402c3874659163161c21543",
+      "git_blob_sha1": "846abedebcccb73b16144d286c5c2f77d486f310"
+    },
+    {
       "path": "generated/markdown/zh-Hans/media/choose-safe-audio-working-copy.md",
       "byte_length": 5980,
       "sha256": "d849465d4be079ed918bd3d749a119b94af1ac129fd4788df62051b8948b4d38",
@@ -75,6 +111,18 @@
       "byte_length": 3591,
       "sha256": "3c1997f3d544a908c9b7dc1b038bb1d9507e4f1ad8431522c7357edb3cb4359f",
       "git_blob_sha1": "ad8c631c952e925421d6e55be3a5d74d1a4cfc2f"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/choose-safe-audio-working-copy/social-card.svg",
+      "byte_length": 3593,
+      "sha256": "17ae3ab776b695cbc395dfe359a9d869d0a952c56db6466cc36361243a472055",
+      "git_blob_sha1": "2026a81db5ac6054180852a04072a357226e8270"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hans/choose-safe-audio-working-copy/social-card.png",
+      "byte_length": 50250,
+      "sha256": "513728692934b8340b71a0ba9e50c25dcff59456f65f2d6bd1b8fdff74621720",
+      "git_blob_sha1": "3fff14d1d345e5a29fa7a25e01d5ff984fc3bf7f"
     },
     {
       "path": "generated/markdown/zh-Hant/media/choose-safe-audio-working-copy.md",
@@ -95,6 +143,18 @@
       "git_blob_sha1": "d3bf0acadf66747d299e36091d838853a2a66e64"
     },
     {
+      "path": "generated/assets/blog/zh-Hant/choose-safe-audio-working-copy/social-card.svg",
+      "byte_length": 3590,
+      "sha256": "3a94fc9af00bda7be902dce6b05264d992eba161c981435ae12d8fb86016c093",
+      "git_blob_sha1": "c95f58bbddc8e59264d70438b77276c932f747dc"
+    },
+    {
+      "path": "generated/assets/blog/zh-Hant/choose-safe-audio-working-copy/social-card.png",
+      "byte_length": 53066,
+      "sha256": "ca85701f9f554db7124a1ddb6ceae4e7a86e3ffa95e1c708adbb3fb4a8ac275f",
+      "git_blob_sha1": "8b2b9d3b522837d323068e3223d19491cc3a16d0"
+    },
+    {
       "path": "generated/markdown/pt-BR/media/choose-safe-audio-working-copy.md",
       "byte_length": 5537,
       "sha256": "25f43aeaf92d309450249214557668b7b6cdd34e35934b3533d211c9334f45cb",
@@ -111,6 +171,18 @@
       "byte_length": 3590,
       "sha256": "cfd785a583708e48a4fe250ddf92089cf477894b2fae08b43d074676ed7f806e",
       "git_blob_sha1": "eb30972c08407ccdd1cb22d9e19ce5c400edd924"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/choose-safe-audio-working-copy/social-card.svg",
+      "byte_length": 4295,
+      "sha256": "1b95119f842078040077867c1170a9b0bf715ff8f060121593b9919841a3a28a",
+      "git_blob_sha1": "3a375baadd86b6bb87dc6662b2bbb8917e2c200b"
+    },
+    {
+      "path": "generated/assets/blog/pt-BR/choose-safe-audio-working-copy/social-card.png",
+      "byte_length": 63986,
+      "sha256": "b12b7575eec54c790230ec8d7877438d1f9d99cb1e90b1de1d370f19ad3cd50a",
+      "git_blob_sha1": "e814d1a5b10bef3338f6da45fbd552635e9dc326"
     },
     {
       "path": "generated/markdown/de/media/choose-safe-audio-working-copy.md",
@@ -131,6 +203,18 @@
       "git_blob_sha1": "2f05863ebd4c5a6b04d38d6bb173a6ae3e28b8dd"
     },
     {
+      "path": "generated/assets/blog/de/choose-safe-audio-working-copy/social-card.svg",
+      "byte_length": 4363,
+      "sha256": "734fe1ad069a68d061b5aa46b77cbbc69bd3eb2826292a7a3f99040b427f3e8a",
+      "git_blob_sha1": "e22e001222aef81bbdfcfd421d41cfbb37a12d3a"
+    },
+    {
+      "path": "generated/assets/blog/de/choose-safe-audio-working-copy/social-card.png",
+      "byte_length": 62426,
+      "sha256": "ae165d298740c6da3509b9f564204e53cbbd99529950c8bb281f99bc007fa541",
+      "git_blob_sha1": "b611a1fe3dcba1e126ee81d10f5f6d9eb18911f0"
+    },
+    {
       "path": "generated/markdown/fr/media/choose-safe-audio-working-copy.md",
       "byte_length": 6047,
       "sha256": "3f211c78107b41b287c0e4b91cc60fbed0d3ff0c710de8d38eac4752bc619ce2",
@@ -149,6 +233,18 @@
       "git_blob_sha1": "418001deb5bf12c95cc46617b1c24980aaf1d32f"
     },
     {
+      "path": "generated/assets/blog/fr/choose-safe-audio-working-copy/social-card.svg",
+      "byte_length": 4391,
+      "sha256": "4f11ea9d0faa531232e7093b489f996ff871f47cb1eb373eae04050c7e98e3fd",
+      "git_blob_sha1": "326983ffd0a8c4b31f7e0208e850a3b0e1f2581e"
+    },
+    {
+      "path": "generated/assets/blog/fr/choose-safe-audio-working-copy/social-card.png",
+      "byte_length": 61141,
+      "sha256": "0dacc07a65afd240b1f7b3264814daf452239d4338fb0503f0c07004bac184d4",
+      "git_blob_sha1": "a9d2e0baf2c11bf7f7ad09478f66ba57eda9f28b"
+    },
+    {
       "path": "generated/markdown/es/media/choose-safe-audio-working-copy.md",
       "byte_length": 5656,
       "sha256": "af7153801a2b608767cfc72242b28cb97a98e14994d59ae5266c80fc2e8fd598",
@@ -165,6 +261,18 @@
       "byte_length": 3587,
       "sha256": "14eb7da9bdb271fc8c4ac5b687c38dc693693c619bf1b8c17f79266245d2694a",
       "git_blob_sha1": "e7e1f69e300a39cc687e9227833fdec444977f43"
+    },
+    {
+      "path": "generated/assets/blog/es/choose-safe-audio-working-copy/social-card.svg",
+      "byte_length": 4326,
+      "sha256": "715fd54f94fcb4a8f80c49fb5b460c7b8bb97e98403cc39fa1fd8cb30b45ed05",
+      "git_blob_sha1": "59d87dff5db5f382f5b887cf143da09c121e7492"
+    },
+    {
+      "path": "generated/assets/blog/es/choose-safe-audio-working-copy/social-card.png",
+      "byte_length": 67329,
+      "sha256": "421132361b64e5283bdd9ded08b354f056371af53bf064199605b599eca03bd5",
+      "git_blob_sha1": "53893c44c647addfe3c880c4bc9dacb02610d50d"
     }
   ]
 }
