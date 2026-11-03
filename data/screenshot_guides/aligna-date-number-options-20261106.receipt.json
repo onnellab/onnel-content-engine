@@ -29,5 +29,21 @@
   },
   "external_link_status": "Correct store URL saved as text; Studio requires one-time verification to make links clickable; not initiated.",
   "public_verified": false,
-  "production_commit": "7caeadf6b3a8037224f7958d64ca3a8678e78b24"
+  "production_commit": "7caeadf6b3a8037224f7958d64ca3a8678e78b24",
+  "studio_rechecks": [
+    {
+      "observed_between_utc": [
+        "2026-11-03T10:47:11Z",
+        "2026-11-03T10:48:57Z"
+      ],
+      "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+      "video_id": "P-auyGH76a0",
+      "status": "scheduled",
+      "scheduled_publish_at": "2026-11-06T09:00:00+09:00",
+      "timezone_ui": "GMT+0900",
+      "studio_url": "https://studio.youtube.com/video/P-auyGH76a0/edit",
+      "public_verified": false,
+      "notes": "Existing scheduled video independently rechecked; no upload or settings change."
+    }
+  ]
 }
