@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "kind": "onnellab_ops_live_verification",
-  "checked_at": "2026-11-02T21:34:42+00:00",
+  "checked_at": "2026-11-03T21:56:30+00:00",
   "base_url": "https://onnellab.com",
-  "deployment_sha": "bf0365079c6491ddcfe0b488e041291bc97de82e",
+  "deployment_sha": "8488124e67c1d757239e529269cd0275f3c31897",
   "state": "verified",
-  "expected_sha256": "6a923e8971917b74f69821ba11083ffc2f8d6576f24cb7596cb9ecc4fa10f2cf",
-  "live_sha256": "6a923e8971917b74f69821ba11083ffc2f8d6576f24cb7596cb9ecc4fa10f2cf",
+  "expected_sha256": "2526195de50618f937587bef0478a1477ac7e2a2ac3fae9588493b9e7075189a",
+  "live_sha256": "2526195de50618f937587bef0478a1477ac7e2a2ac3fae9588493b9e7075189a",
   "checks": {
     "ops_http_200": true,
     "ops_exact_deployed_bytes": true,
