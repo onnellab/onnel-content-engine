@@ -254,9 +254,10 @@ class SingleTests(unittest.TestCase):
             self.assertFalse((job / "source" / "master.wav").exists())
 
     def test_publish_crossing_nine_after_render_fails_closed_without_upload(self):
+        # Initial and post-inventory checks are before nine; rendering crosses it.
         api = Provider()
         with tempfile.TemporaryDirectory() as temporary, \
-             patch.object(aether_single, "publish_slot_stale", side_effect=[False, True]), \
+             patch.object(aether_single, "publish_slot_stale", side_effect=[False, False, True]), \
              patch.object(aether_single, "select_candidate", return_value={
                  "candidate_index": 1, "path": str(Path(temporary) / "chosen.mp3"),
                  "duration_seconds": 184, "sha256": "a" * 64}), \
