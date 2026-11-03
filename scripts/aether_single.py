@@ -259,6 +259,34 @@ class RemoteInventoryUnverified(VideoError):
 
 
 def require_no_owned_title_match(api: YouTube, title: str) -> None:
+    """Require a complete owned inventory, with one bounded read-only restart.
+
+    Malformed/overlapping upload pages are not evidence of absence. Restart
+    from the channel and first page with a smaller page size once; never skip
+    or deduplicate bad rows to accept a partial inventory. Every valid ID seen
+    on the first attempt must also be verified on the complete second attempt.
+    No job, generation, upload, approval or credential operation is retried.
+    """
+    observed_ids: set[str] = set()
+    first_failure = None
+    for attempt, page_size in enumerate((50, 25), start=1):
+        try:
+            return _require_no_owned_title_match_once(
+                api, title, page_size=page_size, observed_ids=observed_ids)
+        except RemoteInventoryUnverified as error:
+            if first_failure is not None:
+                error.diagnostic.update(inventory_attempts=attempt,
+                                        first_failure=first_failure)
+            if (attempt == 1
+                    and error.diagnostic["stage"] == "uploads_ids_invalid_or_duplicate"):
+                first_failure = dict(error.diagnostic)
+                continue
+            raise
+
+
+def _require_no_owned_title_match_once(
+    api: YouTube, title: str, *, page_size: int, observed_ids: set[str],
+) -> None:
     """Verify every owned upload, including private/scheduled videos, before spend.
 
     An incomplete or ambiguous owner inventory is a HOLD. Use only the API
@@ -270,10 +298,13 @@ def require_no_owned_title_match(api: YouTube, title: str) -> None:
     wanted = _normalized_title(_clean(title, "title", 60))
     pages_checked, seen = 0, set()
 
-    def hold(stage: str, *, missing_details: int = 0):
-        raise RemoteInventoryUnverified(stage, pages_checked=pages_checked,
-                                        videos_seen=len(seen),
-                                        missing_details=missing_details)
+    def hold(stage: str, *, missing_details: int = 0, reason: str | None = None):
+        error = RemoteInventoryUnverified(stage, pages_checked=pages_checked,
+                                          videos_seen=len(seen),
+                                          missing_details=missing_details)
+        if reason is not None:
+            error.diagnostic["reason"] = reason
+        raise error
 
     _, _, channels = api.request("GET", API + "channels?" + urlencode({
         "part": "id,contentDetails,statistics", "mine": "true",
@@ -298,7 +329,7 @@ def require_no_owned_title_match(api: YouTube, title: str) -> None:
     for _ in range(100):  # Bounded complete pagination. Never accept partial pages.
         pages_checked += 1
         query = {
-            "part": "contentDetails", "playlistId": playlist, "maxResults": "50",
+            "part": "contentDetails", "playlistId": playlist, "maxResults": str(page_size),
             "fields": "items(contentDetails(videoId)),nextPageToken",
         }
         if token:
@@ -313,11 +344,17 @@ def require_no_owned_title_match(api: YouTube, title: str) -> None:
             if isinstance(row.get("contentDetails"), dict) else None
             for row in rows
         ]
-        if (any(not isinstance(value, str)
-                or not re.fullmatch(r"[A-Za-z0-9_-]{11}", value)
-                or value in seen for value in ids)
-                or len(ids) != len(set(ids))):
-            hold("uploads_ids_invalid_or_duplicate")
+        valid_ids = [value for value in ids if isinstance(value, str)
+                     and re.fullmatch(r"[A-Za-z0-9_-]{11}", value)]
+        # Retain only in memory. Diagnostics never expose IDs or provider data.
+        # A restart may not silently lose an ID from a malformed/overlap page.
+        observed_ids.update(valid_ids)
+        if len(valid_ids) != len(ids):
+            hold("uploads_ids_invalid_or_duplicate", reason="invalid_video_id")
+        if len(ids) != len(set(ids)):
+            hold("uploads_ids_invalid_or_duplicate", reason="duplicate_within_page")
+        if any(value in seen for value in ids):
+            hold("uploads_ids_invalid_or_duplicate", reason="duplicate_across_pages")
         seen.update(ids)
         if ids:
             # fields keeps the response small and avoids an unnecessary,
@@ -360,6 +397,9 @@ def require_no_owned_title_match(api: YouTube, title: str) -> None:
                     raise VideoError("aether_single_existing_remote_title_requires_reconcile")
         token = page.get("nextPageToken")
         if token is None:
+            if not observed_ids.issubset(seen):
+                hold("uploads_missing_after_restart",
+                     missing_details=len(observed_ids - seen))
             if public_count is not None and len(seen) < int(public_count):
                 hold("uploads_less_than_public_count",
                      missing_details=int(public_count) - len(seen))
@@ -885,6 +925,9 @@ def worker(
                                 approved_cover(job["title"], ASSETS_ROOT)
                             if publish:
                                 require_no_owned_title_match(api, job["title"])
+                                # Inventory reads may cross the exact 09:00 boundary.
+                                if publish_slot_stale(job["slot"]):
+                                    raise VideoError("aether_single_publish_time_stale")
                             generated = music_generator(job["title"], job["style"], execute=True,
                                                         output_root=folder / "lyria", slot=job["slot"])
                         chosen = select_candidate(
@@ -932,6 +975,8 @@ def worker(
                     if (folder / "youtube-session.json").exists():
                         raise UploadError("manual_reconcile_required")
                     require_no_owned_title_match(api, job["title"])
+                    if publish_slot_stale(job["slot"]):
+                        raise VideoError("aether_single_publish_time_stale")
                 uploader = Uploader(q, partial(YouTube, profile="aether_inn"))
                 if not job.get("approval"):
                     publish_at = scheduled_publish_at(job["slot"])
