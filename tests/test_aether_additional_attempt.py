@@ -87,5 +87,55 @@ class AdditionalAttemptTests(unittest.TestCase):
                     extra.claim_additional(prior.parent.parent, manual)
 
 
+@contextmanager
+def completion_setup():
+    with setup() as (q, job, prior, manual):
+        extra.record_approval()
+        second = prior.parent.parent / "second" / "manifest.json"
+        second.parent.mkdir()
+        atomic_json(second, {"state": "request_started", "dispatch_started": True,
+                             "candidates": [], "fixture": "second-empty-response"})
+        expected = {**extra.COMPLETION_EXPECTED,
+                    "manual_request_sha256": manual["request_sha256"],
+                    "prior_manifests": {p.parent.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                                        for p in (prior, second)}}
+        with patch.object(extra, "COMPLETION_EXPECTED", expected):
+            yield q, prior, second, manual
+
+
+class CompletionAttemptTests(unittest.TestCase):
+    def test_explicit_latest_request_preserves_both_attempts_and_claims_only_once(self):
+        with completion_setup() as (q, first, second, manual):
+            before = [p.read_bytes() for p in (first, second)]
+            receipt = extra.record_completion_request()
+            self.assertEqual(receipt, extra.record_completion_request())
+            self.assertEqual("0.24", receipt["cumulative_possible_base_usd"])
+            self.assertEqual(before, [p.read_bytes() for p in (first, second)])
+            guard.require_no_unsettled_intents(single_root=q.root)
+            self.assertIsNone(single.recover_generated_result(first.parent.parent.parent))
+            extra.claim_additional(first.parent.parent, manual)
+            with self.assertRaisesRegex(VideoError, "attempt_consumed"):
+                extra.claim_additional(first.parent.parent, manual)
+
+    def test_unacknowledged_third_attempt_blocks_without_a_fourth_request(self):
+        with completion_setup() as (q, first, second, manual):
+            extra.record_completion_request()
+            third = first.parent.parent / "third" / "manifest.json"
+            third.parent.mkdir()
+            atomic_json(third, {"state": "request_started", "dispatch_started": True})
+            self.assertFalse(extra.acknowledged_prior(third))
+            with self.assertRaisesRegex(VideoError, "generation_uncertain"):
+                guard.require_no_unsettled_intents(single_root=q.root)
+            with self.assertRaisesRegex(VideoError, "attempt_consumed"):
+                extra.claim_additional(first.parent.parent, manual)
+
+    def test_modified_prior_evidence_cannot_be_acknowledged(self):
+        with completion_setup() as (q, first, second, manual):
+            extra.record_completion_request()
+            second.write_bytes(b"{}")
+            with self.assertRaisesRegex(VideoError, "prior_manifest_changed"):
+                extra.acknowledged_prior(second)
+
+
 if __name__ == "__main__":
     unittest.main()

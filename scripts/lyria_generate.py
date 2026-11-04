@@ -171,6 +171,7 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
     body = json.dumps({
         "model": MODEL,
         "store": False,
+        "response_modalities": ["audio", "text"],
         "input": [{"type": "user_input", "content": [{"type": "text", "text": prompt}]}],
     }, ensure_ascii=False).encode("utf-8")
     request = Request(

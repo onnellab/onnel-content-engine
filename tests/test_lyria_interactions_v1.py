@@ -57,6 +57,7 @@ class InteractionsV1Tests(unittest.TestCase):
                 body = json.loads(request.data)
                 self.assertEqual(g.MODEL, body["model"])
                 self.assertIs(body["store"], False)
+                self.assertEqual(["audio", "text"], body["response_modalities"])
                 self.assertEqual("user_input", body["input"][0]["type"])
                 self.assertEqual("text", body["input"][0]["content"][0]["type"])
                 self.assertNotIn("background", body)

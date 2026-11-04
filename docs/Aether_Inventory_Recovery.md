@@ -281,3 +281,25 @@ intact; no third POST was sent. No audio, render, upload session or video ID exi
 The new unsettled second request still blocks automatic new generation; no timer
 was disabled or restarted and no historical daily report was overwritten. This is
 a failed production result with preserved evidence, NOT a completed publication.
+
+
+## Explicit audio output request — 2026-11-04
+
+The latest owner instruction requests completing the missed song and restoring
+normal future scheduling. Google's official GenMedia Creative Studio Lyria
+implementation explicitly requests `response_modalities=["audio", "text"]`:
+https://googlecloudplatform.github.io/genmedia-creative-studio/core/foundation-models/lyria/
+The current Interactions reference also documents those lowercase values:
+https://docs.cloud.google.com/gemini-enterprise-agent-platform/reference/models/interactions-api
+Our request omitted this field. The canonical adapter now explicitly requests
+both audio and text, preserving the model, prompt, auth provider, statelessness,
+one-request claim and raw-response retention. This is a concrete request-shape
+correction; its effectiveness still requires a live production outcome.
+
+The latest instruction is limited operationally to one corrected USD 0.08 base
+request for the same existing job; maximum possible cumulative base spend is
+USD 0.24, with prior billing and tax/FX still unknown. A separate immutable
+completion receipt binds both earlier manifest hashes. Neither is erased or
+reclassified as non-billable. A one-use claim prevents a fourth request. Any new
+unsettled attempt still blocks. Scheduled model/count/price/cover/quality/time
+and upload safeguards remain unchanged. 175 focused regressions passed.
