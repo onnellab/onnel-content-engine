@@ -59,7 +59,7 @@ def read_approval():
 
 def acknowledged_prior(manifest):
     manifest = Path(manifest)
-    completion = read_completion_request()
+    completion = read_completion_request(protocol=True) or read_completion_request()
     if completion is not None:
         for run, sha in completion["prior_manifests"].items():
             if manifest == folder() / "lyria" / run / "manifest.json":
@@ -76,6 +76,8 @@ def claim_additional(output_root, manual_release):
     """Called under the existing paid-request lock before creating any new run."""
     if Path(output_root) != folder() / "lyria":
         return None
+    if read_completion_request(protocol=True) is not None:
+        return claim_completion_attempt(manual_release, protocol=True)
     if read_completion_request() is not None:
         return claim_completion_attempt(manual_release)
     if read_approval() is None:
@@ -141,16 +143,27 @@ COMPLETION_EXPECTED = {
 }
 
 
-def read_completion_request():
-    path = folder() / COMPLETION_RECORD
+PROTOCOL_RECORD = "original-protocol-completion-20261104.json"
+PROTOCOL_CLAIM = "original-protocol-completion-20261104.claim"
+PROTOCOL_EXPECTED = {**COMPLETION_EXPECTED,
+    "kind": "aether_original_protocol_completion",
+    "request_correction": "official_and_previously_successful_beta_rest",
+    "cumulative_possible_base_usd": "0.32",
+    "prior_manifests": {**COMPLETION_EXPECTED["prior_manifests"],
+        "20261104T070131Z-the-pass-beyond-the-racing-plains": "f7b13cbbed3b473cba9da3464e4c4626274efe8dc7e7e9035c9cdee9fec4aebb"}}
+
+
+def read_completion_request(*, protocol=False):
+    expected = PROTOCOL_EXPECTED if protocol else COMPLETION_EXPECTED
+    path = folder() / (PROTOCOL_RECORD if protocol else COMPLETION_RECORD)
     if not path.exists():
         return None
     if (any(p.is_symlink() for p in (path, *path.parents))
             or not private_path_permissions(folder()) or not private_path_permissions(path)):
         raise VideoError("aether_completion_receipt_unsafe")
     record = load_json(path, limit=16384)
-    if (set(record) != set(COMPLETION_EXPECTED) | {"issued_at"}
-            or any(record.get(k) != v for k, v in COMPLETION_EXPECTED.items())
+    if (set(record) != set(expected) | {"issued_at"}
+            or any(record.get(k) != v for k, v in expected.items())
             or type(record.get("additional_requests")) is not int
             or type(record.get("version")) is not int):
         raise VideoError("aether_completion_receipt_changed")
@@ -174,7 +187,10 @@ def _write_completion_record(path, record):
         stream.write(canonical(record)); stream.flush(); os.fsync(stream.fileno())
 
 
-def record_completion_request():
+def record_completion_request(*, protocol=False):
+    expected = PROTOCOL_EXPECTED if protocol else COMPLETION_EXPECTED
+    record_name = PROTOCOL_RECORD if protocol else COMPLETION_RECORD
+    expected_error = "lyria_api_error" if protocol else "lyria_audio_missing"
     from aether_single import SingleQueue
     from aether_manual_release import validate
     from aether_paid_guard import paid_request_lock
@@ -182,34 +198,36 @@ def record_completion_request():
     with queue.lock(), paid_request_lock():
         job = queue._read()["jobs"][JOB_ID]
         validate(job)
-        existing = read_completion_request()
+        existing = read_completion_request(protocol=protocol)
         if existing is not None:
             return existing
-        if (job.get("title") != TITLE or job.get("error") != "lyria_audio_missing"
+        if (job.get("title") != TITLE or job.get("error") != expected_error
                 or any(job.get(k) for k in ("music", "result", "upload", "approval"))
                 or (folder() / "youtube-session.json").exists()):
             raise VideoError("aether_completion_job_changed")
         runs = {p.parent.name: hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in (folder() / "lyria").glob("*/manifest.json")}
-        if runs != COMPLETION_EXPECTED["prior_manifests"]:
+        if runs != expected["prior_manifests"]:
             raise VideoError("aether_completion_prior_manifest_changed")
-        _write_completion_record(folder() / COMPLETION_RECORD,
-            {**COMPLETION_EXPECTED, "issued_at": datetime.now(timezone.utc).isoformat()})
-        return read_completion_request()
+        _write_completion_record(folder() / record_name,
+            {**expected, "issued_at": datetime.now(timezone.utc).isoformat()})
+        return read_completion_request(protocol=protocol)
 
 
-def claim_completion_attempt(manual_release):
-    record = read_completion_request()
+def claim_completion_attempt(manual_release, *, protocol=False):
+    record_name = PROTOCOL_RECORD if protocol else COMPLETION_RECORD
+    claim_name = PROTOCOL_CLAIM if protocol else COMPLETION_CLAIM
+    record = read_completion_request(protocol=protocol)
     if record is None or manual_release != {"job_id": JOB_ID, "request_sha256": REQUEST_SHA}:
         raise VideoError("aether_completion_manual_request_changed")
     runs = {p.parent.name for p in (folder() / "lyria").glob("*/manifest.json")}
     if runs != set(record["prior_manifests"]):
         raise VideoError("aether_completion_attempt_consumed")
     receipt = {"kind": "aether_corrected_request_claim", "job_id": JOB_ID,
-               "approval_sha256": hashlib.sha256((folder() / COMPLETION_RECORD).read_bytes()).hexdigest(),
+               "approval_sha256": hashlib.sha256((folder() / record_name).read_bytes()).hexdigest(),
                "claimed_at": datetime.now(timezone.utc).isoformat()}
     try:
-        _write_completion_record(folder() / COMPLETION_CLAIM, receipt)
+        _write_completion_record(folder() / claim_name, receipt)
     except FileExistsError:
         raise VideoError("aether_completion_attempt_consumed") from None
     return receipt
@@ -220,7 +238,8 @@ if __name__ == "__main__":
     import json
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", nargs="?", default="record-additional",
-                        choices=("record-additional", "record-completion"))
+                        choices=("record-additional", "record-completion", "record-protocol"))
     args = parser.parse_args()
-    result = record_completion_request() if args.command == "record-completion" else record_approval()
+    result = (record_approval() if args.command == "record-additional" else
+              record_completion_request(protocol=args.command == "record-protocol"))
     print(json.dumps(result, ensure_ascii=False, indent=2))

@@ -55,5 +55,27 @@ class ResponseRetentionTests(unittest.TestCase):
             transport.assert_called_once()
 
 
+class ErrorResponseRetentionTests(unittest.TestCase):
+    def test_http_error_preserves_body_and_never_retries(self):
+        from urllib.error import HTTPError
+        payload = b'{"error":{"code":400,"message":"Fictional invalid input"}}'
+        with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)), \
+             patch.object(lyria, 'access_token', return_value='private-fixture-token'):
+            output = Path(temporary) / 'lyria'
+            error = HTTPError('https://fixture.invalid', 400, 'fixture', {}, io.BytesIO(payload))
+            with patch.object(lyria, 'urlopen', side_effect=error) as transport:
+                with self.assertRaisesRegex(CredentialError, 'lyria_api_error'):
+                    lyria.generate('Fixture Song', 'Fixture instrumental', execute=True,
+                                   slot=SLOT, output_root=output)
+            path = next(output.glob('*/manifest.json'))
+            record = json.loads(path.read_text())
+            evidence = record['provider_error']
+            self.assertEqual(400, evidence['http_status'])
+            self.assertEqual(payload, (path.parent / evidence['file']).read_bytes())
+            self.assertEqual('request_started', record['state'])
+            self.assertNotIn('private-fixture-token', path.read_text())
+            transport.assert_called_once()
+
+
 if __name__ == '__main__':
     unittest.main()

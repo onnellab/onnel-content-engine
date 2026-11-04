@@ -303,3 +303,20 @@ completion receipt binds both earlier manifest hashes. Neither is erased or
 reclassified as non-billable. A one-use claim prevents a fourth request. Any new
 unsettled attempt still blocks. Scheduled model/count/price/cover/quality/time
 and upload safeguards remain unchanged. 175 focused regressions passed.
+
+## Original REST transport restoration — 2026-11-04
+
+The explicit-modalities v1 attempt returned `lyria_api_error`; its HTTP body was
+not retained by the then-current HTTPError branch. Do not invent a status code
+or billing outcome. The actual current GoogleCloudPlatform implementation at
+`genmedia-creative-studio/main/models/lyria.py` uses v1beta1 with flat text input,
+matching the earlier successful Aether adapter. Its source was read directly.
+The adapter is restored to that exact request shape, without a generic automatic
+endpoint fallback/retry. Both legacy outputs and v1 response parsing remain.
+Future HTTP errors now retain bounded private response bytes and the real code.
+
+The broad owner completion request is bounded here to one restored-protocol
+request, USD 0.08 base, possible cumulative base USD 0.32 (actual bills unknown).
+A separate immutable receipt binds all three prior manifests; none is erased or
+reclassified. All other gates and the ordinary LaunchAgent schedule remain.
+177 focused offline tests passed. This entry is not a publication receipt.

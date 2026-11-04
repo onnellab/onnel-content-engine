@@ -53,13 +53,12 @@ class InteractionsV1Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp, fixture_environment(Path(tmp).resolve()), \
              patch.object(g, "access_token", return_value="fixture-token"):
             def wire(request, **kwargs):
-                self.assertEqual("https://aiplatform.googleapis.com/v1/projects/fixture-project/locations/global/interactions", request.full_url)
+                self.assertEqual("https://aiplatform.googleapis.com/v1beta1/projects/fixture-project/locations/global/interactions", request.full_url)
                 body = json.loads(request.data)
+                self.assertEqual({"model", "input"}, set(body))
                 self.assertEqual(g.MODEL, body["model"])
-                self.assertIs(body["store"], False)
-                self.assertEqual(["audio", "text"], body["response_modalities"])
-                self.assertEqual("user_input", body["input"][0]["type"])
-                self.assertEqual("text", body["input"][0]["content"][0]["type"])
+                self.assertEqual("text", body["input"][0]["type"])
+                self.assertIn("Fixture Journey", body["input"][0]["text"])
                 self.assertNotIn("background", body)
                 stream = io.BytesIO(response([{"type": "model_output", "content": [output()]}]))
                 stream.headers = {}

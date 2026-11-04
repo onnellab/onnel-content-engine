@@ -24,7 +24,9 @@ from lyria_config import (
     load_settings,
 )
 
-API = "https://aiplatform.googleapis.com/v1/projects/{project}/locations/global/interactions"
+# Match Google's working GenMedia Creative Studio REST adapter and our prior
+# successful Lyria transport. Do not mix v1 step-shaped inputs with beta inputs.
+API = "https://aiplatform.googleapis.com/v1beta1/projects/{project}/locations/global/interactions"
 MAX_RESPONSE_BYTES = 64 * 1024 * 1024
 PRIVATE_OUTPUT = Path.home() / "Library/Application Support/ONNELLAB/content-engine/aether-inn/lyria"
 SAFE_TEXT = re.compile(r"[\x20-\x7e\u00a0-\uffff]+")
@@ -170,9 +172,7 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
     token = token or access_token()
     body = json.dumps({
         "model": MODEL,
-        "store": False,
-        "response_modalities": ["audio", "text"],
-        "input": [{"type": "user_input", "content": [{"type": "text", "text": prompt}]}],
+        "input": [{"type": "text", "text": prompt}],
     }, ensure_ascii=False).encode("utf-8")
     request = Request(
         API.format(project=project_id),
@@ -221,6 +221,20 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
             payload = response.read(MAX_RESPONSE_BYTES + 1)
     except HTTPError as exc:
         code = exc.code
+        # Keep bounded provider error evidence too; do not expose headers or
+        # discard a potentially useful diagnosis behind a generic error code.
+        with exc:
+            error_bytes = exc.read(1024 * 1024 + 1)
+        if len(error_bytes) <= 1024 * 1024:
+            error_path = Path(intent_path).with_name("provider-error.json")
+            fd = os.open(error_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+            with os.fdopen(fd, "wb") as stream:
+                stream.write(error_bytes); stream.flush(); os.fsync(stream.fileno())
+            if paid_guard._json(paid_guard._read(intent_path)) != intent:
+                raise CredentialError("aether_lyria_charge_intent_invalid")
+            intent["provider_error"] = {"file": error_path.name, "http_status": code,
+                "sha256": hashlib.sha256(error_bytes).hexdigest(), "bytes": len(error_bytes)}
+            atomic_json(intent_path, intent)
         if code in (401, 403):
             raise CredentialError("lyria_auth_or_permission_denied") from None
         if code == 429:

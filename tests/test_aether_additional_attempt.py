@@ -129,6 +129,29 @@ class CompletionAttemptTests(unittest.TestCase):
             with self.assertRaisesRegex(VideoError, "attempt_consumed"):
                 extra.claim_additional(first.parent.parent, manual)
 
+    def test_protocol_correction_acknowledges_exact_three_runs_and_is_one_use(self):
+        with completion_setup() as (q, first, second, manual):
+            extra.record_completion_request()
+            third = first.parent.parent / 'third' / 'manifest.json'
+            third.parent.mkdir()
+            atomic_json(third, {'state': 'request_started', 'dispatch_started': True})
+            state = q._read()
+            state['jobs'][extra.JOB_ID]['error'] = 'lyria_api_error'
+            atomic_json(q.state_path, state)
+            expected = {**extra.PROTOCOL_EXPECTED,
+                'manual_request_sha256': manual['request_sha256'],
+                'prior_manifests': {p.parent.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                                    for p in (first, second, third)}}
+            with patch.object(extra, 'PROTOCOL_EXPECTED', expected):
+                record = extra.record_completion_request(protocol=True)
+                self.assertEqual('0.32', record['cumulative_possible_base_usd'])
+                guard.require_no_unsettled_intents(single_root=q.root)
+                extra.claim_additional(first.parent.parent, manual)
+                with self.assertRaisesRegex(VideoError, 'attempt_consumed'):
+                    extra.claim_additional(first.parent.parent, manual)
+                self.assertTrue((extra.folder() / extra.COMPLETION_RECORD).exists())
+                self.assertTrue((extra.folder() / extra.PROTOCOL_RECORD).exists())
+
     def test_modified_prior_evidence_cannot_be_acknowledged(self):
         with completion_setup() as (q, first, second, manual):
             extra.record_completion_request()
