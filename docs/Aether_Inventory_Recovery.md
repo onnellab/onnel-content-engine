@@ -252,3 +252,32 @@ the same job, original manual-publication receipt and canonical worker are reuse
 A third request is disallowed, and the new response is retained before parsing.
 Five extra fixtures plus existing affected suites passed (87 tests in this pass).
 This records authorization and code validation, not proof of a successful song.
+
+### Additional attempt outcome (observed, not successful publication)
+
+The approved second POST was dispatched at `2026-11-04T06:33:31.927204+00:00`
+(15:33:31 KST) through the same canonical manual worker. It again ended with
+`lyria_audio_missing`. This time the complete response was saved before parsing:
+141 bytes, received `2026-11-04T06:34:05.043518+00:00`, SHA-256
+`7ab6d16fe633f2e81e7583ec234e6eb411d8460a3986aeb8bca350d875907013`.
+Its entire JSON was:
+
+```json
+{"status":"completed","created":"2026-11-04T06:34:04Z","updated":"2026-11-04T06:34:04Z","object":"interaction","model":"lyria-3-pro-preview"}
+```
+
+It contains no `steps`, `outputs`, audio, text, interaction ID, usage or diagnostic
+error. There are no hidden audio bytes for a parser change to recover. Current
+Google music documentation's sample includes model_output/audio content; it does
+not establish why this particular response omitted content. Do not invent a
+provider root cause, refund or successful charge. The first response remains
+unavailable, so this observation cannot prove the first payload was identical.
+
+Exactly two requests are now recorded for the song, one initial and one explicitly
+approved additional attempt. Potential combined provider-base cost is USD 0.16,
+with actual billing/tax/FX unverified. The first manifest's exact original hash is
+unchanged. The second response, manifest and single-use claims remain private and
+intact; no third POST was sent. No audio, render, upload session or video ID exists.
+The new unsettled second request still blocks automatic new generation; no timer
+was disabled or restarted and no historical daily report was overwritten. This is
+a failed production result with preserved evidence, NOT a completed publication.
