@@ -239,6 +239,24 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
                 atomic_json(intent_path, {**intent, "state": "not_sent", "dispatch_started": False})
     if len(payload) > MAX_RESPONSE_BYTES:
         raise CredentialError("lyria_response_too_large")
+    # Retain the actual stateless response BEFORE parsing it. A changed provider
+    # schema must not discard already-paid output or require a second request.
+    # This private file contains response bytes only, never request headers.
+    response_path = Path(intent_path).with_name("provider-response.json")
+    fd = os.open(response_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(payload)
+        stream.flush()
+        os.fsync(stream.fileno())
+    if paid_guard._json(paid_guard._read(intent_path)) != intent:
+        raise CredentialError("aether_lyria_charge_intent_invalid")
+    intent["provider_response"] = {
+        "file": response_path.name, "sha256": hashlib.sha256(payload).hexdigest(),
+        "bytes": len(payload), "received_at": paid_guard.utc_now().isoformat(),
+    }
+    atomic_json(intent_path, intent)
+    # Keep request_started on parse failure: it is NOT proof of zero charge,
+    # and must never silently authorize another paid attempt.
     return parse_audio_response(payload)
 
 

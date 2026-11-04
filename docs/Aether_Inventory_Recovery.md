@@ -199,3 +199,39 @@ and the unchanged gross-cost rejection using the new official pricing URL.
 No charged model request, render, upload, durable-job mutation or schedule change
 was performed. End-to-end production remains unverified and blocked by missing
 account-specific evidence; do not report this source repair as an uploaded song.
+
+## Actual requested manual production attempt — 2026-11-04 06:11 UTC
+
+The owner again explicitly requested completion of the original missed song.
+The implemented manual-release path was committed as `f30465fd`, then its
+immutable request was recorded for existing job `1f5cf414734a3a362b4db5cc`.
+The canonical worker was executed once. Unlike the earlier preparation-only
+sessions, a real Lyria POST was entered at `2026-11-04T06:11:34.587187+00:00`.
+Run directory: `20261104T061134Z-the-pass-beyond-the-racing-plains`.
+
+It stopped with `lyria_audio_missing` while parsing the received provider
+response. No candidate, render, upload session or video ID was created. The
+existing manifest remains `request_started`, `dispatch_started=true`; charge
+outcome is unverified and must not be represented as zero. No second generation
+request was sent, and neither the manifest nor one-use claim was reset.
+
+The previous adapter did not persist stateless response bytes before parsing.
+Consequently this attempt's original response is not available locally; its
+exact payload-shape/content cause cannot be established retrospectively. A
+read-only Interactions list returned no retained records, and a bounded read of
+Cloud Logging for this project's request interval returned no entries, including
+an unfiltered-service recheck. These empty reads do not prove non-billing.
+
+The adapter now fsyncs the exact response to private `provider-response.json`
+before parsing, records its hash/length in the existing intent, and preserves
+the original uncertain-request restriction on parse failure. Two new fixtures
+verify successful capture and malformed/missing-audio capture with no repayment;
+167 focused tests pass. This fixes loss of future response evidence, not the
+already-discarded response or the present publication failure.
+
+The requested song is still NOT published. A further model request would be a
+new potentially charged attempt, not a no-cost resume. Keep the original record
+and obtain explicit additional-attempt authorization rather than silently
+clearing it. New generation remains held by the existing unsettled-intent gate;
+known-video reconciliation is separate. The daily LaunchAgent schedule and its
+historical daily result were not changed by this interactive attempt.
