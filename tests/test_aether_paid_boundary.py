@@ -85,6 +85,20 @@ class PaidBoundaryTests(unittest.TestCase):
             with self.assertRaisesRegex(CredentialError, "aether_lyria_cost_proof_missing"):
                 guard.load_paid_proof("fixture-project")
 
+    def test_current_official_pricing_url_preserves_all_cost_checks(self):
+        with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
+            proof["pricing"]["source"]["reference"] = "https://cloud.google.com/model-garden/pricing?hl=en"
+            atomic_json(guard.PROOF_PATH, proof)
+            self.assertEqual("0.08", guard.load_paid_proof("fixture-project")["gross_cost_upper_bound_usd"])
+            proof["billing"]["tax_rate"] = "0.10"
+            atomic_json(guard.PROOF_PATH, proof)
+            with self.assertRaisesRegex(CredentialError, "gross_spend_limit"):
+                guard.load_paid_proof("fixture-project")
+            proof["pricing"]["source"]["reference"] = "https://example.invalid/pricing"
+            atomic_json(guard.PROOF_PATH, proof)
+            with self.assertRaisesRegex(CredentialError, "source_invalid"):
+                guard.load_paid_proof("fixture-project")
+
     def test_actual_paid_boundary_closes_at_eight_kst(self):
         with self.assertRaisesRegex(CredentialError, "aether_lyria_generation_window_closed"):
             guard.require_generation_window("2026-10-31", now=datetime(2026, 10, 30, 23, tzinfo=timezone.utc))

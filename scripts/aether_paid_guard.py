@@ -29,6 +29,7 @@ MAX_GROSS_USD = Decimal("0.08")
 PRICE_URLS = {
     "https://cloud.google.com/vertex-ai/generative-ai/pricing",
     "https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing",
+    "https://cloud.google.com/model-garden/pricing",
     "https://cloud.google.com/skus",
 }
 MODEL_URLS = {

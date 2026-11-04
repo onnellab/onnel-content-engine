@@ -129,3 +129,39 @@ authentication, a provider request, job creation or publication. Therefore this
 patch fixes repeated empty job/title consumption, NOT end-to-end production.
 The requested prior single remains unproduced; tool restriction clearance and
 successful generation/upload have not been established.
+
+## Public evidence collection repair (2026-11-04 02:02 UTC)
+
+The previous uncommitted rights-source collector used one 2 MiB limit for both
+HTML download and evidence content, then collapsed every fetch/size error into
+`aether_lyria_provider_terms_fetch_failed`. The actual official preview-terms
+HTML is 2,124,814 bytes, although its complete normalized visible text is only
+39,955 bytes. This was an ordinary source-collection failure, not evidence that
+Google rejected commercial use. It does not explain any host tool-safety denial;
+those provider-side reasons remain unavailable.
+
+The restored `scripts/aether_lyria_rights.py collect` accepts a bounded 8 MiB
+HTML response, excludes script/style/noscript payloads, and preserves complete
+normalized visible text within the existing 2 MiB evidence-file limit. It records
+both raw-response and stored-text hashes with exact official URLs. Oversize,
+HTTP, transport, encoding and source-validation errors are now distinct.
+The old pricing endpoint returned HTTP 301. The collector uses the current
+Google `https://cloud.google.com/model-garden/pricing` endpoint directly, and
+that exact official source was added to the existing pricing URL allowlist.
+Redirects to arbitrary endpoints remain disabled.
+
+Interactive live collection succeeded for model documentation, preview terms,
+service terms and pricing. HTML sizes were 435510, 2124814, 1070488 and 3026453;
+stored-text sizes were 30658, 39955, 202939 and 106729 bytes respectively.
+The source receipt is retained in private `lyria-paid-evidence/public-sources/`.
+This is a source bundle, NOT active `proof.json`, a new contract acceptance,
+account/billing attestation or paid-generation authorization. It leaves every
+existing amount, evidence, time, identity and duplicate-request check unchanged.
+Scheduled reporting still must not invoke this maintenance collector or workers.
+
+134 focused regressions passed, including the >2 MiB HTML case, separate text
+limits, allowed URLs, real source hashes, preservation of existing proof bytes,
+and the unchanged gross-cost rejection using the new official pricing URL.
+No charged model request, render, upload, durable-job mutation or schedule change
+was performed. End-to-end production remains unverified and blocked by missing
+account-specific evidence; do not report this source repair as an uploaded song.
