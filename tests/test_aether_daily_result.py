@@ -99,6 +99,9 @@ class DailyResultTests(unittest.TestCase):
             report["warnings"].append("fixture_warning")
             raise RuntimeError("sensitive-exception-payload")
         with patch.object(worker, "repo_sync", return_value=True), \
+             patch.object(worker, "run_reconcile", return_value={"status": "idle"}), \
+             patch.object(worker, "run_single_slot"), \
+             patch.object(worker, "run_compilation_slot"), \
              patch.object(worker, "run_youtube_reports", side_effect=fail_after_evidence), \
              patch.object(worker, "publish_local_ops_sources") as publish, \
              redirect_stdout(io.StringIO()):
@@ -113,6 +116,121 @@ class DailyResultTests(unittest.TestCase):
         self.assertNotIn("sensitive-exception-payload", self.result.read_text())
         publish.assert_not_called()
         self.run.assert_not_called()
+
+    def scheduled_pass(self, *, hosted_success=True, repo_ready=True, probe=False):
+        """Run real orchestration/slot selection with fictional time and workers.
+
+        subprocess.run is already forbidden by setUp; no queue, provider,
+        credential, renderer, real clock or daily result is touched.
+        """
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+        clock = [datetime(2026, 11, 7, 6, 20, tzinfo=ZoneInfo("Asia/Seoul"))]
+        events = []
+        concept = {"title": "Fixture Sailing", "lane": "open_sea_voyage", "style": "Fixture only"}
+
+        def repo(report):
+            events.append("repo")
+            if not repo_ready:
+                report["blockers"].append("repo_fetch_failed")
+            return repo_ready
+
+        def step(report, name, argv, **kwargs):
+            events.append(name)
+            if name.startswith("backlog_"):
+                return 0, json.dumps({"status": "already_public"}), ""
+            if name == "new_lyria_single":
+                self.assertLess(clock[0].hour, 8)
+                self.assertEqual("2026-11-07", argv[argv.index("--slot") + 1])
+                return 0, json.dumps({"status": "scheduled", "job_id": "fixture-job",
+                    "video_id": "fixture-video", "slot": "2026-11-07", "publication_complete": False,
+                    "publish_at": "2026-11-07T00:00:00Z"}), ""
+            if name == "post_ops_repo_status":
+                return 0, "", ""
+            if name in {"single_readiness_probe", "compilation_readiness_probe"}:
+                return 0, json.dumps({"dry_run": True}), ""
+            self.fail("Unexpected side effect: " + name)
+
+        def hosted(report):
+            events.append("hosted")
+            # Even a queue delay lasting past the publishing boundary must not
+            # prevent the already finished time-critical production stage.
+            clock[0] = clock[0].replace(hour=10)
+            if not hosted_success:
+                report["blockers"].append("fixture_hosted_unavailable")
+            return hosted_success
+
+        def reports(report):
+            events.append("reports")
+            if not probe:
+                self.assertEqual("fixture-video", report["single_slot"]["video_id"])
+
+        def reconcile(report):
+            events.append("reconcile")
+            return {"status": "idle"}
+
+        def compilation(report, now):
+            events.append("compilation")
+            report["compilation_slot"] = {"status": "not_scheduled_today"}
+
+        with patch.object(worker, "now_kst", side_effect=lambda: clock[0]), \
+             patch.object(worker, "repo_sync", side_effect=repo), \
+             patch.object(worker, "run_step", side_effect=step), \
+             patch.object(worker, "run_reconcile", side_effect=reconcile), \
+             patch.object(worker, "run_compilation_slot", side_effect=compilation), \
+             patch.object(worker, "check_new_single_inputs", return_value={"provider_base_price_usd": "0.08"}), \
+             patch.object(worker, "choose_approved_new_single", return_value=concept), \
+             patch.object(worker, "sync_playlists_after_upload", side_effect=lambda r: events.append("playlists")), \
+             patch.object(worker, "run_youtube_reports", side_effect=reports), \
+             patch.object(worker, "publish_local_ops_sources", side_effect=lambda r: events.append("snapshot")), \
+             patch.object(worker, "run_hosted_ops_workflows", side_effect=hosted), \
+             patch.object(worker, "run_store_review_auto_replies", side_effect=lambda r: events.append("reviews")), \
+             patch.object(worker, "run_ops_dashboard_deploy", side_effect=lambda r: events.append("deploy")), \
+             patch.object(sys, "argv", ["aether_daily_local.py"] + (["--probe"] if probe else [])), \
+             redirect_stdout(io.StringIO()):
+            code = worker.main()
+        path = self.root / "probe-result.json" if probe else self.result
+        self.run.assert_not_called()
+        return code, events, json.loads(path.read_text())
+
+    def test_hosted_delay_cannot_consume_music_deadline_and_snapshot_is_after_music(self):
+        code, events, result = self.scheduled_pass()
+        self.assertEqual(0, code)
+        self.assertEqual("scheduled", result["single_slot"]["status"])
+        self.assertFalse(result["single_slot"]["publication_complete"])
+        self.assertEqual(1, events.count("new_lyria_single"))
+        order = ["reconcile", "new_lyria_single", "playlists", "compilation", "reports", "snapshot", "hosted", "reviews", "deploy"]
+        self.assertEqual(sorted(events.index(x) for x in order), [events.index(x) for x in order])
+        self.assertEqual("aether_before_reporting_and_hosted_ops", result["execution_order"])
+
+    def test_hosted_failure_preserves_music_ids_without_second_attempt(self):
+        code, events, result = self.scheduled_pass(hosted_success=False)
+        self.assertEqual(2, code)
+        self.assertEqual("partial", result["state"])
+        self.assertEqual("fixture-video", result["single_slot"]["video_id"])
+        self.assertEqual(1, events.count("new_lyria_single"))
+        self.assertNotIn("reviews", events)
+        self.assertNotIn("deploy", events)
+        self.assertEqual(["fixture_hosted_unavailable"], result["blockers"])
+        original = self.result.read_bytes()
+        # Same-day relaunch must not repeat either production or hosted work.
+        code, events, again = self.scheduled_pass(hosted_success=False)
+        self.assertEqual(2, code)
+        self.assertEqual([], events)
+        self.assertEqual(original, self.result.read_bytes())
+
+    def test_priority_does_not_bypass_repository_check(self):
+        code, events, result = self.scheduled_pass(repo_ready=False)
+        self.assertEqual(2, code)
+        self.assertEqual(["repo"], events)
+        self.assertEqual(["repo_fetch_failed"], result["blockers"])
+
+    def test_probe_remains_nonproducing_after_reorder(self):
+        code, events, result = self.scheduled_pass(probe=True)
+        self.assertEqual(0, code)
+        self.assertEqual(["repo", "reports", "single_readiness_probe", "compilation_readiness_probe"], events)
+        self.assertFalse(self.result.exists())
+        self.assertNotIn("single_slot", result)
 
     def test_lock_failure_does_not_clobber_existing_result(self):
         worker.save(self.report())

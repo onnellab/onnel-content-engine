@@ -1107,8 +1107,8 @@ def main() -> int:
             print(json.dumps({"state": report["state"], "blockers": report["blockers"]}))
             return 2
 
-        run_youtube_reports(report)
         if args.probe:
+            run_youtube_reports(report)
             code, stdout, _ = run_step(
                 report, "single_readiness_probe",
                 [sys.executable, "-B", "scripts/aether_single.py", "readiness"], timeout=180,
@@ -1126,6 +1126,19 @@ def main() -> int:
             finalize(report)
             print(json.dumps({"state": report["state"], "blockers": report["blockers"]}))
             return 0 if not report["blockers"] else 2
+        # The 08:00 generation / 09:00 publication deadlines cannot wait for
+        # hosted Actions (which can queue or take hours). The same launchd
+        # owner performs the original music stages once, before reporting/Ops.
+        # run_single_slot still enforces the real current date and deadlines;
+        # this does not recover, reschedule or revive a stale single.
+        report["execution_order"] = "aether_before_reporting_and_hosted_ops"
+        single_reconcile = run_reconcile(report)
+        run_single_slot(report, single_reconcile)
+        run_compilation_slot(report, now_kst())
+        save(report)
+        # Capture reports AFTER music so the later snapshot/deploy reflects the
+        # outcome of this pass, not only the inventory from before production.
+        run_youtube_reports(report)
         publish_local_ops_sources(report)
         hosted_sources_ready = run_hosted_ops_workflows(report)
         if hosted_sources_ready:
@@ -1133,9 +1146,8 @@ def main() -> int:
             run_ops_dashboard_deploy(report)
         else:
             report["hosted_ops_downstream"] = "skipped_unverified_or_failed_source"
-        # Aether reconciliation/music is independent of hosted workflows. A
-        # transient GitHub outage must not make us miss the 09:00 music slot.
-        # The existing post-Ops clean-worktree check still fails closed.
+        # Preserve the post-Ops repository check and any earlier music IDs.
+        # Music already ran once; hosted failures never trigger another attempt.
         code, status, _ = run_step(report, "post_ops_repo_status", ["git", "status", "--porcelain"], timeout=30)
         if code != 0 or status.strip():
             report["blockers"].append("repo_dirty_after_ops_snapshot")
@@ -1143,9 +1155,6 @@ def main() -> int:
             print(json.dumps({"state": report["state"], "blockers": report["blockers"]}))
             return 2
 
-        single_reconcile = run_reconcile(report)
-        run_single_slot(report, single_reconcile)
-        run_compilation_slot(report, now_kst())
         finalize(report)
         print(json.dumps({
             "state": report["state"],

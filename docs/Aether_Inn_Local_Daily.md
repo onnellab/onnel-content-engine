@@ -58,12 +58,49 @@ can actually verify. The `$25/1M characters` translation figure remains only in
 `data/melivra_ai_credit_policy.csv` as a conservative planning assumption; it is
 not reported as a current DeepL API price.
 
+## Deadline-first execution order — 2026-11-04
+
+The normal daily pass now performs the existing Aether reconciliation, playlist
+sync and eligible music slots **immediately after the clean current-main check**,
+before YouTube reporting and before any hosted Actions dispatch/wait. Previously
+four hosted stages could consume the entire pre-08:00 generation window even
+though the code described music as independent of hosted operations.
+
+The order is: repository freshness → same-ID reconciliation/playlists → current
+single/compilation slots → independent channel reports → local Ops snapshot →
+sequential hosted sources → review notifications → combined Ops deployment.
+The snapshot and deployed page therefore use reports collected after the music
+stage. Hosted delays/failures cannot retroactively prevent that stage or cause a
+second music attempt. Earlier music job/video IDs survive later Ops failures.
+
+This changes stage priority only. The same LaunchAgent, locks, same-day result
+guard, production weekdays, before-08:00 new-generation boundary, PRIVATE +
+09:00 publishAt, approved artwork and one-request/cost/source checks remain.
+No old rejected job is revived, no immediate stale-slot publication is added,
+and the read-only ChatGPT reporter still never runs production or a replacement
+worker. Manual --probe remains reporting/readiness only. A run still in progress
+at report time must be reported as running, not falsely marked complete.
+
+Maintenance verification on 2026-11-04: 160 focused regressions passed, including
+an eligible 06:20 Saturday pass whose hosted stage finishes at 10:00, hosted
+failure with exact music IDs preserved, no same-day retry, repository rejection
+before production and a nonproducing probe. Actual read-only Mac checks selected
+`Sails Beyond the Amber Harbor` (open_sea_voyage), validated its approved finished
+1920x1080 cover and current USD 0.08 base-price sources, and verified all 67
+owned videos/positions in two exact passes without a title collision. The live
+queue stayed byte-identical. The installed launchd job was registered at the
+canonical script path with 06:20 / 07:20 / 08:20 triggers and last exit code 0;
+these triggers were not changed. No production, publication or timer kickstart
+was performed. These checks are readiness evidence, not a future upload receipt.
+
 ## Local responsibilities
 
 Every normal run uses current `main` only after a clean fast-forward check. A dirty,
 diverged, locally-ahead, or unrefreshable content-engine checkout fails closed rather
 than using unknown or cached remote state. A failed `git fetch` is a blocker and
-must not be followed by divergence decisions against a stale `origin/main`. The worker then:
+must not be followed by divergence decisions against a stale `origin/main`.
+Responsibilities below are grouped by component; the deadline-first section
+above defines their execution order:
 
 - refreshes ONNELLAB and Aether Inn private YouTube reports independently;
 - refreshes the public-safe YouTube ops snapshot and AI-provider pricing status;
