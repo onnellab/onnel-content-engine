@@ -1107,14 +1107,15 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "10:13 AM · Nov 4, 2026",
       "browser_ui_timezone": "not_recorded",
       "observed_short_urls": [
         "https://t.co/yOeysQShXj",
         "https://t.co/9I0epD7nu8"
       ],
-      "observation_source": "Dot cloud browser verified authenticated @onnellab, current main receipts, profile and duplicate search before one UI submit. Canonical article live; complete unchanged draft and both store URLs checked in composer. Profile count 24 to 25; exact permalink verifies author and full body. UI time datetime read separately. X normalized paragraph spacing and shortened URLs. observed_at is post-detail metadata verification time."
+      "observation_source": "Dot cloud browser verified authenticated @onnellab, current main receipts, profile and duplicate search before one UI submit. Canonical article live; complete unchanged draft and both store URLs checked in composer. Profile count 24 to 25; exact permalink verifies author and full body. UI time datetime read separately. X normalized paragraph spacing and shortened URLs. observed_at is post-detail metadata verification time.",
+      "processed_at": "2026-11-04T01:16:30+00:00"
     },
     {
       "topic_id": "TOPIC-0041",
@@ -1143,11 +1144,12 @@
       "approval_source": "Owner's X/LinkedIn browser publication automation authorizes overdue valid drafts.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "방금",
       "browser_ui_timezone": "not_recorded",
       "observed_short_url": "https://lnkd.in/gqXVbd2J",
-      "observation_source": "Dot cloud browser verified ONNEL LAB profile, current main receipts and recent activity before one UI submit. Canonical article live; public audience and complete unchanged draft verified in composer. Success alert and exact permalink confirm author, full body and canonical article-card destination. LinkedIn normalized paragraph spacing and shortened the text link. Server publication time unavailable; observed_at is post-detail verification time."
+      "observation_source": "Dot cloud browser verified ONNEL LAB profile, current main receipts and recent activity before one UI submit. Canonical article live; public audience and complete unchanged draft verified in composer. Success alert and exact permalink confirm author, full body and canonical article-card destination. LinkedIn normalized paragraph spacing and shortened the text link. Server publication time unavailable; observed_at is post-detail verification time.",
+      "processed_at": "2026-11-04T01:16:30+00:00"
     }
   ]
 }
