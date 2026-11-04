@@ -179,10 +179,12 @@ class SingleSlotBoundary(unittest.TestCase):
                 "estimated_cost_usd": 0.08, "generation_count": 1,
             }), ""
         with patch.object(module, "now_kst", return_value=now), \
+             patch.object(module, "check_new_single_inputs") as preflight, \
              patch.object(module, "choose_approved_new_single", return_value=concept) as choose, \
              patch.object(module, "sync_playlists_after_upload") as playlists, \
              patch.object(module, "run_step", side_effect=fake_step):
             module.run_single_slot(report, {"status": "idle"})
+        preflight.assert_called_once_with()
         choose.assert_called_once_with()
         self.assertEqual(len(module.BACKLOG) + 1, len(calls))
         self.assertEqual("worker", calls[-1][1][3])
@@ -259,6 +261,89 @@ class SingleSlotBoundary(unittest.TestCase):
         self.assertEqual("old-video", report["single_slot"]["video_id"])
         self.assertEqual(["aether_single_existing_job_unsettled"], report["blockers"])
 
+
+
+class NewSingleInputPreflight(unittest.TestCase):
+    def test_missing_evidence_does_not_consume_title_or_create_job_on_later_slots(self):
+        import aether_paid_guard
+        import lyria_config
+        settings = {"enabled": True, "project_id": "fixture-only"}
+        with tempfile.TemporaryDirectory() as temporary, \
+             patch.object(aether_paid_guard, "PROOF_PATH", Path(temporary) / "absent.json"), \
+             patch.object(lyria_config, "load_settings", return_value=settings), \
+             patch.object(lyria_config, "access_token", side_effect=AssertionError("no authentication")), \
+             patch.object(module, "choose_approved_new_single") as choose, \
+             patch.object(module, "run_step", return_value=(0, json.dumps({"status": "already_public"}), "")) as run:
+            for day in (7, 10):
+                report = {"blockers": [], "steps": []}
+                with patch.object(module, "now_kst", return_value=datetime(2026, 11, day, 6, 30, tzinfo=KST)):
+                    module.run_single_slot(report, {"status": "idle"})
+                result = report["single_slot"]
+                self.assertEqual("aether_lyria_cost_proof_missing", result["error"])
+                self.assertEqual("generation_preflight", result["stage"])
+                self.assertFalse(result["created_new_job"])
+                self.assertFalse(result["generation_attempted"])
+                self.assertFalse(result["upload_attempted"])
+                self.assertNotIn("spent_usd", result)
+                self.assertEqual([result["error"]], report["blockers"])
+            choose.assert_not_called()
+            self.assertEqual(2 * len(module.BACKLOG), run.call_count)
+            self.assertTrue(all("backlog-worker" in call.args[2] for call in run.call_args_list))
+            self.assertEqual([], list(Path(temporary).iterdir()))
+
+    def test_existing_config_and_evidence_checks_are_used_without_authorizing(self):
+        import aether_paid_guard
+        import lyria_config
+        from short_video_credentials import CredentialError
+        with patch.object(lyria_config, "load_settings") as settings, \
+             patch.object(aether_paid_guard, "load_paid_proof") as proof, \
+             patch.object(aether_paid_guard, "require_no_unsettled_intents") as unsettled:
+            for config, reason in ((None, "lyria_not_configured"), ({"enabled": False}, "lyria_generation_disabled")):
+                settings.return_value = config
+                with self.assertRaisesRegex(CredentialError, reason):
+                    module.check_new_single_inputs()
+            proof.assert_not_called()
+            unsettled.assert_not_called()
+            settings.return_value = {"enabled": True, "project_id": "fixture-only"}
+            proof.side_effect = CredentialError("aether_lyria_gross_spend_limit")
+            with self.assertRaisesRegex(CredentialError, "aether_lyria_gross_spend_limit"):
+                module.check_new_single_inputs()
+            unsettled.assert_not_called()
+            proof.side_effect = None
+            self.assertIsNone(module.check_new_single_inputs())
+            proof.assert_called_with("fixture-only")
+            unsettled.assert_called_once_with()
+            unsettled.side_effect = CredentialError("aether_lyria_generation_uncertain")
+            with self.assertRaisesRegex(CredentialError, "aether_lyria_generation_uncertain"):
+                module.check_new_single_inputs()
+
+    def test_unexpected_failure_is_not_printed_as_private_provider_data(self):
+        report = {"blockers": [], "steps": []}
+        with patch.object(module, "now_kst", return_value=datetime(2026, 11, 7, 6, 30, tzinfo=KST)), \
+             patch.object(module, "check_new_single_inputs", side_effect=RuntimeError("private fixture payload")), \
+             patch.object(module, "choose_approved_new_single") as choose, \
+             patch.object(module, "run_step", return_value=(0, json.dumps({"status": "already_public"}), "")):
+            module.run_single_slot(report, {"status": "idle"})
+        self.assertEqual("aether_single_input_preflight_failed", report["single_slot"]["error"])
+        self.assertNotIn("private fixture payload", json.dumps(report))
+        choose.assert_not_called()
+
+    def test_existing_upload_and_backlog_do_not_require_new_generation_evidence(self):
+        now = datetime(2026, 11, 7, 6, 30, tzinfo=KST)
+        with patch.object(module, "now_kst", return_value=now), \
+             patch.object(module, "check_new_single_inputs", side_effect=AssertionError("not new generation")) as preflight, \
+             patch.object(module, "sync_playlists_after_upload"), \
+             patch.object(module, "run_step", return_value=(0, json.dumps({"status": "scheduled", "video_id": "fixture"}), "")) as run:
+            report = {"blockers": [], "steps": []}
+            existing = {"status": "scheduled", "slot": "2026-11-07", "job_id": "existing", "video_id": "fixture"}
+            module.run_single_slot(report, existing)
+            run.assert_not_called()
+            self.assertEqual("existing", report["single_slot"]["job_id"])
+            report = {"blockers": [], "steps": []}
+            module.run_single_slot(report, {"status": "idle"})
+            self.assertEqual("scheduled", report["single_slot"]["status"])
+            self.assertEqual(1, run.call_count)
+            preflight.assert_not_called()
 
 
 class CompilationMaterializationRetry(unittest.TestCase):

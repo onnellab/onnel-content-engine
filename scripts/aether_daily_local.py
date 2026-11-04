@@ -571,6 +571,25 @@ def choose_approved_new_single() -> dict | None:
     return None
 
 
+def check_new_single_inputs() -> None:
+    """Read existing generation prerequisites before consuming a title/job.
+
+    This does not authenticate, dispatch, write evidence, or authorize a charge.
+    The canonical generator must still repeat every check at paid dispatch.
+    """
+    import aether_paid_guard as paid_guard
+    from lyria_config import CONFIG_PATH, load_settings
+    from short_video_credentials import CredentialError
+
+    settings = load_settings(CONFIG_PATH)
+    if not settings:
+        raise CredentialError("lyria_not_configured")
+    if not settings["enabled"]:
+        raise CredentialError("lyria_generation_disabled")
+    paid_guard.load_paid_proof(settings["project_id"])
+    paid_guard.require_no_unsettled_intents()
+
+
 def run_single_slot(report: dict, single_reconcile: dict) -> None:
     now = now_kst()
     if now.weekday() not in {1, 5}:
@@ -653,6 +672,22 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
         error = "aether_lyria_generation_window_closed"
         report["single_slot"] = {"status": "blocked", "error": error}
         report["blockers"].append(error)
+        return
+    # Fail before planning creates another job or consumes its approved title.
+    # These are the existing checks, not replacement authorization or a retry.
+    try:
+        check_new_single_inputs()
+    except Exception as error:
+        from short_video_pipeline import VideoError
+        import re
+        reason = str(error) if isinstance(error, VideoError) and re.fullmatch(r"[a-z_]{1,100}", str(error)) else "aether_single_input_preflight_failed"
+        report["single_slot"] = {
+            "status": "blocked", "source_kind": "new_lyria", "slot": slot,
+            "stage": "generation_preflight", "error": reason,
+            "created_new_job": False, "generation_attempted": False,
+            "upload_attempted": False,
+        }
+        report["blockers"].append(reason)
         return
     try:
         concept = choose_approved_new_single()

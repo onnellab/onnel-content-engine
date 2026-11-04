@@ -63,6 +63,7 @@ class PaidApiPolicyTests(unittest.TestCase):
         now = datetime(2026, 10, 10, 6, 20, tzinfo=ZoneInfo("Asia/Seoul"))
         with patch.object(aether_daily_local, "now_kst", return_value=now), \
              patch.object(aether_daily_local, "run_step", return_value=(0, json.dumps({"status": "already_public"}), "")) as run, \
+             patch.object(aether_daily_local, "check_new_single_inputs"), \
              patch.object(aether_daily_local, "choose_approved_new_single", return_value=None) as choose:
             aether_daily_local.run_single_slot(report, {"status": "idle"})
         choose.assert_called_once_with()

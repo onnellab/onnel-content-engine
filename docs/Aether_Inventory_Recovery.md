@@ -100,3 +100,32 @@ single-worker behavior, paid-boundary and cost-policy suites. The older
 render-crossing-deadline fixture now advances its mocked clock at actual render
 completion instead of assuming a fixed number of clock checks; its no-upload
 and no-approval assertions remain intact.
+
+## New-generation input checks before title consumption (2026-11-04)
+
+A separate failure path remained after the uploads-list repair: the daily wrapper
+selected an approved title and invoked the single worker before discovering that
+the existing Lyria cost/rights evidence was missing. The worker could persist an
+unproduced job, which later became stale; the planner then excluded that title
+because it was already in the queue. Repeating this consumed approved concepts
+without producing audio. This is distinct from a ChatGPT tool-edit rejection and
+from a YouTube upload failure.
+
+The daily wrapper now calls the existing local settings, paid-proof and unsettled
+intent readers before selecting a new Lyria concept or starting its worker.
+A failure reports the original safe reason with `stage=generation_preflight`,
+`created_new_job=false`, `generation_attempted=false`, `upload_attempted=false`.
+No unknown historical spend is reported as zero. Existing-video reconciliation
+and canonical WAV backlog handling precede this check and remain unchanged.
+The generator repeats all original checks at dispatch; no limit, authorization,
+proof schema, publication deadline, credential handling or launchd owner changed.
+No proof is fabricated, no rejected job is revived, and no production is retried.
+
+Validation: 124 focused regressions passed, including missing-proof behavior on
+two later slots, actual proof-reader use, no title/worker creation on failure,
+original spending/uncertainty blocks and preserved backlog/existing-upload paths.
+The read-only Mac input check returned `aether_lyria_cost_proof_missing` without
+authentication, a provider request, job creation or publication. Therefore this
+patch fixes repeated empty job/title consumption, NOT end-to-end production.
+The requested prior single remains unproduced; tool restriction clearance and
+successful generation/upload have not been established.
