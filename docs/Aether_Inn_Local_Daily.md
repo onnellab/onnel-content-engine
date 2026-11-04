@@ -106,6 +106,19 @@ cross-check, same-video reconciliation, rights gates, and playlist classificatio
 remain owned by the canonical repository workers. The daily wrapper does not
 reimplement or weaken those contracts.
 
+## Current cost/terms clarification — 2026-11-04
+
+The Lyria-only allowance is one song at the provider base price of at most
+USD 0.08, with actual tax/FX/invoice totals not certified by that estimate.
+The earlier all-in USD 0.08 interpretation and manually authored account/rights
+proof dependency are superseded by `Aether_Inn_Lyria.md`'s current policy.
+Before selecting a new title, the existing LaunchAgent slot refreshes official
+public price/model/terms sources and validates their hashes and permissions.
+It rechecks the before-08:00 boundary after that refresh. Source failure blocks
+without consuming a title/job. All one-request, model, enabled, approved-cover,
+ownership/inventory, paid-intent and 09:00 publication guards remain in place.
+Scheduled ChatGPT reporting still cannot execute collection or production.
+
 ## Scoped paid-API production policy (owner authorization 2026-10-10)
 
 Only `lyria-3-pro-preview` is enabled for **one** paid generated song at an

@@ -571,11 +571,11 @@ def choose_approved_new_single() -> dict | None:
     return None
 
 
-def check_new_single_inputs() -> None:
-    """Read existing generation prerequisites before consuming a title/job.
+def check_new_single_inputs(*, refresh_sources: bool = False) -> dict:
+    """Verify price/terms before consuming a title/job; never call a model.
 
-    This does not authenticate, dispatch, write evidence, or authorize a charge.
-    The canonical generator must still repeat every check at paid dispatch.
+    Only the launchd-owned slot requests public-source refresh. Read-only status
+    checks leave it disabled. The generator rechecks the same source hashes.
     """
     import aether_paid_guard as paid_guard
     from lyria_config import CONFIG_PATH, load_settings
@@ -586,8 +586,18 @@ def check_new_single_inputs() -> None:
         raise CredentialError("lyria_not_configured")
     if not settings["enabled"]:
         raise CredentialError("lyria_generation_disabled")
-    paid_guard.load_paid_proof(settings["project_id"])
     paid_guard.require_no_unsettled_intents()
+    if refresh_sources:
+        from aether_lyria_rights import collect, SourceError
+        try:
+            collect(root=paid_guard.PROOF_PATH.parent)
+        except SourceError as error:
+            reason = str(error).rsplit(":", 1)[-1]
+            import re
+            if not re.fullmatch(r"[a-z_0-9]{1,100}", reason):
+                reason = "aether_lyria_provider_sources_refresh_failed"
+            raise CredentialError(reason) from None
+    return paid_guard.load_paid_proof(settings["project_id"])
 
 
 def run_single_slot(report: dict, single_reconcile: dict) -> None:
@@ -676,17 +686,26 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
     # Fail before planning creates another job or consumes its approved title.
     # These are the existing checks, not replacement authorization or a retry.
     try:
-        check_new_single_inputs()
+        evidence = check_new_single_inputs(refresh_sources=True)
+        report["single_generation_inputs"] = evidence
     except Exception as error:
         from short_video_pipeline import VideoError
         import re
-        reason = str(error) if isinstance(error, VideoError) and re.fullmatch(r"[a-z_]{1,100}", str(error)) else "aether_single_input_preflight_failed"
+        reason = str(error) if isinstance(error, VideoError) and re.fullmatch(r"[a-z_0-9]{1,100}", str(error)) else "aether_single_input_preflight_failed"
         report["single_slot"] = {
             "status": "blocked", "source_kind": "new_lyria", "slot": slot,
             "stage": "generation_preflight", "error": reason,
             "created_new_job": False, "generation_attempted": False,
             "upload_attempted": False,
         }
+        report["blockers"].append(reason)
+        return
+    current = now_kst()
+    if current.date().isoformat() != slot or current.hour >= 8:
+        reason = "aether_lyria_generation_window_closed"
+        report["single_slot"] = {"status": "blocked", "error": reason,
+                                 "created_new_job": False, "generation_attempted": False,
+                                 "upload_attempted": False}
         report["blockers"].append(reason)
         return
     try:

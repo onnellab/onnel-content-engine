@@ -229,6 +229,9 @@ def generate(title: str, style: str, *, count: int | None = None, execute: bool 
         "project_id": settings["project_id"],
         "candidate_count": requested,
         "estimated_cost_usd": cost,
+        "cost_basis": "provider_base_excluding_tax_and_currency_adjustments",
+        "gross_cost_verified": False,
+        "final_billed_cost_usd": None,
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
         "execute": execute,
     }

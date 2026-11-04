@@ -1,5 +1,39 @@
 # Owned-upload inventory recovery
 
+## Current resolution — 2026-11-04
+
+The current policy is `docs/Aether_Inn_Lyria.md`, not the historical all-in
+proof-file wording below. The owner requested correcting the internally added
+requirements. Runtime now validates the original one-candidate Lyria-only
+USD 0.08 **provider-base** budget against freshly collected official price and
+commercial-use documents. Account taxes/FX/final invoices remain explicitly
+unverified, not zero. No per-song copyright certificate or manually authored
+account `proof.json` is required. Original evidence and job records are retained.
+
+The collector atomically indexes validated public sources as `current.json`.
+The existing LaunchAgent refreshes these on an eligible new-single slot before
+choosing a title; the paid adapter rechecks the same project-bound receipt/hash
+and source bytes before dispatch. Changed price/terms, missing or expired sources,
+wrong model/count, uncertain earlier charges, duplicate uploads and expired
+production/publication windows still block. No platform/tool safety setting,
+authentication source, schedule or durable job/video ID was changed.
+
+Live Mac verification using official sources checked at 2026-11-04T02:44:47Z
+returned `inputs_verified` and `provider_base_price_usd=0.08`, with
+`gross_cost_verified=false` and `final_billed_cost_usd=null`. No paid model
+request, render or upload was executed during this maintenance. The original
+November 3 single is still unproduced; this is a verified prerequisite/policy
+repair, not a retroactive publication receipt. No stale-slot recovery was run.
+
+Validation: 138 focused Aether/source/intent/upload regressions plus 16 Lyria
+adapter/configuration regressions passed (154 total). Tests preserve one-request
+intent semantics and exercise exact model/currency/unit parsing, price increases,
+changed sources, project binding, source-refresh failure and crossing 08:00 while
+refreshing, while leaving existing uploads and canonical WAVs independent.
+
+The dated sections below are historical incident evidence. Their former missing
+manual-proof blocker is superseded, not an instruction to reintroduce it.
+
 ## Incident and scope (2026-11-03)
 
 The durable local result reported `aether_single_remote_inventory_unverified`

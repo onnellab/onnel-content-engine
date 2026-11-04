@@ -184,7 +184,7 @@ class SingleSlotBoundary(unittest.TestCase):
              patch.object(module, "sync_playlists_after_upload") as playlists, \
              patch.object(module, "run_step", side_effect=fake_step):
             module.run_single_slot(report, {"status": "idle"})
-        preflight.assert_called_once_with()
+        preflight.assert_called_once_with(refresh_sources=True)
         choose.assert_called_once_with()
         self.assertEqual(len(module.BACKLOG) + 1, len(calls))
         self.assertEqual("worker", calls[-1][1][3])
@@ -267,10 +267,13 @@ class NewSingleInputPreflight(unittest.TestCase):
     def test_missing_evidence_does_not_consume_title_or_create_job_on_later_slots(self):
         import aether_paid_guard
         import lyria_config
+        import aether_lyria_rights as sources
         settings = {"enabled": True, "project_id": "fixture-only"}
         with tempfile.TemporaryDirectory() as temporary, \
              patch.object(aether_paid_guard, "PROOF_PATH", Path(temporary) / "absent.json"), \
              patch.object(lyria_config, "load_settings", return_value=settings), \
+             patch.object(sources, "collect"), \
+             patch.object(aether_paid_guard, "require_no_unsettled_intents"), \
              patch.object(lyria_config, "access_token", side_effect=AssertionError("no authentication")), \
              patch.object(module, "choose_approved_new_single") as choose, \
              patch.object(module, "run_step", return_value=(0, json.dumps({"status": "already_public"}), "")) as run:
@@ -279,7 +282,7 @@ class NewSingleInputPreflight(unittest.TestCase):
                 with patch.object(module, "now_kst", return_value=datetime(2026, 11, day, 6, 30, tzinfo=KST)):
                     module.run_single_slot(report, {"status": "idle"})
                 result = report["single_slot"]
-                self.assertEqual("aether_lyria_cost_proof_missing", result["error"])
+                self.assertEqual("aether_lyria_provider_sources_missing", result["error"])
                 self.assertEqual("generation_preflight", result["stage"])
                 self.assertFalse(result["created_new_job"])
                 self.assertFalse(result["generation_attempted"])
@@ -305,12 +308,14 @@ class NewSingleInputPreflight(unittest.TestCase):
             proof.assert_not_called()
             unsettled.assert_not_called()
             settings.return_value = {"enabled": True, "project_id": "fixture-only"}
-            proof.side_effect = CredentialError("aether_lyria_gross_spend_limit")
-            with self.assertRaisesRegex(CredentialError, "aether_lyria_gross_spend_limit"):
+            proof.side_effect = CredentialError("aether_lyria_spend_limit")
+            with self.assertRaisesRegex(CredentialError, "aether_lyria_spend_limit"):
                 module.check_new_single_inputs()
-            unsettled.assert_not_called()
+            unsettled.assert_called_once_with()
+            unsettled.reset_mock()
             proof.side_effect = None
-            self.assertIsNone(module.check_new_single_inputs())
+            proof.return_value = {"provider_base_price_usd": "0.08"}
+            self.assertEqual(proof.return_value, module.check_new_single_inputs())
             proof.assert_called_with("fixture-only")
             unsettled.assert_called_once_with()
             unsettled.side_effect = CredentialError("aether_lyria_generation_uncertain")
@@ -327,6 +332,36 @@ class NewSingleInputPreflight(unittest.TestCase):
         self.assertEqual("aether_single_input_preflight_failed", report["single_slot"]["error"])
         self.assertNotIn("private fixture payload", json.dumps(report))
         choose.assert_not_called()
+
+    def test_source_refresh_crossing_eight_never_consumes_a_title(self):
+        clock = [datetime(2026, 11, 7, 7, 59, tzinfo=KST)]
+        def refreshed(**kwargs):
+            self.assertEqual({"refresh_sources": True}, kwargs)
+            clock[0] = datetime(2026, 11, 7, 8, 0, tzinfo=KST)
+            return {"provider_base_price_usd": "0.08"}
+        report = {"blockers": [], "steps": []}
+        with patch.object(module, "now_kst", side_effect=lambda: clock[0]), \
+             patch.object(module, "check_new_single_inputs", side_effect=refreshed), \
+             patch.object(module, "choose_approved_new_single") as choose, \
+             patch.object(module, "run_step", return_value=(0, json.dumps({"status": "already_public"}), "")) as run:
+            module.run_single_slot(report, {"status": "idle"})
+        choose.assert_not_called()
+        self.assertEqual(len(module.BACKLOG), run.call_count)
+        self.assertEqual("aether_lyria_generation_window_closed", report["single_slot"]["error"])
+        self.assertFalse(report["single_slot"]["created_new_job"])
+
+    def test_public_source_refresh_failure_never_uses_cached_evidence(self):
+        import aether_paid_guard
+        import aether_lyria_rights as sources
+        import lyria_config
+        from short_video_credentials import CredentialError
+        with patch.object(lyria_config, "load_settings", return_value={"enabled": True, "project_id": "fixture-only"}), \
+             patch.object(aether_paid_guard, "require_no_unsettled_intents"), \
+             patch.object(aether_paid_guard, "load_paid_proof") as reader, \
+             patch.object(sources, "collect", side_effect=sources.SourceError("pricing:aether_public_source_http_503")), \
+             self.assertRaisesRegex(CredentialError, "aether_public_source_http_503"):
+            module.check_new_single_inputs(refresh_sources=True)
+        reader.assert_not_called()
 
     def test_existing_upload_and_backlog_do_not_require_new_generation_evidence(self):
         now = datetime(2026, 11, 7, 6, 30, tzinfo=KST)

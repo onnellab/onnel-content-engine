@@ -6,7 +6,7 @@ attest account agreement/billing, change a guard, accept terms or call a model.
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import hashlib
 from html.parser import HTMLParser
 import json
@@ -103,7 +103,17 @@ def documented_permission(texts):
     return True
 
 
-def collect(root=ROOT, *, fetch=fetch_document):
+def documented_price(text):
+    """Read only the USD/full-song Lyria 3 Pro row, not a different model price."""
+    rows = re.findall(
+        r"Price \(USD\)\s+Lyria 3 Pro Full song music generation (?:(?!Lyria 3 30 second).){1,600}?"
+        r"Full song \$(\d+(?:\.\d+)?)\s*/\s*1 count", text)
+    if len(rows) != 1:
+        raise SourceError("aether_public_provider_price_unverified")
+    return rows[0]
+
+
+def collect(root=ROOT, *, fetch=fetch_document, now=None):
     documents = {}
     for name, url in URLS.items():
         try:
@@ -111,6 +121,11 @@ def collect(root=ROOT, *, fetch=fetch_document):
         except SourceError as error:
             raise SourceError(f"{name}:{error}") from None
     permission = documented_permission({name: text for name, (_, text) in documents.items()})
+    base_price = documented_price(documents["pricing"][1])
+    checked = now or datetime.now(timezone.utc)
+    if checked.tzinfo is None:
+        raise SourceError("aether_public_source_time_invalid")
+    checked = checked.astimezone(timezone.utc).replace(microsecond=0)
     root = Path(root)
     if any(part.is_symlink() for part in (root, *root.parents)):
         raise SourceError("aether_public_source_path_unsafe")
@@ -143,17 +158,30 @@ def collect(root=ROOT, *, fetch=fetch_document):
                          "representation": "complete_visible_text_whitespace_normalized",
                          "html_sha256": hashlib.sha256(raw).hexdigest(),
                          "html_bytes": len(raw), "text_bytes": len(content)}
-    result = {"kind": "aether_public_provider_sources", "checked_at": datetime.now(timezone.utc).isoformat(),
+    result = {"schema_version": 2, "kind": "aether_public_provider_sources",
+              "checked_at": checked.strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "expires_at": (checked + timedelta(hours=24)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "provider_base_price_usd": base_price,
               "model": "lyria-3-pro-preview", "provider_permission_documented": permission,
               "account_agreement_verified": False, "account_billing_verified": False,
               "generation_authorized": False, "proof_created": False, "sources": sources}
     content = (json.dumps(result, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     receipt = root / ("collection-" + hashlib.sha256(content).hexdigest() + ".json")
-    fd = os.open(receipt, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-    with os.fdopen(fd, "wb") as stream:
-        stream.write(content)
-        stream.flush()
-        os.fsync(stream.fileno())
+    if receipt.is_symlink() or (receipt.exists() and receipt.read_bytes() != content):
+        raise SourceError("aether_public_source_existing_bytes_changed")
+    if not receipt.exists():
+        fd = os.open(receipt, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(content)
+            stream.flush()
+            os.fsync(stream.fileno())
+    # Publish the index only after every source and immutable receipt is durable.
+    # This is evidence, not an owner signature, account contract or charge intent.
+    from short_video_pipeline import atomic_json
+    current_path = root / "current.json"
+    if current_path.is_symlink():
+        raise SourceError("aether_public_source_path_unsafe")
+    atomic_json(current_path, result)
     return {**result, "receipt": str(receipt)}
 
 

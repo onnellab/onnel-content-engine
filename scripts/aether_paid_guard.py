@@ -1,14 +1,14 @@
-"""Aether-only gross-cost evidence and paid-request fences; never fetch or approve.
+"""Provider-base price/terms evidence and durable one-request fences.
 
-Evidence hashes establish byte integrity, NOT the truth of a billing assertion.
-A reviewer must obtain current provider/account evidence separately. This module
-does not create an active proof, accept terms, change billing, or read credentials.
+The source receipt verifies public provider conditions, not copyright ownership,
+account-specific agreement acceptance, tax/FX or the final invoice. The source
+collector and the paid transport are separate; this reader never authenticates.
 """
 from __future__ import annotations
 
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
-from decimal import Decimal, InvalidOperation, localcontext
+from decimal import Decimal, InvalidOperation
 import fcntl
 import hashlib
 import json
@@ -23,20 +23,11 @@ from short_video_credentials import CredentialError
 from short_video_private_permissions import private_path_permissions
 
 AETHER_ROOT = Path.home() / "Library/Application Support/ONNELLAB/content-engine/aether-inn"
-PROOF_PATH = AETHER_ROOT / "lyria-paid-evidence" / "proof.json"
+# The former hand-authored proof.json is retained on disk, never synthesized.
+# This receipt is refreshed from official public documents by the local owner.
+PROOF_PATH = AETHER_ROOT / "lyria-paid-evidence" / "public-sources" / "current.json"
 MAX_PROOF_AGE = timedelta(hours=24)
-MAX_GROSS_USD = Decimal("0.08")
-PRICE_URLS = {
-    "https://cloud.google.com/vertex-ai/generative-ai/pricing",
-    "https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing",
-    "https://cloud.google.com/model-garden/pricing",
-    "https://cloud.google.com/skus",
-}
-MODEL_URLS = {
-    "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/lyria/lyria-3",
-    "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/lyria/lyria-3",
-}
-TERMS_URL = "https://cloud.google.com/terms/service-terms"
+MAX_BASE_PRICE_USD = Decimal("0.08")
 
 
 def utc_now():
@@ -90,27 +81,6 @@ def _json(raw):
         raise CredentialError("aether_lyria_evidence_invalid") from None
 
 
-def _source(root, descriptor, *, allowed_urls=None):
-    if not isinstance(descriptor, dict) or set(descriptor) != {"path", "sha256", "reference"}:
-        raise CredentialError("aether_lyria_evidence_invalid")
-    relative, expected, reference = (descriptor.get(key) for key in ("path", "sha256", "reference"))
-    if (not isinstance(relative, str) or not relative or "\\" in relative
-            or Path(relative).is_absolute() or any(p in {"", ".", ".."} for p in relative.split("/"))
-            or not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{64}", expected)
-            or not isinstance(reference, str) or not 1 <= len(reference) <= 1024
-            or any(ord(c) < 32 for c in reference)):
-        raise CredentialError("aether_lyria_evidence_invalid")
-    if allowed_urls is not None and reference.split("?", 1)[0] not in allowed_urls:
-        raise CredentialError("aether_lyria_evidence_source_invalid")
-    current = root
-    for part in Path(relative).parts:
-        current = current / part
-        if current.is_symlink():
-            raise CredentialError("aether_lyria_evidence_integrity")
-    if hashlib.sha256(_read(current)).hexdigest() != expected:
-        raise CredentialError("aether_lyria_evidence_integrity")
-
-
 def require_generation_window(slot, *, now=None):
     current = now or utc_now()
     if current.tzinfo is None:
@@ -122,80 +92,76 @@ def require_generation_window(slot, *, now=None):
 
 
 def load_paid_proof(project_id, *, expected_sha256=None, now=None):
-    """Read an existing reviewed proof. Unknown total/rights always means HOLD."""
+    """Read separately verifiable provider price and commercial-use sources.
+
+    The owner's original Lyria-only $0.08/song instruction and 2026-11-04
+    correction use the provider base-price basis. Tax/FX and final invoices are
+    not claimed verified or zero. The former hand-authored gross-cost proof is
+    not a prerequisite for this source-backed policy. No model request, account
+    agreement acceptance, queue mutation or credential access occurs here.
+    """
+    from aether_lyria_rights import URLS, documented_permission, documented_price, SourceError
+
+    if not isinstance(project_id, str) or not re.fullmatch(r"[a-z][a-z0-9-]{4,28}[a-z0-9]", project_id):
+        raise CredentialError("aether_lyria_cost_proof_binding_invalid")
     path = PROOF_PATH
     if not path.exists():
-        raise CredentialError("aether_lyria_cost_proof_missing")
-    if (path.parent.is_symlink() or not private_path_permissions(path.parent)
+        raise CredentialError("aether_lyria_provider_sources_missing")
+    if (any(part.is_symlink() for part in (path, *path.parents))
+            or not private_path_permissions(path.parent)
             or not private_path_permissions(path)):
         raise CredentialError("aether_lyria_cost_proof_permissions")
     raw = _read(path, limit=64 * 1024)
-    sha = hashlib.sha256(raw).hexdigest()
+    # A public policy receipt does not itself bind an account. Bind its exact
+    # bytes to the configured project here and retain that binding in the intent.
+    sha = hashlib.sha256(raw + b"\x00" + project_id.encode("ascii")).hexdigest()
     if expected_sha256 is not None and sha != expected_sha256:
         raise CredentialError("aether_lyria_cost_proof_changed")
     proof = _json(raw)
-    required = {"schema_version", "profile", "provider", "project_id", "model", "location",
-                "candidate_count", "checked_at", "expires_at", "reviewer", "authority_reference",
-                "pricing", "billing", "rights"}
-    if (set(proof) != required or type(proof.get("schema_version")) is not int
-            or proof["schema_version"] != 1 or proof.get("profile") != "aether_inn"
-            or proof.get("provider") != "google_cloud" or proof.get("project_id") != project_id
-            or proof.get("model") != ALLOWED_LYRIA_MODEL or proof.get("location") != "global"
-            or type(proof.get("candidate_count")) is not int or proof["candidate_count"] != 1
-            or proof.get("reviewer") != "dot"
-            or not isinstance(proof.get("authority_reference"), str)
-            or not 1 <= len(proof["authority_reference"]) <= 1024):
+    if (type(proof.get("schema_version")) is not int or proof["schema_version"] != 2
+            or proof.get("kind") != "aether_public_provider_sources"
+            or proof.get("model") != ALLOWED_LYRIA_MODEL
+            or proof.get("provider_permission_documented") is not True
+            or proof.get("generation_authorized") is not False):
         raise CredentialError("aether_lyria_cost_proof_binding_invalid")
-    checked, expires, current = _time(proof["checked_at"]), _time(proof["expires_at"]), now or utc_now()
-    if current.tzinfo is None or not checked <= current < expires or not timedelta(0) < expires - checked <= MAX_PROOF_AGE:
+    checked, expires = _time(proof.get("checked_at")), _time(proof.get("expires_at"))
+    current = now or utc_now()
+    if (current.tzinfo is None or not checked <= current < expires
+            or not timedelta(0) < expires - checked <= MAX_PROOF_AGE):
         raise CredentialError("aether_lyria_cost_proof_expired")
-    price, billing, rights = proof["pricing"], proof["billing"], proof["rights"]
-    if (not isinstance(price, dict) or set(price) != {"unit", "currency", "unit_price", "source"}
-            or price.get("unit") != "song" or not isinstance(price.get("currency"), str)
-            or not re.fullmatch(r"[A-Z]{3}", price["currency"])):
-        raise CredentialError("aether_lyria_cost_proof_pricing_invalid")
-    if (not isinstance(billing, dict)
-            or set(billing) != {"country", "currency", "tax_rate", "mandatory_fee_per_song",
-                               "rounding_usd_upper_bound", "usd_per_currency_upper_bound",
-                               "all_mandatory_costs_confirmed", "source", "fx_source"}
-            or billing.get("currency") != price["currency"]
-            or not isinstance(billing.get("country"), str) or not re.fullmatch(r"[A-Z]{2}", billing["country"])
-            or billing.get("all_mandatory_costs_confirmed") is not True):
-        raise CredentialError("aether_lyria_billing_evidence_incomplete")
-    if (not isinstance(rights, dict)
-            or set(rights) != {"commercial_use_allowed", "output_distribution_allowed",
-                               "existing_agreement_confirmed", "agreement_reference", "model_source", "terms_source"}
-            or any(rights.get(key) is not True for key in (
-                "commercial_use_allowed", "output_distribution_allowed", "existing_agreement_confirmed"))
-            or not isinstance(rights.get("agreement_reference"), str)
-            or not 1 <= len(rights["agreement_reference"]) <= 1024):
-        raise CredentialError("aether_lyria_commercial_rights_unverified")
-    _source(path.parent, price["source"], allowed_urls=PRICE_URLS)
-    _source(path.parent, billing["source"])
-    _source(path.parent, rights["model_source"], allowed_urls=MODEL_URLS)
-    _source(path.parent, rights["terms_source"], allowed_urls={TERMS_URL})
-    unit, tax, fee, fx, rounding = (_decimal(value) for value in (
-        price["unit_price"], billing["tax_rate"], billing["mandatory_fee_per_song"],
-        billing["usd_per_currency_upper_bound"], billing["rounding_usd_upper_bound"]))
-    if unit <= 0 or fx <= 0 or tax > 1:
-        raise CredentialError("aether_lyria_cost_proof_amount_invalid")
-    if price["currency"] == "USD":
-        if fx != 1 or billing["fx_source"] is not None:
-            raise CredentialError("aether_lyria_fx_unverified")
-    else:
-        if billing["fx_source"] is None:
-            raise CredentialError("aether_lyria_fx_unverified")
-        _source(path.parent, billing["fx_source"])
-    # Conservative: include mandatory fees in the taxable base; never subtract
-    # credits or anticipated VAT recovery, and never round a cost down to cents.
-    with localcontext() as context:
-        context.prec = 120  # exceeds all products of bounded 27-digit inputs
-        total = (unit + fee) * (1 + tax) * fx + rounding
-    if not 0 < total <= MAX_GROSS_USD:
-        raise CredentialError("aether_lyria_gross_spend_limit")
+    sources, texts = proof.get("sources"), {}
+    if not isinstance(sources, dict) or set(sources) != set(URLS):
+        raise CredentialError("aether_lyria_evidence_invalid")
+    for name, url in URLS.items():
+        source = sources[name]
+        if (not isinstance(source, dict) or source.get("reference") != url
+                or not isinstance(source.get("sha256"), str)
+                or not re.fullmatch(r"[0-9a-f]{64}", source["sha256"])
+                or source.get("path") != f"{name}-{source['sha256']}.txt"):
+            raise CredentialError("aether_lyria_evidence_source_invalid")
+        source_bytes = _read(path.parent / source["path"])
+        if hashlib.sha256(source_bytes).hexdigest() != source["sha256"]:
+            raise CredentialError("aether_lyria_evidence_integrity")
+        try:
+            texts[name] = source_bytes.decode("utf-8")
+        except UnicodeError:
+            raise CredentialError("aether_lyria_evidence_invalid") from None
+    try:
+        documented_permission(texts)
+        unit = _decimal(documented_price(texts["pricing"]))
+    except SourceError as error:
+        raise CredentialError(str(error)) from None
+    if str(unit) != proof.get("provider_base_price_usd"):
+        raise CredentialError("aether_lyria_evidence_invalid")
+    if not 0 < unit <= MAX_BASE_PRICE_USD:
+        raise CredentialError("aether_lyria_spend_limit")
     if not checked <= (now or utc_now()) < expires:
         raise CredentialError("aether_lyria_cost_proof_expired")
-    return {"proof_sha256": sha, "gross_cost_upper_bound_usd": str(total),
+    return {"proof_sha256": sha, "evidence_kind": "provider_price_and_terms",
+            "project_id": project_id, "provider_base_price_usd": str(unit),
+            "cost_basis": "provider_base_excluding_tax_and_currency_adjustments",
+            "gross_cost_verified": False, "final_billed_cost_usd": None,
+            "account_agreement_verified": False, "copyright_ownership_certified": False,
             "checked_at": proof["checked_at"], "expires_at": proof["expires_at"]}
 
 

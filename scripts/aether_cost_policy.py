@@ -1,10 +1,10 @@
-"""Strict owner-approved spending policy for Aether Inn provider APIs.
+"""Owner-approved provider-base budget for Aether Inn.
 
-Only a single Lyria 3 Pro song request fits the coarse $0.08 allowance.
-This is NOT gross-cost authorization: aether_paid_guard must additionally
-validate current account-specific all-in cost/rights evidence at paid dispatch.
-Gemini image/audio and every other paid provider remain fail-closed.
-There is no environment, credential, or generic API bypass.
+Only one Lyria 3 Pro candidate at a provider base price <= $0.08 is permitted.
+Current public price and commercial-use sources are checked separately at paid
+request boundaries. Taxes, currency adjustments and invoice totals are not
+represented as zero or as verified. Gemini and other paid providers remain off.
+No environment, credential or generic API bypass is provided.
 """
 from short_video_credentials import CredentialError
 

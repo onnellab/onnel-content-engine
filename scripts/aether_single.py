@@ -1148,6 +1148,7 @@ def worker(
                         )
                         chosen["generation_count"] = len(generated.get("candidates") or [])
                         chosen["estimated_cost_usd"] = generated.get("estimated_cost_usd")
+                        chosen["cost_basis"] = generated.get("cost_basis", "historical_base_estimate")
                     job["music"] = chosen
                     job["status"] = "music_ready"
                     atomic_json(q.state_path, state)
@@ -1223,6 +1224,9 @@ def worker(
                 "source_filename": job.get("source_filename"),
                 "generation_count": (job.get("music") or {}).get("generation_count"),
                 "estimated_cost_usd": (job.get("music") or {}).get("estimated_cost_usd"),
+                "cost_basis": (job.get("music") or {}).get("cost_basis"),
+                "gross_cost_verified": False,
+                "final_billed_cost_usd": None,
                 "audio_review": (job.get("music") or {}).get("review"),
                 "video_id": job.get("upload", {}).get("video_id"),
                 "thumbnail_status": job.get("thumbnail_status"),

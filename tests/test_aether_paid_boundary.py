@@ -30,43 +30,40 @@ SETTINGS = {"project_id": "fixture-project", "candidate_count": 1, "max_usd_per_
 
 
 def proof_fixture(root):
-    """Not an active billing proof: every source explicitly says FICTIONAL."""
-    evidence = root / "lyria-paid-evidence"
-    evidence.mkdir(parents=True, mode=0o700)
-    def source(name, reference):
-        path = evidence / name
-        path.write_bytes(("FICTIONAL TEST SOURCE, NOT BILLING EVIDENCE: " + name).encode())
-        path.chmod(0o600)
-        return {"path": name, "sha256": file_hash(path), "reference": reference}
-    proof = {
-        "schema_version": 1, "profile": "aether_inn", "provider": "google_cloud",
-        "project_id": "fixture-project", "model": "lyria-3-pro-preview", "location": "global",
-        "candidate_count": 1, "checked_at": "2026-10-30T20:00:00Z", "expires_at": "2026-10-31T20:00:00Z",
-        "reviewer": "dot", "authority_reference": "FICTIONAL_TEST_ONLY_NOT_OWNER_APPROVAL",
-        "pricing": {"unit": "song", "currency": "USD", "unit_price": "0.08",
-                    "source": source("price.txt", "https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing")},
-        "billing": {"country": "US", "currency": "USD", "tax_rate": "0",
-                    "mandatory_fee_per_song": "0", "rounding_usd_upper_bound": "0",
-                    "usd_per_currency_upper_bound": "1", "all_mandatory_costs_confirmed": True,
-                    "source": source("billing.txt", "private:FICTIONAL_REDACTED_RECEIPT"), "fx_source": None},
-        "rights": {"commercial_use_allowed": True, "output_distribution_allowed": True,
-                   "existing_agreement_confirmed": True, "agreement_reference": "FICTIONAL_EXISTING_AGREEMENT",
-                   "model_source": source("model.txt", "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/lyria/lyria-3"),
-                   "terms_source": source("terms.txt", "https://cloud.google.com/terms/service-terms")},
-    }
-    atomic_json(evidence / "proof.json", proof)
-    return proof
+    """Fictional public documents; never use a live account or active policy."""
+    import aether_lyria_rights as sources
+    from test_aether_public_sources import MODEL_TEXT, PREVIEW_TEXT, PRICE_TEXT
+    texts = {"model": MODEL_TEXT, "preview": PREVIEW_TEXT, "pricing": PRICE_TEXT,
+             "terms": "FICTIONAL TEST service terms; no agreement acceptance"}
+    def fetch(url):
+        name = next(key for key, value in sources.URLS.items() if value == url)
+        text = "FICTIONAL TEST SOURCE: " + texts[name] + "\n"
+        return text.encode(), text
+    evidence = Path(root).resolve() / "lyria-paid-evidence" / "public-sources"
+    sources.collect(evidence, fetch=fetch, now=NOW - timedelta(hours=1))
+    return json.loads((evidence / "current.json").read_text())
+
+
+def replace_source(proof, name, text):
+    raw = text.encode()
+    sha = hashlib.sha256(raw).hexdigest()
+    filename = f"{name}-{sha}.txt"
+    (guard.PROOF_PATH.parent / filename).write_bytes(raw)
+    proof["sources"][name].update(path=filename, sha256=sha)
+    if name == "pricing":
+        import aether_lyria_rights as sources
+        proof["provider_base_price_usd"] = sources.documented_price(text)
+    atomic_json(guard.PROOF_PATH, proof)
 
 
 @contextmanager
 def fixture_environment(root, project_id="fixture-project"):
+    root = Path(root).resolve()
     root.mkdir(parents=True, exist_ok=True, mode=0o700)
     root.chmod(0o700)
     proof = proof_fixture(root)
-    proof["project_id"] = project_id
-    atomic_json(root / "lyria-paid-evidence" / "proof.json", proof)
     with patch.object(guard, "AETHER_ROOT", root), \
-         patch.object(guard, "PROOF_PATH", root / "lyria-paid-evidence" / "proof.json"), \
+         patch.object(guard, "PROOF_PATH", root / "lyria-paid-evidence" / "public-sources" / "current.json"), \
          patch.object(guard, "utc_now", return_value=NOW), \
          patch.object(lyria_generate, "load_settings", return_value={**SETTINGS, "project_id": project_id}):
         yield proof
@@ -80,85 +77,84 @@ def response_fixture():
 
 
 class PaidBoundaryTests(unittest.TestCase):
-    def test_missing_proof_fails_closed(self):
+    def test_missing_provider_sources_fail_before_authorization(self):
         with tempfile.TemporaryDirectory() as temporary, patch.object(guard, "PROOF_PATH", Path(temporary) / "absent.json"):
-            with self.assertRaisesRegex(CredentialError, "aether_lyria_cost_proof_missing"):
-                guard.load_paid_proof("fixture-project")
-
-    def test_current_official_pricing_url_preserves_all_cost_checks(self):
-        with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
-            proof["pricing"]["source"]["reference"] = "https://cloud.google.com/model-garden/pricing?hl=en"
-            atomic_json(guard.PROOF_PATH, proof)
-            self.assertEqual("0.08", guard.load_paid_proof("fixture-project")["gross_cost_upper_bound_usd"])
-            proof["billing"]["tax_rate"] = "0.10"
-            atomic_json(guard.PROOF_PATH, proof)
-            with self.assertRaisesRegex(CredentialError, "gross_spend_limit"):
-                guard.load_paid_proof("fixture-project")
-            proof["pricing"]["source"]["reference"] = "https://example.invalid/pricing"
-            atomic_json(guard.PROOF_PATH, proof)
-            with self.assertRaisesRegex(CredentialError, "source_invalid"):
+            with self.assertRaisesRegex(CredentialError, "provider_sources_missing"):
                 guard.load_paid_proof("fixture-project")
 
     def test_actual_paid_boundary_closes_at_eight_kst(self):
         with self.assertRaisesRegex(CredentialError, "aether_lyria_generation_window_closed"):
             guard.require_generation_window("2026-10-31", now=datetime(2026, 10, 30, 23, tzinfo=timezone.utc))
 
-    def test_proof_is_exact_gross_not_static_base_estimate(self):
-        with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
+    def test_provider_price_does_not_claim_invoice_or_require_manual_proof(self):
+        with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)):
             result = guard.load_paid_proof("fixture-project")
-            self.assertEqual("0.08", result["gross_cost_upper_bound_usd"])
-            proof["billing"]["tax_rate"] = "0.10"
-            atomic_json(guard.PROOF_PATH, proof)
-            with self.assertRaisesRegex(CredentialError, "gross_spend_limit"):
-                guard.load_paid_proof("fixture-project")
+            self.assertEqual("0.08", result["provider_base_price_usd"])
+            self.assertFalse(result["gross_cost_verified"])
+            self.assertIsNone(result["final_billed_cost_usd"])
+            self.assertFalse(result["account_agreement_verified"])
+            self.assertFalse(result["copyright_ownership_certified"])
+            self.assertNotIn("gross_cost_upper_bound_usd", result)
+            self.assertFalse((guard.PROOF_PATH.parent.parent / "proof.json").exists())
 
-    def test_unknown_or_changed_cost_and_rights_are_not_authorization(self):
-        cases = [
-            (("billing", "tax_rate"), None), (("billing", "tax_rate"), "NaN"),
-            (("billing", "mandatory_fee_per_song"), "-0.01"),
-            (("billing", "all_mandatory_costs_confirmed"), False),
-            (("pricing", "unit_price"), 0.08), (("pricing", "unit_price"), "Infinity"),
-            (("pricing", "unit_price"), True), (("rights", "commercial_use_allowed"), False),
-            (("rights", "existing_agreement_confirmed"), False),
-            (("model",), "lyria-3-clip-preview"), (("candidate_count",), 2),
-            (("project_id",), "other-project"), (("location",), "us-central1"),
-            (("checked_at",), "2026-10-31T21:00:00Z"), (("expires_at",), "2026-10-30T21:20:00Z"),
-            (("expires_at",), "2099-01-01T00:00:00Z"),
-        ]
-        for keys, value in cases:
-            with self.subTest(keys=keys, value=value), tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
-                target = proof
-                for key in keys[:-1]:
-                    target = target[key]
-                target[keys[-1]] = value
+    def test_actual_price_increase_or_zero_blocks_without_rounding(self):
+        from test_aether_public_sources import PRICE_TEXT
+        for amount in ("0.080000000000000001", "0.09", "0"):
+            with self.subTest(amount=amount), tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
+                replace_source(proof, "pricing", PRICE_TEXT.replace("$0.08", "$" + amount))
+                with self.assertRaisesRegex(CredentialError, "spend_limit"):
+                    guard.load_paid_proof("fixture-project")
+
+    def test_malformed_modified_or_expired_receipts_do_not_authorize(self):
+        cases = [("schema_version", True), ("schema_version", 1),
+                 ("model", "lyria-3-clip-preview"), ("provider_permission_documented", False),
+                 ("generation_authorized", True), ("kind", "not_provider_sources"),
+                 ("provider_base_price_usd", 0.08), ("provider_base_price_usd", "0.01"),
+                 ("checked_at", "2026-10-31T21:00:00Z"),
+                 ("expires_at", "2026-10-30T21:20:00Z"), ("expires_at", "2099-01-01T00:00:00Z")]
+        for key, value in cases:
+            with self.subTest(key=key), tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
+                proof[key] = value
                 atomic_json(guard.PROOF_PATH, proof)
                 with self.assertRaises(CredentialError):
                     guard.load_paid_proof("fixture-project")
 
-    def test_non_usd_requires_actual_fx_evidence_and_no_round_down(self):
-        with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
-            proof["pricing"]["currency"] = proof["billing"]["currency"] = "KRW"
-            atomic_json(guard.PROOF_PATH, proof)
-            with self.assertRaisesRegex(CredentialError, "fx_unverified"):
-                guard.load_paid_proof("fixture-project")
-            proof["billing"]["fx_source"] = proof["billing"]["source"]
-            proof["pricing"]["unit_price"] = "0.000000000000000001"
-            proof["billing"]["usd_per_currency_upper_bound"] = "0.000000000000000001"
-            proof["billing"]["rounding_usd_upper_bound"] = "0.08"
-            atomic_json(guard.PROOF_PATH, proof)
-            with self.assertRaisesRegex(CredentialError, "gross_spend_limit"):
-                guard.load_paid_proof("fixture-project")
+    def test_both_terms_and_model_permission_are_rechecked_not_boolean_only(self):
+        for source in ("model", "preview"):
+            with self.subTest(source=source), tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
+                replace_source(proof, source, "FICTIONAL updated terms without Lyria permission")
+                with self.assertRaises(CredentialError):
+                    guard.load_paid_proof("fixture-project")
 
-    def test_price_rights_source_and_proof_sha_are_rechecked(self):
-        for source in ("price.txt", "model.txt", "terms.txt", "billing.txt"):
-            with self.subTest(source=source), tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)):
+    def test_source_paths_urls_and_symlinks_are_not_trusted(self):
+        for defect in ("url", "path", "symlink"):
+            with self.subTest(defect=defect), tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
+                source = proof["sources"]["model"]
+                if defect == "url":
+                    source["reference"] = "https://example.invalid/terms"
+                elif defect == "path":
+                    source["path"] = "../private.txt"
+                else:
+                    path = guard.PROOF_PATH.parent / source["path"]
+                    target = guard.PROOF_PATH.parent / "other.txt"
+                    path.rename(target)
+                    path.symlink_to(target)
+                atomic_json(guard.PROOF_PATH, proof)
+                with self.assertRaises(CredentialError):
+                    guard.load_paid_proof("fixture-project")
+
+    def test_every_source_and_project_bound_hash_are_rechecked(self):
+        for name in ("pricing", "model", "preview", "terms"):
+            with self.subTest(source=name), tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
                 expected = guard.load_paid_proof("fixture-project")["proof_sha256"]
-                (guard.PROOF_PATH.parent / source).write_bytes(b"changed")
+                (guard.PROOF_PATH.parent / proof["sources"][name]["path"]).write_bytes(b"changed")
                 with self.assertRaisesRegex(CredentialError, "evidence_integrity"):
                     guard.load_paid_proof("fixture-project", expected_sha256=expected)
         with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)) as proof:
             expected = guard.load_paid_proof("fixture-project")["proof_sha256"]
-            proof["authority_reference"] = "another FICTIONAL reference"
+            with self.assertRaisesRegex(CredentialError, "cost_proof_changed"):
+                guard.load_paid_proof("other-project", expected_sha256=expected)
+            proof["provider_permission_documented"] = False
             atomic_json(guard.PROOF_PATH, proof)
             with self.assertRaisesRegex(CredentialError, "cost_proof_changed"):
                 guard.load_paid_proof("fixture-project", expected_sha256=expected)
@@ -167,7 +163,7 @@ class PaidBoundaryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)), \
              patch.object(lyria_generate, "access_token") as auth, patch.object(lyria_generate, "urlopen") as wire:
             guard.PROOF_PATH.unlink()
-            with self.assertRaisesRegex(CredentialError, "cost_proof_missing"):
+            with self.assertRaisesRegex(CredentialError, "provider_sources_missing"):
                 lyria_generate.generate("Fixture Road", "Instrumental travel", slot=SLOT, execute=True, output_root=Path(temporary) / "lyria")
             auth.assert_not_called()
             wire.assert_not_called()
@@ -181,7 +177,7 @@ class PaidBoundaryTests(unittest.TestCase):
                 intent = json.loads(next(output.glob("*/manifest.json")).read_text())
                 self.assertEqual("request_started", intent["state"])
                 self.assertTrue(intent["dispatch_started"])
-                self.assertEqual("0.08", intent["cost_proof"]["gross_cost_upper_bound_usd"])
+                self.assertEqual("0.08", intent["cost_proof"]["provider_base_price_usd"])
                 self.assertNotIn("fixture-token", json.dumps(intent))
                 return response_fixture()
             with patch.object(lyria_generate, "urlopen", side_effect=wire) as transport:
@@ -213,14 +209,14 @@ class PaidBoundaryTests(unittest.TestCase):
                     self.assertEqual("not_sent", json.loads(path.read_text())["state"])
 
     def test_source_mutation_during_fsync_causes_zero_post(self):
-        for source in ("price.txt", "model.txt"):
+        for source in ("pricing", "model"):
             with self.subTest(source=source), tempfile.TemporaryDirectory() as temporary, fixture_environment(Path(temporary)), \
                  patch.object(lyria_generate, "urlopen") as wire, \
                  patch.object(lyria_generate, "access_token", return_value="fixture"):
                 def save(path, value):
                     atomic_json(path, value)
                     if value.get("state") == "request_started":
-                        (guard.PROOF_PATH.parent / source).write_bytes(b"changed after fsync")
+                        (guard.PROOF_PATH.parent / json.loads(guard.PROOF_PATH.read_text())["sources"][source]["path"]).write_bytes(b"changed after fsync")
                 with patch.object(lyria_generate, "atomic_json", side_effect=save), self.assertRaisesRegex(CredentialError, "evidence_integrity"):
                     lyria_generate.generate("Fixture Road", "Instrumental travel", slot=SLOT, execute=True, output_root=Path(temporary) / "lyria")
                 wire.assert_not_called()
@@ -321,7 +317,7 @@ class PaidBoundaryTests(unittest.TestCase):
                         elif changed == "enabled":
                             config["enabled"] = False
                         elif changed == "proof":
-                            proof["billing"]["tax_rate"] = "0.1"
+                            proof["provider_permission_documented"] = False
                             atomic_json(guard.PROOF_PATH, proof)
                         else:
                             clock[0] = NOW + timedelta(days=1)

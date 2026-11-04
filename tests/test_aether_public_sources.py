@@ -24,6 +24,13 @@ PREVIEW_TEXT = (
 )
 
 
+PRICE_TEXT = (
+    "Price (USD) Lyria 3 Pro Full song music generation "
+    "Lyria 3 Pro creates full-length musical compositions from multimodal inputs "
+    "Text, Image Full song $0.08 / 1 count Lyria 3 30 second music clip generation"
+)
+
+
 class SourcesTests(unittest.TestCase):
     def response(self, raw, url=None):
         result = io.BytesIO(raw)
@@ -81,7 +88,7 @@ class SourcesTests(unittest.TestCase):
             parent = Path(temporary).resolve()
             proof = parent / "proof.json"
             proof.write_bytes(b"existing proof must not change")
-            originals = {name: ("<main>" + (MODEL_TEXT if name == "model" else PREVIEW_TEXT if name == "preview" else "Fixture public document") + "</main>").encode() for name in module.URLS}
+            originals = {name: ("<main>" + (MODEL_TEXT if name == "model" else PREVIEW_TEXT if name == "preview" else PRICE_TEXT if name == "pricing" else "Fixture public document") + "</main>").encode() for name in module.URLS}
             def fetch(url):
                 name = next(name for name, source in module.URLS.items() if source == url)
                 return originals[name], module.visible_text(originals[name])
@@ -96,6 +103,15 @@ class SourcesTests(unittest.TestCase):
                 self.assertEqual(0, file.stat().st_mode & 0o077)
             self.assertEqual(b"existing proof must not change", proof.read_bytes())
             self.assertEqual("aether_public_provider_sources", json.loads(Path(result["receipt"]).read_text())["kind"])
+
+    def test_price_requires_exact_usd_model_unit_and_unambiguous_row(self):
+        self.assertEqual("0.08", module.documented_price(PRICE_TEXT))
+        for text in (PRICE_TEXT.replace("USD", "CAD"),
+                     PRICE_TEXT.replace("/ 1 count", "/ 100 count"),
+                     PRICE_TEXT.replace("Lyria 3 Pro", "Other model"),
+                     PRICE_TEXT + " " + PRICE_TEXT):
+            with self.subTest(text=text), self.assertRaises(module.SourceError):
+                module.documented_price(text)
 
     def test_failed_collection_does_not_create_partial_receipt(self):
         with tempfile.TemporaryDirectory() as temporary:
