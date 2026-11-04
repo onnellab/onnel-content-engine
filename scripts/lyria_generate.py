@@ -124,9 +124,20 @@ def parse_audio_response(payload: bytes) -> tuple[bytes, str, dict]:
     return raw, mime, {"description": description}
 
 
+def check_generation_schedule(slot, project_id, prompt, *, manual_release=None, now=None):
+    if manual_release is None:
+        return paid_guard.require_generation_window(slot, now=now)
+    if not isinstance(manual_release, dict) or set(manual_release) != {"job_id", "request_sha256"}:
+        raise CredentialError("aether_manual_release_identity_invalid")
+    from aether_manual_release import require_generation
+    require_generation(manual_release["job_id"], slot, project_id, prompt,
+                       manual_release["request_sha256"], now=now)
+
+
 def request_song(project_id: str, prompt: str, *, token: str | None = None, timeout: int = 240,
                  slot: str | None = None, intent_path: Path | None = None,
-                 intent_sha256: str | None = None, proof_sha256: str | None = None) -> tuple[bytes, str, dict]:
+                 intent_sha256: str | None = None, proof_sha256: str | None = None,
+                 manual_release: dict | None = None) -> tuple[bytes, str, dict]:
     require_paid_api_allowed(purpose=ALLOWED_LYRIA_PURPOSE, model=MODEL,
                              candidate_count=1, estimated_cost_usd=UNIT_PRICE_USD)
     settings = load_settings(CONFIG_PATH)
@@ -138,7 +149,7 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
             or settings["max_usd_per_run"] < UNIT_PRICE_USD - 1e-9
             or settings["max_usd_per_run"] > UNIT_PRICE_USD + 1e-9):
         raise CredentialError("lyria_owner_spend_limit")
-    paid_guard.require_generation_window(slot)
+    check_generation_schedule(slot, project_id, prompt, manual_release=manual_release)
     paid_guard.load_paid_proof(project_id, expected_sha256=proof_sha256)
     if intent_path is None or not intent_sha256 or not proof_sha256:
         raise CredentialError("aether_lyria_charge_intent_required")
@@ -151,6 +162,11 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
             or intent["cost_proof"].get("proof_sha256") != proof_sha256
             or intent.get("prompt_sha256") != hashlib.sha256(prompt.encode("utf-8")).hexdigest()):
         raise CredentialError("aether_lyria_charge_intent_invalid")
+    if manual_release is not None:
+        from aether_manual_release import ROOT as single_root
+        if (intent.get("manual_release") != manual_release
+                or Path(intent_path).parent.parent != single_root / "jobs" / manual_release["job_id"] / "lyria"):
+            raise CredentialError("aether_manual_release_identity_invalid")
     token = token or access_token()
     body = json.dumps({
         "model": MODEL,
@@ -195,7 +211,7 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
         final_now = paid_guard.utc_now()
         if not paid_guard._time(final_proof["checked_at"]) <= final_now < paid_guard._time(final_proof["expires_at"]):
             raise CredentialError("aether_lyria_cost_proof_expired")
-        paid_guard.require_generation_window(slot, now=final_now)
+        check_generation_schedule(slot, project_id, prompt, manual_release=manual_release, now=final_now)
         dispatched = True
         with urlopen(request, timeout=timeout) as response:
             declared = response.headers.get("Content-Length")
@@ -232,7 +248,8 @@ def slug(value: str) -> str:
 
 
 def generate(title: str, style: str, *, count: int | None = None, execute: bool = False,
-             output_root: Path = PRIVATE_OUTPUT, slot: str | None = None) -> dict:
+             output_root: Path = PRIVATE_OUTPUT, slot: str | None = None,
+             manual_release: dict | None = None) -> dict:
     settings = load_settings(CONFIG_PATH)
     if not settings:
         raise CredentialError("lyria_not_configured")
@@ -262,17 +279,22 @@ def generate(title: str, style: str, *, count: int | None = None, execute: bool 
     if not execute:
         return {**plan, "state": "planned", "prompt": prompt, "paid_authorized": False,
                 "cost_basis": "static_base_estimate_not_gross_cost_proof"}
-    paid_guard.require_generation_window(slot)
+    check_generation_schedule(slot, settings["project_id"], prompt, manual_release=manual_release)
+    if manual_release is not None:
+        from aether_manual_release import ROOT as single_root
+        if Path(output_root) != single_root / "jobs" / manual_release["job_id"] / "lyria":
+            raise CredentialError("aether_manual_release_identity_invalid")
     proof = paid_guard.load_paid_proof(settings["project_id"])
     with paid_guard.paid_request_lock():
         paid_guard.require_no_unsettled_intents(extra_roots=(output_root,))
-        return _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof)
+        return _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof,
+                                   manual_release=manual_release)
 
 
-def _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof):
+def _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof, *, manual_release=None):
     token = access_token()
     paid_guard.load_paid_proof(settings["project_id"], expected_sha256=proof["proof_sha256"])
-    paid_guard.require_generation_window(slot)
+    check_generation_schedule(slot, settings["project_id"], prompt, manual_release=manual_release)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run_dir = Path(output_root).expanduser() / (timestamp + "-" + slug(title))
     run_dir.mkdir(parents=True, exist_ok=False, mode=0o700)
@@ -291,6 +313,8 @@ def _execute_generation(title, style, output_root, slot, settings, plan, prompt,
         "prepared_at": datetime.now(timezone.utc).isoformat(),
         "candidates": [],
     }
+    if manual_release is not None:
+        manifest["manual_release"] = manual_release
     atomic_json(manifest_path, manifest)
     os.chmod(manifest_path, 0o600)
     # This owner's authorization permits precisely one provider request per
@@ -298,7 +322,8 @@ def _execute_generation(title, style, output_root, slot, settings, plan, prompt,
     audio, mime, meta = request_song(settings["project_id"], prompt, token=token, slot=slot,
                                    intent_path=manifest_path,
                                    intent_sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
-                                   proof_sha256=proof["proof_sha256"])
+                                   proof_sha256=proof["proof_sha256"],
+                                   **({"manual_release": manual_release} if manual_release is not None else {}))
     manifest = paid_guard._json(paid_guard._read(manifest_path))
     ext = ".mp3" if mime == "audio/mpeg" else ".wav"
     path = run_dir / f"candidate-01{ext}"

@@ -703,6 +703,9 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float, 
 
 def policy_for(job: dict) -> dict:
     policy = dict(POLICY)
+    if job.get("manual_release"):
+        policy.update(privacy="public", publish_schedule="explicit_manual_release",
+                      manual_release_sha256=job["manual_release"]["request_sha256"])
     if job.get("source_kind") == "backlog_wav":
         policy.update({
             "version": 2,
@@ -990,6 +993,7 @@ def worker(
     api_factory=None, music_generator=generate_music, cover_generator=import_existing_cover,
     renderer=render_single, existing_only=False, source_kind=None, source_wav=None,
     source_expected_duration=None, source_filename=None, source_expected_sha256=None,
+    manual_release_id=None,
 ):
     if not execute:
         return {"dry_run": True, **readiness(root)}
@@ -999,8 +1003,24 @@ def worker(
     except (ValueError, TypeError):
         raise VideoError("aether_single_slot_invalid") from None
     q = SingleQueue(root)
+    manual = None
     with q.lock():
         state = q._read()
+        if manual_release_id is not None:
+            from aether_manual_release import JOB_ID, validate
+            if manual_release_id != JOB_ID or existing_only or source_kind is not None or not publish:
+                raise VideoError("aether_manual_release_identity_invalid")
+            target = state["jobs"].get(manual_release_id, {})
+            manual = validate(target, root=q.root, active=not bool(target.get("upload")))
+
+        def check_publication_window(current_job, current_slot):
+            if manual is None:
+                if publish_slot_stale(current_slot):
+                    raise VideoError("aether_single_publish_time_stale")
+            else:
+                from aether_manual_release import validate
+                validate(current_job, root=q.root, expected_sha=manual["request_sha256"])
+
         pending = [
             j for j in state["jobs"].values()
             if j.get("upload") and (j["status"] not in FINAL or j.get("thumbnail_status") != "set" and j["status"] != "rejected")
@@ -1031,7 +1051,10 @@ def worker(
                     result["retired_stale_jobs"] = retired
                 return result
         else:
-            job = (pending or same_slot or unfinished or [None])[0]
+            job = (state["jobs"][manual_release_id] if manual is not None
+                   else (pending or same_slot or unfinished or [None])[0])
+            if manual is not None and any(j["id"] != manual_release_id for j in pending + unfinished):
+                raise VideoError("aether_single_existing_job_unsettled")
             if not pending and source_kind != "backlog_wav" and not (job or {}).get("music"):
                 paid_guard.require_no_unsettled_intents(single_root=q.root)
         # Caller source bytes belong to one exact canonical title. Queue priority
@@ -1054,11 +1077,21 @@ def worker(
                         or source_expected_sha256 != bound["sha256"]):
                     raise VideoError("aether_single_backlog_source_job_mismatch")
         stale_slot = job["slot"] if job is not None else slot
-        if publish and not (job or {}).get("upload") and publish_slot_stale(stale_slot):
-            if job is not None:
-                job.update(status="rejected", error="aether_single_publish_time_stale")
+        if publish and not (job or {}).get("upload"):
+            try:
+                check_publication_window(job, stale_slot)
+            except VideoError as error:
+                if job is not None and manual is None:
+                    job.update(status="rejected", error=str(error))
+                    atomic_json(q.state_path, state)
+                raise
+        if manual is not None:
+            previous = job.get("manual_release")
+            if previous is not None and previous != manual:
+                raise VideoError("aether_manual_release_request_changed")
+            if previous is None:
+                job["manual_release"] = manual
                 atomic_json(q.state_path, state)
-            raise VideoError("aether_single_publish_time_stale")
         api = None
         if publish:
             api = (api_factory or partial(YouTube, profile="aether_inn"))()
@@ -1138,10 +1171,11 @@ def worker(
                             if publish:
                                 require_no_owned_title_match(api, job["title"])
                                 # Inventory reads may cross the exact 09:00 boundary.
-                                if publish_slot_stale(job["slot"]):
-                                    raise VideoError("aether_single_publish_time_stale")
+                                check_publication_window(job, job["slot"])
                             generated = music_generator(job["title"], job["style"], execute=True,
-                                                        output_root=folder / "lyria", slot=job["slot"])
+                                output_root=folder / "lyria", slot=job["slot"],
+                                **({"manual_release": {"job_id": manual_release_id,
+                                     "request_sha256": manual["request_sha256"]}} if manual is not None else {}))
                         chosen = select_candidate(
                             generated, _history_hashes(state),
                             reviewer=lambda path: review_audio(path),
@@ -1179,8 +1213,8 @@ def worker(
                 # Rendering and FileProvider hydration can cross 09:00. Never
                 # start a first upload after the exact publishAt has gone stale.
                 # Existing uploads are reconciled with their same durable ID.
-                if not job.get("upload") and publish_slot_stale(job["slot"]):
-                    raise VideoError("aether_single_publish_time_stale")
+                if not job.get("upload"):
+                    check_publication_window(job, job["slot"])
                 if not job.get("upload"):
                     # Covers resumed, already-paid renders too. A remote title
                     # collision never justifies another insert; known sessions
@@ -1188,22 +1222,21 @@ def worker(
                     if (folder / "youtube-session.json").exists():
                         raise UploadError("manual_reconcile_required")
                     require_no_owned_title_match(api, job["title"])
-                    if publish_slot_stale(job["slot"]):
-                        raise VideoError("aether_single_publish_time_stale")
+                    check_publication_window(job, job["slot"])
                 uploader = Uploader(q, partial(YouTube, profile="aether_inn"))
                 if not job.get("approval"):
-                    publish_at = scheduled_publish_at(job["slot"])
+                    publish_at = None if manual is not None else scheduled_publish_at(job["slot"])
                     choices = {
                         "made_for_kids": False,
                         "synthetic_media": True,
-                        "privacy": "private",
+                        "privacy": "public" if manual is not None else "private",
                         "publish_at": publish_at,
                         "publish_approved": True,
                     }
                     policy = policy_for(job)
                     uploader.bind_approval_locked(
                         state, job, choices,
-                        mode="automatic_fail_closed",
+                        mode="manual" if manual is not None else "automatic_fail_closed",
                         policy_hash=digest(policy),
                     )
                 if not job.get("upload") and job["approval"].get("policy_hash") != digest(policy_for(job)):

@@ -208,3 +208,30 @@ The durable worker performs these stages in order:
 A failed later stage does not regenerate an already-paid Lyria candidate. The job keeps the music and cover hashes and resumes from the missing stage on the next run.
 
 The current automatic candidate gate analyzes actual decoded PCM locally without a paid API and saves SHA-bound signal quality findings. It is not a human/Gemini musical listening review or a copyright, genre-fit, tonal-resolution or melodic-originality certification. Exact hashes can reject identical files, but the system does not claim that a generated melody is legally or musically unique.
+
+## Explicit manual publication request — 2026-11-04
+
+The owner explicitly requested `기존 누락곡의 공개 완료해`, following the request
+to complete production and publication of the missed November 3 single. This
+interactive release concerns only `The Pass Beyond the Racing Plains`, existing
+job `1f5cf414734a3a362b4db5cc`. It does not change unattended execution or schedules.
+
+`scripts/aether_manual_release.py record-request` records that instruction in
+one private immutable job/prompt/project-bound receipt, valid for two hours.
+It preserves the original slot and prior rejection; it never renews an expired
+receipt, deletes prior charges or creates another queue job. `publish` calls the
+canonical single worker for that exact job. The source/price/model/count/cover,
+complete owned-inventory, PCM quality, render integrity and one-use charged-request
+checks all remain. The receipt supplies this explicitly requested manual window;
+ordinary Tuesday/Saturday generation and PRIVATE + 09:00 scheduling are unchanged.
+
+Actual publication uses the canonical uploader's manual public approval, bound
+to the completed render and metadata, with no past publishAt. Same-video/session
+reconciliation remains mandatory; accepted or processing uploads are not public
+completion. Set its thumbnail and separately synchronize the canonical playlists.
+The daily ChatGPT reporting task must never call this interactive command.
+
+165 focused tests passed before production, including same-job idempotency,
+immutable/expiring requests, project/prompt binding, one charged request,
+uncertain-result preservation and unchanged scheduled/hosted-operation behavior.
+These tests are not a production or publication receipt.

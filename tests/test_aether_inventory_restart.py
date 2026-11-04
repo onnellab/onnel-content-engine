@@ -273,14 +273,18 @@ class DeadlineSourceTests(unittest.TestCase):
                             and statement.value.func.id == "require_no_owned_title_match"):
                         checks += 1
                         deadline = block[index + 1]
-                        self.assertIsInstance(deadline, ast.If)
-                        self.assertIsInstance(deadline.test, ast.Call)
-                        self.assertEqual("publish_slot_stale", deadline.test.func.id)
-                        self.assertEqual('job["slot"]', ast.unparse(deadline.test.args[0]).replace("'", '"'))
-                        self.assertIsInstance(deadline.body[0], ast.Raise)
-                        self.assertEqual("aether_single_publish_time_stale",
-                                         deadline.body[0].exc.args[0].value)
+                        self.assertIsInstance(deadline, ast.Expr)
+                        self.assertIsInstance(deadline.value, ast.Call)
+                        self.assertEqual("check_publication_window", deadline.value.func.id)
+                        self.assertEqual('job["slot"]', ast.unparse(deadline.value.args[1]).replace("'", '"'))
         self.assertEqual(2, checks)
+        helper = next(n for n in ast.walk(worker) if isinstance(n, ast.FunctionDef)
+                      and n.name == "check_publication_window")
+        text = ast.unparse(helper)
+        self.assertIn("publish_slot_stale(current_slot)", text)
+        self.assertIn("aether_single_publish_time_stale", text)
+        self.assertIn("validate(current_job", text)
+        self.assertIn("expected_sha=manual['request_sha256']", text)
 
 
 if __name__ == "__main__":
