@@ -305,6 +305,10 @@ def generate(title: str, style: str, *, count: int | None = None, execute: bool 
     proof = paid_guard.load_paid_proof(settings["project_id"])
     with paid_guard.paid_request_lock():
         paid_guard.require_no_unsettled_intents(extra_roots=(output_root,))
+        from aether_additional_attempt import claim_additional
+        additional = claim_additional(output_root, manual_release)
+        if additional is not None:
+            plan["additional_attempt"] = additional
         return _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof,
                                    manual_release=manual_release)
 

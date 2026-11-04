@@ -231,6 +231,11 @@ def require_no_unsettled_intents(*, single_root=None, extra_roots=(), current_in
                 data = _json(_read(manifest))
                 state = data.get("state")
                 if state in {"request_started", "prepared"}:
+                    # Only an exact, separately owner-acknowledged prior charge
+                    # may be retained without blocking the newly approved attempt.
+                    from aether_additional_attempt import acknowledged_prior
+                    if acknowledged_prior(manifest):
+                        continue
                     raise CredentialError("aether_lyria_generation_uncertain")
                 if state == "not_sent" and data.get("dispatch_started") is False:
                     continue

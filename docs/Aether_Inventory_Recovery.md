@@ -235,3 +235,20 @@ and obtain explicit additional-attempt authorization rather than silently
 clearing it. New generation remains held by the existing unsettled-intent gate;
 known-video reconciliation is separate. The daily LaunchAgent schedule and its
 historical daily result were not changed by this interactive attempt.
+
+## Explicit additional-attempt approval — 2026-11-04
+
+After being told the first actual request had unknown billing and no retained
+output, the owner replied `승인` to exactly one additional generation at USD
+0.08 provider base, cumulative possible base spend USD 0.16 (tax/FX separate).
+`aether_additional_attempt.py` records that instruction for the existing song
+and exact first manifest hash. It does not overwrite or reclassify the original
+request_started manifest as free, failed-before-send, generated or refunded.
+
+The existing unsettled-intent reader and source recovery may recognize only this
+exact owner-acknowledged prior request. Every other ambiguous attempt still holds.
+The additional generation is claimed once under the canonical paid-request lock;
+the same job, original manual-publication receipt and canonical worker are reused.
+A third request is disallowed, and the new response is retained before parsing.
+Five extra fixtures plus existing affected suites passed (87 tests in this pass).
+This records authorization and code validation, not proof of a successful song.

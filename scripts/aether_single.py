@@ -831,6 +831,9 @@ def recover_generated_result(folder: Path) -> dict | None:
         except Exception:
             raise VideoError("aether_single_generation_manifest_invalid") from None
         if data.get("state") in {"request_started", "prepared"}:
+            from aether_additional_attempt import acknowledged_prior
+            if acknowledged_prior(manifest):
+                continue
             raise VideoError("aether_lyria_generation_uncertain")
         if data.get("state") != "generated" or not isinstance(data.get("candidates"), list):
             raise VideoError("aether_single_generation_manifest_invalid")
