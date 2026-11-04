@@ -33,9 +33,9 @@
         "slug": "mark-uncertainty-clearly-in-research-notes",
         "category": "research",
         "language": "zh-Hans",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/zh-Hans/research/mark-uncertainty-clearly-in-research-notes.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "research"

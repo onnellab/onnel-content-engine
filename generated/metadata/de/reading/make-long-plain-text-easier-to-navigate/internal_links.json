@@ -102,9 +102,9 @@
         "slug": "mark-uncertainty-clearly-in-research-notes",
         "category": "research",
         "language": "de",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/de/research/mark-uncertainty-clearly-in-research-notes.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6
