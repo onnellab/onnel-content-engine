@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-11-03T14:28:18+09:00",
+  "checked_at": "2026-11-04T13:52:44+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 100,
-    "already_done": 97,
+    "already_done": 100,
     "verified": 0,
-    "pending": 3
+    "pending": 0
   },
   "items": [
     {
@@ -766,6 +766,18 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0041::x::en::x",
+      "topic_id": "TOPIC-0041",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2117787160422097226",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0041::bluesky::en::bluesky",
       "topic_id": "TOPIC-0041",
       "platform": "bluesky",
@@ -776,6 +788,18 @@
       "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mzf45uncjq2y",
       "verification_method": "",
       "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0041::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0041",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7523553171005427712/",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
     },
     {
       "manual_key": "TOPIC-0042::x::en::x",
@@ -1138,6 +1162,18 @@
       "verification_confidence": ""
     },
     {
+      "manual_key": "TOPIC-0041::devto::en::markdown",
+      "topic_id": "TOPIC-0041",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/choose-a-working-copy-before-editing-audio-551e",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
       "manual_key": "TOPIC-0042::devto::en::markdown",
       "topic_id": "TOPIC-0042",
       "platform": "devto",
@@ -1170,42 +1206,6 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://dev.to/onnellab/check-an-epubs-table-of-contents-and-chapter-order-25g6",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0041::x::en::x",
-      "topic_id": "TOPIC-0041",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0041::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0041",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0041::devto::en::markdown",
-      "topic_id": "TOPIC-0041",
-      "platform": "devto",
-      "language": "en",
-      "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
     }
