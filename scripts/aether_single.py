@@ -258,13 +258,15 @@ class RemoteInventoryUnverified(VideoError):
         super().__init__("aether_single_remote_inventory_unverified")
 
 
-def require_no_owned_title_match(api: YouTube, title: str) -> None:
+def require_no_owned_title_match(api: YouTube, title: str) -> dict | None:
     """Require a complete owned inventory, with one bounded read-only restart.
 
     Malformed/overlapping upload pages are not evidence of absence. Restart
     from the channel and first page with a smaller page size once; never skip
     or deduplicate bad rows to accept a partial inventory. Every valid ID seen
     on the first attempt must also be verified on the complete second attempt.
+    Persistent cross-page duplication can only recover through an independently
+    complete, twice-verified exact-entry inventory, never by dropping duplicates.
     No job, generation, upload, approval or credential operation is retried.
     """
     observed_ids: set[str] = set()
@@ -281,6 +283,13 @@ def require_no_owned_title_match(api: YouTube, title: str) -> None:
                     and error.diagnostic["stage"] == "uploads_ids_invalid_or_duplicate"):
                 first_failure = dict(error.diagnostic)
                 continue
+            if (attempt == 2 and error.diagnostic.get("reason") == "duplicate_across_pages"
+                    and (first_failure or {}).get("reason") == "duplicate_across_pages"):
+                try:
+                    return _recover_owned_inventory_exact(api, title, observed_ids)
+                except RemoteInventoryUnverified as recovery_error:
+                    error.diagnostic["exact_recovery_failure"] = recovery_error.diagnostic
+                    raise error from None
             raise
 
 
@@ -409,6 +418,209 @@ def _require_no_owned_title_match_once(
         visited.add(token)
     raise VideoError("aether_single_remote_inventory_incomplete")
 
+
+
+def _recover_owned_inventory_exact(api: YouTube, title: str, observed_ids: set[str]) -> dict:
+    """Reconstruct a defective uploads page from independently verified entries.
+
+    Owner search discovers candidates only. Completeness comes from TWO identical
+    exact playlist-item reads covering every ordinal in the current uploads
+    playlist, plus current owner/title/privacy details for every candidate.
+    A search result count, a deduplicated page or a union of partial scans never
+    proves completeness. This exceptional read-only path is bounded to 250 items.
+    """
+    wanted = _normalized_title(_clean(title, "title", 60))
+    pages_checked = 0
+    verified = set()
+    started = time.monotonic()
+
+    def hold(stage):
+        raise RemoteInventoryUnverified(stage, pages_checked=pages_checked,
+                                        videos_seen=len(verified))
+
+    def get(endpoint, query):
+        if time.monotonic() - started >= 120:
+            hold("exact_inventory_time_limit")
+        _, _, value = api.request("GET", API + endpoint + "?" + urlencode(query),
+                                  headers=api.headers(), retry=True)
+        if time.monotonic() - started >= 120:
+            hold("exact_inventory_time_limit")
+        if not isinstance(value, dict):
+            hold("exact_inventory_response_invalid")
+        return value
+
+    def owner_snapshot():
+        response = get("channels", {
+            "part": "id,contentDetails,statistics", "mine": "true",
+            "fields": "items(id,contentDetails(relatedPlaylists(uploads)),statistics(videoCount))",
+        })
+        rows = response.get("items")
+        if not isinstance(rows, list) or len(rows) != 1 or not isinstance(rows[0], dict):
+            hold("exact_inventory_owner_invalid")
+        row = rows[0]
+        details, stats = row.get("contentDetails"), row.get("statistics")
+        related = details.get("relatedPlaylists") if isinstance(details, dict) else None
+        playlist = related.get("uploads") if isinstance(related, dict) else None
+        count = stats.get("videoCount") if isinstance(stats, dict) else None
+        if (row.get("id") != api.channel or not isinstance(playlist, str)
+                or not re.fullmatch(r"UU[A-Za-z0-9_-]{22}", playlist)
+                or not isinstance(count, str) or not count.isdigit()):
+            hold("exact_inventory_owner_invalid")
+        return playlist, int(count)
+
+    playlist, public_count = owner_snapshot()
+    fields = "items(id,snippet(position,playlistId,resourceId(kind,videoId)),contentDetails(videoId)),nextPageToken,pageInfo(totalResults)"
+
+    def entry(row, total):
+        if not isinstance(row, dict):
+            hold("exact_inventory_entry_invalid")
+        snippet, details = row.get("snippet"), row.get("contentDetails")
+        resource = snippet.get("resourceId") if isinstance(snippet, dict) else None
+        key = details.get("videoId") if isinstance(details, dict) else None
+        identity = row.get("id")
+        position = snippet.get("position") if isinstance(snippet, dict) else None
+        if (not isinstance(identity, str) or not 1 <= len(identity) <= 1024
+                or any(ord(c) < 32 for c in identity)
+                or not isinstance(key, str) or not re.fullmatch(r"[A-Za-z0-9_-]{11}", key)
+                or not isinstance(resource, dict) or resource.get("kind") != "youtube#video"
+                or resource.get("videoId") != key or snippet.get("playlistId") != playlist
+                or type(position) is not int or not 0 <= position < total):
+            hold("exact_inventory_entry_invalid")
+        return position, identity, key
+
+    total = None
+    positions, current_ids, tokens = set(), set(), set()
+    token = None
+    for _ in range(5):
+        query = {"part": "id,snippet,contentDetails", "playlistId": playlist,
+                 "maxResults": "50", "fields": fields}
+        if token is not None:
+            query["pageToken"] = token
+        response = get("playlistItems", query)
+        pages_checked += 1
+        info = response.get("pageInfo")
+        count = info.get("totalResults") if isinstance(info, dict) else None
+        if type(count) is not int or not 1 <= count <= 250:
+            hold("exact_inventory_total_unverified")
+        if total is None:
+            total = count
+        if count != total:
+            hold("exact_inventory_total_changed")
+        rows = response.get("items")
+        if not isinstance(rows, list) or not 1 <= len(rows) <= 50:
+            hold("exact_inventory_page_invalid")
+        for row in rows:
+            position, _, key = entry(row, total)
+            if position in positions:
+                hold("exact_inventory_position_duplicate")
+            positions.add(position)
+            current_ids.add(key)
+        token = response.get("nextPageToken")
+        if token is None:
+            break
+        if not isinstance(token, str) or not token or len(token) > 2048 or token in tokens:
+            hold("exact_inventory_token_invalid")
+        tokens.add(token)
+    else:
+        hold("exact_inventory_page_limit")
+    if positions != set(range(total)) or total < public_count:
+        hold("exact_inventory_positions_incomplete")
+    observed_ids = observed_ids | current_ids
+
+    candidates, tokens, token = set(), set(), None
+    for _ in range(5):
+        query = {"part": "id", "forMine": "true", "type": "video",
+                 "maxResults": "50", "fields": "items(id(kind,videoId)),nextPageToken"}
+        if token is not None:
+            query["pageToken"] = token
+        response = get("search", query)
+        pages_checked += 1
+        rows = response.get("items")
+        if not isinstance(rows, list) or not 1 <= len(rows) <= 50:
+            hold("exact_inventory_owner_search_invalid")
+        for row in rows:
+            identity = row.get("id") if isinstance(row, dict) else None
+            key = identity.get("videoId") if isinstance(identity, dict) else None
+            if (not isinstance(key, str) or not re.fullmatch(r"[A-Za-z0-9_-]{11}", key)
+                    or identity.get("kind") != "youtube#video" or key in candidates):
+                hold("exact_inventory_owner_search_invalid")
+            candidates.add(key)
+        token = response.get("nextPageToken")
+        if token is None:
+            break
+        if not isinstance(token, str) or not token or len(token) > 2048 or token in tokens:
+            hold("exact_inventory_token_invalid")
+        tokens.add(token)
+    else:
+        hold("exact_inventory_search_limit")
+    if len(candidates) != total or not observed_ids.issubset(candidates):
+        hold("exact_inventory_owner_search_incomplete")
+
+    previous = None
+    for _ in range(2):
+        snapshot, item_ids = {}, set()
+        for key in sorted(candidates):
+            response = get("playlistItems", {
+                "part": "id,snippet,contentDetails", "playlistId": playlist,
+                "videoId": key, "maxResults": "50", "fields": fields,
+            })
+            rows = response.get("items")
+            if (not isinstance(rows, list) or len(rows) != 1
+                    or response.get("nextPageToken") is not None):
+                hold("exact_inventory_entry_unresolved")
+            position, identity, actual = entry(rows[0], total)
+            if actual != key or position in snapshot or identity in item_ids:
+                hold("exact_inventory_entry_conflict")
+            snapshot[position] = (identity, key)
+            item_ids.add(identity)
+        if set(snapshot) != set(range(total)):
+            hold("exact_inventory_positions_incomplete")
+        if previous is not None and previous != snapshot:
+            hold("exact_inventory_changed_during_read")
+        previous = snapshot
+
+    public_seen = 0
+    keys = sorted(candidates)
+    for offset in range(0, len(keys), 50):
+        batch = keys[offset:offset + 50]
+        response = get("videos", {
+            "part": "snippet,status", "id": ",".join(batch),
+            "fields": "items(id,snippet(channelId,title),status(privacyStatus))",
+        })
+        rows = response.get("items")
+        if not isinstance(rows, list) or len(rows) != len(batch):
+            hold("exact_inventory_video_details_missing")
+        batch_seen = set()
+        for row in rows:
+            if not isinstance(row, dict):
+                hold("exact_inventory_video_invalid")
+            key, snippet, status = row.get("id"), row.get("snippet"), row.get("status")
+            if (not isinstance(key, str) or key not in batch or key in batch_seen
+                    or not isinstance(snippet, dict) or snippet.get("channelId") != api.channel
+                    or not isinstance(status, dict)
+                    or status.get("privacyStatus") not in {"public", "private", "unlisted"}
+                    or not isinstance(snippet.get("title"), str) or not snippet["title"].strip()):
+                hold("exact_inventory_video_invalid")
+            batch_seen.add(key)
+            if re.match(rf"^{re.escape(wanted)}(?:$|\W)", _normalized_title(snippet["title"])):
+                raise VideoError("aether_single_existing_remote_title_requires_reconcile")
+            public_seen += status["privacyStatus"] == "public"
+        verified.update(batch_seen)
+    if public_seen != public_count or owner_snapshot() != (playlist, public_count):
+        hold("exact_inventory_owner_changed")
+    if verified != candidates:
+        hold("exact_inventory_video_details_missing")
+    # Recheck the uploads total after the independent reads, not search estimates.
+    ending = get("playlistItems", {"part": "id", "playlistId": playlist,
+                                   "maxResults": "1", "fields": "pageInfo(totalResults)"})
+    ending_info = ending.get("pageInfo")
+    if (not isinstance(ending_info, dict)
+            or type(ending_info.get("totalResults")) is not int
+            or ending_info["totalResults"] != total):
+        hold("exact_inventory_total_changed")
+    return {"state": "verified", "method": "owner_search_exact_playlist_crosscheck",
+            "videos_verified": len(verified), "positions_verified": total,
+            "identical_exact_passes": 2}
 
 
 def _hydrate_dataless_backlog_wav(source: Path) -> None:

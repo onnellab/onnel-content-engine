@@ -47,3 +47,56 @@ across retries, title collisions in every privacy state, missing details,
 ownership/count/token/transport failures and diagnostic privacy. The deadline
 checks are also inspected structurally at both production call sites.
 Full integration and live production verification remain separate.
+
+
+## Verified persistent pagination defect and exact recovery (2026-11-04)
+
+During owner-requested interactive repair (not the daily reporting task), the
+current guard reproduced `duplicate_across_pages` with both 50- and 25-item
+pages. A richer uploads response reported 67 total entries and positions 0..66,
+but repeated the same video AND playlist-item identity at different positions:
+only 66 distinct videos/items remained. A separate authenticated owner search
+found 67 distinct candidates. An exact uploads lookup for the missing candidate
+confirmed its membership at position 50 and its current channel/public status.
+This identifies the observed API inconsistency, not an explanation of Google's
+internal cause. Restarting the same broken pagination was insufficient.
+
+The ordinary strict path and its bounded smaller-page restart remain unchanged.
+Only persistent cross-page duplication on BOTH scans can enter the new recovery:
+
+1. Re-read the owner channel, uploads playlist and public count. Require complete
+   rich uploads pagination with a stable exact `pageInfo.totalResults`, valid
+   entry identity fields and every ordinal present. Limit recovery to 250 items.
+2. Use `search.list(forMine=true,type=video)` ONLY to discover candidate IDs.
+   Do not use its approximate result count, public-only search, date/order filters,
+   or a cached report as evidence of completeness. Every previously observed ID
+   must remain present, and candidate cardinality must match the uploads total.
+3. Independently query the uploads playlist by EACH exact candidate video ID,
+   twice. Require exactly one bound playlist item per candidate; unique video,
+   item and position identities; every position 0..total-1; and identical mappings
+   on both passes. Missing, conflicting, foreign or changing evidence still HOLDs.
+4. Read current title, owner and privacy details for every candidate. A matching
+   public/private/unlisted title still blocks. Require the observed public count
+   and final channel/uploads total to remain consistent. Check a 120-second
+   deadline before and after each provider request; expiry never becomes success.
+
+Failure preserves the original top-level blocker and adds a safe
+`exact_recovery_failure` subreason. Success returns only verification method and
+counts, never private IDs, titles, provider payloads or credentials. No duplicate
+is silently discarded, no partial inventories are merged into success, and no
+paid-generation, upload or approval action is performed by this read-only helper.
+
+The actual Mac owner-inventory check completed successfully with 67 verified
+videos, 67 covered positions and two identical exact-entry passes (64.38 seconds).
+This is live inventory verification, NOT a production/publication receipt.
+The requested prior single has an approved cover but no retained generated audio,
+no render and no video ID; its stale job remains preserved. Its required private
+paid-cost/rights proof is absent. The existing gross $0.08 ceiling, generation
+window, original 09:00 schedule and durable job records were not changed, and no
+paid request or upload was attempted. Scheduled reporting remains read-only.
+
+Regression verification: 90 tests passed across exact/restart/owned inventory,
+single-worker behavior, paid-boundary and cost-policy suites. The older
+render-crossing-deadline fixture now advances its mocked clock at actual render
+completion instead of assuming a fixed number of clock checks; its no-upload
+and no-approval assertions remain intact.

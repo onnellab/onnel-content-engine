@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import re
 import types
+import time
 import unicodedata
 import unittest
 from urllib.parse import parse_qs, urlencode, urlsplit
@@ -29,14 +30,15 @@ class FixtureVideoError(Exception):
 def load_guard():
     tree = ast.parse(SOURCE.read_text(encoding="utf-8"), filename=str(SOURCE))
     names = {"_clean", "_normalized_title", "RemoteInventoryUnverified",
-             "require_no_owned_title_match", "_require_no_owned_title_match_once"}
+             "require_no_owned_title_match", "_require_no_owned_title_match_once",
+             "_recover_owned_inventory_exact"}
     nodes = [n for n in tree.body
              if isinstance(n, (ast.FunctionDef, ast.ClassDef)) and n.name in names]
     if {n.name for n in nodes} != names:
         raise AssertionError("The production inventory guard is incomplete")
     namespace = {"VideoError": FixtureVideoError, "YouTube": object,
                  "API": "https://www.googleapis.com/youtube/v3/",
-                 "re": re, "unicodedata": unicodedata, "urlencode": urlencode}
+                 "re": re, "unicodedata": unicodedata, "urlencode": urlencode, "time": time}
     exec(compile(ast.Module(body=nodes, type_ignores=[]), str(SOURCE), "exec"), namespace)
     return types.SimpleNamespace(**namespace)
 
@@ -153,7 +155,11 @@ class InventoryRestartTests(unittest.TestCase):
     def test_persistent_overlap_never_deduplicates_to_success(self):
         api = ReadOnlyInventory(fault="overlap", persistent=True)
         diagnostic = self.failure(api)
-        self.assertEqual(2, api.scans)
+        # Two failed paginated scans plus an independent exact-recovery owner read.
+        # This fixture has no authoritative playlist totals, so it must still HOLD.
+        self.assertEqual(3, api.scans)
+        self.assertEqual("exact_inventory_total_unverified",
+                         diagnostic["exact_recovery_failure"]["stage"])
         self.assertEqual("duplicate_across_pages", diagnostic["reason"])
         self.assertEqual(2, diagnostic["inventory_attempts"])
         self.assertEqual(50, diagnostic["first_failure"]["videos_seen"])

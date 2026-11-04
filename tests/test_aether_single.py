@@ -255,8 +255,16 @@ class SingleTests(unittest.TestCase):
 
     def test_publish_crossing_nine_after_render_fails_closed_without_upload(self):
         api = Provider()
+        clock = {"rendered": False}
+
+        def render_then_cross_deadline(*args):
+            result = self.fake_renderer(*args)
+            clock["rendered"] = True
+            return result
+
         with tempfile.TemporaryDirectory() as temporary, \
-             patch.object(aether_single, "publish_slot_stale", side_effect=[False, True]), \
+             patch.object(aether_single, "publish_slot_stale",
+                          side_effect=lambda slot: clock["rendered"]), \
              patch.object(aether_single, "select_candidate", return_value={
                  "candidate_index": 1, "path": str(Path(temporary) / "chosen.mp3"),
                  "duration_seconds": 184, "sha256": "a" * 64}), \
@@ -269,7 +277,7 @@ class SingleTests(unittest.TestCase):
                     style="Warm fantasy road theme", lane="skybound_flight",
                     publish=True, execute=True, api_factory=lambda: api,
                     music_generator=self.fake_music, cover_generator=self.fake_cover,
-                    renderer=self.fake_renderer,
+                    renderer=render_then_cross_deadline,
                 )
             uploader.assert_not_called()
             state = json.loads((root / "queue.json").read_text())
