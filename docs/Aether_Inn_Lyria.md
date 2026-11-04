@@ -83,7 +83,15 @@ No test or dry-run result may be called a real upload/publication receipt.
 
 Model: `lyria-3-pro-preview`; region: `global`.
 Official endpoint:
-`https://aiplatform.googleapis.com/v1beta1/projects/{PROJECT_ID}/locations/global/interactions`.
+`https://aiplatform.googleapis.com/v1/projects/{PROJECT_ID}/locations/global/interactions`.
+The current request uses `input[].type=user_input`, a `content` array, and
+`store=false` (Lyria supports stateless interactions). Current responses carry
+audio in `steps[].type=model_output` content; historical `outputs` responses
+remain readable. Sources verified 2026-11-04:
+https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/music/generate-music?hl=en
+and https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/capabilities/interactions/ .
+This transport update does not change generation windows, publication timing,
+spending/approval checks, or authorize a manual stale-slot recovery.
 The existing local configuration remains `enabled=true`, `candidate_count=1`,
 `max_usd_per_run=0.08`. Its cap is explicitly a provider-base budget.
 Credentials remain in the existing Google ADC/Keychain providers, never Git,

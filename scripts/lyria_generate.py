@@ -24,7 +24,7 @@ from lyria_config import (
     load_settings,
 )
 
-API = "https://aiplatform.googleapis.com/v1beta1/projects/{project}/locations/global/interactions"
+API = "https://aiplatform.googleapis.com/v1/projects/{project}/locations/global/interactions"
 MAX_RESPONSE_BYTES = 64 * 1024 * 1024
 PRIVATE_OUTPUT = Path.home() / "Library/Application Support/ONNELLAB/content-engine/aether-inn/lyria"
 SAFE_TEXT = re.compile(r"[\x20-\x7e\u00a0-\uffff]+")
@@ -80,15 +80,35 @@ def parse_audio_response(payload: bytes) -> tuple[bytes, str, dict]:
         data = json.loads(payload)
     except json.JSONDecodeError:
         raise CredentialError("lyria_response_invalid") from None
+    if not isinstance(data, dict):
+        raise CredentialError("lyria_response_invalid")
     if data.get("status") != "completed" or data.get("model") != MODEL:
         raise CredentialError("lyria_generation_not_completed")
     audio = None
     mime = None
     description = ""
-    for item in data.get("outputs") or []:
+    # v1 returns model_output steps; historical beta fixtures use outputs.
+    if "steps" in data:
+        if not isinstance(data["steps"], list):
+            raise CredentialError("lyria_response_invalid")
+        outputs = []
+        for step in data["steps"]:
+            if not isinstance(step, dict):
+                raise CredentialError("lyria_response_invalid")
+            if step.get("type") == "model_output":
+                if not isinstance(step.get("content"), list):
+                    raise CredentialError("lyria_response_invalid")
+                outputs.extend(step["content"])
+    else:
+        outputs = data.get("outputs") or []
+    if not isinstance(outputs, list):
+        raise CredentialError("lyria_response_invalid")
+    for item in outputs:
         if not isinstance(item, dict):
             continue
         if item.get("type") == "audio" and isinstance(item.get("data"), str):
+            if audio is not None:
+                raise CredentialError("lyria_multiple_audio_outputs")
             audio = item["data"]
             mime = item.get("mime_type")
         elif item.get("type") == "text" and isinstance(item.get("text"), str) and not description:
@@ -132,7 +152,11 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
             or intent.get("prompt_sha256") != hashlib.sha256(prompt.encode("utf-8")).hexdigest()):
         raise CredentialError("aether_lyria_charge_intent_invalid")
     token = token or access_token()
-    body = json.dumps({"model": MODEL, "input": [{"type": "text", "text": prompt}]}, ensure_ascii=False).encode("utf-8")
+    body = json.dumps({
+        "model": MODEL,
+        "store": False,
+        "input": [{"type": "user_input", "content": [{"type": "text", "text": prompt}]}],
+    }, ensure_ascii=False).encode("utf-8")
     request = Request(
         API.format(project=project_id),
         data=body,
