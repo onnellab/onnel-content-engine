@@ -1,5 +1,14 @@
 # Owned-upload inventory recovery
 
+## Latest status — 2026-11-04 16:24 Asia/Seoul
+
+**RESOLVED: The Pass Beyond the Racing Plains is publicly published as `IWYViblbUGc`.**
+Audio, render, public/processed observation, thumbnail and playlist membership
+are complete. Normal generation input/unsettled-intent checks now pass.
+See `Completed public release` below for actual receipts and cost uncertainty.
+Earlier missing-audio/manual-proof/failure sections are incident history, not
+current unresolved-production alerts. No evidence of prior unknown charges was erased.
+
 ## Current resolution — 2026-11-04
 
 The current policy is `docs/Aether_Inn_Lyria.md`, not the historical all-in
@@ -320,3 +329,39 @@ request, USD 0.08 base, possible cumulative base USD 0.32 (actual bills unknown)
 A separate immutable receipt binds all three prior manifests; none is erased or
 reclassified. All other gates and the ordinary LaunchAgent schedule remain.
 177 focused offline tests passed. This entry is not a publication receipt.
+
+## Completed public release — 2026-11-04 07:24 UTC
+
+The original job `1f5cf414734a3a362b4db5cc` is now **published**:
+https://www.youtube.com/watch?v=IWYViblbUGc
+Title: The Pass Beyond the Racing Plains.
+The original-beta request at run `20261104T071835Z-the-pass-beyond-the-racing-plains`
+produced one 176.535458-second audio file; offline signal-quality review accepted
+it. The approved existing cover and canonical 1920x1080 H.264/AAC render were used.
+No later-stage failure regenerated this accepted audio or replaced the video ID.
+
+The same video's owner-authenticated observation confirmed `privacy=public`,
+`upload_status=processed`, `processing_status=succeeded`, and thumbnail `set`.
+A separate anonymous YouTube oEmbed GET returned the exact title and Aether Inn
+author. Final observation timestamp: `2026-11-04T07:24:14.698044+00:00`.
+The private exact observation receipt is in the existing job directory as
+`publication-observed.json`; it does not contain credentials.
+
+All six canonical playlists separately returned `synced` with 68 videos considered.
+The exact new video was independently observed ONCE in each of all/roads/uplifting.
+Totals: all 68, roads 39, towns 12, nature 14, rest 22, uplifting 26.
+Four model requests are recorded for this song across the earlier failures and
+successful recovery. Conservative possible cumulative base cost is USD 0.32;
+actual billing, tax and currency adjustments are not verified. Prior manifests,
+raw response evidence and one-use claims remain intact, not rewritten as free.
+
+The normal new-single input check AND unsettled-intent check passed at
+`2026-11-04T07:23:05.533165+00:00`. The next planner candidate is
+`Sails Beyond the Amber Harbor` (open_sea_voyage), with its own approved cover.
+The same restored production adapter is used by the normal LaunchAgent path.
+The registered LaunchAgent still points to the canonical script, is idle with
+last exit code 0, and retains its existing 06:20/07:20/08:20 triggers. No timer
+restart, schedule change, synthetic historical daily result or second uploader
+was introduced. The normal next single slot remains 2026-11-07 09:00 KST.
+These are live current readiness/publication observations, not a guarantee against
+future external service outages. No future slot was produced early.

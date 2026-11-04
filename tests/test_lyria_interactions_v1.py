@@ -49,7 +49,7 @@ class InteractionsV1Tests(unittest.TestCase):
             with self.subTest(raw=raw[:80]), self.assertRaises(CredentialError):
                 g.parse_audio_response(raw)
 
-    def test_real_adapter_builds_one_stateless_v1_request_under_existing_gates(self):
+    def test_real_adapter_uses_original_flat_beta_request_under_existing_gates(self):
         with tempfile.TemporaryDirectory() as tmp, fixture_environment(Path(tmp).resolve()), \
              patch.object(g, "access_token", return_value="fixture-token"):
             def wire(request, **kwargs):

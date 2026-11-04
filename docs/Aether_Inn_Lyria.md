@@ -83,15 +83,20 @@ No test or dry-run result may be called a real upload/publication receipt.
 
 Model: `lyria-3-pro-preview`; region: `global`.
 Official endpoint:
-`https://aiplatform.googleapis.com/v1/projects/{PROJECT_ID}/locations/global/interactions`.
-The current request uses `input[].type=user_input`, a `content` array, and
-`store=false` (Lyria supports stateless interactions). Current responses carry
-audio in `steps[].type=model_output` content; historical `outputs` responses
-remain readable. Sources verified 2026-11-04:
-https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/music/generate-music?hl=en
-and https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/capabilities/interactions/ .
-This transport update does not change generation windows, publication timing,
-spending/approval checks, or authorize a manual stale-slot recovery.
+`https://aiplatform.googleapis.com/v1beta1/projects/{PROJECT_ID}/locations/global/interactions`.
+The current request matches Google's GenMedia Creative Studio REST adapter:
+`{"model":"lyria-3-pro-preview","input":[{"type":"text","text":"..."}]}`.
+Source read 2026-11-04:
+https://github.com/GoogleCloudPlatform/genmedia-creative-studio/blob/main/models/lyria.py
+This is also the earlier successful Aether request shape. The intervening v1
+step-shaped request returned completed metadata without audio in a live attempt;
+adding response_modalities to that request then produced an API error. Restoring
+the original beta transport produced real accepted audio on 2026-11-04.
+Both `outputs` and v1 `steps[].type=model_output` responses remain readable.
+The exact raw successful/error response is retained privately before parsing;
+no automatic endpoint fallback or second POST occurs on an ambiguous response.
+This transport correction does not change ordinary generation windows,
+publication timing, spending or approval checks.
 The existing local configuration remains `enabled=true`, `candidate_count=1`,
 `max_usd_per_run=0.08`. Its cap is explicitly a provider-base budget.
 Credentials remain in the existing Google ADC/Keychain providers, never Git,
