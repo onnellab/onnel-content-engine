@@ -5,7 +5,7 @@ slug: "mark-uncertainty-clearly-in-research-notes"
 category: "research"
 language: "de"
 description: "Unterscheiden Sie ungeklärte Angaben, widersprüchliche Darstellungen und vorläufige Deutungen. Halten Sie für jede Frage den nächsten Prüfschritt fest."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0129"
 search_intent: "workflow"
 primary_keyword: "Unsicherheit in Recherchenotizen"
@@ -14,6 +14,9 @@ tags: "Unsicherheit in Recherchenotizen"
 short_answer: "Kennzeichnen Sie Ungeklärtes, widersprüchliche Angaben und vorläufige Deutungen. Notieren Sie den Grund, die Belege und den nächsten konkreten Prüfschritt. Bewahren Sie bei Änderungen die frühere Begründung. Diese Kennzeichnungen beschreiben den Recherchestand, keine gemessene Wahrscheinlichkeit."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/de/mark-uncertainty-clearly-in-research-notes/"
+published_at: "2026-11-05T09:00:00+09:00"
+updated_at: "2026-11-05T09:00:00+09:00"
+related_articles: "Quellennotizen und eigene Schlussfolgerungen klar trennen => https://onnellab.com/blog/de/separate-source-notes-from-conclusions/|Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln => https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/|Lange Textdokumente leichter navigieren => https://onnellab.com/blog/de/make-long-plain-text-easier-to-navigate/|Einheitliche Album- und Künstler-Tags: Künstlerangaben erhalten => https://onnellab.com/blog/de/consistent-album-artist-names/|Musikdateien auf Android für die Offline-Wiedergabe ordnen => https://onnellab.com/blog/de/organize-local-music-library-offline-android/|Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen => https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/"
 ---
 
 # Unsicherheit in Recherchenotizen klar kennzeichnen

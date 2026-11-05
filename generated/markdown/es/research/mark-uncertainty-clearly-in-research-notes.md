@@ -5,7 +5,7 @@ slug: "mark-uncertainty-clearly-in-research-notes"
 category: "research"
 language: "es"
 description: "Distingue la información no confirmada, las versiones contradictorias y las interpretaciones provisionales, y anota la siguiente comprobación de cada cuestión."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0131"
 search_intent: "workflow"
 primary_keyword: "incertidumbre en las notas de investigación"
@@ -14,6 +14,9 @@ tags: "incertidumbre en las notas de investigación"
 short_answer: "Indica qué está sin confirmar, presenta discrepancias o es provisional; explica el motivo, enlaza las pruebas y concreta la siguiente comprobación. Conserva el razonamiento anterior al actualizar la nota. Estas etiquetas describen la investigación, no una probabilidad medida."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/es/mark-uncertainty-clearly-in-research-notes/"
+published_at: "2026-11-05T09:00:00+09:00"
+updated_at: "2026-11-05T09:00:00+09:00"
+related_articles: "Cómo separar las notas de las fuentes de tus conclusiones => https://onnellab.com/blog/es/separate-source-notes-from-conclusions/|Cómo organizar música en Android para escucharla sin conexión => https://onnellab.com/blog/es/organize-local-music-library-offline-android/|Cómo orientarte en un documento de texto largo => https://onnellab.com/blog/es/make-long-plain-text-easier-to-navigate/|Cómo convertir textos repetidos en fragmentos reutilizables => https://onnellab.com/blog/es/turn-repeated-text-into-reusable-snippets/|Etiquetas de álbum y artista coherentes sin perder créditos => https://onnellab.com/blog/es/consistent-album-artist-names/|Prepara una copia de trabajo antes de editar audio => https://onnellab.com/blog/es/choose-safe-audio-working-copy/"
 ---
 
 # Cómo señalar la incertidumbre en las notas de investigación

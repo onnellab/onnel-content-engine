@@ -5,7 +5,7 @@ slug: "mark-uncertainty-clearly-in-research-notes"
 category: "research"
 language: "en"
 description: "Distinguish missing evidence, conflicting accounts and working interpretations, then record the specific check needed to resolve each research question."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0086"
 search_intent: "workflow"
 primary_keyword: "uncertainty in research notes"
@@ -14,6 +14,9 @@ tags: "uncertainty in research notes"
 short_answer: "Mark what is unknown, disputed or provisional; explain why, link the evidence and write a specific next check. Keep earlier reasoning when updating the note. These labels describe the state of your investigation, not a measured probability."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/en/mark-uncertainty-clearly-in-research-notes/"
+published_at: "2026-11-05T09:00:00+09:00"
+updated_at: "2026-11-05T09:00:00+09:00"
+related_articles: "How to Keep a Durable Research Reading Log => https://onnellab.com/blog/en/keep-durable-research-reading-log/|How to Separate Source Notes from Your Conclusions => https://onnellab.com/blog/en/separate-source-notes-from-conclusions/|How to Turn Rough Notes Into a Structured First Draft => https://onnellab.com/blog/en/turn-rough-notes-into-structured-first-draft/|How to Number Tracks in a Multi-Disc MP3 Album => https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/|TXT vs EPUB for Long Reading => https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/"
 ---
 
 # Mark Uncertainty Clearly in Research Notes

@@ -14,7 +14,7 @@
     "slug": "distinguish-duplicate-music-files-from-different-recordings",
     "category": "music",
     "language": "zh-Hans",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
       "录音比较",
       "文件哈希",

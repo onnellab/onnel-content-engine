@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0135",
   "title": "区分重复音乐文件与不同录音",
-  "input_fingerprint": "0d96ac5d1bcd81eca80dae5a321aeed3ac90584d354feb5feecb6ff238b659d5",
+  "input_fingerprint": "3e017f2704984ac1cf7849a270ab915ba4d4405cd2d46446108d6e60c50df74f",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

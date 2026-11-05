@@ -5,7 +5,7 @@ slug: "mark-uncertainty-clearly-in-research-notes"
 category: "research"
 language: "zh-Hant"
 description: "區分尚未確認的資訊、互相衝突的說法與暫定解釋，並為每個問題記錄具體的下一步查證行動。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0127"
 search_intent: "workflow"
 primary_keyword: "研究筆記中的不確定性"
@@ -14,6 +14,9 @@ tags: "研究筆記中的不確定性"
 short_answer: "標明未確認、說法不一致或暫定解釋，寫清原因、證據來源與下一步查證。更新筆記時保留先前判斷的理由。這些標籤描述調查狀態，不代表測量得出的機率。"
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/zh-hant/mark-uncertainty-clearly-in-research-notes/"
+published_at: "2026-11-05T09:00:00+09:00"
+updated_at: "2026-11-05T09:00:00+09:00"
+related_articles: "如何區分資料筆記與自己的結論 => https://onnellab.com/blog/zh-hant/separate-source-notes-from-conclusions/|在 Android 整理音樂檔案，準備離線播放 => https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/|檢查 EPUB 的目錄連結與章節順序 => https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/|取代原始檔案前，如何檢查轉檔後的媒體檔案 => https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/|如何整理可重複使用的文字片段 => https://onnellab.com/blog/zh-hant/turn-repeated-text-into-reusable-snippets/|如何建立一致又好找的檔案命名規則 => https://onnellab.com/blog/zh-hant/design-consistent-file-naming-system/"
 ---
 
 # 在研究筆記中清楚標示不確定之處

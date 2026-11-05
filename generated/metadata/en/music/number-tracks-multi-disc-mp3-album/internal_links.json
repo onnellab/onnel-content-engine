@@ -82,9 +82,9 @@
         "slug": "distinguish-duplicate-music-files-from-different-recordings",
         "category": "music",
         "language": "en",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/en/music/distinguish-duplicate-music-files-from-different-recordings.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "deeper",
         "shared_clusters": [
           "music"

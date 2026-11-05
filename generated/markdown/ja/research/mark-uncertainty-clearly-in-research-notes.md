@@ -5,7 +5,7 @@ slug: "mark-uncertainty-clearly-in-research-notes"
 category: "research"
 language: "ja"
 description: "未確認の情報、食い違う説明、暫定的な解釈を区別し、それぞれを確かめるための具体的な次の行動を記録します。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0125"
 search_intent: "workflow"
 primary_keyword: "調査ノートの不確実性"
@@ -14,6 +14,9 @@ tags: "調査ノートの不確実性"
 short_answer: "未確認・説明の不一致・暫定的な解釈を区別し、理由、根拠となる資料、次の確認事項を書きます。更新時には以前の判断理由も残します。この表示は調査の状態を表すもので、測定された確率ではありません。"
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/ja/mark-uncertainty-clearly-in-research-notes/"
+published_at: "2026-11-05T09:00:00+09:00"
+updated_at: "2026-11-05T09:00:00+09:00"
+related_articles: "出典メモと自分の結論を分ける方法 => https://onnellab.com/blog/ja/separate-source-notes-from-conclusions/|Androidの音楽ファイルをオフライン再生用に整理する方法 => https://onnellab.com/blog/ja/organize-local-music-library-offline-android/|EPUBの目次リンクと章の順序を確認する方法 => https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/|元ファイルを置き換える前に変換後のメディアを確認する方法 => https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/|繰り返し使う文章を再利用できる定型文に整理する方法 => https://onnellab.com/blog/ja/turn-repeated-text-into-reusable-snippets/|探しやすいファイル命名ルールの作り方 => https://onnellab.com/blog/ja/design-consistent-file-naming-system/"
 ---
 
 # 調査ノートの不確実な点を明確にする

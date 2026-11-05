@@ -1,0 +1,10 @@
+A reliable plan for how to record uncertainty without making a research note vague or falsely confident starts with the result and constraints.
+
+Mark what is unknown, disputed or provisional; explain why, link the evidence and write a specific next check. Keep earlier reasoning when updating the note.
+
+Before changing tools:
+- Isolate the claim. Write one checkable statement. Separate an event's date from your explanation of why it happened; they may need different evidence.
+- Name the uncertainty and its reason. Write “unknown: no dated record found,” not simply “maybe.” A search that found nothing does not prove that no record exists.
+
+Read the full article:
+https://onnellab.com/blog/en/mark-uncertainty-clearly-in-research-notes/

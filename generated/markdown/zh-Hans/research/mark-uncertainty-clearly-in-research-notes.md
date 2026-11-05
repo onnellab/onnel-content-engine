@@ -5,7 +5,7 @@ slug: "mark-uncertainty-clearly-in-research-notes"
 category: "research"
 language: "zh-Hans"
 description: "区分尚未确认的信息、互相冲突的说法和暂定解释，并为每个问题记录具体的下一步核查行动。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0126"
 search_intent: "workflow"
 primary_keyword: "研究笔记中的不确定性"
@@ -14,6 +14,9 @@ tags: "研究笔记中的不确定性"
 short_answer: "标明未确认、说法不一致或暂定解释，写清原因、证据来源和下一步核查。更新笔记时保留先前判断的理由。这些标签描述调查状态，并不代表测量得到的概率。"
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/zh-hans/mark-uncertainty-clearly-in-research-notes/"
+published_at: "2026-11-05T09:00:00+09:00"
+updated_at: "2026-11-05T09:00:00+09:00"
+related_articles: "如何区分资料笔记与自己的结论 => https://onnellab.com/blog/zh-hans/separate-source-notes-from-conclusions/|在 Android 上整理音乐文件，准备离线播放 => https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/|检查 EPUB 的目录链接和章节顺序 => https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/|替换原文件前，如何检查转换后的媒体文件 => https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/|如何整理可重复使用的文本片段 => https://onnellab.com/blog/zh-hans/turn-repeated-text-into-reusable-snippets/|如何建立一致、好查找的文件命名规则 => https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/"
 ---
 
 # 在研究笔记中清楚标注不确定之处

@@ -5,7 +5,7 @@ slug: "mark-uncertainty-clearly-in-research-notes"
 category: "research"
 language: "ko"
 description: "아직 확인하지 못한 정보, 서로 다른 설명, 잠정 해석을 구분하고 각 질문을 확인할 구체적인 다음 행동을 기록해 보세요."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0124"
 search_intent: "workflow"
 primary_keyword: "연구 노트의 불확실성"
@@ -14,6 +14,9 @@ tags: "연구 노트의 불확실성"
 short_answer: "미확인·설명 불일치·잠정 해석을 구분하고, 그 이유와 근거 출처, 다음 확인 행동을 적으세요. 노트를 고칠 때 이전 판단의 이유도 남기세요. 이 표시는 조사 상태를 설명할 뿐 측정된 확률을 뜻하지 않아요."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/ko/mark-uncertainty-clearly-in-research-notes/"
+published_at: "2026-11-05T09:00:00+09:00"
+updated_at: "2026-11-05T09:00:00+09:00"
+related_articles: "오래 활용할 수 있는 연구 독서 기록을 만드는 방법 => https://onnellab.com/blog/ko/keep-durable-research-reading-log/|출처 메모와 자신의 결론을 구분하는 방법 => https://onnellab.com/blog/ko/separate-source-notes-from-conclusions/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/|음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|아이폰에서 복사한 텍스트 조각을 다시 사용하는 방법 => https://onnellab.com/blog/ko/reuse-copied-text-snippets-iphone/"
 ---
 
 # 연구 노트의 불확실성을 분명하게 표시하는 방법

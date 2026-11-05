@@ -14,7 +14,7 @@
     "slug": "distinguish-duplicate-music-files-from-different-recordings",
     "category": "music",
     "language": "ko",
-    "status": "review",
+    "status": "scheduled",
     "topic_clusters": [
       "녹음 비교",
       "파일 해시",

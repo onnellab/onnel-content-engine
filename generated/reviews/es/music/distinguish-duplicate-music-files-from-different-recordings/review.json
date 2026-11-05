@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0140",
   "title": "Distingue archivos de música duplicados de grabaciones diferentes",
-  "input_fingerprint": "5cad870aa38afee6ebdf383bc7ae7af2dd5d7fa4ac09ddc82a0888db84aa2fd7",
+  "input_fingerprint": "ee99ca83a7953ae16d1f7f4915e78f77a52932d509e621e7afa6aff5b862086d",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

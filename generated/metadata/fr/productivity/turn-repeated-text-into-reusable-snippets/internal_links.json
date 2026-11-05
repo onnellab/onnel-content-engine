@@ -102,9 +102,9 @@
         "slug": "distinguish-duplicate-music-files-from-different-recordings",
         "category": "music",
         "language": "fr",
-        "status": "review",
+        "status": "scheduled",
         "url": "generated/markdown/fr/music/distinguish-duplicate-music-files-from-different-recordings.md",
-        "destination": "draft_article",
+        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6

@@ -5,7 +5,7 @@ slug: "mark-uncertainty-clearly-in-research-notes"
 category: "research"
 language: "fr"
 description: "Distinguez les informations non établies, les récits divergents et les interprétations provisoires, puis précisez la prochaine vérification à effectuer."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0130"
 search_intent: "workflow"
 primary_keyword: "incertitude dans les notes de recherche"
@@ -14,6 +14,9 @@ tags: "incertitude dans les notes de recherche"
 short_answer: "Indiquez ce qui est non établi, contradictoire ou provisoire ; expliquez pourquoi, reliez les preuves et précisez la prochaine vérification. Conservez le raisonnement antérieur lors des mises à jour. Ces mentions décrivent l'état de la recherche, pas une probabilité mesurée."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/fr/mark-uncertainty-clearly-in-research-notes/"
+published_at: "2026-11-05T09:00:00+09:00"
+updated_at: "2026-11-05T09:00:00+09:00"
+related_articles: "Comment séparer les notes de source de vos conclusions => https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/|Créer une convention cohérente pour nommer ses fichiers => https://onnellab.com/blog/fr/design-consistent-file-naming-system/|Des tags d’album et d’artiste cohérents, des crédits préservés => https://onnellab.com/blog/fr/consistent-album-artist-names/|Organiser sa musique sur Android pour une écoute hors ligne => https://onnellab.com/blog/fr/organize-local-music-library-offline-android/|Vérifier la table des matières et l’ordre des chapitres d’un EPUB => https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/|Transformer les textes répétitifs en extraits réutilisables => https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/"
 ---
 
 # Indiquer clairement les incertitudes dans ses notes de recherche

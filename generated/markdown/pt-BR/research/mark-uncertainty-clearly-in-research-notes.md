@@ -5,7 +5,7 @@ slug: "mark-uncertainty-clearly-in-research-notes"
 category: "research"
 language: "pt-BR"
 description: "Diferencie informações não confirmadas, relatos divergentes e interpretações provisórias, registrando a próxima verificação de cada questão."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0128"
 search_intent: "workflow"
 primary_keyword: "incerteza nas notas de pesquisa"
@@ -14,6 +14,9 @@ tags: "incerteza nas notas de pesquisa"
 short_answer: "Indique o que ainda não foi confirmado, o que apresenta divergências e o que é provisório; explique o motivo, vincule as evidências e defina a próxima verificação. Ao atualizar a nota, preserve o raciocínio anterior. Esses rótulos descrevem a investigação, não uma probabilidade medida."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/pt-br/mark-uncertainty-clearly-in-research-notes/"
+published_at: "2026-11-05T09:00:00+09:00"
+updated_at: "2026-11-05T09:00:00+09:00"
+related_articles: "Como separar as anotações sobre fontes das suas conclusões => https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/|Como transformar textos repetidos em trechos reutilizáveis => https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/|Tags de álbum e artista consistentes: preserve os créditos => https://onnellab.com/blog/pt-br/consistent-album-artist-names/|Como facilitar a navegação em um documento de texto longo => https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/|Prepare uma cópia de trabalho antes de editar áudio => https://onnellab.com/blog/pt-br/choose-safe-audio-working-copy/"
 ---
 
 # Como indicar incertezas nas notas de pesquisa
