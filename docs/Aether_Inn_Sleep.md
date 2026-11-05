@@ -27,7 +27,8 @@ unchanged.
   existing music. Sleep videos are assigned only to the sleep playlist.
 - `data/aether_sleep_pilot.json` stores three working concepts and measurement
   criteria. It is not consumed by the daily producer and contains no job IDs,
-  generated media, enabled flag, paid approval or publication dates.
+  generated media, enabled execution or publication dates. The selected provider
+  and bounded pilot budget are not a live cost-verification receipt.
 
 Existing playlist memberships are never removed. No old song, catalog entry,
 rights record, approval, queue or live video metadata is relabeled by this work.
@@ -35,8 +36,10 @@ The new source marker is routing metadata, not proof of rights or audio quality.
 
 ## Pilot creative brief
 
-Proposed first format: three 30-minute videos, each based on its own new
-sleep-specific composition. Length is a proposal pending the production contract.
+Selected first format: three 30-minute videos, each repeating and gently joining
+its own new Lyria sleep composition. The owner selected Lyria after this format,
+one request per composition, no paid retries and a total USD 0.30 including-tax
+cap were proposed. This is not 30 minutes of distinct generated material.
 No existing-master medley and no replacement of regular fantasy singles.
 
 1. Moonlit Guestroom: soft midrange keys and warm strings in a dark indigo inn.
@@ -61,8 +64,11 @@ compositions, 30-minute generation, repeated extensions or a new upload cadence.
 Do not change the existing paid guard or mislabel a sleep request as a normal
 single. Tax, FX and invoice totals remain separate from the base-price estimate.
 
-Before actual production, obtain an explicit sleep-source/request and total pilot
-budget, choose and validate the long-form method, and agree publication slots.
+The owner subsequently selected the separately proposed Lyria pilot with three
+one-shot requests and an all-in USD 0.30 ceiling. That selected preparation is
+recorded separately from execution readiness. Before actual production, verify
+the account-specific all-in cost and validate the long-form method. Publication
+slots remain unspecified; preparation approval is not immediate-publication approval.
 If one new composition is extended into 30 minutes, that method must be explicit;
 a 30-minute runtime is not evidence of 30 minutes of distinct newly generated music.
 Commercial rights, provenance, current source terms, approved cover, PCM checks,
@@ -101,3 +107,49 @@ The narrow live playlist command stopped before provider access with
 ID or URL was returned, and no alternate credential path or security change was
 attempted. The existing canonical sync can ensure the playlist when its normal
 profile access is available; do not create a replacement timer or producer.
+
+## Lyria selection and offline preparation, 2026-11-05
+
+The owner's reply, after the bounded three-video proposal and Suno comparison,
+was `그럼 그냥 lyria로 해`. Preserve the proposed ceiling: three new compositions,
+one charged request each, zero paid retries, total including taxes at most
+USD 0.30. The selected method repeats each new short composition into its own
+30-minute video. Do not silently require another approval for the same selection;
+ask only for missing information or a material change. Publication timing was
+not supplied, so no dates or immediate-publication decision have been invented.
+
+`scripts/aether_sleep_plan.py` is an offline-only planner. It creates three
+distinct prompt drafts and an illustrative repeated-source timeline. It has no
+execute flag, credential lookup, request dispatch, queue writer or renderer.
+All outputs explicitly report `paid_authorized=false` and
+`publication_authorized=false`. These execution flags do not erase the owner's
+selected preparation. Use `--source-seconds 184` to inspect the geometry of a
+possible source; it is not an actual-audio measurement or seam-quality result.
+An eight-second crossfade is a planning default, not an approved audible join.
+Actual music, looping seams, volume, ending and artwork must still be reviewed.
+
+Read-only checks found the existing Lyria configuration enabled for the exact
+model, one candidate and USD 0.08 provider-base cap, with authentication usable.
+The canonical unsettled-request scan was clear. These checks do not certify
+billing, publication readiness or an audio generation. The public provider
+receipt was refreshed through the existing collector at 2026-11-05 05:32:30 UTC,
+valid until 2026-11-06 05:32:30 UTC; no new agreement was accepted.
+
+Official sources checked on 2026-11-05:
+- [Lyria model and commercial-use permission](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/lyria/lyria-3?hl=en): exact model, at most 184 seconds and one clip per prompt.
+- [Provider price](https://cloud.google.com/model-garden/pricing?hl=en): USD 0.08 per full song, USD 0.24 for three before taxes and currency adjustments.
+- [Preview exception](https://cloud.google.com/terms/genai-preview-products?hl=en): Lyria 3 Pro is explicitly excepted from the default preview commercial-use restriction.
+- [Service terms](https://cloud.google.com/terms/service-terms): use remains subject to the existing account agreement; public permission does not establish originality or non-infringement.
+- [Taxes](https://docs.cloud.google.com/billing/docs/resources/vat-overview): displayed SKU prices exclude taxes. South Korea is listed at 10% VAT, but the user's billing location must not be inferred from language or timezone.
+
+If the actual account uses USD pricing and the South Korean VAT treatment, the
+arithmetic would be USD 0.264 before any other mandatory adjustment. This is a
+conditional illustration, not verified billing. Keep production stopped until
+the existing account's tax/currency/mandatory-charge basis fits the all-in cap.
+The ordinary fantasy-single paid guard is unchanged and must not be reused to
+mislabel a sleep request. All 324 Aether tests passed with zero network attempts.
+
+A read-only query of the configured project's billing link exited with code 1.
+No billing account, country or currency was established from that query; no new
+credentials or permissions were requested. This remains a billing-information
+blocker, not evidence of a disabled billing account or a generation failure.
