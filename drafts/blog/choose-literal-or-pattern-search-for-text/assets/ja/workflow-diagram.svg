@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1100" role="img" aria-labelledby="title desc" lang="ja">
+<title id="title">検索方式を選ぶ</title>
+<desc id="desc">既知の文字列 · 複数の形 · リテラル検索 · パターン構文を確認 · 小さな例で確認 · 検索範囲を確認 · 検索のみ・置換しない</desc>
+<rect width="800" height="1100" fill="#faf8f3"/>
+<g font-family="sans-serif" text-anchor="middle">
+<text x="400" y="90" font-size="30" fill="#252d29">検索方式を選ぶ</text>
+<path d="M400 125 V165 H220 V200 M400 165 H580 V200" fill="none" stroke="#486b58" stroke-width="3"/>
+<rect x="50" y="200" width="330" height="200" rx="16" fill="#ffffff" stroke="#9aafa3"/>
+<rect x="420" y="200" width="330" height="200" rx="16" fill="#ffffff" stroke="#9aafa3"/>
+<text x="215" y="265" font-size="23" fill="#4a5550">既知の文字列</text>
+<text x="215" y="335" font-size="24" fill="#252d29">リテラル検索</text>
+<text x="585" y="265" font-size="23" fill="#4a5550">複数の形</text>
+<text x="585" y="335" font-size="24" fill="#252d29">パターン構文を確認</text>
+<path d="M215 400 V450 H400 V500 M585 400 V450 H400 M391 488 L400 500 L409 488" fill="none" stroke="#486b58" stroke-width="3"/>
+<rect x="50" y="500" width="700" height="150" rx="16" fill="#ffffff" stroke="#9aafa3"/>
+<text x="400" y="585" font-size="28" fill="#252d29">小さな例で確認</text>
+<path d="M400 650 V710 M391 698 L400 710 L409 698" fill="none" stroke="#486b58" stroke-width="3"/>
+<rect x="50" y="710" width="700" height="150" rx="16" fill="#ffffff" stroke="#9aafa3"/>
+<text x="400" y="795" font-size="28" fill="#252d29">検索範囲を確認</text>
+<text x="400" y="1000" font-size="25" fill="#252d29">検索のみ・置換しない</text>
+</g>
+</svg>

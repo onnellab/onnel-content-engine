@@ -103,8 +103,14 @@
         "Check the scope"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG proposed; not generated or rendered",
-      "status": "pending"
+      "format": "SVG source created; not rendered",
+      "status": "source_prepared_render_pending",
+      "mode_labels": [
+        "Literal search",
+        "Check pattern syntax"
+      ],
+      "footer": "Find only; do not replace",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/assets/en/workflow-diagram.svg"
     },
     {
       "locale": "ko",
@@ -118,8 +124,14 @@
         "검색 범위 확인"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG proposed; not generated or rendered",
-      "status": "pending"
+      "format": "SVG source created; not rendered",
+      "status": "source_prepared_render_pending",
+      "mode_labels": [
+        "일반 검색",
+        "패턴 문법 확인"
+      ],
+      "footer": "찾기만 하고 바꾸지 않기",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/assets/ko/workflow-diagram.svg"
     },
     {
       "locale": "ja",
@@ -133,8 +145,14 @@
         "検索範囲を確認"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG proposed; not generated or rendered",
-      "status": "pending"
+      "format": "SVG source created; not rendered",
+      "status": "source_prepared_render_pending",
+      "mode_labels": [
+        "リテラル検索",
+        "パターン構文を確認"
+      ],
+      "footer": "検索のみ・置換しない",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/assets/ja/workflow-diagram.svg"
     },
     {
       "locale": "zh-Hans",
@@ -148,8 +166,14 @@
         "检查搜索范围"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG proposed; not generated or rendered",
-      "status": "pending"
+      "format": "SVG source created; not rendered",
+      "status": "source_prepared_render_pending",
+      "mode_labels": [
+        "字面搜索",
+        "核对模式语法"
+      ],
+      "footer": "只查找，不替换",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/assets/zh-Hans/workflow-diagram.svg"
     },
     {
       "locale": "zh-Hant",
@@ -163,8 +187,14 @@
         "檢查搜尋範圍"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG proposed; not generated or rendered",
-      "status": "pending"
+      "format": "SVG source created; not rendered",
+      "status": "source_prepared_render_pending",
+      "mode_labels": [
+        "字面搜尋",
+        "核對模式語法"
+      ],
+      "footer": "只查找，不取代",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/assets/zh-Hant/workflow-diagram.svg"
     },
     {
       "locale": "pt-BR",
@@ -178,8 +208,14 @@
         "Confira o escopo"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG proposed; not generated or rendered",
-      "status": "pending"
+      "format": "SVG source created; not rendered",
+      "status": "source_prepared_render_pending",
+      "mode_labels": [
+        "Busca literal",
+        "Confira a sintaxe"
+      ],
+      "footer": "Busque sem substituir",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/assets/pt-BR/workflow-diagram.svg"
     },
     {
       "locale": "de",
@@ -193,8 +229,14 @@
         "Bereich prüfen"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG proposed; not generated or rendered",
-      "status": "pending"
+      "format": "SVG source created; not rendered",
+      "status": "source_prepared_render_pending",
+      "mode_labels": [
+        "Wörtliche Suche",
+        "Syntax prüfen"
+      ],
+      "footer": "Suchen, nicht ersetzen",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/assets/de/workflow-diagram.svg"
     },
     {
       "locale": "fr",
@@ -208,8 +250,14 @@
         "Vérifier le périmètre"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG proposed; not generated or rendered",
-      "status": "pending"
+      "format": "SVG source created; not rendered",
+      "status": "source_prepared_render_pending",
+      "mode_labels": [
+        "Recherche littérale",
+        "Vérifier la syntaxe"
+      ],
+      "footer": "Chercher sans remplacer",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/assets/fr/workflow-diagram.svg"
     },
     {
       "locale": "es",
@@ -223,8 +271,14 @@
         "Revisa el alcance"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG proposed; not generated or rendered",
-      "status": "pending"
+      "format": "SVG source created; not rendered",
+      "status": "source_prepared_render_pending",
+      "mode_labels": [
+        "Búsqueda literal",
+        "Revisa la sintaxis"
+      ],
+      "footer": "Busca sin sustituir",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/assets/es/workflow-diagram.svg"
     }
   ],
   "editorial_checks": {
@@ -255,7 +309,7 @@
   },
   "pending": [
     "Repository native evaluator and fingerprint gates (not executed; no numerical score claimed)",
-    "Creation and rendering of nine localized diagram assets",
+    "Rendering and independent visual review of nine prepared localized SVG assets",
     "Desktop/mobile rendered page and link verification",
     "Review queue integration only after gates; canonical publisher owns scheduling"
   ],
@@ -268,5 +322,12 @@
     "work_service_used": false
   },
   "created_at": "2026-11-05T10:39:33Z",
-  "source_engine_commit": "d69c8cfcc8bfcd09e412be8aca97601a03f90c18"
+  "source_engine_commit": "d69c8cfcc8bfcd09e412be8aca97601a03f90c18",
+  "image_source_preparation": {
+    "prepared_at": "2026-11-05T10:55:44Z",
+    "scope": "Nine inactive SVG source diagrams; title, task branches, mode guidance, shared test/scope steps, and no-replacement footer localized.",
+    "inspection": "Source text and structure only. No script, foreignObject, event handler or external resource references. Pixel rendering and font metrics unverified.",
+    "visual_preview_attempt": "Cloud browser rejected data: SVG navigation because only http/https protocols are allowed. No alternative execution or policy workaround attempted.",
+    "rendered": false
+  }
 }
