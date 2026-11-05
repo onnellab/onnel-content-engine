@@ -11,6 +11,7 @@ import subprocess
 import sys
 import time
 from datetime import datetime, date
+from uuid import uuid4
 from zoneinfo import ZoneInfo
 
 REPO = Path(__file__).resolve().parents[1]
@@ -338,6 +339,152 @@ def watch_hosted_run(
             "watch_exit_code": code}
 
 
+# A workflow_dispatch HTTP 5xx can be returned AFTER GitHub accepted the
+# event. Correlate by the unique run-name; never issue a second POST here.
+DISPATCH_RECHECK_INTERVAL_SECONDS = 10
+DISPATCH_RECHECK_MAX_POLLS = 6
+WORKFLOW_DISPATCH_PATHS = {
+    "Sync app operational status": ".github/workflows/sync-app-operational-status.yml",
+    "Refresh AI Operations Sources": ".github/workflows/refresh-ai-operations.yml",
+    "Sync Store Reviews": ".github/workflows/sync-store-reviews.yml",
+    "Deploy Ops Dashboard": ".github/workflows/deploy-ops-dashboard.yml",
+}
+WORKFLOW_DISPATCH_TITLES = {
+    "Sync app operational status": "Daily app status",
+    "Refresh AI Operations Sources": "Daily AI operations",
+    "Sync Store Reviews": "Daily store reviews",
+    "Deploy Ops Dashboard": "Daily ops dashboard",
+}
+
+
+def reconcile_ambiguous_dispatch(
+    report: dict, *, label: str, workflow: str, dispatch_key: str,
+    started_at: str,
+) -> dict:
+    """Read-only lookup for the unique workflow_dispatch; never retry POST."""
+    repo = "onnellab/onnel-content-engine"
+    expected_path = WORKFLOW_DISPATCH_PATHS[workflow]
+    expected_title = f"{WORKFLOW_DISPATCH_TITLES[workflow]} [{dispatch_key}]"
+    earliest = datetime.fromisoformat(started_at).timestamp() - 30
+    projection = (
+        "{workflow_runs: [.workflow_runs[] | "
+        "{id, name, display_title, path, event, head_branch, created_at}]}"
+    )
+    successful_reads = 0
+    for attempt in range(1, DISPATCH_RECHECK_MAX_POLLS + 1):
+        if attempt > 1:
+            time.sleep(DISPATCH_RECHECK_INTERVAL_SECONDS)
+        code, stdout, _ = run_step(
+            report, f"reconcile_dispatch_{label}_{attempt}",
+            [
+                "gh", "api", "-X", "GET",
+                f"repos/{repo}/actions/runs?event=workflow_dispatch&branch=main&per_page=30",
+                "--jq", projection,
+            ],
+            timeout=45,
+        )
+        if code != 0:
+            continue
+        try:
+            observed = json.loads(stdout)
+        except (TypeError, ValueError):
+            return {"verification_error": "dispatch_run_list_invalid"}
+        if not isinstance(observed, dict) or not isinstance(observed.get("workflow_runs"), list):
+            return {"verification_error": "dispatch_run_list_invalid"}
+        successful_reads += 1
+        candidates = []
+        for row in observed["workflow_runs"]:
+            if not isinstance(row, dict) or (
+                type(row.get("id")) is not int
+                or row.get("name") != workflow
+                or row.get("display_title") != expected_title
+                or row.get("path") != expected_path
+                or row.get("event") != "workflow_dispatch"
+                or row.get("head_branch") != "main"
+                or not isinstance(row.get("created_at"), str)
+            ):
+                continue
+            try:
+                created = datetime.fromisoformat(
+                    row["created_at"].replace("Z", "+00:00")
+                ).timestamp()
+            except ValueError:
+                continue
+            if created >= earliest:
+                candidates.append(str(row["id"]))
+        if len(candidates) == 1:
+            return {
+                "run_id": candidates[0],
+                "verification_source": "unique_dispatch_key_run_lookup",
+            }
+        if len(candidates) > 1:
+            return {
+                "verification_error": "multiple_correlated_runs",
+                "candidate_run_ids": candidates,
+            }
+    return {
+        "verification_error": (
+            "no_correlated_run_observed" if successful_reads
+            else "dispatch_run_list_unavailable"
+        ),
+        "read_attempts": DISPATCH_RECHECK_MAX_POLLS,
+    }
+
+
+def dispatch_hosted_workflow(
+    report: dict, *, label: str, workflow: str, extra_args: tuple[str, ...] = (),
+) -> dict:
+    """One POST maximum. An uncertain response can only be reconciled by GET."""
+    repo = "onnellab/onnel-content-engine"
+    dispatch_key = f"{now_kst():%Y%m%dT%H%M%S}-{label}-{uuid4().hex[:12]}"
+    started_at = iso_now()
+    state = {
+        "workflow": workflow,
+        "run_id": "",
+        "status": "dispatching",
+        "dispatch_key": dispatch_key,
+        "dispatch_started_at": started_at,
+    }
+    # run_step saves this identity before the one possible side-effecting POST.
+    report.setdefault("hosted_workflows", {})[label] = state
+    code, stdout, _ = run_step(
+        report, f"dispatch_{label}",
+        [
+            "gh", "workflow", "run", workflow, "-R", repo, "--ref", "main",
+            "-f", f"daily_dispatch_key={dispatch_key}", *extra_args,
+        ],
+        timeout=90,
+    )
+    url = next(
+        (line.strip() for line in reversed(stdout.splitlines()) if "/actions/runs/" in line),
+        "",
+    )
+    run_id = url.rstrip("/").split("/")[-1] if url else ""
+    if code == 0 and run_id.isdecimal():
+        state.update(
+            run_id=run_id, status="dispatched",
+            verification_source="gh_workflow_dispatch_run_url",
+        )
+        return state
+
+    # Any missing/uncertain response is NOT evidence of non-creation.
+    # Never repeat the workflow_dispatch, even on HTTP 503 or a CLI timeout.
+    recovered = reconcile_ambiguous_dispatch(
+        report, label=label, workflow=workflow,
+        dispatch_key=dispatch_key, started_at=started_at,
+    )
+    state.update(recovered)
+    state["dispatch_exit_code"] = code
+    if state.get("run_id"):
+        state["status"] = "dispatched"
+        report.setdefault("warnings", []).append(
+            f"workflow_dispatch_response_reconciled:{label}"
+        )
+    else:
+        state["status"] = "dispatch_unverified"
+    return state
+
+
 def run_hosted_ops_workflows(report: dict) -> bool:
     repo = "onnellab/onnel-content-engine"
     workflows = [
@@ -347,21 +494,14 @@ def run_hosted_ops_workflows(report: dict) -> bool:
     ]
     report["hosted_workflows"] = {}
     for key, workflow, extra_args in workflows:
-        code, stdout, _ = run_step(
-            report,
-            f"dispatch_{key}",
-            ["gh", "workflow", "run", workflow, "-R", repo, "--ref", "main", *extra_args],
-            timeout=90,
+        state = dispatch_hosted_workflow(
+            report, label=key, workflow=workflow, extra_args=tuple(extra_args),
         )
-        url = next((line.strip() for line in reversed(stdout.splitlines()) if "/actions/runs/" in line), "")
-        run_id = url.rstrip("/").split("/")[-1] if url else ""
-        state = {"workflow": workflow, "run_id": run_id, "status": "dispatch_failed"}
-        report["hosted_workflows"][key] = state
-        if code != 0 or not run_id.isdigit():
-            report["blockers"].append(f"{key}_workflow_dispatch_failed")
+        if not state["run_id"]:
+            report["blockers"].append(f"{key}_workflow_dispatch_unverified")
             return False
         state.update(watch_hosted_run(
-            report, label=key, run_id=run_id, workflow=workflow,
+            report, label=key, run_id=state["run_id"], workflow=workflow,
         ))
         if state["status"] != "success":
             report["blockers"].append(
@@ -441,21 +581,14 @@ def run_store_review_auto_replies(report: dict) -> None:
 
 def run_ops_dashboard_deploy(report: dict) -> None:
     workflow = "Deploy Ops Dashboard"
-    code, stdout, _ = run_step(
-        report,
-        "dispatch_ops_dashboard",
-        ["gh", "workflow", "run", workflow, "-R", "onnellab/onnel-content-engine", "--ref", "main"],
-        timeout=90,
+    state = dispatch_hosted_workflow(
+        report, label="ops_dashboard", workflow=workflow,
     )
-    url = next((line.strip() for line in reversed(stdout.splitlines()) if "/actions/runs/" in line), "")
-    run_id = url.rstrip("/").split("/")[-1] if url else ""
-    state = {"workflow": workflow, "run_id": run_id, "status": "dispatch_failed"}
-    report.setdefault("hosted_workflows", {})["ops_dashboard"] = state
-    if code != 0 or not run_id.isdigit():
-        report["blockers"].append("ops_dashboard_workflow_dispatch_failed")
+    if not state["run_id"]:
+        report["blockers"].append("ops_dashboard_workflow_dispatch_unverified")
         return
     state.update(watch_hosted_run(
-        report, label="ops_dashboard", run_id=run_id, workflow=workflow,
+        report, label="ops_dashboard", run_id=state["run_id"], workflow=workflow,
     ))
     if state["status"] != "success":
         report["blockers"].append(

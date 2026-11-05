@@ -1,6 +1,13 @@
 name: Refresh AI Operations Sources
+run-name: ${{ inputs.daily_dispatch_key && format('Daily AI operations [{0}]', inputs.daily_dispatch_key) || 'Refresh AI Operations Sources' }}
 on:
   workflow_dispatch:
+    inputs:
+      daily_dispatch_key:
+        description: Correlation key for the launchd-owned daily run
+        required: false
+        default: ""
+        type: string
 permissions:
   contents: write
 concurrency:

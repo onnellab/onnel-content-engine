@@ -1,8 +1,14 @@
 name: Sync Store Reviews
+run-name: ${{ inputs.daily_dispatch_key && format('Daily store reviews [{0}]', inputs.daily_dispatch_key) || 'Sync Store Reviews' }}
 
 on:
   workflow_dispatch:
     inputs:
+      daily_dispatch_key:
+        description: Correlation key for the launchd-owned daily run
+        required: false
+        default: ""
+        type: string
       deploy_dashboard:
         description: "Build, deploy, and verify /ops/ after syncing reviews"
         required: false

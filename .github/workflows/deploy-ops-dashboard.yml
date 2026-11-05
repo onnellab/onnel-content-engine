@@ -1,7 +1,14 @@
 name: Deploy Ops Dashboard
+run-name: ${{ inputs.daily_dispatch_key && format('Daily ops dashboard [{0}]', inputs.daily_dispatch_key) || 'Deploy Ops Dashboard' }}
 
 on:
   workflow_dispatch:
+    inputs:
+      daily_dispatch_key:
+        description: Correlation key for the launchd-owned daily run
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write

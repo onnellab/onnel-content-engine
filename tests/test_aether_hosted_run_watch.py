@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 import sys
 import tempfile
@@ -134,6 +135,114 @@ class SameRunVerification(unittest.TestCase):
             result = self.watch()
         self.assertEqual("unverified", result["status"])
         self.assertEqual("unknown_run_conclusion", result["verification_error"])
+
+
+class Dispatch503Reconciliation(unittest.TestCase):
+    def setUp(self):
+        self.report = {"steps": [], "warnings": [], "blockers": []}
+
+    def test_http_503_adopts_only_exact_correlated_run_without_new_dispatch(self):
+        calls = []
+
+        def fake_step(report, name, args, **kwargs):
+            calls.append((name, args))
+            if name == "dispatch_app_operational_status":
+                return 1, "", "could not create workflow dispatch event: HTTP 503"
+            if name == "reconcile_dispatch_app_operational_status_1":
+                key = report["hosted_workflows"]["app_operational_status"]["dispatch_key"]
+                return 0, json.dumps({"workflow_runs": [{
+                    "id": int(RUN_ID), "name": WORKFLOW,
+                    "display_title": f"Daily app status [{key}]",
+                    "path": ".github/workflows/sync-app-operational-status.yml",
+                    "event": "workflow_dispatch", "head_branch": "main",
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                }]}), ""
+            self.fail(f"unexpected operation: {name}")
+
+        with patch.object(daily, "run_step", side_effect=fake_step):
+            state = daily.dispatch_hosted_workflow(
+                self.report, label="app_operational_status", workflow=WORKFLOW,
+            )
+        self.assertEqual("dispatched", state["status"])
+        self.assertEqual(RUN_ID, state["run_id"])
+        self.assertEqual("unique_dispatch_key_run_lookup", state["verification_source"])
+        dispatches = [entry for entry in calls if entry[0].startswith("dispatch_")]
+        self.assertEqual(1, len(dispatches))
+        self.assertIn("-f", dispatches[0][1])
+        self.assertIn(
+            f"daily_dispatch_key={state['dispatch_key']}", dispatches[0][1],
+        )
+        self.assertEqual(["workflow_dispatch_response_reconciled:app_operational_status"],
+                         self.report["warnings"])
+
+    def test_http_503_without_correlated_run_fails_closed(self):
+        calls = []
+
+        def fake_step(report, name, args, **kwargs):
+            calls.append(name)
+            if name == "dispatch_app_operational_status":
+                return 1, "", "HTTP 503"
+            if name.startswith("reconcile_dispatch_app_operational_status_"):
+                return 0, '{"workflow_runs": []}', ""
+            self.fail(f"unexpected operation: {name}")
+
+        with patch.object(daily, "run_step", side_effect=fake_step), \
+             patch.object(daily.time, "sleep"):
+            state = daily.dispatch_hosted_workflow(
+                self.report, label="app_operational_status", workflow=WORKFLOW,
+            )
+        self.assertEqual("dispatch_unverified", state["status"])
+        self.assertEqual("", state["run_id"])
+        self.assertEqual("no_correlated_run_observed", state["verification_error"])
+        self.assertEqual(1, calls.count("dispatch_app_operational_status"))
+        self.assertEqual(
+            daily.DISPATCH_RECHECK_MAX_POLLS,
+            len([name for name in calls if name.startswith("reconcile_dispatch_")]),
+        )
+
+    def test_unrelated_workflow_run_cannot_be_adopted(self):
+        def fake_step(report, name, args, **kwargs):
+            if name == "dispatch_app_operational_status":
+                return 1, "", "HTTP 503"
+            if name.startswith("reconcile_dispatch_"):
+                key = report["hosted_workflows"]["app_operational_status"]["dispatch_key"]
+                return 0, json.dumps({"workflow_runs": [{
+                    "id": int(RUN_ID), "name": WORKFLOW,
+                    "display_title": f"Daily app status [{key}]",
+                    "path": ".github/workflows/other.yml",
+                    "event": "workflow_dispatch", "head_branch": "main",
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                }]}), ""
+            self.fail(f"unexpected operation: {name}")
+
+        with patch.object(daily, "run_step", side_effect=fake_step), \
+             patch.object(daily.time, "sleep"):
+            state = daily.dispatch_hosted_workflow(
+                self.report, label="app_operational_status", workflow=WORKFLOW,
+            )
+        self.assertEqual("dispatch_unverified", state["status"])
+        self.assertEqual("", state["run_id"])
+
+    def test_unconfirmed_dispatch_stops_downstream_hosted_workflows(self):
+        calls = []
+
+        def fake_step(report, name, args, **kwargs):
+            calls.append(name)
+            if name == "dispatch_app_operational_status":
+                return 1, "", "HTTP 503"
+            if name.startswith("reconcile_dispatch_app_operational_status_"):
+                return 0, '{"workflow_runs": []}', ""
+            self.fail(f"unexpected next workflow: {name}")
+
+        with patch.object(daily, "run_step", side_effect=fake_step), \
+             patch.object(daily.time, "sleep"):
+            success = daily.run_hosted_ops_workflows(self.report)
+        self.assertFalse(success)
+        self.assertEqual(
+            ["app_operational_status_workflow_dispatch_unverified"],
+            self.report["blockers"],
+        )
+        self.assertFalse(any("dispatch_ai_operations" in name for name in calls))
 
 
 class HostedOpsIntegration(unittest.TestCase):
