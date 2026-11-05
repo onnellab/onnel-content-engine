@@ -1,0 +1,272 @@
+{
+  "schema": 1,
+  "kind": "nine_locale_editorial_draft_not_publication_receipt",
+  "slug": "choose-literal-or-pattern-search-for-text",
+  "category": "reading",
+  "state": "draft_not_ready",
+  "source_idea_id": "TOPIC-0114",
+  "new_topic_ids_allocated": false,
+  "queue_modified": false,
+  "scheduled_at": null,
+  "published_at": null,
+  "source_homepage_commit": "253d80e06c5f97fd134415b41d2e5136f901a705",
+  "manuscripts": [
+    {
+      "locale": "en",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/en.md",
+      "git_blob_sha": "b35099845862810c4affe98eebf2c9eedb2bed8e"
+    },
+    {
+      "locale": "ko",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/ko.md",
+      "git_blob_sha": "80d476ebb41a54cd49b757111b25e4ba7338a076"
+    },
+    {
+      "locale": "ja",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/ja.md",
+      "git_blob_sha": "a8749e07e273c73ae8ed222b0fd5a3093b82adb8"
+    },
+    {
+      "locale": "zh-Hans",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/zh-Hans.md",
+      "git_blob_sha": "28abab84a3d2ead2a7a8e6fafccd52a6b5be4bd7"
+    },
+    {
+      "locale": "zh-Hant",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/zh-Hant.md",
+      "git_blob_sha": "7a4e2b580389d51aebcf4118e251374f2b884aa1"
+    },
+    {
+      "locale": "pt-BR",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/pt-BR.md",
+      "git_blob_sha": "cd425d7ad2be49060dfacba5fb1b928f1f73cff3"
+    },
+    {
+      "locale": "de",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/de.md",
+      "git_blob_sha": "730cb07cb94801a52fcc1cc974f872c84a664e2e"
+    },
+    {
+      "locale": "fr",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/fr.md",
+      "git_blob_sha": "d8624a6b5734c5dc9a4b4b2dfaae5e539dbe6414"
+    },
+    {
+      "locale": "es",
+      "path": "drafts/blog/choose-literal-or-pattern-search-for-text/es.md",
+      "git_blob_sha": "1ddf3cf878c983d27ba7ebddd008c7dbeaff1971"
+    }
+  ],
+  "source_evidence": {
+    "observed_date": "2026-11-05",
+    "guides": [
+      {
+        "path": "docs/Content_Guide.md",
+        "sha": "ff0a8951d08fcf0d7a87eae779fb1a913bb19e1b"
+      },
+      {
+        "path": "docs/Nine_Language_Publishing.md",
+        "sha": "90de3df210eb7c8190dcdeb264a1addeb5883ef1"
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://github.com/google/re2/wiki/Syntax",
+        "scope": "Dot wildcard versus escaped literal dot; examples are original and not universal application instructions."
+      },
+      {
+        "url": "https://support.google.com/docs/answer/62754?hl=en",
+        "scope": "Google-specific regular-expression option and backslash escaping only."
+      },
+      {
+        "url": "https://code.visualstudio.com/docs/editing/codebasics",
+        "scope": "Distinction between content-search options and include/exclude file glob patterns."
+      }
+    ],
+    "related_article": {
+      "slug": "make-long-plain-text-easier-to-navigate",
+      "evidence": "All nine locale frontmatter blocks fetched from homepage repository and individually confirmed status=published and exact localized canonical_url. Tree and metadata checked on 2026-11-05; live HTTP behavior not claimed.",
+      "homepage_commit": "253d80e06c5f97fd134415b41d2e5136f901a705"
+    }
+  },
+  "search_demand": "Editorial hypothesis, not measured",
+  "image_specifications": [
+    {
+      "locale": "en",
+      "title": "Choose the search mode",
+      "branch_labels": [
+        "Known text",
+        "Several variants"
+      ],
+      "shared_steps": [
+        "Test a small sample",
+        "Check the scope"
+      ],
+      "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
+      "format": "SVG proposed; not generated or rendered",
+      "status": "pending"
+    },
+    {
+      "locale": "ko",
+      "title": "검색 방식 선택",
+      "branch_labels": [
+        "아는 문자열",
+        "여러 형태"
+      ],
+      "shared_steps": [
+        "작은 예제로 확인",
+        "검색 범위 확인"
+      ],
+      "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
+      "format": "SVG proposed; not generated or rendered",
+      "status": "pending"
+    },
+    {
+      "locale": "ja",
+      "title": "検索方式を選ぶ",
+      "branch_labels": [
+        "既知の文字列",
+        "複数の形"
+      ],
+      "shared_steps": [
+        "小さな例で確認",
+        "検索範囲を確認"
+      ],
+      "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
+      "format": "SVG proposed; not generated or rendered",
+      "status": "pending"
+    },
+    {
+      "locale": "zh-Hans",
+      "title": "选择搜索方式",
+      "branch_labels": [
+        "已知字符串",
+        "多种形式"
+      ],
+      "shared_steps": [
+        "小样本测试",
+        "检查搜索范围"
+      ],
+      "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
+      "format": "SVG proposed; not generated or rendered",
+      "status": "pending"
+    },
+    {
+      "locale": "zh-Hant",
+      "title": "選擇搜尋方式",
+      "branch_labels": [
+        "已知字串",
+        "多種形式"
+      ],
+      "shared_steps": [
+        "小範例測試",
+        "檢查搜尋範圍"
+      ],
+      "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
+      "format": "SVG proposed; not generated or rendered",
+      "status": "pending"
+    },
+    {
+      "locale": "pt-BR",
+      "title": "Escolha a busca",
+      "branch_labels": [
+        "Texto conhecido",
+        "Várias formas"
+      ],
+      "shared_steps": [
+        "Teste uma amostra",
+        "Confira o escopo"
+      ],
+      "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
+      "format": "SVG proposed; not generated or rendered",
+      "status": "pending"
+    },
+    {
+      "locale": "de",
+      "title": "Suchmodus wählen",
+      "branch_labels": [
+        "Bekannter Text",
+        "Mehrere Varianten"
+      ],
+      "shared_steps": [
+        "Kleine Probe",
+        "Bereich prüfen"
+      ],
+      "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
+      "format": "SVG proposed; not generated or rendered",
+      "status": "pending"
+    },
+    {
+      "locale": "fr",
+      "title": "Choisir la recherche",
+      "branch_labels": [
+        "Texte connu",
+        "Plusieurs variantes"
+      ],
+      "shared_steps": [
+        "Tester un exemple",
+        "Vérifier le périmètre"
+      ],
+      "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
+      "format": "SVG proposed; not generated or rendered",
+      "status": "pending"
+    },
+    {
+      "locale": "es",
+      "title": "Elige la búsqueda",
+      "branch_labels": [
+        "Texto conocido",
+        "Varias variantes"
+      ],
+      "shared_steps": [
+        "Prueba un ejemplo",
+        "Revisa el alcance"
+      ],
+      "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
+      "format": "SVG proposed; not generated or rendered",
+      "status": "pending"
+    }
+  ],
+  "editorial_checks": {
+    "method": "Author read nine complete localized manuscripts and checked source scope; connector-orchestration string checks only, no CLI or native evaluator.",
+    "structure": "Each article has definitions, three table data rows, five numbered steps and three FAQ questions.",
+    "markdown_correction": "All invented query strings use inline code; three-line corpus uses a text code block, preserving the backslash in A\\.7.",
+    "independent_review": "Independent editorial reviewer read all nine exact manuscript blobs and compared meanings, scope, localized terms, metadata, references and query examples. Two wording corrections were independently re-fetched and verified as the only changes on 2026-11-05. No remaining textual defect identified in this review; no numerical quality score or rendered evaluation claimed.",
+    "claims": "No ONNELLAB app feature, pricing, platform, search-volume or ranking claims. No publication, replacement, deletion or source-file modification instructions.",
+    "corrections": [
+      {
+        "locale": "all",
+        "change": "Preserve pattern strings with inline code and corpus with fenced text; add localized References."
+      },
+      {
+        "locale": "zh-Hant",
+        "from": "全字符合",
+        "to": "整個詞語符合",
+        "reason": "Clarify whole-word meaning"
+      },
+      {
+        "locale": "fr",
+        "from": "Aucun résultat peut signaler",
+        "to": "L’absence de résultat peut signaler",
+        "reason": "Natural grammatical phrasing"
+      }
+    ],
+    "independent_structure_check": "All nine locale identifiers, lowercase canonical routes, five steps, three FAQs, three official source URLs and backslash-preserving inline code confirmed. Related-guide source pages exist in all nine locales."
+  },
+  "pending": [
+    "Repository native evaluator and fingerprint gates (not executed; no numerical score claimed)",
+    "Creation and rendering of nine localized diagram assets",
+    "Desktop/mobile rendered page and link verification",
+    "Review queue integration only after gates; canonical publisher owns scheduling"
+  ],
+  "boundaries": {
+    "scope": "Only nine new draft manuscripts and this manifest; no source queue, workflow, publication state, or deployment setting changed.",
+    "queue_changed": false,
+    "github_ci_run": false,
+    "cli_used": false,
+    "paid_api_used": false,
+    "work_service_used": false
+  },
+  "created_at": "2026-11-05T10:39:33Z",
+  "source_engine_commit": "d69c8cfcc8bfcd09e412be8aca97601a03f90c18"
+}
