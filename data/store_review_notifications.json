@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "policy_changed_at": "2026-10-14T06:14:53+00:00",
-  "updated_at": "2026-10-28T17:45:52+00:00",
+  "updated_at": "2026-11-05T21:25:56+00:00",
   "notifications": [
     {
       "review_id": "10b4e93e-b9cd-4ef4-ad91-2726f5256651",
@@ -65,6 +65,25 @@
       "owner_approval_required": true,
       "notified_at": "2026-10-27T23:27:36.332666+00:00",
       "delivery_channel": "chatgpt"
+    },
+    {
+      "review_id": "00000192-e776-1303-6f23-0ab200000000",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "platform": "ios",
+      "rating": "5",
+      "title": "推荐！",
+      "body": "简单明了非常方便！！免费版也完全够用 就是希望制作者大人能否出一个pro版可以两个设备共同使用呢 （貌似没有看到这个功能）会毫不犹豫升级的！ipad上需要编辑的内容更多 但手机更常用😭",
+      "created_at": "2026-11-04T04:07:19-08:00",
+      "updated_at": "2026-11-04T04:07:19-08:00",
+      "reviewer_language": "",
+      "territory": "",
+      "notification_id": "store-review-56d7c74a7aee9a3e6e563803757bc41244de394a5613d6e28ee4db860561e21e",
+      "status": "pending",
+      "detected_at": "2026-11-05T21:25:56+00:00",
+      "delivery_reference": "",
+      "owner_approval_required": true
     }
   ]
 }
