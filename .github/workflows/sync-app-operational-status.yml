@@ -1,5 +1,5 @@
 name: Sync app operational status
-run-name: ${{ inputs.daily_dispatch_key && format('Daily app status [{0}]', inputs.daily_dispatch_key) || (inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection || inputs.artwork_docker_profile_trial || inputs.artwork_docker_app_probe) && 'Read-only artwork access probe' || (inputs.artwork_check_only || github.event_name == 'schedule') && 'Check reviewed artwork changes' || 'Sync app operational status' }}
+run-name: ${{ (inputs.artwork_read_only || inputs.artwork_docker_trial || inputs.artwork_profile_inspection || inputs.artwork_docker_profile_trial || inputs.artwork_docker_app_probe) && 'Read-only artwork access probe' || (inputs.artwork_check_only || github.event_name == 'schedule') && 'Check reviewed artwork changes' || inputs.daily_dispatch_key && format('Daily app status [{0}]', inputs.daily_dispatch_key) || 'Sync app operational status' }}
 
 on:
   workflow_dispatch:
