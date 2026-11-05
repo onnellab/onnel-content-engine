@@ -358,7 +358,7 @@ The owner approved preparing `Aether Inn Sleep` on the existing channel on
 2026-11-05. This is a separate playlist and inactive three-video pilot brief,
 not an existing-song collection or a new channel. The owner then selected Lyria
 for three one-shot new compositions repeated into 30-minute videos, within a
-USD 0.30 including-tax total ceiling and no paid retries. Preserve fantasy
-singles and the sole existing Mac producer. Production remains disabled pending
+USD 0.50 total ceiling including taxes and mandatory costs, with no paid retries.
+Preserve fantasy singles and the sole existing Mac producer. Production remains disabled pending
 account-specific all-in cost verification and guarded worker implementation;
 publication slots are unspecified. See `docs/Aether_Inn_Sleep.md`.

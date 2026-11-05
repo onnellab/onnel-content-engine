@@ -12,7 +12,7 @@
   "request_limit_total": 3,
   "request_limit_per_composition": 1,
   "paid_retry_limit": 0,
-  "all_in_budget_cap_usd": "0.30",
+  "all_in_budget_cap_usd": "0.50",
   "provider_base_unit_price_usd_observed": "0.08",
   "all_in_cost_verified": false,
   "format": "one_new_composition_per_video_repeated_with_reviewed_seams",
@@ -58,7 +58,7 @@
     "returning_viewers": "Use series-level returning viewers only when YouTube exposes it; otherwise channel-level context, not attributed series impact."
   },
   "pending_decisions": [
-    "Verify the existing billing account, taxes, currency and mandatory charges within the USD 0.30 total cap.",
+    "Verify the existing billing account, taxes, currency and mandatory charges within the USD 0.50 total cap.",
     "Extend the existing worker without relaxing ordinary single guards; validate new sleep sources, seams, rights and artwork.",
     "Choose explicit publication slots that preserve current fantasy singles and existing producer ownership."
   ]

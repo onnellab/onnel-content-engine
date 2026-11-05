@@ -38,8 +38,9 @@ The new source marker is routing metadata, not proof of rights or audio quality.
 
 Selected first format: three 30-minute videos, each repeating and gently joining
 its own new Lyria sleep composition. The owner selected Lyria after this format,
-one request per composition, no paid retries and a total USD 0.30 including-tax
-cap were proposed. This is not 30 minutes of distinct generated material.
+one request per composition, no paid retries and an initial USD 0.30 including-tax
+cap were proposed. The owner subsequently raised the total ceiling to USD 0.50,
+including taxes and mandatory costs. This is not 30 minutes of distinct generated material.
 No existing-master medley and no replacement of regular fantasy singles.
 
 1. Moonlit Guestroom: soft midrange keys and warm strings in a dark indigo inn.
@@ -65,7 +66,7 @@ Do not change the existing paid guard or mislabel a sleep request as a normal
 single. Tax, FX and invoice totals remain separate from the base-price estimate.
 
 The owner subsequently selected the separately proposed Lyria pilot with three
-one-shot requests and an all-in USD 0.30 ceiling. That selected preparation is
+one-shot requests and an all-in ceiling, since revised to USD 0.50. That selected preparation is
 recorded separately from execution readiness. Before actual production, verify
 the account-specific all-in cost and validate the long-form method. Publication
 slots remain unspecified; preparation approval is not immediate-publication approval.
@@ -111,9 +112,10 @@ profile access is available; do not create a replacement timer or producer.
 ## Lyria selection and offline preparation, 2026-11-05
 
 The owner's reply, after the bounded three-video proposal and Suno comparison,
-was `그럼 그냥 lyria로 해`. Preserve the proposed ceiling: three new compositions,
-one charged request each, zero paid retries, total including taxes at most
-USD 0.30. The selected method repeats each new short composition into its own
+was `그럼 그냥 lyria로 해`, followed by `0.50달러 기준으로 해`. Preserve the latest
+scope: three new compositions, one charged request each, zero paid retries,
+total including taxes and mandatory costs at most USD 0.50. The selected method
+repeats each new short composition into its own
 30-minute video. Do not silently require another approval for the same selection;
 ask only for missing information or a material change. Publication timing was
 not supplied, so no dates or immediate-publication decision have been invented.
@@ -153,3 +155,22 @@ A read-only query of the configured project's billing link exited with code 1.
 No billing account, country or currency was established from that query; no new
 credentials or permissions were requested. This remains a billing-information
 blocker, not evidence of a disabled billing account or a generation failure.
+
+## Budget revision, 2026-11-05
+
+The owner explicitly revised the total ceiling to USD 0.50. This replaces only
+the prior USD 0.30 cap; it does not increase the three-request allowance, the
+one-request-per-composition limit or the observed USD 0.08 provider-base price.
+Zero paid retries remains unchanged. Taxes and all mandatory charges count
+against the same USD 0.50 total, not a separate allowance.
+
+The budget increase does not verify the billing country, currency or other
+mandatory costs, authorize a new credential/permission, or specify publication
+dates. No paid POST, playlist retry, queue mutation or production launch is
+part of this revision. The existing billing-read failure remains unresolved;
+changing the budget alone is not evidence that the read or YouTube credential
+access can now succeed. Continue offline preparation and obtain the missing
+account-specific cost basis and publication slots before enabling execution.
+The revised cap and unchanged inactive guards passed 326 Aether tests with zero
+network attempts. The offline estimate remains USD 0.24 before account-specific
+taxes and mandatory adjustments; it is not a new generation or billing receipt.

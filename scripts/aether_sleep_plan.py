@@ -8,6 +8,7 @@ from pathlib import Path
 
 PLAN = Path(__file__).resolve().parents[1] / "data/aether_sleep_pilot.json"
 MODEL = "lyria-3-pro-preview"
+ALL_IN_CAP_USD = "0.50"
 
 
 def amount(value):
@@ -64,7 +65,7 @@ def build_plan(path=PLAN):
             or plan.get("paid_generation_authorized") is not False
             or plan.get("publication_authorized") is not False
             or plan.get("existing_track_ids") != []
-            or amount(plan.get("all_in_budget_cap_usd")) != Decimal("0.30")):
+            or amount(plan.get("all_in_budget_cap_usd")) != Decimal(ALL_IN_CAP_USD)):
         raise ValueError("aether_sleep_execution_not_supported")
     concepts = plan.get("concepts", [])
     if len(concepts) != 3 or len({row["id"] for row in concepts}) != 3:
@@ -76,7 +77,7 @@ def build_plan(path=PLAN):
         "state": "prepared_not_executable", "profile": plan["profile"], "model": MODEL,
         "paid_authorized": False, "publication_authorized": False,
         "request_count_planned": 3, "paid_retries": 0,
-        "base_total_usd_estimate": str(base * 3), "all_in_cap_usd": "0.30",
+        "base_total_usd_estimate": str(base * 3), "all_in_cap_usd": ALL_IN_CAP_USD,
         "all_in_total_verified": False, "publish_slots": None,
         "blockers": ["account_all_in_cost_unverified", "sleep_worker_extension_not_enabled",
                      "new_audio_and_cover_not_created_or_reviewed", "publication_slots_unspecified"],
