@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-04T21:23:02.064392Z",
+  "checked_at": "2026-11-05T21:21:14.771047Z",
   "outcome": "synced",
   "token_configured": true,
   "messages": [
@@ -25,6 +25,7 @@
     "synced onnellab/melivra v1.0.8 https://github.com/onnellab/melivra/releases/tag/v1.0.8",
     "synced onnellab/tagweaver v2.5.6 https://github.com/onnellab/tagweaver/releases/tag/v2.5.6",
     "synced onnellab/segra v1.0.7 https://github.com/onnellab/segra/releases/tag/v1.0.7",
-    "synced onnellab/aligna v1.1.2 https://github.com/onnellab/aligna/releases/tag/v1.1.2"
+    "synced onnellab/aligna v1.1.2 https://github.com/onnellab/aligna/releases/tag/v1.1.2",
+    "synced onnellab/tagweaver v2.5.9 https://github.com/onnellab/tagweaver/releases/tag/v2.5.9"
   ]
 }
