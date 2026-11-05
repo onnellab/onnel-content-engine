@@ -14,7 +14,13 @@ from short_video_youtube import API, UploadError, YouTube
 ROOT = Path.home() / "Library/Application Support/ONNELLAB/content-engine/aether-inn/singles"
 CATALOG = Path(__file__).resolve().parents[1] / "data" / "aether_catalog.json"
 
+SLEEP_SERIES = "aether_inn_sleep"
+
 PLAYLISTS = {
+    "sleep": {
+        "title": "Aether Inn Sleep",
+        "description": "New, purpose-composed fantasy sleep music from Aether Inn. Quiet nighttime soundscapes with gentle textures and dark artwork. Separate from the fantasy adventure singles and existing-track collections. AI-generated music.",
+    },
     "all": {
         "title": "Aether Inn — All Fantasy RPG Music",
         "description": "The complete Aether Inn fantasy RPG music archive — nostalgic JRPG and MMORPG-inspired journeys, towns, forests, night skies, ruins, and returning roads. AI-generated fantasy soundtrack collection.",
@@ -107,7 +113,10 @@ def _catalog() -> list[dict]:
     return rows
 
 
-def classify(title: str, style: str = "", lane: str = "") -> list[str]:
+def classify(title: str, style: str = "", lane: str = "", *, series: str = "") -> list[str]:
+    # Sleep is opt-in provenance, never inferred from restful legacy titles.
+    if series == SLEEP_SERIES:
+        return ["sleep"]
     title_text = title.casefold()
     style_text = style.casefold()
     result = {"all"}
@@ -255,10 +264,17 @@ def _video_records(api: YouTube, root: Path) -> list[dict]:
             title = (job or {}).get("title") or catalog_title or yt_title
             style = (job or {}).get("style") or catalog_style
             lane = (job or {}).get("lane") or ""
+            series = (job or {}).get("series", "")
+            if series == SLEEP_SERIES and (
+                catalog_title or (job or {}).get("source_kind") != "purpose_composed_sleep"
+            ):
+                raise UploadError("aether_sleep_source_required")
             records.append({
                 "video_id": video_id, "title": title, "style": style, "lane": lane,
                 "published_at": item.get("snippet", {}).get("publishedAt", ""),
-                "privacy": privacy, "playlists": classify(title, style, lane),
+                "privacy": privacy, "playlists": classify(
+                    title, style, lane, series=(job or {}).get("series", "")
+                ),
             })
     return records
 
@@ -274,16 +290,20 @@ def _existing_playlists(api: YouTube) -> dict[str, str]:
             "GET", API + "playlists?" + urlencode(params), headers=api.headers(), retry=True
         )
         for item in data.get("items", []):
-            found[item.get("snippet", {}).get("title", "")] = item["id"]
+            title = item.get("snippet", {}).get("title", "")
+            if title in found and title in {spec["title"] for spec in PLAYLISTS.values()}:
+                raise UploadError("aether_duplicate_playlist_title")
+            found[title] = item["id"]
         page = data.get("nextPageToken", "")
         if not page:
             return found
 
 
-def _ensure_playlists(api: YouTube) -> dict[str, str]:
+def _ensure_playlists(api: YouTube, keys=None) -> dict[str, str]:
     existing = _existing_playlists(api)
     result = {}
-    for key, spec in PLAYLISTS.items():
+    for key in (PLAYLISTS if keys is None else keys):
+        spec = PLAYLISTS[key]
         playlist_id = existing.get(spec["title"])
         if not playlist_id:
             body = {
@@ -319,6 +339,34 @@ def _playlist_video_ids(api: YouTube, playlist_id: str) -> set[str]:
         page = data.get("nextPageToken", "")
         if not page:
             return found
+
+
+def ensure_playlist(key: str, *, execute: bool = False, api_factory=None) -> dict:
+    """Create/reuse one playlist only; never scan or add videos."""
+    if key not in PLAYLISTS:
+        raise UploadError("aether_playlist_key_invalid")
+    if not execute:
+        return {"profile": "aether_inn", "state": "planned", "playlist": key}
+    api = (api_factory or (lambda: YouTube(profile="aether_inn")))()
+    if getattr(api, "profile", None) != "aether_inn":
+        raise UploadError("aether_profile_required")
+    api.verify()
+    playlist_id = _ensure_playlists(api, keys=(key,))[key]
+    _, _, data = api.request(
+        "GET", API + "playlists?" + urlencode({
+            "part": "snippet,status", "id": playlist_id
+        }), headers=api.headers(), retry=True,
+    )
+    items = data.get("items", [])
+    if (len(items) != 1 or items[0].get("id") != playlist_id
+            or items[0].get("snippet", {}).get("channelId") != api.channel
+            or items[0].get("snippet", {}).get("title") != PLAYLISTS[key]["title"]
+            or items[0].get("status", {}).get("privacyStatus") != "public"):
+        raise UploadError("aether_playlist_verification_failed")
+    return {"profile": "aether_inn", "state": "verified", "playlist": key,
+            "playlist_id": playlist_id, "channel_id": api.channel,
+            "url": "https://www.youtube.com/playlist?list=" + playlist_id,
+            "videos_added": 0}
 
 
 def sync(root: Path = ROOT, *, execute: bool = False, api_factory=None) -> dict:
@@ -361,9 +409,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--ensure-playlist", choices=list(PLAYLISTS))
     args = parser.parse_args()
     try:
-        print(json.dumps(sync(args.root, execute=args.execute), ensure_ascii=False, indent=2))
+        result = (ensure_playlist(args.ensure_playlist, execute=args.execute)
+                  if args.ensure_playlist else sync(args.root, execute=args.execute))
+        print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
     except Exception as error:
         reason = str(error) if isinstance(error, UploadError) else "aether_playlist_operation_failed"

@@ -123,7 +123,9 @@ above defines their execution order:
   single reconcile already returns a same-day durable job/video in scheduled,
   processing, or published state, that exact job becomes the slot result and the
   wrapper does not touch the backlog WAV or create another upload;
-- synchronizes the six canonical Aether playlists idempotently;
+- synchronizes the canonical Aether playlists idempotently, including the
+  separately prepared Sleep playlist without generating sleep jobs; see
+  `Aether_Inn_Sleep.md`;
 - on Tuesday/Saturday before 09:00 KST, processes the first actually-missing
   canonical backlog WAV with its own approved cover. Only after all canonical
   backlog entries are independently confirmed already public may the launchd-owned

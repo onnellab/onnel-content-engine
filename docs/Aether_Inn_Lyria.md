@@ -152,9 +152,13 @@ The title overlay is deterministic and local. The main title uses a larger 72 px
 
 ## YouTube playlist curation
 
-Aether Inn uses six public YouTube playlists managed idempotently by `scripts/aether_playlists.py`: the complete archive, open-road/skybound travel, lantern towns/cozy inns, forests/rivers/ancient ruins, starlit rest/quiet farewells, and uplifting adventures/grand returns. A track may belong to multiple thematic playlists when its title, catalog style, or single-lane metadata supports that classification. Tracks without sufficient thematic evidence are kept in the complete archive rather than forced into an inaccurate category.
+Aether Inn uses six fantasy public YouTube playlists managed idempotently by `scripts/aether_playlists.py`: the complete archive, open-road/skybound travel, lantern towns/cozy inns, forests/rivers/ancient ruins, starlit rest/quiet farewells, and uplifting adventures/grand returns. A track may belong to multiple thematic playlists when its title, catalog style, or single-lane metadata supports that classification. Tracks without sufficient thematic evidence are kept in the complete archive rather than forced into an inaccurate category.
 
 Run `python3 -B scripts/aether_playlists.py --execute` after a new Aether single upload and during the daily Aether reconciliation pass. The sync must use only the `aether_inn` YouTube profile, reuse exact existing playlist titles, avoid duplicate playlist items, and insert new matching tracks at position 0 so newer releases remain near the top. Public legacy uploads are classified from the catalog where available; durable single jobs may supply title/style/lane metadata for published, scheduled, or provider-processing videos. Forced-private, rejected, blocked, or uncertain/reconcile-required jobs must not be added merely because they have a video ID.
+
+The separately prepared seventh playlist, `Aether Inn Sleep`, accepts only new,
+explicitly marked sleep sources; it never selects existing singles by restful
+keywords. Its production contract is not yet enabled. See `Aether_Inn_Sleep.md`.
 
 ## Originality and quality
 

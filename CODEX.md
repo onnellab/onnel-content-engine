@@ -351,3 +351,12 @@ gates. Reuse the resumable transport, never the app-Shorts schema or ONNELLAB
 credentials. Test-only media cannot publish. New Suno/image generation and a
 calibrated musical-originality evaluator remain separate unfinished components.
 See `docs/Aether_Inn_Compilation.md` and `docs/YouTube_Brand_Workspace.md`.
+
+### Separate purpose-composed sleep series
+
+The owner approved preparing `Aether Inn Sleep` on the existing channel on
+2026-11-05. This is a separate playlist and inactive three-video pilot brief,
+not an existing-song collection or a new channel. Preserve fantasy singles and
+the sole existing Mac producer. New paid generation, long-form source handling
+and publication slots remain gated by an explicit sleep production contract.
+See `docs/Aether_Inn_Sleep.md`.
