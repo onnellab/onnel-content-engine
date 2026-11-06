@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-06T07:16:39+00:00",
+  "checked_at": "2026-11-06T23:01:54+00:00",
   "status": "ok",
   "sources": {
     "apple": {
@@ -239,7 +239,7 @@
       "principal": "id-989@polar-outlet-171708.iam.gserviceaccount.com"
     }
   },
-  "daily_rows": 2990,
+  "daily_rows": 3017,
   "apple_additions": 41,
-  "google_additions": 999
+  "google_additions": 1013
 }
