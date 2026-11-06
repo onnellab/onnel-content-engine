@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-06T07:39:29+00:00",
+  "updated_at": "2026-11-06T07:39:53+00:00",
   "approvals": [
     {
       "approval_id": "review-report-6b652b2227b5da3cd8607adf",
@@ -120,15 +120,15 @@
       "approved_at": "2026-11-06T07:39:29+00:00",
       "approved_by": "owner_explicit_chat_approval",
       "note": "Owner explicitly approved the exact Chinese restore-purchase reply shown immediately before that instruction in this current conversation, and on 2026-11-06 requested rollback of the mandatory message-ID rule. No account-login or cloud-sync promise.",
-      "status": "queued",
+      "status": "published",
       "approval_type": "explicit_owner_current_chat_v1",
       "approval_channel": "chatgpt",
       "approval_reference": "",
       "review_content_sha256": "56d7c74a7aee9a3e6e563803757bc41244de394a5613d6e28ee4db860561e21e",
       "publication": {
-        "attempts": 0,
-        "published_at": "",
-        "external_response_id": ""
+        "attempts": 1,
+        "published_at": "2026-11-06T07:39:53+00:00",
+        "external_response_id": "40000192-e776-1303-6f23-0ab2040fabb7"
       },
       "owner_approval_text": "데스크탑 커맨더 쓰면 되잖아. 승인",
       "approval_sha256": "72174056ca1ffa9e6d86410c383f1db0c34751c448765bae29ba8b04194d512b"
