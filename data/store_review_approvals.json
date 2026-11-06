@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-14T06:29:16+00:00",
+  "updated_at": "2026-11-06T07:39:29+00:00",
   "approvals": [
     {
       "approval_id": "review-report-6b652b2227b5da3cd8607adf",
@@ -109,6 +109,29 @@
           "same_review_id_required": true
         }
       ]
+    },
+    {
+      "approval_id": "review-00000192-e776-1303-6f23-0ab200000000-72174056ca1f",
+      "review_id": "00000192-e776-1303-6f23-0ab200000000",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "platform": "ios",
+      "reply": "感谢您的五星好评和支持！ TagWeaver Pro 已支持在使用同一 Apple 账户的 iPhone 和 iPad 上使用，无需重复购买。 只需在另一台设备上安装 TagWeaver，然后进入应用内的「设置」→「恢复购买」，即可恢复 Pro 权限。 请注意，这仅适用于 Pro 购买权限，音乐文件不会在设备之间自动同步。 非常感谢您对 TagWeaver 的喜爱！",
+      "approved_at": "2026-11-06T07:39:29+00:00",
+      "approved_by": "owner_explicit_chat_approval",
+      "note": "Owner explicitly approved the exact Chinese restore-purchase reply shown immediately before that instruction in this current conversation, and on 2026-11-06 requested rollback of the mandatory message-ID rule. No account-login or cloud-sync promise.",
+      "status": "queued",
+      "approval_type": "explicit_owner_current_chat_v1",
+      "approval_channel": "chatgpt",
+      "approval_reference": "",
+      "review_content_sha256": "56d7c74a7aee9a3e6e563803757bc41244de394a5613d6e28ee4db860561e21e",
+      "publication": {
+        "attempts": 0,
+        "published_at": "",
+        "external_response_id": ""
+      },
+      "owner_approval_text": "데스크탑 커맨더 쓰면 되잖아. 승인",
+      "approval_sha256": "72174056ca1ffa9e6d86410c383f1db0c34751c448765bae29ba8b04194d512b"
     }
   ]
 }
