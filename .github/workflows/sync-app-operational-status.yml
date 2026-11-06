@@ -48,6 +48,7 @@ on:
 concurrency:
   group: onnellab-manual-dashboard-writer
   cancel-in-progress: false
+  queue: max
 
 env:
   ONNELLAB_OPS_PASSWORD: ${{ secrets.ONNELLAB_OPS_PASSWORD }}

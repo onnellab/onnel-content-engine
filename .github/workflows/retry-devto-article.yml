@@ -16,6 +16,7 @@ permissions:
 concurrency:
   group: onnellab-manual-dashboard-writer
   cancel-in-progress: false
+  queue: max
 jobs:
   retry:
     runs-on: ubuntu-latest

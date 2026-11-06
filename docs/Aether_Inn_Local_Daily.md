@@ -283,9 +283,11 @@ Never classify the watched workflow as failed solely from this CLI exit.
 After a nonzero watch, the same local worker now polls the read-only
 `/repos/onnellab/onnel-content-engine/actions/runs/<original-run-id>`
 endpoint. The query returns only an allowlisted set of run metadata:
-`id, name, status, conclusion, event, head_branch`. To trust the result it
-must match the dispatched run ID, expected workflow name, `workflow_dispatch`
-event and `main` branch. Run/job logs, credentials and headers are never
+`id, name, path, display_title, status, conclusion, event, head_branch`. To trust
+the result it must match the original run ID, canonical workflow YAML path,
+`workflow_dispatch` event and `main` branch. For a keyed daily dispatch, its
+`display_title` must also match the exact durable dispatch key. The API `name`
+is not a workflow identity: it may contain the dynamic run-name. Run/job logs, credentials and headers are never
 written to the durable report.
 
 - `completed + success` => `success` with
@@ -314,6 +316,32 @@ reconciling its status for a report is read-only and does not rewrite the old
 `result.json`, reset its same-day state or trigger any production compensation.
 Scheduled ChatGPT verification remains file/GitHub-read-only; it must not invoke
 this helper independently, call local commands, or start GitHub workflows.
+
+## Hosted queue and identity repair — 2026-11-07
+
+The 06:29 KST AI operations run `42297127692` waited behind app release
+publication `42297120424`. When release-note sync `42297953409` arrived at
+06:35, GitHub cancelled the waiting AI run with the annotation "Canceling since
+a higher priority waiting request for onnellab-manual-dashboard-writer exists".
+`cancel-in-progress: false` protected the active writer, not the one pending run.
+Every member of that same shared writer group now explicitly uses `queue: max`.
+This preserves serialization and pending runs (up to GitHub's queue limit), not
+parallel writes, automatic retries, extra schedules or replacement workers.
+
+The terminal API returned the dynamic daily title in `name`. Both same-run
+verification and ambiguous-dispatch lookup now bind the canonical YAML `path`
+and exact dispatch key instead of comparing `name` to the static workflow name.
+A confirmed cancellation is `*_workflow_cancelled`, not an identity mismatch or
+success. Wrong IDs/paths/keys/events/branches still fail closed; unsuccessful
+predecessors still block downstream work and never cause a second dispatch.
+
+The pinned actionlint parser predates the documented `concurrency.queue` field.
+CI first validates every queue value and all shared writer policies strictly,
+then suppresses only the parser's exact obsolete unknown-queue diagnostic.
+No other lint, permission, publication, receipt or source-freshness gate changes.
+The regression tests use the recorded metadata with mocked calls only.
+Today's partial result and existing job/video IDs are historical evidence and
+remain unchanged; source installation does not replay today's operational pass.
 
 ## Failure behavior
 

@@ -18,9 +18,14 @@ WORKFLOW = "Sync app operational status"
 
 
 def response(*, run_id=RUN_ID, workflow=WORKFLOW, status="completed",
-             conclusion="success", event="workflow_dispatch", branch="main"):
+             conclusion="success", event="workflow_dispatch", branch="main",
+             report=None, label="app_operational_status"):
+    state = (report or {}).get("hosted_workflows", {}).get(label, {})
+    key = state.get("dispatch_key", "")
+    title = f"{daily.WORKFLOW_DISPATCH_TITLES[workflow]} [{key}]" if key else workflow
     return json.dumps({
         "id": int(run_id), "name": workflow, "status": status,
+        "path": daily.WORKFLOW_DISPATCH_PATHS[workflow], "display_title": title,
         "conclusion": conclusion, "event": event, "head_branch": branch,
     })
 
@@ -265,7 +270,7 @@ class HostedOpsIntegration(unittest.TestCase):
             if name == "watch_app_operational_status":
                 return 1, "", "HTTP 502 /jobs"
             if name == "verify_app_operational_status_run_1":
-                return 0, response(run_id=RUN_ID), ""
+                return 0, response(run_id=RUN_ID, report=report), ""
             if name.startswith("watch_"):
                 return 0, "", ""
             if name == "hosted_ops_local_status":
@@ -312,7 +317,7 @@ class HostedOpsIntegration(unittest.TestCase):
             if name == "watch_app_operational_status":
                 return 1, "", "HTTP 502"
             if name == "verify_app_operational_status_run_1":
-                return 0, response(conclusion="failure"), ""
+                return 0, response(conclusion="failure", report=report), ""
             self.fail(f"unexpected workflow: {name}")
         with patch.object(daily, "run_step", side_effect=fake_step):
             okay = daily.run_hosted_ops_workflows(self.report)
@@ -334,7 +339,7 @@ class OpsDeployIntegration(unittest.TestCase):
             if name == "watch_ops_dashboard":
                 return 1, "", "HTTP 502"
             if name == "verify_ops_dashboard_run_1":
-                return 0, response(run_id=run_id, workflow="Deploy Ops Dashboard"), ""
+                return 0, response(run_id=run_id, workflow="Deploy Ops Dashboard", report=report, label="ops_dashboard"), ""
             if name == "ops_dashboard_divergence":
                 return 0, "0 0", ""
             if name == "ops_dashboard_fetch":

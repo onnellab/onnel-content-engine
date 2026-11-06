@@ -3,10 +3,12 @@ on:
   pull_request:
     paths:
       - ".github/workflows/**"
+      - "tests/test_ops_workflow_concurrency.py"
   push:
     branches: [main]
     paths:
       - ".github/workflows/**"
+      - "tests/test_ops_workflow_concurrency.py"
 permissions:
   contents: read
 jobs:
@@ -14,5 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install workflow YAML parser
+        run: python -m pip install PyYAML==6.0.3
+      - name: Validate documented pending-queue syntax and serialization
+        run: python -m unittest tests.test_ops_workflow_concurrency
       - name: Validate workflow syntax and expressions
         uses: docker://rhysd/actionlint:1.7.7
+        with:
+          # GitHub supports concurrency.queue; this pinned parser predates it.
+          # The preceding strict test validates that field and cancel policy.
+          # All other syntax, expression and shell diagnostics remain fatal.
+          args: >-
+            -color -ignore "^unexpected key .queue. for .concurrency. section[.] expected one of .cancel-in-progress., .group.$"

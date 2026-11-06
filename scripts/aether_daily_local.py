@@ -278,7 +278,9 @@ def watch_hosted_run(
                 "verification_source": "gh_run_watch_exit_status"}
 
     # Only safe run metadata enters the local report; do not read logs/jobs.
-    selection = "{id: .id, name: .name, status: .status, conclusion: .conclusion, event: .event, head_branch: .head_branch}"
+    selection = "{id: .id, name: .name, path: .path, display_title: .display_title, status: .status, conclusion: .conclusion, event: .event, head_branch: .head_branch}"
+    expected = report.get("hosted_workflows", {}).get(label, {})
+    dispatch_key = expected.get("dispatch_key", "")
     api_errors = 0
     for attempt in range(1, max_polls + 1):
         if attempt > 1:
@@ -302,12 +304,8 @@ def watch_hosted_run(
             return {"status": "unverified", "verification_source": "same_run_api",
                     "verification_error": "invalid_run_metadata",
                     "watch_exit_code": code}
-        if not isinstance(observed, dict) or (
-            type(observed.get("id")) is not int
-            or str(observed.get("id")) != run_id
-            or observed.get("name") != workflow
-            or observed.get("event") != "workflow_dispatch"
-            or observed.get("head_branch") != "main"
+        if not hosted_run_identity_matches(
+            observed, workflow=workflow, run_id=run_id, dispatch_key=dispatch_key,
         ):
             return {"status": "unverified", "verification_source": "same_run_api",
                     "verification_error": "run_identity_mismatch",
@@ -357,14 +355,47 @@ WORKFLOW_DISPATCH_TITLES = {
 }
 
 
+def hosted_run_identity_matches(
+    observed: object, *, workflow: str, run_id: str | None = None,
+    dispatch_key: str = "",
+) -> bool:
+    """Bind a run to stable workflow path plus its durable dispatch identity.
+
+    GitHub may expose run-name in both name and display_title. Neither a fixed
+    name comparison nor a startswith/prefix match identifies a workflow safely.
+    """
+    expected_path = WORKFLOW_DISPATCH_PATHS.get(workflow)
+    if not expected_path or not isinstance(observed, dict):
+        return False
+    if (type(observed.get("id")) is not int or observed["id"] <= 0
+            or (run_id is not None and str(observed["id"]) != run_id)
+            or observed.get("path") != expected_path
+            or observed.get("event") != "workflow_dispatch"
+            or observed.get("head_branch") != "main"
+            or not isinstance(dispatch_key, str)):
+        return False
+    if dispatch_key:
+        title = f"{WORKFLOW_DISPATCH_TITLES[workflow]} [{dispatch_key}]"
+        return observed.get("display_title") == title
+    # Older retained runs have no dispatch key; the exact run ID and path are
+    # still mandatory in watch_hosted_run. Do not invent a historical key.
+    return run_id is not None
+
+
+def hosted_run_blocker(label: str, state: dict) -> str:
+    if state.get("status") != "failed":
+        return f"{label}_workflow_verification_unavailable"
+    if state.get("observed_conclusion") == "cancelled":
+        return f"{label}_workflow_cancelled"
+    return f"{label}_workflow_failed"
+
+
 def reconcile_ambiguous_dispatch(
     report: dict, *, label: str, workflow: str, dispatch_key: str,
     started_at: str,
 ) -> dict:
     """Read-only lookup for the unique workflow_dispatch; never retry POST."""
     repo = "onnellab/onnel-content-engine"
-    expected_path = WORKFLOW_DISPATCH_PATHS[workflow]
-    expected_title = f"{WORKFLOW_DISPATCH_TITLES[workflow]} [{dispatch_key}]"
     earliest = datetime.fromisoformat(started_at).timestamp() - 30
     projection = (
         "{workflow_runs: [.workflow_runs[] | "
@@ -394,15 +425,9 @@ def reconcile_ambiguous_dispatch(
         successful_reads += 1
         candidates = []
         for row in observed["workflow_runs"]:
-            if not isinstance(row, dict) or (
-                type(row.get("id")) is not int
-                or row.get("name") != workflow
-                or row.get("display_title") != expected_title
-                or row.get("path") != expected_path
-                or row.get("event") != "workflow_dispatch"
-                or row.get("head_branch") != "main"
-                or not isinstance(row.get("created_at"), str)
-            ):
+            if not hosted_run_identity_matches(
+                row, workflow=workflow, dispatch_key=dispatch_key,
+            ) or not isinstance(row.get("created_at"), str):
                 continue
             try:
                 created = datetime.fromisoformat(
@@ -504,10 +529,7 @@ def run_hosted_ops_workflows(report: dict) -> bool:
             report, label=key, run_id=state["run_id"], workflow=workflow,
         ))
         if state["status"] != "success":
-            report["blockers"].append(
-                f"{key}_workflow_failed" if state["status"] == "failed"
-                else f"{key}_workflow_verification_unavailable"
-            )
+            report["blockers"].append(hosted_run_blocker(key, state))
             return False
 
     code, clean, _ = run_step(report, "hosted_ops_local_status", ["git", "status", "--porcelain"], timeout=30)
@@ -591,10 +613,7 @@ def run_ops_dashboard_deploy(report: dict) -> None:
         report, label="ops_dashboard", run_id=state["run_id"], workflow=workflow,
     ))
     if state["status"] != "success":
-        report["blockers"].append(
-            "ops_dashboard_workflow_failed" if state["status"] == "failed"
-            else "ops_dashboard_workflow_verification_unavailable"
-        )
+        report["blockers"].append(hosted_run_blocker("ops_dashboard", state))
         return
     code, _, _ = run_step(report, "ops_dashboard_fetch", ["git", "fetch", "origin", "main"], timeout=120)
     if code != 0:
