@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-04T01:16:30+00:00",
+  "updated_at": "2026-11-06T07:40:31+00:00",
   "done": {
     "TOPIC-0001::x::en::x": {
       "topic_id": "TOPIC-0001",
@@ -1237,6 +1237,35 @@
       "source_draft_path": "generated/social/linkedin/en/media/choose-safe-audio-working-copy.txt",
       "observed_short_url": "https://lnkd.in/gqXVbd2J",
       "canonical_url": "https://onnellab.com/blog/en/choose-safe-audio-working-copy/"
+    },
+    "TOPIC-0086::x::en::x": {
+      "topic_id": "TOPIC-0086",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "marked_at": "2026-11-06T07:40:31+00:00",
+      "marked_by": "chatgpt_remote_browser",
+      "posted_url": "https://x.com/onnellab/status/2118607754361532539",
+      "verified_at": "2026-11-06T07:40:31+00:00",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink",
+      "published_at": "2026-11-06T07:33:45.000Z",
+      "published_at_precision": "second",
+      "observed_at": "2026-11-06T07:36:26Z",
+      "observed_at_precision": "second",
+      "observation_source": "Dot cloud browser verified authenticated @onnellab, fresh main receipts, profile and duplicate search before one UI submit. Live canonical and complete corrected opening checked. Profile count increased 25 to 26; exact permalink confirmed author, full body and canonical article card. UI datetime read separately. observed_at is metadata verification observation time, not publication time.",
+      "browser_ui_timestamp": "4:33 PM · Nov 6, 2026",
+      "browser_ui_timezone": "not_recorded",
+      "draft_sha256": "b032471e11fe310d987f2006d6cbb1874026eea84ac496a4276932bd3c1cdaeb",
+      "posted_body_sha256": "581c75a1ed294265a40c62a1750f603e56156b34b61b66432a5d96c843cee6e9",
+      "account": "@onnellab",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "body_evidence_kind": "submitted_source",
+      "post_id": "2118607754361532539",
+      "source_draft_path": "generated/social/x/en/research/mark-uncertainty-clearly-in-research-notes.txt",
+      "observed_short_url": "https://t.co/EaJzz2JcUz",
+      "canonical_url": "https://onnellab.com/blog/en/mark-uncertainty-clearly-in-research-notes/"
     }
   }
 }

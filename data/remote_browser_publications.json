@@ -1178,11 +1178,12 @@
       "approval_source": "Owner's browser publication automation and explicit Nov 6 request to verify both scheduled posts and publish only unpublished items.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "4:33 PM · Nov 6, 2026",
       "browser_ui_timezone": "not_recorded",
       "observed_short_url": "https://t.co/EaJzz2JcUz",
-      "observation_source": "Dot cloud browser verified authenticated @onnellab, fresh main receipts, profile and duplicate search before one UI submit. Live canonical and complete corrected opening checked. Profile count increased 25 to 26; exact permalink confirmed author, full body and canonical article card. UI datetime read separately. observed_at is metadata verification observation time, not publication time."
+      "observation_source": "Dot cloud browser verified authenticated @onnellab, fresh main receipts, profile and duplicate search before one UI submit. Live canonical and complete corrected opening checked. Profile count increased 25 to 26; exact permalink confirmed author, full body and canonical article card. UI datetime read separately. observed_at is metadata verification observation time, not publication time.",
+      "processed_at": "2026-11-06T07:40:31+00:00"
     }
   ]
 }
