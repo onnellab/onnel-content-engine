@@ -81,7 +81,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | segra | 1.0.6+76 | 1.0.6 | - | ok | github:onnellab/segra/pubspec.yaml |
+| app_version | segra | 1.0.7+77 | 1.0.7 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | app_settings | any | 7.0.0 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/segra/pubspec.yaml |
 | dependency | ffmpeg_kit_flutter_new | 4.5.3 | 4.5.3 | - | ok | github:onnellab/segra/pubspec.yaml |
@@ -134,7 +134,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 | dependency | in_app_purchase | ^3.3.0 | 3.3.0 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | in_app_purchase_android | 0.5.0 | 0.5.0 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | intl | 0.20.3 | 0.20.3 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
-| dependency | onnel_text_engine | path:../packages/onnel_text_engine | 0.1.300 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
+| dependency | onnel_text_engine | path:../packages/onnel_text_engine | 0.1.308 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | path_provider | ^2.1.5 | 2.1.5 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | shared_preferences | ^2.2.3 | 2.5.4 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |
 | dependency | url_launcher | ^6.3.2 | 6.3.2 | - | ok | github:onnellab/onnellab-text/vaultxt/pubspec.yaml |

@@ -54,7 +54,7 @@ APP-0001,quivra,dependency,flutter_riverpod,^2.6.1,2.6.1,,ok,github:onnellab/qui
 APP-0001,quivra,dependency,path_provider,^2.1.5,2.1.5,,ok,github:onnellab/quivra/pubspec.yaml
 APP-0001,quivra,dependency,shared_preferences,^2.3.2,2.5.4,,ok,github:onnellab/quivra/pubspec.yaml
 APP-0001,quivra,flutter_sdk,flutter,>=3.38.4,,>=3.38.4,ok,github:onnellab/quivra/pubspec.yaml
-APP-0004,segra,app_version,segra,1.0.6+76,1.0.6,,ok,github:onnellab/segra/pubspec.yaml
+APP-0004,segra,app_version,segra,1.0.7+77,1.0.7,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,app_settings,any,7.0.0,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,cupertino_icons,^1.0.8,1.0.8,,ok,github:onnellab/segra/pubspec.yaml
 APP-0004,segra,dependency,ffmpeg_kit_flutter_new,4.5.3,4.5.3,,ok,github:onnellab/segra/pubspec.yaml
@@ -97,7 +97,7 @@ APP-0003,vaultxt,dependency,go_router,^14.1.4,14.8.1,,ok,github:onnellab/onnella
 APP-0003,vaultxt,dependency,in_app_purchase,^3.3.0,3.3.0,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,in_app_purchase_android,0.5.0,0.5.0,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,intl,0.20.3,0.20.3,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
-APP-0003,vaultxt,dependency,onnel_text_engine,path:../packages/onnel_text_engine,0.1.300,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
+APP-0003,vaultxt,dependency,onnel_text_engine,path:../packages/onnel_text_engine,0.1.308,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,path_provider,^2.1.5,2.1.5,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,shared_preferences,^2.2.3,2.5.4,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
 APP-0003,vaultxt,dependency,url_launcher,^6.3.2,6.3.2,,ok,github:onnellab/onnellab-text/vaultxt/pubspec.yaml
