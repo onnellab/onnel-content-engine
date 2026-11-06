@@ -12,7 +12,7 @@ import argparse
 import csv
 import json
 
-from store_review_policy import APPROVAL_TYPE, approval_fingerprint, require_owner_approval, review_fingerprint
+from store_review_policy import APPROVAL_TYPE, DIRECT_CHAT_APPROVAL_TYPE, approval_fingerprint, require_owner_approval, review_fingerprint
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -53,7 +53,7 @@ def validate_reply(reply: str) -> str:
 
 
 def approve_review(
-    reviews: dict[str, dict[str, str]], payload: dict[str, object], review_id: str, reply: str, approver: str, note: str = "", *, approval_reference: str = ""
+    reviews: dict[str, dict[str, str]], payload: dict[str, object], review_id: str, reply: str, approver: str, note: str = "", *, approval_reference: str = "", owner_approval_text: str = ""
 ) -> dict[str, object]:
     review = reviews.get(review_id)
     if not review:
@@ -67,16 +67,22 @@ def approve_review(
     assert isinstance(approvals, list)
     if any(isinstance(item, dict) and item.get("review_id") == review_id and item.get("status") in {"queued", "published"} for item in approvals):
         raise ValueError("this review already has an active approval")
+    if approval_reference.strip() and owner_approval_text.strip():
+        raise ValueError("choose one observed owner approval source")
+    direct_chat = bool(owner_approval_text.strip())
     record = {
         "approval_id": f"review-{review_id}", "review_id": review_id,
         "app_id": review.get("app_id", ""), "app_slug": review.get("app_slug", ""),
         "platform": review.get("platform", ""), "reply": clean_reply,
         "approved_at": now_iso(), "approved_by": approver.strip(),
         "note": note.strip(), "status": "queued",
-        "approval_type": APPROVAL_TYPE, "approval_channel": "chatgpt", "approval_reference": approval_reference.strip(),
+        "approval_type": DIRECT_CHAT_APPROVAL_TYPE if direct_chat else APPROVAL_TYPE,
+        "approval_channel": "chatgpt", "approval_reference": approval_reference.strip(),
         "review_content_sha256": review_fingerprint(review),
         "publication": {"attempts": 0, "published_at": "", "external_response_id": ""},
     }
+    if direct_chat:
+        record["owner_approval_text"] = owner_approval_text.strip()
     record["approval_sha256"] = approval_fingerprint(record)
     require_owner_approval(record, review)
     # Keep historical/quarantined attempts, but use a unique ID for each approval.
@@ -92,12 +98,14 @@ def main() -> int:
     parser.add_argument("--reply", required=True)
     parser.add_argument("--approver", required=True)
     parser.add_argument("--note", default="")
-    parser.add_argument("--approval-reference", required=True, help="Verified owner message/confirmation reference for this exact review and reply")
+    evidence = parser.add_mutually_exclusive_group(required=True)
+    evidence.add_argument("--approval-reference", default="", help="Verified existing owner message reference, when available")
+    evidence.add_argument("--owner-approval-text", default="", help="Exact owner instruction observed in the current chat approving this review/reply; not a draft or generated authorization")
     parser.add_argument("--reviews", type=Path, default=DEFAULT_REVIEWS)
     parser.add_argument("--approvals", type=Path, default=DEFAULT_APPROVALS)
     args = parser.parse_args()
     payload = read_approvals(args.approvals)
-    record = approve_review(read_reviews(args.reviews), payload, args.review_id, args.reply, args.approver, args.note, approval_reference=args.approval_reference)
+    record = approve_review(read_reviews(args.reviews), payload, args.review_id, args.reply, args.approver, args.note, approval_reference=args.approval_reference, owner_approval_text=args.owner_approval_text)
     args.approvals.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"queued {record['approval_id']}")
     return 0

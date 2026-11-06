@@ -11,7 +11,7 @@ import aether_daily_local as daily
 from publish_store_review_reply import publish, main as publish_main
 from queue_standing_store_review_replies import acknowledge_notification, prepare_notifications, queue_replies
 from store_review_approvals import approve_review
-from store_review_policy import approval_fingerprint, require_owner_approval
+from store_review_policy import DIRECT_CHAT_APPROVAL_TYPE, approval_fingerprint, require_owner_approval
 
 
 class OwnerReviewPolicy(unittest.TestCase):
@@ -24,6 +24,66 @@ class OwnerReviewPolicy(unittest.TestCase):
     def approval(self, review):
         return approve_review({"review-1": review}, {"approvals": []}, "review-1", "Thank you for the feedback.",
                               "owner_explicit_chat_approval", approval_reference="Sentinel_11111111111111111111111111111111")
+
+    def direct_approval(self, review):
+        return approve_review({"review-1": review}, {"approvals": []}, "review-1",
+                              "Thank you for the feedback.", "owner_explicit_chat_approval",
+                              owner_approval_text="Please post this exact reply. Approved.")
+
+    def test_direct_current_chat_approval_needs_no_platform_message_id(self):
+        review = self.review()
+        record = self.direct_approval(review)
+        self.assertEqual(DIRECT_CHAT_APPROVAL_TYPE, record["approval_type"])
+        self.assertEqual("", record["approval_reference"])
+        self.assertEqual("Please post this exact reply. Approved.", record["owner_approval_text"])
+        requester = Mock(return_value={"data": {"id": "mock-response"}})
+        self.assertEqual("mock-response", publish(record, "mock", "", Path("missing"), requester, review=review))
+        self.assertEqual(1, requester.call_count)
+        self.assertEqual(record["reply"], requester.call_args.args[3]["data"]["attributes"]["responseBody"])
+
+    def test_direct_approval_is_not_consumed_by_scheduled_queue(self):
+        review = self.review()
+        record = self.direct_approval(review)
+        payload = {"approvals": [record]}
+        original = copy.deepcopy(payload)
+        self.assertEqual(([], False), queue_replies({"review-1": review}, payload))
+        self.assertEqual(original, payload)
+
+    def test_direct_approval_rejects_missing_or_tampered_scope_before_write(self):
+        for platform in ("ios", "android"):
+            review = self.review(platform)
+            record = self.direct_approval(review)
+            for changes in ({"owner_approval_text": ""}, {"owner_approval_text": "Different instruction"},
+                            {"approval_channel": "assistant"}, {"approved_by": "agent"},
+                            {"approval_reference": "made-up-message"}, {"reply": "Different reply"},
+                            {"status": "failed"}, {"status": "published"}):
+                requester = Mock()
+                with self.subTest(platform=platform, changes=changes), self.assertRaises(ValueError):
+                    publish({**record, **changes}, "apple", "google", Path("missing"), requester, review=review)
+                requester.assert_not_called()
+            for changes in ({"body": "Edited"}, {"rating": "1"}, {"developer_reply": "Already answered"}):
+                with self.subTest(platform=platform, review_changes=changes), self.assertRaises(ValueError):
+                    require_owner_approval(record, {**review, **changes})
+
+    def test_direct_approval_does_not_revive_old_standing_approval(self):
+        record = self.direct_approval(self.review())
+        record["approval_type"] = "standing"
+        record["approval_sha256"] = approval_fingerprint(record)
+        with self.assertRaisesRegex(ValueError, "explicit per-review"):
+            require_owner_approval(record, self.review())
+
+    def test_duplicate_direct_approval_is_rejected(self):
+        review = self.review()
+        record = self.direct_approval(review)
+        with self.assertRaisesRegex(ValueError, "active approval"):
+            approve_review({"review-1": review}, {"approvals": [record]}, "review-1", record["reply"],
+                           "owner_explicit_chat_approval", owner_approval_text=record["owner_approval_text"])
+
+    def test_two_evidence_sources_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "one observed"):
+            approve_review({"review-1": self.review()}, {"approvals": []}, "review-1", "Thanks.",
+                           "owner_explicit_chat_approval", owner_approval_text="Approved.",
+                           approval_reference="Sentinel_" + "1" * 32)
 
     def test_missing_evidence_cannot_create_approval(self):
         with self.assertRaisesRegex(ValueError, "reference"):

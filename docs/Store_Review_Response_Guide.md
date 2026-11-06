@@ -61,25 +61,40 @@ is not a reply approval. Do not email the reviewer or contact any third party.
 
 ### Publishing one owner-approved reply
 
-Read the referenced owner-chat message and verify `channel=chatgpt`, human owner
-author, and explicit approval of the exact review and localized reply. The reference
-must be the tool-returned `Sentinel_` message ID or its unchanged canonical room
-reference. Local logs, job/workflow IDs, draft IDs, or assistant-authored messages
-are not owner approval. Syntax/hash validation is only a safety check and cannot
-authenticate a message; the operator must verify it through the messaging source. Then:
+**Owner correction, 2026-11-06:** restore publication after explicit approval in
+this conversation. A platform-specific `Sentinel_` message ID is not mandatory
+when the human owner's instruction approving the exact review and localized
+reply is directly visible in the current chat. Do not ask for repeated approval
+solely because the chat surface does not expose an internal message ID.
+
+Record the actual owner instruction, never an invented message ID or an
+assistant-authored authorization. The operator must observe the human approval
+and bind it to the exact target and reply:
 
 ```sh
 python3 scripts/store_review_approvals.py REVIEW_ID \
   --reply "Exact owner-approved reply" --approver "owner_explicit_chat_approval" \
-  --approval-reference OWNER_APPROVAL_MESSAGE_ID
+  --owner-approval-text "Exact owner instruction observed in the current chat"
 ```
 
-The command records a new approval type, source reference, timestamp, reviewed
-content hash, and a SHA-256 binding of the exact target and reply. Old dashboard
-queue records and standing-policy records deliberately do not satisfy this
-contract. Until the dashboard supports this new evidence contract, use the
-approval CLI after verified owner confirmation; its legacy button alone cannot
-publish a reply. Never fabricate an approval reference or treat it as a token.
+This creates an `explicit_owner_current_chat_v1` audit record with an empty
+`approval_reference`, the observed `owner_approval_text`, timestamp, review hash,
+and a SHA-256 binding of the target, reply and owner instruction. This is an
+operator-recorded audit of the visible instruction, not a claim of independent
+platform message authentication. A generated draft, a historical standing
+policy or an assistant's own message is never owner consent.
+
+When a real tool-returned owner message reference is available and verified,
+`--approval-reference OWNER_APPROVAL_MESSAGE_ID` remains supported instead.
+The two evidence options are mutually exclusive. Existing reference-based
+approval hashes and published history are unchanged. Notification delivery
+receipts are separate and are not fabricated by the direct-chat approval path.
+
+The rollback is limited to the mandatory message-ID dependency. It does not
+reinstate scheduled/standing auto-replies, revive legacy approvals, change
+launchd ownership, weaken store credentials, or permit duplicate publication.
+The daily worker remains notification-only. All actual writes still use the
+existing one-at-a-time canonical publisher and an explicit publish action.
 
 Dispatch **Publish Approved Store Review Reply** manually with the new exact
 `approval_id` and `PUBLISH`, or run the publisher with `--confirm-publish`.

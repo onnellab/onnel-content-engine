@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 
 POLICY_CHANGED_AT = "2026-10-14T06:14:53+00:00"
 APPROVAL_TYPE = "explicit_owner_per_review_v1"
+DIRECT_CHAT_APPROVAL_TYPE = "explicit_owner_current_chat_v1"
 REVIEW_FIELDS = ("review_id", "app_id", "platform", "title", "body", "rating", "updated_at")
 APPROVAL_FIELDS = (
     "approval_type", "review_id", "app_id", "platform", "reply", "approved_at",
@@ -24,7 +25,12 @@ def review_fingerprint(review: dict) -> str:
 
 
 def approval_fingerprint(record: dict) -> str:
-    return fingerprint([str(record.get(key, "")) for key in APPROVAL_FIELDS])
+    # Keep old approval fingerprints stable; bind the visible owner instruction
+    # for new direct-chat approvals without inventing a platform message ID.
+    fields = APPROVAL_FIELDS
+    if record.get("approval_type") == DIRECT_CHAT_APPROVAL_TYPE:
+        fields += ("owner_approval_text",)
+    return fingerprint([str(record.get(key, "")) for key in fields])
 
 
 def require_owner_message_reference(channel: str, reference: str) -> None:
@@ -35,12 +41,13 @@ def require_owner_message_reference(channel: str, reference: str) -> None:
 
 
 def require_owner_approval(record: dict, review: dict | None = None) -> None:
-    """Evidence is an owner message/confirmation reference, never a draft or policy.
+    """Accept an observed owner instruction, never a generated draft or policy.
 
-    The caller must have actually verified that reference. This local binding
-    detects stale/tampered scope; it does not authenticate arbitrary input.
+    The operator must observe the owner's approval of this exact review/reply
+    in the current conversation or verify a referenced owner message. Hashes
+    bind that audit record; neither path authenticates arbitrary input.
     """
-    if record.get("approval_type") != APPROVAL_TYPE:
+    if record.get("approval_type") not in {APPROVAL_TYPE, DIRECT_CHAT_APPROVAL_TYPE}:
         raise ValueError("explicit per-review owner approval is required; standing/legacy approvals are invalid")
     if record.get("status") != "queued":
         raise ValueError("owner approval must be queued")
@@ -48,7 +55,18 @@ def require_owner_approval(record: dict, review: dict | None = None) -> None:
     reference = str(record.get("approval_reference", "")).strip()
     if not actor or any(word in actor.casefold() for word in ("standing", "automatic", "generated")):
         raise ValueError("an explicit owner approval actor is required")
-    require_owner_message_reference(str(record.get("approval_channel", "")), reference)
+    if record.get("approval_type") == DIRECT_CHAT_APPROVAL_TYPE:
+        # Owner correction, 2026-11-06: current-chat consent does not require
+        # a Sentinel ID that this chat surface cannot expose.
+        text = record.get("owner_approval_text")
+        if (record.get("approval_channel") != "chatgpt"
+                or actor != "owner_explicit_chat_approval"
+                or reference
+                or not isinstance(text, str) or not text.strip()
+                or len(text) > 2000):
+            raise ValueError("direct owner chat approval requires the observed owner instruction")
+    else:
+        require_owner_message_reference(str(record.get("approval_channel", "")), reference)
     try:
         approved_at = datetime.fromisoformat(str(record.get("approved_at", "")).replace("Z", "+00:00"))
         if approved_at.tzinfo is None or approved_at < datetime.fromisoformat(POLICY_CHANGED_AT):
