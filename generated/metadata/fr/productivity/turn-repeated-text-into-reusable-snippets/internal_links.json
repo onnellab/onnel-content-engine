@@ -97,14 +97,14 @@
         "score": 6
       },
       {
-        "topic_id": "TOPIC-0139",
-        "title": "Distinguer les fichiers musicaux en double des enregistrements différents",
-        "slug": "distinguish-duplicate-music-files-from-different-recordings",
-        "category": "music",
+        "topic_id": "TOPIC-0130",
+        "title": "Indiquer clairement les incertitudes dans ses notes de recherche",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
         "language": "fr",
-        "status": "scheduled",
-        "url": "generated/markdown/fr/music/distinguish-duplicate-music-files-from-different-recordings.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/mark-uncertainty-clearly-in-research-notes/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 6

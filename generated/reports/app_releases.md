@@ -1,13 +1,14 @@
 # App Release Status
 
-Generated: 2026-11-06T06:22:13+09:00
+Generated: 2026-11-06T14:08:24+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
 | Store | in_review | 1 |
-| Store | unchanged | 14 |
+| Store | unchanged | 13 |
+| Store | updated | 1 |
 | GitHub Release | archived | 2 |
 | GitHub Release | planned | 1 |
 | GitHub Release | released | 10 |
@@ -28,7 +29,7 @@ Generated: 2026-11-06T06:22:13+09:00
 | Segra | android | 1.0.7 | 1.0.6 | store_ahead | unchanged | released | onnellab/segra | Sync local metadata |
 | Segra | ios | 1.0.7 | 1.0.6 | store_ahead | unchanged | released | onnellab/segra | Sync local metadata |
 | TagWeaver | android | 2.5.9 | 2.5.9 | same | unchanged | released | onnellab/tagweaver | No action |
-| TagWeaver | ios | 2.5.8 | 2.5.9 | local_ahead | unchanged | released | onnellab/tagweaver | Platform rollout not public |
+| TagWeaver | ios | 2.5.9 | 2.5.9 | same | updated | released | onnellab/tagweaver | Create or verify release candidate |
 | VaultXT | android | 2.0.2 | 2.0.2 | same | unchanged | released | onnellab/onnellab-text | No action |
 | VaultXT | ios | 2.0.2 | 2.0.2 | same | unchanged | archived | onnellab/onnellab-text | No action |
 
@@ -39,7 +40,7 @@ Generated: 2026-11-06T06:22:13+09:00
 | REL-0039 | TagWeaver | android | public | v2.5.9 | released | Public GitHub Release published | https://github.com/onnellab/tagweaver/releases/tag/v2.5.9 | - | - | No action |
 | REL-0014 | VaultXT | ios | public | v2.0.0 | archived | Archived | - | - | 작은 화면과 큰 글씨에서도 문서 나누기·합치기와 구매 안내를 편하게 사용할 수 있도록 개선했어요. Pro 구매 버튼에 스토어 가격을 표시해요. 문서 목록이나 스냅샷을 불러오지 못했을 때 다시 시도할 수 있어요. 찾기·바꾸기 입력 안내와 실행 버튼을 다듬었어요. 대용량 문서 편집 중 발생하던 화면 표시 오류를 수정했어요. iOS에서 앱 시작을 개선했어요. | No action |
 | REL-0017 | Segra | android | public | v1.0.6 | released | Public GitHub Release published | https://github.com/onnellab/segra/releases/tag/v1.0.6 | - | - | No action |
-| REL-0035 | TagWeaver | ios | public | v2.5.6 | released | Public GitHub Release published | https://github.com/onnellab/tagweaver/releases/tag/v2.5.6 | - | - 태그를 저장할 때 수정하지 않은 추가 태그와 빈 값을 더 안전하게 보존해요. - 파일을 제대로 읽지 못했을 때 저장 결과를 더 정확하게 안내해요. - iOS에서 오디오 사본을 만들 때 외부 파일 접근을 더 안정적으로 처리해요. | No action |
+| REL-0035 | TagWeaver | ios | public | v2.5.6 | released | Public GitHub Release published | https://github.com/onnellab/tagweaver/releases/tag/v2.5.6 | - | - Android에서 여러 FLAC 파일의 댓글 태그를 한 번에 삭제할 때 저장에 실패하던 문제를 고쳤어요. - 일부 파일만 저장된 뒤 다시 시도할 때 이미 처리한 태그를 중복 삭제하지 않도록 개선했어요. - 추가 태그의 변경 미리보기가 실제 저장값과 일치하도록 고쳤어요. | No action |
 | REL-0029 | ClipNest | ios | public | v1.0.5 | released | Public GitHub Release published | https://github.com/onnellab/clipnest/releases/tag/v1.0.5 | - | - 저장한 텍스트를 검색하고 편집하는 화면을 다듬었어요. - 설정에서 9개 언어를 선택할 수 있고, Pro 구매 버튼에는 스토어 가격을 표시해요. - 공용 색상과 화면 구성을 정리하고, 키보드 붙여넣기 사용 예시와 스토어 안내를 개선했어요. | No action |
 | REL-0024 | Quivra | ios | public | v1.0.10 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.10 | - | 변환 전과 변환 중에도 파일 목록의 위치와 높이가 안정적으로 유지되도록 화면을 다듬었어요. | No action |
 | REL-0019 | Quivra | android | public | v1.0.9 | released | Public GitHub Release published | https://github.com/onnellab/quivra/releases/tag/v1.0.9 | - | - | No action |
@@ -54,7 +55,7 @@ Generated: 2026-11-06T06:22:13+09:00
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| TagWeaver | ios | unchanged | Platform rollout not public | - |
+| TagWeaver | ios | updated | Create or verify release candidate | - |
 | Segra | ios | unchanged | Sync local metadata | - |
 | Segra | android | unchanged | Sync local metadata | Version/update date read from Google Play public page; Android snapshot version 1.0.6 is stale for public version 1.0.7 and was not merged. |
 | Melivra | android | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.8. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |

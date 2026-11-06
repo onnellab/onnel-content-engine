@@ -57,6 +57,19 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0128",
+        "title": "Como indicar incertezas nas notas de pesquisa",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/mark-uncertainty-clearly-in-research-notes/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0074",
         "title": "Como transformar textos repetidos em trechos reutilizáveis",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -90,19 +103,6 @@
         "language": "pt-BR",
         "status": "published",
         "url": "https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0110",
-        "title": "Como facilitar a navegação em um documento de texto longo",
-        "slug": "make-long-plain-text-easier-to-navigate",
-        "category": "reading",
-        "language": "pt-BR",
-        "status": "published",
-        "url": "https://onnellab.com/blog/pt-br/make-long-plain-text-easier-to-navigate/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

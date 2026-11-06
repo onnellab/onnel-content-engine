@@ -84,6 +84,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0131",
+        "title": "Cómo señalar la incertidumbre en las notas de investigación",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/mark-uncertainty-clearly-in-research-notes/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0085",
         "title": "Cómo crear un sistema coherente para nombrar archivos",
         "slug": "design-consistent-file-naming-system",
@@ -91,19 +104,6 @@
         "language": "es",
         "status": "published",
         "url": "https://onnellab.com/blog/es/design-consistent-file-naming-system/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0104",
-        "title": "Etiquetas de álbum y artista coherentes sin perder créditos",
-        "slug": "consistent-album-artist-names",
-        "category": "music",
-        "language": "es",
-        "status": "published",
-        "url": "https://onnellab.com/blog/es/consistent-album-artist-names/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

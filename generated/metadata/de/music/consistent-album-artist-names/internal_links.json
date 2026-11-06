@@ -99,17 +99,17 @@
         "score": 6
       },
       {
-        "topic_id": "TOPIC-0067",
-        "title": "Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen",
-        "slug": "test-converted-media-before-replacing-original",
-        "category": "media",
+        "topic_id": "TOPIC-0129",
+        "title": "Unsicherheit in Recherchenotizen klar kennzeichnen",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
         "language": "de",
         "status": "published",
-        "url": "https://onnellab.com/blog/de/test-converted-media-before-replacing-original/",
+        "url": "https://onnellab.com/blog/de/mark-uncertainty-clearly-in-research-notes/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 5
+        "score": 6
       }
     ],
     "related_apps": [

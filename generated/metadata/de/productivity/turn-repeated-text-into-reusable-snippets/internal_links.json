@@ -76,12 +76,12 @@
         "slug": "mark-uncertainty-clearly-in-research-notes",
         "category": "research",
         "language": "de",
-        "status": "scheduled",
-        "url": "generated/markdown/de/research/mark-uncertainty-clearly-in-research-notes.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/mark-uncertainty-clearly-in-research-notes/",
+        "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
-        "score": 6
+        "score": 7
       },
       {
         "topic_id": "TOPIC-0050",

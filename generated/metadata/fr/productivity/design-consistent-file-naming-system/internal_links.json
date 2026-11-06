@@ -84,6 +84,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0130",
+        "title": "Indiquer clairement les incertitudes dans ses notes de recherche",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/mark-uncertainty-clearly-in-research-notes/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0094",
         "title": "Comment séparer les notes de source de vos conclusions",
         "slug": "separate-source-notes-from-conclusions",
@@ -91,19 +104,6 @@
         "language": "fr",
         "status": "published",
         "url": "https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0121",
-        "title": "Préparer une copie de travail avant de modifier un fichier audio",
-        "slug": "choose-safe-audio-working-copy",
-        "category": "media",
-        "language": "fr",
-        "status": "published",
-        "url": "https://onnellab.com/blog/fr/choose-safe-audio-working-copy/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

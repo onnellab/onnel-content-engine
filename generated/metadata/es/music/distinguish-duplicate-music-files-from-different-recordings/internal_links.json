@@ -57,6 +57,19 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0131",
+        "title": "Cómo señalar la incertidumbre en las notas de investigación",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/mark-uncertainty-clearly-in-research-notes/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0085",
         "title": "Cómo crear un sistema coherente para nombrar archivos",
         "slug": "design-consistent-file-naming-system",
@@ -90,19 +103,6 @@
         "language": "es",
         "status": "published",
         "url": "https://onnellab.com/blog/es/make-long-plain-text-easier-to-navigate/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0122",
-        "title": "Prepara una copia de trabajo antes de editar audio",
-        "slug": "choose-safe-audio-working-copy",
-        "category": "media",
-        "language": "es",
-        "status": "published",
-        "url": "https://onnellab.com/blog/es/choose-safe-audio-working-copy/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

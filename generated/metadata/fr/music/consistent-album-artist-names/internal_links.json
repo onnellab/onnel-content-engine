@@ -86,6 +86,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0130",
+        "title": "Indiquer clairement les incertitudes dans ses notes de recherche",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/mark-uncertainty-clearly-in-research-notes/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0076",
         "title": "Transformer les textes répétitifs en extraits réutilisables",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -93,19 +106,6 @@
         "language": "fr",
         "status": "published",
         "url": "https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0094",
-        "title": "Comment séparer les notes de source de vos conclusions",
-        "slug": "separate-source-notes-from-conclusions",
-        "category": "research",
-        "language": "fr",
-        "status": "published",
-        "url": "https://onnellab.com/blog/fr/separate-source-notes-from-conclusions/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
