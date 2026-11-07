@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-11-06T14:09:13+09:00",
+  "checked_at": "2026-11-07T13:41:28+09:00",
   "visual_public_pages": true,
   "counts": {
     "checked": 104,
-    "already_done": 101,
+    "already_done": 104,
     "verified": 0,
-    "pending": 3
+    "pending": 0
   },
   "items": [
     {
@@ -910,6 +910,18 @@
       "verification_confidence": "browser_permalink"
     },
     {
+      "manual_key": "TOPIC-0086::x::en::x",
+      "topic_id": "TOPIC-0086",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://x.com/onnellab/status/2118607754361532539",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
+    },
+    {
       "manual_key": "TOPIC-0086::bluesky::en::bluesky",
       "topic_id": "TOPIC-0086",
       "platform": "bluesky",
@@ -920,6 +932,18 @@
       "posted_url": "https://bsky.app/profile/onnellab.bsky.social/post/3mzmmiix6hx2y",
       "verification_method": "",
       "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0086::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0086",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7524636986624696320/",
+      "verification_method": "remote_chrome_permalink",
+      "verification_confidence": "browser_permalink"
     },
     {
       "manual_key": "TOPIC-0001::devto::en::markdown",
@@ -1222,38 +1246,14 @@
       "verification_confidence": ""
     },
     {
-      "manual_key": "TOPIC-0086::x::en::x",
-      "topic_id": "TOPIC-0086",
-      "platform": "x",
-      "language": "en",
-      "template_id": "x",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
-      "manual_key": "TOPIC-0086::linkedin::en::linkedin",
-      "topic_id": "TOPIC-0086",
-      "platform": "linkedin",
-      "language": "en",
-      "template_id": "linkedin",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
-      "verification_method": "",
-      "verification_confidence": ""
-    },
-    {
       "manual_key": "TOPIC-0086::devto::en::markdown",
       "topic_id": "TOPIC-0086",
       "platform": "devto",
       "language": "en",
       "template_id": "markdown",
-      "status": "pending",
-      "reason": "No matching public post found",
-      "posted_url": "",
+      "status": "already_done",
+      "reason": "",
+      "posted_url": "https://dev.to/onnellab/mark-uncertainty-clearly-in-research-notes-5b0m",
       "verification_method": "",
       "verification_confidence": ""
     }
