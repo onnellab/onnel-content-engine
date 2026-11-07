@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-06T23:01:54+00:00",
+  "checked_at": "2026-11-07T06:29:40+00:00",
   "windows": [
     7,
     30,
@@ -262,25 +262,25 @@
           "latest_date": "2026-11-05",
           "windows": {
             "7": {
-              "impressions": 68,
-              "store_visitors": 3,
+              "impressions": 62,
+              "store_visitors": 2,
               "installs": null,
               "purchases": null,
-              "days_with_data": 6
+              "days_with_data": 5
             },
             "30": {
-              "impressions": 561,
-              "store_visitors": 13,
+              "impressions": 533,
+              "store_visitors": 12,
               "installs": null,
               "purchases": null,
-              "days_with_data": 29
+              "days_with_data": 28
             },
             "90": {
-              "impressions": 1223,
+              "impressions": 1216,
               "store_visitors": 32,
               "installs": null,
               "purchases": null,
-              "days_with_data": 88
+              "days_with_data": 87
             }
           }
         },
@@ -289,10 +289,10 @@
           "windows": {
             "7": {
               "impressions": null,
-              "store_visitors": 1,
-              "installs": 0,
+              "store_visitors": null,
+              "installs": null,
               "purchases": null,
-              "days_with_data": 1
+              "days_with_data": 0
             },
             "30": {
               "impressions": null,
@@ -303,10 +303,10 @@
             },
             "90": {
               "impressions": null,
-              "store_visitors": 164,
+              "store_visitors": 161,
               "installs": 2,
               "purchases": 4,
-              "days_with_data": 58
+              "days_with_data": 57
             }
           }
         }
@@ -340,25 +340,25 @@
           "latest_date": "2026-11-05",
           "windows": {
             "7": {
-              "impressions": 996,
-              "store_visitors": 130,
+              "impressions": 860,
+              "store_visitors": 104,
               "installs": null,
-              "purchases": 2,
-              "days_with_data": 6
+              "purchases": 3,
+              "days_with_data": 5
             },
             "30": {
-              "impressions": 3796,
-              "store_visitors": 459,
+              "impressions": 3595,
+              "store_visitors": 438,
               "installs": null,
               "purchases": 10,
-              "days_with_data": 29
+              "days_with_data": 28
             },
             "90": {
-              "impressions": 10434,
-              "store_visitors": 1155,
+              "impressions": 10364,
+              "store_visitors": 1146,
               "installs": null,
-              "purchases": 20,
-              "days_with_data": 89
+              "purchases": 19,
+              "days_with_data": 88
             }
           }
         },
@@ -367,24 +367,24 @@
           "windows": {
             "7": {
               "impressions": null,
-              "store_visitors": 55,
-              "installs": 20,
-              "purchases": 3,
-              "days_with_data": 3
+              "store_visitors": null,
+              "installs": null,
+              "purchases": 2,
+              "days_with_data": 2
             },
             "30": {
               "impressions": null,
-              "store_visitors": 1106,
-              "installs": 350,
+              "store_visitors": 1055,
+              "installs": 334,
               "purchases": 14,
-              "days_with_data": 26
+              "days_with_data": 25
             },
             "90": {
               "impressions": null,
               "store_visitors": 3083,
               "installs": 989,
               "purchases": 36,
-              "days_with_data": 86
+              "days_with_data": 85
             }
           }
         }
@@ -393,20 +393,20 @@
         "7": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 20,
+          "installs": 0,
           "purchases": 5
         },
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 350,
+          "installs": 334,
           "purchases": 24
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
           "installs": 989,
-          "purchases": 56
+          "purchases": 55
         }
       }
     },
@@ -418,25 +418,25 @@
           "latest_date": "2026-11-05",
           "windows": {
             "7": {
-              "impressions": 456,
+              "impressions": 398,
               "store_visitors": 39,
               "installs": null,
               "purchases": null,
-              "days_with_data": 6
+              "days_with_data": 5
             },
             "30": {
-              "impressions": 2465,
-              "store_visitors": 256,
+              "impressions": 2337,
+              "store_visitors": 253,
               "installs": null,
               "purchases": null,
-              "days_with_data": 29
+              "days_with_data": 28
             },
             "90": {
-              "impressions": 5658,
+              "impressions": 5640,
               "store_visitors": 517,
               "installs": null,
               "purchases": 1,
-              "days_with_data": 89
+              "days_with_data": 88
             }
           }
         },
@@ -445,24 +445,24 @@
           "windows": {
             "7": {
               "impressions": null,
-              "store_visitors": 8,
-              "installs": 2,
+              "store_visitors": null,
+              "installs": null,
               "purchases": null,
-              "days_with_data": 1
+              "days_with_data": 0
             },
             "30": {
               "impressions": null,
-              "store_visitors": 136,
-              "installs": 42,
+              "store_visitors": 133,
+              "installs": 40,
               "purchases": 1,
-              "days_with_data": 24
+              "days_with_data": 23
             },
             "90": {
               "impressions": null,
               "store_visitors": 420,
               "installs": 140,
               "purchases": 2,
-              "days_with_data": 82
+              "days_with_data": 81
             }
           }
         }
@@ -471,13 +471,13 @@
         "7": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 2,
+          "installs": 0,
           "purchases": 0
         },
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 42,
+          "installs": 40,
           "purchases": 1
         },
         "90": {
@@ -496,25 +496,25 @@
           "latest_date": "2026-11-05",
           "windows": {
             "7": {
-              "impressions": 407,
-              "store_visitors": 38,
+              "impressions": 322,
+              "store_visitors": 33,
               "installs": null,
               "purchases": null,
-              "days_with_data": 6
+              "days_with_data": 5
             },
             "30": {
-              "impressions": 2180,
-              "store_visitors": 146,
+              "impressions": 2052,
+              "store_visitors": 144,
               "installs": null,
               "purchases": null,
-              "days_with_data": 29
+              "days_with_data": 28
             },
             "90": {
-              "impressions": 8067,
-              "store_visitors": 341,
+              "impressions": 8016,
+              "store_visitors": 339,
               "installs": null,
               "purchases": 1,
-              "days_with_data": 89
+              "days_with_data": 88
             }
           }
         },
@@ -523,17 +523,17 @@
           "windows": {
             "7": {
               "impressions": null,
-              "store_visitors": 9,
-              "installs": 3,
+              "store_visitors": null,
+              "installs": null,
               "purchases": null,
-              "days_with_data": 1
+              "days_with_data": 0
             },
             "30": {
               "impressions": null,
-              "store_visitors": 120,
+              "store_visitors": 119,
               "installs": 20,
               "purchases": null,
-              "days_with_data": 20
+              "days_with_data": 19
             },
             "90": {
               "impressions": null,
@@ -549,7 +549,7 @@
         "7": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 3,
+          "installs": 0,
           "purchases": 0
         },
         "30": {
@@ -574,25 +574,25 @@
           "latest_date": "2026-11-05",
           "windows": {
             "7": {
-              "impressions": 1159,
-              "store_visitors": 46,
+              "impressions": 1085,
+              "store_visitors": 43,
               "installs": null,
               "purchases": null,
-              "days_with_data": 6
+              "days_with_data": 5
             },
             "30": {
-              "impressions": 2643,
-              "store_visitors": 141,
+              "impressions": 2601,
+              "store_visitors": 139,
               "installs": null,
               "purchases": null,
-              "days_with_data": 29
+              "days_with_data": 28
             },
             "90": {
-              "impressions": 5217,
-              "store_visitors": 253,
+              "impressions": 5148,
+              "store_visitors": 249,
               "installs": null,
               "purchases": null,
-              "days_with_data": 89
+              "days_with_data": 88
             }
           }
         },
@@ -630,25 +630,25 @@
           "latest_date": "2026-11-05",
           "windows": {
             "7": {
-              "impressions": 313,
-              "store_visitors": 16,
+              "impressions": 270,
+              "store_visitors": 13,
               "installs": null,
               "purchases": null,
-              "days_with_data": 6
+              "days_with_data": 5
             },
             "30": {
-              "impressions": 1635,
-              "store_visitors": 140,
+              "impressions": 1607,
+              "store_visitors": 135,
               "installs": null,
               "purchases": 1,
-              "days_with_data": 29
+              "days_with_data": 28
             },
             "90": {
-              "impressions": 3395,
-              "store_visitors": 351,
+              "impressions": 3363,
+              "store_visitors": 346,
               "installs": null,
               "purchases": 2,
-              "days_with_data": 89
+              "days_with_data": 88
             }
           }
         },
@@ -657,24 +657,24 @@
           "windows": {
             "7": {
               "impressions": null,
-              "store_visitors": 8,
-              "installs": 3,
+              "store_visitors": null,
+              "installs": null,
               "purchases": 1,
-              "days_with_data": 2
+              "days_with_data": 1
             },
             "30": {
               "impressions": null,
-              "store_visitors": 131,
-              "installs": 62,
+              "store_visitors": 129,
+              "installs": 60,
               "purchases": 4,
-              "days_with_data": 25
+              "days_with_data": 24
             },
             "90": {
               "impressions": null,
-              "store_visitors": 297,
+              "store_visitors": 295,
               "installs": 126,
               "purchases": 4,
-              "days_with_data": 80
+              "days_with_data": 79
             }
           }
         }
@@ -683,13 +683,13 @@
         "7": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 3,
+          "installs": 0,
           "purchases": 1
         },
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 62,
+          "installs": 60,
           "purchases": 5
         },
         "90": {
@@ -713,17 +713,17 @@
           "windows": {
             "7": {
               "impressions": null,
-              "store_visitors": 14,
-              "installs": 2,
+              "store_visitors": null,
+              "installs": null,
               "purchases": null,
-              "days_with_data": 1
+              "days_with_data": 0
             },
             "30": {
               "impressions": null,
-              "store_visitors": 322,
-              "installs": 43,
+              "store_visitors": 315,
+              "installs": 41,
               "purchases": null,
-              "days_with_data": 24
+              "days_with_data": 23
             },
             "90": {
               "impressions": null,
@@ -739,13 +739,13 @@
         "7": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 2,
+          "installs": 0,
           "purchases": 0
         },
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 43,
+          "installs": 41,
           "purchases": 0
         },
         "90": {
@@ -764,18 +764,18 @@
           "latest_date": "2026-11-05",
           "windows": {
             "7": {
-              "impressions": 350,
-              "store_visitors": 18,
+              "impressions": 288,
+              "store_visitors": 15,
               "installs": null,
               "purchases": 2,
-              "days_with_data": 6
+              "days_with_data": 5
             },
             "30": {
-              "impressions": 1464,
-              "store_visitors": 83,
+              "impressions": 1424,
+              "store_visitors": 81,
               "installs": null,
               "purchases": 4,
-              "days_with_data": 29
+              "days_with_data": 28
             },
             "90": {
               "impressions": 1867,
@@ -791,17 +791,17 @@
           "windows": {
             "7": {
               "impressions": null,
-              "store_visitors": 16,
-              "installs": 0,
+              "store_visitors": null,
+              "installs": null,
               "purchases": 0,
-              "days_with_data": 2
+              "days_with_data": 1
             },
             "30": {
               "impressions": null,
-              "store_visitors": 248,
+              "store_visitors": 241,
               "installs": 9,
               "purchases": 6,
-              "days_with_data": 25
+              "days_with_data": 24
             },
             "90": {
               "impressions": null,

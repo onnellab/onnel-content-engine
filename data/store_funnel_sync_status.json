@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-06T23:01:54+00:00",
+  "checked_at": "2026-11-07T06:29:40+00:00",
   "status": "ok",
   "sources": {
     "apple": {
@@ -240,6 +240,6 @@
     }
   },
   "daily_rows": 3017,
-  "apple_additions": 41,
+  "apple_additions": 0,
   "google_additions": 1013
 }
