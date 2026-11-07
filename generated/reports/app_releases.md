@@ -1,14 +1,13 @@
 # App Release Status
 
-Generated: 2026-11-07T06:38:30+09:00
+Generated: 2026-11-07T13:40:48+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
 | Store | in_review | 1 |
-| Store | unchanged | 13 |
-| Store | updated | 1 |
+| Store | unchanged | 14 |
 | GitHub Release | archived | 2 |
 | GitHub Release | planned | 1 |
 | GitHub Release | released | 10 |
@@ -29,7 +28,7 @@ Generated: 2026-11-07T06:38:30+09:00
 | Segra | android | 1.0.7 | 1.0.7 | same | unchanged | released | onnellab/segra | No action |
 | Segra | ios | 1.0.7 | 1.0.7 | same | unchanged | released | onnellab/segra | No action |
 | TagWeaver | android | 2.5.9 | 2.5.9 | same | unchanged | released | onnellab/tagweaver | No action |
-| TagWeaver | ios | 2.5.9 | 2.5.9 | same | updated | released | onnellab/tagweaver | Create or verify release candidate |
+| TagWeaver | ios | 2.5.9 | 2.5.9 | same | unchanged | released | onnellab/tagweaver | No action |
 | VaultXT | android | 2.0.2 | 2.0.2 | same | unchanged | released | onnellab/onnellab-text | No action |
 | VaultXT | ios | 2.0.2 | 2.0.2 | same | unchanged | archived | onnellab/onnellab-text | No action |
 
@@ -55,5 +54,4 @@ Generated: 2026-11-07T06:38:30+09:00
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| TagWeaver | ios | updated | Create or verify release candidate | - |
 | Melivra | android | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.8. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
