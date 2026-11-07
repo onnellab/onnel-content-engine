@@ -1210,11 +1210,12 @@
       "approval_source": "Owner's browser-only scheduled publication automation.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timestamp": "방금",
       "browser_ui_timezone": "not_recorded",
       "observed_short_url": "https://lnkd.in/g54W-_ae",
-      "observation_source": "Dot cloud browser verified authenticated ONNEL LAB, current main receipts and profile activity before one UI submit. Live canonical, unchanged source and public audience verified. Success alert and exact permalink confirmed author, full paragraphs and canonical article card destination. LinkedIn normalized paragraph spacing and shortened text link. observed_at is completion of observation metadata recording, not server publication time."
+      "observation_source": "Dot cloud browser verified authenticated ONNEL LAB, current main receipts and profile activity before one UI submit. Live canonical, unchanged source and public audience verified. Success alert and exact permalink confirmed author, full paragraphs and canonical article card destination. LinkedIn normalized paragraph spacing and shortened text link. observed_at is completion of observation metadata recording, not server publication time.",
+      "processed_at": "2026-11-07T01:02:43+00:00"
     }
   ]
 }
