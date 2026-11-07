@@ -1184,6 +1184,37 @@
       "observed_short_url": "https://t.co/EaJzz2JcUz",
       "observation_source": "Dot cloud browser verified authenticated @onnellab, fresh main receipts, profile and duplicate search before one UI submit. Live canonical and complete corrected opening checked. Profile count increased 25 to 26; exact permalink confirmed author, full body and canonical article card. UI datetime read separately. observed_at is metadata verification observation time, not publication time.",
       "processed_at": "2026-11-06T07:40:31+00:00"
+    },
+    {
+      "topic_id": "TOPIC-0086",
+      "language": "en",
+      "manual_key": "TOPIC-0086::linkedin::en::linkedin",
+      "platform": "linkedin",
+      "template_id": "linkedin",
+      "posted_url": "https://www.linkedin.com/feed/update/urn:li:activity:7524636986624696320/",
+      "post_id": "urn:li:activity:7524636986624696320",
+      "published_at": "",
+      "published_at_precision": "unknown",
+      "published_at_source": "UI only displayed 방금; server timestamp unavailable.",
+      "observed_at": "2026-11-07T01:01:55Z",
+      "observed_at_precision": "second",
+      "account": "ONNEL LAB (onnel-lab-b5b9b0421)",
+      "draft_sha256": "a60872197fc1bc398a246aff90c3f7cedb936bb285951a511af48c637ce27bd1",
+      "posted_body_sha256": "002724ff68dfc832d90e2a2c6a53ccae5d72b4b0e8b83d07e2c5be0991b5d3e6",
+      "draft_hash_normalization": "Repository source UTF-8 with CRLF normalized to LF; terminal LF retained.",
+      "posted_body_hash_normalization": "Submitted UTF-8 source with CRLF normalized to LF; terminal LF removed; before platform text normalization and URL shortening.",
+      "body_evidence_kind": "submitted_source",
+      "submitted_body": "A reliable plan for how to record uncertainty without making a research note vague or falsely confident starts with the result and constraints.\n\nMark what is unknown, disputed or provisional; explain why, link the evidence and write a specific next check. Keep earlier reasoning when updating the note.\n\nBefore changing tools:\n- Isolate the claim. Write one checkable statement. Separate an event's date from your explanation of why it happened; they may need different evidence.\n- Name the uncertainty and its reason. Write “unknown: no dated record found,” not simply “maybe.” A search that found nothing does not prove that no record exists.\n\nRead the full article:\nhttps://onnellab.com/blog/en/mark-uncertainty-clearly-in-research-notes/",
+      "source_draft_path": "generated/social/linkedin/en/research/mark-uncertainty-clearly-in-research-notes.txt",
+      "canonical_url": "https://onnellab.com/blog/en/mark-uncertainty-clearly-in-research-notes/",
+      "approval_source": "Owner's browser-only scheduled publication automation.",
+      "verification_method": "dot_cloud_browser_permalink",
+      "verification_confidence": "browser_permalink",
+      "status": "new",
+      "browser_ui_timestamp": "방금",
+      "browser_ui_timezone": "not_recorded",
+      "observed_short_url": "https://lnkd.in/g54W-_ae",
+      "observation_source": "Dot cloud browser verified authenticated ONNEL LAB, current main receipts and profile activity before one UI submit. Live canonical, unchanged source and public audience verified. Success alert and exact permalink confirmed author, full paragraphs and canonical article card destination. LinkedIn normalized paragraph spacing and shortened text link. observed_at is completion of observation metadata recording, not server publication time."
     }
   ]
 }
