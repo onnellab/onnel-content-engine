@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "guide_id": "aligna-date-number-options-20261106",
-  "status": "scheduled_verified",
+  "status": "published_verified",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
   "video_id": "P-auyGH76a0",
   "video_url": "https://youtube.com/shorts/P-auyGH76a0",
@@ -28,7 +28,7 @@
     "video_first_frame_verified": true
   },
   "external_link_status": "Correct store URL saved as text; Studio requires one-time verification to make links clickable; not initiated.",
-  "public_verified": false,
+  "public_verified": true,
   "production_commit": "7caeadf6b3a8037224f7958d64ca3a8678e78b24",
   "studio_rechecks": [
     {
@@ -44,6 +44,18 @@
       "studio_url": "https://studio.youtube.com/video/P-auyGH76a0/edit",
       "public_verified": false,
       "notes": "Existing scheduled video independently rechecked; no upload or settings change."
+    },
+    {
+      "observed_at_utc": "2026-11-08T09:51:46Z",
+      "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+      "video_id": "P-auyGH76a0",
+      "status": "public",
+      "publication_date_ui": "2026-11-06",
+      "studio_url": "https://studio.youtube.com/channel/UCXyRedrldRBl9Y35nyWoTLg/videos/short",
+      "public_verified": true,
+      "server_publication_timestamp_verified": false,
+      "notes": "YouTube Studio full Shorts inventory showed Public and publication date with matching title and video ID. 18 Shorts and 6 ordinary videos inspected; no future scheduled entries. Observation time recorded after inspection, not server event time. No upload or video setting changed."
     }
-  ]
+  ],
+  "public_verification_observed_at": "2026-11-08T09:51:46Z"
 }
