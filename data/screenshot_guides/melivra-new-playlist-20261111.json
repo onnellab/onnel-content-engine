@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide",
+  "guide_id": "melivra-new-playlist-20261111",
+  "app_id": "APP-0007",
+  "locale": "en",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "source": {
+    "repository": "onnellab/melivra",
+    "commit": "d598b91f22b08174cf6510871557fe06201db978",
+    "capture_source_commit": "d110bb09dd31395f7c20447eaf29f6d270a90a5d",
+    "capture_version": "1.0.8+145",
+    "capture_variant": "integration-test-debug-production-id",
+    "capture_receipt_path": "assets/store_promo/raw/en/android/04.capture.json",
+    "capture_receipt_git_blob_sha": "3026e3bacf2af85e697d7c625993c30f5682dfe8",
+    "capture_method": "adb native Android emulator capture",
+    "public_version_observed": "1.0.8",
+    "public_version_checked_on": "2026-11-08",
+    "public_version_source": "https://play.google.com/store/apps/details?id=com.onnellab.melivra",
+    "release_evidence": "assets/store_promo/generated/android-release145.json identifies this exact raw hash and capture source as release 145 artwork; capture source pubspec is 1.0.8+145, matching current public 1.0.8. Not exact signed-binary attestation or current main runtime parity.",
+    "rights_review": "Repository-authored demo playlist names/counts and original procedural cover art; silent PCM fixtures. No third-party music or artwork, no audio in guide.",
+    "limitations": [
+      "Static Playlists screen only. No tap, playlist creation, saved result, track insertion, playback or performance demonstration.",
+      "Names and counts are seeded demonstration state, not user results.",
+      "Release-145 capture, not signed-public-binary attestation or latest main runtime parity."
+    ]
+  },
+  "assets": [
+    {
+      "local_name": "04.png",
+      "source_path": "assets/store_promo/raw/en/android/04.png",
+      "sha256": "db82f20a2405cd98d7a5e570bff6374aa45eca7a2092f94109ad9b1956205794",
+      "dimensions": [
+        1080,
+        2400
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "heading": "Start a new playlist",
+      "caption": "On Playlists, find New Playlist.",
+      "asset": "04.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Check the two options",
+      "caption": "New smart playlist is a separate control.",
+      "asset": "04.png",
+      "seconds": 5
+    },
+    {
+      "heading": "Melivra for Android",
+      "caption": "App link in the description.",
+      "asset": "04.png",
+      "seconds": 5
+    }
+  ],
+  "metadata": {
+    "title": "Where to Start a New Playlist in Melivra | Android Screenshot Guide",
+    "description": "In Melivra’s Playlists screen, find New Playlist near the top. New smart playlist is a separate control under Smart Playlists.\n\nStill-screen guide using a real Android emulator capture of Melivra 1.0.8+145 with repository-authored demonstration names, counts and original procedural cover art. No taps, playlist creation, saved results, track insertion, playback or speed demonstration is shown. This is not a live recording, and the video has no audio.\n\nMelivra for Android:\nhttps://play.google.com/store/apps/details?id=com.onnellab.melivra\n\n#Melivra #Playlists #Shorts",
+    "format_disclosure": "Still-screen guide · Demo library",
+    "audio": "none",
+    "made_for_kids": false,
+    "synthetic_media": false,
+    "category": "Education",
+    "cta": "Melivra for Android · Link in description",
+    "target_publish_at": "2026-11-11T09:00:00+09:00",
+    "timezone": "Asia/Seoul"
+  },
+  "authorization": {
+    "format_approved_on": "2026-10-08",
+    "rights_basis": "ONNELLAB-owned UI and repository-authored fixtures",
+    "scope": "English still-screen guide on approved ONNELLAB channel only",
+    "execution_scope": "User-approved Melivra-only free dot cloud Python/ffmpeg/ffprobe production and verification; no paid service, Work/Codex or user computer."
+  }
+}
