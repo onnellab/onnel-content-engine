@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import subprocess
@@ -196,6 +197,89 @@ CLIPNEST_CONTRACT = {'schema_version': 1,
 
 class GuideError(ValueError):
     pass
+
+def prepare_caption_lines(text, measure, max_width=960, max_lines=2):
+    """Draft-only word wrapping; never changes a reviewed manifest or render.
+
+    measure must use the proposed final font's actual pixel width. Unbreakable
+    words and excessive copy fail rather than shrinking text or truncating it.
+    The caller must review the resulting copy and geometry in a NEW contract.
+    """
+    if (not isinstance(text, str) or not text.strip() or len(text) > 5000
+            or any(ord(c) < 32 for c in text)
+            or isinstance(max_width, bool) or not isinstance(max_width, (int, float))
+            or not math.isfinite(max_width) or max_width <= 0
+            or type(max_lines) is not int or not 1 <= max_lines <= 3):
+        raise GuideError('caption_draft_invalid')
+    def fits(value):
+        width = measure(value)
+        if (isinstance(width, bool) or not isinstance(width, (int, float))
+                or not math.isfinite(width) or width < 0):
+            raise GuideError('caption_measure_invalid')
+        return width <= max_width
+    lines = []
+    current = ''
+    for word in text.split():
+        if not fits(word):
+            raise GuideError('caption_unbreakable_word')
+        candidate = (current + ' ' + word).strip()
+        if current and not fits(candidate):
+            lines.append(current)
+            current = word
+        else:
+            current = candidate
+    lines.append(current)
+    if len(lines) > max_lines:
+        raise GuideError('caption_too_many_lines')
+    return lines
+
+def audit_copy_timing(manifest):
+    """Conservative English copy heuristic, not proof of human comprehension.
+
+    Counts changing heading and caption together. Persistent labels/disclosure
+    require separate visual review; this does not approve facts or publication.
+    """
+    if manifest.get('locale') != 'en':
+        raise GuideError('copy_timing_locale_requires_review')
+    slides = manifest.get('slides')
+    if not isinstance(slides, list) or not slides:
+        raise GuideError('copy_timing_slides')
+    results = []
+    for index, slide in enumerate(slides):
+        if not isinstance(slide, dict):
+            raise GuideError('copy_timing_slide')
+        seconds = slide.get('seconds')
+        if (isinstance(seconds, bool) or not isinstance(seconds, (int, float))
+                or not math.isfinite(seconds) or seconds < 2):
+            raise GuideError('copy_timing_duration')
+        parts = [slide.get('heading'), slide.get('caption')]
+        if any(not isinstance(part, str) or not part.strip()
+               or any(ord(c) < 32 for c in part) for part in parts):
+            raise GuideError('copy_timing_text')
+        characters = len(' '.join(part.strip() for part in parts))
+        if characters / seconds > 20:
+            raise GuideError('copy_reading_time_exceeded')
+        results.append({'slide': index + 1, 'changing_characters': characters,
+                        'seconds': seconds, 'characters_per_second': characters / seconds})
+    return {'policy': 'english-changing-copy-20cps-v1', 'slides': results,
+            'human_comprehension_verified': False}
+
+def audit_text_box(bounds, occupied, screenshot_box):
+    """Check actual glyph bounds, not nominal text position or char count.
+
+    These are internal canvas margins, NOT a universal YouTube player safe area.
+    Keep an 8px gap from other labels and the full uncropped app screenshot.
+    """
+    if (len(bounds) != 4 or any(not isinstance(v, (int, float))
+            or isinstance(v, bool) or not math.isfinite(v) for v in bounds)
+            or bounds[0] >= bounds[2] or bounds[1] >= bounds[3]):
+        raise GuideError('text_bounds_invalid')
+    if bounds[0] < 60 or bounds[2] > 1020 or bounds[1] < 64 or bounds[3] > 1880:
+        raise GuideError('text_outside_safe_bounds')
+    for other in [screenshot_box, *occupied]:
+        if (bounds[0] < other[2] + 8 and bounds[2] + 8 > other[0]
+                and bounds[1] < other[3] + 8 and bounds[3] + 8 > other[1]):
+            raise GuideError('text_overlaps_screenshot_or_label')
 
 def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -740,6 +824,7 @@ def validate(manifest, asset_root):
 
 def render(manifest, asset_root, output):
     evidence = validate(manifest, asset_root)
+    copy_timing = audit_copy_timing(manifest)
     tagweaver = manifest['app_id'] == 'APP-0002'
     vaultxt = manifest['app_id'] == 'APP-0003'
     segra = manifest['app_id'] == 'APP-0004'
@@ -787,6 +872,11 @@ def render(manifest, asset_root, output):
     for index, slide in enumerate(manifest['slides']):
         canvas = Image.new('RGB', (1080, 1920), '#fbfaf7')
         draw = ImageDraw.Draw(canvas)
+        # Preserve existing screenshot placement and pixels exactly.
+        size = (675,1350) if aligna else (603,1311) if clipnest else (621,1380) if melivra or papira or new_guide else (756,1344)
+        x, y = (202,320) if aligna else (238,330) if clipnest else (229,300) if melivra or papira or new_guide else (162,320)
+        screenshot_box = (x-3, y-3, x+size[0]+3, y+size[1]+3)
+        occupied = []
         def center(text, y, font, color='#353041'):
             box = draw.textbbox((0,0), text, font=font)
             width = box[2] - box[0]
@@ -794,8 +884,8 @@ def render(manifest, asset_root, output):
                 raise GuideError('text_exceeds_safe_width')
             position = ((1080-width)/2, y)
             bounds = draw.textbbox(position, text, font=font)
-            if bounds[0] < 60 or bounds[2] > 1020 or bounds[1] < 64 or bounds[3] > 1880:
-                raise GuideError('text_outside_safe_bounds')
+            audit_text_box(bounds, occupied, screenshot_box)
+            occupied.append(bounds)
             text_bounds.append({'slide': index+1, 'text': text, 'bbox': list(bounds)})
             draw.text(position, text, font=font, fill=color)
         draw.rounded_rectangle((64,64,1016,126), radius=25, fill='#eae4f5')
@@ -806,8 +896,6 @@ def render(manifest, asset_root, output):
         if source.size != expected_source_size:
             raise GuideError('source_geometry_changed')
         # Entire screenshot, uniformly scaled. No crop, synthetic taps or UI edits.
-        size = (675,1350) if aligna else (603,1311) if clipnest else (621,1380) if melivra or papira or new_guide else (756,1344)
-        x, y = (202,320) if aligna else (238,330) if clipnest else (229,300) if melivra or papira or new_guide else (162,320)
         source = source.resize(size, Image.Resampling.LANCZOS)
         canvas.paste(source,(x,y))
         draw.rounded_rectangle((x-3,y-3,x+size[0]+3,y+size[1]+3), radius=3, outline='#d8cdeb', width=3)
@@ -835,7 +923,9 @@ def render(manifest, asset_root, output):
     evidence.update(video_file=video.name, video_sha256=sha256(video),
                     seconds=15, width=1080, height=1920, fps=30, audio=False,
                     slide_sha256={p.name:sha256(p) for p in frames},
-                    text_bounds=text_bounds)
+                    text_bounds=text_bounds, copy_timing=copy_timing,
+                    layout_checks={'glyph_bounds': True, 'minimum_gap_px': 8,
+                                   'player_overlay_verified': False})
     (output/'render-evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')
     return evidence
 
@@ -859,6 +949,7 @@ def main():
 
 if __name__=='__main__':
     raise SystemExit(main())
+
 
 
 
