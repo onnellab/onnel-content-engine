@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import os
 from pathlib import Path
 import re
@@ -20,6 +21,7 @@ from youtube_report_store import directory
 
 ASSETS_ROOT = Path.home() / "Library/Application Support/ONNELLAB/content-engine/aether-inn/assets"
 MYBOX_ROOT = Path.home() / "Library/CloudStorage/MYBOX-yungela1"
+CLOUD_COPY_TIMEOUT_SECONDS = 150  # One file, not the full 30-minute job.
 COVER_DEFAULTS = {
     "open_roads": "The Road Between Two Kingdoms.png",
     "lantern_towns": "The First Lantern of Autumn.png",
@@ -131,10 +133,22 @@ def stage_private_source(source: Path, target: Path, *, wake_provider: bool = Fa
     if partial.is_symlink():
         raise VideoError("aether_symlink_asset_rejected")
     last_error = None
-    for attempt in range(3):
+    # A File Provider source can block indefinitely inside shutil.copyfile().
+    # Isolate the cloud read in a killable child, with no shell or secret args.
+    # launchd's outer compilation loop owns MYBOX retries; no nested cloud
+    # retry storm and no duplicate production, render, or upload attempts.
+    attempts = 1 if wake_provider else 3
+    for attempt in range(attempts):
         partial.unlink(missing_ok=True)
         try:
-            shutil.copyfile(source, partial)
+            copied = subprocess.run(
+                ["/bin/cp", "-p", str(source), str(partial)],
+                stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL, check=False,
+                timeout=CLOUD_COPY_TIMEOUT_SECONDS,
+            )
+            if copied.returncode != 0:
+                raise OSError("source copy failed")
             os.chmod(partial, 0o600)
             os.utime(partial, ns=(source_stat.st_atime_ns, source_stat.st_mtime_ns))
             if partial.stat().st_size != source_stat.st_size:
@@ -142,12 +156,9 @@ def stage_private_source(source: Path, target: Path, *, wake_provider: bool = Fa
             digest = file_hash(partial)
             partial.replace(target)
             return target, digest
-        except OSError as error:
+        except (OSError, subprocess.TimeoutExpired) as error:
             last_error = error
             partial.unlink(missing_ok=True)
-            if attempt < 2 and wake_provider:
-                activate_mybox()
-                time.sleep(2 * (attempt + 1))
     raise VideoError("aether_asset_source_materialization_failed") from last_error
 
 
@@ -252,9 +263,23 @@ def sync(
     if theme is not None and theme not in THEMES:
         raise VideoError("aether_theme_invalid")
 
+    stage_key = theme or "all"
+    progress_path = assets_root / "registration-progress.json"
+
+    def checkpoint(stage: str, title: str | None = None) -> None:
+        # Private, non-credential diagnostic. Survives the parent worker's
+        # 30-minute timeout so the stalled file/stage isn't mistaken for a
+        # generic malformed worker response.
+        if execute:
+            atomic_json(progress_path, {
+                "schema_version": 1, "theme": theme, "slot": slot,
+                "stage": stage, "title": title,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            })
+
+    checkpoint("locate_mybox_source")
     source = find_source_root(source_root)
     wake_provider = source_root is None
-    stage_key = theme or "all"
     approved_tracks = {}
     quality_reviews = {}
     preselection = None
@@ -281,12 +306,14 @@ def sync(
         measured = []
         staged_specs = {}
         for row in ordered:
+            checkpoint("materialize_audio", source_title(row))
             relative = f"01_Audio_Master/{source_title(row)}.wav"
             source_path = checked_private_source(source, relative, {".wav"})
             target = assets_root / "staged" / stage_key / "masters" / f"{source_title(row)}.wav"
             staged, digest = stage_private_source(
                 source_path, target, wake_provider=wake_provider,
             )
+            checkpoint("review_audio", source_title(row))
             review = review_audio(staged)
             if review["source_sha256"] != digest:
                 raise VideoError("aether_offline_audio_source_changed")
@@ -317,12 +344,14 @@ def sync(
         }
     else:
         for row in eligible:
+            checkpoint("materialize_audio", source_title(row))
             relative = f"01_Audio_Master/{source_title(row)}.wav"
             source_path = checked_private_source(source, relative, {".wav"})
             target = assets_root / "staged" / stage_key / "masters" / f"{source_title(row)}.wav"
             staged, digest = stage_private_source(
                 source_path, target, wake_provider=wake_provider,
             )
+            checkpoint("review_audio", source_title(row))
             review = review_audio(staged)
             if review["source_sha256"] != digest:
                 raise VideoError("aether_offline_audio_source_changed")
@@ -350,6 +379,7 @@ def sync(
         filename = spec.get("filename")
         if not isinstance(filename, str) or not filename or "/" in filename or "\\" in filename:
             raise VideoError("aether_asset_approval_invalid")
+        checkpoint("materialize_cover", filename)
         relative = f"02_Cover_Original/{filename}"
         source_path = checked_private_source(source, relative, {".png", ".jpg", ".jpeg"})
         target = assets_root / "staged" / stage_key / "covers" / filename
@@ -360,6 +390,7 @@ def sync(
             assets_root / "staged" / stage_key / "covers"
             / f"compilation-{cover_theme}.png"
         )
+        checkpoint("render_cover", filename)
         branded = build_compilation_cover(
             staged, compilation_cover, THEMES[cover_theme][0],
         )
@@ -386,6 +417,7 @@ def sync(
     if execute:
         atomic_json(manifest_path, manifest)
         os.chmod(manifest_path, 0o600)
+        checkpoint("manifest_ready")
     return {
         "status": "ready" if execute else "dry_run",
         "asset_source": "local_private_cache",
