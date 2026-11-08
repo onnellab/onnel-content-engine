@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "guide_id": "melivra-player-rating-location-20261109",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "status": "intent_recorded",
+  "created_at_utc": "2026-11-08T09:59:00Z",
+  "target_publish_at": "2026-11-09T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "video_sha256": "49e2b99a11cad2bf2c478b0847a784b2ac3b8328d9ed776b096be850513abe5a",
+  "manifest_sha256": "d83ffe532f1eed0d575392941d3abf3182febb3709063d9037585db9ec16f75c",
+  "library_file_id": "libfile_338ff1be98808191a017ade89cea4bd9",
+  "upload_attempt": 1,
+  "uncertain_upload": false,
+  "duplicate_reconciliation": "2026-11-08 Studio 18 Shorts and 6 ordinary videos, no matching player-rating guide or future schedule.",
+  "video_id": null
+}
