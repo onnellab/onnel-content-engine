@@ -93,10 +93,41 @@ class Compilation(unittest.TestCase):
     def test_mybox_activation_is_bounded_and_checked(self):
         completed=Mock(returncode=0)
         with patch('aether_compilation_assets.subprocess.run',return_value=completed) as run, \
+             patch('aether_compilation_assets.mybox_host_running',return_value=True) as host, \
              patch('aether_compilation_assets.time.sleep') as sleep:
             activate_mybox()
         self.assertEqual(['/usr/bin/open','-gja','MYBOX'],run.call_args.args[0])
+        host.assert_called_once()
         sleep.assert_called_once_with(3)
+
+    def test_mybox_open_success_but_no_main_app_fails_closed(self):
+        with patch('aether_compilation_assets.subprocess.run',return_value=Mock(returncode=0)) as run, \
+             patch('aether_compilation_assets.mybox_host_running',return_value=False) as host, \
+             patch('aether_compilation_assets.time.sleep') as sleep:
+            with self.assertRaisesRegex(VideoError,'aether_asset_source_provider_unavailable'):
+                activate_mybox()
+        self.assertEqual(1,run.call_count)
+        self.assertEqual(10,host.call_count)
+        self.assertEqual([2]*9,[call.args[0] for call in sleep.call_args_list])
+
+    def test_mybox_host_can_appear_after_launchservices_returns(self):
+        with patch('aether_compilation_assets.subprocess.run',return_value=Mock(returncode=0)), \
+             patch('aether_compilation_assets.mybox_host_running',side_effect=[False,False,True]), \
+             patch('aether_compilation_assets.time.sleep') as sleep:
+            activate_mybox()
+        self.assertEqual([2,2,3],[call.args[0] for call in sleep.call_args_list])
+
+    def test_mybox_extension_alone_is_not_detected_as_main_app(self):
+        from aether_compilation_assets import mybox_host_running, MYBOX_HOST_PROCESS
+        fake=Mock(returncode=0,stdout=(
+            "/Applications/MYBOX.app/Contents/PlugIns/Extension.appex/Contents/MacOS/Extension\n"
+        ))
+        with patch('aether_compilation_assets.subprocess.run',return_value=fake) as ps:
+            self.assertFalse(mybox_host_running())
+        self.assertEqual(['/bin/ps','-axo','comm=','-ww'],ps.call_args.args[0])
+        fake.stdout=MYBOX_HOST_PROCESS+"\n"
+        with patch('aether_compilation_assets.subprocess.run',return_value=fake):
+            self.assertTrue(mybox_host_running())
 
     def test_catalog_style_suffix_is_not_part_of_source_filename(self):
         self.assertEqual('The Last Light Over Seren Fields', source_title({'title':'The Last Light Over Seren Fields Style:'}))

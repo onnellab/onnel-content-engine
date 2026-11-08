@@ -212,6 +212,28 @@ limits. Missing separately approved cover artwork or
 unverified commercial rights remain blockers; the audio quality delegation
 does not authorize bypassing those gates.
 
+## MYBOX File Provider host readiness — 2026-11-08
+
+A MYBOX Finder domain and its File Provider extension can stay visible and
+reported as logged-in even when the **MYBOX main app is not running**. In that
+state, cloud-only WAV/cover placeholders can pass metadata checks, while actual
+reads fail with macOS Cocoa error 3072 (operation cancelled). A successful
+`open -gja MYBOX` exit alone does not prove that the download host started.
+
+The canonical asset-source activation now waits a bounded interval for the
+actual `/Applications/MYBOX.app/Contents/MacOS/MYBOX` host, not merely the
+extension, before attempting source materialization. If it never appears,
+fail closed as `aether_asset_source_provider_unavailable` before any
+compilation worker, render, upload, or publication is initiated. Retain the
+existing bounded cloud-copy timeout and durable stage checkpoints. Do not
+kill shared File Provider processes, wipe caches, disconnect the cloud
+account, unlock Keychain, or bypass any approval/publication gate.
+
+On 2026-11-08, launching the MYBOX main app restored bounded full-size
+WAV copying into a temporary local path with SHA-256 and mode 0600; this is
+a source-access verification, **not** a new compilation or published video.
+Future production remains owned exclusively by the scheduled LaunchAgent.
+
 ## Fail-closed compilation-only recovery (MYBOX)
 
 A `partial` report with **only** `aether_asset_source_materialization_failed`

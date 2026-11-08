@@ -45,6 +45,26 @@ def _nfc_child(parent: Path, name: str, *, directory_only: bool = False) -> Path
     return matches[0] if matches else None
 
 
+MYBOX_HOST_PROCESS = "/Applications/MYBOX.app/Contents/MacOS/MYBOX"
+MYBOX_STARTUP_POLLS = 10
+MYBOX_STARTUP_INTERVAL_SECONDS = 2
+
+
+def mybox_host_running() -> bool:
+    """The File Provider extension alone is not a usable MYBOX download host."""
+    try:
+        completed = subprocess.run(
+            ["/bin/ps", "-axo", "comm=", "-ww"],
+            stdin=subprocess.DEVNULL, capture_output=True, text=True,
+            timeout=5, check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return completed.returncode == 0 and MYBOX_HOST_PROCESS in {
+        line.strip() for line in completed.stdout.splitlines()
+    }
+
+
 def activate_mybox() -> None:
     try:
         completed = subprocess.run(
@@ -56,7 +76,16 @@ def activate_mybox() -> None:
         raise VideoError("aether_asset_source_provider_unavailable") from None
     if completed.returncode != 0:
         raise VideoError("aether_asset_source_provider_unavailable")
-    time.sleep(3)
+    # LaunchServices may report success even if the main app promptly exits.
+    # Without the app, the extension can list dataless WAVs but cancels every
+    # fetchContentsForItemWithID request. Never start a long cloud copy then.
+    for poll in range(MYBOX_STARTUP_POLLS):
+        if mybox_host_running():
+            time.sleep(3)
+            return
+        if poll + 1 < MYBOX_STARTUP_POLLS:
+            time.sleep(MYBOX_STARTUP_INTERVAL_SECONDS)
+    raise VideoError("aether_asset_source_provider_unavailable")
 
 
 def find_source_root(override: Path | None = None) -> Path:
