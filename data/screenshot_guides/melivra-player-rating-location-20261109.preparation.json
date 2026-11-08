@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "guide_id": "melivra-player-rating-location-20261109",
+  "status": "prepared_verified",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "target_publish_at": "2026-11-09T09:00:00+09:00",
+  "manifest_sha256": "d83ffe532f1eed0d575392941d3abf3182febb3709063d9037585db9ec16f75c",
+  "video_sha256": "49e2b99a11cad2bf2c478b0847a784b2ac3b8328d9ed776b096be850513abe5a",
+  "library_file_id": "libfile_338ff1be98808191a017ade89cea4bd9",
+  "library_version": 1,
+  "independent_review": {
+    "status": "passed",
+    "reviewed_on": "2026-11-08",
+    "checks": [
+      "Original and all three final frames inspected",
+      "Top STILL-SCREEN DEMO disclosure",
+      "Source release145/capture receipt/pubspec linked",
+      "15s 1080x1920 H264 30fps 450 frames no audio",
+      "No playback, saved result or performance claims"
+    ]
+  },
+  "checks": {
+    "leaf_mutations": 53,
+    "focused_unittest_cases": 2,
+    "all_450_decoded_frames_match": true,
+    "max_mean_absolute_pixel_error": 1.0485386123971194,
+    "source_regions_pixel_exact": true,
+    "owned_encoder_decoder_exited": true
+  },
+  "limitations": [
+    "Actual small-phone YouTube overlays unverified",
+    "Not signed-release binary capture attestation",
+    "Full repository CI not run"
+  ]
+}
