@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "checked_at": "2026-11-07T13:41:28+09:00",
+  "checked_at": "2026-11-08T13:34:10+09:00",
   "visual_public_pages": true,
   "counts": {
-    "checked": 104,
+    "checked": 108,
     "already_done": 104,
     "verified": 0,
-    "pending": 0
+    "pending": 4
   },
   "items": [
     {
@@ -1254,6 +1254,54 @@
       "status": "already_done",
       "reason": "",
       "posted_url": "https://dev.to/onnellab/mark-uncertainty-clearly-in-research-notes-5b0m",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0087::x::en::x",
+      "topic_id": "TOPIC-0087",
+      "platform": "x",
+      "language": "en",
+      "template_id": "x",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0087::bluesky::en::bluesky",
+      "topic_id": "TOPIC-0087",
+      "platform": "bluesky",
+      "language": "en",
+      "template_id": "bluesky",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0087::linkedin::en::linkedin",
+      "topic_id": "TOPIC-0087",
+      "platform": "linkedin",
+      "language": "en",
+      "template_id": "linkedin",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
+      "verification_method": "",
+      "verification_confidence": ""
+    },
+    {
+      "manual_key": "TOPIC-0087::devto::en::markdown",
+      "topic_id": "TOPIC-0087",
+      "platform": "devto",
+      "language": "en",
+      "template_id": "markdown",
+      "status": "pending",
+      "reason": "No matching public post found",
+      "posted_url": "",
       "verification_method": "",
       "verification_confidence": ""
     }
