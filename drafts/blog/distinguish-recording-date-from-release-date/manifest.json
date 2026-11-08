@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "slug": "distinguish-recording-date-from-release-date",
+  "source_topic_id": "TOPIC-0105",
+  "status": "draft_not_ready",
+  "prepared_at": "2026-11-08",
+  "languages": [
+    "en",
+    "ko",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "pt-BR",
+    "de",
+    "fr",
+    "es"
+  ],
+  "topic_scope": "Product-neutral evidence-first workflow distinguishing recording, original release and the owned edition's release date. Not an app-capability claim or tag-mapping prescription.",
+  "search_evidence": "Editorial query hypothesis only. No measured keyword demand, ranking, conversion or ASO outcome claim.",
+  "sources": [
+    {
+      "url": "https://musicbrainz.org/doc/Release",
+      "verified_on": "2026-11-08",
+      "supports": "Release edition and its issue date; edition identity context."
+    },
+    {
+      "url": "https://id3.org/id3v2.4.0-frames",
+      "verified_on": "2026-11-08",
+      "supports": "Separate recording, original-release and release timestamps; no editor support inferred."
+    }
+  ],
+  "author_checks": {
+    "all_nine_full_drafts": true,
+    "shared_example": "Invented: recording 1998, first release 2000, owned edition 2024.",
+    "matching_internal_link_paths": true,
+    "internal_link_check": "All nine destination Markdown paths present in homepage repository; live HTTP/render unverified.",
+    "unverified_dates_not_invented": true,
+    "app_store_cta": "Not applicable to this product-neutral draft. No app name or unsupported editor feature added.",
+    "independent_translation_review": "pending",
+    "native_quality_score": null
+  },
+  "publication_gate": {
+    "ready": false,
+    "schedule_assigned": false,
+    "published": false,
+    "remaining": [
+      "Independent per-language semantic and naturalness review",
+      "Approved native quality/completeness/path/link checks without bypassing the CLI restriction",
+      "Illustration assets and manifest integration if required by the current contract",
+      "Desktop/mobile rendered-page and link verification",
+      "Normal topic/row allocation and scheduler admission after all nine pass"
+    ],
+    "restrictions": "Existing TOPIC-0114 drafts, topics.csv, publishing queues, workflows, preview scripts and privacy files unchanged. Do not publish EN/KO alone."
+  }
+}
