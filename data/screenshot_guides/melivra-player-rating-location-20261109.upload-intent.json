@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "melivra-player-rating-location-20261109",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "intent_recorded",
+  "status": "uploaded_processing",
   "created_at_utc": "2026-11-08T09:59:00Z",
   "target_publish_at": "2026-11-09T09:00:00+09:00",
   "timezone": "Asia/Seoul",
@@ -12,5 +12,5 @@
   "upload_attempt": 1,
   "uncertain_upload": false,
   "duplicate_reconciliation": "2026-11-08 Studio 18 Shorts and 6 ordinary videos, no matching player-rating guide or future schedule.",
-  "video_id": null
+  "video_id": "Cc7G1KpVVJE"
 }
