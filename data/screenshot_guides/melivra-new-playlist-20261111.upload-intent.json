@@ -2,7 +2,7 @@
   "schema_version": 1,
   "guide_id": "melivra-new-playlist-20261111",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
-  "status": "uploaded_processing",
+  "status": "scheduled_verified",
   "created_at_utc": "2026-11-08T10:35:25Z",
   "target_publish_at": "2026-11-11T09:00:00+09:00",
   "timezone": "Asia/Seoul",
@@ -21,5 +21,6 @@
     "focused_tests_passed": 4,
     "full_repository_ci": "not run",
     "existing_contracts_preserved": 12
-  }
+  },
+  "observed_at_utc": "2026-11-08T10:38:15Z"
 }
