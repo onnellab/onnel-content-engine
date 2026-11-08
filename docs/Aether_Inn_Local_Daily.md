@@ -224,9 +224,11 @@ The canonical asset-source activation now waits a bounded interval for the
 actual `/Applications/MYBOX.app/Contents/MacOS/MYBOX` host, not merely the
 extension, before attempting source materialization. If it never appears,
 fail closed as `aether_asset_source_provider_unavailable` before any
-compilation worker, render, upload, or publication is initiated. Retain the
-existing bounded cloud-copy timeout and durable stage checkpoints. Do not
-kill shared File Provider processes, wipe caches, disconnect the cloud
+compilation worker, render, upload, or publication is initiated. The
+backlog-single dataless WAV path also reuses this same activation check
+before reading its source. Retain the existing bounded cloud-copy timeout
+and durable stage checkpoints. Do not kill shared File Provider processes,
+wipe caches, disconnect the cloud
 account, unlock Keychain, or bypass any approval/publication gate.
 
 On 2026-11-08, launching the MYBOX main app restored bounded full-size

@@ -237,6 +237,22 @@ class SingleTests(unittest.TestCase):
             self.assertFalse((root / "job" / "source" / "master.wav").exists())
 
 
+    def test_backlog_source_uses_verified_mybox_main_app_readiness(self):
+        with patch("aether_compilation_assets.activate_mybox") as activate:
+            self.assertTrue(aether_single._warm_mybox_provider())
+            activate.assert_called_once()
+        with patch("aether_compilation_assets.activate_mybox",
+                   side_effect=aether_single.VideoError("aether_asset_source_provider_unavailable")):
+            self.assertFalse(aether_single._warm_mybox_provider())
+
+    def test_missing_mybox_main_app_never_reads_backlog_placeholder(self):
+        with patch.object(aether_single, "_warm_mybox_provider", return_value=False), \
+             patch.object(Path, "open", side_effect=AssertionError("never read placeholder")) as read:
+            with self.assertRaisesRegex(aether_single.VideoError,
+                                        "aether_single_backlog_wav_unavailable"):
+                aether_single._hydrate_dataless_backlog_wav(Path("/tmp/no-mybox-audio.wav"))
+            read.assert_not_called()
+
     def test_cloud_placeholder_hydration_failure_prevents_copy_and_upload(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary).resolve()

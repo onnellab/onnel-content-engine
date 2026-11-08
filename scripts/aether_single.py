@@ -96,14 +96,12 @@ def _is_dataless(path: Path) -> bool:
 
 
 def _warm_mybox_provider() -> bool:
-    app = Path("/Applications/MYBOX.app")
-    if not app.is_dir():
-        return False
+    """Use the same verified MYBOX main-host readiness as compilations."""
+    from aether_compilation_assets import activate_mybox
     try:
-        run_process(["/usr/bin/open", "-g", "-a", "MYBOX"], timeout=15)
+        activate_mybox()
     except VideoError:
         return False
-    time.sleep(1)
     return True
 
 
@@ -631,7 +629,8 @@ def _hydrate_dataless_backlog_wav(source: Path) -> None:
     Reading in bounded chunks triggers hydration, with limited retries for
     transient provider errors. Never fall back to new music generation.
     """
-    _warm_mybox_provider()
+    if not _warm_mybox_provider():
+        raise VideoError("aether_single_backlog_wav_unavailable")
     for attempt in range(3):
         try:
             with source.open("rb") as stream:
