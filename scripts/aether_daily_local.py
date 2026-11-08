@@ -33,6 +33,8 @@ COMPILATION_THEMES = ["open_roads", "lantern_towns", "woodland_water", "starlit_
 # compilation job/render/upload exists. They never retry uncertain publication.
 COMPILATION_ASSET_RETRY_DELAYS = (45, 120)
 MAX_SAME_DAY_COMPILATION_RECOVERIES = 2
+AETHER_ASSET_PROGRESS = (Path.home() / "Library/Application Support/ONNELLAB"
+                         / "content-engine/aether-inn/assets/registration-progress.json")
 
 TITLE_BANK = {
     "quiet_road": [
@@ -906,6 +908,25 @@ def scheduled_compilation_theme(now: datetime) -> str | None:
     return COMPILATION_THEMES[(delta // 14) % len(COMPILATION_THEMES)]
 
 
+def compilation_asset_timeout_report(theme: str, slot: str) -> dict:
+    """Fail closed, preserving the last private asset checkpoint on hard timeout."""
+    result = {"status": "blocked", "error": "aether_asset_registration_timeout"}
+    try:
+        info = json.loads(AETHER_ASSET_PROGRESS.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return result
+    stages = {"locate_mybox_source", "materialize_audio", "review_audio",
+              "materialize_cover", "render_cover", "manifest_ready"}
+    if (isinstance(info, dict) and info.get("schema_version") == 1
+            and info.get("theme") == theme and info.get("slot") == slot
+            and info.get("stage") in stages):
+        result["last_stage"] = info["stage"]
+        title = info.get("title")
+        if isinstance(title, str) and len(title) <= 200:
+            result["last_title"] = title
+    return result
+
+
 def run_compilation_slot(report: dict, now: datetime, *, recovery: bool = False) -> None:
     """Run only the scheduled compilation; retry transient MYBOX reads before upload.
 
@@ -931,9 +952,10 @@ def run_compilation_slot(report: dict, now: datetime, *, recovery: bool = False)
             ],
             timeout=1800,
         )
-        assets = json_stdout(stdout) or {
-            "status": "blocked", "error": "aether_asset_registration_output_invalid",
-        }
+        assets = (compilation_asset_timeout_report(theme, now.date().isoformat())
+                  if code == 124 else json_stdout(stdout) or {
+                      "status": "blocked", "error": "aether_asset_registration_output_invalid",
+                  })
         report["aether_compilation_assets"] = assets
         if code == 0 and assets.get("status") == "ready":
             break
