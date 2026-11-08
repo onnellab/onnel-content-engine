@@ -8,6 +8,7 @@ import os
 import re
 import sys
 import threading
+import time
 
 from short_video_pipeline import VideoError
 from youtube_profiles import profile_id, environment_names, ANALYTICS_SCOPE
@@ -104,7 +105,9 @@ class MacKeychain:
                                ('SecItemAdd', [C.c_void_p, C.POINTER(C.c_void_p)]),
                                ('SecItemUpdate', [C.c_void_p, C.c_void_p]), ('SecItemDelete', [C.c_void_p]),
                                ('SecKeychainSetUserInteractionAllowed', [C.c_bool]),
-                               ('SecKeychainGetUserInteractionAllowed', [C.POINTER(C.c_bool)])]:
+                               ('SecKeychainGetUserInteractionAllowed', [C.POINTER(C.c_bool)]),
+                                ('SecKeychainCopyDefault', [C.POINTER(C.c_void_p)]),
+                                ('SecKeychainGetStatus', [C.c_void_p, C.POINTER(C.c_uint32)])]:
                 function = getattr(self.sec, name); function.argtypes = args; function.restype = C.c_int32
         except (OSError, AttributeError):
             raise CredentialError('keychain_unavailable') from None
@@ -157,8 +160,30 @@ class MacKeychain:
     def _check(code):
         if code == 0: return
         if code == -25300: raise CredentialError('missing_youtube_credentials')
-        if code in (-25308, -25293, -128): raise CredentialError('keychain_locked_or_access_denied')
+        # Keep OSStatus categories distinct. "Always Allow" is an item ACL,
+        # not proof that the login keychain is unlocked at launchd run time.
+        if code == -25308: raise CredentialError('keychain_interaction_required')
+        if code == -25293: raise CredentialError('keychain_authentication_failed')
+        if code == -128: raise CredentialError('keychain_user_cancelled')
         raise CredentialError('keychain_operation_failed')
+
+    def _read_error(self, code):
+        # Query only the DEFAULT KEYCHAIN LOCK BIT. No credential data, unlock,
+        # UI prompt, environment fallback, or authentication side effect.
+        # Distinguishes an actually locked login keychain from an item ACL /
+        # background-session interaction requirement when OSStatus is ambiguous.
+        if code in (-25308, -25293):
+            keychain = C.c_void_p()
+            try:
+                if self.sec.SecKeychainCopyDefault(C.byref(keychain)) == 0 and keychain:
+                    flags = C.c_uint32()
+                    if (self.sec.SecKeychainGetStatus(keychain, C.byref(flags)) == 0
+                            and not (flags.value & 0x1)):
+                        raise CredentialError('keychain_default_locked')
+            finally:
+                if keychain:
+                    self.cf.CFRelease(keychain)
+        self._check(code)
 
     def present(self):
         """Attribute-only existence query; does not retrieve any credential payload."""
@@ -171,8 +196,19 @@ class MacKeychain:
     def load(self):
         query_values = {**self._base(), 'kSecReturnData': ('kCFBooleanTrue',), 'kSecMatchLimit': ('kSecMatchLimitOne',)}
         result = C.c_void_p()
-        with self._interaction(), self._dict(query_values) as query:
-            code = self.sec.SecItemCopyMatching(query, C.byref(result))
+        # Retries only an uncompleted LOCAL keychain read during a transient
+        # securityd/session transition. Never retry an OAuth/API request.
+        for attempt in range(3):
+            with self._interaction(), self._dict(query_values) as query:
+                code = self.sec.SecItemCopyMatching(query, C.byref(result))
+                if code != 0 and (code != -25308 or attempt == 2):
+                    self._read_error(code)
+            if code == 0:
+                break
+            if result:
+                self.cf.CFRelease(result)
+                result = C.c_void_p()
+            time.sleep((1, 3)[attempt])
         self._check(code)
         try:
             size = self.cf.CFDataGetLength(result)
