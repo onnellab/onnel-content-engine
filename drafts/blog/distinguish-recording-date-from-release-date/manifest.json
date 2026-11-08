@@ -36,7 +36,7 @@
     "internal_link_check": "All nine destination Markdown paths present in homepage repository; live HTTP/render unverified.",
     "unverified_dates_not_invented": true,
     "app_store_cta": "Not applicable to this product-neutral draft. No app name or unsupported editor feature added.",
-    "independent_translation_review": "pending",
+    "independent_translation_review": "Independent comparative editorial review completed; documented prose corrections applied. See translation-review.md. Not a native pipeline or rendering pass.",
     "native_quality_score": null
   },
   "publication_gate": {
@@ -44,12 +44,30 @@
     "schedule_assigned": false,
     "published": false,
     "remaining": [
-      "Independent per-language semantic and naturalness review",
       "Approved native quality/completeness/path/link checks without bypassing the CLI restriction",
-      "Illustration assets and manifest integration if required by the current contract",
+      "Nine localized illustrations, manifest integration and rendered-image inspection required by the current Topic → Research → Article → Images → Publishing contract",
       "Desktop/mobile rendered-page and link verification",
       "Normal topic/row allocation and scheduler admission after all nine pass"
     ],
     "restrictions": "Existing TOPIC-0114 drafts, topics.csv, publishing queues, workflows, preview scripts and privacy files unchanged. Do not publish EN/KO alone."
+  },
+  "independent_review": {
+    "source_commit": "fb4d1c74431cdc158e2fc36173cfd114eac05adc",
+    "date": "2026-11-08",
+    "method": "Separate AI text reviewer; full nine-locale comparison",
+    "languages": [
+      "en",
+      "ko",
+      "ja",
+      "zh-Hans",
+      "zh-Hant",
+      "pt-BR",
+      "de",
+      "fr",
+      "es"
+    ],
+    "record": "drafts/blog/distinguish-recording-date-from-release-date/translation-review.md",
+    "corrections_applied": true,
+    "native_or_render_pass": false
   }
 }

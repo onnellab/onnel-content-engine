@@ -1,13 +1,13 @@
 ---
-title: "Distingue la fecha de grabación de la fecha de lanzamiento en los metadatos musicales"
-description: "Separa la grabación, el primer lanzamiento y la edición que tienes. Conserva las fuentes y no inventes las fechas desconocidas."
+title: "Fechas de grabación y lanzamiento en los metadatos musicales"
+description: "Distingue la fecha de grabación, la del primer lanzamiento y la de tu edición. Conserva las fuentes y deja sin completar las fechas que no puedas confirmar."
 language: "es"
 slug: "distinguish-recording-date-from-release-date"
 category: "music"
 short_answer: "La fecha de grabación indica cuándo se grabó la interpretación; la de lanzamiento, cuándo se publicó el audio. Identifica la edición exacta, compara la información oficial y el libreto y conserva la fuente de cada fecha. No deduzcas el año de grabación a partir del año de lanzamiento."
 primary_keyword: "fecha de grabación y fecha de lanzamiento"
 secondary_keywords: ""
-card_title: "Distingue la fecha de grabación de la fecha de lanzamiento en los metadatos musicales"
+card_title: "Fechas de grabación y lanzamiento en los metadatos musicales"
 status: "draft"
 related_apps: ""
 search_intent: "workflow"
@@ -15,7 +15,7 @@ tags: "fecha de grabación y fecha de lanzamiento"
 canonical_url: "https://onnellab.com/blog/es/distinguish-recording-date-from-release-date/"
 ---
 
-# Distingue la fecha de grabación de la fecha de lanzamiento en los metadatos musicales
+# Fechas de grabación y lanzamiento en los metadatos musicales
 
 La fecha de grabación indica cuándo se grabó la interpretación; la de lanzamiento, cuándo se publicó el audio. Identifica la edición exacta, compara la información oficial y el libreto y conserva la fuente de cada fecha. No deduzcas el año de grabación a partir del año de lanzamiento.
 
@@ -43,11 +43,11 @@ El año de remasterización, un aviso de derechos de autor o la fecha de modific
 4. Mantén solo la precisión respaldada por las pruebas. Si únicamente conoces el año, no inventes el mes ni el día. Registra las contradicciones en una nota aparte.
 5. Comprueba las definiciones de los campos del editor y la visualización del reproductor antes de guardar una copia de prueba. Un campo llamado «Año» puede no conservar todas estas distinciones. Vuelve a abrir la copia guardada y revísala antes de ampliar los cambios.
 
-La [especificación ID3v2.4](https://id3.org/id3v2.4.0-frames) distingue los tiempos de grabación, primer lanzamiento y lanzamiento. Eso no demuestra que un editor ofrezca todos los campos ni que un reproductor los muestre como esperas. Esta guía no prescribe una asignación a campos de etiquetas concretos.
+La [especificación ID3v2.4](https://id3.org/id3v2.4.0-frames) distingue las marcas de tiempo de grabación, lanzamiento original y lanzamiento. Eso no demuestra que un editor ofrezca todos los campos ni que un reproductor los muestre como esperas. Esta guía no prescribe una asignación a campos de etiquetas concretos.
 
 ## Un ejemplo ficticio
 
-Imagina que el libreto indique expresamente una grabación de 1998, las notas oficiales identifiquen el primer lanzamiento en 2000 y tu edición se haya publicado en 2024. Conserva los tres datos por separado con sus fuentes. La edición de 2024 no convierte la interpretación en una grabación de 2024.
+Supongamos que el libreto indica expresamente que la grabación se realizó en 1998, las notas oficiales sitúan su primer lanzamiento en 2000 y tu edición se publicó en 2024. Conserva los tres datos por separado con sus fuentes. La edición de 2024 no convierte la interpretación en una grabación de 2024.
 
 Si falta la fecha de grabación, escribe «desconocida» en tus notas de investigación. No copies 2000 o 2024 en el campo de grabación solo para rellenar el hueco.
 

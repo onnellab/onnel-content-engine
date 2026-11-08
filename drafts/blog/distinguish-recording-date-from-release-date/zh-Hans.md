@@ -33,7 +33,7 @@ MusicBrainz的[发行文档](https://musicbrainz.org/doc/Release)将具体版本
 | 这段录音何时首次发行？ | 能确定首次发行的官方信息 | 再版日期就是首次发行日期 |
 | 我持有的版本何时发行？ | 对应版本及发行地区的信息 | 所有版本的日期都相同 |
 
-仅凭重新母带处理的年份、版权标记或文件修改时间，不能同时回答这三个问题。
+仅凭母带重制年份、版权标记或文件修改时间，不能同时回答这三个问题。
 
 ## 修改日期前的五个步骤
 
@@ -64,4 +64,4 @@ MusicBrainz的[发行文档](https://musicbrainz.org/doc/Release)将具体版本
 
 ## 下一步
 
-选择一张专辑，在修改标签前建立来源笔记。另一个问题可参考[区分重复文件与不同录音](/blog/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/)。日期笔记本身不能证明两个文件包含同一段录音。
+选择一张专辑，在修改标签前建立来源笔记。如果你还需要判断文件是否重复，可以参考[区分重复文件与不同录音](/blog/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/)。日期笔记本身不能证明两个文件包含同一段录音。

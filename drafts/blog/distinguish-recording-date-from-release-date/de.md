@@ -1,13 +1,13 @@
 ---
-title: "Aufnahmedatum und Veröffentlichungsdatum in Musik-Metadaten unterscheiden"
-description: "Trennen Sie Aufnahme, Erstveröffentlichung und Ausgabe, notieren Sie die Quellen und lassen Sie unbekannte Musikdaten offen."
+title: "Aufnahme- und Veröffentlichungsdatum in Musik-Metadaten"
+description: "Trennen Sie das Aufnahmedatum vom Datum der Erstveröffentlichung und dem Erscheinungsdatum Ihrer Ausgabe. Halten Sie Quellen fest und lassen Sie unbekannte Angaben offen."
 language: "de"
 slug: "distinguish-recording-date-from-release-date"
 category: "music"
 short_answer: "Das Aufnahmedatum bezeichnet den Zeitpunkt der Aufnahme, das Veröffentlichungsdatum den Zeitpunkt der Veröffentlichung. Bestimmen Sie die genaue Ausgabe, vergleichen Sie offizielle Angaben und Booklet und notieren Sie die Quelle jeder Datumsangabe. Leiten Sie das Aufnahmejahr nicht aus dem Veröffentlichungsjahr ab."
 primary_keyword: "Aufnahmedatum und Veröffentlichungsdatum"
 secondary_keywords: ""
-card_title: "Aufnahmedatum und Veröffentlichungsdatum in Musik-Metadaten unterscheiden"
+card_title: "Aufnahme- und Veröffentlichungsdatum in Musik-Metadaten"
 status: "draft"
 related_apps: ""
 search_intent: "workflow"
@@ -15,7 +15,7 @@ tags: "Aufnahmedatum und Veröffentlichungsdatum"
 canonical_url: "https://onnellab.com/blog/de/distinguish-recording-date-from-release-date/"
 ---
 
-# Aufnahmedatum und Veröffentlichungsdatum in Musik-Metadaten unterscheiden
+# Aufnahme- und Veröffentlichungsdatum in Musik-Metadaten
 
 Das Aufnahmedatum bezeichnet den Zeitpunkt der Aufnahme, das Veröffentlichungsdatum den Zeitpunkt der Veröffentlichung. Bestimmen Sie die genaue Ausgabe, vergleichen Sie offizielle Angaben und Booklet und notieren Sie die Quelle jeder Datumsangabe. Leiten Sie das Aufnahmejahr nicht aus dem Veröffentlichungsjahr ab.
 
@@ -41,7 +41,7 @@ Ein Remastering-Jahr, ein Copyright-Vermerk oder der Änderungszeitpunkt einer D
 2. Gleichen Sie die Ausgabe ab. Erfassen Sie, soweit bekannt, Label, Katalognummer, Format und Veröffentlichungsgebiet.
 3. Lesen Sie Booklet und offizielle Veröffentlichungsseite. Halten Sie fest, was das jeweilige Datum laut Quelle bezeichnet, einschließlich Seitenzahl oder URL.
 4. Bleiben Sie bei der belegten Genauigkeit. Ist nur das Jahr bekannt, erfinden Sie weder Monat noch Tag. Notieren Sie Widersprüche separat.
-5. Prüfen Sie vor dem Speichern einer Testkopie die Felddefinitionen des Editors und die Anzeige im Player. Ein Feld namens „Jahr“ erhält möglicherweise nicht alle Unterschiede. Öffnen Sie die gespeicherte Kopie erneut und kontrollieren Sie sie, bevor Sie weitere Dateien bearbeiten.
+5. Prüfen Sie vor dem Speichern einer Testkopie die Felddefinitionen des Editors und die Anzeige im Player. Ein Feld namens „Jahr“ bildet diese Unterschiede möglicherweise nicht vollständig ab. Öffnen Sie die gespeicherte Kopie erneut und kontrollieren Sie sie, bevor Sie weitere Dateien bearbeiten.
 
 Die [ID3v2.4-Spezifikation](https://id3.org/id3v2.4.0-frames) unterscheidet Zeitangaben für Aufnahme, Erstveröffentlichung und Veröffentlichung. Das beweist nicht, dass ein bestimmter Editor alle Felder anbietet oder ein Player sie wie erwartet anzeigt. Diese Anleitung legt keine Zuordnung zu Tag-Feldern fest.
 

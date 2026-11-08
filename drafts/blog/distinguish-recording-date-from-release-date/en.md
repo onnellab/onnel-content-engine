@@ -1,5 +1,5 @@
 ---
-title: "Distinguish Recording Dates from Release Dates in Music Metadata"
+title: "Recording Date vs. Release Date in Music Metadata"
 description: "Separate recording, original release and edition dates, keep source notes, and leave uncertain music metadata dates unknown."
 language: "en"
 slug: "distinguish-recording-date-from-release-date"
@@ -7,7 +7,7 @@ category: "music"
 short_answer: "A recording date describes when the performance was recorded; a release date describes when music was issued. Identify the exact edition, compare its official information and booklet, and keep each date with its source. Do not invent a recording date from a release year."
 primary_keyword: "recording date versus release date"
 secondary_keywords: ""
-card_title: "Distinguish Recording Dates from Release Dates in Music Metadata"
+card_title: "Recording Date vs. Release Date in Music Metadata"
 status: "draft"
 related_apps: ""
 search_intent: "workflow"
@@ -15,7 +15,7 @@ tags: "recording date versus release date"
 canonical_url: "https://onnellab.com/blog/en/distinguish-recording-date-from-release-date/"
 ---
 
-# Distinguish Recording Dates from Release Dates in Music Metadata
+# Recording Date vs. Release Date in Music Metadata
 
 A recording date describes when the performance was recorded; a release date describes when music was issued. Identify the exact edition, compare its official information and booklet, and keep each date with its source. Do not invent a recording date from a release year.
 

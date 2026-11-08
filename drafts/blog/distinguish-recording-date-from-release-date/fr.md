@@ -1,13 +1,13 @@
 ---
-title: "Distinguer date d’enregistrement et date de sortie dans les métadonnées musicales"
-description: "Séparez l’enregistrement, la première sortie et la sortie de votre édition. Conservez les sources et ne devinez pas les dates inconnues."
+title: "Dates d’enregistrement et de sortie dans les métadonnées musicales"
+description: "Distinguez la date d’enregistrement, celle de la première sortie et celle de votre édition. Conservez les sources et ne devinez pas les dates inconnues."
 language: "fr"
 slug: "distinguish-recording-date-from-release-date"
 category: "music"
-short_answer: "La date d’enregistrement indique quand l’interprétation a été enregistrée ; la date de sortie indique quand l’audio a été publié. Identifiez l’édition précise, comparez les informations officielles et le livret, puis associez chaque date à sa source. Ne déduisez pas l’année d’enregistrement de l’année de sortie."
+short_answer: "La date d’enregistrement indique quand l’interprétation a été enregistrée ; la date de sortie indique quand l’enregistrement a été publié. Identifiez l’édition précise, comparez les informations officielles et le livret, puis associez chaque date à sa source. Ne déduisez pas l’année d’enregistrement de l’année de sortie."
 primary_keyword: "date d’enregistrement et date de sortie"
 secondary_keywords: ""
-card_title: "Distinguer date d’enregistrement et date de sortie dans les métadonnées musicales"
+card_title: "Dates d’enregistrement et de sortie dans les métadonnées musicales"
 status: "draft"
 related_apps: ""
 search_intent: "workflow"
@@ -15,9 +15,9 @@ tags: "date d’enregistrement et date de sortie"
 canonical_url: "https://onnellab.com/blog/fr/distinguish-recording-date-from-release-date/"
 ---
 
-# Distinguer date d’enregistrement et date de sortie dans les métadonnées musicales
+# Dates d’enregistrement et de sortie dans les métadonnées musicales
 
-La date d’enregistrement indique quand l’interprétation a été enregistrée ; la date de sortie indique quand l’audio a été publié. Identifiez l’édition précise, comparez les informations officielles et le livret, puis associez chaque date à sa source. Ne déduisez pas l’année d’enregistrement de l’année de sortie.
+La date d’enregistrement indique quand l’interprétation a été enregistrée ; la date de sortie indique quand l’enregistrement a été publié. Identifiez l’édition précise, comparez les informations officielles et le livret, puis associez chaque date à sa source. Ne déduisez pas l’année d’enregistrement de l’année de sortie.
 
 ## Commencez par une édition précise
 
@@ -57,7 +57,7 @@ Si la date d’enregistrement manque, écrivez « inconnue » dans vos notes de 
 Vérifiez d’abord que les preuves concernent toutes les pistes. Un album peut réunir plusieurs séances ou des titres bonus.
 
 ### Quelle date mon lecteur doit-il afficher ?
-Cela dépend de votre objectif de classement et du lecteur. Préservez d’abord les faits distincts, puis testez la lecture d’une copie. Ne perdez pas les sources pour obtenir un affichage plus uniforme.
+Cela dépend de votre objectif de classement et du lecteur. Conservez d’abord les différentes dates avec leurs sources, puis vérifiez leur affichage dans le lecteur à partir d’une copie. Ne perdez pas les sources pour obtenir un affichage plus uniforme.
 
 ### Que faire si deux sources se contredisent ?
 Gardez les deux références et décrivez le conflit. Vérifiez qu’elles concernent la même édition et le même territoire. Laissez la valeur en suspens plutôt que de retenir l’année la plus pratique.
