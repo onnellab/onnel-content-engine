@@ -1,6 +1,7 @@
 """Aether media boundary tests. No network, credentials or real publication."""
 import copy
 import json
+import subprocess
 from pathlib import Path
 import sys
 import tempfile
@@ -11,7 +12,7 @@ from short_video_pipeline import VideoError,file_hash
 from short_video_youtube import metadata,UploadError
 from aether_compose import checked_asset,render
 from aether_compilation import worker,brief_for,private_job_directory
-from aether_compilation_assets import activate_mybox,approval_template,hash_private_source,source_title,sync as sync_assets
+from aether_compilation_assets import activate_mybox,approval_template,hash_private_source,source_title,stage_private_source,CLOUD_COPY_TIMEOUT_SECONDS,sync as sync_assets
 from aether_planner import plan,read_catalog
 from datetime import datetime,timezone
 
@@ -65,6 +66,30 @@ class Compilation(unittest.TestCase):
             with self.assertRaisesRegex(VideoError,'aether_asset_source_materialization_failed'):
                 hash_private_source(Path('/tmp/cloud-placeholder.wav'))
 
+    def test_cloud_copy_timeout_kills_child_and_keeps_target_uncommitted(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            source = Path(temporary) / "cloud.wav"
+            target = Path(temporary) / "staged" / "audio.wav"
+            source.write_bytes(b"local test data")
+            with patch('aether_compilation_assets.subprocess.run',
+                       side_effect=subprocess.TimeoutExpired('cp', CLOUD_COPY_TIMEOUT_SECONDS)) as child:
+                with self.assertRaisesRegex(VideoError, 'aether_asset_source_materialization_failed'):
+                    stage_private_source(source, target, wake_provider=True)
+            self.assertEqual(1, child.call_count)
+            self.assertEqual(CLOUD_COPY_TIMEOUT_SECONDS, child.call_args.kwargs['timeout'])
+            self.assertFalse(target.exists())
+            self.assertFalse(target.with_suffix(".wav.partial").exists())
+
+    def test_failed_cloud_copy_never_looks_like_a_valid_staged_asset(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            source = Path(temporary) / "cloud.wav"
+            target = Path(temporary) / "staged" / "audio.wav"
+            source.write_bytes(b"local test data")
+            with patch('aether_compilation_assets.subprocess.run', return_value=Mock(returncode=1)):
+                with self.assertRaisesRegex(VideoError, 'aether_asset_source_materialization_failed'):
+                    stage_private_source(source, target, wake_provider=True)
+            self.assertFalse(target.exists())
+
     def test_mybox_activation_is_bounded_and_checked(self):
         completed=Mock(returncode=0)
         with patch('aether_compilation_assets.subprocess.run',return_value=completed) as run, \
@@ -110,6 +135,9 @@ class Compilation(unittest.TestCase):
             self.assertNotIn(unused['id'],manifest['tracks'])
             self.assertEqual({'open_roads'},set(manifest['covers']))
             self.assertEqual('local_private_cache',manifest['asset_source'])
+            progress=json.loads((assets/'registration-progress.json').read_text())
+            self.assertEqual('manifest_ready',progress['stage'])
+            self.assertEqual('open_roads',progress['theme'])
             self.assertTrue(all(spec['path'].startswith('staged/open_roads/masters/') for spec in manifest['tracks'].values()))
             self.assertEqual(3,result['approved_track_count'])
 
