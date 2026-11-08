@@ -36,6 +36,33 @@ class CompilationSlot(unittest.TestCase):
         ))
 
 
+    def test_timeout_reports_private_asset_stage_without_retrying_publisher(self):
+        report = {"blockers": [], "steps": []}
+        now = datetime(2026, 11, 8, 6, 20, tzinfo=KST)
+        with tempfile.TemporaryDirectory() as temporary:
+            progress = Path(temporary) / "registration-progress.json"
+            progress.write_text(json.dumps({
+                "schema_version": 1, "theme": "starlit_rest",
+                "slot": "2026-11-08", "stage": "materialize_audio",
+                "title": "A Sky Filled with Migrating Stars",
+            }), encoding="utf-8")
+            with patch.object(module, "AETHER_ASSET_PROGRESS", progress), \
+                 patch.object(module, "run_step", return_value=(124, "", "local_worker_timeout")) as run:
+                module.run_compilation_slot(report, now)
+        self.assertEqual(1, run.call_count)
+        self.assertEqual("aether_asset_registration_timeout", report["compilation_slot"]["error"])
+        self.assertEqual("materialize_audio", report["aether_compilation_assets"]["last_stage"])
+        self.assertEqual("A Sky Filled with Migrating Stars",
+                         report["aether_compilation_assets"]["last_title"])
+        self.assertEqual(["aether_asset_registration_timeout"], report["blockers"])
+
+    def test_stale_checkpoint_is_not_attributed_to_current_timeout(self):
+        result = module.compilation_asset_timeout_report("starlit_rest", "2026-11-08")
+        self.assertEqual("aether_asset_registration_timeout", result["error"])
+        # The report must never invent a successful registration or upload.
+        self.assertEqual("blocked", result["status"])
+
+
 class RepositoryFreshness(unittest.TestCase):
     def test_initial_fetch_failure_blocks_before_cached_divergence_check(self):
         report = {"blockers": [], "steps": []}
