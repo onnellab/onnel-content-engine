@@ -1,6 +1,7 @@
 """OAuth and credential tests are offline and never use the user's Keychain."""
 from __future__ import annotations
 import copy
+import ctypes as C
 import hashlib
 import base64
 import json
@@ -88,9 +89,38 @@ class CredentialTests(unittest.TestCase):
         env=resolve_credentials(store=MemoryStore(BUNDLE),environ={})
         with patch('short_video_youtube.resolve_credentials',side_effect=AssertionError('keychain')):
             YouTube(env=env,send=FakeGoogle()).verify()
-    def test_native_status_codes_are_safe(self):
-        for code,expected in [(-25300,'missing_youtube_credentials'),(-25308,'keychain_locked_or_access_denied'),(-1,'keychain_operation_failed')]:
-            with self.subTest(code=code),self.assertRaisesRegex(CredentialError,expected): MacKeychain._check(code)
+    def test_native_status_codes_are_safe_and_distinct(self):
+        cases = [
+            (-25300, 'missing_youtube_credentials'),
+            (-25308, 'keychain_interaction_required'),
+            (-25293, 'keychain_authentication_failed'),
+            (-128, 'keychain_user_cancelled'),
+            (-1, 'keychain_operation_failed'),
+        ]
+        for code, expected in cases:
+            with self.subTest(code=code), self.assertRaisesRegex(CredentialError, expected):
+                MacKeychain._check(code)
+
+    def test_default_keychain_lock_is_distinct_from_item_acl(self):
+        # Pure fake Security.framework; no real Keychain item is accessed.
+        store = object.__new__(MacKeychain)
+        store.sec = Mock()
+        store.cf = Mock()
+        flags = [0]  # macOS kSecUnlockStateStatus bit absent
+        def copy_default(pointer):
+            C.cast(pointer, C.POINTER(C.c_void_p))[0] = C.c_void_p(7)
+            return 0
+        def get_status(_keychain, pointer):
+            C.cast(pointer, C.POINTER(C.c_uint32))[0] = flags[0]
+            return 0
+        store.sec.SecKeychainCopyDefault.side_effect = copy_default
+        store.sec.SecKeychainGetStatus.side_effect = get_status
+        with self.assertRaisesRegex(CredentialError, 'keychain_default_locked'):
+            store._read_error(-25308)
+        flags[0] = 1  # same item error but default login keychain unlocked
+        with self.assertRaisesRegex(CredentialError, 'keychain_interaction_required'):
+            store._read_error(-25308)
+        self.assertEqual(2, store.cf.CFRelease.call_count)
     def test_duplicate_or_invalid_json_fails_closed(self):
         for raw in ['{"a":1,"a":2}','[1]','{"a":NaN}','x'*33000]:
             with self.subTest(raw=raw[:16]),self.assertRaises(CredentialError): strict_json(raw)
