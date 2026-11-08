@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-07T06:29:40+00:00",
+  "checked_at": "2026-11-08T06:36:16+00:00",
   "status": "ok",
   "sources": {
     "apple": {
@@ -231,7 +231,7 @@
     },
     "google": {
       "status": "ok",
-      "store_performance_objects": 22,
+      "store_performance_objects": 29,
       "financial": {
         "status": "ok",
         "objects": 4
@@ -239,7 +239,7 @@
       "principal": "id-989@polar-outlet-171708.iam.gserviceaccount.com"
     }
   },
-  "daily_rows": 3017,
-  "apple_additions": 0,
-  "google_additions": 1013
+  "daily_rows": 3044,
+  "apple_additions": 39,
+  "google_additions": 1027
 }
