@@ -1,0 +1,4 @@
+Before you compare two music files without accidentally discarding a different recording, separate the required result from the optional steps.
+
+Read the full article:
+https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/

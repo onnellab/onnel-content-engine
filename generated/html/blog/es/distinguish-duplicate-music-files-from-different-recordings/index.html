@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Distingue archivos de música duplicados de grabaciones diferentes</title>
+  <meta name="description" content="Distingue nombres, bytes y grabaciones. Conserva los originales y documenta las parejas de archivos de música que sigan siendo dudosas.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/es/distinguish-duplicate-music-files-from-different-recordings/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Distingue archivos de música duplicados de grabaciones diferentes">
+  <meta property="og:description" content="Distingue nombres, bytes y grabaciones. Conserva los originales y documenta las parejas de archivos de música que sigan siendo dudosas.">
+  <meta property="og:url" content="https://onnellab.com/blog/es/distinguish-duplicate-music-files-from-different-recordings/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Distingue archivos de música duplicados de grabaciones diferentes">
+  <meta name="twitter:description" content="Distingue nombres, bytes y grabaciones. Conserva los originales y documenta las parejas de archivos de música que sigan siendo dudosas.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/es/distinguish-duplicate-music-files-from-different-recordings/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/es/distinguish-duplicate-music-files-from-different-recordings/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Distingue archivos de música duplicados de grabaciones diferentes</h1>
+<p>Dos archivos con el mismo título pueden contener interpretaciones distintas. A la inversa, nombres diferentes pueden ocultar copias del mismo archivo. Antes de ordenar la biblioteca, define qué entiendes por «duplicado».</p>
+<h2>Pregunta</h2>
+<p>¿Cómo comparo dos archivos de música sin descartar por error una grabación diferente?</p>
+<h2>Respuesta breve</h2>
+<p>Conserva primero ambos archivos. Revisa su procedencia y las indicaciones de versión, y escucha pasajes correspondientes. Separa la identidad del archivo de la identidad de la grabación. Si el título, la duración o las etiquetas no bastan, conserva ambos y anota la duda.</p>
+<figure><img src="/blog-assets/es/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg" alt="Compara antes de borrar"></figure>
+<h2>Tres comparaciones distintas</h2>
+<p>La identidad del archivo significa que coinciden los bytes del archivo completo. Comparar grabaciones consiste en investigar si representan la misma interpretación y mezcla.</p>
+<table><thead><tr><th>Comparación</th><th>Qué se comprueba</th><th>Qué no demuestra</th></tr></thead><tbody><tr><td>Bytes del archivo</td><td>¿Son idénticos los archivos completos?</td><td>Si hace falta otra copia</td></tr><tr><td>Grabación</td><td>¿Es la misma interpretación y mezcla?</td><td>Si la codificación o masterización es igual</td></tr><tr><td>Entrada de la biblioteca</td><td>¿Es la misma posición de pista en la misma edición?</td><td>Si los archivos son idénticos</td></tr></tbody></table>
+<p>MusicBrainz distingue las grabaciones de las pistas de una edición. Esta distinción aporta vocabulario, no una regla para borrar archivos. Un identificador de una base de datos también depende de que se haya asignado correctamente.</p>
+<h2>Flujo recomendado</h2>
+<ol><li><strong>Conserva el punto de partida.</strong> Deja los originales donde están y crea una nota de comparación aparte. Antes de una limpieza posterior, comprueba que la copia de seguridad se abre. Esta comparación no requiere mover, renombrar ni borrar archivos.</li><li><strong>Anota la procedencia.</strong> Registra ruta, álbum o edición, posición de pista, indicación de versión y fuente. «En directo» o «remezcla» en el nombre son pistas, no hechos ya confirmados. Mantén como desconocida la información que falte.</li><li><strong>Interpreta con cuidado los datos técnicos.</strong> Duración, tamaño, formato y tasa de bits ayudan a explicar diferencias, pero no identifican una interpretación. El hash del archivo completo no es una huella acústica. Cambiar etiquetas o codificación puede cambiarlo. Los valores iguales calculados con un algoritmo de hash como SHA-256 son un indicio sólido de igualdad de bytes, no una autorización para borrar una copia.</li><li><strong>Escucha pasajes correspondientes a un volumen cómodo.</strong> Compara el principio, un pasaje distintivo del medio y el final. Ten en cuenta el silencio inicial para alinear el mismo momento musical. Anota diferencias de interpretación, arreglo, mezcla o fundido. No subas el volumen para compensar un archivo desconocido; una diferencia de volumen no demuestra por sí sola otra interpretación.</li><li><strong>Limita la conclusión a lo comprobado.</strong> Escribe, por ejemplo, «archivos con bytes idénticos», «posiblemente la misma grabación, con versiones de archivo diferentes» o «se oyen interpretaciones distintas». Guarda las pruebas y las dudas. Escuchar unos fragmentos no demuestra identidad completa.</li></ol>
+<h2>Conserva una pareja dudosa</h2>
+<p>Imagina dos archivos ficticios titulados «Paseo al atardecer». Solo uno empieza con aplausos. El título no resuelve la comparación: los aplausos podrían ser una introducción añadida o pertenecer a otra actuación. Conserva ambos archivos y la pregunta pendiente hasta aclararlo.</p>
+<h2>Límites</h2>
+<p>La comparación no es una clasificación de calidad. Un archivo más grande o una tasa de bits mayor no demuestra una fuente mejor; convertirlo tampoco recupera información perdida. Incluso archivos idénticos pueden servir a listas de reproducción, carpetas de ediciones o copias de seguridad distintas. Decide qué conservar por separado, tras revisar esas referencias y una copia de seguridad utilizable.</p>
+<h2>Guías relacionadas</h2>
+<ul><li><a href="https://onnellab.com/blog/es/consistent-album-artist-names/">Mantén coherentes los nombres de álbum y artista</a></li><li><a href="https://onnellab.com/blog/es/organize-local-music-library-offline-android/">Organiza una biblioteca musical local en Android</a></li></ul>
+<h2>Referencias</h2>
+<p><a href="https://musicbrainz.org/doc/Recording">MusicBrainz: Recording</a> explica los términos grabación y pista de una edición. El procedimiento manual anterior es una orientación editorial propia, no un procedimiento de borrado de MusicBrainz.</p>
+<h2>Conclusión</h2>
+<p>Conserva los originales y compara por separado archivo, grabación y entrada de biblioteca. Es mejor documentar una duda que declarar un duplicado sin pruebas suficientes.</p>
+<h2>Preguntas frecuentes</h2>
+<h3>¿Un título y una duración iguales demuestran un duplicado?</h3>
+<p>No. Son pistas de búsqueda, no pruebas de archivos o interpretaciones idénticos.</p>
+<h3>¿Hashes distintos demuestran grabaciones diferentes?</h3>
+<p>No. Los bytes ajenos al audio o los cambios de codificación también alteran el hash del archivo completo, sin explicar la causa.</p>
+<h3>¿Puedo borrar uno si no oigo diferencias?</h3>
+<p>No solo por eso. Si la identidad o la finalidad son inciertas, conserva ambos y anota qué pasajes comparaste.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Cómo organizar música en Android para escucharla sin conexión</h3><a class="related-article-link" href="https://onnellab.com/blog/es/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>Etiquetas de álbum y artista coherentes sin perder créditos</h3><a class="related-article-link" href="https://onnellab.com/blog/es/consistent-album-artist-names/">Read article</a></article>
+<article class="related-article-card"><h3>Cómo señalar la incertidumbre en las notas de investigación</h3><a class="related-article-link" href="https://onnellab.com/blog/es/mark-uncertainty-clearly-in-research-notes/">Read article</a></article>
+<article class="related-article-card"><h3>Cómo crear un sistema coherente para nombrar archivos</h3><a class="related-article-link" href="https://onnellab.com/blog/es/design-consistent-file-naming-system/">Read article</a></article>
+<article class="related-article-card"><h3>Cómo separar las notas de las fuentes de tus conclusiones</h3><a class="related-article-link" href="https://onnellab.com/blog/es/separate-source-notes-from-conclusions/">Read article</a></article>
+<article class="related-article-card"><h3>Cómo orientarte en un documento de texto largo</h3><a class="related-article-link" href="https://onnellab.com/blog/es/make-long-plain-text-easier-to-navigate/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

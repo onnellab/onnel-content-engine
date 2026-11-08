@@ -1,0 +1,10 @@
+The clearest way to compare two music files without accidentally discarding a different recording is to separate the decision from the tool.
+
+Preserve both files first. Compare their origins, version labels and audio at matching passages.
+
+Before changing tools:
+- Preserve the starting point. Leave originals in place and use a separate comparison note. Before any later cleanup, check that a backup can actually be opened. This guide does not require moving, renaming or deleting files.
+- Record provenance. Note each path, album or release, track position, stated version and source. Distinguish “live,” “remix” and similar labels from confirmed evidence: a filename can be wrong. Leave missing information unknown.
+
+Read the full article:
+https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/

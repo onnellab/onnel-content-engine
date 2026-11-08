@@ -5,7 +5,7 @@ slug: "distinguish-duplicate-music-files-from-different-recordings"
 category: "music"
 language: "en"
 description: "Compare music files without confusing matching names, file bytes and recordings. Preserve originals and document uncertain pairs."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0087"
 search_intent: "workflow"
 primary_keyword: "duplicate music files"
@@ -14,6 +14,9 @@ tags: "duplicate music files"
 short_answer: "Preserve both files first. Compare their origins, version labels and audio at matching passages. Separate file identity from recording identity, and keep an unresolved pair rather than making a deletion decision from a title, duration or tag alone."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/"
+published_at: "2026-11-08T09:00:00+09:00"
+updated_at: "2026-11-08T09:00:00+09:00"
+related_articles: "Organize a Local Music Library for Offline Listening on Android => https://onnellab.com/blog/en/organize-local-music-library-offline-android/|How to Clean Up MP3 Metadata Before Organizing Music => https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/|How to Number Tracks in a Multi-Disc MP3 Album => https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/|Consistent Album and Artist Tags Without Losing Track Credits => https://onnellab.com/blog/en/consistent-album-artist-names/|How to Trim Audio Recordings Without a Full Editor => https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/|How to Read Large TXT Files Without Lag => https://onnellab.com/blog/en/read-large-txt-files-without-lag/"
 ---
 
 # Tell Duplicate Music Files from Different Recordings

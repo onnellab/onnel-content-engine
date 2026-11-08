@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tell Duplicate Music Files from Different Recordings</title>
+  <meta name="description" content="Compare music files without confusing matching names, file bytes and recordings. Preserve originals and document uncertain pairs.">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Tell Duplicate Music Files from Different Recordings">
+  <meta property="og:description" content="Compare music files without confusing matching names, file bytes and recordings. Preserve originals and document uncertain pairs.">
+  <meta property="og:url" content="https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tell Duplicate Music Files from Different Recordings">
+  <meta name="twitter:description" content="Compare music files without confusing matching names, file bytes and recordings. Preserve originals and document uncertain pairs.">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/en/distinguish-duplicate-music-files-from-different-recordings/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/en/distinguish-duplicate-music-files-from-different-recordings/social-card.png">
+</head>
+<body>
+  <main>
+<h1>Tell Duplicate Music Files from Different Recordings</h1>
+<p>Two files with the same song title can look redundant while containing different performances. Conversely, different filenames can hide copies of the same file. Before tidying a library, decide what you mean by “duplicate.”</p>
+<h2>Question</h2>
+<p>How can I compare two music files without accidentally discarding a different recording?</p>
+<h2>Short Answer</h2>
+<p>Preserve both files first. Compare their origins, version labels and audio at matching passages. Separate file identity from recording identity, and keep an unresolved pair rather than making a deletion decision from a title, duration or tag alone.</p>
+<figure><img src="/blog-assets/en/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg" alt="Compare before removing"></figure>
+<h2>Three Different Comparisons</h2>
+<p>File identity means equality of the complete file&#x27;s bytes. Recording comparison is the investigation of whether files represent the same performance and mix.</p>
+<table><thead><tr><th>Comparison</th><th>What it asks</th><th>What it does not establish</th></tr></thead><tbody><tr><td>File bytes</td><td>Are the complete files identical?</td><td>Whether another copy is needed elsewhere</td></tr><tr><td>Recording</td><td>Do the files represent the same performance and mix?</td><td>Whether their encoding or mastering is identical</td></tr><tr><td>Library entry</td><td>Do the entries belong to the same release and track position?</td><td>Whether the underlying files are identical</td></tr></tbody></table>
+<p>MusicBrainz distinguishes recordings from tracks on releases. That distinction is useful vocabulary here, not a rule for deleting files from your library. A copied database identifier is only as reliable as the match that assigned it.</p>
+<h2>Recommended Workflow</h2>
+<ol><li><strong>Preserve the starting point.</strong> Leave originals in place and use a separate comparison note. Before any later cleanup, check that a backup can actually be opened. This guide does not require moving, renaming or deleting files.</li><li><strong>Record provenance.</strong> Note each path, album or release, track position, stated version and source. Distinguish “live,” “remix” and similar labels from confirmed evidence: a filename can be wrong. Leave missing information unknown.</li><li><strong>Compare technical clues carefully.</strong> Duration, file size, format and bitrate help explain differences but do not identify a performance. A whole-file hash is not an audio fingerprint. Different hashes may reflect changed tags or encoding; matching values calculated with a hash algorithm such as SHA-256 are strong evidence of equal bytes, not permission to remove a copy.</li><li><strong>Listen to matching passages.</strong> At a comfortable volume, compare the opening, a distinctive middle passage and the ending. Account for leading silence before aligning the same musical moment. Note differences in the performance, arrangement, mix or fade. Do not raise volume to compensate for an unfamiliar file; a loudness difference alone does not prove a different performance.</li><li><strong>Write a bounded conclusion.</strong> Use labels such as “byte-identical files,” “possibly the same recording; file versions differ” or “different performance heard.” Record the evidence and what remains unresolved. Listening to a few passages cannot establish complete identity.</li></ol>
+<h2>Keep an Uncertain Pair</h2>
+<p>Imagine two invented entries called “Evening Walk.” One starts with applause; the other does not. The title is not enough to classify them. Check whether the applause is merely an introduction or accompanies a different performance. Until the evidence is clear, retain both and document the question.</p>
+<h2>Limits</h2>
+<p>Comparison is not a quality contest. A larger file or higher bitrate does not prove a better source, and converting a file does not restore missing information. Even identical files may serve different playlists, release folders or backup purposes. Decide retention separately, with the relevant references and a usable backup; no deletion is needed to complete this comparison.</p>
+<h2>Related Guides</h2>
+<ul><li><a href="https://onnellab.com/blog/en/consistent-album-artist-names/">Keep album and artist names consistent</a></li><li><a href="https://onnellab.com/blog/en/organize-local-music-library-offline-android/">Organize a local music library on Android</a></li></ul>
+<h2>References</h2>
+<p><a href="https://musicbrainz.org/doc/Recording">MusicBrainz: Recording</a> explains its recording and release-track terminology. The manual comparison workflow above is editorial guidance, not a MusicBrainz deletion procedure.</p>
+<h2>Conclusion</h2>
+<p>Preserve the originals and compare files, recordings and library entries separately. A documented uncertainty is more useful than declaring a duplicate without enough evidence.</p>
+<h2>FAQ</h2>
+<h3>Do matching titles and durations prove a duplicate?</h3>
+<p>No. They are useful search clues, not proof of identical files or performances.</p>
+<h3>Do different file hashes prove different recordings?</h3>
+<p>No. Whole-file hashes also change when non-audio bytes or encoding change. They do not describe why files differ.</p>
+<h3>Should I remove one file when I cannot hear a difference?</h3>
+<p>Not on that basis alone. Keep the pair if identity or purpose is uncertain, and record what you compared.</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Organize a Local Music Library for Offline Listening on Android</h3><a class="related-article-link" href="https://onnellab.com/blog/en/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>How to Clean Up MP3 Metadata Before Organizing Music</h3><a class="related-article-link" href="https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/">Read article</a></article>
+<article class="related-article-card"><h3>How to Number Tracks in a Multi-Disc MP3 Album</h3><a class="related-article-link" href="https://onnellab.com/blog/en/number-tracks-multi-disc-mp3-album/">Read article</a></article>
+<article class="related-article-card"><h3>Consistent Album and Artist Tags Without Losing Track Credits</h3><a class="related-article-link" href="https://onnellab.com/blog/en/consistent-album-artist-names/">Read article</a></article>
+<article class="related-article-card"><h3>How to Trim Audio Recordings Without a Full Editor</h3><a class="related-article-link" href="https://onnellab.com/blog/en/trim-audio-recordings-without-full-editor/">Read article</a></article>
+<article class="related-article-card"><h3>How to Read Large TXT Files Without Lag</h3><a class="related-article-link" href="https://onnellab.com/blog/en/read-large-txt-files-without-lag/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

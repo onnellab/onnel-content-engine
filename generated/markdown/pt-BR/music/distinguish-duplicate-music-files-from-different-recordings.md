@@ -5,7 +5,7 @@ slug: "distinguish-duplicate-music-files-from-different-recordings"
 category: "music"
 language: "pt-BR"
 description: "Compare nomes, bytes e gravações sem confundi-los. Preserve os originais e documente pares de arquivos de música que ainda geram dúvidas."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0137"
 search_intent: "workflow"
 primary_keyword: "arquivos de música"
@@ -14,6 +14,9 @@ tags: "arquivos de música"
 short_answer: "Preserve os dois arquivos. Confira a origem e as indicações de versão e escute trechos correspondentes. Separe a identidade do arquivo da identidade da gravação. Se título, duração ou tags não permitirem uma conclusão, mantenha o par e registre a dúvida."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/pt-br/distinguish-duplicate-music-files-from-different-recordings/"
+published_at: "2026-11-08T09:00:00+09:00"
+updated_at: "2026-11-08T09:00:00+09:00"
+related_articles: "Como organizar músicas no Android para ouvir offline => https://onnellab.com/blog/pt-br/organize-local-music-library-offline-android/|Tags de álbum e artista consistentes: preserve os créditos => https://onnellab.com/blog/pt-br/consistent-album-artist-names/|Como indicar incertezas nas notas de pesquisa => https://onnellab.com/blog/pt-br/mark-uncertainty-clearly-in-research-notes/|Como transformar textos repetidos em trechos reutilizáveis => https://onnellab.com/blog/pt-br/turn-repeated-text-into-reusable-snippets/|Como criar um padrão consistente para nomes de arquivos => https://onnellab.com/blog/pt-br/design-consistent-file-naming-system/|Como separar as anotações sobre fontes das suas conclusões => https://onnellab.com/blog/pt-br/separate-source-notes-from-conclusions/"
 ---
 
 # Diferencie arquivos de música duplicados de gravações distintas

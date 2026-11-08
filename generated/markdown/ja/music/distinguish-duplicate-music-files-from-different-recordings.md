@@ -5,7 +5,7 @@ slug: "distinguish-duplicate-music-files-from-different-recordings"
 category: "music"
 language: "ja"
 description: "曲名、ファイルのバイト列、録音の違いを区別し、原本を残しながら不明な組み合わせを記録する方法を説明します。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0134"
 search_intent: "workflow"
 primary_keyword: "音楽ファイル"
@@ -14,6 +14,9 @@ tags: "音楽ファイル"
 short_answer: "まず両方を保存します。入手元とバージョン表記を調べ、同じ箇所の音を聴き比べます。ファイルの同一性と録音の同一性を分け、曲名・長さ・タグだけでは判断できない組み合わせは残してください。"
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/ja/distinguish-duplicate-music-files-from-different-recordings/"
+published_at: "2026-11-08T09:00:00+09:00"
+updated_at: "2026-11-08T09:00:00+09:00"
+related_articles: "Androidの音楽ファイルをオフライン再生用に整理する方法 => https://onnellab.com/blog/ja/organize-local-music-library-offline-android/|アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る => https://onnellab.com/blog/ja/consistent-album-artist-names/|EPUBの目次リンクと章の順序を確認する方法 => https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/|元ファイルを置き換える前に変換後のメディアを確認する方法 => https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/|繰り返し使う文章を再利用できる定型文に整理する方法 => https://onnellab.com/blog/ja/turn-repeated-text-into-reusable-snippets/|探しやすいファイル命名ルールの作り方 => https://onnellab.com/blog/ja/design-consistent-file-naming-system/"
 ---
 
 # 重複した音楽ファイルと異なる録音を見分ける

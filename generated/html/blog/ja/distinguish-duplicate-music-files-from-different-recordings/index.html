@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>重複した音楽ファイルと異なる録音を見分ける</title>
+  <meta name="description" content="曲名、ファイルのバイト列、録音の違いを区別し、原本を残しながら不明な組み合わせを記録する方法を説明します。">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/ja/distinguish-duplicate-music-files-from-different-recordings/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="重複した音楽ファイルと異なる録音を見分ける">
+  <meta property="og:description" content="曲名、ファイルのバイト列、録音の違いを区別し、原本を残しながら不明な組み合わせを記録する方法を説明します。">
+  <meta property="og:url" content="https://onnellab.com/blog/ja/distinguish-duplicate-music-files-from-different-recordings/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="重複した音楽ファイルと異なる録音を見分ける">
+  <meta name="twitter:description" content="曲名、ファイルのバイト列、録音の違いを区別し、原本を残しながら不明な組み合わせを記録する方法を説明します。">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/ja/distinguish-duplicate-music-files-from-different-recordings/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/ja/distinguish-duplicate-music-files-from-different-recordings/social-card.png">
+</head>
+<body>
+  <main>
+<h1>重複した音楽ファイルと異なる録音を見分ける</h1>
+<p>同じ曲名のファイルでも、別の演奏が入っていることがあります。逆に、名前が違っても同じファイルのコピーかもしれません。整理する前に、何を「重複」と呼ぶのかを分けて考えましょう。</p>
+<h2>質問</h2>
+<p>別の録音を誤って捨てずに、二つの音楽ファイルを比較するにはどうすればよいですか？</p>
+<h2>短い回答</h2>
+<p>まず両方を保存します。入手元とバージョン表記を調べ、同じ箇所の音を聴き比べます。ファイルの同一性と録音の同一性を分け、曲名・長さ・タグだけでは判断できない組み合わせは残してください。</p>
+<figure><img src="/blog-assets/ja/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg" alt="削除する前に比較"></figure>
+<h2>三つの比較を区別する</h2>
+<p>ファイルの同一性とは、ファイル全体のバイト列が同じかという問題です。録音の比較は、同じ演奏やミックスを表しているかを調べる作業です。</p>
+<table><thead><tr><th>比較対象</th><th>確かめること</th><th>それだけでは分からないこと</th></tr></thead><tbody><tr><td>ファイルのバイト列</td><td>ファイル全体が同一か</td><td>別の場所にもコピーが必要か</td></tr><tr><td>録音</td><td>同じ演奏とミックスか</td><td>エンコードやマスタリングも同じか</td></tr><tr><td>ライブラリの項目</td><td>同じリリースの同じ曲順か</td><td>実際のファイルが同一か</td></tr></tbody></table>
+<p>MusicBrainzは録音とリリース上のトラックを区別します。ここでは用語の参考とし、削除基準にはしません。識別子が誤って割り当てられていれば、その一致も確証にはなりません。</p>
+<h2>推奨する作業手順</h2>
+<ol><li><strong>元の状態を残します。</strong> 原本はそのままにして、比較用のメモを作ります。後で整理する場合も、先にバックアップを開けることを確認します。この比較に移動・改名・削除は不要です。</li><li><strong>入手元を記録します。</strong> パス、アルバムやリリース、曲順、バージョン表記、入手元を書きます。「ライブ」「リミックス」という名前は手掛かりであり、確認済みの証拠とは分けます。不明な情報は不明のまま残します。</li><li><strong>技術情報を過信しません。</strong> 長さ、容量、形式、ビットレートは差を理解する材料ですが、演奏を特定する証拠ではありません。ファイル全体のハッシュは音声の指紋とは異なり、タグやエンコードの変更でも変わります。SHA-256などのハッシュアルゴリズムで計算した値の一致は、同じバイト列の強い根拠ですが、削除の許可ではありません。</li><li><strong>同じ箇所を無理のない音量で聴きます。</strong> 冒頭、特徴のある中盤、末尾を比較します。先頭の無音を考慮し、同じ音楽上の位置を合わせます。演奏、編曲、ミックス、フェードの差を記録します。未知のファイルに合わせて音量を上げず、音量差だけで別演奏と判断しません。</li><li><strong>確認した範囲で結論を書きます。</strong> 「バイト列が同一」「同じ録音の可能性があるがファイル版は異なる」「別の演奏が聴こえる」などと記し、根拠と未確認点を残します。数か所の試聴だけで全体の同一性は証明できません。</li></ol>
+<h2>不明な組み合わせは残す</h2>
+<p>架空の「夕方の散歩」という二つのファイルで、一方だけに拍手が入っているとします。曲名だけでは判断できません。導入部分に拍手が足されただけなのか、別の公演なのかを確かめます。分からなければ両方を残し、確認事項をメモします。</p>
+<h2>注意点</h2>
+<p>これは音質の順位付けではありません。容量やビットレートが大きくても、元の音源が優れているとは限りません。変換しても失われた情報は戻りません。同じファイルにも再生リスト、リリース別フォルダ、バックアップという別の用途があります。保管の判断は、それらの参照関係と使えるバックアップを確かめてから別に行います。</p>
+<h2>関連ガイド</h2>
+<ul><li><a href="https://onnellab.com/blog/ja/consistent-album-artist-names/">アルバム名とアーティスト名を統一する</a></li><li><a href="https://onnellab.com/blog/ja/organize-local-music-library-offline-android/">Androidでローカル音楽ライブラリを整理する</a></li></ul>
+<h2>参考資料</h2>
+<p><a href="https://musicbrainz.org/doc/Recording">MusicBrainz: Recording</a>は録音とリリース上のトラックの用語を説明しています。上の手順は独自の編集上の案内であり、MusicBrainzの削除手順ではありません。</p>
+<h2>まとめ</h2>
+<p>原本を残し、ファイル、録音、ライブラリ項目を別々に比較しましょう。不明点を残す方が、根拠のない重複判定より安全です。</p>
+<h2>よくある質問</h2>
+<h3>曲名と長さが同じなら重複ですか？</h3>
+<p>いいえ。検索の手掛かりですが、同じファイルや演奏である証明ではありません。</p>
+<h3>ハッシュが違えば別の録音ですか？</h3>
+<p>いいえ。音声以外のバイトやエンコードの違いでも変わり、違いの理由までは示しません。</p>
+<h3>違いが聴こえなければ片方を消してよいですか？</h3>
+<p>それだけでは判断できません。同一性や用途が不明なら両方を残し、比較範囲を記録してください。</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>Androidの音楽ファイルをオフライン再生用に整理する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/consistent-album-artist-names/">Read article</a></article>
+<article class="related-article-card"><h3>EPUBの目次リンクと章の順序を確認する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/check-epub-table-of-contents-and-reading-order/">Read article</a></article>
+<article class="related-article-card"><h3>元ファイルを置き換える前に変換後のメディアを確認する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/test-converted-media-before-replacing-original/">Read article</a></article>
+<article class="related-article-card"><h3>繰り返し使う文章を再利用できる定型文に整理する方法</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/turn-repeated-text-into-reusable-snippets/">Read article</a></article>
+<article class="related-article-card"><h3>探しやすいファイル命名ルールの作り方</h3><a class="related-article-link" href="https://onnellab.com/blog/ja/design-consistent-file-naming-system/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

@@ -893,6 +893,27 @@
       "error": "",
       "error_type": "",
       "retry_count": 0
+    },
+    {
+      "topic_id": "TOPIC-0087",
+      "source_status": "published",
+      "publish_after_canonical": false,
+      "platform": "devto",
+      "language": "en",
+      "category": "music",
+      "slug": "distinguish-duplicate-music-files-from-different-recordings",
+      "draft_path": "generated/syndication/devto/en/music/distinguish-duplicate-music-files-from-different-recordings.md",
+      "canonical_url": "https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/",
+      "status": "draft",
+      "approved_by": "",
+      "approved_at": "",
+      "post_id": "",
+      "posted_url": "",
+      "posted_at": "",
+      "last_attempt_at": "",
+      "error": "",
+      "error_type": "",
+      "retry_count": 0
     }
   ]
 }

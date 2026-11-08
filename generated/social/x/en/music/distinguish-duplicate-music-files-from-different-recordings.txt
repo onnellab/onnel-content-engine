@@ -1,0 +1,4 @@
+Start with the constraints, then decide how to compare two music files without accidentally discarding a different recording.
+
+Read the full article:
+https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/

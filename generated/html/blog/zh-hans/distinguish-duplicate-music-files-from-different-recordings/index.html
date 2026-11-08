@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>区分重复音乐文件与不同录音</title>
+  <meta name="description" content="区分文件名、文件字节与录音身份，保留原文件，并记录无法确定的音乐文件对。">
+  <link rel="icon" href="/favicon.svg?v=20261008-open-monogram-v1" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png?v=20261008-open-monogram-v1" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261008-open-monogram-v1">
+  <link rel="manifest" href="/site.webmanifest?v=20261008-open-monogram-v1">
+  <meta name="theme-color" content="#f8f4ec">
+  <link rel="canonical" href="https://onnellab.com/blog/zh-hans/distinguish-duplicate-music-files-from-different-recordings/">
+  <link rel="alternate" type="application/rss+xml" title="ONNELLAB Content Engine RSS" href="https://onnellab.com/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="区分重复音乐文件与不同录音">
+  <meta property="og:description" content="区分文件名、文件字节与录音身份，保留原文件，并记录无法确定的音乐文件对。">
+  <meta property="og:url" content="https://onnellab.com/blog/zh-hans/distinguish-duplicate-music-files-from-different-recordings/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="区分重复音乐文件与不同录音">
+  <meta name="twitter:description" content="区分文件名、文件字节与录音身份，保留原文件，并记录无法确定的音乐文件对。">
+  <meta property="og:image" content="https://onnellab.com/blog-assets/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/social-card.png">
+  <meta name="twitter:image" content="https://onnellab.com/blog-assets/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/social-card.png">
+</head>
+<body>
+  <main>
+<h1>区分重复音乐文件与不同录音</h1>
+<p>歌名相同的两个文件，可能保存着不同的演出；文件名不同，也可能只是同一文件的副本。整理音乐库之前，先明确自己所说的“重复”指什么。</p>
+<h2>问题</h2>
+<p>怎样比较两个音乐文件，避免误删不同的录音？</p>
+<h2>简短回答</h2>
+<p>先保留两个文件，再核对来源、版本标记，并试听对应片段。把文件是否相同与录音是否相同分开判断；仅凭标题、时长或标签无法确定时，保留两份并记录疑问。</p>
+<figure><img src="/blog-assets/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/workflow-diagram.svg" alt="删除之前先比较"></figure>
+<h2>区分三种比较</h2>
+<p>文件相同是指整个文件的字节内容一致。录音比较则是判断文件是否代表同一演奏和混音。</p>
+<table><thead><tr><th>比较对象</th><th>要回答的问题</th><th>不能据此确定的事</th></tr></thead><tbody><tr><td>文件字节</td><td>整个文件是否一致？</td><td>其他位置是否仍需要副本</td></tr><tr><td>录音</td><td>是否为同一演奏和混音？</td><td>编码或母带处理是否相同</td></tr><tr><td>音乐库条目</td><td>是否属于同一发行版本的同一曲目位置？</td><td>实际文件是否一致</td></tr></tbody></table>
+<p>MusicBrainz区分录音与发行版本中的曲目。这里仅借用这种概念区分，并不把它当作删除规则。数据库标识符如果匹配错误，相同的标识也不能证明文件身份。</p>
+<h2>建议操作流程</h2>
+<ol><li><strong>保留原始状态。</strong> 原文件留在原处，另建比较笔记。以后若要整理，先确认备份确实能够打开。本次比较不需要移动、改名或删除文件。</li><li><strong>记录来源。</strong> 写下路径、专辑或发行版本、曲目位置、版本标记及来源。“现场版”“混音版”等文件名只是线索，要与已经核实的证据分开。缺失的信息保持未知。</li><li><strong>谨慎解读技术信息。</strong> 时长、大小、格式和比特率有助于解释差异，却不能识别演奏。整个文件的哈希不是音频指纹；修改标签或重新编码也可能改变哈希。使用SHA-256等哈希算法计算的值相同，是字节一致的有力证据，但不是删除副本的许可。</li><li><strong>以舒适音量试听对应片段。</strong> 比较开头、有辨识度的中段和结尾。考虑开头静音的长度，找到同一个音乐位置。记录演奏、编曲、混音或淡出的差异。不要为了补偿陌生文件的音量而调高音量；响度不同本身不能证明演奏不同。</li><li><strong>限定结论范围。</strong> 可以写“字节一致的文件”“可能是同一录音，但文件版本不同”或“听到了不同演奏”。同时保留依据与未确认事项。试听几个片段不能证明全曲完全相同。</li></ol>
+<h2>不确定时保留两份</h2>
+<p>假设两份虚构的《傍晚散步》中，只有一份在开头有掌声。标题不足以判断它们的关系。需要核对掌声是否只是添加的引子，还是来自另一场演出。证据不明确时，保留两个文件和待核实的问题。</p>
+<h2>注意事项</h2>
+<p>这不是音质排名。文件更大、比特率更高，并不能证明来源更好；转换格式也不能恢复已丢失的信息。即使文件相同，也可能分别用于播放列表、发行版本文件夹或备份。保留与否应在确认这些引用关系和可用备份后另行决定。</p>
+<h2>相关指南</h2>
+<ul><li><a href="https://onnellab.com/blog/zh-hans/consistent-album-artist-names/">保持专辑与艺术家名称一致</a></li><li><a href="https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/">在Android上整理本地音乐库</a></li></ul>
+<h2>参考资料</h2>
+<p><a href="https://musicbrainz.org/doc/Recording">MusicBrainz：Recording</a>解释录音与发行曲目的术语。上述手动比较流程是独立编写的实用建议，并非MusicBrainz的删除流程。</p>
+<h2>总结</h2>
+<p>保留原文件，分别比较文件、录音与音乐库条目。记录未知之处，不要用没有充分依据的重复判断替代核实。</p>
+<h2>常见问题</h2>
+<h3>标题和时长相同就证明重复吗？</h3>
+<p>不能。它们是查找线索，不是文件或演奏相同的证明。</p>
+<h3>哈希不同就代表不同录音吗？</h3>
+<p>不一定。非音频字节或编码发生变化也会改变整个文件的哈希，而且哈希不能说明差异原因。</p>
+<h3>听不出区别就可以删掉一份吗？</h3>
+<p>不能只凭这一点决定。身份或用途不明确时，保留两份并记录比较过的范围。</p>
+<section class="related-articles" aria-label="Related Articles">
+<h2>Related Articles</h2>
+<article class="related-article-card"><h3>在 Android 上整理音乐文件，准备离线播放</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/organize-local-music-library-offline-android/">Read article</a></article>
+<article class="related-article-card"><h3>统一专辑与艺人标签，保留曲目署名</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/consistent-album-artist-names/">Read article</a></article>
+<article class="related-article-card"><h3>检查 EPUB 的目录链接和章节顺序</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/check-epub-table-of-contents-and-reading-order/">Read article</a></article>
+<article class="related-article-card"><h3>替换原文件前，如何检查转换后的媒体文件</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/test-converted-media-before-replacing-original/">Read article</a></article>
+<article class="related-article-card"><h3>如何整理可重复使用的文本片段</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/turn-repeated-text-into-reusable-snippets/">Read article</a></article>
+<article class="related-article-card"><h3>如何建立一致、好查找的文件命名规则</h3><a class="related-article-link" href="https://onnellab.com/blog/zh-hans/design-consistent-file-naming-system/">Read article</a></article>
+</section>
+  </main>
+</body>
+</html>

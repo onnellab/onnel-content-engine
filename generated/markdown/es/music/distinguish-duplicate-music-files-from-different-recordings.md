@@ -5,7 +5,7 @@ slug: "distinguish-duplicate-music-files-from-different-recordings"
 category: "music"
 language: "es"
 description: "Distingue nombres, bytes y grabaciones. Conserva los originales y documenta las parejas de archivos de música que sigan siendo dudosas."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0140"
 search_intent: "workflow"
 primary_keyword: "archivos de música"
@@ -14,6 +14,9 @@ tags: "archivos de música"
 short_answer: "Conserva primero ambos archivos. Revisa su procedencia y las indicaciones de versión, y escucha pasajes correspondientes. Separa la identidad del archivo de la identidad de la grabación. Si el título, la duración o las etiquetas no bastan, conserva ambos y anota la duda."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/es/distinguish-duplicate-music-files-from-different-recordings/"
+published_at: "2026-11-08T09:00:00+09:00"
+updated_at: "2026-11-08T09:00:00+09:00"
+related_articles: "Cómo organizar música en Android para escucharla sin conexión => https://onnellab.com/blog/es/organize-local-music-library-offline-android/|Etiquetas de álbum y artista coherentes sin perder créditos => https://onnellab.com/blog/es/consistent-album-artist-names/|Cómo señalar la incertidumbre en las notas de investigación => https://onnellab.com/blog/es/mark-uncertainty-clearly-in-research-notes/|Cómo crear un sistema coherente para nombrar archivos => https://onnellab.com/blog/es/design-consistent-file-naming-system/|Cómo separar las notas de las fuentes de tus conclusiones => https://onnellab.com/blog/es/separate-source-notes-from-conclusions/|Cómo orientarte en un documento de texto largo => https://onnellab.com/blog/es/make-long-plain-text-easier-to-navigate/"
 ---
 
 # Distingue archivos de música duplicados de grabaciones diferentes

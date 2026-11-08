@@ -5,7 +5,7 @@ slug: "distinguish-duplicate-music-files-from-different-recordings"
 category: "music"
 language: "ko"
 description: "음악 파일의 이름·바이트·녹음 차이를 구분하고 원본을 보존하며 불확실한 파일 쌍을 기록하는 방법을 알아보세요."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0133"
 search_intent: "workflow"
 primary_keyword: "중복 음악 파일"
@@ -14,6 +14,9 @@ tags: "중복 음악 파일"
 short_answer: "먼저 두 파일을 모두 보존하세요. 출처와 버전 표기를 확인하고 같은 구간의 소리를 비교해요. 파일 자체가 같은지와 녹음이 같은지를 구분하고, 제목·재생 시간·태그 하나만으로 판단하기 어려운 파일은 그대로 남겨 두세요."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/ko/distinguish-duplicate-music-files-from-different-recordings/"
+published_at: "2026-11-08T09:00:00+09:00"
+updated_at: "2026-11-08T09:00:00+09:00"
+related_articles: "음악 정리 전 MP3 메타데이터를 정돈하는 방법 => https://onnellab.com/blog/ko/clean-up-mp3-metadata-before-organizing-music/|여러 장으로 된 MP3 앨범의 트랙 번호를 매기는 방법 => https://onnellab.com/blog/ko/number-tracks-multi-disc-mp3-album/|Android에서 오프라인 감상을 위한 음악 파일 정리하기 => https://onnellab.com/blog/ko/organize-local-music-library-offline-android/|곡별 크레딧을 지키며 앨범과 아티스트 태그 정리하기 => https://onnellab.com/blog/ko/consistent-album-artist-names/|대용량 TXT 파일을 지연 없이 읽는 방법 => https://onnellab.com/blog/ko/read-large-txt-files-without-lag/|로컬 미디어 파일을 비공개로 변환하는 방법 => https://onnellab.com/blog/ko/convert-local-media-files-privately/"
 ---
 
 # 중복 음악 파일과 서로 다른 녹음을 구분하는 방법

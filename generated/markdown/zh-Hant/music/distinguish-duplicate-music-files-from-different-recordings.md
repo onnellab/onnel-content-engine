@@ -5,7 +5,7 @@ slug: "distinguish-duplicate-music-files-from-different-recordings"
 category: "music"
 language: "zh-Hant"
 description: "區分檔名、檔案位元組與錄音身分，保留原始檔，並記錄無法確定的音樂檔案配對。"
-status: "review"
+status: "published"
 topic_id: "TOPIC-0136"
 search_intent: "workflow"
 primary_keyword: "音樂檔案"
@@ -14,6 +14,9 @@ tags: "音樂檔案"
 short_answer: "先保留兩個檔案，再核對來源、版本標示，並試聽對應片段。將檔案是否相同與錄音是否相同分開判斷；僅憑標題、長度或標籤無法確定時，保留兩份並記下疑問。"
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/zh-hant/distinguish-duplicate-music-files-from-different-recordings/"
+published_at: "2026-11-08T09:00:00+09:00"
+updated_at: "2026-11-08T09:00:00+09:00"
+related_articles: "在 Android 整理音樂檔案，準備離線播放 => https://onnellab.com/blog/zh-hant/organize-local-music-library-offline-android/|統一專輯與藝人標籤，保留曲目署名 => https://onnellab.com/blog/zh-hant/consistent-album-artist-names/|檢查 EPUB 的目錄連結與章節順序 => https://onnellab.com/blog/zh-hant/check-epub-table-of-contents-and-reading-order/|取代原始檔案前，如何檢查轉檔後的媒體檔案 => https://onnellab.com/blog/zh-hant/test-converted-media-before-replacing-original/|如何整理可重複使用的文字片段 => https://onnellab.com/blog/zh-hant/turn-repeated-text-into-reusable-snippets/|如何建立一致又好找的檔案命名規則 => https://onnellab.com/blog/zh-hant/design-consistent-file-naming-system/"
 ---
 
 # 分辨重複音樂檔案與不同錄音

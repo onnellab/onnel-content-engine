@@ -579,6 +579,13 @@
     <pubDate>Thu, 05 Nov 2026 00:00:00 GMT</pubDate>
   </item>
   <item>
+    <title>Tell Duplicate Music Files from Different Recordings</title>
+    <link>https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/</link>
+    <guid>https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/</guid>
+    <description>Compare music files without confusing matching names, file bytes and recordings. Preserve originals and document uncertain pairs.</description>
+    <pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>출처 메모와 자신의 결론을 구분하는 방법</title>
     <link>https://onnellab.com/blog/ko/separate-source-notes-from-conclusions/</link>
     <guid>https://onnellab.com/blog/ko/separate-source-notes-from-conclusions/</guid>
@@ -857,6 +864,62 @@
     <guid>https://onnellab.com/blog/es/mark-uncertainty-clearly-in-research-notes/</guid>
     <description>Distingue la información no confirmada, las versiones contradictorias y las interpretaciones provisionales, y anota la siguiente comprobación de cada cuestión.</description>
     <pubDate>Thu, 05 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>중복 음악 파일과 서로 다른 녹음을 구분하는 방법</title>
+    <link>https://onnellab.com/blog/ko/distinguish-duplicate-music-files-from-different-recordings/</link>
+    <guid>https://onnellab.com/blog/ko/distinguish-duplicate-music-files-from-different-recordings/</guid>
+    <description>음악 파일의 이름·바이트·녹음 차이를 구분하고 원본을 보존하며 불확실한 파일 쌍을 기록하는 방법을 알아보세요.</description>
+    <pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>重複した音楽ファイルと異なる録音を見分ける</title>
+    <link>https://onnellab.com/blog/ja/distinguish-duplicate-music-files-from-different-recordings/</link>
+    <guid>https://onnellab.com/blog/ja/distinguish-duplicate-music-files-from-different-recordings/</guid>
+    <description>曲名、ファイルのバイト列、録音の違いを区別し、原本を残しながら不明な組み合わせを記録する方法を説明します。</description>
+    <pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>区分重复音乐文件与不同录音</title>
+    <link>https://onnellab.com/blog/zh-hans/distinguish-duplicate-music-files-from-different-recordings/</link>
+    <guid>https://onnellab.com/blog/zh-hans/distinguish-duplicate-music-files-from-different-recordings/</guid>
+    <description>区分文件名、文件字节与录音身份，保留原文件，并记录无法确定的音乐文件对。</description>
+    <pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>分辨重複音樂檔案與不同錄音</title>
+    <link>https://onnellab.com/blog/zh-hant/distinguish-duplicate-music-files-from-different-recordings/</link>
+    <guid>https://onnellab.com/blog/zh-hant/distinguish-duplicate-music-files-from-different-recordings/</guid>
+    <description>區分檔名、檔案位元組與錄音身分，保留原始檔，並記錄無法確定的音樂檔案配對。</description>
+    <pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Diferencie arquivos de música duplicados de gravações distintas</title>
+    <link>https://onnellab.com/blog/pt-br/distinguish-duplicate-music-files-from-different-recordings/</link>
+    <guid>https://onnellab.com/blog/pt-br/distinguish-duplicate-music-files-from-different-recordings/</guid>
+    <description>Compare nomes, bytes e gravações sem confundi-los. Preserve os originais e documente pares de arquivos de música que ainda geram dúvidas.</description>
+    <pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Doppelte Musikdateien von unterschiedlichen Aufnahmen unterscheiden</title>
+    <link>https://onnellab.com/blog/de/distinguish-duplicate-music-files-from-different-recordings/</link>
+    <guid>https://onnellab.com/blog/de/distinguish-duplicate-music-files-from-different-recordings/</guid>
+    <description>Unterscheiden Sie Dateinamen, Dateibytes und Aufnahmen. Bewahren Sie Originale auf und dokumentieren Sie unklare Musikdateipaare.</description>
+    <pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Distinguer les fichiers musicaux en double des enregistrements différents</title>
+    <link>https://onnellab.com/blog/fr/distinguish-duplicate-music-files-from-different-recordings/</link>
+    <guid>https://onnellab.com/blog/fr/distinguish-duplicate-music-files-from-different-recordings/</guid>
+    <description>Distinguez noms, octets et enregistrements. Préservez les originaux et documentez les paires de fichiers musicaux encore incertaines.</description>
+    <pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Distingue archivos de música duplicados de grabaciones diferentes</title>
+    <link>https://onnellab.com/blog/es/distinguish-duplicate-music-files-from-different-recordings/</link>
+    <guid>https://onnellab.com/blog/es/distinguish-duplicate-music-files-from-different-recordings/</guid>
+    <description>Distingue nombres, bytes y grabaciones. Conserva los originales y documenta las parejas de archivos de música que sigan siendo dudosas.</description>
+    <pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate>
   </item>
 </channel>
 </rss>

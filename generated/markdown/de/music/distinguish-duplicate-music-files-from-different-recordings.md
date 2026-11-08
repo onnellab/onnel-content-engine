@@ -5,7 +5,7 @@ slug: "distinguish-duplicate-music-files-from-different-recordings"
 category: "music"
 language: "de"
 description: "Unterscheiden Sie Dateinamen, Dateibytes und Aufnahmen. Bewahren Sie Originale auf und dokumentieren Sie unklare Musikdateipaare."
-status: "review"
+status: "published"
 topic_id: "TOPIC-0138"
 search_intent: "workflow"
 primary_keyword: "Musikdateien"
@@ -14,6 +14,9 @@ tags: "Musikdateien"
 short_answer: "Bewahren Sie zunächst beide Dateien auf. Prüfen Sie Herkunft und Versionsangaben und hören Sie entsprechende Stellen an. Unterscheiden Sie Dateiidentität von Aufnahmeidentität. Bleibt die Zuordnung anhand von Titel, Dauer oder Tags unklar, behalten Sie beide und notieren Sie die offene Frage."
 related_apps: ""
 canonical_url: "https://onnellab.com/blog/de/distinguish-duplicate-music-files-from-different-recordings/"
+published_at: "2026-11-08T09:00:00+09:00"
+updated_at: "2026-11-08T09:00:00+09:00"
+related_articles: "Musikdateien auf Android für die Offline-Wiedergabe ordnen => https://onnellab.com/blog/de/organize-local-music-library-offline-android/|Einheitliche Album- und Künstler-Tags: Künstlerangaben erhalten => https://onnellab.com/blog/de/consistent-album-artist-names/|Konvertierte Mediendateien prüfen, bevor Sie das Original ersetzen => https://onnellab.com/blog/de/test-converted-media-before-replacing-original/|Wiederkehrende Texte in wiederverwendbare Textbausteine umwandeln => https://onnellab.com/blog/de/turn-repeated-text-into-reusable-snippets/|Lange Textdokumente leichter navigieren => https://onnellab.com/blog/de/make-long-plain-text-easier-to-navigate/|Vor der Audiobearbeitung eine Arbeitskopie anlegen => https://onnellab.com/blog/de/choose-safe-audio-working-copy/"
 ---
 
 # Doppelte Musikdateien von unterschiedlichen Aufnahmen unterscheiden
