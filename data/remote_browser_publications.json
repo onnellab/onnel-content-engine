@@ -1229,7 +1229,7 @@
       "approval_source": "Owner's browser-only scheduled publication automation authorizes overdue valid drafts and routine factual wording improvement.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timezone": "not_recorded",
       "manual_key": "TOPIC-0087::x::en::x",
       "platform": "x",
@@ -1247,7 +1247,8 @@
       "copy_adjustment": "Routine opening improvement drawn from the live article summary; preserved factual comparison advice, purpose, CTA and canonical URL. Original source draft remains unchanged.",
       "browser_ui_timestamp": "9:21 AM · Nov 9, 2026",
       "observed_short_url": "https://t.co/UJZeGPuDkl",
-      "observation_source": "Dot cloud browser verified @onnellab, fresh main receipts, latest profile and live canonical article before one UI submit. Profile count 26 to 27 and exact permalink author, full body, card title verified. Server time read from UI datetime; observed_at is final evidence recording time."
+      "observation_source": "Dot cloud browser verified @onnellab, fresh main receipts, latest profile and live canonical article before one UI submit. Profile count 26 to 27 and exact permalink author, full body, card title verified. Server time read from UI datetime; observed_at is final evidence recording time.",
+      "processed_at": "2026-11-09T00:24:01+00:00"
     },
     {
       "topic_id": "TOPIC-0087",
@@ -1261,7 +1262,7 @@
       "approval_source": "Owner's browser-only scheduled publication automation authorizes overdue valid drafts and routine factual wording improvement.",
       "verification_method": "dot_cloud_browser_permalink",
       "verification_confidence": "browser_permalink",
-      "status": "new",
+      "status": "processed",
       "browser_ui_timezone": "not_recorded",
       "manual_key": "TOPIC-0087::linkedin::en::linkedin",
       "platform": "linkedin",
@@ -1279,7 +1280,8 @@
       "copy_adjustment": "None; primary source preserved.",
       "browser_ui_timestamp": "방금",
       "observed_short_url": "https://lnkd.in/gvEPtdWX",
-      "observation_source": "Dot cloud browser verified ONNEL LAB, current main receipts, recent profile activity, live canonical and public audience before one UI submit. Success alert and exact permalink author, all paragraphs and card destination verified. LinkedIn normalized spacing and shortened text link. observed_at is evidence recording time, not server publication time."
+      "observation_source": "Dot cloud browser verified ONNEL LAB, current main receipts, recent profile activity, live canonical and public audience before one UI submit. Success alert and exact permalink author, all paragraphs and card destination verified. LinkedIn normalized spacing and shortened text link. observed_at is evidence recording time, not server publication time.",
+      "processed_at": "2026-11-09T00:24:01+00:00"
     }
   ]
 }
