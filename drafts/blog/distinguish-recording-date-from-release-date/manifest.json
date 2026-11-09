@@ -44,8 +44,8 @@
     "schedule_assigned": false,
     "published": false,
     "remaining": [
-      "Approved native quality/completeness/path/link checks without bypassing the CLI restriction",
-      "Nine localized illustrations, manifest integration and rendered-image inspection required by the current Topic → Research → Article → Images → Publishing contract",
+      "Native evaluation and fingerprint checks using an approved execution path; no CLI or CI was run",
+      "Integrate reviewed draft illustrations through the canonical native adapter and verify generated image/social-card output",
       "Desktop/mobile rendered-page and link verification",
       "Normal topic/row allocation and scheduler admission after all nine pass"
     ],
@@ -82,7 +82,7 @@
     "native_or_page_render_pass": false
   },
   "image_preparation_20261109": {
-    "status": "source_prepared_not_rendered",
+    "status": "standalone_svg_independent_visual_review_pass",
     "method": "Original inactive SVG, three separate date rows using the shared invented example. Independently proposed localized labels; no screenshot or app functionality claim.",
     "paths": [
       "drafts/blog/distinguish-recording-date-from-release-date/assets/en/date-comparison.svg",
@@ -178,6 +178,58 @@
         "No inventes fechas desconocidas."
       ]
     ],
-    "rendered": false
+    "rendered": true,
+    "source_commit": "960c8b1a94f562abd3448bc3d5686aed0d451e65",
+    "assets": [
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/de/date-comparison.svg",
+        "git_blob_sha": "e76fb2a8667e3654e7b23756f276b0822fe691af"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/en/date-comparison.svg",
+        "git_blob_sha": "d9f134c3975e68d5425b8d0b5400ebb7fe5a03e7"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/es/date-comparison.svg",
+        "git_blob_sha": "a4c9cc1447269f36816fea05e6537a6947f7dfd9"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/fr/date-comparison.svg",
+        "git_blob_sha": "675c715253375ca5ec9fe19a203b78c7d2f3a782"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/ja/date-comparison.svg",
+        "git_blob_sha": "3ead08dd94fc98afddc9a34f62e4369c55b89c93"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/ko/date-comparison.svg",
+        "git_blob_sha": "3967d97b7812ac641dd1ffd2866dee2f1aa14896"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/pt-BR/date-comparison.svg",
+        "git_blob_sha": "458287aace6e7fc28177d54ba947199d8129e392"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/zh-Hans/date-comparison.svg",
+        "git_blob_sha": "d49adb3ffe3faaa041374b80c3669dfec9d3cb9a"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/zh-Hant/date-comparison.svg",
+        "git_blob_sha": "8821d6a68b490777f31dce10e222b3ca43656e57"
+      }
+    ],
+    "independent_review": {
+      "date": "2026-11-09",
+      "source_commit": "960c8b1a94f562abd3448bc3d5686aed0d451e65",
+      "scope": "Two reviewers inspected all nine sources and actual standalone GitHub Raw full-page screenshots; desktop browser only.",
+      "result": "No clipped titles, missing glyphs, overlaps or cropped footers. Three date meanings and invented-example labels match manuscripts.",
+      "not_checked": [
+        "Astro insertion",
+        "Mobile responsiveness",
+        "Native evaluator",
+        "Generated social cards",
+        "Public deployment"
+      ]
+    }
   }
 }
