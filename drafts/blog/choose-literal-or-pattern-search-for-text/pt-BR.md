@@ -58,7 +58,7 @@ Passar nesse teste não torna o padrão uma regra completa para o documento. Dec
 ## Fluxo recomendado
 
 1. **Escreva o objetivo em palavras.** Você procura uma frase conhecida ou uma família de formas? Liste um resultado desejado e outro parecido que deve ficar de fora.
-2. **Preserve a fonte.** Use uma visualização somente leitura ou uma cópia de trabalho. Separe o texto de teste das observações. Não envie conteúdo privado a um testador de padrões on-line.
+2. **Preserve a fonte.** Use uma visualização somente leitura ou uma cópia de trabalho. Mantenha o texto de teste e as observações em notas separadas do documento original. Não envie conteúdo privado a um testador de padrões on-line.
 3. **Confira o campo de busca usado.** Consulte a ajuda sobre modo, escapes e sintaxe. A [ajuda do Google](https://support.google.com/docs/answer/62754?hl=en) documenta sua opção de expressões regulares e o uso da barra invertida. São instruções daquele produto.
 4. **Teste sem substituir.** Confira todas as correspondências e exclusões esperadas na amostra fictícia. Altere uma opção por vez. Se o comportamento não estiver claro, volte à busca literal com uma frase curta e específica.
 5. **Confira e registre o escopo.** Confirme arquivo, versão, seleção e filtros. Leia o contexto e anote consulta, modo e opções relevantes fora do original.

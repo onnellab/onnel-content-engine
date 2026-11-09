@@ -44,8 +44,8 @@
     "schedule_assigned": false,
     "published": false,
     "remaining": [
-      "Approved native quality/completeness/path/link checks without bypassing the CLI restriction",
-      "Nine localized illustrations, manifest integration and rendered-image inspection required by the current Topic → Research → Article → Images → Publishing contract",
+      "Native evaluation and fingerprint checks using an approved execution path; no CLI or CI was run",
+      "Integrate reviewed draft illustrations through the canonical native adapter and verify generated image/social-card output",
       "Desktop/mobile rendered-page and link verification",
       "Normal topic/row allocation and scheduler admission after all nine pass"
     ],
@@ -69,5 +69,167 @@
     "record": "drafts/blog/distinguish-recording-date-from-release-date/translation-review.md",
     "corrections_applied": true,
     "native_or_render_pass": false
+  },
+  "path_review_20261109": {
+    "source_commit": "88a92e1d26be93a8f7593fc1cebcd252afe2b76b",
+    "correction": "Canonical and related-guide public route locale segments lowercased in zh-Hans, zh-Hant, pt-BR; filenames and language IDs unchanged.",
+    "independent_check": "Three new blobs re-fetched and compared against prior complete text: exactly two URL replacements per locale, no other changes.",
+    "blobs": {
+      "zh-Hans": "72566ca6dcfd81dbe9e44502ce1b9c3f9af299ee",
+      "zh-Hant": "c372758c898ea880d7161462e064fa5555ae1129",
+      "pt-BR": "900eb89e09d0dc1bbaf0550e83bb36e3aea410ec"
+    },
+    "native_or_page_render_pass": false
+  },
+  "image_preparation_20261109": {
+    "status": "standalone_svg_independent_visual_review_pass",
+    "method": "Original inactive SVG, three separate date rows using the shared invented example. Independently proposed localized labels; no screenshot or app functionality claim.",
+    "paths": [
+      "drafts/blog/distinguish-recording-date-from-release-date/assets/en/date-comparison.svg",
+      "drafts/blog/distinguish-recording-date-from-release-date/assets/ko/date-comparison.svg",
+      "drafts/blog/distinguish-recording-date-from-release-date/assets/ja/date-comparison.svg",
+      "drafts/blog/distinguish-recording-date-from-release-date/assets/zh-Hans/date-comparison.svg",
+      "drafts/blog/distinguish-recording-date-from-release-date/assets/zh-Hant/date-comparison.svg",
+      "drafts/blog/distinguish-recording-date-from-release-date/assets/pt-BR/date-comparison.svg",
+      "drafts/blog/distinguish-recording-date-from-release-date/assets/de/date-comparison.svg",
+      "drafts/blog/distinguish-recording-date-from-release-date/assets/fr/date-comparison.svg",
+      "drafts/blog/distinguish-recording-date-from-release-date/assets/es/date-comparison.svg"
+    ],
+    "labels": [
+      [
+        "en",
+        "Keep music dates separate",
+        "Invented example",
+        "Recording",
+        "First release",
+        "Your edition's release",
+        "Do not guess unknown dates."
+      ],
+      [
+        "ko",
+        "음악의 날짜를 구분하세요",
+        "가상의 예시",
+        "녹음",
+        "최초 발매",
+        "소장 판본 발매",
+        "확인되지 않은 날짜는 추정하지 마세요."
+      ],
+      [
+        "ja",
+        "音楽の日付を分けて記録",
+        "架空の例",
+        "録音",
+        "初回発売",
+        "手元の版の発売",
+        "不明な日付を推測で埋めない"
+      ],
+      [
+        "zh-Hans",
+        "分别记录音乐的不同日期",
+        "虚构例子",
+        "录音",
+        "首次发行",
+        "所持版本发行",
+        "不要用推测填补未知日期"
+      ],
+      [
+        "zh-Hant",
+        "分別記錄音樂的不同日期",
+        "虛構例子",
+        "錄音",
+        "首次發行",
+        "持有版本發行",
+        "不要用推測填補未知日期"
+      ],
+      [
+        "pt-BR",
+        "Separe as datas da música",
+        "Exemplo fictício",
+        "Gravação",
+        "Primeiro lançamento",
+        "Lançamento da sua edição",
+        "Não adivinhe datas desconhecidas."
+      ],
+      [
+        "de",
+        "Musikdaten getrennt festhalten",
+        "Erfundenes Beispiel",
+        "Aufnahme",
+        "Erstveröffentlichung",
+        "Veröffentlichung Ihrer Ausgabe",
+        "Unbekannte Datumsangaben nicht schätzen."
+      ],
+      [
+        "fr",
+        "Distinguez les dates musicales",
+        "Exemple fictif",
+        "Enregistrement",
+        "Première sortie",
+        "Sortie de votre édition",
+        "Ne devinez pas les dates inconnues."
+      ],
+      [
+        "es",
+        "Distingue las fechas musicales",
+        "Ejemplo ficticio",
+        "Grabación",
+        "Primer lanzamiento",
+        "Lanzamiento de tu edición",
+        "No inventes fechas desconocidas."
+      ]
+    ],
+    "rendered": true,
+    "source_commit": "960c8b1a94f562abd3448bc3d5686aed0d451e65",
+    "assets": [
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/de/date-comparison.svg",
+        "git_blob_sha": "e76fb2a8667e3654e7b23756f276b0822fe691af"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/en/date-comparison.svg",
+        "git_blob_sha": "d9f134c3975e68d5425b8d0b5400ebb7fe5a03e7"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/es/date-comparison.svg",
+        "git_blob_sha": "a4c9cc1447269f36816fea05e6537a6947f7dfd9"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/fr/date-comparison.svg",
+        "git_blob_sha": "675c715253375ca5ec9fe19a203b78c7d2f3a782"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/ja/date-comparison.svg",
+        "git_blob_sha": "3ead08dd94fc98afddc9a34f62e4369c55b89c93"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/ko/date-comparison.svg",
+        "git_blob_sha": "3967d97b7812ac641dd1ffd2866dee2f1aa14896"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/pt-BR/date-comparison.svg",
+        "git_blob_sha": "458287aace6e7fc28177d54ba947199d8129e392"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/zh-Hans/date-comparison.svg",
+        "git_blob_sha": "d49adb3ffe3faaa041374b80c3669dfec9d3cb9a"
+      },
+      {
+        "path": "drafts/blog/distinguish-recording-date-from-release-date/assets/zh-Hant/date-comparison.svg",
+        "git_blob_sha": "8821d6a68b490777f31dce10e222b3ca43656e57"
+      }
+    ],
+    "independent_review": {
+      "date": "2026-11-09",
+      "source_commit": "960c8b1a94f562abd3448bc3d5686aed0d451e65",
+      "scope": "Two reviewers inspected all nine sources and actual standalone GitHub Raw full-page screenshots; desktop browser only.",
+      "result": "No clipped titles, missing glyphs, overlaps or cropped footers. Three date meanings and invented-example labels match manuscripts.",
+      "not_checked": [
+        "Astro insertion",
+        "Mobile responsiveness",
+        "Native evaluator",
+        "Generated social cards",
+        "Public deployment"
+      ]
+    }
   }
 }

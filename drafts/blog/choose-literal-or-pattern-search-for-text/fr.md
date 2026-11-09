@@ -58,7 +58,7 @@ Réussir ce petit test ne suffit pas à définir une règle complète pour le do
 ## Méthode recommandée
 
 1. **Décrivez le but avec des mots.** Cherchez-vous une expression connue ou plusieurs variantes ? Notez un résultat souhaité et un résultat proche à exclure.
-2. **Préservez la source.** Utilisez un affichage en lecture seule ou une copie de travail. Séparez le texte de test des observations. N’envoyez pas de contenu privé à un outil de test de motifs en ligne.
+2. **Préservez la source.** Utilisez un affichage en lecture seule ou une copie de travail. Conservez le texte de test et vos observations dans des notes distinctes du document original. N’envoyez pas de contenu privé à un outil de test de motifs en ligne.
 3. **Vérifiez le champ utilisé.** Consultez l’aide sur le mode, l’échappement et la syntaxe acceptée. L’[aide Google](https://support.google.com/docs/answer/62754?hl=en) décrit son option d’expressions régulières et l’échappement par barre oblique inverse. Ces indications concernent ce produit.
 4. **Testez sans remplacer.** Vérifiez chaque correspondance attendue et chaque exclusion sur l’exemple fictif. Changez une seule option à la fois. Si le comportement reste obscur, revenez à une recherche littérale courte et distinctive.
 5. **Vérifiez et notez le périmètre.** Confirmez fichier, version, sélection et filtres. Lisez le contexte et consignez requête, mode et options utiles hors du document original.

@@ -24,7 +24,7 @@
     {
       "locale": "ja",
       "path": "drafts/blog/choose-literal-or-pattern-search-for-text/ja.md",
-      "git_blob_sha": "a8749e07e273c73ae8ed222b0fd5a3093b82adb8"
+      "git_blob_sha": "51b4d084494439acefef137d9c190c128d31b619"
     },
     {
       "locale": "zh-Hans",
@@ -39,22 +39,22 @@
     {
       "locale": "pt-BR",
       "path": "drafts/blog/choose-literal-or-pattern-search-for-text/pt-BR.md",
-      "git_blob_sha": "cd425d7ad2be49060dfacba5fb1b928f1f73cff3"
+      "git_blob_sha": "7dd5ed76f3e2a9bc663fa69ab4bb972a1e7941c1"
     },
     {
       "locale": "de",
       "path": "drafts/blog/choose-literal-or-pattern-search-for-text/de.md",
-      "git_blob_sha": "730cb07cb94801a52fcc1cc974f872c84a664e2e"
+      "git_blob_sha": "3e68670a01a3f352e6305dd88e4021ba568e9284"
     },
     {
       "locale": "fr",
       "path": "drafts/blog/choose-literal-or-pattern-search-for-text/fr.md",
-      "git_blob_sha": "d8624a6b5734c5dc9a4b4b2dfaae5e539dbe6414"
+      "git_blob_sha": "21a55c81a3ca8a77bb5555525c786f3405f20952"
     },
     {
       "locale": "es",
       "path": "drafts/blog/choose-literal-or-pattern-search-for-text/es.md",
-      "git_blob_sha": "1ddf3cf878c983d27ba7ebddd008c7dbeaff1971"
+      "git_blob_sha": "d06224fa5e7627378b8c09f530cfba5cd0741982"
     }
   ],
   "source_evidence": {
@@ -103,8 +103,8 @@
         "Check the scope"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG source created; not rendered",
-      "status": "source_prepared_render_pending",
+      "format": "SVG source; standalone browser rendering inspected",
+      "status": "standalone_svg_visual_review_pass_page_pending",
       "mode_labels": [
         "Literal search",
         "Check pattern syntax"
@@ -124,8 +124,8 @@
         "검색 범위 확인"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG source created; not rendered",
-      "status": "source_prepared_render_pending",
+      "format": "SVG source; standalone browser rendering inspected",
+      "status": "standalone_svg_visual_review_pass_page_pending",
       "mode_labels": [
         "일반 검색",
         "패턴 문법 확인"
@@ -145,8 +145,8 @@
         "検索範囲を確認"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG source created; not rendered",
-      "status": "source_prepared_render_pending",
+      "format": "SVG source; standalone browser rendering inspected",
+      "status": "standalone_svg_visual_review_pass_page_pending",
       "mode_labels": [
         "リテラル検索",
         "パターン構文を確認"
@@ -166,8 +166,8 @@
         "检查搜索范围"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG source created; not rendered",
-      "status": "source_prepared_render_pending",
+      "format": "SVG source; standalone browser rendering inspected",
+      "status": "standalone_svg_visual_review_pass_page_pending",
       "mode_labels": [
         "字面搜索",
         "核对模式语法"
@@ -187,8 +187,8 @@
         "檢查搜尋範圍"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG source created; not rendered",
-      "status": "source_prepared_render_pending",
+      "format": "SVG source; standalone browser rendering inspected",
+      "status": "standalone_svg_visual_review_pass_page_pending",
       "mode_labels": [
         "字面搜尋",
         "核對模式語法"
@@ -208,8 +208,8 @@
         "Confira o escopo"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG source created; not rendered",
-      "status": "source_prepared_render_pending",
+      "format": "SVG source; standalone browser rendering inspected",
+      "status": "standalone_svg_visual_review_pass_page_pending",
       "mode_labels": [
         "Busca literal",
         "Confira a sintaxe"
@@ -229,8 +229,8 @@
         "Bereich prüfen"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG source created; not rendered",
-      "status": "source_prepared_render_pending",
+      "format": "SVG source; standalone browser rendering inspected",
+      "status": "standalone_svg_visual_review_pass_page_pending",
       "mode_labels": [
         "Wörtliche Suche",
         "Syntax prüfen"
@@ -250,8 +250,8 @@
         "Vérifier le périmètre"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG source created; not rendered",
-      "status": "source_prepared_render_pending",
+      "format": "SVG source; standalone browser rendering inspected",
+      "status": "standalone_svg_visual_review_pass_page_pending",
       "mode_labels": [
         "Recherche littérale",
         "Vérifier la syntaxe"
@@ -271,8 +271,8 @@
         "Revisa el alcance"
       ],
       "layout": "Decision diagram: title above two branches, known text versus multiple variants; both converge on small-sample test and scope check. Use locale text exactly; allow natural wrapping without splitting words. No app screenshots or feature claims.",
-      "format": "SVG source created; not rendered",
-      "status": "source_prepared_render_pending",
+      "format": "SVG source; standalone browser rendering inspected",
+      "status": "standalone_svg_visual_review_pass_page_pending",
       "mode_labels": [
         "Búsqueda literal",
         "Revisa la sintaxis"
@@ -305,11 +305,62 @@
         "reason": "Natural grammatical phrasing"
       }
     ],
-    "independent_structure_check": "All nine locale identifiers, lowercase canonical routes, five steps, three FAQs, three official source URLs and backslash-preserving inline code confirmed. Related-guide source pages exist in all nine locales."
+    "independent_structure_check": "All nine locale identifiers, lowercase canonical routes, five steps, three FAQs, three official source URLs and backslash-preserving inline code confirmed. Related-guide source pages exist in all nine locales.",
+    "corrections_20261109": {
+      "fr": [
+        [
+          "Séparez le texte de test des observations.",
+          "Conservez le texte de test et vos observations dans des notes distinctes du document original."
+        ]
+      ],
+      "pt-BR": [
+        [
+          "Separe o texto de teste das observações.",
+          "Mantenha o texto de teste e as observações em notas separadas do documento original."
+        ]
+      ],
+      "es": [
+        [
+          "Mantén separados el texto de prueba y las observaciones.",
+          "Guarda el texto de prueba y las observaciones en notas separadas del documento original."
+        ]
+      ],
+      "ja": [
+        [
+          "試験用の文字列と観察メモは分け、",
+          "試験用の文字列と観察メモは原本とは別に保存し、"
+        ]
+      ],
+      "de": [
+        [
+          "reguläre Ausdrücke suchen",
+          "Suche mit regulären Ausdrücken"
+        ],
+        [
+          "Beachtung der Großschreibung",
+          "Unterscheidung von Groß- und Kleinschreibung"
+        ],
+        [
+          "Satzzeichen und Großschreibung",
+          "Satzzeichen und Groß-/Kleinschreibung"
+        ],
+        [
+          "entbehrliche lokale Notiz",
+          "temporäre lokale Notiz"
+        ],
+        [
+          "Ein Sucherfolg findet relevante Stellen mit bekannten Grenzen.",
+          "Bei einer erfolgreichen Suche finden Sie relevante Textstellen und kennen die Grenzen der Suche."
+        ],
+        [
+          "Er beweist weder Vollständigkeit noch rechtfertigt er das Ersetzen.",
+          "Das Ergebnis belegt weder die Vollständigkeit der Suche noch rechtfertigt es das Ersetzen."
+        ]
+      ]
+    }
   },
   "pending": [
     "Repository native evaluator and fingerprint gates (not executed; no numerical score claimed)",
-    "Rendering and independent visual review of nine prepared localized SVG assets",
     "Desktop/mobile rendered page and link verification",
     "Review queue integration only after gates; canonical publisher owns scheduling"
   ],
@@ -328,6 +379,20 @@
     "scope": "Nine inactive SVG source diagrams; title, task branches, mode guidance, shared test/scope steps, and no-replacement footer localized.",
     "inspection": "Source text and structure only. No script, foreignObject, event handler or external resource references. Pixel rendering and font metrics unverified.",
     "visual_preview_attempt": "Cloud browser rejected data: SVG navigation because only http/https protocols are allowed. No alternative execution or policy workaround attempted.",
-    "rendered": false
+    "rendered": true,
+    "render_scope": "Standalone GitHub Raw SVG rendering, 2026-11-09; prior data URL limitation not bypassed."
+  },
+  "visual_review_20261109": {
+    "source_commit": "88a92e1d26be93a8f7593fc1cebcd252afe2b76b",
+    "method": "Two separate reviewers directly inspected all nine SVG renders through GitHub Raw in the cloud browser.",
+    "result": "No missing glyphs, clipped labels, overlaps or broken connectors observed. Localized labels retain manuscript meaning.",
+    "scope": "Standalone SVG desktop rendering only. Not homepage Astro render, mobile layout, social-card transformation or native evaluator."
+  },
+  "editorial_review_20261109": {
+    "method": "Independent second reviewer read all nine exact current manuscripts and compared meanings, definitions, five steps, three FAQs, invented examples and limits.",
+    "sources_and_links": "Reviewer read all three official reference pages and all nine localized related-guide destination pages on 2026-11-09.",
+    "result": "Five locales received clarity/naturalness corrections, preserving all source claims and examples. Re-fetched corrected blobs compared against exact intended replacements.",
+    "native_score": null,
+    "page_render": false
   }
 }

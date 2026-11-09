@@ -12,7 +12,7 @@ status: "draft"
 related_apps: ""
 search_intent: "workflow"
 tags: "data de gravação e data de lançamento"
-canonical_url: "https://onnellab.com/blog/pt-BR/distinguish-recording-date-from-release-date/"
+canonical_url: "https://onnellab.com/blog/pt-br/distinguish-recording-date-from-release-date/"
 ---
 
 # Data de gravação e de lançamento nos metadados musicais
@@ -64,4 +64,4 @@ Guarde as duas referências e descreva o conflito. Verifique se tratam da mesma 
 
 ## Próximo passo
 
-Escolha um álbum e crie uma nota de fontes antes de editar as tags. Para outra questão, veja [como distinguir arquivos duplicados de gravações diferentes](/blog/pt-BR/distinguish-duplicate-music-files-from-different-recordings/). As datas, sozinhas, não comprovam que dois arquivos contenham a mesma gravação.
+Escolha um álbum e crie uma nota de fontes antes de editar as tags. Para outra questão, veja [como distinguir arquivos duplicados de gravações diferentes](/blog/pt-br/distinguish-duplicate-music-files-from-different-recordings/). As datas, sozinhas, não comprovam que dois arquivos contenham a mesma gravação.

@@ -12,7 +12,7 @@ status: "draft"
 related_apps: ""
 search_intent: "workflow"
 tags: "錄音日期與發行日期的差別"
-canonical_url: "https://onnellab.com/blog/zh-Hant/distinguish-recording-date-from-release-date/"
+canonical_url: "https://onnellab.com/blog/zh-hant/distinguish-recording-date-from-release-date/"
 ---
 
 # 區分音樂中繼資料中的錄音日期與發行日期
@@ -64,4 +64,4 @@ MusicBrainz的[發行說明](https://musicbrainz.org/doc/Release)將具體版本
 
 ## 下一步
 
-選擇一張專輯，在修改標籤前建立來源筆記。如果你也需要判斷檔案是否重複，可以參考[區分重複檔案與不同錄音](/blog/zh-Hant/distinguish-duplicate-music-files-from-different-recordings/)。日期筆記本身不能證明兩個檔案包含同一段錄音。
+選擇一張專輯，在修改標籤前建立來源筆記。如果你也需要判斷檔案是否重複，可以參考[區分重複檔案與不同錄音](/blog/zh-hant/distinguish-duplicate-music-files-from-different-recordings/)。日期筆記本身不能證明兩個檔案包含同一段錄音。

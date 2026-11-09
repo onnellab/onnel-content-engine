@@ -58,7 +58,7 @@ Superar esta pequeña prueba no convierte el patrón en una regla completa para 
 ## Flujo recomendado
 
 1. **Escribe el objetivo con palabras.** ¿Buscas una frase conocida o varias variantes? Anota un resultado deseado y otro parecido que quieras excluir.
-2. **Conserva la fuente.** Usa una vista de solo lectura o una copia de trabajo. Mantén separados el texto de prueba y las observaciones. No subas contenido privado a un comprobador de patrones en línea.
+2. **Conserva la fuente.** Usa una vista de solo lectura o una copia de trabajo. Guarda el texto de prueba y las observaciones en notas separadas del documento original. No subas contenido privado a un comprobador de patrones en línea.
 3. **Comprueba el campo concreto.** Consulta la ayuda sobre modo, escapes y sintaxis admitida. La [ayuda de Google](https://support.google.com/docs/answer/62754?hl=en) documenta su opción de expresiones regulares y el escape con barra inversa. Son instrucciones de ese producto.
 4. **Prueba sin sustituir.** Revisa todas las coincidencias y exclusiones esperadas con el ejemplo ficticio. Cambia una sola opción cada vez. Si el comportamiento no está claro, vuelve a una búsqueda literal corta y distintiva.
 5. **Revisa y registra el alcance.** Confirma archivo, versión, selección y filtros. Lee el contexto y anota consulta, modo y opciones relevantes fuera del original.

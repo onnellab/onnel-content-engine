@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-labelledby="title desc" xml:lang="zh-Hant">
+<title id="title">分別記錄音樂的不同日期</title>
+<desc id="desc">虛構例子: 錄音 1998; 首次發行 2000; 持有版本發行 2024. 不要用推測填補未知日期</desc>
+<rect width="1200" height="900" fill="#f7f8f4"/>
+<g font-family="Arial, Noto Sans, Noto Sans CJK KR, Noto Sans CJK JP, Noto Sans CJK SC, Noto Sans CJK TC, sans-serif" fill="#23362f">
+<text x="600" y="92" text-anchor="middle" font-size="40">分別記錄音樂的不同日期</text>
+<text x="600" y="151" text-anchor="middle" font-size="27" fill="#52695d">虛構例子</text>
+<rect x="80" y="204" width="1040" height="136" rx="20" fill="#ffffff" stroke="#b8c6bc" stroke-width="2"/>
+<text x="120" y="286" font-size="31">錄音</text>
+<text x="1060" y="287" text-anchor="end" font-size="50" font-weight="600" fill="#2b6050">1998</text>
+<rect x="80" y="372" width="1040" height="136" rx="20" fill="#ffffff" stroke="#b8c6bc" stroke-width="2"/>
+<text x="120" y="454" font-size="31">首次發行</text>
+<text x="1060" y="455" text-anchor="end" font-size="50" font-weight="600" fill="#2b6050">2000</text>
+<rect x="80" y="540" width="1040" height="136" rx="20" fill="#ffffff" stroke="#b8c6bc" stroke-width="2"/>
+<text x="120" y="622" font-size="31">持有版本發行</text>
+<text x="1060" y="623" text-anchor="end" font-size="50" font-weight="600" fill="#2b6050">2024</text>
+<text x="600" y="815" text-anchor="middle" font-size="27">不要用推測填補未知日期</text>
+</g>
+</svg>
