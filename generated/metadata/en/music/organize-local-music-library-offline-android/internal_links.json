@@ -50,14 +50,14 @@
         "slug": "distinguish-duplicate-music-files-from-different-recordings",
         "category": "music",
         "language": "en",
-        "status": "scheduled",
-        "url": "generated/markdown/en/music/distinguish-duplicate-music-files-from-different-recordings.md",
-        "destination": "scheduled_article",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/",
+        "destination": "published_article",
         "relationship": "deeper",
         "shared_clusters": [
           "music"
         ],
-        "score": 11
+        "score": 12
       },
       {
         "topic_id": "TOPIC-0029",

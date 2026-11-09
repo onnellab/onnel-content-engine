@@ -3,7 +3,7 @@
   "type": "article_review",
   "topic_id": "TOPIC-0098",
   "title": "アルバム名とアーティスト名のタグを整える：曲ごとのクレジットを守る",
-  "input_fingerprint": "41f5b34c55b801c73c4abcc531843b0d6b4b8ee939f396d6db4dc24a1d64f8ec",
+  "input_fingerprint": "c47ad914b55138f062bb7b1b0a4980fa3da2e484f301766415972f85c71d35b1",
   "score": 10.0,
   "threshold": 9.0,
   "passed": true,

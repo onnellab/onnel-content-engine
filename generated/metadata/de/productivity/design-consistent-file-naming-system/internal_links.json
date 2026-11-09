@@ -84,6 +84,19 @@
         "score": 5
       },
       {
+        "topic_id": "TOPIC-0138",
+        "title": "Doppelte Musikdateien von unterschiedlichen Aufnahmen unterscheiden",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/distinguish-duplicate-music-files-from-different-recordings/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
         "topic_id": "TOPIC-0050",
         "title": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
         "slug": "organize-local-music-library-offline-android",
@@ -93,19 +106,6 @@
         "url": "https://onnellab.com/blog/de/organize-local-music-library-offline-android/",
         "destination": "published_article",
         "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 4
-      },
-      {
-        "topic_id": "TOPIC-0059",
-        "title": "Inhaltsverzeichnis und Kapitelreihenfolge einer EPUB prüfen",
-        "slug": "check-epub-table-of-contents-and-reading-order",
-        "category": "reading",
-        "language": "de",
-        "status": "published",
-        "url": "https://onnellab.com/blog/de/check-epub-table-of-contents-and-reading-order/",
-        "destination": "published_article",
-        "relationship": "troubleshooting",
         "shared_clusters": [],
         "score": 4
       }

@@ -43,6 +43,19 @@
         "score": 12
       },
       {
+        "topic_id": "TOPIC-0137",
+        "title": "Diferencie arquivos de música duplicados de gravações distintas",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "pt-BR",
+        "status": "published",
+        "url": "https://onnellab.com/blog/pt-br/distinguish-duplicate-music-files-from-different-recordings/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0074",
         "title": "Como transformar textos repetidos em trechos reutilizáveis",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -77,19 +90,6 @@
         "status": "published",
         "url": "https://onnellab.com/blog/pt-br/choose-safe-audio-working-copy/",
         "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0137",
-        "title": "Diferencie arquivos de música duplicados de gravações distintas",
-        "slug": "distinguish-duplicate-music-files-from-different-recordings",
-        "category": "music",
-        "language": "pt-BR",
-        "status": "scheduled",
-        "url": "generated/markdown/pt-BR/music/distinguish-duplicate-music-files-from-different-recordings.md",
-        "destination": "scheduled_article",
         "relationship": "cross_domain",
         "shared_clusters": [],
         "score": 5

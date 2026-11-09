@@ -71,6 +71,19 @@
         "score": 4
       },
       {
+        "topic_id": "TOPIC-0087",
+        "title": "Tell Duplicate Music Files from Different Recordings",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "en",
+        "status": "published",
+        "url": "https://onnellab.com/blog/en/distinguish-duplicate-music-files-from-different-recordings/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 4
+      },
+      {
         "topic_id": "TOPIC-0001",
         "title": "How to Read Large TXT Files Without Lag",
         "slug": "read-large-txt-files-without-lag",
@@ -93,19 +106,6 @@
         "url": "https://onnellab.com/blog/en/txt-vs-epub-for-long-reading/",
         "destination": "published_article",
         "relationship": "comparison",
-        "shared_clusters": [],
-        "score": 3
-      },
-      {
-        "topic_id": "TOPIC-0004",
-        "title": "What Makes Large Text Files Slow to Open",
-        "slug": "large-text-file-slow-to-open",
-        "category": "reading",
-        "language": "en",
-        "status": "published",
-        "url": "https://onnellab.com/blog/en/large-text-file-slow-to-open/",
-        "destination": "published_article",
-        "relationship": "prerequisite",
         "shared_clusters": [],
         "score": 3
       }

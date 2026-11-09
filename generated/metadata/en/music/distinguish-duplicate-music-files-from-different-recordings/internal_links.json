@@ -14,7 +14,7 @@
     "slug": "distinguish-duplicate-music-files-from-different-recordings",
     "category": "music",
     "language": "en",
-    "status": "scheduled",
+    "status": "published",
     "topic_clusters": [
       "recording comparison",
       "file hash",

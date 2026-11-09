@@ -44,6 +44,19 @@
         "score": 13
       },
       {
+        "topic_id": "TOPIC-0138",
+        "title": "Doppelte Musikdateien von unterschiedlichen Aufnahmen unterscheiden",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "de",
+        "status": "published",
+        "url": "https://onnellab.com/blog/de/distinguish-duplicate-music-files-from-different-recordings/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 6
+      },
+      {
         "topic_id": "TOPIC-0050",
         "title": "Musikdateien auf Android für die Offline-Wiedergabe ordnen",
         "slug": "organize-local-music-library-offline-android",
@@ -90,19 +103,6 @@
         "language": "de",
         "status": "published",
         "url": "https://onnellab.com/blog/de/design-consistent-file-naming-system/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 5
-      },
-      {
-        "topic_id": "TOPIC-0102",
-        "title": "Einheitliche Album- und Künstler-Tags: Künstlerangaben erhalten",
-        "slug": "consistent-album-artist-names",
-        "category": "music",
-        "language": "de",
-        "status": "published",
-        "url": "https://onnellab.com/blog/de/consistent-album-artist-names/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

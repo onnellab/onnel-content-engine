@@ -65,6 +65,19 @@
         "score": 7
       },
       {
+        "topic_id": "TOPIC-0140",
+        "title": "Distingue archivos de música duplicados de grabaciones diferentes",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "es",
+        "status": "published",
+        "url": "https://onnellab.com/blog/es/distinguish-duplicate-music-files-from-different-recordings/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 7
+      },
+      {
         "topic_id": "TOPIC-0077",
         "title": "Cómo convertir textos repetidos en fragmentos reutilizables",
         "slug": "turn-repeated-text-into-reusable-snippets",
@@ -85,19 +98,6 @@
         "language": "es",
         "status": "published",
         "url": "https://onnellab.com/blog/es/consistent-album-artist-names/",
-        "destination": "published_article",
-        "relationship": "cross_domain",
-        "shared_clusters": [],
-        "score": 6
-      },
-      {
-        "topic_id": "TOPIC-0122",
-        "title": "Prepara una copia de trabajo antes de editar audio",
-        "slug": "choose-safe-audio-working-copy",
-        "category": "media",
-        "language": "es",
-        "status": "published",
-        "url": "https://onnellab.com/blog/es/choose-safe-audio-working-copy/",
         "destination": "published_article",
         "relationship": "cross_domain",
         "shared_clusters": [],

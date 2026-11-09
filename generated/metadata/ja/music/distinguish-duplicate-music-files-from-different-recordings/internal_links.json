@@ -14,7 +14,7 @@
     "slug": "distinguish-duplicate-music-files-from-different-recordings",
     "category": "music",
     "language": "ja",
-    "status": "scheduled",
+    "status": "published",
     "topic_clusters": [
       "録音の比較",
       "ファイルハッシュ",
