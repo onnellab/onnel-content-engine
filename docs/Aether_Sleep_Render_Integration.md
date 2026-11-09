@@ -27,6 +27,26 @@ not runtime activation switches. Actual activation requires the explicit existin
 runner invocation, the fixed sleep scope, current verified account evidence and
 all runtime gates below. A preparation plan is never a paid authorization receipt.
 
+## Default-off adoption boundary
+
+The dedicated runtime gate `AETHER_SLEEP_PILOT_ENABLED` defaults OFF. Only the
+exact value `1` permits the sleep lane. No checked-in launchd configuration or
+runner invocation sets it. The ordinary daily pass reports the sleep lane disabled
+without launching it. Direct worker execution, resumed publication and paid
+dispatch also enforce the gate. Offline plans and safe expired-job retirement
+remain possible. Enabling the gate is a separate authorized operational change,
+not part of integrating this branch; it never replaces cost, review or date gates.
+
+The November 9 KST slot is now expired. It is deliberately unchanged and cannot
+be recovered by enabling the gate. Completing all three compositions requires
+a separately approved revised schedule; this change does not move or reactivate it.
+
+Before queue admission or generation, the complete remaining pilot must fit
+USD 0.50: irreversible prior reservations plus the current verified per-request
+upper bound times the number of unreserved compositions. The check is repeated
+under the ledger lock immediately before reservation. Future evidence is still
+revalidated for every request, and failures/uncertain charges remain reserved.
+
 ## Paid generation
 
 `lyria_generate.generate_sleep` pins the separate sleep prompt and passes an

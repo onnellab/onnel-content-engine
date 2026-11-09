@@ -158,6 +158,7 @@ def run_locked(q, state, job, *, publish, api_factory=None, reconcile_only=False
     import aether_single as single
     from lyria_generate import generate_sleep
     from aether_sleep_render import render as render_loop, source_info
+    from aether_sleep_contract import require_activation
     folder = single.directory(q.root / "jobs" / job["id"])
     def save():
         single.atomic_json(q.state_path, state)
@@ -182,6 +183,7 @@ def run_locked(q, state, job, *, publish, api_factory=None, reconcile_only=False
         if reconcile_only and not job.get("upload") and not job.get("publish_requested"):
             return {"profile": "aether_inn", "status": "idle", "created_new_job": False,
                     "sleep_render_only_job": job["id"]}
+        require_activation()
         api = (api_factory or (lambda: single.YouTube(profile="aether_inn")))()
         if getattr(api, "profile", None) != "aether_inn":
             raise ValueError("aether_profile_required")
@@ -281,6 +283,8 @@ def worker(*, root=None, concept_id, slot, execute=False, publish=False, api_fac
     from aether_sleep_plan import build_plan
     if not execute:
         return {"status": "planned", "paid_dispatch_allowed": False, "series": SERIES}
+    from aether_sleep_contract import require_activation
+    require_activation()
     q = single.SingleQueue(single.ROOT if root is None else root)
     concept = next((x for x in build_plan()["drafts"] if x["id"] == concept_id), None)
     if concept is None:
@@ -303,11 +307,11 @@ def worker(*, root=None, concept_id, slot, execute=False, publish=False, api_fac
             require_window(seed)
             # Missing account evidence/art cannot create an unfinished queue job.
             from lyria_config import CONFIG_PATH, load_settings
-            from aether_sleep_guard import load_all_in_proof
+            from aether_sleep_guard import load_all_in_proof, require_affordable_pilot
             settings = load_settings(CONFIG_PATH)
             if not settings or settings.get("enabled") is not True:
                 raise single.VideoError("lyria_generation_disabled")
-            load_all_in_proof(settings["project_id"])
+            require_affordable_pilot(load_all_in_proof(settings["project_id"]))
             single.approved_cover(seed["title"], single.ASSETS_ROOT)
             if any(j["slot"] == slot for j in state["jobs"].values()):
                 raise single.VideoError("sleep_slot_already_used")

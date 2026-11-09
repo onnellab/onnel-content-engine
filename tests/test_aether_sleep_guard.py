@@ -3,6 +3,7 @@ import copy
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -25,7 +26,8 @@ class GuardTest(unittest.TestCase):
         # /private/var. Canonicalize the fixture, not the production guard.
         self.root = Path(self.tmp.name).resolve()
         self.root.chmod(0o700)
-        self.patches = [patch.object(guard, 'ROOT', self.root / 'pilot'),
+        self.patches = [patch.dict(os.environ, {'AETHER_SLEEP_PILOT_ENABLED': '1'}),
+                        patch.object(guard, 'ROOT', self.root / 'pilot'),
                         patch.object(guard, 'PROOF_PATH', self.root / 'pilot' / 'receipt.json'),
                         patch.object(guard.paid, 'AETHER_ROOT', self.root),
                         patch.object(guard.paid, 'utc_now', return_value=NOW)]
@@ -67,6 +69,56 @@ class GuardTest(unittest.TestCase):
             'source_references': {k: 'synthetic line 1' for k in fields}}
         self.write(guard.PROOF_PATH, proof)
         return proof
+
+    def test_activation_default_off_at_paid_boundary(self):
+        settings = {'enabled': True, 'project_id': PROJECT, 'candidate_count': 1, 'max_usd_per_run': 0.08}
+        with patch.dict(os.environ, {}, clear=True), \
+             patch.object(lyria_generate, 'load_settings', return_value=settings), \
+             patch.object(lyria_generate, 'urlopen') as transport:
+            with self.assertRaisesRegex(CredentialError, 'sleep_pilot_disabled'):
+                lyria_generate.request_song(PROJECT, self.row['prompt'],
+                    slot=self.scope['slot'], sleep_scope=self.scope)
+            transport.assert_not_called()
+
+    def test_first_request_requires_three_request_affordability(self):
+        for amount, allowed in [('0.166666666666666666', True), ('0.17', False), ('0.20', False)]:
+            with self.subTest(amount=amount):
+                proof = {'all_in_reserved_usd': amount}
+                if allowed:
+                    guard.require_affordable_pilot(proof)
+                else:
+                    with self.assertRaisesRegex(CredentialError, 'full_pilot_budget_exceeded'):
+                        guard.require_affordable_pilot(proof)
+                self.assertEqual(guard.ledger_rows(), [])
+
+    def test_failed_reservations_count_in_remaining_projection(self):
+        self.write(guard.ROOT / ('reservation-' + self.scope['concept_id'] + '.json'),
+                   {**self.scope, 'request_count': 1, 'all_in_reserved_usd': '0.10', 'state': 'failed'})
+        guard.require_affordable_pilot({'all_in_reserved_usd': '0.20'})
+        with self.assertRaisesRegex(CredentialError, 'full_pilot_budget_exceeded'):
+            guard.require_affordable_pilot({'all_in_reserved_usd': '0.21'})
+
+    def test_reserve_rechecks_full_pilot_before_writing(self):
+        self.receipt()
+        proof = guard.load_all_in_proof(PROJECT)
+        with patch.object(guard, 'load_all_in_proof', return_value={**proof, 'all_in_reserved_usd': '0.20'}):
+            with self.assertRaisesRegex(CredentialError, 'full_pilot_budget_exceeded'):
+                guard.reserve(self.scope, PROJECT, self.row['prompt'], self.intent_path, 'f'*64, proof)
+        self.assertEqual(guard.ledger_rows(), [])
+
+    def test_unaffordable_generation_never_enters_execution(self):
+        self.receipt()
+        settings = {'enabled': True, 'project_id': PROJECT, 'candidate_count': 1, 'max_usd_per_run': 0.08}
+        with patch.object(lyria_generate, 'load_settings', return_value=settings), \
+             patch.object(guard.paid, 'load_paid_proof', return_value={}), \
+             patch.object(guard, 'load_all_in_proof', return_value={'all_in_reserved_usd': '0.20'}), \
+             patch.object(lyria_generate, '_execute_generation') as execute:
+            with self.assertRaisesRegex(CredentialError, 'full_pilot_budget_exceeded'):
+                lyria_generate.generate_sleep(self.scope['concept_id'], execute=True,
+                    output_root=guard.output_for(self.scope['job_id']), slot=self.scope['slot'], job_id=self.scope['job_id'])
+            execute.assert_not_called()
+        self.assertEqual(guard.ledger_rows(), [])
+        self.assertFalse(guard.output_for(self.scope['job_id']).exists())
 
     def test_missing_receipt(self):
         with self.assertRaisesRegex(CredentialError, 'unverified'): guard.load_all_in_proof(PROJECT)

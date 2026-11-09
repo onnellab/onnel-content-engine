@@ -25,6 +25,56 @@ def job():
 
 
 class ContractTests(unittest.TestCase):
+    def setUp(self):
+        enabled = patch.dict(os.environ, {'AETHER_SLEEP_PILOT_ENABLED': '1'})
+        enabled.start()
+        self.addCleanup(enabled.stop)
+
+    def test_disabled_runner_never_launches_worker(self):
+        for value in ('', '0', 'true', 'yes'):
+            with self.subTest(value=value), patch.dict(os.environ, {'AETHER_SLEEP_PILOT_ENABLED': value}), \
+                 patch.object(daily, 'run_step') as run:
+                report = {'blockers': []}
+                daily.run_sleep_slot(report, datetime.fromisoformat('2026-11-13T07:00:00+09:00'))
+                self.assertEqual(report['sleep_slot']['status'], 'disabled')
+                run.assert_not_called()
+
+    def test_disabled_direct_worker_never_creates_queue(self):
+        import aether_single as single
+        from short_video_credentials import CredentialError
+        with patch.dict(os.environ, {}, clear=True), patch.object(single, 'SingleQueue') as queue:
+            with self.assertRaisesRegex(CredentialError, 'sleep_pilot_disabled'):
+                sleep.worker(concept_id=contract.CONCEPTS[0][0], slot='2026-11-09', execute=True, publish=True)
+            queue.assert_not_called()
+
+    def test_disabled_resume_never_contacts_provider_or_youtube(self):
+        import aether_single as single
+        with tempfile.TemporaryDirectory() as folder, patch.dict(os.environ, {}, clear=True), \
+             patch.object(sleep, 'require_window', return_value='private'), \
+             patch('lyria_generate.generate_sleep') as generate:
+            root = Path(folder).resolve()
+            q = types.SimpleNamespace(root=root, state_path=root / 'queue.json')
+            j = {**job(), 'publish_requested': True}
+            api = Mock()
+            with self.assertRaisesRegex(single.VideoError, 'sleep_pilot_disabled'):
+                sleep.run_locked(q, {'jobs': {j['id']: j}}, j, publish=True, api_factory=api, reconcile_only=True)
+            api.assert_not_called()
+            generate.assert_not_called()
+
+    def test_unaffordable_pilot_never_creates_queue_job(self):
+        import aether_single as single
+        from short_video_credentials import CredentialError
+        with tempfile.TemporaryDirectory() as folder:
+            with patch.object(sleep, 'require_window', return_value='public'), \
+                 patch('lyria_config.load_settings', return_value={'enabled': True, 'project_id': 'sleep-project'}), \
+                 patch('aether_sleep_guard.load_all_in_proof', return_value={'all_in_reserved_usd': '0.20'}), \
+                 patch('aether_sleep_guard.require_affordable_pilot', side_effect=CredentialError('sleep_full_pilot_budget_exceeded')), \
+                 patch.object(single, 'approved_cover') as cover:
+                with self.assertRaisesRegex(CredentialError, 'full_pilot_budget_exceeded'):
+                    sleep.worker(root=Path(folder).resolve(), concept_id=contract.CONCEPTS[0][0], slot='2026-11-09', execute=True)
+                cover.assert_not_called()
+            self.assertEqual(single.SingleQueue(Path(folder).resolve())._read()['jobs'], {})
+
     def test_identity_requires_markers_and_exact_concept(self):
         contract.validate_identity(job())
         for field in ('profile', 'series', 'source_kind', 'concept_id', 'title', 'duration_seconds'):
@@ -141,7 +191,7 @@ class ContractTests(unittest.TestCase):
                 atomic_json=Mock(), paid_guard=types.SimpleNamespace(require_no_unsettled_intents=Mock()), VideoError=RuntimeError)
             gen=types.SimpleNamespace(generate_sleep=Mock())
             j=job(); state={'jobs':{j['id']:j}}
-            with patch.dict(sys.modules, {'aether_single':fake,'lyria_generate':gen}), patch.object(sleep,'require_window',side_effect=ValueError('sleep_publication_window_closed')):
+            with patch.dict(os.environ, {}, clear=True), patch.dict(sys.modules, {'aether_single':fake,'lyria_generate':gen}), patch.object(sleep,'require_window',side_effect=ValueError('sleep_publication_window_closed')):
                 result=sleep.run_locked(q,state,j,publish=True,reconcile_only=True)
                 self.assertEqual(result['status'],'idle'); self.assertEqual(j['status'],'rejected')
                 gen.generate_sleep.assert_not_called()

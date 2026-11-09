@@ -435,6 +435,7 @@ def generate_sleep(concept_id, *, execute=False, output_root, slot, job_id):
     all_in = sleep_guard.load_all_in_proof(settings["project_id"])
     with paid_guard.paid_request_lock():
         sleep_guard.require_available(scope)
+        sleep_guard.require_affordable_pilot(all_in)
         paid_guard.require_no_unsettled_intents(extra_roots=(output_root,))
         return _execute_generation(row["title"], "Purpose-composed sleep source", output_root,
                                    slot, settings, plan, row["prompt"], proof,

@@ -6,6 +6,7 @@ This module alone grants neither paid dispatch nor media review.
 from __future__ import annotations
 
 from datetime import datetime
+import os
 from decimal import Decimal
 from zoneinfo import ZoneInfo
 
@@ -21,6 +22,17 @@ CONCEPTS = (
 )
 # Fixed pilot dates; runtime cost, provenance and review gates still apply.
 PROPOSED_SLOTS = ("2026-11-09", "2026-11-13", "2026-11-16")
+
+
+def runtime_enabled() -> bool:
+    """Deployment alone must never activate the pilot."""
+    return os.environ.get("AETHER_SLEEP_PILOT_ENABLED") == "1"
+
+
+def require_activation() -> None:
+    if not runtime_enabled():
+        from short_video_credentials import CredentialError
+        raise CredentialError("sleep_pilot_disabled")
 
 
 def today_exception_valid(now: datetime, concept_id: str, slot: str) -> bool:

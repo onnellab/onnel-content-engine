@@ -42,6 +42,8 @@ def identity(scope, project, prompt, *, now=None):
             or not isinstance(project, str)
             or not re.fullmatch('[a-z][a-z0-9-]{4,28}[a-z0-9]', project)):
         raise CredentialError('sleep_identity_invalid')
+    from aether_sleep_contract import require_activation
+    require_activation()
     row = concept(scope['concept_id'])
     rows = build_plan()['drafts']
     expected = SLOTS[[r['id'] for r in rows].index(row['id'])]
@@ -160,6 +162,20 @@ def ledger_rows():
     return rows
 
 
+def require_remaining_budget(rows, proof):
+    """Prove affordability of all remaining compositions, not just the next."""
+    spent = sum((paid._decimal(r['all_in_reserved_usd']) for r in rows), Decimal(0))
+    remaining = 3 - len(rows)
+    unit = paid._decimal(proof['all_in_reserved_usd'])
+    if unit <= 0 or remaining < 0 or spent + remaining * unit > Decimal('0.50'):
+        raise CredentialError('sleep_full_pilot_budget_exceeded')
+
+
+def require_affordable_pilot(proof):
+    with ledger_lock():
+        require_remaining_budget(ledger_rows(), proof)
+
+
 def require_available(scope):
     with ledger_lock():
         rows = ledger_rows()
@@ -179,6 +195,7 @@ def reserve(scope, project, prompt, intent_path, intent_sha256, proof):
         if any(r['concept_id'] == scope['concept_id'] or r.get('job_id') == scope['job_id'] for r in rows):
             raise CredentialError('sleep_paid_retry_forbidden')
         current = load_all_in_proof(project, expected_sha256=proof['proof_sha256'])
+        require_remaining_budget(rows, current)
         if len(rows) >= 3 or sum((paid._decimal(r['all_in_reserved_usd']) for r in rows), paid._decimal(current['all_in_reserved_usd'])) > Decimal('0.50'):
             raise CredentialError('sleep_all_in_budget_exceeded')
         reservation = {**scope, **current, 'project_id': project, 'title': row['title'],

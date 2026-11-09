@@ -904,7 +904,10 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
 
 def run_sleep_slot(report: dict, now: datetime, reconciled: dict | None = None) -> None:
     """Same producer and queue, fixed three-source pilot, no new timer."""
-    from aether_sleep_contract import CONCEPTS, PROPOSED_SLOTS
+    from aether_sleep_contract import CONCEPTS, PROPOSED_SLOTS, runtime_enabled
+    if not runtime_enabled():
+        report["sleep_slot"] = {"status": "disabled", "error": "sleep_pilot_disabled"}
+        return
     local_date = now.astimezone(KST).date().isoformat()
     if local_date not in PROPOSED_SLOTS:
         report["sleep_slot"] = {"status": "not_scheduled_today"}
