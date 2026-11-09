@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-labelledby="title desc" xml:lang="ko">
+<title id="title">음악의 날짜를 구분하세요</title>
+<desc id="desc">가상의 예시: 녹음 1998; 최초 발매 2000; 소장 판본 발매 2024. 확인되지 않은 날짜는 추정하지 마세요.</desc>
+<rect width="1200" height="900" fill="#f7f8f4"/>
+<g font-family="Arial, Noto Sans, Noto Sans CJK KR, Noto Sans CJK JP, Noto Sans CJK SC, Noto Sans CJK TC, sans-serif" fill="#23362f">
+<text x="600" y="92" text-anchor="middle" font-size="40">음악의 날짜를 구분하세요</text>
+<text x="600" y="151" text-anchor="middle" font-size="27" fill="#52695d">가상의 예시</text>
+<rect x="80" y="204" width="1040" height="136" rx="20" fill="#ffffff" stroke="#b8c6bc" stroke-width="2"/>
+<text x="120" y="286" font-size="31">녹음</text>
+<text x="1060" y="287" text-anchor="end" font-size="50" font-weight="600" fill="#2b6050">1998</text>
+<rect x="80" y="372" width="1040" height="136" rx="20" fill="#ffffff" stroke="#b8c6bc" stroke-width="2"/>
+<text x="120" y="454" font-size="31">최초 발매</text>
+<text x="1060" y="455" text-anchor="end" font-size="50" font-weight="600" fill="#2b6050">2000</text>
+<rect x="80" y="540" width="1040" height="136" rx="20" fill="#ffffff" stroke="#b8c6bc" stroke-width="2"/>
+<text x="120" y="622" font-size="31">소장 판본 발매</text>
+<text x="1060" y="623" text-anchor="end" font-size="50" font-weight="600" fill="#2b6050">2024</text>
+<text x="600" y="815" text-anchor="middle" font-size="27">확인되지 않은 날짜는 추정하지 마세요.</text>
+</g>
+</svg>
