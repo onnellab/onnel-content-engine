@@ -111,6 +111,8 @@ def iso_now() -> str:
 def save(payload: dict) -> None:
     STATE.mkdir(parents=True, exist_ok=True)
     target = RESULT.with_name("probe-result.json") if payload.get("mode") == "probe" else RESULT
+    if payload.get("mode") == "sleep":
+        target = RESULT.with_name("sleep-result.json")
     tmp = target.with_suffix(".tmp")
     tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     os.chmod(tmp, 0o600)
@@ -900,6 +902,30 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
         sync_playlists_after_upload(report)
 
 
+def run_sleep_slot(report: dict, now: datetime, reconciled: dict | None = None) -> None:
+    """Same producer and queue, fixed three-source pilot, no new timer."""
+    from aether_sleep_contract import CONCEPTS, PROPOSED_SLOTS
+    local_date = now.astimezone(KST).date().isoformat()
+    if local_date not in PROPOSED_SLOTS:
+        report["sleep_slot"] = {"status": "not_scheduled_today"}
+        return
+    if reconciled and reconciled.get("series") == "aether_inn_sleep":
+        report["sleep_slot"] = reconciled
+        return  # Never run the same job twice within a daily pass.
+    code, stdout, _ = run_step(
+        report, "aether_sleep_slot",
+        [sys.executable, "-B", "scripts/aether_single.py", "sleep-worker",
+         "--concept", CONCEPTS[PROPOSED_SLOTS.index(local_date)][0],
+         "--slot", local_date, "--execute", "--publish"], timeout=3600,
+    )
+    result = json_stdout(stdout) or {"status": "blocked", "error": "sleep_worker_output_invalid"}
+    report["sleep_slot"] = result
+    if code != 0 or result.get("status") in {"blocked", "reconcile_required", "rejected"}:
+        report["blockers"].append(result.get("error") or "sleep_worker_failed")
+    elif result.get("video_id"):
+        sync_playlists_after_upload(report)
+
+
 def scheduled_compilation_theme(now: datetime) -> str | None:
     start = date(2026, 9, 27)
     delta = (now.date() - start).days
@@ -1216,7 +1242,9 @@ def finalize(report: dict) -> None:
     save(report)
 def main() -> int:
     parser = argparse.ArgumentParser(description="Local fail-closed Aether daily worker")
-    parser.add_argument("--probe", action="store_true")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--probe", action="store_true")
+    mode.add_argument("--sleep-only", action="store_true")
     args = parser.parse_args()
     STATE.mkdir(parents=True, exist_ok=True)
     fd = os.open(LOCK, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
@@ -1229,6 +1257,19 @@ def main() -> int:
             print(json.dumps({"state": "already_running", "result": str(RESULT)}))
             return 3
         now = now_kst()
+        if args.sleep_only:
+            # Explicit same-owner continuation. Preserve daily reports and never
+            # repeat fantasy/Ops/compilation stages on a same-day invocation.
+            report = {"schema_version": 1, "kind": "onnellab_aether_local_sleep_result",
+                      "mode": "sleep", "started_at": now.isoformat(timespec="seconds"),
+                      "local_date": now.date().isoformat(), "state": "running",
+                      "steps": [], "blockers": [], "warnings": []}
+            save(report)
+            if repo_sync(report):
+                run_sleep_slot(report, now_kst())
+            finalize(report)
+            print(json.dumps(report, ensure_ascii=False))
+            return 2 if report["blockers"] else 0
         if not args.probe and RESULT.exists():
             try:
                 existing = json.loads(RESULT.read_text(encoding="utf-8"))
@@ -1308,6 +1349,7 @@ def main() -> int:
         report["execution_order"] = "aether_before_reporting_and_hosted_ops"
         single_reconcile = run_reconcile(report)
         run_single_slot(report, single_reconcile)
+        run_sleep_slot(report, now_kst(), single_reconcile)
         run_compilation_slot(report, now_kst())
         save(report)
         # Capture reports AFTER music so the later snapshot/deploy reflects the
@@ -1355,4 +1397,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
 

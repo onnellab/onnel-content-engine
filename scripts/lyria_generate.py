@@ -139,7 +139,7 @@ def check_generation_schedule(slot, project_id, prompt, *, manual_release=None, 
 def request_song(project_id: str, prompt: str, *, token: str | None = None, timeout: int = 240,
                  slot: str | None = None, intent_path: Path | None = None,
                  intent_sha256: str | None = None, proof_sha256: str | None = None,
-                 manual_release: dict | None = None) -> tuple[bytes, str, dict]:
+                 manual_release: dict | None = None, sleep_scope: dict | None = None) -> tuple[bytes, str, dict]:
     require_paid_api_allowed(purpose=ALLOWED_LYRIA_PURPOSE, model=MODEL,
                              candidate_count=1, estimated_cost_usd=UNIT_PRICE_USD)
     settings = load_settings(CONFIG_PATH)
@@ -151,7 +151,13 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
             or settings["max_usd_per_run"] < UNIT_PRICE_USD - 1e-9
             or settings["max_usd_per_run"] > UNIT_PRICE_USD + 1e-9):
         raise CredentialError("lyria_owner_spend_limit")
-    check_generation_schedule(slot, project_id, prompt, manual_release=manual_release)
+    if sleep_scope is not None:
+        import aether_sleep_guard as sleep_guard
+        if not isinstance(sleep_scope, dict) or manual_release is not None or sleep_scope.get("slot") != slot:
+            raise CredentialError("sleep_identity_invalid")
+        sleep_guard.identity(sleep_scope, project_id, prompt)
+    else:
+        check_generation_schedule(slot, project_id, prompt, manual_release=manual_release)
     paid_guard.load_paid_proof(project_id, expected_sha256=proof_sha256)
     if intent_path is None or not intent_sha256 or not proof_sha256:
         raise CredentialError("aether_lyria_charge_intent_required")
@@ -169,6 +175,10 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
         if (intent.get("manual_release") != manual_release
                 or Path(intent_path).parent.parent != single_root / "jobs" / manual_release["job_id"] / "lyria"):
             raise CredentialError("aether_manual_release_identity_invalid")
+    if sleep_scope is not None:
+        sleep_guard.require_dispatch(sleep_scope, project_id, prompt, intent_path, intent_sha256, intent)
+    elif intent.get("sleep_scope") is not None:
+        raise CredentialError("sleep_scope_required")
     token = token or access_token()
     body = json.dumps({
         "model": MODEL,
@@ -212,7 +222,10 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
         final_now = paid_guard.utc_now()
         if not paid_guard._time(final_proof["checked_at"]) <= final_now < paid_guard._time(final_proof["expires_at"]):
             raise CredentialError("aether_lyria_cost_proof_expired")
-        check_generation_schedule(slot, project_id, prompt, manual_release=manual_release, now=final_now)
+        if sleep_scope is not None:
+            sleep_guard.require_dispatch(sleep_scope, project_id, prompt, intent_path, intent_sha256, intent, now=final_now)
+        else:
+            check_generation_schedule(slot, project_id, prompt, manual_release=manual_release, now=final_now)
         dispatched = True
         with urlopen(request, timeout=timeout) as response:
             declared = response.headers.get("Content-Length")
@@ -328,10 +341,14 @@ def generate(title: str, style: str, *, count: int | None = None, execute: bool 
                                    manual_release=manual_release)
 
 
-def _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof, *, manual_release=None):
+def _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof, *, manual_release=None, sleep_scope=None, sleep_proof=None):
     token = access_token()
     paid_guard.load_paid_proof(settings["project_id"], expected_sha256=proof["proof_sha256"])
-    check_generation_schedule(slot, settings["project_id"], prompt, manual_release=manual_release)
+    if sleep_scope is not None:
+        import aether_sleep_guard as sleep_guard
+        sleep_guard.identity(sleep_scope, settings["project_id"], prompt)
+    else:
+        check_generation_schedule(slot, settings["project_id"], prompt, manual_release=manual_release)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run_dir = Path(output_root).expanduser() / (timestamp + "-" + slug(title))
     run_dir.mkdir(parents=True, exist_ok=False, mode=0o700)
@@ -352,15 +369,22 @@ def _execute_generation(title, style, output_root, slot, settings, plan, prompt,
     }
     if manual_release is not None:
         manifest["manual_release"] = manual_release
+    if sleep_scope is not None:
+        manifest["sleep_scope"] = sleep_scope
+        manifest["sleep_all_in_proof"] = sleep_proof
     atomic_json(manifest_path, manifest)
     os.chmod(manifest_path, 0o600)
+    if sleep_scope is not None:
+        sleep_guard.reserve(sleep_scope, settings["project_id"], prompt, manifest_path,
+                            hashlib.sha256(manifest_path.read_bytes()).hexdigest(), sleep_proof)
     # This owner's authorization permits precisely one provider request per
     # single; it does not authorize retries or multi-candidate generation.
     audio, mime, meta = request_song(settings["project_id"], prompt, token=token, slot=slot,
                                    intent_path=manifest_path,
                                    intent_sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
                                    proof_sha256=proof["proof_sha256"],
-                                   **({"manual_release": manual_release} if manual_release is not None else {}))
+                                   **({"manual_release": manual_release} if manual_release is not None else {}),
+                                   **({"sleep_scope": sleep_scope} if sleep_scope is not None else {}))
     manifest = paid_guard._json(paid_guard._read(manifest_path))
     ext = ".mp3" if mime == "audio/mpeg" else ".wav"
     path = run_dir / f"candidate-01{ext}"
@@ -383,6 +407,38 @@ def _execute_generation(title, style, output_root, slot, settings, plan, prompt,
     )
     atomic_json(manifest_path, manifest)
     return {**manifest, "manifest": str(manifest_path)}
+
+
+def generate_sleep(concept_id, *, execute=False, output_root, slot, job_id):
+    """Purpose-composed sleep only; all paid traffic stays in request_song."""
+    import aether_sleep_guard as sleep_guard
+    row = sleep_guard.concept(concept_id)
+    scope = {"concept_id": concept_id, "job_id": job_id, "slot": slot}
+    plan = {"model": MODEL, "candidate_count": 1, "estimated_cost_usd": UNIT_PRICE_USD,
+            "prompt_sha256": hashlib.sha256(row["prompt"].encode()).hexdigest(),
+            "execute": execute, "cost_basis": "all_in_upper_bound_required",
+            "gross_cost_verified": False, "final_billed_cost_usd": None,
+            "series": "aether_inn_sleep", "source_kind": "purpose_composed_sleep"}
+    if not execute:
+        return {**plan, "state": "planned", "prompt": row["prompt"], "title": row["title"],
+                "paid_authorized": False}
+    settings = load_settings(CONFIG_PATH)
+    if not settings or settings.get("enabled") is not True:
+        raise CredentialError("lyria_generation_disabled")
+    sleep_guard.identity(scope, settings["project_id"], row["prompt"])
+    if Path(output_root) != sleep_guard.output_for(job_id):
+        raise CredentialError("sleep_output_binding_invalid")
+    require_paid_api_allowed(purpose=ALLOWED_LYRIA_PURPOSE, model=MODEL,
+                             candidate_count=1, estimated_cost_usd=UNIT_PRICE_USD)
+    plan["project_id"] = settings["project_id"]
+    proof = paid_guard.load_paid_proof(settings["project_id"])
+    all_in = sleep_guard.load_all_in_proof(settings["project_id"])
+    with paid_guard.paid_request_lock():
+        sleep_guard.require_available(scope)
+        paid_guard.require_no_unsettled_intents(extra_roots=(output_root,))
+        return _execute_generation(row["title"], "Purpose-composed sleep source", output_root,
+                                   slot, settings, plan, row["prompt"], proof,
+                                   sleep_scope=scope, sleep_proof=all_in)
 
 
 def main() -> int:
@@ -413,3 +469,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

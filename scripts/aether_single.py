@@ -702,6 +702,13 @@ def import_backlog_master(source: Path, folder: Path, expected_duration: float, 
 
 def policy_for(job: dict) -> dict:
     policy = dict(POLICY)
+    if job.get("source_kind") == "purpose_composed_sleep" or job.get("series") == "aether_inn_sleep":
+        from aether_sleep_contract import validate_identity
+        validate_identity(job)
+        return {**policy, "version": 5, "kind": "purpose_composed_sleep", "series": "aether_inn_sleep",
+                "cover_provider": "owner_approved_existing_cover", "duration_seconds": 1800,
+                "publish_schedule": "sleep_pilot_2026_11_09_13_16", "request_limit": 3,
+                "all_in_cap_usd": "0.50", "paid_retries": 0}
     if job.get("manual_release"):
         policy.update(privacy="public", publish_schedule="explicit_manual_release",
                       manual_release_sha256=job["manual_release"]["request_sha256"])
@@ -773,6 +780,9 @@ def enforce_lane_rotation(state: dict, lane: str) -> None:
             raise VideoError("aether_single_traversal_rotation_required")
 
 def brief_for(job: dict) -> dict:
+    if job.get("source_kind") == "purpose_composed_sleep" or job.get("series") == "aether_inn_sleep":
+        from aether_sleep_worker import brief_for as sleep_brief
+        return sleep_brief(job)
     title = job["title"]
     style = job["style"]
     lane = job["lane"]
@@ -958,6 +968,9 @@ class SingleQueue:
         return state
 
     def _render(self, state, job, renderer):
+        if job.get("source_kind") == "purpose_composed_sleep":
+            from aether_sleep_worker import verify_media
+            verify_media(job, self.root / "jobs" / job["id"])
         result = job.get("result") or {}
         path = self.root / "jobs" / job["id"] / "video.mp4"
         if result.get("job_id") != job["id"] or result.get("test_only") is not False or result.get("upload_eligible") is not True:
@@ -1029,6 +1042,13 @@ def worker(
         ]
         same_slot = [j for j in state["jobs"].values() if j["slot"] == slot]
         unfinished = [j for j in state["jobs"].values() if not j.get("upload") and j["status"] not in FINAL]
+        selected = (pending or (unfinished if existing_only else same_slot or unfinished) or [None])[0]
+        if selected is not None and selected.get("source_kind") == "purpose_composed_sleep":
+            # Sleep never enters fantasy lane/audio/deadline or retry policy.
+            if not existing_only:
+                raise VideoError("aether_single_existing_job_unsettled")
+            from aether_sleep_worker import run_locked as run_sleep_locked
+            return run_sleep_locked(q, state, selected, publish=publish, api_factory=api_factory, reconcile_only=True)
         if existing_only:
             # A previous slot's unuploaded job has no legal publishAt after 09:00.
             # Retire it durably without creating an upload or consuming the next
@@ -1339,10 +1359,19 @@ def main() -> int:
     p.add_argument("--lane")
     p.add_argument("--execute", action="store_true")
     p.add_argument("--publish", action="store_true")
+    sleep = sub.add_parser("sleep-worker")
+    sleep.add_argument("--concept", required=True)
+    sleep.add_argument("--slot", required=True)
+    sleep.add_argument("--execute", action="store_true")
+    sleep.add_argument("--publish", action="store_true")
     args = parser.parse_args()
     try:
         if args.command == "readiness":
             result = readiness(args.root)
+        elif args.command == "sleep-worker":
+            from aether_sleep_worker import worker as sleep_worker
+            result = sleep_worker(root=args.root, concept_id=args.concept, slot=args.slot,
+                                  execute=args.execute, publish=args.publish)
         elif args.command == "reconcile":
             result = worker(args.root, publish=True, execute=args.execute, existing_only=True)
         elif args.command == "backlog-worker":
@@ -1367,4 +1396,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
 

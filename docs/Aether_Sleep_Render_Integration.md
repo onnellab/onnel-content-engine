@@ -1,50 +1,91 @@
-# Sleep rendering implementation, 2026-11-09
+# Sleep pilot integration, 2026-11-09
 
-The owner's latest instruction requests one sleep release today and recurring
-alternation with fantasy music. This supersedes the earlier unspecified-publication
-timing, but does not lift the three-composition / USD 0.50 all-in pilot ceiling,
-one request each, zero paid retries, rights checks or single-producer ownership.
+The owner requested one sleep release today and recurring alternation with fantasy
+music. The three-composition / USD 0.50 all-in ceiling, one request each, no paid
+retries and sole existing Mac producer remain mandatory. This implementation does
+not claim that any track has been generated, reviewed or published.
 
-## Implemented and tested
+## Existing owner, queue and transport
 
-`scripts/aether_sleep_render.py` is a callable offline PCM renderer, not a new
-producer or uploader. It snapshots and verifies the supplied source SHA, accepts
-30–184-second PCM16 sources, and uses independently opened copies of the same
-source with linear crossfades, exact 1800-second trim and gentle endpoint fades.
-The result is an auditable repeated-source file, not 30 minutes of unique music.
-Output publication into the caller's filesystem is atomic and create-only.
-All temporary rendering files are scoped to this call and removed on failure.
+`aether_daily_local.py` owns execution under its existing worker lock. Its daily
+pass routes the three sleep dates through `aether_single.py sleep-worker`, using
+the exact existing `SingleQueue` and resumable `Uploader`, Aether profile only.
+There is no second timer, producer, credential source, queue or direct HTTP path.
+`--sleep-only` on that same daily runner resumes only the sleep lane and writes
+`sleep-result.json`; it preserves the ordinary daily result and never repeats
+fantasy, compilation or Ops stages. Do not run an independent timer for it.
 
-Actual cloud ffmpeg testing exposed a broken shared asplit/acrossfade approach:
-it exhausted input early. The implemented independent-input version passed the
-real 30-minute 24kHz mono synthetic PCM test. Ten focused tests passed including
-SHA mismatch, snapshot corruption, malformed input, invalid fades, no-overwrite
-and a racing destination. Independent review of the corrected implementation
-found no remaining blocking issue for the default path.
+Fixed pilot dates are Nov 9 (Moonlit Guestroom), Nov 13 (Stillwater Sanctuary),
+and Nov 16 (Cloudrest Chamber), 2026, Asia/Seoul. Nov 9 permits an immediate
+release only within that exact local date and only for the first concept.
+The later two dates retain generation before 08:00 and publication before 09:00.
+Fantasy Tue/Sat dates remain unchanged. No fourth sleep composition is enabled.
+A missed pilot date is not automatically shifted or regenerated.
 
-Synthetic signals establish renderer behavior only, not musical quality or
-sleep suitability. Stereo/44.1/48kHz, full repository checks, actual Lyria audio,
-audible seams and final video remain unverified. No paid request, real music,
-cover, video upload, launchd change or queue mutation was performed by this patch.
+The old `aether_sleep_plan.py` and pilot JSON remain offline preparation artifacts,
+not runtime activation switches. Actual activation requires the explicit existing
+runner invocation, the fixed sleep scope, current verified account evidence and
+all runtime gates below. A preparation plan is never a paid authorization receipt.
 
-## Remaining integration gates
+## Paid generation
 
-1. Existing single Mac producer must own the operation and locks. Extend its
-   exact durable queue contract with explicit sleep source/series markers; do not
-   pass sleep music off as an ordinary fantasy single or weaken ordinary guards.
-2. Refresh current provider rights/price evidence and verify account-specific
-   all-in costs against the pilot's USD 0.50 total. A historical KRW SKU price
-   is not a verified tax/FX/mandatory-fee total. Reserve durable intent before each
-   of at most three requests; uncertain requests count as unresolved, never retry.
-3. Bind generated source, delegated audio/seam review, cover review and final
-   video validation to their actual SHA values. PCM success is not those reviews.
-4. Use only existing Aether credentials/uploader, reconcile remote state before
-   retrying an uncertain upload, then verify the exact channel and public video ID.
-5. Record the user's today-release exception independently of normal 09:00
-   cutoffs. A possible pilot alternation preserving Tue/Sat fantasy is Mon Nov9
-   sleep, Tue Nov10 fantasy, Fri Nov13 sleep, Sat Nov14 fantasy, Mon Nov16 sleep,
-   Tue Nov17 fantasy. This is a proposal, not an installed or executed schedule.
-   After three sleep sources, stop new paid sleep production pending a new budget.
+`lyria_generate.generate_sleep` pins the separate sleep prompt and passes an
+explicit sleep scope through the existing canonical `request_song` transport.
+It never calls ordinary fantasy generation with a force flag. The ordinary
+single prompt, schedule and spend policy remain unchanged.
 
-The old planner intentionally remains preparation-only. This patch does not
-flip readiness flags, install a scheduler or assert today's publication occurred.
+`aether_sleep_guard.py` validates private, project/account-bound all-in evidence,
+including provider base, tax, currency conversion and mandatory fees; it retains
+the original evidence bytes and an attributed field-level review. Hash integrity
+and an attestation do not independently authenticate an invoice. Do not fabricate
+a receipt or fill uncertain adjustments with zero. Missing proof fails before a
+new sleep queue job or paid request is created.
+
+The same global paid-request lock serializes dispatch. A private pilot ledger
+reserves the exact concept/job/intent/prompt/proof before its only request. All
+reservations count against the total, including failed or uncertain requests.
+A dispatch claim and durable intent prevent retry. Recovery validates the same
+reservation, scope, generated manifest and source bytes; it never buys again.
+Expired evidence may accompany a previously completed source but never authorize
+another charge. Unsettled intents remain blockers even when queue status changes.
+
+## Media and real review
+
+Provider MP3/WAV bytes are hash-pinned and retained. A bounded local ffmpeg decode
+produces PCM16 48kHz stereo with a separate SHA. Oversized, too-short, too-long,
+changed or symlink inputs fail closed. Output creation does not overwrite existing
+files. `aether_sleep_render.py` repeats the one source with gentle linear
+crossfades to exactly 1800 seconds. This is not 30 minutes of unique music.
+
+Three private exact-job review receipts are required in the existing job folder:
+
+* `sleep-source-review.json`: exact original and decoded source SHA, commercial
+  rights, actual listening, sleep suitability, no abrupt swells/prominent beat/voice.
+* `sleep-loop-review.json`: exact source and repeated-loop SHA, actual listening
+  to seams, endpoint fades and stable dynamics.
+* `sleep-video-review.json`: exact source/loop/cover/video SHA, actual final-video
+  inspection, suitable static sleep artwork and audiovisual synchronization.
+
+Each contains its stage, series, job ID, accepted boolean, actual reviewer,
+review timestamp and authority reference. See `require_review` for the exact field
+contract. Never generate these assertions from a successful render. Sleep does
+not use the ordinary adventure-density audio score. Cover import still requires
+the existing exact-title SHA-bound rights and quality approval. Every upload
+revalidates source provenance, reviews and final video integrity. Duplicate owned
+video titles and uncertain resumable sessions block a new insert.
+
+Expired unuploaded sleep jobs retire only after unsettled-charge checks, preserving
+sources and reservations. Render-only jobs do not gain publication intent through
+ordinary reconciliation. An uncertain charge cannot be retired away to permit new
+spending. Existing uploaded jobs use the same uploader reconciliation path.
+
+## Verification and deployment boundary
+
+Focused cloud tests cover the aggregate reservation cap, no retries, canonical
+transport fences, source identity and hash changes, real MP3 and WAV decode,
+real 30-minute PCM rendering, review gates, publication windows, missing billing
+without queue insertion, and expired-job handling. Synthetic media proves
+mechanics, not musical quality. Full ordinary Aether regression tests and the
+actual Mac environment must still be checked on the exact commit before adoption.
+No paid request, real track, live queue, cover registration, timer change or upload
+was performed during this implementation. The branch is not production deployment.
