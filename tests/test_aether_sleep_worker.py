@@ -113,9 +113,9 @@ class ContractTests(unittest.TestCase):
                  patch('lyria_config.load_settings', return_value={'enabled': True, 'project_id': 'sleep-project'}), \
                  patch('aether_sleep_guard.load_all_in_proof', side_effect=CredentialError('sleep_account_all_in_cost_unverified')):
                 with self.assertRaises(CredentialError):
-                    sleep.worker(root=Path(folder), concept_id=contract.CONCEPTS[0][0], slot='2026-11-09', execute=True, publish=True, api_factory=api)
+                    sleep.worker(root=Path(folder).resolve(), concept_id=contract.CONCEPTS[0][0], slot='2026-11-09', execute=True, publish=True, api_factory=api)
             api.assert_not_called()
-            self.assertEqual(single.SingleQueue(Path(folder))._read()['jobs'], {})
+            self.assertEqual(single.SingleQueue(Path(folder).resolve())._read()['jobs'], {})
 
     def test_runner_only_fixed_dates_and_same_worker(self):
         report={'blockers':[]}

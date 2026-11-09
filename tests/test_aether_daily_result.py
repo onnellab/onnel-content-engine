@@ -75,6 +75,19 @@ class DailyResultTests(unittest.TestCase):
         self.assertEqual(0o600, (self.result.stat().st_mode & 0o777))
         self.assertEqual(0o600, ((self.root / "probe-result.json").stat().st_mode & 0o777))
 
+    def test_sleep_continuation_cannot_overwrite_authoritative_daily_result(self):
+        worker.save(self.report())
+        original = self.result.read_bytes()
+        sleep_report = self.report("sleep")
+        sleep_report.update(kind="onnellab_aether_local_sleep_result",
+                            sleep_slot={"job_id": "fixture-sleep", "status": "blocked"})
+        worker.save(sleep_report)
+        self.assertEqual(original, self.result.read_bytes())
+        separate = self.root / "sleep-result.json"
+        saved = json.loads(separate.read_text())
+        self.assertEqual("fixture-sleep", saved["sleep_slot"]["job_id"])
+        self.assertEqual(0o600, separate.stat().st_mode & 0o777)
+
     def test_json_stdout_accepts_only_objects(self):
         for value in ("[]", "null", '"text"', "7", "true", None):
             with self.subTest(value=value), self.assertRaises((TypeError, ValueError)):
@@ -101,6 +114,7 @@ class DailyResultTests(unittest.TestCase):
         with patch.object(worker, "repo_sync", return_value=True), \
              patch.object(worker, "run_reconcile", return_value={"status": "idle"}), \
              patch.object(worker, "run_single_slot"), \
+             patch.object(worker, "run_sleep_slot"), \
              patch.object(worker, "run_compilation_slot"), \
              patch.object(worker, "run_youtube_reports", side_effect=fail_after_evidence), \
              patch.object(worker, "publish_local_ops_sources") as publish, \
@@ -253,3 +267,4 @@ class DailyResultTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

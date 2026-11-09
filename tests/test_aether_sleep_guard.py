@@ -21,7 +21,9 @@ PROJECT = 'example-project'
 class GuardTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.root = Path(self.tmp.name)
+        # macOS may return /var/folders/... while /var is a symlink to
+        # /private/var. Canonicalize the fixture, not the production guard.
+        self.root = Path(self.tmp.name).resolve()
         self.root.chmod(0o700)
         self.patches = [patch.object(guard, 'ROOT', self.root / 'pilot'),
                         patch.object(guard, 'PROOF_PATH', self.root / 'pilot' / 'receipt.json'),
