@@ -62,3 +62,31 @@ commit with the remaining regression/media checks when resources permit.
 Activation still requires authorization, current real account evidence, approved
 artwork, real audio/video review and a valid approved schedule. Synthetic fixtures
 and passing tests supply none of those approvals.
+
+## Integrated verification after resources recovered
+
+This later pass supersedes the earlier media-test deferral. Memory pressure
+returned to normal (level 1), with 41% reported free memory. No existing Aether
+producer or ffmpeg process was running. The candidate was merged without
+conflicts with main 1746b29294445461f5c7b1e9770ad487b90055ea, preserving all
+intervening unrelated changes. Integrated code commit:
+ed370a66f1e21de7b24aff568dad8685ebd091a6.
+
+All 409 tests selected by test_aether*.py and test_lyria*.py passed sequentially
+in 3.487 seconds, including the real 30-minute PCM render and MP3/WAV decode
+tests previously deferred. No tests in that selection were excluded.
+
+The socket fence recorded zero network attempts. The subprocess fence permitted
+only tiny fixture copies and ffmpeg inputs/outputs inside temporary directories
+created by the same test runner. It allowed 15 cp and four ffmpeg invocations,
+with zero denied subprocess attempts. Child-process polling and a subsequent
+process-list check both confirmed no test/ffmpeg processes remained.
+
+This verifies mechanics on synthetic local fixtures, not actual composition
+quality, rights, final-video review, account tax/billing evidence or permission to
+publish. Runtime remains OFF; no producer was run and no charge or upload occurred.
+The past November 9 slot remains unchanged. The complete three-composition goal
+still requires a separately approved valid schedule and real evidence/reviews.
+
+The verified code is suitable for dormant integration through the existing
+producer path. This is not runtime activation and does not create another producer.
