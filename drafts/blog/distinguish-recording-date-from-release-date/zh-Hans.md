@@ -12,7 +12,7 @@ status: "draft"
 related_apps: ""
 search_intent: "workflow"
 tags: "录音日期与发行日期的区别"
-canonical_url: "https://onnellab.com/blog/zh-Hans/distinguish-recording-date-from-release-date/"
+canonical_url: "https://onnellab.com/blog/zh-hans/distinguish-recording-date-from-release-date/"
 ---
 
 # 区分音乐元数据中的录音日期与发行日期
@@ -64,4 +64,4 @@ MusicBrainz的[发行文档](https://musicbrainz.org/doc/Release)将具体版本
 
 ## 下一步
 
-选择一张专辑，在修改标签前建立来源笔记。如果你还需要判断文件是否重复，可以参考[区分重复文件与不同录音](/blog/zh-Hans/distinguish-duplicate-music-files-from-different-recordings/)。日期笔记本身不能证明两个文件包含同一段录音。
+选择一张专辑，在修改标签前建立来源笔记。如果你还需要判断文件是否重复，可以参考[区分重复文件与不同录音](/blog/zh-hans/distinguish-duplicate-music-files-from-different-recordings/)。日期笔记本身不能证明两个文件包含同一段录音。

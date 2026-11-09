@@ -69,5 +69,16 @@
     "record": "drafts/blog/distinguish-recording-date-from-release-date/translation-review.md",
     "corrections_applied": true,
     "native_or_render_pass": false
+  },
+  "path_review_20261109": {
+    "source_commit": "88a92e1d26be93a8f7593fc1cebcd252afe2b76b",
+    "correction": "Canonical and related-guide public route locale segments lowercased in zh-Hans, zh-Hant, pt-BR; filenames and language IDs unchanged.",
+    "independent_check": "Three new blobs re-fetched and compared against prior complete text: exactly two URL replacements per locale, no other changes.",
+    "blobs": {
+      "zh-Hans": "72566ca6dcfd81dbe9e44502ce1b9c3f9af299ee",
+      "zh-Hant": "c372758c898ea880d7161462e064fa5555ae1129",
+      "pt-BR": "900eb89e09d0dc1bbaf0550e83bb36e3aea410ec"
+    },
+    "native_or_page_render_pass": false
   }
 }

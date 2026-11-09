@@ -23,3 +23,7 @@
 ## Shared result
 
 No substantive missing facts, major mistranslations, source overstatements or unsupported app-capability claims were found. All nine retain the three distinct date questions, edition/territory matching, uncertainty, conflicting-source notes, invented example, backup/test-copy safeguards, per-track caution and no tag-mapping guarantee. Title shortening is an editorial refinement, not evidence of search performance. Corrections were applied by the author after the independent review. No rendered-page or native validation pass is asserted.
+
+## 2026-11-09 independent path correction
+
+Fresh review found uppercase locale segments in canonical and related-guide URLs for zh-Hans, zh-Hant and pt-BR. Corrected those six public URL paths to lowercase; file identities and language values remain unchanged. Independent reviewer re-fetched each new blob and verified exact equivalence to the original except the two intended replacements per file. This corrects the earlier path-completeness implication; no native evaluator or rendered-page pass is asserted. All nine full manuscripts and both official sources were re-read. Images remain unprepared and the bundle remains draft_not_ready.

@@ -6,7 +6,7 @@ slug: "choose-literal-or-pattern-search-for-text"
 category: "reading"
 short_answer: "Suchen Sie eine bekannte Zeichenfolge zunächst wörtlich. Verwenden Sie ein Muster nur, wenn Sie mehrere Varianten nach einer Regel finden müssen und die Syntax der Anwendung geprüft haben. Testen Sie gewünschte und unerwünschte Treffer an erfundenem Text. Prüfen Sie danach das Dokument, ohne etwas zu ersetzen."
 primary_keyword: "wörtliche Suche oder Mustersuche"
-secondary_keywords: "Text wörtlich suchen|reguläre Ausdrücke suchen|Satzzeichen suchen"
+secondary_keywords: "Text wörtlich suchen|Suche mit regulären Ausdrücken|Satzzeichen suchen"
 card_title: "Wörtliche Suche oder Mustersuche für Text wählen"
 status: "draft"
 related_apps: ""
@@ -31,17 +31,17 @@ Suchen Sie eine bekannte Zeichenfolge zunächst wörtlich. Verwenden Sie ein Mus
 
 Die wörtliche Suche sucht die eingegebenen Zeichen, ohne sie als Musteroperatoren auszulegen. Die Mustersuche interpretiert bestimmte Zeichen als Regeln. Ein regulärer Ausdruck ist eine Art von Muster. Platzhalter für Dateinamen verwenden nicht automatisch dieselbe Sprache.
 
-Wörtlich bedeutet nicht zwingend ganze Zeile, ganzes Wort, Beachtung der Großschreibung oder identische Dateibytes. Das sind getrennte Fragen. Auch ein Teil einer längeren Aussage kann ein wörtlicher Treffer sein.
+Wörtlich bedeutet nicht zwingend ganze Zeile, ganzes Wort, Unterscheidung von Groß- und Kleinschreibung oder identische Dateibytes. Das sind getrennte Fragen. Auch ein Teil einer längeren Aussage kann ein wörtlicher Treffer sein.
 
 | Aufgabe | Ausgangspunkt | Vor der Bewertung prüfen |
 | --- | --- | --- |
-| Die Kennzeichnung `A.7` finden | Wörtliche Suche | Satzzeichen und Großschreibung |
+| Die Kennzeichnung `A.7` finden | Wörtliche Suche | Satzzeichen und Groß-/Kleinschreibung |
 | Mehrere definierte Varianten finden | Unterstützter Mustermodus | Syntax und unerwünschte Treffer |
 | Durchsuchte Dateien eingrenzen | Dateibereich festlegen | Pfadfilter von Inhaltssuche trennen |
 
 ## Eine kleine erfundene Probe
 
-Legen Sie eine entbehrliche lokale Notiz mit diesen drei Zeilen an. Verwenden Sie keine privaten Daten oder echten Dokumentauszüge.
+Legen Sie eine temporäre lokale Notiz mit diesen drei Zeilen an. Verwenden Sie keine privaten Daten oder echten Dokumentauszüge.
 
 ```text
 A.7
@@ -71,7 +71,7 @@ Null Treffer können fehlenden Text bedeuten, aber auch eine falsche Auswahl, ei
 
 ## Fazit
 
-Wählen Sie den einfachsten Modus, der zur Aufgabe passt. Ein Sucherfolg findet relevante Stellen mit bekannten Grenzen. Er beweist weder Vollständigkeit noch rechtfertigt er das Ersetzen.
+Wählen Sie den einfachsten Modus, der zur Aufgabe passt. Bei einer erfolgreichen Suche finden Sie relevante Textstellen und kennen die Grenzen der Suche. Das Ergebnis belegt weder die Vollständigkeit der Suche noch rechtfertigt es das Ersetzen.
 
 ## Häufige Fragen
 
