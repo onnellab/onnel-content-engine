@@ -709,6 +709,10 @@ def policy_for(job: dict) -> dict:
                 "cover_provider": "owner_approved_existing_cover", "duration_seconds": 1800,
                 "publish_schedule": "sleep_pilot_2026_11_09_13_16", "request_limit": 3,
                 "all_in_cap_usd": "0.50", "paid_retries": 0}
+    if job.get("same_day_release"):
+        policy.update(privacy="public", publish_schedule="explicit_same_day_2026_11_10",
+                      same_day_release=job["same_day_release"], all_in_cap_usd="0.10",
+                      cost_basis="owner_approved_estimate_account_unverified")
     if job.get("manual_release"):
         policy.update(privacy="public", publish_schedule="explicit_manual_release",
                       manual_release_sha256=job["manual_release"]["request_sha256"])
@@ -1008,7 +1012,7 @@ def worker(
     api_factory=None, music_generator=generate_music, cover_generator=import_existing_cover,
     renderer=render_single, existing_only=False, source_kind=None, source_wav=None,
     source_expected_duration=None, source_filename=None, source_expected_sha256=None,
-    manual_release_id=None,
+    manual_release_id=None, same_day_release=False,
 ):
     if not execute:
         return {"dry_run": True, **readiness(root)}
@@ -1017,6 +1021,13 @@ def worker(
         datetime.strptime(slot, "%Y-%m-%d")
     except (ValueError, TypeError):
         raise VideoError("aether_single_slot_invalid") from None
+    today_scope = None
+    if same_day_release:
+        from aether_single_today import require_target, ROOT as today_root
+        if (manual_release_id is not None or existing_only or source_kind is not None
+                or not publish or Path(root) != today_root):
+            raise VideoError("aether_single_today_identity_or_date_invalid")
+        require_target(slot, title, style, lane)
     q = SingleQueue(root)
     manual = None
     with q.lock():
@@ -1029,7 +1040,11 @@ def worker(
             manual = validate(target, root=q.root, active=not bool(target.get("upload")))
 
         def check_publication_window(current_job, current_slot):
-            if manual is None:
+            if same_day_release:
+                from aether_single_today import require_target
+                bound = current_job or {"slot": slot, "title": title, "style": style, "lane": lane}
+                require_target(bound["slot"], bound["title"], bound["style"], bound["lane"])
+            elif manual is None:
                 if publish_slot_stale(current_slot):
                     raise VideoError("aether_single_publish_time_stale")
             else:
@@ -1042,6 +1057,19 @@ def worker(
         ]
         same_slot = [j for j in state["jobs"].values() if j["slot"] == slot]
         unfinished = [j for j in state["jobs"].values() if not j.get("upload") and j["status"] not in FINAL]
+        if same_day_release:
+            from aether_single_today import job_id, scope_for
+            target_id = job_id()
+            if any(j["id"] != target_id for j in pending + unfinished):
+                raise VideoError("aether_single_existing_job_unsettled")
+            target = state["jobs"].get(target_id)
+            if target and target.get("status") == "rejected":
+                raise VideoError("aether_single_today_paid_retry_forbidden")
+            same_slot = [target] if target else []
+            if target and target.get("same_day_release"):
+                today_scope = target["same_day_release"]
+            else:
+                today_scope = scope_for({"id": target_id, "slot": slot, "title": title, "style": style, "lane": lane})
         selected = (pending or (unfinished if existing_only else same_slot or unfinished) or [None])[0]
         if selected is not None and selected.get("source_kind") == "purpose_composed_sleep":
             # Sleep never enters fantasy lane/audio/deadline or retry policy.
@@ -1103,7 +1131,7 @@ def worker(
             try:
                 check_publication_window(job, stale_slot)
             except VideoError as error:
-                if job is not None and manual is None:
+                if job is not None and manual is None and not same_day_release:
                     job.update(status="rejected", error=str(error))
                     atomic_json(q.state_path, state)
                 raise
@@ -1160,6 +1188,8 @@ def worker(
                 "status": "planned", "music": None, "cover": None, "result": None,
                 "upload_eligible": False, "error": None, "publish_requested": publish,
             }
+            if today_scope is not None:
+                job["same_day_release"] = today_scope
             job["brief"] = brief_for(job)
             job["payload_hash"] = digest(job["brief"])
             state["jobs"][key] = job
@@ -1197,7 +1227,8 @@ def worker(
                             generated = music_generator(job["title"], job["style"], execute=True,
                                 output_root=folder / "lyria", slot=job["slot"],
                                 **({"manual_release": {"job_id": manual_release_id,
-                                     "request_sha256": manual["request_sha256"]}} if manual is not None else {}))
+                                     "request_sha256": manual["request_sha256"]}} if manual is not None else {}),
+                                **({"same_day_release": today_scope} if today_scope is not None else {}))
                         chosen = select_candidate(
                             generated, _history_hashes(state),
                             reviewer=lambda path: review_audio(path),
@@ -1247,18 +1278,18 @@ def worker(
                     check_publication_window(job, job["slot"])
                 uploader = Uploader(q, partial(YouTube, profile="aether_inn"))
                 if not job.get("approval"):
-                    publish_at = None if manual is not None else scheduled_publish_at(job["slot"])
+                    publish_at = None if manual is not None or same_day_release else scheduled_publish_at(job["slot"])
                     choices = {
                         "made_for_kids": False,
                         "synthetic_media": True,
-                        "privacy": "public" if manual is not None else "private",
+                        "privacy": "public" if manual is not None or same_day_release else "private",
                         "publish_at": publish_at,
                         "publish_approved": True,
                     }
                     policy = policy_for(job)
                     uploader.bind_approval_locked(
                         state, job, choices,
-                        mode="manual" if manual is not None else "automatic_fail_closed",
+                        mode="manual" if manual is not None or same_day_release else "automatic_fail_closed",
                         policy_hash=digest(policy),
                     )
                 if not job.get("upload") and job["approval"].get("policy_hash") != digest(policy_for(job)):
@@ -1359,6 +1390,7 @@ def main() -> int:
     p.add_argument("--lane")
     p.add_argument("--execute", action="store_true")
     p.add_argument("--publish", action="store_true")
+    p.add_argument("--same-day-release", action="store_true")
     sleep = sub.add_parser("sleep-worker")
     sleep.add_argument("--concept", required=True)
     sleep.add_argument("--slot", required=True)
@@ -1381,7 +1413,7 @@ def main() -> int:
         else:
             result = worker(
                 args.root, slot=args.slot, title=args.title, style=args.style, lane=args.lane,
-                publish=args.publish, execute=args.execute,
+                publish=args.publish, execute=args.execute, same_day_release=args.same_day_release,
             )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 2 if result.get("status") in {"blocked", "reconcile_required", "rejected"} else 0
