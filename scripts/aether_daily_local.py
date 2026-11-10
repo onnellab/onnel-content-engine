@@ -111,6 +111,8 @@ def iso_now() -> str:
 def save(payload: dict) -> None:
     STATE.mkdir(parents=True, exist_ok=True)
     target = RESULT.with_name("probe-result.json") if payload.get("mode") == "probe" else RESULT
+    if payload.get("mode") == "single_today":
+        target = RESULT.with_name("single-today-result.json")
     if payload.get("mode") == "sleep":
         target = RESULT.with_name("sleep-result.json")
     tmp = target.with_suffix(".tmp")
@@ -902,6 +904,55 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
         sync_playlists_after_upload(report)
 
 
+def run_today_single_slot(report: dict) -> None:
+    from aether_single_today import SLOT, TITLE, LANE, canonical_style, require_target, load_cost_estimate
+    from short_video_pipeline import VideoError
+    try:
+        require_target(SLOT, TITLE, canonical_style(), LANE)
+        from aether_single import SingleQueue, YouTube, find_existing_public_video, require_no_owned_title_match
+        from aether_single_today import job_id
+        queue = SingleQueue()
+        with queue.lock():
+            existing = queue._read()["jobs"].get(job_id())
+        # An exact, previously bound job belongs to the durable worker. Never
+        # apply a no-duplicate inventory gate to its own upload or require a new
+        # price receipt merely to reconcile already-paid artifacts. The worker
+        # and paid adapter still recheck cost evidence if generation is needed.
+        if existing:
+            require_target(existing.get("slot"), existing.get("title"),
+                           existing.get("style"), existing.get("lane"))
+            if (existing.get("same_day_release") or {}).get("job_id") != job_id():
+                raise VideoError("aether_single_today_generation_binding_invalid")
+            report["resumed_existing_job"] = job_id()
+        else:
+            # Refresh official base-price/rights sources before binding the
+            # owner-approved estimate. Never label the estimate an invoice.
+            report["single_generation_inputs"] = check_new_single_inputs(refresh_sources=True)
+            report["single_cost_estimate"] = load_cost_estimate()
+            api = YouTube(profile="aether_inn")
+            api.verify()
+            for title in BACKLOG:
+                if not find_existing_public_video(api, title):
+                    raise VideoError("aether_single_backlog_not_public")
+            require_no_owned_title_match(api, TITLE)
+    except VideoError as error:
+        report["single_slot"] = {"status": "blocked", "error": str(error),
+                                 "created_new_job": False, "generation_attempted": False,
+                                 "upload_attempted": False}
+        report["blockers"].append(str(error))
+        return
+    code, stdout, _ = run_step(report, "same_day_single",
+        [sys.executable, "-B", "scripts/aether_single.py", "worker",
+         "--slot", SLOT, "--title", TITLE, "--style", canonical_style(), "--lane", LANE,
+         "--same-day-release", "--execute", "--publish"], timeout=2400)
+    payload = json_stdout(stdout) or {"status": "blocked", "error": "aether_single_today_output_invalid"}
+    report["single_slot"] = payload
+    if code != 0:
+        report["blockers"].append(payload.get("error") or "aether_single_today_failed")
+    elif payload.get("video_id") and payload.get("status") in {"scheduled", "processing", "published"}:
+        sync_playlists_after_upload(report)
+
+
 def run_sleep_slot(report: dict, now: datetime, reconciled: dict | None = None) -> None:
     """Same producer and queue, fixed three-source pilot, no new timer."""
     from aether_sleep_contract import CONCEPTS, PROPOSED_SLOTS, runtime_enabled
@@ -1248,6 +1299,8 @@ def main() -> int:
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--probe", action="store_true")
     mode.add_argument("--sleep-only", action="store_true")
+    mode.add_argument("--single-today", action="store_true")
+    mode.add_argument("--request-single-today", action="store_true")
     args = parser.parse_args()
     STATE.mkdir(parents=True, exist_ok=True)
     fd = os.open(LOCK, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
@@ -1260,6 +1313,29 @@ def main() -> int:
             print(json.dumps({"state": "already_running", "result": str(RESULT)}))
             return 3
         now = now_kst()
+        if args.request_single_today:
+            from aether_single_today import record_request
+            print(json.dumps(record_request(now=now), ensure_ascii=False))
+            return 0
+        if not (args.probe or args.sleep_only or args.single_today):
+            from aether_single_today import pending_request
+            # The registered GUI launchd service retains its original plist,
+            # interpreter, security session and locks. The remote tmux shell
+            # records the request and observes output; it does not impersonate
+            # that session, unlock a keychain, or create another executor.
+            if os.environ.get("XPC_SERVICE_NAME") == "com.onnellab.aether-daily-local":
+                args.single_today = pending_request(now=now)
+        if args.single_today:
+            report = {"schema_version": 1, "kind": "onnellab_aether_local_single_today_result",
+                      "mode": "single_today", "started_at": now.isoformat(timespec="seconds"),
+                      "local_date": now.date().isoformat(), "state": "running",
+                      "steps": [], "blockers": [], "warnings": []}
+            save(report)
+            if repo_sync(report):
+                run_today_single_slot(report)
+            finalize(report)
+            print(json.dumps(report, ensure_ascii=False))
+            return 2 if report["blockers"] else 0
         if args.sleep_only:
             # Explicit same-owner continuation. Preserve daily reports and never
             # repeat fantasy/Ops/compilation stages on a same-day invocation.

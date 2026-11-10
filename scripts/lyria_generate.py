@@ -126,7 +126,12 @@ def parse_audio_response(payload: bytes) -> tuple[bytes, str, dict]:
     return raw, mime, {"description": description}
 
 
-def check_generation_schedule(slot, project_id, prompt, *, manual_release=None, now=None):
+def check_generation_schedule(slot, project_id, prompt, *, manual_release=None, same_day_release=None, now=None):
+    if same_day_release is not None:
+        if manual_release is not None:
+            raise CredentialError("aether_single_today_generation_binding_invalid")
+        from aether_single_today import require_generation
+        return require_generation(same_day_release, slot, project_id, prompt, now=now)
     if manual_release is None:
         return paid_guard.require_generation_window(slot, now=now)
     if not isinstance(manual_release, dict) or set(manual_release) != {"job_id", "request_sha256"}:
@@ -139,7 +144,7 @@ def check_generation_schedule(slot, project_id, prompt, *, manual_release=None, 
 def request_song(project_id: str, prompt: str, *, token: str | None = None, timeout: int = 240,
                  slot: str | None = None, intent_path: Path | None = None,
                  intent_sha256: str | None = None, proof_sha256: str | None = None,
-                 manual_release: dict | None = None, sleep_scope: dict | None = None) -> tuple[bytes, str, dict]:
+                 manual_release: dict | None = None, sleep_scope: dict | None = None, same_day_release: dict | None = None) -> tuple[bytes, str, dict]:
     require_paid_api_allowed(purpose=ALLOWED_LYRIA_PURPOSE, model=MODEL,
                              candidate_count=1, estimated_cost_usd=UNIT_PRICE_USD)
     settings = load_settings(CONFIG_PATH)
@@ -153,11 +158,11 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
         raise CredentialError("lyria_owner_spend_limit")
     if sleep_scope is not None:
         import aether_sleep_guard as sleep_guard
-        if not isinstance(sleep_scope, dict) or manual_release is not None or sleep_scope.get("slot") != slot:
+        if not isinstance(sleep_scope, dict) or manual_release is not None or same_day_release is not None or sleep_scope.get("slot") != slot:
             raise CredentialError("sleep_identity_invalid")
         sleep_guard.identity(sleep_scope, project_id, prompt)
     else:
-        check_generation_schedule(slot, project_id, prompt, manual_release=manual_release)
+        check_generation_schedule(slot, project_id, prompt, manual_release=manual_release, same_day_release=same_day_release)
     paid_guard.load_paid_proof(project_id, expected_sha256=proof_sha256)
     if intent_path is None or not intent_sha256 or not proof_sha256:
         raise CredentialError("aether_lyria_charge_intent_required")
@@ -175,6 +180,14 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
         if (intent.get("manual_release") != manual_release
                 or Path(intent_path).parent.parent != single_root / "jobs" / manual_release["job_id"] / "lyria"):
             raise CredentialError("aether_manual_release_identity_invalid")
+    if same_day_release is not None:
+        from aether_single_today import require_generation
+        if intent.get("same_day_release") != same_day_release:
+            raise CredentialError("aether_single_today_generation_binding_invalid")
+        require_generation(same_day_release, slot, project_id, prompt,
+                           output_root=Path(intent_path).parent.parent)
+    elif intent.get("same_day_release") is not None:
+        raise CredentialError("aether_single_today_scope_required")
     if sleep_scope is not None:
         sleep_guard.require_dispatch(sleep_scope, project_id, prompt, intent_path, intent_sha256, intent)
     elif intent.get("sleep_scope") is not None:
@@ -225,7 +238,7 @@ def request_song(project_id: str, prompt: str, *, token: str | None = None, time
         if sleep_scope is not None:
             sleep_guard.require_dispatch(sleep_scope, project_id, prompt, intent_path, intent_sha256, intent, now=final_now)
         else:
-            check_generation_schedule(slot, project_id, prompt, manual_release=manual_release, now=final_now)
+            check_generation_schedule(slot, project_id, prompt, manual_release=manual_release, same_day_release=same_day_release, now=final_now)
         dispatched = True
         with urlopen(request, timeout=timeout) as response:
             declared = response.headers.get("Content-Length")
@@ -295,7 +308,7 @@ def slug(value: str) -> str:
 
 def generate(title: str, style: str, *, count: int | None = None, execute: bool = False,
              output_root: Path = PRIVATE_OUTPUT, slot: str | None = None,
-             manual_release: dict | None = None) -> dict:
+             manual_release: dict | None = None, same_day_release: dict | None = None) -> dict:
     settings = load_settings(CONFIG_PATH)
     if not settings:
         raise CredentialError("lyria_not_configured")
@@ -325,30 +338,39 @@ def generate(title: str, style: str, *, count: int | None = None, execute: bool 
     if not execute:
         return {**plan, "state": "planned", "prompt": prompt, "paid_authorized": False,
                 "cost_basis": "static_base_estimate_not_gross_cost_proof"}
-    check_generation_schedule(slot, settings["project_id"], prompt, manual_release=manual_release)
+    check_generation_schedule(slot, settings["project_id"], prompt, manual_release=manual_release, same_day_release=same_day_release)
     if manual_release is not None:
         from aether_manual_release import ROOT as single_root
         if Path(output_root) != single_root / "jobs" / manual_release["job_id"] / "lyria":
             raise CredentialError("aether_manual_release_identity_invalid")
+    if same_day_release is not None:
+        from aether_single_today import require_generation
+        estimate = require_generation(same_day_release, slot, settings["project_id"], prompt, output_root=output_root)
+        plan.update(estimated_cost_usd=float(estimate["estimated_total_usd"]),
+                    provider_base_estimate_usd=cost, cost_basis=estimate["cost_basis"],
+                    same_day_cost_estimate=estimate)
     proof = paid_guard.load_paid_proof(settings["project_id"])
     with paid_guard.paid_request_lock():
         paid_guard.require_no_unsettled_intents(extra_roots=(output_root,))
+        if same_day_release is not None:
+            from aether_single_today import claim_once
+            claim_once(same_day_release, output_root)
         from aether_additional_attempt import claim_additional
         additional = claim_additional(output_root, manual_release)
         if additional is not None:
             plan["additional_attempt"] = additional
         return _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof,
-                                   manual_release=manual_release)
+                                   manual_release=manual_release, same_day_release=same_day_release)
 
 
-def _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof, *, manual_release=None, sleep_scope=None, sleep_proof=None):
+def _execute_generation(title, style, output_root, slot, settings, plan, prompt, proof, *, manual_release=None, sleep_scope=None, sleep_proof=None, same_day_release=None):
     token = access_token()
     paid_guard.load_paid_proof(settings["project_id"], expected_sha256=proof["proof_sha256"])
     if sleep_scope is not None:
         import aether_sleep_guard as sleep_guard
         sleep_guard.identity(sleep_scope, settings["project_id"], prompt)
     else:
-        check_generation_schedule(slot, settings["project_id"], prompt, manual_release=manual_release)
+        check_generation_schedule(slot, settings["project_id"], prompt, manual_release=manual_release, same_day_release=same_day_release)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run_dir = Path(output_root).expanduser() / (timestamp + "-" + slug(title))
     run_dir.mkdir(parents=True, exist_ok=False, mode=0o700)
@@ -369,6 +391,8 @@ def _execute_generation(title, style, output_root, slot, settings, plan, prompt,
     }
     if manual_release is not None:
         manifest["manual_release"] = manual_release
+    if same_day_release is not None:
+        manifest["same_day_release"] = same_day_release
     if sleep_scope is not None:
         manifest["sleep_scope"] = sleep_scope
         manifest["sleep_all_in_proof"] = sleep_proof
@@ -384,7 +408,8 @@ def _execute_generation(title, style, output_root, slot, settings, plan, prompt,
                                    intent_sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
                                    proof_sha256=proof["proof_sha256"],
                                    **({"manual_release": manual_release} if manual_release is not None else {}),
-                                   **({"sleep_scope": sleep_scope} if sleep_scope is not None else {}))
+                                   **({"sleep_scope": sleep_scope} if sleep_scope is not None else {}),
+                                   **({"same_day_release": same_day_release} if same_day_release is not None else {}))
     manifest = paid_guard._json(paid_guard._read(manifest_path))
     ext = ".mp3" if mime == "audio/mpeg" else ".wav"
     path = run_dir / f"candidate-01{ext}"
