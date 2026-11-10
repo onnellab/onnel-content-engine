@@ -96,6 +96,10 @@ class ContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             sleep.require_window({**job(), 'slot': '2026-11-09'}, datetime.fromisoformat('2026-11-10T12:00:00+09:00'))
 
+    def test_sleep_policy_records_current_exact_dates(self):
+        from aether_single import policy_for
+        self.assertEqual(policy_for(job())['publish_schedule'], 'sleep_pilot_2026_11_10_13_16')
+
     def test_future_slots_have_no_late_exception(self):
         j = {**job(), 'concept_id': contract.CONCEPTS[1][0], 'title': contract.CONCEPTS[1][1], 'slot': '2026-11-13'}
         self.assertEqual(sleep.require_window(j, datetime.fromisoformat('2026-11-13T08:59:59+09:00')), 'private')

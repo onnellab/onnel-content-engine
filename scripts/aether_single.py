@@ -707,7 +707,7 @@ def policy_for(job: dict) -> dict:
         validate_identity(job)
         return {**policy, "version": 5, "kind": "purpose_composed_sleep", "series": "aether_inn_sleep",
                 "cover_provider": "owner_approved_existing_cover", "duration_seconds": 1800,
-                "publish_schedule": "sleep_pilot_2026_11_09_13_16", "request_limit": 3,
+                "publish_schedule": "sleep_pilot_2026_11_10_13_16", "request_limit": 3,
                 "all_in_cap_usd": "0.50", "paid_retries": 0}
     if job.get("manual_release"):
         policy.update(privacy="public", publish_schedule="explicit_manual_release",
