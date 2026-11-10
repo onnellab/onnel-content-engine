@@ -23,7 +23,7 @@ from aether_sleep_plan import build_plan
 
 ROOT = paid.AETHER_ROOT / 'sleep-pilot-20261109'
 PROOF_PATH = ROOT / 'account-all-in-receipt.json'
-SLOTS = ('2026-11-09', '2026-11-13', '2026-11-16')
+from aether_sleep_contract import PROPOSED_SLOTS as SLOTS
 MODEL = 'lyria-3-pro-preview'
 
 

@@ -15,7 +15,7 @@ import aether_sleep_guard as guard
 import lyria_generate
 from short_video_credentials import CredentialError
 
-NOW = datetime(2026, 11, 9, 4, tzinfo=timezone.utc)
+NOW = datetime(2026, 11, 10, 4, tzinfo=timezone.utc)
 PROJECT = 'example-project'
 
 
@@ -33,7 +33,7 @@ class GuardTest(unittest.TestCase):
                         patch.object(guard.paid, 'utc_now', return_value=NOW)]
         for p in self.patches: p.start()
         guard.ROOT.mkdir(mode=0o700)
-        self.scope = {'concept_id': 'sleep_moonlit_guestroom', 'job_id': 'a' * 24, 'slot': '2026-11-09'}
+        self.scope = {'concept_id': 'sleep_moonlit_guestroom', 'job_id': 'a' * 24, 'slot': '2026-11-10'}
         self.row = guard.concept(self.scope['concept_id'])
         self.intent_path = guard.output_for(self.scope['job_id']) / 'run' / 'manifest.json'
         self.intent = {'sleep_scope': self.scope, 'title': self.row['title'], 'model': guard.MODEL,
@@ -56,7 +56,7 @@ class GuardTest(unittest.TestCase):
                  'project_id': PROJECT, 'model': guard.MODEL, 'currency': 'USD',
                  'account_reference': 'synthetic-account', 'receipt_reference': 'synthetic-test',
                  'coverage': ['provider_base', 'tax', 'currency_conversion', 'mandatory_fees'],
-                 'checked_at': '2026-11-09T00:00:00Z', 'expires_at': '2026-11-10T00:00:00Z',
+                 'checked_at': '2026-11-10T00:00:00Z', 'expires_at': '2026-11-11T00:00:00Z',
                  'provider_base_usd': '0.08', 'tax_upper_bound_usd': '0.02',
                  'fx_upper_bound_usd': '0', 'mandatory_fees_upper_bound_usd': '0',
                  'per_request_all_in_upper_bound_usd': total, 'source_sha256': digest}
@@ -64,7 +64,7 @@ class GuardTest(unittest.TestCase):
                   'tax_upper_bound_usd', 'fx_upper_bound_usd', 'mandatory_fees_upper_bound_usd',
                   'per_request_all_in_upper_bound_usd')
         proof['review_attestation'] = {'kind': 'reviewed_account_upper_bound', 'reviewer_kind': 'dot_delegated',
-            'source_sha256': digest, 'reviewer': 'synthetic-test', 'reviewed_at': '2026-11-09T01:00:00Z',
+            'source_sha256': digest, 'reviewer': 'synthetic-test', 'reviewed_at': '2026-11-10T01:00:00Z',
             'reviewed_values': {k: proof[k] for k in fields},
             'source_references': {k: 'synthetic line 1' for k in fields}}
         self.write(guard.PROOF_PATH, proof)
@@ -127,7 +127,7 @@ class GuardTest(unittest.TestCase):
         proof = self.receipt()
         self.assertEqual(guard.load_all_in_proof(PROJECT)['all_in_reserved_usd'], '0.10')
         for key, value in [('project_id', 'other-project'), ('model', 'other'),
-                           ('expires_at', '2026-11-09T03:00:00Z'),
+                           ('expires_at', '2026-11-10T03:00:00Z'),
                            ('provider_base_usd', True), ('provider_base_usd', 'NaN'),
                            ('per_request_all_in_upper_bound_usd', '0.08'),
                            ('review_attestation', {'verified': True})]:
@@ -166,7 +166,7 @@ class GuardTest(unittest.TestCase):
     def test_prompt_date_and_private_permissions(self):
         with self.assertRaises(CredentialError): guard.identity(self.scope, PROJECT, 'adventure')
         with self.assertRaises(CredentialError):
-            guard.identity(self.scope, PROJECT, self.row['prompt'], now=datetime(2026,11,10,tzinfo=timezone.utc))
+            guard.identity(self.scope, PROJECT, self.row['prompt'], now=datetime(2026,11,11,tzinfo=timezone.utc))
         self.receipt(); guard.PROOF_PATH.chmod(0o644)
         with self.assertRaises(CredentialError): guard.load_all_in_proof(PROJECT)
 
@@ -188,8 +188,8 @@ class GuardTest(unittest.TestCase):
     def test_failed_transport_is_reserved_and_never_retried(self):
         self.receipt()
         settings = {'enabled': True, 'project_id': PROJECT, 'candidate_count': 1, 'max_usd_per_run': 0.08}
-        base_proof = {'proof_sha256': 'b'*64, 'checked_at': '2026-11-09T00:00:00Z',
-                      'expires_at': '2026-11-10T00:00:00Z'}
+        base_proof = {'proof_sha256': 'b'*64, 'checked_at': '2026-11-10T00:00:00Z',
+                      'expires_at': '2026-11-11T00:00:00Z'}
         with patch.object(lyria_generate, 'load_settings', return_value=settings), \
              patch.object(lyria_generate, 'access_token', return_value='offline-fixture'), \
              patch.object(guard.paid, 'load_paid_proof', return_value=base_proof), \
@@ -211,8 +211,8 @@ class GuardTest(unittest.TestCase):
         import io
         self.receipt()
         settings = {'enabled': True, 'project_id': PROJECT, 'candidate_count': 1, 'max_usd_per_run': 0.08}
-        base_proof = {'proof_sha256': 'b'*64, 'checked_at': '2026-11-09T00:00:00Z',
-                      'expires_at': '2026-11-10T00:00:00Z'}
+        base_proof = {'proof_sha256': 'b'*64, 'checked_at': '2026-11-10T00:00:00Z',
+                      'expires_at': '2026-11-11T00:00:00Z'}
         response = io.BytesIO(json.dumps({'status': 'completed', 'model': guard.MODEL,
             'outputs': [{'type': 'audio', 'mime_type': 'audio/wav',
                          'data': base64.b64encode(b'x'*1024).decode()}]}).encode())
@@ -235,8 +235,8 @@ class GuardTest(unittest.TestCase):
     def test_final_receipt_recheck_blocks_transport(self):
         self.receipt()
         settings = {'enabled': True, 'project_id': PROJECT, 'candidate_count': 1, 'max_usd_per_run': 0.08}
-        base_proof = {'proof_sha256': 'b'*64, 'checked_at': '2026-11-09T00:00:00Z',
-                      'expires_at': '2026-11-10T00:00:00Z'}
+        base_proof = {'proof_sha256': 'b'*64, 'checked_at': '2026-11-10T00:00:00Z',
+                      'expires_at': '2026-11-11T00:00:00Z'}
         original = guard.load_all_in_proof
         checks = []
         def expiry(*args, **kwargs):
@@ -262,8 +262,8 @@ class GuardTest(unittest.TestCase):
              patch.object(guard.paid, 'require_generation_window', side_effect=CredentialError('fantasy-window')) as window, \
              patch.object(lyria_generate, 'urlopen') as transport:
             with self.assertRaisesRegex(CredentialError, 'fantasy-window'):
-                lyria_generate.request_song(PROJECT, 'ordinary prompt', slot='2026-11-09')
-            window.assert_called_once_with('2026-11-09', now=None)
+                lyria_generate.request_song(PROJECT, 'ordinary prompt', slot='2026-11-10')
+            window.assert_called_once_with('2026-11-10', now=None)
             transport.assert_not_called()
 
 

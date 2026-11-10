@@ -104,3 +104,11 @@ absent. The workflow now installs ffmpeg through its existing official apt/Homeb
 setup, checks ffmpeg and ffprobe before tests, and retains all offline and
 permissions/time-limit protections. Regression tests require this setup.
 No production code or runtime activation setting changed in this correction.
+
+## Explicit same-day request, November 10 KST
+
+The owner's renewed instruction to publish today supersedes only the first sleep slot. Moonlit Guestroom is now bound to November 10 KST; November 13 and 16 remain unchanged. The superseded November 9 slot remains rejected. The paid guard imports the contract's dates to prevent divergence. No production queue or reservation existed for the pilot before this change, and none was created by verification.
+
+All 412 Aether/Lyria tests passed in 3.359 seconds, including three actual local fixture media tests. The bounded harness recorded zero network attempts, zero denied subprocesses, 15 temporary fixture copies, four temporary ffmpeg invocations, and zero remaining children. An initial date-negative fixture still targeted the newly valid day; it was corrected to the following day before the successful rerun. This is not a claim of source listening or publishing approval.
+
+Main commit 046ec4ae completed all three CI workflows successfully. Publishing Pipeline push runs are dry-run content checks, not Aether music publication. Runtime remains default OFF, and actual generation still requires current account all-in proof, approved cover, single-executor locks and all source/loop/video reviews. No billing values or review assertions were invented.

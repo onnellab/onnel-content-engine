@@ -21,7 +21,7 @@ CONCEPTS = (
     ("sleep_cloudrest_chamber", "Cloudrest Chamber"),
 )
 # Fixed pilot dates; runtime cost, provenance and review gates still apply.
-PROPOSED_SLOTS = ("2026-11-09", "2026-11-13", "2026-11-16")
+PROPOSED_SLOTS = ("2026-11-10", "2026-11-13", "2026-11-16")
 
 
 def runtime_enabled() -> bool:
@@ -39,7 +39,7 @@ def today_exception_valid(now: datetime, concept_id: str, slot: str) -> bool:
     """Date-bounded owner request, never inherited by ordinary fantasy singles."""
     if now.tzinfo is None or now.utcoffset() is None:
         raise ValueError("sleep_timezone_required")
-    return (now.astimezone(KST).date().isoformat() == slot == "2026-11-09"
+    return (now.astimezone(KST).date().isoformat() == slot == "2026-11-10"
             and concept_id == CONCEPTS[0][0])
 
 

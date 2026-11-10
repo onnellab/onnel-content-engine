@@ -20,7 +20,7 @@ import aether_daily_local as daily
 def job():
     return {'id': 'a' * 24, 'profile': 'aether_inn', 'series': contract.SERIES,
             'source_kind': contract.SOURCE_KIND, 'concept_id': contract.CONCEPTS[0][0],
-            'title': contract.CONCEPTS[0][1], 'slot': '2026-11-09', 'duration_seconds': 1800,
+            'title': contract.CONCEPTS[0][1], 'slot': '2026-11-10', 'duration_seconds': 1800,
             'status': 'blocked'}
 
 
@@ -44,7 +44,7 @@ class ContractTests(unittest.TestCase):
         from short_video_credentials import CredentialError
         with patch.dict(os.environ, {}, clear=True), patch.object(single, 'SingleQueue') as queue:
             with self.assertRaisesRegex(CredentialError, 'sleep_pilot_disabled'):
-                sleep.worker(concept_id=contract.CONCEPTS[0][0], slot='2026-11-09', execute=True, publish=True)
+                sleep.worker(concept_id=contract.CONCEPTS[0][0], slot='2026-11-10', execute=True, publish=True)
             queue.assert_not_called()
 
     def test_disabled_resume_never_contacts_provider_or_youtube(self):
@@ -71,7 +71,7 @@ class ContractTests(unittest.TestCase):
                  patch('aether_sleep_guard.require_affordable_pilot', side_effect=CredentialError('sleep_full_pilot_budget_exceeded')), \
                  patch.object(single, 'approved_cover') as cover:
                 with self.assertRaisesRegex(CredentialError, 'full_pilot_budget_exceeded'):
-                    sleep.worker(root=Path(folder).resolve(), concept_id=contract.CONCEPTS[0][0], slot='2026-11-09', execute=True)
+                    sleep.worker(root=Path(folder).resolve(), concept_id=contract.CONCEPTS[0][0], slot='2026-11-10', execute=True)
                 cover.assert_not_called()
             self.assertEqual(single.SingleQueue(Path(folder).resolve())._read()['jobs'], {})
 
@@ -83,10 +83,18 @@ class ContractTests(unittest.TestCase):
                 contract.validate_identity(altered)
 
     def test_today_exception_is_kst_and_first_concept_only(self):
-        self.assertEqual(sleep.require_window(job(), datetime.fromisoformat('2026-11-09T14:59:59+00:00')), 'public')
+        self.assertEqual(sleep.require_window(job(), datetime.fromisoformat('2026-11-10T14:59:59+00:00')), 'public')
         with self.assertRaises(ValueError):
-            sleep.require_window(job(), datetime.fromisoformat('2026-11-09T15:00:00+00:00'))
-        self.assertFalse(contract.today_exception_valid(datetime.fromisoformat('2026-11-09T10:00:00+09:00'), contract.CONCEPTS[1][0], '2026-11-09'))
+            sleep.require_window(job(), datetime.fromisoformat('2026-11-10T15:00:00+00:00'))
+        self.assertFalse(contract.today_exception_valid(datetime.fromisoformat('2026-11-10T10:00:00+09:00'), contract.CONCEPTS[1][0], '2026-11-10'))
+
+    def test_superseded_day_remains_blocked_and_later_slots_unchanged(self):
+        import aether_sleep_guard as guard
+        self.assertEqual(contract.PROPOSED_SLOTS, ('2026-11-10', '2026-11-13', '2026-11-16'))
+        self.assertEqual(guard.SLOTS, contract.PROPOSED_SLOTS)
+        self.assertFalse(contract.today_exception_valid(datetime.fromisoformat('2026-11-09T12:00:00+09:00'), contract.CONCEPTS[0][0], '2026-11-09'))
+        with self.assertRaises(ValueError):
+            sleep.require_window({**job(), 'slot': '2026-11-09'}, datetime.fromisoformat('2026-11-10T12:00:00+09:00'))
 
     def test_future_slots_have_no_late_exception(self):
         j = {**job(), 'concept_id': contract.CONCEPTS[1][0], 'title': contract.CONCEPTS[1][1], 'slot': '2026-11-13'}
@@ -95,7 +103,7 @@ class ContractTests(unittest.TestCase):
             sleep.require_window(j, datetime.fromisoformat('2026-11-13T09:00:00+09:00'))
 
     def test_wrong_slot_naive_clock_fail(self):
-        for j, now in (({**job(), 'slot': '2026-11-10'}, datetime.fromisoformat('2026-11-10T01:00:00+09:00')), (job(), datetime(2026,11,9))):
+        for j, now in (({**job(), 'slot': '2026-11-11'}, datetime.fromisoformat('2026-11-11T01:00:00+09:00')), (job(), datetime(2026,11,9))):
             with self.assertRaises(ValueError): sleep.require_window(j, now)
 
     def test_budget_counts_failed_or_uncertain_without_refund(self):
@@ -115,7 +123,7 @@ class ContractTests(unittest.TestCase):
             p = Path(folder) / 'sleep-source-review.json'
             bindings = {'source':'1'*64, 'original':'2'*64}
             receipt = {'job_id':job()['id'], 'series':contract.SERIES, 'stage':'source', 'sha256':bindings,
-                       'accepted':True, 'reviewer':'reviewer', 'reviewed_at':'2026-11-09T12:00:00Z', 'authority_reference':'delegated review',
+                       'accepted':True, 'reviewer':'reviewer', 'reviewed_at':'2026-11-10T12:00:00Z', 'authority_reference':'delegated review',
                        **{k:True for k in ['purpose_composed_sleep','commercial_rights_checked','actual_audio_listened','no_abrupt_swells','no_prominent_beat','no_voice','sleep_suitable']}}
             p.write_text(json.dumps(receipt)); p.chmod(0o600)
             sleep.require_review(folder, job(), 'source', bindings)
@@ -163,25 +171,25 @@ class ContractTests(unittest.TestCase):
                  patch('lyria_config.load_settings', return_value={'enabled': True, 'project_id': 'sleep-project'}), \
                  patch('aether_sleep_guard.load_all_in_proof', side_effect=CredentialError('sleep_account_all_in_cost_unverified')):
                 with self.assertRaises(CredentialError):
-                    sleep.worker(root=Path(folder).resolve(), concept_id=contract.CONCEPTS[0][0], slot='2026-11-09', execute=True, publish=True, api_factory=api)
+                    sleep.worker(root=Path(folder).resolve(), concept_id=contract.CONCEPTS[0][0], slot='2026-11-10', execute=True, publish=True, api_factory=api)
             api.assert_not_called()
             self.assertEqual(single.SingleQueue(Path(folder).resolve())._read()['jobs'], {})
 
     def test_runner_only_fixed_dates_and_same_worker(self):
         report={'blockers':[]}
         with patch.object(daily, 'run_step', return_value=(2,'{"status":"blocked","error":"sleep_account_all_in_cost_unverified"}','')) as run:
-            daily.run_sleep_slot(report, datetime.fromisoformat('2026-11-09T16:00:00+09:00'))
+            daily.run_sleep_slot(report, datetime.fromisoformat('2026-11-10T16:00:00+09:00'))
             args = run.call_args.args[2]
             self.assertIn('scripts/aether_single.py',args)
             self.assertIn('sleep-worker',args)
             self.assertIn('sleep_moonlit_guestroom',args)
         with patch.object(daily,'run_step') as run:
-            daily.run_sleep_slot({'blockers':[]},datetime.fromisoformat('2026-11-10T07:00:00+09:00'))
+            daily.run_sleep_slot({'blockers':[]},datetime.fromisoformat('2026-11-11T07:00:00+09:00'))
             run.assert_not_called()
 
     def test_runner_does_not_repeat_reconciled_sleep(self):
         with patch.object(daily, 'run_step') as run:
-            daily.run_sleep_slot({'blockers':[]},datetime.fromisoformat('2026-11-09T12:00:00+09:00'),{'series':contract.SERIES,'status':'blocked'})
+            daily.run_sleep_slot({'blockers':[]},datetime.fromisoformat('2026-11-10T12:00:00+09:00'),{'series':contract.SERIES,'status':'blocked'})
             run.assert_not_called()
 
     def test_expired_unspent_job_retires_but_uncertain_does_not(self):
