@@ -457,7 +457,8 @@ def generate_sleep(concept_id, *, execute=False, output_root, slot, job_id):
                              candidate_count=1, estimated_cost_usd=UNIT_PRICE_USD)
     plan["project_id"] = settings["project_id"]
     proof = paid_guard.load_paid_proof(settings["project_id"])
-    all_in = sleep_guard.load_all_in_proof(settings["project_id"])
+    all_in = sleep_guard.load_cost_authorization(settings["project_id"])
+    plan["cost_basis"] = all_in.get("cost_basis", "reviewed_account_upper_bound")
     with paid_guard.paid_request_lock():
         sleep_guard.require_available(scope)
         sleep_guard.require_affordable_pilot(all_in)

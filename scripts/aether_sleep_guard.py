@@ -125,6 +125,14 @@ def load_all_in_proof(project, *, expected_sha256=None, now=None):
             'invoice_facts_independently_verified': False}
 
 
+def load_cost_authorization(project, *, expected_sha256=None, now=None):
+    """Explicit estimate mode never weakens the strict receipt validator."""
+    from aether_sleep_request import gui_requested, load_cost_estimate
+    if gui_requested(now=now):
+        return load_cost_estimate(project, expected_sha256=expected_sha256, now=now)
+    return load_all_in_proof(project, expected_sha256=expected_sha256, now=now)
+
+
 def output_for(job_id):
     return paid.AETHER_ROOT / 'singles' / 'jobs' / job_id / 'lyria'
 
@@ -194,7 +202,7 @@ def reserve(scope, project, prompt, intent_path, intent_sha256, proof):
         rows = ledger_rows()
         if any(r['concept_id'] == scope['concept_id'] or r.get('job_id') == scope['job_id'] for r in rows):
             raise CredentialError('sleep_paid_retry_forbidden')
-        current = load_all_in_proof(project, expected_sha256=proof['proof_sha256'])
+        current = load_cost_authorization(project, expected_sha256=proof['proof_sha256'])
         require_remaining_budget(rows, current)
         if len(rows) >= 3 or sum((paid._decimal(r['all_in_reserved_usd']) for r in rows), paid._decimal(current['all_in_reserved_usd'])) > Decimal('0.50'):
             raise CredentialError('sleep_all_in_budget_exceeded')
@@ -235,7 +243,7 @@ def require_dispatch(scope, project, prompt, intent_path, intent_sha256, intent,
                            'prompt_sha256': hashlib.sha256(prompt.encode()).hexdigest()}.items():
             if reserved.get(key) != value:
                 raise CredentialError('sleep_reservation_binding_invalid')
-        proof = load_all_in_proof(project, expected_sha256=reserved['proof_sha256'], now=now)
+        proof = load_cost_authorization(project, expected_sha256=reserved['proof_sha256'], now=now)
         if proof['all_in_reserved_usd'] != reserved['all_in_reserved_usd']:
             raise CredentialError('sleep_reservation_binding_invalid')
 

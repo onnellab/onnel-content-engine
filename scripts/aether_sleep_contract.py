@@ -26,7 +26,8 @@ PROPOSED_SLOTS = ("2026-11-10", "2026-11-13", "2026-11-16")
 
 def runtime_enabled() -> bool:
     """Deployment alone must never activate the pilot."""
-    return os.environ.get("AETHER_SLEEP_PILOT_ENABLED") == "1"
+    from aether_sleep_request import gui_requested
+    return os.environ.get("AETHER_SLEEP_PILOT_ENABLED") == "1" or gui_requested()
 
 
 def require_activation() -> None:

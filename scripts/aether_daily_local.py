@@ -966,6 +966,23 @@ def run_sleep_slot(report: dict, now: datetime, reconciled: dict | None = None) 
     if reconciled and reconciled.get("series") == "aether_inn_sleep":
         report["sleep_slot"] = reconciled
         return  # Never run the same job twice within a daily pass.
+    from aether_sleep_request import gui_requested, load_cost_estimate, PROJECT
+    if gui_requested(now=now):
+        from aether_sleep_guard import ROOT as sleep_root
+        from aether_single import SingleQueue
+        queue = SingleQueue()
+        concept_id = CONCEPTS[PROPOSED_SLOTS.index(local_date)][0]
+        with queue.lock():
+            existing = [job for job in queue._read()["jobs"].values()
+                        if job.get("concept_id") == concept_id]
+        # Do not refresh/change proof after any irreversible reservation, nor
+        # require fresh pricing merely to recover a completed paid source.
+        reserved = (sleep_root / ("reservation-" + concept_id + ".json")).exists()
+        generated = any(list((queue.root / "jobs" / job["id"] / "lyria").glob("*/manifest.json"))
+                        for job in existing)
+        if not reserved and not generated:
+            report["sleep_generation_inputs"] = check_new_single_inputs(refresh_sources=True)
+            report["sleep_cost_estimate"] = load_cost_estimate(PROJECT, now=now)
     code, stdout, _ = run_step(
         report, "aether_sleep_slot",
         [sys.executable, "-B", "scripts/aether_single.py", "sleep-worker",
@@ -1301,6 +1318,7 @@ def main() -> int:
     mode.add_argument("--sleep-only", action="store_true")
     mode.add_argument("--single-today", action="store_true")
     mode.add_argument("--request-single-today", action="store_true")
+    mode.add_argument("--request-sleep-today", action="store_true")
     args = parser.parse_args()
     STATE.mkdir(parents=True, exist_ok=True)
     fd = os.open(LOCK, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
@@ -1313,6 +1331,10 @@ def main() -> int:
             print(json.dumps({"state": "already_running", "result": str(RESULT)}))
             return 3
         now = now_kst()
+        if args.request_sleep_today:
+            from aether_sleep_request import record_request
+            print(json.dumps(record_request(now=now), ensure_ascii=False))
+            return 0
         if args.request_single_today:
             from aether_single_today import record_request
             print(json.dumps(record_request(now=now), ensure_ascii=False))
@@ -1325,6 +1347,10 @@ def main() -> int:
             # that session, unlock a keychain, or create another executor.
             if os.environ.get("XPC_SERVICE_NAME") == "com.onnellab.aether-daily-local":
                 args.single_today = pending_request(now=now)
+                from aether_sleep_request import gui_requested
+                args.sleep_only = gui_requested(now=now)
+                if args.single_today and args.sleep_only:
+                    raise ValueError('aether_conflicting_same_day_requests')
         if args.single_today:
             report = {"schema_version": 1, "kind": "onnellab_aether_local_single_today_result",
                       "mode": "single_today", "started_at": now.isoformat(timespec="seconds"),

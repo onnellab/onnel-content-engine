@@ -174,3 +174,28 @@ account-specific cost basis and publication slots before enabling execution.
 The revised cap and unchanged inactive guards passed 326 Aether tests with zero
 network attempts. The offline estimate remains USD 0.24 before account-specific
 taxes and mandatory adjustments; it is not a new generation or billing receipt.
+
+## 2026-11-10 explicitly accepted estimate continuation
+
+The owner accepted estimated pricing despite unavailable account billing evidence.
+The strict account receipt validator remains unchanged. A separate exact private
+request marker binds all three concepts/prompts/dates, one request each, no paid
+retry and the USD 0.50 pilot cap. Official base USD 0.08 plus assumed Korean VAT
+10% is USD 0.088 per source, USD 0.264 estimated total. Actual account tax, FX,
+mandatory fees and final billed cost remain unknown, never invoice facts.
+The durable ledger reserves USD 0.166666666666 per source as a pilot budget
+allocation, not a verified all-in price. Its legacy all_in_reserved_usd field is
+explicitly qualified by reservation_basis. The estimate and provider proof hashes
+must remain unchanged through reservation and dispatch.
+
+Only the existing com.onnellab.aether-daily-local GUI service with the exact
+2026-11-10 marker gains this estimate continuation. Deployment alone stays off.
+The --request-sleep-today option records an immutable 0600 marker in a new 0700
+child directory without modifying existing report permissions or launchd setup.
+Default GUI invocation routes to the existing sleep-only runner under the same
+daily lock, skipping fantasy/Ops/compilation. Later proposed dates remain
+2026-11-13 and 2026-11-16; this marker does not activate those dates.
+Source evidence refresh occurs only before a reservation/manifest exists.
+Completed sources can recover by original manifest/reservation hashes without
+fresh cost evidence. Missing real source/loop/video review leaves the matching
+sleep_*_pending_review status, never creates a review or permits upload.

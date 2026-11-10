@@ -273,6 +273,13 @@ def run_locked(q, state, job, *, publish, api_factory=None, reconcile_only=False
                 "slot": job["slot"], "video_id": job.get("upload", {}).get("video_id"),
                 "publication_complete": job["status"] == "published" and job.get("thumbnail_status") == "set"}
     except (ValueError, OSError, single.VideoError) as error:
+        if str(error) in {"sleep_source_review_required", "sleep_loop_review_required", "sleep_video_review_required"}:
+            stage = str(error).split("_")[1]
+            job.update(status=f"sleep_{stage}_pending_review", error=str(error))
+            save()
+            return {"profile": "aether_inn", "series": SERIES, "status": job["status"],
+                    "job_id": job["id"], "slot": job["slot"], "review_required": stage,
+                    "publication_complete": False}
         job.update(status="reconcile_required" if job.get("upload") else "blocked", error=str(error))
         save()
         raise single.VideoError(str(error)) from error
@@ -307,13 +314,22 @@ def worker(*, root=None, concept_id, slot, execute=False, publish=False, api_fac
             require_window(seed)
             # Missing account evidence/art cannot create an unfinished queue job.
             from lyria_config import CONFIG_PATH, load_settings
-            from aether_sleep_guard import load_all_in_proof, require_affordable_pilot
+            from aether_sleep_guard import load_cost_authorization, require_affordable_pilot
             settings = load_settings(CONFIG_PATH)
             if not settings or settings.get("enabled") is not True:
                 raise single.VideoError("lyria_generation_disabled")
-            require_affordable_pilot(load_all_in_proof(settings["project_id"]))
+            require_affordable_pilot(load_cost_authorization(settings["project_id"]))
             single.approved_cover(seed["title"], single.ASSETS_ROOT)
-            if any(j["slot"] == slot for j in state["jobs"].values()):
+            from aether_sleep_request import gui_requested
+            # Exact same-day owner request may follow a settled fantasy single.
+            # Other sleep concepts, dates and unfinished jobs remain excluded.
+            if any(j["slot"] == slot and not (
+                    gui_requested() and slot == PROPOSED_SLOTS[0]
+                    and concept_id == CONCEPTS[0][0]
+                    and j.get("source_kind", "new_lyria") == "new_lyria"
+                    and j["status"] in single.FINAL
+                    and (not j.get("upload") or j.get("thumbnail_status") == "set"))
+                   for j in state["jobs"].values()):
                 raise single.VideoError("sleep_slot_already_used")
             job = {**seed, "id": key, "status": "planned", "publish_requested": publish,
                    "music": None, "cover": None, "result": None, "upload_eligible": False}
