@@ -953,6 +953,57 @@ def run_today_single_slot(report: dict) -> None:
         sync_playlists_after_upload(report)
 
 
+class SleepOwnerDeadline(BaseException):
+    """Escape transport catches; only the owner step handles its deadline."""
+
+
+def run_owner_sleep_step(report: dict, concept_id: str, slot: str) -> tuple[int, str, str]:
+    """Keep the exact GUI owner's context; never synthesize it in a child."""
+    import re
+    import signal
+    from aether_sleep_request import gui_requested
+    from aether_sleep_worker import worker
+    from aether_single import RemoteInventoryUnverified
+    from short_video_pipeline import VideoError
+
+    started = iso_now()
+    report["active_step"] = {"name": "aether_sleep_slot", "started_at": started}
+    save(report)
+    previous_handler = signal.getsignal(signal.SIGALRM)
+    handler_installed = False
+    def deadline(_signum, _frame):
+        raise SleepOwnerDeadline()
+    try:
+        if not gui_requested():
+            raise VideoError("sleep_gui_owner_required")
+        if signal.getitimer(signal.ITIMER_REAL) != (0.0, 0.0):
+            raise VideoError("sleep_owner_deadline_already_active")
+        signal.signal(signal.SIGALRM, deadline)
+        handler_installed = True
+        signal.setitimer(signal.ITIMER_REAL, 3600)
+        result = worker(concept_id=concept_id, slot=slot, execute=True, publish=True)
+        code = 2 if result.get("status") in {"blocked", "reconcile_required", "rejected"} else 0
+        stdout, stderr = json.dumps(result, ensure_ascii=False), ""
+    except SleepOwnerDeadline:
+        code, stdout, stderr = 124, "", "local_worker_timeout"
+    except Exception as error:
+        reason = str(error) if isinstance(error, VideoError) and re.fullmatch(r"[a-z_]{1,100}", str(error)) else "aether_single_operation_failed"
+        payload = {"status": "blocked", "error": reason}
+        if isinstance(error, RemoteInventoryUnverified):
+            payload["remote_inventory_diagnostic"] = error.diagnostic
+        code, stdout, stderr = 2, json.dumps(payload), ""
+    finally:
+        if handler_installed:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+            signal.signal(signal.SIGALRM, previous_handler)
+    report["steps"].append({"name": "aether_sleep_slot", "started_at": started,
+                            "finished_at": iso_now(), "exit_code": code,
+                            "stdout": stdout, "stderr": stderr})
+    report.pop("active_step", None)
+    save(report)
+    return code, stdout, stderr
+
+
 def run_sleep_slot(report: dict, now: datetime, reconciled: dict | None = None) -> None:
     """Same producer and queue, fixed three-source pilot, no new timer."""
     from aether_sleep_contract import CONCEPTS, PROPOSED_SLOTS, runtime_enabled
@@ -967,7 +1018,8 @@ def run_sleep_slot(report: dict, now: datetime, reconciled: dict | None = None) 
         report["sleep_slot"] = reconciled
         return  # Never run the same job twice within a daily pass.
     from aether_sleep_request import gui_requested, load_cost_estimate, PROJECT
-    if gui_requested(now=now):
+    owner_requested = gui_requested(now=now)
+    if owner_requested:
         from aether_sleep_guard import ROOT as sleep_root
         from aether_single import SingleQueue
         queue = SingleQueue()
@@ -986,12 +1038,16 @@ def run_sleep_slot(report: dict, now: datetime, reconciled: dict | None = None) 
             # Validate the refreshed evidence at the actual current time, while
             # retaining all request/date/expiry checks in load_cost_estimate.
             report["sleep_cost_estimate"] = load_cost_estimate(PROJECT, now=now_kst())
-    code, stdout, _ = run_step(
-        report, "aether_sleep_slot",
-        [sys.executable, "-B", "scripts/aether_single.py", "sleep-worker",
-         "--concept", CONCEPTS[PROPOSED_SLOTS.index(local_date)][0],
-         "--slot", local_date, "--execute", "--publish"], timeout=3600,
-    )
+    concept_id = CONCEPTS[PROPOSED_SLOTS.index(local_date)][0]
+    if owner_requested:
+        code, stdout, _ = run_owner_sleep_step(report, concept_id, local_date)
+    else:
+        code, stdout, _ = run_step(
+            report, "aether_sleep_slot",
+            [sys.executable, "-B", "scripts/aether_single.py", "sleep-worker",
+             "--concept", concept_id,
+             "--slot", local_date, "--execute", "--publish"], timeout=3600,
+        )
     result = json_stdout(stdout) or {"status": "blocked", "error": "sleep_worker_output_invalid"}
     report["sleep_slot"] = result
     if code != 0 or result.get("status") in {"blocked", "reconcile_required", "rejected"}:

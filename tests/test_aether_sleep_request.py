@@ -139,12 +139,91 @@ class SleepRequest(unittest.TestCase):
                  patch.object(daily, "check_new_single_inputs", return_value={}) as refresh, \
                  patch.object(daily, "now_kst", return_value=refreshed_at), \
                  patch.object(request, "load_cost_estimate", side_effect=estimate), \
-                 patch.object(daily, "run_step", return_value=(0, '{"status":"sleep_source_pending_review"}', '')) as run:
+                 patch.object(daily, "run_owner_sleep_step", return_value=(0, '{"status":"sleep_source_pending_review"}', '')) as run:
                 daily.run_sleep_slot(report, NOW)
             refresh.assert_called_once_with(refresh_sources=True)
             run.assert_called_once()
             self.assertEqual([], report["blockers"])
             self.assertEqual(refreshed_at.isoformat(), report["sleep_cost_estimate"]["checked_at"])
+
+    def test_gui_sleep_stays_in_owner_without_subprocess_or_environment_change(self):
+        import aether_sleep_worker as worker
+        import subprocess
+        import signal
+        for allowed in (False, True):
+            report = {"steps": []}
+            before = dict(os.environ)
+            with patch.object(request, "gui_requested", return_value=allowed), \
+                 patch.object(daily, "save"), patch.object(subprocess, "run") as child, \
+                 patch.object(signal, "getitimer", return_value=(0.0, 0.0)), \
+                 patch.object(signal, "setitimer") as timer, patch.object(signal, "signal") as handler, \
+                 patch.object(worker, "worker", return_value={"status": "sleep_source_pending_review"}) as run:
+                code, output, _ = daily.run_owner_sleep_step(report, contract.CONCEPTS[0][0], contract.PROPOSED_SLOTS[0])
+            self.assertEqual(0 if allowed else 2, code)
+            self.assertEqual(before, dict(os.environ))
+            child.assert_not_called()
+            self.assertEqual(int(allowed), run.call_count)
+            if allowed:
+                run.assert_called_once_with(concept_id=contract.CONCEPTS[0][0], slot=contract.PROPOSED_SLOTS[0], execute=True, publish=True)
+                self.assertEqual([((signal.ITIMER_REAL, 3600),), ((signal.ITIMER_REAL, 0),)], timer.call_args_list)
+                self.assertEqual(2, handler.call_count)
+            else:
+                self.assertEqual("sleep_gui_owner_required", json.loads(output)["error"])
+                timer.assert_not_called()
+                handler.assert_not_called()
+            self.assertNotIn("active_step", report)
+
+    def test_gui_sleep_timeout_restores_handler_without_retry(self):
+        import aether_sleep_worker as worker
+        import signal
+        previous = signal.getsignal(signal.SIGALRM)
+        report = {"steps": []}
+        with patch.object(request, "gui_requested", return_value=True), patch.object(daily, "save"), \
+             patch.object(signal, "getitimer", return_value=(0.0, 0.0)), \
+             patch.object(signal, "setitimer") as timer, patch.object(signal, "signal") as handler, \
+             patch.object(worker, "worker", side_effect=daily.SleepOwnerDeadline()) as run:
+            code, _, error = daily.run_owner_sleep_step(report, contract.CONCEPTS[0][0], contract.PROPOSED_SLOTS[0])
+        self.assertEqual((124, "local_worker_timeout"), (code, error))
+        run.assert_called_once()
+        handler.assert_called_with(signal.SIGALRM, previous)
+        timer.assert_called_with(signal.ITIMER_REAL, 0)
+
+    def test_gui_existing_deadline_is_preserved_and_worker_not_called(self):
+        import aether_sleep_worker as worker
+        import signal
+        with patch.object(request, "gui_requested", return_value=True), patch.object(daily, "save"), \
+             patch.object(signal, "getitimer", return_value=(30.0, 0.0)), \
+             patch.object(signal, "setitimer") as timer, patch.object(signal, "signal") as handler, \
+             patch.object(worker, "worker") as run:
+            code, output, _ = daily.run_owner_sleep_step({"steps": []}, contract.CONCEPTS[0][0], contract.PROPOSED_SLOTS[0])
+        self.assertEqual(2, code)
+        self.assertEqual("sleep_owner_deadline_already_active", json.loads(output)["error"])
+        run.assert_not_called()
+        timer.assert_not_called()
+        handler.assert_not_called()
+
+    def test_gui_request_expiry_never_falls_back_to_subprocess(self):
+        import aether_single as single
+        import aether_sleep_worker as worker
+        from contextlib import nullcontext
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp).resolve()
+            queue = Mock(root=root)
+            queue.lock.return_value = nullcontext()
+            queue._read.return_value = {"jobs": {}}
+            report = {"steps": [], "blockers": []}
+            with patch.object(contract, "runtime_enabled", return_value=True), \
+                 patch.object(request, "gui_requested", side_effect=[True, False]), \
+                 patch.object(guard, "ROOT", root), patch.object(single, "SingleQueue", return_value=queue), \
+                 patch.object(daily, "check_new_single_inputs", return_value={}), \
+                 patch.object(request, "load_cost_estimate", return_value={}), \
+                 patch.object(daily, "save"), patch.object(daily, "run_step") as subprocess_step, \
+                 patch.object(worker, "worker") as run:
+                daily.run_sleep_slot(report, NOW)
+            self.assertEqual(["sleep_gui_owner_required"], report["blockers"])
+            subprocess_step.assert_not_called()
+            run.assert_not_called()
 
     def test_default_gui_routes_sleep_without_fantasy(self):
         for service, count in ((request.SERVICE, 1), ("other-service", 0)):
