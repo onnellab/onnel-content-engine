@@ -982,7 +982,10 @@ def run_sleep_slot(report: dict, now: datetime, reconciled: dict | None = None) 
                         for job in existing)
         if not reserved and not generated:
             report["sleep_generation_inputs"] = check_new_single_inputs(refresh_sources=True)
-            report["sleep_cost_estimate"] = load_cost_estimate(PROJECT, now=now)
+            # Source collection can finish after this slot's initial timestamp.
+            # Validate the refreshed evidence at the actual current time, while
+            # retaining all request/date/expiry checks in load_cost_estimate.
+            report["sleep_cost_estimate"] = load_cost_estimate(PROJECT, now=now_kst())
     code, stdout, _ = run_step(
         report, "aether_sleep_slot",
         [sys.executable, "-B", "scripts/aether_single.py", "sleep-worker",

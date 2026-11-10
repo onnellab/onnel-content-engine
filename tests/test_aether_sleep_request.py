@@ -114,6 +114,38 @@ class SleepRequest(unittest.TestCase):
                 with patch.object(request, "gui_requested", return_value=allowed):
                     self.assertEqual(allowed, contract.runtime_enabled())
 
+    def test_refreshed_provider_evidence_uses_current_time(self):
+        import aether_single as single
+        from contextlib import nullcontext
+        from unittest.mock import Mock
+
+        refreshed_at = NOW + timedelta(seconds=6)
+        def estimate(project, *, now):
+            self.assertEqual(request.PROJECT, project)
+            if now < refreshed_at:
+                raise CredentialError("aether_lyria_cost_proof_expired")
+            return {"checked_at": refreshed_at.isoformat()}
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp).resolve()
+            queue = Mock(root=root)
+            queue.lock.return_value = nullcontext()
+            queue._read.return_value = {"jobs": {}}
+            report = {"blockers": []}
+            with patch.object(contract, "runtime_enabled", return_value=True), \
+                 patch.object(request, "gui_requested", return_value=True), \
+                 patch.object(guard, "ROOT", root), \
+                 patch.object(single, "SingleQueue", return_value=queue), \
+                 patch.object(daily, "check_new_single_inputs", return_value={}) as refresh, \
+                 patch.object(daily, "now_kst", return_value=refreshed_at), \
+                 patch.object(request, "load_cost_estimate", side_effect=estimate), \
+                 patch.object(daily, "run_step", return_value=(0, '{"status":"sleep_source_pending_review"}', '')) as run:
+                daily.run_sleep_slot(report, NOW)
+            refresh.assert_called_once_with(refresh_sources=True)
+            run.assert_called_once()
+            self.assertEqual([], report["blockers"])
+            self.assertEqual(refreshed_at.isoformat(), report["sleep_cost_estimate"]["checked_at"])
+
     def test_default_gui_routes_sleep_without_fantasy(self):
         for service, count in ((request.SERVICE, 1), ("other-service", 0)):
             with tempfile.TemporaryDirectory() as temp:
