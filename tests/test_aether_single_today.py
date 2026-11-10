@@ -161,6 +161,19 @@ class Contract(unittest.TestCase):
                 sleep_slot.assert_not_called()
                 self.assertEqual(original, json.loads(result.read_text()))
 
+    def test_request_creates_private_child_without_changing_report_directory(self):
+        with fixture() as q:
+            path = today.request_path()
+            reports = path.parent.parent
+            reports.mkdir(parents=True, exist_ok=True)
+            reports.chmod(0o755)
+            self.assertFalse(path.parent.exists())
+            today.record_request(now=NOW)
+            self.assertEqual(0o755, reports.stat().st_mode & 0o777)
+            self.assertEqual(0o700, path.parent.stat().st_mode & 0o777)
+            self.assertEqual(0o600, path.stat().st_mode & 0o777)
+            self.assertTrue(today.pending_request(now=NOW))
+
 class Worker(unittest.TestCase):
     def test_missing_all_in_receipt_does_not_consume_job_or_touch_provider(self):
         with fixture() as q, patch.object(today, "load_cost_estimate", side_effect=CredentialError("unverified")), \

@@ -120,7 +120,7 @@ def claim_once(scope, output_root):
 
 
 def request_path():
-    return ROOT.parent.parent / "daily-aether" / "single-today-request-20261110.json"
+    return ROOT.parent.parent / "daily-aether" / "single-today-requests" / "20261110.json"
 
 
 def request_binding():
@@ -153,6 +153,11 @@ def record_request(*, now=None):
     from short_video_private_permissions import private_path_permissions
     require_target(SLOT, TITLE, canonical_style(), LANE, now=now)
     path = request_path()
+    # Existing operational reports may be 0755. Preserve their permissions and
+    # create only this request's new private child directory.
+    if any(p.is_symlink() for p in (path.parent, *path.parent.parents)):
+        raise CredentialError("aether_single_today_request_unsafe")
+    path.parent.mkdir(mode=0o700, parents=False, exist_ok=True)
     if path.exists():
         if not pending_request(now=now):
             raise CredentialError("aether_single_today_identity_or_date_invalid")
