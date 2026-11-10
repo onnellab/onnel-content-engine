@@ -104,7 +104,7 @@ class GitHubActionsTest(unittest.TestCase):
         self.assertEqual(linux_install["run"].splitlines(), [
             "printf '%s\\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt > /dev/null",
             "sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update",
-            "sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y librsvg2-bin fonts-noto-cjk",
+            "sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y librsvg2-bin fonts-noto-cjk ffmpeg",
         ])
         self.assertEqual(job["timeout-minutes"], 10)
         self.assertEqual(configuration["permissions"], {"contents": "read"})

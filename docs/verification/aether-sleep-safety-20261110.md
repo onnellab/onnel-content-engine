@@ -90,3 +90,17 @@ still requires a separately approved valid schedule and real evidence/reviews.
 
 The verified code is suitable for dormant integration through the existing
 producer path. This is not runtime activation and does not create another producer.
+
+## Main integration and hosted dependency correction
+
+The owner subsequently approved main and existing-Mac-checkout integration.
+Both were fast-forwarded to 63e66e5d with runtime still OFF. Its Publishing
+Pipeline run 42728267736 succeeded in push-event DRY_RUN mode; actual publication,
+deployment and output commits were skipped.
+
+Hosted full-suite run 42728267668 exposed a missing test dependency: all three
+Linux/macOS matrix jobs failed only the two new decode tests because ffmpeg was
+absent. The workflow now installs ffmpeg through its existing official apt/Homebrew
+setup, checks ffmpeg and ffprobe before tests, and retains all offline and
+permissions/time-limit protections. Regression tests require this setup.
+No production code or runtime activation setting changed in this correction.
