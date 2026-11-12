@@ -87,6 +87,7 @@ Examples include:
 * Newsletter
 * Social media
 * Documentation
+* Google Blogger (approved, guarded English pilot; publishing remains disabled until authenticated setup and adapter validation)
 
 The original content should remain the single source of truth.
 
