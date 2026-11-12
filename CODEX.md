@@ -287,6 +287,10 @@ The content source should remain unified.
 
 ---
 
+## Approved Google Blogger pilot
+
+Google Blogger is permitted as an optional secondary long-form educational outlet, subject to the authenticated-account, quality, idempotency, canonical attribution, privacy, and AdSense-disclosure gates in `docs/Publishing_Guide.md` and `docs/GitHub_Actions.md`. The ONNELLAB website remains the primary publication destination. Do not enable or claim automatic Blogger publishing until the authorized blog and adapter are verifiably configured.
+
 # Final Principle
 
 Teach first.
