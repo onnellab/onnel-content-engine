@@ -565,6 +565,24 @@ Medium is excluded from future exports and publication. Preserved historical dra
 
 ---
 
+### Google Blogger: approved secondary long-form destination
+
+Blogger is approved as an optional long-form channel for a measured English-language, AdSense-eligible **content-quality experiment**. Its publication is separate from the official ONNELLAB blog and the existing Dev.to syndication worker. The official ONNELLAB website remains the primary publication destination and canonical source of ONNELLAB articles.
+
+**Launch rules**
+
+1. Confirm the Google-account owner and actual Blogger blog ID, URL and HTTPS status before enabling publishing. A planned blog name or a guessed available Blogspot address is not evidence that a blog exists.
+2. Use a restrained, mobile-responsive ONNELLAB style (ivory/white, lilac, soft peach, baby blue) with legible text, lightweight images, meaningful navigation, and no unrelated decoration or misleading app claims.
+3. Prepare a clear About page, contact route, privacy/cookie disclosure, and relevant advertising/affiliate disclosures **before** seeking AdSense review. Publish only factual statements about the actual site; do not imply an AdSense approval or integration that is not yet active.
+4. Initial pilot: at most one useful **English** guide per week. Base it on genuine existing research but give it a distinct question, original examples, checks, and practical added value. It must not be an automatically paraphrased clone of the official ONNELLAB article, nor a thin affiliate/ad landing page. Review for accuracy and rights.
+5. If carrying identical or near-identical syndicated material, show explicit source credit and canonical attribution to the ONNELLAB article. For a genuinely independent Blogger article, use that page's own URL, with reasonable cross-links to relevant ONNELLAB sources and products only when genuinely helpful.
+6. Draft-first via official Blogger tools and authenticated OAuth 2.0. Do not publish from a secret, profile cookie, copied account session, or unreviewed automation. Record provider blog ID/post ID/permalink and verify the specific live public URL; a successful API response without a public permalink is not completion.
+7. Dedupe by normalized source article ID, Blogger content angle and target locale; retries may update a known draft but must not create duplicate posts. Isolate this target from X/LinkedIn/Bluesky/Dev.to so one channel's failure does not block others.
+8. Do not change the canonical site's nine-language bundle contract, three-day cadence, quality threshold, or original publication dates. Blogger runs on its own low-frequency optional schedule, only after the canonical source is public if the article adapts that source.
+9. Google Search Console, analytics and AdSense require actual property ownership, consent/legal settings as applicable, and separate verification. Record verified measurement only; AdSense revenue, approval and eligibility are **not** guaranteed by publishing or by Blogger.
+
+**Rollout gate:** channel approved in policy, but **posting disabled** until the target blog exists, authorized credentials are configured outside Git, a tested provider adapter and idempotent state ledger are available, and a first draft has passed quality review. The first run must not bulk-migrate the ONNELLAB back catalog.
+
 # 6-1. Product Release Destinations
 
 GitHub Release is not a general educational distribution channel.
