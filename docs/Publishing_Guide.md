@@ -567,6 +567,8 @@ Medium is excluded from future exports and publication. Preserved historical dra
 
 ### Google Blogger: approved secondary long-form destination
 
+**Verified channel and current setup:** [Blogger Channel Runbook](Blogger_Channel_Runbook.md), including the confirmed ONNELLAB account, Blog ID, public URL, launch settings, and disabled automation status.
+
 Blogger is approved as an optional long-form channel for a measured English-language, AdSense-eligible **content-quality experiment**. Its publication is separate from the official ONNELLAB blog and the existing Dev.to syndication worker. The official ONNELLAB website remains the primary publication destination and canonical source of ONNELLAB articles.
 
 **Launch rules**
