@@ -51,32 +51,51 @@ Public discovery and HTTPS redirection were observed enabled in Blogger settings
 
 Policy and quality gates are defined in `docs/Publishing_Guide.md` and `docs/GitHub_Actions.md`. They take priority over this status record.
 
-## 4. Initial content pilot (not activated)
+## 4. Independent English editorial automation
 
-- Editorial language: English.
-- Planned ceiling: at most one separately reviewed educational guide per week.
+- The owner approved **separate automatic English Blogger publication** on 2026-11-12, without requiring approval for each individual article when objective gates pass.
+- A dedicated ChatGPT task is enabled weekly on **Tuesdays at 10:00 Asia/Seoul**, starting 2026-11-17. The task researches, drafts, validates, posts, and verifies Blogger articles. It is separate from the canonical site GitHub Actions workflow; **no Blogger step is added to that existing workflow**.
+- Editorial language: English. Maximum: **one independently useful guide per KST ISO week**, not an unconditional obligation to publish.
 - Suggested topics: practical workflows for offline music, metadata, TXT/EPUB, file management, and audio/video utilities.
-- Gate: research → article → meaningful visuals → factual review → draft → explicit publication readiness check.
-- No automatic back-catalog migration. Do not trigger Google Blogger API posts just because a canonical ONNELLAB article was released.
-- A guide must have added value, real references where needed, correctly functioning links and images, and no misleading claims.
-- Any AdSense-eligible editorial plan is not an assurance of AdSense approval, search rankings, or revenue.
+- Gate: research → distinctly scoped English article → fact/links/rights review → `blogger_weekly.py check` → week reservation + Git commit/push → draft through authenticated Blogger UI → record remote draft ID + Git commit/push → publish through verified ONNELLAB Blogger UI → independent public URL/content verification → record receipt + Git commit/push.
+- The official Blogger web interface in a previously authenticated account is the initial posting transport. A future Blogger API/OAuth adapter is optional; never read cookies or browser tokens. A scheduled run must verify the signed-in account is `onnellab.app@gmail.com` and the actual Blog ID is `1829676614817439337` before any posting. If that cannot be established, stop; retain the work and report the blocker.
+- An article may go live automatically only after the account/target verification, content originality, safety, and public-draft preview gates pass. The first real post is also an end-to-end transport acceptance test; no publication may be marked complete until its public body is verified. Do not publish solely to satisfy the schedule.
+- No automatic back-catalog migration. Never change the canonical article release history or alter X/LinkedIn/Bluesky/Dev.to.
+- Publishing is suspended for the affected week if there is an uncertain duplicate, lost authentication, missing reference evidence, or an existing reserved draft whose remote state cannot be reconciled.
+- AdSense approval, search visibility, or revenue are not assumed.
 
-## 5. Conditions before automated Blogger publishing can be enabled
+## 5. Activation and safety checklist
 
-All conditions below must be met, documented and independently verified:
+- [x] Created real Blogger channel and verified account identity, public blog ID, HTTPS URL, and essential pages.
+- [x] Created a separate weekly agent schedule independent of the GitHub Actions canonical publishing workflow.
+- [x] Implemented `scripts/blogger_weekly.py` with English-only quality checks, source-url requirements, substantial article length, reference/rights review attestations, exact-passage overlap rejection, duplicate week/slug prevention, guarded state transitions, and public receipt verification.
+- [x] Added offline regression tests in `tests/test_blogger_weekly.py`.
+- [ ] First scheduled run: verify a real article draft, the authenticated browser account and Blog ID, preview, live-publication sequence, and exact public article content. This cannot be claimed complete until actually observed.
+- [ ] Optional future API route: implement dedicated Blogger OAuth consent and secret storage, test refresh/scopes/account identity, and never borrow an unrelated Google account's YouTube token.
 
-- [ ] Dedicated Blogger API adapter implemented using Google's official OAuth 2.0 permission flow under the confirmed ONNELLAB Google account; consent is completed by the account owner as needed.
-- [ ] Least-privilege credentials and refresh tokens stored only in approved secret storage, never Git or generated website pages.
-- [ ] Target Blog ID is the verified `1829676614817439337`; no account mixing with other signed-in Google profiles.
-- [ ] Separate posting state manifest/ledger records source article ID, language, draft ID, public Blogger post ID, permalink, and timing.
-- [ ] Strict idempotency: retry never creates duplicate posts; an update targets a confirmed draft.
-- [ ] Draft-first workflow, quality gate, and no public publishing from unreviewed content.
-- [ ] Publish only after verifying the final actual Blogger public URL and content. If unavailable, keep pending and do not claim success.
-- [ ] Tests cover OAuth denial/expiry, malformed content, duplicate retries, missing asset/canonical and incorrect account/blog ID.
-- [ ] Channel failure does not alter ONNELLAB canonical site or other distribution pipelines.
-- [ ] Rollback/recovery documented. No bulk publish on first connection.
+### Draft metadata contract
 
-No user password, cookie, recovery code or secret should be requested in chat or committed to a repository.
+Create `drafts/blogger/en/<slug>.html` and `drafts/blogger/en/<slug>.json`. Keep them separate from `generated/markdown` and existing syndication drafts. The JSON includes `week` (current Asia/Seoul ISO week such as `2026-W47`), `slug`, `language: en`, `title`, `primary_question`, `source_title`, `source_url` (HTTPS official ONNELLAB article), `source_path` (a real `generated/markdown/en/...` file), `body_path`, `fact_sources` (two or more factual citations each with `url` and specific `supports`), `new_examples` (two or more substantial new examples), and `review` with the following truthfully checked booleans: `technically_verified`, `distinct_search_intent`, `original_examples`, `sources_checked`, `links_checked`, `rights_checked`, `english_proofread`.
+
+The HTML must be an independent, useful English guide (minimum 650 words), with at least three substantive H2 sections, six paragraphs, a list or steps, a clearly attributed link to its ONNELLAB source, and hyperlinks to the research references. Only basic safe HTML with absolute HTTPS links is accepted. This is **not** an excuse to pad length or pass checks without real editorial work.
+
+### Run commands
+
+```bash
+python3 scripts/blogger_weekly.py status
+python3 scripts/blogger_weekly.py check --brief drafts/blogger/en/<slug>.json
+python3 scripts/blogger_weekly.py reserve --brief drafts/blogger/en/<slug>.json
+# Commit and push the brief, HTML and reserved data/blogger_publications.json BEFORE remote UI work.
+# Verify authenticated ONNELLAB account; create ONE Blogger draft and record its real numeric post ID.
+python3 scripts/blogger_weekly.py record-draft --brief drafts/blogger/en/<slug>.json --post-id <real-numeric-Blogger-post-ID>
+# Commit/push the draft receipt; publish the SAME draft if all checks pass.
+python3 scripts/blogger_weekly.py record-published --brief drafts/blogger/en/<slug>.json --post-id <same-post-ID> --url https://onnellab-guides.blogspot.com/<actual-article-permalink>.html
+# Commit/push verified receipt ONLY after remote HTTP and content checks pass.
+```
+
+`data/blogger_publications.json` is a separate checked-in operational ledger, created by the first successful reservation. Do not create it by guessing post IDs. If a run is interrupted after reservation or draft creation, inspect the actual Blogger administration screen before resuming; **never** create a second remote post to overcome an uncertain state.
+
+There is no personal per-article approval step; the user approved automatic operation subject to the documented gates. The browser route is allowed only through Google's real Blogger UI, with each run checking the signed-in ONNELLAB account and blog identity. Never inspect, copy, or commit Chrome cookies, tokens, passwords, passkeys, or recovery information.
 
 ## 6. Search and advertising steps (not completed)
 
