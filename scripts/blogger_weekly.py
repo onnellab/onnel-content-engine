@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Guarded, independent weekly Blogger publication ledger (no account secrets).
+"""Guarded, independent three-times-weekly Blogger ledger (no account secrets).
 
 An agent authors an original English HTML article and JSON brief. This tool
-checks distinctness and quality, reserves a week before remote work, and
+checks distinctness and quality, reserves one KST date slot before remote work, and
 verifies actual public posts before marking them published. It never posts to
 Blogger itself, and it never touches canonical ONNELLAB publishing manifests.
 """
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from difflib import SequenceMatcher
 from hashlib import sha256
 from html.parser import HTMLParser
@@ -26,6 +26,7 @@ DRAFT_ROOT = ROOT / "drafts" / "blogger"
 LEDGER = ROOT / "data" / "blogger_publications.json"
 BLOG_ID = "1829676614817439337"
 BLOG_HOST = "onnellab-guides.blogspot.com"
+MAX_PER_WEEK = 3
 ALLOWED_TAGS = {
     "h2", "h3", "h4", "p", "br", "hr", "strong", "em", "b", "i",
     "ul", "ol", "li", "a", "blockquote", "pre", "code", "img", "figure",
@@ -64,6 +65,24 @@ def week_key(day: datetime | None = None) -> str:
     day = day.astimezone(ZoneInfo("Asia/Seoul"))
     year, week, _ = day.isocalendar()
     return f"{year}-W{week:02d}"
+
+
+def slot_key(day: datetime | None = None) -> str:
+    """Date of a scheduled publishing slot in the Blogger owner's KST time zone."""
+    day = day or datetime.now(ZoneInfo("Asia/Seoul"))
+    return day.astimezone(ZoneInfo("Asia/Seoul")).date().isoformat()
+
+
+def ensure_slot(slot: str, week: str) -> None:
+    if not isinstance(slot, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", slot):
+        refuse("Blogger slot must be a KST YYYY-MM-DD date")
+    try:
+        value = date.fromisoformat(slot)
+    except ValueError:
+        refuse("Blogger slot is not a real calendar date")
+    iso_year, iso_week, _ = value.isocalendar()
+    if f"{iso_year}-W{iso_week:02d}" != week:
+        refuse("Blogger slot and ISO week do not match")
 
 
 def relative_path(root: Path, value: str, prefix: Path) -> Path:
@@ -157,6 +176,8 @@ def validate(brief_path: Path, *, root: Path = ROOT) -> dict:
         refuse("invalid Blogger article slug")
     if meta.get("language") != "en" or meta.get("week") != week_key():
         refuse("Blogger brief must be English and for the current KST publication week")
+    slot = meta.get("slot", slot_key())
+    ensure_slot(slot, meta["week"])
     title = meta.get("title")
     question = meta.get("primary_question")
     source_title = meta.get("source_title")
@@ -203,7 +224,7 @@ def validate(brief_path: Path, *, root: Path = ROOT) -> dict:
         if any(tuple(guide_tokens[i:i+28]) in source_runs for i in range(max(0, len(guide_tokens) - 27))):
             refuse("Blogger article copies a long exact passage from the ONNELLAB source")
     return {
-        "slug": slug, "week": meta["week"], "title": title, "question": question,
+        "slug": slug, "week": meta["week"], "slot": slot, "title": title, "question": question,
         "source_url": source_url, "body_path": meta["body_path"],
         "sha256": sha256(content.encode("utf-8")).hexdigest(),
         "word_count": len(parser.words), "sections": parser.h2,
@@ -221,13 +242,29 @@ def read_ledger(path: Path = LEDGER) -> dict:
     if (not isinstance(ledger, dict) or ledger.get("schema_version") != 1
             or ledger.get("blog_id") != BLOG_ID or not isinstance(ledger.get("entries"), list)):
         refuse("Blogger ledger has invalid schema or target Blog ID")
-    weeks, slugs, post_ids = set(), set(), set()
+    slots, slugs, post_ids, week_counts = set(), set(), set(), {}
     for e in ledger["entries"]:
         if not isinstance(e, dict) or e.get("status") not in {"reserved", "draft", "published"}:
             refuse("invalid Blogger ledger entry")
-        if e.get("week") in weeks or e.get("slug") in slugs:
-            refuse("duplicate Blogger publication week or slug in ledger")
-        weeks.add(e["week"]); slugs.add(e["slug"])
+        week = e.get("week")
+        slug = e.get("slug")
+        if not isinstance(week, str) or not re.fullmatch(r"\d{4}-W\d{2}", week):
+            refuse("invalid Blogger ledger ISO week")
+        if not isinstance(slug, str) or not slug or slug in slugs:
+            refuse("duplicate Blogger article slug in ledger")
+        slugs.add(slug)
+        # Historical weekly-only reservations remain visible but must be reconciled
+        # before adding another article to that week; never guess their date.
+        slot = e.get("slot")
+        if slot is not None:
+            ensure_slot(slot, week)
+        key = (week, slot)
+        if key in slots:
+            refuse("duplicate Blogger publication date slot in ledger")
+        slots.add(key)
+        week_counts[week] = week_counts.get(week, 0) + 1
+        if week_counts[week] > MAX_PER_WEEK:
+            refuse("Blogger publication week exceeds three reserved articles")
         pid = e.get("post_id")
         if pid:
             if pid in post_ids: refuse("duplicate Blogger remote post ID")
@@ -246,15 +283,23 @@ def save_ledger(ledger: dict, path: Path = LEDGER):
 
 
 def reserve(info: dict, path: Path = LEDGER):
+    ensure_slot(info["slot"], info["week"])
     ledger = read_ledger(path)
+    week_count = 0
     for e in ledger["entries"]:
-        if e["week"] == info["week"]:
-            if e["slug"] == info["slug"] and e["sha256"] == info["sha256"]:
-                return e, False
-            refuse("another Blogger article is already reserved or posted for this KST week")
+        if e["slug"] == info["slug"] and (e["week"], e.get("slot"), e["sha256"]) == (info["week"], info["slot"], info["sha256"]):
+            return e, False
         if e["slug"] == info["slug"]:
             refuse("Blogger article slug is already used")
-    entry = {k: info[k] for k in ("slug", "week", "title", "source_url", "body_path", "sha256")}
+        if e["week"] == info["week"]:
+            week_count += 1
+            if e.get("slot") is None:
+                refuse("legacy weekly reservation needs reconciliation before adding a new slot")
+            if e["slot"] == info["slot"]:
+                refuse("another Blogger article is already reserved or posted for this KST date")
+    if week_count >= MAX_PER_WEEK:
+        refuse("Blogger has already reserved three articles for this KST week")
+    entry = {k: info[k] for k in ("slug", "week", "slot", "title", "source_url", "body_path", "sha256")}
     entry.update(status="reserved", post_id="", posted_url="", created_at=now_utc(), verified_at="")
     ledger["entries"].append(entry)
     save_ledger(ledger, path)
@@ -269,7 +314,7 @@ def record_draft(info: dict, post_id: str, path: Path = LEDGER):
     if not re.fullmatch(r"[0-9]{10,25}", post_id):
         refuse("Blogger post ID must be numeric")
     ledger = read_ledger(path)
-    row = next((e for e in ledger["entries"] if e["week"] == info["week"] and e["slug"] == info["slug"] and e["sha256"] == info["sha256"]), None)
+    row = next((e for e in ledger["entries"] if e["week"] == info["week"] and e.get("slot") == info["slot"] and e["slug"] == info["slug"] and e["sha256"] == info["sha256"]), None)
     if row is None: refuse("reserve and commit the week before creating a Blogger draft")
     if row["status"] == "published": refuse("this week is already published")
     if row.get("post_id") not in {"", post_id}: refuse("conflicting remote Blogger draft ID")
@@ -303,7 +348,7 @@ def verify_public_post(info: dict, posted_url: str, *, fetch=None) -> bool:
 
 def record_published(info: dict, post_id: str, posted_url: str, path: Path = LEDGER, *, fetch=None):
     ledger = read_ledger(path)
-    row = next((e for e in ledger["entries"] if e["week"] == info["week"] and e["slug"] == info["slug"] and e["sha256"] == info["sha256"]), None)
+    row = next((e for e in ledger["entries"] if e["week"] == info["week"] and e.get("slot") == info["slot"] and e["slug"] == info["slug"] and e["sha256"] == info["sha256"]), None)
     if row is None or row.get("status") != "draft" or row.get("post_id") != post_id:
         refuse("Blogger draft must first be recorded with matching post ID")
     verify_public_post(info, posted_url, fetch=fetch)
@@ -328,8 +373,10 @@ def main() -> int:
             info = validate(args.brief)
             if args.action == "check":
                 ledger = read_ledger(args.ledger)
-                current = next((e for e in ledger["entries"] if e["week"] == info["week"]), None)
-                result = {"quality": info, "week_status": current or "available"}
+                current = next((e for e in ledger["entries"] if e["week"] == info["week"] and e.get("slot") == info["slot"]), None)
+                count = sum(e["week"] == info["week"] for e in ledger["entries"])
+                has_legacy = any(e["week"] == info["week"] and e.get("slot") is None for e in ledger["entries"])
+                result = {"quality": info, "slot_status": current or ("blocked" if count >= MAX_PER_WEEK or has_legacy else "available"), "week_count": count, "week_limit": MAX_PER_WEEK}
             elif args.action == "reserve":
                 row, new = reserve(info, args.ledger)
                 result = {"new_reservation": new, "entry": row}

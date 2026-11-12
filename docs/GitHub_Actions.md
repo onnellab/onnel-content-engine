@@ -615,7 +615,7 @@ Google Blogger is an approved **optional, secondary educational publishing chann
 - Blogger publication is **disabled by default** until the authorized ONNELLAB Google account is verified, a target blog ID/URL is recorded, OAuth is explicitly granted, and the adapter and approval gates have passed tests. Never place credentials, OAuth tokens, or secrets in Git or generated website artifacts.
 - Use Google Blogger's official publishing interface or Blogger API under a least-privilege Google OAuth connection. Use draft-first flow, human-reviewable previews, duplicate/idempotency keys, bounded retry, and exact public-permalink receipts for successful publication. Fail closed on missing authorization or content/URL verification.
 - A new Blogger publication must remain in draft until its metadata, links, images, attribution, accessibility, translation if needed, and policy checks pass. Publishing solely to raise page count is prohibited.
-- For launch, target **up to one independently useful English Blogger article each week**. Expanding volume or languages requires observed search/quality outcomes, not assumed AdSense eligibility.
+- For launch, target **up to three independently useful English Blogger articles each KST ISO week (one per Monday, Wednesday and Friday)**. Expanding volume or languages requires observed search/quality outcomes, not assumed AdSense eligibility.
 - AdSense eligibility, approval, and revenue are independent decisions by Google; do not report ads as enabled or revenue as earned until verified in the real account. No ads.txt, publisher ID, or external analytics IDs may be invented.
 - Search Console / analytics / AdSense measurement must use real connected properties and preserve uncertainty when not yet configured.
 

@@ -1,7 +1,7 @@
 """Offline regression tests for the isolated ONNELLAB Blogger channel."""
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 import json
 import sys
@@ -11,7 +11,7 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from blogger_weekly import (
     BLOG_HOST, BLOG_ID, BloggerGuardError, read_ledger, record_draft,
-    record_published, reserve, validate, verify_public_post, week_key,
+    record_published, reserve, validate, verify_public_post, week_key, MAX_PER_WEEK,
 )
 
 
@@ -90,12 +90,35 @@ class BloggerWeekTests(unittest.TestCase):
         self.assertEqual(read_ledger(self.ledger)["blog_id"], BLOG_ID)
         self.assertEqual(len(read_ledger(self.ledger)["entries"]), 1)
 
-    def test_no_second_article_same_week(self):
+    def test_no_second_article_same_date(self):
         info = validate(self.meta_path, root=self.root)
         reserve(info, self.ledger)
         extra = dict(info, slug="different-article", sha256="abc123")
-        with self.assertRaisesRegex(BloggerGuardError, "already reserved"):
+        with self.assertRaisesRegex(BloggerGuardError, "date"):
             reserve(extra, self.ledger)
+
+    def test_three_distinct_days_and_fourth_blocked(self):
+        info = validate(self.meta_path, root=self.root)
+        year, week = map(int, info["week"].split("-W"))
+        self.assertEqual(MAX_PER_WEEK, 3)
+        # Mon/Wed/Fri are independent slots, even though their ISO week matches.
+        days = [date.fromisocalendar(year, week, day).isoformat() for day in (1, 3, 5, 7)]
+        for i, day in enumerate(days[:3]):
+            row, new = reserve(dict(info, slot=day, slug=f"article-{i}", sha256=f"digest-{i}"), self.ledger)
+            self.assertTrue(new)
+            self.assertEqual(row["slot"], day)
+        self.assertEqual(len(read_ledger(self.ledger)["entries"]), 3)
+        same, new = reserve(dict(info, slot=days[1], slug="article-1", sha256="digest-1"), self.ledger)
+        self.assertFalse(new)
+        self.assertEqual(same["slot"], days[1])
+        with self.assertRaisesRegex(BloggerGuardError, "three articles"):
+            reserve(dict(info, slot=days[3], slug="article-4", sha256="digest-4"), self.ledger)
+
+    def test_mismatched_date_and_week_refused(self):
+        info = validate(self.meta_path, root=self.root)
+        info["slot"] = "1999-01-01"
+        with self.assertRaisesRegex(BloggerGuardError, "week do not match"):
+            reserve(info, self.ledger)
 
     def test_distinctness_and_fact_sources_required(self):
         self.meta["title"] = self.meta["source_title"]
