@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "blog_id": "1829676614817439337",
+  "entries": [
+    {
+      "slug": "mp3-cover-art-missing-on-one-player",
+      "week": "2026-W46",
+      "slot": "2026-11-13",
+      "title": "Why MP3 Cover Art Shows on One Player but Not Another",
+      "source_url": "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/",
+      "body_path": "drafts/blogger/en/mp3-cover-art-missing-on-one-player.html",
+      "sha256": "116e0d9847dba84367e659bb20a14459781bf5d9dffcfeeb7cdc54311ce5429e",
+      "status": "reserved",
+      "post_id": "",
+      "posted_url": "",
+      "created_at": "2026-11-13T01:27:29+00:00",
+      "verified_at": ""
+    }
+  ]
+}

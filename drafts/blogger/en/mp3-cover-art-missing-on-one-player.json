@@ -1,0 +1,40 @@
+{
+  "week": "2026-W46",
+  "slot": "2026-11-13",
+  "slug": "mp3-cover-art-missing-on-one-player",
+  "language": "en",
+  "title": "Why MP3 Cover Art Shows on One Player but Not Another",
+  "primary_question": "Why does embedded MP3 cover art appear on one music player but disappear or show the wrong image in another?",
+  "source_title": "How to Clean Up MP3 Metadata Before Organizing Music",
+  "source_url": "https://onnellab.com/blog/en/clean-up-mp3-metadata-before-organizing-music/",
+  "source_path": "generated/markdown/en/music/clean-up-mp3-metadata-before-organizing-music.md",
+  "body_path": "drafts/blogger/en/mp3-cover-art-missing-on-one-player.html",
+  "fact_sources": [
+    {
+      "url": "https://id3.org/id3v2.4.0-frames",
+      "supports": "ID3v2.4 attached picture APIC frame supports format, picture type, description and binary image data, distinct from an external image file."
+    },
+    {
+      "url": "https://mutagen.readthedocs.io/en/latest/user/id3.html",
+      "supports": "Mutagen ID3 reference documents APIC description uniqueness, multiple frames, ID3 version conversions and v2.3 save option."
+    },
+    {
+      "url": "https://ffmpeg.org/ffmpeg-formats.html",
+      "supports": "FFmpeg MP3 muxer reference documents APIC attached-picture handling and ID3v2.3/ID3v2.4 support; it does not guarantee any particular music player display."
+    }
+  ],
+  "new_examples": [
+    "Fictional Harbor at Dawn folder contains cover.jpg alongside 01-Arrival.mp3 but the MP3 has no APIC. After moving the MP3 alone to a phone the art vanishes. The guide isolates an external image from an embedded one by testing a saved file copy.",
+    "Fictional Night Ferry MP3 has two attached pictures, an obsolete thumbnail and a recent front image. Two players choose different images, so a reversible one-front-cover test copy distinguishes conflicting APIC selections from a codec or audio fault."
+  ],
+  "review": {
+    "technically_verified": true,
+    "distinct_search_intent": true,
+    "original_examples": true,
+    "sources_checked": true,
+    "links_checked": true,
+    "rights_checked": true,
+    "english_proofread": true
+  },
+  "editorial_notes": "Independent diagnosis of missing/wrong artwork across two players. Different user intent from the broad canonical MP3 cleanup checklist. References checked from source publishers on 2026-11-13. Link to ONNELLAB primary article returns HTTP 200. All cases clearly labelled fictional. No copied art, images, app endorsements or third-party text reproduced. No claim of a universal fix."
+}
