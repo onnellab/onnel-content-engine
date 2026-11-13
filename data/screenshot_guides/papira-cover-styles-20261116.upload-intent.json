@@ -47,5 +47,7 @@
     "copyright_checks": "No issues found; not a permanent guarantee",
     "external_link_status": "Studio requires one-time verification for clickable external links. Store URL text retained; no verification initiated.",
     "disclosure_review": "Actual PNG capture and renderer inspected. No realistic people/events/synthetic realistic scenes or generated music; no selected for those UI-listed uses. AI assistance with copy/code not represented as no assistance."
-  }
+  },
+  "manifest_hash_kind": "SHA256 of UTF-8 canonical JSON: ensure_ascii=False,sort_keys=True,separators=(',',':')",
+  "manifest_file_sha256": "0469d79f0004a21484471fe54cb4c3eef600624ecf93510db896fc0102788df1"
 }
