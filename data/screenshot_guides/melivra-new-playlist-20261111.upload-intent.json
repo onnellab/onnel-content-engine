@@ -22,5 +22,16 @@
     "full_repository_ci": "not run",
     "existing_contracts_preserved": 12
   },
-  "observed_at_utc": "2026-11-08T10:38:15Z"
+  "observed_at_utc": "2026-11-08T10:38:15Z",
+  "publication_observation": {
+    "recorded_at_utc": "2026-11-13T06:50:49Z",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "video_id": "H5yJr81_ENg",
+    "visibility": "public",
+    "studio_displayed_publication_date": "2026-11-11",
+    "source": "YouTube Studio channel content Shorts table, all 20 of 20 rows inspected during this run",
+    "public_url": "https://www.youtube.com/shorts/H5yJr81_ENg",
+    "exact_server_publication_timestamp": null,
+    "notes": "Previously scheduled upload now observed public. Original schedule verification retained; no new upload, no title or metadata edit. Studio access restored by selecting already signed-in ONNELLAB channel instead of Akin; no new login or permissions."
+  }
 }
