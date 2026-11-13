@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "guide_id": "papira-cover-styles-20261116",
+  "status": "ready_for_single_browser_upload",
+  "created_at": "2026-11-13T07:56:41.756Z",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "publish_at": "2026-11-16T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "video_sha256": "21418a1ba4bb992160b70d820c23e108a56b508dd48bfd0bb091b45d689f33fd",
+  "manifest_sha256": "558f281f3720fcfcc261e035bb6bbeffbb5a60f94b516a7063ca8d113d6ae552",
+  "library_file_id": "libfile_fde3_f-999b4a4e0c608191a1923b282e3958ad_4a2b969d461c81918faf7efb17e451f0",
+  "authorization": {
+    "proposal": "Sentinel_52a30ac4c9808191a5e4d1d4b10e993c",
+    "approval": "Sentinel_f6f280bdd60c81918765fd2290ddc42d",
+    "scope": "One Papira 2026-11-16 guide; free dot cloud Python/ffmpeg production and browser scheduling. No paid API or Mac."
+  },
+  "duplicate_check": {
+    "shorts": 20,
+    "videos": 6,
+    "matching_topic_or_upload": false,
+    "observed_at": "2026-11-13T07:56:41.756Z"
+  },
+  "qa": {
+    "independent_review": "pass; original capture, three slides, copy, 13 preserved contracts and five tests reviewed",
+    "full_frame_checks": 450,
+    "video": "15 seconds, 1080x1920,30fps,H264,yuv420p",
+    "audio": "none",
+    "limitations": [
+      "Mobile Shorts overlay unverified",
+      "Screenshot not live action recording",
+      "Signed-store-binary attestation and iOS parity not claimed"
+    ]
+  },
+  "video_id": null
+}
