@@ -1,0 +1,23 @@
+{
+  "all_frames_checked": 450,
+  "max_mean_absolute_error_255": 0.8487742734053498,
+  "source_interior_pixel_exact": true,
+  "preserved_existing_contracts": [
+    "MELIVRA_CONTRACT",
+    "CLIPNEST_CONTRACT",
+    "ALIGNA_CONTRACT",
+    "MELIVRA_ALBUMS_CONTRACT",
+    "PAPIRA_CONTRACT",
+    "TAGWEAVER_CONTRACT",
+    "VAULTXT_CONTRACT",
+    "SEGRA_CONTRACT",
+    "MELIVRA_EQUALIZER_CONTRACT",
+    "CLIPNEST_LANGUAGE_CONTRACT",
+    "ALIGNA_OPTIONS_CONTRACT",
+    "MELIVRA_RATING_CONTRACT",
+    "MELIVRA_PLAYLIST_CONTRACT"
+  ],
+  "owned_decode_process_exited": true,
+  "focused_tests_passed": 5,
+  "source_hash": "8534b4c802e269a92d670c075c2dc789af239f33ba73447ab8a7dd5b95064362"
+}
