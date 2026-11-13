@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "guide_id": "papira-cover-styles-20261116",
-  "status": "uploaded_private_processing",
+  "status": "scheduled",
   "created_at": "2026-11-13T07:56:41.756Z",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
   "publish_at": "2026-11-16T09:00:00+09:00",
@@ -32,5 +32,20 @@
     ]
   },
   "video_id": "R-Ktv2bQ-kI",
-  "upload_observed_at": "2026-11-13T07:57:47.650Z"
+  "upload_observed_at": "2026-11-13T07:57:47.650Z",
+  "schedule_receipt": {
+    "video_id": "R-Ktv2bQ-kI",
+    "url": "https://youtube.com/shorts/R-Ktv2bQ-kI",
+    "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+    "publish_at": "2026-11-16T09:00:00+09:00",
+    "timezone": "Asia/Seoul",
+    "ui_timezone": "서울(GMT+09:00)",
+    "observed_at": "2026-11-13T08:01:28.738Z",
+    "confirmation": "동영상 예약됨; 2026년 11월 16일 9:00에 동영상이 공개 상태로 설정됩니다.",
+    "actual_publication_verified": false,
+    "duration_display": "0:15",
+    "copyright_checks": "No issues found; not a permanent guarantee",
+    "external_link_status": "Studio requires one-time verification for clickable external links. Store URL text retained; no verification initiated.",
+    "disclosure_review": "Actual PNG capture and renderer inspected. No realistic people/events/synthetic realistic scenes or generated music; no selected for those UI-listed uses. AI assistance with copy/code not represented as no assistance."
+  }
 }
