@@ -1,0 +1,232 @@
+{
+  "manifest_sha256": "558f281f3720fcfcc261e035bb6bbeffbb5a60f94b516a7063ca8d113d6ae552",
+  "asset_hashes": {
+    "02.png": "8534b4c802e269a92d670c075c2dc789af239f33ba73447ab8a7dd5b95064362"
+  },
+  "kind": "screenshot_guide",
+  "runtime_recording_attestation": false,
+  "upload_authorized_by_cli": false,
+  "video_file": "papira-cover-styles-20261116.mp4",
+  "video_sha256": "21418a1ba4bb992160b70d820c23e108a56b508dd48bfd0bb091b45d689f33fd",
+  "seconds": 15,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "audio": false,
+  "slide_sha256": {
+    "slide-1.png": "af89f21af08098573b4dff95ccd1055627b84be8188b36111026d9c5775c3106",
+    "slide-2.png": "a450ab5434c279d36a3df9f4b8a4accd78cecf4f0008ba33b335788992a1f8cf",
+    "slide-3.png": "71fea27398875b2326e997f05cc71263c75f76ab18b00e34eb1b8e8cc8dcbfee"
+  },
+  "text_bounds": [
+    {
+      "slide": 1,
+      "text": "PAPIRA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        292.0,
+        83,
+        788.0,
+        105
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Compare cover styles",
+      "bbox": [
+        248.0,
+        175,
+        832.0,
+        221
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Review the named thumbnails.",
+      "bbox": [
+        291.5,
+        241,
+        788.5,
+        265
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Still-screen guide \u00b7 Demo manuscript",
+      "bbox": [
+        252.5,
+        1726,
+        827.5,
+        1756
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "Papira for Android \u00b7 Link in description",
+      "bbox": [
+        263.0,
+        1788,
+        817.0,
+        1816
+      ]
+    },
+    {
+      "slide": 1,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "PAPIRA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        292.0,
+        83,
+        788.0,
+        105
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Find the selected style",
+      "bbox": [
+        231.0,
+        175,
+        849.0,
+        221
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Floral Frame has the checkmark.",
+      "bbox": [
+        278.0,
+        241,
+        802.0,
+        265
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Still-screen guide \u00b7 Demo manuscript",
+      "bbox": [
+        252.5,
+        1726,
+        827.5,
+        1756
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "Papira for Android \u00b7 Link in description",
+      "bbox": [
+        263.0,
+        1788,
+        817.0,
+        1816
+      ]
+    },
+    {
+      "slide": 2,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "PAPIRA \u00b7 SCREENSHOT GUIDE",
+      "bbox": [
+        292.0,
+        83,
+        788.0,
+        105
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Papira for Android",
+      "bbox": [
+        291.5,
+        175,
+        788.5,
+        221
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "App link in the description.",
+      "bbox": [
+        325.0,
+        241,
+        755.0,
+        272
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Still-screen guide \u00b7 Demo manuscript",
+      "bbox": [
+        252.5,
+        1726,
+        827.5,
+        1756
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "Papira for Android \u00b7 Link in description",
+      "bbox": [
+        263.0,
+        1788,
+        817.0,
+        1816
+      ]
+    },
+    {
+      "slide": 3,
+      "text": "ONNELLAB",
+      "bbox": [
+        462.0,
+        1847,
+        618.0,
+        1866
+      ]
+    }
+  ],
+  "copy_timing": {
+    "policy": "english-changing-copy-20cps-v1",
+    "slides": [
+      {
+        "slide": 1,
+        "changing_characters": 49,
+        "seconds": 5,
+        "characters_per_second": 9.8
+      },
+      {
+        "slide": 2,
+        "changing_characters": 55,
+        "seconds": 5,
+        "characters_per_second": 11.0
+      },
+      {
+        "slide": 3,
+        "changing_characters": 47,
+        "seconds": 5,
+        "characters_per_second": 9.4
+      }
+    ],
+    "human_comprehension_verified": false
+  },
+  "layout_checks": {
+    "glyph_bounds": true,
+    "minimum_gap_px": 8,
+    "player_overlay_verified": false
+  }
+}
