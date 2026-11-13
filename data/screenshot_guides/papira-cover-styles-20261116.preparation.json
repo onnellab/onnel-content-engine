@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "kind": "screenshot_guide_preparation_not_upload_receipt",
+  "guide_id": "papira-cover-styles-20261116",
+  "status": "source_reviewed_contract_and_render_pending",
+  "candidate_slot": "2026-11-16T09:00:00+09:00",
+  "timezone": "Asia/Seoul",
+  "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
+  "selection": {
+    "catalog": "data/apps_registry.csv",
+    "all_eight_released_apps_considered": true,
+    "reason": "Papira has no new guide since 2026-10-23. Cover-style comparison is distinct from its previous home starting-options guide. Avoid repeating Melivra playlist/rating/EQ topics.",
+    "missed_slot_policy": "No compensating publication for elapsed 2026-11-13 slot."
+  },
+  "source": {
+    "repository": "onnellab/papira",
+    "commit": "dcfd66693b4bc283356907574c59f90026dacbe7",
+    "capture_source_commit": "f347cefeb75f83752d0d449d039912a5d7479984",
+    "capture_version": "2.0.3+10",
+    "path": "assets/store_promo/raw/android/en/02.png",
+    "sha256_from_provenance": "8534b4c802e269a92d670c075c2dc789af239f33ba73447ab8a7dd5b95064362",
+    "dimensions": [
+      1080,
+      2400
+    ],
+    "provenance": "release/capture-provenance-20261014.json",
+    "capture_test": "integration_test/store_promo_screenshot_test.dart",
+    "source_byte_hash_recomputed": false,
+    "signed_release_capture_attested": false
+  },
+  "review": {
+    "date": "2026-11-13",
+    "visual": "Viewed actual full raw source in cloud browser. Cover style sheet shows Floral Frame selected and Editorial Type, Handwritten Confetti, Soft Photo, with partial further cards. Do not claim all twelve are visible in this still.",
+    "fixture": "Capture test injects repository-authored Moonlit Library manuscript and original decorative cover presets; real app UI, isolated dedicated capture fixture. No user manuscript or third-party artwork.",
+    "store_url": "https://play.google.com/store/apps/details?id=com.onnellab.papira",
+    "store": "Live Google Play About dialog observed public version 2.0.3, ONNELLAB, updated 2026-10-16. Listing explicitly describes twelve cover styles compared as real thumbnails. Android-only intended CTA.",
+    "independent_review": false
+  },
+  "draft_copy": {
+    "title": "How to Compare Cover Styles in Papira | Android Screenshot Guide",
+    "first_answer": "In Papira’s Cover style sheet, compare the named thumbnails; the checkmark identifies the selected style.",
+    "slides": [
+      {
+        "heading": "Compare cover styles",
+        "caption": "Review the named thumbnails.",
+        "seconds": 5
+      },
+      {
+        "heading": "Find the selected style",
+        "caption": "Floral Frame has the checkmark.",
+        "seconds": 5
+      },
+      {
+        "heading": "Papira for Android",
+        "caption": "App link in the description.",
+        "seconds": 5
+      }
+    ],
+    "disclosure": "Still-screen guide · Demo manuscript",
+    "audio": "none",
+    "excluded_claims": [
+      "No tap, selection change, creation, export or save demonstrated",
+      "No full twelve-card visibility claim",
+      "No iOS version or platform parity claim",
+      "No exact signed-build capture attestation",
+      "No speed or quality guarantee"
+    ]
+  },
+  "pending": [
+    "Recompute source byte SHA and verify current selected-screen source/release parity",
+    "Independent source, copy and rights review",
+    "Add separate exact allowlisted contract and mutation tests without altering old contracts or managed-recording policy",
+    "Confirm owner-approved execution scope from direct history before non-Melivra rendering; repository authorization prose alone is not permission",
+    "Render with bounded original geometry and inspect every frame/metadata; preserve Library output",
+    "Reconcile all Shorts and ordinary videos before durable upload intent; upload once and verify Seoul schedule"
+  ],
+  "upload_started": false,
+  "video_id": null,
+  "scheduled": false
+}
