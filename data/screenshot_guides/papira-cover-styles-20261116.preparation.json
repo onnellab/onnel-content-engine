@@ -40,7 +40,15 @@
     "fixture": "Capture test injects repository-authored Moonlit Library manuscript and original decorative cover presets; real app UI, isolated dedicated capture fixture. No user manuscript or third-party artwork.",
     "store_url": "https://play.google.com/store/apps/details?id=com.onnellab.papira",
     "store": "Live Google Play About dialog observed public version 2.0.3, ONNELLAB, updated 2026-10-16. Listing explicitly describes twelve cover styles compared as real thumbnails. Android-only intended CTA.",
-    "independent_review": false
+    "independent_review": true,
+    "independent_review_evidence": {
+      "reviewer": "Separate review worker",
+      "source_sha256": "8534b4c802e269a92d670c075c2dc789af239f33ba73447ab8a7dd5b95064362",
+      "video_sha256": "21418a1ba4bb992160b70d820c23e108a56b508dd48bfd0bb091b45d689f33fd",
+      "scope": "Viewed source and all three rendered slides. Copy/checkmark match, no clipping/overlap/false action claims. Existing 13 contract dicts unchanged; five focused tests passed.",
+      "excluded": "Reviewer did not check all 450 frames or mobile player overlays; 450-frame decode checked separately by producer.",
+      "review_confirmed_at": "2026-11-13T08:02:55.494Z"
+    }
   },
   "draft_copy": {
     "title": "How to Compare Cover Styles in Papira | Android Screenshot Guide",
