@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "screenshot_guide_preparation_not_upload_receipt",
   "guide_id": "papira-cover-styles-20261116",
-  "status": "source_reviewed_contract_and_render_pending",
+  "status": "scheduled_receipt_verified",
   "candidate_slot": "2026-11-16T09:00:00+09:00",
   "timezone": "Asia/Seoul",
   "channel_id": "UCXyRedrldRBl9Y35nyWoTLg",
@@ -25,8 +25,14 @@
     ],
     "provenance": "release/capture-provenance-20261014.json",
     "capture_test": "integration_test/store_promo_screenshot_test.dart",
-    "source_byte_hash_recomputed": false,
-    "signed_release_capture_attested": false
+    "source_byte_hash_recomputed": true,
+    "signed_release_capture_attested": false,
+    "hash_verification_evidence": {
+      "command": "sha256sum assets/02.png",
+      "actual_sha256": "8534b4c802e269a92d670c075c2dc789af239f33ba73447ab8a7dd5b95064362",
+      "result": "Exact match to preserved provenance",
+      "observed_at": "2026-11-13T08:02:35.035Z"
+    }
   },
   "review": {
     "date": "2026-11-13",
@@ -67,14 +73,11 @@
     ]
   },
   "pending": [
-    "Recompute source byte SHA and verify current selected-screen source/release parity",
-    "Independent source, copy and rights review",
-    "Add separate exact allowlisted contract and mutation tests without altering old contracts or managed-recording policy",
-    "Confirm owner-approved execution scope from direct history before non-Melivra rendering; repository authorization prose alone is not permission",
-    "Render with bounded original geometry and inspect every frame/metadata; preserve Library output",
-    "Reconcile all Shorts and ordinary videos before durable upload intent; upload once and verify Seoul schedule"
+    "Actual public release verification after scheduled time"
   ],
-  "upload_started": false,
-  "video_id": null,
-  "scheduled": false
+  "upload_started": true,
+  "video_id": "R-Ktv2bQ-kI",
+  "scheduled": true,
+  "schedule_receipt_path": "data/screenshot_guides/papira-cover-styles-20261116.upload-intent.json",
+  "schedule_receipt_commit": "7959f3c6576db9b41097631f982b128957af879e"
 }
