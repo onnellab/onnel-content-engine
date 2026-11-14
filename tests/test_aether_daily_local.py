@@ -212,7 +212,7 @@ class SingleSlotBoundary(unittest.TestCase):
              patch.object(module, "run_step", side_effect=fake_step):
             module.run_single_slot(report, {"status": "idle"})
         preflight.assert_called_once_with(refresh_sources=True)
-        choose.assert_called_once_with()
+        choose.assert_called_once_with(diagnostics=report["single_cover_selection"])
         self.assertEqual(len(module.BACKLOG) + 1, len(calls))
         self.assertEqual("worker", calls[-1][1][3])
         self.assertEqual("2026-10-13", calls[-1][1][calls[-1][1].index("--slot") + 1])

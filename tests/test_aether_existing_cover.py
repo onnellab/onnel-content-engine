@@ -84,6 +84,34 @@ class ExistingCoverTests(unittest.TestCase):
         self.assertEqual(file_hash(self.assets / cover.APPROVAL_FILE), approval_hash)
         self.assertEqual(spec["kind"], "finished_cover")
 
+    def test_advisory_validation_never_installs_base64_transfer(self):
+        self.spec["path"] = "staged/singles/art.png"
+        self.save()
+        staged = self.assets / "staged" / "singles"
+        staged.mkdir(parents=True)
+        encoded = staged / "art.png.b64"
+        encoded.write_bytes(base64.b64encode(self.source.read_bytes()))
+        approval_before = (self.assets / cover.APPROVAL_FILE).read_bytes()
+        encoded_before = encoded.read_bytes()
+        with patch.object(cover, "_install_hash_bound_staged_cover", side_effect=AssertionError("no installation")):
+            with self.assertRaisesRegex(Exception, "asset_missing_or_invalid"):
+                cover.approved_cover(self.title, self.assets, materialize_staged=False)
+        self.assertFalse((staged / "art.png").exists())
+        self.assertEqual(encoded_before, encoded.read_bytes())
+        self.assertEqual(approval_before, (self.assets / cover.APPROVAL_FILE).read_bytes())
+
+    def test_advisory_validation_keeps_rights_and_hash_checks(self):
+        with patch.object(cover, "_install_hash_bound_staged_cover", side_effect=AssertionError("no installation")):
+            source, _, _ = cover.approved_cover(self.title, self.assets, materialize_staged=False)
+            self.assertEqual(self.source, source)
+            self.source.write_bytes(b"changed")
+            with self.assertRaisesRegex(Exception, "hash_mismatch"):
+                cover.approved_cover(self.title, self.assets, materialize_staged=False)
+            self.spec["commercial_use_confirmed"] = False
+            self.save()
+            with self.assertRaisesRegex(Exception, "rights_unconfirmed"):
+                cover.approved_cover(self.title, self.assets, materialize_staged=False)
+
     def test_base64_transfer_hash_mismatch_fails_before_install(self):
         self.spec["path"] = "staged/singles/art.png"
         self.save()

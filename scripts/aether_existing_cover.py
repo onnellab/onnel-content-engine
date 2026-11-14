@@ -168,7 +168,9 @@ def _install_hash_bound_staged_cover(root: Path, spec: dict) -> None:
             partial.unlink(missing_ok=True)
 
 
-def approved_cover(title: str, assets_root: Path) -> tuple[Path, dict, str]:
+def approved_cover(title: str, assets_root: Path, *,
+                   materialize_staged: bool = True) -> tuple[Path, dict, str]:
+    """Validate the existing approval; advisory checks must not install assets."""
     root = Path(assets_root)
     if any(part.is_symlink() for part in (root, *root.parents)):
         raise VideoError("aether_symlink_asset_root_rejected")
@@ -190,7 +192,8 @@ def approved_cover(title: str, assets_root: Path) -> tuple[Path, dict, str]:
     if spec.get("kind") not in {"finished_cover", "unbranded_background"}:
         raise VideoError("aether_single_cover_kind_invalid")
     provenance = delegated_quality_provenance(root, spec)
-    _install_hash_bound_staged_cover(root, spec)
+    if materialize_staged:
+        _install_hash_bound_staged_cover(root, spec)
     source = checked_asset(root, spec, {".png", ".jpg", ".jpeg"})
     if source.stat().st_size > MAX_COVER_BYTES:
         raise VideoError("aether_single_cover_too_large")

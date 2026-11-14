@@ -682,21 +682,38 @@ def sync_playlists_after_upload(report: dict) -> None:
     if code != 0 or payload.get("state") != "synced":
         report["blockers"].append(payload.get("error") or "aether_playlist_sync_after_upload_failed")
 
-def choose_approved_new_single() -> dict | None:
-    """Plan a no-duplicate Lyria concept only when its *own* cover is ready.
+def choose_approved_new_single(*, diagnostics: dict | None = None,
+                               materialize_staged: bool = True,
+                               scan_all: bool = False) -> dict | None:
+    """Select only an unused title with its own validated cover.
 
-    The launchd-owned caller may spend up to $0.08 for a single audio candidate;
-    it must not spend merely to discover a missing owner-approved cover.
+    Diagnostics retain each rejection instead of hiding integrity/approval
+    failures behind an empty selection. They never authorize or create a job.
+    Advisory callers disable asset installation and scan the complete inventory.
     """
+    import re
     from aether_single import FINAL, SingleQueue, enforce_lane_rotation
     from aether_existing_cover import ASSETS_ROOT, approved_cover
     from aether_cover import lane_direction
     from aether_planner import inspect_candidate, read_catalog
     from short_video_pipeline import VideoError
 
+    details = diagnostics if diagnostics is not None else {}
+    details.pop("error", None)
+    details.update({
+        "status": "checking", "scope": "materialized_cover_readiness_only",
+        "checked_at": iso_now(), "candidates": [], "lane_blockers": [],
+        "ready_count": 0, "scan_complete": False, "selected": None,
+        "next_cover_request": None, "created_new_job": False,
+        "generation_attempted": False, "upload_attempted": False,
+    })
+    def safe_reason(error):
+        reason = str(error)
+        return reason if re.fullmatch(r"aether_[a-z_0-9]{1,100}", reason) else "aether_cover_validation_failed"
+
     registry = json.loads((REPO / "data/aether_single_lanes.json").read_text(encoding="utf-8"))
     lanes = registry.get("lanes", [])
-    # Prefer traversal/high-motion concepts when compatible with canonical rotation.
+    # Preserve canonical traversal/high-motion preference and rotation gates.
     ordered = sorted(lanes, key=lambda row: (
         row.get("energy") != "high_motion",
         not bool(row.get("traversal")),
@@ -704,29 +721,93 @@ def choose_approved_new_single() -> dict | None:
     ))
     catalog = read_catalog()
     queue = SingleQueue()
+    selected = None
     with queue.lock():
         state = queue._read()
         if any(j.get("upload") and j.get("status") not in FINAL for j in state["jobs"].values()):
             raise VideoError("aether_single_existing_job_unsettled")
-        used_titles = {str(j.get("title") or "") for j in state["jobs"].values()}
+        # Rejected/expired jobs still reserve their titles. Never revive them.
+        used_titles = {str(j.get("title") or "").strip().casefold() for j in state["jobs"].values()}
         for row in ordered:
             lane = str(row.get("id", ""))
             if lane not in TITLE_BANK:
                 continue
             try:
                 enforce_lane_rotation(state, lane)
-            except VideoError:
+            except VideoError as error:
+                details["lane_blockers"].append({"lane": lane, "error": safe_reason(error)})
                 continue
             style = lane_direction(lane) + COMMON_STYLE
             for title in TITLE_BANK[lane]:
-                if title in used_titles or inspect_candidate(title, style, catalog)["metadata_gate"] == "rejected":
+                candidate = {"title": title, "lane": lane}
+                details["candidates"].append(candidate)
+                if title.strip().casefold() in used_titles:
+                    candidate.update(status="reserved", error="aether_single_title_already_reserved")
+                    continue
+                if inspect_candidate(title, style, catalog)["metadata_gate"] == "rejected":
+                    candidate.update(status="metadata_rejected", error="aether_single_metadata_rejected")
                     continue
                 try:
-                    approved_cover(title, ASSETS_ROOT)
-                except VideoError:
+                    approved_cover(title, ASSETS_ROOT, materialize_staged=materialize_staged)
+                except VideoError as error:
+                    reason = safe_reason(error)
+                    candidate.update(status="cover_blocked", error=reason)
+                    if details["next_cover_request"] is None:
+                        details["next_cover_request"] = {
+                            "title": title, "lane": lane, "style": style,
+                            "error": reason, "state": "preparation_required",
+                            "approval_granted": False,
+                        }
                     continue
-                return {"title": title, "style": style, "lane": lane}
-    return None
+                candidate["status"] = "ready"
+                details["ready_count"] += 1
+                if selected is None:
+                    selected = {"title": title, "style": style, "lane": lane}
+                    details["selected"] = dict(selected)
+                if not scan_all:
+                    details["status"] = "ready"
+                    return selected
+    details["scan_complete"] = True
+    details["status"] = "ready" if selected else "blocked"
+    if selected is None:
+        details["error"] = "aether_lyria_approved_cover_unavailable"
+    return selected
+
+
+def record_single_cover_readiness(report: dict) -> None:
+    """Check next-slot cover supply every day, without producing or approving.
+
+    The daily executor already owns the orchestration lock. SingleQueue's lock
+    protects the snapshot; no job/approval is written and no staged image is
+    installed. This advisory is not readiness for paid generation/publication.
+    """
+    from datetime import timedelta
+    from short_video_pipeline import VideoError
+    import re
+
+    now = now_kst()
+    next_slot = now.replace(hour=9, minute=0, second=0, microsecond=0) + timedelta(days=1)
+    while next_slot.weekday() not in {1, 5}:
+        next_slot += timedelta(days=1)
+    details = {
+        "next_publish_at": next_slot.isoformat(),
+        "prepare_before": next_slot.replace(hour=6, minute=20).isoformat(),
+    }
+    report["single_cover_readiness"] = details
+    try:
+        choose_approved_new_single(diagnostics=details, materialize_staged=False, scan_all=True)
+    except Exception as error:
+        reason = str(error)
+        if not isinstance(error, VideoError) or not re.fullmatch(r"aether_[a-z_0-9]{1,100}", reason):
+            reason = "aether_cover_readiness_check_failed"
+        # Partial observations cannot certify that a full inventory scan passed.
+        details.update(status="unavailable", error=reason, scan_complete=False,
+                       selected=None, ready_count=None, next_cover_request=None)
+    if details.get("status") != "ready":
+        warning = "aether_upcoming_single_cover_not_ready"
+        warnings = report.setdefault("warnings", [])
+        if warning not in warnings:
+            warnings.append(warning)
 
 
 def check_new_single_inputs(*, refresh_sources: bool = False) -> dict:
@@ -866,17 +947,26 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
                                  "upload_attempted": False}
         report["blockers"].append(reason)
         return
+    selection = {}
+    report["single_cover_selection"] = selection
     try:
-        concept = choose_approved_new_single()
+        concept = choose_approved_new_single(diagnostics=selection)
     except Exception as error:
         reason = str(error) if str(error) == "aether_single_existing_job_unsettled" else "aether_lyria_concept_preflight_failed"
+        selection.update(status="unavailable", error=reason, scan_complete=False,
+                         selected=None, ready_count=None)
         report["single_slot"] = {"status": "blocked", "error": reason}
         report["blockers"].append(reason)
         return
     if not concept:
         error = "aether_lyria_approved_cover_unavailable"
-        report["single_slot"] = {"status": "blocked", "error": error,
-                                 "source_kind": "new_lyria", "spent_usd": 0.0}
+        report["single_slot"] = {
+            "status": "blocked", "error": error, "stage": "cover_selection",
+            "source_kind": "new_lyria", "spent_usd": 0.0,
+            "created_new_job": False, "generation_attempted": False,
+            "upload_attempted": False,
+            "next_cover_request": selection.get("next_cover_request"),
+        }
         report["blockers"].append(error)
         return
     # All actual execution still belongs to the existing durable single worker.
@@ -1515,6 +1605,9 @@ def main() -> int:
         run_single_slot(report, single_reconcile)
         run_sleep_slot(report, now_kst(), single_reconcile)
         run_compilation_slot(report, now_kst())
+        # Surface depleted cover supply on non-publication days too. This
+        # advisory never replaces the due slot or creates a production retry.
+        record_single_cover_readiness(report)
         save(report)
         # Capture reports AFTER music so the later snapshot/deploy reflects the
         # outcome of this pass, not only the inventory from before production.

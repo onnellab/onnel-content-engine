@@ -61,3 +61,35 @@ Historical generated-cover approval hashes stay unchanged. Uploaded jobs keep
 their exact video IDs and hash-bound rendered assets; missing original music or
 cover files do not trigger regeneration. Corrupt/missing final video or thumbnail
 assets remain blocked/retry-required under existing integrity gates.
+
+## Daily cover-supply diagnostics (2026-11-14)
+
+The canonical daily LaunchAgent now records `single_cover_selection` for a due
+Lyria slot and `single_cover_readiness` after the day's music stages, including
+non-publication days. The latter targets the next Tuesday/Saturday at 09:00 KST
+(strictly after the current date) and records a preparation deadline of 06:20 KST.
+It is an advisory for future supply, not a retry or replacement for today's slot.
+
+Each eligible title retains its specific failure code: already-reserved title,
+metadata rejection, lane-rotation constraint, missing approval, invalid rights or
+quality evidence, missing source, or hash/integrity failure. Previously reserved
+(including rejected/expired) titles remain reserved. `next_cover_request` identifies
+an unapproved preparation need; it is not a selected/approved production job.
+Unexpected exception payloads are never copied into the report.
+
+The advisory uses `approved_cover(..., materialize_staged=False)` and scans all
+candidates without importing or generating images, spending money, creating jobs,
+changing approvals, or uploading. Its scope is **materialized cover readiness**:
+a transfer that exists only as Base64 still needs canonical materialization, and
+runtime geometry/full-bleed checks remain mandatory. `ready` is not certification
+of audio, provider terms, pricing, final image geometry, or publication readiness.
+Unreadable/failed scans use `unavailable` and an unknown (`null`) ready count, not
+zero. A depleted/unavailable supply adds `aether_upcoming_single_cover_not_ready`
+to warnings; current due-slot blockers and durable job/video IDs stay intact.
+
+This repair improves diagnosis and advance warning; it does not replenish art.
+Production remains blocked until a real unused per-title cover and genuine
+rights/quality evidence are supplied through the existing approval path. The
+09:00 boundary, 08:00 generation cutoff, backlog priority, no-paid-image fallback,
+launchd-only execution, and read-only scheduled ChatGPT reporting are unchanged.
+Do not rerun a failed daily pass or rewrite its historical result after this patch.

@@ -25,6 +25,9 @@ class DailyResultTests(unittest.TestCase):
         self.run = self.stack.enter_context(patch.object(
             worker.subprocess, "run", side_effect=AssertionError("external execution forbidden")))
         self.stack.enter_context(patch.object(sys, "argv", ["aether_daily_local.py"]))
+        # Cover readiness has its own fixture suite. Durable-result tests must
+        # not inspect the user's actual queue or asset inventory.
+        self.stack.enter_context(patch.object(worker, "record_single_cover_readiness"))
 
     def report(self, mode="daily"):
         return {"schema_version": 1, "kind": "onnellab_aether_local_daily_result",
