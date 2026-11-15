@@ -2,9 +2,9 @@ name: Isolated short-video checks
 on:
   push:
     branches: [main]
-    paths: ['video/**', 'requirements-test.txt', 'requirements-short-video.txt', 'scripts/short_video*.py', 'scripts/video_product_eligibility.py', 'tests/test_short_video*.py', 'tests/test_video_product_eligibility.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', 'data/video_recording_backlog.json', 'data/video_rotation.json', 'data/video_script_templates.json', '.github/workflows/short-video.yml']
+    paths: ['video/**', 'requirements-test.txt', 'requirements-short-video.txt', 'scripts/short_video*.py', 'scripts/video_product_eligibility.py', 'tests/test_short_video*.py', 'tests/test_video_product_eligibility.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', 'data/video_recording_backlog.json', 'data/video_rotation.json', 'data/video_script_templates.json', 'tool/run_video_tests.sh', '.github/workflows/short-video.yml']
   pull_request:
-    paths: ['video/**', 'requirements-test.txt', 'requirements-short-video.txt', 'scripts/short_video*.py', 'scripts/video_product_eligibility.py', 'tests/test_short_video*.py', 'tests/test_video_product_eligibility.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', 'data/video_recording_backlog.json', 'data/video_rotation.json', 'data/video_script_templates.json', '.github/workflows/short-video.yml']
+    paths: ['video/**', 'requirements-test.txt', 'requirements-short-video.txt', 'scripts/short_video*.py', 'scripts/video_product_eligibility.py', 'tests/test_short_video*.py', 'tests/test_video_product_eligibility.py', 'data/video_briefs/**', 'data/video_publish_policy.json', 'data/video_recording_scenarios.json', 'data/video_recording_backlog.json', 'data/video_rotation.json', 'data/video_script_templates.json', 'tool/run_video_tests.sh', '.github/workflows/short-video.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,7 +25,9 @@ jobs:
           cache: npm
           cache-dependency-path: video/package-lock.json
       - run: python -m pip install -r requirements-test.txt
+      - run: sh -n tool/run_video_tests.sh
       - run: npm --prefix video ci
+      - run: npm --prefix video run verify:install
       - run: npm --prefix video run typecheck
       - run: npm --prefix video test
       - run: python -B scripts/run_unit_tests.py --pattern 'test_short_video*.py'

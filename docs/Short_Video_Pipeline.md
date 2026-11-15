@@ -23,14 +23,29 @@ No font or browser is downloaded by the worker. Prepare dependencies once:
 
 ```sh
 npm --prefix video ci
+npm --prefix video run verify:install
 npm --prefix video run typecheck
 npm --prefix video test
-python3 -B scripts/run_unit_tests.py --pattern 'test_short_video*.py'
+tool/run_video_tests.sh 'test_short_video*.py'
 ```
 
-The Python runner uses the repository's `requirements-test.txt`. If the default
-npm cache is not writable, use `npm --cache /private/tmp/onnel-video-npm-cache
---prefix video ci` (on Linux, use a writable directory under `/tmp`).
+The portable local test wrapper creates/reuses an isolated Python virtualenv in
+`.runtime/video-test-venv`, installs the repository's pinned `requirements-test.txt`
+and invokes the offline test runner. Prefer Python 3.13 on macOS when available;
+no system Python installation is modified. This bootstrap may download pinned
+wheels once, but the tests themselves reject unmocked network access. CI keeps
+using its own declared Python environment. On macOS, the full screenshot suite
+also needs the approved DejaVu faces (`brew install --cask font-dejavu`), matching
+the existing macOS CI dependency. Never substitute different fonts silently.
+
+The Node install-integrity gate compares the actual installed packages with all
+required entries in `video/package-lock.json` before typecheck, unit tests, and
+both renderers. Missing platform-specific optional packages are allowed. A
+mismatch (including `fast-uri` or `zod`) is a hard failure requiring `npm
+--prefix video ci`; do not bypass the gate or loosen the security regressions.
+If the default npm cache is not writable, use `npm --cache
+/private/tmp/onnel-video-npm-cache --prefix video ci` (on Linux, use a writable
+cache directory under `/tmp`).
 All direct and transitive `@remotion/*` packages and `remotion` are locked to
 4.0.526. `npm view` confirmed React/React DOM peers `>=16.8.0`; installed React
 and React DOM are both 19.2.0. `npm ls` and a lockfile test check the resolved
@@ -504,8 +519,10 @@ Tasks/app actions may require approval; Remote Desktop availability is not assum
 
 ### Phase-2 verification boundary
 
-Run `python3 -B scripts/run_unit_tests.py --pattern 'test_short_video*.py'`,
+Run `tool/run_video_tests.sh 'test_short_video*.py'`,
 `npm --prefix video run typecheck`, and `npm --prefix video test`.
+These commands fail closed if declared Python test packages or locked Node
+packages are missing/mismatched; a passing lockfile alone is not sufficient.
 The isolated `short-video.yml` workflow performs these checks on changed video
 paths or manual dispatch, using repository action-version conventions and no
 secrets, dispatch shell input, real uploads or service activation. Fake-transport

@@ -104,16 +104,25 @@ into the existing Shorts upload queue or treat a successful render as approval.
 ## Verification
 
 ```sh
+npm --prefix video run verify:install
 npm --prefix video run typecheck
-node --test video/test/motion.test.mjs video/test/longform.test.mjs video/test/render.test.mjs
+npm --prefix video test
+tool/run_video_tests.sh 'test_short_video*.py'
 ```
 
-If the full `npm --prefix video test` fails in
-`video/test/dependency-security.test.mjs`, investigate the separately
-tracked upstream dependency-security regression rather than concealing it
-behind the new renderer's isolated test success. All new unit tests should
-be green before a commit. A real bounded TEST ONLY render must be ffprobed
-at least once on the intended macOS host before enabling production use.
+The full Node suite includes the `fast-uri` and Zod security regression cases.
+The committed lockfile already pins their patched versions, but a machine may
+have stale `node_modules`; `npm --prefix video ci` repairs that drift. A new
+install-integrity gate checks all locked nonoptional packages before rendering,
+typechecking or testing, including nested transitive dependencies. Do not edit
+the tests to accept vulnerable behavior or use a stale local install as proof.
+Use `tool/run_video_tests.sh 'test_*.py'` for the full Python suite. For local
+screenshot-guide verification on macOS, install the same DejaVu font cask as CI.
+The public content repository does not contain Papira's private raw screenshot;
+positive Papira source-hash verification can use an explicitly selected local
+asset directory via `ONNELLAB_PAPIRA_COVER_ASSET_ROOT`, while the no-asset test
+must assert strict denial. Never create fake replacement footage. A real bounded
+TEST ONLY render must be ffprobed on the intended macOS host.
 
 ## Resource ownership
 

@@ -66,7 +66,10 @@ class PaidApiPolicyTests(unittest.TestCase):
              patch.object(aether_daily_local, "check_new_single_inputs"), \
              patch.object(aether_daily_local, "choose_approved_new_single", return_value=None) as choose:
             aether_daily_local.run_single_slot(report, {"status": "idle"})
-        choose.assert_called_once_with()
+        # The chooser now receives a writable, report-owned diagnostics dict;
+        # the paid API gate must still block spending before generation.
+        choose.assert_called_once_with(diagnostics=report["single_cover_selection"])
+        self.assertEqual({}, report["single_cover_selection"])
         self.assertEqual(len(aether_daily_local.BACKLOG), run.call_count)
         self.assertTrue(all("backlog-worker" in call.args[2] for call in run.call_args_list))
         self.assertEqual("aether_lyria_approved_cover_unavailable", report["single_slot"]["error"])

@@ -1,11 +1,23 @@
-import unittest,copy,json,importlib.util,tempfile
+import unittest,copy,json,importlib.util,tempfile,os
 from pathlib import Path
 from unittest.mock import patch
 spec=importlib.util.spec_from_file_location('guide',Path(__file__).parents[1]/'scripts/screenshot_guide.py');g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
 ROOT=Path(__file__).parents[1]
 class CoverTest(unittest.TestCase):
  def test_exact(self):
-  j=json.loads((ROOT/'data/screenshot_guides/papira-cover-styles-20261116.json').read_text());self.assertEqual(j,g.PAPIRA_COVER_CONTRACT);self.assertFalse(g.validate(j,ROOT/'assets')['upload_authorized_by_cli']);g.audit_copy_timing(j)
+  j=json.loads((ROOT/'data/screenshot_guides/papira-cover-styles-20261116.json').read_text())
+  self.assertEqual(j,g.PAPIRA_COVER_CONTRACT)
+  g.audit_copy_timing(j)
+  # This public repo intentionally does not distribute the private raw screenshot.
+  # Without the exact bytes we MUST verify denial, never synthesize/approve media.
+  source=os.environ.get('ONNELLAB_PAPIRA_COVER_ASSET_ROOT')
+  root=Path(source) if source else ROOT/'assets'
+  local=root/j['assets'][0]['local_name']
+  if not local.is_file():
+   if source:self.fail('Explicit Papira capture directory has no verified source file')
+   with self.assertRaisesRegex(g.GuideError,'unsafe_asset_path'):g.validate(j,root)
+   return
+  self.assertFalse(g.validate(j,root)['upload_authorized_by_cli'])
  def test_all_leaves_fail_closed(self):
   def leaves(x,p=()):
    if isinstance(x,dict):
