@@ -7,6 +7,7 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {basename, dirname, extname, isAbsolute, join, relative, sep} from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+import {assertInstalledLock} from './verify-install.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const exec = promisify(execFile);
@@ -100,6 +101,7 @@ async function ffmpegFinish(input, output) {
  * @param {{probe: typeof ffprobe, finish: typeof ffmpegFinish}} system
  */
 export async function renderLongform(request, api = runtime, system = {probe: ffprobe, finish: ffmpegFinish}) {
+  assertInstalledLock();
   const brief = /** @type {import('./longform/Longform.js').LongformProps & {schema_version: number}} */ (request.brief);
   const total = validateBrief(brief);
   if (!isAbsolute(request.asset_root) || !isAbsolute(request.browser) || !isAbsolute(request.output)

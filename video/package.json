@@ -7,6 +7,9 @@
     "node": ">=22"
   },
   "scripts": {
+    "verify:install": "node verify-install.mjs",
+    "pretest": "node verify-install.mjs",
+    "pretypecheck": "node verify-install.mjs",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.longform.json",
     "test": "node --test test/*.test.mjs",
     "render": "node render.mjs",

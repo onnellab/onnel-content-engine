@@ -3,6 +3,7 @@ import {openBrowser, selectComposition, renderMedia, renderStill, makeCancelSign
 import {copyFile, mkdir, mkdtemp, readFile, realpath, rm, stat} from 'node:fs/promises';
 import {dirname, extname, isAbsolute, join} from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+import {assertInstalledLock} from './verify-install.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const CACHE_BYTES = 64 * 1024 * 1024;
@@ -40,6 +41,7 @@ export function validateProps(value) {
  * @param {typeof runtime} api
  */
 export async function renderRequest(request, api = runtime) {
+  assertInstalledLock();
   if (!isAbsolute(request.output) || !isAbsolute(request.browser) || !(await stat(request.browser)).isFile()) throw new Error('Local output and installed browser required');
   const output = await realpath(request.output);
   const temp = await mkdtemp(join(output, '.remotion-'));

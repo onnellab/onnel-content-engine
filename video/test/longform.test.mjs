@@ -67,7 +67,11 @@ for (const fail of [false, true]) {
           assert.equal(inputProps.scenes[1].recording, 'recording-1.mp4');
           return {width: 1920, height: 1080, fps: 30, durationInFrames: 210};
         },
-        renderMedia: async ({outputLocation, disallowParallelEncoding, concurrency, envVariables}) => {
+        renderMedia: async ({outputLocation, disallowParallelEncoding, concurrency, envVariables, colorSpace, imageFormat, pixelFormat}) => {
+          // Stable BT.709 PNG input avoids the previous yuvj420p ffprobe failure.
+          assert.equal(colorSpace, 'bt709');
+          assert.equal(imageFormat, 'png');
+          assert.equal(pixelFormat, 'yuv420p');
           assert.equal(disallowParallelEncoding, true);
           assert.equal(concurrency, 1);
           assert.deepEqual(envVariables, {});
