@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "longform/**/*",
+    "render-longform.mjs",
+    "src/CaptionText.tsx",
+    "src/text-layout.mjs",
+    "src/motion.mjs"
+  ]
+}

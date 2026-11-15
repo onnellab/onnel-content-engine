@@ -7,9 +7,10 @@
     "node": ">=22"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.longform.json",
     "test": "node --test test/*.test.mjs",
-    "render": "node render.mjs"
+    "render": "node render.mjs",
+    "render:longform": "node render-longform.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.526",

@@ -209,9 +209,14 @@ the reference loses.
 ## Relationship to the current Shorts runtime
 
 The current Shorts renderer remains governed by `Short_Video_Pipeline.md`.
-This guide is a design-direction contract and does not imply that every motion
-pattern above is already implemented.
+Caption, hook and closing entrances use frame-driven motion in `video/src/motion.mjs`;
+the actual app recording stays stationary and uncropped.
 
-When the renderer is extended, prefer reusable continuity primitives over
+The educational long-form Remotion/FFmpeg draft renderer is separately documented
+in `YouTube_Motion_Integration.md`. It is not part of the scheduled Shorts upload
+queue and does not automatically publish. Build each demonstration from a real,
+verified recording and preserve the clip without cropping.
+
+When extending either renderer, prefer reusable continuity primitives over
 one-off per-app effects, and keep deterministic video flows tied to real product
 recordings.
