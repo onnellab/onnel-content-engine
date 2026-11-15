@@ -11,6 +11,7 @@ import {
 } from 'remotion';
 import type {VideoProps} from './model.js';
 import {CaptionText, fontFamily} from './CaptionText.js';
+import {reveal} from './motion.mjs';
 
 const ink = '#242335';
 const label = {fontSize: 27, letterSpacing: 1.8, fontWeight: 650} as const;
@@ -48,16 +49,9 @@ export const Short: React.FC<VideoProps> = (props) => {
     [0, 1, 1, 0],
     {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
   );
-  const captionFade = caption
-    ? interpolate(frame - caption.start * fps, [0, 7], [0, 1], {
-        extrapolateLeft: 'clamp',
-        extrapolateRight: 'clamp',
-      })
-    : 0;
-  const closingFade = interpolate(frame, [closingStart, closingStart + 8], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  // Only the instructional copy moves; the real product recording never shifts.
+  const captionEntrance = caption ? reveal(frame, Math.round(caption.start * fps), 10, 16) : {opacity: 0};
+  const closingEntrance = reveal(frame, closingStart, 12, 18);
 
   return (
     <AbsoluteFill
@@ -110,7 +104,9 @@ export const Short: React.FC<VideoProps> = (props) => {
             alignItems: 'center',
           }}
         >
-          <CaptionText text={props.hook} width={924} size={58} weight={760} />
+          <div style={reveal(frame, 3, 14, 16)}>
+            <CaptionText text={props.hook} width={924} size={58} weight={760} />
+          </div>
         </div>
 
         <div
@@ -157,7 +153,7 @@ export const Short: React.FC<VideoProps> = (props) => {
               fontWeight: 700,
               textAlign: 'center',
               whiteSpace: 'pre',
-              opacity: captionFade,
+              ...captionEntrance,
             }}
           >
             {caption && <CaptionText text={caption.text} width={880} size={46} weight={700} />}
@@ -176,7 +172,7 @@ export const Short: React.FC<VideoProps> = (props) => {
           }}
         >
           {closing ? (
-            <div style={{opacity: closingFade, width: '100%'}}>
+            <div style={{...closingEntrance, width: '100%'}}>
               <div style={{fontSize: 23, letterSpacing: 2.4, fontWeight: 650, color: '#77718A'}}>
                 ONNELLAB
               </div>
