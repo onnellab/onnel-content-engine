@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-14T06:56:32+00:00",
+  "checked_at": "2026-11-15T07:03:55+00:00",
   "windows": [
     7,
     30,
@@ -233,17 +233,17 @@
       "app_name": "Quivra",
       "platforms": {
         "ios": {
-          "latest_date": "2026-11-12",
+          "latest_date": "2026-11-13",
           "windows": {
             "7": {
-              "impressions": 46,
-              "store_visitors": 14,
+              "impressions": 41,
+              "store_visitors": 12,
               "installs": null,
               "purchases": null,
               "days_with_data": 5
             },
             "30": {
-              "impressions": 441,
+              "impressions": 426,
               "store_visitors": 22,
               "installs": null,
               "purchases": null,
@@ -251,7 +251,7 @@
             },
             "90": {
               "impressions": 1212,
-              "store_visitors": 44,
+              "store_visitors": 43,
               "installs": null,
               "purchases": null,
               "days_with_data": 87
@@ -277,10 +277,10 @@
             },
             "90": {
               "impressions": null,
-              "store_visitors": 146,
+              "store_visitors": 143,
               "installs": 2,
               "purchases": 3,
-              "days_with_data": 53
+              "days_with_data": 52
             }
           }
         }
@@ -311,25 +311,25 @@
       "app_name": "TagWeaver",
       "platforms": {
         "ios": {
-          "latest_date": "2026-11-12",
+          "latest_date": "2026-11-13",
           "windows": {
             "7": {
-              "impressions": 660,
-              "store_visitors": 79,
+              "impressions": 589,
+              "store_visitors": 83,
               "installs": null,
               "purchases": null,
               "days_with_data": 5
             },
             "30": {
-              "impressions": 3810,
-              "store_visitors": 475,
+              "impressions": 3828,
+              "store_visitors": 472,
               "installs": null,
               "purchases": 8,
               "days_with_data": 28
             },
             "90": {
-              "impressions": 10820,
-              "store_visitors": 1215,
+              "impressions": 10856,
+              "store_visitors": 1222,
               "installs": null,
               "purchases": 19,
               "days_with_data": 88
@@ -343,22 +343,22 @@
               "impressions": null,
               "store_visitors": null,
               "installs": null,
-              "purchases": 2,
-              "days_with_data": 2
+              "purchases": 1,
+              "days_with_data": 1
             },
             "30": {
               "impressions": null,
-              "store_visitors": 1039,
-              "installs": 343,
-              "purchases": 12,
-              "days_with_data": 25
+              "store_visitors": 1003,
+              "installs": 328,
+              "purchases": 11,
+              "days_with_data": 24
             },
             "90": {
               "impressions": null,
-              "store_visitors": 3286,
-              "installs": 1055,
+              "store_visitors": 3281,
+              "installs": 1054,
               "purchases": 37,
-              "days_with_data": 85
+              "days_with_data": 84
             }
           }
         }
@@ -368,18 +368,18 @@
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 2
+          "purchases": 1
         },
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 343,
-          "purchases": 20
+          "installs": 328,
+          "purchases": 19
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 1055,
+          "installs": 1054,
           "purchases": 56
         }
       }
@@ -389,25 +389,25 @@
       "app_name": "VaultXT",
       "platforms": {
         "ios": {
-          "latest_date": "2026-11-12",
+          "latest_date": "2026-11-13",
           "windows": {
             "7": {
-              "impressions": 400,
-              "store_visitors": 31,
+              "impressions": 377,
+              "store_visitors": 18,
               "installs": null,
               "purchases": null,
               "days_with_data": 5
             },
             "30": {
-              "impressions": 2352,
-              "store_visitors": 259,
+              "impressions": 2340,
+              "store_visitors": 248,
               "installs": null,
               "purchases": null,
               "days_with_data": 28
             },
             "90": {
-              "impressions": 5986,
-              "store_visitors": 553,
+              "impressions": 6041,
+              "store_visitors": 558,
               "installs": null,
               "purchases": 1,
               "days_with_data": 88
@@ -426,17 +426,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 160,
-              "installs": 44,
+              "store_visitors": 155,
+              "installs": 43,
               "purchases": null,
-              "days_with_data": 23
+              "days_with_data": 22
             },
             "90": {
               "impressions": null,
-              "store_visitors": 431,
-              "installs": 135,
+              "store_visitors": 427,
+              "installs": 134,
               "purchases": 1,
-              "days_with_data": 81
+              "days_with_data": 80
             }
           }
         }
@@ -451,13 +451,13 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 44,
+          "installs": 43,
           "purchases": 0
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 135,
+          "installs": 134,
           "purchases": 2
         }
       }
@@ -467,25 +467,25 @@
       "app_name": "Segra",
       "platforms": {
         "ios": {
-          "latest_date": "2026-11-12",
+          "latest_date": "2026-11-13",
           "windows": {
             "7": {
-              "impressions": 381,
-              "store_visitors": 44,
+              "impressions": 413,
+              "store_visitors": 40,
               "installs": null,
               "purchases": null,
               "days_with_data": 5
             },
             "30": {
-              "impressions": 1982,
-              "store_visitors": 166,
+              "impressions": 2018,
+              "store_visitors": 168,
               "installs": null,
               "purchases": null,
               "days_with_data": 28
             },
             "90": {
-              "impressions": 8009,
-              "store_visitors": 384,
+              "impressions": 8028,
+              "store_visitors": 391,
               "installs": null,
               "purchases": 1,
               "days_with_data": 88
@@ -504,10 +504,10 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 156,
+              "store_visitors": 155,
               "installs": 31,
               "purchases": null,
-              "days_with_data": 19
+              "days_with_data": 18
             },
             "90": {
               "impressions": null,
@@ -545,25 +545,25 @@
       "app_name": "ClipNest",
       "platforms": {
         "ios": {
-          "latest_date": "2026-11-12",
+          "latest_date": "2026-11-13",
           "windows": {
             "7": {
-              "impressions": 344,
-              "store_visitors": 20,
+              "impressions": 335,
+              "store_visitors": 19,
               "installs": null,
               "purchases": null,
               "days_with_data": 5
             },
             "30": {
-              "impressions": 2614,
-              "store_visitors": 154,
+              "impressions": 2604,
+              "store_visitors": 149,
               "installs": null,
               "purchases": null,
               "days_with_data": 28
             },
             "90": {
-              "impressions": 5272,
-              "store_visitors": 254,
+              "impressions": 5290,
+              "store_visitors": 255,
               "installs": null,
               "purchases": null,
               "days_with_data": 88
@@ -601,25 +601,25 @@
       "app_name": "Aligna",
       "platforms": {
         "ios": {
-          "latest_date": "2026-11-12",
+          "latest_date": "2026-11-13",
           "windows": {
             "7": {
-              "impressions": 239,
-              "store_visitors": 28,
+              "impressions": 254,
+              "store_visitors": 36,
               "installs": null,
               "purchases": null,
               "days_with_data": 5
             },
             "30": {
-              "impressions": 1550,
-              "store_visitors": 148,
+              "impressions": 1549,
+              "store_visitors": 159,
               "installs": null,
               "purchases": 1,
               "days_with_data": 28
             },
             "90": {
-              "impressions": 3509,
-              "store_visitors": 371,
+              "impressions": 3541,
+              "store_visitors": 380,
               "installs": null,
               "purchases": 2,
               "days_with_data": 88
@@ -638,17 +638,17 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 154,
-              "installs": 63,
+              "store_visitors": 146,
+              "installs": 62,
               "purchases": 3,
-              "days_with_data": 23
+              "days_with_data": 22
             },
             "90": {
               "impressions": null,
-              "store_visitors": 331,
-              "installs": 140,
+              "store_visitors": 325,
+              "installs": 138,
               "purchases": 4,
-              "days_with_data": 78
+              "days_with_data": 77
             }
           }
         }
@@ -663,13 +663,13 @@
         "30": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 63,
+          "installs": 62,
           "purchases": 4
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
-          "installs": 140,
+          "installs": 138,
           "purchases": 6
         }
       }
@@ -694,10 +694,10 @@
             },
             "30": {
               "impressions": null,
-              "store_visitors": 253,
+              "store_visitors": 236,
               "installs": 28,
               "purchases": null,
-              "days_with_data": 23
+              "days_with_data": 22
             },
             "90": {
               "impressions": null,
@@ -735,54 +735,54 @@
       "app_name": "Papira",
       "platforms": {
         "ios": {
-          "latest_date": "2026-11-12",
+          "latest_date": "2026-11-13",
           "windows": {
             "7": {
-              "impressions": 269,
-              "store_visitors": 19,
+              "impressions": 230,
+              "store_visitors": 20,
               "installs": null,
               "purchases": null,
               "days_with_data": 5
             },
             "30": {
-              "impressions": 1635,
-              "store_visitors": 101,
+              "impressions": 1642,
+              "store_visitors": 105,
               "installs": null,
               "purchases": 4,
               "days_with_data": 28
             },
             "90": {
-              "impressions": 2246,
-              "store_visitors": 136,
+              "impressions": 2279,
+              "store_visitors": 140,
               "installs": null,
               "purchases": 5,
-              "days_with_data": 50
+              "days_with_data": 51
             }
           }
         },
         "android": {
-          "latest_date": "2026-11-12",
+          "latest_date": "2026-11-14",
           "windows": {
             "7": {
               "impressions": null,
               "store_visitors": null,
               "installs": null,
-              "purchases": 2,
-              "days_with_data": 2
+              "purchases": 3,
+              "days_with_data": 3
             },
             "30": {
               "impressions": null,
-              "store_visitors": 221,
+              "store_visitors": 213,
               "installs": 4,
-              "purchases": 6,
+              "purchases": 7,
               "days_with_data": 25
             },
             "90": {
               "impressions": null,
               "store_visitors": 371,
               "installs": 10,
-              "purchases": 9,
-              "days_with_data": 41
+              "purchases": 10,
+              "days_with_data": 42
             }
           }
         }
@@ -792,19 +792,19 @@
           "store_visitors": null,
           "impressions": null,
           "installs": 0,
-          "purchases": 2
+          "purchases": 3
         },
         "30": {
           "store_visitors": null,
           "impressions": null,
           "installs": 4,
-          "purchases": 10
+          "purchases": 11
         },
         "90": {
           "store_visitors": null,
           "impressions": null,
           "installs": 10,
-          "purchases": 14
+          "purchases": 15
         }
       }
     }
