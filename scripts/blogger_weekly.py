@@ -282,15 +282,18 @@ def save_ledger(ledger: dict, path: Path = LEDGER):
         tmp.unlink(missing_ok=True)
 
 
-def reserve(info: dict, path: Path = LEDGER):
+def reservation_state(info: dict, ledger: dict) -> dict | None:
+    """Read-only check shared by check/reserve; never skip unresolved remote work."""
     ensure_slot(info["slot"], info["week"])
-    ledger = read_ledger(path)
     week_count = 0
     for e in ledger["entries"]:
-        if e["slug"] == info["slug"] and (e["week"], e.get("slot"), e["sha256"]) == (info["week"], info["slot"], info["sha256"]):
-            return e, False
+        if e["slug"] == info["slug"] and all(
+            e.get(key) == info.get(key)
+            for key in ("week", "slot", "sha256", "title", "source_url", "body_path")
+        ):
+            return e
         if e["slug"] == info["slug"]:
-            refuse("Blogger article slug is already used")
+            refuse("Blogger article slug is already used with different reserved content")
         if e["week"] == info["week"]:
             week_count += 1
             if e.get("slot") is None:
@@ -299,6 +302,22 @@ def reserve(info: dict, path: Path = LEDGER):
                 refuse("another Blogger article is already reserved or posted for this KST date")
     if week_count >= MAX_PER_WEEK:
         refuse("Blogger has already reserved three articles for this KST week")
+    pending = [e for e in ledger["entries"] if e["status"] != "published"]
+    if pending:
+        entry = pending[0]
+        refuse(
+            f"unfinished Blogger publication {entry['slug']} "
+            f"({entry.get('slot') or entry['week']}, {entry['status']}); "
+            "reconcile that existing remote state before reserving another article"
+        )
+    return None
+
+
+def reserve(info: dict, path: Path = LEDGER):
+    ledger = read_ledger(path)
+    existing = reservation_state(info, ledger)
+    if existing is not None:
+        return existing, False
     entry = {k: info[k] for k in ("slug", "week", "slot", "title", "source_url", "body_path", "sha256")}
     entry.update(status="reserved", post_id="", posted_url="", created_at=now_utc(), verified_at="")
     ledger["entries"].append(entry)
@@ -373,10 +392,21 @@ def main() -> int:
             info = validate(args.brief)
             if args.action == "check":
                 ledger = read_ledger(args.ledger)
-                current = next((e for e in ledger["entries"] if e["week"] == info["week"] and e.get("slot") == info["slot"]), None)
+                current = reservation_state(info, ledger)
                 count = sum(e["week"] == info["week"] for e in ledger["entries"])
-                has_legacy = any(e["week"] == info["week"] and e.get("slot") is None for e in ledger["entries"])
-                result = {"quality": info, "slot_status": current or ("blocked" if count >= MAX_PER_WEEK or has_legacy else "available"), "week_count": count, "week_limit": MAX_PER_WEEK}
+                next_actions = {
+                    "reserved": "reconcile_existing_remote_state_before_creating_any_draft",
+                    "draft": "resume_recorded_post_id_only",
+                    "published": "already_published_do_not_post_again",
+                }
+                result = {
+                    "quality": info, "slot_status": current or "available",
+                    "week_count": count, "week_limit": MAX_PER_WEEK,
+                    "next_action": next_actions[current["status"]] if current else "reserve_then_commit_and_push",
+                    "remote_account_verified": False,
+                    "remote_state_verified": False,
+                    "note": "Local checks do not verify browser access, account identity, or remote post state.",
+                }
             elif args.action == "reserve":
                 row, new = reserve(info, args.ledger)
                 result = {"new_reservation": new, "entry": row}

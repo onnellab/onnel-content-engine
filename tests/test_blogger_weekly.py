@@ -104,9 +104,14 @@ class BloggerWeekTests(unittest.TestCase):
         # Mon/Wed/Fri are independent slots, even though their ISO week matches.
         days = [date.fromisocalendar(year, week, day).isoformat() for day in (1, 3, 5, 7)]
         for i, day in enumerate(days[:3]):
-            row, new = reserve(dict(info, slot=day, slug=f"article-{i}", sha256=f"digest-{i}"), self.ledger)
+            slot_info = dict(info, slot=day, slug=f"article-{i}", sha256=f"digest-{i}")
+            row, new = reserve(slot_info, self.ledger)
             self.assertTrue(new)
             self.assertEqual(row["slot"], day)
+            post_id = str(1234567890123 + i)
+            record_draft(slot_info, post_id, self.ledger)
+            page = "<html><body>" + ("Fixture content " * 30) + "<h1>" + info["title"] + "</h1>" + "".join(f"<h2>{s}</h2>" for s in info["sections"]) + "</body></html>"
+            record_published(slot_info, post_id, f"https://{BLOG_HOST}/2026/11/article-{i}.html", self.ledger, fetch=lambda _: page)
         self.assertEqual(len(read_ledger(self.ledger)["entries"]), 3)
         same, new = reserve(dict(info, slot=days[1], slug="article-1", sha256="digest-1"), self.ledger)
         self.assertFalse(new)
@@ -167,6 +172,72 @@ class BloggerWeekTests(unittest.TestCase):
         self.assertEqual(row["status"], "published")
         with self.assertRaisesRegex(BloggerGuardError, "already published"):
             record_draft(info, "1234567890123", self.ledger)
+
+    def test_unfinished_slot_blocks_new_slot_without_changing_ledger(self):
+        info = validate(self.meta_path, root=self.root)
+        year, week = map(int, info["week"].split("-W"))
+        monday = date.fromisocalendar(year, week, 1).isoformat()
+        wednesday = date.fromisocalendar(year, week, 3).isoformat()
+        pending = dict(info, slot=monday)
+        reserve(pending, self.ledger)
+        before = self.ledger.read_bytes()
+        with self.assertRaisesRegex(BloggerGuardError, "unfinished"):
+            reserve(dict(info, slot=wednesday, slug="new-angle", sha256="new-digest"), self.ledger)
+        self.assertEqual(self.ledger.read_bytes(), before)
+        row, created = reserve(pending, self.ledger)
+        self.assertFalse(created)
+        self.assertEqual(row["status"], "reserved")
+
+    def test_unfinished_prior_week_also_blocks_new_reservation(self):
+        info = validate(self.meta_path, root=self.root)
+        prior = dict(info, week="2020-W01", slot="2019-12-30", slug="pending-old-guide")
+        reserve(prior, self.ledger)
+        with self.assertRaisesRegex(BloggerGuardError, "unfinished"):
+            reserve(info, self.ledger)
+
+    def test_check_and_reserve_share_collision_checks(self):
+        from blogger_weekly import reservation_state
+        info = validate(self.meta_path, root=self.root)
+        reserve(info, self.ledger)
+        for changed in (dict(info, slug="another-title"), dict(info, sha256="changed-body")):
+            with self.assertRaises(BloggerGuardError):
+                reservation_state(changed, read_ledger(self.ledger))
+        row = reservation_state(info, read_ledger(self.ledger))
+        self.assertEqual(row["slug"], info["slug"])
+        self.assertEqual(row["status"], "reserved")
+
+    def test_cli_check_rejects_collision_without_mutating_ledger(self):
+        from contextlib import redirect_stderr
+        from io import StringIO
+        from unittest.mock import patch
+        from blogger_weekly import main
+        info = validate(self.meta_path, root=self.root)
+        reserve(info, self.ledger)
+        before = self.ledger.read_bytes()
+        args = ["blogger_weekly.py", "check", "--brief", str(self.meta_path), "--ledger", str(self.ledger)]
+        error = StringIO()
+        with patch.object(sys, "argv", args), patch("blogger_weekly.validate", return_value=dict(info, sha256="changed-content")), redirect_stderr(error):
+            self.assertEqual(main(), 1)
+        self.assertIn("different reserved content", error.getvalue())
+        self.assertEqual(self.ledger.read_bytes(), before)
+
+    def test_cli_check_distinguishes_local_pass_from_remote_verification(self):
+        from contextlib import redirect_stdout
+        from io import StringIO
+        from unittest.mock import patch
+        from blogger_weekly import main
+        info = validate(self.meta_path, root=self.root)
+        reserve(info, self.ledger)
+        before = self.ledger.read_bytes()
+        args = ["blogger_weekly.py", "check", "--brief", str(self.meta_path), "--ledger", str(self.ledger)]
+        output = StringIO()
+        with patch.object(sys, "argv", args), patch("blogger_weekly.validate", return_value=info), redirect_stdout(output):
+            self.assertEqual(main(), 0)
+        report = json.loads(output.getvalue())
+        self.assertEqual(report["next_action"], "reconcile_existing_remote_state_before_creating_any_draft")
+        self.assertFalse(report["remote_account_verified"])
+        self.assertFalse(report["remote_state_verified"])
+        self.assertEqual(self.ledger.read_bytes(), before)
 
     def test_disallow_copied_canonical_passage(self):
         longpass = " ".join(f"identical phrase word number {i}" for i in range(28))

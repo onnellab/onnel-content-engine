@@ -37,6 +37,21 @@
     "english_proofread": true
   },
   "editorial_notes": "Original English how-to article on isolated click repairs rather than the existing ONNELLAB inventory/format/order guide. Verified authoritative Audacity manual and FFmpeg filter docs via web on 2026-11-16, and all four HTTPS URLs returned HTTP 200 on the Mac or were fetched in current search. Two examples explicitly labeled fictional. No copyrighted external text, art or images copied, no promotional claims. Article text was checked for clear diagnostic separation, conservative fade descriptions, and no universal settings.",
+  "recovery_observation": {
+    "date_kst": "2026-11-16",
+    "status": "blocked_browser_context",
+    "mac_online": true,
+    "repository_synced_from": "427b6ff4",
+    "browser_tool": "Browser.list_tabs",
+    "browser_error": "Browser access requires the originating browser context. Open ChatGPT in the browser with the connected extension and try again.",
+    "authenticated_ui_inspected": false,
+    "account_email_verified": false,
+    "blog_id_verified_in_admin_ui": false,
+    "remote_draft_or_publish_attempted": false,
+    "earlier_reading_list_redirect_cause": "unconfirmed; redirect alone does not establish wrong account or lost authentication",
+    "required_next_step": "Continue in the authorized macOS Chrome browser context with control capabilities. Inspect the existing Google account menu and ONNELLAB blog selector, verify the expected email and Blog ID, reconcile all matching draft/scheduled/published states, and resume this reservation only. Do not create a new article to bypass the blocker.",
+    "local_fix": "Shared check/reserve collision validation now blocks new reservations while any earlier slot is unfinished and explicitly separates local validation from remote verification. The article HTML and real publication ledger remain unchanged. This is a recovery guard fix, not a claim of browser-session repair."
+  },
   "transport_observation": {
     "date_kst": "2026-11-16",
     "status": "blocked_before_remote_draft",
