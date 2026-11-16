@@ -36,5 +36,10 @@
     "rights_checked": true,
     "english_proofread": true
   },
-  "editorial_notes": "Original English how-to article on isolated click repairs rather than the existing ONNELLAB inventory/format/order guide. Verified authoritative Audacity manual and FFmpeg filter docs via web on 2026-11-16, and all four HTTPS URLs returned HTTP 200 on the Mac or were fetched in current search. Two examples explicitly labeled fictional. No copyrighted external text, art or images copied, no promotional claims. Article text was checked for clear diagnostic separation, conservative fade descriptions, and no universal settings."
+  "editorial_notes": "Original English how-to article on isolated click repairs rather than the existing ONNELLAB inventory/format/order guide. Verified authoritative Audacity manual and FFmpeg filter docs via web on 2026-11-16, and all four HTTPS URLs returned HTTP 200 on the Mac or were fetched in current search. Two examples explicitly labeled fictional. No copyrighted external text, art or images copied, no promotional claims. Article text was checked for clear diagnostic separation, conservative fade descriptions, and no universal settings.",
+  "transport_observation": {
+    "date_kst": "2026-11-16",
+    "status": "blocked_before_remote_draft",
+    "detail": "Mac Chrome opened the official Blogger posts URL for Blog ID 1829676614817439337 but redirected to Blogger reading list. The intended signed-in ONNELLAB Google account and Blogger blog identity could not be established. System Events reported zero Chrome windows and screen capture failed. No remote Blogger draft or publication was made; no post ID is known. Preserve this reservation and reconcile authenticated UI before any retry."
+  }
 }
