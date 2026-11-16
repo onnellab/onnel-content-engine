@@ -1,0 +1,66 @@
+<p>Both audio recordings sound fine on their own. You put one after the other, export a new file, and hear a sharp tick at the exact moment they meet. That tiny click can be harder to ignore than a much louder background noise because it appears unexpectedly at the transition. The fix is usually not to normalize the entire recording or run a noise remover. First determine whether the edit created a sudden change in the waveform, whether the next clip begins with an actual transient, or whether the two recordings have incompatible ambience.</p>
+
+<p>This guide focuses on a single problem: <strong>diagnosing and repairing a click at a join without swallowing a consonant, changing the pacing, or damaging the original files.</strong> The examples are illustrative editing scenarios, not measurements from an actual published recording. Keep untouched originals and edit copies throughout.</p>
+
+<h2>Why a clean recording can click at a cut</h2>
+<p>Digital audio is a sequence of sample values. At an abrupt splice, the final sample of the first clip may be far from the first sample of the second. The player must jump immediately between those values, and that discontinuity can introduce an audible click. A similar click can occur when playback begins suddenly at a nonzero sample. The Audacity manual explains this failure mode in its <a href="https://manual.audacityteam.org/man/fade_and_crossfade.html">fade and crossfade guide</a>.</p>
+
+<p>But not every tick at a seam is a discontinuity. The second recording might begin with a mouth click, finger tap, or microphone bump that is genuinely part of the source. An abrupt room-tone change can also feel like a bad edit even when there is no short click. Before processing, listen to the last second of clip A and the first second of clip B separately, then listen across the join. If the noise exists inside clip B before the join, investigate that source rather than blindly crossfading the boundary.</p>
+
+<h2>Five steps to repair a click without losing content</h2>
+<ol>
+<li><strong>Duplicate the sources.</strong> Keep the original recordings unchanged. Make a project copy and export each candidate repair under a new filename so you can compare it with the problem join.</li>
+<li><strong>Zoom in at the exact join.</strong> Listen at normal volume first, then inspect the waveform around the seam. Locate the sample-level boundary instead of guessing from the overall clip shape. Avoid monitoring at an unnecessarily loud level.</li>
+<li><strong>Try a better edit point.</strong> Move the cut a little into a quiet gap or breath that does not carry meaning. In Audacity, the <a href="https://manual.audacityteam.org/man/select_menu_at_zero_crossings.html">At Zero Crossings</a> command can nudge boundaries toward a rising zero crossing. This reduces click risk, but it is not a magic button: left and right stereo channels may cross zero at different instants.</li>
+<li><strong>Use the least intrusive fade that works.</strong> If a small jump remains at the edge, apply a brief fade-out to A and fade-in to B around the boundary, then listen again. A short fade is a starting experiment, not a universal number. Make sure the fade does not make the start of a word or musical attack disappear.</li>
+<li><strong>Crossfade only if the sounds should overlap.</strong> When adjacent material is compatible, overlapping the clips and blending their levels may create a smoother seam. But an overlap alters timing and can layer two breaths, words, rhythms, or background noises. If the join is between independent spoken sentences, a natural pause or subtle room-tone bridge may be better.</li>
+</ol>
+
+<p>Audacity's own documentation distinguishes fades from crossfades and shows how a short fade can smooth an abrupt entrance. For scripted audio workflows, <a href="https://ffmpeg.org/ffmpeg-filters.html">FFmpeg's audio filter reference</a> describes both <code>afade</code> (a fade applied to one input) and <code>acrossfade</code> (a transition between inputs). The latter supports a specified duration and, by default, overlaps the input streams. Neither feature guarantees a good edit without listening.</p>
+
+<h2>Choose the remedy by what you actually hear</h2>
+<table>
+<thead><tr><th>Symptom at the join</th><th>First thing to inspect</th><th>Possible repair</th></tr></thead>
+<tbody>
+<tr><td>One sharp, isolated tick</td><td>Waveform jump at the splice</td><td>Move the boundary or add a tiny edge fade</td></tr>
+<tr><td>Speech starts with a clipped letter</td><td>Whether the edit removed the initial consonant</td><td>Restore source audio; choose a different cut</td></tr>
+<tr><td>Background noise changes abruptly</td><td>Room tone before and after the splice</td><td>Bridge with natural ambience or a carefully heard overlap</td></tr>
+<tr><td>Two voices or beats are heard at once</td><td>Accidental overlap or oversized crossfade</td><td>Reduce or remove the overlap</td></tr>
+<tr><td>Next clip suddenly sounds louder</td><td>Perceived level across the boundary</td><td>Adjust levels separately, then recheck the seam</td></tr>
+</tbody>
+</table>
+
+<p>Notice the distinction: a click repair should address a <em>boundary problem</em>, not automatically retouch the entire recording. If a recording is clipped or distorted long before the edit point, a smooth join cannot restore information that was never captured correctly.</p>
+
+<h2>Example 1: an interview sentence with a click after a breath</h2>
+<p>Imagine two fictional interview takes. The speaker finishes the first take with “I checked the result,” inhales, and begins the next with “Then I tried again.” A straight cut made between the takes produces a crisp tick. Zooming in shows a sudden transition in sample level. You could place the cut inside the natural pause and use a very short fade at the two edges. Then audition not just the tick but also the final <em>t</em> of “result” and the <em>th</em> of “Then.” If either consonant becomes dull, move the cut again instead of making the fade longer.</p>
+
+<p>Suppose you instead apply a long crossfade across the breath and the start of “Then.” The tick may disappear, but two breathing patterns can overlap, and the beginning of the second sentence may sound weak. In this case the correct outcome is a clean cut with a human pause, not the smoothest-looking waveform. This is why editing by ear matters even when the software shows an attractive fade curve.</p>
+
+<h2>Example 2: a rain ambience loop with an audible restart</h2>
+<p>Now imagine a fictional two-minute rain recording intended to repeat beneath a reading session. The end contains a quiet downpour; the beginning contains a nearby splash. A hard wrap from the last sample to the first makes the loop edge obvious. Choosing two more similar portions of continuous rain may help more than fading directly through the distinctive splash. For an ambience bed, a somewhat longer overlap can be appropriate because there is no spoken consonant to preserve.</p>
+
+<p>Start with a modest overlap and compare the transition to a straight cut, then adjust by listening. Watch for rhythmic pumping, doubled drips, phasey coloration, or a noticeable dip in background level. The right crossfade length depends on the recording, not on an arbitrary universal preset. If the intended result is a seamless repeating loop, test the exported file across its <strong>last-to-first</strong> boundary too; fixing the join between two placed copies does not automatically fix the final loop wrap.</p>
+
+<h2>Export and verify the actual joined file</h2>
+<p>A repaired timeline is only a candidate until you test the exported audio. Export to a separate lossless working file if practical, then listen on the intended player. Some problems become easier to hear with headphones, while others appear on ordinary speakers. Keep your listening level comfortable and focus on preserving natural timing rather than merely removing visible spikes.</p>
+
+<ul>
+<li>Play a few seconds before and after every edited join at normal speed.</li>
+<li>Confirm that no word ending, first syllable, or sound effect was softened away by a fade.</li>
+<li>Check for doubled breaths, beats, or ambience during an overlap.</li>
+<li>Confirm the total duration if you intentionally overlapped clips: overlapping material generally reduces the combined timeline by the overlap duration.</li>
+<li>For a loop, repeat playback through the file's end-to-start transition several times.</li>
+<li>Keep the untouched source and the selected repair version until the result is accepted.</li>
+</ul>
+
+<p>If the join still sounds wrong, return to the sources and change the edit decision. A different cut position often works better than adding a second or third processor. The broader <a href="https://onnellab.com/blog/en/verify-audio-clips-before-combining/">ONNELLAB guide to verifying audio clips before combining</a> covers inventory, format compatibility, loudness, ordering, and final export checks. This article addresses the narrower audible seam itself.</p>
+
+<h2>References and further reading</h2>
+<ul>
+<li><a href="https://manual.audacityteam.org/man/fade_and_crossfade.html">Audacity Manual: Fade and Crossfade</a> — why sudden sample changes can click and what a short fade can do.</li>
+<li><a href="https://manual.audacityteam.org/man/select_menu_at_zero_crossings.html">Audacity Manual: At Zero Crossings</a> — moving an edit point to reduce clicking, including stereo limitations.</li>
+<li><a href="https://ffmpeg.org/ffmpeg-filters.html">FFmpeg Filters Documentation</a> — behavior and options of the <code>afade</code> and <code>acrossfade</code> audio filters.</li>
+</ul>
+
+<p><strong>Bottom line:</strong> locate the real cause, move the cut before applying effects, use short fades for sharp edges, and reserve crossfades for material that benefits from overlap. Judge the saved export with your ears, not only the waveform.</p>

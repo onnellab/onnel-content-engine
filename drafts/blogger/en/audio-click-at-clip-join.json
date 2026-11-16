@@ -1,0 +1,40 @@
+{
+  "week": "2026-W47",
+  "slot": "2026-11-16",
+  "slug": "audio-click-at-clip-join",
+  "language": "en",
+  "title": "Why Two Audio Clips Click When Joined (and How to Repair the Seam)",
+  "primary_question": "Why do two individually clean audio recordings make a clicking noise exactly where they are joined, and how can I repair it without damaging speech?",
+  "source_title": "How to Verify Audio Clips Before Combining Them",
+  "source_url": "https://onnellab.com/blog/en/verify-audio-clips-before-combining/",
+  "source_path": "generated/markdown/en/media/verify-audio-clips-before-combining.md",
+  "body_path": "drafts/blogger/en/audio-click-at-clip-join.html",
+  "fact_sources": [
+    {
+      "url": "https://manual.audacityteam.org/man/fade_and_crossfade.html",
+      "supports": "The Audacity manual describes audible clicks caused by abrupt waveform jumps and shows short fade-in repairs at the start of an edited sound."
+    },
+    {
+      "url": "https://manual.audacityteam.org/man/select_menu_at_zero_crossings.html",
+      "supports": "The At Zero Crossings command moves selection boundaries toward a rising zero crossing to reduce edit clicks, with stereo limitations because channels need not cross zero simultaneously."
+    },
+    {
+      "url": "https://ffmpeg.org/ffmpeg-filters.html",
+      "supports": "The official FFmpeg documentation describes afade for single audio inputs and acrossfade for two streams, including durations and overlapping by default."
+    }
+  ],
+  "new_examples": [
+    "Fictional interview with the word 'result' followed by a breath and the word 'Then': a splice click is repaired by shifting the cut, and a long crossfade is rejected because it masks a consonant and doubles breaths.",
+    "Fictional rain-loop ambience whose last segment is a quiet downpour but whose start includes a splash: a loop-point change and monitored overlap are tested, including the final end-to-start wrap."
+  ],
+  "review": {
+    "technically_verified": true,
+    "distinct_search_intent": true,
+    "original_examples": true,
+    "sources_checked": true,
+    "links_checked": true,
+    "rights_checked": true,
+    "english_proofread": true
+  },
+  "editorial_notes": "Original English how-to article on isolated click repairs rather than the existing ONNELLAB inventory/format/order guide. Verified authoritative Audacity manual and FFmpeg filter docs via web on 2026-11-16, and all four HTTPS URLs returned HTTP 200 on the Mac or were fetched in current search. Two examples explicitly labeled fictional. No copyrighted external text, art or images copied, no promotional claims. Article text was checked for clear diagnostic separation, conservative fade descriptions, and no universal settings."
+}
