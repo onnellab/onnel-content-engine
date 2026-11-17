@@ -113,6 +113,8 @@ def save(payload: dict) -> None:
     target = RESULT.with_name("probe-result.json") if payload.get("mode") == "probe" else RESULT
     if payload.get("mode") == "single_today":
         target = RESULT.with_name("single-today-result.json")
+    if payload.get("mode") == "retained_release":
+        target = RESULT.with_name("retained-release-result.json")
     if payload.get("mode") == "sleep":
         target = RESULT.with_name("sleep-result.json")
     tmp = target.with_suffix(".tmp")
@@ -996,6 +998,28 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
         sync_playlists_after_upload(report)
 
 
+def run_retained_single_slot(report: dict) -> None:
+    """Execute only the owner's exact retained-audio release, not daily Ops."""
+    from aether_retained_release import JOB_ID, OWNER_SERVICE
+    if os.environ.get("XPC_SERVICE_NAME") != OWNER_SERVICE:
+        raise ValueError("aether_retained_release_gui_owner_required")
+    code, stdout, _ = run_step(
+        report, "retained_single_release",
+        [sys.executable, "-B", "scripts/aether_retained_release.py", "publish"],
+        timeout=2400,
+    )
+    payload = json_stdout(stdout) or {
+        "status": "blocked", "job_id": JOB_ID, "error": "aether_retained_release_output_invalid"}
+    report["single_slot"] = payload
+    if code != 0 or payload.get("job_id") != JOB_ID:
+        report["blockers"].append(payload.get("error") or "aether_retained_release_failed")
+        return
+    if payload.get("video_id") and payload.get("status") in {"scheduled", "processing", "published"}:
+        sync_playlists_after_upload(report)
+    if payload.get("publication_complete") is not True:
+        report["blockers"].append("aether_retained_publication_unverified")
+
+
 def run_today_single_slot(report: dict) -> None:
     from aether_single_today import SLOT, TITLE, LANE, canonical_style, require_target, load_cost_estimate
     from short_video_pipeline import VideoError
@@ -1490,6 +1514,7 @@ def main() -> int:
             from aether_single_today import record_request
             print(json.dumps(record_request(now=now), ensure_ascii=False))
             return 0
+        retained_requested = False
         if not (args.probe or args.sleep_only or args.single_today):
             from aether_single_today import pending_request
             # The registered GUI launchd service retains its original plist,
@@ -1500,8 +1525,21 @@ def main() -> int:
                 args.single_today = pending_request(now=now)
                 from aether_sleep_request import gui_requested
                 args.sleep_only = gui_requested(now=now)
-                if args.single_today and args.sleep_only:
+                from aether_retained_release import pending_request as retained_pending
+                retained_requested = retained_pending(now=now)
+                if sum((bool(args.single_today), bool(args.sleep_only), bool(retained_requested))) > 1:
                     raise ValueError('aether_conflicting_same_day_requests')
+        if retained_requested:
+            report = {"schema_version": 1, "kind": "onnellab_aether_retained_release_result",
+                      "mode": "retained_release", "started_at": now.isoformat(timespec="seconds"),
+                      "local_date": now.date().isoformat(), "state": "running",
+                      "steps": [], "blockers": [], "warnings": []}
+            save(report)
+            if repo_sync(report):
+                run_retained_single_slot(report)
+            finalize(report)
+            print(json.dumps(report, ensure_ascii=False))
+            return 2 if report["blockers"] else 0
         if args.single_today:
             report = {"schema_version": 1, "kind": "onnellab_aether_local_single_today_result",
                       "mode": "single_today", "started_at": now.isoformat(timespec="seconds"),

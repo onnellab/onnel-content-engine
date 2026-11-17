@@ -1,5 +1,6 @@
 """New-single editorial duration contract; never alters historical job prompts."""
-MIN_DURATION_SECONDS = 160.0
+# Owner 2026-11-17: accept complete singles from 140 seconds, inclusive.
+MIN_DURATION_SECONDS = 140.0
 MAX_DURATION_SECONDS = 210.0
 TARGET_DURATION_SECONDS = 184.0
 

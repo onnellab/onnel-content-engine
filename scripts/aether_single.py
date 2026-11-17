@@ -1142,11 +1142,18 @@ def worker(
     with q.lock():
         state = q._read()
         if manual_release_id is not None:
-            from aether_manual_release import JOB_ID, validate
-            if manual_release_id != JOB_ID or existing_only or source_kind is not None or not publish:
+            import aether_manual_release as legacy_release
+            import aether_retained_release as retained_release
+            if existing_only or source_kind is not None or not publish or same_day_release:
+                raise VideoError("aether_manual_release_identity_invalid")
+            if manual_release_id == legacy_release.JOB_ID:
+                manual_validator = legacy_release.validate
+            elif manual_release_id == retained_release.JOB_ID:
+                manual_validator = retained_release.validate
+            else:
                 raise VideoError("aether_manual_release_identity_invalid")
             target = state["jobs"].get(manual_release_id, {})
-            manual = validate(target, root=q.root, active=not bool(target.get("upload")))
+            manual = manual_validator(target, root=q.root, active=not bool(target.get("upload")))
 
         def check_publication_window(current_job, current_slot):
             if same_day_release:
@@ -1157,8 +1164,7 @@ def worker(
                 if publish_slot_stale(current_slot):
                     raise VideoError("aether_single_publish_time_stale")
             else:
-                from aether_manual_release import validate
-                validate(current_job, root=q.root, expected_sha=manual["request_sha256"])
+                manual_validator(current_job, root=q.root, expected_sha=manual["request_sha256"])
 
         pending = [
             j for j in state["jobs"].values()
@@ -1322,6 +1328,13 @@ def worker(
                         chosen["source_filename"] = job["source_filename"]
                     else:
                         generated = recover_generated_result(folder)
+                        if manual is not None and manual.get("retained_only"):
+                            from aether_retained_release import require_source, SOURCE_SHA256
+                            evidence = require_source(job, q.root)
+                            if (generated is None or len(generated.get("candidates") or []) != 1
+                                    or generated["candidates"][0].get("sha256") != SOURCE_SHA256):
+                                raise VideoError("aether_retained_release_generation_forbidden")
+                            generated = {**generated, **evidence}
                         if generated is None:
                             paid_guard.require_no_unsettled_intents(single_root=q.root)
                             # Do not spend for audio that cannot become a video.

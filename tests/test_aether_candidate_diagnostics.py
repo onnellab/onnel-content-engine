@@ -25,30 +25,30 @@ class CandidateDiagnostics(unittest.TestCase):
         self.review = Mock(return_value={"accepted": True, "weighted_score": 8.5,
                                         "source_sha256": self.row["sha256"]})
 
-    def failed(self, *, duration=140.434208, rows=None, prior=None):
+    def failed(self, *, duration=139.434208, rows=None, prior=None):
         with patch.object(single, "audio_duration", return_value=duration):
             with self.assertRaises(single.CandidateSelectionError) as caught:
                 single.select_candidate({"candidates": rows if rows is not None else [self.row]},
                                         prior or set(), reviewer=self.review)
         return caught.exception.diagnostic
 
-    def test_actual_incident_is_duration_rejection_not_audio_quality_failure(self):
+    def test_below_140_is_duration_rejection_not_audio_quality_failure(self):
         detail = self.failed()
         self.assertEqual("duration", detail["failure_stage"])
-        self.assertEqual({"min": 160, "max": 210}, detail["duration_limits_seconds"])
+        self.assertEqual({"min": 140, "max": 210}, detail["duration_limits_seconds"])
         entry = detail["candidates"][0]
-        self.assertEqual(140.434208, entry["duration_seconds"])
+        self.assertEqual(139.434208, entry["duration_seconds"])
         self.assertEqual(["duration_out_of_bounds"], entry["reason_codes"])
         self.assertEqual("not_run_duration_gate", entry["audio_review_state"])
         self.review.assert_not_called()
         self.assertNotIn(str(self.root), json.dumps(detail))
 
-    def test_unchanged_inclusive_length_boundaries(self):
-        for duration in (160.0, 210.0):
+    def test_owner_approved_140_inclusive_boundaries_and_retained_length(self):
+        for duration in (140.0, 140.434208, 160.0, 210.0):
             with self.subTest(duration=duration), patch.object(single, "audio_duration", return_value=duration):
                 result = single.select_candidate({"candidates": [self.row]}, set(), reviewer=self.review)
                 self.assertEqual(duration, result["duration_seconds"])
-        for duration in (159.999, 210.001):
+        for duration in (139.999, 210.001):
             with self.subTest(duration=duration):
                 self.assertEqual("duration", self.failed(duration=duration)["failure_stage"])
 
@@ -151,7 +151,7 @@ class CandidateDiagnostics(unittest.TestCase):
         kwargs = dict(slot="2099-09-26", title="Fixture New Ridge", style="Warm frontier travel",
                       lane="frontier_surge", execute=True, publish=False,
                       music_generator=generator, cover_generator=cover, renderer=renderer)
-        with patch.object(single, "audio_duration", return_value=140.434208), patch.object(single, "review_audio") as review, patch.object(single.paid_guard, "require_no_unsettled_intents"):
+        with patch.object(single, "audio_duration", return_value=139.434208), patch.object(single, "review_audio") as review, patch.object(single.paid_guard, "require_no_unsettled_intents"):
             failures = []
             for _ in range(2):
                 with self.assertRaises(single.CandidateSelectionError) as caught:

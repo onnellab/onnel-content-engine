@@ -293,3 +293,44 @@ its signal-only decision was accepted. This does not certify musical quality.
 Source/manifest/queue/daily-result/cover-approval hashes were unchanged across
 the inspection, and the historical prompt still matched its manifest hash.
 These are maintenance/diagnostic results, not a production/publication receipt.
+
+## Owner-authorized 140-second minimum and retained release — 2026-11-17
+
+The owner explicitly instructed: `140초까지도 통과시키고 이 곡 공개완료해`.
+This supersedes the earlier maintenance note's unchanged 160-second editorial
+minimum: new singles now accept **140–210 seconds inclusive**, subject to every
+existing integrity, duplicate, offline signal-quality and publication check.
+The requested generation target remains 180–184 seconds; no padding, looping,
+time stretching or removal of the signal gate is authorized.
+
+The immediate release applies only to `The Ridge Where the Wild Road Begins`,
+existing job `ca7ecaa3c19738e4a852a59c`, original slot 2026-11-17, retained source
+SHA-256 `90af9117fd588df0c50921fd3b6b99c0f3640dc2bc3149dd77fe8321a3591ef4`.
+`scripts/aether_retained_release.py record-request` records this exact instruction
+in a private, immutable, two-hour receipt bound to job, prompt, source and original
+manifest. It cannot renew an expired request, alter the queue, create an approval,
+or permit another paid generation. Changed/missing evidence stops publication.
+
+The existing GUI LaunchAgent consumes the explicit request under its existing
+lock and canonical single worker. It writes `retained-release-result.json`, not
+the historical morning `result.json`; it does not repeat daily Ops, store replies,
+channel reports or other production slots. It preserves the job ID and source,
+runs real signal/cover/render checks, and uses manual PUBLIC publication without
+a stale publishAt for this owner-requested release only. Unknown existing upload
+sessions still require reconciliation; no duplicate insert is authorized.
+
+The current 06:20 LaunchAgent schedule, ordinary Tuesday/Saturday PRIVATE +
+09:00 policy, paid limits, credentials and host safety settings are unchanged.
+Only the exact retained release accepts this time-limited manual request. A
+registered-owner check is required at the release entrypoint. New generation is
+forbidden both at the retained-source selection branch and the generator callback.
+Public state/thumbnail confirmation and separate playlist synchronization remain
+required before claiming completion. Actual execution results are recorded only
+after observation, not inferred from this authorization or offline tests.
+
+Pre-publication verification for this owner change: 456 Aether regression tests
+passed, including inclusive 140-second acceptance, 139.999-second rejection,
+retained-source integrity, no new generation, same-job/same-video idempotency,
+receipt expiry, canonical manual deadline validation, registered-owner routing,
+and preservation of the morning daily report. These are offline tests, not proof
+that the requested real video has been published.

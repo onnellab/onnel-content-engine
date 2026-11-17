@@ -283,8 +283,11 @@ class DeadlineSourceTests(unittest.TestCase):
         text = ast.unparse(helper)
         self.assertIn("publish_slot_stale(current_slot)", text)
         self.assertIn("aether_single_publish_time_stale", text)
-        self.assertIn("validate(current_job", text)
+        self.assertIn("manual_validator(current_job", text)
         self.assertIn("expected_sha=manual['request_sha256']", text)
+        worker_text = ast.unparse(worker)
+        self.assertIn("manual_validator = legacy_release.validate", worker_text)
+        self.assertIn("manual_validator = retained_release.validate", worker_text)
 
 
 if __name__ == "__main__":
