@@ -693,6 +693,7 @@ def choose_approved_new_single(*, diagnostics: dict | None = None,
     """
     import re
     from aether_single import FINAL, SingleQueue, enforce_lane_rotation
+    from aether_single_duration import NEW_SINGLE_DURATION_DIRECTION
     from aether_existing_cover import ASSETS_ROOT, approved_cover
     from aether_cover import lane_direction
     from aether_planner import inspect_candidate, read_catalog
@@ -737,7 +738,8 @@ def choose_approved_new_single(*, diagnostics: dict | None = None,
             except VideoError as error:
                 details["lane_blockers"].append({"lane": lane, "error": safe_reason(error)})
                 continue
-            style = lane_direction(lane) + COMMON_STYLE
+            # New unused concepts only: historical job/receipt prompts stay exact.
+            style = lane_direction(lane) + COMMON_STYLE + NEW_SINGLE_DURATION_DIRECTION
             for title in TITLE_BANK[lane]:
                 candidate = {"title": title, "lane": lane}
                 details["candidates"].append(candidate)

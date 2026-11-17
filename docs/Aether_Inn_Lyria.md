@@ -244,3 +244,52 @@ The daily ChatGPT reporting task must never call this interactive command.
 immutable/expiring requests, project/prompt binding, one charged request,
 uncertain-result preservation and unchanged scheduled/hosted-operation behavior.
 These tests are not a production or publication receipt.
+
+## Duration rejection diagnostics — 2026-11-17 maintenance
+
+The retained 2026-11-17 candidate for `The Ridge Where the Wild Road Begins`
+measures 140.434208 seconds. Its SHA-256 matches the generation manifest, and a
+separate post-incident offline signal review accepts the exact original bytes.
+The scheduled selector rejected it **before audio review**, because the existing
+new-single duration gate is 160–210 seconds. `no_accepted_candidate` alone must
+not be described as proof of poor audio quality. No melody/listening assessment
+or publication approval follows from the signal result.
+
+New scheduled concepts explicitly request a complete 180–184-second composition,
+with development before the final cadence; this supplements the existing timestamp
+structure rather than changing historical prompts or job identities. Google's
+Lyria 3 model documentation describes 184 seconds as a maximum, not a guaranteed
+minimum, and its music-generation guide describes prompt-based duration control.
+Sources checked 2026-11-17: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/lyria/lyria-3
+and https://ai.google.dev/gemini-api/docs/music-generation . A prompt is a request,
+not a deterministic duration guarantee. No undocumented API duration parameter,
+extra request, padding, repetition, time-stretch or length-gate reduction is added.
+
+Candidate selection now retains per-candidate safe diagnostics: integrity,
+duration, duplicate, probe, and signal-review outcomes are distinct. A duration
+rejection records the measured length, the unchanged limits and that signal review
+was not run. The durable queue and CLI failure result retain these details along
+with the same job/slot and known generation estimate; a rejected candidate must
+not become an apparent zero-cost or unidentifiable production failure. Diagnostics
+must not contain source paths, credentials, raw provider responses, or arbitrary
+exception text. Malformed/unavailable reviews stay fail-closed.
+
+This interactive maintenance does not restart the daily worker, rewrite its
+historical result, amend the real queue, revive today's missed 09:00 slot, change
+approvals, generate another song, render, or upload. The 160–210-second gate and
+all cost, rights, quality, launchd ownership and publication checks remain intact.
+Using the retained shorter song for publication is a separate editorial/release
+decision, not a consequence of fixing diagnostic loss.
+
+Maintenance verification: 447 Aether tests passed using Python 3.14 and the
+repository-pinned PyYAML 6.0.3 in a temporary isolated environment. The initial
+system-Python discovery lacked PyYAML; it was not a production-code failure and
+was not hidden as a passing suite. The retained real MP3 reproduced
+`failure_stage=duration`, `duration_out_of_bounds`, and
+`audio_review_state=not_run_duration_gate` without invoking any worker.
+Independent post-incident PCM analysis measured RMS -14.89 dBFS, peak -0.11 dBFS,
+zero clipped samples, longest silence 1.5 seconds and a quiet final sample;
+its signal-only decision was accepted. This does not certify musical quality.
+Source/manifest/queue/daily-result/cover-approval hashes were unchanged across
+the inspection, and the historical prompt still matched its manifest hash.
+These are maintenance/diagnostic results, not a production/publication receipt.

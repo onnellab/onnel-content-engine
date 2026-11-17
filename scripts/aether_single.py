@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import fcntl
 from functools import partial
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -20,6 +21,7 @@ from zoneinfo import ZoneInfo
 
 from aether_compilation import thumbnail
 from aether_offline_audio_review import review_audio
+from aether_single_duration import MIN_DURATION_SECONDS, MAX_DURATION_SECONDS, TARGET_DURATION_SECONDS
 from aether_compose import audio_duration, checked_asset, media_info, validate_output
 from aether_cover import lane_direction
 from aether_existing_cover import ASSETS_ROOT, approved_cover, import_existing_cover
@@ -867,32 +869,139 @@ def recover_generated_result(folder: Path) -> dict | None:
         return None
     return {"state": "recovered", "candidates": candidates, "generation_manifest_count": len(manifests)}
 
-def select_candidate(result: dict, prior_hashes: set[str], *, reviewer=None) -> dict:
+class CandidateSelectionError(VideoError):
+    """Keep safe selection evidence when the legacy aggregate error is raised."""
+    def __init__(self, reason: str, diagnostic: dict):
+        super().__init__(reason)
+        self.diagnostic = diagnostic
+        self.worker_result: dict = {}
+
+
+def select_candidate(result: dict, prior_hashes: set[str], *, reviewer=None,
+                     diagnostics: dict | None = None) -> dict:
+    # The numeric duration gate is unchanged. Editorial length is not proof of
+    # bad signal quality: record exactly which stage ran and which did not.
+    details = diagnostics if diagnostics is not None else {}
+    details.clear()
+    details.update(schema_version=1, status="checking", candidates=[],
+                   duration_limits_seconds={"min": MIN_DURATION_SECONDS,
+                                            "max": MAX_DURATION_SECONDS},
+                   accepted_count=0)
     candidates = result.get("candidates") or []
+    if not isinstance(candidates, list):
+        candidates = [None]
+    details["candidate_count"] = len(candidates)
     technical = []
-    for row in candidates:
-        path = Path(row.get("file", ""))
+    review_reasons = {
+        "duration_out_of_bounds", "duration_mismatch", "audio_too_quiet",
+        "audio_excessively_loud", "audio_clipping", "audio_long_silence",
+        "audio_initial_silence", "audio_hard_cut", "audio_low_variation",
+    }
+    for ordinal, row in enumerate(candidates, 1):
+        entry = {"candidate_index": ordinal, "status": "rejected",
+                 "stage": "integrity", "reason_codes": [],
+                 "audio_review_state": "not_run"}
+        details["candidates"].append(entry)
+        def reject(stage, reason):
+            entry.update(stage=stage, reason_codes=[reason])
+        if (not isinstance(row, dict) or not isinstance(row.get("file"), str)
+                or not row["file"]):
+            reject("integrity", "candidate_record_invalid")
+            continue
+        try:
+            index = int(row.get("index", 999))
+        except (TypeError, ValueError, OverflowError):
+            reject("integrity", "candidate_record_invalid")
+            continue
+        entry["candidate_index"] = index
+        path = Path(row["file"])
         expected = row.get("sha256")
-        if path.is_symlink() or not path.is_file() or not re.fullmatch(r"[0-9a-f]{64}", str(expected)):
+        if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{64}", expected):
+            reject("integrity", "candidate_hash_invalid")
             continue
-        if file_hash(path) != expected or expected in prior_hashes:
+        entry["source_sha256"] = expected
+        try:
+            if path.is_symlink() or not path.is_file():
+                reject("integrity", "candidate_source_missing_or_unsafe")
+                continue
+            if file_hash(path) != expected:
+                reject("integrity", "candidate_hash_mismatch")
+                continue
+        except OSError:
+            reject("integrity", "candidate_source_unreadable")
             continue
-        duration = audio_duration(path)
-        if not 160 <= duration <= 210:
+        if expected in prior_hashes:
+            reject("duplicate", "candidate_duplicate_audio")
             continue
-        item = {"candidate_index": int(row.get("index", 999)), "path": str(path),
+        try:
+            duration = audio_duration(path)
+            if type(duration) not in (int, float) or not math.isfinite(duration):
+                raise ValueError()
+        except Exception:
+            reject("probe", "candidate_duration_probe_failed")
+            continue
+        entry["duration_seconds"] = duration
+        if not MIN_DURATION_SECONDS <= duration <= MAX_DURATION_SECONDS:
+            reject("duration", "duration_out_of_bounds")
+            entry["audio_review_state"] = "not_run_duration_gate"
+            continue
+        item = {"candidate_index": index, "path": str(path),
                 "duration_seconds": duration, "sha256": expected}
         if reviewer is not None:
-            review = reviewer(path)
-            item["review"] = review
-            if not review.get("accepted"):
+            try:
+                review = reviewer(path)
+            except Exception:
+                reject("audio_review", "audio_review_unavailable")
+                entry["audio_review_state"] = "unavailable"
                 continue
+            if not isinstance(review, dict) or type(review.get("accepted")) is not bool:
+                reject("audio_review", "audio_review_invalid")
+                entry["audio_review_state"] = "unavailable"
+                continue
+            entry["audio_review_state"] = "accepted" if review["accepted"] else "rejected"
+            if review.get("source_sha256", expected) != expected:
+                reject("integrity", "audio_review_source_mismatch")
+                continue
+            if not review["accepted"]:
+                codes = review.get("reason_codes")
+                entry.update(stage="audio_review", reason_codes=[
+                    code for code in codes if isinstance(code, str) and code in review_reasons
+                ] if isinstance(codes, list) else [])
+                if not entry["reason_codes"]:
+                    entry["reason_codes"] = ["audio_review_rejected"]
+                continue
+            score = review.get("weighted_score")
+            if type(score) not in (int, float) or not math.isfinite(score) or not 0 <= score <= 10:
+                reject("audio_review", "audio_review_score_invalid")
+                entry["audio_review_state"] = "unavailable"
+                continue
+            entry["weighted_score"] = score
+            item["review"] = review
+        # Bind acceptance to the same file bytes, including after local decoding.
+        try:
+            if path.is_symlink() or file_hash(path) != expected:
+                raise OSError()
+        except OSError:
+            reject("integrity", "candidate_source_changed")
+            continue
+        entry.update(status="accepted", stage="complete")
         technical.append(item)
+    details["accepted_count"] = len(technical)
     if not technical:
-        raise VideoError("aether_single_no_accepted_candidate" if reviewer else "aether_single_no_technical_candidate")
+        details["status"] = "rejected"
+        stages = {entry["stage"] for entry in details["candidates"]}
+        details["failure_stage"] = next(iter(stages)) if len(stages) == 1 else "mixed" if stages else "no_candidates"
+        raise CandidateSelectionError(
+            "aether_single_no_accepted_candidate" if reviewer is not None else "aether_single_no_technical_candidate",
+            details,
+        )
+    details["status"] = "accepted"
     if reviewer is None:
-        return min(technical, key=lambda x: (abs(x["duration_seconds"]-184), x["candidate_index"]))
-    return max(technical, key=lambda x: (x["review"]["weighted_score"], -abs(x["duration_seconds"]-184), -x["candidate_index"]))
+        chosen = min(technical, key=lambda x: (abs(x["duration_seconds"]-TARGET_DURATION_SECONDS), x["candidate_index"]))
+    else:
+        chosen = max(technical, key=lambda x: (x["review"]["weighted_score"], -abs(x["duration_seconds"]-TARGET_DURATION_SECONDS), -x["candidate_index"]))
+    details["selected_candidate_index"] = chosen["candidate_index"]
+    return chosen
 
 
 def render_single(audio: Path, cover: Path, output: Path) -> dict:
@@ -1229,13 +1338,31 @@ def worker(
                                 **({"manual_release": {"job_id": manual_release_id,
                                      "request_sha256": manual["request_sha256"]}} if manual is not None else {}),
                                 **({"same_day_release": today_scope} if today_scope is not None else {}))
-                        chosen = select_candidate(
-                            generated, _history_hashes(state),
-                            reviewer=lambda path: review_audio(path),
-                        )
-                        chosen["generation_count"] = len(generated.get("candidates") or [])
-                        chosen["estimated_cost_usd"] = generated.get("estimated_cost_usd")
-                        chosen["cost_basis"] = generated.get("cost_basis", "historical_base_estimate")
+                        # Persist paid-generation evidence before selection so a
+                        # rejected source does not lose its count/known estimate.
+                        summary = dict(job.get("generation_summary") or {})
+                        summary["generation_count"] = len(generated.get("candidates") or [])
+                        estimate = generated.get("estimated_cost_usd")
+                        if type(estimate) in (int, float) and math.isfinite(estimate) and estimate >= 0:
+                            summary["estimated_cost_usd"] = estimate
+                        basis = generated.get("cost_basis")
+                        if basis in {"provider_base_excluding_tax_and_currency_adjustments",
+                                     "official_provider_base_plus_assumed_korea_vat"}:
+                            summary["cost_basis"] = basis
+                        job["generation_summary"] = summary
+                        job["candidate_selection"] = {}
+                        atomic_json(q.state_path, state)
+                        try:
+                            chosen = select_candidate(
+                                generated, _history_hashes(state),
+                                reviewer=lambda path: review_audio(path),
+                                diagnostics=job["candidate_selection"],
+                            )
+                        finally:
+                            atomic_json(q.state_path, state)
+                        chosen["generation_count"] = summary.get("generation_count")
+                        chosen["estimated_cost_usd"] = summary.get("estimated_cost_usd")
+                        chosen["cost_basis"] = summary.get("cost_basis", "historical_base_estimate")
                     job["music"] = chosen
                     job["status"] = "music_ready"
                     atomic_json(q.state_path, state)
@@ -1327,6 +1454,19 @@ def worker(
             )
             if isinstance(error, RemoteInventoryUnverified):
                 job["remote_inventory_diagnostic"] = error.diagnostic
+            if isinstance(error, CandidateSelectionError):
+                summary = job.get("generation_summary") or {}
+                error.worker_result = {
+                    "job_id": job["id"], "slot": job["slot"], "title": job["title"],
+                    "source_kind": job.get("source_kind", "new_lyria"),
+                    "generation_count": summary.get("generation_count"),
+                    "estimated_cost_usd": summary.get("estimated_cost_usd"),
+                    "cost_basis": summary.get("cost_basis"),
+                    "gross_cost_verified": False, "final_billed_cost_usd": None,
+                    "candidate_selection": error.diagnostic,
+                    "video_id": (job.get("upload") or {}).get("video_id"),
+                    "publication_complete": False,
+                }
             atomic_json(q.state_path, state)
             raise
 
@@ -1422,6 +1562,9 @@ def main() -> int:
         payload = {"profile": "aether_inn", "status": "blocked", "error": reason}
         if isinstance(error, RemoteInventoryUnverified):
             payload["remote_inventory_diagnostic"] = error.diagnostic
+        if isinstance(error, CandidateSelectionError):
+            payload.update(error.worker_result)
+            payload["candidate_selection"] = error.diagnostic
         print(json.dumps(payload))
         return 2
 
