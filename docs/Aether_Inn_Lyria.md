@@ -342,3 +342,37 @@ the canonical retained publisher in the original LaunchAgent process, with the
 owner check unchanged. It does not forge XPC environment values, unlock Keychain,
 start a second executor, renew the receipt, or repeat paid generation. All 456
 Aether tests pass with the in-process owner path. The morning report is untouched.
+
+### Observed retained-release completion — 2026-11-17 16:17 KST
+
+The existing LaunchAgent rendered the retained 140.434208-second source into a
+validated 140.8-second video, uploaded once, and set its thumbnail. The first
+upload result at 16:16:30 KST was `processing`, not public completion. A subsequent
+same-owner reconciliation reused video `BJ0BBNhIq-4` and the same job
+`ca7ecaa3c19738e4a852a59c`; it did not regenerate or upload a duplicate.
+
+At 16:17:11 KST the canonical authenticated observation returned `published`,
+`publication_complete=true`, and `thumbnail_status=set`. The durable queue records
+`privacy=public`, `processing_status=succeeded`, and `upload_status=processed`.
+This owner's immediate release used manual PUBLIC approval with no stale publishAt.
+Video: https://www.youtube.com/watch?v=BJ0BBNhIq-4 . Independent web-cache fetching
+returned a cache miss, so public verification is based on the canonical YouTube
+API observation, not a claimed browser playback check.
+
+Playlist synchronization separately finished at 16:17:17 KST with `state=synced`:
+the track was added to `all`, `roads`, and `uplifting`. The follow-up sync added
+zero duplicates. Eligible totals are all 71, roads 42, towns 12, nature 14,
+rest 22, uplifting 28, sleep 0. The retained release result is `complete` with
+empty blockers/warnings; the historical morning failure report remains unchanged.
+
+The original audio and generation-manifest hashes still match their pre-release
+values, and exactly one generation manifest exists. No additional model request
+or generation charge was incurred. The known original base estimate is USD 0.08;
+tax/FX/final billed total remain unverified. Actual offline signal review passed,
+without claiming human listening or musical-originality certification.
+
+After completion the LaunchAgent was `not running` with exit code 0; the owned
+renderer and test process IDs were absent. The temporary QA environment was
+removed, and pre-existing/shared simulator/emulator/build processes were untouched.
+No ordinary schedule, store reply, daily Ops deployment, or credential setting
+was changed as part of this release.
