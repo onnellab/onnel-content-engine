@@ -334,3 +334,11 @@ retained-source integrity, no new generation, same-job/same-video idempotency,
 receipt expiry, canonical manual deadline validation, registered-owner routing,
 and preservation of the morning daily report. These are offline tests, not proof
 that the requested real video has been published.
+
+The first requested launch at 16:02 KST stopped before worker/API execution with
+`aether_retained_release_gui_owner_required`: macOS did not retain the registered
+XPC service identity in a newly spawned Python child. The coordinator now invokes
+the canonical retained publisher in the original LaunchAgent process, with the
+owner check unchanged. It does not forge XPC environment values, unlock Keychain,
+start a second executor, renew the receipt, or repeat paid generation. All 456
+Aether tests pass with the in-process owner path. The morning report is untouched.

@@ -180,7 +180,9 @@ class RetainedRelease(unittest.TestCase):
         value = {"job_id": release.JOB_ID, "status": "processing", "video_id": "fixture-id",
                  "publication_complete": False}
         with patch.dict(os.environ, {"XPC_SERVICE_NAME": release.OWNER_SERVICE}), \
-             patch.object(daily, "run_step", return_value=(0, json.dumps(value), "")), \
+             patch.object(release, "publish", return_value=value), \
+             patch.object(daily, "save"), \
+             patch.object(daily, "run_step", side_effect=AssertionError("must retain original owner")), \
              patch.object(daily, "sync_playlists_after_upload"):
             daily.run_retained_single_slot(report)
         self.assertEqual(["aether_retained_publication_unverified"], report["blockers"])

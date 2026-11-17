@@ -1000,17 +1000,28 @@ def run_single_slot(report: dict, single_reconcile: dict) -> None:
 
 def run_retained_single_slot(report: dict) -> None:
     """Execute only the owner's exact retained-audio release, not daily Ops."""
-    from aether_retained_release import JOB_ID, OWNER_SERVICE
+    from aether_retained_release import JOB_ID, OWNER_SERVICE, publish
+    from short_video_pipeline import VideoError
+    import re
     if os.environ.get("XPC_SERVICE_NAME") != OWNER_SERVICE:
         raise ValueError("aether_retained_release_gui_owner_required")
-    code, stdout, _ = run_step(
-        report, "retained_single_release",
-        [sys.executable, "-B", "scripts/aether_retained_release.py", "publish"],
-        timeout=2400,
-    )
-    payload = json_stdout(stdout) or {
-        "status": "blocked", "job_id": JOB_ID, "error": "aether_retained_release_output_invalid"}
+    # XPC ownership does not survive a new Python child on this Mac. Keep the
+    # original registered owner's context; never synthesize it in an environment.
+    started = iso_now()
+    report["active_step"] = {"name": "retained_single_release", "started_at": started}
+    save(report)
+    try:
+        payload = publish()
+        code = 2 if payload.get("status") in {"blocked", "reconcile_required", "rejected"} else 0
+    except (VideoError, OSError) as error:
+        reason = str(error) if isinstance(error, VideoError) and re.fullmatch(r"[a-z_0-9]{1,100}", str(error)) else "aether_retained_release_failed"
+        code, payload = 2, {"status": "blocked", "job_id": JOB_ID, "error": reason}
+    report["steps"].append({"name": "retained_single_release", "started_at": started,
+                            "finished_at": iso_now(), "exit_code": code,
+                            "execution_context": "registered_gui_owner_in_process"})
+    report.pop("active_step", None)
     report["single_slot"] = payload
+    save(report)
     if code != 0 or payload.get("job_id") != JOB_ID:
         report["blockers"].append(payload.get("error") or "aether_retained_release_failed")
         return
