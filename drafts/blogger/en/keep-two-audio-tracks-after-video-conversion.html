@@ -10,7 +10,7 @@
 <h2>Use ffprobe to inventory the input and the export</h2>
 <p>FFmpeg's <a href="https://ffmpeg.org/ffprobe.html">official ffprobe documentation</a> explains how to display stream information and metadata. If ffprobe is installed, run a command like the one below on a local copy of your input. It reports the stream index, codec type, codec, channel count and any available language or title tags in JSON format. A missing language tag is not proof that the audio track is absent.</p>
 
-<pre><code>ffprobe -v error -show_entries stream=index,codec_type,codec_name,channels:stream_tags=language,title -of json input.mkv</code></pre>
+<p><code>ffprobe -v error -show_entries stream=index,codec_type,codec_name,channels:stream_tags=language,title -of json input.mkv</code></p>
 
 <p>Run the same command with the <code>input.mkv</code> name replaced by your converted output. Make a small inventory: which audio-stream indices appear in the source, which appear in the result, and which language/title tags are actually recorded? The absolute stream indices can change between files; compare track count and content rather than assuming source index 2 will remain index 2 after remuxing.</p>
 
@@ -32,7 +32,7 @@
 <h2>Preserve both audio streams with an explicit map</h2>
 <p>For a video whose first video stream and every existing audio stream should be retained, the following is an illustrative FFmpeg command. It selects the first video stream from input 0, selects all audio streams from that same input, and requests stream copy to a new Matroska file. The <code>-map 0:a</code> part is the important difference from relying on automatic audio selection.</p>
 
-<pre><code>ffmpeg -i input.mkv -map 0:v:0 -map 0:a -c copy output-with-both-audio.mkv</code></pre>
+<p><code>ffmpeg -i input.mkv -map 0:v:0 -map 0:a -c copy output-with-both-audio.mkv</code></p>
 
 <p>Use this only after confirming that the source contains the expected streams and that copying their codecs into the intended output container is supported. It does not automatically include subtitles, attachments or additional video streams, and it will fail if a required mapped stream is absent. Chapters follow separate copying rules and may be retained by default, so verify them separately. For a different input layout, map the streams that actually exist rather than copying a command blindly. The <a href="https://ffmpeg.org/ffmpeg-formats.html">FFmpeg format documentation</a> provides container and muxer information relevant to compatibility decisions.</p>
 

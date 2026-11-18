@@ -44,13 +44,15 @@
   },
   "transport_observation": {
     "date_kst": "2026-11-18",
-    "status": "account_and_remote_inventory_verified",
-    "recorded_at": "2026-11-18T06:49:12.014Z",
+    "status": "draft_saved_and_preview_verified",
+    "recorded_at": "2026-11-18T07:09:42.376Z",
     "transport": "User-requested Desktop Commander control of the existing macOS Chrome UI",
     "account": "onnellab.app@gmail.com",
     "blog_id": "1829676614817439337",
+    "post_id": "5479279401888867258",
     "management_url": "https://www.blogger.com/u/2/blog/posts/1829676614817439337",
-    "detail": "Selected the existing ONNELLAB account in Google's account chooser. Verified all 2 existing posts are published; drafts, scheduled and trash are all 0. No matching target post exists. No remote draft for this article has yet been created."
+    "editor_url": "https://www.blogger.com/u/2/blog/post/edit/1829676614817439337/5479279401888867258",
+    "detail": "Reconciled authenticated inventory before creation, then saved exactly one draft. Reopened the same draft and matched all 51 ordered article blocks and 7 links to the revised source. Regenerated Blogger preview matched the complete body, headings, links and both exact commands; the page has no horizontal overflow at 1200px, and a temporary 320px article-width check also passed. Existing draft receipt was committed and pushed before publication."
   },
   "editorial_revisions": [
     {
@@ -58,6 +60,37 @@
       "to_sha256": "a3c26437e747780f49690efb232c2fc232f80ee2fdbcb3a1a5a86dc2744b5b31",
       "revised_at": "2026-11-18T06:49:39.268Z",
       "reason": "Correct FFmpeg chapter-copy behavior: chapter copying is governed separately from stream mapping."
+    },
+    {
+      "from_sha256": "a3c26437e747780f49690efb232c2fc232f80ee2fdbcb3a1a5a86dc2744b5b31",
+      "to_sha256": "94557b2e641ad60ace8daf7bff70570a17df56ba88b99cb6bb072b82bca15416",
+      "revised_at": "2026-11-18T07:10:25.444Z",
+      "reason": "Replace two PRE wrappers with paragraph/code wrappers so the Blogger theme can wrap long commands without changing command text; the existing HTML safety policy is unchanged.",
+      "post_id": "5479279401888867258",
+      "remote_status": "draft",
+      "saved_body_and_links_verified": true,
+      "preview_verified_at": "2026-11-18T07:09:25.822Z",
+      "preview_url": "https://www.blogger.com/u/2/blog/post/preview/1829676614817439337/5479279401888867258",
+      "preview_checks": {
+        "ordered_blocks": 51,
+        "links": 7,
+        "headings": 8,
+        "tables": 1,
+        "commands": 2,
+        "full_blocks_match": true,
+        "links_match": true,
+        "command_text_unchanged": true,
+        "page_client_width": 1200,
+        "page_scroll_width": 1200,
+        "article_client_width": 810,
+        "article_scroll_width": 810,
+        "narrow_article_width_check": {
+          "width": 320,
+          "scroll_width": 320,
+          "original_style_restored": true,
+          "verified_at": "2026-11-18T07:09:42.376Z"
+        }
+      }
     }
   ]
 }

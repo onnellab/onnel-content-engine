@@ -37,7 +37,7 @@
       "title": "Why a Converted Video Keeps Only One Audio Language (and How to Preserve Both)",
       "source_url": "https://onnellab.com/blog/en/test-converted-media-before-replacing-original/",
       "body_path": "drafts/blogger/en/keep-two-audio-tracks-after-video-conversion.html",
-      "sha256": "a3c26437e747780f49690efb232c2fc232f80ee2fdbcb3a1a5a86dc2744b5b31",
+      "sha256": "94557b2e641ad60ace8daf7bff70570a17df56ba88b99cb6bb072b82bca15416",
       "status": "draft",
       "post_id": "5479279401888867258",
       "posted_url": "",
@@ -65,6 +65,37 @@
               "Why Two Audio Clips Click When Joined (and How to Repair the Seam)",
               "Why MP3 Cover Art Shows on One Player but Not Another"
             ]
+          }
+        },
+        {
+          "from_sha256": "a3c26437e747780f49690efb232c2fc232f80ee2fdbcb3a1a5a86dc2744b5b31",
+          "to_sha256": "94557b2e641ad60ace8daf7bff70570a17df56ba88b99cb6bb072b82bca15416",
+          "revised_at": "2026-11-18T07:10:25.444Z",
+          "reason": "Replace two PRE wrappers with paragraph/code wrappers so the Blogger theme can wrap long commands without changing command text; the existing HTML safety policy is unchanged.",
+          "post_id": "5479279401888867258",
+          "remote_status": "draft",
+          "saved_body_and_links_verified": true,
+          "preview_verified_at": "2026-11-18T07:09:25.822Z",
+          "preview_url": "https://www.blogger.com/u/2/blog/post/preview/1829676614817439337/5479279401888867258",
+          "preview_checks": {
+            "ordered_blocks": 51,
+            "links": 7,
+            "headings": 8,
+            "tables": 1,
+            "commands": 2,
+            "full_blocks_match": true,
+            "links_match": true,
+            "command_text_unchanged": true,
+            "page_client_width": 1200,
+            "page_scroll_width": 1200,
+            "article_client_width": 810,
+            "article_scroll_width": 810,
+            "narrow_article_width_check": {
+              "width": 320,
+              "scroll_width": 320,
+              "original_style_restored": true,
+              "verified_at": "2026-11-18T07:09:42.376Z"
+            }
           }
         }
       ]
