@@ -26,7 +26,7 @@ VENDORED = Path("assets/store_promo/onnellab_shared_v20261011")
 GATE_SHA256 = "7d28497c40140d8a5f55577c327be1edd258554fedb838f35aa6befb470b1391"
 ROOT_ADAPTER = Path("assets/store_promo/release_artwork.py")
 ROOT_ADAPTER_SHA256 = "55c9afcbc66bf13b3e5f7033f0358b5ecfb146a740e6c445253fac05e769846c"
-# Two individually reviewed, indivisible bundles. Source aliases are accepted
+# Individually reviewed, indivisible bundles. Source aliases are accepted
 # only for the exact corresponding complete map, never interchangeable files.
 BUNDLE_PINS = {
     "legacy_v20261011": {
@@ -39,6 +39,11 @@ BUNDLE_PINS = {
         "source_commits": frozenset({"0d8a37eefa4283e82e2c7ea803580a7c5eed1835"}),
         "gate_sha256": GATE_SHA256,
         "file_map_sha256": "ba0baadc8895e9883c0a208b9e730a0df0d20b562346a31645e9768da57be16e",
+    },
+    "native_ios_v20261118": {
+        "source_commits": frozenset({"90aa630e84cb1e540ec0a8e4ea3e17e2e7f7a3df"}),
+        "gate_sha256": "e55eec6ad659ebe33c0218d7d0995422473a982a50f648f45839d1d379d103b9",
+        "file_map_sha256": "ad056ea40f02da2c2797c58b969213e74a5279cf5e2d1f4f3302b528fcb5f129",
     },
 }
 SOURCE_COMMITS = frozenset(commit for pin in BUNDLE_PINS.values() for commit in pin["source_commits"])

@@ -74,6 +74,9 @@ class BundleFixture(unittest.TestCase):
             "unchanged_screen_v20261018": dict(self.contents,
                 **{"release_artwork.py": b"# synthetic new gate\n",
                    "header_icon_template.svg": b"<svg>new wash</svg>\n"}),
+            "native_ios_v20261118": dict(self.contents,
+                **{"release_artwork.py": b"# synthetic native iOS gate\n",
+                   "header_icon_template.svg": b"<svg>native fixture</svg>"}),
         }
         self.ledger = {"schema_version": 2, "repository": "onnellab/onnellab-flutter-template",
                        "source_directory": "template/assets/store_promo", "bundles": {
@@ -597,6 +600,14 @@ class EngineAllowlistAndProbe(unittest.TestCase):
         for name, digest in expected.items():
             with self.subTest(name=name):
                 self.assertEqual(actual[name], digest)
+
+    def test_native_ios_adds_only_the_reviewed_bundle_delta(self):
+        bundles = gate.load_allowlist()["bundles"]
+        verified = bundles["unchanged_screen_v20261018"]["sha256"]
+        native_ios = bundles["native_ios_v20261118"]["sha256"]
+        self.assertEqual(set(verified), set(native_ios))
+        self.assertEqual({name for name in verified if verified[name] != native_ios[name]},
+                         {"README.md", "capture_release_identity.py", "release_artwork.py"})
 
     def test_runtime_probe_contains_no_app_code_or_canonical_bundle(self):
         captured = {}
