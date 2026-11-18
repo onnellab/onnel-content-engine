@@ -1,0 +1,71 @@
+<p>Your original video offers English and Korean audio, or perhaps a director's commentary alongside the main soundtrack. After conversion, the video plays, but the audio-language menu has only one choice. The second track may not be broken at all: the converter may simply have left it out. Before converting again, distinguish a <strong>missing stream</strong> from a stream that is present but not offered or selected by the player.</p>
+
+<p>This guide addresses that specific failure. It explains how to count the actual audio streams, how FFmpeg's default stream selection can omit a language or commentary, and when an explicit stream map can preserve both. The examples are fictional troubleshooting scenarios, not tests of a particular device or application. Keep the original file untouched while investigating.</p>
+
+<h2>First ask whether the track is absent or merely hidden</h2>
+<p>A media file can contain separate video, audio, subtitle and other streams. An audio stream is a distinct track in the file, not just a left or right speaker channel. Two audio streams might carry two languages, while one stereo stream merely has two channels. Confusing those terms makes diagnosis unnecessarily difficult.</p>
+
+<p>Play the <em>original</em> and note which languages or commentary tracks appear in its audio menu. Then examine the output file's audio menu and compare the inventory. A player may have its own preferences, language labels, or decoding limitations, so a missing menu entry alone does not prove that the stream was discarded. Inspect the files themselves before attributing the failure to the conversion.</p>
+
+<h2>Use ffprobe to inventory the input and the export</h2>
+<p>FFmpeg's <a href="https://ffmpeg.org/ffprobe.html">official ffprobe documentation</a> explains how to display stream information and metadata. If ffprobe is installed, run a command like the one below on a local copy of your input. It reports the stream index, codec type, codec, channel count and any available language or title tags in JSON format. A missing language tag is not proof that the audio track is absent.</p>
+
+<pre><code>ffprobe -v error -show_entries stream=index,codec_type,codec_name,channels:stream_tags=language,title -of json input.mkv</code></pre>
+
+<p>Run the same command with the <code>input.mkv</code> name replaced by your converted output. Make a small inventory: which audio-stream indices appear in the source, which appear in the result, and which language/title tags are actually recorded? The absolute stream indices can change between files; compare track count and content rather than assuming source index 2 will remain index 2 after remuxing.</p>
+
+<table>
+<thead><tr><th>Observation</th><th>What it suggests</th><th>What to check next</th></tr></thead>
+<tbody>
+<tr><td>Source has two audio streams; output has one</td><td>One may have been excluded during output selection</td><td>Review the converter's stream mapping or track-selection controls</td></tr>
+<tr><td>Both files have two audio streams; only one appears in a player's menu</td><td>Player support, track metadata or playback selection may be involved</td><td>Test another compatible player and inspect codec and language tags</td></tr>
+<tr><td>Output has two tracks, but both play the same language</td><td>The wrong sources may have been mapped twice</td><td>Listen to each output track and compare the actual source tracks</td></tr>
+<tr><td>Command reports an unsupported output format or codec</td><td>Selected streams may not fit the chosen container</td><td>Check container support and pick a compatible output workflow</td></tr>
+</tbody>
+</table>
+
+<h2>Why FFmpeg can choose only one audio stream by default</h2>
+<p>The <a href="https://ffmpeg.org/ffmpeg.html">FFmpeg documentation on stream selection</a> states that, without a manual <code>-map</code> for an output, FFmpeg ordinarily selects one audio stream from the available inputs when the output supports audio. Its automatic choice is based on channel count, with an index tie-breaker. This is not the same as asking which language the viewer prefers. A six-channel commentary can therefore be chosen over a two-channel main track, depending on the actual stream layout.</p>
+
+<p>That behavior explains a particularly confusing result: a conversion may finish without an error and still omit the second spoken language. Choosing an audio encoder with <code>-c:a</code> does not, by itself, instruct FFmpeg to retain every audio stream; stream selection and encoding are separate decisions. Likewise, simply changing a filename extension will not restore an excluded track.</p>
+
+<h2>Preserve both audio streams with an explicit map</h2>
+<p>For a video whose first video stream and every existing audio stream should be retained, the following is an illustrative FFmpeg command. It selects the first video stream from input 0, selects all audio streams from that same input, and requests stream copy to a new Matroska file. The <code>-map 0:a</code> part is the important difference from relying on automatic audio selection.</p>
+
+<pre><code>ffmpeg -i input.mkv -map 0:v:0 -map 0:a -c copy output-with-both-audio.mkv</code></pre>
+
+<p>Use this only after confirming that the source contains the expected streams and that copying their codecs into the intended output container is supported. It does not automatically include subtitles, chapters, attachments or additional video streams, and it will fail if a required mapped stream is absent. For a different input layout, map the streams that actually exist rather than copying a command blindly. The <a href="https://ffmpeg.org/ffmpeg-formats.html">FFmpeg format documentation</a> provides container and muxer information relevant to compatibility decisions.</p>
+
+<p>When you need an MP4 rather than a Matroska output, inspect the actual audio and video codec requirements first. An output container may reject a stream even when the original source handled it. In that case, choose a compatible audio conversion method intentionally, without silently dropping the second track. A failed stream-copy attempt is preferable to claiming success from a file that has the wrong soundtrack.</p>
+
+<h2>Example 1: a bilingual oral-history interview</h2>
+<p>Imagine a fictional oral-history recording with a two-channel English narration and a one-channel Korean interpretation. The owner exports a smaller video for an offline archive and discovers that the Korean track is missing. Inspection shows two audio streams in the original file but only one in the export. The channel-count rule makes the English track a plausible automatic selection, although the actual command and files must still be examined.</p>
+
+<p>The editor's first task is not to raise the volume of the Korean voice; that voice is not in the resulting file. They return to the original, explicitly map the required streams to a compatible output, and inspect the exported tracks again. Finally they listen to short passages from each language track in a player that can select between them. A successful JSON inventory establishes presence, not intelligibility or the accuracy of the language labels.</p>
+
+<h2>Example 2: surround commentary overtakes the main soundtrack</h2>
+<p>Imagine a separate fictional student-film archive. Its main soundtrack is stereo, but the optional behind-the-scenes commentary uses six channels. A conversion that relies on automatic audio selection may keep the six-channel stream and discard the stereo main track. Viewers then hear commentary instead of the film's intended sound. This is a selection issue, not necessarily corruption or a mysterious volume setting.</p>
+
+<p>Here the owner writes down the desired output order: main soundtrack first, commentary second. They inspect input indices and explicitly map the two known audio streams in that order, rather than assuming an automatically preferred stream is the desired one. After export, they select each audio option, listen to distinguish them, and verify whether the player's default track selection matches the intended viewer experience. Track order, labels and player behavior should be checked separately.</p>
+
+<h2>Verify the final file before replacing anything</h2>
+<ol>
+<li><strong>Compare stream counts.</strong> Run ffprobe on both files and confirm that the required audio streams are present in the output.</li>
+<li><strong>Listen to each choice.</strong> Use a compatible player to select every output audio track and test the beginning, middle and end of representative speech or music.</li>
+<li><strong>Check the right identity.</strong> Confirm that English, Korean, commentary or other labels describe what actually plays; a tag is only metadata.</li>
+<li><strong>Check the destination.</strong> Try the actual target device or app. A track existing in the file does not guarantee that all devices can decode it.</li>
+<li><strong>Keep the source.</strong> Preserve the original and the conversion settings. Do not replace the only surviving copy merely because the output opens without an error.</li>
+</ol>
+
+<p>If a desired track is present in the converted file but cannot play in the target app, the next problem is compatibility, not stream retention. If only one track remains, return to the mapping configuration before experimenting with unrelated filters. This distinction saves time and keeps a reversible path back to the source.</p>
+
+<h2>Sources and further reading</h2>
+<ul>
+<li><a href="https://ffmpeg.org/ffmpeg.html">FFmpeg: stream selection and -map options</a> — automatic versus manual selection, channel-count behavior and mapping examples.</li>
+<li><a href="https://ffmpeg.org/ffprobe.html">ffprobe documentation</a> — inspecting actual streams and tags rather than relying only on a player's audio menu.</li>
+<li><a href="https://ffmpeg.org/ffmpeg-formats.html">FFmpeg formats documentation</a> — container and muxer behavior that affects whether selected streams can be written.</li>
+</ul>
+
+<p>For a broader acceptance checklist covering video integrity, playback, metadata, backups and replacement decisions, consult <a href="https://onnellab.com/blog/en/test-converted-media-before-replacing-original/">ONNELLAB's guide to testing converted media before replacing the original</a>. This separate article concentrates on one narrower failure: preserving multiple language or commentary streams during output selection.</p>
+
+<p><strong>Takeaway:</strong> inventory first, map deliberately, verify every audio choice and keep the untouched original. An export that plays is not necessarily an export that kept every soundtrack.</p>

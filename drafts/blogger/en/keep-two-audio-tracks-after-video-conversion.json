@@ -1,0 +1,45 @@
+{
+  "week": "2026-W47",
+  "slot": "2026-11-18",
+  "slug": "keep-two-audio-tracks-after-video-conversion",
+  "language": "en",
+  "title": "Why a Converted Video Keeps Only One Audio Language (and How to Preserve Both)",
+  "primary_question": "Why does a converted video lose its second audio language or commentary track, and how can I preserve both without overwriting the source?",
+  "source_title": "How to Test a Converted Media File Before Replacing the Original",
+  "source_url": "https://onnellab.com/blog/en/test-converted-media-before-replacing-original/",
+  "source_path": "generated/markdown/en/media/test-converted-media-before-replacing-original.md",
+  "body_path": "drafts/blogger/en/keep-two-audio-tracks-after-video-conversion.html",
+  "fact_sources": [
+    {
+      "url": "https://ffmpeg.org/ffmpeg.html",
+      "supports": "FFmpeg documentation states that with no -map it automatically selects one audio stream based on channel count, then index; using -map controls included streams, and -c copy copies selected streams without transcoding."
+    },
+    {
+      "url": "https://ffmpeg.org/ffprobe.html",
+      "supports": "Official ffprobe reference describes -show_entries stream fields and stream_tags fields as well as JSON output for investigating track counts and metadata."
+    },
+    {
+      "url": "https://ffmpeg.org/ffmpeg-formats.html",
+      "supports": "Official formats documentation describes muxers and containers; selecting streams does not override output container support."
+    }
+  ],
+  "new_examples": [
+    "Fictional bilingual oral-history interview with two-channel English narration and one-channel Korean interpretation: output has one stream; operator explicitly maps both and checks audible language choices.",
+    "Fictional student-film archive with two-channel main soundtrack and six-channel director commentary: automatic selection may retain surround commentary; operator maps desired tracks in intended order, checks each, and verifies target player behavior."
+  ],
+  "review": {
+    "technically_verified": true,
+    "distinct_search_intent": true,
+    "original_examples": true,
+    "sources_checked": true,
+    "links_checked": true,
+    "rights_checked": true,
+    "english_proofread": true
+  },
+  "editorial_notes": "Independently written 2026-11-18 technical troubleshooting guide on FFmpeg default audio stream selection and multi-track preservation, not a paraphrase of ONNELLAB's general post-conversion acceptance checklist. FFmpeg official docs examined this run; all three documentation URLs and source canonical URL returned HTTP 200 from Mac. -map examples carry codec/container caveats, and no specific third-party device compatibility is claimed. Two explicitly fictional original cases. Source text examined, links reviewed, no external artwork or quoted protected copy reused. Reviewed English prose for misleading universal claims. Browser access is not available in this task's originating context; no Blogger account verification or remote draft/publication is claimed.",
+  "transport_observation": {
+    "date_kst": "2026-11-18",
+    "status": "browser_context_unavailable",
+    "detail": "Mac connected, but Browser.list_tabs refused: Browser access requires the originating browser context. No verified Google Blogger OAuth adapter. Existing Nov 16 prior article is recorded as published in latest origin/main and its exact public URL/body were independently verified from the Mac. New article only receives local validation and a guarded Git reservation; do not claim remote draft/publication before account, blog ID and remote post inventory can be inspected."
+  }
+}
