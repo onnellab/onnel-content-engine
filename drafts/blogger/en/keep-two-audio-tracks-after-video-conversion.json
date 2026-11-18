@@ -12,7 +12,7 @@
   "fact_sources": [
     {
       "url": "https://ffmpeg.org/ffmpeg.html",
-      "supports": "FFmpeg documentation states that with no -map it automatically selects one audio stream based on channel count, then index; using -map controls included streams, and -c copy copies selected streams without transcoding."
+      "supports": "FFmpeg documentation states that with no -map it automatically selects one audio stream based on channel count, then index; using -map controls included streams, and -c copy copies selected streams without transcoding. Chapter mapping is separate: without -map_chapters, chapters are copied from the first input that contains them."
     },
     {
       "url": "https://ffmpeg.org/ffprobe.html",
@@ -36,10 +36,28 @@
     "rights_checked": true,
     "english_proofread": true
   },
-  "editorial_notes": "Independently written 2026-11-18 technical troubleshooting guide on FFmpeg default audio stream selection and multi-track preservation, not a paraphrase of ONNELLAB's general post-conversion acceptance checklist. FFmpeg official docs examined this run; all three documentation URLs and source canonical URL returned HTTP 200 from Mac. -map examples carry codec/container caveats, and no specific third-party device compatibility is claimed. Two explicitly fictional original cases. Source text examined, links reviewed, no external artwork or quoted protected copy reused. Reviewed English prose for misleading universal claims. Browser access is not available in this task's originating context; no Blogger account verification or remote draft/publication is claimed.",
-  "transport_observation": {
+  "editorial_notes": "Independently written 2026-11-18 technical troubleshooting guide on FFmpeg default audio stream selection and multi-track preservation, not a paraphrase of ONNELLAB's general post-conversion acceptance checklist. FFmpeg official docs examined this run; all three documentation URLs and source canonical URL returned HTTP 200 from Mac. -map examples carry codec/container caveats, and no specific third-party device compatibility is claimed. Two explicitly fictional original cases. Source text examined, links reviewed, no external artwork or quoted protected copy reused. Reviewed English prose for misleading universal claims. The initial run could not access its originating extension browser context. On 2026-11-18, recovery through the user-requested Desktop Commander route verified the existing ONNELLAB Google account and correct blog, and confirmed two published posts with no drafts, scheduled posts or trashed posts. Corrected the chapter-copy statement against FFmpeg's -map_chapters documentation before creating this article's first remote draft.",
+  "initial_transport_observation": {
     "date_kst": "2026-11-18",
     "status": "browser_context_unavailable",
     "detail": "Mac connected, but Browser.list_tabs refused: Browser access requires the originating browser context. No verified Google Blogger OAuth adapter. Existing Nov 16 prior article is recorded as published in latest origin/main and its exact public URL/body were independently verified from the Mac. New article only receives local validation and a guarded Git reservation; do not claim remote draft/publication before account, blog ID and remote post inventory can be inspected."
-  }
+  },
+  "transport_observation": {
+    "date_kst": "2026-11-18",
+    "status": "account_and_remote_inventory_verified",
+    "recorded_at": "2026-11-18T06:49:12.014Z",
+    "transport": "User-requested Desktop Commander control of the existing macOS Chrome UI",
+    "account": "onnellab.app@gmail.com",
+    "blog_id": "1829676614817439337",
+    "management_url": "https://www.blogger.com/u/2/blog/posts/1829676614817439337",
+    "detail": "Selected the existing ONNELLAB account in Google's account chooser. Verified all 2 existing posts are published; drafts, scheduled and trash are all 0. No matching target post exists. No remote draft for this article has yet been created."
+  },
+  "editorial_revisions": [
+    {
+      "from_sha256": "e6a97ba4d8a4f22fecceade3561675a975df55da0ec71b345b883cb794ea39da",
+      "to_sha256": "a3c26437e747780f49690efb232c2fc232f80ee2fdbcb3a1a5a86dc2744b5b31",
+      "revised_at": "2026-11-18T06:49:39.268Z",
+      "reason": "Correct FFmpeg chapter-copy behavior: chapter copying is governed separately from stream mapping."
+    }
+  ]
 }
