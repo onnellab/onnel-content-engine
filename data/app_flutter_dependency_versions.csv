@@ -13,7 +13,7 @@ APP-0006,aligna,dependency,in_app_review,^2.0.11,2.0.11,,ok,github:onnellab/alig
 APP-0006,aligna,dependency,shared_preferences,^2.5.3,2.5.4,,ok,github:onnellab/aligna/pubspec.yaml
 APP-0006,aligna,dependency,url_launcher,^6.3.2,6.3.2,,ok,github:onnellab/aligna/pubspec.yaml
 APP-0006,aligna,flutter_sdk,flutter,>=3.38.0,,>=3.38.0,ok,github:onnellab/aligna/pubspec.yaml
-APP-0005,clipnest,app_version,clipnest,1.0.6+100,1.0.6,,ok,github:onnellab/clipnest/pubspec.yaml
+APP-0005,clipnest,app_version,clipnest,1.0.8+104,1.0.8,,ok,github:onnellab/clipnest/pubspec.yaml
 APP-0005,clipnest,dependency,cupertino_icons,^1.0.8,1.0.8,,ok,github:onnellab/clipnest/pubspec.yaml
 APP-0005,clipnest,dependency,flutter,sdk:flutter,0.0.0,,ok,github:onnellab/clipnest/pubspec.yaml
 APP-0005,clipnest,dependency,flutter_localizations,sdk:flutter,0.0.0,,ok,github:onnellab/clipnest/pubspec.yaml

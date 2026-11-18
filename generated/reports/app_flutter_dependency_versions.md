@@ -25,7 +25,7 @@ Generated from app repository mappings; GitHub default branches are used when ma
 
 | Type | Package | Declared | Resolved | Flutter SDK | Status | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| app_version | clipnest | 1.0.6+100 | 1.0.6 | - | ok | github:onnellab/clipnest/pubspec.yaml |
+| app_version | clipnest | 1.0.8+104 | 1.0.8 | - | ok | github:onnellab/clipnest/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/clipnest/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/clipnest/pubspec.yaml |
 | dependency | flutter_localizations | sdk:flutter | 0.0.0 | - | ok | github:onnellab/clipnest/pubspec.yaml |
