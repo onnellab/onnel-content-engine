@@ -1,6 +1,8 @@
 # ONNELLAB Google Blogger Channel — Operational Runbook
 
-## 1. Verified channel identity (2026-11-12)
+## 1. Verified channel identity and current status
+
+Channel identity was established on 2026-11-12. Publication and transport status below were updated from the verified 2026-11-18 recovery.
 
 | Field | Verified value |
 | --- | --- |
@@ -13,8 +15,8 @@
 | Language | English (`en`) |
 | Time zone | `Asia/Seoul` |
 | Theme | Essential Light |
-| Publishing status | Blog created; no general articles published |
-| Automatic posting status | **DISABLED / NOT CONNECTED** |
+| Publishing status | Three published articles; no drafts or scheduled posts (verified 2026-11-18) |
+| Automatic posting status | Schedule configured; Desktop Commander UI recovery verified 2026-11-18; unattended browser transport not re-verified |
 | AdSense | **NOT ENABLED / NO APPROVAL CLAIM** |
 | Google Analytics measurement ID | Not configured at initialization |
 | Custom domain | Not configured; uses the verified Blogspot URL |
@@ -73,7 +75,15 @@ Policy and quality gates are defined in `docs/Publishing_Guide.md` and `docs/Git
 5. `check` and `reserve` use the same slot/slug/body-identity checks. A title, source URL, body path or digest mismatch is not permission to replace a reserved article. Successful local validation explicitly reports that remote account/state remain unverified and gives the next local recovery action. It is not authorization evidence.
 6. The current repository has no verified Blogger OAuth publishing adapter. An unrelated Google/YouTube connection cannot substitute for one. Keep the supported browser route or use a separately authorized, tested Blogger OAuth adapter; do not borrow tokens. Google's [Blogger API authorization requirements](https://developers.google.com/blogger/docs/3.0/using) apply to any future adapter.
 
-The 2026-11-16 recovery inspection confirmed the original `audio-click-at-clip-join` reservation and unchanged HTML, but the current Browser tool lacked its originating browser context. The earlier reading-list redirect remains unexplained because the authenticated UI could not be inspected. No remote draft or publication was attempted during that recovery inspection. Browser reconnection is still required; these guard changes do not claim to repair a Google session.
+The 2026-11-16 recovery inspection confirmed the original `audio-click-at-clip-join` reservation and unchanged HTML, but that run's Browser tool lacked its originating browser context. The earlier reading-list redirect remained unexplained because the authenticated UI could not be inspected. No remote draft or publication was attempted during that recovery inspection; browser reconnection was still required at that time.
+
+### Desktop Commander recovery verified (2026-11-18)
+
+The user explicitly requested Desktop Commander for this recovery. Through the existing macOS Chrome UI, the visible Google account chooser selected `onnellab.app@gmail.com`, and the ONNELLAB Guides management screen confirmed Blog ID `1829676614817439337`. The observed account index `/u/2/` is session-specific and must not be hard-coded for future runs. Before draft creation, the authenticated inventory showed two published posts and no draft, scheduled or trashed posts; the reserved target was absent.
+
+The existing November 18 reservation was reconciled, its chapter-copy statement corrected against the FFmpeg documentation, and one draft was saved as post ID `5479279401888867258`. Its receipt was committed and pushed before publication. The same draft passed complete source/preview comparison and a command-wrapping correction, then was published at [its actual public permalink](https://onnellab-guides.blogspot.com/2026/11/why-converted-video-keeps-only-one.html). At `2026-11-18T07:13:56Z`, an unauthenticated request returned HTTP 200; all 51 ordered article blocks, seven link destinations and all code text matched the approved source. The management inventory showed three published posts and zero drafts, scheduled posts or trash.
+
+This verifies the explicitly authorized Desktop Commander route for this recovery. It does not verify repaired extension-context access, unattended scheduled browser access or a Blogger OAuth adapter. Advertising, analytics, Search Console and the canonical publishing workflow were not changed.
 
 ## 5. Activation and safety checklist
 
@@ -81,7 +91,8 @@ The 2026-11-16 recovery inspection confirmed the original `audio-click-at-clip-j
 - [x] Created a separate three-times-weekly agent schedule independent of the GitHub Actions canonical publishing workflow.
 - [x] Implemented `scripts/blogger_weekly.py` with English-only quality checks, source-url requirements, substantial article length, reference/rights review attestations, exact-passage overlap rejection, duplicate KST date-slot/slug prevention and three-per-week cap, guarded state transitions, and public receipt verification.
 - [x] Added offline regression tests in `tests/test_blogger_weekly.py`.
-- [ ] First scheduled run: verify a real article draft, the authenticated browser account and Blog ID, preview, live-publication sequence, and exact public article content. This cannot be claimed complete until actually observed.
+- [x] End-to-end publication gate: verified the real draft, authenticated account and Blog ID, regenerated preview, publication of the same post, and exact unauthenticated public article content during the 2026-11-18 Desktop Commander recovery.
+- [ ] Unattended scheduled browser transport: verify access from an actual scheduled execution context; the successful user-directed recovery does not establish that capability.
 - [ ] Optional future API route: implement dedicated Blogger OAuth consent and secret storage, test refresh/scopes/account identity, and never borrow an unrelated Google account's YouTube token.
 
 ### Draft metadata contract
@@ -127,3 +138,4 @@ The platform's built-in cookie notice must actually function for eligible visito
 - About/Contact/Privacy: created and checked on their exact public URLs.
 - Essential Light, navigation menu and hidden profile: verified on the live Blogger homepage.
 - General posts: 0 at launch; account advertising connection: not configured.
+- Latest publication verification (2026-11-18): three published posts and zero drafts/scheduled/trash; post `5479279401888867258` passed independent HTTP 200 and complete public-body comparison. See the recovery record above and `data/blogger_publications.json`.

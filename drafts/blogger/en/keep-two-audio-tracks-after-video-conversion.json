@@ -44,15 +44,44 @@
   },
   "transport_observation": {
     "date_kst": "2026-11-18",
-    "status": "draft_saved_and_preview_verified",
-    "recorded_at": "2026-11-18T07:09:42.376Z",
+    "status": "published_and_publicly_verified",
+    "recorded_at": "2026-11-18T07:14:06+00:00",
     "transport": "User-requested Desktop Commander control of the existing macOS Chrome UI",
     "account": "onnellab.app@gmail.com",
     "blog_id": "1829676614817439337",
     "post_id": "5479279401888867258",
     "management_url": "https://www.blogger.com/u/2/blog/posts/1829676614817439337",
     "editor_url": "https://www.blogger.com/u/2/blog/post/edit/1829676614817439337/5479279401888867258",
-    "detail": "Reconciled authenticated inventory before creation, then saved exactly one draft. Reopened the same draft and matched all 51 ordered article blocks and 7 links to the revised source. Regenerated Blogger preview matched the complete body, headings, links and both exact commands; the page has no horizontal overflow at 1200px, and a temporary 320px article-width check also passed. Existing draft receipt was committed and pushed before publication."
+    "detail": "Published the same recorded draft through the verified ONNELLAB Blogger UI after the saved source and regenerated preview passed. The actual public permalink returned HTTP 200 without authentication and all 51 ordered text blocks, 7 link destinations and every code element matched the approved source. The current Chrome account index was selected through Google's visible account chooser and is session-specific. This recovery verifies the user-requested Desktop Commander route; it does not assert that the extension-context blocker or an unattended OAuth adapter was repaired.",
+    "public_url": "https://onnellab-guides.blogspot.com/2026/11/why-converted-video-keeps-only-one.html",
+    "public_verification": {
+      "verified_at": "2026-11-18T07:13:56.115470+00:00",
+      "method": "Unauthenticated urllib request; exact public post-body HTMLParser comparison against approved source",
+      "http_status": 200,
+      "requested_url": "https://onnellab-guides.blogspot.com/2026/11/why-converted-video-keeps-only-one.html",
+      "final_url": "https://onnellab-guides.blogspot.com/2026/11/why-converted-video-keeps-only-one.html",
+      "post_id": "5479279401888867258",
+      "title_matches": true,
+      "article_count": 1,
+      "source_sha256": "94557b2e641ad60ace8daf7bff70570a17df56ba88b99cb6bb072b82bca15416",
+      "ordered_block_count": 51,
+      "full_body_matches": true,
+      "link_count": 7,
+      "all_link_destinations_match": true,
+      "code_text_count": 6,
+      "all_code_text_matches": true,
+      "corrected_chapter_sentence_present": true,
+      "old_false_sentence_absent": true,
+      "observed_blocks_sha256": "c83d3ec696a45f0128c3562b939f9fea6f758b9d2437beadcf90af8b8e2c322b"
+    },
+    "remote_inventory": {
+      "verified_at": "2026-11-18T07:12:37.014Z",
+      "published": 3,
+      "drafts": 0,
+      "scheduled": 0,
+      "trash": 0,
+      "target_status": "published"
+    }
   },
   "editorial_revisions": [
     {
