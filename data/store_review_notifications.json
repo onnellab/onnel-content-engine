@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "policy_changed_at": "2026-10-14T06:14:53+00:00",
-  "updated_at": "2026-11-05T23:32:59.034Z",
+  "updated_at": "2026-11-19T21:27:50+00:00",
   "notifications": [
     {
       "review_id": "10b4e93e-b9cd-4ef4-ad91-2726f5256651",
@@ -86,6 +86,25 @@
       "owner_approval_required": true,
       "notified_at": "2026-11-05T23:31:35.106593+00:00",
       "delivery_channel": "chatgpt"
+    },
+    {
+      "review_id": "9e44915d-4662-4121-995a-e10dfc518ad0",
+      "app_id": "APP-0002",
+      "app_slug": "tagweaver",
+      "app_name": "TagWeaver",
+      "platform": "android",
+      "rating": "2",
+      "title": "",
+      "body": "its fine for the most part, except it wouldnt let me save any changes...",
+      "created_at": "2026-11-19T14:48:18+00:00",
+      "updated_at": "2026-11-19T14:48:18+00:00",
+      "reviewer_language": "en",
+      "territory": "",
+      "notification_id": "store-review-fd1dbb22b904f74bffce4b258937d79120ccc18e31fc03022766cdfcbe782ccb",
+      "status": "pending",
+      "detected_at": "2026-11-19T21:27:50+00:00",
+      "delivery_reference": "",
+      "owner_approval_required": true
     }
   ]
 }
