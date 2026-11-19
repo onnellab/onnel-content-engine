@@ -70,11 +70,13 @@ Generated from app repository mappings; GitHub default branches are used when ma
 | --- | --- | --- | --- | --- | --- | --- |
 | app_version | quivra | 1.0.10+85 | 1.0.10 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | cupertino_icons | ^1.0.8 | 1.0.8 | - | ok | github:onnellab/quivra/pubspec.yaml |
+| dependency | ffi | ^2.1.5 | 2.1.5 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | ffmpeg_kit_flutter_new_full | ^2.0.0 | 2.0.0 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | flutter | sdk:flutter | 0.0.0 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | flutter_riverpod | ^2.6.1 | 2.6.1 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | path_provider | ^2.1.5 | 2.1.5 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | dependency | shared_preferences | ^2.3.2 | 2.5.4 | - | ok | github:onnellab/quivra/pubspec.yaml |
+| dependency | url_launcher | ^6.3.2 | 6.3.2 | - | ok | github:onnellab/quivra/pubspec.yaml |
 | flutter_sdk | flutter | >=3.38.4 | - | >=3.38.4 | ok | github:onnellab/quivra/pubspec.yaml |
 
 ## segra (APP-0004)
