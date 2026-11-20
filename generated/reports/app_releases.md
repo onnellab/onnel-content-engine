@@ -1,14 +1,13 @@
 # App Release Status
 
-Generated: 2026-11-20T06:23:38+09:00
+Generated: 2026-11-21T06:24:42+09:00
 
 ## Summary
 
 | Area | Status | Count |
 | --- | --- | --- |
 | Store | in_review | 1 |
-| Store | unchanged | 13 |
-| Store | updated | 1 |
+| Store | unchanged | 14 |
 | GitHub Release | archived | 2 |
 | GitHub Release | planned | 1 |
 | GitHub Release | released | 10 |
@@ -19,7 +18,7 @@ Generated: 2026-11-20T06:23:38+09:00
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Aligna | android | 1.1.2 | 1.1.2 | same | unchanged | released | onnellab/aligna | No action |
 | Aligna | ios | 1.1.2 | 1.1.2 | same | unchanged | archived | onnellab/aligna | No action |
-| ClipNest | ios | 1.0.9 | 1.0.8 | store_ahead | updated | released | onnellab/clipnest | Sync local metadata |
+| ClipNest | ios | 1.0.9 | 1.0.8 | store_ahead | unchanged | released | onnellab/clipnest | Sync local metadata |
 | Melivra | android | 1.0.8 | 1.1.0 | local_ahead | unchanged | planned | onnellab/melivra | Private test only; do not publish public GitHub Release |
 | Melivra | ios | 6783644955 | 1.1.0 | unknown | in_review | - | onnellab/melivra | Review status |
 | Papira | android | 2.0.3 | - | unknown | unchanged | released | onnellab/papira | No action |
@@ -55,5 +54,5 @@ Generated: 2026-11-20T06:23:38+09:00
 
 | App | Platform | Status | Next action | Notes |
 | --- | --- | --- | --- | --- |
-| ClipNest | ios | updated | Sync local metadata | - |
+| ClipNest | ios | unchanged | Sync local metadata | - |
 | Melivra | android | planned | Private test only; do not publish public GitHub Release | Generated from repository build metadata because repository version is ahead of store snapshot. Store version: 1.0.8. Add release artifact and checksum only for private testing. Keep private until the version is publicly released. |
