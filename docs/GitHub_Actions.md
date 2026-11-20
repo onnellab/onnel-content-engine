@@ -604,24 +604,24 @@ Push events also run dry-run mode by default.
 
 ---
 
-# 15. Blogger Distribution Target (Approved; Setup Required)
+# 15. Blogger Distribution Target (Approved Separate UI Task; Optional API Route)
 
-Google Blogger is an approved **optional, secondary educational publishing channel** for ONNELLAB, with a future opportunity to apply for AdSense. This approval replaces the previous unsupported-target restriction. Approval of the channel is **not** a claim that the Google account, blog, OAuth connection, publishing adapter, or AdSense account has been configured.
+Google Blogger is an approved **optional, secondary educational publishing channel** for ONNELLAB, with a future opportunity to apply for AdSense. The verified destination and current Desktop Commander route through the existing macOS Chrome and official Blogger UI are recorded in `docs/Blogger_Channel_Runbook.md`. Its successful manual recovery does not establish unattended scheduled transport, a Blogger OAuth adapter, or an AdSense account.
 
 - Primary source of truth: ONNELLAB Content Engine Markdown. The official website (https://onnellab.com/) remains the canonical ONNELLAB article destination and is published first under its existing nine-language and quality gates. GitHub Pages remains its deployment target.
 - Blogger is a separate destination, **never** a replacement for the ONNELLAB website, and must not change existing X/LinkedIn/Bluesky/Dev.to cadence or publication receipts.
 - For a substantially distinct Blogger guide, create a separately reviewed English edition that answers a distinct search intent, adds original examples or analysis, and is useful without an ONNELLAB product. Do not automatically clone every canonical article or rephrase it mechanically merely for search traffic.
 - If an article is syndicated rather than substantially original, retain clear original-source attribution and an appropriate canonical URL pointing to the ONNELLAB article; do not represent a duplicate as an independent article.
-- Blogger publication is **disabled by default** until the authorized ONNELLAB Google account is verified, a target blog ID/URL is recorded, OAuth is explicitly granted, and the adapter and approval gates have passed tests. Never place credentials, OAuth tokens, or secrets in Git or generated website artifacts.
-- Use Google Blogger's official publishing interface or Blogger API under a least-privilege Google OAuth connection. Use draft-first flow, human-reviewable previews, duplicate/idempotency keys, bounded retry, and exact public-permalink receipts for successful publication. Fail closed on missing authorization or content/URL verification.
+- The separate approved Blogger task may publish through the official UI route only after each run verifies the visible ONNELLAB Google account, actual target blog ID/URL, existing post states and all content gates. Desktop Commander is the user-authorized primary transport; an extension originating-context error does not invalidate that available route. No new per-run or per-article approval is required. Never place credentials, OAuth tokens, or secrets in Git or generated website artifacts.
+- Follow the runbook's draft-first flow, regenerated human-reviewable previews, duplicate/idempotency keys, bounded retry and complete independent public-body/link/code comparison before recording the exact public-permalink receipt. Do not extract session material, call private endpoints or change security settings. A future Blogger API adapter requires its own authorized, tested least-privilege OAuth connection and remains optional. Fail closed on missing account/target authorization or content/URL verification.
 - A new Blogger publication must remain in draft until its metadata, links, images, attribution, accessibility, translation if needed, and policy checks pass. Publishing solely to raise page count is prohibited.
 - For launch, target **up to three independently useful English Blogger articles each KST ISO week (one per Monday, Wednesday and Friday)**. Expanding volume or languages requires observed search/quality outcomes, not assumed AdSense eligibility.
 - AdSense eligibility, approval, and revenue are independent decisions by Google; do not report ads as enabled or revenue as earned until verified in the real account. No ads.txt, publisher ID, or external analytics IDs may be invented.
 - Search Console / analytics / AdSense measurement must use real connected properties and preserve uncertainty when not yet configured.
 
-## Implementation gate
+## Separate task and optional adapter
 
-Before enabling Blogger in the scheduled publishing workflow, add a tested adapter and channel-specific runbook, extend generation and state-tracking carefully without modifying canonical website publisher responsibility, and document rollout/recovery. This section changes **policy only**; it does not silently enable posting or authorize unreviewed mass publication.
+Blogger runs in its existing separate ChatGPT task; do not add it to the canonical GitHub Actions publishing workflow. Follow `docs/Blogger_Channel_Runbook.md` for the approved UI transport, ledger, recovery and receipts. Keep the existing Monday/Wednesday/Friday 10:00 Asia/Seoul schedule, weekly/date limits and canonical publisher responsibilities. An optional API adapter requires separately verified authorization and tests before activation. This clarification does not authorize new schedules, higher volume, back-catalog migration or unreviewed mass publication.
 
 ---
 

@@ -289,7 +289,7 @@ The content source should remain unified.
 
 ## Approved Google Blogger pilot
 
-Google Blogger is permitted as an optional secondary long-form educational outlet, subject to the authenticated-account, quality, idempotency, canonical attribution, privacy, and AdSense-disclosure gates in `docs/Publishing_Guide.md` and `docs/GitHub_Actions.md`. The ONNELLAB website remains the primary publication destination. Do not enable or claim automatic Blogger publishing until the authorized blog and adapter are verifiably configured.
+Google Blogger is permitted as an optional secondary long-form educational outlet, subject to the authenticated-account, quality, idempotency, canonical attribution, privacy, and AdSense-disclosure gates in `docs/Publishing_Guide.md` and `docs/GitHub_Actions.md`. The ONNELLAB website remains the primary publication destination. Its separate approved task uses the user-authorized Desktop Commander route through the existing macOS Chrome and official Blogger UI, following `docs/Blogger_Channel_Runbook.md`. Preserve per-run account/target, draft, duplicate, preview and public-receipt checks without requesting approval again for each article. A future Blogger API adapter requires separately authorized, tested OAuth and is not a prerequisite for the UI route. Do not claim publication or unattended scheduled transport verification without actual execution evidence.
 
 # Final Principle
 

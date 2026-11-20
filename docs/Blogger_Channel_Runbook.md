@@ -2,7 +2,7 @@
 
 ## 1. Verified channel identity and current status
 
-Channel identity was established on 2026-11-12. Publication and transport status below were updated from the verified 2026-11-18 recovery.
+Channel identity was established on 2026-11-12. Publication evidence below records the verified 2026-11-18 recovery; the continuing Desktop Commander routing instructions were clarified on 2026-11-20.
 
 | Field | Verified value |
 | --- | --- |
@@ -16,7 +16,7 @@ Channel identity was established on 2026-11-12. Publication and transport status
 | Time zone | `Asia/Seoul` |
 | Theme | Essential Light |
 | Publishing status | Three published articles; no drafts or scheduled posts (verified 2026-11-18) |
-| Automatic posting status | Schedule configured; Desktop Commander UI recovery verified 2026-11-18; unattended browser transport not re-verified |
+| Automatic posting status | Schedule configured; Desktop Commander is the approved primary UI route; recovery verified 2026-11-18; unattended scheduled transport not re-verified |
 | AdSense | **NOT ENABLED / NO APPROVAL CLAIM** |
 | Google Analytics measurement ID | Not configured at initialization |
 | Custom domain | Not configured; uses the verified Blogspot URL |
@@ -60,20 +60,27 @@ Policy and quality gates are defined in `docs/Publishing_Guide.md` and `docs/Git
 - Editorial language: English. Maximum: **three independently useful guides per KST ISO week, at most one per KST calendar date**, not an unconditional obligation to fill every slot.
 - Suggested topics: practical workflows for offline music, metadata, TXT/EPUB, file management, and audio/video utilities.
 - Gate: research → distinctly scoped English article → fact/links/rights review → `blogger_weekly.py check` → unique KST publication-date reservation + Git commit/push → draft through authenticated Blogger UI → record remote draft ID + Git commit/push → publish through verified ONNELLAB Blogger UI → independent public URL/content verification → record receipt + Git commit/push.
-- The official Blogger web interface in a previously authenticated account is the initial posting transport. A future Blogger API/OAuth adapter is optional; never read cookies or browser tokens. A scheduled run must verify the signed-in account is `onnellab.app@gmail.com` and the actual Blog ID is `1829676614817439337` before any posting. If that cannot be established, stop; retain the work and report the blocker.
+- The primary posting transport is Desktop Commander operating the existing macOS Chrome session through Google's official Blogger UI. The owner's 2026-11-18 instruction to use Desktop Commander continues to apply to scheduled runs; no new per-run or per-article approval is required. A future Blogger API/OAuth adapter is optional; never read cookies or browser tokens. Each run must verify the visible signed-in account is `onnellab.app@gmail.com` and the actual Blog ID is `1829676614817439337` before any posting. If that cannot be established, stop; retain the work and report the blocker.
 - An article may go live automatically only after the account/target verification, content originality, safety, and public-draft preview gates pass. The first real post is also an end-to-end transport acceptance test; no publication may be marked complete until its public body is verified. Do not publish solely to satisfy the schedule.
 - No automatic back-catalog migration. Never change the canonical article release history or alter X/LinkedIn/Bluesky/Dev.to.
 - Publishing is suspended for the affected slot if there is an uncertain duplicate, lost authentication, missing reference evidence, or an existing reserved draft whose remote state cannot be reconciled. Existing incomplete slots must be reconciled before proceeding to the next scheduled slot; never publish duplicates.
 - AdSense approval, search visibility, or revenue are not assumed.
 
-### Transport preflight and interrupted-slot recovery (2026-11-16)
+### Transport preflight and interrupted-slot recovery (updated 2026-11-20)
 
 1. Read the latest ledger before generating any new guide. Run `check` for the exact existing brief when a reservation/draft exists. The same unchanged reserved article is resumable; any unfinished article, including one from an earlier week, blocks a new reservation. Published articles on other dates still count as separate slots, up to three per week.
-2. Verify the current execution surface can actually inspect and control the authorized macOS Chrome session before attempting account checks. Mac online status, a Chrome process, and successful terminal commands do **not** prove browser-tool access. An error such as `Browser access requires the originating browser context` is a browser transport/context blocker, not evidence that Google signed the account out. Record it as `browser_context_unavailable`; do not change device permissions, use shell browser automation, extract session material, or assert a login failure.
+2. Use Desktop Commander as the primary transport to the existing macOS Chrome and verify it can inspect and control the official Blogger UI. Short direct AppleScript UI calls and UI-facing DOM actions are allowed for this user-authorized route; inspect the current page first and derive selectors only from its observed DOM. An error such as `Browser access requires the originating browser context` identifies only the Browser extension transport as unavailable (`browser_context_unavailable`); continue with Desktop Commander when available, without asserting Google sign-out. Mac online status or a Chrome process alone proves neither UI access nor account identity. Do not extract browser profiles, cookies, tokens or session material, call private endpoints, or change device/browser/Keychain/security settings to obtain access. If the available UI route cannot verify the account and target, retain the reserved work and report that actual blocker.
 3. A redirect to Blogger's reading list is only `account_or_target_unverified` until the visible Google-account menu and blog selector are inspected. Do not assume a fixed `/u/0/` index identifies ONNELLAB. In an available authorized browser, select the existing `onnellab.app@gmail.com` account using Google's own account menu, select ONNELLAB Guides, then verify Blog ID `1829676614817439337` in the actual management URL. If reauthentication or a human-only challenge is required, stop without a draft or publication claim. See [Blogger's account-switching instructions](https://support.google.com/blogger/answer/7635125?hl=en) and [missing-blog account checks](https://support.google.com/blogger/answer/87065?hl=en).
 4. Once the account and blog are verified, inspect **all relevant post states**, including drafts, scheduled and published posts, for the existing title/slug. A public homepage cannot establish that a private draft is absent. Reconcile a matching real post before creating anything; when a recorded post ID exists, resume only that post. Multiple ambiguous matches must remain blocked.
 5. `check` and `reserve` use the same slot/slug/body-identity checks. A title, source URL, body path or digest mismatch is not permission to replace a reserved article. Successful local validation explicitly reports that remote account/state remain unverified and gives the next local recovery action. It is not authorization evidence.
-6. The current repository has no verified Blogger OAuth publishing adapter. An unrelated Google/YouTube connection cannot substitute for one. Keep the supported browser route or use a separately authorized, tested Blogger OAuth adapter; do not borrow tokens. Google's [Blogger API authorization requirements](https://developers.google.com/blogger/docs/3.0/using) apply to any future adapter.
+6. The current repository has no verified Blogger OAuth publishing adapter. An unrelated Google/YouTube connection cannot substitute for one. Keep the supported Desktop Commander UI route or use a separately authorized, tested Blogger OAuth adapter; do not borrow tokens. Google's [Blogger API authorization requirements](https://developers.google.com/blogger/docs/3.0/using) apply to any future adapter.
+
+### UI recovery and complete-content verification (2026-11-20)
+
+- If Chrome is closed, launch the already installed Google Chrome normally, then inspect its actual UI and account chooser. Do not create/copy a profile or infer a session from process availability. Derive the account index from the observed session; never hard-code `/u/2/` or any other account index.
+- Blogger's saved editor DOM may preserve an original link destination in `data-original-attrs`. Inspect the actual observed attribute when present, and verify the rendered preview/public link destinations; do not treat that editor representation alone as missing or correct content.
+- Regenerate the preview through the editor's own **Preview** action before inspecting the resulting preview link. Reopening an older preview URL may show a stale snapshot. Compare the complete ordered article blocks, all link destinations and exact code text against the approved source before publishing the same draft.
+- After publication, independently fetch the actual public permalink and verify HTTP status plus the complete ordered body, link destinations and code text. The current `record-published` checks are partial and do not replace this comparison. Record and commit/push the receipt only after it passes; never mark a manual recovery as proof of unattended scheduled transport.
 
 The 2026-11-16 recovery inspection confirmed the original `audio-click-at-clip-join` reservation and unchanged HTML, but that run's Browser tool lacked its originating browser context. The earlier reading-list redirect remained unexplained because the authenticated UI could not be inspected. No remote draft or publication was attempted during that recovery inspection; browser reconnection was still required at that time.
 
