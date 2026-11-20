@@ -107,12 +107,32 @@
       "title": "EPUB Chapters Open, but the Table of Contents Is Missing: What to Check",
       "source_url": "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
       "body_path": "drafts/blogger/en/epub-chapters-readable-but-toc-missing.html",
-      "sha256": "5e77296ef093dad30c0db3a58a2460ddbb109e6406d2d8592b91351785db20c6",
+      "sha256": "e1effd4c312f360e5d472231d202776beeb898e00da1c09a522df8da36653745",
       "status": "reserved",
       "post_id": "",
       "posted_url": "",
       "created_at": "2026-11-20T01:29:00+00:00",
-      "verified_at": ""
+      "verified_at": "",
+      "editorial_revisions": [
+        {
+          "from_sha256": "5e77296ef093dad30c0db3a58a2460ddbb109e6406d2d8592b91351785db20c6",
+          "to_sha256": "e1effd4c312f360e5d472231d202776beeb898e00da1c09a522df8da36653745",
+          "revised_at": "2026-11-20T05:59:17.956Z",
+          "reason": "Remove an unsupported twelve-chapter count from the cookbook example; twelve belongs to the separate field-handbook example.",
+          "remote_state_verified_at": "2026-11-20T05:58:07.167Z",
+          "remote_state": {
+            "account": "onnellab.app@gmail.com",
+            "blog_id": "1829676614817439337",
+            "management_url": "https://www.blogger.com/u/2/blog/posts/1829676614817439337",
+            "all_posts": 3,
+            "published": 3,
+            "drafts": 0,
+            "scheduled": 0,
+            "trash": 0,
+            "target_post_absent": true
+          }
+        }
+      ]
     }
   ]
 }

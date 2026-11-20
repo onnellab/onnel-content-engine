@@ -37,9 +37,39 @@
     "english_proofread": true
   },
   "editorial_notes": "Written independently on 2026-11-20 for the narrow search problem of an EPUB reading app's missing generated TOC while chapters remain readable; distinct from the canonical ONNELLAB checklist for comparing expected contents and chapter order. Reviewed official W3C EPUB 3.3, EPUB Reading Systems 3.3 and W3C EPUBCheck command guide; all three HTTPS fact references plus the exact canonical source URL returned HTTP 200 from the Mac in this run. Read the full canonical Markdown file and kept a separate question, research-specific diagnosis, and two entirely fictional newly authored examples. The article does not claim actual device test results, and preserves EPUB originals/annotations. No images, external prose passages, secrets or third-party artwork were copied. Proofread for English grammar, structure, scope, rights and non-universal claims; the executable package example is explicitly conditional on an EPUBCheck installation. This brief's source_url is the verified official article URL, not a claim that the Blogger article was syndicated verbatim.",
-  "transport_observation": {
+  "initial_transport_observation": {
     "date_kst": "2026-11-20",
     "status": "browser_context_unavailable",
     "detail": "The Mac's Desktop Commander was online and git pull succeeded, but Browser.list_tabs returned 'Browser access requires the originating browser context'. Under docs/Blogger_Channel_Runbook.md §4, browser context failure does not demonstrate a Google sign-out; no Chrome shell automation, account switching, remote draft creation or publication was attempted. Live Blogger draft/scheduled inventory for today remains unverified. A checked Git reservation may preserve the article for later authenticated UI recovery; no post ID or publication URL is asserted."
-  }
+  },
+  "transport_observation": {
+    "date_kst": "2026-11-20",
+    "status": "account_and_remote_inventory_verified",
+    "recorded_at": "2026-11-20T05:58:07.167Z",
+    "transport": "User-authorized Desktop Commander control of the existing macOS Google Chrome UI",
+    "account": "onnellab.app@gmail.com",
+    "blog_id": "1829676614817439337",
+    "management_url": "https://www.blogger.com/u/2/blog/posts/1829676614817439337",
+    "detail": "Opened the installed Chrome normally and selected the existing ONNELLAB account through Google's visible account chooser. The authenticated management inventory shows three published posts and no drafts, scheduled or trashed posts; today's target is absent. The original reservation is retained and no new remote post has yet been created. The extension-context failure is specific to the unavailable Browser transport, not a sign-out or absence of Desktop Commander access."
+  },
+  "editorial_revisions": [
+    {
+      "from_sha256": "5e77296ef093dad30c0db3a58a2460ddbb109e6406d2d8592b91351785db20c6",
+      "to_sha256": "e1effd4c312f360e5d472231d202776beeb898e00da1c09a522df8da36653745",
+      "revised_at": "2026-11-20T05:59:17.956Z",
+      "reason": "Remove an unsupported twelve-chapter count from the cookbook example; twelve belongs to the separate field-handbook example.",
+      "remote_state_verified_at": "2026-11-20T05:58:07.167Z",
+      "remote_state": {
+        "account": "onnellab.app@gmail.com",
+        "blog_id": "1829676614817439337",
+        "management_url": "https://www.blogger.com/u/2/blog/posts/1829676614817439337",
+        "all_posts": 3,
+        "published": 3,
+        "drafts": 0,
+        "scheduled": 0,
+        "trash": 0,
+        "target_post_absent": true
+      }
+    }
+  ]
 }
