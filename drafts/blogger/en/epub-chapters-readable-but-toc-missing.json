@@ -44,13 +44,75 @@
   },
   "transport_observation": {
     "date_kst": "2026-11-20",
-    "status": "account_and_remote_inventory_verified",
-    "recorded_at": "2026-11-20T05:58:07.167Z",
+    "status": "published_and_publicly_verified",
+    "recorded_at": "2026-11-20T06:12:37+00:00",
     "transport": "User-authorized Desktop Commander control of the existing macOS Google Chrome UI",
     "account": "onnellab.app@gmail.com",
     "blog_id": "1829676614817439337",
+    "post_id": "4958717244145532046",
     "management_url": "https://www.blogger.com/u/2/blog/posts/1829676614817439337",
-    "detail": "Opened the installed Chrome normally and selected the existing ONNELLAB account through Google's visible account chooser. The authenticated management inventory shows three published posts and no drafts, scheduled or trashed posts; today's target is absent. The original reservation is retained and no new remote post has yet been created. The extension-context failure is specific to the unavailable Browser transport, not a sign-out or absence of Desktop Commander access."
+    "public_url": "https://onnellab-guides.blogspot.com/2026/11/epub-chapters-open-but-table-of.html",
+    "detail": "Reconciled the authenticated remote inventory, retained the existing Friday reservation, corrected one inconsistent example count, and saved one draft. Reopened its saved body, regenerated Preview and matched the complete source before publishing that same recorded post. Independent unauthenticated public verification passed. The repeated extension-context stop was addressed in all four operative policy/runbook documents and the existing automation prompt; Desktop Commander is now the primary UI route.",
+    "preview_verification": {
+      "verified_at": "2026-11-20T06:06:13.484Z",
+      "ordered_blocks": 40,
+      "links": 7,
+      "code_elements": 16,
+      "complete_source_match": true,
+      "page_width": 1200,
+      "page_scroll_width": 1200,
+      "article_width": 810,
+      "article_scroll_width": 810,
+      "narrow_article_check": {
+        "method": "temporary 320px article width",
+        "width": 320,
+        "scroll_width": 320,
+        "original_style_restored": true
+      }
+    },
+    "public_verification": {
+      "ok": true,
+      "verified_at": "2026-11-20T06:11:55Z",
+      "post_id": "4958717244145532046",
+      "http_status": 200,
+      "final_url": "https://onnellab-guides.blogspot.com/2026/11/epub-chapters-open-but-table-of.html",
+      "document_title": "EPUB Chapters Open, but the Table of Contents Is Missing: What to Check",
+      "matching_post_body_elements": 1,
+      "source_sha256": "e1effd4c312f360e5d472231d202776beeb898e00da1c09a522df8da36653745",
+      "source_counts": {
+        "blocks": 40,
+        "links": 7,
+        "code": 16
+      },
+      "observed_counts": {
+        "blocks": 40,
+        "links": 7,
+        "code": 16
+      },
+      "comparisons": {
+        "ordered_blocks": true,
+        "all_hrefs_and_anchor_text": true,
+        "exact_code_text": true
+      },
+      "observed_block_digest_sha256": "72c43310eed9634ed361badbffc51a2073800e14799a44b1c3d4d12ab0e5bac2",
+      "source_block_digest_sha256": "72c43310eed9634ed361badbffc51a2073800e14799a44b1c3d4d12ab0e5bac2",
+      "method": "Mac Desktop Commander, fresh unauthenticated urllib opener with ProxyHandler({}); no cookies/auth/browser state; Python stdlib HTMLParser; blocks=[tag, whitespace-normalized text]; links=[literal href, normalized anchor text]; exact HTML-decoded code. Block digest=SHA256(UTF8 JSON ensure_ascii=False,separators=(',',':'))."
+    },
+    "remote_inventory": {
+      "verified_at": "2026-11-20T06:07:21.990Z",
+      "published": 4,
+      "drafts": 0,
+      "scheduled": 0,
+      "trash": 0
+    },
+    "automation_repair": {
+      "task_id": "Automation_d7acbcc65eec819180589fe05a995c4b",
+      "updated_at": "2026-11-20T06:04:23.067660+00:00",
+      "primary_transport": "Desktop Commander / existing Chrome / official Blogger UI",
+      "schedule_preserved": true,
+      "publication_limits_preserved": true,
+      "unattended_execution_under_revised_prompt_verified": false
+    }
   },
   "editorial_revisions": [
     {

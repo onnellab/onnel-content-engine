@@ -2,7 +2,7 @@
 
 ## 1. Verified channel identity and current status
 
-Channel identity was established on 2026-11-12. Publication evidence below records the verified 2026-11-18 recovery; the continuing Desktop Commander routing instructions were clarified on 2026-11-20.
+Channel identity was established on 2026-11-12. Current publication status and the continuing Desktop Commander route below reflect the verified 2026-11-20 repair and recovery; earlier observations remain in their dated records.
 
 | Field | Verified value |
 | --- | --- |
@@ -15,8 +15,8 @@ Channel identity was established on 2026-11-12. Publication evidence below recor
 | Language | English (`en`) |
 | Time zone | `Asia/Seoul` |
 | Theme | Essential Light |
-| Publishing status | Three published articles; no drafts or scheduled posts (verified 2026-11-18) |
-| Automatic posting status | Schedule configured; Desktop Commander is the approved primary UI route; recovery verified 2026-11-18; unattended scheduled transport not re-verified |
+| Publishing status | Four published articles; no drafts or scheduled posts (verified 2026-11-20) |
+| Automatic posting status | Existing task prompt and docs aligned to Desktop Commander; UI recovery verified 2026-11-20; actual unattended execution under the revised prompt remains unverified |
 | AdSense | **NOT ENABLED / NO APPROVAL CLAIM** |
 | Google Analytics measurement ID | Not configured at initialization |
 | Custom domain | Not configured; uses the verified Blogspot URL |
@@ -92,6 +92,14 @@ The existing November 18 reservation was reconciled, its chapter-copy statement 
 
 This verifies the explicitly authorized Desktop Commander route for this recovery. It does not verify repaired extension-context access, unattended scheduled browser access or a Blogger OAuth adapter. Advertising, analytics, Search Console and the canonical publishing workflow were not changed.
 
+### Recurring transport repair (2026-11-20)
+
+The November 20 scheduled execution stopped after reserving `epub-chapters-readable-but-toc-missing` because the Browser extension required its originating context. Desktop Commander was available, but the operative preflight still prohibited its browser route, higher-level Blogger policy text still required a separate OAuth adapter, and the saved task prompt had not adopted the successful November 18 transport. The historical recovery note alone had not corrected these execution instructions.
+
+The current transport rules in this runbook, `CODEX.md`, `docs/Publishing_Guide.md` and `docs/GitHub_Actions.md` now consistently use the already authorized Desktop Commander official-UI route. The existing task `Automation_d7acbcc65eec819180589fe05a995c4b` was updated successfully at `2026-11-20T06:04:23Z` with that primary route, transport-specific error handling and the unchanged identity, duplicate, preview and complete-public-verification gates. Its schedule, timezone, enabled state and publication limits were preserved. Actual unattended execution under the revised prompt remains to be observed.
+
+The same November 20 reservation was resumed as draft/post `4958717244145532046`, and its draft receipt was committed and pushed before publication. The [EPUB missing-contents guide](https://onnellab-guides.blogspot.com/2026/11/epub-chapters-open-but-table-of.html) passed saved-body and regenerated-preview checks, then independent unauthenticated verification at `2026-11-20T06:11:55Z`: HTTP 200, the exact title and post body, all 40 ordered blocks, seven link destinations/anchor texts and 16 exact code elements matched the approved source. The administration screen showed four published posts and no drafts, scheduled or trashed posts. All three 2026-W47 slots are now published; the ledger contains the actual permalink and receipt.
+
 ## 5. Activation and safety checklist
 
 - [x] Created real Blogger channel and verified account identity, public blog ID, HTTPS URL, and essential pages.
@@ -145,4 +153,4 @@ The platform's built-in cookie notice must actually function for eligible visito
 - About/Contact/Privacy: created and checked on their exact public URLs.
 - Essential Light, navigation menu and hidden profile: verified on the live Blogger homepage.
 - General posts: 0 at launch; account advertising connection: not configured.
-- Latest publication verification (2026-11-18): three published posts and zero drafts/scheduled/trash; post `5479279401888867258` passed independent HTTP 200 and complete public-body comparison. See the recovery record above and `data/blogger_publications.json`.
+- Latest publication verification (2026-11-20): four published posts and zero drafts/scheduled/trash; post `4958717244145532046` passed independent HTTP 200 and complete public-body/link/code comparison. The existing recurring task prompt was updated to the approved Desktop Commander route. See the dated recovery records above and `data/blogger_publications.json`.
