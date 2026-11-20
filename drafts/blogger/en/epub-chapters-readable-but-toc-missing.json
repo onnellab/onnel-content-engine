@@ -1,0 +1,45 @@
+{
+  "week": "2026-W47",
+  "slot": "2026-11-20",
+  "slug": "epub-chapters-readable-but-toc-missing",
+  "language": "en",
+  "title": "EPUB Chapters Open, but the Table of Contents Is Missing: What to Check",
+  "primary_question": "Why can I read every chapter of an EPUB while one reading app shows an empty or incomplete table of contents, and how can I diagnose the actual cause safely?",
+  "source_title": "Check an EPUB’s Table of Contents and Chapter Order",
+  "source_url": "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
+  "source_path": "generated/markdown/en/reading/check-epub-table-of-contents-and-reading-order.md",
+  "body_path": "drafts/blogger/en/epub-chapters-readable-but-toc-missing.html",
+  "fact_sources": [
+    {
+      "url": "https://www.w3.org/TR/epub-33/",
+      "supports": "W3C EPUB 3.3 Recommendation (2026-01-13) requires exactly one EPUB navigation document identified in the package manifest by the nav property; its navigation document contains exactly one toc nav; the spine provides a separate reading sequence. Inspected relevant sections 5.6.2.2, 7.2 and 7.4.2."
+    },
+    {
+      "url": "https://www.w3.org/TR/epub-rs-33/",
+      "supports": "W3C EPUB Reading Systems 3.3 Recommendation section 7 states EPUB 3 readers must process navigation documents and expose toc nav links and headings regardless of whether the navigation document is in the spine; it does not prescribe a particular menu design."
+    },
+    {
+      "url": "https://www.w3.org/publishing/epubcheck/docs/running/",
+      "supports": "Official W3C EPUBCheck user documentation describes the packaged-file command epubcheck filename.epub and interpretation of errors and warnings; conformance checks do not replace editorial comparison of expected chapter entries."
+    }
+  ],
+  "new_examples": [
+    "An invented twelve-section field handbook is exported twice; a desktop reader imports revision B and the phone retains revision A. A version/file-identity comparison and controlled reimport explain the difference without automatically blaming reader implementation.",
+    "An invented community cookbook's chapters remain reachable through its spine, but its generated navigation menu lists only the introduction. Inspection of toc entries separates content availability from navigation completeness and motivates a reproducible source/export correction."
+  ],
+  "review": {
+    "technically_verified": true,
+    "distinct_search_intent": true,
+    "original_examples": true,
+    "sources_checked": true,
+    "links_checked": true,
+    "rights_checked": true,
+    "english_proofread": true
+  },
+  "editorial_notes": "Written independently on 2026-11-20 for the narrow search problem of an EPUB reading app's missing generated TOC while chapters remain readable; distinct from the canonical ONNELLAB checklist for comparing expected contents and chapter order. Reviewed official W3C EPUB 3.3, EPUB Reading Systems 3.3 and W3C EPUBCheck command guide; all three HTTPS fact references plus the exact canonical source URL returned HTTP 200 from the Mac in this run. Read the full canonical Markdown file and kept a separate question, research-specific diagnosis, and two entirely fictional newly authored examples. The article does not claim actual device test results, and preserves EPUB originals/annotations. No images, external prose passages, secrets or third-party artwork were copied. Proofread for English grammar, structure, scope, rights and non-universal claims; the executable package example is explicitly conditional on an EPUBCheck installation. This brief's source_url is the verified official article URL, not a claim that the Blogger article was syndicated verbatim.",
+  "transport_observation": {
+    "date_kst": "2026-11-20",
+    "status": "browser_context_unavailable",
+    "detail": "The Mac's Desktop Commander was online and git pull succeeded, but Browser.list_tabs returned 'Browser access requires the originating browser context'. Under docs/Blogger_Channel_Runbook.md §4, browser context failure does not demonstrate a Google sign-out; no Chrome shell automation, account switching, remote draft creation or publication was attempted. Live Blogger draft/scheduled inventory for today remains unverified. A checked Git reservation may preserve the article for later authenticated UI recovery; no post ID or publication URL is asserted."
+  }
+}

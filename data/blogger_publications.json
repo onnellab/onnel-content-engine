@@ -99,6 +99,20 @@
           }
         }
       ]
+    },
+    {
+      "slug": "epub-chapters-readable-but-toc-missing",
+      "week": "2026-W47",
+      "slot": "2026-11-20",
+      "title": "EPUB Chapters Open, but the Table of Contents Is Missing: What to Check",
+      "source_url": "https://onnellab.com/blog/en/check-epub-table-of-contents-and-reading-order/",
+      "body_path": "drafts/blogger/en/epub-chapters-readable-but-toc-missing.html",
+      "sha256": "5e77296ef093dad30c0db3a58a2460ddbb109e6406d2d8592b91351785db20c6",
+      "status": "reserved",
+      "post_id": "",
+      "posted_url": "",
+      "created_at": "2026-11-20T01:29:00+00:00",
+      "verified_at": ""
     }
   ]
 }
