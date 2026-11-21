@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/zh-Hant/research/distinguish-source-publication-date-from-access-date.md",
+  "topic": {
+    "id": "TOPIC-0153",
+    "title": "資料的發布日期和查閱日期，筆記該怎麼記？",
+    "slug": "distinguish-source-publication-date-from-access-date",
+    "category": "research",
+    "language": "zh-Hant",
+    "primary_keyword": "發布日期",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "資料的發布日期和查閱日期，筆記該怎麼記？",
+    "問題",
+    "簡短回答",
+    "建議流程",
+    "參考資料",
+    "結論",
+    "常見問題",
+    "同一頁面出現兩個互相矛盾的日期怎麼辦？",
+    "參考文獻一定要加查閱日期嗎？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "資料的發布日期和查閱日期，筆記該怎麼記？",
+      "source_sections": [
+        "簡短回答",
+        "建議流程"
+      ],
+      "structure": [
+        "1. 問題",
+        "2. 檢查",
+        "3. 流程",
+        "4. 結果"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating 發布日期?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "查閱日期",
+        "資料筆記"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "No related application is referenced; decorative screenshots are not required.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "資料的發布日期和查閱日期，筆記該怎麼記？",
+      "steps": [
+        "1. 問題",
+        "2. 檢查",
+        "3. 流程",
+        "4. 結果"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "發布日期 · 比較",
+      "items": [
+        "查閱日期",
+        "資料筆記"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "記錄網頁資料的日期",
+    "message": "發布日期和查閱日期分開記。",
+    "description": "日期記錄流程圖: 標題或署名 · 只填已知日期 · 只填明示日期 · 日期與網址",
+    "steps": [
+      [
+        "1. 查看標示",
+        "標題或署名"
+      ],
+      [
+        "2. 發布日期",
+        "只填已知日期"
+      ],
+      [
+        "3. 更新日期",
+        "只填明示日期"
+      ],
+      [
+        "4. 查閱日期",
+        "日期與網址"
+      ]
+    ]
+  }
+}

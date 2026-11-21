@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/reading/choose-literal-or-pattern-search-for-text.md",
+  "topic": {
+    "id": "TOPIC-0143",
+    "title": "文書は文字どおりに検索する？それともパターンで検索する？",
+    "slug": "choose-literal-or-pattern-search-for-text",
+    "category": "reading",
+    "language": "ja",
+    "primary_keyword": "文字どおりの検索",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "文書は文字どおりに検索する？それともパターンで検索する？",
+    "質問",
+    "短い回答",
+    "推奨ワークフロー",
+    "よくある質問",
+    "正規表現を使えない場合は？",
+    "何も見つからない場合は？",
+    "参考資料",
+    "結論"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "文書は文字どおりに検索する？それともパターンで検索する？",
+      "source_sections": [
+        "短い回答",
+        "推奨ワークフロー"
+      ],
+      "structure": [
+        "1. 問題",
+        "2. 確認",
+        "3. 手順",
+        "4. 結果"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating 文字どおりの検索?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "パターン検索",
+        "正規表現",
+        "部分一致"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "No related application is referenced; decorative screenshots are not required.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "文書は文字どおりに検索する？それともパターンで検索する？",
+      "steps": [
+        "1. 問題",
+        "2. 確認",
+        "3. 手順",
+        "4. 結果"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "文字どおりの検索 · 比較",
+      "items": [
+        "パターン検索",
+        "正規表現",
+        "部分一致"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "検索方法を選ぶ",
+    "message": "一致結果を使う前に、強調表示の範囲を確認します。",
+    "description": "表記どおり: 通常検索を使う; 共通の形式: 正規表現で探す; 例で試す: 一致しない例も; 一致範囲: 強調の端を確認.",
+    "steps": [
+      [
+        "表記どおり",
+        "通常検索を使う"
+      ],
+      [
+        "共通の形式",
+        "正規表現で探す"
+      ],
+      [
+        "例で試す",
+        "一致しない例も"
+      ],
+      [
+        "一致範囲",
+        "強調の端を確認"
+      ]
+    ]
+  }
+}

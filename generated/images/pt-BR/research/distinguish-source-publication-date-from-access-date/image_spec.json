@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/pt-BR/research/distinguish-source-publication-date-from-access-date.md",
+  "topic": {
+    "id": "TOPIC-0154",
+    "title": "Data de publicação ou de acesso: como anotar a fonte?",
+    "slug": "distinguish-source-publication-date-from-access-date",
+    "category": "research",
+    "language": "pt-BR",
+    "primary_keyword": "data de publicação",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Data de publicação ou de acesso: como anotar a fonte?",
+    "Pergunta",
+    "Resposta curta",
+    "Fluxo de trabalho recomendado",
+    "Referências",
+    "Conclusão",
+    "Perguntas frequentes",
+    "E se a página mostrar duas datas incompatíveis?",
+    "Preciso incluir a data de acesso nas referências?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Data de publicação ou de acesso: como anotar a fonte?",
+      "source_sections": [
+        "Resposta curta",
+        "Fluxo de trabalho recomendado"
+      ],
+      "structure": [
+        "1. Problema",
+        "2. Verificação",
+        "3. Processo",
+        "4. Resultado"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating data de publicação?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "data de acesso",
+        "notas de pesquisa"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "No related application is referenced; decorative screenshots are not required.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Data de publicação ou de acesso: como anotar a fonte?",
+      "steps": [
+        "1. Problema",
+        "2. Verificação",
+        "3. Processo",
+        "4. Resultado"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "data de publicação · Comparação",
+      "items": [
+        "data de acesso",
+        "notas de pesquisa"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Datas de fontes na web",
+    "message": "Publicação e acesso são campos diferentes.",
+    "description": "Diagrama do processo: Título e autoria · Só se indicada · Só se indicada · Data e endereço",
+    "steps": [
+      [
+        "1. Localize",
+        "Título e autoria"
+      ],
+      [
+        "2. Publicado",
+        "Só se indicada"
+      ],
+      [
+        "3. Revisão",
+        "Só se indicada"
+      ],
+      [
+        "4. Acesso",
+        "Data e endereço"
+      ]
+    ]
+  }
+}

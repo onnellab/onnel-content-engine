@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/reading/choose-literal-or-pattern-search-for-text.md",
+  "topic": {
+    "id": "TOPIC-0149",
+    "title": "¿Cuándo conviene usar una búsqueda literal o por patrón?",
+    "slug": "choose-literal-or-pattern-search-for-text",
+    "category": "reading",
+    "language": "es",
+    "primary_keyword": "búsqueda literal",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "¿Cuándo conviene usar una búsqueda literal o por patrón?",
+    "Pregunta",
+    "Respuesta breve",
+    "Flujo de trabajo recomendado",
+    "Preguntas frecuentes",
+    "¿Qué hago si no hay una opción de expresiones regulares?",
+    "¿Si no hay resultados, el texto no está en el documento?",
+    "Referencias",
+    "Conclusión"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "¿Cuándo conviene usar una búsqueda literal o por patrón?",
+      "source_sections": [
+        "Respuesta breve",
+        "Flujo de trabajo recomendado"
+      ],
+      "structure": [
+        "1. Problema",
+        "2. Revisión",
+        "3. Proceso",
+        "4. Resultado"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating búsqueda literal?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "búsqueda por patrón",
+        "expresiones regulares",
+        "coincidencia parcial"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "No related application is referenced; decorative screenshots are not required.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "¿Cuándo conviene usar una búsqueda literal o por patrón?",
+      "steps": [
+        "1. Problema",
+        "2. Revisión",
+        "3. Proceso",
+        "4. Resultado"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "búsqueda literal · Comparación",
+      "items": [
+        "búsqueda por patrón",
+        "expresiones regulares",
+        "coincidencia parcial"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Elige el modo",
+    "message": "Comprueba el tramo resaltado antes de usar el resultado.",
+    "description": "Texto conocido: Modo literal; Forma común: Patrón, si es compatible; Prueba el patrón: Incluye un caso negativo; Mira el resaltado: Comprueba todo el resultado.",
+    "steps": [
+      [
+        "Texto conocido",
+        "Modo literal"
+      ],
+      [
+        "Forma común",
+        "Patrón, si es compatible"
+      ],
+      [
+        "Prueba el patrón",
+        "Incluye un caso negativo"
+      ],
+      [
+        "Mira el resaltado",
+        "Comprueba todo el resultado"
+      ]
+    ]
+  }
+}

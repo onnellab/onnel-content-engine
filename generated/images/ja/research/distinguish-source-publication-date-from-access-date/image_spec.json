@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/ja/research/distinguish-source-publication-date-from-access-date.md",
+  "topic": {
+    "id": "TOPIC-0151",
+    "title": "公開日と閲覧日、資料メモにはどちらを書く？",
+    "slug": "distinguish-source-publication-date-from-access-date",
+    "category": "research",
+    "language": "ja",
+    "primary_keyword": "公開日",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "公開日と閲覧日、資料メモにはどちらを書く？",
+    "質問",
+    "短い回答",
+    "推奨ワークフロー",
+    "参考資料",
+    "結論",
+    "よくある質問",
+    "記事に二つの日付がある場合は？",
+    "参考文献にも閲覧日が必要ですか？"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "公開日と閲覧日、資料メモにはどちらを書く？",
+      "source_sections": [
+        "短い回答",
+        "推奨ワークフロー"
+      ],
+      "structure": [
+        "1. 問題",
+        "2. 確認",
+        "3. 手順",
+        "4. 結果"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating 公開日?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "閲覧日",
+        "資料メモ"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "No related application is referenced; decorative screenshots are not required.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "公開日と閲覧日、資料メモにはどちらを書く？",
+      "steps": [
+        "1. 問題",
+        "2. 確認",
+        "3. 手順",
+        "4. 結果"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "公開日 · 比較",
+      "items": [
+        "閲覧日",
+        "資料メモ"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "ウェブ資料の日付を記録",
+    "message": "公開日と閲覧日は別の項目です。",
+    "description": "日付記録の手順図: 見出し周辺 · 確認できた日 · 明示がある日 · 日付とURL",
+    "steps": [
+      [
+        "1. 表示箇所",
+        "見出し周辺"
+      ],
+      [
+        "2. 公開日",
+        "確認できた日"
+      ],
+      [
+        "3. 更新日",
+        "明示がある日"
+      ],
+      [
+        "4. 閲覧日",
+        "日付とURL"
+      ]
+    ]
+  }
+}

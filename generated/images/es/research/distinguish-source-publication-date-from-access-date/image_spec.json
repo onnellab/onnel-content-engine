@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/es/research/distinguish-source-publication-date-from-access-date.md",
+  "topic": {
+    "id": "TOPIC-0157",
+    "title": "Fecha de publicación o de consulta: ¿cuál anotar en la fuente?",
+    "slug": "distinguish-source-publication-date-from-access-date",
+    "category": "research",
+    "language": "es",
+    "primary_keyword": "fecha de publicación",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Fecha de publicación o de consulta: ¿cuál anotar en la fuente?",
+    "Pregunta",
+    "Respuesta breve",
+    "Flujo de trabajo recomendado",
+    "Referencias",
+    "Conclusión",
+    "Preguntas frecuentes",
+    "¿Qué hago si aparecen dos fechas contradictorias?",
+    "¿Es obligatorio incluir la fecha de consulta en la bibliografía?"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Fecha de publicación o de consulta: ¿cuál anotar en la fuente?",
+      "source_sections": [
+        "Respuesta breve",
+        "Flujo de trabajo recomendado"
+      ],
+      "structure": [
+        "1. Problema",
+        "2. Revisión",
+        "3. Proceso",
+        "4. Resultado"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating fecha de publicación?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "fecha de consulta",
+        "notas de investigación"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "No related application is referenced; decorative screenshots are not required.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Fecha de publicación o de consulta: ¿cuál anotar en la fuente?",
+      "steps": [
+        "1. Problema",
+        "2. Revisión",
+        "3. Proceso",
+        "4. Resultado"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "fecha de publicación · Comparación",
+      "items": [
+        "fecha de consulta",
+        "notas de investigación"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Fechas de fuentes web",
+    "message": "Publicación y consulta se anotan en campos distintos.",
+    "description": "Diagrama del proceso: Título y firma · Si se indica · Si se indica · Fecha y enlace",
+    "steps": [
+      [
+        "1. Busca",
+        "Título y firma"
+      ],
+      [
+        "2. Publicado",
+        "Si se indica"
+      ],
+      [
+        "3. Revisión",
+        "Si se indica"
+      ],
+      [
+        "4. Consulta",
+        "Fecha y enlace"
+      ]
+    ]
+  }
+}

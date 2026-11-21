@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/fr/reading/choose-literal-or-pattern-search-for-text.md",
+  "topic": {
+    "id": "TOPIC-0148",
+    "title": "Dans un texte, faut-il choisir la recherche littérale ou la recherche par motif ?",
+    "slug": "choose-literal-or-pattern-search-for-text",
+    "category": "reading",
+    "language": "fr",
+    "primary_keyword": "recherche littérale",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Dans un texte, faut-il choisir la recherche littérale ou la recherche par motif ?",
+    "Question",
+    "Réponse courte",
+    "Méthode recommandée",
+    "Questions fréquentes",
+    "Mon lecteur n’a pas d’option d’expression régulière. Que faire ?",
+    "Aucun résultat : le texte est-il absent ?",
+    "Références",
+    "Conclusion"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Dans un texte, faut-il choisir la recherche littérale ou la recherche par motif ?",
+      "source_sections": [
+        "Réponse courte",
+        "Méthode recommandée"
+      ],
+      "structure": [
+        "1. Problème",
+        "2. Vérification",
+        "3. Méthode",
+        "4. Résultat"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating recherche littérale?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "recherche par motif",
+        "expressions régulières",
+        "surlignage"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "No related application is referenced; decorative screenshots are not required.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Dans un texte, faut-il choisir la recherche littérale ou la recherche par motif ?",
+      "steps": [
+        "1. Problème",
+        "2. Vérification",
+        "3. Méthode",
+        "4. Résultat"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "recherche littérale · Comparaison",
+      "items": [
+        "recherche par motif",
+        "expressions régulières",
+        "surlignage"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Choisir le mode",
+    "message": "Vérifiez le passage surligné avant d’utiliser le résultat.",
+    "description": "Texte connu: Mode littéral; Forme commune: Motif, si pris en charge; Tester la requête: Prévoir un cas à écarter; Voir la zone: Vérifier le résultat entier.",
+    "steps": [
+      [
+        "Texte connu",
+        "Mode littéral"
+      ],
+      [
+        "Forme commune",
+        "Motif, si pris en charge"
+      ],
+      [
+        "Tester la requête",
+        "Prévoir un cas à écarter"
+      ],
+      [
+        "Voir la zone",
+        "Vérifier le résultat entier"
+      ]
+    ]
+  }
+}

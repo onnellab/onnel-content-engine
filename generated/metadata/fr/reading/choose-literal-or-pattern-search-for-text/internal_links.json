@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "type": "internal_link_recommendations",
+  "generation_scope": "metadata_only",
+  "article_text_modified": false,
+  "source": {
+    "topics": "data/topics.csv",
+    "apps_registry": "data/apps_registry.csv",
+    "knowledge_graph": "docs/Knowledge_Graph.md"
+  },
+  "topic": {
+    "id": "TOPIC-0148",
+    "title": "Dans un texte, faut-il choisir la recherche littérale ou la recherche par motif ?",
+    "slug": "choose-literal-or-pattern-search-for-text",
+    "category": "reading",
+    "language": "fr",
+    "status": "review",
+    "topic_clusters": [
+      "recherche par motif",
+      "expressions régulières",
+      "surlignage",
+      "recherche littérale",
+      "reading"
+    ],
+    "related_app_names": []
+  },
+  "recommendations": {
+    "related_articles": [
+      {
+        "topic_id": "TOPIC-0112",
+        "title": "Se repérer plus facilement dans un long document texte",
+        "slug": "make-long-plain-text-easier-to-navigate",
+        "category": "reading",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/make-long-plain-text-easier-to-navigate/",
+        "destination": "published_article",
+        "relationship": "deeper",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 14
+      },
+      {
+        "topic_id": "TOPIC-0060",
+        "title": "Vérifier la table des matières et l’ordre des chapitres d’un EPUB",
+        "slug": "check-epub-table-of-contents-and-reading-order",
+        "category": "reading",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/check-epub-table-of-contents-and-reading-order/",
+        "destination": "published_article",
+        "relationship": "troubleshooting",
+        "shared_clusters": [
+          "reading"
+        ],
+        "score": 12
+      },
+      {
+        "topic_id": "TOPIC-0076",
+        "title": "Transformer les textes répétitifs en extraits réutilisables",
+        "slug": "turn-repeated-text-into-reusable-snippets",
+        "category": "productivity",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/turn-repeated-text-into-reusable-snippets/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0121",
+        "title": "Préparer une copie de travail avant de modifier un fichier audio",
+        "slug": "choose-safe-audio-working-copy",
+        "category": "media",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/choose-safe-audio-working-copy/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0130",
+        "title": "Indiquer clairement les incertitudes dans ses notes de recherche",
+        "slug": "mark-uncertainty-clearly-in-research-notes",
+        "category": "research",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/mark-uncertainty-clearly-in-research-notes/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      },
+      {
+        "topic_id": "TOPIC-0139",
+        "title": "Distinguer les fichiers musicaux en double des enregistrements différents",
+        "slug": "distinguish-duplicate-music-files-from-different-recordings",
+        "category": "music",
+        "language": "fr",
+        "status": "published",
+        "url": "https://onnellab.com/blog/fr/distinguish-duplicate-music-files-from-different-recordings/",
+        "destination": "published_article",
+        "relationship": "cross_domain",
+        "shared_clusters": [],
+        "score": 5
+      }
+    ],
+    "related_apps": [],
+    "related_guides": [
+      {
+        "type": "broader_topic",
+        "title": "Reading guide",
+        "category": "reading",
+        "cluster": "reading",
+        "reason": "Provides the broader domain context required by the knowledge graph."
+      },
+      {
+        "type": "topic_cluster",
+        "title": "recherche par motif cluster",
+        "category": "reading",
+        "cluster": "recherche par motif",
+        "reason": "Connects the article to its nearest conceptual cluster."
+      },
+      {
+        "type": "cross_domain",
+        "title": "Indiquer clairement les incertitudes dans ses notes de recherche",
+        "category": "research",
+        "cluster": "incertitude dans les notes de recherche",
+        "topic_id": "TOPIC-0130",
+        "reason": "Supports cross-domain navigation when the concepts overlap."
+      }
+    ]
+  },
+  "selection_policy": {
+    "related_article_priority": [
+      "published_article",
+      "scheduled_article",
+      "draft_article"
+    ],
+    "markdown_text_modified": false,
+    "publication_note": "Published article destinations should be preferred when rendering public article recommendations."
+  },
+  "rules": [
+    "Recommendations represent conceptual relationships, not SEO-only links.",
+    "Applications appear as solutions, not categories.",
+    "Every recommendation should help the reader continue learning.",
+    "No article Markdown is modified by this generator."
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "type": "image_spec",
+  "generation_scope": "specification_only",
+  "image_generation_allowed": false,
+  "source_markdown": "generated/markdown/pt-BR/reading/choose-literal-or-pattern-search-for-text.md",
+  "topic": {
+    "id": "TOPIC-0146",
+    "title": "Quando vale usar busca literal ou por padrão em um texto?",
+    "slug": "choose-literal-or-pattern-search-for-text",
+    "category": "reading",
+    "language": "pt-BR",
+    "primary_keyword": "busca literal",
+    "related_apps": []
+  },
+  "article_sections_detected": [
+    "Quando vale usar busca literal ou por padrão em um texto?",
+    "Pergunta",
+    "Resposta curta",
+    "Fluxo de trabalho recomendado",
+    "Perguntas frequentes",
+    "E se o leitor não tiver opção de expressão regular?",
+    "Uma busca sem resultados prova que o texto não está lá?",
+    "Referências",
+    "Conclusão"
+  ],
+  "visual_style": {
+    "tone": [
+      "calm",
+      "clean",
+      "minimal",
+      "structured",
+      "approachable",
+      "timeless"
+    ],
+    "colors": {
+      "background": "Ivory Soft",
+      "primary": "Baby Blue Calm",
+      "secondary": "Dusty Lilac",
+      "accent": "Soft Peach",
+      "text": "Charcoal Soft"
+    },
+    "typography": [
+      "ONNEL Sans",
+      "System UI",
+      "Pretendard",
+      "Inter"
+    ],
+    "accessibility": [
+      "Readable on mobile",
+      "Understandable in grayscale",
+      "Color must not be the only information channel"
+    ]
+  },
+  "required_infographic_types": [
+    {
+      "id": "workflow-primary",
+      "type": "workflow",
+      "required": true,
+      "question_answered": "Quando vale usar busca literal ou por padrão em um texto?",
+      "source_sections": [
+        "Resposta curta",
+        "Fluxo de trabalho recomendado"
+      ],
+      "structure": [
+        "1. Problema",
+        "2. Verificação",
+        "3. Processo",
+        "4. Resultado"
+      ],
+      "notes": "Use a calm, minimal workflow diagram. The visual should explain the process, not decorate the article."
+    },
+    {
+      "id": "comparison-options",
+      "type": "comparison",
+      "required": true,
+      "question_answered": "Which concepts or approaches matter when evaluating busca literal?",
+      "source_sections": [
+        "Why This Problem Happens",
+        "What To Check First"
+      ],
+      "compare": [
+        "busca por padrão",
+        "expressões regulares",
+        "busca de texto"
+      ],
+      "notes": "Keep the comparison balanced and avoid presenting any ONNELLAB product as universally superior."
+    }
+  ],
+  "screenshot_requirements": {
+    "required": false,
+    "reason": "No related application is referenced; decorative screenshots are not required.",
+    "applications": [],
+    "rules": [
+      "Use screenshots only to demonstrate a real feature.",
+      "Crop unnecessary UI.",
+      "Highlight only the relevant control or workflow area.",
+      "Maintain high resolution.",
+      "Do not use screenshots as decoration."
+    ]
+  },
+  "workflow_diagrams": [
+    {
+      "id": "workflow-primary",
+      "title": "Quando vale usar busca literal ou por padrão em um texto?",
+      "steps": [
+        "1. Problema",
+        "2. Verificação",
+        "3. Processo",
+        "4. Resultado"
+      ],
+      "layout": "vertical or left-to-right sequence"
+    }
+  ],
+  "comparison_diagrams": [
+    {
+      "id": "comparison-options",
+      "title": "busca literal · Comparação",
+      "items": [
+        "busca por padrão",
+        "expressões regulares",
+        "busca de texto"
+      ],
+      "layout": "side-by-side comparison table"
+    }
+  ],
+  "prohibited": [
+    "Do not generate image files in this step.",
+    "Do not create screenshots in this step.",
+    "Do not publish assets in this step.",
+    "Do not use decorative visuals without explanatory purpose."
+  ],
+  "editorial_workflow": {
+    "subtitle": "Escolha o modo",
+    "message": "Confira o trecho destacado antes de usar o resultado.",
+    "description": "Grafia conhecida: Busca literal; Estrutura comum: Padrão, se houver suporte; Teste a consulta: Inclua um caso negativo; Confira o destaque: Veja o resultado inteiro.",
+    "steps": [
+      [
+        "Grafia conhecida",
+        "Busca literal"
+      ],
+      [
+        "Estrutura comum",
+        "Padrão, se houver suporte"
+      ],
+      [
+        "Teste a consulta",
+        "Inclua um caso negativo"
+      ],
+      [
+        "Confira o destaque",
+        "Veja o resultado inteiro"
+      ]
+    ]
+  }
+}
